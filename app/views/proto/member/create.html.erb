@@ -1,0 +1,14 @@
+<h1>Proto::Member#create</h1>
+<p>Find me in app/views/proto/member/create.html.erb</p>
+
+<% form_tag(:action => "create") do %>
+
+  <p>First Name: <%= text_field_tag("first_name","") %></p>
+  <p>Last Name: <%= text_field_tag("last_name","") %></p>
+  
+  <%= submit_tag("Create member")%>
+  
+  <hr>
+  <%= debug(params) %>
+
+<% end %>

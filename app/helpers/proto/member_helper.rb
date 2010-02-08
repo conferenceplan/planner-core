@@ -1,0 +1,2 @@
+module Proto::MemberHelper
+end
