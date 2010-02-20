@@ -10,6 +10,8 @@ class CreateAddresses < ActiveRecord::Migration
       t.string :country, :limit =>2 #use the ISO country code (put in seperate table the code to country names)
       t.string :phone
       
+      t.string :email, { :default => "" }
+      
       t.boolean :isvalid
       
       t.column :addressable_id, :integer

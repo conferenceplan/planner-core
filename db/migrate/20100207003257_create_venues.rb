@@ -1,6 +1,7 @@
 class CreateVenues < ActiveRecord::Migration
   def self.up
     create_table :venues do |t|
+      t.string :name
 
       t.timestamps
       t.column :lock_version, :integer, { :default => 0 }

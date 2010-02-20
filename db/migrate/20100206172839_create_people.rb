@@ -4,7 +4,6 @@ class CreatePeople < ActiveRecord::Migration
       t.string :first_name, { :default => "" }
       t.string :last_name, { :default => "" }
       t.string :suffix, { :default => "" }
-      t.string :email, { :default => "" } # TODO - perhaps the email should be in contact information or address...
       
       # TODO: do we need badge and publication names?
       t.string :language, { :default => "" }# use two character country code for preferred language
