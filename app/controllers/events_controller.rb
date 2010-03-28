@@ -1,4 +1,4 @@
-cclass EventsController < ApplicationController
+class EventsController < ApplicationController
   def index
     @events = Event.find :all
   end
@@ -27,9 +27,11 @@ cclass EventsController < ApplicationController
       render :action => edit
     end
   end
+  
   def destroy
     @event = Event.find(params[:id])
     @event.destroy
     redirect_to :action => index
   end
+  
 end
