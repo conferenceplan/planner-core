@@ -1,4 +1,4 @@
-class ChangeLog < ActiveRecord::Migration
+class CreateChangeLog < ActiveRecord::Migration
   def self.up
     create_table :changelog do |t|
       t.string :who
@@ -6,6 +6,8 @@ class ChangeLog < ActiveRecord::Migration
       t.string :description
       t.string :type
       t.string :old_value
+
+      t.timestamps
     end
   end
 
