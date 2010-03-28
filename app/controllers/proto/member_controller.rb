@@ -1,3 +1,6 @@
+#
+#
+#
 class Proto::MemberController < ApplicationController
   def create
     @first_name = params[:first_name]
