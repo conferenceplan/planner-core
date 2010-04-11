@@ -1,4 +1,5 @@
 class EventsController < ApplicationController
+
   def index
     @events = Event.find :all
   end
@@ -6,9 +7,11 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
   end
   def create
-    event = Event.new(params[:event])
-    if (event.save)
-       redirect_to :action => 'show', :id => event
+    @event = Event.new(params[:event])
+    if (@event.save)
+       redirect_to :action => 'show', :id => @event
+    else
+      render :action => 'new'
     end 
   end
   def new
@@ -16,7 +19,7 @@ class EventsController < ApplicationController
   end
   
   def edit
-    @event = Event.find(param[:id])
+    @event = Event.find(params[:id])
   end
   
   def update
@@ -24,14 +27,14 @@ class EventsController < ApplicationController
     if @event.update_attributes(params[:event])
       redirect_to :action => 'show', :id => @event
     else
-      render :action => edit
+      render :action => 'edit'
     end
   end
   
   def destroy
     @event = Event.find(params[:id])
     @event.destroy
-    redirect_to :action => index
+    redirect_to :action => 'index'
   end
   
 end

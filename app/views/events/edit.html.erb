@@ -2,12 +2,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Untitled Document</title>
-	</head>
+        <title>Event</title>
+    </head>
     <body>
-        <p>Find me in app/views/events/create.html.erb</p>
-
-        <% form_for :event, :url =>{:action =>:create} do |f| -%>
+    <h1> Edit an Event</h1>
+    <%= error_messages_for :event %>
+    <% form_for @event do |f| -%>
 
             <p>
                 <%= f.label :title, "Title" %> <br>
@@ -15,7 +15,7 @@
             </p>
             <p>
                 <%= f.label :precis, "Precis" %> <br>
-                <%= f.text_field :precis %>
+                <%= f.text_area :precis %>
             </p>
             <p>
                 <%= f.label :duration, "Duration" %> <br>
@@ -25,10 +25,6 @@
             <p>
                 <%= f.submit "Submit" %>
             </p>
-  
-            <hr>
-                <%= debug(params) %>
-
         <% end %>
     </body>
 </html>
