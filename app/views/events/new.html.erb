@@ -1,30 +1,19 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Untitled Document</title>
-    </head>
-    <body>
-    <h1> Create a New Event</h1>
-    <%= error_messages_for :event %>
-    <% form_for @event do |f| -%>
-
-            <p>
-                <%= f.label :title, "Title" %> <br>
-                <%= f.text_field :title %>
-            </p>
-            <p>
-                <%= f.label :precis, "Precis" %> <br>
-                <%= f.text_area :precis %>
-            </p>
-            <p>
-                <%= f.label :duration, "Duration" %> <br>
-                <%= f.text_field :duration %>
-            </p>
- 
-            <p>
-                <%= f.submit "Submit" %>
-            </p>
-        <% end %>
-    </body>
-</html>
+<h1> Create a New Event</h1>
+<%= error_messages_for :event %>
+<% form_for @event do |f| -%>
+	<p>
+		<%= f.label :title, "Title" %> <br>
+		<%= f.text_field :title %>
+	</p>
+	<p>
+		<%= f.label :precis, "Precis" %> <br>
+		<%= f.text_area :precis %>
+	</p>
+	<p>
+		<%= f.label :duration, "Duration" %> <br>
+		<%= f.text_field :duration %>
+	</p>
+	<p>
+		<%= f.submit "Submit" %>
+	</p>
+<% end %>

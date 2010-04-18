@@ -1,0 +1,10 @@
+<html>
+<head>
+<title><%= @page_title or 'Page Title' %></title>
+</head>
+<body>
+	<!-- div id="top_menu">Top menu items here</div -->
+	<!-- div id="menu">Menu items here</div -->
+	<div id="content"><%= yield(:content) or yield %></div>
+</body>
+</html> 

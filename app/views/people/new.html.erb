@@ -1,0 +1,15 @@
+<h1>Person#create</h1>
+<p>Find me in app/views/people/create.html.erb</p>
+Test
+
+<% form_for @participant do |f| -%>
+
+  <p>First Name: <%= f.text_field :first_name %></p>
+  <p>Last Name: <%= f.text_field :last_name %></p>
+  
+  <%= f.submit "Create Participant" %>
+  
+  <hr>
+  <%= debug(params) %>
+
+<% end %>
