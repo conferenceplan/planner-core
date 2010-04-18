@@ -1,6 +1,6 @@
 class Person < ActiveRecord::Base
   
-  validates_uniqueness_of :last_name, :scope => [:first_name], :case_sensitive => false 
+  validates_uniqueness_of :last_name, :scope => [:first_name], :case_sensitive => false, :message => ':that person already exists in the database.' 
   
   has_many  :addresses, :as => :addressable, :dependent => :destroy # if two people can share the same address then the dependent destroy should be removed
   

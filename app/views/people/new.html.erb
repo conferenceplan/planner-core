@@ -1,7 +1,5 @@
-<h1>Person#create</h1>
-<p>Find me in app/views/people/create.html.erb</p>
-Test
-
+<h1>People#create</h1>
+<%= error_messages_for :participant %>
 <% form_for @participant do |f| -%>
 
   <p>First Name: <%= f.text_field :first_name %></p>

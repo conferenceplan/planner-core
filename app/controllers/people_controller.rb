@@ -19,10 +19,10 @@ class PeopleController < ApplicationController
   end
 
   def create
-    @person = Person.new(params[:person])
+    @participant = Person.new(params[:person])
 
-    if (@person.save)
-       redirect_to :action => 'show', :id => @person
+    if (@participant.save)
+       redirect_to :action => 'show', :id => @participant
     else
       render :action => 'new'
     end 
