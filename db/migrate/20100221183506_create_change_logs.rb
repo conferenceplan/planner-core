@@ -1,6 +1,6 @@
-class CreateChangeLog < ActiveRecord::Migration
+class CreateChangeLogs < ActiveRecord::Migration
   def self.up
-    create_table :changelog do |t|
+    create_table :change_logs do |t|
       t.string :who
       t.timestamp :when
       t.string :description
@@ -12,6 +12,6 @@ class CreateChangeLog < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :changelog
+    drop_table :change_logs
   end
 end

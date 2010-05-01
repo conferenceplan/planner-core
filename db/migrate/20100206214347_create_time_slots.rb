@@ -6,7 +6,7 @@ class CreateTimeSlots < ActiveRecord::Migration
       t.datetime :end
       t.string :type
       
-      t.references :schedule_id
+      t.references :schedule
 
       t.timestamps
       t.column :lock_version, :integer, { :default => 0 }

@@ -14,12 +14,10 @@ class Person < ActiveRecord::Base
             :source => :person,
             :conditions => "exclusions.excludable_type = 'Person'"
   
-  has_many  :excluded_periods, :through => :exclusions,
-            :source => :period,
+  has_many  :excluded_periods, :source_type => "Period", :through => :exclusions,
             :conditions => "exclusions.excludable_type = 'Period'"
   
-  has_many  :excluded_events, :through => :exclusions,
-            :source => :event,
+  has_many  :excluded_events, :source_type => "Event", :through => :exclusions,
             :conditions => "exclusions.excludable_type = 'Event'"
   
   has_many  :event_assignments
