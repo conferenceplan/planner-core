@@ -1,3 +1,19 @@
-<% for person in @people %>
-Person: <%= person.first_name %> <%= person.last_name %><br/>
-<%end%>
+<div id='links'>
+	<%= link_to "New Participant", :action => 'new' %>
+</div>
+<div id='left-panel'>
+	<table id="participants"></table>
+	<div id="pager"></div>
+</div>
+<div id='right-panel'>
+<div id="particpanttabs">
+	<ul>
+		<li><a href="#regtab">Registration Details</a></li>
+		<li><a href="#addrstab">Contact Details</a></li>
+	</ul>
+	<div id="regtab">
+	</div>
+	<div id="addrstab">
+	</div>
+</div>
+</div>
