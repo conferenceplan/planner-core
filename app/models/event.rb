@@ -3,8 +3,8 @@ class Event < ActiveRecord::Base
   has_many  :event_assignments
   has_many  :people, :through => :event_assignments
   
-  has_many  :tags, :as => :tagable
- 
+  acts_as_taggable_on :tags, :streams
+  
   # TODO: Add event substitutions, people that can be added to an event
   # if person is removed from event then user is asked if the person should be added to subs
   

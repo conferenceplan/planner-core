@@ -5,22 +5,15 @@ class PeopleController < ApplicationController
   def destroy
     @person = Person.find(params[:id])
     @person.destroy
-    redirect_to :action => 'index' # change
+    redirect_to :action => 'index'
+  end
+
+  def show
+    @person = Person.find(params[:id])
   end
 
   def edit
     @person = Person.find(params[:id])
-  end
-
-  #
-  # All the index method does is provide formatting, the actual
-  # work for the listing of people is done by the list method
-  #
-  def index
-    respond_to do |format|
-      format.html
-      format.js {render :layout => false}
-    end
   end
 
   def new
@@ -37,8 +30,24 @@ class PeopleController < ApplicationController
     end 
   end
 
-  def show
+  def update
     @person = Person.find(params[:id])
+#    if @event.update_attributes(params[:event])
+#      redirect_to :action => 'show', :id => @event
+#    else
+#      render :action => 'edit'
+#    end
+  end
+
+  #
+  # All the index method does is provide formatting, the actual
+  # work for the listing of people is done by the list method
+  #
+  def index
+    respond_to do |format|
+      format.html
+      format.js {render :layout => false}
+    end
   end
 
   #
@@ -57,21 +66,11 @@ class PeopleController < ApplicationController
     off = (@page.to_i - 1) * rows.to_i
     @people = Person.find :all, :offset => off, :limit => rows, :order => idx + " " + order
    
-    # We return the list of people as an XML structure which the
-    # 'table' can use.
+    # We return the list of people as an XML structure which the 'table' can use.
     # TODO: would it be more efficient to use JSON instead?
     respond_to do |format|
       format.xml
     end
-  end
-
-  def update
-    @person = Person.find(params[:id])
-#    if @event.update_attributes(params[:event])
-#      redirect_to :action => 'show', :id => @event
-#    else
-#      render :action => 'edit'
-#    end
   end
 
 end
