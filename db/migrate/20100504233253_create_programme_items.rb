@@ -1,7 +1,6 @@
-class CreateEvents < ActiveRecord::Migration
+class CreateProgrammeItems < ActiveRecord::Migration
   def self.up
-    create_table :events do |t|
- 
+    create_table :programme_items do |t|
       t.string :short_title
       t.string :title
       t.text :precis
@@ -11,6 +10,7 @@ class CreateEvents < ActiveRecord::Migration
       t.string :format #TODO: change to a type
       t.text :notes
       t.boolean :print
+      t.references :time_slot
 #      t.item_number :string #because
 # TODO: add list of equipment needed
 
@@ -22,6 +22,6 @@ class CreateEvents < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :events
+    drop_table :programme_items
   end
 end

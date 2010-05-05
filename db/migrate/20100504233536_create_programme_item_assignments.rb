@@ -1,7 +1,6 @@
-class CreateEventAssignments < ActiveRecord::Migration
+class CreateProgrammeItemAssignments < ActiveRecord::Migration
   def self.up
-    create_table :event_assignments do |t|
-      
+    create_table :programme_item_assignments do |t|
       t.integer :person_id
       t.integer :event_id
       t.string :role #TODO - change to a type
@@ -12,6 +11,6 @@ class CreateEventAssignments < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :event_assignments
+    drop_table :programme_item_assignments
   end
 end

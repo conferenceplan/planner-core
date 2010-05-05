@@ -17,11 +17,12 @@ class Person < ActiveRecord::Base
   has_many  :excluded_periods, :source_type => "Period", :through => :exclusions,
             :conditions => "exclusions.excludable_type = 'Period'"
   
-  has_many  :excluded_events, :source_type => "Event", :through => :exclusions,
-            :conditions => "exclusions.excludable_type = 'Event'"
+  has_many  :excluded_items, :source_type => "ProgrammeItem", :through => :exclusions,
+            :conditions => "exclusions.excludable_type = 'ProgrammeItem'"
   
-  has_many  :event_assignments
-  has_many  :events, :through => :event_assignments
+  # TODO - check this
+  has_many  :programme_item_assignments
+  has_many  :programme_items, :through => :programme_item_assignments
 
   has_one   :RegistrationDetail
   has_one   :Survey

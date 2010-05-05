@@ -1,7 +1,7 @@
-class Event < ActiveRecord::Base
+class ProgrammeItem < ActiveRecord::Base
   validates_presence_of :title
-  has_many  :event_assignments
-  has_many  :people, :through => :event_assignments
+  has_many  :programme_item_assignments
+  has_many  :people, :through => :programme_item_assignments
   
   acts_as_taggable_on :tags, :streams
   
@@ -10,5 +10,4 @@ class Event < ActiveRecord::Base
   
   has_one   :room
   has_one   :time_slot
-
 end
