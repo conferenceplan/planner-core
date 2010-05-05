@@ -9,7 +9,7 @@
     <% end%>
 
     <% fields_for :email_address, @emailAddress do |email_fields| %>
-	  <p>Line1 <%= email_fields.text_field :email%></p>
+	  <p>Email <%= email_fields.text_field :email%></p>
     <% end%>
   
   <%= participant_form.submit "Create Participant" %>
