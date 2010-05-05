@@ -2,7 +2,13 @@ class Person < ActiveRecord::Base
   
   validates_uniqueness_of :last_name, :scope => [:first_name], :case_sensitive => false, :message => ':that person already exists in the database.' 
   
-  has_many  :addresses, :as => :addressable, :dependent => :destroy # if two people can share the same address then the dependent destroy should be removed
+  has_many  :addresses, :as => :addressable #, :dependent => :destroy # if two people can share the same address then the dependent destroy should be removed
+  has_many  :postal_addresses, :through => :addressable,
+            :source_type => "PostalAddress",
+            :conditions => "addresses.addressable_type = 'PostalAddress'"
+  has_many  :email_addresses, :through => :addressable,
+            :source_type => "EmailAddress",
+            :conditions => "addresses.addressable_type = 'EmailAddress'"
   
   has_many  :relationships, :as => :relatable
   
@@ -21,10 +27,10 @@ class Person < ActiveRecord::Base
             :conditions => "exclusions.excludable_type = 'ProgrammeItem'"
   
   # TODO - check this
-  has_many  :programme_item_assignments
-  has_many  :programme_items, :through => :programme_item_assignments
+  has_many  :programmeItemAssignments
+  has_many  :programmeItems, :through => :programmeItemAssignments
 
-  has_one   :RegistrationDetail
-  has_one   :Survey
+  has_one   :registrationDetail
+  has_one   :survey
   
 end

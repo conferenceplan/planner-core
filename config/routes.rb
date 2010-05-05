@@ -40,7 +40,8 @@ ActionController::Routing::Routes.draw do |map|
   # consider removing or commenting them out if you're using named routes and resources.
   map.resources :programme_items
   map.connect 'participants/list', :controller => 'people', :action => 'list'
-  map.resources :people , :as => "participants"
+  map.resources :people, :as => "participants"
+#  map.resources :addresses, :as => "addresses"
 #  map.connect ':controller/:action/:id'
 #  map.connect ':controller/:action/:id.:format'
 end

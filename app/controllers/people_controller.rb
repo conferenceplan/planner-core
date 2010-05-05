@@ -23,6 +23,18 @@ class PeopleController < ApplicationController
   def create
     @participant = Person.new(params[:person])
 
+    # TODO - we want to see if the address exists already....? i.e. first do a find...
+    # create the postal addrees
+    postalAddress = PostalAddress.new(params[:postal_address])
+    # Then create the association, assume that it is valid since we are just entering it :-)
+    Address.create(:addressable => postalAddress, :person => @participant, :isvalid => true)
+
+    # Now associate an email address with the person
+    if (params[:email_address])
+      emailAddress = EmailAddress.new(params[:email_address])
+      Address.create(:addressable => emailAddress, :person => @participant, :isvalid => true)
+    end
+
     if (@participant.save)
        redirect_to :action => 'show', :id => @participant
     else

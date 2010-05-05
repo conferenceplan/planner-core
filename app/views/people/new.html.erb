@@ -1,10 +1,18 @@
 <%= error_messages_for :participant %>
-<% form_for @participant do |f| -%>
+<% form_for @participant do |participant_form| -%>
 
-  <p>First Name: <%= f.text_field :first_name %></p>
-  <p>Last Name: <%= f.text_field :last_name %></p>
+  <p>First Name: <%= participant_form.text_field :first_name %></p>
+  <p>Last Name: <%= participant_form.text_field :last_name %></p>
   
-  <%= f.submit "Create Participant" %>
+    <% fields_for :postal_address, @postalAddress do |address_fields| %>
+	  <p>Line1 <%= address_fields.text_field :line1%></p>
+    <% end%>
+
+    <% fields_for :email_address, @emailAddress do |email_fields| %>
+	  <p>Line1 <%= email_fields.text_field :email%></p>
+    <% end%>
+  
+  <%= participant_form.submit "Create Participant" %>
   
   <hr>
   <%= debug(params) %>
