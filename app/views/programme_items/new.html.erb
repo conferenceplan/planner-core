@@ -1,0 +1,19 @@
+<h1> Create a New Programme Item</h1>
+<%= error_messages_for :programmeItem %>
+<% form_for @programmeItem do |f| -%>
+	<p>
+		<%= f.label :title, "Title" %> <br>
+		<%= f.text_field :title %>
+	</p>
+	<p>
+		<%= f.label :precis, "Precis" %> <br>
+		<%= f.text_area :precis %>
+	</p>
+	<p>
+		<%= f.label :duration, "Duration" %> <br>
+		<%= f.text_field :duration %>
+	</p>
+	<p>
+		<%= f.submit "Submit" %>
+	</p>
+<% end %>
