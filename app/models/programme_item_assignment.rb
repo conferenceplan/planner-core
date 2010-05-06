@@ -1,4 +1,4 @@
 class ProgrammeItemAssignment < ActiveRecord::Base
   belongs_to  :person
-  belongs_to  :event
+  belongs_to  :programmeItem
 end
