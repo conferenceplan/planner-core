@@ -10,6 +10,8 @@ class PeopleController < ApplicationController
 
   def show
     @person = Person.find(params[:id])
+
+    render :layout => 'content'
   end
 
   def edit
