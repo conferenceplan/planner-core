@@ -39,6 +39,7 @@ ActionController::Routing::Routes.draw do |map|
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
   map.resources :programme_items
+  map.resources :menus
   map.connect 'participants/list', :controller => 'people', :action => 'list'
   map.resources :people, :as => "participants"
 #  map.resources :addresses, :as => "addresses"

@@ -1,0 +1,12 @@
+<ul id="dropdownmenu">
+ <% menu.menu_items.each do |menu_item|%>	
+ <li class="menutop">
+	<a href="<%= menu_item.path%>"><%= menu_item.name%></a>
+    <% menu_item.menu_items.each do |sub_menu_item| %>
+         <ul>
+          <li><a href="<%= sub_menu_item.path%>"><%= sub_menu_item.name%></a></li>
+         </ul>
+    <% end %>
+ </li>
+ <% end %>
+</ul>
