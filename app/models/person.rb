@@ -1,30 +1,38 @@
 class Person < ActiveRecord::Base
   
-  validates_uniqueness_of :last_name, :scope => [:first_name], :case_sensitive => false, :message => ':that person already exists in the database.' 
-  
-  has_many  :addresses, :as => :addressable #, :dependent => :destroy # if two people can share the same address then the dependent destroy should be removed
-  has_many  :postal_addresses, :through => :addressable,
-            :source_type => "PostalAddress",
-            :conditions => "addresses.addressable_type = 'PostalAddress'"
-  has_many  :email_addresses, :through => :addressable,
-            :source_type => "EmailAddress",
-            :conditions => "addresses.addressable_type = 'EmailAddress'"
-  
-  has_many  :relationships, :as => :relatable
-  
-  has_many  :related_people, :source_type => "Person", :through => :relationships
+  validates_uniqueness_of :last_name,
+            :scope => [:first_name], 
+            :case_sensitive => false, :message => ':that person already exists in the database.' 
 
-  has_many  :exclusions, :as => :excludable
+  has_many  :addresses
+  
+  has_many  :postal_addresses, :through => :addresses,
+            :source => :addressable, 
+            :source_type => 'PostalAddress'
+  
+  has_many  :email_addresses, :through => :addresses, 
+            :source => :addressable, 
+            :source_type => 'EmailAddress'
+
+  has_many  :relationships
+  
+  has_many  :related_people, :through => :relationships,
+            :source => :relatable,
+            :source_type => 'Person'
+
+  has_many  :exclusions
   
   has_many  :excluded_people, :through => :exclusions, 
-            :source => :person,
-            :conditions => "exclusions.excludable_type = 'Person'"
+            :source => :excludable,
+            :source_type => 'Person'
   
-  has_many  :excluded_periods, :source_type => "Period", :through => :exclusions,
-            :conditions => "exclusions.excludable_type = 'Period'"
+  has_many  :excluded_periods, :through => :exclusions,
+            :source => :excludable,
+            :source_type => 'Period'
   
-  has_many  :excluded_items, :source_type => "ProgrammeItem", :through => :exclusions,
-            :conditions => "exclusions.excludable_type = 'ProgrammeItem'"
+  has_many  :excluded_items, :through => :exclusions,
+            :source => :excludable,
+            :source_type => "ProgrammeItem" 
   
   # TODO - check this
   has_many  :programmeItemAssignments

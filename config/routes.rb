@@ -41,7 +41,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :programme_items
   map.resources :menus
   map.connect 'participants/list', :controller => 'people', :action => 'list'
-  map.resources :people, :as => "participants"
+  map.resources :people, :as => "participants", :has_many => :addresses
 #  map.resources :addresses, :as => "addresses"
 #  map.connect ':controller/:action/:id'
 #  map.connect ':controller/:action/:id.:format'

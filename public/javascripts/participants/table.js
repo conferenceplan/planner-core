@@ -27,7 +27,7 @@ jQuery(document).ready(function(){
       var $tabs = $('#particpanttabs').tabs();
 
       $tabs.
-          tabs( 'url' , 0 , 'participants/'+ids ).tabs( 'load' , 0 ).tabs('select', 0).
+          tabs( 'url' , 0 , 'participants/'+ids+'/addresses' ).tabs( 'load' , 0 ).tabs('select', 0).
           tabs( 'url' , 1 , 'participants/'+ids ).tabs( 'load' , 1 );
       return false;
     }
