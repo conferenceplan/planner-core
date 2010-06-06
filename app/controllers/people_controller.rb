@@ -5,7 +5,7 @@ class PeopleController < ApplicationController
   def destroy
     @person = Person.find(params[:id])
     @person.destroy
-    redirect_to :action => 'index'
+    render :layout => 'success'
   end
 
   def show
@@ -25,9 +25,6 @@ class PeopleController < ApplicationController
   def create
     @participant = Person.new(params[:person])
     
-    @participant.postal_addresses.new(params[:postal_address]);
-    @participant.email_addresses.new(params[:email_address]);
-
     if (@participant.save)
        redirect_to :action => 'show', :id => @participant
     else
@@ -37,11 +34,12 @@ class PeopleController < ApplicationController
 
   def update
     @person = Person.find(params[:id])
-#    if @event.update_attributes(params[:event])
-#      redirect_to :action => 'show', :id => @event
-#    else
-#      render :action => 'edit'
-#    end
+    
+    if @person.update_attributes(params[:person])
+      redirect_to :action => 'show', :id => @person
+    else
+      render :action => 'edit'
+    end
   end
 
   #
@@ -57,19 +55,39 @@ class PeopleController < ApplicationController
 
   #
   def list
+    j = ActiveSupport::JSON
+    
     rows = params[:rows]
     @page = params[:page]
     idx = params[:sidx]
     order = params[:sord]
+    clause = ""
+    fields = Array::new
+    
+    if (params[:filters])
+      queryParams = j.decode(params[:filters])
+      if (queryParams)
+        clausestr = ""
+        queryParams["rules"].each do |subclause|
+          if clausestr.length > 0 
+            clausestr << ' ' + queryParams["groupOp"] + ' '
+          end
+          clausestr << subclause['field'] + ' like ?'
+          fields << subclause['data'] + '%'
+          logger.info fields
+        end
+        clause = [clausestr] | fields
+      end
+    end
     
     # First we need to know how many records there are in the database
-
     # Then we get the actual data we want from the DB
-    count = Person.count
+    count = Person.count :conditions => clause
     @nbr_pages = (count / rows.to_i).floor + 1
     
     off = (@page.to_i - 1) * rows.to_i
-    @people = Person.find :all, :offset => off, :limit => rows, :order => idx + " " + order
+    @people = Person.find :all, :offset => off, :limit => rows,
+      :order => idx + " " + order, :conditions => clause
    
     # We return the list of people as an XML structure which the 'table' can use.
     # TODO: would it be more efficient to use JSON instead?

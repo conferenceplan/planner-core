@@ -11,8 +11,12 @@ jQuery(document).ready(function(){
     datatype: 'xml',
     colNames:['First Name','Last Name'],
     colModel :[ 
-      {name:'first_name', index:'first_name', width:200}, 
-      {name:'last_name', index:'last_name', width:250} ],
+      {name:'person[first_name]', index:'first_name', width:250,
+    	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:1, label: "First Name", elmprefix:"(*)"},editrules:{required:true}
+    	  }, 
+      {name:'person[last_name]', index:'last_name', width:250,
+        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Last Name", elmprefix:"(*)"},editrules:{required:true}
+    		  } ],
     pager: jQuery('#pager'),
     rowNum:10,
     autowidth: false,
@@ -23,13 +27,63 @@ jQuery(document).ready(function(){
     viewrecords: true,
     imgpath: 'stylesheets/cupertino/images',
     caption: 'Participants',
+    editurl: '/participants',
     onSelectRow: function(ids) {
       var $tabs = $('#particpanttabs').tabs();
 
       $tabs.
-          tabs( 'url' , 0 , 'participants/'+ids+'/addresses' ).tabs( 'load' , 0 ).tabs('select', 0).
-          tabs( 'url' , 1 , 'participants/'+ids ).tabs( 'load' , 1 );
+          tabs( 'url' , 0 , 'participants/'+ids+'/registration_details' ).tabs( 'load' , 0 ).tabs('select', 0).
+          tabs( 'url' , 1 , 'participants/'+ids+'/addresses' ).tabs( 'load' , 1 );
+      
       return false;
     }
   }); 
-}).navGrid('#pager',{edit:false,add:false,del:false});
+  
+  jQuery("#participants").navGrid('#pager',
+		  {view:false }, //options
+
+		  {	// edit options
+			  height:220, reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
+			  bottominfo:"Fields marked with (*) are required",
+			  afterSubmit: processResponse,
+			  beforeSubmit : function(postdata, formid) {
+			  	this.ajaxEditOptions = {url : '/participants/'+postdata.participants_id, type: 'put'};
+			  	return [true, "ok"]; }
+		  }, // edit options
+
+		  { // add options
+			  reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
+			  bottominfo:"Fields marked with (*) are required",
+			  afterSubmit: processResponse,
+			  closeAfterAdd: true
+		  }, // add options
+
+		  { // del options
+			  reloadAfterSubmit:false,jqModal:true, closeOnEscape:true,
+			  beforeSubmit : function(postdata) {
+			  this.ajaxDelOptions = {url : '/participants/'+postdata, type: 'delete' };
+			  return [true, "ok"]; },
+		  }, // del options
+
+		  { // search options
+			  jqModal:true, closeOnEscape:true,
+			  multipleSearch:true,
+			  sopt:['eq','ne'],
+			  odata: ['begins with', 'does not begin with'],
+			  groupOps: [ { op: "AND", text: "all" }, { op: "OR", text: "any" } ]
+		  }, // search options
+		  
+		  {height:150, jqModal:true, closeOnEscape:true} // view options
+  );
+});
+
+function processResponse(response, postdata) { 
+	// examine return for problem - look for errorExplanation in the returned HTML
+	var text = $(response.responseText).find(".errorExplanation");
+	if (text.size() > 0) {
+		text.css('font-size','6pt');
+		text = $("<div></div>").append(text);
+		return [false, text.html() ];
+	}
+	return [true, "Success"]; 
+}

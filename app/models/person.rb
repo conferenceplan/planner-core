@@ -14,6 +14,8 @@ class Person < ActiveRecord::Base
             :source => :addressable, 
             :source_type => 'EmailAddress'
 
+  accepts_nested_attributes_for :postal_addresses, :email_addresses
+
   has_many  :relationships
   
   has_many  :related_people, :through => :relationships,

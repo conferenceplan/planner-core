@@ -4,15 +4,7 @@
 
   <p>First Name: <%= participant_form.text_field :first_name %></p>
   <p>Last Name: <%= participant_form.text_field :last_name %></p>
-  
-    <% fields_for :postal_address, @postalAddress do |address_fields| %>
-	  <p>Line1 <%= address_fields.text_field :line1%></p>
-    <% end%>
-
-    <% fields_for :email_address, @emailAddress do |email_fields| %>
-	  <p>Email <%= email_fields.text_field :email%></p>
-    <% end%>
-  
+    
   <%= participant_form.submit "Create Participant" %>
   
   <hr>
