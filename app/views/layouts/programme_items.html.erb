@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		<title>Participants</title>
+		<%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
+		<%= stylesheet_link_tag 'ui.jqgrid' if params[:action] == 'index' %>
+		<%= stylesheet_link_tag 'planner'%>
+		
+		<%= javascript_include_tag 'jquery-1.4.2.min' %>
+		<%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
+		<%= javascript_include_tag 'grid.locale-en' if params[:action] == 'index' %>
+		<%= javascript_include_tag 'jqModal.js' if params[:action] == 'index' %>
+		<%= javascript_include_tag 'jquery.jqGrid.min' if params[:action] == 'index' %>
+		<%= javascript_include_tag 'application'%>
+		
+		<% if protect_against_forgery? %>
+		  <script type='text/javascript'>
+			//<![CDATA[
+        	window._auth_token_name = "#{request_forgery_protection_token}";
+            window._auth_token = "#{form_authenticity_token}";
+            //]]>
+          </script>
+        <% end %>
+        <!-- = javascript_include_tag 'programme_items/table' if params[:action] == 'index' % -->
+	</head>
+	<body>
+		<%= menu %>
+		<div id="programme_item_content"><%= yield(:content) or yield %></div>
+	</body>
+</html>

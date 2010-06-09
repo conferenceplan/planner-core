@@ -8,6 +8,6 @@ class ProgrammeItem < ActiveRecord::Base
   # TODO: Add event substitutions, people that can be added to an event
   # if person is removed from event then user is asked if the person should be added to subs
   
-  has_one   :room
+  belongs_to   :room
   has_one   :time_slot
 end

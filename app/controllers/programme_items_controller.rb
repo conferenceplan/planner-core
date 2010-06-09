@@ -24,7 +24,7 @@ class ProgrammeItemsController < ApplicationController
   
   def update
     @programmeItem = ProgrammeItem.find(params[:id])
-    if @programmeItem.update_attributes(params[:event])
+    if @programmeItem.update_attributes(params[:programme_item])
       redirect_to :action => 'show', :id => @programmeItem
     else
       render :action => 'edit'

@@ -1,0 +1,16 @@
+<br/>
+<h1> Edit a room</h1>
+<%= error_messages_for :room %>
+<% form_for @room do |f| -%>
+	<p>
+		<%= f.label :name, "Name " %> <br>
+		<%= f.text_field :name %>
+	</p>
+	<p>
+		<%= f.label :capacity, "Capacity " %> <br>
+		<%= f.text_field :capacity %>
+	</p>
+	<p>
+		<%= f.submit "Submit" %>
+	</p>
+<% end %>

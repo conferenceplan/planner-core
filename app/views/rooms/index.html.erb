@@ -1,0 +1,9 @@
+<br/>
+<br/>
+<% for room in @rooms %>
+	<li>name is <%= room.name %> 
+		<%=  link_to "edit", :action => 'edit', :id => room %>
+		<%=  link_to "remove", room, :method => :delete,:confirm => "Are you Sure?" %>
+	</li>
+<%end%>
+<p> <%= link_to "create new room", :action => 'new' %></p>

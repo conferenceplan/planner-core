@@ -14,6 +14,12 @@
 		<%= f.text_field :duration %>
 	</p>
 	<p>
+		<%= f.label :room_id %><br/>
+		<%= f.select :room_id,
+	                 Room.find(:all).collect {|r| [r.name,r.id] },
+	                 {:include_blank => true}%>
+	    </p>
+	<p>
 		<%= f.submit "Submit" %>
 	</p>
 <% end %>
