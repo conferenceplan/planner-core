@@ -30,6 +30,7 @@
 	float: left;
 	list-style: none;
 	font: 12px Tahoma, Arial;
+	width: 20%;
 }
 
 #dropdownmenu li a { 
@@ -38,7 +39,6 @@
 	padding: 5px 12px;
 	text-decoration: none;
 	border-right: 1px solid white;
-	width: 70px;
 	color: #EAFFED;
 	white-space: nowrap
 }

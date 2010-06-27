@@ -72,7 +72,11 @@ class PeopleController < ApplicationController
           if clausestr.length > 0 
             clausestr << ' ' + queryParams["groupOp"] + ' '
           end
-          clausestr << subclause['field'] + ' like ?'
+          if subclause["op"] == 'ne'
+            clausestr << subclause['field'] + ' not like ?'
+          else
+            clausestr << subclause['field'] + ' like ?'
+          end
           fields << subclause['data'] + '%'
           logger.info fields
         end

@@ -1,0 +1,17 @@
+<%= error_messages_for :postalAddress %>
+<% form_for @postalAddress, :url => @urlstr, :html => {:class => "particpantInfo", :id => "particiantInfo"} do |f| %>
+	<div class='line'>Line1: <%= f.text_field :line1 %></div>
+	<div class='line'>Line2: <%= f.text_field :line2 %></div>
+	<div class='line'>Line3: <%= f.text_field :line3 %></div>
+	<div class='city'>city: <%= f.text_field :city %></div>
+	<div class='state'>state: <%= f.text_field :state %></div>
+	<div class='postcode'>post code: <%= f.text_field :postcode %></div>
+	<div class='country'>country: <%= f.text_field :country %></div>
+	<div class='phone'>phone: <%= f.text_field :phone %></div>
+	<div class='boolean'>default?: <%= f.check_box :isdefault %></div>
+	<div class='form-buttons'><%= f.submit "Submit" %>
+	<button type="button" class='jqmClose'>Close</button>
+	</div>
+<% end %>
+<div id='form-response'>
+</div>

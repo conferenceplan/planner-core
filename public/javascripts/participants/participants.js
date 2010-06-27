@@ -1,11 +1,10 @@
 jQuery(document).ready(function(){ 
-  jQuery("#particpanttabs").tabs({
-	ajaxOptions: { async: false },
-	cache: false
-  });
-});
-
-jQuery(document).ready(function(){ 
+	jQuery("#particpanttabs").tabs({
+		ajaxOptions: { async: false },
+		cache: false
+	}).
+	tabs({load : initDialog});
+	
   jQuery("#participants").jqGrid({
     url:'participants/list',
     datatype: 'xml',
@@ -32,8 +31,10 @@ jQuery(document).ready(function(){
       var $tabs = $('#particpanttabs').tabs();
 
       $tabs.
-          tabs( 'url' , 0 , 'participants/'+ids+'/registration_details' ).tabs( 'load' , 0 ).tabs('select', 0).
-          tabs( 'url' , 1 , 'participants/'+ids+'/addresses' ).tabs( 'load' , 1 );
+          tabs( 'url' , 0 , 'participants/'+ids+'/registration_detail' ).tabs( 'load' , 0 ).tabs('select', 0);
+      $tabs.
+          tabs( 'url' , 1 , 'participants/'+ids+'/addresses').tabs( 'load' , 1 )
+          ;
       
       return false;
     }
@@ -76,6 +77,36 @@ jQuery(document).ready(function(){
 		  {height:150, jqModal:true, closeOnEscape:true} // view options
   );
 });
+
+
+function initDialog(event, ui) {
+	$('#edialog', ui.panel).jqm({
+		ajax: '@href', 
+		trigger: 'a.entrydialog',
+		onLoad: adjust,
+		onHide: function(hash) {
+		var $tabs = $('#particpanttabs').tabs();
+		var selected = $tabs.tabs('option', 'selected');
+		$tabs.tabs('load', selected);
+		hash.w.fadeOut('2000',function(){ hash.o.remove(); });
+		}
+	});
+	
+	$('.remove-form form', ui.panel).ajaxForm({
+		target: '#tab-messages',
+		success: function(response, status) {
+			var $tabs = $('#particpanttabs').tabs();
+			var selected = $tabs.tabs('option', 'selected');
+			$tabs.tabs('load', selected);
+		}
+	});
+}
+
+function adjust(dialog) {
+	$('.particpantInfo', dialog.w).ajaxForm({
+		target: '#form-response'
+	});
+}
 
 function processResponse(response, postdata) { 
 	// examine return for problem - look for errorExplanation in the returned HTML

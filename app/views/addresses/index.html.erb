@@ -1,8 +1,31 @@
-<br/>
-<br/>
-<div>
-	<% @addresses.each do |address|%>
-	<%= address.line1 %>
-	<br/>
+<div class='address'>
+	<% @postalAddresses.each do |address|%>
+    <div class='address_postal'>
+    <div class='controls'>
+    <div class='remove-form'>
+    <%=  button_to "remove", address, :method => :delete, :class => 'remove-button' %>
+    </div>
+    <div class='edit-form'>
+    <%=  link_to "edit", {:controller => 'postal_addresses', :action => 'edit', :id => address}, :class => 'entrydialog' %>
+    </div>
+    </div>
+
+	  <div class='boolean'>default?: <%= address.isdefault %></div>
+  	  <div class='line'>line1: <%= address.line1 %></div>
+	  <div class='line'>line2: <%= address.line2 %></div>
+	  <div class='line'>line3: <%= address.line3 %></div>
+	  <div class='city'>city: <%= address.city %></div>
+	  <div class='state'>state: <%= address.state %></div>
+	  <div class='postcode'>post code: <%= address.postcode %></div>
+	  <div class='country'>country: <%= address.country %></div>
+	  <div class='phone'>phone: <%= address.phone %></div>
+	</div>
 	<% end %>
+<p>
+  <%= link_to "Add Postal Address", @urlstr, :class => 'entrydialog' %>
+</p>
+<div class='message' id='tab-messages'></div>
+<div class="jqmWindow" id="edialog">
+Please wait...
+</div>
 </div>

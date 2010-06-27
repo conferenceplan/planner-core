@@ -1,0 +1,20 @@
+<div class='participant_reg_detail'>
+	<% if @registrationDetail %>
+	<div class='participant_reg_detail.number'>
+	Regsitration Number: <%= @registrationDetail.registration_number %>
+	</div>
+	<div class='participant_reg_detail.type'>
+	Type: <%= @registrationDetail.registration_type %>
+	</div>
+	<div class='participant_reg_detail.registered'>
+	Registered: <%= @registrationDetail.registered %>
+	</div>
+	<div class='participant_reg_detail.ghost'>
+	Ghost: <%= @registrationDetail.ghost %>
+	</div>
+	<% else %>
+	<div class='participant_reg_detail.message'>
+	Currently there are no registration details
+	</div>
+	<% end %>
+</div>
