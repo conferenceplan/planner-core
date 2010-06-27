@@ -31,7 +31,7 @@ jQuery(document).ready(function(){
       var $tabs = $('#particpanttabs').tabs();
 
       $tabs.
-          tabs( 'url' , 0 , 'participants/'+ids+'/registration_detail' ).tabs( 'load' , 0 ).tabs('select', 0);
+          tabs( 'url' , 0 , 'participants/'+ids+'/registrationDetail' ).tabs( 'load' , 0 ).tabs('select', 0);
       $tabs.
           tabs( 'url' , 1 , 'participants/'+ids+'/addresses').tabs( 'load' , 1 )
           ;

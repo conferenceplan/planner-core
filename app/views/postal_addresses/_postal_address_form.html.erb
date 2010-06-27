@@ -9,8 +9,9 @@
 	<div class='country'>country: <%= f.text_field :country %></div>
 	<div class='phone'>phone: <%= f.text_field :phone %></div>
 	<div class='boolean'>default?: <%= f.check_box :isdefault %></div>
-	<div class='form-buttons'><%= f.submit "Submit" %>
-	<button type="button" class='jqmClose'>Close</button>
+	<div class='form-buttons'>
+		<%= f.submit "Submit" %>
+		<button type="button" class='jqmClose'>Close</button>
 	</div>
 <% end %>
 <div id='form-response'>

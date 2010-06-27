@@ -40,7 +40,7 @@ class Person < ActiveRecord::Base
   has_many  :programmeItemAssignments
   has_many  :programmeItems, :through => :programmeItemAssignments
 
-  has_one   :registrationDetail
+  has_one   :registrationDetail, :dependent => :delete
   has_one   :survey
   
 end

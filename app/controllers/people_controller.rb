@@ -1,7 +1,5 @@
 class PeopleController < ApplicationController
   
-#  layout 'content'
-  
   def destroy
     @person = Person.find(params[:id])
     @person.destroy

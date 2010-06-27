@@ -1,3 +1,7 @@
+/* @override http://localhost:3000/stylesheets/planner.css?1277669140 */
+
+/* @override http://localhost:3000/stylesheets/planner.css?1277665705 */
+
 
 #people_content {
 	width : 90%;
@@ -69,3 +73,86 @@
 #dropdownmenu li ul li a:hover {
 	background: #7F1616;
 }
+
+div.controls {
+	display: inline-block;
+	clear: none;
+	width: 100%;
+}
+
+div.controls div.remove-form {
+	float: right;
+}
+
+div.controls div.edit-form {
+	float: right;
+}
+		
+#dropdownmenu li ul li a:hover {
+	background: #7F1616;
+}
+
+#content div.address {
+}
+
+div.address div.address_postal {
+	border-style: solid;
+	border-width: 1px;
+	margin-bottom: 5px;
+	height: 160px;
+	padding: 3px;
+}
+
+div.address div.address_postal div.adress_details {
+}
+
+div div.field_name {
+	width: 20%;
+	float: left;
+	margin-right: 8px;
+	text-transform: capitalize;
+}
+
+#content div.address p a.entrydialog {
+	float: right;
+	margin-top: 7px;
+}
+
+div div.field_value {
+	width: 100%;
+}
+
+div.boolean {
+	clear: both;
+	width: 100%;
+}
+
+div.line {
+	clear: both;
+}
+
+div.city {
+	clear: both;
+	width: 100%;
+}
+
+div.state {
+	clear: both;
+	width: 100%;
+}
+
+div.postcode {
+	clear: both;
+	width: 100%;
+}
+
+div.country {
+	clear: both;
+	width: 100%;
+}
+
+div.phone {
+	clear: both;
+	width: 100%;
+}
+

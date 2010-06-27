@@ -1,3 +1,3 @@
 class RegistrationDetail < ActiveRecord::Base
-  belongs_to  :person
+  belongs_to  :person 
 end

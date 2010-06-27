@@ -31,7 +31,7 @@ class PostalAddressesController < ApplicationController
       @postalAddress = @person.postal_addresses.new(params[:postal_address]);
     else
       # TODO - we may not want to create an address without having a person to assigned it to it?
-      @postalAddress = @PostalAddress.new(params[:postal_address]);
+      @postalAddress = PostalAddress.new(params[:postal_address]);
     end
     
     if (@person.save)

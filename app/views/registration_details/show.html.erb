@@ -1,20 +1,20 @@
 <div class='participant_reg_detail'>
-	<% if @registrationDetail %>
-	<div class='participant_reg_detail.number'>
-	Regsitration Number: <%= @registrationDetail.registration_number %>
-	</div>
-	<div class='participant_reg_detail.type'>
-	Type: <%= @registrationDetail.registration_type %>
-	</div>
-	<div class='participant_reg_detail.registered'>
-	Registered: <%= @registrationDetail.registered %>
-	</div>
-	<div class='participant_reg_detail.ghost'>
-	Ghost: <%= @registrationDetail.ghost %>
-	</div>
-	<% else %>
-	<div class='participant_reg_detail.message'>
-	Currently there are no registration details
-	</div>
-	<% end %>
+  <% if @registrationDetail %>
+    <div class='edit-form'>
+      <%=  link_to "edit", {:controller => 'registrationDetails', :action => 'edit', :id => @registrationDetail}, :class => 'entrydialog' %>
+    </div>
+    <div class='line'>Registration Number: <%= @registrationDetail.registration_number %></div>
+    <div class='line'>Type: <%= @registrationDetail.registration_type %></div>
+    <div class='boolean'>Registered?: <%= @registrationDetail.registered %></div>
+    <div class='boolean'>Ghost?: <%= @registrationDetail.ghost %></div>
+  <% else %>
+    <div class='participant_reg_detail.message'>
+      Currently there are no registration details
+      <p>
+      <%= link_to "Add Registration Details", @urlstr, :class => 'entrydialog' %>
+      </p>
+    </div>
+  <% end %>
+  <div class='message' id='tab-messages'></div>
+  <div class="jqmWindow" id="edialog">Please wait...</div>
 </div>
