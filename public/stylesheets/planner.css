@@ -82,10 +82,13 @@ div.controls {
 
 div.controls div.remove-form {
 	float: right;
+	vertical-align: top;
+	margin-left: 5px;
 }
 
 div.controls div.edit-form {
 	float: right;
+	vertical-align: top;
 }
 		
 #dropdownmenu li ul li a:hover {
@@ -103,7 +106,7 @@ div.address div.address_postal {
 	padding: 3px;
 }
 
-div.address div.address_postal div.adress_details {
+div.address div.address_postal div.address_details {
 }
 
 div div.field_name {
@@ -156,3 +159,20 @@ div.phone {
 	width: 100%;
 }
 
+div.controls div.remove-form form.button-to div input.remove-button {
+	clear: both;
+	margin: -1px 0 0 0px;
+	background-image: none;
+	background-color: transparent;
+	padding: 0;
+	border: 1px solid black;
+}
+
+div.controls div.edit-form a.entrydialog {
+	text-decoration: none;
+	border-style: solid;
+	border-width: 1px;
+	margin: 0;
+	padding: 0;
+	height: 18px;
+}

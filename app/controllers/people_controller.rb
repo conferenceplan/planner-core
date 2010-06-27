@@ -2,6 +2,16 @@ class PeopleController < ApplicationController
   
   def destroy
     @person = Person.find(params[:id])
+    
+    # Get the addresses and if they are not reference by other people the get rid of them...
+    @postalAddresses = @person.postal_addresses
+    
+    if (@postalAddresses)
+      @postalAddresses.each do |address|
+        @person.removeAddress(address)
+      end
+    end
+    
     @person.destroy
     render :layout => 'success'
   end

@@ -43,4 +43,13 @@ class Person < ActiveRecord::Base
   has_one   :registrationDetail, :dependent => :delete
   has_one   :survey
   
+  def removeAddress(address)
+    # TODO - change to handle any address type
+     postal_addresses.delete(address) # remove it from the person
+     # and then make sure that it is not used by another person
+     if (! addresses.find(:all, :conditions =>  ["addressable_id = ? and person_id != ?", address, @id] ) )
+       address.destroy
+     end
+  end
+  
 end
