@@ -16,11 +16,13 @@ jQuery(document).ready(function(){
       {name:'programmeItem[title]', index:'title', width:250,
     	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:1, label: "Title", elmprefix:"(*)"},editrules:{required:true}
       }, 
+      // We do not want the room to be editable here as it is a scheduling task....
       {name:'programmeItem[room.name]', index:'room.name', width:250,
-          editable:true,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Room", elmprefix:"(*)"},editrules:{required:false}
+          editable:false,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Room", elmprefix:"(*)"},editrules:{required:false}
     		  },
+//    		  First you need to make sure it is on a separate row - this is done via the rowpos attribute
       {name:'programmeItem[duration]', index:'duration', width:250,
-        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Duration", elmprefix:"(*)"},editrules:{required:true}
+        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:3, label: "Duration", elmprefix:"(*)"},editrules:{required:true}
       } ],
 	 
     pager: jQuery('#pager'),
@@ -33,7 +35,7 @@ jQuery(document).ready(function(){
     viewrecords: true,
     imgpath: 'stylesheets/cupertino/images',
     caption: 'ProgrammeItems',
-    editurl: '/',
+    editurl: '/programme_items', // need to ensure edit url is correct
     onSelectRow: function(ids) {
       
       return false;
@@ -44,7 +46,7 @@ jQuery(document).ready(function(){
 		  {view:false }, //options
 
 		  {	// edit options
-			  height:220, reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
+			  height:320, reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
 			  bottominfo:"Fields marked with (*) are required",
 			  afterSubmit: processResponse,
 			  beforeSubmit : function(postdata, formid) {
