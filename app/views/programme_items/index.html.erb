@@ -1,9 +1,6 @@
 <br/>
 <br/>
-<% for item in @programmeItems %>
-	<li>Title is <%= item.title %> 
-		<%=  link_to "edit", :action => 'edit', :id => item %>
-		<%=  link_to "remove", item, :method => :delete,:confirm => "Are you Sure?" %>
-	</li>
-<%end%>
-<p> <%= link_to "create new event", :action => 'new' %></p>
+<div id='left-panel'>
+	<table id="programmeItems"></table>
+	<div id="pager"></div>
+</div>

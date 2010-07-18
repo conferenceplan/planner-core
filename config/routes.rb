@@ -38,6 +38,7 @@ ActionController::Routing::Routes.draw do |map|
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing or commenting them out if you're using named routes and resources.
+  map.connect 'programme_items/list', :controller => 'programme_items', :action => 'list'
   map.resources :programme_items
   map.resources :registrationDetails, :has_one => :participant
   map.resources :postal_addresses, :has_many => :people

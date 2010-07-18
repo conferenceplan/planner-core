@@ -1,0 +1,17 @@
+xml.rows do
+  xml.page(@page)
+  xml.total(@nbr_pages)
+  xml.records(@programmeItems.size)
+  @programmeItems.each do |programmeItem|
+    xml.row({:id => programmeItem.id}) do
+      xml.cell(programmeItem.title)
+      if (programmeItem.room)
+         xml.cell(programmeItem.room.name)
+      else
+         xml.cell('none')
+      end
+      xml.cell(programmeItem.duration)
+    end
+  end
+end
+
