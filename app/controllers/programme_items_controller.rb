@@ -7,7 +7,8 @@ class ProgrammeItemsController < ApplicationController
     @programmeItem = ProgrammeItem.find(params[:id])
   end
   def create
-    @programmeItem = ProgrammeItem.new(params[:programme_item])
+# NOTE - name of the programmeItem passed in from form
+    @programmeItem = ProgrammeItem.new(params[:programmeItem])
     if (@programmeItem.save)
        redirect_to :action => 'show', :id => @programmeItem
     else
