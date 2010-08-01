@@ -71,7 +71,7 @@ class ProgrammeItemsController < ApplicationController
     
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    count = ProgrammeItem.count :conditions => clause
+    count = ProgrammeItem.count :include => :room, :conditions => clause
     @nbr_pages = (count / rows.to_i).floor + 1
     
     off = (@page.to_i - 1) * rows.to_i
