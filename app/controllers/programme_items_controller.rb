@@ -75,7 +75,7 @@ class ProgrammeItemsController < ApplicationController
     @nbr_pages = (count / rows.to_i).floor + 1
     
     off = (@page.to_i - 1) * rows.to_i
-    @programmeItems = ProgrammeItem.find :all, :offset => off, :limit => rows,
+    @programmeItems = ProgrammeItem.find :all, :include => :room, :offset => off, :limit => rows,
       :order => idx + " " + order, :conditions => clause
    
     # We return the list of ProgrammeItems as an XML structure which the 'table' can use.
