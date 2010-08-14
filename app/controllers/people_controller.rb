@@ -1,5 +1,6 @@
 class PeopleController < ApplicationController
-  
+  require 'csv'
+
   def destroy
     @person = Person.find(params[:id])
     
@@ -101,11 +102,32 @@ class PeopleController < ApplicationController
     @people = Person.find :all, :offset => off, :limit => rows,
       :order => idx + " " + order, :conditions => clause
    
-    # We return the list of people as an XML structure which the 'table' can use.
+    # We return the list of people as an XML structure which the 'table' can us
     # TODO: would it be more efficient to use JSON instead?
     respond_to do |format|
       format.xml
     end
   end
-
+  
+  def import
+    
+  end
+  
+  def doimport
+     @parsed_file=CSV::Reader.parse(params[:dump][:file])
+     n=0
+     @parsed_file.each  do |row|
+        c=Person.new
+    
+        c.first_name=row[0]
+        c.last_name=row[1]
+        if c.save
+           n=n+1
+           GC.start if n%50==0
+        end
+        flash.now[:message]="CSV Import Successful,  #{n} new
+                                records added to data base"
+      end
+      redirect_to :action => 'index'
+    end
 end

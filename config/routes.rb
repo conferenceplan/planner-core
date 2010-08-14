@@ -44,6 +44,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :postal_addresses, :has_many => :people
   map.resources :menus
   map.connect 'participants/list', :controller => 'people', :action => 'list'
+  map.connect 'participants/import', :controller => 'people', :action => 'import'
+  map.connect 'participants/doimport', :controller => 'people', :action => 'doimport', :method => 'post'
+
   map.resources :people, :as => "participants", :has_many => [:addresses, :postalAddresses], :has_one => :registrationDetail
   map.resources :rooms
 #  map.resources :addresses, :as => "addresses"
