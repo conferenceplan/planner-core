@@ -42,6 +42,7 @@ class Person < ActiveRecord::Base
 
   has_one   :registrationDetail, :dependent => :delete
   has_one   :survey
+  has_enumerated :invitestatus, :class_name => 'InviteStatus'
   
   def removeAddress(address)
     # TODO - change to handle any address type

@@ -1,4 +1,7 @@
 <h1>People#show</h1>
 
-First Name: <%= @person.first_name %><br/>
-Last Name: <%= @person.last_name %><br/>
+<h2>First Name: <%= @person.first_name %><h2/>
+<h2>Last Name: <%= @person.last_name %><h2/>
+<h2> InviteStatus: <% if @person.invitestatus %>
+<%= @person.invitestatus.name %>
+<% end%></h2>
