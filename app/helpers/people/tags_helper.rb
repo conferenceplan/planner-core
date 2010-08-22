@@ -1,0 +1,2 @@
+module People::TagsHelper
+end

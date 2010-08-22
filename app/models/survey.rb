@@ -1,6 +1,6 @@
 class Survey < ActiveRecord::Base
-  belongs_to  :Person
+  belongs_to  :person
 
-  has_many    :Answer
+  has_many    :answers
   
 end

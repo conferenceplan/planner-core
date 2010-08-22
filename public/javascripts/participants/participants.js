@@ -2,8 +2,7 @@ jQuery(document).ready(function(){
 	jQuery("#particpanttabs").tabs({
 		ajaxOptions: { async: false },
 		cache: false
-	}).
-	tabs({load : initDialog});
+	}).tabs({load : initDialog});
 	
   jQuery("#participants").jqGrid({
     url:'participants/list',
@@ -30,11 +29,9 @@ jQuery(document).ready(function(){
     onSelectRow: function(ids) {
       var $tabs = $('#particpanttabs').tabs();
 
-      $tabs.
-          tabs( 'url' , 0 , 'participants/'+ids+'/registrationDetail' ).tabs( 'load' , 0 ).tabs('select', 0);
-      $tabs.
-          tabs( 'url' , 1 , 'participants/'+ids+'/addresses').tabs( 'load' , 1 )
-          ;
+      $tabs.tabs( 'url' , 0 , 'participants/'+ids+'/registrationDetail' ).tabs( 'load' , 0 ).tabs('select', 0);
+      $tabs.tabs( 'url' , 1 , 'participants/'+ids+'/addresses').tabs( 'load' , 1 );
+      $tabs.tabs( 'url' , 2 , 'participants/'+ids+'/tags').tabs( 'load' , 2 );
       
       return false;
     }
@@ -78,6 +75,23 @@ jQuery(document).ready(function(){
   );
 });
 
+//http://jqueryui.com/demos/autocomplete/search.php?term=ro
+/*
+ * [ { "id": "Nycticorax nycticorax", 
+ * "label": "Black-crowned Night Heron", 
+ * "value": "Black-crowned Night Heron" }, 
+ * { "id": "Ardea purpurea", "label": "Purple Heron", "value": "Purple Heron" }, { "id": "Tetrao tetrix", "label": "Black Grouse", "value": "Black Grouse" }, { "id": "Caprimulgus europaeus", "label": "European Nightjar", "value": "European Nightjar" }, { "id": "Picus viridis", "label": "European Green Woodpecker", "value": "European Green Woodpecker" }, { "id": "Saxicola rubicola", "label": "European Stonechat", "value": "European Stonechat" }, { "id": "Luscinia svecica", "label": "Bluethroat", "value": "Bluethroat" }, { "id": "Ardea cinerea", "label": "Grey Heron", "value": "Grey Heron" }, { "id": "Corvus cornix", "label": "Hooded Crow", "value": "Hooded Crow" }, { "id": "Sylvia curruca", "label": "Lesser Whitethroat", "value": "Lesser Whitethroat" }, { "id": "Pluvialis apricaria", "label": "European Golden Plover", "value": "European Golden Plover" }, { "id": "Sylvia communis", "label": "Common Whitethroat", "value": "Common Whitethroat" } ]
+ */
+function initAutoComplete() {
+	$("#tags").autocomplete({
+		source: "/participants/tags", // type list?
+		minLength: 2,
+		select: function(event, ui) {
+			alert("Selected " + ui.item.value);
+//			log(ui.item ? ("Selected: " + ui.item.value + " aka " + ui.item.id) : "Nothing selected, input was " + this.value);
+		}
+	});
+}
 
 function initDialog(event, ui) {
 	$('#edialog', ui.panel).jqm({

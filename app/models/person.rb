@@ -1,5 +1,6 @@
 class Person < ActiveRecord::Base
   
+  # TODO - this is probably not the correct uniqueness test
   validates_uniqueness_of :last_name,
             :scope => [:first_name], 
             :case_sensitive => false, :message => ':that person already exists in the database.' 
@@ -43,6 +44,10 @@ class Person < ActiveRecord::Base
   has_one   :registrationDetail, :dependent => :delete
   has_one   :survey
   has_enumerated :invitestatus, :class_name => 'InviteStatus'
+  
+  #
+  acts_as_taggable
+  acts_as_taggable_on :activities
   
   def removeAddress(address)
     # TODO - change to handle any address type

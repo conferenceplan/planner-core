@@ -43,11 +43,19 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :registrationDetails, :has_one => :participant
   map.resources :postal_addresses, :has_many => :people
   map.resources :menus
-  map.connect 'participants/list', :controller => 'people', :action => 'list'
-  map.connect 'participants/import', :controller => 'people', :action => 'import'
-  map.connect 'participants/doimport', :controller => 'people', :action => 'doimport', :method => 'post'
-
-  map.resources :people, :as => "participants", :has_many => [:addresses, :postalAddresses], :has_one => :registrationDetail
+  map.connect 'participants/tags', :controller => 'people/tags', :action => 'index'
+  map.resources :people, :as => "participants", 
+    :has_many => [:addresses, :postalAddresses], #TODO: check the tags path
+    :has_one => :registrationDetail,
+    :collection => {:list => :get }
+  map.resources :people, :as => "participants" do |person|
+    person.resource :tags, :member => {:remove => :delete, :add => :post, :index => :get, :list => :get}, :controller => 'people/tags',
+      :except => [:destroy, :new, :update, :create, :edit]
+  end
+    
+#  map.namespace :people do |person|
+#    person.resources :tag
+#  end
   map.resources :rooms
 #  map.resources :addresses, :as => "addresses"
 #  map.connect ':controller/:action/:id'
