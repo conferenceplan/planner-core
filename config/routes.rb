@@ -43,7 +43,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :registrationDetails, :has_one => :participant
   map.resources :postal_addresses, :has_many => :people
   map.resources :menus
-#  map.connect 'participants/tags', :controller => 'people/tags', :action => 'index'
+
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses],
     :has_one => :registrationDetail,
@@ -53,15 +53,21 @@ ActionController::Routing::Routes.draw do |map|
       :except => [:destroy, :new, :update, :create, :edit]
   end
 
+  map.connect 'participants/tags/list', :controller => 'people/tags', :action => 'list'
+  map.connect 'participants/tags/index', :controller => 'people/tags', :action => 'index'
+
   map.connect 'participants/list', :controller => 'people', :action => 'list'
   map.connect 'participants/import', :controller => 'people', :action => 'import'
   map.connect 'participants/doimport', :controller => 'people', :action => 'doimport', :method => 'post'
     
-#  map.namespace :people do |person|
-#    person.resources :tag
-#  end
   map.resources :rooms
-#  map.resources :addresses, :as => "addresses"
-#  map.connect ':controller/:action/:id'
-#  map.connect ':controller/:action/:id.:format'
+
+  map.resource :user_session
+  map.root :controller => "user_sessions", :action => "new" # optional, this just sets the root route
+  
+  map.resource :account, :controller => "users"
+  map.resources :users
+  
+  #
+  
 end

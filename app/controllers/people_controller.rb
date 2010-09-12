@@ -1,5 +1,6 @@
 class PeopleController < ApplicationController
   require 'csv'
+  before_filter :require_user
 
   def destroy
     @person = Person.find(params[:id])

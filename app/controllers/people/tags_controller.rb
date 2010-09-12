@@ -2,36 +2,43 @@ class People::TagsController < ApplicationController
   
   def index
     # Get all the tags for all the people
-    @tags = Person.tag_counts
+    @tags = Person.tag_counts_on(:activities)
     render :layout => 'content'
   end
   
   # All the other methods take the id of the person to update
   
   def add
-    person = Person.find(params[:person_id])
+    @person = Person.find(params[:person_id])
+    tag = params[:tag]
     
     # add new tag to the person?
+#    @person.tag_list.add(tag)
+    @person.activity_list.add(tag)
+    @person.save
     
     render :layout => 'content'
   end
   
   def show
-    @tags = Person.find(params[:person_id]).tag_list
+    person = Person.find(params[:person_id])
+    @tags = person.activity_list
     
     render :layout => 'content'
   end
 
   def list
-    @tags = Person.find(params[:person_id]).tag_list
+    @tags = Person.tag_counts_on(:activities)
     
-    render :layout => 'content'
+    respond_to do |format|
+      format.xml
+    end
   end
   
   def remove
-    person = Person.find(params[:person_id])
+    @person = Person.find(params[:person_id])
     
-    # remove tag fromthe person?
+    # remove tag from the person?
     
     render :layout => 'content'
   end

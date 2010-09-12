@@ -1,12 +1,13 @@
 <div class='participant_tags'>
-<% tag_cloud @tags, %w(css1 css2 css3 css4) do |tag, css_class| %>
-    <%= link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
-<% end %>
 <div class="ui-widget">
-<label for="tags">Tags: </label><input id="tags" />
+<label>Tags: </label><input id="tags" />
 </div>
 <div class="ui-widget" style="margin-top:2em; font-family:Arial">
 Tags:
-<div id="tags-list" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content"></div>
+<div id="tags-list" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content">
+<% @tags.each do |tag| %>
+  <%= tag %><br/>
+<% end %>
+</div>
 </div>
 </div>
