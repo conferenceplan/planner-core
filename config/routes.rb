@@ -43,7 +43,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :registrationDetails, :has_one => :participant
   map.resources :postal_addresses, :has_many => :people
   map.resources :menus
-
+  
+  map.connect 'participants/import', :controller => 'people', :action => 'import'
+  map.connect 'participants/doimport', :controller => 'people', :action => 'doimport', :method => 'post'
+    
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses],
     :has_one => :registrationDetail,
@@ -57,9 +60,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/tags/index', :controller => 'people/tags', :action => 'index'
 
   map.connect 'participants/list', :controller => 'people', :action => 'list'
-  map.connect 'participants/import', :controller => 'people', :action => 'import'
-  map.connect 'participants/doimport', :controller => 'people', :action => 'doimport', :method => 'post'
-    
+ 
   map.resources :rooms
 
   map.resource :user_session
