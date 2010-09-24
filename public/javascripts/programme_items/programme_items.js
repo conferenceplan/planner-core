@@ -13,15 +13,15 @@ jQuery(document).ready(function(){
     datatype: 'xml',
     colNames:['Title','Room','Duration'],
     colModel :[ 
-      {name:'programmeItem[title]', index:'title', width:250,
+      {name:'programme_item[title]', index:'title', width:250,
     	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:1, label: "Title", elmprefix:"(*)"},editrules:{required:true}
       }, 
       // We do not want the room to be editable here as it is a scheduling task....
-      {name:'programmeItem[room.name]', index:'rooms.name', width:250,
+      {name:'programme_item[room.name]', index:'rooms.name', width:250,
           editable:false,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Room", elmprefix:"(*)"},editrules:{required:false}
     		  },
 //    		  First you need to make sure it is on a separate row - this is done via the rowpos attribute
-      {name:'programmeItem[duration]', index:'duration', width:250,
+      {name:'programme_item[duration]', index:'duration', width:250,
         	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:3, label: "Duration", elmprefix:"(*)"},editrules:{required:true}
       } ],
 	 
