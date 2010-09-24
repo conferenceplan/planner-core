@@ -118,10 +118,13 @@ class PeopleController < ApplicationController
      @parsed_file=CSV::Reader.parse(params[:dump][:file])
      n=0
      @parsed_file.each  do |row|
+        r=RegistrationDetail.new
+        r.registration_number=row[0]
+        r.registration_type=row[1]
         c=Person.new
-    
-        c.first_name=row[0]
-        c.last_name=row[1]
+        c.registrationDetail=r
+        c.first_name=row[2]
+        c.last_name=row[3]
         if c.save
            n=n+1
            GC.start if n%50==0
