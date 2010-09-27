@@ -1,3 +1,20 @@
+<% @emailAddresses.each do |eaddress|%>
+    <div class='address_email'>
+      <div class='controls'>
+        <div class='remove-form'>
+          <%=  button_to "remove", eaddress, :method => :delete, :class => 'remove-button' %>
+        </div>
+        <div class='edit-form'>
+          <%=  link_to "edit", {:controller => 'email_addresses', :action => 'edit', :id => eaddress}, :class => 'entrydialog' %>
+        </div>
+      </div>
+      <div class='address_details'>
+	      <div class='boolean'><div class='field_name'>default?:</div><div class='field_value'><%= eaddress.isdefault %></div></div>
+  	      <div class='email'><div class='field_name'>email:</div><div class='field_value'><%= eaddress.email %></div></div>
+	  </div>
+ 	</div>
+	<% end %>
+</div>
 <div class='address'>
 	<% @postalAddresses.each do |address|%>
     <div class='address_postal'>
@@ -23,8 +40,12 @@
  	</div>
 	<% end %>
 </div>
+
 <p>
   <%= link_to "Add Postal Address", @urlstr, :class => 'entrydialog' %>
+</p>
+<p>
+  <%= link_to "Add Email Address", @urlemailstr, :class => 'entrydialog' %>
 </p>
 <div class='message' id='tab-messages'></div>
 <div class="jqmWindow" id="edialog">

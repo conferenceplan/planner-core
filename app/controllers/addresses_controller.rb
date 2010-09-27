@@ -6,6 +6,10 @@ class AddressesController < ApplicationController
     
     @postalAddresses = person.postal_addresses
     
+    @urlemailstr = '/participants/'+ params[:person_id]  + '/emailAddresses/new'
+    
+    @emailAddresses = person.email_addresses
+    
     render :layout => 'content'
   end
 

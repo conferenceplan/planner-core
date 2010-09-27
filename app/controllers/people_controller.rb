@@ -117,17 +117,25 @@ class PeopleController < ApplicationController
   def doimport
      @parsed_file=CSV::Reader.parse(params[:dump][:file])
      n=0
-     @parsed_file.each  do |row|
-        r=RegistrationDetail.new
-        r.registration_number=row[0]
-        r.registration_type=row[1]
-        c=Person.new
-        c.registrationDetail=r
-        c.first_name=row[2]
-        c.last_name=row[3]
-        if c.save
-           n=n+1
-           GC.start if n%50==0
+     @parsed_file.shift
+     @parsed_file.each  do |row|       
+        p=Person.new(:first_name => row[2],
+                     :last_name => row[3])
+        r = RegistrationDetail.new(:registration_number => row[0],
+                                   :registration_type => row[1])
+        p.registrationDetail = r
+        p.save
+        @a=p.postal_addresses.new(:line1 => row[4],
+                               :line2 => row[5],
+                               :city  => row[6],
+                               :postcode => row[7],
+                               :state => row[8],
+                               :country => row[9],
+                               :phone => row[10])    
+       
+        if (p.save)
+              n=n+1
+              GC.start if n%50==0
         end
         flash.now[:message]="CSV Import Successful,  #{n} new
                                 records added to data base"

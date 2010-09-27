@@ -44,13 +44,14 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :programme_items
   map.resources :registrationDetails, :has_one => :participant
   map.resources :postal_addresses, :has_many => :people
+  map.resources :email_addresses, :has_many => :people
   map.resources :menus
   
   map.connect 'participants/import', :controller => 'people', :action => 'import'
   map.connect 'participants/doimport', :controller => 'people', :action => 'doimport', :method => 'post'
     
   map.resources :people, :as => "participants", 
-    :has_many => [:addresses, :postalAddresses],
+    :has_many => [:addresses, :postalAddresses, :emailAddresses],
     :has_one => :registrationDetail,
     :collection => {:list => :get }
   map.resources :people, :as => "participants" do |person|
