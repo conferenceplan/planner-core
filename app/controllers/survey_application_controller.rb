@@ -1,0 +1,12 @@
+class SurveyApplicationController < ApplicationController
+
+  private
+    def check_for_single_access_token 
+      if params[:key] 
+        @respondent       = SurveyRespondent.find_by_single_access_token(params[:key]) 
+        @survey_respondent_session = SurveyRespondentSession.create!(@respondent) 
+#        @respondent.reset_single_access_token! # do this if we want a new key every time
+      end
+    end 
+
+end

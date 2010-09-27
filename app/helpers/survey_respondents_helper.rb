@@ -1,0 +1,2 @@
+module SurveyRespondentsHelper
+end

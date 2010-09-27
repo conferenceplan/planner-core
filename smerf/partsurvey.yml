@@ -1,0 +1,198 @@
+--- 
+smerfform:   
+  name: Renovation Program Participant Questionnaire
+  welcome: |
+    <b>Welcome</b>
+    <p>
+    Please complete this form if you've been invited to be on Renovation Program.
+    </p>
+    <p>
+    Worldcon program is a big, varied enterprise that needs the talents of many people to succeed.
+    If you're new to SF cons, welcome! The questionnaire is lengthy; please complete as much as you can and 
+    make your best guesses. You will also be able to return to the form to update your information. 
+    If you have to cancel your trip to Reno, please let us know as soon as possible. Many fields have explanatory links, 
+    so select the field name to display more information.
+    </p>
+    <p>
+    <em>Underlined fields</em> are required.
+    </p>
+
+  thank_you: | 
+    <p>
+    <b>Thank you for your input.</b>
+    </p>
+
+  group_sort_order_field: code
+
+  groups:
+    personal_details:
+      code: 1
+      name: Personal Details
+      description: | 
+        <p>
+        This is a brief description of the Personal Details Group
+        here we ask you some personal details ...
+        <p>
+      questions:
+        First Name:
+          code: g1q1
+          type: textfield
+          sort_order: 1
+          question: | <u>First Name</u>
+          textfield_size: 20
+          validation: validate_mandatory_question
+        Last Name:
+          code: g1q2
+          type: textfield
+          sort_order: 2
+          question: | Last Name
+          textfield_size: 20
+          validation: validate_mandatory_question
+        Plan to Attend:
+          code: g1q3
+          type: singlechoice
+          sort_order: 3
+          validation: validate_mandatory_question
+          question: | I plan to attend
+          answers:
+            Yes:
+              code: 1
+              answer: | Yes
+              sort_order: 1
+              default: N
+            No:
+              code: 2
+              answer: | No
+              sort_order: 2
+              default: N
+        Full Name:
+          code: g1q4
+          type: textfield
+          sort_order: 4
+          validation: validate_mandatory_question
+          question: | Full Name
+          textfield_size: 60
+          help: | as you want it to appear in the schedule, if you use a pen name or want middle initials included
+        City:
+          code: g1q5
+          type: textfield
+          validation: validate_mandatory_question
+          sort_order: 5
+          question: | City
+          textfield_size: 20
+        State:
+          code: g1q6
+          type: textfield
+          validation: validate_mandatory_question
+          sort_order: 6
+          question: | State
+          textfield_size: 10
+        Email:
+          code: g1q7
+          type: textfield
+          validation: validate_mandatory_question
+          sort_order: 7
+          question: | Email Address
+          textfield_size: 50
+        Phone:
+          code: g1q8
+          validation: validate_mandatory_question
+          type: textfield
+          sort_order: 8
+          question: | Phone Number
+          textfield_size: 50
+# NOTE: we want to be able to attach sub questions to text - this needs to be an extension to SMERF
+# also want the ability to to an add more of this type, and a tag choice (with cloud display)
+# change render to get rid of <p> and put in div with style so we an have first and last name on one line etc
+# use the question label for the style name if that helps or put in a style attribute
+    membership_status:
+      code: 2
+      name: Membership Status
+      questions:
+        I am a Member:
+          code: g2q1
+          type: singlechoice
+          sort_order: 1
+          answers:
+            Yes:
+              code: 1
+              answer: | I am an attending member of Renovation.<br/> 
+                Check our online member search if you aren't sure of your status.
+              sort_order: 1
+              default: N
+            No:
+              code: 2
+              answer: | I'm not yet an attending member, I understand I need to buy a membership in order to be scheduled for Program.<br/>
+                You can complete the rest of the questionnaire, but you need to buy a membership by June 15, 2011 in order to be scheduled.
+              sort_order: 2
+              default: N
+    program_availability:
+      code: 3
+      name: Program Availability
+      description: | Note that Renovation runs from Wednesday, August 17-Sunday, August 21
+      questions:
+        Start Date:
+          code: g3q1
+          validation: validate_mandatory_question
+          type: selectionbox
+          selectionbox_multiplechoice: N
+          sort_order: 1
+          question: | I will be available to be on Renovation Program beginning:
+          answers:
+            Wed:
+              code: 1
+              answer: | Wednesday, August 17
+              sort_order: 1
+              default: N
+            Thu:
+              code: 2
+              answer: | Thursday, August 18
+              sort_order: 2
+              default: N
+            Fri:
+              code: 3
+              answer: | Friday, August 19
+              sort_order: 3
+              default: N
+            Sat:
+              code: 4
+              answer: | Saturday, August 20
+              sort_order: 4
+              default: N
+        End Date:
+          code: g3q2
+          validation: validate_mandatory_question
+          type: selectionbox
+          selectionbox_multiplechoice: N
+          sort_order: 2
+          question: | I will not be available for program after:
+          answers:
+            Thu:
+              code: 2
+              answer: | Thursday, August 18
+              sort_order: 3
+              default: N
+            Fri:
+              code: 3
+              answer: | Friday, August 19
+              sort_order: 2
+              default: N
+            Sat:
+              code: 4
+              answer: | Saturday, August 20
+              sort_order: 1
+              default: N
+# NOTE: change to a date entry field - use a jquery date selector and a helper for validation?
+        Max Items Per Day:
+          code: g3q3
+          type: textfield
+          sort_order: 3
+          question: | The maximum number of items I would like to be on per day is
+          textfield_size: 3
+        Max Items:
+          code: g3q4
+          type: textfield
+          sort_order: 4
+          question: | The maximum number of items I'd like to be on for the entire convention is
+          textfield_size: 3
+

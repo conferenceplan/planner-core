@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :smerf_forms
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -68,7 +70,13 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resource :account, :controller => "users"
   map.resources :users
-  
+    
   #
-  
+#  map.resource :survey_session
+#  map.root :controller => "survey_sessions", :action => "new" # optional, this just sets the root route
+
+  map.resources :survey_respondent_sessions # just for the new session...
+
+  map.resources :survey_respondents
+
 end

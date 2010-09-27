@@ -1,5 +1,5 @@
 class ProgrammeItemsController < ApplicationController
-
+  
   def index
     @programmeItems = ProgrammeItem.find :all
   end
