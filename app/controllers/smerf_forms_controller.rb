@@ -7,7 +7,9 @@
 # * PUT /smerf_form/1 - updates existing record with responses
 #
 
-class SmerfFormsController < ApplicationController
+class SmerfFormsController < SurveyApplicationController
+
+  before_filter :check_for_single_access_token, :only => [:show, :create, :update]
   
   include Smerf
 
