@@ -1,5 +1,19 @@
+
+<div class='address'>
+    <div class=address_header>
+      <% if @emailAddresses.length > 0 %>
+        <div class='infolabel'>Email Address(es)</div>
+	  <%else%>
+	    <div class='infolabel'>No Email Address</div>
+	  <%end%>
+	  <div class=add-form>
+		   <%= link_to "Add Email Address", @urlemailstr, :class => 'entrydialog' %>
+	  </div>
+    </div>
+
 <% @emailAddresses.each do |eaddress|%>
     <div class='address_email'>
+      
       <div class='controls'>
         <div class='remove-form'>
           <%=  button_to "remove", eaddress, :method => :delete, :class => 'remove-button' %>
@@ -16,6 +30,17 @@
 	<% end %>
 </div>
 <div class='address'>
+	<div class=address_header>
+      <% if @emailAddresses.length > 0 %>
+        <div class='infolabel'>Postal Address(es)</div>
+	  <% else %>
+	        <div class='infolabel'>No Postal Address</div>
+	  <% end%>
+	  <div class=add-form>
+		   <%= link_to "Add Postal Address", @urlstr, :class => 'entrydialog' %>
+	  </div>
+    </div>
+
 	<% @postalAddresses.each do |address|%>
     <div class='address_postal'>
       <div class='controls'>
@@ -41,12 +66,6 @@
 	<% end %>
 </div>
 
-<p>
-  <%= link_to "Add Postal Address", @urlstr, :class => 'entrydialog' %>
-</p>
-<p>
-  <%= link_to "Add Email Address", @urlemailstr, :class => 'entrydialog' %>
-</p>
 <div class='message' id='tab-messages'></div>
 <div class="jqmWindow" id="edialog">
 Please wait...
