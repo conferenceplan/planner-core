@@ -57,5 +57,16 @@ class Person < ActiveRecord::Base
        address.destroy
      end
   end
+
+  def removeAllAddresses()
+    # Get the addresses and if they are not reference by other people the get rid of them...
+    postalAddresses = self.postal_addresses
+    
+    if (postalAddresses)
+      postalAddresses.each do |address|
+        self.removeAddress(address)
+      end
+    end
+  end
   
 end

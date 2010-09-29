@@ -3,7 +3,7 @@ class PostalAddressesController < ApplicationController
     if (params[:person_id])
       @urlstr = '/participants/' + params[:person_id] + '/postalAddresses'
     else
-      @urlstr = '/postalAddresses'
+      @urlstr = '/postal_addresses'
     end
     @postalAddress = PostalAddress.new 
 
@@ -30,10 +30,17 @@ class PostalAddressesController < ApplicationController
       @person = Person.find(params[:person_id])      
       @postalAddress = @person.postal_addresses.new(params[:postal_address]);
     else
+    logger.debug "HERE"
       # TODO - we may not want to create an address without having a person to assigned it to it?
       @postalAddress = PostalAddress.new(params[:postal_address]);
+      if (@postalAddress.save)
+        redirect_to :action => 'show', :id => @postalAddress
+      else
+        render :action => 'new'
+      end
+      return
     end
-    
+
     if (@person.save)
 #      We want to go back to?
        redirect_to :action => 'show', :id => @postalAddress
@@ -50,6 +57,8 @@ class PostalAddressesController < ApplicationController
 
   def destroy
     # TODO - make sure that this cleans up the relationships in the Address table
+    # TODO - this is not correct, the address should be removed from the person then only
+    # destroyed if there are no other people referencing the address...
     @postalAddress = PostalAddress.find(params[:id])
     @postalAddress.destroy
     render :layout => 'success'

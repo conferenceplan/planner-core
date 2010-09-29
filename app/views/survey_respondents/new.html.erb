@@ -1,0 +1,5 @@
+<h1>Survey</h1>
+
+<% form_for @survey_respondent do |f| %>
+  <%= render :partial => "form", :locals => {:object => f, :button => "Start"} %>
+<% end %>
