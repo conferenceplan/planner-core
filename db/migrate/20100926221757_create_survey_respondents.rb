@@ -9,6 +9,8 @@ class CreateSurveyRespondents < ActiveRecord::Migration
       t.string    :persistence_token,   :null => false                # required
       t.string    :single_access_token, :null => false                # for access via token for survey
 
+      t.references :Person # eventually there is one person/participant per survey
+      
       t.timestamps
     end
   end

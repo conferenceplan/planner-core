@@ -42,7 +42,7 @@ class Person < ActiveRecord::Base
   has_many  :programmeItems, :through => :programmeItemAssignments
 
   has_one   :registrationDetail, :dependent => :delete
-  has_one   :survey
+  has_one   :survey_respondent
   has_enumerated :invitestatus, :class_name => 'InviteStatus'
   
   #

@@ -8,4 +8,6 @@
 <%= form.label "Key" %><br />
 <%= form.text_field :key %><br />
 <br />
+<%= submit_tag "I will not attend", :name => "cancel", :confirm => "Are you sure" %>
 <%= form.submit button %>
+<!-- TODO - add another button where the person can say that they are not attending the convention -->
