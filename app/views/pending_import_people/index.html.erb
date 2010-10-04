@@ -1,0 +1,8 @@
+<br/>
+<br/>
+<% for pendingImportPerson in  @pendingImportPeople %>
+	<li>First name is <%= pendingImportPerson.first_name %> last name is <%= pendingImportPerson.last_name %>
+		<%=  link_to "edit", :action => 'edit', :id => pendingImportPerson %>
+		<%=  link_to "remove", pendingImportPerson, :method => :delete,:confirm => "Are you Sure?" %>
+	</li>
+<%end%>

@@ -65,7 +65,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/list', :controller => 'people', :action => 'list'
  
   map.resources :rooms
-
+  map.resources :pending_import_people
   map.resource :user_session
   map.root :controller => "user_sessions", :action => "new"
   map.login "login", :controller => "user_sessions", :action => "new"
