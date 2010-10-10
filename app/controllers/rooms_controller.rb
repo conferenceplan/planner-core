@@ -1,4 +1,6 @@
 class RoomsController < ApplicationController
+  before_filter :require_user
+
   def index
     @rooms = Room.find :all
   end

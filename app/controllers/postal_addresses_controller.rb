@@ -1,4 +1,6 @@
 class PostalAddressesController < ApplicationController
+  before_filter :require_user
+
   def new
     if (params[:person_id])
       @urlstr = '/participants/' + params[:person_id] + '/postalAddresses'

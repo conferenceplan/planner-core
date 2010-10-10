@@ -1,4 +1,6 @@
 class PendingImportPeopleController < ApplicationController
+  before_filter :require_user
+
   def index
     @pendingImportPeople = PendingImportPerson.find :all
   end

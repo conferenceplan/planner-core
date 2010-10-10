@@ -1,4 +1,6 @@
 class AddressesController < ApplicationController
+  before_filter :require_user
+
   def index
     person = Person.find(params[:person_id])
     

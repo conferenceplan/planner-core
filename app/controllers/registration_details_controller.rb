@@ -1,4 +1,5 @@
 class RegistrationDetailsController < ApplicationController
+  before_filter :require_user
 
   def edit
     @registrationDetail = RegistrationDetail.find(params[:id])

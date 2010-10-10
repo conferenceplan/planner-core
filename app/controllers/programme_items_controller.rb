@@ -1,4 +1,5 @@
 class ProgrammeItemsController < ApplicationController
+  before_filter :require_user
   
   def index
     @programmeItems = ProgrammeItem.find :all

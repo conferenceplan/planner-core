@@ -1,4 +1,5 @@
 class People::TagsController < ApplicationController
+  before_filter :require_user
   
   def index
     # Get all the tags for all the people
