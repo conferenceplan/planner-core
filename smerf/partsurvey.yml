@@ -41,6 +41,7 @@ smerfform:
           question: | <u>First Name</u>
           textfield_size: 20
           validation: validate_mandatory_question
+          style: mandatory
         Last Name:
           code: g1q2
           type: textfield
@@ -101,6 +102,26 @@ smerfform:
           sort_order: 8
           question: | Phone Number
           textfield_size: 50
+          additional: 3
+          subquestions:
+             phone_type:
+                 code: g1q8t1
+                 type: singlechoice
+                 sort_order: 1
+                 question: | type
+                 validation: validate_sub_question
+                 answers:
+                    home:
+                      code: 1
+                      answer: | home
+                      sort_order: 1
+                      default: N
+                    work:
+                      code: 2
+                      answer: | work
+                      sort_order: 2
+                      default: N
+
 # NOTE: we want to be able to attach sub questions to text - this needs to be an extension to SMERF
 # also want the ability to to an add more of this type, and a tag choice (with cloud display)
 # change render to get rid of <p> and put in div with style so we an have first and last name on one line etc
@@ -195,4 +216,61 @@ smerfform:
           sort_order: 4
           question: | The maximum number of items I'd like to be on for the entire convention is
           textfield_size: 3
-
+# test of sub question
+        specify_your_age:
+          code: g1q1y1
+          type: singlechoice
+          sort_order: 10
+          question: | Specify your ages  
+          help: | Select the <b>one</b> that apply 
+          validation: validate_mandatory_question
+          additional: 3
+          answers:
+            1_20:
+              code: 1
+              answer: | 1-20
+              sort_order: 1
+              default: N
+            21_40:
+              code: 2
+              answer: | 21_40
+              sort_order: 2
+              default: N
+            >40:
+              code: 3
+              answer: | > 40
+              sort_order: 3
+              default: N
+              subquestions:
+                >40:
+                  code: g1q1a3s1y1
+                  type: singlechoice
+                  sort_order: 1
+                  question: | Are you aged over 40
+                  help: | Select the <b>one</b> that apply 
+                  validation: validate_sub_question
+                  answers:
+                    41_50:
+                      code: 1
+                      answer: | 41-50
+                      sort_order: 1
+                      default: N
+                    51_60:
+                      code: 2
+                      answer: | 51_60
+                      sort_order: 2
+                      default: N
+                    >61:
+                      code: 3
+                      answer: | > 61
+                      sort_order: 3
+                      default: N
+                      subquestions:
+                        >61:
+                          code: g1q1a3s1a3s1y1
+                          type: textfield
+                          sort_order: 1
+                          header: 
+                          question: | If you are older than 61, please specify
+                          textfield_size: 10
+                          validation: validate_sub_question

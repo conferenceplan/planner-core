@@ -83,7 +83,7 @@ module SmerfFormsHelper
   #
   def smerf_group_name(group)
     if !group.name.blank?
-      content_tag(:div, content_tag(:h3, group.name), :class => "smerfGroup")
+      content_tag(:h3, group.name)
     end
   end
    
@@ -94,7 +94,7 @@ module SmerfFormsHelper
   #
   def smerf_group_description(group)
     if !group.description.blank?
-      content_tag(:div, content_tag(:p, group.description), :class => "smerfGroupDescription")
+      content_tag(:div, content_tag(:p, group.description), :class => "smerfGroupDescription") # TODO
     end
   end
  
@@ -131,8 +131,9 @@ module SmerfFormsHelper
   #   smerfQuestionError
   #   smerfInstruction
   # 
-  def smerf_group_question(question, level = 1)
+  def smerf_group_question(question, level = 1, add_index = "")
     contents = ""
+    answered = false
     # Format question header 
     contents += content_tag(:div, content_tag(:p, question.header), 
       :class => "smerfQuestionHeader") if (question.header and !question.header.blank?) 
@@ -144,37 +145,86 @@ module SmerfFormsHelper
     contents += content_tag(:div, 
       content_tag(:p, "#{image_tag("smerf_error.gif", :alt => "Error")} #{@errors["#{question.item_id}"]["msg"]}"), 
       :class => "smerfQuestionError") if (@errors and @errors.has_key?("#{question.item_id}"))    
+
     # Format help   
-    contents += content_tag(:div, 
-      "#{image_tag("smerf_help.gif", :alt => "Help")} #{question.help}", 
-      :class => "smerfInstruction") if (!question.help.blank?)    
+    contents += "<a title='"+question.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (!question.help.blank?)    
    
     # Check the type and format appropriatly
     case question.type
     when 'multiplechoice'
-      contents += get_multiplechoice(question, level)
+      result = get_multiplechoice(question, level)
+      contents += result[:content]
+      answered = result[:answer]
     when 'textbox'
-      contents += get_textbox(question)
+      result = get_textbox(question, level)
+      contents += result[:content]
+      answered = result[:answer]
     when 'textfield'
-      contents += get_textfield(question)
+      result = get_textfield(question, level)
+      contents += result[:content]
+      answered = result[:answer]
     when 'singlechoice'
-      contents += get_singlechoice(question, level)
+      result = get_singlechoice(question, level)
+      contents += result[:content]
+      answered = result[:answer]
     when 'selectionbox'
-      contents += get_selectionbox(question, level)
+      result = get_selectionbox(question, level)
+      contents += result[:content]
+      answered = result[:answer]
     else  
       raise("Unknown question type for question: #{question.question}")
     end
-    # Draw a line to indicate the end of the question if level 1, 
-    # i.e. not an answer sub question
-#     :class => (!question.style.blank?) ? !question.style : ""),
-    questionClass = (!question.style.blank?) ? !question.style : (level <= 1) ? "smerfQuestionArea" : "smerfSubquestionArea"
-    contents = content_tag(:div, contents, :class => questionClass)
-#      if (question.question and !question.question.blank?) 
-#    contents += content_tag(:div, "", :class => "questionbox") if (!contents.blank? and level <= 1)
-    return contents   
+
+    # question style needs to be modified if the add index is not empty...
+    # hidden so that this can be revealed by JS and change the code logically
+    questionClass = (!question.style.blank?) ? question.style : (level <= 1) ? "smerfQuestionArea" : "smerfSubquestionArea" 
+    contentId = nil
+    contentId = add_index if(!add_index.empty?)
+    questionClass += " toggle" if((!add_index.empty?) and (!result[:answer]) )
+    contents = content_tag(:div, contents, :class => questionClass, :id => contentId)
+ 
+    # only put in the add if the next element is empty...
+    additional_content = ""
+    hide_link = false
+    if (question.additional and add_index.empty? )
+      # for each of the additional we want to create a new version of the same question
+      1.upto(question.additional) { |i|
+        dup_question = question.clone
+        dup_question.additional = 0
+        dup_question.code += "-" + i.to_s
+        change_question_code(dup_question, "-" + i.to_s)
+        # need to go through the nested questions and change their codes as well
+        additional_content = smerf_group_question(dup_question, level, dup_question.code)
+        
+        if (!additional_content[:answered])
+          if (hide_link)
+            contents += "<a class='toggleLink toggle'>ADD</a>" if((!add_index.empty?)or question.additional)
+          else
+            contents += "<a class='toggleLink'>ADD</a>" if((!add_index.empty?)or question.additional)
+          end
+          hide_link = true
+        end
+        contents += additional_content[:content]
+     }
+    end
+
+    return { :content => contents, :answered => answered }
   end
   
   private
+  
+    # recusively set the new code for the duplicated question's
+    # sub questions
+    def change_question_code(question, code)
+      question.answers.each do |answer|
+        if (answer.respond_to?("subquestions") and answer.subquestions and answer.subquestions.size > 0)
+        answer.subquestions.each {|subquestion| 
+           subquestion.code += code
+           change_question_code(subquestion, code)
+          }
+        end
+      end
+    end
   
     # Some answers to questions may have further questions, here we 
     # process these sub questions.
@@ -185,7 +235,7 @@ module SmerfFormsHelper
       if (answer.respond_to?("subquestions") and 
         answer.subquestions and answer.subquestions.size > 0)
         answer.subquestions.each {|subquestion| sq_contents += 
-          smerf_group_question(subquestion, level+1)}
+          smerf_group_question(subquestion, level+1)[:content]}
         # Indent question
         sq_contents = "<div style=\"margin-left: #{level * 25}px;\">" + sq_contents + '</div>'       
       end
@@ -196,6 +246,7 @@ module SmerfFormsHelper
     #
     def get_multiplechoice(question, level)
       contents = ""
+      answered = false
       question.answers.each do |answer|
         # Get the user input if available
         user_answer = nil
@@ -203,6 +254,7 @@ module SmerfFormsHelper
           @responses.has_key?("#{question.code}") and
           @responses["#{question.code}"].has_key?("#{answer.code}"))
           user_answer = @responses["#{question.code}"]["#{answer.code}"]
+          answered = true
         end
         # Note we wrap the form element in a label element, this allows the input
         # field to be selected by selecting the label, we could otherwise use a 
@@ -223,59 +275,68 @@ module SmerfFormsHelper
       # Process error messages if they exist
       #wrap_error(contents, (@errors and @errors.has_key?("#{question.code}")))
       #contents = content_tag(:div, contents, :class => "questionWithErrors") if (@errors and @errors.has_key?("#{question.code}"))
-      return contents
+      return { :content => contents, :answer => answered }
     end
 
     # Format text box question
     #
-    def get_textbox(question)
+    def get_textbox(question, level)
       # Get the user input if available
       user_answer = nil
+      answered = false
       if (@responses and !@responses.empty?() and 
         @responses.has_key?("#{question.code}"))
         user_answer = @responses["#{question.code}"]
+        answered = (user_answer and !user_answer.blank?())
       end
       contents = text_area_tag("responses[#{question.code}]",    
         # Set value to user response if available
-        if (user_answer and !user_answer.blank?())
+        if (answered)
           user_answer
         else
           nil
         end,
         :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5")
       contents = content_tag(:div, contents, :class => "textarea")
+      return { :content => contents, :answer => answered }
     end
 
     # Format text field question
     #
-    def get_textfield(question)
+    def get_textfield(question, level)
       # Get the user input if available
+      answered = false
       user_answer = nil
       if (@responses and !@responses.empty?() and 
         @responses.has_key?("#{question.code}"))
         user_answer = @responses["#{question.code}"]
+        answered = (user_answer and !user_answer.blank?())
       end
       contents = text_field_tag("responses[#{question.code}]", 
         # Set value to user responses if available
-        if (user_answer and !user_answer.blank?())
+        if (answered)
           user_answer
         else
           nil
         end, 
         :size => (!question.textfield_size.blank?) ? question.textfield_size : "30")
       contents = content_tag(:div, contents, :class => "text")
+      
+      return { :content => contents, :answer => answered }
     end
 
     # Format single choice question
     #
     def get_singlechoice(question, level)
       contents = ""
+      answered = false
       question.answers.each do |answer|
         # Get the user input_objects if available
         user_answer = nil
         if (@responses and !@responses.empty?() and 
           @responses.has_key?("#{question.code}"))
           user_answer = @responses["#{question.code}"]
+          answered = true
         end
         # Note we wrap the form element in a label element, this allows the input
         # field to be selected by selecting the label, we could otherwise use a 
@@ -292,7 +353,8 @@ module SmerfFormsHelper
         # Process any sub questions this answer may have
         contents += process_sub_questions(answer, level)
       end
-      return contents
+#      return contents
+      return { :content => contents, :answer => answered }
     end
  
     # Format drop down box(select) question
@@ -300,6 +362,7 @@ module SmerfFormsHelper
     def get_selectionbox(question, level)
       # Note: This question type can not have subquestions      
       contents = ""
+      answered = false
       answers = "\n"
       question.answers.each do |answer|
         # Get the user input if available
@@ -308,6 +371,7 @@ module SmerfFormsHelper
           @responses.has_key?("#{question.code}") and
           @responses["#{question.code}"].include?("#{answer.code}"))
           user_answer = answer.code
+          answered = true
         end
         # Format answers
         answers += '<option ' + 
@@ -330,7 +394,8 @@ module SmerfFormsHelper
         question.selectionbox_multiplechoice.upcase == 'Y'))
       contents += content_tag(:div, html, :class => "select")
       
-      return contents
+#      return contents
+      return { :content => contents, :answer => answered }
     end
    
     # Some questions/sub questions may not actually have any question text,

@@ -1,0 +1,33 @@
+<html>
+<head>
+<title><%= @page_title or 'Page Title' %></title>
+		<%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
+		<%= stylesheet_link_tag 'jquery.tooltip.css' %>
+		<%= javascript_include_tag 'jquery-1.4.2.min' %>
+		<%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
+		<%= javascript_include_tag 'jquery.dimensions' %>
+		<%= javascript_include_tag 'jquery.tooltip.min' %>
+<script>
+	$(function() {
+        $( "#surveyAccordian" ).accordion({ header : 'h3', collapsible: true, autoHeight: false });
+		
+        $('#survey-set *').tooltip();
+
+        // hide all of the elements with a class of 'toggle'
+        $('.toggle').hide();
+
+        $('a.toggleLink').click(function() {
+            // switch visibility
+            //$(this).next('.toggle').toggle('slow').next('.toggleLink').toggle('slow');
+            $(this).next('.toggle').show().next('.toggleLink').show();
+            // return false so any link destination is not followed
+            return false;
+        });
+
+	});
+</script>
+</head>
+<body>
+	<div id="content"><%= yield(:content) or yield %></div>
+</body>
+</html> 

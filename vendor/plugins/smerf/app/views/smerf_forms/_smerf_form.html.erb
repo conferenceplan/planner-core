@@ -6,18 +6,24 @@
   <%= smerf_title() %>
   <!-- Display form welcome message -->
   <%= smerf_welcome() %>
+<fieldset id="survey-set">
   <!-- Display groups and the questions within each group -->
+<div class="survey" id="surveyAccordian">
   <% smerf_get_groups().each do |group| %>
     <!-- Display the group name and description -->
+      <%= smerf_group_name(group) %>
     <div class="surveyGroup" id="surveyGroup<%= group.code %>">
-    <%= smerf_group_name(group) %>
-    <%= smerf_group_description(group) %>
-    <!-- Display the questions within the group -->
-    <% smerf_get_group_questions(group).each do |question| %>
-      <%= smerf_group_question(question) %>
-    <% end %>
+    <% content_tag :div, :class => "smerfGroup" do %>
+      <%= smerf_group_description(group) %>
+      <!-- Display the questions within the group -->
+      <% smerf_get_group_questions(group).each do |question| %>
+        <%= smerf_group_question(question)[:content] %>
+      <% end %>
+	<% end %>
     </div>
   <% end %>
+</div>
+</fieldset>
   <!-- Display form thank you -->
   <%= smerf_thank_you() %>
   <!-- Add save button -->

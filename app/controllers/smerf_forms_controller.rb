@@ -12,6 +12,8 @@ class SmerfFormsController < SurveyApplicationController
   before_filter :check_for_single_access_token, :only => [:show, :create, :update]
   
   include Smerf
+  
+  layout "survey"
 
   # GET /smerf_forms/smerf_form_file_name
   # 
