@@ -268,7 +268,7 @@ module SmerfFormsHelper
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y'))) + 
           "#{answer.answer}</label>\n"
-        contents += content_tag(:div, html, "checkbox")
+        contents += content_tag(:div, html, :class => "checkbox")
         # Process any sub questions this answer may have
         contents += process_sub_questions(answer, level)
       end

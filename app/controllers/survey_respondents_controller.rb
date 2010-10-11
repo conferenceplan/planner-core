@@ -24,7 +24,9 @@ class SurveyRespondentsController < SurveyApplicationController
     # find a respondent with the key, if not found then create a new one
     if (key)
       @survey_respondent = SurveyRespondent.find_by_key(key)
-      @survey_respondent.attending = fillSurvey
+      if (@survey_respondent)
+        @survey_respondent.attending = fillSurvey
+      end
     end
     
     # TODO: else let them know that we did not find the key and ask them if they want to continue without it

@@ -34,40 +34,8 @@ smerfform:
         here we ask you some personal details ...
         <p>
       questions:
-        First Name:
-          code: g1q1
-          type: textfield
-          sort_order: 1
-          question: | <u>First Name</u>
-          textfield_size: 20
-          validation: validate_mandatory_question
-          style: mandatory
-        Last Name:
-          code: g1q2
-          type: textfield
-          sort_order: 2
-          question: | Last Name
-          textfield_size: 20
-          validation: validate_mandatory_question
-        Plan to Attend:
-          code: g1q3
-          type: singlechoice
-          sort_order: 3
-          validation: validate_mandatory_question
-          question: | I plan to attend
-          answers:
-            Yes:
-              code: 1
-              answer: | Yes
-              sort_order: 1
-              default: N
-            No:
-              code: 2
-              answer: | No
-              sort_order: 2
-              default: N
         Full Name:
-          code: g1q4
+          code: g1q1
           type: textfield
           sort_order: 4
           validation: validate_mandatory_question
@@ -75,57 +43,59 @@ smerfform:
           textfield_size: 60
           help: | as you want it to appear in the schedule, if you use a pen name or want middle initials included
         City:
-          code: g1q5
+          code: g1q2
           type: textfield
           validation: validate_mandatory_question
           sort_order: 5
           question: | City
           textfield_size: 20
         State:
-          code: g1q6
+          code: g1q3
           type: textfield
           validation: validate_mandatory_question
           sort_order: 6
           question: | State
           textfield_size: 10
         Email:
-          code: g1q7
+          code: g1q4
           type: textfield
           validation: validate_mandatory_question
           sort_order: 7
           question: | Email Address
           textfield_size: 50
+          additional: 2
         Phone:
-          code: g1q8
-          validation: validate_mandatory_question
-          type: textfield
+          code: g1q5
+          type: singlechoice
           sort_order: 8
-          question: | Phone Number
-          textfield_size: 50
+          question: | type
           additional: 3
-          subquestions:
-             phone_type:
-                 code: g1q8t1
-                 type: singlechoice
-                 sort_order: 1
-                 question: | type
-                 validation: validate_sub_question
-                 answers:
-                    home:
-                      code: 1
-                      answer: | home
-                      sort_order: 1
-                      default: N
-                    work:
-                      code: 2
-                      answer: | work
-                      sort_order: 2
-                      default: N
-
+          answers:
+             home:
+               code: 1
+               answer: | home
+               sort_order: 1
+               default: N
+             work:
+               code: 2
+               answer: | work
+               sort_order: 2
+               default: N
+             cell:
+               code: 3
+               answer: | cell
+               sort_order: 3
+               default: N
+               subquestions:
+                    phone:
+                        code: g1q5p1
+                        type: textfield
+                        sort_order: 1
+                        question: | Phone Number
+                        textfield_size: 50
 # NOTE: we want to be able to attach sub questions to text - this needs to be an extension to SMERF
 # also want the ability to to an add more of this type, and a tag choice (with cloud display)
 # change render to get rid of <p> and put in div with style so we an have first and last name on one line etc
-# use the question label for the style name if that helps or put in a style attribute
     membership_status:
       code: 2
       name: Membership Status
@@ -180,12 +150,80 @@ smerfform:
               answer: | Saturday, August 20
               sort_order: 4
               default: N
-        End Date:
+        Start Time:
           code: g3q2
           validation: validate_mandatory_question
           type: selectionbox
           selectionbox_multiplechoice: N
           sort_order: 2
+          question: | starting from:
+          answers:
+            10am:
+              code: 1
+              answer: | 10am
+              sort_order: 1
+              default: Y
+            11am:
+              code: 2
+              answer: | 11am
+              sort_order: 2
+              default: N
+            noon:
+              code: 3
+              answer: | Noon
+              sort_order: 3
+              default: N
+            1pm:
+              code: 4
+              answer: | 1pm
+              sort_order: 4
+              default: N
+            2pm:
+              code: 5
+              answer: | 2pm
+              sort_order: 5
+              default: N
+            3pm:
+              code: 6
+              answer: | 3pm
+              sort_order: 6
+              default: N
+            4pm:
+              code: 7
+              answer: | 4pm
+              sort_order: 7
+              default: N
+            5pm:
+              code: 8
+              answer: | 5pm
+              sort_order: 8
+              default: N
+            6pm:
+              code: 9
+              answer: | 6pm
+              sort_order: 7
+              default: N
+            7pm:
+              code: 10
+              answer: | 7pm
+              sort_order: 9
+              default: N
+            8pm:
+              code: 11
+              answer: | 8pm
+              sort_order: 10
+              default: N
+            9pm:
+              code: 12
+              answer: | 9pm
+              sort_order: 11
+              default: N
+        End Date:
+          code: g3q3
+          validation: validate_mandatory_question
+          type: selectionbox
+          selectionbox_multiplechoice: N
+          sort_order: 3
           question: | I will not be available for program after:
           answers:
             Thu:
@@ -203,16 +241,120 @@ smerfform:
               answer: | Saturday, August 20
               sort_order: 1
               default: N
+        End Time:
+          code: g3q4
+          validation: validate_mandatory_question
+          type: selectionbox
+          selectionbox_multiplechoice: N
+          sort_order: 4
+          question: | ending at:
+          answers:
+            10am:
+              code: 1
+              answer: | 10am
+              sort_order: 1
+              default: Y
+            11am:
+              code: 2
+              answer: | 11am
+              sort_order: 2
+              default: N
+            noon:
+              code: 3
+              answer: | Noon
+              sort_order: 3
+              default: N
+            1pm:
+              code: 4
+              answer: | 1pm
+              sort_order: 4
+              default: N
+            2pm:
+              code: 5
+              answer: | 2pm
+              sort_order: 5
+              default: N
+            3pm:
+              code: 6
+              answer: | 3pm
+              sort_order: 6
+              default: N
+            4pm:
+              code: 7
+              answer: | 4pm
+              sort_order: 7
+              default: N
+            5pm:
+              code: 8
+              answer: | 5pm
+              sort_order: 8
+              default: N
+            6pm:
+              code: 9
+              answer: | 6pm
+              sort_order: 7
+              default: N
+            7pm:
+              code: 10
+              answer: | 7pm
+              sort_order: 9
+              default: N
+            8pm:
+              code: 11
+              answer: | 8pm
+              sort_order: 10
+              default: N
+            9pm:
+              code: 12
+              answer: | 9pm
+              sort_order: 11
+              default: N
 # NOTE: change to a date entry field - use a jquery date selector and a helper for validation?
         Max Items Per Day:
-          code: g3q3
+          code: g3q5
           type: textfield
-          sort_order: 3
+          sort_order: 5
           question: | The maximum number of items I would like to be on per day is
           textfield_size: 3
         Max Items:
-          code: g3q4
+          code: g3q6
           type: textfield
-          sort_order: 4
+          sort_order: 6
           question: | The maximum number of items I'd like to be on for the entire convention is
           textfield_size: 3
+        conflicts:
+          code: g3q7
+          type: multiplechoice
+          sort_order: 7
+          question: | Do not schedule me during these times or against these items: 
+          answers:
+            before11am:
+              code: 1
+              answer: | Before 11am
+              sort_order: 1
+              default: N
+            before6to8:
+              code: 2
+              answer: | 6pm - 8pm
+              sort_order: 2
+              default: N
+            after8pm:
+              code: 3
+              answer: | After 8pm
+              sort_order: 3
+              default: N
+            openingCermony:
+              code: 4
+              answer: | Opening Ceremony (Wed night)
+              sort_order: 4
+              default: N
+              subquestions:
+                    excludedTimesText:
+                        code: g3q7t1
+                        type: textbox
+                        sort_order: 1
+                        question: | Do not schedule me at these other times:
+#    topic_interests:
+#      code: 4
+#      name: Topic Interests
+#      description: | Which of the following topics are you interested in talking about
