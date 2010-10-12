@@ -348,6 +348,91 @@ smerfform:
               answer: | Opening Ceremony (Wed night)
               sort_order: 4
               default: N
+            chesleys:
+              code: 5
+              answer: | Chesleys (Thur night)
+              sort_order: 5
+              default: N
+            masquerade:
+              code: 6
+              answer: | Masquerade (Fri night)
+              sort_order: 6
+              default: N
+            hugos:
+              code: 7
+              answer: | Hugos (Sat night)
+              sort_order: 7
+              default: N
+            closingCeremony:
+              code: 8
+              answer: | Closing Ceremony (Sun aft)
+              sort_order: 8
+              default: N
+            powersGOH:
+              code: 9
+              answer: | Tim Powers GoH Item
+              sort_order: 9
+              default: N
+            vallejoGOH:
+              code: 10
+              answer: | Boris Vallejo GoH Item
+              sort_order: 10
+              default: N
+            asherGOH:
+              code: 11
+              answer: | Ellen Asher GoH Item
+              sort_order: 11
+              default: N
+            brownGOH:
+              code: 12
+              answer: | Charles Brown GoH Item
+              sort_order: 12
+              default: N
+            billWillingham:
+              code: 13
+              answer: | Bill Willingham Item
+              sort_order: 13
+              default: N
+            trickyPixie:
+              code: 14
+              answer: | Tricky Pixie Concert
+              sort_order: 14
+              default: N
+            wsfsMeetings:
+              code: 15
+              answer: | WSFS Meetings (mornings)
+              sort_order: 15
+              default: N
+            sfwaMeetings:
+              code: 16
+              answer: | SFWA Meeting
+              sort_order: 16
+              default: N
+            asfaMeetings:
+              code: 17
+              answer: | ASFA Meeting
+              sort_order: 17
+              default: N
+            masqRehearsal:
+              code: 18
+              answer: | Masq Rehearsal (Fri)
+              sort_order: 18
+              default: N
+            artAuction:
+              code: 19
+              answer: | Art Auction (Sat aft)
+              sort_order: 19
+              default: N
+            regencyDance:
+              code: 20
+              answer: | Regency Dance
+              sort_order: 20
+              default: N
+            charityAuction:
+              code: 21
+              answer: | Charity Auction
+              sort_order: 21
+              default: N
               subquestions:
                     excludedTimesText:
                         code: g3q7t1
