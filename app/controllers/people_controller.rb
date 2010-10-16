@@ -203,7 +203,7 @@ class PeopleController < ApplicationController
                                      :phone => pendingImportPerson.phone)    
            @e=p.email_addresses.new(:email => pendingImportPerson.email)  
            if (p.save)
-              pendingImportPerson.delete
+              pendingImportPerson.destroy
               n=n+1
               GC.start if n%50==0
            end
@@ -216,7 +216,7 @@ class PeopleController < ApplicationController
            # save pending person for later updating
            person = Person.find(nReg.person_id)
            if (person.UpdateIfPendingPersonDifferent(pendingImportPerson.id))
-             pendingImportPerson.delete
+             pendingImportPerson.destroy
            end
          end
        end

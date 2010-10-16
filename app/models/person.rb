@@ -114,7 +114,7 @@ class Person < ActiveRecord::Base
       if (emailAddresses.size == 1)
         eaddress = emailAddresses[0]
         if (pendingImportPerson.email != eaddress.email)
-          self.removeEmailAddress(address)
+          self.removeEmailAddress(eaddress)
         else
           newEmailAddress = false
         end
