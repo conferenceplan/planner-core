@@ -49,9 +49,18 @@ class Person < ActiveRecord::Base
   acts_as_taggable
   acts_as_taggable_on :activities
   
-  def removeAddress(address)
+  def removePostalAddress(address)
     # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person
+     # and then make sure that it is not used by another person
+     if (! addresses.find(:all, :conditions =>  ["addressable_id = ? and person_id != ?", address, @id] ) )
+       address.destroy
+     end
+  end
+  
+  def removeEmailAddress(address)
+    # TODO - change to handle any address type
+     email_addresses.delete(address) # remove it from the person
      # and then make sure that it is not used by another person
      if (! addresses.find(:all, :conditions =>  ["addressable_id = ? and person_id != ?", address, @id] ) )
        address.destroy
@@ -64,9 +73,76 @@ class Person < ActiveRecord::Base
     
     if (postalAddresses)
       postalAddresses.each do |address|
-        self.removeAddress(address)
+        self.removePostalAddress(address)
+      end
+    end
+    emailAddresses = self.email_addresses
+    if (emailAddresses)
+      emailAddresses.each do |eaddress|
+        self.removeEmailAddress(eaddress)
       end
     end
   end
   
+  def UpdateIfPendingPersonDifferent(pending_id)
+    pendingImportPerson = PendingImportPerson.find(pending_id)
+    postalAddresses = self.postal_addresses
+    emailAddresses = self.email_addresses
+    # we can only automatically update addresses from pendingImportPerson
+    # if we have 1 email and postal address in our database
+    # if we have more than 1, we can't tell which one to update
+    # and require user intervention
+    if postalAddresses.size <= 1 && emailAddresses.size <= 1
+      newPostalAddress = true
+      newEmailAddress = true
+      # check if postal address in database is different - if so, remove from database
+      if (postalAddresses.size == 1)
+        address = postalAddresses[0]
+      
+        if ((pendingImportPerson.line1 != address.line1) ||
+            (pendingImportPerson.line2 != address.line2) ||
+            (pendingImportPerson.city != address.city ) ||
+            (pendingImportPerson.country != address.country) ||
+            (pendingImportPerson.postcode != address.postcode) ||
+            (pendingImportPerson.phone != address.phone))
+            self.removePostalAddress(address)  
+        else
+            newPostalAddress = false
+        end
+      end
+      # check if email address is different - if so, remove email from database
+      if (emailAddresses.size == 1)
+        eaddress = emailAddresses[0]
+        if (pendingImportPerson.email != eaddress.email)
+          self.removeEmailAddress(address)
+        else
+          newEmailAddress = false
+        end
+      end
+      # we have a new postal address, so create one
+      if (newPostalAddress == true)
+           self.postal_addresses.new(:line1 => pendingImportPerson.line1,
+                                     :line2 => pendingImportPerson.line2,
+                                     :city  => pendingImportPerson.city,
+                                     :postcode => pendingImportPerson.postcode,
+                                     :state => pendingImportPerson.state,
+                                     :country => pendingImportPerson.country,
+                                     :phone => pendingImportPerson.phone)
+      end
+      # we have a new email address, so create one
+      if (newEmailAddress == true)
+        self.email_addresses.new(:email => pendingImportPerson.email)
+      end
+      
+      # save new addresses
+      if (newEmailAddress == true || newPostalAddress == true)
+        self.save
+      end
+      # update successful
+      return true
+    else
+      # can't update since we have multiple addresses
+      return false
+    end
+  end
 end
