@@ -82,4 +82,14 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :survey_respondents
 
+# TODO - how do I insist on the tag context as a parameter
+  map.resources :survey_respondents do |respondent|
+    respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, :controller => 'survey_respondents/tags',
+      :except => [:destroy, :new, :create, :edit, :remove]
+  end
+
+  # These also take the context as a parameter...
+  map.connect 'survey_respondents/tags/alltags', :controller => 'survey_respondents/tags', :action => 'alltags'
+  map.connect 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
+
 end

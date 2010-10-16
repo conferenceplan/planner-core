@@ -149,6 +149,16 @@ module SmerfFormsHelper
     # Format help   
     contents += "<a title='"+question.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (!question.help.blank?)    
    
+#  * Put in some HTML like the following:
+# * div.tag
+# * <div class='tag'> 
+# * <div id='context' style='display:none'>contextname</div>
+# * <div id='respondent' style='display:none'>id</div>
+# * <textarea rows="5" name="responses[g3q7t1]" id="responses_g3q7t1" cols="30" class='tag'></textarea>
+# * </div>
+    if (question.tags)
+      contents += "<div class='taggable'><div id='context' style='display:none'>"+question.tags+"</div>"
+    end
     # Check the type and format appropriatly
     case question.type
     when 'multiplechoice'
@@ -173,6 +183,10 @@ module SmerfFormsHelper
       answered = result[:answer]
     else  
       raise("Unknown question type for question: #{question.question}")
+    end
+
+    if (question.tags)
+      contents += "</div>"
     end
 
     # question style needs to be modified if the add index is not empty...
@@ -296,7 +310,8 @@ module SmerfFormsHelper
         else
           nil
         end,
-        :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5")
+        :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5",
+        :class => question.tags )
       contents = content_tag(:div, contents, :class => "textarea")
       return { :content => contents, :answer => answered }
     end
@@ -319,7 +334,8 @@ module SmerfFormsHelper
         else
           nil
         end, 
-        :size => (!question.textfield_size.blank?) ? question.textfield_size : "30")
+        :size => (!question.textfield_size.blank?) ? question.textfield_size : "30",
+        :class => question.tags)
       contents = content_tag(:div, contents, :class => "text")
       
       return { :content => contents, :answer => answered }

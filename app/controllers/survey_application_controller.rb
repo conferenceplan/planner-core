@@ -2,9 +2,9 @@ class SurveyApplicationController < ApplicationController
 
   private
     def check_for_single_access_token 
-      if params[:key] 
+      if params[:key]
         @respondent       = SurveyRespondent.find_by_single_access_token(params[:key]) 
-        @survey_respondent_session = SurveyRespondentSession.create!(@respondent) 
+        @current_respondent_session = SurveyRespondentSession.create!(@respondent) 
         begin
         self.smerf_user_id = @respondent.id
           rescue NoMethodError

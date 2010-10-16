@@ -9,7 +9,7 @@
 
 class SmerfFormsController < SurveyApplicationController
 
-  before_filter :check_for_single_access_token, :only => [:show, :create, :update]
+  before_filter :check_for_single_access_token, :only => [:create, :show, :update]
   
   include Smerf
   

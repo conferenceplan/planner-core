@@ -436,6 +436,7 @@ smerfform:
               subquestions:
                     excludedTimesText:
                         code: g3q7t1
+                        tags: excludedTimes
                         type: textbox
                         sort_order: 1
                         question: | Do not schedule me at these other times:
