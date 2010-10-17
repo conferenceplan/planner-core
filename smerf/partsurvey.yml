@@ -69,6 +69,7 @@ smerfform:
           type: singlechoice
           sort_order: 8
           question: | type
+          style: phonetype
           additional: 3
           answers:
              home:
