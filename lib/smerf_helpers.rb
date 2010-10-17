@@ -29,6 +29,30 @@ require 'smerf_system_helpers'
 #
 
 module SmerfHelpers
+  
+  def add_tags(question, responses, form)
+    # Add tags to the respondent from a tag field
+    answer = smerf_get_question_answer(question, responses)
+    if (answer)
+      # get the tag context from the question
+      # we have the list of tags
+      # so we also need the id of the respondent
+      context = question.tags
+      SurveyRespondent.transaction(:requires_new => true) do
+        respondent = SurveyRespondent.find(self.current_user)
+        
+        if (respondent)
+          respondent.set_tag_list_on(context, answer) # set the tag list on the respondent for the context
+          
+          if !respondent.save
+            return "Unable to associate tag"
+          end
+        end
+      end
+    end
+    
+    return nil
+  end
 
   # Example validation method for "How many years have you worked in the industry"
   # it uses a regex to make sure 0-99 years specified.

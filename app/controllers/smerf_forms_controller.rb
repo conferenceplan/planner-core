@@ -134,8 +134,9 @@ private
     @responses = params['responses'] 
     # Retrieve the smerf form record, rails will raise error if not found
     @smerfform = SmerfForm.find(params[:smerf_form_id])
+    @smerfform.current_user = self.smerf_user_id # The id of the survey respondent
     # Validate user responses
-    @errors = Hash.new()    
+    @errors = Hash.new()
     @smerfform.validate_responses(@responses, @errors)    
   end
 end

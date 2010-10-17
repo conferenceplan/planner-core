@@ -313,6 +313,10 @@ module SmerfFormsHelper
         :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5",
         :class => question.tags )
       contents = content_tag(:div, contents, :class => "textarea")
+      if (question.tags)
+        contents += content_tag(:div,"", :class => "cloud")
+      end
+
       return { :content => contents, :answer => answered }
     end
 
@@ -337,6 +341,9 @@ module SmerfFormsHelper
         :size => (!question.textfield_size.blank?) ? question.textfield_size : "30",
         :class => question.tags)
       contents = content_tag(:div, contents, :class => "text")
+      if (question.tags)
+        contents += content_tag(:div,"", :class => "cloud")
+      end
       
       return { :content => contents, :answer => answered }
     end

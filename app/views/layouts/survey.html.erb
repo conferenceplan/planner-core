@@ -3,9 +3,9 @@
 <title><%= @page_title or 'Page Title' %></title>
 		<%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
 		<%= stylesheet_link_tag 'jquery.tooltip.css' %>
+		<%= stylesheet_link_tag 'survey.css' %>
 		<%= javascript_include_tag 'jquery-1.4.2.min' %>
 		<%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
-		<%= javascript_include_tag 'jquery.dimensions' %>
 		<%= javascript_include_tag 'jquery.tooltip.min' %>
 <script>
 	$(function() {
@@ -20,10 +20,77 @@
             // switch visibility
             //$(this).next('.toggle').toggle('slow').next('.toggleLink').toggle('slow');
             $(this).next('.toggle').show().next('.toggleLink').show();
-            // return false so any link destination is not followed
+            // return false so link destination for pane is not followed
             return false;
         });
 
+		/*
+		 * <div class="taggable">
+		 *   <div style="display: none;" id="context">excludedTimes</div>
+		 *   <div class="textarea">
+		 *     <textarea rows="5" name="responses[g3q7t1]" id="responses_g3q7t1" cols="30" class="excludedTimes">
+		 *     Help, New
+		 *     </textarea>
+		 *   </div>
+		 *   <div class="cloud"></div>
+		 * </div>
+		 */
+        function split( val ) {
+			return val.split( /,\s*/ );
+		}
+		function extractLast( term ) {
+			return split( term ).pop();
+		}
+		// Iterate through all the elements in the page and assign the autocomplete to it
+		// then make calls to the server to get the tags for each of the associated contexts
+		$('div.taggable').each(function(index) { // for all divs that have the class taggable
+			var context = $(this).find('#context').text(); // get the context
+			var element = $(this).find('.' + context); // get the text or text area that needs to have autocomplete
+			var cloud = $(this).find('.cloud');
+			
+            // create the cloud for /survey_respondents/tags/cloud?context=excludedTimes
+            $.ajax({
+              url : "/survey_respondents/tags/cloud?context=" + context,
+              dataType : "html",
+              success: function(response) {
+			  	cloud.append(response);
+              }
+            });
+
+            //                    
+            $.ajax({
+                url: "/survey_respondents/tags/alltags?context=" + context,
+                async: true,
+                dataType: "xml",
+                success: function(xmlResponse){
+					// Put all the tags into an array
+                    var gtags = new Array();
+                    $(xmlResponse).find("tag").each(function(){
+                        gtags.push($(this).text());
+                    });
+					
+					// and then use this array with the autocomplete functionality
+					element.autocomplete({
+                        source: function(request, response) {
+                          // delegate back to autocomplete, but extract the last term
+                          response( $.ui.autocomplete.filter(gtags, extractLast( request.term )) );
+                        },
+						focus : function() {
+							return false; // prevent value insertion on focus
+						},
+						select : function(event, ui) {
+                            var terms = split( this.value );
+				            terms.pop(); // remove the current input
+				            terms.push( ui.item.value ); // add the selected item
+				            terms.push( "" ); // add placeholder to get the comma-and-space at the end
+				            this.value = terms.join( ", " );
+				            return false;
+						}
+                    });
+                }
+            });
+		});
+		//
 	});
 </script>
 </head>

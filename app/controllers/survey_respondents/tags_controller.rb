@@ -25,6 +25,8 @@ class SurveyRespondents::TagsController < ApplicationController
 
     respondent.set_tag_list_on(tag_context, tag_list) # set the tag list on the respondent for the context
     
+    respondent.save
+    
     render :layout => 'content'
   end
 

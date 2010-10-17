@@ -9,6 +9,8 @@ require "smerf_helpers"
 
 class SmerfForm < ActiveRecord::Base
   
+  attr_accessor :current_user
+  
   # Add smerf helper methods to this class 
   include SmerfSystemHelpers
   include SmerfHelpers

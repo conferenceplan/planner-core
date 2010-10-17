@@ -439,6 +439,7 @@ smerfform:
                         tags: excludedTimes
                         type: textbox
                         sort_order: 1
+                        validation: add_tags
                         question: | Do not schedule me at these other times:
 #    topic_interests:
 #      code: 4
