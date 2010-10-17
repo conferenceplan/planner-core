@@ -1,10 +1,5 @@
 class Person < ActiveRecord::Base
   
-  # TODO - this is probably not the correct uniqueness test
-  validates_uniqueness_of :last_name,
-            :scope => [:first_name], 
-            :case_sensitive => false, :message => ':that person already exists in the database.' 
-
   has_many  :addresses
   
   has_many  :postal_addresses, :through => :addresses,

@@ -211,16 +211,22 @@ class PeopleController < ApplicationController
                                 records added to data base"
        else
          if (!savePersonAsPending)
-           # found record already, update. If update fails (because we
-           # can't figure out what to update due to multiple addresses)
-           # save pending person for later updating
-           person = Person.find(nReg.person_id)
-           if (person.UpdateIfPendingPersonDifferent(pendingImportPerson.id))
-             pendingImportPerson.destroy
+           if (nReg != nil)
+            # found record already, update if update fails (because we
+            # can't figure out what to update due to multiple addresses)
+            # save pending person for later updating
+            person = Person.find_by_id_and_last_name_and_first_name(nReg.person_id,pendingImportPerson.last_name,pendingImportPerson.first_name)
+            if (person)
+              if (person.UpdateIfPendingPersonDifferent(pendingImportPerson.id))
+                pendingImportPerson.destroy
+              end
+            end
+           else
+              pendingImportPerson.destroy
            end
-         end
        end
+      end
      end #do
      redirect_to :action => 'index'
-  end 
+ end
 end
