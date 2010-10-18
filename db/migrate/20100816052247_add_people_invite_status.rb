@@ -4,5 +4,6 @@ class AddPeopleInviteStatus < ActiveRecord::Migration
   end
 
   def self.down
+     remove_column :people, :invitestatus_id
   end
 end

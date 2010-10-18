@@ -1,0 +1,16 @@
+br/>
+<h1> Edit an invitation category</h1>
+<%= error_messages_for :invitation_category %>
+<% form_for @invitationCategory do |f| -%>
+	<p>
+		<%= f.label :name, "Name " %> <br>
+		<%= f.text_field :name %>
+	</p>
+	<p>
+		<%= f.label :position, "Menu Order " %> <br>
+		<%= f.text_field :position %>
+	</p>
+	<p>
+		<%= f.submit "Submit" %>
+	</p>
+<% end %>

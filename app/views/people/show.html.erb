@@ -5,3 +5,6 @@
 <h2> InviteStatus: <% if @person.invitestatus %>
 <%= @person.invitestatus.name %>
 <% end%></h2>
+<h2> InviteCategory: <% if @person.invitation_category %>
+<%= @person.invitation_category.name %>
+<% end%></h2>

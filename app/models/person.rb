@@ -39,6 +39,8 @@ class Person < ActiveRecord::Base
   has_one   :registrationDetail, :dependent => :delete
   has_one   :survey_respondent
   has_enumerated :invitestatus, :class_name => 'InviteStatus'
+
+  belongs_to  :invitation_category
   
   #
   acts_as_taggable
