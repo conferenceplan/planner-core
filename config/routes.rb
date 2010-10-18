@@ -47,9 +47,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :email_addresses, :has_many => :people
   map.resources :menus
   
-  map.connect 'participants/import', :controller => 'people', :action => 'import'
-  map.connect 'participants/doimport', :controller => 'people', :action => 'doimport', :method => 'post'
-    
+
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses],
     :has_one => :registrationDetail,
@@ -66,7 +64,11 @@ ActionController::Routing::Routes.draw do |map|
  
   map.resources :rooms
   map.resources :invitation_categories
+  
+  map.connect 'pending_import_people/import', :controller => 'pending_import_people', :action => 'import'
+  map.connect 'pending_import_people/doimport', :controller => 'pending_import_people', :action => 'doimport', :method => 'post'   
   map.resources :pending_import_people
+  
   map.resource :user_session
   map.root :controller => "user_sessions", :action => "new"
   map.login "login", :controller => "user_sessions", :action => "new"
