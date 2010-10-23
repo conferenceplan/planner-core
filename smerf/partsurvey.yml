@@ -10,11 +10,11 @@ smerfform:
     Worldcon program is a big, varied enterprise that needs the talents of many people to succeed.
     If you're new to SF cons, welcome! The questionnaire is lengthy; please complete as much as you can and 
     make your best guesses. You will also be able to return to the form to update your information. 
-    If you have to cancel your trip to Reno, please let us know as soon as possible. Many fields have explanatory links, 
-    so select the field name to display more information.
+    If you have to cancel your trip to Reno, please let us know as soon as possible. Many fields have explanatory help, 
+    hover on the information icon beside the field name to display more information.
     </p>
     <p>
-    <em>Underlined fields</em> are required.
+    Fields that are in <b class='mandatory'>red</b> are required.
     </p>
 
   thank_you: | 
@@ -37,14 +37,20 @@ smerfform:
         Full Name:
           code: g1q1
           type: textfield
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_4
           sort_order: 4
           validation: validate_mandatory_question
           question: | Full Name
-          textfield_size: 60
+          textfield_size: 100
           help: | as you want it to appear in the schedule, if you use a pen name or want middle initials included
         City:
           code: g1q2
           type: textfield
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_4
           validation: validate_mandatory_question
           sort_order: 5
           question: | City
@@ -52,6 +58,9 @@ smerfform:
         State:
           code: g1q3
           type: textfield
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_4
           validation: validate_mandatory_question
           sort_order: 6
           question: | State
@@ -59,6 +68,9 @@ smerfform:
         Email:
           code: g1q4
           type: textfield
+          style: grid_11
+          question_style: grid_2
+          answer_style: grid_4
           validation: validate_mandatory_question
           sort_order: 7
           question: | Email Address
@@ -68,24 +80,29 @@ smerfform:
           code: g1q5
           type: singlechoice
           sort_order: 8
-          question: | type
-          style: phonetype
+          question: |
+          style: phonetype grid_11
+          question_style: grid_2
+          answer_style: grid_1
           additional: 3
           answers:
              home:
                code: 1
                answer: | home
                sort_order: 1
+               style: grid_1
                default: N
              work:
                code: 2
                answer: | work
                sort_order: 2
+               style: grid_1
                default: N
              cell:
                code: 3
                answer: | cell
                sort_order: 3
+               style: grid_1
                default: N
                subquestions:
                     phone:
@@ -93,6 +110,9 @@ smerfform:
                         type: textfield
                         sort_order: 1
                         question: | Phone Number
+                        style: PhoneNumber grid_7
+                        question_style: grid_2
+                        answer_style: grid_4
                         textfield_size: 50
 # NOTE: we want to be able to attach sub questions to text - this needs to be an extension to SMERF
 # also want the ability to to an add more of this type, and a tag choice (with cloud display)
@@ -108,12 +128,14 @@ smerfform:
           answers:
             Yes:
               code: 1
+              style: grid_12
               answer: | I am an attending member of Renovation.<br/> 
                 Check our online member search if you aren't sure of your status.
               sort_order: 1
               default: N
             No:
               code: 2
+              style: grid_12
               answer: | I'm not yet an attending member, I understand I need to buy a membership in order to be scheduled for Program.<br/>
                 You can complete the rest of the questionnaire, but you need to buy a membership by June 15, 2011 in order to be scheduled.
               sort_order: 2
@@ -129,6 +151,9 @@ smerfform:
           type: selectionbox
           selectionbox_multiplechoice: N
           sort_order: 1
+          style: grid_12
+          question_style: grid_6
+          answer_style: grid_4
           question: | I will be available to be on Renovation Program beginning:
           answers:
             Wed:
@@ -157,6 +182,9 @@ smerfform:
           type: selectionbox
           selectionbox_multiplechoice: N
           sort_order: 2
+          style: grid_12
+          question_style: grid_6
+          answer_style: grid_4
           question: | starting from:
           answers:
             10am:
@@ -226,6 +254,9 @@ smerfform:
           selectionbox_multiplechoice: N
           sort_order: 3
           question: | I will not be available for program after:
+          style: grid_12
+          question_style: grid_6
+          answer_style: grid_4
           answers:
             Thu:
               code: 2
@@ -249,6 +280,9 @@ smerfform:
           selectionbox_multiplechoice: N
           sort_order: 4
           question: | ending at:
+          style: grid_12
+          question_style: grid_6
+          answer_style: grid_4
           answers:
             10am:
               code: 1
@@ -315,17 +349,26 @@ smerfform:
           code: g3q5
           type: textfield
           sort_order: 5
+          style: grid_12
+          question_style: grid_6
+          answer_style: grid_4
           question: | The maximum number of items I would like to be on per day is
           textfield_size: 3
         Max Items:
           code: g3q6
           type: textfield
           sort_order: 6
+          style: grid_12
+          question_style: grid_6
+          answer_style: grid_4
           question: | The maximum number of items I'd like to be on for the entire convention is
           textfield_size: 3
         conflicts:
           code: g3q7
           type: multiplechoice
+          style: grid_12
+          question_style: grid_11
+          answer_style: grid_3
           sort_order: 7
           question: | Do not schedule me during these times or against these items: 
           answers:
@@ -434,15 +477,450 @@ smerfform:
               answer: | Charity Auction
               sort_order: 21
               default: N
-              subquestions:
-                    excludedTimesText:
-                        code: g3q7t1
-                        tags: excludedTimes
-                        type: textbox
-                        sort_order: 1
-                        validation: add_tags
-                        question: | Do not schedule me at these other times:
+        excludedTimesText:
+          code: g3q8
+          type: textbox
+          sort_order: 8
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_9
+          question: | Do not schedule me at these other times:
+#
+#                    excludedTimesText:
+#                        code: g3q7t1
+#                        tags: excludedTimes
+#                        type: textbox
+#                        sort_order: 1
+#                        validation: add_tags
+#                        question: | Do not schedule me at these other times:
 #    topic_interests:
 #      code: 4
 #      name: Topic Interests
 #      description: | Which of the following topics are you interested in talking about
+    program_topics:
+      code: 4
+      name: Which of the following topics are you interested in talking about?
+      description: | Please select the top 4-6 areas that you are the most interested in/knowledgeable about
+      questions:
+        scienceItems:
+          code: g4q1
+          type: textbox
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_6
+          sort_order: 1
+          question: | Science
+          tags: scienceItems
+          validation: add_tags
+        literature:
+          code: g4q2
+          type: textbox
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_6
+          sort_order: 2
+          question: | Literature
+          tags: literature
+          validation: add_tags
+        media:
+          code: g4q3
+          type: textbox
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_6
+          sort_order: 3
+          question: | Media
+          tags: media
+          validation: add_tags
+        fandom:
+          code: g4q4
+          type: textbox
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_6
+          sort_order: 4
+          question: | Fan
+          tags: fandom
+          validation: add_tags
+        nevada:
+          code: g4q5
+          type: textbox
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_6
+          sort_order: 5
+          question: | Nevada
+          tags: nevada
+          validation: add_tags
+# List 2-3 unique areas that you could discuss, or give details for anything you've checked above
+# I do not want to take about
+    author_topics:
+      code: 5
+      name: Which of the following authors are you interested in talking about?
+      description: | Please select the top 2-3 authors whose work you are familiar with.
+      questions:
+        Authors:
+          code: g5q1
+          type: textbox
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_6
+          sort_order: 1
+          question: | Authors
+          tags: authors
+          validation: add_tags
+# 
+    prog_types:
+      code: 6
+      name: Specific Program Types
+      description: | I am interested in doing some of the following:
+      questions:
+        scienceItems:
+          code: g6q1
+          type: textbox
+          style: grid_12
+          question_style: grid_8
+          answer_style: grid_6
+          sort_order: 1
+          question: | Specific Program Types
+          tags: specificProgTypes
+          validation: add_tags
+        specificItemTypes:
+          code: g6q2
+          type: multiplechoice
+          style: grid_12
+          question_style: grid_11
+          answer_style: grid_3
+          sort_order: 2
+          question: | I am interested in doing some of the following: 
+          answers:
+            Autographing:
+              code: 1
+              answer: | Autographing
+              sort_order: 1
+              default: N
+            WritersWorkshop:
+              code: 2
+              answer: | Writers Workshop
+              sort_order: 2
+              default: N
+            NewProOrientation:
+              code: 3
+              answer: | New Pro Orientation
+              sort_order: 3
+              default: N
+            DiscussionGroup:
+              code: 4
+              answer: | Discussion Group
+              sort_order: 4
+              default: N
+            LiteraryBeer:
+              code: 5
+              answer: | Literary Beer
+              sort_order: 5
+              default: N
+            StrollwithStars:
+              code: 6
+              answer: | Stroll with Stars
+              sort_order: 6
+              default: N
+            GameShow:
+              code: 7
+              answer: | Game Show
+              sort_order: 7
+              default: N
+            LiteraryTea:
+              code: 8
+              answer: | Literary Tea
+              sort_order: 8
+              default: N
+            ProgramforYoungAdults_Kids:
+              code: 9
+              answer: | Program for Young Adults/Kids
+              sort_order: 9
+              default: N
+            Kaffeeklatsch:
+              code: 10
+              answer: | Kaffeeklatsch
+              sort_order: 10
+              default: N
+            DocentTours:
+              code: 11
+              answer: | Docent Tours
+              sort_order: 11
+              default: N
+            Book_StoryDiscussionGroup:
+              code: 12
+              answer: | Book/Story Discussion Group (Preparation Required)
+              sort_order: 12
+              default: N
+            Reading:
+              code: 13
+              answer: | Reading (20 minute)
+              sort_order: 13
+              default: N
+            Teen Writing:
+              code: 14
+              answer: | Teen Writing
+              sort_order: 14
+              default: N
+            MusicWorkshop:
+              code: 15
+              answer: | Music Workshop
+              sort_order: 15
+              default: N
+            ArtWorkshop:
+              code: 17
+              answer: | Art Workshop
+              sort_order: 17
+              default: N
+            CostumeWorkshop:
+              code: 18
+              answer: | Costume Workshop
+              sort_order: 18
+              default: N
+            Con_runningWorkshop:
+              code: 19
+              answer: |  Con-running Workshop
+              sort_order: 19
+              default: N
+            Demo:
+              code: 20
+              answer: | Demo (art, tech, video etc.)
+              sort_order: 20
+              default: N
+            Presentation (Data Projector):
+              code: 21
+              answer: | Presentation (Data Projector)
+              sort_order: 21
+              default: N
+        specificItemTypes2:
+          code: g6q3
+          type: multiplechoice
+          sort_order: 3
+          question: |
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_4
+          answers:
+            DialogInterview:
+              code: 1
+              answer: | Dialog/Interview
+              sort_order: 1
+              default: N
+              subquestions:
+                DialogTopic:
+                  code: g6q3s1
+                  type: textbox
+                  style: grid_12
+                  question_style: grid_2
+                  answer_style: grid_7
+                  sort_order: 1
+                  question: | Dialog Topic
+                  help: | enter the topic of the Dialog that you would like to do 
+                  validation: validate_sub_question
+                DialogParticipants:
+                  code: g6q3s2
+                  type: textbox
+                  style: grid_12
+                  question_style: grid_2
+                  answer_style: grid_7
+                  sort_order: 2
+                  question: | Dialog Participants
+                  help: | suggest participants
+                  validation: validate_sub_question
+# Need misc stuff
+# Release (auto fill) i.e. checked
+# Mini Bio, web site etc
+# 
+    music_night:
+      code: 7
+      name: Wednesday Music Night
+      description: | Wednesday Music night: Play an instrument or sing well? 
+              Participate in one of our Wednesday perfomances. 
+              Enter notes about what you'd like to do in the Comments area below.
+      questions:
+        musicNightVolunteer:
+          code: g7q1
+          type: textbox
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_7
+          sort_order: 1
+          question: | Notes for Music Night
+    art_night:
+      code: 8
+      name: Thursday Art Night
+      description: | Thursday Art Night: Would you like to give an art demo or some 
+          sort of interactive art event? Enter notes about what you'd 
+          like to do in the Comments area below.
+      questions:
+        artNightVolunteer:
+          code: g8q1
+          type: textbox
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_7
+          sort_order: 1
+          question: | Notes for Art Night
+    other_info:
+      code: 9
+      name: Other Information
+      description: | 
+      questions:
+        exclusionRequest:
+          code: g9q1
+          type: textbox
+          style: grid_12
+          question_style: grid_7
+          answer_style: grid_11
+          sort_order: 1
+          question: | Under no circumstances should I be on a panel with:
+              Sensitive information entered in this section is not passed along to the next Worldcon.
+        NevadaConnections:
+          code: g9q2
+          type: textbox
+          style: grid_12
+          question_style: grid_7
+          answer_style: grid_11
+          sort_order: 2
+          question: | Do you have any Nevada connections (born there/school/job)?
+# These need to be changed to check boxes
+        emailShare:
+          code: g9q3
+          type: singlechoice
+          style: grid_12
+          question_style: grid_10
+          sort_order: 3
+          question: | 
+          answers:
+             doNotShareEmail:
+               code: 1
+               answer: | Do not share E-mail contact info with other participants
+               sort_order: 1
+               default: N
+        canInterview:
+          code: g9q4
+          type: singlechoice
+          style: grid_12
+          question_style: grid_10
+          sort_order: 4
+          question: | 
+          answers:
+             canInterview:
+               code: 1
+               answer: | I am willing to be interviewed by the media
+               sort_order: 1
+               default: N
+        comments:
+          code: g9q5
+          type: textbox
+          style: grid_12
+          question_style: grid_7
+          answer_style: grid_11
+          sort_order: 5
+          question: | Do you have any comments?
+#
+# Paticipant Release
+#
+    release:
+      code: 91
+      name: Participant Release
+      description: | <p>As a Renovation program participant, I understand that my name and likeness may be 
+       recorded during the convention, in any recording format. I consent to the use of any such recording 
+       of my name and likeness by the convention or its agents, <b><u>except</u> that I <u>do not</u> 
+       consent to any use of 
+       recording of events that are predominantly presentations of my artistic work, including, but not limited to, 
+       readings of written work and exhibits of graphical work or sculpture.</b></p>
+       <p><b>I expressly release the Reno Worldcon 2011 and its agents and assignees from any privacy, 
+       defamation or other claim I may otherwise have arising out of the broadcast, exhibition, cablecast, 
+       webcast, publication, promotion or any other use of my name or likeness.</b></p> 
+      questions:
+        release_name:
+          code: g10q1
+          type: textfield
+          textfield_size: 100
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_9
+          sort_order: 1
+          question: | Name
+        release_date:
+          code: g10q2
+          type: textfield
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_9
+          sort_order: 2
+          question: | Date
+# Publications Information
+#
+    pub_info:
+      code: 92
+      name: Information for Renovation's Web Site and Publications
+      description: | 
+      questions:
+        mini_bio:
+          code: g11q1
+          type: textbox
+          style: grid_12
+          question_style: grid_10
+          answer_style: grid_10
+          sort_order: 1
+          question: | <b><u>Mini-Bio</u></b> Please write a short (under 200 words) bio-blurb for the Website, 
+              which includes info about your most recent publications/activities. Do not put titles in ALL CAPS; 
+              use title-style capitalization. We will edit the bio as needed.
+              <a href="http://www.fanac.org/Denvention3/programming/bios2.html" target="new">
+              Some sample participant bios from other Worldcons</a>.
+        homepage:
+          code: g11q2
+          type: textfield
+          textfield_size: 100
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_7
+          sort_order: 2
+          question: | Home Page URL
+        photourl:
+          code: g11q3
+          type: textfield
+          textfield_size: 100
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_7
+          sort_order: 3
+          question: | Photo URL
+        socialmedia:
+          code: g11q4
+          type: multiplechoice
+          style: grid_12
+          question_style: grid_11
+          answer_style: grid_3
+          sort_order: 4
+          question: | Social Media
+          answers:
+            facebook:
+              code: 1
+              answer: | Facebook
+              sort_order: 1
+              default: N
+            twitter:
+              code: 2
+              answer: | Twitter
+              sort_order: 2
+              default: N
+            other:
+              code: 4
+              answer: | other
+              sort_order: 4
+              default: N
+              subquestions:
+                 phone:
+                     code: g11q4p1
+                     type: textfield
+                     sort_order: 1
+                     question: | Other
+                     style: grid_12
+                     question_style: grid_2
+                     answer_style: grid_6
+                     textfield_size: 50

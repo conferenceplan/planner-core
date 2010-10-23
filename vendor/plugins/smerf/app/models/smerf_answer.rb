@@ -30,7 +30,7 @@
 #
 
 class SmerfAnswer < SmerfItem
-  attr_accessor :code, :answer, :default, :sort_order 
+  attr_accessor :code, :answer, :default, :sort_order, :style 
   
   # A answer object maintains any number of sub-questions, here we alias the 
   # variable that stores the child objects to make code more readable
@@ -44,7 +44,8 @@ class SmerfAnswer < SmerfItem
       'answer'                    => {'mandatory' => 'Y'},
       'default'                   => {'mandatory' => 'Y'},
       'sort_order'                => {'mandatory' => 'Y'},
-      'subquestions'              => {'mandatory' => 'N', 'child_items' => 'SmerfQuestion', 'sort_by' => 'sort_order'}
+      'style'                     => {'mandatory' => 'N'},
+      'subquestions'              => {'mandatory' => 'N', 'child_items' => 'SmerfQuestion', 'sort_by' => 'sort_order'},
     }  
   end
 

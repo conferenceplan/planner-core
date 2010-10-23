@@ -137,17 +137,24 @@ module SmerfFormsHelper
     # Format question header 
     contents += content_tag(:div, content_tag(:p, question.header), 
       :class => "smerfQuestionHeader") if (question.header and !question.header.blank?) 
-    # Format question  
+    # Format question
+    classStr = (level <= 1) ? "smerfQuestion" : "smerfSubquestion"
+    classStr += " " + question.question_style if question.question_style
+    if question.validation and question.validation.include? "mandatory"
+      classStr += " mandatory"
+    end
+    helpLink = "<a title='"+question.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (!question.help.blank?)
+    
     contents += content_tag(:div, 
-        question.question,
-      :class => (level <= 1) ? "smerfQuestion" : "smerfSubquestion") if (question.question and !question.question.blank?) 
+        question.question + (helpLink ? " " + helpLink : ""),
+      :class => classStr) if (question.question and !question.question.blank?) 
     # Format error
     contents += content_tag(:div, 
       content_tag(:p, "#{image_tag("smerf_error.gif", :alt => "Error")} #{@errors["#{question.item_id}"]["msg"]}"), 
       :class => "smerfQuestionError") if (@errors and @errors.has_key?("#{question.item_id}"))    
 
     # Format help   
-    contents += "<a title='"+question.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (!question.help.blank?)    
+#    contents += "<a title='"+question.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (!question.help.blank?)    
    
 #  * Put in some HTML like the following:
 # * div.tag
@@ -191,7 +198,9 @@ module SmerfFormsHelper
 
     # question style needs to be modified if the add index is not empty...
     # hidden so that this can be revealed by JS and change the code logically
-    questionClass = (!question.style.blank?) ? question.style : (level <= 1) ? "smerfQuestionArea" : "smerfSubquestionArea" 
+#    questionClass = (!question.style.blank?) ? question.style : (level <= 1) ? "smerfQuestionArea" : "smerfSubquestionArea" 
+
+    questionClass = (!question.style.blank?) ? " " + question.style : ""
     contentId = nil
     contentId = add_index if(!add_index.empty?)
     questionClass += " toggle" if((!add_index.empty?) and (!result[:answer]) )
@@ -212,9 +221,9 @@ module SmerfFormsHelper
         
         if (!additional_content[:answered])
           if (hide_link)
-            contents += "<a class='toggleLink toggle'>add</a>" if((!add_index.empty?)or question.additional)
+            contents += "<a class='toggleLink toggle grid_1'>add</a>" if((!add_index.empty?)or question.additional)
           else
-            contents += "<a class='toggleLink'>add</a>" if((!add_index.empty?)or question.additional)
+            contents += "<a class='toggleLink grid_1'>add</a>" if((!add_index.empty?)or question.additional)
           end
           hide_link = true
         end
@@ -251,7 +260,7 @@ module SmerfFormsHelper
         answer.subquestions.each {|subquestion| sq_contents += 
           smerf_group_question(subquestion, level+1)[:content]}
         # Indent question
-        sq_contents = "<div style=\"margin-left: #{level * 25}px;\">" + sq_contents + '</div>'       
+#        sq_contents = "<div style=\"margin-left: #{level * 25}px;\">" + sq_contents + '</div>'       
       end
       return sq_contents
     end
@@ -273,6 +282,8 @@ module SmerfFormsHelper
         # Note we wrap the form element in a label element, this allows the input
         # field to be selected by selecting the label, we could otherwise use a 
         # <lable for="....">...</label> construct to do the same
+        style = "checkbox"
+        style += " " + question.answer_style if question.answer_style
         html = '<label>' + check_box_tag("responses[#{question.code}][#{answer.code}]", answer.code, 
           # If user responded to the question and the value is the same as the question 
           # value then tick this checkbox
@@ -282,7 +293,7 @@ module SmerfFormsHelper
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y'))) + 
           "#{answer.answer}</label>\n"
-        contents += content_tag(:div, html, :class => "checkbox")
+        contents += content_tag(:div, html, :class => style)
         # Process any sub questions this answer may have
         contents += process_sub_questions(answer, level)
       end
@@ -303,6 +314,9 @@ module SmerfFormsHelper
         user_answer = @responses["#{question.code}"]
         answered = (user_answer and !user_answer.blank?())
       end
+      style = ""
+      style += question.tags if question.tags
+      style += " " + question.answer_style if question.answer_style
       contents = text_area_tag("responses[#{question.code}]",    
         # Set value to user response if available
         if (answered)
@@ -311,10 +325,13 @@ module SmerfFormsHelper
           nil
         end,
         :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5",
-        :class => question.tags )
-      contents = content_tag(:div, contents, :class => "textarea")
+        :class => style )
+#      contents = content_tag(:div, contents, :class => "textarea")
       if (question.tags)
-        contents += content_tag(:div,"", :class => "cloud")
+        contents += '<div class="grid_4 cloud ui-widget ui-widget-content ui-corner-all">'
+        contents += '<div class="ui-widget-header ui-corner-top ui-helper-clearfix">'+question.question+'</div>'
+        contents += content_tag(:div,"", :class => "ui-widget ui-widget-content ui-corner-all")
+        contents += '</div>'
       end
 
       return { :content => contents, :answer => answered }
@@ -331,6 +348,8 @@ module SmerfFormsHelper
         user_answer = @responses["#{question.code}"]
         answered = (user_answer and !user_answer.blank?())
       end
+      style = "text"
+      style += " " + question.answer_style if question.answer_style
       contents = text_field_tag("responses[#{question.code}]", 
         # Set value to user responses if available
         if (answered)
@@ -340,9 +359,13 @@ module SmerfFormsHelper
         end, 
         :size => (!question.textfield_size.blank?) ? question.textfield_size : "30",
         :class => question.tags)
-      contents = content_tag(:div, contents, :class => "text")
+      contents = content_tag(:div, contents, :class => style)
+
       if (question.tags)
-        contents += content_tag(:div,"", :class => "cloud")
+        contents += '<div class="grid_4 cloud ui-widget ui-widget-content ui-corner-all">'
+        contents += '<div class="ui-widget-header ui-corner-top ui-helper-clearfix">'+question.question+'</div>'
+        contents += content_tag(:div,"", :class => "ui-widget ui-widget-content ui-corner-all")
+        contents += '</div>'
       end
       
       return { :content => contents, :answer => answered }
@@ -372,7 +395,9 @@ module SmerfFormsHelper
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y'))) + 
           "#{answer.answer}</label>\n"
-        contents += content_tag(:div, html, :class => "radiobutton")
+        style = "radiobutton"
+        style += " " + question.answer_style if question.answer_style
+        contents += content_tag(:div, html, :class => style)
         # Process any sub questions this answer may have
         contents += process_sub_questions(answer, level)
       end
@@ -410,12 +435,14 @@ module SmerfFormsHelper
         
       # Note the additional [] in the select_tag name, without this we only get 
       # one choice in params, adding the [] gets all choices as an array
+      style = "select"
+      style += " " + question.answer_style if question.answer_style
       html = "\n" + select_tag("responses[#{question.code}][]", answers, :multiple => 
         # Check if multiple choice
         (question.selectionbox_multiplechoice and 
         !question.selectionbox_multiplechoice.blank?() and
         question.selectionbox_multiplechoice.upcase == 'Y'))
-      contents += content_tag(:div, html, :class => "select")
+      contents += content_tag(:div, html, :class => style)
       
 #      return contents
       return { :content => contents, :answer => answered }

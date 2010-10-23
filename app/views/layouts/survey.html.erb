@@ -3,6 +3,9 @@
 <title><%= @page_title or 'Page Title' %></title>
 		<%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
 		<%= stylesheet_link_tag 'jquery.tooltip.css' %>
+		<%= stylesheet_link_tag 'reset.css' %>
+		<%= stylesheet_link_tag 'text.css' %>
+		<%= stylesheet_link_tag '960.css' %>
 		<%= stylesheet_link_tag 'survey.css' %>
 		<%= javascript_include_tag 'jquery-1.4.2.min' %>
 		<%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
@@ -95,6 +98,8 @@
 </script>
 </head>
 <body>
-	<div id="content"><%= yield(:content) or yield %></div>
+<div class="container_12">
+	<%= yield(:content) or yield %>
+</div>
 </body>
 </html> 
