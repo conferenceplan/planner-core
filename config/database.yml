@@ -41,8 +41,9 @@ production:
   adapter: mysql
   encoding: utf8
   reconnect: false
-  database: PlannerPrototype_production
+  database: plannerproductio
   pool: 5
-  username: root
-  password: 
+  username: plannerproductio
+  password: lRuth,bhenrY9
+  host: plannerproductio.db.4550921.hostedresource.com
   socket: /tmp/mysql.sock

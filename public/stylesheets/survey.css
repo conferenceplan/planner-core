@@ -78,9 +78,8 @@ div.cloud div#content div {
 }
 
 a.toggleLink.toggle, a.toggleLink {
-	display: inline-block;
-	width: 100%;
-	text-align: right;
+	color: blue;
+	font-size: 8pt;
 }
 
 div.radiobutton {

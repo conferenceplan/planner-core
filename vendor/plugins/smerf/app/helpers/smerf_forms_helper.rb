@@ -221,9 +221,9 @@ module SmerfFormsHelper
         
         if (!additional_content[:answered])
           if (hide_link)
-            contents += "<a class='toggleLink toggle grid_1'>add</a>" if((!add_index.empty?)or question.additional)
+            contents += "<a class='toggleLink toggle grid_1'>add another</a>" if((!add_index.empty?)or question.additional)
           else
-            contents += "<a class='toggleLink grid_1'>add</a>" if((!add_index.empty?)or question.additional)
+            contents += "<a class='toggleLink grid_1'>add another</a>" if((!add_index.empty?)or question.additional)
           end
           hide_link = true
         end

@@ -14,7 +14,7 @@ smerfform:
     hover on the information icon beside the field name to display more information.
     </p>
     <p>
-    Fields that are in <b class='mandatory'>red</b> are required.
+    Fields that are in <b class="mandatory">red</b> are required.
     </p>
 
   thank_you: | 
