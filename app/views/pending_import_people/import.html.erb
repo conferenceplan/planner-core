@@ -3,21 +3,20 @@
                     :action=>"doimport",:method => "post"},
 
                     :html => { :multipart => true } do |f| -%>
- <table">
-   <tr>
-     <td>
+ <p>
       <label for="dump_file">
         Select a CSV File :
       </label>
-     </td>
-     <td >
        <%= f.file_field :file -%>
-     </td>
-   </tr>
-   <tr>
-     <td colspan='2'>
+ </p>
+ <p>
+ 	<label for="dump_importtype">
+ 		File Data Type :
+		</label>
+		<%= f.radio_button :importtype, :reno%>Reno Registration
+		<%= f.radio_button :importtype, :renotest-%>Reno Test
+ 	</p
+ <p>
        <%= submit_tag 'Submit' -%>
-     </td>
-   </tr>
- </table>
+ </p>
 <% end -%>
