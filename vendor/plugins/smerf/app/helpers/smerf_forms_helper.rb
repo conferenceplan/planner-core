@@ -221,9 +221,9 @@ module SmerfFormsHelper
         
         if (!additional_content[:answered])
           if (hide_link)
-            contents += "<a class='toggleLink toggle grid_1'>add another</a>" if((!add_index.empty?)or question.additional)
+            contents += "<a class='toggleLink toggle grid_1 prefix_5'>add another</a>" if((!add_index.empty?)or question.additional)
           else
-            contents += "<a class='toggleLink grid_1'>add another</a>" if((!add_index.empty?)or question.additional)
+            contents += "<a class='toggleLink grid_1 prefix_5'>add another</a>" if((!add_index.empty?)or question.additional)
           end
           hide_link = true
         end
@@ -295,7 +295,11 @@ module SmerfFormsHelper
           "#{answer.answer}</label>\n"
         contents += content_tag(:div, html, :class => style)
         # Process any sub questions this answer may have
-        contents += process_sub_questions(answer, level)
+        if (question.subfirst)
+          contents = process_sub_questions(answer, level) + contents
+        else
+          contents += process_sub_questions(answer, level)
+        end
       end
       # Process error messages if they exist
       #wrap_error(contents, (@errors and @errors.has_key?("#{question.code}")))
@@ -399,7 +403,11 @@ module SmerfFormsHelper
         style += " " + question.answer_style if question.answer_style
         contents += content_tag(:div, html, :class => style)
         # Process any sub questions this answer may have
-        contents += process_sub_questions(answer, level)
+        if (question.subfirst)
+          contents = process_sub_questions(answer, level) + contents
+        else
+          contents += process_sub_questions(answer, level)
+        end
       end
 #      return contents
       return { :content => contents, :answer => answered }

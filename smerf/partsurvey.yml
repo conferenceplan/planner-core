@@ -45,6 +45,16 @@ smerfform:
           question: | Full Name
           textfield_size: 100
           help: | as you want it to appear in the schedule, if you use a pen name or want middle initials included
+        Street Address:
+          code: g1q11
+          type: textfield
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_4
+          sort_order: 4
+          validation: validate_mandatory_question
+          question: | Street Address
+          textfield_size: 100
         City:
           code: g1q2
           type: textfield
@@ -68,7 +78,7 @@ smerfform:
         Email:
           code: g1q4
           type: textfield
-          style: grid_11
+          style: grid_12
           question_style: grid_2
           answer_style: grid_4
           validation: validate_mandatory_question
@@ -80,10 +90,11 @@ smerfform:
           code: g1q5
           type: singlechoice
           sort_order: 8
-          question: |
-          style: phonetype grid_11
+          question: | Phone Number
+          style: phonetype grid_12
           question_style: grid_2
           answer_style: grid_1
+          subfirst: true
           additional: 3
           answers:
              home:
@@ -109,10 +120,9 @@ smerfform:
                         code: g1q5p1
                         type: textfield
                         sort_order: 1
-                        question: | Phone Number
-                        style: PhoneNumber grid_7
+                        question: |
+                        style: PhoneNumber grid_5
                         question_style: grid_2
-                        answer_style: grid_4
                         textfield_size: 50
 # NOTE: we want to be able to attach sub questions to text - this needs to be an extension to SMERF
 # also want the ability to to an add more of this type, and a tag choice (with cloud display)
@@ -160,7 +170,7 @@ smerfform:
               code: 1
               answer: | Wednesday, August 17
               sort_order: 1
-              default: N
+              default: Y
             Thu:
               code: 2
               answer: | Thursday, August 18
@@ -261,18 +271,23 @@ smerfform:
             Thu:
               code: 2
               answer: | Thursday, August 18
-              sort_order: 3
+              sort_order: 4
               default: N
             Fri:
               code: 3
               answer: | Friday, August 19
-              sort_order: 2
+              sort_order: 3
               default: N
             Sat:
               code: 4
               answer: | Saturday, August 20
-              sort_order: 1
+              sort_order: 2
               default: N
+            Sun:
+              code: 5
+              answer: | Sunday, August 21
+              sort_order: 1
+              default: Y
         End Time:
           code: g3q4
           validation: validate_mandatory_question
@@ -399,12 +414,12 @@ smerfform:
               default: N
             masquerade:
               code: 6
-              answer: | Masquerade (Fri night)
+              answer: | Masquerade
               sort_order: 6
               default: N
             hugos:
               code: 7
-              answer: | Hugos (Sat night)
+              answer: | Hugos
               sort_order: 7
               default: N
             closingCeremony:
@@ -500,7 +515,7 @@ smerfform:
     program_topics:
       code: 4
       name: Which of the following topics are you interested in talking about?
-      description: | Please select the top 4-6 areas that you are the most interested in/knowledgeable about
+      description: | Please select 4-6 areas below in which you are interested and knowledgable.
       questions:
         scienceItems:
           code: g4q1
@@ -557,7 +572,7 @@ smerfform:
     author_topics:
       code: 5
       name: Which of the following authors are you interested in talking about?
-      description: | Please select the top 2-3 authors whose work you are familiar with.
+      description: | Please list the top 2-3 authors whose work you are familiar with.
       questions:
         Authors:
           code: g5q1
@@ -573,18 +588,18 @@ smerfform:
     prog_types:
       code: 6
       name: Specific Program Types
-      description: | I am interested in doing some of the following:
+      description: |
       questions:
-        scienceItems:
-          code: g6q1
-          type: textbox
-          style: grid_12
-          question_style: grid_8
-          answer_style: grid_6
-          sort_order: 1
-          question: | Specific Program Types
-          tags: specificProgTypes
-          validation: add_tags
+#        scienceItems:
+#          code: g6q1
+#          type: textbox
+#          style: grid_12
+#          question_style: grid_8
+#          answer_style: grid_6
+#          sort_order: 1
+#          question: | Specific Program Types
+#          tags: specificProgTypes
+#          validation: add_tags
         specificItemTypes:
           code: g6q2
           type: multiplechoice

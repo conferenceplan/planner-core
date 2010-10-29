@@ -60,7 +60,7 @@
 class SmerfQuestion < SmerfItem
   attr_accessor :code, :type, :question, :sort_order, :help, :textbox_size
   attr_accessor :textfield_size, :header, :validation, :selectionbox_multiplechoice, :style, :additional, :tags
-  attr_accessor :question_style, :answer_style
+  attr_accessor :question_style, :answer_style, :subfirst
   
   # A question object maintains any number of answers, here we alias the 
   # variable that stores the child objects to make code more readable
@@ -86,6 +86,7 @@ class SmerfQuestion < SmerfItem
       'answer_style'                => {'mandatory' => 'N'},
       'additional'                  => {'mandatory' => 'N'},
       'tags'                        => {'mandatory' => 'N'},
+      'subfirst'                    => {'mandatory' => 'N'},
     }
   end    
     

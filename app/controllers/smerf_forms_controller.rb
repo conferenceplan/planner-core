@@ -98,7 +98,7 @@ class SmerfFormsController < SurveyApplicationController
         flash[:notice] = "#{@smerfform.name} updated successfully"   
       end
       # Show the form again, allowing the user to edit responses
-      render(:action => "edit")
+      render(:action => "edit") # TODO - change to redirect to a page that says thank you (and also gives the key)
     else
       flash[:notice] = "No responses found in #{@smerfform.name}, nothing saved"      
     end
