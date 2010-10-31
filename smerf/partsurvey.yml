@@ -173,7 +173,7 @@ smerfform:
       questions:
         NotSureWhen:
           code: g3q0
-          type: singlechoice
+          type: multiplechoice
           sort_order: 1
           answers:
             Yes:
