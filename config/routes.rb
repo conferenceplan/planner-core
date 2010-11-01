@@ -84,6 +84,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :survey_respondent_sessions # just for the new session...
 
   map.resources :survey_respondents
+  map.connect 'survey_respondents/confirm', :controller => 'survey_respondents', :action => 'confirm'
 
 # TODO - how do I insist on the tag context as a parameter
   map.resources :survey_respondents do |respondent|

@@ -3,10 +3,18 @@
 <title><%= @page_title or 'Page Title' %></title>
 		<%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
 		<%= stylesheet_link_tag 'planner'%>
+		<%= stylesheet_link_tag '960.css' %>
 		<%= javascript_include_tag 'jquery-1.4.2.min' %>
 		<%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
 </head>
 <body>
-	<div id="content"><%= yield(:content) or yield %></div>
+<div class="grid_12">
+  <img src="http://www.renovationsf.org/images/renovation_logo.gif" alt="Rennie logo" class="grid_1" height="110">
+  <img src="http://www.renovationsf.org/images/gold-renovation.gif" alt="Rennie Title" class="grid_1">
+</div>
+<div class="clear"></div>
+<!-- div id="content" -->
+	<%= yield(:content) or yield %>
+<!-- /div -->
 </body>
 </html> 

@@ -1,13 +1,24 @@
+<div class="container_12">
 <%= object.error_messages %>
-<%= form.label "First Name" %><br />
-<%= form.text_field :first_name %><br />
-<br />
-<%= form.label "Last Name" %><br />
-<%= form.text_field :last_name %><br />
-<br />
-<%= form.label "Key" %><br />
-<%= form.text_field :key %><br />
-<br />
-<%= submit_tag "I will not attend", :name => "cancel", :confirm => "Are you sure" %>
-<%= form.submit button %>
-<!-- TODO - add another button where the person can say that they are not attending the convention -->
+</div>
+<div class="clear"></div>
+<div class="container_12">
+<%= form.label "First Name:", nil ,:class => "grid_2" %>
+<%= form.text_field :first_name, :class => "grid_5" %>
+</div>
+<div class="clear"></div>
+<div class="container_12">
+<%= form.label "Last Name:", nil ,:class => "grid_2" %>
+<%= form.text_field :last_name, :class => "grid_5" %>
+</div>
+<div class="clear"></div>
+<div class="container_12">
+<%= form.label "Key:", nil ,:class => "grid_2" %>
+<%= form.text_field :key, :class => "grid_1" %>
+</div>
+<div class="clear"></div>
+<div class="container_12">
+<%= form.submit button, :class => "grid_3" %>
+<%= submit_tag "I will not attend", :name => "cancel", :confirm => "Are you sure", :class => "grid_3" %>
+</div>
+<div class="clear"></div>

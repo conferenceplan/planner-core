@@ -2,7 +2,7 @@
 #
 #
 class SurveyRespondentsController < SurveyApplicationController
-  before_filter :check_for_single_access_token, :only => [:show, :edit, :update]
+  before_filter :check_for_single_access_token, :only => [:show, :edit, :update, :confirm]
   
   def new
     @survey_respondent = SurveyRespondent.new
@@ -23,16 +23,18 @@ class SurveyRespondentsController < SurveyApplicationController
     
     # find a respondent with the key, if not found then create a new one
     if (key)
+      # TODO - put in code to also validate the last name that they are using matches the one that we have in the DB
       @survey_respondent = SurveyRespondent.find_by_key(key)
       if (@survey_respondent)
         @survey_respondent.attending = fillSurvey
       end
     end
     
-    # TODO: else let them know that we did not find the key and ask them if they want to continue without it
+    # Create a new survey respondent based on the first and last name...
     if (! @survey_respondent ) # create a new survey respondent and survey (to be linked to participant manually)
       @survey_respondent = SurveyRespondent.new(params[:survey_respondent])
-      @survey_respondent.key = nil # ensure that we do not save the key to the database
+      # Create a key for this new survey respondent
+      @survey_respondent.key = '%05d' % rand(1e5) # ensure that we do not save the key to the database
     end
     
     if @survey_respondent.save and fillSurvey
@@ -48,6 +50,12 @@ class SurveyRespondentsController < SurveyApplicationController
   # For now the update does the same as the create
   def update
     create
+  end
+
+  def confirm
+    @survey_respondent = @current_survey_respondent
+    
+    render :layout => 'content'
   end
   
   # TODO - once they have completed the survey we should send them an email to confirm that the survey

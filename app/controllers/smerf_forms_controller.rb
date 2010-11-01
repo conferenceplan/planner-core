@@ -39,6 +39,8 @@ class SmerfFormsController < SurveyApplicationController
     # Retrieve the smerf form record, rebuild if required, also
     # retrieve the responses to this form if they exist
     retrieve_smerf_form(params[:id])
+    @current_key = params[:key];
+    @respondent = SurveyRespondent.find_by_single_access_token(params[:key]) 
     if (@smerf_forms_surveyrespondent)
       # Retrieve the responses
       @responses = @smerf_forms_surveyrespondent.responses
@@ -70,7 +72,8 @@ class SmerfFormsController < SurveyApplicationController
           @smerfform.id, self.smerf_user_id, @responses)
         flash[:notice] = "#{@smerfform.name} saved successfully"
         # Show the form again, allowing the user to edit responses
-        render(:action => "edit")
+#        render(:action => "edit")
+        render('survey_respondents/confirm')
       end
     else
       flash[:notice] = "No responses found in #{@smerfform.name}, nothing saved"      
@@ -98,7 +101,8 @@ class SmerfFormsController < SurveyApplicationController
         flash[:notice] = "#{@smerfform.name} updated successfully"   
       end
       # Show the form again, allowing the user to edit responses
-      render(:action => "edit") # TODO - change to redirect to a page that says thank you (and also gives the key)
+#      render(:action => "edit") # TODO - change to redirect to a page that says thank you (and also gives the key)
+      render('survey_respondents/confirm')
     else
       flash[:notice] = "No responses found in #{@smerfform.name}, nothing saved"      
     end
@@ -135,6 +139,7 @@ private
     # Retrieve the smerf form record, rails will raise error if not found
     @smerfform = SmerfForm.find(params[:smerf_form_id])
     @smerfform.current_user = self.smerf_user_id # The id of the survey respondent
+    @current_key = params[:key];
     # Validate user responses
     @errors = Hash.new()
     @smerfform.validate_responses(@responses, @errors)    
