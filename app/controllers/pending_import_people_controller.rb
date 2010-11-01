@@ -123,8 +123,10 @@ class PendingImportPeopleController < ApplicationController
        
  
        if (newPersonFlag)
+           inviteStatus = InviteStatus.find_by_name("Not Invited")
            p=Person.new(:first_name => pendingImportPerson.first_name,
-                        :last_name => pendingImportPerson.last_name)
+                        :last_name => pendingImportPerson.last_name,
+                        :invitestatus_id=> inviteStatus.id)
            if (pendingImportPerson.registration_number)
               nReg.registration_type = pendingImportPerson.registration_type
               p.registrationDetail = nReg

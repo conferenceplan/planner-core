@@ -45,7 +45,8 @@ jQuery(document).ready(function(){
 
       $tabs.tabs( 'url' , 0 , 'participants/'+ids+'/registrationDetail' ).tabs( 'load' , 0 ).tabs('select', 0);
       $tabs.tabs( 'url' , 1 , 'participants/'+ids+'/addresses').tabs( 'load' , 1 );
-      $tabs.tabs( 'url' , 2 , 'participants/'+ids+'/tags').tabs( 'load' , 2 );
+	  $tabs.tabs( 'url' , 2, 'participants/'+ids).tabs('load', 2)
+      $tabs.tabs( 'url' , 3 , 'participants/'+ids+'/tags').tabs( 'load' , 3 );
       
       return false;
     }

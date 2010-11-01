@@ -1,24 +1,2 @@
-<br/>
-<%= error_messages_for :participant %>
-<% form_for @participant do |participant_form| -%>
-
-  <p>First Name: <%= participant_form.text_field :first_name %></p>
-  <p>Last Name: <%= participant_form.text_field :last_name %></p>
-  <p>
-		<%= participant_form.label :invitestatus_id %><br/>
-		<%= participant_form.select :invitestatus_id,
-	                 InviteStatus.find(:all).collect {|s| [s.name,s.id] },
-	                 {:include_blank => true}%>
-  </p>  
-  <p>
-		<%= participant_form.label :invitation_category_id %><br/>
-		<%= participant_form.select :invitation_category_id,
-	                 InvitationCategory.find(:all).collect {|s| [s.name,s.id] },
-	                 {:include_blank => true}%>
-  </p>  
-  <%= participant_form.submit "Create Participant" %>
-  
-  <hr>
-  <%= debug(params) %>
-
-<% end %>
+<h1>Create a Person</h1>
+<%= render :partial => 'form' %>

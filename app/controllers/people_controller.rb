@@ -38,7 +38,7 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
     
     if @person.update_attributes(params[:person])
-      redirect_to :action => 'show', :id => @person
+      redirect_to :action => 'index'
     else
       render :action => 'edit'
     end

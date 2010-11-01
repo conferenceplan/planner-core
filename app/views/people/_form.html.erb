@@ -1,0 +1,17 @@
+<%= error_messages_for :person %>
+<% form_for @person do |f| -%>
+<div>
+  <div class='line'><div class='field_name'><%= f.label :first_name, "First Name" %></div><div class='field_value'> <%= f.text_field :first_name %></div></div>
+  <div class='line'><div class='field_name'><%= f.label :last_name, "Last Name" %></div><div class='field_value'> <%= f.text_field :last_name %></div></div>
+  <div class='line'><div class='field_name'><%= f.label :invitestatus_id %></div><div class='field_value'><%= f.select :invitestatus_id,
+	                 InviteStatus.find(:all).collect {|s| [s.name,s.id] },
+	                 {:include_blank => false}%></div></div>
+  <div class='line'><div class='field_name'><%= f.label :invitation_category_id %></div><div class='field_value'><%= f.select :invitation_category_id,
+	                 InvitationCategory.find(:all).collect {|s| [s.name,s.id] },
+	                 {:include_blank => true}%></div></div>
+  <div class='form-buttons'>
+		<%= f.submit "Submit" %>
+		<button type="button" class='jqmClose'>Close</button>
+  </div>
+</div>
+<% end %>
