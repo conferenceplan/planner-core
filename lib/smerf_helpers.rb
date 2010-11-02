@@ -29,11 +29,14 @@ require 'smerf_system_helpers'
 #
 
 module SmerfHelpers
+
+  # TODO - add helpers to validate email and phone numbers
   
   def add_tags(question, responses, form)
     # Add tags to the respondent from a tag field
     answer = smerf_get_question_answer(question, responses)
     if (answer)
+      answer = answer.capitalize
       # get the tag context from the question
       # we have the list of tags
       # so we also need the id of the respondent
