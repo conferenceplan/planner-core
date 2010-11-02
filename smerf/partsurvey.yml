@@ -42,9 +42,9 @@ smerfform:
           answer_style: grid_4
           sort_order: 4
           validation: validate_mandatory_question
-          question: | Full Name
+          question: | Name (publication)
           textfield_size: 100
-          help: | as you want it to appear in the schedule, if you use a pen name or want middle initials included
+          help: | as you would like it to appear in the schedule, if you use a pen name or want middle initials included
         Street Address:
           code: g1q11
           type: textfield
@@ -169,7 +169,8 @@ smerfform:
     program_availability:
       code: 3
       name: Program Availability
-      description: | Note that Renovation runs from Wednesday, August 17-Sunday, August 21
+      description: | Renovation Program will officially begin at noon, Wednesday, August 17 and 
+                     will end by 4pm on Sunday, August 21.
       questions:
         NotSureWhen:
           code: g3q0
@@ -212,6 +213,11 @@ smerfform:
               code: 4
               answer: | Saturday, August 20
               sort_order: 4
+              default: N
+            Sun:
+              code: 5
+              answer: | Sunday, August 21
+              sort_order: 5
               default: N
         Start Time:
           code: g3q2
@@ -295,6 +301,11 @@ smerfform:
           question_style: grid_6
           answer_style: grid_4
           answers:
+            Wed:
+              code: 1
+              answer: | Wednesday, August 17
+              sort_order: 5
+              default: N
             Thu:
               code: 2
               answer: | Thursday, August 18
@@ -740,9 +751,11 @@ smerfform:
           code: g6q3
           type: multiplechoice
           sort_order: 3
-          question: |
+# This note has been put in here so that we can put the note below the previous check boxes. THe grid_11 will ensure that the
+# note will be on a seperate line
+          question: | Note: most Readings will be 20 minutes long. 
           style: grid_12
-          question_style: grid_1
+          question_style: grid_11
           answer_style: grid_4
           answers:
             DialogInterview:
@@ -814,11 +827,11 @@ smerfform:
           code: g9q1
           type: textbox
           style: grid_12
-          question_style: grid_7
+          question_style: grid_11
           answer_style: grid_11
           sort_order: 1
-          question: | Under no circumstances should I be on a panel with:
-              Sensitive information entered in this section is not passed along to the next Worldcon.
+          question: | Under no circumstances should I be on a panel with: <i>anything you list here will not be shared outside
+            of the core Renovation programming team.</i>
         NevadaConnections:
           code: g9q2
           type: textbox
