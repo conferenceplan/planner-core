@@ -75,6 +75,16 @@ smerfform:
           sort_order: 6
           question: | State/Province/County
           textfield_size: 10
+        Zip:
+          code: g1q32
+          type: textfield
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_4
+          validation: validate_mandatory_question
+          sort_order: 7
+          question: | Zip/Postal Code
+          textfield_size: 10
         Country:
           code: g1q31
           type: textfield
@@ -82,9 +92,9 @@ smerfform:
           question_style: grid_2
           answer_style: grid_4
           validation: validate_mandatory_question
-          sort_order: 7
+          sort_order: 8
           question: | Country
-          textfield_size: 10
+          textfield_size: 30
         Email:
           code: g1q4
           type: textfield
@@ -92,14 +102,14 @@ smerfform:
           question_style: grid_2
           answer_style: grid_4
           validation: validate_mandatory_question
-          sort_order: 8
+          sort_order: 9
           question: | Email Address
           textfield_size: 50
           additional: 2
         Phone:
           code: g1q5
           type: singlechoice
-          sort_order: 9
+          sort_order: 10
           question: | Phone Number
           style: phonetype grid_12
           question_style: grid_2
@@ -173,236 +183,258 @@ smerfform:
                      will end by 4pm on Sunday, August 21.
       questions:
         NotSureWhen:
-          code: g3q0
-          type: multiplechoice
+          code: g3q1
+          type: singlechoice
+          style: availabilitySection grid_12
           sort_order: 1
           answers:
-            Yes:
+            Not Sure:
               code: 1
               style: grid_12
               answer: | I am not sure when I will be at the convention.
               sort_order: 1
               default: N
-        Start Date:
-          code: g3q1
-          type: selectionbox
-          selectionbox_multiplechoice: N
-          sort_order: 2
-          style: grid_12
-          question_style: grid_6
-          answer_style: grid_4
-          question: | I will be available to be on Renovation Program beginning:
-          answers:
-            DoNotKnow:
-              code: 1
-              answer: | ------
-              sort_order: 1
-              default: Y
-            Wed:
+            Know Time:
               code: 2
-              answer: | Wednesday, August 17
+              style: grid_12
+              answer: | I know when I will be at the convention.
               sort_order: 2
               default: N
-            Thu:
-              code: 3
-              answer: | Thursday, August 18
-              sort_order: 3
-              default: N
-            Fri:
-              code: 4
-              answer: | Friday, August 19
-              sort_order: 4
-              default: N
-            Sat:
-              code: 5
-              answer: | Saturday, August 20
-              sort_order: 5
-              default: N
-            Sun:
-              code: 6
-              answer: | Sunday, August 21
-              sort_order: 6
-              default: N
-        Start Time:
-          code: g3q2
-          type: selectionbox
-          selectionbox_multiplechoice: N
-          sort_order: 3
-          style: grid_12
-          question_style: grid_6
-          answer_style: grid_4
-          question: | starting from:
-          answers:
-            10am:
-              code: 1
-              answer: | 10am
-              sort_order: 1
-              default: Y
-            11am:
-              code: 2
-              answer: | 11am
-              sort_order: 2
-              default: N
-            noon:
-              code: 3
-              answer: | Noon
-              sort_order: 3
-              default: N
-            1pm:
-              code: 4
-              answer: | 1pm
-              sort_order: 4
-              default: N
-            2pm:
-              code: 5
-              answer: | 2pm
-              sort_order: 5
-              default: N
-            3pm:
-              code: 6
-              answer: | 3pm
-              sort_order: 6
-              default: N
-            4pm:
-              code: 7
-              answer: | 4pm
-              sort_order: 7
-              default: N
-            5pm:
-              code: 8
-              answer: | 5pm
-              sort_order: 8
-              default: N
-            6pm:
-              code: 9
-              answer: | 6pm
-              sort_order: 7
-              default: N
-            7pm:
-              code: 10
-              answer: | 7pm
-              sort_order: 9
-              default: N
-            8pm:
-              code: 11
-              answer: | 8pm
-              sort_order: 10
-              default: N
-            9pm:
-              code: 12
-              answer: | 9pm
-              sort_order: 11
-              default: N
-        End Date:
-          code: g3q3
-          type: selectionbox
-          selectionbox_multiplechoice: N
-          sort_order: 4
-          question: | I will not be available for program after:
-          style: grid_12
-          question_style: grid_6
-          answer_style: grid_4
-          answers:
-            DoNotKnow:
-              code: 7
-              answer: | ------
-              sort_order: 1
-              default: Y
-            Wed:
-              code: 2
-              answer: | Wednesday, August 17
-              sort_order: 6
-              default: N
-            Thu:
-              code: 3
-              answer: | Thursday, August 18
-              sort_order: 5
-              default: N
-            Fri:
-              code: 4
-              answer: | Friday, August 19
-              sort_order: 4
-              default: N
-            Sat:
-              code: 5
-              answer: | Saturday, August 20
-              sort_order: 3
-              default: N
-            Sun:
-              code: 6
-              answer: | Sunday, August 21
-              sort_order: 2
-              default: Y
-        End Time:
-          code: g3q4
-          type: selectionbox
-          selectionbox_multiplechoice: N
-          sort_order: 5
-          question: | ending at:
-          style: grid_12
-          question_style: grid_6
-          answer_style: grid_4
-          answers:
-            10am:
-              code: 1
-              answer: | 10am
-              sort_order: 1
-              default: Y
-            11am:
-              code: 2
-              answer: | 11am
-              sort_order: 2
-              default: N
-            noon:
-              code: 3
-              answer: | Noon
-              sort_order: 3
-              default: N
-            1pm:
-              code: 4
-              answer: | 1pm
-              sort_order: 4
-              default: N
-            2pm:
-              code: 5
-              answer: | 2pm
-              sort_order: 5
-              default: N
-            3pm:
-              code: 6
-              answer: | 3pm
-              sort_order: 6
-              default: N
-            4pm:
-              code: 7
-              answer: | 4pm
-              sort_order: 7
-              default: N
-            5pm:
-              code: 8
-              answer: | 5pm
-              sort_order: 8
-              default: N
-            6pm:
-              code: 9
-              answer: | 6pm
-              sort_order: 7
-              default: N
-            7pm:
-              code: 10
-              answer: | 7pm
-              sort_order: 9
-              default: N
-            8pm:
-              code: 11
-              answer: | 8pm
-              sort_order: 10
-              default: N
-            9pm:
-              code: 12
-              answer: | 9pm
-              sort_order: 11
-              default: N
+              subquestions:
+                Start Date:
+                  code: g3q1s1
+                  validation: validate_sub_question
+                  type: selectionbox
+                  selectionbox_multiplechoice: N
+                  sort_order: 2
+                  style: grid_12
+                  question_style: grid_6
+                  answer_style: grid_4
+                  question: | I will be available to be on Renovation Program beginning:
+                  answers:
+                    none:
+                      code: 0
+                      answer: | ------
+                      sort_order: 1
+                      default: N
+                    Wed:
+                      code: 1
+                      answer: | Wednesday, August 17
+                      sort_order: 2
+                      default: N
+                    Thu:
+                      code: 2
+                      answer: | Thursday, August 18
+                      sort_order: 3
+                      default: N
+                    Fri:
+                      code: 3
+                      answer: | Friday, August 19
+                      sort_order: 4
+                      default: N
+                    Sat:
+                      code: 4
+                      answer: | Saturday, August 20
+                      sort_order: 5
+                      default: N
+                    Sun:
+                      code: 5
+                      answer: | Sunday, August 21
+                      sort_order: 6
+                      default: N
+                Start Time:
+                  code: g3q1s2
+                  validation: validate_sub_question
+                  type: selectionbox
+                  selectionbox_multiplechoice: N
+                  sort_order: 3
+                  style: grid_12
+                  question_style: grid_6
+                  answer_style: grid_4
+                  question: | starting from:
+                  answers:
+                    none:
+                      code: 0
+                      answer: | ------
+                      sort_order: 1
+                      default: N
+                    10am:
+                      code: 1
+                      answer: | 10am
+                      sort_order: 2
+                      default: N
+                    11am:
+                      code: 2
+                      answer: | 11am
+                      sort_order: 3
+                      default: N
+                    noon:
+                      code: 3
+                      answer: | Noon
+                      sort_order: 4
+                      default: N
+                    1pm:
+                      code: 4
+                      answer: | 1pm
+                      sort_order: 5
+                      default: N
+                    2pm:
+                      code: 5
+                      answer: | 2pm
+                      sort_order: 6
+                      default: N
+                    3pm:
+                      code: 6
+                      answer: | 3pm
+                      sort_order: 7
+                      default: N
+                    4pm:
+                      code: 7
+                      answer: | 4pm
+                      sort_order: 8
+                      default: N
+                    5pm:
+                      code: 8
+                      answer: | 5pm
+                      sort_order: 9
+                      default: N
+                    6pm:
+                      code: 9
+                      answer: | 6pm
+                      sort_order: 10
+                      default: N
+                    7pm:
+                      code: 10
+                      answer: | 7pm
+                      sort_order: 11
+                      default: N
+                    8pm:
+                      code: 11
+                      answer: | 8pm
+                      sort_order: 12
+                      default: N
+                    9pm:
+                      code: 12
+                      answer: | 9pm
+                      sort_order: 13
+                      default: N
+                End Date:
+                  code: g3q1s3
+                  validation: validate_sub_question
+                  type: selectionbox
+                  selectionbox_multiplechoice: N
+                  sort_order: 4
+                  question: | I will not be available for program after:
+                  style: grid_12
+                  question_style: grid_6
+                  answer_style: grid_4
+                  answers:
+                    Wed:
+                      code: 1
+                      answer: | Wednesday, August 17
+                      sort_order: 6
+                      default: N
+                    Thu:
+                      code: 2
+                      answer: | Thursday, August 18
+                      sort_order: 5
+                      default: N
+                    Fri:
+                      code: 3
+                      answer: | Friday, August 19
+                      sort_order: 4
+                      default: N
+                    Sat:
+                      code: 4
+                      answer: | Saturday, August 20
+                      sort_order: 3
+                      default: N
+                    Sun:
+                      code: 5
+                      answer: | Sunday, August 21
+                      sort_order: 2
+                      default: N
+                    none:
+                      code: 6
+                      answer: | ------
+                      sort_order: 1
+                      default: N
+                End Time:
+                  code: g3q1s4
+                  validation: validate_sub_question
+                  type: selectionbox
+                  selectionbox_multiplechoice: N
+                  sort_order: 5
+                  question: | ending at:
+                  style: grid_12
+                  question_style: grid_6
+                  answer_style: grid_4
+                  answers:
+                    none:
+                      code: 0
+                      answer: | ------
+                      sort_order: 1
+                      default: N
+                    10am:
+                      code: 1
+                      answer: | 10am
+                      sort_order: 2
+                      default: N
+                    11am:
+                      code: 2
+                      answer: | 11am
+                      sort_order: 3
+                      default: N
+                    noon:
+                      code: 3
+                      answer: | Noon
+                      sort_order: 4
+                      default: N
+                    1pm:
+                      code: 4
+                      answer: | 1pm
+                      sort_order: 5
+                      default: N
+                    2pm:
+                      code: 5
+                      answer: | 2pm
+                      sort_order: 6
+                      default: N
+                    3pm:
+                      code: 6
+                      answer: | 3pm
+                      sort_order: 7
+                      default: N
+                    4pm:
+                      code: 7
+                      answer: | 4pm
+                      sort_order: 8
+                      default: N
+                    5pm:
+                      code: 8
+                      answer: | 5pm
+                      sort_order: 9
+                      default: N
+                    6pm:
+                      code: 9
+                      answer: | 6pm
+                      sort_order: 10
+                      default: N
+                    7pm:
+                      code: 10
+                      answer: | 7pm
+                      sort_order: 11
+                      default: N
+                    8pm:
+                      code: 11
+                      answer: | 8pm
+                      sort_order: 12
+                      default: N
+                    9pm:
+                      code: 12
+                      answer: | 9pm
+                      sort_order: 13
+                      default: N
 # NOTE: change to a date entry field - use a jquery date selector and a helper for validation?
         Max Items Per Day:
           code: g3q5
