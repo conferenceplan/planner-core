@@ -110,19 +110,19 @@ smerfform:
              home:
                code: 1
                answer: | home
-               sort_order: 1
+               sort_order: 2
                style: grid_1
                default: N
              work:
                code: 2
                answer: | work
-               sort_order: 2
+               sort_order: 3
                style: grid_1
                default: N
              cell:
                code: 3
                answer: | cell
-               sort_order: 3
+               sort_order: 1
                style: grid_1
                default: N
              fax:
@@ -185,7 +185,6 @@ smerfform:
               default: N
         Start Date:
           code: g3q1
-          validation: validate_mandatory_question
           type: selectionbox
           selectionbox_multiplechoice: N
           sort_order: 2
@@ -194,34 +193,38 @@ smerfform:
           answer_style: grid_4
           question: | I will be available to be on Renovation Program beginning:
           answers:
-            Wed:
+            DoNotKnow:
               code: 1
-              answer: | Wednesday, August 17
+              answer: | ------
               sort_order: 1
               default: Y
-            Thu:
+            Wed:
               code: 2
-              answer: | Thursday, August 18
+              answer: | Wednesday, August 17
               sort_order: 2
               default: N
-            Fri:
+            Thu:
               code: 3
-              answer: | Friday, August 19
+              answer: | Thursday, August 18
               sort_order: 3
               default: N
-            Sat:
+            Fri:
               code: 4
-              answer: | Saturday, August 20
+              answer: | Friday, August 19
               sort_order: 4
               default: N
-            Sun:
+            Sat:
               code: 5
-              answer: | Sunday, August 21
+              answer: | Saturday, August 20
               sort_order: 5
+              default: N
+            Sun:
+              code: 6
+              answer: | Sunday, August 21
+              sort_order: 6
               default: N
         Start Time:
           code: g3q2
-          validation: validate_mandatory_question
           type: selectionbox
           selectionbox_multiplechoice: N
           sort_order: 3
@@ -292,7 +295,6 @@ smerfform:
               default: N
         End Date:
           code: g3q3
-          validation: validate_mandatory_question
           type: selectionbox
           selectionbox_multiplechoice: N
           sort_order: 4
@@ -301,34 +303,38 @@ smerfform:
           question_style: grid_6
           answer_style: grid_4
           answers:
+            DoNotKnow:
+              code: 7
+              answer: | ------
+              sort_order: 1
+              default: Y
             Wed:
-              code: 1
+              code: 2
               answer: | Wednesday, August 17
-              sort_order: 5
+              sort_order: 6
               default: N
             Thu:
-              code: 2
+              code: 3
               answer: | Thursday, August 18
-              sort_order: 4
+              sort_order: 5
               default: N
             Fri:
-              code: 3
+              code: 4
               answer: | Friday, August 19
-              sort_order: 3
+              sort_order: 4
               default: N
             Sat:
-              code: 4
+              code: 5
               answer: | Saturday, August 20
-              sort_order: 2
+              sort_order: 3
               default: N
             Sun:
-              code: 5
+              code: 6
               answer: | Sunday, August 21
-              sort_order: 1
+              sort_order: 2
               default: Y
         End Time:
           code: g3q4
-          validation: validate_mandatory_question
           type: selectionbox
           selectionbox_multiplechoice: N
           sort_order: 5
@@ -452,12 +458,12 @@ smerfform:
               default: N
             masquerade:
               code: 6
-              answer: | Masquerade
+              answer: | Masquerade (Fri night)
               sort_order: 6
               default: N
             hugos:
               code: 7
-              answer: | Hugos
+              answer: | Hugos (Sat night)
               sort_order: 7
               default: N
             closingCeremony:
@@ -742,9 +748,9 @@ smerfform:
               answer: | Demo (art, tech, video etc.)
               sort_order: 20
               default: N
-            Presentation (Data Projector):
+            Solo Presentation:
               code: 21
-              answer: | Presentation (Data Projector)
+              answer: | Solo Presentation
               sort_order: 21
               default: N
         specificItemTypes2:
@@ -776,7 +782,8 @@ smerfform:
                   validation: validate_sub_question
                 DialogParticipants:
                   code: g6q3s2
-                  type: textbox
+                  type: textfield
+                  textfield_size: 100
                   style: grid_12
                   question_style: grid_2
                   answer_style: grid_7
