@@ -182,17 +182,24 @@ smerfform:
       description: | Renovation Program will officially begin at noon, Wednesday, August 17 and 
                      will end by 4pm on Sunday, August 21.
       questions:
-        NotSureWhen:
+        Availability:
           code: g3q1
           type: singlechoice
           style: availabilitySection grid_12
           sort_order: 1
           answers:
-            Not Sure:
+            Whole Time:
               code: 1
               style: grid_12
-              answer: | I am not sure when I will be at the convention.
+              answer: | I am available for Program for the complete duration of the convention.
               sort_order: 1
+              default: N
+            Not Sure:
+              code: 3
+              style: grid_12
+              answer: | I am extremely uncertain about when I will be arriving in or leaving Reno. 
+                  (Program will not schedule you for any specific items until you can let us know your approximate arrival and departure times)
+              sort_order: 3
               default: N
             Know Time:
               code: 2
