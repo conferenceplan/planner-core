@@ -14,6 +14,24 @@
 	$(function() {
         //$( "#surveyAccordian" ).accordion({ header : 'h3', collapsible: true, autoHeight: false });
 		
+		function toggleQuestions(state) {
+			$('div.timeselect > select').attr('disabled', state);
+		};
+		
+		toggleQuestions('true');
+		
+		$('#timeselect').click(
+		  function() {
+			$('div.timeselect > select').removeAttr('disabled');
+		  }
+		);
+
+		$('#timedisable').click(
+		  function() {
+			toggleQuestions('true');
+		  }
+		);
+		
         $('#survey-set *').tooltip();
 
         // hide all of the elements with a class of 'toggle'

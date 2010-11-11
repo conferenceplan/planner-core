@@ -2,7 +2,6 @@
 smerfform:   
   name: Renovation Program Participant Questionnaire
   welcome: |
-    <b>Welcome</b>
     <p>
     Please complete this form if you've been invited to be on Renovation Program.
     </p>
@@ -40,11 +39,30 @@ smerfform:
           style: grid_12
           question_style: grid_2
           answer_style: grid_4
-          sort_order: 4
+          sort_order: 1
           validation: validate_mandatory_question
           question: | Name (publication)
-          textfield_size: 100
+          textfield_size: 75
           help: | as you would like it to appear in the schedule, if you use a pen name or want middle initials included
+        Middle Name:
+          code: g1q1ee
+          type: textfield
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_4
+          sort_order: 2
+          question: | Middle Name
+          textfield_size: 20
+        Last Name:
+          code: g1q1ff
+          type: textfield
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_4
+          sort_order: 3
+          validation: validate_mandatory_question
+          question: | Last Name
+          textfield_size: 75
         Street Address:
           code: g1q11
           type: textfield
@@ -121,25 +139,21 @@ smerfform:
                code: 1
                answer: | home
                sort_order: 2
-               style: grid_1
                default: N
              work:
                code: 2
                answer: | work
                sort_order: 3
-               style: grid_1
                default: N
              cell:
                code: 3
                answer: | cell
                sort_order: 1
-               style: grid_1
                default: N
              fax:
                code: 4
                answer: | fax
                sort_order: 4
-               style: grid_1
                default: N
                subquestions:
                     phone:
@@ -164,14 +178,12 @@ smerfform:
           answers:
             Yes:
               code: 1
-              style: grid_12
               answer: | I am an attending member of Renovation.<br/> 
                 Check our online member search if you aren't sure of your status.
               sort_order: 1
               default: N
             No:
               code: 2
-              style: grid_12
               answer: | I'm not yet an attending member, I understand I need to buy a membership in order to be scheduled for Program.<br/>
                 You can complete the rest of the questionnaire, but you need to buy a membership by June 15, 2011 in order to be scheduled.
               sort_order: 2
@@ -190,20 +202,20 @@ smerfform:
           answers:
             Whole Time:
               code: 1
-              style: grid_12
+              answer_id: timedisable
               answer: | I am available for Program for the complete duration of the convention.
               sort_order: 1
               default: N
             Not Sure:
               code: 3
-              style: grid_12
+              answer_id: timedisable
               answer: | I am extremely uncertain about when I will be arriving in or leaving Reno. 
                   (Program will not schedule you for any specific items until you can let us know your approximate arrival and departure times)
               sort_order: 3
               default: N
             Know Time:
               code: 2
-              style: grid_12
+              answer_id: timeselect
               answer: | I know when I will be at the convention.
               sort_order: 2
               default: N
@@ -216,38 +228,33 @@ smerfform:
                   sort_order: 2
                   style: grid_12
                   question_style: grid_6
-                  answer_style: grid_4
+                  answer_style: grid_4 timeselect
                   question: | I will be available to be on Renovation Program beginning:
                   answers:
-                    none:
-                      code: 0
-                      answer: | ------
-                      sort_order: 1
-                      default: N
                     Wed:
                       code: 1
                       answer: | Wednesday, August 17
-                      sort_order: 2
+                      sort_order: 1
                       default: N
                     Thu:
                       code: 2
                       answer: | Thursday, August 18
-                      sort_order: 3
+                      sort_order: 2
                       default: N
                     Fri:
                       code: 3
                       answer: | Friday, August 19
-                      sort_order: 4
+                      sort_order: 3
                       default: N
                     Sat:
                       code: 4
                       answer: | Saturday, August 20
-                      sort_order: 5
+                      sort_order: 4
                       default: N
                     Sun:
                       code: 5
                       answer: | Sunday, August 21
-                      sort_order: 6
+                      sort_order: 5
                       default: N
                 Start Time:
                   code: g3q1s2
@@ -257,7 +264,7 @@ smerfform:
                   sort_order: 3
                   style: grid_12
                   question_style: grid_6
-                  answer_style: grid_4
+                  answer_style: grid_4 timeselect
                   question: | starting from:
                   answers:
                     none:
@@ -334,36 +341,31 @@ smerfform:
                   question: | I will not be available for program after:
                   style: grid_12
                   question_style: grid_6
-                  answer_style: grid_4
+                  answer_style: grid_4 timeselect
                   answers:
                     Wed:
                       code: 1
                       answer: | Wednesday, August 17
-                      sort_order: 6
+                      sort_order: 5
                       default: N
                     Thu:
                       code: 2
                       answer: | Thursday, August 18
-                      sort_order: 5
+                      sort_order: 4
                       default: N
                     Fri:
                       code: 3
                       answer: | Friday, August 19
-                      sort_order: 4
+                      sort_order: 3
                       default: N
                     Sat:
                       code: 4
                       answer: | Saturday, August 20
-                      sort_order: 3
+                      sort_order: 2
                       default: N
                     Sun:
                       code: 5
                       answer: | Sunday, August 21
-                      sort_order: 2
-                      default: N
-                    none:
-                      code: 6
-                      answer: | ------
                       sort_order: 1
                       default: N
                 End Time:
@@ -375,7 +377,7 @@ smerfform:
                   question: | ending at:
                   style: grid_12
                   question_style: grid_6
-                  answer_style: grid_4
+                  answer_style: grid_4 timeselect
                   answers:
                     none:
                       code: 0

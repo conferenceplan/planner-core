@@ -147,6 +147,7 @@ module SmerfFormsHelper
     
     contents += content_tag(:div, 
         question.question + (helpLink ? " " + helpLink : ""),
+      :id => question.question_id,
       :class => classStr) if (question.question and !question.question.blank?) 
     # Format error
     contents += content_tag(:div, 
@@ -293,7 +294,7 @@ module SmerfFormsHelper
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y'))) + 
           "#{answer.answer}</label>\n"
-        contents += content_tag(:div, html, :class => style)
+        contents += content_tag(:div, html, :class => style, :id => question.answer_id)
         # Process any sub questions this answer may have
         if (question.subfirst)
           contents = process_sub_questions(answer, level) + contents
@@ -329,7 +330,7 @@ module SmerfFormsHelper
           nil
         end,
         :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5",
-        :class => style )
+        :class => style, :id => question.answer_id )
 #      contents = content_tag(:div, contents, :class => "textarea")
       if (question.tags)
         contents += '<div class="grid_4 cloud ui-widget ui-widget-content ui-corner-all">'
@@ -362,7 +363,7 @@ module SmerfFormsHelper
           nil
         end, 
         :size => (!question.textfield_size.blank?) ? question.textfield_size : "30",
-        :class => question.tags)
+        :class => question.tags, :id => question.answer_id)
       contents = content_tag(:div, contents, :class => style)
 
       if (question.tags)
@@ -388,6 +389,8 @@ module SmerfFormsHelper
           user_answer = @responses["#{question.code}"]
           answered = true
         end
+        answerstyle = answer.style if answer.style
+        answerid = answer.answer_id if answer.answer_id
         # Note we wrap the form element in a label element, this allows the input
         # field to be selected by selecting the label, we could otherwise use a 
         # <lable for="....">...</label> construct to do the same
@@ -397,11 +400,14 @@ module SmerfFormsHelper
           # If this is a new record and no response have been entered, i.e. this is the
           # first time the new record form is displayed set on if default 
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
-          answer.default.upcase == 'Y'))) + 
+          answer.default.upcase == 'Y')),
+          :class => answerstyle,
+          :id => answerid
+          ) + 
           "#{answer.answer}</label>\n"
         style = "radiobutton"
         style += " " + question.answer_style if question.answer_style
-        contents += content_tag(:div, html, :class => style)
+        contents += content_tag(:div, html, :class => style, :id => question.answer_id)
         # Process any sub questions this answer may have
         if (question.subfirst)
           contents = process_sub_questions(answer, level) + contents
@@ -450,7 +456,7 @@ module SmerfFormsHelper
         (question.selectionbox_multiplechoice and 
         !question.selectionbox_multiplechoice.blank?() and
         question.selectionbox_multiplechoice.upcase == 'Y'))
-      contents += content_tag(:div, html, :class => style)
+      contents += content_tag(:div, html, :class => style, :id => question.answer_id)
       
 #      return contents
       return { :content => contents, :answer => answered }
