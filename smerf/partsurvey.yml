@@ -604,7 +604,8 @@ smerfform:
       questions:
         scienceItems:
           code: g4q1
-          type: textbox
+          type: textfield
+          textfield_size: 50
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -614,7 +615,8 @@ smerfform:
           validation: add_tags
         literature:
           code: g4q2
-          type: textbox
+          type: textfield
+          textfield_size: 50
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -624,7 +626,8 @@ smerfform:
           validation: add_tags
         media:
           code: g4q3
-          type: textbox
+          type: textfield
+          textfield_size: 50
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -634,7 +637,8 @@ smerfform:
           validation: add_tags
         fandom:
           code: g4q4
-          type: textbox
+          type: textfield
+          textfield_size: 50
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -644,7 +648,8 @@ smerfform:
           validation: add_tags
         nevada:
           code: g4q5
-          type: textbox
+          type: textfield
+          textfield_size: 50
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -661,7 +666,8 @@ smerfform:
       questions:
         Authors:
           code: g5q1
-          type: textbox
+          type: textfield
+          textfield_size: 50
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -929,28 +935,12 @@ smerfform:
     release:
       code: 91
       name: Participant Release
-      description: | <p>As a Renovation program participant, I understand that my name and likeness may be 
-       recorded during the convention, in any recording format. I consent to the use of any such recording 
-       of my name and likeness by the convention or its agents, <b><u>except</u> that I <u>do not</u> 
-       consent to any use of 
-       recording of events that are predominantly presentations of my artistic work, including, but not limited to, 
-       readings of written work and exhibits of graphical work or sculpture.</b></p>
-       <p><b>I expressly release the Reno Worldcon 2011 and its agents and assignees from any privacy, 
-       defamation or other claim I may otherwise have arising out of the broadcast, exhibition, cablecast, 
-       webcast, publication, promotion or any other use of my name or likeness.</b></p> 
+      description: | Renovation will be held in a "WIFI everywhere" environment. That means individuals may record or photograph you or 
+       your panel items in the course of the convention and may share this on the Internet.  Please check here that you have no objection.
       questions:
-        release_name:
-          code: g10q1
-          type: textfield
-          textfield_size: 100
-          style: grid_12
-          question_style: grid_1
-          answer_style: grid_9
-          sort_order: 1
-          question: | Name
         release_date:
           code: g10q2
-          type: textfield
+          type: singlechoice
           style: grid_12
           question_style: grid_1
           answer_style: grid_9

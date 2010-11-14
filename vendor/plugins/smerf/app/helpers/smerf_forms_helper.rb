@@ -62,7 +62,10 @@ module SmerfFormsHelper
   #
   def smerf_welcome
     if !@smerfform.form.welcome.blank?
-      content_tag(:div, content_tag(:p, @smerfform.form.welcome), :class => "smerfWelcome")
+      html = ""
+      html = @respondent.first_name + " " + @respondent.last_name if @respondent
+      html = "<b>Welcome " + html + " </b>"
+      content_tag(:div, html + content_tag(:p, @smerfform.form.welcome), :class => "smerfWelcome")
     end
   end
   
