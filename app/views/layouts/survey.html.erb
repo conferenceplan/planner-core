@@ -16,6 +16,7 @@
 		
 		function toggleQuestions(state) {
 			$('div.timeselect > select').attr('disabled', state);
+			$('div.timeselect input').attr('disabled', state);
 		};
 		
 		toggleQuestions('true');
@@ -23,6 +24,7 @@
 		$('#timeselect').click(
 		  function() {
 			$('div.timeselect > select').removeAttr('disabled');
+			$('div.timeselect input').removeAttr('disabled');
 		  }
 		);
 

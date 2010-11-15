@@ -33,6 +33,8 @@ smerfform:
         here we ask you some personal details ...
         <p>
       questions:
+# TODO: Real name/reg name and add publication name (as a optional field) - state in help text
+# Add a "publication name if different from name above" button (little blue– button)
         Full Name:
           code: g1q1
           type: textfield
@@ -63,13 +65,22 @@ smerfform:
           validation: validate_mandatory_question
           question: | Last Name
           textfield_size: 75
+        Suffix:
+          code: g1q1gg
+          type: textfield
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_4
+          sort_order: 4
+          question: | Suffix
+          textfield_size: 5
         Street Address:
           code: g1q11
           type: textfield
           style: grid_12
           question_style: grid_2
           answer_style: grid_4
-          sort_order: 4
+          sort_order: 5
           validation: validate_mandatory_question
           question: | Street Address
           textfield_size: 100
@@ -80,7 +91,7 @@ smerfform:
           question_style: grid_2
           answer_style: grid_4
           validation: validate_mandatory_question
-          sort_order: 5
+          sort_order: 6
           question: | City
           textfield_size: 20
         State:
@@ -90,7 +101,7 @@ smerfform:
           question_style: grid_2
           answer_style: grid_4
           validation: validate_mandatory_question
-          sort_order: 6
+          sort_order: 7
           question: | State/Province/County
           textfield_size: 10
         Zip:
@@ -191,8 +202,7 @@ smerfform:
     program_availability:
       code: 3
       name: Program Availability
-      description: | Renovation Program will officially begin at noon, Wednesday, August 17 and 
-                     will end by 4pm on Sunday, August 21.
+      description: | 
       questions:
         Availability:
           code: g3q1
@@ -204,22 +214,28 @@ smerfform:
               code: 1
               answer_id: timedisable
               answer: | I am available for Program for the complete duration of the convention.
+                     Renovation Program will officially begin at noon, Wednesday, August 17 and 
+                     will end by 4pm on Sunday, August 21.
               sort_order: 1
-              default: N
-            Not Sure:
-              code: 3
-              answer_id: timedisable
-              answer: | I am extremely uncertain about when I will be arriving in or leaving Reno. 
-                  (Program will not schedule you for any specific items until you can let us know your approximate arrival and departure times)
-              sort_order: 3
               default: N
             Know Time:
               code: 2
               answer_id: timeselect
-              answer: | I know when I will be at the convention.
+              answer: | I plan on being at the convention.
               sort_order: 2
               default: N
               subquestions:
+                Not Sure:
+                  code: g3q1s3XXX
+                  type: singlechoice
+                  sort_order: 7
+                  style: timeselect grid_12
+                  answers:
+                    not_sure:
+                      code: 1
+                      answer: | I am extremely uncertain about when I will be arriving in or leaving Reno. 
+                      default: N
+                      sort_order: 1
                 Start Date:
                   code: g3q1s1
                   validation: validate_sub_question
@@ -585,18 +601,6 @@ smerfform:
           question_style: grid_2
           answer_style: grid_9
           question: | Do not schedule me at these other times:
-#
-#                    excludedTimesText:
-#                        code: g3q7t1
-#                        tags: excludedTimes
-#                        type: textbox
-#                        sort_order: 1
-#                        validation: add_tags
-#                        question: | Do not schedule me at these other times:
-#    topic_interests:
-#      code: 4
-#      name: Topic Interests
-#      description: | Which of the following topics are you interested in talking about
     program_topics:
       code: 4
       name: Which of the following topics are you interested in talking about?
@@ -643,11 +647,22 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 4
-          question: | Fan
+          question: | Fandom
           tags: fandom
           validation: add_tags
-        nevada:
+        filk:
           code: g4q5
+          type: textfield
+          textfield_size: 50
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_6
+          sort_order: 5
+          question: | Filk
+          tags: filk
+          validation: add_tags
+        nevada:
+          code: g4q6
           type: textfield
           textfield_size: 50
           style: grid_12
@@ -675,22 +690,11 @@ smerfform:
           question: | Authors
           tags: authors
           validation: add_tags
-# 
     prog_types:
       code: 6
       name: Specific Program Types
       description: |
       questions:
-#        scienceItems:
-#          code: g6q1
-#          type: textbox
-#          style: grid_12
-#          question_style: grid_8
-#          answer_style: grid_6
-#          sort_order: 1
-#          question: | Specific Program Types
-#          tags: specificProgTypes
-#          validation: add_tags
         specificItemTypes:
           code: g6q2
           type: multiplechoice
@@ -735,9 +739,9 @@ smerfform:
               answer: | Game Show
               sort_order: 7
               default: N
-            LiteraryTea:
+            LiteraryTea_Kaffeklatsch:
               code: 8
-              answer: | Literary Tea
+              answer: | Literary Tea/Kaffeeklatsch
               sort_order: 8
               default: N
             ProgramforYoungAdults_Kids:
@@ -745,66 +749,62 @@ smerfform:
               answer: | Program for Young Adults/Kids
               sort_order: 9
               default: N
-            Kaffeeklatsch:
+            DocentTours:
               code: 10
-              answer: | Kaffeeklatsch
+              answer: | Docent Tours
               sort_order: 10
               default: N
-            DocentTours:
+            Book_StoryDiscussionGroup:
               code: 11
-              answer: | Docent Tours
+              answer: | Book/Story Discussion Group (Preparation Required)
               sort_order: 11
               default: N
-            Book_StoryDiscussionGroup:
+            Reading:
               code: 12
-              answer: | Book/Story Discussion Group (Preparation Required)
+              answer: | Reading (20 minute)
               sort_order: 12
               default: N
-            Reading:
+            Teen Writing:
               code: 13
-              answer: | Reading (20 minute)
+              answer: | Teen Writing
               sort_order: 13
               default: N
-            Teen Writing:
+            MusicWorkshop:
               code: 14
-              answer: | Teen Writing
+              answer: | Music Workshop
               sort_order: 14
               default: N
-            MusicWorkshop:
+            ArtWorkshop:
               code: 15
-              answer: | Music Workshop
+              answer: | Art Workshop
               sort_order: 15
               default: N
-            ArtWorkshop:
-              code: 17
-              answer: | Art Workshop
-              sort_order: 17
-              default: N
             CostumeWorkshop:
-              code: 18
+              code: 16
               answer: | Costume Workshop
-              sort_order: 18
+              sort_order: 16
               default: N
             Con_runningWorkshop:
-              code: 19
+              code: 17
               answer: |  Con-running Workshop
-              sort_order: 19
+              sort_order: 17
               default: N
             Demo:
-              code: 20
+              code: 18
               answer: | Demo (art, tech, video etc.)
-              sort_order: 20
+              sort_order: 18
               default: N
             Solo Presentation:
-              code: 21
+              code: 19
               answer: | Solo Presentation
-              sort_order: 21
+              sort_order: 19
               default: N
         specificItemTypes2:
           code: g6q3
           type: multiplechoice
           sort_order: 3
-# This note has been put in here so that we can put the note below the previous check boxes. THe grid_11 will ensure that the
+# This note has been put in here so that we can put the note below the previous check boxes. 
+# The grid_11 will ensure that the
 # note will be on a seperate line
           question: | Note: most Readings will be 20 minutes long. 
           style: grid_12
@@ -838,10 +838,6 @@ smerfform:
                   question: | Dialog Participants
                   help: | suggest participants
                   validation: validate_sub_question
-# Need misc stuff
-# Release (auto fill) i.e. checked
-# Mini Bio, web site etc
-# 
     music_night:
       code: 7
       name: Wednesday Music Night
@@ -877,30 +873,46 @@ smerfform:
       name: Other Information
       description: | 
       questions:
-        exclusionRequest:
-          code: g9q1
+        comments:
+          code: g9q5
           type: textbox
           style: grid_12
-          question_style: grid_11
+          question_style: grid_7
           answer_style: grid_11
           sort_order: 1
-          question: | Under no circumstances should I be on a panel with: <i>anything you list here will not be shared outside
-            of the core Renovation programming team.</i>
+          question: | Do you have any program ideas or comments?
+        Panels With:
+          code: g9q6
+          type: textbox
+          style: grid_12
+          question_style: grid_7
+          answer_style: grid_11
+          sort_order: 1
+          question: | Who do you want to be on panels with?
         NevadaConnections:
           code: g9q2
           type: textbox
           style: grid_12
           question_style: grid_7
           answer_style: grid_11
-          sort_order: 2
+          sort_order: 3
           question: | Do you have any Nevada connections (born there/school/job)?
+        exclusionRequest:
+          code: g9q1
+          type: textbox
+          style: grid_12
+          question_style: grid_11
+          answer_style: grid_11
+          sort_order: 4
+          question: | Under no circumstances should I be on a panel with: <i>anything you list here will not be shared outside
+            of the core Renovation programming team.</i>
 # These need to be changed to check boxes
         emailShare:
           code: g9q3
           type: singlechoice
           style: grid_12
           question_style: grid_10
-          sort_order: 3
+          sort_order: 10
           question: | 
           answers:
              doNotShareEmail:
@@ -913,7 +925,7 @@ smerfform:
           type: singlechoice
           style: grid_12
           question_style: grid_10
-          sort_order: 4
+          sort_order: 11
           question: | 
           answers:
              canInterview:
@@ -921,31 +933,26 @@ smerfform:
                answer: | I am willing to be interviewed by the media
                sort_order: 1
                default: N
-        comments:
-          code: g9q5
-          type: textbox
-          style: grid_12
-          question_style: grid_7
-          answer_style: grid_11
-          sort_order: 5
-          question: | Do you have any comments?
 #
 # Paticipant Release
 #
+# TODO - fix formatting
     release:
       code: 91
       name: Participant Release
       description: | Renovation will be held in a "WIFI everywhere" environment. That means individuals may record or photograph you or 
-       your panel items in the course of the convention and may share this on the Internet.  Please check here that you have no objection.
+       your panel items in the course of the convention and may share this on the Internet.
       questions:
         release_date:
           code: g10q2
           type: singlechoice
-          style: grid_12
-          question_style: grid_1
-          answer_style: grid_9
-          sort_order: 2
-          question: | Date
+          sort_order : 1
+          answers:
+            release:
+              sort_order : 1
+              code : 1
+              answer : | Please check here that you have no objection.
+              default : N
 # Publications Information
 #
     pub_info:
@@ -1017,3 +1024,6 @@ smerfform:
                      question_style: grid_2
                      answer_style: grid_6
                      textfield_size: 50
+#
+# The end of the survey
+#
