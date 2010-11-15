@@ -1,0 +1,27 @@
+<% form_for :exportemail, :url=>{:controller=>"people", :action=>"doexportemailxml",:method => "get"} do |f| -%>
+ <div>
+  <div class='line'>
+  	<div class='field_name'>
+ 	  <%= f.label :filename, "Enter File Name" %> 
+    </div>
+	<div class='field_value'>
+		<%= f.text_field :filename %>
+	 </div>
+  </div>
+  <div class='line'>
+     	<%= f.label :category_select,"Select Category :"%>     	
+		<%= f.radio_button :category_select, :false%> Select All
+		<%= f.radio_button :category_select, :true-%>Select One
+  </div>
+  <div class='line'><div class='field_name'><%= f.label :invitation_category_id %></div><div class='field_value'><%= f.select :invitation_category_id,
+	                 InvitationCategory.find(:all).collect {|s| [s.name,s.id] },
+	                 {:include_blank => true}%></div></div>
+ 
+  <div class='form-buttons'>
+		<%= f.submit "Submit" %>
+	
+  </div>
+  <div>
+  		<%= link_to 'Cancel', people_path%>
+  </div>
+<% end -%>

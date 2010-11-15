@@ -102,5 +102,25 @@ class PeopleController < ApplicationController
     end
   end
   
+  def doexportemailxml
+    @filename = params[:exportemail][:filename]
+    @invitecategory = params[:exportemail][:invitation_category_id]
+    @categorySelect = params[:exportemail][:category_select]
+    @invited_index = InviteStatus.find_by_name("Invited Pending")
+    if (@categorySelect == "true")
+       @people = Person.find :all,:conditions => {:invitestatus_id => @invited_index,:invitation_category_id => @invitecategory}
+    else
+       @people = Person.find_all_by_invitestatus_id(@invited_index)
+    end
+    
+    respond_to do |format|
+         format.xml {
+             send_data @people.to_xml(:only => [:first_name,:last_name,:email_addresses,:email],:include => :email_addresses), :filename => @filename
+         }
+    end
+  end
   
+ def exportemailxml
+
+ end
 end

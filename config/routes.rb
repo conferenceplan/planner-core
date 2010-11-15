@@ -47,6 +47,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :email_addresses, :has_many => :people
   map.resources :menus
   
+  map.connect 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'
+  map.connect 'participants/doexportemailxml', :controller => 'people', :action => 'doexportemailxml'
 
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses],
