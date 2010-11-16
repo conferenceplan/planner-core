@@ -12,6 +12,7 @@ class ModifyMenu < ActiveRecord::Migration
     partMenu = MenuItem.create( :name => "Participants", :path => "/participants", :menu => menu)
     MenuItem.create( :name => "New", :path => "/participants/new", :menu_item => partMenu)
     MenuItem.create( :name => "Import", :path => "/pending_import_people/import", :menu_item => partMenu)
+    MenuItem.create( :name => "Invitation Categories", :path => "/invitation_categories", :menu_item => partMenu)
     MenuItem.create( :name => "Schedule", :path => "/", :menu => menu)
     comMenu = MenuItem.create( :name => "Communications", :path => "/", :menu => menu)
     MenuItem.create(:name => "Export email list", :path => "/participants/exportemailxml", :menu_item => comMenu)
