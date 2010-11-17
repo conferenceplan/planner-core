@@ -1,3 +1,10 @@
+
+<% @tags.each do |tag| %>
+<%= tag %>(<%= tag.count%>)&nbsp;
+<% end %>
+
+<!--
 <% tag_cloud(@tags, %w(css1 css2 css3 css4)) do |tag, css_class| %>
     <div class="<%= css_class%>">&quot;<%= tag.name %>&quot;</div>
 <% end %>
+-->

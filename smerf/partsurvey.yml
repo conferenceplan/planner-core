@@ -233,7 +233,7 @@ smerfform:
                   answers:
                     not_sure:
                       code: 1
-                      answer: | I am extremely uncertain about when I will be arriving in or leaving Reno. 
+                      answer: | I am extremely uncertain about when I will be arriving in or leaving Reno 
                       default: N
                       sort_order: 1
                 Start Date:
@@ -650,17 +650,6 @@ smerfform:
           question: | Fandom
           tags: fandom
           validation: add_tags
-        filk:
-          code: g4q5
-          type: textfield
-          textfield_size: 50
-          style: grid_12
-          question_style: grid_1
-          answer_style: grid_6
-          sort_order: 5
-          question: | Filk
-          tags: filk
-          validation: add_tags
         nevada:
           code: g4q6
           type: textfield
@@ -874,20 +863,28 @@ smerfform:
       description: | 
       questions:
         comments:
-          code: g9q5
+          code: g9q5a
           type: textbox
           style: grid_12
           question_style: grid_7
           answer_style: grid_11
           sort_order: 1
           question: | Do you have any program ideas or comments?
+        willing to talk:
+          code: g9q5
+          type: textbox
+          style: grid_12
+          question_style: grid_7
+          answer_style: grid_11
+          sort_order: 2
+          question: | Tell us one thing we don't know about you that you are willing to talk about
         Panels With:
           code: g9q6
           type: textbox
           style: grid_12
           question_style: grid_7
           answer_style: grid_11
-          sort_order: 1
+          sort_order: 3
           question: | Who do you want to be on panels with?
         NevadaConnections:
           code: g9q2
@@ -895,15 +892,23 @@ smerfform:
           style: grid_12
           question_style: grid_7
           answer_style: grid_11
-          sort_order: 3
+          sort_order: 4
           question: | Do you have any Nevada connections (born there/school/job)?
+        exclusionTopics:
+          code: g9q2d
+          type: textbox
+          style: grid_12
+          question_style: grid_7
+          answer_style: grid_11
+          sort_order: 5
+          question: | I don't want to talk about the following topics
         exclusionRequest:
           code: g9q1
           type: textbox
           style: grid_12
           question_style: grid_11
           answer_style: grid_11
-          sort_order: 4
+          sort_order: 6
           question: | Under no circumstances should I be on a panel with: <i>anything you list here will not be shared outside
             of the core Renovation programming team.</i>
 # These need to be changed to check boxes

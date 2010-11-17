@@ -168,7 +168,7 @@ module SmerfFormsHelper
 # * <textarea rows="5" name="responses[g3q7t1]" id="responses_g3q7t1" cols="30" class='tag'></textarea>
 # * </div>
     if (question.tags)
-      contents += "<div class='taggable'><div id='context' style='display:none'>"+question.tags+"</div>"
+      contents += "<div class='taggable grid_10'><div id='context' style='display:none'>"+question.tags+"</div>"
     end
     # Check the type and format appropriatly
     case question.type
@@ -334,12 +334,8 @@ module SmerfFormsHelper
         end,
         :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5",
         :class => style, :id => question.answer_id )
-#      contents = content_tag(:div, contents, :class => "textarea")
       if (question.tags)
-        contents += '<div class="grid_4 cloud ui-widget ui-widget-content ui-corner-all">'
-        contents += '<div class="ui-widget-header ui-corner-top ui-helper-clearfix">'+question.question+'</div>'
-        contents += content_tag(:div,"", :class => "ui-widget ui-widget-content ui-corner-all")
-        contents += '</div>'
+        contents += '<div class="grid_10 cloud"></div>'
       end
 
       return { :content => contents, :answer => answered }
@@ -370,10 +366,7 @@ module SmerfFormsHelper
       contents = content_tag(:div, contents, :class => style)
 
       if (question.tags)
-        contents += '<div class="grid_4 cloud ui-widget ui-widget-content ui-corner-all">'
-        contents += '<div class="ui-widget-header ui-corner-top ui-helper-clearfix">'+question.question+'</div>'
-        contents += content_tag(:div,"", :class => "ui-widget ui-widget-content ui-corner-all")
-        contents += '</div>'
+        contents += '<div class="grid_10 cloud"></div>'
       end
       
       return { :content => contents, :answer => answered }
