@@ -13,16 +13,16 @@
     <!-- Display the group name and description -->
 	<div class='clear'></div>
       <%= smerf_group_name(group) %>
-    <!-- div class="surveyGroup" id="surveyGroup<%= group.code %>" -->
+    <div class="surveyGroup" id="surveyGroup<%= group.code %>"> <!-- TODO - change the class of survey group .... -->
     <!-- % content_tag :div, :class => "smerfGroup" do % -->
       <%= smerf_group_description(group) %>
       <!-- Display the questions within the group -->
       <% smerf_get_group_questions(group).each do |question| %>
-	    <div class='clear'></div>
+	    <!-- div class='clear'></div -->
         <%= smerf_group_question(question)[:content] %>
       <% end %>
 	<!-- % end % -->
-    <!-- /div -->
+    </div>
   <% end %>
 <!-- /div -->
 </fieldset>

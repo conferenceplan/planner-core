@@ -23,6 +23,7 @@ class SurveyRespondents::TagsController < ApplicationController
     tag_context = params[:context] # tag context
     tag_list = params[:tags] # comma seperated list of tags
 
+# TODO - change so that the tags are consistent from a case perspective
     respondent.set_tag_list_on(tag_context, tag_list) # set the tag list on the respondent for the context
     
     respondent.save

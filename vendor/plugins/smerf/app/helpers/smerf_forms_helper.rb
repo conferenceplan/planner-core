@@ -14,20 +14,22 @@ module SmerfFormsHelper
       header_message = 
         "#{pluralize(errors.size(), 'error')} prevented #{@smerfform.name} from being saved"
       error_messages = ""
-      errors.each do |error| 
-        # Check if question text available as some questions may have no text, 
-        # e.g. sub questions. If this happens we check all parent objects to see
-        # if the question text is available until text found or no more parents
-        question = (error[1]["question"] and !error[1]["question"].blank?()) ? error[1]["question"] : find_question_text(error[0])        
-        # Format error message
-        error[1]["msg"].each do |error_msg|
-          error_messages += content_tag(:li, "#{question}: #{error_msg}") 
-        end
-      end
+#      errors.each do |error| 
+#        # Check if question text available as some questions may have no text, 
+#        # e.g. sub questions. If this happens we check all parent objects to see
+#        # if the question text is available until text found or no more parents
+#        question = (error[1]["question"] and !error[1]["question"].blank?()) ? error[1]["question"] : "" #find_question_text(error[0])        
+##        # Format error message
+##        error[1]["msg"].each do |error_msg|
+##          error_messages += content_tag(:li, "#{question}: #{error_msg}") 
+##        end
+#      end
       content_tag(:div,
-        content_tag(:h2, header_message) <<
-          content_tag(:p, 'There were problems with the following questions:') <<
-          content_tag(:ul, error_messages),
+        content_tag(:h2, header_message),
+#        <<
+#          content_tag(:p, 'There were problems with the questions in the form')
+#          <<
+#          content_tag(:ul, error_messages),
         :class => "smerfFormError")
     else
       ''
@@ -148,10 +150,14 @@ module SmerfFormsHelper
     end
     helpLink = "<a title='"+question.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (!question.help.blank?)
     
-    contents += content_tag(:div, 
-        question.question + (helpLink ? " " + helpLink : ""),
-      :id => question.question_id,
-      :class => classStr) if (question.question and !question.question.blank?) 
+    if (question.question and !question.question.blank?)
+      contents += content_tag(:div, 
+          question.question + (helpLink ? " " + helpLink : ""),
+        :id => question.question_id,
+        :class => classStr) 
+    else
+      contents += helpLink ? " " + helpLink : ""
+    end
     # Format error
     contents += content_tag(:div, 
       content_tag(:p, "#{image_tag("smerf_error.gif", :alt => "Error")} #{@errors["#{question.item_id}"]["msg"]}"), 
@@ -297,6 +303,8 @@ module SmerfFormsHelper
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y'))) + 
           "#{answer.answer}</label>\n"
+#        helpLink = "<a title='"+answer.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (answer.help.blank?)
+#        html += helpLink ? " " + helpLink : "AA"
         contents += content_tag(:div, html, :class => style, :id => question.answer_id)
         # Process any sub questions this answer may have
         if (question.subfirst)
@@ -362,7 +370,7 @@ module SmerfFormsHelper
           nil
         end, 
         :size => (!question.textfield_size.blank?) ? question.textfield_size : "30",
-        :class => question.tags, :id => question.answer_id)
+        :class => question.tags, :id => question.answer_id, :title => question.title)
       contents = content_tag(:div, contents, :class => style)
 
       if (question.tags)
