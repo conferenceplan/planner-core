@@ -36,7 +36,9 @@ module SmerfHelpers
     # Add tags to the respondent from a tag field
     answer = smerf_get_question_answer(question, responses)
     if (answer)
-      answer = answer.split(' ').map {|w| w.capitalize }.join(' ')
+      answer = answer.split(' ').map {|w| 
+      w[0] = w[0].chr.upcase
+      w }.join(' ')
       smerf_set_question_answer(question, responses, answer)
       # get the tag context from the question
       # we have the list of tags
