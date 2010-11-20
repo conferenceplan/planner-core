@@ -20,6 +20,22 @@ div.smerfGroup {
 	margin-bottom: 3px;
 }
 
+div.tag,
+div.tag-count,
+div.tag-title {
+	font-size: 10pt;	
+}
+
+div.tag-title {
+	font-size: 8pt;	
+	font-style: italic;	
+}
+
+div.tag-count {
+	font-size: 8pt;	
+	color : grey;
+}
+
 div.css1,
 div.css2,
 div.css3,

@@ -35,7 +35,9 @@ smerfform:
     personal_details_name:
       code: 2
       name: 
-      description: | 
+      style: grid_12
+      description_style: grid_2
+      description: | Name
       questions:
         Full Name:
           code: g2q1
@@ -47,14 +49,14 @@ smerfform:
 #          help: | Enter your Reno Registration name
           title: First Name
           textfield_size: 30
-        Middle Name:
-          code: g2q2
-          type: textfield
-          style: grid_2
-          sort_order: 2
-          question: |
-          title: Middle Name
-          textfield_size: 15
+#        Middle Name:
+#          code: g2q2
+#          type: textfield
+#          style: grid_2
+#          sort_order: 2
+#          question: |
+#          title: Middle Name
+#          textfield_size: 15
         Last Name:
           code: g2q3
           type: textfield

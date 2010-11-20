@@ -99,7 +99,8 @@ module SmerfFormsHelper
   #
   def smerf_group_description(group)
     if !group.description.blank?
-      content_tag(:div, content_tag(:p, group.description), :class => "smerfGroupDescription") # TODO
+      content_tag(:div, group.description, :class => group.description_style) 
+#      content_tag(:div, content_tag(:p, group.description), :class => "") # TODO
     end
   end
  
@@ -343,7 +344,7 @@ module SmerfFormsHelper
         :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5",
         :class => style, :id => question.answer_id )
       if (question.tags)
-        contents += '<div class="grid_10 cloud"></div>'
+        contents += '<div class="cloud"></div>'
       end
 
       return { :content => contents, :answer => answered }
@@ -374,7 +375,7 @@ module SmerfFormsHelper
       contents = content_tag(:div, contents, :class => style)
 
       if (question.tags)
-        contents += '<div class="grid_10 cloud"></div>'
+        contents += '<div class="cloud grid_12"></div>'
       end
       
       return { :content => contents, :answer => answered }
