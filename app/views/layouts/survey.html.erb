@@ -17,23 +17,21 @@
         if(this.value == '' && this.title != '') {
             this.value = this.title;
             this.style.color = 'lightgrey';
-//            this.style.fontWeight = 'bold';
 		}
     });
     $("input:text, textarea, input:password").focus(function(){
         if(this.value == this.title) {
             this.value = '';
             this.style.color = '';
-//            this.style.fontWeight = '';
 		}
     });
     $("input:text, textarea, input:password").blur(function(){
         if(this.value == '' && this.title != '') {
             this.value = this.title;
             this.style.color = 'lightgrey';
-//            this.style.fontWeight = 'bold';
 		}
     });
+
     $("input:image, input:button, input:submit").click(function(){
         $(this.form.elements).each(function(){
             if(this.type =='text' || this.type =='textarea' || this.type =='password' ){
@@ -43,7 +41,15 @@
             }
         });
     });
-		
+
+	// Prevent submit on return	
+    $(window).keydown(function(event){
+      if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
+    });
+
         //$( "#surveyAccordian" ).accordion({ header : 'h3', collapsible: true, autoHeight: false });
 		
 		function toggleQuestions(state) {

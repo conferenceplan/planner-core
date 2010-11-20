@@ -162,4 +162,10 @@ module SmerfSystemHelpers
     end
   end
 
+  def smerf_set_question_answer(question, responses, value)
+    if (smerf_question_answered?(question, responses))
+      responses[question.code] = value
+    end
+  end
+
 end
