@@ -22,7 +22,7 @@
 #
 
 class SmerfGroup < SmerfItem
-  attr_accessor :code, :name, :description, :style, :description_style
+  attr_accessor :code, :name, :description, :style, :description_style, :help
   
   # A group object maintains any number of questions, here we alias the 
   # variable that stores the child objects to make code more readable
@@ -38,6 +38,7 @@ class SmerfGroup < SmerfItem
       'questions'                 => {'mandatory' => 'N', 'child_items' => 'SmerfQuestion', 'sort_by' => 'sort_order'},
       'description'               => {'mandatory' => 'N'},
       'style'                     => {'mandatory' => 'N'},
+      'help'                      => {'mandatory' => 'N'},
       'description_style'                     => {'mandatory' => 'N'}
     }     
   end

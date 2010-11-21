@@ -14,6 +14,7 @@ smerfform:
     </p>
     <p>
     Fields that are in <b class="mandatory">red</b> are required.
+    The blue i icon that appears to the next to a field label will display help on that field when you hover on the icon.
     </p>
 
   thank_you: | 
@@ -38,6 +39,7 @@ smerfform:
       style: grid_12
       description_style: grid_2
       description: | Name
+      help: | Enter your Reno Registration name
       questions:
         Full Name:
           code: g2q1
@@ -78,6 +80,7 @@ smerfform:
 #      code: 3
 #      name:
 #      description: | 
+#       help: | Enter your name here as you want to see it in publications and online (pen name, name with initials, etc.)
 #      questions:
 #        Full Name:
 #          code: g3q1
@@ -261,7 +264,8 @@ smerfform:
           sort_order: 1
 # TODO - need to be able to add help here even though there is no question text          
           question: |
-          help: | Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, August 17 and will be in Reno until at least 2pm on Sunday, August 21.
+          help: | Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, 
+            August 17 and will be in Reno until at least 2pm on Sunday, August 21.
           answers:
             Whole Time:
               code: 1
@@ -283,7 +287,10 @@ smerfform:
                   type: singlechoice
                   sort_order: 7
                   style: timeselect grid_12
-                  help: | Select this option if you are really not sure when you're coming into Reno and when you're leaving. However, we cannot schedule you until we have a general idea of when you're coming.  Please try to make your travel plans as soon as you can, and let us know your availability
+                  help: | Select this option if you are really not sure when you are coming into 
+                    Reno and when you are leaving. However, we cannot schedule you until we have a general 
+                    idea of when you are coming.  Please try to make your travel plans as soon as you can, and 
+                    let us know your availability
                   answers:
                     not_sure:
                       code: 1
@@ -542,6 +549,9 @@ smerfform:
           answer_style: grid_3
           sort_order: 8
           question: | Do not schedule me during these times: 
+          help: | Many participants want to attend events at the convention, and Program wants to do what 
+            it can to schedule you reasonably.  Let us know what events you want to attend, 
+            so we will know not to schedule you at those times.
           answers:
             before11am:
               code: 1
@@ -676,8 +686,11 @@ smerfform:
           question: | Other constraints on my availability:
     program_areas:
       code: 7
+      style: grid_12
+      description_style: grid_9
       name: Which of the following topics are you interested in talking about?
       description: | Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgable.
+      help: | Select defined topics on the right, or add a new topic to the appropriate field.  Be sure to put a comma after any multi-word phrases you add to the field (such as space exploration, quantum theory)
       questions:
         scienceItems:
           code: g7q1
@@ -786,86 +799,109 @@ smerfform:
             WritersWorkshop:
               code: 2
               answer: | Writers Workshop
+              help: | Leading morning workshops at the Peppermill 
+                that will last for 2 hours, involve 2 writers and several 
+                aspiring writers; advanced preparation required.
               sort_order: 2
               default: N
             NewProOrientation:
               code: 3
               answer: | New Pro Orientation
+              help: | Discussing agents and publishers and other introductory topics for new writers
               sort_order: 3
               default: N
             LiteraryBeer:
               code: 5
               answer: | Literary Beer
+              help: | Talking with a small group of attendees who signed up to see you. One beer is provided for you.
               sort_order: 5
               default: N
             StrollwithStars:
               code: 6
               answer: | Stroll with Stars
+              help: | Walking around the Virginia Avenue area with attendees. 
+                 Starts at 9am and ends at about 9:50 at the Convention Center
               sort_order: 6
               default: N
             GameShow:
               code: 7
               answer: | Game Show
+              help: | Participating in a game show, either as the MC or a contestant 
+                   (variants on classic game shows, mostly trvia games, but there may be riffs on panel shows).
               sort_order: 7
               default: N
             LiteraryTea_Kaffeklatsch:
               code: 8
               answer: | Literary Tea/Kaffeeklatsch
+              help: | Talking with a small group of attendees who signed up to talk with you. Tea or Coffee is provided for you.
               sort_order: 8
               default: N
             ProgramforYoungAdults_Kids:
               code: 9
               answer: | Program for Young Adults/Kids
+              help: | Storytelling for children or participating in a panel for teens.
               sort_order: 9
               default: N
             DocentTours:
               code: 10
               answer: | Docent Tours
+              help: | Taking a group a attendees on a tour of the Art Show or Exhibit Hall
               sort_order: 10
               default: N
             Book_StoryDiscussionGroup:
               code: 11
               answer: | Book/Story Discussion Group (Preparation Required)
+              help: | Leading a discussion about a particular book or story; advanced preparation required.
               sort_order: 11
               default: N
             Reading:
               code: 12
               answer: | Reading (20 minute)
+              help: | Reading an excerpt from your work, limited to 20-25 minute reading. 
+                Due to a lack of small rooms, the 25 minute limit needs to be strictly enforced to 
+                give more writers a chance to read.
               sort_order: 12
               default: N
             Teen Writing:
               code: 13
               answer: | Teen Writing
+              help: | Leading an informal writers workshop involving a few teenagers
               sort_order: 13
               default: N
             MusicWorkshop:
               code: 14
               answer: | Music Workshop
+              help: | Leading an informal workshop on a specific instrument or musical style
               sort_order: 14
               default: N
             ArtWorkshop:
               code: 15
               answer: | Art Workshop
+              help: | Leading an informal workshop.
               sort_order: 15
               default: N
             CostumeWorkshop:
               code: 16
               answer: | Costume Workshop
+              help: | Leading an informal workshop on an aspect of costume development
               sort_order: 16
               default: N
             Con_runningWorkshop:
               code: 17
               answer: |  Con-running Workshop
+              help: | Participating in a workshop about convention planning and management
               sort_order: 17
               default: N
             Demo:
               code: 18
               answer: | Demo (art, tech, video etc.)
+              help: | Demonstrating painting, sculpture, videography, podcasting...
               sort_order: 18
               default: N
             Solo Presentation:
               code: 19
               answer: | Solo Presentation
+              help: | Giving a solo talk (with video projector if needed)
               sort_order: 19
               default: N
         dicussionGroup:
@@ -876,8 +912,7 @@ smerfform:
 # The grid_11 will ensure that the
 # note will be on a seperate line
           question: |
-#Note: most Readings will be 20 minutes long. 
-          help: |
+          help: | Talking about a predefined topic.
           style: grid_12
           question_style: grid_1
           answer_style: grid_2
@@ -909,6 +944,8 @@ smerfform:
             DialogInterview:
               code: 1
               answer: | Dialog/Interview
+              help: | Engaging in a dialog with another program participant; 
+                be sure to list the person you would want to have a dialog with, and what your topic would be.
               sort_order: 1
               default: N
               subquestions:
@@ -949,6 +986,9 @@ smerfform:
           answer_style: grid_7
           sort_order: 1
           question: | Notes for Music Night
+          help: | Wednesday&rsquo;s music night is a festival of performances, sing-a-longs, 
+            workshops and demos of varied musical instruments and styles. 
+            If you have some musical skills we may not know about and would like to be involved, please let us know.
     art_night:
       code: 92
       name: Thursday Art Night
@@ -1084,6 +1124,8 @@ smerfform:
       code: 95
       name: Information for Renovation's Web Site and Publications
       description: | 
+      help: | Information in this section will be published on our web site, PR&rsquo;s, 
+        and/or program book to better inform our members about you
       questions:
         mini_bio:
           code: g95q1

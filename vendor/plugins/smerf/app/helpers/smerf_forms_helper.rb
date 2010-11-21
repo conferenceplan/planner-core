@@ -91,6 +91,12 @@ module SmerfFormsHelper
       content_tag(:h3, group.name)
     end
   end
+
+  def smerf_group_help(group)
+    if !group.help.blank?
+      "<a title='"+group.help+"' >"+image_tag("smerf_help.gif", :alt => "Help")+"</a>"
+    end
+  end
    
   # This method retrieves and formats the group description of the group
   # passed in as a parameter.
@@ -304,8 +310,10 @@ module SmerfFormsHelper
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y'))) + 
           "#{answer.answer}</label>\n"
-#        helpLink = "<a title='"+answer.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (answer.help.blank?)
-#        html += helpLink ? " " + helpLink : "AA"
+        if answer.help
+          helpLink = "<a title='"+answer.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>"
+        end
+        html += helpLink ? " " + helpLink : ""
         contents += content_tag(:div, html, :class => style, :id => question.answer_id)
         # Process any sub questions this answer may have
         if (question.subfirst)
