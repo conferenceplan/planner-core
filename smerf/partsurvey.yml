@@ -688,9 +688,11 @@ smerfform:
       code: 7
       style: grid_12
       description_style: grid_9
-      name: Which of the following topics are you interested in talking about?
-      description: | Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgable.
-      help: | Select defined topics on the right, or add a new topic to the appropriate field.  Be sure to put a comma after any multi-word phrases you add to the field (such as space exploration, quantum theory)
+      name: What topics are you interested in talking about?
+      description: | Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgable. 
+                  Please seperate topics with a comma. Topics that other survey respondents have entered are shown below the text field.
+      help: | Add a comma seperate list of topics to the appropriate field.
+          Be sure to put a comma after any multi-word phrases you add to the field (such as space exploration, quantum theory). 
       questions:
         scienceItems:
           code: g7q1
@@ -700,7 +702,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 1
-          question: | Science
+          question: | <b>Science</b>
           tags: scienceItems
           validation: add_tags
         literature:
@@ -711,7 +713,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 2
-          question: | Literature
+          question: | <b>Literature</b>
           tags: literature
           validation: add_tags
         art:
@@ -722,7 +724,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 3
-          question: | Art
+          question: | <b>Art</b>
           tags: art
           validation: add_tags
         media:
@@ -733,7 +735,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 4
-          question: | Media
+          question: | <b>Media</b>
           tags: media
           validation: add_tags
         fandom:
@@ -744,7 +746,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 5
-          question: | Fandom
+          question: | <b>Fandom</b>
           tags: fandom
           validation: add_tags
         nevada:
@@ -755,15 +757,16 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 6
-          question: | Nevada
+          question: | <b>Nevada</b>
           tags: nevada
           validation: add_tags
 # List 2-3 unique areas that you could discuss, or give details for anything you've checked above
 # I do not want to take about
     author_topics:
       code: 8
-      name: Which of the following authors are you interested in talking about?
-      description: | Please list the top 2-3 authors whose work you are familiar with.
+      name: Which authors are you interested in talking about?
+      description: | Please list the top 2-3 authors whose work you are familiar with. Seperate each author with a comma.
+        Other authors that respondents hav chosen are shown below the text field.
       questions:
         Authors:
           code: g8q1
@@ -773,7 +776,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 1
-          question: | Authors
+          question: | <b>Authors</b>
           tags: authors
           validation: add_tags
     prog_types:
@@ -1015,7 +1018,7 @@ smerfform:
             festivities.
     other_info:
       code: 93
-      name: Other Information
+      name: Other Information and Comments
       description: | 
       questions:
         comments:
