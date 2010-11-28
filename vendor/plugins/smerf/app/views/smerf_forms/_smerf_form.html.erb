@@ -40,4 +40,10 @@
   </div> 
   <%= hidden_field_tag("smerf_form_id", @smerfform.id) %>
   <%= hidden_field_tag("key", @current_key) %>
+  <!-- Put in the files for the name and address -->
+  <div style='display : none;'>
+  	<div id='pre_first_name'><%= @respondent.first_name %></div>
+  	<div id='pre_last_name'><%= @respondent.last_name %></div>
+  	<div id='pre_email'><%= @respondent.email %></div>
+  </div>
   

@@ -37,18 +37,18 @@ smerfform:
       code: 2
       name: 
       style: grid_12
-      description_style: grid_2
+      description_style: grid_2 mandatory
       description: | Name
       help: | Enter your Reno Registration name
       questions:
-        Full Name:
+        First Name:
           code: g2q1
           type: textfield
           style: grid_3
           sort_order: 1
           validation: validate_mandatory_question
           question: |
-#          help: | Enter your Reno Registration name
+          answer_id: first_name
           title: First Name
           textfield_size: 30
 #        Middle Name:
@@ -66,6 +66,7 @@ smerfform:
           sort_order: 3
           validation: validate_mandatory_question
           question: |
+          answer_id: last_name
           title: Last Name
           textfield_size: 30
         Suffix:
@@ -76,44 +77,38 @@ smerfform:
           question: |
           title: Suffix
           textfield_size: 5
-#    personal_details_pub_name:
-#      code: 3
-#      name:
-#      description: | 
-#       help: | Enter your name here as you want to see it in publications and online (pen name, name with initials, etc.)
-#      questions:
-#        Full Name:
-#          code: g3q1
-#          type: textfield
-#          style: grid_3
-#          sort_order: 1
-#          question: |
-#          title: first name
-#          textfield_size: 30
-#        Middle Name:
-#          code: g3q2
-#          type: textfield
-#          style: grid_2
-#          sort_order: 2
-#          question: |
-#          title: Middle Name
-#          textfield_size: 15
-#        Last Name:
-#          code: g3q3
-#          type: textfield
-#          style: grid_3
-#          sort_order: 3
-#          question: |
-#          title: Last Name
-#          textfield_size: 30
-#        Suffix:
-#          code: g3q4
-#          type: textfield
-#          style: grid_2
-#          sort_order: 4
-#          question: |
-#          title: Suffix
-#          textfield_size: 5
+    personal_details_pub_name:
+      code: 3
+      name:
+      style: grid_12 pubname_toggle
+      description_style: grid_2 mandatory
+      description: | Publication Name
+      help: | Enter your name here as you want to see it in publications and online (pen name, name with initials, etc.)
+      questions:
+        First Name:
+          code: g3q1
+          type: textfield
+          style: grid_3
+          sort_order: 1
+          question: |
+          title: First name
+          textfield_size: 30
+        Last Name:
+          code: g3q3
+          type: textfield
+          style: grid_3
+          sort_order: 3
+          question: |
+          title: Last Name
+          textfield_size: 30
+        Suffix:
+          code: g3q4
+          type: textfield
+          style: grid_2
+          sort_order: 4
+          question: |
+          title: Suffix
+          textfield_size: 5
     personal_details_address:
       code: 4
       name: 
@@ -178,6 +173,7 @@ smerfform:
           answer_style: grid_4
           validation: validate_mandatory_question
           sort_order: 9
+          answer_id: email_address
           question: | Email Address
           textfield_size: 50
           additional: 2

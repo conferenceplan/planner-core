@@ -55,7 +55,8 @@ ActionController::Routing::Routes.draw do |map|
     :has_one => :registrationDetail,
     :collection => {:list => :get }
   map.resources :people, :as => "participants" do |person|
-    person.resource :tags, :member => {:remove => :delete, :add => :post, :index => :get, :list => :get}, :controller => 'people/tags',
+    person.resource :tags, :member => {:remove => :delete, :add => :post, :index => :get, :list => :get}, 
+      :controller => 'people/tags',
       :except => [:destroy, :new, :update, :create, :edit]
   end
 
@@ -80,17 +81,20 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users
     
   #
-#  map.resource :survey_session
-#  map.root :controller => "survey_sessions", :action => "new" # optional, this just sets the root route
-
+  #
+  #
   map.resources :survey_respondent_sessions # just for the new session...
 
+  #
+  #
+  #
   map.resources :survey_respondents
   map.connect 'survey_respondents/confirm', :controller => 'survey_respondents', :action => 'confirm'
 
-# TODO - how do I insist on the tag context as a parameter
+  # 
   map.resources :survey_respondents do |respondent|
-    respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, :controller => 'survey_respondents/tags',
+    respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 
+      :controller => 'survey_respondents/tags',
       :except => [:destroy, :new, :create, :edit, :remove]
   end
 

@@ -10,8 +10,6 @@
 </head>
 <body>
 	<%= menu %>
-	<!-- div id="top_menu">Top menu items here</div -->
-	<!-- div id="menu">Menu items here</div -->
 	<div id="content"><%= yield(:content) or yield %></div>
 <div id="user_nav">
   <% if current_user %>

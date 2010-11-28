@@ -1,174 +1,182 @@
 <html>
-<head>
-<title><%= @page_title or 'Page Title' %></title>
-		<%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
-		<%= stylesheet_link_tag 'jquery.tooltip.css' %>
-		<%= stylesheet_link_tag 'reset.css' %>
-		<%= stylesheet_link_tag 'text.css' %>
-		<%= stylesheet_link_tag '960.css' %>
-		<%= stylesheet_link_tag 'survey.css' %>
-		<%= javascript_include_tag 'jquery-1.4.2.min' %>
-		<%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
-		<%= javascript_include_tag 'jquery.tooltip.min' %>
-<script>
-	$(function() {
-		
-    $("input:text, textarea, input:password").each(function(){
-        if(this.value == '' && this.title != '') {
-            this.value = this.title;
-            this.style.color = 'lightgrey';
-		}
-    });
-    $("input:text, textarea, input:password").focus(function(){
-        if(this.value == this.title) {
-            this.value = '';
-            this.style.color = '';
-		}
-    });
-    $("input:text, textarea, input:password").blur(function(){
-        if(this.value == '' && this.title != '') {
-            this.value = this.title;
-            this.style.color = 'lightgrey';
-		}
-    });
-
-    $("input:image, input:button, input:submit").click(function(){
-        $(this.form.elements).each(function(){
-            if(this.type =='text' || this.type =='textarea' || this.type =='password' ){
-                if(this.value == this.title && this.title!= ''){
-                    this.value='';
-                }
-            }
-        });
-    });
-
-	// Prevent submit on return	
-    $(window).keydown(function(event){
-      if(event.keyCode == 13) {
-        event.preventDefault();
-        return false;
-      }
-    });
-
-        //$( "#surveyAccordian" ).accordion({ header : 'h3', collapsible: true, autoHeight: false });
-		
-		function toggleQuestions(state) {
-			$('div.timeselect > select').attr('disabled', state);
-			$('div.timeselect input').attr('disabled', state);
-		};
-		
-		toggleQuestions('true');
-		
-		$('#timeselect').click(
-		  function() {
-			$('div.timeselect > select').removeAttr('disabled');
-			$('div.timeselect input').removeAttr('disabled');
-		  }
-		);
-
-		$('#timedisable').click(
-		  function() {
-			toggleQuestions('true');
-		  }
-		);
-		
-        $('#survey-set a').tooltip();
-
-        // hide all of the elements with a class of 'toggle'
-        $('.toggle').hide();
-
-        $('a.toggleLink').click(function() {
-            // switch visibility
-            //$(this).next('.toggle').toggle('slow').next('.toggleLink').toggle('slow');
-            $(this).next('.toggle').show().next('.toggleLink').show();
-            // return false so link destination for pane is not followed
-            return false;
-        });
-
-		/*
-		 * <div class="taggable">
-		 *   <div style="display: none;" id="context">excludedTimes</div>
-		 *   <div class="textarea">
-		 *     <textarea rows="5" name="responses[g3q7t1]" id="responses_g3q7t1" cols="30" class="excludedTimes">
-		 *     Help, New
-		 *     </textarea>
-		 *   </div>
-		 *   <div class="cloud"></div>
-		 * </div>
-		 */
-        function split( val ) {
-			return val.split( /,\s*/ );
-		}
-		function extractLast( term ) {
-			return split( term ).pop();
-		}
-		// Iterate through all the elements in the page and assign the autocomplete to it
-		// then make calls to the server to get the tags for each of the associated contexts
-		$('div.taggable').each(function(index) { // for all divs that have the class taggable
-			var context = $(this).find('#context').text(); // get the context
-			var element = $(this).find('.' + context); // get the text or text area that needs to have autocomplete
-			var cloud = $(this).find('.cloud');
-			
-            // create the cloud for /survey_respondents/tags/cloud?context=excludedTimes
-            $.ajax({
-              url : "/survey_respondents/tags/cloud?context=" + context,
-              dataType : "html",
-              success: function(response) {
-			  	cloud.append(response);
-              }
-            });
-
-            //                    
-            $.ajax({
-                url: "/survey_respondents/tags/alltags?context=" + context,
-                async: true,
-                dataType: "xml",
-                success: function(xmlResponse){
-					// Put all the tags into an array
-                    var gtags = new Array();
-                    $(xmlResponse).find("tag").each(function(){
-                        gtags.push($(this).text());
+    <head>
+        <title><%= @page_title or 'Page Title' %></title>
+        <%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
+        <%= stylesheet_link_tag 'jquery.tooltip.css' %>
+        <%= stylesheet_link_tag 'reset.css' %>
+        <%= stylesheet_link_tag 'text.css' %>
+        <%= stylesheet_link_tag '960.css' %>
+        <%= stylesheet_link_tag 'survey.css' %>
+        <%= javascript_include_tag 'jquery-1.4.2.min' %>
+        <%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
+        <%= javascript_include_tag 'jquery.tooltip.min' %>
+        <script>
+            $(function(){
+				
+				var first_name = $("#pre_first_name").text();
+				if ($("#first_name").val() == '') {
+					$("#first_name").val(first_name);
+				}
+				var last_name = $("#pre_last_name").text();
+				if ($("#last_name").val() == '') {
+					$("#last_name").val(last_name);
+				}
+				var email = $("#pre_email").text();
+				if ($("#email_address").val() == '') {
+					$("#email_address").val(email);
+				}
+            
+                $("input:text, textarea, input:password").each(function(){
+                    if (this.value == '' && this.title != '') {
+                        this.value = this.title;
+                        this.style.color = 'lightgrey';
+                    }
+                });
+                $("input:text, textarea, input:password").focus(function(){
+                    if (this.value == this.title) {
+                        this.value = '';
+                        this.style.color = '';
+                    }
+                });
+                $("input:text, textarea, input:password").blur(function(){
+                    if (this.value == '' && this.title != '') {
+                        this.value = this.title;
+                        this.style.color = 'lightgrey';
+                    }
+                });
+                
+                $("input:image, input:button, input:submit").click(function(){
+                    $(this.form.elements).each(function(){
+                        if (this.type == 'text' || this.type == 'textarea' || this.type == 'password') {
+                            if (this.value == this.title && this.title != '') {
+                                this.value = '';
+                            }
+                        }
                     });
-					
-					// and then use this array with the autocomplete functionality
-					element.autocomplete({
-                        source: function(request, response) {
-                          // delegate back to autocomplete, but extract the last term
-//                          response( $.ui.autocomplete.filter(gtags, extractLast( request.term )) );
-						  var re = $.ui.autocomplete.escapeRegex(request.term);
-						  var matcher = new RegExp( "^" + re, "i" );
-						  var a = $.grep( gtags, function(item,index){
-						  	return matcher.test(item);
-							});
-                          response( a );
-                        },
-						focus : function() {
-							return false; // prevent value insertion on focus
-						},
-						select : function(event, ui) {
-                            var terms = split( this.value );
-				            terms.pop(); // remove the current input
-				            terms.push( ui.item.value ); // add the selected item
-				            terms.push( "" ); // add placeholder to get the comma-and-space at the end
-				            this.value = terms.join( ", " );
-				            return false;
-						}
-                    });
+                });
+                
+                // Prevent submit on return	
+                $(window).keydown(function(event){
+                    if (event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+                
+                //$( "#surveyAccordian" ).accordion({ header : 'h3', collapsible: true, autoHeight: false });
+				
+                function toggleQuestions(state){
+                    $('div.timeselect > select').attr('disabled', state);
+                    $('div.timeselect input').attr('disabled', state);
+                };
+                
+                toggleQuestions('true');
+                
+                $('#timeselect').click(function(){
+                    $('div.timeselect > select').removeAttr('disabled');
+                    $('div.timeselect input').removeAttr('disabled');
+                });
+                
+                $('#timedisable').click(function(){
+                    toggleQuestions('true');
+                });
+                
+                $('#survey-set a').tooltip();
+                
+                $('div.pubname_toggle').parent().append("<a class='prefix_1 grid_2 toggle_pub_name'>Add Publication Name</a>");
+				$('a.toggle_pub_name').click(
+				  function() {
+                    $('div.pubname_toggle').show();
+					$(this).hide();
+				  	return false;
+				  }
+				);
+                $('div.pubname_toggle').hide();
+                // add button to unhide
+				
+                // hide all of the elements with a class of 'toggle'
+                $('.toggle').hide();
+                
+                $('a.toggleLink').click(function(){
+                    // switch visibility
+					$(this).hide();
+                    $(this).next('.toggle').show().next('.toggleLink').show();
+                    // return false so link destination for pane is not followed
+                    return false;
+                });
+                
+                function split(val){
+                    return val.split(/,\s*/);
                 }
+                function extractLast(term){
+                    return split(term).pop();
+                }
+
+                // Iterate through all the elements in the page and assign the autocomplete to it
+                // then make calls to the server to get the tags for each of the associated contexts
+                $('div.taggable').each(function(index){ // for all divs that have the class taggable
+                    var context = $(this).find('#context').text(); // get the context
+                    var element = $(this).find('.' + context); // get the text or text area that needs to have autocomplete
+                    var cloud = $(this).find('.cloud');
+                    
+                    // create the cloud for /survey_respondents/tags/cloud?context=excludedTimes
+                    $.ajax({
+                        url: "/survey_respondents/tags/cloud?context=" + context,
+                        dataType: "html",
+                        success: function(response){
+                            cloud.append(response);
+                        }
+                    });
+                    
+                    //                    
+                    $.ajax({
+                        url: "/survey_respondents/tags/alltags?context=" + context,
+                        async: true,
+                        dataType: "xml",
+                        success: function(xmlResponse){
+                            // Put all the tags into an array
+                            var gtags = new Array();
+                            $(xmlResponse).find("tag").each(function(){
+                                gtags.push($(this).text());
+                            });
+                            
+                            // and then use this array with the autocomplete functionality
+                            element.autocomplete({
+                                source: function(request, response){
+                                    var re = $.ui.autocomplete.escapeRegex(request.term);
+                                    var matcher = new RegExp("^" + re, "i");
+                                    var a = $.grep(gtags, function(item, index){
+                                        return matcher.test(item);
+                                    });
+                                    response(a);
+                                },
+                                focus: function(){
+                                    return false; // prevent value insertion on focus
+                                },
+                                select: function(event, ui){
+                                    var terms = split(this.value);
+                                    terms.pop(); // remove the current input
+                                    terms.push(ui.item.value); // add the selected item
+                                    terms.push(""); // add placeholder to get the comma-and-space at the end
+                                    this.value = terms.join(", ");
+                                    return false;
+                                }
+                            });
+                        }
+                    });
+                });
+                //
             });
-		});
-		//
-	});
-</script>
-</head>
-<body>
-<div class="grid_12">
-  <img src="http://www.renovationsf.org/images/renovation_logo.gif" alt="Rennie logo" class="grid_1" height="110">
-  <img src="http://www.renovationsf.org/images/gold-renovation.gif" alt="Rennie Title" class="grid_1">
-</div>
-<div class="clear"></div>
-<div class="container_12">
-	<%= yield(:content) or yield %>
-</div>
-</body>
-</html> 
+        </script>
+    </head>
+    <body>
+        <div class="grid_12">
+            <img src="http://www.renovationsf.org/images/renovation_logo.gif" alt="Rennie logo" class="grid_1" height="110"><img src="http://www.renovationsf.org/images/gold-renovation.gif" alt="Rennie Title" class="grid_1">
+        </div>
+        <div class="clear">
+        </div>
+        <div class="container_12">
+            <%= yield(:content) or yield %>
+        </div>
+    </body>
+</html>

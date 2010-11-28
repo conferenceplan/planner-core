@@ -76,7 +76,7 @@ div.cloud div#content div {
 	padding-bottom: 3px;
 }
 
-a.toggleLink.toggle, a.toggleLink {
+a.toggleLink.toggle, a.toggleLink, a.toggle_pub_name {
 	color: blue;
 	font-size: 8pt;
 }
