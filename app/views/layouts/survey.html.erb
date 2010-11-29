@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title><%= @page_title or 'Page Title' %></title>
+        <title><%= @page_title or 'Renovation Survey' %></title>
         <%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
         <%= stylesheet_link_tag 'jquery.tooltip.css' %>
         <%= stylesheet_link_tag 'reset.css' %>
@@ -12,6 +12,16 @@
         <%= javascript_include_tag 'jquery.tooltip.min' %>
         <script>
             $(function(){
+				
+                if (!$('#pub_first_name').val() && !$('#pub_last_name').val()) {
+                    $('div.pubname_toggle').parent().append("<a class='prefix_1 grid_4 toggle_pub_name'>Add Publication Name (if diffrent from above)</a>");
+                    $('a.toggle_pub_name').click(function(){
+                        $('div.pubname_toggle').show();
+                        $(this).hide();
+                        return false;
+                    });
+                    $('div.pubname_toggle').hide();
+                }
 				
 				var first_name = $("#pre_first_name").text();
 				if ($("#first_name").val() == '') {
@@ -83,17 +93,6 @@
                 
                 $('#survey-set a').tooltip();
                 
-                $('div.pubname_toggle').parent().append("<a class='prefix_1 grid_2 toggle_pub_name'>Add Publication Name</a>");
-				$('a.toggle_pub_name').click(
-				  function() {
-                    $('div.pubname_toggle').show();
-					$(this).hide();
-				  	return false;
-				  }
-				);
-                $('div.pubname_toggle').hide();
-                // add button to unhide
-				
                 // hide all of the elements with a class of 'toggle'
                 $('.toggle').hide();
                 

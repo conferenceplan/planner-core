@@ -6,6 +6,7 @@ class SurveyRespondentsController < SurveyApplicationController
   
   def new
     @survey_respondent = SurveyRespondent.new
+    @page_title = "Renovation Survey Start"
   end
   
   def create
@@ -64,17 +65,13 @@ class SurveyRespondentsController < SurveyApplicationController
   #
   # NOTE: do we want to put in a date after which the survey can not be edited?
   
-  # TODO - show and index does not really make that much sense....
+  # show and index does not really make that much sense.... just redirect to the 'new' action
   def show
-    @survey_respondent = @current_survey_respondent
-    
-    render :layout => 'content'
+    redirect_to '/survey_respondents/new'
   end
   
   def index
-    @survey_respondent = @current_survey_respondent
-    
-    render :layout => 'content'
+    redirect_to '/survey_respondents/new'
   end
   
 end

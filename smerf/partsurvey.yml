@@ -91,6 +91,7 @@ smerfform:
           style: grid_3
           sort_order: 1
           question: |
+          answer_id: pub_first_name
           title: First name
           textfield_size: 30
         Last Name:
@@ -99,6 +100,7 @@ smerfform:
           style: grid_3
           sort_order: 3
           question: |
+          answer_id: pub_last_name
           title: Last Name
           textfield_size: 30
         Suffix:

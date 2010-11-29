@@ -4,5 +4,6 @@
 <div class="clear"></div>
 <div class="grid_8 push_1">
 Thank you for completing the survey. 
-You can always review and edit you response by returning to the survey and entering your unique key: <b><%= @respondent.key %></b>
+You can always review and edit your response by returning to the <%= link_to 'survey', survey_respondents_path %> and 
+entering your the following 'invitation code': <b><%= @respondent.key %></b>
 </div>
