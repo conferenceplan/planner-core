@@ -1,12 +1,12 @@
 class PendingImportPerson < ActiveRecord::Base
   def addressNil?
-    if ((pendingImportPerson.line1 == nil || pendingImportPerson.line1 == "") &&
-        (pendingImportPerson.line2 == nil || pendingImportPerson.line2 == "") &&
-        (pendingImportPerson.line3 == nil || pendingImportPerson.line3 == "") && 
-        (pendingImportPerson.city == nil || pendingImportPerson.city == "") &&
-        (pendingImportPerson.state == nil || pendingImportPerson.state == "") &&
-        (pendingImportPerson.postcode == nil || pendingImportPerson.postcode == "") &&
-        (pendingImportPerson.country == nil || pendingImportPerson.country == ""))
+    if ((self.line1 == nil || self.line1 == "") &&
+        (self.line2 == nil || self.line2 == "") &&
+        (self.line3 == nil || self.line3 == "") && 
+        (self.city == nil || self.city == "") &&
+        (self.state == nil || self.state == "") &&
+        (self.postcode == nil || self.postcode == "") &&
+        (self.country == nil || self.country == ""))
         return true
     else
       return false
@@ -14,16 +14,16 @@ class PendingImportPerson < ActiveRecord::Base
   end
   
   def emailNil?
-    if (pendingImportPerson.email == nil || pendingImportPerson.email == "")
+    if (self.email == nil || self.email == "")
       return true
     else
       return false
     end
   end
   def addressMatch?(matchaddress)
-     if ((self.line1 == matchaddress.line1) &&
-         (self.line2 == matchaddress.line2) &&
-         (self.line3 == matchaddress.line3) &&
+     if ((self.line1 == matchaddress.line1)
+        (self.line2 == matchaddress.line2)
+        (self.line3 == matchaddress.line3) &&
          (self.city == matchaddress.city) &&
          (self.state == matchaddress.state) &&
          (self.postcode == matchaddress.postcode) &&

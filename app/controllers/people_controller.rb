@@ -21,14 +21,14 @@ class PeopleController < ApplicationController
   end
 
   def new
-    @participant = Person.new
+    @person = Person.new
   end
 
   def create
     @participant = Person.new(params[:person])
     
     if (@participant.save)
-       redirect_to :action => 'show', :id => @participant
+       redirect_to :action => 'index'
     else
       render :action => 'new'
     end 
@@ -105,12 +105,19 @@ class PeopleController < ApplicationController
   def doexportemailxml
     @filename = params[:exportemail][:filename]
     @invitecategory = params[:exportemail][:invitation_category_id]
+    
     @categorySelect = params[:exportemail][:category_select]
     @invited_index = InviteStatus.find_by_name("Invited Pending")
     if (@categorySelect == "true")
+      if (@invitecategory == "") 
+            @people = Person.find :all,:conditions => {:invitestatus_id => @invited_index,:invitation_category_id => nil}
+
+      else
        @people = Person.find :all,:conditions => {:invitestatus_id => @invited_index,:invitation_category_id => @invitecategory}
+      end
+    
     else
-       @people = Person.find_all_by_invitestatus_id(@invited_index)
+          @people = Person.find_all_by_invitestatus_id(@invited_index)      
     end
     
     respond_to do |format|

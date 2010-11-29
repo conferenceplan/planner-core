@@ -82,9 +82,16 @@ class Person < ActiveRecord::Base
   end
   
   def UpdateIfPendingPersonDifferent(pending_id)
-    pendingImportPerson = PendingImportPerson.find(pending_id)
+  pendingImportPerson = PendingImportPerson.find(pending_id)
     postalAddresses = self.postal_addresses
     emailAddresses = self.email_addresses
+    myRegistrationDetail = self.registrationDetail
+    
+    if ((myRegistrationDetail == nil) && (pendingImportPerson.registration_number) && pendingImportPerson.registration_number != "")
+      myRegistrationDetail = new RegistrationDetail(:registration_number => pendingImportPerson.registration_number,
+                                                    :registration_type => pendingImportPerson.registration_type)
+      self.registrationDetail = myRegistrationDetail
+    end
     # we can only automatically update addresses from pendingImportPerson
     # if we have 1 email and postal address in our database
     # if we have more than 1, we can't tell which one to update
@@ -126,13 +133,21 @@ class Person < ActiveRecord::Base
                                      :country => pendingImportPerson.country,
                                      :phone => pendingImportPerson.phone)
       end
+      # the person may have previously not had a registration number
+      newRegistration = false
+      if ((myRegistrationDetail == nil) && (pendingImportPerson.registration_number) && pendingImportPerson.registration_number != "")
+         myRegistrationDetail = new RegistrationDetail(:registration_number => pendingImportPerson.registration_number,
+                                                       :registration_type => pendingImportPerson.registration_type)
+         self.registrationDetail = myRegistrationDetail
+         newRegistration = true
+      end
       # we have a new email address, so create one
       if (newEmailAddress == true)
         self.email_addresses.new(:email => pendingImportPerson.email)
       end
       
       # save new addresses
-      if (newEmailAddress == true || newPostalAddress == true)
+      if (newEmailAddress == true || newPostalAddress == true || newRegistration)
         self.save
       end
       # update successful
@@ -142,4 +157,5 @@ class Person < ActiveRecord::Base
       return false
     end
   end
+ 
 end
