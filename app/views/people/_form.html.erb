@@ -3,6 +3,8 @@
 <div>
   <div class='line'><div class='field_name'><%= f.label :first_name, "First Name" %></div><div class='field_value'> <%= f.text_field :first_name %></div></div>
   <div class='line'><div class='field_name'><%= f.label :last_name, "Last Name" %></div><div class='field_value'> <%= f.text_field :last_name %></div></div>
+  <div class='line'><div class='field_name'><%= f.label :suffix, "Suffix" %></div><div class='field_value'> <%= f.text_field :suffix %></div></div>
+
   <div class='line'><div class='field_name'><%= f.label :invitestatus_id %></div><div class='field_value'><%= f.select :invitestatus_id,
 	                 InviteStatus.find(:all).collect {|s| [s.name,s.id] },
 	                 {:include_blank => false}%></div></div>

@@ -68,14 +68,15 @@ class PendingImportPeopleController < ApplicationController
        elsif (master)
           npendingImportPerson = PendingImportPerson.new(:first_name => row[0],
                                                      :last_name => row[1],
-                                                     :line1 => row[2],
-                                                     :line2 => row[3],
-                                                     :city => row[4],
+                                                     :suffix => row[2],
+                                                     :line1 => row[3],
+                                                     :line2 => row[4],
+                                                     :city => row[5],
                                                      :postcode => row[6],
-                                                     :state => row[5],
-                                                     :country => row[7],
-                                                     :phone => row[8],
-                                                     :email => row[9])
+                                                     :state => row[7],
+                                                     :country => row[8],
+                                                     :phone => row[9],
+                                                     :email => row[10])
        else
           npendingImportPerson = PendingImportPerson.new(:first_name => row[2],
                                                      :last_name => row[3],
@@ -94,6 +95,15 @@ class PendingImportPeopleController < ApplicationController
        # we don't care about since are not tracking the old database dups
        next if ((npendingImportPerson.first_name == nil || npendingImportPerson.first_name == "") && (npendingImportPerson.last_name == nil || npendingImportPerson.last_name == ""))
  
+       if (npendingImportPerson.first_name == nil)
+         npendingImportPerson.first_name = ""
+       end
+       if (npendingImportPerson.last_name == nil)
+         npendingImportPerson.last_name = ""
+       end
+       if (npendingImportPerson.suffix == nil)
+         npendingImportPerson.suffix = ""
+       end
        # this is a hack - when we save the data to the pending database, it gets modified
        # to match our constraints. We then retrieve it and use that
        # data to compare to our real database
@@ -116,7 +126,7 @@ class PendingImportPeopleController < ApplicationController
        #       have registered and we would need to check for that
        if (newPersonFlag)
          # search for people with same name
-         matchpeople = Person.find_all_by_last_name_and_first_name(pendingImportPerson.last_name,pendingImportPerson.first_name)        
+         matchpeople = Person.find_all_by_last_name_and_first_name_and_suffix(pendingImportPerson.last_name,pendingImportPerson.first_name,pendingImportPerson.suffix)        
            
          # for master, since we don't have registration to help us figure out duplicate names,
          # and the address is likely not to be an exact match even if it is the same person,
@@ -163,6 +173,7 @@ class PendingImportPeopleController < ApplicationController
            inviteStatus = InviteStatus.find_by_name("Not Invited")
            p=Person.new(:first_name => pendingImportPerson.first_name,
                         :last_name => pendingImportPerson.last_name,
+                        :suffix => pendingImportPerson.suffix,
                         :invitestatus_id=> inviteStatus.id)
            if (pendingImportPerson.registration_number && (pendingImportPerson.registration_number != ""))
               nReg.registration_type = pendingImportPerson.registration_type
