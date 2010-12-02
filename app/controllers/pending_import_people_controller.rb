@@ -3,7 +3,7 @@ class PendingImportPeopleController < ApplicationController
   before_filter :require_user
 
   def index
-    @pendingImportPeople = PendingImportPerson.find :all
+    @pendingImportPeople = PendingImportPerson.find :all, :order => :last_name
   end
   
   def show

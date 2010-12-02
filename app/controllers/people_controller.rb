@@ -28,7 +28,8 @@ class PeopleController < ApplicationController
     @participant = Person.new(params[:person])
     
     if (@participant.save)
-       redirect_to :action => 'index'
+       redirect_to :action => 'show',:id => @participant
+    
     else
       render :action => 'new'
     end 
@@ -38,7 +39,7 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
     
     if @person.update_attributes(params[:person])
-      redirect_to :action => 'index'
+      redirect_to :action => 'show',:id => @person
     else
       render :action => 'edit'
     end

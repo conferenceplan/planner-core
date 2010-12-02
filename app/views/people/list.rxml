@@ -6,6 +6,7 @@ xml.rows do
     xml.row({:id => person.id}) do
       xml.cell(person.first_name)
       xml.cell(person.last_name)
+      xml.cell(person.suffix)
     end
   end
 end

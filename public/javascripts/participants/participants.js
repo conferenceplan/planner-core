@@ -20,13 +20,16 @@ jQuery(document).ready(function(){
   jQuery("#participants").jqGrid({
     url:'participants/list',
     datatype: 'xml',
-    colNames:['First Name','Last Name'],
+    colNames:['First Name','Last Name','Suffix'],
     colModel :[ 
       {name:'person[first_name]', index:'first_name', width:200,
     	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:1, label: "First Name", elmprefix:"(*)"},editrules:{required:true}
     	  }, 
       {name:'person[last_name]', index:'last_name', width:200,
         	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Last Name", elmprefix:"(*)"},editrules:{required:true}
+    		  } ,
+	   {name:'person[suffix]', index:'suffix', width:50,
+        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:3, label: "Suffix", elmprefix:"(*)"},editrules:{required:true}
     		  } ],
     pager: jQuery('#pager'),
     rowNum:10,
