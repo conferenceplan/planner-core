@@ -763,7 +763,7 @@ smerfform:
     author_topics:
       code: 8
       name: Which authors are you interested in talking about?
-      description: | Please list the top 2-3 authors whose work you are familiar with. Separate each author with a comma.
+      description: | Please list the top 2-3 authors whose work you are familiar with. Separate each author with a comma. 
          Other authors that respondents have chosen are shown below the text field.
       questions:
         Authors:
@@ -975,7 +975,7 @@ smerfform:
     music_night:
       code: 91
       name: Wednesday Music Night
-      description: | Wednesday Music night: Play an instrument or sing well? 
+      description: | Wednesday Music night: Play an instrument or sing well? Are you part of music group? 
               Participate in one of our Wednesday perfomances. 
               Enter notes about what you'd like to do in the Comments area below.
       questions:
