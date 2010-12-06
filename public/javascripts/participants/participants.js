@@ -22,7 +22,7 @@ jQuery(document).ready(function(){
     datatype: 'xml',
     colNames:['First Name','Last Name','Suffix'],
     colModel :[ 
-      {name:'person[first_name]', index:'first_name', width:200,
+      {name:'person[first_name]', index:'first_name', width:175,
     	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:1, label: "First Name", elmprefix:"(*)"},editrules:{required:true}
     	  }, 
       {name:'person[last_name]', index:'last_name', width:200,

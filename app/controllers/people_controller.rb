@@ -18,6 +18,8 @@ class PeopleController < ApplicationController
 
   def edit
     @person = Person.find(params[:id])
+    
+    render :layout => 'content'
   end
 
   def new
@@ -25,10 +27,10 @@ class PeopleController < ApplicationController
   end
 
   def create
-    @participant = Person.new(params[:person])
+    @person = Person.new(params[:person])
     
-    if (@participant.save)
-       redirect_to :action => 'show',:id => @participant
+    if (@person.save)
+       redirect_to :action => 'show',:id => @person
     
     else
       render :action => 'new'

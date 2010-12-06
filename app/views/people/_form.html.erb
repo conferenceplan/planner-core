@@ -1,7 +1,6 @@
 <%= error_messages_for :person %>
-<% form_for @person do |f| -%>
-<div>
-  <div class='line'><div class='field_name'><%= f.label :first_name, "First Name" %></div><div class='field_value'> <%= f.text_field :first_name %></div></div>
+<% form_for @person,:html => {:class => "particpantInfo", :id => "particpantInfo"} do |f| -%>
+  <div class='line'><div class='field_name'><%= f.label :first_name, "First Name" %></div><div class='field_value'></div><%= f.text_field :first_name %></div>
   <div class='line'><div class='field_name'><%= f.label :last_name, "Last Name" %></div><div class='field_value'> <%= f.text_field :last_name %></div></div>
   <div class='line'><div class='field_name'><%= f.label :suffix, "Suffix" %></div><div class='field_value'> <%= f.text_field :suffix %></div></div>
 
@@ -16,4 +15,7 @@
 		<button type="button" class='jqmClose'>Close</button>
   </div>
 </div>
+</div>
 <% end %>
+<div id='form-response'>
+</div>
