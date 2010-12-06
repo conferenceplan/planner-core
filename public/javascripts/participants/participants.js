@@ -29,7 +29,7 @@ jQuery(document).ready(function(){
         	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Last Name", elmprefix:"(*)"},editrules:{required:true}
     		  } ,
 	   {name:'person[suffix]', index:'suffix', width:50,
-        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:3, label: "Suffix", elmprefix:"(*)"},editrules:{required:true}
+        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:3, label: "Suffix", elmprefix:"(*)"},editrules:{required:false}
     		  } ],
     pager: jQuery('#pager'),
     rowNum:10,
