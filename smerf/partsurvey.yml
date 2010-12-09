@@ -6,15 +6,17 @@ smerfform:
     Please complete this form if you've been invited to be on Renovation Program.
     </p>
     <p>
-    Worldcon program is a big, varied enterprise that needs the talents of many people to succeed.
-    If you're new to SF cons, welcome! The questionnaire is lengthy; please complete as much as you can and 
-    make your best guesses. You will also be able to return to the form to update your information. 
-    If you have to cancel your trip to Reno, please let us know as soon as possible. Many fields have explanatory help: 
-    hover on the information icon beside the field name to display more information.
+    Whether you're new to SF cons or have participated in
+    Worldcon programs before, welcome! We know this questionnaire
+    is lengthy, but please complete as much as you can to help us
+    create the best possible program and to ensure that we match
+    you with suitable program items. You can return to the form
+    to update it.
     </p>
     <p>
-    Fields that are in <b class="mandatory">red</b> are required.
-    The blue i icon that appears to the next to a field label will display help on that field when you hover on the icon.
+    If you need help with a particular field, hover over the blue
+    icon next to the field to display more information. Fields
+    that are in red are required.
     </p>
 
   thank_you: | 
@@ -32,7 +34,7 @@ smerfform:
       code: 1
       name: Personal Details
       description: | 
-        Here we ask you some personal details
+ 
     personal_details_name:
       code: 2
       name: 
@@ -243,7 +245,7 @@ smerfform:
               default: N
             No:
               code: 2
-              answer: | I'm not yet an attending member, I understand I need to buy a membership in order to be scheduled for Program.<br/>
+              answer: | I'm not yet an attending member. I understand I need to buy a membership in order to be scheduled for Program.<br/>
                 <div class='grid_11 suffix_2'>
                 <i>You can complete the rest of the questionnaire, but you need to buy a membership by June 15, 2011 in order to be scheduled.
                 Membership can be purchased <a href='http://www.renovationsf.org/register.php' target='new'>here</a>.</i>
@@ -268,15 +270,15 @@ smerfform:
             Whole Time:
               code: 1
               answer_id: timedisable
-              answer: | I am available for Program for the complete duration of the convention.
+              answer: | I am available for Program for the complete duration of the convention. 
                      Renovation Program will officially begin at noon, Wednesday, August 17 and 
-                     will end by 4pm on Sunday, August 21.
+                     will end by 4 pm on Sunday, August 21.
               sort_order: 1
               default: N
             Know Time:
               code: 2
               answer_id: timeselect
-              answer: | I plan on being at the convention.
+              answer: | I plan to be at the convention.
               sort_order: 2
               default: N
               subquestions:
@@ -616,7 +618,7 @@ smerfform:
               default: N
             chesleys:
               code: 2
-              answer: | Chesleys
+              answer: | Chesley Awards
               sort_order: 2
               default: N
             masquerade:
@@ -626,7 +628,7 @@ smerfform:
               default: N
             hugos:
               code: 4
-              answer: | Hugos (Sat night)
+              answer: | Hugo Ceremony (Sat night)
               sort_order: 4
               default: N
             closingCeremony:
@@ -687,10 +689,9 @@ smerfform:
       style: grid_12
       description_style: grid_9
       name: What topics are you interested in talking about?
-      description: | Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgable. 
+      description: | Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgeable. 
                   Please separate topics with a comma. Topics that other survey respondents have entered are shown below the text field.
-      help: | Add a comma separated list of topics to the appropriate field.
-           Be sure to put a comma after any multi-word phrases you add to the field (such as space exploration, quantum theory). 
+      help: | Add a comma-separated list of topics in this field, for example, "space exploration,quantum theory".
       questions:
         scienceItems:
           code: g7q1
@@ -944,9 +945,9 @@ smerfform:
           answers:
             DialogInterview:
               code: 1
-              answer: | Dialog/Interview
-              help: | Engaging in a dialog with another program participant; 
-                be sure to list the person you would want to have a dialog with, and what your topic would be.
+              answer: | Dialogue/Interview
+              help: | Engaging in a dialogue with another program participant; 
+                be sure to list the person you would want to have a dialogue with, and what your topic would be.
               sort_order: 1
               default: N
               subquestions:
@@ -957,8 +958,8 @@ smerfform:
                   question_style: grid_2
                   answer_style: grid_7
                   sort_order: 1
-                  question: | Dialog Topic
-                  help: | enter the topic of the Dialog that you would like to do 
+                  question: | Dialogue Topic
+                  help: | enter the topic of the Dialogue that you would like to do 
                   validation: validate_sub_question
                 DialogParticipants:
                   code: g9q3s2
@@ -968,7 +969,7 @@ smerfform:
                   question_style: grid_2
                   answer_style: grid_7
                   sort_order: 2
-                  question: | Dialog Participants
+                  question: | Dialogue Participants
                   help: | suggest participants
                   validation: validate_sub_question
 # TTTTT
@@ -1066,8 +1067,7 @@ smerfform:
           question_style: grid_11
           answer_style: grid_11
           sort_order: 6
-          question: | Under no circumstances should I be on a panel with: <i>anything you list here will not be shared outside
-            of the core Renovation programming team.</i>
+          question: | Please do not schedule me under any circumstances with the following people (information will not be shared except with the core Renovation Program team):
 # These need to be changed to check boxes
         emailShare:
           code: g93q7
@@ -1102,8 +1102,8 @@ smerfform:
     release:
       code: 94
       name: Participant Release
-      description: | Renovation will be held in a "WIFI everywhere" environment. That means individuals may record or photograph you or 
-       your panel items in the course of the convention and may share this on the Internet.
+      description: | Because Renovation is being held in a "WiFi everywhere" environment, individuals might record or photograph you 
+           or your panel items and might post such recordings or photographs on the Internet. 
       questions:
         release_date:
           code: g94q1
@@ -1117,7 +1117,7 @@ smerfform:
             release:
               sort_order : 1
               code : 1
-              answer : | Please check here that you have no objection.
+              answer : | I have no objection.
               default : N
 # Publications Information
 #
@@ -1135,9 +1135,11 @@ smerfform:
           question_style: grid_10
           answer_style: grid_10
           sort_order: 1
-          question: | <b><u>Mini-Bio</u></b> Please write a short (under 200 words) bio-blurb for the Website, 
-              which includes info about your most recent publications/activities. Do not put titles in ALL CAPS; 
-              use title-style capitalization. We will edit the bio as needed.
+          question: | <b><u>Mini-Bio</u></b> Please provide a short (100 - 200 words) bio for the 
+              Renovation web site that includes information about your most
+              recent publications/activities. Use initial capitals for the
+              title rather than ALL CAPS. This bio might be edited for
+              space considerations.
               <a href="http://www.fanac.org/Denvention3/programming/bios2.html" target="new">
               Some sample participant bios from other Worldcons</a>.
         homepage:
