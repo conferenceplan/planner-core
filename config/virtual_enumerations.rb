@@ -77,5 +77,8 @@ ActiveRecord::VirtualEnumerations.define do |config|
  
  config.define 'InviteStatus',
     :extends => 'Enum'
-  
+    
+ config.define 'AcceptanceStatus',
+    :extends => 'Enum'
+
 end

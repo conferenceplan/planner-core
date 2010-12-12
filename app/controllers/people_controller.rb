@@ -30,7 +30,7 @@ class PeopleController < ApplicationController
     @person = Person.new(params[:person])
     
     if (@person.save)
-       redirect_to :action => 'show',:id => @person
+       redirect_to :action => 'index'
     
     else
       render :action => 'new'
@@ -38,12 +38,13 @@ class PeopleController < ApplicationController
   end
 
   def update
+    
     @person = Person.find(params[:id])
     
     if @person.update_attributes(params[:person])
       redirect_to :action => 'show',:id => @person
     else
-      render :action => 'edit'
+      render :action => 'edit', :layout => 'content'
     end
   end
 
@@ -106,26 +107,38 @@ class PeopleController < ApplicationController
   end
   
   def doexportemailxml
-    @filename = params[:exportemail][:filename]
-    @invitecategory = params[:exportemail][:invitation_category_id]
+    filename = params[:exportemail][:filename]
+    mailingSelect = params[:exportemail][:mailing_select]
+    mailingNumber = params[:exportemail][:mailing_number]
+    acceptanceSelect = params[:exportemail][:acceptance_select]
+    acceptanceStatus = params[:exportemail][:acceptance_status_id]
+    invitecategory = params[:exportemail][:invitation_category_id]
+    categorySelect = params[:exportemail][:category_select]
+    invited_index = params[:exportemail][:invitestatus_id]
+    selectConditions = {}
+    selectConditions[:invitestatus_id] = invited_index
     
-    @categorySelect = params[:exportemail][:category_select]
-    @invited_index = InviteStatus.find_by_name("Invited Pending")
-    if (@categorySelect == "true")
-      if (@invitecategory == "") 
-            @people = Person.find :all,:conditions => {:invitestatus_id => @invited_index,:invitation_category_id => nil}
-
-      else
-       @people = Person.find :all,:conditions => {:invitestatus_id => @invited_index,:invitation_category_id => @invitecategory}
+    
+    if (categorySelect == "true")
+      # category can be empty and we may want to select people with no category
+      selectConditions[:invitation_category_id] = nil
+      if (invitecategory != "") 
+        selectConditions[:invitation_category_id] = invitecategory
       end
-    
-    else
-          @people = Person.find_all_by_invitestatus_id(@invited_index)      
     end
     
+    if (acceptanceSelect == "true")
+        selectConditions[:acceptance_status_id] = acceptanceStatus
+    end
+    
+    if (mailingSelect == "true")
+      selectConditions[:mailing_number] = mailingNumber
+    end
+    
+    @people = Person.find :all, :conditions => selectConditions
     respond_to do |format|
          format.xml {
-             send_data @people.to_xml(:only => [:first_name,:last_name,:email_addresses,:email],:include => :email_addresses), :filename => @filename
+             send_data @people.to_xml(:only => [:first_name,:last_name,:email_addresses,:email],:include => :email_addresses), :filename => filename
          }
     end
   end

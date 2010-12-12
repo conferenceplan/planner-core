@@ -1,3 +1,4 @@
+<h1> Generate xml email list using following criteria</h1>
 <% form_for :exportemail, :url=>{:controller=>"people", :action=>"doexportemailxml",:method => "get"} do |f| -%>
  <div>
   <div class='line'>
@@ -8,12 +9,36 @@
 		<%= f.text_field :filename %>
 	 </div>
   </div>
+  <div class='line'><div class='field_name'><%= f.label :invitestatus_id,"Select Invitation Status" %></div><div class='field_value'><%= f.select :invitestatus_id,
+	                 InviteStatus.find(:all).collect {|s| [s.name,s.id] },
+                    {:include_blank => false}%></div></div>	 
+					
+   <div class='line'>
+     	<%= f.label :mailing_select,"Select Mailing Number :"%>     	
+		<%= f.radio_button :mailing_select, :false%> Select All
+		<%= f.radio_button :mailing_select, :true%>Select One
+  </div>
+  <div class='field_name'>
+  	<%= f.label :mailing_number, "Enter Mailing Number"%>
+  </div>
+  <div class='field_value'>
+  	<%= f.text_field :mailing_number%>
+  </div>
+  <div class='line'>
+     	<%= f.label :acceptance_select,"Select Acceptance Status :"%>     	
+		<%= f.radio_button :acceptance_select, :false%> Select All
+		<%= f.radio_button :acceptance_select, :true%>Select One
+  </div>
+  <div class='line'><div class='field_name'><%= f.label :acceptance_status_id,"Select Acceptance Status" %></div><div class='field_value'><%= f.select :acceptance_status_id,
+	                 AcceptanceStatus.find(:all).collect {|s| [s.name,s.id] },
+                    {:include_blank => false}%></div></div>	 
+					
   <div class='line'>
      	<%= f.label :category_select,"Select Category :"%>     	
 		<%= f.radio_button :category_select, :false%> Select All
 		<%= f.radio_button :category_select, :true-%>Select One
   </div>
-  <div class='line'><div class='field_name'><%= f.label :invitation_category_id %></div><div class='field_value'><%= f.select :invitation_category_id,
+  <div class='line'><div class='field_name'><%= f.label :invitation_category_id,"Enter Invitation Category" %></div><div class='field_value'><%= f.select :invitation_category_id,
 	                 InvitationCategory.find(:all).collect {|s| [s.name,s.id] },
 	                 {:include_blank => true}%></div></div>
  

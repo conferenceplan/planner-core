@@ -170,11 +170,15 @@ class PendingImportPeopleController < ApplicationController
        
  
        if (newPersonFlag)
-           inviteStatus = InviteStatus.find_by_name("Not Invited")
+           inviteStatus = InviteStatus.find_by_name("Not Set")
+           acceptanceStatus = AcceptanceStatus.find_by_name("Unknown")
            p=Person.new(:first_name => pendingImportPerson.first_name,
                         :last_name => pendingImportPerson.last_name,
                         :suffix => pendingImportPerson.suffix,
-                        :invitestatus_id=> inviteStatus.id)
+                        :invitestatus_id=> inviteStatus.id,
+                        :acceptance_status_id => acceptanceStatus.id,
+                        :mailing_number => 0)
+                        
            if (pendingImportPerson.registration_number && (pendingImportPerson.registration_number != ""))
               nReg.registration_type = pendingImportPerson.registration_type
               p.registrationDetail = nReg

@@ -1,5 +1,5 @@
 class Person < ActiveRecord::Base
-  
+  validates_numericality_of :mailing_number
   has_many  :addresses
   
   has_many  :postal_addresses, :through => :addresses,
@@ -41,6 +41,7 @@ class Person < ActiveRecord::Base
   has_enumerated :invitestatus, :class_name => 'InviteStatus'
 
   belongs_to  :invitation_category
+  has_enumerated :acceptance_status, :class_name => 'AcceptanceStatus'
   
   #
   acts_as_taggable
