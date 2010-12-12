@@ -56,6 +56,8 @@ class SurveyRespondentsController < SurveyApplicationController
   def confirm
     @survey_respondent = @current_survey_respondent
     
+    SurveyMailer.deliver_thankyou_email(@survey_respondent)
+    
     render :layout => 'content'
   end
   
