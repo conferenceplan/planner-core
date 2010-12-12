@@ -186,15 +186,20 @@ class PendingImportPeopleController < ApplicationController
            
            p.save
            if (testImport == false)
-              a=p.postal_addresses.new( :line1 => pendingImportPerson.line1,
-                                        :line2 => pendingImportPerson.line2,
-                                        :line3 => pendingImportPerson.line3,
-                                        :city  => pendingImportPerson.city,
-                                        :postcode => pendingImportPerson.postcode,
-                                        :state => pendingImportPerson.state,
-                                        :country => pendingImportPerson.country,
-                                        :phone => pendingImportPerson.phone)    
-              e=p.email_addresses.new(:email => pendingImportPerson.email)
+              if (pendingImportPerson.addressNil? == false)
+                a=p.postal_addresses.new( :line1 => pendingImportPerson.line1,
+                                          :line2 => pendingImportPerson.line2,
+                                          :line3 => pendingImportPerson.line3,
+                                          :city  => pendingImportPerson.city,
+                                          :postcode => pendingImportPerson.postcode,
+                                          :state => pendingImportPerson.state,
+                                          :country => pendingImportPerson.country,
+                                          :phone => pendingImportPerson.phone)   
+              end
+                                        
+              if (pendingImportPerson.emailNil? == false)
+                 e=p.email_addresses.new(:email => pendingImportPerson.email)
+              end
             end
             if (p.save)
                  pendingImportPerson.destroy
