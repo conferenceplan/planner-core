@@ -135,11 +135,23 @@ class PeopleController < ApplicationController
       selectConditions[:mailing_number] = mailingNumber
     end
     
+     @people = Person.find :all, :conditions => selectConditions
+     
+     @people.each do |person|
+      if (person.survey_respondent == nil)
+         person.create_survey_respondent(:last_name => person.last_name, 
+                                         :first_name => person.first_name,
+                                         :key => ('%05d' % rand(1e5)))
+         person.save
+      end
+    end
+
     @people = Person.find :all, :conditions => selectConditions
     respond_to do |format|
-         format.xml {
-             send_data @people.to_xml(:only => [:first_name,:last_name,:email_addresses,:email],:include => :email_addresses), :filename => filename
-         }
+         format.xml 
+         #{
+ #            send_data @people.to_xml(:only => [:first_name,:last_name,:email_addresses,:email,:survey_respondent,:key],:include => [:email_addresses,:survey_respondent]), :filename => filename
+       #  }
     end
   end
   

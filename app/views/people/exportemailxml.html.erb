@@ -1,13 +1,10 @@
 <h1> Generate xml email list using following criteria</h1>
+<%= error_messages_for :person %>
 <% form_for :exportemail, :url=>{:controller=>"people", :action=>"doexportemailxml",:method => "get"} do |f| -%>
  <div>
   <div class='line'>
-  	<div class='field_name'>
- 	  <%= f.label :filename, "Enter File Name" %> 
-    </div>
-	<div class='field_value'>
-		<%= f.text_field :filename %>
-	 </div>
+  	Select the criteria for the xml list, then submit. The xml will be displayed in your browser.
+	"Save As" from the browser to get the report as a file.
   </div>
   <div class='line'><div class='field_name'><%= f.label :invitestatus_id,"Select Invitation Status" %></div><div class='field_value'><%= f.select :invitestatus_id,
 	                 InviteStatus.find(:all).collect {|s| [s.name,s.id] },

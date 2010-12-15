@@ -4,6 +4,9 @@
   </div>
   <div class='line'>First Name:: <%= @person.first_name %></div>
   <div class='line'>Last Name: <%= @person.last_name %></div>
+  <div class='line'>Survey Key: <% if @person.survey_respondent %>
+                                <%= @person.survey_respondent.key%>
+								<% end %>
   <div class='line'>Invitation Status: <% if @person.invitestatus %>
        <%= @person.invitestatus.name %>
        <% end%>

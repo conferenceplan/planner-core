@@ -198,7 +198,8 @@ class PendingImportPeopleController < ApplicationController
               end
                                         
               if (pendingImportPerson.emailNil? == false)
-                 e=p.email_addresses.new(:email => pendingImportPerson.email)
+                 e=p.email_addresses.new(:email => pendingImportPerson.email,
+                                         :isdefault => true)
               end
             end
             if (p.save)

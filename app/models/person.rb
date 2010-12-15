@@ -47,6 +47,23 @@ class Person < ActiveRecord::Base
   acts_as_taggable
   acts_as_taggable_on :activities
   
+  def GetFullName()
+      name = ""
+      if (self.first_name != nil)
+        name = self.first_name
+      end
+      if (self.last_name != nil)
+        name = name + " " + self.last_name
+      end
+      if (self.suffix != nil)
+         name = self.first_name + " " + self.last_name
+      end
+      if (self.suffix != nil)
+        name = name + self.suffix
+      end
+      return name
+  end
+  
   def removePostalAddress(address)
     # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person
