@@ -1,0 +1,36 @@
+<h1> Update Invite Pending to Invited</h1>
+<%= error_messages_for :person %>
+<% form_for :exportemail, :url=>{:controller=>"people", :action=>"doUpdateInviteStatus",:method => "post"} do |f| -%>
+ <div>
+  <div class='line'>
+  	Select the criteria for updating people with invite_pending status to invited, then submit. 
+  </div>
+   <div class='line'>
+     	<%= f.label :mailing_select,"Select Mailing Number :"%>     	
+		<%= f.radio_button :mailing_select, :false%> Select All
+		<%= f.radio_button :mailing_select, :true%>Select One
+  </div>
+  <div class='field_name'>
+  	<%= f.label :mailing_number, "Enter Mailing Number"%>
+  </div>
+  <div class='field_value'>
+  	<%= f.text_field :mailing_number%>
+  </div>
+  
+  <div class='line'>
+     	<%= f.label :category_select,"Select Category :"%>     	
+		<%= f.radio_button :category_select, :false%> Select All
+		<%= f.radio_button :category_select, :true-%>Select One
+  </div>
+  <div class='line'><div class='field_name'><%= f.label :invitation_category_id,"Enter Invitation Category" %></div><div class='field_value'><%= f.select :invitation_category_id,
+	                 InvitationCategory.find(:all).collect {|s| [s.name,s.id] },
+	                 {:include_blank => true}%></div></div>
+ 
+  <div class='form-buttons'>
+		<%= f.submit "Submit" %>
+	
+  </div>
+  <div>
+  		<%= link_to 'Cancel', people_path%>
+  </div>
+<% end -%>

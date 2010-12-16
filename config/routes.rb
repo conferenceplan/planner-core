@@ -48,8 +48,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :menus
   
   map.connect 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'
-  map.connect 'participants/doexportemailxml', :controller => 'people', :action => 'doexportemailxml'
-
+  map.connect 'participants/doexportemailxml', :controller => 'people', :action => 'doexportemailxml', :method => 'post'
+  map.connect 'participants/doUpdateInviteStatus', :controller => 'people', :action => 'doUpdateInviteStatus'
+  map.connect 'participants/UpdateInviteStatus', :controller => 'people', :action => 'UpdateInviteStatus'
+  
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses],
     :has_one => :registrationDetail,

@@ -1,6 +1,6 @@
 <h1> Generate xml email list using following criteria</h1>
 <%= error_messages_for :person %>
-<% form_for :exportemail, :url=>{:controller=>"people", :action=>"doexportemailxml",:method => "get"} do |f| -%>
+<% form_for :exportemail, :url=>{:controller=>"people", :action=>"doexportemailxml",:method => "post"} do |f| -%>
  <div>
   <div class='line'>
   	Select the criteria for the xml list, then submit. The xml will be displayed in your browser.

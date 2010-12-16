@@ -106,8 +106,41 @@ class PeopleController < ApplicationController
     end
   end
   
+  def UpdateInviteStatus
+    
+  end
+  
+  def doUpdateInviteStatus
+    mailingSelect = params[:exportemail][:mailing_select]
+    mailingNumber = params[:exportemail][:mailing_number]
+    categorySelect = params[:exportemail][:category_select]
+    invitecategory = params[:exportemail][:invitation_category_id]
+    selectConditions = {}
+    inviteStatus = InviteStatus.find_by_name("Invite Pending")
+    selectConditions[:invitestatus_id] = inviteStatus.id
+    
+    if (categorySelect == "true")
+      # category can be empty and we may want to select people with no category
+      selectConditions[:invitation_category_id] = nil
+      if (invitecategory != "") 
+        selectConditions[:invitation_category_id] = invitecategory
+      end
+    end
+    
+     if (mailingSelect == "true")
+      selectConditions[:mailing_number] = mailingNumber
+    end
+     @people = Person.find :all, :conditions => selectConditions
+     
+     @people.each do |person|
+       newInviteStatus = InviteStatus.find_by_name("Invited")
+       person.invitestatus = newInviteStatus
+       person.save
+     end
+     
+  end
+  
   def doexportemailxml
-    filename = params[:exportemail][:filename]
     mailingSelect = params[:exportemail][:mailing_select]
     mailingNumber = params[:exportemail][:mailing_number]
     acceptanceSelect = params[:exportemail][:acceptance_select]
