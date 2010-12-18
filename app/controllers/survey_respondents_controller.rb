@@ -12,6 +12,7 @@ class SurveyRespondentsController < SurveyApplicationController
   def create
     @survey_respondent = nil
     key = params[:survey_respondent][:key]
+    last_name = params[:survey_respondent][:last_name]
     fillSurvey = true
     
     # Check to see if the respondent has said that they will not be attending
@@ -20,30 +21,45 @@ class SurveyRespondentsController < SurveyApplicationController
       fillSurvey = false
     end
     
-    # TODO - there should be a link between the survey_respondent and the participant, determine the direction (both ways)
-    
     # find a respondent with the key, if not found then create a new one
     if (key)
       # TODO - put in code to also validate the last name that they are using matches the one that we have in the DB
       @survey_respondent = SurveyRespondent.find_by_key(key)
       if (@survey_respondent)
-        @survey_respondent.attending = fillSurvey
+        if @survey_respondent.last_name.eql?(last_name)
+          @survey_respondent.attending = fillSurvey
+        else
+          @survey_respondent = nil
+        end
       end
     end
     
-    # Create a new survey respondent based on the first and last name...
-    if (! @survey_respondent ) # create a new survey respondent and survey (to be linked to participant manually)
-      @survey_respondent = SurveyRespondent.new(params[:survey_respondent])
-      # Create a key for this new survey respondent
-      @survey_respondent.key = '%05d' % rand(1e5) # ensure that we do not save the key to the database
-    end
+#    # Create a new survey respondent based on the first and last name...
+#    if (! @survey_respondent ) # create a new survey respondent and survey (to be linked to participant manually)
+#      @survey_respondent = SurveyRespondent.new(params[:survey_respondent])
+#      # Create a key for this new survey respondent
+#      @survey_respondent.key = '%05d' % rand(1e5) # ensure that we do not save the key to the database
+#    end
     
-    if @survey_respondent.save and fillSurvey
+    # TODO - put in error responses....
+    if @survey_respondent
       # TODO: If they said that they are not attending then redirect to a simple thank you
       # Redirect the person to the survey
-      redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
+      if @survey_respondent.save
+        if (fillSurvey)
+          redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
+        else
+          redirect_to  '/nosurvey.html'
+        end
+      else
+        # there was a problem so return to the new page
+        @survey_respondent.errors.add_to_base("Unable to save the information. Please try again.")
+        render :action => :new
+      end
     else
       # there was a problem so return to the new page
+      @survey_respondent = SurveyRespondent.new
+      @survey_respondent.errors.add_to_base("Unable to find a potential participant that matches the inputs.")
       render :action => :new
     end
     
