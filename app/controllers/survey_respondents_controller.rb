@@ -16,7 +16,7 @@ class SurveyRespondentsController < SurveyApplicationController
     
     # Check to see if the respondent has said that they will not be attending
     if (params[:cancel]) # Then we do not go to the survey
-      # TODO save the fact that they will not be attending and then forward to a thank you page
+      # Save the fact that they will not be attending and then forward to a thank you page
       fillSurvey = false
     end
     
@@ -39,6 +39,7 @@ class SurveyRespondentsController < SurveyApplicationController
     end
     
     if @survey_respondent.save and fillSurvey
+      # TODO: If they said that they are not attending then redirect to a simple thank you
       # Redirect the person to the survey
       redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
     else
@@ -53,18 +54,6 @@ class SurveyRespondentsController < SurveyApplicationController
     create
   end
 
-  def confirm
-    @survey_respondent = @current_survey_respondent
-    
-    SurveyMailer.deliver_thankyou_email(@survey_respondent)
-    
-    render :layout => 'content'
-  end
-  
-  # TODO - once they have completed the survey we should send them an email to confirm that the survey
-  # has been completed. Also with a link to the survey (with single access token) that they can use to edit/update
-  # the survey.
-  #
   # NOTE: do we want to put in a date after which the survey can not be edited?
   
   # show and index does not really make that much sense.... just redirect to the 'new' action

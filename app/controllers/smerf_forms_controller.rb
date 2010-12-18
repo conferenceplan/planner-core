@@ -73,8 +73,11 @@ class SmerfFormsController < SurveyApplicationController
         SmerfFormsSurveyrespondent.create_records(
           @smerfform.id, self.smerf_user_id, @responses)
         flash[:notice] = "#{@smerfform.name} saved successfully"
-        # Show the form again, allowing the user to edit responses
-#        render(:action => "edit")
+
+        #
+        survey_respondent = SurveyRespondent.find(self.smerf_user_id)
+        SurveyMailer.deliver_thankyou_email(survey_respondent)
+    
         render('survey_respondents/confirm')
       end
     else
@@ -103,11 +106,10 @@ class SmerfFormsController < SurveyApplicationController
         flash[:notice] = "#{@smerfform.name} updated successfully"   
       end
 
+      # 
       survey_respondent = SurveyRespondent.find(self.smerf_user_id)
       SurveyMailer.deliver_thankyou_email(survey_respondent)
     
-      # Show the form again, allowing the user to edit responses
-#      render(:action => "edit") # TODO - change to redirect to a page that says thank you (and also gives the key)
       render('survey_respondents/confirm')
     else
       flash[:notice] = "No responses found in #{@smerfform.name}, nothing saved"      

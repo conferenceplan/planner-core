@@ -1,10 +1,20 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-		<title>Untitled Document</title>
-	</head>
-	<body>
-		<h1>Thank you for willing in the form, <%=h @user.first_name %></h1>
-	</body>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <title>Untitled Document</title>
+    </head>
+    <body>
+        <h1><%=h @user.first_name %><%=h @user.last_name %></h1>
+        <p>
+            Thank you for completing the survey for the 2011 Worldcon, Renovation. 
+            You can always review and edit your response by returning to 
+			<a href='<%= survey_respondents_url(:host => "program.renovationsf.org") %>'>survey</a>
+			and entering the following 'invitation code': <b><%= @user.key %></b>
+        </p>
+		<p>A summary of your responses to the questionaire follow below</p>
+        <% @smerfform.form.groups.each do |group| %>
+			<%= format_group(group) %>
+        <% end %>
+    </body>
 </html>
