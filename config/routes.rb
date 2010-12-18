@@ -91,7 +91,6 @@ ActionController::Routing::Routes.draw do |map|
   #
   #
   map.resources :survey_respondents
-  map.connect 'survey_respondents/confirm', :controller => 'survey_respondents', :action => 'confirm'
 
   # 
   map.resources :survey_respondents do |respondent|
