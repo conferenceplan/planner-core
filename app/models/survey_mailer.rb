@@ -4,7 +4,7 @@ class SurveyMailer < ActionMailer::Base
     sform = SmerfForm.find_by_id(1)
     
     recipients get_email(respondent)
-    bcc       "program@renovationsf.org"
+    bcc       "programform@renovationsf.org"
     from      "no-reply@renovationsf.org"
     subject   "Thank you for completing the survey"
     sent_on   Time.now

@@ -759,8 +759,11 @@ smerfform:
           question: | <b>Nevada</b>
           tags: nevada
           validation: add_tags
-# List 2-3 unique areas that you could discuss, or give details for anything you've checked above
-# I do not want to take about
+    personal_details_intro:
+      code: 71
+      name: 
+      description: | If you are interested in presenting an academic paper at the convention, 
+           please visit this <a href='http://www.renovationsf.org/program-academic.php' target="new">link</a> which explains the process
     author_topics:
       code: 8
       name: Which authors are you interested in talking about?
@@ -972,7 +975,19 @@ smerfform:
                   question: | Dialogue Participants
                   help: | suggest participants
                   validation: validate_sub_question
-# TTTTT
+        willmoderate:
+          code: g9q4
+          type: multiplechoice
+          sort_order: 4
+          style: grid_12
+          question_style: grid_10
+          answers:
+            moderate:
+              code: 1
+              answer: | I am willing to moderate panels at the convention.
+              help: | Check here if you are willing to moderate panels at the convention.
+              sort_order: 1
+              default: N
     music_night:
       code: 91
       name: Wednesday Music Night
@@ -1069,31 +1084,33 @@ smerfform:
           sort_order: 6
           question: | Please do not schedule me under any circumstances with the following people (information will not be shared except with the core Renovation Program team):
 # These need to be changed to check boxes
-        emailShare:
+        localtalk:
           code: g93q7
-          type: singlechoice
+          type: multiplechoice
           style: grid_12
           question_style: grid_10
           sort_order: 10
           question: | 
           answers:
-             doNotShareEmail:
+             localtalk:
                code: 1
-               answer: | Do not share E-mail contact info with other participants
+               answer: | I am willing to do a reading or a talk at a local library.
                sort_order: 1
                default: N
-        canInterview:
-          code: g93q8
-          type: singlechoice
-          style: grid_12
-          question_style: grid_10
-          sort_order: 11
-          question: | 
-          answers:
+             sfworkshop:
+               code: 2
+               answer: | Assisting with the "Teaching SF" workshop on Wednesday.
+               sort_order: 2
+               default: N
+             doNotShareEmail:
+               code: 3
+               answer: | Do not share E-mail contact info with other participants
+               sort_order: 3
+               default: N
              canInterview:
-               code: 1
+               code: 4
                answer: | I am willing to be interviewed by the media
-               sort_order: 1
+               sort_order: 4
                default: N
 #
 # Paticipant Release
@@ -1107,7 +1124,7 @@ smerfform:
       questions:
         release_date:
           code: g94q1
-          type: singlechoice
+          type: multiplechoice
           sort_order : 1
           style: grid_12
           question_style: grid_2
@@ -1162,7 +1179,7 @@ smerfform:
           question: | Photo URL
         photourl_donotuse:
           code: g95q4
-          type: singlechoice
+          type: multiplechoice
           sort_order : 4
           style: grid_12
           question_style: grid_2
@@ -1180,18 +1197,37 @@ smerfform:
           question_style: grid_11
           answer_style: grid_3
           sort_order: 5
-          question: | Social Media
+          question: | <b>Social Media</b>
+          help: | If you would like to provide your social media information please enter it here.
           answers:
             facebook:
               code: 1
               answer: | Facebook
               sort_order: 1
               default: N
+              subquestions:
+                 other_contact_details:
+                     code: g95q4s1
+                     type: textfield
+                     sort_order: 1
+                     question: | 
+                     style: grid_7
+                     answer_style: grid_6
+                     textfield_size: 50
             twitter:
               code: 2
               answer: | Twitter
               sort_order: 2
               default: N
+              subquestions:
+                 other_contact_details:
+                     code: g95q4s2
+                     type: textfield
+                     sort_order: 1
+                     question: | 
+                     style: grid_7
+                     answer_style: grid_6
+                     textfield_size: 50
             other:
               code: 3
               answer: | other
@@ -1199,12 +1235,11 @@ smerfform:
               default: N
               subquestions:
                  other_contact_details:
-                     code: g95q4s1
+                     code: g95q4s3
                      type: textfield
                      sort_order: 1
-                     question: | Other
-                     style: grid_12
-                     question_style: grid_2
+                     question: | 
+                     style: grid_7
                      answer_style: grid_6
                      textfield_size: 50
 #
