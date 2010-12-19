@@ -174,7 +174,8 @@ class PeopleController < ApplicationController
       if (person.survey_respondent == nil)
          person.create_survey_respondent(:last_name => person.last_name, 
                                          :first_name => person.first_name,
-                                         :key => ('%05d' % rand(1e5)))
+                                         :key => ('%05d' % rand(1e5)),
+                                         :suffix => person.suffix)
          person.save
       end
     end

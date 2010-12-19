@@ -75,8 +75,7 @@ class SmerfFormsController < SurveyApplicationController
         flash[:notice] = "#{@smerfform.name} saved successfully"
 
         #
-        survey_respondent = SurveyRespondent.find(self.smerf_user_id)
-        SurveyMailer.deliver_thankyou_email(survey_respondent)
+        updateSurveyRespondent(self.smerf_user_id)
     
         render('survey_respondents/confirm')
       end
@@ -107,8 +106,7 @@ class SmerfFormsController < SurveyApplicationController
       end
 
       # 
-      survey_respondent = SurveyRespondent.find(self.smerf_user_id)
-      SurveyMailer.deliver_thankyou_email(survey_respondent)
+      updateSurveyRespondent(self.smerf_user_id)
     
       render('survey_respondents/confirm')
     else
@@ -117,6 +115,23 @@ class SmerfFormsController < SurveyApplicationController
   end
   
 private
+
+  def updateSurveyRespondent(id)
+      # 
+      survey_respondent = SurveyRespondent.find(id)
+      SurveyMailer.deliver_thankyou_email(survey_respondent)
+      
+      smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(id, 1)
+    
+      survey_respondent.email = smerf_forms_surveyrespondent.responses['g4q6']
+      survey_respondent.first_name = smerf_forms_surveyrespondent.responses['g2q1']
+      survey_respondent.last_name = smerf_forms_surveyrespondent.responses['g2q3']
+      survey_respondent.suffix = smerf_forms_surveyrespondent.responses['g2q4']
+      
+      # TODO - error handling?
+      survey_respondent.save
+
+  end
   
   # This method retrieves the smerf form and user responses if user
   # has already completed this form in the past.
