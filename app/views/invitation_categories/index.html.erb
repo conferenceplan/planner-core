@@ -1,8 +1,8 @@
 <br/>
 <br/>
 <% for invitationCategory in @invitationCategories %>
-	<li>name is <%= invitationCategory.name %> menu order is <%= invitationCategory.position%>
-		<%=  link_to "edit", :action => 'edit', :id => invitationCategory %>
+	<li>name is <%= invitationCategory.name %> menu order is <%= invitationCategory.position%>&nbsp; 
+		<%=  link_to "edit", :action => 'edit', :id => invitationCategory %>&nbsp; 
 		<%=  link_to "remove", invitationCategory, :method => :delete,:confirm => "Are you Sure?" %>
 	</li>
 <%end%>
