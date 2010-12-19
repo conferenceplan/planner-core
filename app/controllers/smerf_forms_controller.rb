@@ -130,7 +130,7 @@ private
       
       # TODO - error handling?
       survey_respondent.save
-
+      
   end
   
   # This method retrieves the smerf form and user responses if user

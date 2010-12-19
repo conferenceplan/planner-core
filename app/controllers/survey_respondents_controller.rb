@@ -46,6 +46,13 @@ class SurveyRespondentsController < SurveyApplicationController
       # TODO: If they said that they are not attending then redirect to a simple thank you
       # Redirect the person to the survey
       if @survey_respondent.save
+        # Get the related person and update their acceptance status...
+        person = @survey_respondent.person
+        if person
+          person.acceptance_status = (fillSurvey) ? AcceptanceStatus.find_by_name("Accepted") : AcceptanceStatus.find_by_name("Declined")
+          person.save
+        end
+
         if (fillSurvey)
           redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
         else
