@@ -14,7 +14,9 @@ jQuery(document).ready(function(){
   jQuery("#particpanttabs").tabs({
 		ajaxOptions: { async: false },
 		cache: false
-  }).tabs({load : function(event, ui) { initDialog(event, ui);  initAutoComplete(); } }); // TODO - init dialog and autocomplete
+  }).tabs({load : function(event, ui) { initDialog(event, ui);  initAutoComplete(); 
+  	$( ".addressAccordian" ).accordion({ header : 'h3', collapsible: true, autoHeight: false });
+  	} }); // TODO - init dialog and autocomplete
 
   // The grid containing the list of paricipants
   jQuery("#participants").jqGrid({
