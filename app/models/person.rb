@@ -47,6 +47,9 @@ class Person < ActiveRecord::Base
   acts_as_taggable
   acts_as_taggable_on :activities
   
+  #
+  has_one  :pseudonym
+  
   def GetFullName()
       name = ""
       if (self.first_name != nil)
