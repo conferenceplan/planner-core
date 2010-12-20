@@ -1,8 +1,7 @@
-<%= javascript_include_tag 'jquery-1.4.2.min' %>
+<%= javascript_include_tag 'jquery-1.4.4.min' %>
 <%= javascript_include_tag 'jquery.form' %>
 <%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
 <%= javascript_include_tag 'grid.locale-en' if params[:action] == 'index' %>
-<%= javascript_include_tag 'jqModal.js' if params[:action] == 'index' %>
 <%= javascript_include_tag 'jquery.jqGrid.min' if params[:action] == 'index' %>
 <%= javascript_include_tag 'application'%>
 		<% if protect_against_forgery? %>

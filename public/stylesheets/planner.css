@@ -190,18 +190,17 @@ div.phone {
 }
 
 div.controls div.remove-form form.button-to div input.remove-button {
-	clear: both;
-	margin: -1px 0 0 0px;
-	background-image: none;
-	background-color: transparent;
 	padding: 0;
-	border: 1px solid black;
+	background: none;
+	border: none;
+	display:block;
+	text-decoration:underline;
+	cursor:pointer ;
 }
 
+
+
 div.controls div.edit-form a.entrydialog {
-	text-decoration: none;
-	border-style: solid;
-	border-width: 1px;
 	margin: 0;
 	padding: 0;
 	height: 18px;

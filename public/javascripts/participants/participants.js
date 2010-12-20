@@ -24,10 +24,10 @@ jQuery(document).ready(function(){
     datatype: 'xml',
     colNames:['First Name','Last Name','Suffix'],
     colModel :[ 
-      {name:'person[first_name]', index:'first_name', width:175,
+      {name:'person[first_name]', index:'first_name', width:210,
     	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:1, label: "First Name", elmprefix:"(*)"},editrules:{required:true}
     	  }, 
-      {name:'person[last_name]', index:'last_name', width:200,
+      {name:'person[last_name]', index:'last_name', width:210,
         	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Last Name", elmprefix:"(*)"},editrules:{required:true}
     		  } ,
 	   {name:'person[suffix]', index:'suffix', width:50,
@@ -59,7 +59,7 @@ jQuery(document).ready(function(){
   
   // Set up the pager menu for add, delete, and search
   jQuery("#participants").navGrid('#pager',
-		  {view:false }, //options
+		  {view:false, search:false }, //options
 
 		  {	// edit options
 			  height:220, reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
@@ -84,16 +84,9 @@ jQuery(document).ready(function(){
 			  return [true, "ok"]; },
 		  }, // del options
 
-		  { // search options
-			  jqModal:true, closeOnEscape:true,
-			  multipleSearch:true,
-			  sopt:['eq','ne'],
-			  odata: ['begins with', 'does not begin with'],
-			  groupOps: [ { op: "AND", text: "all" }, { op: "OR", text: "any" } ]
-		  }, // search options
-		  
 		  {height:150, jqModal:true, closeOnEscape:true} // view options
   );
+  jQuery("#participants").jqGrid('filterToolbar',{stringResult: true,searchOnEnter : false});
 });
 
 function addToTagList(value) {
@@ -157,6 +150,15 @@ function initDialog(event, ui) {
 	});
 	
 	$('.remove-form form', ui.panel).ajaxForm({
+		target: '#tab-messages',
+		success: function(response, status) {
+			var $tabs = $('#particpanttabs').tabs();
+			var selected = $tabs.tabs('option', 'selected');
+			$tabs.tabs('load', selected);
+		}
+	});
+
+	$('.remove-form a', ui.panel).ajaxForm({
 		target: '#tab-messages',
 		success: function(response, status) {
 			var $tabs = $('#particpanttabs').tabs();
