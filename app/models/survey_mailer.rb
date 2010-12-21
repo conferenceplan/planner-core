@@ -8,6 +8,7 @@ class SurveyMailer < ActionMailer::Base
     from      "no-reply@renovationsf.org"
     subject   "Thank you for completing the survey"
     sent_on   Time.now
+    content_type "text/html"
     body      :user => respondent, :url => "http://example.com/login", :responses => get_responses(respondent), 
       :smerfform => sform
   end
