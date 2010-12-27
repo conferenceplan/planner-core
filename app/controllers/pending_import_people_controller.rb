@@ -2,8 +2,6 @@ class PendingImportPeopleController < ApplicationController
   require 'csv'
   before_filter :require_user
 
-  layout 'planner'
-  
   def index
     @pendingImportPeople = PendingImportPerson.find :all, :order => :last_name
   end
