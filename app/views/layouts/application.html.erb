@@ -1,18 +1,11 @@
 <html>
-<head>
-<title><%= @page_title or 'Page Title' %></title>
-		<%= stylesheet_link_tag 'redmond/jquery-ui-1.8.1.custom' %>
-		<%= stylesheet_link_tag 'planner'%>
-		<%= stylesheet_link_tag '960.css' %>
-		<%= javascript_include_tag 'jquery-1.4.4.min' %>
-		<%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
-</head>
-<body>
-<div class="grid_12">
-  <img src="http://www.renovationsf.org/images/renovation_logo.gif" alt="Rennie logo" class="grid_1" height="110">
-  <img src="http://www.renovationsf.org/images/gold-renovation.gif" alt="Rennie Title" class="grid_1">
-</div>
-<div class="clear"></div>
-	<%= yield(:content) or yield %>
-</body>
-</html> 
+    <head>
+        <title><%= @page_title or 'Renovation Convention Planner' %></title>
+        <%=render 'layouts/common_styles' %>
+        <%=render 'layouts/common_js' %>
+    </head>
+    <body>
+        <%=render 'layouts/common_page_top' %>
+        <%= yield(:content) or yield %>
+    </body>
+</html>

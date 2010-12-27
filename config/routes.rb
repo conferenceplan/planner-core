@@ -81,6 +81,12 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resource :account, :controller => "users", :except => :new
   map.resources :users, :except => :new
+  map.connect 'users/admin/index', :controller => 'users/admin', :action => 'index'
+#  map.resources :users do |user|
+#    user.resource :admin, #, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 
+#      :controller => 'users/admin'
+##      :except => [:destroy, :new, :create, :edit, :remove]
+#  end
     
   #
   #
@@ -102,5 +108,11 @@ ActionController::Routing::Routes.draw do |map|
   # These also take the context as a parameter...
   map.connect 'survey_respondents/tags/alltags', :controller => 'survey_respondents/tags', :action => 'alltags'
   map.connect 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
+  
+  # Default routes 
+  map.index 'index', :controller => "user_sessions", :action => "new"
+  map.root :index 
+
+  map.connect '', :controller => "user_sessions", :action => "new" 
 
 end

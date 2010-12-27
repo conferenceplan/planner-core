@@ -1,4 +1,6 @@
-<ul id="dropdownmenu">
+<div class="clear"></div>
+<div class="container_12">
+<ul id="dropdownmenu" class="grid_12">
  <% menu.menu_items.each do |menu_item|%>	
  <li class="menutop">
 	<a href="<%= menu_item.path%>"><%= menu_item.name%></a>
@@ -10,3 +12,4 @@
  </li>
  <% end %>
 </ul>
+</div>
