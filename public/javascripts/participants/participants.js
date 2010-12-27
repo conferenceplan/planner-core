@@ -1,186 +1,278 @@
 /*
- * 
+ *
  */
-jQuery(document).ready(function(){ 
-  
-	$.ajax({
-		url : "/participants/tags/index",
-		dataType : "html",
-		success: function(response) {
-		  $(response).appendTo("#participant-tag-cloud");
-		}
-	});
-	
-  jQuery("#particpanttabs").tabs({
-		ajaxOptions: { async: false },
-		cache: false
-  }).tabs({load : function(event, ui) { initDialog(event, ui);  initAutoComplete(); 
-  	$( ".addressAccordian" ).accordion({ header : 'h3', collapsible: true, autoHeight: false });
-  	} }); // TODO - init dialog and autocomplete
+jQuery(document).ready(function(){
 
-  // The grid containing the list of paricipants
-  jQuery("#participants").jqGrid({
-    url:'participants/list',
-    datatype: 'xml',
-    colNames:['First Name','Last Name','Suffix'],
-    colModel :[ 
-      {name:'person[first_name]', index:'first_name', width:210,
-    	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:1, label: "First Name", elmprefix:"(*)"},editrules:{required:true}
-    	  }, 
-      {name:'person[last_name]', index:'last_name', width:210,
-        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Last Name", elmprefix:"(*)"},editrules:{required:true}
-    		  } ,
-	   {name:'person[suffix]', index:'suffix', width:50,
-        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:3, label: "Suffix", elmprefix:"(*)"},editrules:{required:false}
-    		  } ],
-    pager: jQuery('#pager'),
-    rowNum:10,
-    autowidth: false,
-    rowList:[10,20,30],
-    pager: jQuery('#pager'),
-    sortname: 'last_name',
-    sortorder: "asc",
-    viewrecords: true,
-    imgpath: 'stylesheets/cupertino/images',
-    caption: 'Participants',
-    editurl: '/participants',
-    onSelectRow: function(ids) {
-	  $('#participant_id').text(ids);
-      var $tabs = $('#particpanttabs').tabs();
-
-      $tabs.tabs( 'url' , 0 , 'participants/'+ids+'/registrationDetail' ).tabs( 'load' , 0 ).tabs('select', 0);
-      $tabs.tabs( 'url' , 1 , 'participants/'+ids+'/addresses').tabs( 'load' , 1 );
-	  $tabs.tabs( 'url' , 2, 'participants/'+ids).tabs('load', 2)
-      $tabs.tabs( 'url' , 3 , 'participants/'+ids+'/tags').tabs( 'load' , 3 );
-      
-      return false;
-    }
-  }); 
-  
-  // Set up the pager menu for add, delete, and search
-  jQuery("#participants").navGrid('#pager',
-		  {view:false, search:false }, //options
-
-		  {	// edit options
-			  height:220, reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
-			  bottominfo:"Fields marked with (*) are required",
-			  afterSubmit: processResponse,
-			  beforeSubmit : function(postdata, formid) {
-			  	this.ajaxEditOptions = {url : '/participants/'+postdata.participants_id, type: 'put'};
-			  	return [true, "ok"]; }
-		  }, // edit options
-
-		  { // add options
-			  reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
-			  bottominfo:"Fields marked with (*) are required",
-			  afterSubmit: processResponse,
-			  closeAfterAdd: true
-		  }, // add options
-
-		  { // del options
-			  reloadAfterSubmit:false,jqModal:true, closeOnEscape:true,
-			  beforeSubmit : function(postdata) {
-			  this.ajaxDelOptions = {url : '/participants/'+postdata, type: 'delete' };
-			  return [true, "ok"]; },
-		  }, // del options
-
-		  {height:150, jqModal:true, closeOnEscape:true} // view options
-  );
-  jQuery("#participants").jqGrid('filterToolbar',{stringResult: true,searchOnEnter : false});
+	/* Populate the tag cloud */
+    $.ajax({
+        url: "/participants/tags/index",
+        dataType: "html",
+        success: function(response){
+            $(response).appendTo("#participant-tag-cloud");
+        }
+    });
+    
+	/* Initialize the tags - load is called when a new participant/person is selected in the grid */
+    jQuery("#particpanttabs").tabs({
+        ajaxOptions: {
+            async: false
+        },
+        cache: false
+    }).tabs({
+        load: function(event, ui){
+            initDialog(event, ui);
+            initAutoComplete();
+            $(".addressAccordian").accordion({
+                header: 'h3',
+                collapsible: true,
+                autoHeight: false
+            });
+        }
+    });
+    
+    // The grid containing the list of paricipants
+    jQuery("#participants").jqGrid({
+        url: 'participants/list',
+        datatype: 'xml',
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing Number'],
+        colModel: [{
+            name: 'person[first_name]',
+            index: 'first_name',
+            width: 210,
+            editable: true,
+            editoptions: {
+                size: 20
+            },
+            formoptions: {
+                rowpos: 1,
+                label: "First Name",
+                elmprefix: "(*)"
+            },
+            editrules: {
+                required: true
+            }
+        }, {
+            name: 'person[last_name]',
+            index: 'last_name',
+            width: 210,
+            editable: true,
+            editoptions: {
+                size: 20
+            },
+            formoptions: {
+                rowpos: 2,
+                label: "Last Name",
+                elmprefix: "(*)"
+            },
+            editrules: {
+                required: true
+            }
+        }, {
+            name: 'person[suffix]',
+            index: 'suffix',
+            width: 50,
+            editable: true,
+            editoptions: {
+                size: 20
+            },
+            formoptions: {
+                rowpos: 3,
+                label: "Suffix",
+                elmprefix: ""
+            },
+            editrules: {
+                required: false
+            }
+        }, {
+            name: 'person[mailing_number]',
+            index: 'mailing_number',
+            width: 50,
+            editable: true,
+			hidden: true,
+            editoptions: {
+                size: 20
+            },
+            formoptions: {
+                rowpos: 4,
+                label: "Mailing Number",
+                elmprefix: ""
+            },
+            editrules: {
+                required: false,
+				edithidden:true
+            }
+        }
+		],
+        pager: jQuery('#pager'),
+        rowNum: 10,
+        autowidth: false,
+        rowList: [10, 20, 30],
+        pager: jQuery('#pager'),
+        sortname: 'last_name',
+        sortorder: "asc",
+        viewrecords: true,
+        imgpath: 'stylesheets/cupertino/images',
+        caption: 'Participants',
+        editurl: '/participants',
+        onSelectRow: function(ids){
+            $('#participant_id').text(ids);
+            var $tabs = $('#particpanttabs').tabs();
+            
+            $tabs.tabs('url', 0, 'participants/' + ids + '/registrationDetail').tabs('load', 0).tabs('select', 0);
+            $tabs.tabs('url', 1, 'participants/' + ids + '/addresses').tabs('load', 1);
+            $tabs.tabs('url', 2, 'participants/' + ids).tabs('load', 2)
+            $tabs.tabs('url', 3, 'participants/' + ids + '/tags').tabs('load', 3);
+            
+            return false;
+        }
+    });
+    
+    // Set up the pager menu for add, delete, and search
+    jQuery("#participants").navGrid('#pager', {
+        view: false,
+        search: false
+    }, //options
+    { // edit options
+        height: 220,
+        reloadAfterSubmit: false,
+        jqModal: true,
+        closeOnEscape: true,
+        bottominfo: "Fields marked with (*) are required",
+        afterSubmit: processResponse,
+        beforeSubmit: function(postdata, formid){
+            this.ajaxEditOptions = {
+                url: '/participants/' + postdata.participants_id,
+                type: 'put'
+            };
+            return [true, "ok"];
+        }
+    }, // edit options
+    { // add options
+        reloadAfterSubmit: false,
+        jqModal: true,
+        closeOnEscape: true,
+        bottominfo: "Fields marked with (*) are required",
+        afterSubmit: processResponse,
+        closeAfterAdd: true
+    }, // add options
+    { // del options
+        reloadAfterSubmit: false,
+        jqModal: true,
+        closeOnEscape: true,
+        beforeSubmit: function(postdata){
+            this.ajaxDelOptions = {
+                url: '/participants/' + postdata,
+                type: 'delete'
+            };
+            return [true, "ok"];
+        },
+    }, // del options
+    {
+        height: 150,
+        jqModal: true,
+        closeOnEscape: true
+    } // view options
+);
+    jQuery("#participants").jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false
+    });
 });
 
-function addToTagList(value) {
-	$("<div/>").text(value).prependTo("#tags-list");
-	$("#tags-list").attr("scrollTop", 0);
-	$("#tags").val('');
+function addToTagList(value){
+    $("<div/>").text(value).prependTo("#tags-list");
+    $("#tags-list").attr("scrollTop", 0);
+    $("#tags").val('');
 }
 
-function initAutoComplete() {
-	// TODO - change so that tags already used by person are not in the autocomplete list
-	$.ajax({
-		url : "/participants/tags/list",
-		async : false,
-		dataType : "xml",
-		success: function(xmlResponse) {
-			var gtags = new Array();
-			$(xmlResponse).find("tag").each( function() {
-				gtags.push($(this).text());
-			});
-
-			$("#tags").autocomplete({
-				source: gtags,
-				minLength: 2
-				// The select call back causes a double entry...
-//				select: function(event, ui) {
-//					addToTagList(ui.item.value); // make sure this does not do a double entry
-//				}
-			});
-		}
-	});
-
-	// bind to the change event, so that the tag is sent to the server
-	$("#tags").bind("change",
-			function(event) {
-				var newTag = $("#tags").val();
-				var personId = $('#participant_id').text(); // get the id of the person
-				$.ajax({
-						url : "/participants/" + personId + "/tags/add",
-						type : "POST",
-						data : { "tag" : newTag },
-						success : function() {
-							addToTagList(newTag);
-						}
-				});
-			}
-		);
-
+function initAutoComplete(){
+    // TODO - change so that tags already used by person are not in the autocomplete list
+    $.ajax({
+        url: "/participants/tags/list",
+        async: false,
+        dataType: "xml",
+        success: function(xmlResponse){
+            var gtags = new Array();
+            $(xmlResponse).find("tag").each(function(){
+                gtags.push($(this).text());
+            });
+            
+            $("#tags").autocomplete({
+                source: gtags,
+                minLength: 2
+                // The select call back causes a double entry...
+                //				select: function(event, ui) {
+                //					addToTagList(ui.item.value); // make sure this does not do a double entry
+                //				}
+            });
+        }
+    });
+    
+    // bind to the change event, so that the tag is sent to the server
+    $("#tags").bind("change", function(event){
+        var newTag = $("#tags").val();
+        var personId = $('#participant_id').text(); // get the id of the person
+        $.ajax({
+            url: "/participants/" + personId + "/tags/add",
+            type: "POST",
+            data: {
+                "tag": newTag
+            },
+            success: function(){
+                addToTagList(newTag);
+            }
+        });
+    });
+    
 }
 
-function initDialog(event, ui) {
-	$('#edialog', ui.panel).jqm({
-		ajax: '@href', 
-		trigger: 'a.entrydialog',
-		onLoad: adjust,
-		onHide: function(hash) {
-		var $tabs = $('#particpanttabs').tabs();
-		var selected = $tabs.tabs('option', 'selected');
-		$tabs.tabs('load', selected);
-		hash.w.fadeOut('2000',function(){ hash.o.remove(); });
-		}
-	});
-	
-	$('.remove-form form', ui.panel).ajaxForm({
-		target: '#tab-messages',
-		success: function(response, status) {
-			var $tabs = $('#particpanttabs').tabs();
-			var selected = $tabs.tabs('option', 'selected');
-			$tabs.tabs('load', selected);
-		}
-	});
-
-	$('.remove-form a', ui.panel).ajaxForm({
-		target: '#tab-messages',
-		success: function(response, status) {
-			var $tabs = $('#particpanttabs').tabs();
-			var selected = $tabs.tabs('option', 'selected');
-			$tabs.tabs('load', selected);
-		}
-	});
+function initDialog(event, ui){
+    $('#edialog', ui.panel).jqm({
+        ajax: '@href',
+        trigger: 'a.entrydialog',
+        onLoad: adjust,
+        onHide: function(hash){
+            var $tabs = $('#particpanttabs').tabs();
+            var selected = $tabs.tabs('option', 'selected');
+            $tabs.tabs('load', selected);
+            hash.w.fadeOut('2000', function(){
+                hash.o.remove();
+            });
+        }
+    });
+    
+    $('.remove-form form', ui.panel).ajaxForm({
+        target: '#tab-messages',
+        success: function(response, status){
+            var $tabs = $('#particpanttabs').tabs();
+            var selected = $tabs.tabs('option', 'selected');
+            $tabs.tabs('load', selected);
+        }
+    });
+    
+    $('.remove-form a', ui.panel).ajaxForm({
+        target: '#tab-messages',
+        success: function(response, status){
+            var $tabs = $('#particpanttabs').tabs();
+            var selected = $tabs.tabs('option', 'selected');
+            $tabs.tabs('load', selected);
+        }
+    });
 }
 
-function adjust(dialog) {
-	$('.particpantInfo', dialog.w).ajaxForm({
-		target: '#form-response'
-	});
+function adjust(dialog){
+    $('.particpantInfo', dialog.w).ajaxForm({
+        target: '#form-response'
+    });
 }
 
-function processResponse(response, postdata) { 
-	// examine return for problem - look for errorExplanation in the returned HTML
-	var text = $(response.responseText).find(".errorExplanation");
-	if (text.size() > 0) {
-		text.css('font-size','6pt');
-		text = $("<div></div>").append(text);
-		return [false, text.html() ];
-	}
-	return [true, "Success"]; 
+function processResponse(response, postdata){
+    // examine return for problem - look for errorExplanation in the returned HTML
+    var text = $(response.responseText).find(".errorExplanation");
+    if (text.size() > 0) {
+        text.css('font-size', '6pt');
+        text = $("<div></div>").append(text);
+        return [false, text.html()];
+    }
+    return [true, "Success"];
 }
