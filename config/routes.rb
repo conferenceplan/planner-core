@@ -79,14 +79,19 @@ ActionController::Routing::Routes.draw do |map|
   map.login "login", :controller => "user_sessions", :action => "new"
   map.logout "logout", :controller => "user_sessions", :action => "destroy"
 
+  #
+  # The news were removed so as to prevent anonymous people creating new accounts
+  #
   map.resource :account, :controller => "users", :except => :new
   map.resources :users, :except => :new
   map.connect 'users/admin/index', :controller => 'users/admin', :action => 'index'
-#  map.resources :users do |user|
-#    user.resource :admin, #, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 
-#      :controller => 'users/admin'
-##      :except => [:destroy, :new, :create, :edit, :remove]
-#  end
+  map.connect 'users/admin/list', :controller => 'users/admin', :action => 'list'
+  map.connect 'users/admin/new', :controller => 'users/admin', :action => 'new', :method => 'post'
+  map.resources :users do |user|
+    user.resource :admin, :member => {:update => :post, :destroy => :delete}, 
+      :controller => 'users/admin',
+      :except => [:new, :create, :edit, :remove]
+  end
     
   #
   #
