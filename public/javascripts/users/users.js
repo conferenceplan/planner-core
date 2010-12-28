@@ -4,7 +4,7 @@
 jQuery(document).ready(function(){
     // The grid containing the list of users
     jQuery("#users").jqGrid({
-        url: '/users/admin/list',
+        url: '/usersadmin/list',
         datatype: 'xml',
         colNames: ['Login Id', 'Count','Failed','Current', 'Last','IP','Created','Updated', 'Password', 'Password Confirm'],
         colModel: [
@@ -116,16 +116,9 @@ jQuery(document).ready(function(){
         viewrecords: true,
         imgpath: 'stylesheets/cupertino/images',
         caption: 'Users',
-        editurl: '/users/admin',
+        editurl: '/usersadmin',
         onSelectRow: function(ids){
             $('#user_id').text(ids);
-//            var $tabs = $('#particpanttabs').tabs();
-//            
-//            $tabs.tabs('url', 0, 'participants/' + ids + '/registrationDetail').tabs('load', 0).tabs('select', 0);
-//            $tabs.tabs('url', 1, 'participants/' + ids + '/addresses').tabs('load', 1);
-//            $tabs.tabs('url', 2, 'participants/' + ids).tabs('load', 2)
-//            $tabs.tabs('url', 3, 'participants/' + ids + '/tags').tabs('load', 3);
-            
             return false;
         }
     });
@@ -133,7 +126,7 @@ jQuery(document).ready(function(){
     // Set up the pager menu for add, delete, and search
     jQuery("#users").navGrid('#pager', {
         view: false,
-        search: false
+        search: false // TODO - put search back in
     }, //options
     { // edit options
         height: 220,
@@ -144,7 +137,7 @@ jQuery(document).ready(function(){
         afterSubmit: processResponse,
         beforeSubmit: function(postdata, formid){
             this.ajaxEditOptions = {
-                url: '/users/' + postdata.users_id + '/admin', // TODO
+                url: '/usersadmin/' + postdata.users_id, // TODO
                 type: 'put'
             };
             return [true, "ok"];
@@ -156,14 +149,15 @@ jQuery(document).ready(function(){
         closeOnEscape: true,
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
-        closeAfterAdd: true,
-        beforeSubmit: function(postdata, formid){
-            this.ajaxEditOptions = {
-                url: '/users/admin/new',
-                type: 'put'
-            };
-            return [true, "ok"];
-        }
+        closeAfterAdd: true
+//		,
+//        beforeSubmit: function(postdata, formid){
+//            this.ajaxEditOptions = {
+//                url: '/users/admin/new',
+//                type: 'put'
+//            };
+//            return [true, "ok"];
+//        }
     }, // add options
     { // del options
         reloadAfterSubmit: false,
@@ -171,7 +165,7 @@ jQuery(document).ready(function(){
         closeOnEscape: true,
         beforeSubmit: function(postdata){
             this.ajaxDelOptions = {
-                url: '/users/' + postdata + '/admin',
+                url: '/usersadmin/' + postdata,
                 type: 'delete'
             };
             return [true, "ok"];

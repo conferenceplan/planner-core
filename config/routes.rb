@@ -84,14 +84,18 @@ ActionController::Routing::Routes.draw do |map|
   #
   map.resource :account, :controller => "users", :except => :new
   map.resources :users, :except => :new
-  map.connect 'users/admin/index', :controller => 'users/admin', :action => 'index'
-  map.connect 'users/admin/list', :controller => 'users/admin', :action => 'list'
-  map.connect 'users/admin/new', :controller => 'users/admin', :action => 'new', :method => 'post'
-  map.resources :users do |user|
-    user.resource :admin, :member => {:update => :post, :destroy => :delete}, 
-      :controller => 'users/admin',
-      :except => [:new, :create, :edit, :remove]
-  end
+  map.connect 'usersadmin/list', :controller => 'users/admin', :action => 'list'
+  map.resources :usersadmin, :controller => 'users/admin'
+#, :action => 'index'
+#  map.connect 'users/admin', :controller => 'users/admin', :action => 'index'
+#  map.connect 'users/admin/index', :controller => 'users/admin', :action => 'index'
+#  map.connect 'users/admin/list', :controller => 'users/admin', :action => 'list'
+#  map.connect 'users/admin/new', :controller => 'users/admin', :action => 'new', :method => 'post'
+#  map.resources :users do |user|
+#    user.resource :admin, :member => {:update => :post, :destroy => :delete}, 
+#      :controller => 'users/admin',
+#      :except => [:new, :create, :edit, :remove]
+#  end
     
   #
   #

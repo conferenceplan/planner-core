@@ -45,18 +45,35 @@ class Users::AdminController < ApplicationController
   end
 
   def destroy
-  end
-
-  def edit
+    user = User.find(params[:id])
+    
+    user.destroy
+    render :layout => 'success'
   end
 
   def new
+    @user = User.new
   end
 
   def create
+    @user = User.new(params[:user])
+    
+    if (@user.save)
+       redirect_to :action => 'index'
+    else
+      # TODO - report an error
+      render :content
+    end 
   end
 
   def update
+    @user = User.find(params[:id])
+    
+    if @user.update_attributes(params[:user])
+      redirect_to :action => 'show',:id => @user
+    else
+      render :action => 'edit', :layout => 'content'
+    end
   end
 
   def index
