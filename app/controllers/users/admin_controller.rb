@@ -1,34 +1,20 @@
 class Users::AdminController < ApplicationController
 
-  # TODO - refactor
   def list
-    j = ActiveSupport::JSON
-    
     rows = params[:rows]
     @page = params[:page]
     idx = params[:sidx]
     order = params[:sord]
     clause = ""
-    fields = Array::new
-    
-    if (params[:filters])
-      queryParams = j.decode(params[:filters])
-      if (queryParams)
-        clausestr = ""
-        queryParams["rules"].each do |subclause|
-          if clausestr.length > 0 
-            clausestr << ' ' + queryParams["groupOp"] + ' '
-          end
-          if subclause["op"] == 'ne'
-            clausestr << subclause['field'] + ' not like ?'
+        
+    if params['_search'] == "true"
+       clause << ' ' + params["searchField"] + ' '
+       if params["searchOper"] == "ne"
+            clause << ' not like '
           else
-            clausestr << subclause['field'] + ' like ?'
-          end
-          fields << subclause['data'] + '%'
-          logger.info fields
-        end
-        clause = [clausestr] | fields
-      end
+            clause << ' like '
+       end
+       clause << ' \'' + params["searchString"] + '%\''
     end
     
     # First we need to know how many records there are in the database
@@ -73,6 +59,11 @@ class Users::AdminController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    roleArray = params[:userrole]
+
+    role = Role.find(roleArray[:roles])
+    @user.roles.clear
+    @user.roles << role
     
     if @user.update_attributes(params[:user])
       redirect_to :action => 'show',:id => @user

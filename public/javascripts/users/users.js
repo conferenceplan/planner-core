@@ -30,6 +30,7 @@ jQuery(document).ready(function(){
 			width:80,
 			editable: true, 
 			edittype: "select", 
+			search: false,
 			editoptions:{
 				dataUrl:'/roles/list',
 				defaultValue:'Planner'
@@ -43,6 +44,7 @@ jQuery(document).ready(function(){
             index: 'login_count',
             width: 50,
             editable: false,
+			search: false,
             editoptions: {
                 size: 20
             },
@@ -58,35 +60,42 @@ jQuery(document).ready(function(){
             index: 'failed_login_count',
             width: 50,
             editable: false,
+			search: false,
         },{
             name: 'user[current_login_at]',
             index: 'current_login_at',
             width: 170,
             editable: false,
+			search: false,
         },{
             name: 'user[last_login_at]',
             index: 'last_login_at',
             width: 170,
             editable: false,
+			search: false,
         },{
             name: 'user[last_login_ip]',
             index: 'last_login_ip',
             width: 100,
             editable: false,
+			search: false,
         },{
             name: 'user[created_at]',
             index: 'created_at',
             width: 170,
             editable: false,
+			search: false,
         },{
             name: 'user[updated_at]',
             index: 'updated_at',
             width: 170,
+			search: false,
         },{
             name: 'user[password]',
             index: 'password',
             width: 1,
             editable: true,
+			search: false,
 			hidden: true,
 			edittype: "password", 
             editoptions: {
@@ -95,10 +104,9 @@ jQuery(document).ready(function(){
             formoptions: {
                 rowpos: 3,
                 label: "Password",
-                elmprefix: "(*)"
             },
             editrules: {
-                required: true,
+//                required: true,
 				edithidden:true
             }
         },{
@@ -106,6 +114,7 @@ jQuery(document).ready(function(){
             index: 'password_confirmation',
             width: 1,
             editable: true,
+			search: false,
 			edittype: "password", 
 			hidden: true,
             editoptions: {
@@ -114,10 +123,9 @@ jQuery(document).ready(function(){
             formoptions: {
                 rowpos: 4,
                 label: "Confirmation",
-                elmprefix: "(*)"
             },
             editrules: {
-                required: true,
+//                required: true,
 				edithidden:true
             }
         }
@@ -141,8 +149,7 @@ jQuery(document).ready(function(){
     
     // Set up the pager menu for add, delete, and search
     jQuery("#users").navGrid('#pager', {
-        view: false,
-        search: false // TODO - put search back in
+        view: false
     }, //options
     { // edit options
         height: 220,
@@ -166,14 +173,6 @@ jQuery(document).ready(function(){
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
         closeAfterAdd: true
-//		,
-//        beforeSubmit: function(postdata, formid){
-//            this.ajaxEditOptions = {
-//                url: '/users/admin/new',
-//                type: 'put'
-//            };
-//            return [true, "ok"];
-//        }
     }, // add options
     { // del options
         reloadAfterSubmit: false,
@@ -187,16 +186,14 @@ jQuery(document).ready(function(){
             return [true, "ok"];
         },
     }, // del options
-    {
-        height: 150,
-        jqModal: true,
-        closeOnEscape: true
-    } // view options
+	{ // search options
+		jqModal:true, closeOnEscape:true,
+//		multipleSearch:true,
+		sopt:['eq','ne'],
+		odata: ['begins with', 'does not begin with'],
+		groupOps: [ { op: "AND", text: "all" }, { op: "OR", text: "any" } ]
+	} // search options
 	);
-    jQuery("#users").jqGrid('filterToolbar', {
-        stringResult: true,
-        searchOnEnter: false
-    });
 });
 
 function processResponse(response, postdata){
