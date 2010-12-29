@@ -57,6 +57,11 @@ class Users::AdminController < ApplicationController
 
   def create
     @user = User.new(params[:user])
+    # get the role and add it to the user
+    roleArray = params[:userrole]
+
+    role = Role.find(roleArray[:roles])
+    @user.roles << role
     
     if (@user.save)
        redirect_to :action => 'index'

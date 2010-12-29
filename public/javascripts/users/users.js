@@ -6,7 +6,7 @@ jQuery(document).ready(function(){
     jQuery("#users").jqGrid({
         url: '/usersadmin/list',
         datatype: 'xml',
-        colNames: ['Login Id', 'Count','Failed','Current', 'Last','IP','Created','Updated', 'Password', 'Password Confirm'],
+        colNames: ['Login Id', 'Roles', 'Count','Failed','Current', 'Last','IP','Created','Updated', 'Password', 'Password Confirm'],
         colModel: [
 		{
             name: 'user[login]',
@@ -24,6 +24,20 @@ jQuery(document).ready(function(){
             editrules: {
                 required: true
             }
+        },{
+			name:'userrole[roles]',
+			index:'roles',
+			width:80,
+			editable: true, 
+			edittype: "select", 
+			editoptions:{
+				dataUrl:'/roles/list',
+				defaultValue:'Planner'
+			}, 
+			formoptions:{ 
+				rowpos:2,
+				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
+			} 
         },{
             name: 'user[login_count]',
             index: 'login_count',
@@ -74,11 +88,12 @@ jQuery(document).ready(function(){
             width: 1,
             editable: true,
 			hidden: true,
+			edittype: "password", 
             editoptions: {
                 size: 25
             },
             formoptions: {
-                rowpos: 2,
+                rowpos: 3,
                 label: "Password",
                 elmprefix: "(*)"
             },
@@ -91,12 +106,13 @@ jQuery(document).ready(function(){
             index: 'password_confirmation',
             width: 1,
             editable: true,
+			edittype: "password", 
 			hidden: true,
             editoptions: {
                 size: 25
             },
             formoptions: {
-                rowpos: 3,
+                rowpos: 4,
                 label: "Confirmation",
                 elmprefix: "(*)"
             },

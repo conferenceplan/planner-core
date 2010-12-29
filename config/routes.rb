@@ -86,7 +86,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :users, :except => :new
   map.connect 'usersadmin/list', :controller => 'users/admin', :action => 'list'
   map.resources :usersadmin, :controller => 'users/admin'
-#, :action => 'index'
+
+  map.connect 'roles/list', :controller => 'roles', :action => 'list'
+
 #  map.connect 'users/admin', :controller => 'users/admin', :action => 'index'
 #  map.connect 'users/admin/index', :controller => 'users/admin', :action => 'index'
 #  map.connect 'users/admin/list', :controller => 'users/admin', :action => 'list'

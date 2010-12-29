@@ -5,6 +5,7 @@ xml.rows do
   @users.each do |user|
     xml.row({:id => user.id}) do
       xml.cell(user.login)
+      xml.cell(user.roles)
       xml.cell(user.login_count)
       xml.cell(user.failed_login_count)
       xml.cell(user.current_login_at)
