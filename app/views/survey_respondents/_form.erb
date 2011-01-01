@@ -6,7 +6,8 @@
 	<div class="grid_10">
 	<p>
 	Please complete this survey if you want to participate in Renovation Program.
-	If you don't plan to come or do not want to be on Program, simply fill in your name, Invitation Code and click the I Will not Attend button.
+	If you don't plan to come or do not want to be on Program, simply fill in your name, 
+	Invitation Code and click the "I Will not Attend" button.
 	<p/>
 	</div>
 </div>
@@ -34,7 +35,24 @@
 <div class="clear"></div>
 <div class="container_12">
 <br/>
-<%= form.submit button, :class => "grid_3" %>
-<%= submit_tag "I will not attend", :name => "cancel", :confirm => "Are you sure", :class => "grid_3" %>
+<div class="grid_2">
+<%= form.submit button %><a title='Select this button if you plan to attend Renovation and want to participate on Program. Selecting the button will take you to the next page in the questionnaire' ><img src="/images/smerf_help.gif" alt="Help"></a>
+</div>
+<div class="grid_2">
+<%= submit_tag "I will not attend", :name => "cancel", :confirm => "Are you sure" %><a title='Select this button if you do not plan to attend Renovation, or if you are attending and do not want to be on Program.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+</div>
+</div>
+<div class="clear"></div>
+<div class="container_12">
+<div class="grid_11">
+<p>
+<small>
+The small blue i icon provides a link to informational help text.
+If you're unsure what to do, click the help icon.
+If you read the help text and are still uncertain what to do, write to <a href='mailto:program@renovationsf.org'>program at renovationsf.org</a>
+</small>
+</p>
+</div>
+</div>
 </div>
 <div class="clear"></div>

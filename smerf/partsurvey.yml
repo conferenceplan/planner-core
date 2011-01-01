@@ -121,6 +121,7 @@ smerfform:
         Street Address:
           code: g4q1
           type: textfield
+          help: | Enter your street address or PO Box
           style: grid_12
           question_style: grid_2
           answer_style: grid_8
@@ -131,6 +132,7 @@ smerfform:
         City:
           code: g4q2
           type: textfield
+          help: | Enter your city
           style: grid_12
           question_style: grid_2
           answer_style: grid_4
@@ -141,6 +143,7 @@ smerfform:
         State:
           code: g4q3
           type: textfield
+          help: | Enter your state, province, or county
           style: grid_12
           question_style: grid_2
           answer_style: grid_4
@@ -151,6 +154,7 @@ smerfform:
         Zip:
           code: g4q4
           type: textfield
+          help: | Enter your zip code or postal code
           style: grid_12
           question_style: grid_2
           answer_style: grid_4
@@ -161,6 +165,7 @@ smerfform:
         Country:
           code: g4q5
           type: textfield
+          help: | Enter you country
           style: grid_12
           question_style: grid_2
           answer_style: grid_4
@@ -172,6 +177,7 @@ smerfform:
         Email:
           code: g4q6
           type: textfield
+          help: | Enter your primary E-mail address; the one you&rsquo;re most likely to monitor.
           style: grid_12
           question_style: grid_2
           answer_style: grid_4
@@ -200,7 +206,7 @@ smerfform:
              work:
                code: 2
                answer: | work
-               sort_order: 3
+               sort_order: 3    
                default: N
              cell:
                code: 3
@@ -237,7 +243,7 @@ smerfform:
           answers:
             Yes:
               code: 1
-              answer: | I am an attending member of Renovation.<br/> 
+              answer: | I am an attending member of Renovation. <a title='Select this option only if you have already purchased a membership.' ><img src="/images/smerf_help.gif" alt="Help"></a><br/> 
                 <div class='grid_11 suffix_2'>
                 <i>Check our <a href='http://www.renovationsf.org/memlist.php' target='new'>online member search</a> if you aren't sure of your status.</i>
                 </div>
@@ -245,7 +251,7 @@ smerfform:
               default: N
             No:
               code: 2
-              answer: | I'm not yet an attending member. I understand I need to buy a membership in order to be scheduled for Program.<br/>
+              answer: | I'm not yet an attending member <a title='Select this option if you do not have a membership yet.' ><img src="/images/smerf_help.gif" alt="Help">. I understand I need to buy a membership in order to be scheduled for Program.<br/>
                 <div class='grid_11 suffix_2'>
                 <i>You can complete the rest of the questionnaire, but you need to buy a membership by June 15, 2011 in order to be scheduled.
                 Membership can be purchased <a href='http://www.renovationsf.org/register.php' target='new'>here</a>.</i>
@@ -262,23 +268,20 @@ smerfform:
           type: singlechoice
           style: availabilitySection grid_12
           sort_order: 1
-# TODO - need to be able to add help here even though there is no question text          
           question: |
-          help: | Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, 
-            August 17 and will be in Reno until at least 2pm on Sunday, August 21.
           answers:
             Whole Time:
               code: 1
               answer_id: timedisable
               answer: | I am available for Program for the complete duration of the convention. 
                      Renovation Program will officially begin at noon, Wednesday, August 17 and 
-                     will end by 4 pm on Sunday, August 21.
+                     will end by 4 pm on Sunday, August 21. <a title='Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, August 17 and will be in Reno until at least 2pm on Sunday, August 21.' ><img src="/images/smerf_help.gif" alt="Help">.
               sort_order: 1
               default: N
             Know Time:
               code: 2
               answer_id: timeselect
-              answer: | I plan to be at the convention.
+              answer: | I plan to be at the convention. <a title='Select the day/time options to let us know, roughly, when you expect to be available for Program in Reno and when you expect to leave.' ><img src="/images/smerf_help.gif" alt="Help">
               sort_order: 2
               default: N
               subquestions:
@@ -287,14 +290,10 @@ smerfform:
                   type: singlechoice
                   sort_order: 7
                   style: timeselect grid_12
-                  help: | Select this option if you are really not sure when you are coming into 
-                    Reno and when you are leaving. However, we cannot schedule you until we have a general 
-                    idea of when you are coming.  Please try to make your travel plans as soon as you can, and 
-                    let us know your availability
                   answers:
                     not_sure:
                       code: 1
-                      answer: | I am extremely uncertain when I will be available to be on Reno Program
+                      answer: | I am extremely uncertain when I will be available to be on Reno Program <a title='Select this option if you are really not sure when you are coming into Reno and when you are leaving. However, we cannot schedule you until we have a general idea of when you are coming.  Please try to make your travel plans as soon as you can, and let us know your availability' ><img src="/images/smerf_help.gif" alt="Help">
                       default: N
                       sort_order: 1
                 Start Date:
@@ -307,7 +306,6 @@ smerfform:
                   question_style: grid_6
                   answer_style: grid_4 timeselect
                   question: | I will be available to be on Renovation Program beginning:
-                  help: | Select the day/time options to let us know, roughly, when you expect to be available for Program in Reno and when you expect to leave.
                   answers:
                     Wed:
                       code: 1
@@ -531,6 +529,7 @@ smerfform:
           question_style: grid_6
           answer_style: grid_4
           question: | The maximum number of items I would like to be on per day is
+          help: | Enter the maximum number of items you feel comfortable being on per day.
           textfield_size: 3
         Max Items:
           code: g6q3
@@ -540,6 +539,7 @@ smerfform:
           question_style: grid_6
           answer_style: grid_4
           question: | The maximum number of items I'd like to be on for the entire convention is
+          help: | Enter the maximum number of items you feel comfortable being on for the entire five-day convention.
           textfield_size: 3
         time_conflicts:
           code: g6q4
@@ -556,16 +556,19 @@ smerfform:
             before11am:
               code: 1
               answer: | Before 11am
+              help: | Check if you do not want to be on a panel before 11am
               sort_order: 1
               default: N
             before6to8:
               code: 2
               answer: | 6pm - 8pm
+              help: | Check if you do want want to be on a panel between 6pm and 8pm
               sort_order: 2
               default: N
             after8pm:
               code: 3
               answer: | After 8pm
+              help: | Check if you do not want to be on a panel after 8pm
               sort_order: 3
               default: N
         guest_conflicts:
@@ -576,6 +579,7 @@ smerfform:
           answer_style: grid_3
           sort_order: 9
           question: | Please do not schedule me against program items involving these Guests: 
+          help: | Check the guests whose main GoH item (speech, performance, et.c.) you do not want to be scheduled against.
           answers:
             powersGOH:
               code: 1
@@ -602,6 +606,11 @@ smerfform:
               answer: | Bill Willingham Item
               sort_order: 5
               default: N
+            trickyPixie:
+              code: 6
+              answer: | Tricky Pixie Item
+              sort_order: 6
+              default: N
         item_conflicts:
           code: g6q6
           type: multiplechoice
@@ -610,6 +619,7 @@ smerfform:
           answer_style: grid_3
           sort_order: 10
           question: | Please do not schedule me against the following events: 
+          help: | Check the events you do not want to be scheduled against
           answers:
             openingCermony:
               code: 1
@@ -684,6 +694,7 @@ smerfform:
           question_style: grid_2
           answer_style: grid_9
           question: | Other constraints on my availability:
+          help: | Note if there are other times when you cannot be scheduled.  Most panels run between 10am and 6pm.
     program_areas:
       code: 7
       style: grid_12
