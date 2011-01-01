@@ -3,33 +3,37 @@
 </div>
 <div class="clear"></div>
 <div class="container_12">
-	<div class="grid_10">If you are interested in participating in the program for the 2011 World Science Fiction convention
-	please complete the survey.
+	<div class="grid_10">
+	<p>
+	Please complete this survey if you want to participate in Renovation Program.
+	If you don't plan to come or do not want to be on Program, simply fill in your name, Invitation Code and click the I Will not Attend button.
+	<p/>
 	</div>
 </div>
 <div class="clear"></div>
 <div class="container_12">
 <%= form.label "First Name:", nil ,:class => "grid_2" %>
-<%= form.text_field :first_name, :class => "grid_5" %>
+<%= form.text_field :first_name, :class => "grid_5" %><a title='Enter your first name as it appears in your invitation E-mail. You can change this in the questionnaire itself if needed.' ><img src="/images/smerf_help.gif" alt="Help"></a>
 </div>
 <div class="clear"></div>
 <div class="container_12">
 <%= form.label "Last Name:", nil ,:class => "grid_2" %>
-<%= form.text_field :last_name, :class => "grid_5" %>
+<%= form.text_field :last_name, :class => "grid_5" %><a title='Enter your last name as it appears in your invitation E-mail.  You can change this in the questionnaire itself if needed.' ><img src="/images/smerf_help.gif" alt="Help"></a>
 </div>
 <div class="clear"></div>
 <div class="container_12">
 	<div class="grid_10">
-		If you already have an invitation code please provide it here. This will help us reduce the gathering of duplicate information.
 	</div>
 </div>
 <div class="clear"></div>
 <div class="container_12">
 <%= form.label "Invitation Code:", nil ,:class => "grid_2" %>
-<%= form.text_field :key, :class => "grid_1" %>
+<%= form.text_field :key, :class => "grid_1" %><a title='Enter the invitation code as it appears in your invitation E-mail. If the mail did not include an invitation code or if the invitation code did not work, write to program@renovationsf.org so we can send you the correct code.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+</div>
 </div>
 <div class="clear"></div>
 <div class="container_12">
+<br/>
 <%= form.submit button, :class => "grid_3" %>
 <%= submit_tag "I will not attend", :name => "cancel", :confirm => "Are you sure", :class => "grid_3" %>
 </div>
