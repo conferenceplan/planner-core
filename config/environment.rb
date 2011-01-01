@@ -42,11 +42,14 @@ Rails::Initializer.run do |config|
 end
 
   ActionMailer::Base.delivery_method = :smtp
+  
+  ActionMailer::Base.raise_delivery_errors = true
 
 ActionMailer::Base.smtp_settings = {
   :address => "mail-2.eriko.us",
   :user_name => "reno-testmail",
+  :domain => "renovationsf.org",
   :password => "zvefms2CSm",
-  :authentication => "login",
-  :port => 465
+  :authentication => :cram_md5,
+  :port => 25
 }
