@@ -549,9 +549,9 @@ smerfform:
           answer_style: grid_3
           sort_order: 8
           question: | Absolutely do not schedule me during these times: 
-          help: | Many participants want to attend events at the convention, and Program wants to do what 
-            it can to schedule you reasonably.  Let us know what events you want to attend, 
-            so we will know not to schedule you at those times.
+#          help: | Many participants want to attend events at the convention, and Program wants to do what 
+#            it can to schedule you reasonably.  Let us know what events you want to attend, 
+#            so we will know not to schedule you at those times.
           answers:
             before11am:
               code: 1
@@ -578,7 +578,7 @@ smerfform:
           question_style: grid_11
           answer_style: grid_3
           sort_order: 9
-          question: | Please do not schedule me against program items involving these Guests: 
+          question: | Do not schedule me against the main GoH item for: 
           help: | Check the guests whose main GoH item (speech, performance, et.c.) you do not want to be scheduled against.
           answers:
             powersGOH:
@@ -698,11 +698,17 @@ smerfform:
     program_areas:
       code: 7
       style: grid_12
-      description_style: grid_9
+      description_style: grid_11
       name: What topics are you interested in talking about?
-      description: | Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgeable. 
-                  Please separate topics with a comma. Topics that other survey respondents have entered are shown below the text field.
-      help: | Add a comma-separated list of topics in this field, for example, "space exploration,quantum theory".
+      description: | This section collects general information about Topics (Science, Literature, Art, Media, Fandom, Nevada) and Sub-topics 
+          (such as Astronomy, Medicine, Publishing, Space Opera, Digital Painting, Portfolio Development, et.c.) that will be part of Renovation Program. 
+          As more program participants respond to the questionnaire, the program software will add more items to the Sub-topic tag cloud for each Topic. 
+          Program will periodically edit the Sub-topic tag cloud for clarity (adjusting spelling, combining similar sub-topics, etc.) 
+          This part of the questionnaire is for Topics only - enter any specific panel items in the "Do you have any program ideas or comments?" 
+          field below  
+#      Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgeable. 
+#                  Please separate topics with a comma. Topics that other survey respondents have entered are shown below the text field.
+#      help: | Add a comma-separated list of topics in this field, for example, "space exploration,quantum theory".
       questions:
         scienceItems:
           code: g7q1
@@ -778,8 +784,11 @@ smerfform:
     author_topics:
       code: 8
       name: Which authors are you interested in talking about?
-      description: | Please list the top 2-3 authors whose work you are familiar with. Separate each author with a comma. 
-         Other authors that respondents have chosen are shown below the text field.
+      description: | List 2-3 authors/artists whose work you are familiar with. Separate each name with a comma. 
+        As more program participants respond the the questionnaire, the program software will add additional names to this tag cloud. 
+        Program will periodically edit the name tag cloud for clarity (adjusting spelling, et.c.) 
+#      Please list the top 2-3 authors whose work you are familiar with. Separate each author with a comma. 
+#         Other authors that respondents have chosen are shown below the text field.
       questions:
         Authors:
           code: g8q1
