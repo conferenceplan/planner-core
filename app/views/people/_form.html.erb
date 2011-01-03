@@ -13,6 +13,14 @@
   <div class='line'><div class='field_name'><%= f.label :acceptance_status_id %></div><div class='field_value'><%= f.select :acceptance_status_id,
 	                 AcceptanceStatus.find(:all).collect {|s| [s.name,s.id] },
 	                 {:include_blank =>false}%></div></div>
+					 
+  <% @person.build_pseudonym unless @person.pseudonym %>
+  <% f.fields_for :pseudonym do |p| %>
+      <div class='line'><div class='field_name'>Pub Name First Name</div> <div class='field_value'><%= p.text_field :first_name %></div>
+      <div class='line'><div class='field_name'>Pub Name Last Name</div> <div class='field_value'><%= p.text_field :last_name %></div>
+      <div class='line'><div class='field_name'>Pub Name Suffix</div> <div class='field_value'><%= p.text_field :suffix %></div>
+  <% end %>
+  
   <div class='form-buttons'>
 		<%= f.submit "Submit" %>
 		<button type="button" class='jqmClose'>Close</button>

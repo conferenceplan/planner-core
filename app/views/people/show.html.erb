@@ -2,7 +2,7 @@
   <div class='edit-form'>
       <%=  link_to "edit", {:controller => 'people', :action => 'edit', :id => @person}, :class => 'entrydialog' %>
   </div>
-  <div class='line'>First Name:: <%= @person.first_name %></div>
+  <div class='line'>First Name: <%= @person.first_name %></div>
   <div class='line'>Last Name: <%= @person.last_name %></div>
   <div class='line'>Survey Key: <% if @person.survey_respondent %>
                                 <%= @person.survey_respondent.key%>
@@ -20,6 +20,14 @@
        <%= @person.invitation_category.name %>
        <% end%>
   </div>
+  
+  <% if (@person.pseudonym != nil && (@person.pseudonym.first_name != "" || @person.pseudonym.last_name != "" || @person.pseudonym.suffix != "")) %>
+    <div class='line'>Pub Name First Name: <%= @person.pseudonym.first_name %></div>
+    <div class='line'>Pub Name Last Name: <%= @person.pseudonym.last_name %></div>
+    <div class='line'>Pub Name Suffix: <%= @person.pseudonym.suffix %></div>
+  <% else %>
+      <div class='line'>Pub Name same as Name</div>
+  <% end %>
   <div class='message' id='tab-messages'></div>
   <div class="jqmWindow" id="edialog">Please wait...</div>
 </div>

@@ -50,7 +50,8 @@ class Person < ActiveRecord::Base
   
   #
   has_one  :pseudonym
-  
+  accepts_nested_attributes_for :pseudonym
+    
   def GetFullName()
       name = ""
       if (self.first_name != nil)

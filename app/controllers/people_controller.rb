@@ -27,6 +27,19 @@ class PeopleController < ApplicationController
   end
 
   def create
+    # if pseudonym is empty, we don't want to insert an empty record
+    # so delete attributes from input parameter list so
+    # it won't get created
+    if (params[:person].has_key?(:pseudonym_attributes))
+      if (params[:person][:pseudonym_attributes][:last_name] == "") 
+       if (params[:person][:pseudonym_attributes][:first_name] == "")
+         if (params[:person][:pseudonym_attributes][:suffix] == "")
+           params[:person].delete(:pseudonym_attributes)
+         end
+       end
+      end
+    end
+    
     @person = Person.new(params[:person])
     
     if (@person.save)
@@ -40,7 +53,20 @@ class PeopleController < ApplicationController
   def update
     
     @person = Person.find(params[:id])
-    
+    # if pseudonym is empty, we don't want to insert an empty record
+    # so delete attributes from input parameter list so
+    # it won't get created. If the pseudonym is getting zeroed
+    # out (it existed before and now is not going to exist),
+    # we do need to update, so we don't delete the attributes
+    if (@person.pseudonym == nil && params[:person].has_key?(:pseudonym_attributes))
+      if (params[:person][:pseudonym_attributes][:last_name] == "") 
+       if (params[:person][:pseudonym_attributes][:first_name] == "")
+         if (params[:person][:pseudonym_attributes][:suffix] == "")
+           params[:person].delete(:pseudonym_attributes)
+         end
+       end
+      end
+    end
     if @person.update_attributes(params[:person])
       redirect_to :action => 'show',:id => @person
     else
