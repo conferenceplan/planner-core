@@ -554,9 +554,6 @@ smerfform:
           answer_style: grid_3
           sort_order: 8
           question: | Absolutely do not schedule me during these times: 
-#          help: | Many participants want to attend events at the convention, and Program wants to do what 
-#            it can to schedule you reasonably.  Let us know what events you want to attend, 
-#            so we will know not to schedule you at those times.
           answers:
             before11am:
               code: 1
@@ -715,7 +712,7 @@ smerfform:
         scienceItems:
           code: g7q1
           type: textfield
-          textfield_size: 50
+          textfield_size: 100
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -726,7 +723,7 @@ smerfform:
         literature:
           code: g7q2
           type: textfield
-          textfield_size: 50
+          textfield_size: 100
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -737,7 +734,7 @@ smerfform:
         art:
           code: g7q3
           type: textfield
-          textfield_size: 50
+          textfield_size: 100
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -748,7 +745,7 @@ smerfform:
         media:
           code: g7q4
           type: textfield
-          textfield_size: 50
+          textfield_size: 100
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -759,7 +756,7 @@ smerfform:
         fandom:
           code: g7q5
           type: textfield
-          textfield_size: 50
+          textfield_size: 100
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -770,7 +767,7 @@ smerfform:
         nevada:
           code: g7q6
           type: textfield
-          textfield_size: 50
+          textfield_size: 100
           style: grid_12
           question_style: grid_1
           answer_style: grid_6
@@ -782,25 +779,24 @@ smerfform:
       code: 71
       name: 
       description: | If you are interested in presenting an academic paper at the convention, 
-           please visit this <a href='http://www.renovationsf.org/program-academic.php' target="new">link</a> which explains the process
+           please visit this <a href='http://www.renovationsf.org/program-academic.php' target="new">link</a><a title='Select the link if you are interested in learning about presenting academic papers at Renovation.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+           which explains the process
     author_topics:
       code: 8
-      name: Which authors are you interested in talking about?
+      name: Which authors/artists are you interested in talking about?
       description: | List 2-3 authors/artists whose work you are familiar with. Separate each name with a comma. 
         As more program participants respond the the questionnaire, the program software will add additional names to this tag cloud. 
         Program will periodically edit the name tag cloud for clarity (adjusting spelling, et.c.) 
-#      Please list the top 2-3 authors whose work you are familiar with. Separate each author with a comma. 
-#         Other authors that respondents have chosen are shown below the text field.
       questions:
         Authors:
           code: g8q1
           type: textfield
-          textfield_size: 50
+          textfield_size: 100
           style: grid_12
           question_style: grid_1
-          answer_style: grid_6
+          answer_style: grid_9
           sort_order: 1
-          question: | <b>Authors</b>
+          question: | <b>Authors/Artists</b>
           tags: authors
           validation: add_tags
     prog_types:
@@ -1071,6 +1067,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 1
           question: | Do you have any program ideas or comments?
+          help: | List any specific panel ideas or comments
         willing to talk:
           code: g93q2
           type: textbox
@@ -1079,6 +1076,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 2
           question: | Tell us one thing we don't know about you that you are willing to talk about
+          help: | What have you never talked about at a convention that might make an interesting panel item.
         Panels With:
           code: g93q3
           type: textbox
@@ -1087,6 +1085,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 3
           question: | Who do you want to be on panels with?
+          help: | List 4-6 people you particularly enjoy being on panels with and we will try to schedule you with some of them.
         NevadaConnections:
           code: g93q4
           type: textbox
@@ -1095,6 +1094,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 4
           question: | Do you have any Nevada connections (born there/school/job)?
+          help: | Did you witness above-ground nuclear testing in Nevada, or, perhaps, saw something unusual around Area 51?   If you have an interesting Nevada-related tale to tell, let us know.
         exclusionTopics:
           code: g93q5
           type: textbox
@@ -1103,6 +1103,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 5
           question: | I don't want to talk about the following topics
+          help: | If you&rsquo;re talked-out about something that you've discussed many times before, list the item so we can avoid scheduling you on it.
         exclusionRequest:
           code: g93q6
           type: textbox
@@ -1111,7 +1112,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 6
           question: | Please do not schedule me under any circumstances with the following people (information will not be shared except with the core Renovation Program team):
-# These need to be changed to check boxes
+          help: | We believe strongly that panels should be intelligent, respective discussions that do not devolve verbal fistfights.  If there are people you would rather not be panelists with, let us know so we can discretely avoid scheduling you with them.
         localtalk:
           code: g93q7
           type: multiplechoice
@@ -1123,21 +1124,25 @@ smerfform:
              localtalk:
                code: 1
                answer: | I am willing to do a reading or a talk at a local library.
+               help: | Renovation is exploring doing some events at a library that is about two blocks away from the convention center. Check this box if you would be willing to be involved in community outreach for the science fiction field.
                sort_order: 1
                default: N
              sfworkshop:
                code: 2
                answer: | Assisting with the "Teaching SF" workshop on Wednesday.
+               help: | Check this box if you would like to talk at the AboutSF workshop for librarians, teachers and parents on 8/17.
                sort_order: 2
                default: N
              doNotShareEmail:
                code: 3
                answer: | Do not share E-mail contact info with other participants
+               help: | Check this box if you do not want your E-mail address to be included when the panel information goes out next summer.
                sort_order: 3
                default: N
              canInterview:
                code: 4
                answer: | I am willing to be interviewed by the media
+               help: | Check this box if you're willing to talk to journalists before or during the convention.
                sort_order: 4
                default: N
 #
@@ -1170,8 +1175,6 @@ smerfform:
       code: 95
       name: Information for Renovation's Web Site and Publications
       description: | 
-      help: | Information in this section will be published on our web site, PR&rsquo;s, 
-        and/or program book to better inform our members about you
       questions:
         mini_bio:
           code: g95q1
@@ -1187,6 +1190,7 @@ smerfform:
               space considerations.
               <a href="http://www.fanac.org/Denvention3/programming/bios2.html" target="new">
               Some sample participant bios from other Worldcons</a>.
+              <a title='Information in this section will be published in our web site, social media, Progress Reports, and Souvenir Book to better inform our members about you and your appearance at Renovation.' ><img src="/images/smerf_help.gif" alt="Help"></a>
         homepage:
           code: g95q2
           type: textfield
@@ -1196,6 +1200,7 @@ smerfform:
           answer_style: grid_7
           sort_order: 2
           question: | Home Page URL
+          help: | Enter the URL to your home page; do not enter a URL if you do not want it used.
         photourl:
           code: g95q3
           type: textfield
@@ -1205,6 +1210,7 @@ smerfform:
           answer_style: grid_7
           sort_order: 3
           question: | Photo URL
+          help: | Enter the URL to a recent photo; do not enter a URL if you do not want it used.
         photourl_donotuse:
           code: g95q4
           type: multiplechoice
@@ -1218,58 +1224,43 @@ smerfform:
               code : 1
               answer : | Please do not use my photo in publications.
               default : N
-        socialmedia:
-          code: g95q5
-          type: multiplechoice
+    personal_details_pub_name:
+      code: 96
+      name:
+      style: grid_12
+      description_style: grid_2
+      description: | <b>Social Media</b>
+      questions:
+        facebook:
+          code: g96q1
+          sort_order: 1
+          type: textfield
+          textfield_size: 100
           style: grid_12
-          question_style: grid_11
-          answer_style: grid_3
-          sort_order: 5
-          question: | <b>Social Media</b>
-          help: | If you would like to provide your social media information please enter it here.
-          answers:
-            facebook:
-              code: 1
-              answer: | Facebook
-              sort_order: 1
-              default: N
-              subquestions:
-                 other_contact_details:
-                     code: g95q4s1
-                     type: textfield
-                     sort_order: 1
-                     question: | 
-                     style: grid_7
-                     answer_style: grid_6
-                     textfield_size: 50
-            twitter:
-              code: 2
-              answer: | Twitter
-              sort_order: 2
-              default: N
-              subquestions:
-                 other_contact_details:
-                     code: g95q4s2
-                     type: textfield
-                     sort_order: 1
-                     question: | 
-                     style: grid_7
-                     answer_style: grid_6
-                     textfield_size: 50
-            other:
-              code: 3
-              answer: | other
-              sort_order: 3
-              default: N
-              subquestions:
-                 other_contact_details:
-                     code: g95q4s3
-                     type: textfield
-                     sort_order: 1
-                     question: | 
-                     style: grid_7
-                     answer_style: grid_6
-                     textfield_size: 50
+          question_style: grid_2
+          answer_style: grid_7
+          question: | Facebook
+          help: | If you would like people to find you on Facebook, what name do you use on Facebook?
+        twitter:
+          code: g96q2
+          sort_order: 2
+          type: textfield
+          textfield_size: 100
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_7
+          question: | Twitter
+          help: | If you would like people to find you on Twitter, what name do you use on Twitter?
+        other:
+          code: g96q3
+          sort_order: 3
+          type: textfield
+          textfield_size: 100
+          style: grid_12
+          question_style: grid_2
+          answer_style: grid_7
+          question: | Other
+          help: | If you would like people to find you on services such as LiveJournal, MySpace, et.c., what name do you use there?
 #
 # The end of the survey
 #
