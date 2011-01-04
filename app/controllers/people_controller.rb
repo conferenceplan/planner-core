@@ -200,23 +200,31 @@ class PeopleController < ApplicationController
       if (person.survey_respondent == nil)
          # Add the email address to the survey respondent
          possibleEmails = person.email_addresses
-         theEmail = ''
+         theEmail = nil
          if possibleEmails
            possibleEmails.each do |email| 
              if email.isdefault
                theEmail = email
              else # if the email is empty we want to take the first one (unless there is a default)
-               if theEmail.empty?
+               if theEmail == nil
                  theEmail = email
                end
              end
            end
          end
-         person.create_survey_respondent(:last_name => person.last_name, 
+         
+         if theEmail == nil
+           person.create_survey_respondent(:last_name => person.last_name, 
+                                         :first_name => person.first_name,
+                                         :key => ('%05d' % rand(1e5)),
+                                         :suffix => person.suffix)
+         else  
+           person.create_survey_respondent(:last_name => person.last_name, 
                                          :first_name => person.first_name,
                                          :key => ('%05d' % rand(1e5)),
                                          :suffix => person.suffix,
                                          :email => theEmail.email)
+         end
          person.save
       end
     end
