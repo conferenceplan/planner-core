@@ -122,12 +122,17 @@ div.tag-title {
 	font-size: 10pt;	
 }
 
+div.tag-name {
+	float: left;
+}
+
 div.tag-title {
 	font-size: 8pt;	
 	font-style: italic;
 }
 
 div.tag-count {
+	float: left;
 	font-size: 8pt;	
 	color : grey;
 }

@@ -2,7 +2,7 @@
 <div class="tag-title grid_4 suffix_7">Topics that other survey respondents have associated with this area:</div>
 -->
 <% @tags.each do |tag| %>
-<div class="grid_3 tag"><%= tag %> <div class="tag-count">(<%= tag.count%>),</div></div>
+<div class="grid_3 tag"><div class="tag-name"><%= tag %></div><div class="tag-count">&nbsp;(<%= tag.count%>)</div></div>
 <% end %>
 <!--
 <% tag_cloud(@tags, %w(css1 css2 css3 css4)) do |tag, css_class| %>
