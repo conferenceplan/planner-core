@@ -957,7 +957,7 @@ smerfform:
                   sort_order: 1
                   question: | Discusion Topic
                   help: | enter the topic of the Discussion Group
-                  validation: validate_sub_question
+#                  validation: validate_sub_question
         specificItemTypes2:
           code: g9q3
           type: multiplechoice
@@ -983,7 +983,7 @@ smerfform:
                   sort_order: 1
                   question: | Dialogue Topic
                   help: | enter the topic of the Dialogue that you would like to do 
-                  validation: validate_sub_question
+#                  validation: validate_sub_question
                 DialogParticipants:
                   code: g9q3s2
                   type: textfield
@@ -994,7 +994,7 @@ smerfform:
                   sort_order: 2
                   question: | Dialogue Participants
                   help: | suggest participants
-                  validation: validate_sub_question
+#                  validation: validate_sub_question
         willmoderate:
           code: g9q4
           type: multiplechoice
