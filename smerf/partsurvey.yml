@@ -58,14 +58,6 @@ smerfform:
           answer_id: first_name
           title: First Name
           textfield_size: 30
-#        Middle Name:
-#          code: g2q2
-#          type: textfield
-#          style: grid_2
-#          sort_order: 2
-#          question: |
-#          title: Middle Name
-#          textfield_size: 15
         Last Name:
           code: g2q3
           type: textfield
@@ -86,13 +78,13 @@ smerfform:
           textfield_size: 5
     personal_details_pub_name:
       code: 3
-      name:
+      name: 
       style: grid_12 pubname_toggle
       description_style: grid_2 mandatory
       description: | Publication Name
       help: | Enter your name here as you want to see it in publications and online (pen name, name with initials, etc.)
       questions:
-        First Name:
+        Pub First Name:
           code: g3q1
           type: textfield
           style: grid_3
@@ -101,7 +93,7 @@ smerfform:
           answer_id: pub_first_name
           title: First name
           textfield_size: 30
-        Last Name:
+        Pub Last Name:
           code: g3q3
           type: textfield
           style: grid_3
@@ -1224,7 +1216,7 @@ smerfform:
               code : 1
               answer : | Please do not use my photo in publications.
               default : N
-    personal_details_pub_name:
+    social_media_info:
       code: 96
       name:
       style: grid_12
