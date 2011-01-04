@@ -30,7 +30,6 @@ module SurveyMailerHelper
   def smerf_html_group_question(question)
     content = ""
 
-    
     # Check the type and format appropriatly
     answer = ''
     case question.type
@@ -57,13 +56,34 @@ module SurveyMailerHelper
         content += '<br/>'
       end
     end
-    
+
+    if question.additional
+      # for each of the additional we want to create a new version of the same question
+      1.upto(question.additional) { |i|
+        dup_question = question.clone
+        dup_question.additional = 0
+        dup_question.code += "-" + i.to_s
+        change_question_code(dup_question, "-" + i.to_s)
+        # need to go through the nested questions and change their codes as well
+        content += smerf_html_group_question(dup_question)        
+     }
+    end
     
     return content
   end
   
   private
-  
+    def change_question_code(question, code)
+      question.answers.each do |answer|
+        if (answer.respond_to?("subquestions") and answer.subquestions and answer.subquestions.size > 0)
+        answer.subquestions.each {|subquestion| 
+           subquestion.code += code
+           change_question_code(subquestion, code)
+          }
+        end
+      end
+    end
+
     # Some answers to questions may have further questions, here we 
     # process these sub questions.
     #

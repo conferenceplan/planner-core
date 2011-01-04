@@ -36,6 +36,7 @@ class SmerfFormsController < SurveyApplicationController
   #   link_to('Complete Test Smerf Form', smerf_url('testsmerf'))  # Here is an example link that will display the <em>testsmerf</em> form
   # 
   def show
+    flash[:notice] = ""
     # Retrieve the smerf form record, rebuild if required, also
     # retrieve the responses to this form if they exist
     retrieve_smerf_form(params[:id])
@@ -63,6 +64,7 @@ class SmerfFormsController < SurveyApplicationController
   # to the questions on the form.
   # 
   def create
+    flash[:notice] = ""
     # Make sure we have some responses
     if (params.has_key?("responses"))
       # Validate user responses

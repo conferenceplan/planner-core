@@ -1,5 +1,10 @@
 <div class="container_12">
 <%= object.error_messages %>
+<%=
+    if flash[:error]
+      content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
+    end
+%>
 </div>
 <div class="clear"></div>
 <div class="container_12">

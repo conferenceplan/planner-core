@@ -18,6 +18,11 @@ smerfform:
     icon next to the field to display more information. Fields
     that are in red are required.
     </p>
+    <p>
+    <em>Please note that to save the questionaire you need to click the submit button 
+    at the end of the page. You can always come back and make changes to your saved 
+    answers at a later date.</em>
+    </p>
 
   thank_you: | 
     <p>
@@ -706,9 +711,6 @@ smerfform:
           Program will periodically edit the Sub-topic tag cloud for clarity (adjusting spelling, combining similar sub-topics, etc.) 
           This part of the questionnaire is for Topics only - enter any specific panel items in the "Do you have any program ideas or comments?" 
           field below  
-#      Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgeable. 
-#                  Please separate topics with a comma. Topics that other survey respondents have entered are shown below the text field.
-#      help: | Add a comma-separated list of topics in this field, for example, "space exploration,quantum theory".
       questions:
         scienceItems:
           code: g7q1
@@ -928,6 +930,12 @@ smerfform:
               answer: | Solo Presentation
               help: | Giving a solo talk (with video projector if needed)
               sort_order: 19
+              default: N
+            Panel:
+              code: 20
+              answer: | Panel
+              help: | Participate on a Panel
+              sort_order: 20
               default: N
         dicussionGroup:
           code: g9q2

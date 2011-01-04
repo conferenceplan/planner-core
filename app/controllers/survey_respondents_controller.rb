@@ -23,7 +23,6 @@ class SurveyRespondentsController < SurveyApplicationController
     
     # find a respondent with the key, if not found then create a new one
     if (key)
-      # TODO - put in code to also validate the last name that they are using matches the one that we have in the DB
       @survey_respondent = SurveyRespondent.find_by_key(key)
       if (@survey_respondent)
         if @survey_respondent.last_name.eql?(last_name)
@@ -34,16 +33,7 @@ class SurveyRespondentsController < SurveyApplicationController
       end
     end
     
-#    # Create a new survey respondent based on the first and last name...
-#    if (! @survey_respondent ) # create a new survey respondent and survey (to be linked to participant manually)
-#      @survey_respondent = SurveyRespondent.new(params[:survey_respondent])
-#      # Create a key for this new survey respondent
-#      @survey_respondent.key = '%05d' % rand(1e5) # ensure that we do not save the key to the database
-#    end
-    
-    # TODO - put in error responses....
     if @survey_respondent
-      # TODO: If they said that they are not attending then redirect to a simple thank you
       # Redirect the person to the survey
       if @survey_respondent.save
         # Get the related person and update their acceptance status...
@@ -60,13 +50,13 @@ class SurveyRespondentsController < SurveyApplicationController
         end
       else
         # there was a problem so return to the new page
-        @survey_respondent.errors.add_to_base("Unable to save the information. Please try again.")
+        flash[:error] = "Unable to save the information. Please try again."
         render :action => :new
       end
     else
       # there was a problem so return to the new page
       @survey_respondent = SurveyRespondent.new
-      @survey_respondent.errors.add_to_base("Unable to find a potential participant that matches the inputs.")
+      flash[:error] = "Unable to find a potential participant that matches the inputs."
       render :action => :new
     end
     

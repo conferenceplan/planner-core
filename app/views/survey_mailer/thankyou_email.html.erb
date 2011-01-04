@@ -2,12 +2,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-        <title>Untitled Document</title>
+        <title>Renovation Questionaire</title>
     </head>
     <body>
-        <h1><%=h @user.first_name %><%=h @user.last_name %></h1>
+        <h1><%=h @user.first_name %> <%=h @user.last_name %></h1>
         <p>
-            Thank you for completing the survey for the 2011 Worldcon, Renovation. 
+            Thank you for completing the Program questionaire for the 2011 Worldcon, Renovation. 
             You can always review and edit your response by returning to 
 			<a href='<%= survey_respondents_url(:host => "program.renovationsf.org") %>'>survey</a>
 			and entering the following 'invitation code': <b><%= @user.key %></b>
