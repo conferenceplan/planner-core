@@ -5,19 +5,21 @@ class FixEmails < ActiveRecord::Migration
     respondents.each do  |r|
       if r.person
         possibleEmails = r.person.email_addresses
-        theEmail = ''
+        theEmail = nil
         if possibleEmails
           possibleEmails.each do |email| 
             if email.isdefault
               theEmail = email
             else # if the email is empty we want to take the first one (unless there is a default)
-              if theEmail.empty
+              if theEmail == nil
                 theEmail = email
               end
             end
           end
         end
-        r.email = theEmail.email
+        if theEmail != nil
+          r.email = theEmail.email
+        end
         r.save
       end
     end
