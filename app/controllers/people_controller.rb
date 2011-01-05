@@ -194,7 +194,7 @@ class PeopleController < ApplicationController
       selectConditions[:mailing_number] = mailingNumber
     end
     
-     @people = Person.find :all, :conditions => selectConditions
+     @people = Person.find :all, :conditions => selectConditions, :order => 'last_name, first_name'
      
      @people.each do |person|
       if (person.survey_respondent == nil)
@@ -229,7 +229,7 @@ class PeopleController < ApplicationController
       end
     end
 
-    @people = Person.find :all, :conditions => selectConditions
+    @people = Person.find :all, :conditions => selectConditions, :order => 'last_name, first_name'
     respond_to do |format|
          format.xml 
          #{
