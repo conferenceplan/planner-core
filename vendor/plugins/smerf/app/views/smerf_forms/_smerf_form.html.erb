@@ -42,5 +42,12 @@
   	<div id='pre_first_name'><%= @respondent.first_name %></div>
   	<div id='pre_last_name'><%= @respondent.last_name %></div>
   	<div id='pre_email'><%= @respondent.email %></div>
+	<%if @respondent.person %>
+  		<div id='pre_postal_street'><%= @respondent.person.getDefaultPostalAddress.line1 if @respondent.person.getDefaultPostalAddress %></div>
+  		<div id='pre_postal_city'><%= @respondent.person.getDefaultPostalAddress.city if @respondent.person.getDefaultPostalAddress %></div>
+  		<div id='pre_postal_state'><%= @respondent.person.getDefaultPostalAddress.state if @respondent.person.getDefaultPostalAddress %></div>
+  		<div id='pre_postal_zip'><%= @respondent.person.getDefaultPostalAddress.postcode if @respondent.person.getDefaultPostalAddress %></div>
+  		<div id='pre_postal_country'><%= @respondent.person.getDefaultPostalAddress.country if @respondent.person.getDefaultPostalAddress %></div>
+	<%end%>
   </div>
   

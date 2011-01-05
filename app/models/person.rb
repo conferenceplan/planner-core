@@ -69,6 +69,40 @@ class Person < ActiveRecord::Base
       return name
   end
   
+  def getDefaultPostalAddress()
+    possibleAddresses = postal_addresses
+    theAddress = nil
+    if possibleAddresses
+      possibleAddresses.each do |addr| 
+        if addr.isdefault
+          theAddress = email
+        else # if the email is empty we want to take the first one (unless there is a default)
+          if theAddress == nil
+            theAddress = addr
+          end
+        end
+      end
+    end
+    return theAddress
+  end
+
+  def getDefaultEmail()
+    possibleEmails = email_addresses
+    theEmail = nil
+    if possibleEmails
+      possibleEmails.each do |email| 
+        if email.isdefault
+          theEmail = email
+        else # if the email is empty we want to take the first one (unless there is a default)
+          if theEmail == nil
+            theEmail = email
+          end
+        end
+      end
+    end
+    return theEmail
+  end
+  
   def removePostalAddress(address)
     # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person

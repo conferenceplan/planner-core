@@ -131,6 +131,7 @@ private
       survey_respondent.suffix = smerf_forms_surveyrespondent.responses['g2q4']
       
       # TODO - error handling?
+      # TODO - update person invite status to accepted...?
       survey_respondent.save
       
   end

@@ -35,6 +35,31 @@
 				if ($("#email_address").val() == '') {
 					$("#email_address").val(email);
 				}
+
+				var street = $("#pre_postal_street").text();
+				if ($("#postal_street").val() == '') {
+					$("#postal_street").val(street);
+				}
+
+				var city = $("#pre_postal_city").text();
+				if ($("#postal_city").val() == '') {
+					$("#postal_city").val(city);
+				}
+            
+				var state = $("#pre_postal_state").text();
+				if ($("#postal_state").val() == '') {
+					$("#postal_state").val(state);
+				}
+            
+				var zip = $("#pre_postal_zip").text();
+				if ($("#postal_zip").val() == '') {
+					$("#postal_zip").val(zip);
+				}
+            
+				var country = $("#pre_postal_country").text();
+				if ($("#postal_country").val() == '') {
+					$("#postal_country").val(country);
+				}
             
                 $("input:text, textarea, input:password").each(function(){
                     if (this.value == '' && this.title != '') {

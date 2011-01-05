@@ -125,6 +125,7 @@ smerfform:
           sort_order: 5
           validation: validate_mandatory_question
           question: | Street Address
+          answer_id: postal_street
           textfield_size: 100
         City:
           code: g4q2
@@ -136,6 +137,7 @@ smerfform:
           validation: validate_mandatory_question
           sort_order: 6
           question: | City
+          answer_id: postal_city
           textfield_size: 20
         State:
           code: g4q3
@@ -147,6 +149,7 @@ smerfform:
 #          validation: validate_mandatory_question
           sort_order: 7
           question: | State/Province/County
+          answer_id: postal_state
           textfield_size: 10
         Zip:
           code: g4q4
@@ -158,6 +161,7 @@ smerfform:
 #          validation: validate_mandatory_question
           sort_order: 7
           question: | Zip/Postal Code
+          answer_id: postal_zip
           textfield_size: 10
         Country:
           code: g4q5
@@ -169,6 +173,7 @@ smerfform:
           validation: validate_mandatory_question
           sort_order: 8
           question: | Country
+          answer_id: postal_country
           textfield_size: 30
 # TODO - prefill email
         Email:
