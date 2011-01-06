@@ -1,6 +1,6 @@
 <h1> Update Invite Pending to Invited</h1>
 <%= error_messages_for :person %>
-<% form_for :exportemail, :url=>{:controller=>"people", :action=>"doUpdateInviteStatus",:method => "post"} do |f| -%>
+<% form_for :exportemail, :url=>{:controller=>"people", :action=>"doSetInvitePendingToInvited",:method => "post"} do |f| -%>
  <div>
   <div class='line'>
   	Select the criteria for updating people with invite_pending status to invited, then submit. 

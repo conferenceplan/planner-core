@@ -132,15 +132,19 @@ class PeopleController < ApplicationController
     end
   end
   
-  def UpdateInviteStatus
+  def SetInvitePendingToInvited
     
   end
   
-  def doUpdateInviteStatus
+  def doSetInvitePendingToInvited
     mailingSelect = params[:exportemail][:mailing_select]
     mailingNumber = params[:exportemail][:mailing_number]
     categorySelect = params[:exportemail][:category_select]
     invitecategory = params[:exportemail][:invitation_category_id]
+    if (mailingSelect == nil || categorySelect == nil)
+       render :action => 'SetInvitePendingToInvited'
+       return
+    end
     selectConditions = {}
     inviteStatus = InviteStatus.find_by_name("Invite Pending")
     selectConditions[:invitestatus_id] = inviteStatus.id
@@ -167,6 +171,7 @@ class PeopleController < ApplicationController
   end
   
   def doexportemailxml
+    
     mailingSelect = params[:exportemail][:mailing_select]
     mailingNumber = params[:exportemail][:mailing_number]
     acceptanceSelect = params[:exportemail][:acceptance_select]
@@ -174,6 +179,11 @@ class PeopleController < ApplicationController
     invitecategory = params[:exportemail][:invitation_category_id]
     categorySelect = params[:exportemail][:category_select]
     invited_index = params[:exportemail][:invitestatus_id]
+    if (mailingSelect == nil || acceptanceSelect == nil || categorySelect == nil)
+       flash[:notice] = "Mailing select, Acceptance Select and/or Category Select not entered" 
+       redirect_to :action => 'exportemailxml'
+       return
+    end
     selectConditions = {}
     selectConditions[:invitestatus_id] = invited_index
     

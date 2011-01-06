@@ -1,5 +1,5 @@
 <h1> Generate xml email list using following criteria</h1>
-<%= error_messages_for :person %>
+
 <% form_for :exportemail, :url=>{:controller=>"people", :action=>"doexportemailxml",:method => "post"} do |f| -%>
  <div>
   <div class='line'>
