@@ -75,7 +75,7 @@ class Person < ActiveRecord::Base
     if possibleAddresses
       possibleAddresses.each do |addr| 
         if addr.isdefault
-          theAddress = email
+          theAddress = addr
         else # if the email is empty we want to take the first one (unless there is a default)
           if theAddress == nil
             theAddress = addr
