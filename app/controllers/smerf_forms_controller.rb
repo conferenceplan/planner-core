@@ -121,8 +121,6 @@ private
   def updateSurveyRespondent(id)
       # 
       survey_respondent = SurveyRespondent.find(id)
-      SurveyMailer.deliver_thankyou_email(survey_respondent)
-      
       smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(id, 1)
     
       survey_respondent.email = smerf_forms_surveyrespondent.responses['g4q6']
@@ -130,9 +128,9 @@ private
       survey_respondent.last_name = smerf_forms_surveyrespondent.responses['g2q3']
       survey_respondent.suffix = smerf_forms_surveyrespondent.responses['g2q4']
       
-      # TODO - error handling?
-      # TODO - update person invite status to accepted...?
       survey_respondent.save
+
+      SurveyMailer.deliver_thankyou_email(survey_respondent) # send out email to the new email address
       
   end
   
