@@ -33,17 +33,17 @@ test:
   reconnect: false
   database: PlannerPrototype_test
   pool: 5
-  username: root
-  password:
+  username: plannerdev
+  password: plannerdev
   socket: /tmp/mysql.sock
 
 production:
   adapter: mysql
   encoding: utf8
   reconnect: false
-  database: plannerproductio
+  database: RenoPlanner
   pool: 5
-  username: plannerproductio
-  password: lRuth,bhenrY9
-  host: plannerproductio.db.4550921.hostedresource.com
+  username: planner
+  password: 5xE6wizN
+  host: renodb
   socket: /tmp/mysql.sock

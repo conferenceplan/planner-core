@@ -26,3 +26,15 @@ config.action_view.cache_template_loading            = true
 
 # Enable threaded mode
 # config.threadsafe!
+
+ActionMailer::Base.delivery_method = :smtp
+#  
+#
+ActionMailer::Base.smtp_settings = {
+  :address => "mail-2.eriko.us",
+  :user_name => "reno-testmail",
+  :domain => "renovationsf.org",
+  :password => "zvefms2CSm",
+  :authentication => :cram_md5,
+  :port => 25
+}
