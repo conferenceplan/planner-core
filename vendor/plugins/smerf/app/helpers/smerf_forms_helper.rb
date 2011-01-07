@@ -14,22 +14,20 @@ module SmerfFormsHelper
       header_message = 
         "#{pluralize(errors.size(), 'error')} prevented #{@smerfform.name} from being saved"
       error_messages = ""
-#      errors.each do |error| 
-#        # Check if question text available as some questions may have no text, 
-#        # e.g. sub questions. If this happens we check all parent objects to see
-#        # if the question text is available until text found or no more parents
-#        question = (error[1]["question"] and !error[1]["question"].blank?()) ? error[1]["question"] : "" #find_question_text(error[0])        
-##        # Format error message
-##        error[1]["msg"].each do |error_msg|
-##          error_messages += content_tag(:li, "#{question}: #{error_msg}") 
-##        end
-#      end
+      errors.each do |error| 
+        # Check if question text available as some questions may have no text, 
+        # e.g. sub questions. If this happens we check all parent objects to see
+        # if the question text is available until text found or no more parents
+        question = (error[1]["question"] and !error[1]["question"].blank?()) ? error[1]["question"] : "" #find_question_text(error[0])
+        # Format error message
+        error[1]["msg"].each do |error_msg|
+          error_messages += content_tag(:li, "#{question}: #{error_msg}") 
+        end
+      end
       content_tag(:div,
-        content_tag(:h2, header_message),
-#        <<
-#          content_tag(:p, 'There were problems with the questions in the form')
-#          <<
-#          content_tag(:ul, error_messages),
+        content_tag(:h2, header_message) <<
+          content_tag(:p, 'There were problems with the following questions:') <<
+          content_tag(:ul, error_messages),
         :class => "smerfFormError")
     else
       ''

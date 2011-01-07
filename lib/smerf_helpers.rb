@@ -76,4 +76,22 @@ module SmerfHelpers
     return nil
   end
   
+  #
+  #
+  #
+  def validate_time_entry(question, responses, form)
+    answer = smerf_get_question_answer(question, responses)
+    if (answer)
+      # If the person has not selected that they are unsure about their times then they need
+      # to have set the time...
+      if !responses["g6s1q1"]
+        if answer[0] == "0" # if the time is 0 then the user has not selected an actual time
+          return "No time selected for '#{question.question.strip}''"
+        end
+      end
+    end
+    
+    return nil
+  end
+  
 end

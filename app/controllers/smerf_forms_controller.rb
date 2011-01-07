@@ -105,12 +105,13 @@ class SmerfFormsController < SurveyApplicationController
         SmerfFormsSurveyrespondent.update_records(
           @smerfform.id, self.smerf_user_id, @responses)
         flash[:notice] = "#{@smerfform.name} updated successfully"   
-      end
-
-      # 
-      updateSurveyRespondent(self.smerf_user_id)
+        # 
+        updateSurveyRespondent(self.smerf_user_id)
     
-      render('survey_respondents/confirm')
+        render('survey_respondents/confirm')
+      else
+        render(:action => "edit")
+      end
     else
       flash[:notice] = "No responses found in #{@smerfform.name}, nothing saved"      
     end
