@@ -299,7 +299,7 @@ smerfform:
                       sort_order: 1
                 Start Date:
                   code: g6s1q2
-                  validation: validate_sub_question
+#                  validation: validate_sub_question
                   type: selectionbox
                   selectionbox_multiplechoice: N
                   sort_order: 2
@@ -335,7 +335,7 @@ smerfform:
                       default: N
                 Start Time:
                   code: g6s1q3
-                  validation: validate_sub_question, validate_time_entry
+                  validation: validate_time_entry
                   type: selectionbox
                   selectionbox_multiplechoice: N
                   sort_order: 3
@@ -411,7 +411,7 @@ smerfform:
                       default: N
                 End Date:
                   code: g6s1q4
-                  validation: validate_sub_question
+#                  validation: validate_sub_question
                   type: selectionbox
                   selectionbox_multiplechoice: N
                   sort_order: 4
@@ -447,7 +447,7 @@ smerfform:
                       default: N
                 End Time:
                   code: g6s1q5
-                  validation: validate_sub_question, validate_time_entry
+                  validation: validate_time_entry
                   type: selectionbox
                   selectionbox_multiplechoice: N
                   sort_order: 5
