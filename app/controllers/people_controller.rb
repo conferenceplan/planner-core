@@ -142,6 +142,7 @@ class PeopleController < ApplicationController
     categorySelect = params[:exportemail][:category_select]
     invitecategory = params[:exportemail][:invitation_category_id]
     if (mailingSelect == nil || categorySelect == nil)
+       flash[:error]= "Mailing Select and Category select cannot be empty" 
        render :action => 'SetInvitePendingToInvited'
        return
     end

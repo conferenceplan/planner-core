@@ -1,5 +1,9 @@
 <h1> Update Invite Pending to Invited</h1>
-<%= error_messages_for :person %>
+<%=
+    if flash[:error]
+      content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
+    end
+%>
 <% form_for :exportemail, :url=>{:controller=>"people", :action=>"doSetInvitePendingToInvited",:method => "post"} do |f| -%>
  <div>
   <div class='line'>
