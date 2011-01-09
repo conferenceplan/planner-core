@@ -14,7 +14,7 @@
             $(function(){
 				
                 if (!$('#pub_first_name').val() && !$('#pub_last_name').val()) {
-                    $('div.pubname_toggle').parent().append("<a class='prefix_1 grid_4 toggle_pub_name'>Add Publication Name (if diffrent from above)</a>");
+                    $('div.pubname_toggle').parent().append("<a class='prefix_1 grid_4 toggle_pub_name'>Click to add Publication Name (if different from above)</a>");
                     $('a.toggle_pub_name').click(function(){
                         $('div.pubname_toggle').show();
                         $(this).hide();

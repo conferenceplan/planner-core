@@ -19,7 +19,7 @@ smerfform:
     that are in red are required.
     </p>
     <p>
-    <em>Please note that to save the questionaire you need to click the submit button 
+    <em>Please note that to save the questionnaire you need to click the submit button 
     at the end of the page. You can always come back and make changes to your saved 
     answers at a later date.</em>
     </p>
@@ -44,7 +44,7 @@ smerfform:
       code: 2
       name: 
       style: grid_12
-      description_style: grid_2 mandatory
+      description_style: grid_3 mandatory
       description: | Name
       help: | Enter your Reno Registration name
       questions:
@@ -80,7 +80,7 @@ smerfform:
       code: 3
       name: 
       style: grid_12 pubname_toggle
-      description_style: grid_2 mandatory
+      description_style: grid_3
       description: | Publication Name
       help: | Enter your name here as you want to see it in publications and online (pen name, name with initials, etc.)
       questions:
@@ -120,7 +120,7 @@ smerfform:
           type: textfield
           help: | Enter your street address or PO Box
           style: grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_8
           sort_order: 5
           validation: validate_mandatory_question
@@ -132,7 +132,7 @@ smerfform:
           type: textfield
           help: | Enter your city
           style: grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_4
           validation: validate_mandatory_question
           sort_order: 6
@@ -144,7 +144,7 @@ smerfform:
           type: textfield
           help: | Enter your state, province, or county
           style: grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_4
 #          validation: validate_mandatory_question
           sort_order: 7
@@ -156,7 +156,7 @@ smerfform:
           type: textfield
           help: | Enter your zip code or postal code
           style: grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_4
 #          validation: validate_mandatory_question
           sort_order: 7
@@ -166,9 +166,9 @@ smerfform:
         Country:
           code: g4q5
           type: textfield
-          help: | Enter you country
+          help: | Enter your country
           style: grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_4
           validation: validate_mandatory_question
           sort_order: 8
@@ -178,14 +178,14 @@ smerfform:
         Email:
           code: g4q6
           type: textfield
-          help: | Enter your primary E-mail address; the one you&rsquo;re most likely to monitor.
+          help: | Enter your primary e-mail address; the one you&rsquo;re most likely to monitor.
           style: grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_4
           validation: validate_mandatory_question
           sort_order: 9
           answer_id: email_address
-          question: | Email Address
+          question: | E-mail Address
           textfield_size: 50
           additional: 2
         Phone:
@@ -194,7 +194,7 @@ smerfform:
           sort_order: 10
           question: | Phone Number
           style: phonetype grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_1
           subfirst: true
           additional: 3
@@ -276,13 +276,13 @@ smerfform:
               answer_id: timedisable
               answer: | I am available for Program for the complete duration of the convention. 
                      Renovation Program will officially begin at noon, Wednesday, August 17 and 
-                     will end by 4 pm on Sunday, August 21. <a title='Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, August 17 and will be in Reno until at least 2pm on Sunday, August 21.' ><img src="/images/smerf_help.gif" alt="Help">.
+                     will end by 4 pm on Sunday, August 21. <a title='Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, August 17 and will be in Reno until at least 2pm on Sunday, August 21.' ><img src="/images/smerf_help.gif" alt="Help"></a>.
               sort_order: 1
               default: N
             Know Time:
               code: 2
               answer_id: timeselect
-              answer: | I plan to be at the convention. <a title='Select the day/time options to let us know, roughly, when you expect to be available for Program in Reno and when you expect to leave.' ><img src="/images/smerf_help.gif" alt="Help">
+              answer: | I plan to be at the convention. <a title='Select the day/time options to let us know, roughly, when you expect to be available for Program in Reno and when you expect to leave.' ><img src="/images/smerf_help.gif" alt="Help"></a>
               sort_order: 2
               default: N
               subquestions:
@@ -294,7 +294,7 @@ smerfform:
                   answers:
                     not_sure:
                       code: 1
-                      answer: | I am extremely uncertain when I will be available to be on Reno Program <a title='Select this option if you are really not sure when you are coming into Reno and when you are leaving. However, we cannot schedule you until we have a general idea of when you are coming.  Please try to make your travel plans as soon as you can, and let us know your availability' ><img src="/images/smerf_help.gif" alt="Help">
+                      answer: | I am extremely uncertain when I will be available to be on Reno Program <a title='Select this option if you are really not sure when you are coming into Reno and when you are leaving. However, we cannot schedule you until we have a general idea of when you are coming.  Please try to make your travel plans as soon as you can, and let us know your availability.' ><img src="/images/smerf_help.gif" alt="Help"></a>
                       default: N
                       sort_order: 1
                 Start Date:
@@ -527,7 +527,7 @@ smerfform:
           type: textfield
           sort_order: 6
           style: grid_12
-          question_style: grid_6
+          question_style: grid_7
           answer_style: grid_4
           question: | The maximum number of items I would like to be on per day is
           help: | Enter the maximum number of items you feel comfortable being on per day.
@@ -537,7 +537,7 @@ smerfform:
           type: textfield
           sort_order: 7
           style: grid_12
-          question_style: grid_6
+          question_style: grid_7
           answer_style: grid_4
           question: | The maximum number of items I'd like to be on for the entire convention is
           help: | Enter the maximum number of items you feel comfortable being on for the entire five-day convention.
@@ -577,7 +577,7 @@ smerfform:
           answer_style: grid_3
           sort_order: 9
           question: | Do not schedule me against the main GoH item for: 
-          help: | Check the guests whose main GoH item (speech, performance, et.c.) you do not want to be scheduled against.
+          help: | Check the guests whose main GoH item (speech, performance, etc.) you do not want to be scheduled against.
           answers:
             powersGOH:
               code: 1
@@ -699,11 +699,12 @@ smerfform:
       description_style: grid_11
       name: What topics are you interested in talking about?
       description: | This section collects general information about Topics (Science, Literature, Art, Media, Fandom, Nevada) and Sub-topics 
-          (such as Astronomy, Medicine, Publishing, Space Opera, Digital Painting, Portfolio Development, et.c.) that will be part of Renovation Program. 
+          (such as Astronomy, Medicine, Publishing, Space Opera, Digital Painting, Portfolio Development, etc.) that will be part of Renovation Program. 
           As more program participants respond to the questionnaire, the program software will add more items to the Sub-topic tag cloud for each Topic. 
           Program will periodically edit the Sub-topic tag cloud for clarity (adjusting spelling, combining similar sub-topics, etc.) 
           This part of the questionnaire is for Topics only - enter any specific panel items in the "Do you have any program ideas or comments?" 
-          field below  
+          field below.<br/>
+          You can enter multiple 'sub-topics' by seperating them with a comma.
       questions:
         scienceItems:
           code: g7q1
@@ -782,7 +783,7 @@ smerfform:
       name: Which authors/artists are you interested in talking about?
       description: | List 2-3 authors/artists whose work you are familiar with. Separate each name with a comma. 
         As more program participants respond the the questionnaire, the program software will add additional names to this tag cloud. 
-        Program will periodically edit the name tag cloud for clarity (adjusting spelling, et.c.) 
+        Program will periodically edit the name tag cloud for clarity (adjusting spelling, etc.) 
       questions:
         Authors:
           code: g8q1
@@ -871,7 +872,7 @@ smerfform:
               code: 11
               answer: | Book/Story Discussion Group (Preparation Required)
               help: | Leading a discussion about a particular book or story; advanced preparation required.
-              sort_order: 11
+              sort_order: 30
               default: N
             Reading:
               code: 12
@@ -952,10 +953,10 @@ smerfform:
                   code: g9q2s1
                   type: textbox
                   style: grid_12
-                  question_style: grid_2
+                  question_style: grid_3
                   answer_style: grid_7
                   sort_order: 1
-                  question: | Discusion Topic
+                  question: | Discussion Topic
                   help: | enter the topic of the Discussion Group
 #                  validation: validate_sub_question
         specificItemTypes2:
@@ -978,7 +979,7 @@ smerfform:
                   code: g9q3s1
                   type: textbox
                   style: grid_12
-                  question_style: grid_2
+                  question_style: grid_3
                   answer_style: grid_7
                   sort_order: 1
                   question: | Dialogue Topic
@@ -989,7 +990,7 @@ smerfform:
                   type: textfield
                   textfield_size: 100
                   style: grid_12
-                  question_style: grid_2
+                  question_style: grid_3
                   answer_style: grid_7
                   sort_order: 2
                   question: | Dialogue Participants
@@ -1019,7 +1020,7 @@ smerfform:
           code: g91q1
           type: textbox
           style: grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_7
           sort_order: 1
           question: | Notes for Music Night
@@ -1038,17 +1039,17 @@ smerfform:
           code: g92q1
           type: textbox
           style: grid_12
-          question_style: grid_2
+          question_style: grid_3
           answer_style: grid_7
           sort_order: 1
           question: | Notes for Art Night
-          help: | We are aiming to have a strong art program throughout the convention,
-            but in addition we are dedicating the second evening of the con to a
-            festival of the visual arts called Art Night.  Arts-related demos,
-            displays, and interactive events will fill the concourse and exhibit
-            hall, complementing talks and panels and the film festival going on in
-            the programming rooms at the same time. The Art Show will stay open
-            extended hours so that fans and artists can visit it throughout the
+          help: | We are aiming to have a strong art program throughout the convention, 
+            but in addition we are dedicating the second evening of the con to a 
+            festival of the visual arts called Art Night.  Arts-related demos, 
+            displays, and interactive events will fill the concourse and exhibit 
+            hall, complementing talks and panels and the film festival going on in 
+            the programming rooms at the same time. The Art Show will stay open 
+            extended hours so that fans and artists can visit it throughout the 
             festivities.
     other_info:
       code: 93
@@ -1090,7 +1091,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 4
           question: | Do you have any Nevada connections (born there/school/job)?
-          help: | Did you witness above-ground nuclear testing in Nevada, or, perhaps, saw something unusual around Area 51?   If you have an interesting Nevada-related tale to tell, let us know.
+          help: | Did you witness above-ground nuclear testing in Nevada, or perhaps saw something unusual around Area 51?   If you have an interesting Nevada-related tale to tell, let us know.
         exclusionTopics:
           code: g93q5
           type: textbox
@@ -1099,7 +1100,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 5
           question: | I don't want to talk about the following topics
-          help: | If you&rsquo;re talked-out about something that you've discussed many times before, list the item so we can avoid scheduling you on it.
+          help: | If you&rsquo;re talked-out about something that you&rsquo;ve discussed many times before, list the item so we can avoid scheduling you on it.
         exclusionRequest:
           code: g93q6
           type: textbox
@@ -1108,7 +1109,7 @@ smerfform:
           answer_style: grid_11
           sort_order: 6
           question: | Please do not schedule me under any circumstances with the following people (information will not be shared except with the core Renovation Program team):
-          help: | We believe strongly that panels should be intelligent, respective discussions that do not devolve verbal fistfights.  If there are people you would rather not be panelists with, let us know so we can discretely avoid scheduling you with them.
+          help: | We believe strongly that panels should be intelligent, respectful discussions that do not devolve into verbal fistfights.  If there are people you would rather not be panelists with, let us know so we can discreetly avoid scheduling you with them.
         localtalk:
           code: g93q7
           type: multiplechoice
@@ -1131,14 +1132,14 @@ smerfform:
                default: N
              doNotShareEmail:
                code: 3
-               answer: | Do not share E-mail contact info with other participants
-               help: | Check this box if you do not want your E-mail address to be included when the panel information goes out next summer.
+               answer: | Do not share e-mail contact info with other participants
+               help: | Check this box if you do not want your e-mail address to be included when the panel information goes out next summer.
                sort_order: 3
                default: N
              canInterview:
                code: 4
                answer: | I am willing to be interviewed by the media
-               help: | Check this box if you're willing to talk to journalists before or during the convention.
+               help: | Check this box if you&rsquo;re willing to talk to journalists before or during the convention.
                sort_order: 4
                default: N
 #
@@ -1256,7 +1257,7 @@ smerfform:
           question_style: grid_2
           answer_style: grid_7
           question: | Other
-          help: | If you would like people to find you on services such as LiveJournal, MySpace, et.c., what name do you use there?
+          help: | If you would like people to find you on services such as LiveJournal, MySpace, etc., what name do you use there?
 #
 # The end of the survey
 #
