@@ -179,11 +179,30 @@ class PeopleController < ApplicationController
     invitecategory = params[:exportemail][:invitation_category_id]
     categorySelect = params[:exportemail][:category_select]
     invited_index = params[:exportemail][:invitestatus_id]
-    if (mailingSelect == nil || acceptanceSelect == nil || categorySelect == nil)
-       flash[:notice] = "Mailing select, Acceptance Select and/or Category Select not entered" 
+    inviteStatus = InviteStatus.find(invited_index)
+    
+    if (inviteStatus.name == "Not Set")
+       flash[:error]= "Invite status cannot be Not Set" 
        redirect_to :action => 'exportemailxml'
        return
     end
+    
+    if (mailingSelect == nil)
+       flash[:error]= "Mailing select cannot be empty"
+       redirect_to :action => 'exportemailxml'
+       return
+    end
+    if (acceptanceSelect == nil)
+       flash[:error]= "Acceptance select cannot be empty"
+       redirect_to :action => 'exportemailxml'
+       return
+    end
+    if (categorySelect == nil)
+       flash[:error]= "Category select cannot be empty"
+       redirect_to :action => 'exportemailxml'
+       return
+    end
+    
     selectConditions = {}
     selectConditions[:invitestatus_id] = invited_index
     
@@ -249,6 +268,9 @@ class PeopleController < ApplicationController
   end
   
  def exportemailxml
+   if (@exportXmlError == nil)
+    @exportXmlError = ""
+   end
 
  end
 end
