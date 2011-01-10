@@ -418,6 +418,9 @@ module SmerfFormsHelper
           "#{answer.answer}</label>\n"
         style = "radiobutton"
         style += " " + question.answer_style if question.answer_style
+        if answer.help
+          html += "<a title='"+answer.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (!answer.help.blank?)
+        end
         contents += content_tag(:div, html, :class => style, :id => question.answer_id)
         # Process any sub questions this answer may have
         if (question.subfirst)

@@ -6,13 +6,12 @@
     </head>
     <body>
         <h1><%=h @user.first_name %> <%=h @user.last_name %></h1>
-        <p>
-            Thank you for completing the Program questionaire for the 2011 Worldcon, Renovation. 
-            You can always review and edit your response by returning to 
-			<a href='<%= survey_respondents_url(:host => "program.renovationsf.org") %>'>survey</a>
-			and entering the following 'invitation code': <b><%= @user.key %></b>
+        <p>Thank you for completing the Program questionnaire for the 2011 Worldcon, Renovation. 
+		You can always review and edit your response by returning to 
+		<a href='<%= survey_respondents_url(:host => "program.renovationsf.org") %>'>survey</a> 
+	    and entering the following 'invitation code': <b><%= @user.key %></b>
         </p>
-		<p>A summary of your responses to the questionaire follow below</p>
+		<p>A summary of your responses to the questionnaire follow below</p>
         <% @smerfform.form.groups.each do |group| %>
 			<%= format_group(group) %>
         <% end %>

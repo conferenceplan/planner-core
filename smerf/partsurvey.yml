@@ -244,21 +244,23 @@ smerfform:
           answers:
             Yes:
               code: 1
-              answer: | I am an attending member of Renovation. <a title='Select this option only if you have already purchased a membership.' ><img src="/images/smerf_help.gif" alt="Help"></a><br/> 
+              answer: | I am an attending member of Renovation.
                 <div class='grid_11 suffix_2'>
                 <i>Check our <a href='http://www.renovationsf.org/memlist.php' target='new'>online member search</a> if you aren't sure of your status.</i>
                 </div>
               sort_order: 1
               default: N
+              help: | Select this option only if you have already purchased a membership.
             No:
               code: 2
-              answer: | I'm not yet an attending member <a title='Select this option if you do not have a membership yet.' ><img src="/images/smerf_help.gif" alt="Help">. I understand I need to buy a membership in order to be scheduled for Program.<br/>
-                <div class='grid_11 suffix_2'>
+              answer: | I'm not yet an attending member. I understand I need to buy a membership in order to be scheduled for Program.<br/>
+                <div class='grid_8 suffix_2'>
                 <i>You can complete the rest of the questionnaire, but you need to buy a membership by June 15, 2011 in order to be scheduled.
                 Membership can be purchased <a href='http://www.renovationsf.org/register.php' target='new'>here</a>.</i>
                 </div>
               sort_order: 2
               default: N
+              help: | Select this option if you do not have a membership yet.
     program_availability:
       code: 6
       name: Program Availability
@@ -276,15 +278,17 @@ smerfform:
               answer_id: timedisable
               answer: | I am available for Program for the complete duration of the convention. 
                      Renovation Program will officially begin at noon, Wednesday, August 17 and 
-                     will end by 4 pm on Sunday, August 21. <a title='Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, August 17 and will be in Reno until at least 2pm on Sunday, August 21.' ><img src="/images/smerf_help.gif" alt="Help"></a>.
+                     will end by 4 pm on Sunday, August 21.
               sort_order: 1
               default: N
+              help: Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, August 17 and will be in Reno until at least 2pm on Sunday, August 21.
             Know Time:
               code: 2
               answer_id: timeselect
-              answer: | I plan to be at the convention. <a title='Select the day/time options to let us know, roughly, when you expect to be available for Program in Reno and when you expect to leave.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+              answer: | I plan to be at the convention. 
               sort_order: 2
               default: N
+              help: Select the day/time options to let us know, roughly, when you expect to be available for Program in Reno and when you expect to leave.
               subquestions:
                 Not Sure:
                   code: g6s1q1
@@ -294,9 +298,10 @@ smerfform:
                   answers:
                     not_sure:
                       code: 1
-                      answer: | I am extremely uncertain when I will be available to be on Reno Program <a title='Select this option if you are really not sure when you are coming into Reno and when you are leaving. However, we cannot schedule you until we have a general idea of when you are coming.  Please try to make your travel plans as soon as you can, and let us know your availability.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+                      answer: | I am extremely uncertain when I will be available to be on Reno Program 
                       default: N
                       sort_order: 1
+                      help: Select this option if you are really not sure when you are coming into Reno and when you are leaving. However, we cannot schedule you until we have a general idea of when you are coming.  Please try to make your travel plans as soon as you can, and let us know your availability.
                 Start Date:
                   code: g6s1q2
 #                  validation: validate_sub_question
@@ -714,7 +719,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 1
-          question: | <b>Science</b>
+          question: | Science
           tags: scienceItems
           validation: add_tags
         literature:
@@ -725,7 +730,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 2
-          question: | <b>Literature</b>
+          question: | Literature
           tags: literature
           validation: add_tags
         art:
@@ -736,7 +741,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 3
-          question: | <b>Art</b>
+          question: | Art
           tags: art
           validation: add_tags
         media:
@@ -747,7 +752,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 4
-          question: | <b>Media</b>
+          question: | Media
           tags: media
           validation: add_tags
         fandom:
@@ -758,7 +763,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 5
-          question: | <b>Fandom</b>
+          question: | Fandom
           tags: fandom
           validation: add_tags
         nevada:
@@ -769,7 +774,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 6
-          question: | <b>Nevada</b>
+          question: | Nevada
           tags: nevada
           validation: add_tags
     personal_details_intro:
@@ -793,7 +798,7 @@ smerfform:
           question_style: grid_1
           answer_style: grid_9
           sort_order: 1
-          question: | <b>Authors/Artists</b>
+          question: | Authors/Artists
           tags: authors
           validation: add_tags
     prog_types:
@@ -1187,7 +1192,7 @@ smerfform:
               space considerations.
               <a href="http://www.fanac.org/Denvention3/programming/bios2.html" target="new">
               Some sample participant bios from other Worldcons</a>.
-              <a title='Information in this section will be published in our web site, social media, Progress Reports, and Souvenir Book to better inform our members about you and your appearance at Renovation.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+          help: Information in this section will be published in our web site, social media, Progress Reports, and Souvenir Book to better inform our members about you and your appearance at Renovation.
         homepage:
           code: g95q2
           type: textfield

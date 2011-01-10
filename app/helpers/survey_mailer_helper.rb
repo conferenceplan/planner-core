@@ -11,9 +11,9 @@ module SurveyMailerHelper
     
     if (!question_content.blank?)
       content += content_tag(:h3, group.name) if !group.name.blank?
-      content += group.description + ':' if !group.description.blank?
+#      content += group.description + ':' if !group.description.blank?
       content += question_content
-      content += '<br/>' if !group.description.blank?
+#      content += '<br/>' if !group.description.blank?
     end
     
     return content
@@ -36,7 +36,7 @@ module SurveyMailerHelper
       when 'multiplechoice'
       answer += get_multiplechoice(question)
       when 'textbox'
-      answer += get_text(question)
+      answer += get_textbox(question)
       when 'textfield'
       answer += get_text(question)
       when 'singlechoice'
@@ -49,12 +49,10 @@ module SurveyMailerHelper
     
     if (!answer.blank?)
       if (question.question) and (!question.question.blank?)
-        content += question.question + ': '
+        content += question.question + ' '
       end
       content += answer;
-      if (question.question) and (!question.question.blank?)
-        content += '<br/>'
-      end
+      content += '<br/>'
     end
 
     if question.additional
@@ -127,6 +125,20 @@ module SurveyMailerHelper
         user_answer = @responses["#{question.code}"]
         if (user_answer and !user_answer.blank?())
           contents += content_tag(:b, user_answer) + ' '
+        end
+      end
+
+      return contents
+    end
+
+    def get_textbox(question)
+      contents = ""
+      # Get the user input if available
+      if (@responses and !@responses.empty?() and 
+        @responses.has_key?("#{question.code}"))
+        user_answer = @responses["#{question.code}"]
+        if (user_answer and !user_answer.blank?())
+          contents += content_tag(:pre, user_answer) + ' '
         end
       end
 
