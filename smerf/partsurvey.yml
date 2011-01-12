@@ -703,13 +703,17 @@ smerfform:
       style: grid_12
       description_style: grid_11
       name: What topics are you interested in talking about?
-      description: | This section collects general information about Topics (Science, Literature, Art, Media, Fandom, Nevada) and Sub-topics 
-          (such as Astronomy, Medicine, Publishing, Space Opera, Digital Painting, Portfolio Development, etc.) that will be part of Renovation Program. 
-          As more program participants respond to the questionnaire, the program software will add more items to the Sub-topic tag cloud for each Topic. 
-          Program will periodically edit the Sub-topic tag cloud for clarity (adjusting spelling, combining similar sub-topics, etc.) 
-          This part of the questionnaire is for Topics only - enter any specific panel items in the "Do you have any program ideas or comments?" 
-          field below.<br/>
-          You can enter multiple 'sub-topics' by seperating them with a comma.
+      description: | Please indicate 4-6 topics in each of the program areas below in which you are interested and knowledgeable. 
+          Please separate topics with a comma. Topics that other survey respondents have entered are shown below 
+          the text field.  Entering these topics will count as additional support for the topic; 
+          please also add any areas of interest which are not listed.
+#      help: | This section collects general information about Topics (Science, Literature, Art, Media, Fandom, Nevada) and Sub-topics 
+#          (such as Astronomy, Medicine, Publishing, Space Opera, Digital Painting, Portfolio Development, etc.) that will be part of Renovation Program. 
+#          As more program participants respond to the questionnaire, the program software will add more items to the Sub-topic tag cloud for each Topic. 
+#          Program will periodically edit the Sub-topic tag cloud for clarity (adjusting spelling, combining similar sub-topics, etc.) 
+#          This part of the questionnaire is for Topics only - enter any specific panel items in the "Do you have any program ideas or comments?" 
+#          field below.<br/>
+#          You can enter multiple &rsquo;sub-topics&rsquo; by seperating them with a comma.
       questions:
         scienceItems:
           code: g7q1
@@ -776,6 +780,17 @@ smerfform:
           sort_order: 6
           question: | Nevada
           tags: nevada
+          validation: add_tags
+        othertopics:
+          code: g7q7
+          type: textfield
+          textfield_size: 100
+          style: grid_12
+          question_style: grid_1
+          answer_style: grid_6
+          sort_order: 7
+          question: | Other
+          tags: othertopics
           validation: add_tags
     personal_details_intro:
       code: 71
