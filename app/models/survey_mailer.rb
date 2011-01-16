@@ -13,6 +13,16 @@ class SurveyMailer < ActionMailer::Base
       :smerfform => sform
   end
 
+  def decline_email(respondent)
+    recipients get_email(respondent)
+    cc       "program-form@renovationsf.org"
+    from      "no-reply@renovationsf.org"
+    subject   "Your wish to decline in participating has been recorded"
+    sent_on   Time.now
+    content_type "text/html"
+    body      :user => respondent
+  end
+
   def get_email(respondent)
     smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
     
@@ -20,9 +30,10 @@ class SurveyMailer < ActionMailer::Base
   end
 
   def get_responses(respondent)
-    smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-    
-    return smerf_forms_surveyrespondent.responses
+#    smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
+#    
+#    return smerf_forms_surveyrespondent.responses
+    return respondent.email
   end
 
 end

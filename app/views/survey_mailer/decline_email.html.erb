@@ -1,0 +1,15 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Renovation Questionaire</title>
+    </head>
+    <body>
+        <h1><%=h @user.first_name %> <%=h @user.last_name %></h1>
+        <p>Thank you. It has been noted that you have declined to participate in the program at Renovation. 
+		If, at a later date, you decide to change your mind you can return to the survey using the following
+		URL <a href='<%= survey_respondents_url(:host => "program.renovationsf.org") %>'>survey</a> 
+	    and entering the following 'invitation code': <b><%= @user.key %></b>
+        </p>
+    </body>
+</html>
