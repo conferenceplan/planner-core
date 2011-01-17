@@ -24,6 +24,7 @@ class PeopleController < ApplicationController
 
   def new
     @person = Person.new
+    @person.mailing_number = 0
   end
 
   def create
@@ -101,9 +102,14 @@ class PeopleController < ApplicationController
       if (queryParams)
         clausestr = ""
         queryParams["rules"].each do |subclause|
+          # position 0 is the empty position and means it is not selected 
+          next if (subclause['field'] == 'invitestatus_id' && subclause['data'] == '0')        
+          next if (subclause['field'] == 'invitation_category_id' && subclause['data'] == '0')
+ 
           if clausestr.length > 0 
             clausestr << ' ' + queryParams["groupOp"] + ' '
           end
+ 
           if subclause["op"] == 'ne'
             clausestr << subclause['field'] + ' not like ?'
           else
@@ -273,5 +279,15 @@ class PeopleController < ApplicationController
     @exportXmlError = ""
    end
 
- end
+end
+
+def invitestatuslist
+   @inviteStatus = InviteStatus.find :all
+    render :layout => 'content'
+end
+
+def invitestatuslistwithblank
+   @inviteStatus = InviteStatus.find :all
+    render :layout => 'content'
+end
 end

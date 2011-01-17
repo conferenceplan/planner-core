@@ -1,0 +1,6 @@
+<select> 
+<option value='0'></option>
+<% for invitationCategory in @invitationCategories %>
+	<option value='<%=invitationCategory.id%>'><%= invitationCategory.name%></option> 
+<%end%>
+</select>

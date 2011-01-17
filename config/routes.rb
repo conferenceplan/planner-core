@@ -51,7 +51,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/doexportemailxml', :controller => 'people', :action => 'doexportemailxml', :method => 'post'
   map.connect 'participants/doSetInvitePendingToInvited', :controller => 'people', :action => 'doSetInvitePendingToInvited'
   map.connect 'participants/SetInvitePendingToInvited', :controller => 'people', :action => 'SetInvitePendingToInvited'
-  
+  map.connect 'participants/invitestatuslist', :controller => 'people', :action => 'invitestatuslist'
+  map.connect 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'
+
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses],
     :has_one => :registrationDetail,
@@ -68,6 +70,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/list', :controller => 'people', :action => 'list'
  
   map.resources :rooms
+  map.connect 'invitation_categories/list', :controller => 'invitation_categories', :action => 'list'
+
   map.resources :invitation_categories
   
   map.connect 'pending_import_people/import', :controller => 'pending_import_people', :action => 'import'

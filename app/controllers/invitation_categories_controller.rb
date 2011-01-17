@@ -37,5 +37,9 @@ class InvitationCategoriesController < ApplicationController
     @invitationCategory.destroy
     redirect_to :action => 'index'
   end
-  
+  def list  
+    # Get all the roles in the database
+    @invitationCategories = InvitationCategory.find :all
+    render :layout => 'content'
+  end
 end

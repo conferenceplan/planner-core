@@ -34,7 +34,8 @@ jQuery(document).ready(function(){
     jQuery("#participants").jqGrid({
         url: 'participants/list',
         datatype: 'xml',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing Number'],
+		mtype: 'POST',
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing Number','Invite Status','Invitation Category'],
         colModel: [{
             name: 'person[first_name]',
             index: 'first_name',
@@ -88,9 +89,10 @@ jQuery(document).ready(function(){
             index: 'mailing_number',
             width: 50,
             editable: true,
-			hidden: true,
+			hidden: false,
             editoptions: {
-                size: 20
+                size: 20,
+				defaultValue: 0
             },
             formoptions: {
                 rowpos: 4,
@@ -101,7 +103,46 @@ jQuery(document).ready(function(){
                 required: false,
 				edithidden:true
             }
-        }
+        },{
+			name:'person[invitestatus_id]',
+			index:'invitestatus_id',
+			width:80,
+			editable: true, 
+			edittype: "select", 
+			search: true,
+			stype: "select",
+			searchoptions:{
+				dataUrl:'/participants/invitestatuslistwithblank' 
+			},
+			editoptions:{
+				dataUrl:'/participants/invitestatuslist',
+				defaultValue:'Not Set'
+			}, 
+			formoptions:{ 
+				rowpos:5,
+				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
+			} 
+        },
+		{
+			name:'person[invitation_category_id]',
+			index:'invitation_category_id',
+			width:80,
+			editable: true, 
+			edittype: "select", 
+			search: true,
+			stype: "select",
+			searchoptions:{
+				dataUrl:'/invitation_categories/list' 
+			},
+			editoptions:{
+				dataUrl:'/invitation_categories/list',
+				defaultValue:'Not Set'
+			}, 
+			formoptions:{ 
+				rowpos:6,
+				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
+			} 
+        },
 		],
         pager: jQuery('#pager'),
         rowNum: 10,

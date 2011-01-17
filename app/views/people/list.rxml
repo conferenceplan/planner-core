@@ -8,6 +8,12 @@ xml.rows do
       xml.cell(person.last_name)
       xml.cell(person.suffix)
       xml.cell(person.mailing_number)
+      if (person.invitestatus)
+        xml.cell(person.invitestatus.name)
+      end
+      if (person.invitation_category)
+        xml.cell(person.invitation_category.name)
+      end
     end
   end
 end
