@@ -109,13 +109,21 @@ class PeopleController < ApplicationController
           if clausestr.length > 0 
             clausestr << ' ' + queryParams["groupOp"] + ' '
           end
- 
-          if subclause["op"] == 'ne'
-            clausestr << subclause['field'] + ' not like ?'
+          if (subclause['field'] == 'invitestatus_id' || subclause['field'] == 'invitecategory_id'  || subclause['field'] == 'mailing_number')
+             if subclause["op"] == 'ne'
+               clausestr << subclause['field'] + ' != ?'
+             else
+               clausestr << subclause['field'] + ' = ?'
+             end
+             fields << subclause['data'].to_i
           else
-            clausestr << subclause['field'] + ' like ?'
+              if subclause["op"] == 'ne'
+                clausestr << subclause['field'] + ' not like ?'
+              else
+                clausestr << subclause['field'] + ' like ?'
+              end
+              fields << subclause['data'] + '%'
           end
-          fields << subclause['data'] + '%'
           logger.info fields
         end
         clause = [clausestr] | fields
