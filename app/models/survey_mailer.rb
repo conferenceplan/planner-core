@@ -24,16 +24,13 @@ class SurveyMailer < ActionMailer::Base
   end
 
   def get_email(respondent)
-    smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-    
-    return smerf_forms_surveyrespondent.responses['g4q6']
+    return respondent.email
   end
 
   def get_responses(respondent)
-#    smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-#    
-#    return smerf_forms_surveyrespondent.responses
-    return respondent.email
+    smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
+    
+    return smerf_forms_surveyrespondent.responses
   end
 
 end
