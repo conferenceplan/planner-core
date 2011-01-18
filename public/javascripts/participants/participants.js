@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
         url: 'participants/list',
         datatype: 'xml',
 		mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing Number','Invite Status','Invitation Category'],
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation Category'],
         colModel: [{
             name: 'person[first_name]',
             index: 'first_name',
@@ -87,7 +87,7 @@ jQuery(document).ready(function(){
         }, {
             name: 'person[mailing_number]',
             index: 'mailing_number',
-            width: 50,
+            width: 60,
             editable: true,
 			hidden: false,
             editoptions: {
@@ -106,7 +106,7 @@ jQuery(document).ready(function(){
         },{
 			name:'person[invitestatus_id]',
 			index:'invitestatus_id',
-			width:80,
+			width: 100,
 			editable: true, 
 			edittype: "select", 
 			search: true,
@@ -126,7 +126,7 @@ jQuery(document).ready(function(){
 		{
 			name:'person[invitation_category_id]',
 			index:'invitation_category_id',
-			width:80,
+			width: 150,
 			editable: true, 
 			edittype: "select", 
 			search: true,
