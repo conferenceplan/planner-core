@@ -35,24 +35,26 @@ module SmerfHelpers
   def add_tags(question, responses, form)
     # Add tags to the respondent from a tag field
     answer = smerf_get_question_answer(question, responses)
+    # get the tag context from the question
+    context = question.tags
+    
     if (answer)
       answer = answer.split(' ').map {|w| 
-      w[0] = w[0].chr.upcase
-      w }.join(' ')
+        w[0] = w[0].chr.upcase
+        w }.join(' ')
       smerf_set_question_answer(question, responses, answer)
-      # get the tag context from the question
-      # we have the list of tags
-      # so we also need the id of the respondent
-      context = question.tags
-      SurveyRespondent.transaction(:requires_new => true) do
-        respondent = SurveyRespondent.find(self.current_user)
+    else
+      answer = ''
+    end
+    
+    SurveyRespondent.transaction(:requires_new => true) do
+      respondent = SurveyRespondent.find(self.current_user)
+      
+      if (respondent)
+        respondent.set_tag_list_on(context, answer) # set the tag list on the respondent for the context
         
-        if (respondent)
-          respondent.set_tag_list_on(context, answer) # set the tag list on the respondent for the context
-          
-          if !respondent.save
-            return "Unable to associate tag"
-          end
+        if !respondent.save
+          return "Unable to associate tag"
         end
       end
     end
