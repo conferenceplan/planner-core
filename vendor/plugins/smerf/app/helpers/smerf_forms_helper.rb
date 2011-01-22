@@ -412,12 +412,14 @@ module SmerfFormsHelper
           # first time the new record form is displayed set on if default 
           ((!@responses or @responses.empty?()) and params['action'] == 'show' and
           answer.default.upcase == 'Y')),
-          :class => answerstyle,
           :id => answerid
           ) + 
           "#{answer.answer}</label>\n"
         style = "radiobutton"
-        style += " " + question.answer_style if question.answer_style
+        style += " " + answerstyle if answerstyle
+        if !answerstyle
+          style += " " + question.answer_style if question.answer_style
+        end
         if answer.help
           html += "<a title='"+answer.help+"'>"+image_tag("smerf_help.gif", :alt => "Help")+"</a>" if (!answer.help.blank?)
         end

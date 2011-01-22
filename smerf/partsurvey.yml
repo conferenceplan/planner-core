@@ -20,8 +20,8 @@ smerfform:
     </p>
     <p>
     <em>Please note that to save the questionnaire you need to click the submit button 
-    at the end of the page. You can always come back and make changes to your saved 
-    answers at a later date.</em>
+    at the end of the page. <b>You can always come back and make changes to your saved 
+    answers at a later date.</b></em>
     </p>
 
   thank_you: | 
@@ -159,7 +159,7 @@ smerfform:
           question_style: grid_3
           answer_style: grid_4
 #          validation: validate_mandatory_question
-          sort_order: 7
+          sort_order: 9
           question: | Zip/Postal Code
           answer_id: postal_zip
           textfield_size: 10
@@ -183,7 +183,7 @@ smerfform:
           question_style: grid_3
           answer_style: grid_4
           validation: validate_mandatory_question
-          sort_order: 9
+          sort_order: 10
           answer_id: email_address
           question: | E-mail Address
           textfield_size: 50
@@ -191,7 +191,7 @@ smerfform:
         Phone:
           code: g4q7
           type: singlechoice
-          sort_order: 10
+          sort_order: 11
           question: | Phone Number
           style: phonetype grid_12
           question_style: grid_3
@@ -211,8 +211,10 @@ smerfform:
                default: N
              cell:
                code: 3
-               answer: | cell
+               answer: | cell/mobile
+               style: grid_2
                sort_order: 1
+               help: | If we need to call, we will pay careful attention to time zones and not wake you up in the middle of the night.
                default: N
              fax:
                code: 4
@@ -225,9 +227,9 @@ smerfform:
                         type: textfield
                         sort_order: 1
                         question: |
-                        style: PhoneNumber grid_5
-                        question_style: grid_2
-                        textfield_size: 50
+                        style: PhoneNumber grid_3
+                        question_style: grid_1
+                        textfield_size: 30
 # NOTE: we want to be able to attach sub questions to text - this needs to be an extension to SMERF
 # also want the ability to to an add more of this type, and a tag choice (with cloud display)
 # change render to get rid of <p> and put in div with style so we an have first and last name on one line etc
@@ -535,7 +537,8 @@ smerfform:
           question_style: grid_7
           answer_style: grid_4
           question: | The maximum number of items I would like to be on per day is
-          help: | Enter the maximum number of items you feel comfortable being on per day.
+          help: | Enter the maximum number of items you feel comfortable being on per day. 
+              If you don&rsquo;t have a limit, you don&rsquo;t need to fill the box.
           textfield_size: 3
         Max Items:
           code: g6q3
@@ -545,7 +548,8 @@ smerfform:
           question_style: grid_7
           answer_style: grid_4
           question: | The maximum number of items I'd like to be on for the entire convention is
-          help: | Enter the maximum number of items you feel comfortable being on for the entire five-day convention.
+          help: | Enter the maximum number of items you feel comfortable being on for the entire five-day convention. 
+              If you don&rsquo;t have a limit, you don&rsquo;t need to fill the box.
           textfield_size: 3
         time_conflicts:
           code: g6q4
@@ -559,19 +563,16 @@ smerfform:
             before11am:
               code: 1
               answer: | Before 11am
-              help: | Check if you do not want to be on a panel before 11am
               sort_order: 1
               default: N
             before6to8:
               code: 2
               answer: | 6pm - 8pm
-              help: | Check if you do want want to be on a panel between 6pm and 8pm
               sort_order: 2
               default: N
             after8pm:
               code: 3
               answer: | After 8pm
-              help: | Check if you do not want to be on a panel after 8pm
               sort_order: 3
               default: N
         guest_conflicts:
@@ -622,7 +623,6 @@ smerfform:
           answer_style: grid_3
           sort_order: 10
           question: | Please do not schedule me against the following events: 
-          help: | Check the events you do not want to be scheduled against
           answers:
             openingCermony:
               code: 1
@@ -686,7 +686,7 @@ smerfform:
               default: N
             charityAuction:
               code: 13
-              answer: | Charity Auction
+              answer: | Charity and Fan Fund Auctions
               sort_order: 13
               default: N
         excludedTimesText:
@@ -792,18 +792,26 @@ smerfform:
           question: | Other
           tags: othertopics
           validation: add_tags
+        ReasonsForTopics:
+          code: g7q8
+          type: textbox
+          style: grid_12
+          question_style: grid_9
+          answer_style: grid_11
+          sort_order: 8
+          question: | Please feel free to tell us why you’re interested in/how you’re knowledgeable of the topics that you selected above.
     personal_details_intro:
       code: 71
       name: 
       description: | If you are interested in presenting an academic paper at the convention, 
-           please visit this <a href='http://www.renovationsf.org/program-academic.php' target="new">link</a><a title='Select the link if you are interested in learning about presenting academic papers at Renovation.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+           please visit this <a href='http://www.renovationsf.org/program-academic.php' target="new">link</a>
            which explains the process
     author_topics:
       code: 8
-      name: Which authors/artists are you interested in talking about?
-      description: | List 2-3 authors/artists whose work you are familiar with. Separate each name with a comma. 
+      name: Are there any Authors/Artists whom you’d like to talk about? If so, who are they?
+      description: | <p>List 2-3 Authors/Artists whose work you are familiar with. Separate each name with a comma. 
         As more program participants respond the the questionnaire, the program software will add additional names to this tag cloud. 
-        Program will periodically edit the name tag cloud for clarity (adjusting spelling, etc.) 
+        Program will periodically edit the name tag cloud for clarity (adjusting spelling, etc.)</p>
       questions:
         Authors:
           code: g8q1
@@ -885,12 +893,12 @@ smerfform:
             DocentTours:
               code: 10
               answer: | Docent Tours
-              help: | Taking a group a attendees on a tour of the Art Show or Exhibit Hall
+              help: | Taking a group of attendees on a tour of the Art Show or Exhibit Hall
               sort_order: 10
               default: N
             Book_StoryDiscussionGroup:
               code: 11
-              answer: | Book/Story Discussion Group (Preparation Required)
+              answer: | Book/Story Discussion Group &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(Preparation Required)
               help: | Leading a discussion about a particular book or story; advanced preparation required.
               sort_order: 30
               default: N
@@ -1092,7 +1100,7 @@ smerfform:
           question_style: grid_7
           answer_style: grid_11
           sort_order: 2
-          question: | Tell us one thing we don't know about you that you are willing to talk about
+          question: | Is there something else we don't know about you that you'd be willing to talk about?
           help: | What have you never talked about at a convention that might make an interesting panel item.
         Panels With:
           code: g93q3
