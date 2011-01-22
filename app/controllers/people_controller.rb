@@ -112,7 +112,7 @@ class PeopleController < ApplicationController
             clausestr << ' ' + queryParams["groupOp"] + ' '
           end
           # integer items (integers or select id's) need to be handled differently in the query
-          if (subclause['field'] == 'invitestatus_id' || subclause['field'] == 'invitecategory_id'  || subclause['field'] == 'mailing_number' || subclause['field'] == 'acceptance_status_id')
+          if (subclause['field'] == 'invitestatus_id' || subclause['field'] == 'invitation_category_id'  || subclause['field'] == 'mailing_number' || subclause['field'] == 'acceptance_status_id')
              if subclause["op"] == 'ne'
                clausestr << subclause['field'] + ' != ?'
              else
