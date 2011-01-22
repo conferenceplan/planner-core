@@ -53,6 +53,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/SetInvitePendingToInvited', :controller => 'people', :action => 'SetInvitePendingToInvited'
   map.connect 'participants/invitestatuslist', :controller => 'people', :action => 'invitestatuslist'
   map.connect 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'
+  map.connect 'participants/acceptancestatuslist', :controller => 'people', :action => 'acceptancestatuslist'
+  map.connect 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
 
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses],

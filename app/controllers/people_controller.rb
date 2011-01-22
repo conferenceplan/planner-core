@@ -102,14 +102,17 @@ class PeopleController < ApplicationController
       if (queryParams)
         clausestr = ""
         queryParams["rules"].each do |subclause|
-          # position 0 is the empty position and means it is not selected 
+          # these are the select type filters - position 0 is the empty position and means it is not selected, so we are not
+          # filtering on that item
           next if (subclause['field'] == 'invitestatus_id' && subclause['data'] == '0')        
           next if (subclause['field'] == 'invitation_category_id' && subclause['data'] == '0')
- 
+          next if (subclause['field'] == 'acceptance_status_id' && subclause['data'] == '0')
+          
           if clausestr.length > 0 
             clausestr << ' ' + queryParams["groupOp"] + ' '
           end
-          if (subclause['field'] == 'invitestatus_id' || subclause['field'] == 'invitecategory_id'  || subclause['field'] == 'mailing_number')
+          # integer items (integers or select id's) need to be handled differently in the query
+          if (subclause['field'] == 'invitestatus_id' || subclause['field'] == 'invitecategory_id'  || subclause['field'] == 'mailing_number' || subclause['field'] == 'acceptance_status_id')
              if subclause["op"] == 'ne'
                clausestr << subclause['field'] + ' != ?'
              else
@@ -298,4 +301,15 @@ def invitestatuslistwithblank
    @inviteStatus = InviteStatus.find :all
     render :layout => 'content'
 end
+
+def acceptancestatuslist
+   @acceptanceStatus = AcceptanceStatus.find :all
+    render :layout => 'content'
+end
+
+def acceptancestatuslistwithblank
+   @acceptanceStatus = AcceptanceStatus.find :all
+    render :layout => 'content'
+end
+
 end

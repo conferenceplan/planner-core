@@ -9,10 +9,19 @@ xml.rows do
       xml.cell(person.suffix)
       xml.cell(person.mailing_number)
       if (person.invitestatus)
-        xml.cell(person.invitestatus.name)
+        xml.cell(person.invitestatus.name)  
+      else
+        xml.cell("")
       end
       if (person.invitation_category)
         xml.cell(person.invitation_category.name)
+      else
+        xml.cell("")
+      end
+      if (person.acceptance_status)
+        xml.cell(person.acceptance_status.name)
+      else
+        xml.cell("")
       end
     end
   end

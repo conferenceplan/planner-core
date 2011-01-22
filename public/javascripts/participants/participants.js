@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
         url: 'participants/list',
         datatype: 'xml',
 		mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation Category'],
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation Category','Acceptance'],
         colModel: [{
             name: 'person[first_name]',
             index: 'first_name',
@@ -122,8 +122,7 @@ jQuery(document).ready(function(){
 				rowpos:5,
 				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
 			} 
-        },
-		{
+        },{
 			name:'person[invitation_category_id]',
 			index:'invitation_category_id',
 			width: 150,
@@ -142,7 +141,26 @@ jQuery(document).ready(function(){
 				rowpos:6,
 				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
 			} 
-        },
+        },{
+			name:'person[acceptance_status_id]',
+			index:'acceptance_status_id',
+			width: 100,
+			editable: true, 
+			edittype: "select", 
+			search: true,
+			stype: "select",
+			searchoptions:{
+				dataUrl:'/participants/acceptancestatuslistwithblank' 
+			},
+			editoptions:{
+				dataUrl:'/participants/acceptancestatuslist',
+				defaultValue:'Not Set'
+			}, 
+			formoptions:{ 
+				rowpos:7,
+				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
+			} 
+        }
 		],
         pager: jQuery('#pager'),
         rowNum: 10,

@@ -1,0 +1,5 @@
+<select> 
+<% for acceptanceEntry in @acceptanceStatus %>
+	<option value='<%= acceptanceEntry.id%>'><%= acceptanceEntry.name %></option> 
+<%end%>
+</select>
