@@ -91,7 +91,7 @@ smerfform:
           sort_order: 1
           question: |
           answer_id: pub_first_name
-          title: First name
+          title: First Name
           textfield_size: 30
         Pub Last Name:
           code: g3q3

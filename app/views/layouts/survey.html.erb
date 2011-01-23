@@ -81,7 +81,7 @@
                 });
                 
                 $("input:image, input:button, input:submit").click(function(){
-                    $(this.form.elements).each(function(){
+					$("input:text, textarea, input:password").each(function(){
                         if (this.type == 'text' || this.type == 'textarea' || this.type == 'password') {
                             if (this.value == this.title && this.title != '') {
                                 this.value = '';
