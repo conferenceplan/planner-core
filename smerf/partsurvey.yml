@@ -1176,23 +1176,24 @@ smerfform:
 # TODO - fix formatting
     release:
       code: 94
-      name: Participant Release
-      description: | Because Renovation is being held in a "WiFi everywhere" environment, individuals might record or photograph you 
-           or your panel items and might post such recordings or photographs on the Internet. 
+      name: Video and Photography
+      description:
       questions:
         release_date:
-          code: g94q1
+          code: g94q2
           type: multiplechoice
           sort_order : 1
-          style: grid_12 mandatory
+          style: grid_12
           question_style: grid_2
-          validation: validate_mandatory_question
           question: | 
           answers:
             release:
               sort_order : 1
               code : 1
-              answer : | I have no objection.
+              answer : | I would prefer not to have video or photographs taken of me during events. 
+                          NOTE: this only applies to video and photography done officially by the convention; 
+                          we do not have control of the activities of the convention members 
+                          (you can feel free to request members of your audience not to take photos or video during your item).
               default : N
 # Publications Information
 #
