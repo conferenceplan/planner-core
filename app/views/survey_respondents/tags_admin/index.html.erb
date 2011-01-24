@@ -1,0 +1,39 @@
+<% content_for :jsheader do %>
+  <%= stylesheet_link_tag 'survey_respondents/tags_admin' %>
+  <%= javascript_include_tag 'survey_respondents/tags_admin/admin' %>
+<% end %>
+<div class="container_12"><p></p></div>
+<div class="clear"></div>
+<div class="container_12">
+	<div class="grid_2">
+		Context
+		<%= select 'tag', 'context', @tagContexts, {:include_blank => true} %>
+	</div>
+	<div class="grid_2">
+		Tags
+		<div id="tag-list" style="width: 100%; height: 200px; overflow: auto; padding: 5px;">
+		</div>
+	</div>
+	<div class="grid_4">
+		Action
+		<% form_tag('/survey_respondents/tags_admin/update', :id => 'tagForm') do %>
+			<div class="grid_3">
+				<%= select 'tag', 'operation', ['edit', 'delete', 'move'], {:include_blank => true}  %>
+			</div>
+			<div class="grid_3">
+				<%= text_field_tag(:new_tag, nil) %>
+			</div>
+			<div class="grid_3">
+				<%= select 'tag', 'destination', @tagContexts, {:include_blank => true}, :id => 'move_selection' %>
+			</div>
+			<%= hidden_field_tag(:context) %> 
+			<%= hidden_field_tag(:original_tag) %> 
+			<div class="grid_3">
+				<%= submit_tag("Submit", :id => 'tag_edit_button') %>
+			</div>
+		<% end %>
+	</div>
+</div>
+<div class="container_12">
+	<div class="grid_10" id='result'></div>
+</div>

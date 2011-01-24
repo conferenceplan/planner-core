@@ -44,9 +44,14 @@ class SurveyRespondents::TagsController < ApplicationController
   # get the tag cloud for a specific tag list
   def cloud
     tag_context = params[:context] # tag context
+    target = params[:target] # tag context
     @tags = SurveyRespondent.tag_counts_on(tag_context).sort { |x, y| x.name <=> y.name }
     
-    render :layout => 'content'
+    if target == 'selection'
+      render 'selection', :layout => 'content'
+    else  
+      render :layout => 'content'
+    end
   end
 end
 

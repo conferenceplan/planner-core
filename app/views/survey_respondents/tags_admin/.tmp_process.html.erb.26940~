@@ -1,0 +1,22 @@
+<% content_for :jsheader do %>
+  <%= stylesheet_link_tag 'survey_respondents/tags_admin' %>
+  <%= javascript_include_tag 'survey_respondents/tags_admin/admin' %>
+<% end %>
+<div id="user_id" style="display : none"></div>
+<div class="container_12">
+	Context
+	<%= select 'tag', 'context', @tagContexts, {:include_blank => true} %>
+	
+	<div id="tag-list" style="width: 20%; height: 90px; overflow: auto; padding: 5px;">
+	</div>
+
+
+	<% form_tag do %>
+		<%= hidden_field_tag(:context) %> 
+		<%= hidden_field_tag(:original_tag) %> 
+		<%= text_field_tag(:tag) %>
+		<%= select 'tag', 'operation', ['edit', 'delete', 'move'], {:include_blank => true}  %>
+		<%= select 'tag', 'destination', @tagContexts, {:include_blank => true} %>
+		<%= submit_tag("Submit") %>
+	<% end %>
+</div>

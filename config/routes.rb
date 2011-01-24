@@ -112,7 +112,10 @@ ActionController::Routing::Routes.draw do |map|
 
   #
   #
-  #
+  # TODO - check these routes
+  map.connect 'survey_respondents/tags_admin', :controller => 'survey_respondents/tags_admin', :action => 'index'
+  map.connect 'survey_respondents/tags_admin/update', :controller => 'survey_respondents/tags_admin', :action => 'update', :via => :post
+  
   map.resources :survey_respondents
 
   # 
@@ -120,6 +123,10 @@ ActionController::Routing::Routes.draw do |map|
     respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 
       :controller => 'survey_respondents/tags',
       :except => [:destroy, :new, :create, :edit, :remove]
+
+#    respondent.resource :tags_admin, :member => {:index => :get}, 
+#      :controller => 'survey_respondents/tags_admin',
+#      :except => [:destroy, :new, :create, :edit, :remove]
   end
 
   # These also take the context as a parameter...
