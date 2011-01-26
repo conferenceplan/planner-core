@@ -26,6 +26,8 @@ class SurveyRespondents::TagsAdminController < ApplicationController
     old_value = params[:original_tag]
     new_value = params[:new_tag]
     context = params[:context]
+    
+    new_value = toUpperCase(new_value)
 
     # Then depending on the op do an edit/move/delete
     case operation
@@ -38,6 +40,13 @@ class SurveyRespondents::TagsAdminController < ApplicationController
   end
 
 private
+
+  def toUpperCase(str)
+    str = str.split(' ').map {|w|
+      w[0] = w[0].chr.upcase
+      w }.join(' ')
+    return str;  
+  end
 
   # Mapping from the tag context to the survey question id
   def initialize
@@ -66,7 +75,8 @@ private
 
       smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
       str = smerf_forms_surveyrespondent.responses[questionId]
-      smerf_forms_surveyrespondent.responses[questionId] = str.sub(old_value, new_value)
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? new_value : val }
+      smerf_forms_surveyrespondent.responses[questionId] = str.join(',')
       
       smerf_forms_surveyrespondent.save
       respondent.save
@@ -94,7 +104,8 @@ private
 
       smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
       str = smerf_forms_surveyrespondent.responses[srcQuestionId]
-      smerf_forms_surveyrespondent.responses[srcQuestionId] = str.sub(old_value, "")
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? '' : val }
+      smerf_forms_surveyrespondent.responses[srcQuestionId] = str.join(',')
 
       str = smerf_forms_surveyrespondent.responses[destQuestionId]
       smerf_forms_surveyrespondent.responses[destQuestionId] += "," + old_value
@@ -118,7 +129,8 @@ private
       
       smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
       str = smerf_forms_surveyrespondent.responses[questionId]
-      smerf_forms_surveyrespondent.responses[questionId] = str.sub(old_value, "")
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? '' : val }
+      smerf_forms_surveyrespondent.responses[questionId] = str.join(',')
 
       smerf_forms_surveyrespondent.save
       respondent.save
