@@ -53,7 +53,6 @@ smerfform:
           type: textfield
           style: grid_3
           sort_order: 1
-          validation: validate_mandatory_question
           question: |
           answer_id: first_name
           title: First Name
