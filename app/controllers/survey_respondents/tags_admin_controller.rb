@@ -75,8 +75,8 @@ private
 
       smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
       str = smerf_forms_surveyrespondent.responses[questionId]
-      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? new_value : val }
-      smerf_forms_surveyrespondent.responses[questionId] = str.join(',')
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? new_value : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+      smerf_forms_surveyrespondent.responses[questionId] = str.compact.join(',')
       
       smerf_forms_surveyrespondent.save
       respondent.save
@@ -104,11 +104,11 @@ private
 
       smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
       str = smerf_forms_surveyrespondent.responses[srcQuestionId]
-      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? '' : val }
-      smerf_forms_surveyrespondent.responses[srcQuestionId] = str.join(',')
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+      smerf_forms_surveyrespondent.responses[srcQuestionId] = str.compact.join(',')
 
       str = smerf_forms_surveyrespondent.responses[destQuestionId]
-      smerf_forms_surveyrespondent.responses[destQuestionId] += "," + old_value
+      smerf_forms_surveyrespondent.responses[destQuestionId] = (str && str.strip != '') ? str + "," + old_value : old_value
 
       smerf_forms_surveyrespondent.save
       respondent.save
@@ -129,8 +129,8 @@ private
       
       smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
       str = smerf_forms_surveyrespondent.responses[questionId]
-      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? '' : val }
-      smerf_forms_surveyrespondent.responses[questionId] = str.join(',')
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+      smerf_forms_surveyrespondent.responses[questionId] = str.compact.join(',')
 
       smerf_forms_surveyrespondent.save
       respondent.save
