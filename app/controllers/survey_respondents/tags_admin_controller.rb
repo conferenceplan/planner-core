@@ -23,8 +23,8 @@ class SurveyRespondents::TagsAdminController < ApplicationController
     # First get the operation
     operation = params[:tag][:operation]
     destination = params[:tag][:destination]
-    old_value = params[:original_tag]
-    new_value = params[:new_tag]
+    old_value = params[:original_tag].strip
+    new_value = params[:new_tag].strip
     context = params[:context]
     
     new_value = toUpperCase(new_value)
