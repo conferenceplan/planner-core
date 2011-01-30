@@ -55,21 +55,24 @@ class Person < ActiveRecord::Base
   has_one :edited_bio
   accepts_nested_attributes_for :edited_bio
   
-  def GetFullName()
+  def GetFullNameHelper(first_name,last_name,suffix)
       name = ""
-      if (self.first_name != nil)
-        name = self.first_name
+      if (first_name != nil)
+        name = first_name
       end
-      if (self.last_name != nil)
+      if (last_name != nil)
         name = name + " " + self.last_name
       end
-      if (self.suffix != nil)
-         name = self.first_name + " " + self.last_name
+      if (suffix != nil)
+         name = first_name + " " + last_name
       end
-      if (self.suffix != nil)
-        name = name + self.suffix
+      if (suffix != nil)
+        name = name + suffix
       end
       return name
+  end
+  def GetFullName()
+      return GetFullNameHelper(self.first_name,self.last_name,self.suffix)
   end
   
   def getDefaultPostalAddress()
@@ -107,22 +110,51 @@ class Person < ActiveRecord::Base
   end
   
   def hasSurvey?
-    acceptConditions = ""
-    @accepted = AcceptanceStatus.find_by_name("Accepted")        
-    if (self.acceptance_status_id == @accepted.id)
-         if (self.survey_respondent != nil)
-             acceptConditions = "surveyrespondent_id = "+ self.survey_respondent.id.to_s
-             survey = SmerfFormsSurveyrespondent.find :all, :conditions => acceptConditions
-             if (survey == nil || survey.length == 0)
-                  return false
-             end
-          else
-               return false
-          end
-    end
-    return true
+      if (self.survey_respondent != nil)
+         acceptConditions = "surveyrespondent_id = "+ self.survey_respondent.id.to_s
+         survey = SmerfFormsSurveyrespondent.find :all, :conditions => acceptConditions
+         if (survey == nil || survey.length == 0)
+             return false
+         end
+      else
+          return false
+      end
+      return true
   end
   
+  def GetFullPublicationName
+   if (self.pseudonym != nil)
+       return GetFullNameHelper(self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix)
+    else
+      if (self.hasSurvey?)
+         survey = SmerfFormsSurveyrespondent.find_user_smerf_form(self.survey_respondent.id, 1)
+         if (survey == nil)
+           return GetFullName()
+         else
+            survey_first_name = survey.responses['g3q1']
+            if (survey_first_name == "First name")
+              survey_first_name = ""
+            end
+            survey_last_name = survey.responses['g3q3']
+            if (survey_last_name == "Last Name")
+              survey_last_name = ""
+            end
+            survey_suffix = survey.responses['g3q4']
+            if (survey_suffix == "Suffix")
+              survey_suffix = ""
+            end
+            name = GetFullNameHelper(survey_first_name,survey_last_name,survey_suffix)
+            if (name =~ /^\s*$/)
+              name = GetFullName()
+            end
+            return name
+         end
+      else
+        return GetFullName()
+      end
+    end
+  end
+ 
   def removePostalAddress(address)
     # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person
