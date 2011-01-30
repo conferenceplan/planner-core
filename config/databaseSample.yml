@@ -1,3 +1,8 @@
+##
+#
+# This is a sample database.yml. Copy this file to your local database.yml and make the necessary changes
+#
+##
 # MySQL.  Versions 4.1 and 5.0 are recommended.
 #
 # Install the MySQL driver:
@@ -41,9 +46,9 @@ production:
   adapter: mysql
   encoding: utf8
   reconnect: false
-  database: RenoPlanner
+  database: 
   pool: 5
-  username: planner
-  password: 5xE6wizN
-  host: renodb
+  username: 
+  password: 
+  host: 
   socket: /tmp/mysql.sock
