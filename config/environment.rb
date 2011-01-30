@@ -1,12 +1,17 @@
 # Be sure to restart your server when you modify this file
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-# RAILS_GEM _VERSION = '2.3.3' unless defined? RAILS_GEM _VERSION
+RAILS_GEM_VERSION = '2.3.8' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
 
 Rails::Initializer.run do |config|
+
+  config.gem "rack", :version => "1.0.1"
+  config.gem "aws-s3", :version => ">= 0.6.2", :lib => "aws/s3"
+  config.gem "right_aws"
+
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
@@ -40,16 +45,3 @@ Rails::Initializer.run do |config|
   # config.i18n.default_locale = :de
   
 end
-
-#  ActionMailer::Base.delivery_method = :smtp
-#  
-##  ActionMailer::Base.raise_delivery_errors = true
-#
-#ActionMailer::Base.smtp_settings = {
-#  :address => "mail-2.eriko.us",
-#  :user_name => "reno-testmail",
-#  :domain => "renovationsf.org",
-#  :password => "zvefms2CSm",
-#  :authentication => :cram_md5,
-#  :port => 25
-#}
