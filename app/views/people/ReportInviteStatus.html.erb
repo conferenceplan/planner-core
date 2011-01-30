@@ -1,0 +1,39 @@
+<h1> Generate list using following criteria</h1>
+<%=
+    if flash[:error]
+      content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
+    end
+%>
+<% form_for :reportInviteStatus, :url=>{:controller=>"people", :action=>"doReportInviteStatus",:method => "get"} do |f| -%>
+ <div>
+  <div class='line'>
+  	Select the criteria for the people list, then submit. The list will be displayed in your browser.
+    Copy from your browser to save the list.
+  </div>
+  <div class='line'><div class='field_name'><%= f.label :invitestatus_id,"Select Invitation Status" %></div><div class='field_value'><%= f.select :invitestatus_id,
+	                 InviteStatus.find(:all).collect {|s| [s.name,s.id] },
+                    {:include_blank => false}%></div></div>	 
+					
+  <div class='line'>
+     	<%= f.label :acceptance_select,"Select Acceptance Status :"%>     	
+		<%= f.radio_button :acceptance_select, :false%> Select All
+		<%= f.radio_button :acceptance_select, :true%>Select One
+  </div>
+  <div class='line'><div class='field_name'><%= f.label :acceptance_status_id,"Select Acceptance Status" %></div>
+                    <div class='field_value'><%= f.select :acceptance_status_id,
+	                 AcceptanceStatus.find(:all).collect {|s| [s.name,s.id] },
+                    {:include_blank => false}%></div></div>	 
+	
+  <div class='line'><div class='field_name'><%= f.label :invitation_category_id,"Enter Invitation Category (Multiple Can Be Selected)" %></div>
+                    <div class='field_value'>   	
+					<%= select_tag 'reportInviteStatus[invitation_category_id]',options_from_collection_for_select(
+	                 InvitationCategory.find(:all), "id", "name"), :multiple => true %></div></div>
+ 
+  <div class='form-buttons'>
+		<%= f.submit "Submit" %>
+	
+  </div>
+  <div>
+  		<%= link_to 'Cancel', people_path%>
+  </div>
+<% end -%>

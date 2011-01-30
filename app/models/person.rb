@@ -51,7 +51,10 @@ class Person < ActiveRecord::Base
   #
   has_one  :pseudonym
   accepts_nested_attributes_for :pseudonym
-    
+  
+  has_one :edited_bio
+  accepts_nested_attributes_for :edited_bio
+  
   def GetFullName()
       name = ""
       if (self.first_name != nil)
@@ -101,6 +104,23 @@ class Person < ActiveRecord::Base
       end
     end
     return theEmail
+  end
+  
+  def hasSurvey?
+    acceptConditions = ""
+    @accepted = AcceptanceStatus.find_by_name("Accepted")        
+    if (self.acceptance_status_id == @accepted.id)
+         if (self.survey_respondent != nil)
+             acceptConditions = "surveyrespondent_id = "+ self.survey_respondent.id.to_s
+             survey = SmerfFormsSurveyrespondent.find :all, :conditions => acceptConditions
+             if (survey == nil || survey.length == 0)
+                  return false
+             end
+          else
+               return false
+          end
+    end
+    return true
   end
   
   def removePostalAddress(address)

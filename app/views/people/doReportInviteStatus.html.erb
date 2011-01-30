@@ -1,0 +1,20 @@
+<br/>
+<br/>
+<p> List of people:
+<%= @searchDescription %>
+</p>
+<br/>
+<% for person in  @people %>
+	<%= person.first_name %> <%= person.last_name %>
+	<br/>
+<%end%>
+<br/>
+<br/>
+<% if @nosurveypeople.length != 0 %>
+<p> People are listed as accepted but have not finished survey
+</p>
+<% for person in  @nosurveypeople %>
+	<%= person.first_name %> <%= person.last_name %>
+	<br/>
+<%end%>
+<%end%>

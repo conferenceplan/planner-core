@@ -285,17 +285,86 @@ class PeopleController < ApplicationController
     end
   end
   
- def exportemailxml
+  def exportemailxml
    if (@exportXmlError == nil)
     @exportXmlError = ""
    end
+  end
+  
+  def doReportInviteStatus
+    
+    acceptanceSelect = params[:reportInviteStatus][:acceptance_select]
+    acceptanceStatus = params[:reportInviteStatus][:acceptance_status_id]
+    invitecategories = params[:reportInviteStatus][:invitation_category_id]
+    invited_index = params[:reportInviteStatus][:invitestatus_id]
+    inviteStatus = InviteStatus.find(invited_index)
+    
+    if (inviteStatus.name == "Not Set")
+       flash[:error]= "Invite status cannot be Not Set" 
+       redirect_to :action => 'ReportInviteStatus'
+       return
+    end
+    
+    if (acceptanceSelect == nil)
+       flash[:error]= "Acceptance select cannot be empty"
+       redirect_to :action => 'ReportInviteStatus'
+       return
+    end
+    if (invitecategories == nil)
+       flash[:error]= "Invitation category cannot be empty"
+       redirect_to :action => 'ReportInviteStatus'
+       return
+    end
+ 
+    @searchDescription = "Invitation Status = " + inviteStatus.name
+    selectConditions = "invitestatus_id = "+invited_index.to_s
+    if (invitecategories.length != 0)
+      selectConditions = selectConditions + " AND "
+      @searchDescription = @searchDescription + " and "
+    end
+    addOr = "("
+    invitecategories.each do |invitecategory| 
+        inviteCategoryEntry = InvitationCategory.find(invitecategory)
+        @searchDescription = @searchDescription + " Invitation Category = " + inviteCategoryEntry.name
+        selectConditions = selectConditions + addOr + "invitation_category_id = " + invitecategory.to_s
+        addOr = " OR "
+    end
+    selectConditions = selectConditions + ")"
+    
+    if (acceptanceSelect == "true")
+        selectConditions = selectConditions + " AND "
+        selectConditions = selectConditions + "acceptance_status_id = "+ acceptanceStatus.to_s
+        acceptanceEntry = AcceptanceStatus.find(acceptanceStatus)
 
-end
+        @searchDescription = @searchDescription + " and Acceptance status = " + acceptanceEntry.name
+    end
 
-def invitestatuslist
+    @people = Person.find :all, :conditions => selectConditions, :order => 'last_name, first_name'
+    @nosurveypeople = []
+    surveypeople = []
+    @people.each do |person|
+      @accepted = AcceptanceStatus.find_by_name("Accepted")        
+      if (person.acceptance_status_id == @accepted.id)
+        if (person.hasSurvey? == false)
+          @nosurveypeople << person
+        else
+          surveypeople << person
+        end
+      else
+        surveypeople << person
+      end
+    end
+    @people = surveypeople
+  end
+  
+  def ReportInviteStatus
+   
+  end
+
+ def invitestatuslist
    @inviteStatus = InviteStatus.find :all
     render :layout => 'content'
-end
+ end
 
 def invitestatuslistwithblank
    @inviteStatus = InviteStatus.find :all

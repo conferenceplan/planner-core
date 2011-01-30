@@ -47,9 +47,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :email_addresses, :has_many => :people
   map.resources :menus
   
+  map.connect 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
+  map.connect 'participants/doReportInviteStatus', :controller => 'people', :action => 'doReportInviteStatus'
   map.connect 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'
   map.connect 'participants/doexportemailxml', :controller => 'people', :action => 'doexportemailxml', :method => 'post'
-  map.connect 'participants/doSetInvitePendingToInvited', :controller => 'people', :action => 'doSetInvitePendingToInvited'
+  map.connect 'participants/doSetInvitePendingToInvited', :controller => 'people', :action => 'doSetInvitePendingToInvited', :method => 'post'
   map.connect 'participants/SetInvitePendingToInvited', :controller => 'people', :action => 'SetInvitePendingToInvited'
   map.connect 'participants/invitestatuslist', :controller => 'people', :action => 'invitestatuslist'
   map.connect 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'
