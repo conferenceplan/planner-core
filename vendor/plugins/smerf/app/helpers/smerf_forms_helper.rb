@@ -236,9 +236,9 @@ module SmerfFormsHelper
         
         if (!additional_content[:answered])
           if (hide_link)
-            contents += "<a class='toggleLink toggle grid_1 prefix_5'>add another</a>" if((!add_index.empty?)or question.additional)
+            contents += content_tag(:a, "add another", :class => "toggleLink toggle grid_1 prefix_5") if((!add_index.empty?)or question.additional)
           else
-            contents += "<a class='toggleLink grid_1 prefix_5'>add another</a>" if((!add_index.empty?)or question.additional)
+            contents += content_tag(:a, "add another", :class => "toggleLink grid_1 prefix_5") if((!add_index.empty?)or question.additional)
           end
           hide_link = true
         end
@@ -350,7 +350,7 @@ module SmerfFormsHelper
         :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5",
         :class => style, :id => question.answer_id )
       if (question.tags)
-        contents += '<div class="cloud"></div>'
+        contents += content_tag(:div, "", :class => "cloud")
       end
 
       return { :content => contents, :answer => answered }
@@ -381,7 +381,7 @@ module SmerfFormsHelper
       contents = content_tag(:div, contents, :class => style)
 
       if (question.tags)
-        contents += '<div class="cloud grid_12"></div>'
+        contents += content_tag(:div, "", :class => "cloud grid_12")
       end
       
       return { :content => contents, :answer => answered }
