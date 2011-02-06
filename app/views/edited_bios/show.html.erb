@@ -1,0 +1,30 @@
+<div class='people_bio'>
+<% if @editedBio %>
+<div class='edit-form'>
+      <%=  link_to "edit", {:controller => 'edited_bios', :action => 'edit', :id => @editedBio}, :class => 'entrydialog' %>
+</div>
+<br>
+<% else %>
+      <%= link_to "Add Edited Bio", @urlstr, :class => 'entrydialog' %>
+	  <br>
+<% end %>
+<% if @editedBio %>
+<label>Edited Bio:</label>
+<br>
+<%= @editedBio.bio %>
+<br>
+<% else %>
+<p> No Edited Bio </p>
+<% end %>
+<% if @surveyBio %>
+<br>
+<label>Survey Bio:</label>
+<br>
+<%= @surveyBio %>
+<br>
+<% else %>
+<p>No Survey Bio</p>
+<% end %>
+  <div class='message' id='tab-messages'></div>
+  <div class="jqmWindow" id="edialog">Please wait...</div>
+</div>

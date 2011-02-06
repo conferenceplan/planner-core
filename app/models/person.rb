@@ -154,7 +154,18 @@ class Person < ActiveRecord::Base
       end
     end
   end
- 
+  
+  def GetSurveyBio
+     if (self.hasSurvey?)
+         survey = SmerfFormsSurveyrespondent.find_user_smerf_form(self.survey_respondent.id, 1)
+         if (survey == nil)
+           return nil
+         else
+           return survey.responses['g95q1']
+         end
+     end
+  end
+  
   def removePostalAddress(address)
     # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person

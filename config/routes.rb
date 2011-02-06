@@ -43,6 +43,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'programme_items/list', :controller => 'programme_items', :action => 'list'
   map.resources :programme_items
   map.resources :registrationDetails, :has_one => :participant
+  map.resources :edited_bios, :has_one => :participant
+
   map.resources :postal_addresses, :has_many => :people
   map.resources :email_addresses, :has_many => :people
   map.resources :menus
@@ -60,7 +62,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses],
-    :has_one => :registrationDetail,
+    :has_one => [:registrationDetail, :edited_bio],
     :collection => {:list => :get }
   map.resources :people, :as => "participants" do |person|
     person.resource :tags, :member => {:remove => :delete, :add => :post, :index => :get, :list => :get}, 

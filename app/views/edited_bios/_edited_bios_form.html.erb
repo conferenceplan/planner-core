@@ -1,0 +1,11 @@
+<%= error_messages_for :editedBio%>
+<% form_for @editedBio, :url => @urlstr, :html => {:class => "particpantBio", :id => "particiantBio"} do |f| %>
+   <div class='form-buttons'>
+		<%= f.submit "Submit" %>
+		<button type="button" class='jqmClose'>Close</button>
+	</div>
+    <div class='field_name'>bio:</div>
+	<div class='field_value'><%= f.text_area :bio,:size => "40x10" %></div>
+<% end %>
+<div id='form-response'>
+</div>
