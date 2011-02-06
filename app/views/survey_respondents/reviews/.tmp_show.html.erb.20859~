@@ -1,4 +1,0 @@
-
-Test
-
-<%= GenericSmerfHtmlFormatter::html_format_group() %>
