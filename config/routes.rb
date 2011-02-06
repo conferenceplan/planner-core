@@ -88,7 +88,7 @@ ActionController::Routing::Routes.draw do |map|
   map.logout "logout", :controller => "user_sessions", :action => "destroy"
 
   #
-  # The news were removed so as to prevent anonymous people creating new accounts
+  # The new(s) were removed so as to prevent anonymous people creating new accounts
   #
   map.resource :account, :controller => "users", :except => :new
   map.resources :users, :except => :new
@@ -118,6 +118,12 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'survey_respondents/tags_admin', :controller => 'survey_respondents/tags_admin', :action => 'index'
   map.connect 'survey_respondents/tags_admin/update', :controller => 'survey_respondents/tags_admin', :action => 'update', :via => :post
   
+  #
+  map.connect 'survey_respondents/reviews/list', :controller => 'survey_respondents/reviews', :action => 'list'
+  map.namespace :survey_respondents do |respondent|
+    respondent.resources :reviews
+  end
+    
   map.resources :survey_respondents
 
   # 
@@ -125,10 +131,6 @@ ActionController::Routing::Routes.draw do |map|
     respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 
       :controller => 'survey_respondents/tags',
       :except => [:destroy, :new, :create, :edit, :remove]
-
-#    respondent.resource :tags_admin, :member => {:index => :get}, 
-#      :controller => 'survey_respondents/tags_admin',
-#      :except => [:destroy, :new, :create, :edit, :remove]
   end
 
   # These also take the context as a parameter...

@@ -1,0 +1,13 @@
+xml.rows do
+  xml.page(@page)
+  xml.total(@nbr_pages)
+  xml.records(@respondents.size)
+  @respondents.each do |respondent|
+    xml.row({:id => respondent.id}) do
+      xml.cell(respondent.first_name)
+      xml.cell(respondent.last_name)
+      xml.cell(respondent.attending)
+    end
+  end
+end
+

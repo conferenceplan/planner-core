@@ -1,37 +1,87 @@
-# This module contains all the helper methods used by the smerf form views.
-module GenericSmerfHtmlHelper
+#
+#
+#
+module GenericSmerfHtmlFormatter
   
   #
   #
   #
-  def smerf_html_group_question(question)
-    content = ""
-
-    if (question.question) and (!question.question.blank?)
-      content += content_tag(:div, question.question ) 
+  def html_format_group(group)
+    content = ''
+    question_content = ''
+    
+    group.questions.each do |question|
+      question_content += smerf_html_group_question(question)
     end
     
+    if (!question_content.blank?)
+      if !group.name.blank?
+        content += content_tag(:h3, group.name, :class => :response_group_header)
+      else
+        content += content_tag(:h3, group.altname, :class => :response_group_header) if !group.altname.blank?
+      end
+      content += content_tag(:div, question_content)
+    end
+    
+    return content
+  end
+
+  def smerf_html_group_question(question)
+    content = ""
+    answer_html = ""
+
     # Check the type and format appropriatly
+    answer = ''
     case question.type
       when 'multiplechoice'
-      content += get_multiplechoice(question)
+      answer += get_multiplechoice(question)
       when 'textbox'
-      content += get_text(question)
+      answer += get_textbox(question)
       when 'textfield'
-      content += get_text(question)
+      answer += get_text(question)
       when 'singlechoice'
-      content += get_singlechoice(question)
+      answer += get_singlechoice(question)
       when 'selectionbox'
-      content += get_selectionbox(question)
+      answer += get_selectionbox(question)
     else  
       raise("Unknown question type for question: #{question.question}")
+    end
+    
+    if (!answer.blank?)
+      if (question.question) and (!question.question.blank?)
+        answer_html += content_tag(:div, question.question, :class => 'response_question_text')
+      end
+      answer_html += content_tag(:div, answer, :class => 'response_answer');
+      content += content_tag(:div, answer_html, :class => 'response_question')
+    end
+
+    if question.additional
+      # for each of the additional we want to create a new version of the same question
+      1.upto(question.additional) { |i|
+        dup_question = question.clone
+        dup_question.additional = 0
+        dup_question.code += "-" + i.to_s
+        change_question_code(dup_question, "-" + i.to_s)
+        # need to go through the nested questions and change their codes as well
+        content += smerf_html_group_question(dup_question)        
+     }
     end
     
     return content
   end
   
   private
-  
+    def change_question_code(question, code)
+      question.answers.each do |answer|
+        if (answer.respond_to?("subquestions") and answer.subquestions and answer.subquestions.size > 0)
+        answer.subquestions.each {|subquestion| 
+           subquestion.code += code
+           change_question_code(subquestion, code)
+          }
+        end
+      end
+    end
+
     # Some answers to questions may have further questions, here we 
     # process these sub questions.
     #
@@ -56,11 +106,10 @@ module GenericSmerfHtmlHelper
           @responses.has_key?("#{question.code}") and
           @responses["#{question.code}"].has_key?("#{answer.code}"))
           user_answer = @responses["#{question.code}"]["#{answer.code}"]
-#          contents += content_tag(:div, user_answer)
-          contents += content_tag(:div, answer.answer)
+          contents += content_tag(:div, answer.answer, :class => 'response_choice')
         end
         # Process any sub questions this answer may have
-        contents += process_sub_questions(answer)
+        contents += ' ' + process_sub_questions(answer)
       end
       # Process error messages if they exist
       return contents
@@ -75,7 +124,21 @@ module GenericSmerfHtmlHelper
         @responses.has_key?("#{question.code}"))
         user_answer = @responses["#{question.code}"]
         if (user_answer and !user_answer.blank?())
-          contents += content_tag(:div, user_answer)
+          contents += content_tag(:div, user_answer, :class => 'response_text')
+        end
+      end
+
+      return contents
+    end
+
+    def get_textbox(question)
+      contents = ""
+      # Get the user input if available
+      if (@responses and !@responses.empty?() and 
+        @responses.has_key?("#{question.code}"))
+        user_answer = @responses["#{question.code}"]
+        if (user_answer and !user_answer.blank?())
+          contents += content_tag(:div, content_tag(:pre, user_answer), :class => 'response_text_box')
         end
       end
 
@@ -93,7 +156,7 @@ module GenericSmerfHtmlHelper
            if ( answer.answer ) 
              user_answer = @responses["#{question.code}"]
              if ((user_answer and !user_answer.blank?() and user_answer.to_s() == answer.code.to_s()))
-             contents += content_tag(:div, answer.answer)
+             contents += content_tag(:div, answer.answer, :class => 'response_single_choice')
              end
           end
         end
@@ -112,12 +175,11 @@ module GenericSmerfHtmlHelper
         if (@responses and !@responses.empty?() and 
           @responses.has_key?("#{question.code}") and
           @responses["#{question.code}"].include?("#{answer.code}"))
-#          contents += content_tag(:div, answer.code.to_s())
-          contents += content_tag(:div, answer.answer)
+          contents += content_tag(:div, answer.answer, :class => 'response_selection')
         end
       end        
       
       return contents
     end
-   
+
 end

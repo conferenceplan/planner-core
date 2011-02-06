@@ -43,6 +43,7 @@ smerfform:
     personal_details_name:
       code: 2
       name: 
+      altname: Name
       style: grid_12
       description_style: grid_3 mandatory
       description: | Name
@@ -78,6 +79,7 @@ smerfform:
     personal_details_pub_name:
       code: 3
       name: 
+      altname: Publication Name
       style: grid_12 pubname_toggle
       description_style: grid_3
       description: | Publication Name
@@ -112,6 +114,7 @@ smerfform:
     personal_details_address:
       code: 4
       name: 
+      altname: Address Details
       description: | 
       questions:
         Street Address:
@@ -1248,6 +1251,7 @@ smerfform:
     social_media_info:
       code: 96
       name:
+      altname: Social Media
       style: grid_12
       description_style: grid_2
       description: | <b>Social Media</b>
