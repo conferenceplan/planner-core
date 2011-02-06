@@ -11,7 +11,7 @@ module GenericSmerfHtmlFormatter
     question_content = ''
     
     group.questions.each do |question|
-      question_content += smerf_html_group_question(question)
+      question_content += html_group_question(question)
     end
     
     if (!question_content.blank?)
@@ -26,7 +26,7 @@ module GenericSmerfHtmlFormatter
     return content
   end
 
-  def smerf_html_group_question(question)
+  def html_group_question(question)
     content = ""
     answer_html = ""
 
@@ -63,7 +63,7 @@ module GenericSmerfHtmlFormatter
         dup_question.code += "-" + i.to_s
         change_question_code(dup_question, "-" + i.to_s)
         # need to go through the nested questions and change their codes as well
-        content += smerf_html_group_question(dup_question)        
+        content += html_group_question(dup_question)        
      }
     end
     
