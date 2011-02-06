@@ -9,8 +9,6 @@ require File.join(File.dirname(__FILE__), 'boot')
 Rails::Initializer.run do |config|
 
   config.gem "rack", :version => "1.0.1"
-  config.gem "aws-s3", :version => ">= 0.6.2", :lib => "aws/s3"
-  config.gem "right_aws"
 
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
