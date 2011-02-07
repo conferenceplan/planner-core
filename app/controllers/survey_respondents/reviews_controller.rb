@@ -59,7 +59,8 @@ class SurveyRespondents::ReviewsController < ApplicationController
     if clause.empty?
       clause = ["acceptance_status_id = ?", accepted.id.to_s]
     else
-      clause[0] += " AND acceptance_status_id = ?"
+      clause[0] += " AND " if !clause[0].strip().empty?
+      clause[0] += " acceptance_status_id = ?"
       clause << accepted.id.to_s
     end
       
