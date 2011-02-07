@@ -50,6 +50,10 @@ jQuery(document).ready(function(){
             return false;
         }
     });
+    jQuery("#respondents").jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false
+    });
 });
 
 //function processResponse(response, postdata){

@@ -201,3 +201,46 @@ div.controls div.edit-form a.entrydialog {
 	padding: 0;
 	height: 18px;
 }
+
+div.response_question {
+}
+
+div.response_question_text {
+	clear: both;
+	float: left;
+	font-weight: bold;
+	padding-right: 1em;
+}
+
+div.response_single_choice {
+	float: left;
+	padding-right: 1em;
+}
+
+div.response_choice {
+	float: left;
+	padding-right: 0.5em;
+}
+
+div.response_text_box {
+	float: left;
+	clear: both;
+}
+
+div.response_answer {
+}
+
+div.response_choice {
+	clear: both;
+	float: left;	
+}
+
+/* div.response_selection */
+div.response_text {
+	float: left;
+	padding-right: 0.5em;
+}
+
+.ui-widget {
+	font-size: 11px;
+}

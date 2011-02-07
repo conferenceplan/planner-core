@@ -1,10 +1,6 @@
 class SurveyRespondents::ReviewsController < ApplicationController
   before_filter :require_user
 
-# 1. List of survey respondents
-# 2. 
-# 3.
-
   def index
   end
 
@@ -29,7 +25,7 @@ class SurveyRespondents::ReviewsController < ApplicationController
     @page = params[:page]
     idx = params[:sidx]
     order = params[:sord]
-    clause = ""
+    clause = []
     fields = Array::new
     
     if (params[:filters])
@@ -45,25 +41,35 @@ class SurveyRespondents::ReviewsController < ApplicationController
           end
           # integer items (integers or select id's) need to be handled differently in the query
               if subclause["op"] == 'ne'
-                clausestr << subclause['field'] + ' not like ?'
+                clausestr << 'survey_respondents.' + subclause['field'] + ' not like ?'
               else
-                clausestr << subclause['field'] + ' like ?'
+                clausestr << 'survey_respondents.' + subclause['field'] + ' like ?'
               end
               fields << subclause['data'] + '%'
-          logger.info fields
         end
         clause = [clausestr] | fields
       end
     end
+    
+    # and where survey_respondent_.person.acceptance_status is Accepted
+    accepted = AcceptanceStatus.find_by_name("Accepted")
 
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    count = SurveyRespondent.count :conditions => clause
+    if clause.empty?
+      clause = ["acceptance_status_id = ?", accepted.id.to_s]
+    else
+      clause[0] += " AND acceptance_status_id = ?"
+      clause << accepted.id.to_s
+    end
+      
+    count = SurveyRespondent.count :joins => :person,
+                                          :conditions => clause
     @nbr_pages = (count / rows.to_i).floor + 1
     
     off = (@page.to_i - 1) * rows.to_i
-    @respondents = SurveyRespondent.find :all, :offset => off, :limit => rows,
-      :order => idx + " " + order, :conditions => clause
+    @respondents = SurveyRespondent.find :all, :joins => :person, :conditions => clause,
+      :offset => off, :limit => rows, :order => idx + " " + order
    
     # We return the list of people as an XML structure which the 'table' can us
     respond_to do |format|

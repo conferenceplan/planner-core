@@ -182,7 +182,6 @@ jQuery(document).ready(function(){
             $tabs.tabs('url', 1, 'participants/' + ids + '/addresses').tabs('load', 1);
             $tabs.tabs('url', 2, 'participants/' + ids).tabs('load', 2);
 			$tabs.tabs('url', 3, 'participants/' + ids + '/edited_bio').tabs('load',3);
-            $tabs.tabs('url', 4, 'participants/' + ids + '/tags').tabs('load', 4);
             
             return false;
         }
