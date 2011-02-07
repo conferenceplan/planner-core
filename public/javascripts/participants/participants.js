@@ -35,11 +35,11 @@ jQuery(document).ready(function(){
         url: 'participants/list',
         datatype: 'xml',
 		mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation Category','Acceptance'],
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation Category','Acceptance','Survey'],
         colModel: [{
             name: 'person[first_name]',
             index: 'first_name',
-            width: 210,
+            width: 200,
             editable: true,
             editoptions: {
                 size: 20
@@ -55,7 +55,7 @@ jQuery(document).ready(function(){
         }, {
             name: 'person[last_name]',
             index: 'last_name',
-            width: 210,
+            width: 200,
             editable: true,
             editoptions: {
                 size: 20
@@ -160,6 +160,13 @@ jQuery(document).ready(function(){
 				rowpos:7,
 				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
 			} 
+        },{
+            name: 'person[hasSurvey]',
+            width: 60,
+            editable: false,
+			sortable: false,
+			search: false,
+			hidden: false
         }
 		],
         pager: jQuery('#pager'),

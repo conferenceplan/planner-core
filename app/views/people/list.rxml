@@ -23,6 +23,11 @@ xml.rows do
       else
         xml.cell("")
       end
+      if (person.hasSurvey?)
+        xml.cell("Y")
+      else
+        xml.cell("N")
+      end
     end
   end
 end
