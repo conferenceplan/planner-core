@@ -131,6 +131,12 @@ private
       
       survey_respondent.save
 
+      person = survey_respondent.person
+      if person
+        person.acceptance_status = AcceptanceStatus.find_by_name("Accepted")
+        person.save
+      end
+
       SurveyMailer.deliver_thankyou_email(survey_respondent) # send out email to the new email address
       
   end
