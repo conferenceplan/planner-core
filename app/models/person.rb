@@ -110,16 +110,14 @@ class Person < ActiveRecord::Base
   end
   
   def hasSurvey?
-      if (self.survey_respondent != nil)
-         acceptConditions = "surveyrespondent_id = "+ self.survey_respondent.id.to_s
-         survey = SmerfFormsSurveyrespondent.find :all, :conditions => acceptConditions
-         if (survey == nil || survey.length == 0)
-             return false
-         end
-      else
-          return false
-      end
+    # If the person has an accepted status and is also a survey_respondent then
+    # they probably also have a survey completed
+    # AND if the attending attribute of the respondent is true then they have gone to the form ;-)
+    if self.acceptance_status == AcceptanceStatus[:Accepted] && self.survey_respondent != nil && self.survey_respondent.attending
       return true
+    else
+      return false
+    end
   end
   
   def GetFullPublicationName
