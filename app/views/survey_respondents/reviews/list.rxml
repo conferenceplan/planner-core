@@ -6,7 +6,6 @@ xml.rows do
     xml.row({:id => respondent.id}) do
       xml.cell(respondent.first_name)
       xml.cell(respondent.last_name)
-      xml.cell(respondent.attending)
     end
   end
 end

@@ -225,6 +225,11 @@ div.response_text_box {
 div.response_answer {
 }
 
+div.response_answer pre {
+	clear: both;
+	float: left;	
+}
+
 div.response_choice {
 	clear: both;
 	float: left;	

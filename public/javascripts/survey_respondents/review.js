@@ -6,7 +6,7 @@ jQuery(document).ready(function(){
     jQuery("#respondents").jqGrid({
         url: '/survey_respondents/reviews/list',
         datatype: 'xml',
-        colNames: ['First Name', 'Last Name', 'Attending'],
+        colNames: ['First Name', 'Last Name'],
         colModel: [
 		{
             name: 'respondent[first_name]',
@@ -16,10 +16,6 @@ jQuery(document).ready(function(){
 			name:'respondent[last_name]',
 			index:'last_name',
 			width: 250,
-        },{
-            name: 'respondent[attending]',
-            index: 'attending',
-            width: 100,
         }
 		],
         pager: jQuery('#pager'),
