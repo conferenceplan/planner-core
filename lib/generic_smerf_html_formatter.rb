@@ -34,15 +34,15 @@ module GenericSmerfHtmlFormatter
     answer = ''
     case question.type
       when 'multiplechoice'
-      answer += get_multiplechoice(question)
+      answer += html_get_multiplechoice(question)
       when 'textbox'
-      answer += get_textbox(question)
+      answer += html_get_textbox(question)
       when 'textfield'
-      answer += get_text(question)
+      answer += html_get_text(question)
       when 'singlechoice'
-      answer += get_singlechoice(question)
+      answer += html_get_singlechoice(question)
       when 'selectionbox'
-      answer += get_selectionbox(question)
+      answer += html_get_selectionbox(question)
     else  
       raise("Unknown question type for question: #{question.question}")
     end
@@ -51,8 +51,9 @@ module GenericSmerfHtmlFormatter
       if (question.question) and (!question.question.blank?)
         answer_html += content_tag(:div, question.question, :class => 'response_question_text')
       end
-      answer_html += content_tag(:div, answer, :class => 'response_answer');
-      content += content_tag(:div, answer_html, :class => 'response_question')
+      answer_html += content_tag(:div, answer, :class => 'response_answer')
+#      content += content_tag(:div, answer_html, :class => 'response_question')
+      content = answer_html
     end
 
     if question.additional
@@ -61,7 +62,7 @@ module GenericSmerfHtmlFormatter
         dup_question = question.clone
         dup_question.additional = 0
         dup_question.code += "-" + i.to_s
-        change_question_code(dup_question, "-" + i.to_s)
+        html_change_question_code(dup_question, "-" + i.to_s)
         # need to go through the nested questions and change their codes as well
         content += html_group_question(dup_question)        
      }
@@ -71,12 +72,12 @@ module GenericSmerfHtmlFormatter
   end
   
   private
-    def change_question_code(question, code)
+    def html_change_question_code(question, code)
       question.answers.each do |answer|
         if (answer.respond_to?("subquestions") and answer.subquestions and answer.subquestions.size > 0)
         answer.subquestions.each {|subquestion| 
            subquestion.code += code
-           change_question_code(subquestion, code)
+           html_change_question_code(subquestion, code)
           }
         end
       end
@@ -85,20 +86,20 @@ module GenericSmerfHtmlFormatter
     # Some answers to questions may have further questions, here we 
     # process these sub questions.
     #
-    def process_sub_questions(answer)
+    def html_process_sub_questions(answer)
       # Process any answer sub quesions by recursivly calling this function
       sq_contents = ""
       if (answer.respond_to?("subquestions") and 
         answer.subquestions and answer.subquestions.size > 0)
         answer.subquestions.each {|subquestion| sq_contents += 
-          smerf_html_group_question(subquestion)}
+          html_group_question(subquestion)}
       end
       return sq_contents
     end
 
     # Format multiple choice question
     #
-    def get_multiplechoice(question)
+    def html_get_multiplechoice(question)
       contents = ""
       question.answers.each do |answer|
         # Get the user input if available
@@ -109,7 +110,7 @@ module GenericSmerfHtmlFormatter
           contents += content_tag(:div, answer.answer, :class => 'response_choice')
         end
         # Process any sub questions this answer may have
-        contents += ' ' + process_sub_questions(answer)
+        contents += ' ' + html_process_sub_questions(answer)
       end
       # Process error messages if they exist
       return contents
@@ -117,7 +118,7 @@ module GenericSmerfHtmlFormatter
 
     # Format text box question
     #
-    def get_text(question)
+    def html_get_text(question)
       contents = ""
       # Get the user input if available
       if (@responses and !@responses.empty?() and 
@@ -131,7 +132,7 @@ module GenericSmerfHtmlFormatter
       return contents
     end
 
-    def get_textbox(question)
+    def html_get_textbox(question)
       contents = ""
       # Get the user input if available
       if (@responses and !@responses.empty?() and 
@@ -147,7 +148,7 @@ module GenericSmerfHtmlFormatter
 
     # Format single choice question
     #
-    def get_singlechoice(question)
+    def html_get_singlechoice(question)
       contents = ""
       question.answers.each do |answer|
         # Get the user input_objects if available
@@ -161,14 +162,14 @@ module GenericSmerfHtmlFormatter
           end
         end
         # Process any sub questions this answer may have
-        contents += process_sub_questions(answer)
+        contents += html_process_sub_questions(answer)
       end
       return contents
     end
  
     # Format drop down box(select) question
     #
-    def get_selectionbox(question)
+    def html_get_selectionbox(question)
       contents = ""
       question.answers.each do |answer|
         # Get the user input if available

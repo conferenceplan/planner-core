@@ -1,3 +1,7 @@
+/* @override http://sharp-frost-42.heroku.com/stylesheets/planner.css?1297224455 */
+
+/* @override http://sharp-frost-42.heroku.com/stylesheets/planner.css?1297221234 */
+
 #programme_item_content
 {
 	width : 90%
@@ -198,6 +202,7 @@ div.controls div.edit-form a.entrydialog {
 }
 
 div.survey_responses {
+	padding: 1.5em 0.5em 2em;
 }
 
 div.survey_responses h3 {
@@ -207,6 +212,7 @@ div.survey_responses h3 {
 
 div.response_group_body {
 	clear: both;
+	overflow: hidden;
 }
 
 div.response_question {
@@ -226,21 +232,17 @@ div.response_single_choice {
 
 div.response_choice {
 	float: left;
-	padding-right: 0.5em;
+	padding-right: 2em;
+	color: navy;
 }
 
 div.response_text_box {
 	float: left;
+	font-family: "Courier New", Courier, mono;
 	clear: both;
 }
 
 div.response_answer {
-	float: left;
-}
-
-div.response_choice {
-	clear: both;
-	float: left;	
 }
 
 /* div.response_selection */
