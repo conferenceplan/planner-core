@@ -128,6 +128,7 @@ private
       survey_respondent.first_name = smerf_forms_surveyrespondent.responses['g2q1']
       survey_respondent.last_name = smerf_forms_surveyrespondent.responses['g2q3']
       survey_respondent.suffix = smerf_forms_surveyrespondent.responses['g2q4']
+      survey_respondent.submitted_survey = true
       
       survey_respondent.save
 
