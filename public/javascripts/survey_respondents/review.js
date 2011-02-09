@@ -36,11 +36,11 @@ jQuery(document).ready(function(){
 				context: $('#survey'),
 				success: function(data){
 					$(this).html(data);
-            		$(".survey_responses").accordion({
-                		header: 'h3',
-                		collapsible: true,
-                		autoHeight: false
-            		});
+//            		$(".survey_responses").accordion({
+//                		header: 'h3',
+//                		collapsible: true,
+//                		autoHeight: false
+//            		});
 				}
 			});
             return false;

@@ -197,6 +197,18 @@ div.controls div.edit-form a.entrydialog {
 	height: 18px;
 }
 
+div.survey_responses {
+}
+
+div.survey_responses h3 {
+	clear: both;
+	float: left;
+}
+
+div.response_group_body {
+	clear: both;
+}
+
 div.response_question {
 }
 
@@ -223,11 +235,7 @@ div.response_text_box {
 }
 
 div.response_answer {
-}
-
-div.response_answer pre {
-	clear: both;
-	float: left;	
+	float: left;
 }
 
 div.response_choice {

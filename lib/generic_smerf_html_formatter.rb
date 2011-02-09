@@ -20,7 +20,7 @@ module GenericSmerfHtmlFormatter
       else
         content += content_tag(:h3, group.altname, :class => :response_group_header) if !group.altname.blank?
       end
-      content += content_tag(:div, question_content)
+      content += content_tag(:div, question_content, :class => :response_group_body)
     end
     
     return content
@@ -138,7 +138,7 @@ module GenericSmerfHtmlFormatter
         @responses.has_key?("#{question.code}"))
         user_answer = @responses["#{question.code}"]
         if (user_answer and !user_answer.blank?())
-          contents += content_tag(:div, content_tag(:pre, user_answer), :class => 'response_text_box')
+          contents += content_tag(:div, user_answer, :class => 'response_text_box')
         end
       end
 
