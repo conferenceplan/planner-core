@@ -51,25 +51,21 @@ class SurveyRespondents::ReviewsController < ApplicationController
       end
     end
     
-    # and where survey_respondent_.person.acceptance_status is Accepted
-    accepted = AcceptanceStatus.find_by_name("Accepted")
-
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
     if clause.empty?
-      clause = ["acceptance_status_id = ?", accepted.id.to_s]
+      clause = ["submitted_survey = ?", true]
     else
       clause[0] += " AND " if !clause[0].strip().empty?
-      clause[0] += " acceptance_status_id = ?"
-      clause << accepted.id.to_s
+      clause[0] += " submitted_survey = ?"
+      clause << true
     end
       
-    count = SurveyRespondent.count :joins => :person,
-                                          :conditions => clause
+    count = SurveyRespondent.count :conditions => clause
     @nbr_pages = (count / rows.to_i).floor + 1
     
     off = (@page.to_i - 1) * rows.to_i
-    @respondents = SurveyRespondent.find :all, :joins => :person, :conditions => clause,
+    @respondents = SurveyRespondent.find :all, :conditions => clause,
       :offset => off, :limit => rows, :order => idx + " " + order
    
     # We return the list of people as an XML structure which the 'table' can us
