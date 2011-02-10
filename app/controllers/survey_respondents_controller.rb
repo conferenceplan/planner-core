@@ -39,7 +39,13 @@ class SurveyRespondentsController < SurveyApplicationController
         # Get the related person and update their acceptance status...
         person = @survey_respondent.person
         if person
-          person.acceptance_status = (fillSurvey) ? AcceptanceStatus.find_by_name("Probable") : AcceptanceStatus.find_by_name("Declined")
+          if (fillSurvey )
+            if (person.acceptance_status.name != "Accepted")
+              person.acceptance_status = AcceptanceStatus.find_by_name("Probable")
+            end
+          else
+            person.acceptance_status = AcceptanceStatus.find_by_name("Declined")
+          end
           person.save
         end
 
