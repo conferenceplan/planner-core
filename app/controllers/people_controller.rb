@@ -260,15 +260,23 @@ class PeopleController < ApplicationController
            end
          end
          
+         # make sure the survey key is unique
+         survey_respondent = nil
+         newKeyValue = 0
+         begin
+           newKeyValue = ('%05d' % rand(1e5))
+           survey_respondent = SurveyRespondent.find_by_key(newKeyValue)
+         end until survey_respondent == nil
+         
          if theEmail == nil
            person.create_survey_respondent(:last_name => person.last_name, 
                                          :first_name => person.first_name,
-                                         :key => ('%05d' % rand(1e5)),
+                                         :key => newKeyValue,
                                          :suffix => person.suffix)
          else  
            person.create_survey_respondent(:last_name => person.last_name, 
                                          :first_name => person.first_name,
-                                         :key => ('%05d' % rand(1e5)),
+                                         :key => newKeyValue,
                                          :suffix => person.suffix,
                                          :email => theEmail.email)
          end
