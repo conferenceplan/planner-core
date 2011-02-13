@@ -110,7 +110,7 @@ class Person < ActiveRecord::Base
   end
   
   def hasSurvey?
-    return self.survey_respondent.submitted_survey
+    return self.survey_respondent != nil ? self.survey_respondent.submitted_survey : false
   end
   
   def GetFullPublicationName
