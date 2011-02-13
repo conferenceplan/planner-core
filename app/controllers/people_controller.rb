@@ -94,15 +94,22 @@ class PeopleController < PlannerController
     clause = createWhereClause(params[:filters], 
                   ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
                   ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
-    
+                  
+    # if the where clause contains pseudonyms. then we need to add the join
+    args = { :conditions => clause }
+    if clause != nil && clause[0].index('pseudonyms.') != nil
+      args.merge!( :joins => :pseudonym )
+    end
+      
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    @count = Person.count :conditions => clause
+    @count = Person.count args
     @nbr_pages = (@count / rows.to_i).floor + 1
-    
+
+    # now we get the actual data
     offset = (@page.to_i - 1) * rows.to_i
-    @people = Person.find :all, :offset => offset, :limit => rows,
-      :order => idx + " " + order, :conditions => clause
+    args.merge!(:offset => offset, :limit => rows, :order => idx + " " + order)
+    @people = Person.find :all, args
    
     # We return the list of people as an XML structure which the 'table' can use
     respond_to do |format|

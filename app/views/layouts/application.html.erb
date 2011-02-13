@@ -5,6 +5,9 @@
         <%=render 'layouts/common_styles' %>
         <%=render 'layouts/common_js' %>
 		<%= yield(:jsheader) if @content_for_jsheader %>
+		<style type="text/css">
+			<%= yield(:styleheader) if @content_for_styleheader %>
+		</style>
     </head>
     <body>
     	<div class='container_12'>

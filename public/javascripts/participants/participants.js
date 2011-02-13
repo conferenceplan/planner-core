@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
         url: 'participants/list',
         datatype: 'xml',
 		mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation Category','Acceptance','Survey'],
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation<br/>Category','Acceptance','Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name'],
         colModel: [{
             name: 'person[first_name]',
             index: 'first_name',
@@ -125,7 +125,7 @@ jQuery(document).ready(function(){
         },{
 			name:'person[invitation_category_id]',
 			index:'invitation_category_id',
-			width: 150,
+			width: 100,
 			editable: true, 
 			edittype: "select", 
 			search: true,
@@ -162,12 +162,38 @@ jQuery(document).ready(function(){
 			} 
         },{
             name: 'person[hasSurvey]',
-            width: 60,
+            width: 50,
             editable: false,
 			sortable: false,
 			search: false,
 			hidden: false
-        }
+        },{
+            name: 'person[pseudonym_attributes][first_name]',
+            width: 150,
+			index: 'pseudonyms.first_name',
+            editable: true,
+			sortable: false,
+            editoptions: {
+                size: 20
+            },
+            formoptions: {
+                rowpos: 8,
+                label: "Pub First Name"
+            }
+        },{
+            name: 'person[pseudonym_attributes][last_name]',
+            width: 150,
+			index: 'pseudonyms.last_name',
+            editable: true,
+			sortable: false,
+            editoptions: {
+                size: 20
+            },
+            formoptions: {
+                rowpos: 9,
+                label: "Pub Last Name"
+            }
+		}
 		],
         pager: jQuery('#pager'),
         rowNum: 10,
@@ -200,7 +226,7 @@ jQuery(document).ready(function(){
         search: false
     }, //options
     { // edit options
-        height: 220,
+        height: 320,
         reloadAfterSubmit: false,
         jqModal: true,
         closeOnEscape: true,
