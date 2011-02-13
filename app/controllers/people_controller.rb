@@ -1,6 +1,4 @@
-class PeopleController < ApplicationController
-
-  before_filter :require_user
+class PeopleController < PlannerController
 
   def destroy
     person = Person.find(params[:id])
@@ -88,62 +86,25 @@ class PeopleController < ApplicationController
 
   #
   def list
-    j = ActiveSupport::JSON
-    
     rows = params[:rows]
     @page = params[:page]
     idx = params[:sidx]
     order = params[:sord]
-    clause = ""
-    fields = Array::new
     
-    if (params[:filters])
-      queryParams = j.decode(params[:filters])
-      if (queryParams)
-        clausestr = ""
-        queryParams["rules"].each do |subclause|
-          # these are the select type filters - position 0 is the empty position and means it is not selected, so we are not
-          # filtering on that item
-          next if (subclause['field'] == 'invitestatus_id' && subclause['data'] == '0')        
-          next if (subclause['field'] == 'invitation_category_id' && subclause['data'] == '0')
-          next if (subclause['field'] == 'acceptance_status_id' && subclause['data'] == '0')
-          
-          if clausestr.length > 0 
-            clausestr << ' ' + queryParams["groupOp"] + ' '
-          end
-          # integer items (integers or select id's) need to be handled differently in the query
-          if (subclause['field'] == 'invitestatus_id' || subclause['field'] == 'invitation_category_id'  || subclause['field'] == 'mailing_number' || subclause['field'] == 'acceptance_status_id')
-             if subclause["op"] == 'ne'
-               clausestr << subclause['field'] + ' != ?'
-             else
-               clausestr << subclause['field'] + ' = ?'
-             end
-             fields << subclause['data'].to_i
-          else
-              if subclause["op"] == 'ne'
-                clausestr << subclause['field'] + ' not like ?'
-              else
-                clausestr << subclause['field'] + ' like ?'
-              end
-              fields << subclause['data'] + '%'
-          end
-          logger.info fields
-        end
-        clause = [clausestr] | fields
-      end
-    end
+    clause = createWhereClause(params[:filters], 
+                  ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
+                  ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
     
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    count = Person.count :conditions => clause
-    @nbr_pages = (count / rows.to_i).floor + 1
+    @count = Person.count :conditions => clause
+    @nbr_pages = (@count / rows.to_i).floor + 1
     
-    off = (@page.to_i - 1) * rows.to_i
-    @people = Person.find :all, :offset => off, :limit => rows,
+    offset = (@page.to_i - 1) * rows.to_i
+    @people = Person.find :all, :offset => offset, :limit => rows,
       :order => idx + " " + order, :conditions => clause
    
-    # We return the list of people as an XML structure which the 'table' can us
-    # TODO: would it be more efficient to use JSON instead?
+    # We return the list of people as an XML structure which the 'table' can use
     respond_to do |format|
       format.xml
     end

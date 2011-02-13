@@ -1,7 +1,7 @@
 xml.rows do
   xml.page(@page)
   xml.total(@nbr_pages)
-  xml.records(@people.size)
+  xml.records(@count)
   @people.each do |person|
     xml.row({:id => person.id}) do
       xml.cell(person.first_name)
