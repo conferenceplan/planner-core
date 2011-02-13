@@ -36,11 +36,6 @@ jQuery(document).ready(function(){
 				context: $('#survey'),
 				success: function(data){
 					$(this).html(data);
-//            		$(".survey_responses").accordion({
-//                		header: 'h3',
-//                		collapsible: true,
-//                		autoHeight: false
-//            		});
 				}
 			});
             return false;
@@ -51,14 +46,3 @@ jQuery(document).ready(function(){
         searchOnEnter: false
     });
 });
-
-//function processResponse(response, postdata){
-//    // examine return for problem - look for errorExplanation in the returned HTML
-//    var text = $(response.responseText).find(".errorExplanation");
-//    if (text.size() > 0) {
-//        text.css('font-size', '6pt');
-//        text = $("<div></div>").append(text);
-//        return [false, text.html()];
-//    }
-//    return [true, "Success"];
-//}
