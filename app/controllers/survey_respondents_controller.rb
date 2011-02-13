@@ -21,30 +21,25 @@ class SurveyRespondentsController < SurveyApplicationController
       fillSurvey = false
     end
     
-    # find a respondent with the key, if not found then create a new one
+    # find a respondent with the key and last name
     if (key)
-      @survey_respondent = SurveyRespondent.find_by_key(key)
-      if (@survey_respondent)
-        if @survey_respondent.last_name.eql?(last_name)
-          @survey_respondent.attending = fillSurvey
-        else
-          @survey_respondent = nil
-        end
-      end
+      @survey_respondent = SurveyRespondent.find :first, 
+        :conditions => ["survey_respondents.key = ? AND last_name like ?", key, last_name]
     end
     
     if @survey_respondent
+      @survey_respondent.attending = fillSurvey # Indicate whether or not the person said that they are attending
       # Redirect the person to the survey
       if @survey_respondent.save
         # Get the related person and update their acceptance status...
         person = @survey_respondent.person
         if person
           if (fillSurvey )
-            if (person.acceptance_status.name != "Accepted")
-              person.acceptance_status = AcceptanceStatus.find_by_name("Probable")
+            if (person.acceptance_status != AcceptanceStatus[:Accepted])
+              person.acceptance_status = AcceptanceStatus[:Probable]
             end
           else
-            person.acceptance_status = AcceptanceStatus.find_by_name("Declined")
+            person.acceptance_status = AcceptanceStatus[:Declined]
           end
           person.save
         end
