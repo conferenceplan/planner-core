@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
         url: 'participants/list',
         datatype: 'xml',
 		mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation<br/>Category','Acceptance','Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name'],
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation<br/>Category','Acceptance','Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix'],
         colModel: [{
             name: 'person[first_name]',
             index: 'first_name',
@@ -73,6 +73,7 @@ jQuery(document).ready(function(){
             index: 'suffix',
             width: 50,
             editable: true,
+			search: false,
             editoptions: {
                 size: 20
             },
@@ -192,6 +193,20 @@ jQuery(document).ready(function(){
             formoptions: {
                 rowpos: 9,
                 label: "Pub Last Name"
+            }
+        },{
+            name: 'person[pseudonym_attributes][suffix]',
+            width: 50,
+			index: 'pseudonyms.suffix',
+            editable: true,
+			sortable: false,
+			search: false,
+            editoptions: {
+                size: 20
+            },
+            formoptions: {
+                rowpos: 10,
+                label: "Pub Suffix"
             }
 		}
 		],
