@@ -39,7 +39,7 @@ jQuery(document).ready(function(){
         colModel: [{
             name: 'person[first_name]',
             index: 'first_name',
-            width: 200,
+            width: 150,
             editable: true,
             editoptions: {
                 size: 20
@@ -55,7 +55,7 @@ jQuery(document).ready(function(){
         }, {
             name: 'person[last_name]',
             index: 'last_name',
-            width: 200,
+            width: 150,
             editable: true,
             editoptions: {
                 size: 20
