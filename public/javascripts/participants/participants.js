@@ -211,10 +211,11 @@ jQuery(document).ready(function(){
 		}
 		],
         pager: jQuery('#pager'),
-        rowNum: 10,
+//        rowNum: 10,
+        rowNum: 2,
         autowidth: false,
 		height: "100%",
-        rowList: [10, 20, 30],
+        rowList: [2, 10, 20, 30],
         pager: jQuery('#pager'),
         sortname: 'last_name',
         sortorder: "asc",
@@ -223,7 +224,9 @@ jQuery(document).ready(function(){
         caption: 'Participants',
         editurl: '/participants',
         onSelectRow: function(ids){
+			var data = jQuery("#participants").jqGrid('getRowData',ids);
             $('#participant_id').text(ids);
+            $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
             var $tabs = $('#particpanttabs').tabs();
             
             $tabs.tabs('url', 0, 'participants/' + ids + '/registrationDetail').tabs('load', 0).tabs('select', 0);
@@ -233,6 +236,13 @@ jQuery(document).ready(function(){
             
             return false;
         }
+//		,
+//		afterInsertRow: function(rowid, rowdata, rowelem) {
+//			alert('New Row');
+//			// do a refresh of the grid with the new data in the currect pages (and highlight it)...
+//			// jQuery("#bigset").jqGrid('setGridParam',{url:"bigset.php?nm_mask="+nm_mask+"&cd_mask="+cd_mask,page:1}).trigger("reloadGrid"); 
+//			jQuery("#participants").jqGrid().trigger("reloadGrid"); 
+//		}
     });
     
     // Set up the pager menu for add, delete, and search
@@ -242,7 +252,7 @@ jQuery(document).ready(function(){
     }, //options
     { // edit options
         height: 320,
-        reloadAfterSubmit: false,
+        reloadAfterSubmit: true,
         jqModal: true,
         closeOnEscape: true,
         bottominfo: "Fields marked with (*) are required",
@@ -382,5 +392,5 @@ function processResponse(response, postdata){
         text = $("<div></div>").append(text);
         return [false, text.html()];
     }
-    return [true, "Success"];
+    return [true, "Success", ""];
 }

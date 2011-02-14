@@ -30,6 +30,7 @@ class SurveyRespondents::ReviewsController < PlannerController
     # Then we get the actual data we want from the DB      
     @count = SurveyRespondent.count :conditions => clause
     @nbr_pages = (@count / rows.to_i).floor + 1
+    @nbr_pages += 1 if @count % rows.to_i > 0
     
     off = (@page.to_i - 1) * rows.to_i
     @respondents = SurveyRespondent.find :all, :conditions => clause,

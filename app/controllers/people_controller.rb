@@ -104,7 +104,8 @@ class PeopleController < PlannerController
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
     @count = Person.count args
-    @nbr_pages = (@count / rows.to_i).floor + 1
+    @nbr_pages = (@count / rows.to_i).floor
+    @nbr_pages += 1 if @count % rows.to_i > 0
 
     # now we get the actual data
     offset = (@page.to_i - 1) * rows.to_i
