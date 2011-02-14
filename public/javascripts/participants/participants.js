@@ -211,11 +211,10 @@ jQuery(document).ready(function(){
 		}
 		],
         pager: jQuery('#pager'),
-//        rowNum: 10,
-        rowNum: 2,
+        rowNum: 10,
         autowidth: false,
 		height: "100%",
-        rowList: [2, 10, 20, 30],
+        rowList: [10, 20, 30],
         pager: jQuery('#pager'),
         sortname: 'last_name',
         sortorder: "asc",

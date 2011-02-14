@@ -24,7 +24,7 @@ class SurveyRespondents::ReviewsController < PlannerController
     order = params[:sord]
 
     clause = createWhereClause(params[:filters])
-    addClause(clause, 'submitted_survey', true)
+    clause = addClause(clause, 'submitted_survey = ?', true)
 
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB      

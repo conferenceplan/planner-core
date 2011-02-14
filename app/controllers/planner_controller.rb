@@ -42,7 +42,7 @@ class PlannerController < ApplicationController
       clause = [clausestr, field]
     else
       clause[0] += " AND " if !clause[0].strip().empty?
-      clause[0] += "" + clausestr
+      clause[0] += " " + clausestr
       clause << field
     end
     
