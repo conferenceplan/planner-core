@@ -29,6 +29,7 @@ class SurveyRespondentsController < SurveyApplicationController
     
     if @survey_respondent
       @survey_respondent.attending = fillSurvey # Indicate whether or not the person said that they are attending
+      @survey_respondent.submitted_survey = false
       # Redirect the person to the survey
       if @survey_respondent.save
         # Get the related person and update their acceptance status...
