@@ -278,6 +278,8 @@ smerfform:
           style: availabilitySection grid_12
           sort_order: 1
           question: |
+          validation: validate_mandatory_question
+          title: Program Availability
           answers:
             Whole Time:
               code: 1

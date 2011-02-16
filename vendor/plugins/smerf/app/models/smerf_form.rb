@@ -202,7 +202,11 @@ class SmerfForm < ActiveRecord::Base
       errors[item.item_id] = Hash.new if (errors[item.item_id].nil?())
       errors[item.item_id]["msg"] = Array.new if (errors[item.item_id]["msg"].nil?())
       errors[item.item_id]["msg"] << msg
-      errors[item.item_id]["question"] = item.question
+      if (item.question)
+        errors[item.item_id]["question"] = item.question
+      else
+        errors[item.item_id]["question"] = item.title
+      end
     end
     
 end
