@@ -74,6 +74,7 @@ smerfform:
           style: grid_2
           sort_order: 4
           question: |
+          answer_id: name_suffix
           title: Suffix
           textfield_size: 5
     personal_details_pub_name:
@@ -109,6 +110,7 @@ smerfform:
           style: grid_2
           sort_order: 4
           question: |
+          answer_id: pub_suffix
           title: Suffix
           textfield_size: 5
     personal_details_address:
