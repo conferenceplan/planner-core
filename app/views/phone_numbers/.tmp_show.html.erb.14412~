@@ -1,0 +1,6 @@
+<div class='address'>
+    <div class='address_phone'>
+	  <div class='phone'>Phone: <%= @phoneNumber.number %></div>
+	  <!-- Insert Type -->
+	</div>
+</div>

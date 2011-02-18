@@ -150,6 +150,53 @@
             </div>
             <% end %>
         </div>
+        <div class=address_header>
+            <% if @phoneNumbers.length > 0 %>
+            <div class='infolabel'>
+                Phone Number(s)
+            </div>
+            <%else %>
+            <div class='infolabel'>
+                No Phone Numbers
+            </div>
+            <%end %>
+            <div class=add-form>
+                <%= link_to "Add Phone Number", @urlphonestr, :class => 'entrydialog' %>
+            </div>
+        </div>
+        <div class='addressAccordian'>
+            <% @phoneNumbers.each do |paddress| %>
+            <h3>Phone Number</h3>
+            <div class='address_phone'>
+                <div class='controls'>
+                    <div class='remove-form'>
+                        <%= button_to "remove", paddress, :method => :delete, :class => 'remove-button' %>
+                    </div>
+                    <div class='edit-form'>
+                        <%= link_to "edit", {:controller => 'phone_numbers', :action => 'edit', :id => paddress}, :class => 'entrydialog' %>
+                    </div>
+                </div>
+                <div class='address_details'>
+                    <div class='phone'>
+                        <div class='field_name'>
+                            phone:
+                        </div>
+                        <div class='field_value'>
+                            <%= paddress.number %>
+                        </div>
+                    </div>
+	  				<div class='phone_type'>
+                        <div class='field_name'>
+                            Type:
+                        </div>
+                        <div class='field_value'>
+	  						<%= PhoneTypes[paddress.phone_type_id].name %>
+                        </div>
+					</div>
+                </div>
+            </div>
+            <% end %>
+        </div>
         <div class='message' id='tab-messages'>
         </div>
         <div class="jqmWindow" id="edialog">

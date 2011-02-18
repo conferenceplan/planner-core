@@ -81,4 +81,7 @@ ActiveRecord::VirtualEnumerations.define do |config|
  config.define 'AcceptanceStatus',
     :extends => 'Enum'
 
+ config.define 'PhoneTypes',
+    :extends => 'Enum'
+
 end

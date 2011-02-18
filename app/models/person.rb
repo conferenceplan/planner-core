@@ -11,7 +11,11 @@ class Person < ActiveRecord::Base
             :source => :addressable, 
             :source_type => 'EmailAddress'
 
-  accepts_nested_attributes_for :postal_addresses, :email_addresses
+  has_many :phone_numbers, :through => :addresses,
+            :source => :addressable,
+            :source_type => 'PhoneNumber'
+
+  accepts_nested_attributes_for :postal_addresses, :email_addresses, :phone_numbers
 
   has_many  :relationships
   

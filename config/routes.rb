@@ -47,6 +47,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :postal_addresses, :has_many => :people
   map.resources :email_addresses, :has_many => :people
+  map.resources :phone_numbers, :has_many => :people
   map.resources :menus
   
   map.connect 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
@@ -61,7 +62,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
 
   map.resources :people, :as => "participants", 
-    :has_many => [:addresses, :postalAddresses, :emailAddresses],
+    :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers],
     :has_one => [:registrationDetail, :edited_bio],
     :collection => {:list => :get }
   map.resources :people, :as => "participants" do |person|

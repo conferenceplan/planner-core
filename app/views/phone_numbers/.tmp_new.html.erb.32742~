@@ -1,0 +1,2 @@
+<h1> Create a New Phone Number</h1>
+<%=render :partial => 'phone_number_form' %>
