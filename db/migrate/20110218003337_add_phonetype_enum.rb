@@ -6,8 +6,6 @@ class AddPhonetypeEnum < ActiveRecord::Migration
        PhoneTypes.create(:name => 'Work',:position => 3)
        PhoneTypes.create(:name => 'Fax',:position => 4)
        PhoneTypes.create(:name => 'Other',:position => 5)
-       
-       PhoneTypes.save
   end
 
   def self.down
