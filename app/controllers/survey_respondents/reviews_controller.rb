@@ -9,7 +9,6 @@ class SurveyRespondents::ReviewsController < PlannerController
     
     # Get the survey
     @smerf_user_id = respondent.id # check
-#    @respondent_form = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
     @form = SmerfForm.find_by_id(1)
     smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
     @responses = smerf_forms_surveyrespondent.responses
