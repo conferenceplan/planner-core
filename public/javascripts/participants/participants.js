@@ -3,14 +3,14 @@
  */
 jQuery(document).ready(function(){
 
-	/* Populate the tag cloud */
-    $.ajax({
-        url: "/participants/tags/index",
-        dataType: "html",
-        success: function(response){
-            $(response).appendTo("#participant-tag-cloud");
-        }
-    });
+//	/* Populate the tag cloud */
+//    $.ajax({
+//        url: "/participants/tags/index",
+//        dataType: "html",
+//        success: function(response){
+//            $(response).appendTo("#participant-tag-cloud");
+//        }
+//    });
     
 	/* Initialize the tags - load is called when a new participant/person is selected in the grid */
     jQuery("#particpanttabs").tabs({
@@ -254,6 +254,7 @@ jQuery(document).ready(function(){
         reloadAfterSubmit: true,
         jqModal: true,
         closeOnEscape: true,
+        closeAfterEdit: true,
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
         beforeSubmit: function(postdata, formid){
