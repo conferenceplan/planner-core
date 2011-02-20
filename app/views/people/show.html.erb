@@ -16,6 +16,12 @@
        <%= @person.acceptance_status.name %>
        <% end%>
   </div>
+  <div class='line'>Survey?: <%if @person.hasSurvey? %>
+     Y
+	 <% else %>
+	 N
+	 <% end %>
+  </div>
   <div class='line'>Invitation Category: <% if @person.invitation_category %>
        <%= @person.invitation_category.name %>
        <% end%>
