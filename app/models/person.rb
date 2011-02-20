@@ -61,20 +61,30 @@ class Person < ActiveRecord::Base
   
   def GetFullNameHelper(first_name,last_name,suffix)
       name = ""
+      # set first name if it exists
       if (first_name != nil)
         name = first_name
       end
+      
+      # append last name if exits
       if (last_name != nil)
-        name = name + " " + self.last_name
+        # if there is a first name append with space
+        if (name != "")
+           name = name + " " + last_name
+        else
+          # no first name, don't put space in
+          name = last_name
+        end
       end
+    
+      # append suffix if it exits
       if (suffix != nil)
-         name = first_name + " " + last_name
+        name = name + " " + suffix
       end
-      if (suffix != nil)
-        name = name + suffix
-      end
+      
       return name
   end
+  
   def GetFullName()
       return GetFullNameHelper(self.first_name,self.last_name,self.suffix)
   end
@@ -118,14 +128,18 @@ class Person < ActiveRecord::Base
   end
   
   def GetFullPublicationName
+   # if we set the pseudonym in people table, use that
    if (self.pseudonym != nil)
        return GetFullNameHelper(self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix)
     else
+      # if they don't have a pseudonym in people, check survey
       if (self.hasSurvey?)
+        
          survey = SmerfFormsSurveyrespondent.find_user_smerf_form(self.survey_respondent.id, 1)
          if (survey == nil)
            return GetFullName()
          else
+            #pull names out of survey if they exist
             survey_first_name = survey.responses['g3q1']
             if (survey_first_name == "First name")
               survey_first_name = ""
@@ -139,12 +153,14 @@ class Person < ActiveRecord::Base
               survey_suffix = ""
             end
             name = GetFullNameHelper(survey_first_name,survey_last_name,survey_suffix)
+            # if we don't get a valid publication name in survey, just use name
             if (name =~ /^\s*$/)
               name = GetFullName()
             end
             return name
          end
       else
+        # no survey, just use name
         return GetFullName()
       end
     end

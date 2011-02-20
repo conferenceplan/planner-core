@@ -4,9 +4,9 @@
 	<div class='line'><div class='field_name'><%= f.label :title, "Title" %></div><div class='field_value'><%= f.text_field :title %></div></div>
 	<div class='line'><div class='field_name'><%= f.label :precis, "Precis" %></div><div class='field_value'><%= f.text_area :precis %></div></div>
 	<div class='line'><div class='field_name'><%= f.label :duration, "Duration" %></div><div class='field_value'><%= f.text_field :duration %></div></div>
-	<div class='line'><div class='field_name'><%= f.label :room_id %></div><div class='field_value'><%= f.select :room_id,
-	                 Room.find(:all).collect {|r| [r.name,r.id] },
-	                 {:include_blank => true}%></div></div>
+	<div class='line'><div class='field_name'><%= f.label :format_id %></div><div class='field_value'><%= f.select :format_id,
+	                 Format.find(:all).collect {|r| [r.name,r.id] },
+	                 {:include_blank => false}%></div></div>
 	<div class='form-buttons'>
 		<%= f.submit "Submit" %>
 		<button type="button" class='jqmClose'>Close</button>

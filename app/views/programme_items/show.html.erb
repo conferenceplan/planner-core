@@ -2,7 +2,7 @@
 <h1> Title: <%= @programmeItem.title%></h1>
 <h2> Precis: <%= @programmeItem.precis%></h2>
 <h2> Duration: <%= @programmeItem.duration %></h2>
-<h2> Room: <% if @programmeItem.room %>
-<%= @programmeItem.room.name%>
+<h2> Room: <% if @programmeItem.format %>
+<%= @programmeItem.format.name%>
 <% end%></h2>
 

@@ -1,0 +1,6 @@
+<select> 
+<option value='0'></option>
+<% for format in @formats %>
+	<option value='<%=format.id%>'><%= format.name%></option> 
+<%end%>
+</select>

@@ -11,18 +11,47 @@ jQuery(document).ready(function(){
   jQuery("#programmeItems").jqGrid({
     url:'programme_items/list',
     datatype: 'xml',
-    colNames:['Title','Room','Duration'],
+    mtype: 'POST',
+    colNames:['Title','Format','Duration'],
     colModel :[ 
-      {name:'programme_item[title]', index:'title', width:250,
-    	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:1, label: "Title", elmprefix:"(*)"},editrules:{required:true}
+      {name:'programme_item[title]', 
+	   index:'title', 
+	   width:250,
+       editable:true,
+	   editoptions:{size:20}, 
+	   formoptions:{ rowpos:1, label: "Title", elmprefix:"(*)"},
+	   editrules:{required:true}
       }, 
-      // We do not want the room to be editable here as it is a scheduling task....
-      {name:'programme_item[room.name]', index:'rooms.name', width:250,
-          editable:false,editoptions:{size:20}, formoptions:{ rowpos:2, label: "Room", elmprefix:"(*)"},editrules:{required:false}
-    		  },
+	  {
+			name:'programme_item[format_id]',
+			index:'format_id',
+			width: 100,
+			editable: true, 
+			edittype: "select", 
+			search: true,
+			stype: "select",
+			searchoptions:{
+				dataUrl:'/formats/listwithblank' 
+			},
+			editoptions:{
+				dataUrl:'/formats/list',
+				defaultValue:'1'
+			}, 
+			formoptions:{ 
+				rowpos:2,
+				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
+			} 
+        },
 //    		  First you need to make sure it is on a separate row - this is done via the rowpos attribute
-      {name:'programme_item[duration]', index:'duration', width:250,
-        	  editable:true,editoptions:{size:20}, formoptions:{ rowpos:3, label: "Duration", elmprefix:"(*)"},editrules:{required:true}
+      {name:'programme_item[duration]', 
+	   index:'duration', 
+	   width:250,
+       editable:true,
+	   editoptions:{size:20},
+	   formoptions:{ rowpos:3, 
+	   label: "Duration", 
+	   elmprefix:"(*)"},
+	   editrules:{required:true}
       } ],
 	 
     pager: jQuery('#pager'),
@@ -36,24 +65,33 @@ jQuery(document).ready(function(){
     imgpath: 'stylesheets/cupertino/images',
     caption: 'ProgrammeItems',
     editurl: '/programme_items', // need to ensure edit url is correct
-    onSelectRow: function(ids) {
-      
-      return false;
-    }
+        onSelectRow: function(ids){
+			var data = jQuery("#programme_items").jqGrid('getRowData',ids);
+            $('#programme_item_id').text(ids);
+            return false;
+        }
   }); 
   
   jQuery("#programmeItems").navGrid('#pager',
-		  {view:false }, //options
-
-		  {	// edit options
-			  height:320, reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
-			  bottominfo:"Fields marked with (*) are required",
-			  afterSubmit: processResponse,
-			  beforeSubmit : function(postdata, formid) {
-			  	this.ajaxEditOptions = {url : '/programme_items/'+postdata.programme_items_id, type: 'put'};
-			  	return [true, "ok"]; }
-		  }, // edit options
-
+		  {view:false,
+		   search: false
+          }, //options
+		  { // edit options
+           height: 320,
+           reloadAfterSubmit: true,
+           jqModal: true,
+           closeOnEscape: true,
+            bottominfo: "Fields marked with (*) are required",
+            afterSubmit: processResponse,
+            beforeSubmit: function(postdata, formid){
+			   
+               this.ajaxEditOptions = {
+                   url: '/programme_items/'+postdata.programmeItems_id,
+                   type: 'put'
+             };
+            return [true, "ok"];
+            }
+          }, // edit options
 		  { // add options
 			  reloadAfterSubmit:false, jqModal:true, closeOnEscape:true,
 			  bottominfo:"Fields marked with (*) are required",
@@ -68,16 +106,13 @@ jQuery(document).ready(function(){
 			  return [true, "ok"]; },
 		  }, // del options
 
-		  { // search options
-			  jqModal:true, closeOnEscape:true,
-			  multipleSearch:true,
-			  sopt:['eq','ne'],
-			  odata: ['begins with', 'does not begin with'],
-			  groupOps: [ { op: "AND", text: "all" }, { op: "OR", text: "any" } ]
-		  }, // search options
-		  
+		
 		  {height:150, jqModal:true, closeOnEscape:true} // view options
   );
+  jQuery("#programmeItems").jqGrid('filterToolbar', {
+        stringResult: true,
+        searchOnEnter: false
+    });
 });
 
 

@@ -81,6 +81,10 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :invitation_categories
   
+  map.connect 'formats/list', :controller => 'formats', :action => 'list'
+  map.connect 'formats/listwithblank', :controller => 'formats', :action => 'listwithblank'
+  map.resources :formats
+  
   map.connect 'pending_import_people/import', :controller => 'pending_import_people', :action => 'import'
   map.connect 'pending_import_people/doimport', :controller => 'pending_import_people', :action => 'doimport', :method => 'post'   
   map.resources :pending_import_people

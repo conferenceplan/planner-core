@@ -5,8 +5,8 @@ xml.rows do
   @programmeItems.each do |programmeItem|
     xml.row({:id => programmeItem.id}) do
       xml.cell(programmeItem.title)
-      if (programmeItem.room)
-         xml.cell(programmeItem.room.name)
+      if (programmeItem.format)
+         xml.cell(programmeItem.format.name)
       else
          xml.cell('none')
       end
