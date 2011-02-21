@@ -1,5 +1,5 @@
 class PeopleController < PlannerController
-
+  
   def destroy
     person = Person.find(params[:id])
     
@@ -10,8 +10,16 @@ class PeopleController < PlannerController
 
   def show
     @person = Person.find(params[:id])
-
-    render :layout => 'content'
+    comp = params[:comp]
+    
+    if comp
+      @postalAddresses = @person.postal_addresses
+      @emailAddresses = @person.email_addresses
+      @phoneNumbers= @person.phone_numbers
+      render :comphrensive, :layout => 'content'
+    else  
+      render :layout => 'content'
+    end
   end
 
   def edit

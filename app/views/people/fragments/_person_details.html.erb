@@ -1,0 +1,15 @@
+  <div class='line'>First Name: <%= @person.first_name %></div>
+  <div class='line'>Last Name: <%= @person.last_name %></div>
+  <div class='line'>Survey Key: <%= @person.survey_respondent.key if @person.survey_respondent %></div>
+  <div class='line'>Invitation Status: <%= @person.invitestatus.name if @person.invitestatus %></div>
+  <div class='line'>Mailing Number: <%= @person.mailing_number %></div>
+  <div class='line'>Acceptance Status: <%= @person.acceptance_status.name if @person.acceptance_status%></div>
+  <div class='line'>Invitation Category: <%= @person.invitation_category.name if @person.invitation_category%></div>
+  
+  <% if (@person.pseudonym != nil && (@person.pseudonym.first_name != "" || @person.pseudonym.last_name != "" || @person.pseudonym.suffix != "")) %>
+    <div class='line'>Pub Name First Name: <%= @person.pseudonym.first_name %></div>
+    <div class='line'>Pub Name Last Name: <%= @person.pseudonym.last_name %></div>
+    <div class='line'>Pub Name Suffix: <%= @person.pseudonym.suffix %></div>
+  <% else %>
+      <div class='line'>Pub Name same as Name</div>
+  <% end %>

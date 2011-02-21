@@ -3,15 +3,6 @@
  */
 jQuery(document).ready(function(){
 
-//	/* Populate the tag cloud */
-//    $.ajax({
-//        url: "/participants/tags/index",
-//        dataType: "html",
-//        success: function(response){
-//            $(response).appendTo("#participant-tag-cloud");
-//        }
-//    });
-    
 	/* Initialize the tags - load is called when a new participant/person is selected in the grid */
     jQuery("#particpanttabs").tabs({
         ajaxOptions: {
@@ -21,7 +12,6 @@ jQuery(document).ready(function(){
     }).tabs({
         load: function(event, ui){
             initDialog(event, ui);
-            initAutoComplete();
             $(".addressAccordian").accordion({
                 header: 'h3',
                 collapsible: true,
@@ -235,13 +225,6 @@ jQuery(document).ready(function(){
             
             return false;
         }
-//		,
-//		afterInsertRow: function(rowid, rowdata, rowelem) {
-//			alert('New Row');
-//			// do a refresh of the grid with the new data in the currect pages (and highlight it)...
-//			// jQuery("#bigset").jqGrid('setGridParam',{url:"bigset.php?nm_mask="+nm_mask+"&cd_mask="+cd_mask,page:1}).trigger("reloadGrid"); 
-//			jQuery("#participants").jqGrid().trigger("reloadGrid"); 
-//		}
     });
     
     // Set up the pager menu for add, delete, and search
@@ -301,47 +284,6 @@ function addToTagList(value){
     $("<div/>").text(value).prependTo("#tags-list");
     $("#tags-list").attr("scrollTop", 0);
     $("#tags").val('');
-}
-
-function initAutoComplete(){
-    // TODO - change so that tags already used by person are not in the autocomplete list
-    $.ajax({
-        url: "/participants/tags/list",
-        async: false,
-        dataType: "xml",
-        success: function(xmlResponse){
-            var gtags = new Array();
-            $(xmlResponse).find("tag").each(function(){
-                gtags.push($(this).text());
-            });
-            
-            $("#tags").autocomplete({
-                source: gtags,
-                minLength: 2
-                // The select call back causes a double entry...
-                //				select: function(event, ui) {
-                //					addToTagList(ui.item.value); // make sure this does not do a double entry
-                //				}
-            });
-        }
-    });
-    
-    // bind to the change event, so that the tag is sent to the server
-    $("#tags").bind("change", function(event){
-        var newTag = $("#tags").val();
-        var personId = $('#participant_id').text(); // get the id of the person
-        $.ajax({
-            url: "/participants/" + personId + "/tags/add",
-            type: "POST",
-            data: {
-                "tag": newTag
-            },
-            success: function(){
-                addToTagList(newTag);
-            }
-        });
-    });
-    
 }
 
 function initDialog(event, ui){

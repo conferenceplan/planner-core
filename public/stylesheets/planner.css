@@ -254,3 +254,13 @@ div.response_text {
 .ui-widget {
 	font-size: 11px;
 }
+
+/*
+#editslider,
+.overlay,
+.toggler 
+*/
+#editslider {
+	position: absolute;
+	z-index: 255;
+}

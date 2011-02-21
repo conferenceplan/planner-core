@@ -1,0 +1,14 @@
+<div class='address_phone'>
+	<%if editable %>
+                <div class='controls'>
+                    <div class='remove-form'>
+                        <%= button_to "remove", phoneNumber, :method => :delete, :class => 'remove-button' %>
+                    </div>
+                    <div class='edit-form'>
+                        <%= link_to "edit", {:controller => 'phone_numbers', :action => 'edit', :id => phoneNumber}, :class => 'entrydialog' %>
+                    </div>
+                </div>
+	<% end %>
+	<div class='phone'>Phone: <%= phoneNumber.number %></div>
+	<div class='phone_type'>Type: <%= PhoneTypes[phoneNumber.phone_type_id].name %></div>
+</div>
