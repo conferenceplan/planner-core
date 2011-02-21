@@ -79,6 +79,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/list', :controller => 'people', :action => 'list'
  
   map.resources :rooms
+
+  map.resources :venue
+
   map.connect 'invitation_categories/list', :controller => 'invitation_categories', :action => 'list'
 
   map.resources :invitation_categories

@@ -1,0 +1,17 @@
+<h1><%= @venue.name %></h1>
+<h2>Rooms:</h2>
+<p>
+<% if @rooms.blank? %>
+   There are no rooms in this venue.
+<% else %>
+   <ul>
+   <% @rooms.each do |r| %>
+       <li><%= link_to r.name, room_path(r.id) %> - <%= r.capacity %> cap </li>
+   <% end %>
+   </ul>
+<% end %>
+
+</p>
+<hr />
+<%= link_to 'Venue List', {:action => 'index'} %>
+

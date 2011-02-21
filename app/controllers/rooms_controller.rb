@@ -6,6 +6,7 @@ class RoomsController < ApplicationController
   end
   def show
     @room = Room.find(params[:id])
+    @venue = Venue.find @room.venue_id
   end
   def create
     @room = Room.new(params[:room])
@@ -17,10 +18,12 @@ class RoomsController < ApplicationController
   end
   def new
     @room = Room.new
+    @venues = Venue.find :all
   end
   
   def edit
     @room = Room.find(params[:id])
+    @venues = Venue.find :all
   end
   
   def update

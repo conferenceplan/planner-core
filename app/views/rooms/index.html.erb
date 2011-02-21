@@ -1,9 +1,15 @@
-<br/>
-<br/>
-<% for room in @rooms %>
-	<li>name is <%= room.name %> 
-		<%=  link_to "edit", :action => 'edit', :id => room %>
-		<%=  link_to "remove", room, :method => :delete,:confirm => "Are you Sure?" %>
+<% if @rooms.blank? %>
+   <p>There are no rooms currently in the system.</p>
+<% else %>
+   <p>These are the current rooms in our system:</p>
+   <ul id = "rooms">
+   <% @rooms.each do |r| %>
+	<li><h3><%= link_to r.name, {:action => 'show', :id => r.id} %> (<%= link_to Venue.find(r.venue_id).name, venue_path(r.venue_id)%>) - <%= r.capacity %> cap </h3>
+		<%=  link_to "Edit", {:action => 'edit', :id => r.id} %>
+		<%=  link_to "Delete", {:action => 'destroy', :id => r.id}, :confirm => "Are you sure you want to delete this room?" %>
 	</li>
-<%end%>
-<p> <%= link_to "create new room", :action => 'new' %></p>
+   <%end%>
+   </ul>
+<% end %>
+<hr />
+<p> <%= link_to "Create new room", :action => 'new' %></p>
