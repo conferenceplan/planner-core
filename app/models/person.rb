@@ -45,6 +45,8 @@ class Person < ActiveRecord::Base
   has_one   :survey_respondent
   has_enumerated :invitestatus, :class_name => 'InviteStatus'
 
+  has_one   :survey_copy_status
+
   belongs_to  :invitation_category
   has_enumerated :acceptance_status, :class_name => 'AcceptanceStatus'
   

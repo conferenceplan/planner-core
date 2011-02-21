@@ -1,0 +1,18 @@
+<h1>Listing survey_copy_statuses</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% @survey_copy_statuses.each do |survey_copy_status| %>
+  <tr>
+    <td><%= link_to 'Show', survey_copy_status %></td>
+    <td><%= link_to 'Edit', edit_survey_copy_status_path(survey_copy_status) %></td>
+    <td><%= link_to 'Destroy', survey_copy_status, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New survey_copy_status', new_survey_copy_status_path %>

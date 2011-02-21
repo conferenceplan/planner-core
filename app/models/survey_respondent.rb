@@ -8,6 +8,7 @@ class SurveyRespondent < ActiveRecord::Base
   
     
   belongs_to  :person 
+  has_one   :survey_copy_status
 
   # So we can add tags of various types to the Survey respondents
   acts_as_taggable

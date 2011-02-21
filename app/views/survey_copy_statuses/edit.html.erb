@@ -1,0 +1,12 @@
+<h1>Editing survey_copy_status</h1>
+
+<% form_for(@survey_copy_status) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @survey_copy_status %> |
+<%= link_to 'Back', survey_copy_statuses_path %>
