@@ -1,8 +1,32 @@
-<br>
-<h1> Title: <%= @programmeItem.title%></h1>
-<h2> Precis: <%= @programmeItem.precis%></h2>
-<h2> Duration: <%= @programmeItem.duration %></h2>
-<h2> Room: <% if @programmeItem.format %>
-<%= @programmeItem.format.name%>
-<% end%></h2>
+  <div class='programmeItem_show'>
+  <div class='edit-form'>
+      <%=  link_to "edit", {:controller => 'programme_items', :action => 'edit', :id => @programmeItem}, :class => 'entrydialog' %>
+  </div>
+  <div class='line'>Title: <%= @programmeItem.title %></div>
+  <div class='line'>ShortTitle: <%= @programmeItem.short_title %></div>
+  <div class='line'>Format: <% if @programmeItem.format %>
+      <%= @programmeItem.format.name %>
+	  <% end%>
+  </div>
+  <div class='line'>Print: <% if @programmeItem.print %>
+      Yes
+    <% else %>
+	  No
+	<%end %>
+  </div>
+  <div class='line'>Duration in minutes: <%= @programmeItem.duration %></div>
+  <div class='line'>Minimum # of people:<%= @programmeItem.minimum_people %></div>
+  <div class='line'>Maximum # of people:<%= @programmeItem.maximum_people %></div>
+  <label>Precis:</label>
+  <div class='city'>
+  <%= @programmeItem.precis %>
+  </div
+  <label>Notes: </label>
+  <div class='city'>
+  <%= @programmeItem.notes %>
+  </div>
+  <div class='message' id='tab-messages'></div>
+  <div class="jqmWindow" id="edialog">Please wait...</div>
+</div>
+
 

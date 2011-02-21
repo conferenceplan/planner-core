@@ -1,15 +1,53 @@
 <%= error_messages_for :programmeItem %>
-<% form_for @programmeItem do |f| -%>
-<div>
-	<div class='line'><div class='field_name'><%= f.label :title, "Title" %></div><div class='field_value'><%= f.text_field :title %></div></div>
-	<div class='line'><div class='field_name'><%= f.label :precis, "Precis" %></div><div class='field_value'><%= f.text_area :precis %></div></div>
-	<div class='line'><div class='field_name'><%= f.label :duration, "Duration" %></div><div class='field_value'><%= f.text_field :duration %></div></div>
-	<div class='line'><div class='field_name'><%= f.label :format_id %></div><div class='field_value'><%= f.select :format_id,
-	                 Format.find(:all).collect {|r| [r.name,r.id] },
-	                 {:include_blank => false}%></div></div>
+<% form_for @programmeItem, :html => {:class => "programmeItemInfo", :id => "programmeItemInfo"} do |f| -%>
+<div class='container_16'>
+<div class='grid_6'>
 	<div class='form-buttons'>
 		<%= f.submit "Submit" %>
 		<button type="button" class='jqmClose'>Close</button>
 	</div>
+	<div class='line'>
+		<div class='field_name'><%= f.label :title, "Title" %></div>
+		<div class='field_value'><%= f.text_area :title,:size => "30x2"  %></div>
+	</div>
+	<div class='line'>
+		<div class='field_name'><%= f.label :short_title, "Short Title" %></div>
+		<div class='field_value'><%= f.text_field :short_title %></div>
+	</div>
+	<div class='line'>
+		<div class='field_name'><%= f.label :format_id, "Format" %></div>
+		<div class='field_value'><%= f.select :format_id,
+	                 Format.find(:all).collect {|r| [r.name,r.id] },
+	                 {:include_blank => false}%></div>
+	</div>
+	<div class='line'>
+		<div class='field_name'><%= f.label :print, "Print?" %></div>
+		<div class='field_value'><%= f.select :print, {"Yes" => true, "No" => false}%></div>
+	</div>
+	<div class='line'>
+		<div class='field_name'><%= f.label :duration, "Duration in minutes" %></div>
+		<div class='field_value'><%= f.text_field :duration %></div>
+	</div>
+	<div class='line'>
+		<div class='field_name'><%= f.label :minimum_people, "Minimum # of people" %></div>
+		<div class='field_value'><%= f.text_field :minimum_people %></div>
+	</div>
+	<div class='line'>
+		<div class='field_name'><%= f.label :maximum_people, "Maximum # of people" %></div>
+		<div class='field_value'><%= f.text_field :maximum_people %></div>
+	</div>
+</div>
+<div class='grid_2'>
+	<div class='line'>
+		<div class='field_name'><%= f.label :precis, "Precis" %></div>
+		<div class='field_value'><%= f.text_area :precis,:size => "30x8" %></div>
+	</div>
+	<div class='line'>
+		<div class='field_name'><%= f.label :notes, "Notes" %></div>
+		<div class='field_value'><%= f.text_area :notes, :size => "30x7" %></div>
+    </div>
+</div>
 </div>
 <% end %>
+<div id='form-response'>
+</div>

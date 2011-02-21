@@ -6,6 +6,7 @@ class ProgrammeItemsController < PlannerController
   end
   def show
     @programmeItem = ProgrammeItem.find(params[:id])
+    render :layout => 'content'
   end
   def create
 # NOTE - name of the programmeItem passed in from form
@@ -22,6 +23,7 @@ class ProgrammeItemsController < PlannerController
   
   def edit
     @programmeItem = ProgrammeItem.find(params[:id])
+    render :layout => 'content'
   end
   
   def update
@@ -29,7 +31,7 @@ class ProgrammeItemsController < PlannerController
     if @programmeItem.update_attributes(params[:programme_item])
       redirect_to :action => 'show', :id => @programmeItem
     else
-      render :action => 'edit'
+      render :action => 'edit', :layout => 'content'
     end
   end
   

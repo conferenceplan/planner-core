@@ -1,9 +1,28 @@
+<% content_for :styleheader do %>
+.ui-jqgrid .ui-jqgrid-htable th div {
+    height: 30px;
+}
+<% end %>
 <% content_for :jsheader do %>
 	<%= javascript_include_tag 'programme_items/programme_items' %>
 <% end %>
-<div class="container_12">
-    <div class="grid_6">
-        <table id="programmeItems"></table>
-        <div id="pager"></div>
+<div id="programmeItem_id" style="display : none"></div>
+
+ <div class="grid_10">
+     <table id="programmeItems">
+     </table>
+	 <div id="pager">
+	 </div>
+ </div>
+
+<div class="grid_10">
+    <div id="programmeItems_tabs" style="font-size:11px;">
+        <ul>
+            <li>
+                <a href="#detailstab">Details</a>
+            </li>
+        </ul>
+        <div id="detailstab">
+        </div>
     </div>
 </div>

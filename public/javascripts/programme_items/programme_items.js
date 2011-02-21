@@ -1,12 +1,16 @@
 /**
  * @author rleibig
  */
+    
 jQuery(document).ready(function(){ 
-	jQuery("#programmeitemtabs").tabs({
+	jQuery("#programmeItems_tabs").tabs({
 		ajaxOptions: { async: false },
 		cache: false
-	}).
-	tabs({load : initDialog});
+	}).tabs({
+        load: function(event, ui){
+            initDialog(event, ui);
+        }
+    });
 	
   jQuery("#programmeItems").jqGrid({
     url:'programme_items/list',
@@ -65,9 +69,11 @@ jQuery(document).ready(function(){
     imgpath: 'stylesheets/cupertino/images',
     caption: 'ProgrammeItems',
     editurl: '/programme_items', // need to ensure edit url is correct
-        onSelectRow: function(ids){
-			var data = jQuery("#programme_items").jqGrid('getRowData',ids);
-            $('#programme_item_id').text(ids);
+     onSelectRow: function(ids){
+			var data = jQuery("#programmeItems").jqGrid('getRowData',ids);
+            $('#programmeItem_id').text(ids);
+            var $tabs = $('#programmeItems_tabs').tabs();   
+            $tabs.tabs('url', 0, 'programme_items/' + ids).tabs('load', 0); 
             return false;
         }
   }); 
@@ -81,6 +87,7 @@ jQuery(document).ready(function(){
            reloadAfterSubmit: true,
            jqModal: true,
            closeOnEscape: true,
+		   closeAfterEdit: true, 
             bottominfo: "Fields marked with (*) are required",
             afterSubmit: processResponse,
             beforeSubmit: function(postdata, formid){
@@ -117,21 +124,39 @@ jQuery(document).ready(function(){
 
 
 function initDialog(event, ui) {
-	$('#edialog', ui.panel).jqm({
-		ajax: '@href', 
-		trigger: 'a.entrydialog',
-		onLoad: adjust,
-		onHide: function(hash) {
-		hash.w.fadeOut('2000',function(){ hash.o.remove(); });
-		}
-	});
-	
-	$('.remove-form form', ui.panel).ajaxForm({
-		target: '#tab-messages',
-		success: function(response, status) {
-		}
-	});
+    $('#edialog', ui.panel).jqm({
+        ajax: '@href',
+        trigger: 'a.entrydialog',
+        onLoad: adjust,
+        onHide: function(hash){
+            var $tabs = $('#programmeItems_tabs').tabs();
+            var selected = $tabs.tabs('option', 'selected');
+            $tabs.tabs('load', selected);
+            hash.w.fadeOut('2000', function(){
+                hash.o.remove();
+            });
+        }
+    });
+    
+    $('.remove-form form', ui.panel).ajaxForm({
+        target: '#tab-messages',
+        success: function(response, status){
+            var $tabs = $('#programmeItems_tabs').tabs();
+            var selected = $tabs.tabs('option', 'selected');
+            $tabs.tabs('load', selected);
+        }
+    });
+    
+    $('.remove-form a', ui.panel).ajaxForm({
+        target: '#tab-messages',
+        success: function(response, status){
+            var $tabs = $('#programmeItems_tabs').tabs();
+            var selected = $tabs.tabs('option', 'selected');
+            $tabs.tabs('load', selected);
+        }
+    });
 }
+
 
 function adjust(dialog) {
 	$('.programmeItemInfo', dialog.w).ajaxForm({
