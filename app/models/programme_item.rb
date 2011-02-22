@@ -1,5 +1,8 @@
 class ProgrammeItem < ActiveRecord::Base
   validates_presence_of :title
+  validates_numericality_of :duration, :allow_nil => true
+  validates_numericality_of :minimum_people, :allow_nil => true
+  validates_numericality_of :maximum_people, :allow_nil => true
   has_many  :programme_item_assignments
   has_many  :people, :through => :programme_item_assignments
   

@@ -12,13 +12,17 @@ class ProgrammeItemsController < PlannerController
 # NOTE - name of the programmeItem passed in from form
     @programmeItem = ProgrammeItem.new(params[:programme_item])
     if (@programmeItem.save)
-       redirect_to :action => 'show', :id => @programmeItem
+       redirect_to :action => 'index', :id => @programmeItem
     else
       render :action => 'new'
     end 
   end
   def new
     @programmeItem = ProgrammeItem.new
+    @programmeItem.duration = 60
+    @programmeItem.minimum_people = 3
+    @programmeItem.maximum_people = 5
+    @programmeItem.print = true
   end
   
   def edit

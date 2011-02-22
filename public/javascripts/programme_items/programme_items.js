@@ -61,6 +61,7 @@ jQuery(document).ready(function(){
     pager: jQuery('#pager'),
     rowNum:10,
     autowidth: false,
+	height: "100%",
     rowList:[10,20,30],
     pager: jQuery('#pager'),
     sortname: 'title',
