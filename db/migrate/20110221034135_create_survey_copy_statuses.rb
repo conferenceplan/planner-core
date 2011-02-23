@@ -2,7 +2,7 @@ class CreateSurveyCopyStatuses < ActiveRecord::Migration
   def self.up
     create_table :survey_copy_statuses do |t|
       t.references :person
-      t.references :survey_respondents
+      t.references :survey_respondent
       t.boolean :nameCopied, { :default => false }
       t.boolean :pseudonymCopied, { :default => false }
       t.boolean :addressCopied, { :default => false }

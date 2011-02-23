@@ -133,7 +133,7 @@ ActionController::Routing::Routes.draw do |map|
   #
   map.connect 'survey_respondents/reviews/list', :controller => 'survey_respondents/reviews', :action => 'list'
   map.namespace :survey_respondents do |respondent|
-    respondent.resources :reviews
+    respondent.resources :reviews, :member => {:list => :get, :states => :get, :copySurvey => :post }
   end
     
   map.resources :survey_respondents

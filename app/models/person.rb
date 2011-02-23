@@ -52,7 +52,6 @@ class Person < ActiveRecord::Base
   
   #
   acts_as_taggable
-  acts_as_taggable_on :activities
   
   #
   has_one  :pseudonym
@@ -134,6 +133,7 @@ class Person < ActiveRecord::Base
    if (self.pseudonym != nil)
        return GetFullNameHelper(self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix)
     else
+      # TODO - This should be removed, as the pseudonym will be copied from the survey after it has been reviewed...
       # if they don't have a pseudonym in people, check survey
       if (self.hasSurvey?)
         

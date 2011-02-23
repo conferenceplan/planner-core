@@ -81,6 +81,19 @@ jQuery(document).ready(function(){
             		});
 				}
 			});
+			
+			$.ajax({
+				url: "/survey_respondents/reviews/" + ids + "/states",
+				context: $('#survey-states'),
+				success: function(data){
+					$(this).html(data);
+					
+					// TODO - on success refresh the participant area
+					$('.copy-form form').ajaxForm({
+        				target: '#survey-states',
+    				});
+				}
+			});
 
             return false;
         }
