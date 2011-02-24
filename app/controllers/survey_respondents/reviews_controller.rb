@@ -150,7 +150,7 @@ class SurveyRespondents::ReviewsController < PlannerController
       email = survey.responses[@@surveyFields[:email] + suf] # email
       if email != nil && email != ''
         newemail = person.email_addresses.new
-        newemail = email
+        newemail.email = email
       end
     }
     
