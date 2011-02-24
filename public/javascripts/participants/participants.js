@@ -334,5 +334,10 @@ function processResponse(response, postdata){
         text = $("<div></div>").append(text);
         return [false, text.html()];
     }
+
+	var $tabs = $('#particpanttabs').tabs();
+	var selected = $tabs.tabs('option', 'selected');
+	$tabs.tabs('load', selected);
+
     return [true, "Success", ""];
 }
