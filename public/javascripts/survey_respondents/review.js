@@ -1,6 +1,41 @@
 /*
  *
  */
+
+var currentPersonId = -1;
+
+function copyFormSetup() {
+
+	$('.copy-form form').ajaxForm({
+		target: '#survey-states',
+		success: function() {
+			// TODO - on success refresh the participant area
+			copyFormSetup();
+			fillParticipantInfo();
+		}
+	});
+	
+};
+
+function fillParticipantInfo() {
+
+	// get the id of the participant, and change this to the comp view
+	if (currentPersonId != -1) {
+		$.ajax({
+			url: "/participants/" + currentPersonId + "?comp=true",
+			context: $('#participant'),
+			success: function(data){
+				$(this).html(data);
+				$(".addressAccordian").accordion({
+					header: 'h3',
+	                collapsible: true,
+	                autoHeight: false
+				});
+			}
+		});
+	}
+}
+
 jQuery(document).ready(function(){
 		// run the currently selected effect
 		function runEffect() {			
@@ -68,19 +103,9 @@ jQuery(document).ready(function(){
 
 			// get the id of the participant, and change this to the comp view
 			var rowData = jQuery("#respondents").getRowData(ids);
-			var personId = rowData['participant[id]'];
-			$.ajax({
-				url: "/participants/" + personId + "?comp=true",
-				context: $('#participant'),
-				success: function(data){
-					$(this).html(data);
-            		$(".addressAccordian").accordion({
-                		header: 'h3',
-                		collapsible: true,
-                		autoHeight: false
-            		});
-				}
-			});
+			currentPersonId = rowData['participant[id]'];
+
+			fillParticipantInfo();
 			
 			$.ajax({
 				url: "/survey_respondents/reviews/" + ids + "/states",
@@ -88,10 +113,7 @@ jQuery(document).ready(function(){
 				success: function(data){
 					$(this).html(data);
 					
-					// TODO - on success refresh the participant area
-					$('.copy-form form').ajaxForm({
-        				target: '#survey-states',
-    				});
+					copyFormSetup();
 				}
 			});
 

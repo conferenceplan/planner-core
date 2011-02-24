@@ -249,13 +249,15 @@ class PeopleController < PlannerController
            person.create_survey_respondent(:last_name => person.last_name, 
                                          :first_name => person.first_name,
                                          :key => newKeyValue,
-                                         :suffix => person.suffix)
+                                         :suffix => person.suffix,
+                                         :submitted_survey => false)
          else  
            person.create_survey_respondent(:last_name => person.last_name, 
                                          :first_name => person.first_name,
                                          :key => newKeyValue,
                                          :suffix => person.suffix,
-                                         :email => theEmail.email)
+                                         :email => theEmail.email,
+                                         :submitted_survey => false)
          end
          person.save
       end
