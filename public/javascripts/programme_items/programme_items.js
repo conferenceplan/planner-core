@@ -136,6 +136,7 @@ function initDialog(event, ui) {
             hash.w.fadeOut('2000', function(){
                 hash.o.remove();
             });
+			jQuery("#programmeItems").trigger("reloadGrid");
         }
     });
     

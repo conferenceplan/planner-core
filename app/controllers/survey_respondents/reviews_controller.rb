@@ -121,22 +121,26 @@ class SurveyRespondents::ReviewsController < PlannerController
       phonetype = survey.responses[@@surveyFields[:phone][0] + suf] # type
       phonenumber = survey.responses[@@surveyFields[:phone][1] + suf] # number
       if phonenumber != nil && phonenumber != ''
-        phone = person.phone_numbers.new
-        phone.number = phonenumber
-        phone.phone_type = PhoneTypes[:Other]
-        case phonetype.to_i
-          when 1
+        place = person.phone_numbers.index{ |ph| ph.number == phonenumber }
+        
+        if place == nil
+          phone = person.phone_numbers.new
+          phone.number = phonenumber
+          phone.phone_type = PhoneTypes[:Other]
+          case phonetype.to_i
+            when 1
             phone.phone_type = PhoneTypes[:Home]
-          when 2
+            when 2
             phone.phone_type = PhoneTypes[:Work]
-          when 3
+            when 3
             phone.phone_type = PhoneTypes[:Mobile]
-          when 4
+            when 4
             phone.phone_type = PhoneTypes[:Fax]
+          end
         end
       end
     }
-
+    
     copystatus.phoneCopied = true
   end
 
@@ -149,8 +153,12 @@ class SurveyRespondents::ReviewsController < PlannerController
       suf = '-' + i.to_s if i > 0
       email = survey.responses[@@surveyFields[:email] + suf] # email
       if email != nil && email != ''
-        newemail = person.email_addresses.new
-        newemail.email = email
+        place = person.email_addresses.index{ |addr| addr.email == email }
+        if place == nil
+          newemail = person.email_addresses.new
+          newemail.email = email
+          newemail.isdefault = i == 0
+        end
       end
     }
     

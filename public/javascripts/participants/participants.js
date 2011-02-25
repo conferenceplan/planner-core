@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
         colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation<br/>Category','Acceptance','Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix'],
         colModel: [{
             name: 'person[first_name]',
-            index: 'first_name',
+            index: 'people.first_name',
             width: 150,
             editable: true,
             editoptions: {
@@ -44,7 +44,7 @@ jQuery(document).ready(function(){
             }
         }, {
             name: 'person[last_name]',
-            index: 'last_name',
+            index: 'people.last_name',
             width: 150,
             editable: true,
             editoptions: {
@@ -60,7 +60,7 @@ jQuery(document).ready(function(){
             }
         }, {
             name: 'person[suffix]',
-            index: 'suffix',
+            index: 'people.suffix',
             width: 50,
             editable: true,
 			search: false,
@@ -298,6 +298,7 @@ function initDialog(event, ui){
             hash.w.fadeOut('2000', function(){
                 hash.o.remove();
             });
+			jQuery("#participants").trigger("reloadGrid");
         }
     });
     
@@ -334,7 +335,7 @@ function processResponse(response, postdata){
         text = $("<div></div>").append(text);
         return [false, text.html()];
     }
-
+	
 	var $tabs = $('#particpanttabs').tabs();
 	var selected = $tabs.tabs('option', 'selected');
 	$tabs.tabs('load', selected);
