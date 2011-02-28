@@ -3,6 +3,15 @@
  */
     
 jQuery(document).ready(function(){ 
+    /* Populate the tag cloud */
+    $.ajax({ //http://localhost:3000/tags?class=ProgrammeItem
+        url: "/tags?class=ProgrammeItem",
+        dataType: "html",
+        success: function(response){
+            $(response).appendTo("#programmeitem-tag-cloud");
+        }
+    });
+
 	jQuery("#programmeItems_tabs").tabs({
 		ajaxOptions: { async: false },
 		cache: false
@@ -20,7 +29,7 @@ jQuery(document).ready(function(){
     colModel :[ 
       {name:'programme_item[title]', 
 	   index:'title', 
-	   width:250,
+	   width:500,
        editable:true,
 	   editoptions:{size:20}, 
 	   formoptions:{ rowpos:1, label: "Title", elmprefix:"(*)"},
@@ -29,7 +38,7 @@ jQuery(document).ready(function(){
 	  {
 			name:'programme_item[format_id]',
 			index:'format_id',
-			width: 100,
+			width: 150,
 			editable: true, 
 			edittype: "select", 
 			search: true,
@@ -49,7 +58,7 @@ jQuery(document).ready(function(){
 //    		  First you need to make sure it is on a separate row - this is done via the rowpos attribute
       {name:'programme_item[duration]', 
 	   index:'duration', 
-	   width:250,
+	   width:80,
        editable:true,
 	   editoptions:{size:20},
 	   formoptions:{ rowpos:3, 
@@ -74,7 +83,8 @@ jQuery(document).ready(function(){
 			var data = jQuery("#programmeItems").jqGrid('getRowData',ids);
             $('#programmeItem_id').text(ids);
             var $tabs = $('#programmeItems_tabs').tabs();   
-            $tabs.tabs('url', 0, 'programme_items/' + ids).tabs('load', 0); 
+            $tabs.tabs('url', 0, 'programme_items/' + ids).tabs('load', 0).tabs('select', 0);; 
+			$tabs.tabs('url', 1, 'tags/' + ids + '?class=ProgrammeItem').tabs('load',1);
             return false;
         }
   }); 

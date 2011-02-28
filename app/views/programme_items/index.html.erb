@@ -7,22 +7,33 @@
 	<%= javascript_include_tag 'programme_items/programme_items' %>
 <% end %>
 <div id="programmeItem_id" style="display : none"></div>
-
  <div class="grid_10">
      <table id="programmeItems">
      </table>
 	 <div id="pager">
 	 </div>
  </div>
-
-<div class="grid_10">
+<div class="grid_7">
     <div id="programmeItems_tabs" style="font-size:11px;">
         <ul>
             <li>
                 <a href="#detailstab">Details</a>
             </li>
+			<li>
+				<a href="#tagstab">Tags</a>
+			</li>
         </ul>
         <div id="detailstab">
         </div>
+		<div id="tagstab">
+        </div>
     </div>
 </div>
+<div id="tag-cloud" class="ui-widget ui-widget-content ui-corner-all grid_4">
+        <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
+            All Programme Item Tags
+        </div>
+        <div id="programmeitem-tag-cloud">
+        </div>
+</div>
+    
