@@ -5,4 +5,6 @@ class MenuItem < ActiveRecord::Base
   has_many :menu_items
   belongs_to :menu_item
   
+  acts_as_taggable
+
 end
