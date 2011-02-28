@@ -1,0 +1,8 @@
+xml.tags do
+  @allTags.each do |context, tags|
+    xml.taglist do
+      xml.context(context)
+      xml.tags(tags)
+	  end
+  end
+end

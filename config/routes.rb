@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :tags
+
+  map.resources :tag_contexts
+
   map.resources :survey_copy_statuses
 
   map.resources :smerf_forms
@@ -67,14 +71,15 @@ ActionController::Routing::Routes.draw do |map|
     :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers],
     :has_one => [:registrationDetail, :edited_bio],
     :collection => {:list => :get }
-  map.resources :people, :as => "participants" do |person|
-    person.resource :tags, :member => {:remove => :delete, :add => :post, :index => :get, :list => :get}, 
-      :controller => 'people/tags',
-      :except => [:destroy, :new, :update, :create, :edit]
-  end
+#  map.resources :people, :as => "participants" do |person|
+#    person.resource :tags, :member => {:remove => :delete, :add => :post, :index => :get}, 
+#      :controller => 'people/tags',
+#      :except => [:destroy, :new, :update, :create, :edit],
+#      :format => "xml"
+#  end
 
-  map.connect 'participants/tags/list', :controller => 'people/tags', :action => 'list'
-  map.connect 'participants/tags/index', :controller => 'people/tags', :action => 'index'
+#  map.connect 'participants/tags/list', :controller => 'people/tags', :action => 'list'
+#  map.connect 'participants/tags/index', :controller => 'people/tags', :action => 'index'
 
   map.connect 'participants/list', :controller => 'people', :action => 'list'
  

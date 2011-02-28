@@ -3,6 +3,15 @@
  */
 jQuery(document).ready(function(){
 
+	/* Populate the tag cloud */
+    $.ajax({ //http://localhost:3000/tags?class=Person
+        url: "/tags?class=Person",
+        dataType: "html",
+        success: function(response){
+            $(response).appendTo("#participant-tag-cloud");
+        }
+    });
+
 	/* Initialize the tags - load is called when a new participant/person is selected in the grid */
     jQuery("#particpanttabs").tabs({
         ajaxOptions: {
@@ -222,6 +231,7 @@ jQuery(document).ready(function(){
             $tabs.tabs('url', 1, 'participants/' + ids + '/addresses').tabs('load', 1);
             $tabs.tabs('url', 2, 'participants/' + ids).tabs('load', 2);
 			$tabs.tabs('url', 3, 'participants/' + ids + '/edited_bio').tabs('load',3);
+			$tabs.tabs('url', 4, 'tags/' + ids + '?class=Person').tabs('load',4);
             
             return false;
         }

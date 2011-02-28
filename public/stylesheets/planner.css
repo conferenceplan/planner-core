@@ -264,3 +264,39 @@ div.response_text {
 	position: absolute;
 	z-index: 255;
 }
+
+div.tag,
+div.tag-count,
+div.tag-context-title,
+div.tag-title {
+	font-size: 10pt;
+	font-family: Arial;
+}
+
+div.tag {
+	margin-right: 5px;
+	float: left;
+}
+
+div.tag-name {
+	font-size: 8pt;	
+	float: left;
+}
+
+div.tag-title {
+	font-style: italic;
+}
+
+div.tag-context-title {
+	font-size: 10pt;
+	font-weight: bold; 
+	margin-top: 5px;
+	margin-bottom: 5px;
+	clear: both;
+}
+
+div.tag-count {
+	float: left;
+	font-size: 8pt;	
+	color : grey;
+}

@@ -1,13 +1,8 @@
-<div class='participant_tags'>
-<div class="ui-widget">
-<label>Tags: </label><input id="tags" />
-</div>
-<div class="ui-widget" style="margin-top:2em; font-family:Arial">
-Tags:
-<div id="tags-list" style="height: 200px; width: 300px; overflow: auto;" class="ui-widget-content">
-<% @tags.each do |tag| %>
-  <%= tag %><br/>
+<div class='tags'>
+<div class="ui-widget" style="font-family:Arial">
+<% @allTags.each do |context, tags| %>
+	<h3><%= context %></h3>
+	<div><%= tags %><br/></div>
 <% end %>
-</div>
 </div>
 </div>

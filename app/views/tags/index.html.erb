@@ -1,0 +1,10 @@
+<div class='tags'>
+  <% @allTagCounts.each do |context, tags| %>
+    <div class="tag-context-title"><%= context%></div>
+    <% tags.each do |tag| %>
+      <div class='tag'>
+      	<div class="tag-name"><%= tag.name %></div><div class="tag-count">&nbsp;(<%= tag.count %>)</div>
+	  </div>
+    <% end %>
+  <% end %>
+<div>
