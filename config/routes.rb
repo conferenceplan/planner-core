@@ -1,5 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :tags
+  map.resources :tags, :member => {:remove => :delete, :add => :post, :index => :get},
+      :except => [:destroy, :new, :update, :create, :edit]
 
   map.resources :tag_contexts
 
