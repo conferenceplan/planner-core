@@ -1,4 +1,4 @@
-class FormatsController < ApplicationController
+class FormatsController < PlannerController
   before_filter :require_user
 
   def index

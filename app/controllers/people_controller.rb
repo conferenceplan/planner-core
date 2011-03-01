@@ -1,5 +1,6 @@
 class PeopleController < PlannerController
-  
+  filter_access_to :all # Only allow roles that have manage permission to use any of the methods in this controller
+
   def destroy
     person = Person.find(params[:id])
     

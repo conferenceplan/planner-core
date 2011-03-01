@@ -1,4 +1,4 @@
-class PendingImportPeopleController < ApplicationController
+class PendingImportPeopleController < PlannerController
   require 'csv'
   before_filter :require_user
 

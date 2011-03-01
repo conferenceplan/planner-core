@@ -1,4 +1,4 @@
-class RoomsController < ApplicationController
+class RoomsController < PlannerController
   before_filter :require_user
 
   def index

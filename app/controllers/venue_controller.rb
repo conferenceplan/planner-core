@@ -1,4 +1,4 @@
-class VenueController < ApplicationController
+class VenueController < PlannerController
    def index
       @venues = Venue.find :all
       @rooms = Array.new

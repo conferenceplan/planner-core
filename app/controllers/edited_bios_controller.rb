@@ -1,4 +1,4 @@
-class EditedBiosController < ApplicationController
+class EditedBiosController < PlannerController
   before_filter :require_user
 
   def index
@@ -13,6 +13,8 @@ class EditedBiosController < ApplicationController
        @editedBio = @person.edited_bio
        @surveyBio = @person.GetSurveyBio
     else
+      @urlstr = '/edited_bios/new'
+
       @editedBio = EditedBio.find(params[:id])
       @surveyBio = @editedBio.person.GetSurveyBio
     end
