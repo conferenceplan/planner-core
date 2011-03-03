@@ -1,5 +1,5 @@
 <%= error_messages_for :phoneNumber %>
-<% form_for @phoneNumber, :url => @urlstr, :html => {:class => "particpantInfo", :id => "particiantInfo"} do |f| %>
+<% form_for @phoneNumber, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
 <div class='address_phone'>
 <div class='address_details'>
 	<div class='phone'><div class='field_name'>Phone:</div><div class='field_value'><%= f.text_field :number %></div></div>

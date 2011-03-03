@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :tags, :member => {:remove => :delete, :add => :post, :index => :get},
-      :except => [:destroy, :new, :update, :create, :edit]
+#  map.resources :tags, :member => {:remove => :get, :add => :get, :index => :get, :edit => :get, :update => :post},
+  map.resources :tags, :member => {:remove => :delete, :add => :post, :index => :get, :edit => :get},
+      :except => [:destroy, :new, :create]
 
   map.resources :tag_contexts
 
@@ -78,7 +79,6 @@ ActionController::Routing::Routes.draw do |map|
 #      :except => [:destroy, :new, :update, :create, :edit],
 #      :format => "xml"
 #  end
-
 #  map.connect 'participants/tags/list', :controller => 'people/tags', :action => 'list'
 #  map.connect 'participants/tags/index', :controller => 'people/tags', :action => 'index'
 

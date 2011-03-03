@@ -30,8 +30,8 @@ class TagsController < PlannerController
   #
   def show
     # For each of the possible contexts get the tags...
-    className = params[:class]
-    obj = eval(className).find(params[:id])
+    @className = params[:class]
+    obj = eval(@className).find(params[:id])
     
     # 1. Get the set of contexts
     contexts = TagContext.all
@@ -52,27 +52,58 @@ class TagsController < PlannerController
   end
   
   def add
-    # class
-    # id
-    # context
-    context = params[:context]
-    className = params[:class]
-    obj = eval(className).find(params[:id])
-    tag = params[:tag]
+    context = params[:context] # context
+    className = params[:class] # class
     
-    obj.tag_list_on(context).add(tag)
-    obj.save
+    if isok(className)
+      obj = eval(className).find(params[:id]) # object find by id
+      tagList = params[:tag].split(',') # allow the addition of multiple tags (comma seperated)
+    
+      tagList.each do |tag|
+        obj.tag_list_on(context).add(tag)
+      end
+      obj.save
+    end
     
     render :layout => 'content'
   end
 
   def remove
-#    @tag = Tag.find(params[:id])
-#    @tag.destroy
+    context = params[:context] # context
+    className = params[:class] # class
 
+    if isok(className)
+      obj = eval(className).find(params[:id]) # object find by id
+      tag = params[:tag]
+
+      obj.tag_list_on(context).delete(tag)
+      obj.save
+    end
+
+    render :layout => 'content'
+  end
+
+# Create the edit form , the result will be to add a new tag(s)
+# http://localhost:3000/tags/1/edit?class=Person&context=scienceItems
+  def edit
+    @context = params[:context] # context
+    @className = params[:class] if isok(params[:class])
+    @id = params[:id]
+
+    # Just pass on to the form that will allow us to 'edit' the tag list i.e. to add tags
     respond_to do |format|
-      format.html { redirect_to(tags_url) }
-      format.xml  { head :ok }
+      format.html {render :layout => 'content'} # new.html.erb
     end
   end
+
+  private
+  
+  #
+  # Make sure that the parameter is not trying to execute a system command
+  #
+  def isok(input)
+    # make sure that the input does not contain system ''
+    ! input.downcase.include? 'system'
+  end
+  
 end

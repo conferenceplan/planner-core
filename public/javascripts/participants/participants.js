@@ -3,14 +3,7 @@
  */
 jQuery(document).ready(function(){
 
-	/* Populate the tag cloud */
-    $.ajax({ //http://localhost:3000/tags?class=Person
-        url: "/tags?class=Person",
-        dataType: "html",
-        success: function(response){
-            $(response).appendTo("#participant-tag-cloud");
-        }
-    });
+	populateTagCloud();
 
 	/* Initialize the tags - load is called when a new participant/person is selected in the grid */
     jQuery("#particpanttabs").tabs({
@@ -309,6 +302,7 @@ function initDialog(event, ui){
                 hash.o.remove();
             });
 			jQuery("#participants").trigger("reloadGrid");
+			populateTagCloud();
         }
     });
     
@@ -332,7 +326,7 @@ function initDialog(event, ui){
 }
 
 function adjust(dialog){
-    $('.particpantInfo', dialog.w).ajaxForm({
+    $('.layerform', dialog.w).ajaxForm({
         target: '#form-response'
     });
 }
@@ -352,3 +346,15 @@ function processResponse(response, postdata){
 
     return [true, "Success", ""];
 }
+
+function populateTagCloud() {
+	/* Populate the tag cloud */
+    $.ajax({ //http://localhost:3000/tags?class=Person
+        url: "/tags?class=Person",
+        dataType: "html",
+        success: function(response){
+			jQuery("#participant-tag-cloud").html(response);
+        }
+    });
+}
+

@@ -4,14 +4,8 @@
     
 jQuery(document).ready(function(){ 
     /* Populate the tag cloud */
-    $.ajax({ //http://localhost:3000/tags?class=ProgrammeItem
-        url: "/tags?class=ProgrammeItem",
-        dataType: "html",
-        success: function(response){
-            $(response).appendTo("#programmeitem-tag-cloud");
-        }
-    });
-
+	populateTagCloud();
+	
 	jQuery("#programmeItems_tabs").tabs({
 		ajaxOptions: { async: false },
 		cache: false
@@ -147,6 +141,7 @@ function initDialog(event, ui) {
                 hash.o.remove();
             });
 			jQuery("#programmeItems").trigger("reloadGrid");
+			populateTagCloud();
         }
     });
     
@@ -171,7 +166,7 @@ function initDialog(event, ui) {
 
 
 function adjust(dialog) {
-	$('.programmeItemInfo', dialog.w).ajaxForm({
+	$('.layerform', dialog.w).ajaxForm({
 		target: '#form-response'
 	});
 }
@@ -191,3 +186,15 @@ function processResponse(response, postdata) {
 			
 	return [true, "Success"]; 
 }
+
+function populateTagCloud() {
+	/* Populate the tag cloud */
+    $.ajax({ //http://localhost:3000/tags?class=ProgrammeItem
+        url: "/tags?class=ProgrammeItem",
+        dataType: "html",
+        success: function(response){
+			jQuery("#programmeitem-tag-cloud").html(response);
+        }
+    });
+}
+

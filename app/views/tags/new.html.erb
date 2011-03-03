@@ -1,11 +1,12 @@
 <h1>New tag</h1>
-
-<% form_for(@tag) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.submit 'Create' %>
-  </p>
-<% end %>
-
-<%= link_to 'Back', tags_path %>
+<!-- Input for the tag -->
+<!-- http://localhost:3000/tags/1/add?class=Person&context=scienceItems&tag=uuu -->
+<!--
+1. Get the class name from the controller
+2. Get the context from the controller
+-->
+<% form_tag(tags_path, :method => "get") do %>
+  <%= label_tag(:q, "Search for:") %>
+  <%= text_field_tag(:q) %>
+  <%= submit_tag("Search") %>
+<% end %> 

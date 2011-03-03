@@ -265,6 +265,11 @@ div.response_text {
 	z-index: 255;
 }
 
+div.tags {
+	height: 100%;
+	display: inline-block;
+}
+
 div.tag,
 div.tag-count,
 div.tag-context-title,

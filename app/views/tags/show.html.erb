@@ -1,8 +1,18 @@
 <div class='tags'>
-  <div class="ui-widget" style="font-family:Arial">
     <% @allTags.each do |context, tags| %>
-	  <h3><%= context %></h3>
-	  <div><%= tags %><br/></div>
-    <% end %>
-  </div>
+	  <div class="tag-context-title"><%= context %></div>
+<div class='controls'>
+	<div class='edit-form'>
+	<%= link_to "edit", {:controller => 'tags', :action => 'edit', :class => @className, :context => context}, :class => 'entrydialog' %>
+	</div>
 </div>
+	  	<%tags.each do |t|%>
+		<div class="tag">
+	  		<div class="tag-name"><%= t %></div>
+			<div class="ui-icon ui-icon-close" style="float: left;"/><br/>
+		</div>
+        <% end %>
+    <% end %>
+</div>
+<div class='message' id='tab-messages'></div>
+<div class="jqmWindow" id="edialog">Please wait...</div>
