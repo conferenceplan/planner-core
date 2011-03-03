@@ -1,0 +1,28 @@
+xml.people do
+  @people.each do |p|
+    xml.person do
+      name = p.GetFullPublicationName()
+      xml.name(name)    
+      if (p.edited_bio)
+           xml.bio do
+             xml.cdata! (markdown(p.edited_bio.bio))
+           end
+      end
+      if (p.GetWebSite)
+        xml.WebSite :type => 'url',
+          :href => p.GetWebSite
+      end
+       if (p.GetTwitterInfo())
+        xml.TwitterInfo(p.GetTwitterInfo)
+      end
+      if (p.GetOtherSocialMediaInfo)
+        xml.OtherSocialMediaInfo :type => 'url',
+          :href => p.GetOtherSocialMediaInfo
+      end
+      if (p.GetPhotoUrl)
+        xml.PhotoUrl :type => 'url',
+          :href => p.GetPhotoUrl
+      end
+    end
+  end
+end

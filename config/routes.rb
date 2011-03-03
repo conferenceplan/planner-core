@@ -58,6 +58,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :phone_numbers, :has_many => :people
   map.resources :menus
   
+  map.connect 'participants/exportbiolist', :controller => 'people',:action => 'exportbiolist'
   map.connect 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
   map.connect 'participants/doReportInviteStatus', :controller => 'people', :action => 'doReportInviteStatus'
   map.connect 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'

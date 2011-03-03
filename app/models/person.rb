@@ -169,16 +169,51 @@ class Person < ActiveRecord::Base
   end
   
   def GetSurveyBio
-     if (self.hasSurvey?)
+    return (GetSurveyQuestionResponse('g95q1'))    
+  end
+  
+  def GetSurveyQuestionResponse(questionId)
+    if (self.hasSurvey?)
          survey = SmerfFormsSurveyrespondent.find_user_smerf_form(self.survey_respondent.id, 1)
          if (survey == nil)
            return nil
          else
-           return survey.responses['g95q1']
+           if (survey.responses[questionId] != "")
+           return survey.responses[questionId]
+         else
+           return nil
          end
+       end
+     else
+       return nil
      end
   end
   
+  def GetWebSite()
+       return (GetSurveyQuestionResponse('g95q2'))    
+  end
+ 
+  def GetFacebookInfo()
+    return (GetSurveyQuestionResponse('g96q1'))    
+  end
+ 
+ def GetTwitterInfo()
+   return (GetSurveyQuestionResponse('g96q2'))
+ end
+ 
+ def GetOtherSocialMediaInfo()
+      return (GetSurveyQuestionResponse('g96q3'))
+ end
+ 
+ def GetPhotoUrl()
+   doNotPostPhoto = GetSurveyQuestionResponse('g95q4')
+   if (doNotPostPhoto)
+     return "Do Not Post Photo"
+   else
+     return (GetSurveyQuestionResponse('g95q3'))
+   end
+ end
+ 
   def removePostalAddress(address)
     # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person
@@ -290,5 +325,5 @@ class Person < ActiveRecord::Base
       return false
     end
   end
- 
+  
 end

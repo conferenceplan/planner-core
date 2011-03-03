@@ -345,6 +345,13 @@ class PeopleController < PlannerController
     @people = surveypeople
   end
   
+  def exportbiolist
+    accepted = AcceptanceStatus.find_by_name("Accepted")        
+    invitestatus = InviteStatus.find_by_name("Invited")
+    @people = Person.find :all,  :conditions => ['acceptance_status_id = ? and invitestatus_id = ?', accepted.id, invitestatus.id], :order => 'last_name, first_name'
+    render :layout => 'content'
+  end
+  
   def ReportInviteStatus
    
   end
@@ -368,5 +375,6 @@ def acceptancestatuslistwithblank
    @acceptanceStatus = AcceptanceStatus.find :all
     render :layout => 'content'
 end
+
 
 end

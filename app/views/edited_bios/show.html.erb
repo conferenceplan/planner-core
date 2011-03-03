@@ -11,7 +11,7 @@
 <% if @editedBio %>
 <label>Edited Bio:</label>
 <br>
-<%= @editedBio.bio %>
+<%=  markdown(@editedBio.bio) %>
 <br>
 <% else %>
 <p> No Edited Bio </p>
