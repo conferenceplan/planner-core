@@ -38,7 +38,7 @@ authorization do
     has_permission_on :phone_numbers, :to => :manage
     has_permission_on :postal_addresses, :to => :manage
     has_permission_on :programme_items, :to => :manage
-#    has_permission_on :registration_details, :to => :manage
+    has_permission_on :registration_details, :to => :manage
     has_permission_on :roles, :to => [:read]
     has_permission_on :rooms, :to => :manage
     has_permission_on :survey_respondents, :to => :manage
