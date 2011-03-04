@@ -1,5 +1,4 @@
 class ProgrammeItemsController < PlannerController
-  filter_access_to :all
   
   def index
     @programmeItems = ProgrammeItem.find :all

@@ -1,5 +1,4 @@
 class FormatsController < PlannerController
-  before_filter :require_user
 
   def index
     @formats = Format.find :all

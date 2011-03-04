@@ -1,7 +1,4 @@
-class Users::AdminController < ApplicationController
-  filter_access_to :all, :require => :manage # Only allow roles that have manage permission to use any of the methods in this controller
-  # TODO - put the role mechanism into the menu rendering...
-  
+class Users::AdminController < PlannerController  
   def list
     rows = params[:rows]
     @page = params[:page]

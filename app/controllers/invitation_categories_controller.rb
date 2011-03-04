@@ -1,5 +1,4 @@
-class InvitationCategoriesController < ApplicationController
-  before_filter :require_user
+class InvitationCategoriesController < PlannerController
 
   def index
     @invitationCategories = InvitationCategory.find :all

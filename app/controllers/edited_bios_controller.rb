@@ -1,5 +1,4 @@
 class EditedBiosController < PlannerController
-  before_filter :require_user
 
   def index
     @editedBios = EditedBio.find :all

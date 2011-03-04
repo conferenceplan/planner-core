@@ -1,5 +1,4 @@
-class AddressesController < ApplicationController
-  before_filter :require_user
+class AddressesController < PlannerController
 
   def index
     person = Person.find(params[:person_id])

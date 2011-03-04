@@ -1,5 +1,4 @@
-class PostalAddressesController < ApplicationController
-  before_filter :require_user
+class PostalAddressesController < PlannerController
 
   def new
     if (params[:person_id])

@@ -1,7 +1,5 @@
-class SurveyCopyStatusesController < ApplicationController
+class SurveyCopyStatusesController < PlannerController
   
-  before_filter :require_user
-
   # GET /survey_copy_statuses
   # GET /survey_copy_statuses.xml
   def index

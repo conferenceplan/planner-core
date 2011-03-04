@@ -1,6 +1,4 @@
 class RoomsController < PlannerController
-  before_filter :require_user
-
   def index
     @rooms = Room.find :all
   end

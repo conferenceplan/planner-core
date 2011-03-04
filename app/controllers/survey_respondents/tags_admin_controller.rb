@@ -1,9 +1,7 @@
 #
 #
 #
-class SurveyRespondents::TagsAdminController < ApplicationController
-#  filter_access_to :all, :require => :manage # Only allow roles that have manage permission to use any of the methods in this controller
-
+class SurveyRespondents::TagsAdminController < PlannerController
   # The start page, we start with a hash of the tag contexts and their associated tags
   def index
     taggings = ActsAsTaggableOn::Tagging.find :all,
@@ -137,16 +135,4 @@ private
     end
   end
 
-#
-# To edit the persons form we will need to get the field from the survey, split the text (by comma) and change the appropriate value
-#
 end
-
-# 1. Get a list of the tag contexts for the survey respondents
-# 2. For each context get the tags and their tag count
-# 3. Allow update and delete on specific tag in the collection
-# 4. Allow move of tag from one context to another
-
-# NOTE: We need to update the response on all the appropriate survey respondent instances
-# when the tag is changed
-#

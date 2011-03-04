@@ -1,5 +1,4 @@
-class PhoneNumbersController < ApplicationController
-  before_filter :require_user
+class PhoneNumbersController < PlannerController
 
   def new
     if (params[:person_id])

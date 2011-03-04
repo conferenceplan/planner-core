@@ -1,5 +1,4 @@
-class RegistrationDetailsController < ApplicationController
-  before_filter :require_user
+class RegistrationDetailsController < PlannerController
 
   def edit
     @registrationDetail = RegistrationDetail.find(params[:id])

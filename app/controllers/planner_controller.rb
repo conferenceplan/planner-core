@@ -2,8 +2,10 @@
 #
 #
 class PlannerController < ApplicationController
-  before_filter :require_user
-  filter_access_to :all # Only allow roles that have manage permission to use any of the methods in this controller
+  before_filter :require_user # All controllers that inherit from this will require an authenticated user
+  filter_access_to :all # All controllers that inherit from this will be controlled by the access rules
+
+private
 
   def createWhereClause(filters, integerFieldsSkipIfEmpty = [], integerFields = [])
     clause = nil

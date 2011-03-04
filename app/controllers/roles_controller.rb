@@ -1,4 +1,4 @@
-class RolesController < ApplicationController
+class RolesController < PlannerController
     layout "content"
     
   def list
