@@ -290,6 +290,23 @@ function addToTagList(value){
 }
 
 function initDialog(event, ui){
+	
+	$(".deletetag").click(function(event) {
+		// do the action etc
+		var a    = $(this),
+		href = a.attr('href'),
+		content  = $('.message');
+		
+		content.load(href);// + " #content");
+
+		populateTagCloud();
+            var $tabs = $('#particpanttabs').tabs();
+            var selected = $tabs.tabs('option', 'selected');
+            $tabs.tabs('load', selected);
+		
+		event.preventDefault();
+	});
+	
     $('#edialog', ui.panel).jqm({
         ajax: '@href',
         trigger: 'a.entrydialog',

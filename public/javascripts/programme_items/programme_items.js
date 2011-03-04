@@ -129,6 +129,23 @@ jQuery(document).ready(function(){
 
 
 function initDialog(event, ui) {
+
+	$(".deletetag").click(function(event) {
+		// do the action etc
+		var a    = $(this),
+		href = a.attr('href'),
+		content  = $('.message');
+		
+		content.load(href);
+
+		populateTagCloud();
+            var $tabs = $('#programmeItems_tabs').tabs();
+            var selected = $tabs.tabs('option', 'selected');
+            $tabs.tabs('load', selected);
+		
+		event.preventDefault();
+	});
+
     $('#edialog', ui.panel).jqm({
         ajax: '@href',
         trigger: 'a.entrydialog',

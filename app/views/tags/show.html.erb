@@ -1,17 +1,20 @@
 <div class='tags'>
-    <% @allTags.each do |context, tags| %>
-	  <div class="tag-context-title"><%= context %></div>
-<div class='controls'>
-	<div class='edit-form'>
-	<%= link_to "edit", {:controller => 'tags', :action => 'edit', :class => @className, :context => context}, :class => 'entrydialog' %>
-	</div>
-</div>
-	  	<%tags.each do |t|%>
-		<div class="tag">
-	  		<div class="tag-name"><%= t %></div>
-			<div class="ui-icon ui-icon-close" style="float: left;"/><br/>
+	<% @allTags.each do |context, tags| %>
+		<div class="tag-context-title"><%= context %></div>
+		<div class='controls'>
+			<div class='edit-form'>
+				<%= link_to "new", {:controller => 'tags', :action => 'edit', :class => @className, :context => context}, :class => 'entrydialog' %>
+			</div>
 		</div>
-        <% end %>
+		<%tags.each do |t|%>
+			<div class="tag">
+		  		<div class="tag-name"><%= t %></div>
+				<%link_to({:controller => 'tags', :action => 'remove', :class => @className, :context => context, :tag => t}, :class => 'deletetag') do%>
+					<div class="ui-icon ui-icon-close" style="float: left;"/>
+				<%end%>
+				<br/>
+			</div>
+		<% end %>
     <% end %>
 </div>
 <div class='message' id='tab-messages'></div>
