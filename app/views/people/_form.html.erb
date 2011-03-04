@@ -1,5 +1,5 @@
 <%= error_messages_for :person %>
-<% form_for @person,:html => {:class => "particpantInfo", :id => "particpantInfo"} do |f| -%>
+<% form_for @person,:html => {:class => "layerform", :id => "layerform"} do |f| -%>
   <div class='line'><div class='field_name'><%= f.label :first_name, "First Name" %></div>       <div class='field_value'></div><%= f.text_field :first_name %></div>
   <div class='line'><div class='field_name'><%= f.label :last_name, "Last Name" %></div>         <div class='field_value'> <%= f.text_field :last_name %></div></div>
   <div class='line'><div class='field_name'><%= f.label :suffix, "Suffix" %></div>               <div class='field_value'> <%= f.text_field :suffix %></div></div>
