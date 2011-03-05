@@ -5,6 +5,10 @@ class PlannerController < ApplicationController
   before_filter :require_user # All controllers that inherit from this will require an authenticated user
   filter_access_to :all # All controllers that inherit from this will be controlled by the access rules
 
+  def permission_denied
+    render '/errors/permission_error'
+  end
+
 private
 
   def createWhereClause(filters, integerFieldsSkipIfEmpty = [], integerFields = [])

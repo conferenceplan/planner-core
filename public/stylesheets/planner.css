@@ -267,7 +267,24 @@ div.response_text {
 
 div.tags {
 	height: 100%;
+    width: 100%;
 	display: inline-block;
+}
+
+div.tag-title-area {
+    display: inline-block;
+}
+
+div.tag-area {
+    clear: both;
+}
+
+div.tag-controls {
+    float: right;
+}
+
+div.tag-context-title {
+    float: left;
 }
 
 div.tag,

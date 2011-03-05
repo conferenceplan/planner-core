@@ -374,7 +374,7 @@ function populateTagCloud(){
             jQuery("#participant-tag-cloud").html(response);
             
             jQuery(".tag-select").click(function(event){
-                var ctx = $(this).parents('.tag-group').children('.tag-context-title').text();
+                var ctx = $(this).parents('.tag-group').find('.tag-context-title').text();
                 var tag = $(this).text();
                 
                 if (!tagQueryList[ctx]) {
@@ -421,6 +421,7 @@ function turnTagQueryToHTML(){
     for (var key in tagQueryList) {
         html += "<div class='tag-group'>";
         html += "<div class='tag-context-title'>" + key + "</div>";
+        html += "<div class='tag-area'>"
         html += "<div class='tag'>"
         for (var i = 0; i < tagQueryList[key].length; i++) {
             html += '<div class="tag-name">';
@@ -430,6 +431,7 @@ function turnTagQueryToHTML(){
             html += '<div class="ui-icon ui-icon-close" style="float: left;"/>';
             html += '</a>';
         }
+        html += "</div>";
         html += "</div>";
         html += "</div>";
         html += "</div>";

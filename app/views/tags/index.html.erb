@@ -1,12 +1,16 @@
 <div class='tags'>
   <% @allTagCounts.each do |context, tags| %>
     <div class="tag-group">
-    <div class="tag-context-title"><%= context%></div>
+    <div class="tag-context-title-area">
+        <div class="tag-context-title"><%= context%></div>
+	</div>
+    <div class='tag-area'>
     <% tags.each do |tag| %>
       <div class='tag'>
       	<div class="tag-name tag-select"><%= tag.name %></div><div class="tag-count">&nbsp;(<%= tag.count %>)</div>
 	  </div>
     <% end %>
 	</div>
+    </div>
   <% end %>
 <div>
