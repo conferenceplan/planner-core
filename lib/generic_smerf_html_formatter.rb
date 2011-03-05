@@ -29,43 +29,52 @@ module GenericSmerfHtmlFormatter
   def html_group_question(question)
     content = ""
     answer_html = ""
-
+    okToShow = true
+    
     # Check the type and format appropriatly
     answer = ''
-    case question.type
-      when 'multiplechoice'
-      answer += html_get_multiplechoice(question)
-      when 'textbox'
-      answer += html_get_textbox(question)
-      when 'textfield'
-      answer += html_get_text(question)
-      when 'singlechoice'
-      answer += html_get_singlechoice(question)
-      when 'selectionbox'
-      answer += html_get_selectionbox(question)
-    else  
-      raise("Unknown question type for question: #{question.question}")
-    end
-    
-    if (!answer.blank?)
-      if (question.question) and (!question.question.blank?)
-        answer_html += content_tag(:div, question.question, :class => 'response_question_text')
+    if question.code == 'g93q6'
+      okToShow = false
+      controller.permitted_to? :manage, :survey_respondents_reviews do
+        okToShow = true
       end
-      answer_html += content_tag(:div, answer, :class => 'response_answer')
-#      content += content_tag(:div, answer_html, :class => 'response_question')
-      content = answer_html
     end
-
-    if question.additional
-      # for each of the additional we want to create a new version of the same question
-      1.upto(question.additional) { |i|
-        dup_question = question.clone
-        dup_question.additional = 0
-        dup_question.code += "-" + i.to_s
-        html_change_question_code(dup_question, "-" + i.to_s)
-        # need to go through the nested questions and change their codes as well
-        content += html_group_question(dup_question)        
-     }
+    if okToShow
+      case question.type
+        when 'multiplechoice'
+        answer += html_get_multiplechoice(question)
+        when 'textbox'
+        answer += html_get_textbox(question)
+        when 'textfield'
+        answer += html_get_text(question)
+        when 'singlechoice'
+        answer += html_get_singlechoice(question)
+        when 'selectionbox'
+        answer += html_get_selectionbox(question)
+      else  
+        raise("Unknown question type for question: #{question.question}")
+      end
+      
+      if (!answer.blank?)
+        if (question.question) and (!question.question.blank?)
+          answer_html += content_tag(:div, question.question, :class => 'response_question_text')
+        end
+        answer_html += content_tag(:div, answer, :class => 'response_answer')
+        #      content += content_tag(:div, answer_html, :class => 'response_question')
+        content = answer_html
+      end
+      
+      if question.additional
+        # for each of the additional we want to create a new version of the same question
+        1.upto(question.additional) { |i|
+          dup_question = question.clone
+          dup_question.additional = 0
+          dup_question.code += "-" + i.to_s
+          html_change_question_code(dup_question, "-" + i.to_s)
+          # need to go through the nested questions and change their codes as well
+          content += html_group_question(dup_question)        
+        }
+      end
     end
     
     return content
