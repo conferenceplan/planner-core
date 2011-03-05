@@ -26,6 +26,11 @@ authorization do
     has_permission_on :survey_respondents_tags_admin, :to => :manage
   end
   
+  role :Itemeditor do
+    includes :Viewer
+    has_permission_on :programme_items, :to => :manage
+  end
+  
   role :Planner do
     includes :Viewer
     has_permission_on :addresses, :to => :manage
