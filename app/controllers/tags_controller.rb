@@ -5,14 +5,16 @@ class TagsController < PlannerController
     # For each of the possible contexts get the tags...
     className = params[:class]
     
-    # 1. Get the set of contexts
-    contexts = TagContext.all
-    # 2. For each context get the tags for thie person and add them to the results
-    @allTagCounts = Hash.new
-    contexts.each do |context|
-      tags = eval(className).tag_counts_on( context.name )
-      if tags != nil
-        @allTagCounts[context.name] = tags
+    if isok(className)
+      # 1. Get the set of contexts
+      contexts = TagContext.all
+      # 2. For each context get the tags for thie person and add them to the results
+      @allTagCounts = Hash.new
+      contexts.each do |context|
+        tags = eval(className).tag_counts_on( context.name )
+        if tags != nil
+          @allTagCounts[context.name] = tags
+        end
       end
     end
     
@@ -31,16 +33,19 @@ class TagsController < PlannerController
   def show
     # For each of the possible contexts get the tags...
     @className = params[:class]
-    obj = eval(@className).find(params[:id])
     
-    # 1. Get the set of contexts
-    contexts = TagContext.all
-    # 2. For each context get the tags for thie person and add them to the results
-    @allTags = Hash.new
-    contexts.each do |context|
-      tags = obj.tag_list_on( context.name )
-      if tags != nil
-        @allTags[context.name] = tags
+    if isok(@className)
+      obj = eval(@className).find(params[:id])
+      
+      # 1. Get the set of contexts
+      contexts = TagContext.all
+      # 2. For each context get the tags for thie person and add them to the results
+      @allTags = Hash.new
+      contexts.each do |context|
+        tags = obj.tag_list_on( context.name )
+        if tags != nil
+          @allTags[context.name] = tags
+        end
       end
     end
     
@@ -48,6 +53,44 @@ class TagsController < PlannerController
     respond_to do |format|
       format.html { render :layout => 'content' } # show.html.erb
       format.xml  
+    end
+  end
+  
+  #
+  # Get a set of the instances with the given tag
+  #
+  def list
+    # For each of the possible contexts get the tags...
+    context = params[:context] # context
+    className = params[:class] # class
+    exclude = params[:exclude]
+    @results = nil
+    
+    op = exclude ? :match_all : :any
+    query = ''
+    if context.class == HashWithIndifferentAccess
+      context.each do |key, ctx|
+        query += ".tagged_with('" + params[:tag][key] + "', :on => '" + ctx + "', '+op+' => true)"
+      end
+    end
+
+    if isok(className)
+      cl = eval(className) # get the instance of the class
+      page = params[:page] ? params[:page].to_i : 1
+      pagesize = params[:pagesize] ? params[:pagesize].to_i : 10
+
+      # Allowed operations are any or match_all, if exclude has been passed then we assume an exact match...
+      if query.empty?
+        @results = Person.tagged_with(params[:tag], :on => context, op => true).by_last_name.paginate(:page => page, :per_page => pagesize)
+      else
+        @results = eval "Person" + query + ".by_last_name.paginate(:page => page, :per_page => pagesize)"
+      end
+    end
+    
+    # 3. Then pass this along to the view
+    respond_to do |format|
+      format.html { render :layout => 'content' } # list.html.erb
+      format.xml  { render :xml => @results }
     end
   end
   

@@ -1,11 +1,14 @@
 /*
  *
  */
+var baseUrl = "participants/list";
+var tagQueryList = {};
+
 jQuery(document).ready(function(){
 
-	populateTagCloud();
-
-	/* Initialize the tags - load is called when a new participant/person is selected in the grid */
+    populateTagCloud();
+    
+    /* Initialize the tags - load is called when a new participant/person is selected in the grid */
     jQuery("#particpanttabs").tabs({
         ajaxOptions: {
             async: false
@@ -24,10 +27,10 @@ jQuery(document).ready(function(){
     
     // The grid containing the list of paricipants
     jQuery("#participants").jqGrid({
-        url: 'participants/list',
+        url: baseUrl,
         datatype: 'xml',
-		mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #','Invite Status','Invitation<br/>Category','Acceptance','Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix'],
+        mtype: 'POST',
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix'],
         colModel: [{
             name: 'person[first_name]',
             index: 'people.first_name',
@@ -65,7 +68,7 @@ jQuery(document).ready(function(){
             index: 'people.suffix',
             width: 50,
             editable: true,
-			search: false,
+            search: false,
             editoptions: {
                 size: 20
             },
@@ -82,10 +85,10 @@ jQuery(document).ready(function(){
             index: 'mailing_number',
             width: 60,
             editable: true,
-			hidden: false,
+            hidden: false,
             editoptions: {
                 size: 20,
-				defaultValue: 0
+                defaultValue: 0
             },
             formoptions: {
                 rowpos: 4,
@@ -94,78 +97,78 @@ jQuery(document).ready(function(){
             },
             editrules: {
                 required: false,
-				edithidden:true
+                edithidden: true
             }
-        },{
-			name:'person[invitestatus_id]',
-			index:'invitestatus_id',
-			width: 100,
-			editable: true, 
-			edittype: "select", 
-			search: true,
-			stype: "select",
-			searchoptions:{
-				dataUrl:'/participants/invitestatuslistwithblank' 
-			},
-			editoptions:{
-				dataUrl:'/participants/invitestatuslist',
-				defaultValue:'Not Set'
-			}, 
-			formoptions:{ 
-				rowpos:5,
-				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
-			} 
-        },{
-			name:'person[invitation_category_id]',
-			index:'invitation_category_id',
-			width: 100,
-			editable: true, 
-			edittype: "select", 
-			search: true,
-			stype: "select",
-			searchoptions:{
-				dataUrl:'/invitation_categories/list' 
-			},
-			editoptions:{
-				dataUrl:'/invitation_categories/list',
-				defaultValue:'Not Set'
-			}, 
-			formoptions:{ 
-				rowpos:6,
-				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
-			} 
-        },{
-			name:'person[acceptance_status_id]',
-			index:'acceptance_status_id',
-			width: 100,
-			editable: true, 
-			edittype: "select", 
-			search: true,
-			stype: "select",
-			searchoptions:{
-				dataUrl:'/participants/acceptancestatuslistwithblank' 
-			},
-			editoptions:{
-				dataUrl:'/participants/acceptancestatuslist',
-				defaultValue:'Not Set'
-			}, 
-			formoptions:{ 
-				rowpos:7,
-				elmprefix:"&nbsp;&nbsp;&nbsp;&nbsp;"
-			} 
-        },{
+        }, {
+            name: 'person[invitestatus_id]',
+            index: 'invitestatus_id',
+            width: 100,
+            editable: true,
+            edittype: "select",
+            search: true,
+            stype: "select",
+            searchoptions: {
+                dataUrl: '/participants/invitestatuslistwithblank'
+            },
+            editoptions: {
+                dataUrl: '/participants/invitestatuslist',
+                defaultValue: 'Not Set'
+            },
+            formoptions: {
+                rowpos: 5,
+                elmprefix: "&nbsp;&nbsp;&nbsp;&nbsp;"
+            }
+        }, {
+            name: 'person[invitation_category_id]',
+            index: 'invitation_category_id',
+            width: 100,
+            editable: true,
+            edittype: "select",
+            search: true,
+            stype: "select",
+            searchoptions: {
+                dataUrl: '/invitation_categories/list'
+            },
+            editoptions: {
+                dataUrl: '/invitation_categories/list',
+                defaultValue: 'Not Set'
+            },
+            formoptions: {
+                rowpos: 6,
+                elmprefix: "&nbsp;&nbsp;&nbsp;&nbsp;"
+            }
+        }, {
+            name: 'person[acceptance_status_id]',
+            index: 'acceptance_status_id',
+            width: 100,
+            editable: true,
+            edittype: "select",
+            search: true,
+            stype: "select",
+            searchoptions: {
+                dataUrl: '/participants/acceptancestatuslistwithblank'
+            },
+            editoptions: {
+                dataUrl: '/participants/acceptancestatuslist',
+                defaultValue: 'Not Set'
+            },
+            formoptions: {
+                rowpos: 7,
+                elmprefix: "&nbsp;&nbsp;&nbsp;&nbsp;"
+            }
+        }, {
             name: 'person[hasSurvey]',
             width: 50,
             editable: false,
-			sortable: false,
-			search: false,
-			hidden: false
-        },{
+            sortable: false,
+            search: false,
+            hidden: false
+        }, {
             name: 'person[pseudonym_attributes][first_name]',
             width: 150,
-			index: 'pseudonyms.first_name',
+            index: 'pseudonyms.first_name',
             editable: true,
-			sortable: false,
+            sortable: false,
             editoptions: {
                 size: 20
             },
@@ -173,12 +176,12 @@ jQuery(document).ready(function(){
                 rowpos: 8,
                 label: "Pub First Name"
             }
-        },{
+        }, {
             name: 'person[pseudonym_attributes][last_name]',
             width: 150,
-			index: 'pseudonyms.last_name',
+            index: 'pseudonyms.last_name',
             editable: true,
-			sortable: false,
+            sortable: false,
             editoptions: {
                 size: 20
             },
@@ -186,13 +189,13 @@ jQuery(document).ready(function(){
                 rowpos: 9,
                 label: "Pub Last Name"
             }
-        },{
+        }, {
             name: 'person[pseudonym_attributes][suffix]',
             width: 50,
-			index: 'pseudonyms.suffix',
+            index: 'pseudonyms.suffix',
             editable: true,
-			sortable: false,
-			search: false,
+            sortable: false,
+            search: false,
             editoptions: {
                 size: 20
             },
@@ -200,12 +203,11 @@ jQuery(document).ready(function(){
                 rowpos: 10,
                 label: "Pub Suffix"
             }
-		}
-		],
+        }],
         pager: jQuery('#pager'),
         rowNum: 10,
         autowidth: false,
-		height: "100%",
+        height: "100%",
         rowList: [10, 20, 30],
         pager: jQuery('#pager'),
         sortname: 'last_name',
@@ -215,7 +217,7 @@ jQuery(document).ready(function(){
         caption: 'Participants',
         editurl: '/participants',
         onSelectRow: function(ids){
-			var data = jQuery("#participants").jqGrid('getRowData',ids);
+            var data = jQuery("#participants").jqGrid('getRowData', ids);
             $('#participant_id').text(ids);
             $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
             var $tabs = $('#particpanttabs').tabs();
@@ -223,8 +225,8 @@ jQuery(document).ready(function(){
             $tabs.tabs('url', 0, 'participants/' + ids + '/registrationDetail').tabs('load', 0).tabs('select', 0);
             $tabs.tabs('url', 1, 'participants/' + ids + '/addresses').tabs('load', 1);
             $tabs.tabs('url', 2, 'participants/' + ids).tabs('load', 2);
-			$tabs.tabs('url', 3, 'participants/' + ids + '/edited_bio').tabs('load',3);
-			$tabs.tabs('url', 4, 'tags/' + ids + '?class=Person').tabs('load',4);
+            $tabs.tabs('url', 3, 'participants/' + ids + '/edited_bio').tabs('load', 3);
+            $tabs.tabs('url', 4, 'tags/' + ids + '?class=Person').tabs('load', 4);
             
             return false;
         }
@@ -290,23 +292,22 @@ function addToTagList(value){
 }
 
 function initDialog(event, ui){
-	
-	$(".deletetag").click(function(event) {
-		// do the action etc
-		var a    = $(this),
-		href = a.attr('href'),
-		content  = $('.message');
-		
-		content.load(href);// + " #content");
 
-		populateTagCloud();
-            var $tabs = $('#particpanttabs').tabs();
-            var selected = $tabs.tabs('option', 'selected');
-            $tabs.tabs('load', selected);
-		
-		event.preventDefault();
-	});
-	
+    $(".deletetag").click(function(event){
+        // do the action etc
+        var a = $(this), href = a.attr('href'), content = $('.message');
+        
+        content.load(href);// + " #content");
+        populateTagCloud();
+        var $tabs = $('#particpanttabs').tabs();
+        var selected = $tabs.tabs('option', 'selected');
+        $tabs.tabs('load', selected);
+        
+        jQuery("#participants").trigger("reloadGrid");
+        
+        event.preventDefault();
+    });
+    
     $('#edialog', ui.panel).jqm({
         ajax: '@href',
         trigger: 'a.entrydialog',
@@ -318,8 +319,8 @@ function initDialog(event, ui){
             hash.w.fadeOut('2000', function(){
                 hash.o.remove();
             });
-			jQuery("#participants").trigger("reloadGrid");
-			populateTagCloud();
+            jQuery("#participants").trigger("reloadGrid");
+            populateTagCloud();
         }
     });
     
@@ -356,22 +357,102 @@ function processResponse(response, postdata){
         text = $("<div></div>").append(text);
         return [false, text.html()];
     }
-	
-	var $tabs = $('#particpanttabs').tabs();
-	var selected = $tabs.tabs('option', 'selected');
-	$tabs.tabs('load', selected);
-
+    
+    var $tabs = $('#particpanttabs').tabs();
+    var selected = $tabs.tabs('option', 'selected');
+    $tabs.tabs('load', selected);
+    
     return [true, "Success", ""];
 }
 
-function populateTagCloud() {
-	/* Populate the tag cloud */
-    $.ajax({ //http://localhost:3000/tags?class=Person
+function populateTagCloud(){
+    /* Populate the tag cloud */
+    $.ajax({ // /tags?class=Person
         url: "/tags?class=Person",
         dataType: "html",
         success: function(response){
-			jQuery("#participant-tag-cloud").html(response);
+            jQuery("#participant-tag-cloud").html(response);
+            
+            jQuery(".tag-select").click(function(event){
+                var ctx = $(this).parents('.tag-group').children('.tag-context-title').text();
+                var tag = $(this).text();
+                
+                if (!tagQueryList[ctx]) {
+                    tagQueryList[ctx] = new Array();
+                }
+                
+                if ($.inArray(tag, tagQueryList[ctx]) == -1) { // only push if it does not already exist
+                    tagQueryList[ctx].push(tag);
+                }
+
+                issueTagQuery();
+            });
         }
+    });
+}
+
+function issueTagQuery(){
+    var newUrl = baseUrl + "?" + createTagQuery();
+    jQuery("#participants").jqGrid('setGridParam', {
+        url: newUrl
+    }).trigger("reloadGrid");
+    
+    jQuery("#participant-tag-facets").html(turnTagQueryToHTML());
+    applyFilterEventHandler();
+}
+
+function createTagQuery() {
+    // context='" + ctx + "'&tags='" + tag + "'"
+    var posn = 0;
+    var query = "";
+    for (var key in tagQueryList) {
+        query += "context[" + posn + "]='" + key + "'&tags["+ posn + "]='";
+        for (var i = 0; i < tagQueryList[key].length; i++) {
+            query += tagQueryList[key][i] + ",";
+        }
+        query += "'&";
+		posn += 1;
+    }
+    return query;
+}
+
+function turnTagQueryToHTML(){
+    var html = "<div class='tags'>";
+    for (var key in tagQueryList) {
+        html += "<div class='tag-group'>";
+        html += "<div class='tag-context-title'>" + key + "</div>";
+        html += "<div class='tag'>"
+        for (var i = 0; i < tagQueryList[key].length; i++) {
+            html += '<div class="tag-name">';
+            html += tagQueryList[key][i];
+            html += '</div>';
+            html += '<a href="#context='+key+'&tag='+tagQueryList[key][i]+'" class="delete-filter-tag">';
+            html += '<div class="ui-icon ui-icon-close" style="float: left;"/>';
+            html += '</a>';
+        }
+        html += "</div>";
+        html += "</div>";
+        html += "</div>";
+    }
+    html += "</div>";
+    
+    return html;
+}
+
+function applyFilterEventHandler() {
+    jQuery(".delete-filter-tag").click(function(event){
+        var q = $(this).attr('href');
+        var strs = q.split('&');
+        var ctx = strs[0].substr(9,strs[0].length);
+        var tag = strs[1].substr(4,strs[1].length);
+        // extract the context and tag and then remove these from the tag query collection
+        // then force the elements to refresh
+        var posn = $.inArray(tag, tagQueryList[ctx]);
+        tagQueryList[ctx].splice(posn,1);
+        if (tagQueryList[ctx].length == 0) {
+            delete tagQueryList[ctx];
+        }
+        issueTagQuery();
     });
 }
 

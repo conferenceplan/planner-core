@@ -53,6 +53,8 @@ class Person < ActiveRecord::Base
   #
   acts_as_taggable
   
+  named_scope :by_last_name, :order => "last_name ASC"
+  
   #
   has_one  :pseudonym
   accepts_nested_attributes_for :pseudonym

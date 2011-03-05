@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+  map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
   map.resources :tags, :member => {:remove => :get, :add => :post, :index => :get, :edit => :get},
       :except => [:destroy, :new, :create]
 

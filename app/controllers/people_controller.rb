@@ -98,28 +98,50 @@ class PeopleController < PlannerController
     @page = params[:page]
     idx = params[:sidx]
     order = params[:sord]
+    tags = params[:tags]
+    context = params[:context]
     
     clause = createWhereClause(params[:filters], 
-                  ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
-                  ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
-                  
+    ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
+    ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
+    
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
     if clause != nil && clause[0].index('pseudonyms.') != nil
       args.merge!( :joins => :pseudonym )
     end
-      
+    
+    tagquery = ""
+    if context
+      if context.class == HashWithIndifferentAccess
+        context.each do |key, ctx|
+          tagquery += ".tagged_with('" + params[:tags][key] + "', :on => '" + ctx + "', :any => true)"
+        end
+      else
+        tagquery += ".tagged_with('" + params[:tags] + "', :on => '" + context + "', :op => true)"
+      end
+    end
+    
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    @count = Person.count args
+    if tagquery.empty?
+      @count = Person.count args
+    else
+      @count = eval "Person#{tagquery}.count :all, " + args.inspect
+    end
     @nbr_pages = (@count / rows.to_i).floor
     @nbr_pages += 1 if @count % rows.to_i > 0
-
+    
     # now we get the actual data
     offset = (@page.to_i - 1) * rows.to_i
     args.merge!(:offset => offset, :limit => rows, :order => idx + " " + order)
-    @people = Person.find :all, args
-   
+    
+    if tagquery.empty?
+      @people = Person.find :all, args
+    else
+      @people = eval "Person#{tagquery}.find :all, " + args.inspect
+    end
+    
     # We return the list of people as an XML structure which the 'table' can use
     respond_to do |format|
       format.xml
