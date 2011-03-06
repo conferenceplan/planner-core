@@ -5,5 +5,6 @@ $(document).ready(function(){
 		$('li.menutop').hover(
 			function() { $('ul', this).css('visibility', 'visible'); },
 			function() { $('ul', this).css('visibility', 'hidden'); });
+			
 });
 	

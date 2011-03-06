@@ -1,15 +1,60 @@
 <%= javascript_include_tag 'jquery-1.4.2.min' %>
+<%= javascript_include_tag 'jquery.timers-1.2' %>
+<%= javascript_include_tag 'jquery.freeow' %>
 <%= javascript_include_tag 'jquery.form' %>
 <%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
 <%= javascript_include_tag 'grid.locale-en' if params[:action] == 'index' %>
 <%= javascript_include_tag 'jquery.jqGrid.min' if params[:action] == 'index' %>
 <%= javascript_include_tag 'application'%>
-		<% if protect_against_forgery? %>
-		  <script type='text/javascript'>
-			//<![CDATA[
-        	window._auth_token_name = "#{request_forgery_protection_token}";
+        <% if protect_against_forgery? %>
+            <script type='text/javascript'>
+            //<![CDATA[
+            window._auth_token_name = "#{request_forgery_protection_token}";
             window._auth_token = "#{form_authenticity_token}";
             //]]>
           </script>
         <% end %>
-		
+<% if current_user %>
+<script type='text/javascript'>
+var message_me = "<%= current_user.preference != nil ? current_user.preference : false %>" === 'true';
+
+function startMessaging() {
+    $("#alert-me").everyTime(60000, "planner-messages", function() {
+        $.ajax({
+            url: "/monitor",
+            dataType: "html",
+            success: function(response){
+                if ($.trim(response).length > 0) {
+                    $('#freeow-tr').freeow("Message", response, {
+                        classes: ["gray", "warning"]
+                    });
+                }
+            }
+        });
+
+    }, 0);
+    message_me = true;
+}
+
+$(document).ready(function(){
+    $("#alert-me-toggle").click(function() {
+        if (message_me) {
+            $("#alert-me").stopTime("planner-messages");
+            $("#alert-me-toggle").text('Start Messages');
+            message_me = false;
+        } else {
+            startMessaging();
+            $("#alert-me-toggle").text('Stop Messages');
+        };
+    });
+
+    if (message_me) {
+        startMessaging();
+    } else {
+        $("#alert-me").stopTime("planner-messages");
+        $("#alert-me-toggle").text('Start Messages');
+    }
+});
+</script>
+<% end %>
+	

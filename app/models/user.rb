@@ -4,6 +4,7 @@ class User < ActiveRecord::Base
   end
   has_many  :roleAssignments
   has_many  :roles, :through => :roleAssignments
+  has_one   :preference
   def role_symbols
    (roles || []).map {|r| r.title.to_sym}
   end

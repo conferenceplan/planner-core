@@ -11,6 +11,7 @@ Rails::Initializer.run do |config|
   config.gem "rack", :version => "1.0.1"
   config.gem "bluecloth"
   config.gem 'will_paginate', :version => '~> 2.3.11', :source => 'http://gemcutter.org'
+  config.gem 'acts_as_audited', :version => "1.1.1"
   
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers

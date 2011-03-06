@@ -1,6 +1,9 @@
 class Person < ActiveRecord::Base
   validates_numericality_of :mailing_number, :allow_nil => true # TODO - set the deafilt to 0 in DB, or move to a separate table containing the mailing information
 
+  # Put in audit for people
+  acts_as_audited
+
   has_many  :addresses
   
   has_many  :postal_addresses, :through => :addresses,

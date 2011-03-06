@@ -14,6 +14,8 @@ class ProgrammeItem < ActiveRecord::Base
   # if person is removed from event then user is asked if the person should be added to subs
   
   belongs_to   :room
-  belongs_to   :format
+  belongs_to   :format 
   has_one   :time_slot
+  
+  acts_as_audited :parent => :room
 end
