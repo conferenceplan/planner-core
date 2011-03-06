@@ -74,14 +74,6 @@ ActionController::Routing::Routes.draw do |map|
     :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers],
     :has_one => [:registrationDetail, :edited_bio],
     :collection => {:list => :get }
-#  map.resources :people, :as => "participants" do |person|
-#    person.resource :tags, :member => {:remove => :delete, :add => :post, :index => :get}, 
-#      :controller => 'people/tags',
-#      :except => [:destroy, :new, :update, :create, :edit],
-#      :format => "xml"
-#  end
-#  map.connect 'participants/tags/list', :controller => 'people/tags', :action => 'list'
-#  map.connect 'participants/tags/index', :controller => 'people/tags', :action => 'index'
 
   map.connect 'participants/list', :controller => 'people', :action => 'list'
  
@@ -116,16 +108,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.connect 'roles/list', :controller => 'roles', :action => 'list'
 
-#  map.connect 'users/admin', :controller => 'users/admin', :action => 'index'
-#  map.connect 'users/admin/index', :controller => 'users/admin', :action => 'index'
-#  map.connect 'users/admin/list', :controller => 'users/admin', :action => 'list'
-#  map.connect 'users/admin/new', :controller => 'users/admin', :action => 'new', :method => 'post'
-#  map.resources :users do |user|
-#    user.resource :admin, :member => {:update => :post, :destroy => :delete}, 
-#      :controller => 'users/admin',
-#      :except => [:new, :create, :edit, :remove]
-#  end
-    
   #
   #
   #
