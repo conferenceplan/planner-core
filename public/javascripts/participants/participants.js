@@ -406,11 +406,11 @@ function createTagQuery() {
     var posn = 0;
     var query = "";
     for (var key in tagQueryList) {
-        query += "context[" + posn + "]='" + key + "'&tags["+ posn + "]='";
+        query += "context[" + posn + "]=" + key + "&tags["+ posn + "]=";
         for (var i = 0; i < tagQueryList[key].length; i++) {
             query += tagQueryList[key][i] + ",";
         }
-        query += "'&";
+        query += "&";
 		posn += 1;
     }
     return query;
