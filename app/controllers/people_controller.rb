@@ -144,6 +144,7 @@ class PeopleController < PlannerController
     
     # We return the list of people as an XML structure which the 'table' can use
     respond_to do |format|
+      format.html { render :layout => 'content' } # list.html.erb
       format.xml
     end
   end

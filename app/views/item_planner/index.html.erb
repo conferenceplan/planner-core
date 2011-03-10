@@ -1,0 +1,42 @@
+<% content_for :jsheader do %>
+  <%= stylesheet_link_tag 'planner/itemplanner' %>
+  <%= javascript_include_tag 'planner/itemplanner' %>
+<% end %>
+<div class='container_12'>
+    <div id="participant-widget" class="ui-widget ui-widget-content ui-corner-all grid_3">
+        <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
+            Participants
+        </div>
+        <div id="participant-widget-content">
+        </div>
+    </div>
+    <!-- TODO - put in mechanism to page and to filter -->
+    <div id="item-widget" class="ui-widget ui-widget-content ui-corner-all grid_5">
+        <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
+            Current Item
+        </div>
+        <div id="item-widget-content">
+            <div id="current-item-content"></div>
+            <div id="item-participants" class="droppable">
+                <div class="ui-widget-content">
+                    <div>Participant(s)</div>
+                    <ol class="selectable"></ol>
+                </div>
+            </div>
+            <div id="item-reserve-participants" class="droppable">
+                <div class="ui-widget-content">
+                    <div>Reserve</div>
+                    <ol class="selectable">
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="items-widget" class="ui-widget ui-widget-content ui-corner-all grid_3">
+        <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
+            Items
+        </div>
+        <div id="items-widget-content">
+        </div>
+    </div>
+</div>

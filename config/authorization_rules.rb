@@ -38,6 +38,7 @@ authorization do
     has_permission_on :email_addresses, :to => :manage
     has_permission_on :formats, :to => :manage
     has_permission_on :invitation_categories, :to => :manage
+    has_permission_on :item_planner, :to => :manage
     has_permission_on :pending_import_people, :to => :manage
     has_permission_on :people, :to => :manage
     has_permission_on :phone_numbers, :to => :manage

@@ -53,10 +53,9 @@ class ProgrammeItemsController < PlannerController
     idx = params[:sidx]
     order = params[:sord]
     
-      clause = createWhereClause(params[:filters], 
+    clause = createWhereClause(params[:filters], 
                   ['format_id'],
                   ['format_id'])
-                  
   
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
@@ -66,10 +65,10 @@ class ProgrammeItemsController < PlannerController
     off = (@page.to_i - 1) * rows.to_i
     @programmeItems = ProgrammeItem.find :all, :include => :format, :offset => off, :limit => rows,
       :order => idx + " " + order, :conditions => clause
-   
+
     # We return the list of ProgrammeItems as an XML structure which the 'table' can use.
-    # TODO: would it be more efficient to use JSON instead?
     respond_to do |format|
+      format.html { render :layout => 'content' } # list.html.erb
       format.xml
     end
   end

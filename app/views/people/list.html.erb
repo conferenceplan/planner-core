@@ -1,0 +1,15 @@
+<!-- The given set of participants -->
+<!-- TODO - change the formatting to be suitable for assignment/widget
+change so that the name displayed is the pub name if there is one
+-->
+<div><%=@count%> People</div>
+<div>Page <%= @page%> of <%= @nbr_pages%></div>
+
+<ol id="selectable-person" class="selectable">
+<% @people.each do |person| %>
+    <li class="draggable ui-widget-content">
+        <div class="personid" style="display: none;"><%= person.id %> </div>
+        <%= person.first_name %> <%= person.last_name %> <%= person.suffix %>
+    </li>
+<% end %>
+</ol>

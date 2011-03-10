@@ -11,6 +11,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :monitor, :only => :index # we only need the one method/route for this
 
+  map.resources :item_planner, :only => :index # TODO - check
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

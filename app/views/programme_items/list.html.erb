@@ -1,0 +1,11 @@
+<div><%=@count%> Items </div>
+<div>Page <%= @page%> of <%= @nbr_pages%></div>
+
+<ol id="selectable-item" class="selectable">
+<% @programmeItems.each do |programmeItem| %>
+    <li class="ui-widget-content">
+        <div class="itemid" style="display: none;"><%= programmeItem.id %>
+        </div> <%= programmeItem.title %>
+    </li>
+<% end %>
+</ol>
