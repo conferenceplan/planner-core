@@ -45,7 +45,7 @@ class SurveyRespondents::TagsController < ApplicationController
   def cloud
     tag_context = params[:context] # tag context
     target = params[:target] # tag context
-    @tags = SurveyRespondent.tag_counts_on(tag_context).sort { |x, y| x.name <=> y.name }
+    @tags = SurveyRespondent.tag_counts_on(tag_context).sort { |x, y| x.name.downcase <=> y.name.downcase }
     
     if target == 'selection'
       render 'selection', :layout => 'content'

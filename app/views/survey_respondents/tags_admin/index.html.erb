@@ -22,13 +22,9 @@
 			</div>
 			<div class="grid_3">
 				<%= text_field_tag(:new_tag, nil) %>
-			</div>
-			<div class="grid_3">
 				<%= select 'tag', 'destination', @tagContexts, {:include_blank => true}, :id => 'move_selection' %>
-			</div>
 			<%= hidden_field_tag(:context) %> 
 			<%= hidden_field_tag(:original_tag) %> 
-			<div class="grid_3">
 				<%= submit_tag("Submit", :id => 'tag_edit_button') %>
 			</div>
 		<% end %>
