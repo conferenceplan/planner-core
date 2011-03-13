@@ -96,6 +96,10 @@ class SurveyRespondents::ReviewsController < PlannerController
   end
 
   def copyPseudonym(survey, person, copystatus)
+    # FIX
+    if person.pseudonym == nil
+      person.pseudonym = Pseudonym.new
+    end
     person.pseudonym.first_name = survey.responses[@@surveyFields[:pseudonym][0]]
     person.pseudonym.last_name = survey.responses[@@surveyFields[:pseudonym][1]]
     person.pseudonym.suffix = survey.responses[@@surveyFields[:pseudonym][2]]
