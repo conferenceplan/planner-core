@@ -48,8 +48,11 @@ private
     if clause == nil || clause.empty?
       clause = [clausestr, field]
     else
-      clause[0] += " AND " if !clause[0].strip().empty?
+      isEmpty = clause[0].strip().empty?
+      clause[0] = " ( " + clause[0]
+      clause[0] += ") AND ( " if ! isEmpty
       clause[0] += " " + clausestr
+      clause[0] += " ) "  if ! isEmpty
       clause << field
     end
     
