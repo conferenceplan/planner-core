@@ -322,3 +322,28 @@ div.tag-count {
 	font-size: 8pt;	
 	color : grey;
 }
+
+.small-spacer {
+		padding: 2px;    
+}
+
+.spacer {
+		padding: 5px;    
+}
+
+.medium-spacer {
+		padding: 10px;    
+}
+
+.large-spacer {
+		padding: 20px;    
+}
+
+.selectable .ui-selecting { background: #FECA40; }
+
+.selectable .ui-selected { background: #F39814; color: white; }
+
+.selectable { list-style-type: none; margin: 0; padding: 0; }
+
+.selectable li { margin: 2px; padding: 0.1em; font-size: 1em; background-color: transparent; }
+

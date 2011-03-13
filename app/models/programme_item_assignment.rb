@@ -4,4 +4,6 @@ class ProgrammeItemAssignment < ActiveRecord::Base
   
   acts_as_audited :parent => :person
 
+  has_enumerated :role, :class_name => 'PersonItemRole'
+
 end

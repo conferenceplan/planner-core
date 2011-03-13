@@ -1,15 +1,22 @@
-<!-- The given set of participants -->
-<!-- TODO - change the formatting to be suitable for assignment/widget
-change so that the name displayed is the pub name if there is one
--->
-<div><%=@count%> People</div>
-<div>Page <%= @page%> of <%= @nbr_pages%></div>
-
+<script type='text/javascript'>
+//<![CDATA[
+var participantPageNbr = "<%=@nbr_pages%>";
+//]]>
+</script>
+<!-- The given set of participants, pub name -->
+<div>Page <%= @page%> of <%= @nbr_pages%> of <%=@count%> People</div>
 <ol id="selectable-person" class="selectable">
 <% @people.each do |person| %>
     <li class="draggable ui-widget-content">
+	    <input type="hidden" name="participant" value="<%= person.id %>" >
         <div class="personid" style="display: none;"><%= person.id %> </div>
-        <%= person.first_name %> <%= person.last_name %> <%= person.suffix %>
+        <% if person.pseudonym %>
+            <%= person.pseudonym.first_name %> <%= person.pseudonym.last_name %> <%= person.pseudonym.suffix %>
+            <br/>
+            (<%= person.first_name %> <%= person.last_name %> <%= person.suffix %>)
+        <%else%>
+            <%= person.first_name %> <%= person.last_name %> <%= person.suffix %>
+        <% end %>
     </li>
 <% end %>
 </ol>

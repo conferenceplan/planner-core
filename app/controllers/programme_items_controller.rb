@@ -5,6 +5,10 @@ class ProgrammeItemsController < PlannerController
   end
   def show
     @programmeItem = ProgrammeItem.find(params[:id])
+    
+    @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] 
+    @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] 
+    
     render :layout => 'content'
   end
   def create
@@ -79,6 +83,39 @@ class ProgrammeItemsController < PlannerController
     # We return the list of ProgrammeItems as an XML structure which the 'table' can use.
     respond_to do |format|
       format.html { render :layout => 'content' } # list.html.erb
+      format.xml
+    end
+  end
+  
+  #
+  # Update the participants associated with this programme item
+  #  
+  def updateParticipants
+    @programmeItem = ProgrammeItem.find(params[:id])
+
+    # 1. Clear out the current set of participants    
+    @programmeItem.people.clear # remove it from the person. NOTE: this does not update the audit table... TODO
+    @programmeItem.save
+    
+    # 2. Create the new set
+    candidates = params['item-participants'] # this is a collection of the information about the participants to add (id and role)
+    candidates.each do |candidate_id, candidate|
+      p = Person.find(candidate[:person_id])
+      # NOTE : had to put the programme item id in there explicitly because AR seemed not to work it out when using :programmeItem...
+      # Using this mechanism so we can specify the role(s)
+      assignment = ProgrammeItemAssignment.create(:programme_item_id => @programmeItem.id, :person => p, :role => PersonItemRole['Participant'])
+      assignment.save
+    end
+    
+    reserve = params['item-reserve-participants'] # this is a collection of the information about the participants to add (id and role)
+    reserve.each do |candidate_id, candidate|
+      p = Person.find(candidate[:person_id])
+      assignment = ProgrammeItemAssignment.create(:programme_item_id => @programmeItem.id, :person => p, :role => PersonItemRole['Reserved'])
+      assignment.save
+    end
+  
+    respond_to do |format|
+      format.html { render :layout => 'content' } # updateParticipants.html.erb
       format.xml
     end
   end

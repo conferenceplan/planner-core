@@ -1,8 +1,15 @@
 
-.selectable .ui-selecting { background: #FECA40; }
 
-.selectable .ui-selected { background: #F39814; color: white; }
+#item-participants div.ui-widget-contents {
+	background-color: transparent;
+}
 
-.selectable { list-style-type: none; margin: 0; padding: 0; }
+#participant-toolbar,
+#item-update-toolbar,
+#item-toolbar {
+	padding: 10px 4px;
+}
 
-.selectable li { margin: 2px; padding: 0.1em; font-size: 1em; height: 18px; }
+#item-update-toolbar {
+    float : right;
+}

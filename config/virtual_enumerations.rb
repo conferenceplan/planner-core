@@ -84,4 +84,7 @@ ActiveRecord::VirtualEnumerations.define do |config|
  config.define 'PhoneTypes',
     :extends => 'Enum'
 
+ config.define 'PersonItemRole',
+    :extends => 'Enum'
+
 end

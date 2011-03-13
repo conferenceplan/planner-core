@@ -1,5 +1,9 @@
-<div><%=@count%> Items </div>
-<div>Page <%= @page%> of <%= @nbr_pages%></div>
+<script type='text/javascript'>
+//<![CDATA[
+var itemPageNbr = "<%=@nbr_pages%>";
+//]]>
+</script>
+<div>Page <%= @page%> of <%= @nbr_pages%> of <%=@count%> Items</div>
 
 <ol id="selectable-item" class="selectable">
 <% @programmeItems.each do |programmeItem| %>

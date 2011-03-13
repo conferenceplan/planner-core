@@ -28,5 +28,52 @@
   <div class='message' id='tab-messages'></div>
   <div class="jqmWindow" id="edialog">Please wait...</div>
 </div>
-
+<div id="item-participants" class="droppable">
+    <div class="ui-widget-content">
+        <div>
+            Participant(s)
+        </div>
+        <ol class="selectable">
+            <% @participantAssociations.each do |assoc| %>
+            <li class="ui-widget-content">
+	            <input type="hidden" value="<%=assoc.person.id%>" name="item-participants[<%=assoc.person.id%>][person_id]">
+                <div style="display: none;" class="personid"><%=assoc.person.id%></div>
+                <%= assoc.person.first_name  %> <%= assoc.person.last_name  %>
+            </li>
+            <%end%>
+        </ol>
+        <%if @participantAssociations.empty? %>
+        <div class="placeholder">
+            <br/>
+            <em>Drag a participant here...</em>
+            <br/>
+            <br/>
+        </div>
+        <% end %>
+    </div>
+</div>
+<div id="item-reserve-participants" class="droppable">
+    <div class="ui-widget-content">
+        <div>
+            Reserve
+        </div>
+        <ol class="selectable">
+            <% @reserveAssociations.each do |assoc| %>
+            <li class="ui-widget-content">
+	            <input type="hidden" value="<%=assoc.person.id%>" name="item-participants[<%=assoc.person.id%>][person_id]">
+                <div style="display: none;" class="personid"><%=assoc.person.id%></div>
+                <%= assoc.person.first_name  %> <%= assoc.person.last_name  %>
+            </li>
+            <% end %>
+        </ol>
+        <%if @reserveAssociations.empty? %>
+        <div class="placeholder">
+            <br/>
+            <em>Drag a participant here...</em>
+            <br/>
+            <br/>
+        </div>
+        <% end %>
+    </div>
+</div>
 
