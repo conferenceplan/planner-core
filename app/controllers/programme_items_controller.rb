@@ -46,25 +46,35 @@ class ProgrammeItemsController < PlannerController
   #
   
   def list
-    j = ActiveSupport::JSON
-    
     rows = params[:rows]
     @page = params[:page]
     idx = params[:sidx]
     order = params[:sord]
+    nameSearch = params[:namesearch]
     
     clause = createWhereClause(params[:filters], 
                   ['format_id'],
                   ['format_id'])
+
+    # add the name search of the title
+    if nameSearch && ! nameSearch.empty?
+      clause = addClause(clause,'title like ?','%' + nameSearch + '%')
+    end
+
+    args = { :conditions => clause }
   
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    count = ProgrammeItem.count :include => :format, :conditions => clause
-    @nbr_pages = (count / rows.to_i).floor + 1
+    args.merge!(:include => :format)
+    @count = ProgrammeItem.count args
+
+    @nbr_pages = (@count / rows.to_i).floor
+    @nbr_pages += 1 if @count % rows.to_i > 0
     
-    off = (@page.to_i - 1) * rows.to_i
-    @programmeItems = ProgrammeItem.find :all, :include => :format, :offset => off, :limit => rows,
-      :order => idx + " " + order, :conditions => clause
+    offset = (@page.to_i - 1) * rows.to_i
+    args.merge!(:offset => offset, :limit => rows, :order => idx + " " + order)
+    
+    @programmeItems = ProgrammeItem.find :all, args
 
     # We return the list of ProgrammeItems as an XML structure which the 'table' can use.
     respond_to do |format|

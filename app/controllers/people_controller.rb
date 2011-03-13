@@ -100,15 +100,26 @@ class PeopleController < PlannerController
     order = params[:sord]
     tags = params[:tags]
     context = params[:context]
+    nameSearch = params[:namesearch]
     
     clause = createWhereClause(params[:filters], 
     ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
     ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
     
+    # add the name search for last of first etc
+    if nameSearch && ! nameSearch.empty? # TODO - fix
+      clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ?','%' + nameSearch + '%')
+      clause << '%' + nameSearch + '%'
+    end
+
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
-    if clause != nil && clause[0].index('pseudonyms.') != nil
-      args.merge!( :joins => :pseudonym )
+    if nameSearch && ! nameSearch.empty?
+      args.merge!( :joins => 'LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
+    else
+      if clause != nil && clause[0].index('pseudonyms.') != nil
+        args.merge!( :joins => :pseudonym )
+      end
     end
     
     tagquery = ""
