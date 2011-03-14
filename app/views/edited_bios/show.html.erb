@@ -39,7 +39,13 @@
   <% else %>
     No Photo Url
   <% end %>
-
+ <br>
+  Facebook:
+  <% if ((@editedBio.facebook != nil) && (@editedBio.facebook != "")) %>
+    <%= @editedBio.facebook %>
+  <% else %>
+    No Facebook
+  <% end %>
 <% else %>
 <p> No Edited Bio </p>
 <% end %>

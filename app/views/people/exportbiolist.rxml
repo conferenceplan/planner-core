@@ -23,6 +23,9 @@ xml.people do
              xml.PhotoUrl :type => 'url',
                :href => p.edited_bio.photourl
           end
+          if (p.edited_bio.facebook)
+            xml.Facebook(p.edited_bio.facebook)
+          end
       end
     end
   end

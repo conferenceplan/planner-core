@@ -52,6 +52,7 @@ end
     @editedBio.twitterinfo = person.GetTwitterInfo
     @editedBio.othersocialmedia = person.GetOtherSocialMediaInfo
     @editedBio.photourl = person.GetPhotoUrl
+    @editedBio.facebook = person.GetFacebookInfo
     render :layout => 'content'
   end
   
@@ -72,6 +73,9 @@ end
     
     if (@editedBio.photourl == nil)
       @editedBio.photourl = @editedBio.person.GetPhotoUrl
+    end
+      if (@editedBio.facebook == nil)
+      @editedBio.facebook = @editedBio.person.GetFacebookInfo
     end
     
     @urlstr = '/edited_bios/' + params[:id]
