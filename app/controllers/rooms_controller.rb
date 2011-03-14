@@ -13,8 +13,8 @@ class RoomsController < PlannerController
 
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    count = Room.count :conditions => clause
-    @nbr_pages = (count / rows.to_i).floor + 1
+    @count = Room.count :conditions => clause
+    @nbr_pages = (@count / rows.to_i).floor + 1
     
     off = (@page.to_i - 1) * rows.to_i
     @rooms = Room.find :all, :offset => off, :limit => rows, :order => idx + " " + order, :conditions => clause
