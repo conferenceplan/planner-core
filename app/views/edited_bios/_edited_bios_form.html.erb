@@ -1,11 +1,29 @@
 <%= error_messages_for :editedBio%>
 <% form_for @editedBio, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
-   <div class='form-buttons'>
+   <div class='container_16'>
+   <div class='grid_10'>
+     <div class='form-buttons'>
 		<%= f.submit "Submit" %>
 		<button type="button" class='jqmClose'>Close</button>
+	  </div>
+      <div class='field_name'>bio:</div>
+	  <div class='field_value'><%= f.text_area :bio,:size => "40x10" %></div>
 	</div>
-    <div class='field_name'>bio:</div>
-	<div class='field_value'><%= f.text_area :bio,:size => "40x10" %></div>
+	<div class='grid_2'>
+	  <div class='field_name'>Web Site:</div>
+	  <div class='field_value'><%= f.text_field :website %></div>
+	   <div class='field_name'>Twitter Info:</div>
+	  <div class='field_value'><%= f.text_field :twitterinfo %></div>
+	  <div class='field_name'>Other Social Media:</div>
+	  <div class='field_value'><%= f.text_field :othersocialmedia %></div>
+	   <div class='field_name'>Photo Url:</div>
+	  <div class='field_value'><%= f.text_area :photourl, :size => "30x2" %></div>
+	</div>
+	</div>
 <% end %>
+<div class='container_16'>
+<div class='grid_10'>
 <div id='form-response'>
+</div>
+</div>
 </div>

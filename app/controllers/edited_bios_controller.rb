@@ -48,11 +48,32 @@ end
     @editedBio = EditedBio.new
     person = Person.find(params[:person_id])
     @editedBio.bio = person.GetSurveyBio
+    @editedBio.website = person.GetWebSite
+    @editedBio.twitterinfo = person.GetTwitterInfo
+    @editedBio.othersocialmedia = person.GetOtherSocialMediaInfo
+    @editedBio.photourl = person.GetPhotoUrl
     render :layout => 'content'
   end
   
   def edit
     @editedBio = EditedBio.find(params[:id])
+    
+    if (@editedBio.website == nil)
+      @editedBio.website = @editedBio.person.GetWebSite
+    end
+    
+    if (@editedBio.twitterinfo == nil)
+      @editedBio.twitterinfo = @editedBio.person.GetTwitterInfo
+    end
+    
+    if (@editedBio.othersocialmedia == nil)
+      @editedBio.othersocialmedia = @editedBio.person.GetOtherSocialMediaInfo
+    end
+    
+    if (@editedBio.photourl == nil)
+      @editedBio.photourl = @editedBio.person.GetPhotoUrl
+    end
+    
     @urlstr = '/edited_bios/' + params[:id]
     render :layout => 'content'
   end

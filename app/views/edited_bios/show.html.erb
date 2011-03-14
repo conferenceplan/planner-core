@@ -9,13 +9,41 @@
 	  <br>
 <% end %>
 <% if @editedBio %>
-<label>Edited Bio:</label>
-<br>
-<%=  markdown(@editedBio.bio) %>
-<br>
+  <label>Edited Bio:</label>
+  <%=  markdown(@editedBio.bio) %>
+  <br>
+  Web site: 
+  <% if ((@editedBio.website != nil) && (@editedBio.website != "")) %>
+    <%= @editedBio.website %>
+  <% else %>
+  No Web Site
+  <% end %>
+  <br>
+  Twitter Info:
+  <% if ((@editedBio.twitterinfo != nil) && (@editedBio.twitterinfo != "")) %>
+    <%= @editedBio.twitterinfo %>
+  <% else %>
+ No Twitter Info
+  <% end %>
+  <br>
+  Other Social Media:
+  <% if ((@editedBio.othersocialmedia != nil) && (@editedBio.othersocialmedia != "")) %>
+    <%= @editedBio.othersocialmedia %>
+  <% else %>
+    No Other Social Media
+  <% end %>
+  <br>
+  Photo Url:
+  <% if ((@editedBio.photourl != nil) && (@editedBio.photourl != "")) %>
+    <%= @editedBio.photourl %>
+  <% else %>
+    No Photo Url
+  <% end %>
+
 <% else %>
 <p> No Edited Bio </p>
 <% end %>
+<br>
 <% if @surveyBio %>
 <br>
 <label>Survey Bio:</label>
