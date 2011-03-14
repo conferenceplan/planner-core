@@ -62,7 +62,7 @@ end
 
 privileges do
     privilege :read, :includes => [:index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,:doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank]
-    privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove]
+    privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants]
     privilege :create, :includes => [:new,:import,:doimport]
     privilege :update, :includes => [:edit,:states,:copySurvey]
     privilege :delete, :includes => :destroy
