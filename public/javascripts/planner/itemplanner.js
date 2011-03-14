@@ -213,7 +213,6 @@ function makeDraggables(){
         hoverClass: "ui-state-hover",
         accept: ":not(.removeable)",
         drop: function(event, ui){
-            $(this).find(".placeholder").remove();
             var type = $(this).attr('id');
             var id = ui.draggable.find('input').attr('value');
             // Check to make sure that this has not already been added to the item
@@ -230,6 +229,7 @@ function makeDraggables(){
                 });
             });
             if (!doNotInsert) {
+                $(this).find(".placeholder").remove();
                 // 2. check that none of them 
                 type += '[' + id + '][person_id]'; // TODO - insert the role
                 ui.draggable.find('input').attr('name', type);
