@@ -8,33 +8,9 @@ class RoomsController < PlannerController
     @page = params[:page]
     idx = params[:sidx]
     order = params[:sord]
-    clause = ""
-        
-    if params['_search'] == "true"
-       clauses = Array.new
-       filters = ActiveSupport::JSON.decode params[:filters]
-logger.debug filters["rules"]
-       filters["rules"].each do |r|
-          clause = ' ' + r["field"]
-          if r["op"] == "ne"
-               clause << ' not like '
-               clause << ' \'' + r["data"] + '%\''
-          elsif r["op"] == "eq"
-               clause << ' like '
-               clause << ' \'' + r["data"] + '%\''
-          elsif r["op"] == "ge"
-               clause << ' >= '
-               clause << ' \'' + r["data"] + '\''
-          elsif r["op"] == "le"
-               clause << ' <= '
-               clause << ' \'' + r["data"] + '\''
-          end
-          clauses << clause
-       end 
-    end
-      clause = clauses.join(' ' + filters["groupOp"] + ' ')
-      logger.debug ">>>>>>>>clause: " + clause
-    
+
+    clause = createWhereClause(params[:filters])
+
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
     count = Room.count :conditions => clause

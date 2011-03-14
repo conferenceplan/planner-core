@@ -125,7 +125,6 @@ jQuery(document).ready(function(){
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
         beforeSubmit: function(postdata, formid){
-            console.log("before submit")
             this.ajaxEditOptions = {
                 url: '/rooms/' + postdata.rooms_id, // TODO
                 type: 'put'
@@ -166,7 +165,6 @@ jQuery(document).ready(function(){
 
 function processResponse(response, postdata){
     // examine return for problem - look for errorExplanation in the returned HTML
-            console.log("after submit")
     var text = $(response.responseText).find(".errorExplanation");
     if (text.size() > 0) {
         text.css('font-size', '6pt');

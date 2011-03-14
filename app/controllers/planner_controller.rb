@@ -33,7 +33,11 @@ private
           isInteger = integerFields.include?(subclause['field'])
           if subclause["op"] == 'ne'
             clausestr << subclause['field'] + lambda { return isInteger ? ' != ?' : ' not like ?' }.call
-          else
+          elsif subclause["op"] == 'ge'
+            clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' >= ?' }.call
+          elsif subclause["op"] == 'le'
+            clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' <= ?' }.call
+          else # also the eq
             clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' like ?' }.call
           end
           fields << lambda { return isInteger ? subclause['data'].to_i : subclause['data'] + '%' }.call
