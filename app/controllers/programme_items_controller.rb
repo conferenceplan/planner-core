@@ -5,6 +5,7 @@ class ProgrammeItemsController < PlannerController
   end
   def show
     @programmeItem = ProgrammeItem.find(params[:id])
+    @editable = params[:edit] ? params[:edit] == "true" : true
     
     @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] 
     @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] 
@@ -99,19 +100,23 @@ class ProgrammeItemsController < PlannerController
     
     # 2. Create the new set
     candidates = params['item-participants'] # this is a collection of the information about the participants to add (id and role)
-    candidates.each do |candidate_id, candidate|
-      p = Person.find(candidate[:person_id])
-      # NOTE : had to put the programme item id in there explicitly because AR seemed not to work it out when using :programmeItem...
-      # Using this mechanism so we can specify the role(s)
-      assignment = ProgrammeItemAssignment.create(:programme_item_id => @programmeItem.id, :person => p, :role => PersonItemRole['Participant'])
-      assignment.save
+    if candidates
+      candidates.each do |candidate_id, candidate|
+        p = Person.find(candidate[:person_id])
+        # NOTE : had to put the programme item id in there explicitly because AR seemed not to work it out when using :programmeItem...
+        # Using this mechanism so we can specify the role(s)
+        assignment = ProgrammeItemAssignment.create(:programme_item_id => @programmeItem.id, :person => p, :role => PersonItemRole['Participant'])
+        assignment.save
+      end
     end
     
     reserve = params['item-reserve-participants'] # this is a collection of the information about the participants to add (id and role)
-    reserve.each do |candidate_id, candidate|
-      p = Person.find(candidate[:person_id])
-      assignment = ProgrammeItemAssignment.create(:programme_item_id => @programmeItem.id, :person => p, :role => PersonItemRole['Reserved'])
-      assignment.save
+    if reserve
+      reserve.each do |candidate_id, candidate|
+        p = Person.find(candidate[:person_id])
+        assignment = ProgrammeItemAssignment.create(:programme_item_id => @programmeItem.id, :person => p, :role => PersonItemRole['Reserved'])
+        assignment.save
+      end
     end
   
     respond_to do |format|

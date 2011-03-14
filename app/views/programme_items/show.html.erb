@@ -1,54 +1,80 @@
-  <div class='programmeItem_show'>
-  <div class='edit-form'>
-      <%=  link_to "edit", {:controller => 'programme_items', :action => 'edit', :id => @programmeItem}, :class => 'entrydialog' %>
-  </div>
-  <div class='line'>Title: <%= @programmeItem.title %></div>
-  <div class='line'>ShortTitle: <%= @programmeItem.short_title %></div>
-  <div class='line'>Format: <% if @programmeItem.format %>
-      <%= @programmeItem.format.name %>
-	  <% end%>
-  </div>
-  <div class='line'>Print: <% if @programmeItem.print %>
-      Yes
-    <% else %>
-	  No
-	<%end %>
-  </div>
-  <div class='line'>Duration in minutes: <%= @programmeItem.duration %></div>
-  <div class='line'>Minimum # of people:<%= @programmeItem.minimum_people %></div>
-  <div class='line'>Maximum # of people:<%= @programmeItem.maximum_people %></div>
-  <label>Precis:</label>
-  <div class='city'>
-  <%= @programmeItem.precis %>
-  </div
-  <label>Notes: </label>
-  <div class='city'>
-  <%= @programmeItem.notes %>
-  </div>
-  <div class='message' id='tab-messages'></div>
-  <div class="jqmWindow" id="edialog">Please wait...</div>
+<div class='programmeItem_show'>
+    <% if @editable %>
+    <div class='edit-form'>
+        <%= link_to "edit", {:controller => 'programme_items', :action => 'edit', :id => @programmeItem}, :class => 'entrydialog' %>
+    </div>
+    <% end %>
+    <div class='line'>
+        Title: <%= @programmeItem.title %>
+    </div>
+    <div class='line'>
+        ShortTitle: <%= @programmeItem.short_title %>
+    </div>
+    <div class='line'>
+        Format: <% if @programmeItem.format %>
+        <%= @programmeItem.format.name %>
+        <% end %>
+    </div>
+    <div class='line'>
+        Print: <% if @programmeItem.print %>
+        Yes<% else %>
+        No<%end %>
+    </div>
+    <div class='line'>
+        Duration in minutes: <%= @programmeItem.duration %>
+    </div>
+    <div class='line'>
+        Minimum # of people:<%= @programmeItem.minimum_people %>
+    </div>
+    <div class='line'>
+        Maximum # of people:<%= @programmeItem.maximum_people %>
+    </div>
+    <label>
+        Precis:
+    </label>
+    <div class='city'>
+        <%= @programmeItem.precis %>
+    </div
+    <label>
+        Notes: 
+    </label>
+    <div class='city'>
+        <%= @programmeItem.notes %>
+    </div>
+    <div class='message' id='tab-messages'>
+    </div>
+    <div class="jqmWindow" id="edialog">
+        Please wait...
+    </div>
 </div>
 <div id="item-participants" class="droppable">
     <div class="ui-widget-content">
         <div>
             Participant(s)
         </div>
-        <ol class="selectable">
+        <ol class="selectable selectable-participant">
             <% @participantAssociations.each do |assoc| %>
-            <li class="ui-widget-content">
-	            <input type="hidden" value="<%=assoc.person.id%>" name="item-participants[<%=assoc.person.id%>][person_id]">
-                <div style="display: none;" class="personid"><%=assoc.person.id%></div>
-                <%= assoc.person.first_name  %> <%= assoc.person.last_name  %>
+            <li class="ui-widget-content removeable">
+                <input type="hidden" value="<%=assoc.person.id%>" name="item-participants[<%=assoc.person.id%>][person_id]">
+                <div style="display: none;" class="personid">
+                    <%=assoc.person.id %>
+                </div>
+                <% if assoc.person.pseudonym %>
+                <%= assoc.person.pseudonym.first_name %><%= assoc.person.pseudonym.last_name %><%= assoc.person.pseudonym.suffix %>
+                <br/>
+                (<%= assoc.person.first_name %><%= assoc.person.last_name %><%= assoc.person.suffix %>)<%else %>
+                <%= assoc.person.first_name %><%= assoc.person.last_name %><%= assoc.person.suffix %>
+                <% end %>
             </li>
-            <%end%>
-        </ol>
+            <%end %>
         <%if @participantAssociations.empty? %>
         <div class="placeholder">
             <br/>
-            <em>Drag a participant here...</em>
+            <em>No Participants ...</em>
             <br/>
             <br/>
         </div>
+        </ol>
         <% end %>
     </div>
 </div>
@@ -57,23 +83,29 @@
         <div>
             Reserve
         </div>
-        <ol class="selectable">
+        <ol class="selectable selectable-participant">
             <% @reserveAssociations.each do |assoc| %>
-            <li class="ui-widget-content">
-	            <input type="hidden" value="<%=assoc.person.id%>" name="item-participants[<%=assoc.person.id%>][person_id]">
-                <div style="display: none;" class="personid"><%=assoc.person.id%></div>
-                <%= assoc.person.first_name  %> <%= assoc.person.last_name  %>
+            <li class="ui-widget-content removeable">
+                <input type="hidden" value="<%=assoc.person.id%>" name="item-participants[<%=assoc.person.id%>][person_id]">
+                <div style="display: none;" class="personid">
+                    <%=assoc.person.id %>
+                </div>
+                <% if assoc.person.pseudonym %>
+                <%= assoc.person.pseudonym.first_name %><%= assoc.person.pseudonym.last_name %><%= assoc.person.pseudonym.suffix %>
+                <br/>
+                (<%= assoc.person.first_name %><%= assoc.person.last_name %><%= assoc.person.suffix %>)<%else %>
+                <%= assoc.person.first_name %><%= assoc.person.last_name %><%= assoc.person.suffix %>
+                <% end %>
             </li>
             <% end %>
-        </ol>
         <%if @reserveAssociations.empty? %>
         <div class="placeholder">
             <br/>
-            <em>Drag a participant here...</em>
+            <em>No Reserve Participants...</em>
             <br/>
             <br/>
         </div>
+        </ol>
         <% end %>
     </div>
 </div>
-

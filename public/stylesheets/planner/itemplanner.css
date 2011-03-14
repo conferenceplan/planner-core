@@ -13,3 +13,11 @@
 #item-update-toolbar {
     float : right;
 }
+
+div.trash-message {
+	color: blue;
+}
+
+#item-trash {
+	float: right;
+}
