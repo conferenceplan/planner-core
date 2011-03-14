@@ -1,0 +1,14 @@
+xml.rows do
+  xml.page(@page)
+  xml.total(@nbr_pages)
+  xml.records(@rooms.size)
+  @rooms.each do |room|
+    xml.row({:id => room.id}) do
+      xml.cell(room.name)
+      xml.cell(Venue.find(room.venue_id).name)
+      xml.cell(room.capacity)
+      xml.cell(room.purpose)
+      xml.cell(room.comment)
+    end
+  end
+end

@@ -6,6 +6,12 @@ class VenueController < PlannerController
          @rooms[v.id] = Room.count :conditions => {:venue_id => v.id}
       end
    end
+
+   def list
+     @venues = Venue.find :all
+     render :action => :list, :layout => "content"
+   end
+
    def show
       @venue = Venue.find params[:id]
       @rooms = Room.find :all, :conditions => {:venue_id => params[:id]}

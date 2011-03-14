@@ -1,23 +1,10 @@
-<div class='container_12'>
-<% if @rooms.blank? %>
-   <p>There are no rooms currently in the system.</p>
-<% else %>
-   <p>These are the current rooms in our system:</p>
-   <ul id = "rooms">
-   <% @rooms.each do |r| %>
-	<li><h3>
-		 <%= link_to r.name, {:action => 'show', :id => r.id} %>
-	     <% if r.venue %>
-	      (<%= link_to r.venue.name, venue_path(r.venue_id)%>)
-	     <% end %>
-	     - <%= r.capacity %> cap 
-	    </h3>
-		<%=  link_to "Edit", {:action => 'edit', :id => r.id} %>
-		<%=  link_to "Delete", {:action => 'destroy', :id => r.id}, :confirm => "Are you sure you want to delete this room?" %>
-	</li>
-   <%end%>
-   </ul>
+<% content_for :jsheader do %>
+  <%= javascript_include_tag 'rooms/rooms' %>
 <% end %>
-<hr />
-<p> <%= link_to "Create new room", :action => 'new' %></p>
+<div id="room_id" style="display : none"></div>
+<div class="container_12">
+<div class="grid_6">
+    <table id="rooms"></table>
+    <div id="pager"></div>
+</div>
 </div>
