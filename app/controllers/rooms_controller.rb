@@ -1,6 +1,5 @@
 class RoomsController < PlannerController
   def index
-    logger.debug ">>>>>>>>In index"
   end
 
   def list
@@ -29,7 +28,6 @@ class RoomsController < PlannerController
     @venue = Venue.find @room.venue_id
   end
   def create
-      logger.debug ">>>>>>>>In create"
     @room = Room.new(params[:room])
     if (@room.save)
        render :action => 'index', :layout => 'content'

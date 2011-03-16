@@ -12,13 +12,16 @@ jQuery(document).ready(function(){
             name: 'room[name]',
             index: 'name',
             width: 125,
+            searchoptions: {
+                sopt: ['eq','ne','bw','bn','cn','nc']
+            },
             editable: true,
             editoptions: {
                 size: 20
             },
             formoptions: {
                 rowpos: 1,
-                label: "Name",
+                label: "Name:",
                 elmprefix: "(*)"
             },
             editrules: {
@@ -30,6 +33,11 @@ jQuery(document).ready(function(){
             width: 125,
             editable: true,
 	    search: true,
+            stype: 'select',
+            searchoptions: {
+                dataUrl:'/venue/list',
+                sopt: ['eq','ne']
+            },
             sortable: true,
             edittype: "select",
             editoptions: {
@@ -37,7 +45,7 @@ jQuery(document).ready(function(){
             },
             formoptions: {
                 rowpos: 2,
-                label: "Venue",
+                label: "Venue:",
                 elmprefix: "(*)"
             },
             editrules: {
@@ -49,13 +57,16 @@ jQuery(document).ready(function(){
             width: 75,
             editable: true,
 	    search: true,
+            searchoptions: {
+                sopt: ['eq','ne','ge','le']
+            },
             sortable: true,
             editoptions: {
                 size: 20
             },
             formoptions: {
                 rowpos: 3,
-                label: "Capacity",
+                label: "Capacity:",
             },
             editrules: {
                 required: false
@@ -66,12 +77,15 @@ jQuery(document).ready(function(){
             width: 170,
             editable: true,
 	    search: true,
+            searchoptions: {
+                sopt: ['eq','ne','bw','bn','cn','nc']
+            },
             editoptions: {
                 size: 20
             },
             formoptions: {
                 rowpos: 4,
-                label: "Purpose",
+                label: "Purpose:",
             },
             editrules: {
                 required: false
@@ -81,17 +95,23 @@ jQuery(document).ready(function(){
             index: 'comment',
             width: 170,
             editable: true,
+            hidden: true,
+            viewable: true,
 	    search: true,
+            searchoptions: {
+                sopt: ['eq','ne','bw','bn','cn','nc']
+            },
             edittype: "textarea",
             editoptions: {
-                size: 20
+            //    size: 20
             },
             formoptions: {
                 rowpos: 5,
-                label: "Comment",
+                label: "Comment:",
             },
             editrules: {
-                required: false
+                required: false,
+                edithidden: true
             },
         }
 		],
@@ -114,7 +134,7 @@ jQuery(document).ready(function(){
     
     // Set up the pager menu for add, delete, and search
     jQuery("#rooms").navGrid('#pager', {
-        view: false
+       view: true
     }, //options
     { // edit options
         height: 250,
@@ -153,13 +173,23 @@ jQuery(document).ready(function(){
             return [true, "ok"];
         },
     }, 
-	{ // search options
-		jqModal:true, closeOnEscape:true,
-		multipleSearch:true,
-		sopt:['eq','ne','le','ge'],
-		//odata: ['begins with', 'does not begin with'],
-		groupOps: [ { op: "AND", text: "all" }, { op: "OR", text: "any" } ]
-	} // search options
+    { // search options
+	jqModal:true, closeOnEscape:true,
+	multipleSearch:true,
+	//sopt:['eq','ne','le','ge'],
+	//odata: ['begins with', 'does not begin with'],
+	groupOps: [ { op: "AND", text: "all" }, { op: "OR", text: "any" } ]
+    }, // search options
+    { //view options
+        caption: "Room",
+	bClose: "Close",
+        beforeShowForm: function(formid){
+           $('.ui-jqdialog-content .form-view-data').css('white-space', 'normal');
+           $('.ui-jqdialog-content .form-view-data').css('height', 'auto');
+           $('.ui-jqdialog-content .form-view-data').css('vertical-align', 'text-top');
+           $('.ui-jqdialog-content .form-view-data').css('padding-top', '2px');
+        },
+    } //view options
 	);
 });
 
