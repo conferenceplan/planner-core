@@ -31,16 +31,21 @@ private
           
           # integer items (integers or select id's) need to be handled differently in the query
           isInteger = integerFields.include?(subclause['field'])
-          if subclause["op"] == 'ne'
+          if subclause["op"] == 'ne' || subclause["op"] == 'nc' || subclause["op"] == 'bn'
             clausestr << subclause['field'] + lambda { return isInteger ? ' != ?' : ' not like ?' }.call
           elsif subclause["op"] == 'ge'
             clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' >= ?' }.call
           elsif subclause["op"] == 'le'
             clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' <= ?' }.call
-          else # also the eq
+          else # also the eq, cn, bw
             clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' like ?' }.call
           end
-          fields << lambda { return isInteger ? subclause['data'].to_i : subclause['data'] + '%' }.call
+           
+          if subclause["op"] == 'nc' || subclause["op"] == 'cn'
+             fields << lambda { return isInteger ? subclause['data'].to_i : '%' + subclause['data'] + '%' }.call
+          else
+             fields << lambda { return isInteger ? subclause['data'].to_i : subclause['data'] + '%' }.call
+          end
         end
         clause = [clausestr] | fields
       end
