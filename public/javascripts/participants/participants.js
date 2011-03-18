@@ -323,7 +323,6 @@ function adjust(dialog){
     currentDialog = dialog;
     $('.layerform', dialog.w).ajaxForm({
         target: '#form-response',
-        success: function() { console.log('success:',response); },
         error: function(response, r) {
             var errText = $(response.responseText).find(".error"); // class error
             $('#form-response', currentDialog.w).append('ERROR: ' + errText.text());
