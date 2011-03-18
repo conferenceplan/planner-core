@@ -1,1 +1,9 @@
+<div>
+<% if not @messages_rendered -%>
+  <% if flash[:error] -%>
+    <p class='error'><%= flash[:error] %></p>
+  <% end -%>
+<% end -%>
+<% @messages_rendered = true -%>
 <%= yield(:content) or yield %>
+</div>

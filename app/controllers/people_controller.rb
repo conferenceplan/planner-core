@@ -50,8 +50,7 @@ class PeopleController < PlannerController
     @person = Person.new(params[:person])
     
     if (@person.save)
-       redirect_to :action => 'index'
-    
+      render :action => 'show', :layout => 'content'
     else
       render :action => 'new'
     end 

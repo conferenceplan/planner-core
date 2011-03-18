@@ -6,3 +6,4 @@ module ApplicationHelper
     render :partial => 'menus/index', :locals => {:menu => menu}
   end
 end
+

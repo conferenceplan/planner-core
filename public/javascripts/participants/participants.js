@@ -8,23 +8,8 @@ jQuery(document).ready(function(){
 
     populateTagCloud();
     
-    /* Initialize the tags - load is called when a new participant/person is selected in the grid */
-    jQuery("#particpanttabs").tabs({
-        ajaxOptions: {
-            async: false
-        },
-        cache: false
-    }).tabs({
-        load: function(event, ui){
-            initDialog(event, ui);
-            $(".addressAccordian").accordion({
-                header: 'h3',
-                collapsible: true,
-                autoHeight: false
-            });
-        }
-    });
-    
+    createTabs();
+        
     // The grid containing the list of paricipants
     jQuery("#participants").jqGrid({
         url: baseUrl,
@@ -217,17 +202,7 @@ jQuery(document).ready(function(){
         caption: 'Participants',
         editurl: '/participants',
         onSelectRow: function(ids){
-            var data = jQuery("#participants").jqGrid('getRowData', ids);
-            $('#participant_id').text(ids);
-            $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
-            var $tabs = $('#particpanttabs').tabs();
-            
-            $tabs.tabs('url', 0, 'participants/' + ids + '/registrationDetail').tabs('load', 0).tabs('select', 0);
-            $tabs.tabs('url', 1, 'participants/' + ids + '/addresses').tabs('load', 1);
-            $tabs.tabs('url', 2, 'participants/' + ids).tabs('load', 2);
-            $tabs.tabs('url', 3, 'participants/' + ids + '/edited_bio').tabs('load', 3);
-            $tabs.tabs('url', 4, 'tags/' + ids + '?class=Person').tabs('load', 4);
-            
+            loadTabs(ids);            
             return false;
         }
     });
@@ -258,7 +233,7 @@ jQuery(document).ready(function(){
         jqModal: true,
         closeOnEscape: true,
         bottominfo: "Fields marked with (*) are required",
-        afterSubmit: processResponse,
+        afterSubmit: processAddResponse,
         closeAfterAdd: true
     }, // add options
     { // del options
@@ -343,9 +318,17 @@ function initDialog(event, ui){
     });
 }
 
+// TODO - we need a mechanism to handle errors, we receive a 409 response for lock issues
+var currentDialog = null;
 function adjust(dialog){
+    currentDialog = dialog;
     $('.layerform', dialog.w).ajaxForm({
-        target: '#form-response'
+        target: '#form-response',
+        success: function() { console.log('success:',response); },
+        error: function(response, r) {
+            var errText = $(response.responseText).find(".error"); // class error
+            $('#form-response', currentDialog.w).append('ERROR: ' + errText.text());
+        }
     });
 }
 
@@ -363,6 +346,21 @@ function processResponse(response, postdata){
     $tabs.tabs('load', selected);
     
     return [true, "Success", ""];
+}
+
+function processAddResponse(response, postdata) {
+    // examine return for problem - look for errorExplanation in the returned HTML
+    var text = jQuery(response.responseText).find(".errorExplanation");
+    if (text.size() > 0) {
+        text.css('font-size', '6pt');
+        text = jQuery("<div></div>").append(text);
+        return [false, text.html()];
+    }
+    
+    // get the id of the new entry and change the id of the 
+    var id = jQuery(response.responseText).find("#personid");
+
+    return [true, "Success", id.text()]; // Last param is the id of the new item
 }
 
 function populateTagCloud(){
@@ -458,3 +456,34 @@ function applyFilterEventHandler() {
     });
 }
 
+function loadTabs(id){
+    var data = jQuery("#participants").jqGrid('getRowData', id);
+    $('#participant_id').text(id);
+    $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
+    var tabs = $('#particpanttabs').tabs();
+    
+    tabs.tabs('url', 0, 'participants/' + id + '/registrationDetail').tabs('load', 0).tabs('select', 0);
+    tabs.tabs('url', 1, 'participants/' + id + '/addresses').tabs('load', 1);
+    tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);
+    tabs.tabs('url', 3, 'participants/' + id + '/edited_bio').tabs('load', 3);
+    tabs.tabs('url', 4, 'tags/' + id + '?class=Person').tabs('load', 4);
+}
+
+/* Initialize the tags - load is called when a new participant/person is selected in the grid */
+function createTabs() {
+    jQuery("#particpanttabs").tabs({
+        ajaxOptions: {
+            async: false
+        },
+        cache: false
+    }).tabs({
+        load: function(event, ui){
+            initDialog(event, ui);
+            $(".addressAccordian").accordion({
+                header: 'h3',
+                collapsible: true,
+                autoHeight: false
+            });
+        }
+    });
+}
