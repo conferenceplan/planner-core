@@ -318,7 +318,6 @@ function initDialog(event, ui){
     });
 }
 
-// TODO - we need a mechanism to handle errors, we receive a 409 response for lock issues
 var currentDialog = null;
 function adjust(dialog){
     currentDialog = dialog;
