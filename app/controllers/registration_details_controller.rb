@@ -2,13 +2,13 @@ class RegistrationDetailsController < PlannerController
 
   def edit
     @registrationDetail = RegistrationDetail.find(params[:id])
-      @urlstr = '/registrationDetails/' + params[:id]
+    @urlstr = '/registrationDetails/' + params[:id]
     render :layout => 'content'
   end
 
   def update
     @registrationDetail = RegistrationDetail.find(params[:id])
-#      @urlstr = '/registrationDetails/' + params[:id]
+    @urlstr = '/registrationDetails/' + params[:id]
 
     if @registrationDetail.update_attributes(params[:registration_detail])
       redirect_to :action => 'show', :id => @registrationDetail
@@ -48,7 +48,7 @@ class RegistrationDetailsController < PlannerController
     if (params[:person_id])
       person = Person.find(params[:person_id])
 
-      @urlstr = '/participants/'+ params[:person_id]  + '/registrationDetail/new'
+     @urlstr = '/participants/'+ params[:person_id]  + '/registrationDetail/new'
 
       @registrationDetail = person.registrationDetail
     else

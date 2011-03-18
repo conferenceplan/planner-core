@@ -8,7 +8,7 @@ class PlannerController < ApplicationController
   rescue_from ActiveRecord::StaleObjectError do |exception|
     respond_to do |format|
       format.html {
-        correct_stale_record_version
+#        correct_stale_record_version
         stale_record_recovery_action
       }
       format.xml  { head :conflict }

@@ -1,13 +1,25 @@
-<%= error_messages_for :registrationDetail %>
-<% form_for @registrationDetail, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
-	<div class='line'>Registration Number: <%= f.text_field :registration_number %></div>
-	<div class='line'>Type: <%= f.text_field :registration_type %></div>
-	<div class='boolean'>Registered?: <%= f.check_box :registered %></div>
-	<div class='boolean'>Ghost?: <%= f.check_box :ghost %></div>
-	<div class='form-buttons'>
-		<%= f.submit "Submit" %>
-		<button type="button" class='jqmClose'>Close</button>
-	</div>
-<% end %>
-<div id='form-response'>
+<div>
+    <%= error_messages_for :registrationDetail %>
+    <% form_for @registrationDetail, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
+    <div class='line'>
+        Registration Number: <%= f.text_field :registration_number %>
+    </div>
+    <div class='line'>
+        Type: <%= f.text_field :registration_type %>
+    </div>
+    <div class='boolean'>
+        Registered?: <%= f.check_box :registered %>
+    </div>
+    <div class='boolean'>
+        Ghost?: <%= f.check_box :ghost %>
+    </div>
+    <div class='form-buttons'>
+        <%= f.submit "Submit" %>
+        <button type="button" class='jqmClose'>
+            Close
+        </button>
+    </div>
+    <% end %>
+    <div id='form-response'>
+    </div>
 </div>

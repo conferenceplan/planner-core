@@ -73,6 +73,7 @@ class PeopleController < PlannerController
        end
       end
     end
+    # TODO -
     if @person.update_attributes(params[:person])
       redirect_to :action => 'show',:id => @person
     else

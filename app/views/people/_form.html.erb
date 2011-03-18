@@ -19,6 +19,7 @@
       <div class='line'><div class='field_name'>Pub Name First Name</div> <div class='field_value'><%= p.text_field :first_name %></div>
       <div class='line'><div class='field_name'>Pub Name Last Name</div> <div class='field_value'><%= p.text_field :last_name %></div>
       <div class='line'><div class='field_name'>Pub Name Suffix</div> <div class='field_value'><%= p.text_field :suffix %></div>
+      <%= p.hidden_field :lock_version%>
   <% end %>
   
   <div class='form-buttons'>

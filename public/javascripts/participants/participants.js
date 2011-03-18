@@ -460,11 +460,11 @@ function loadTabs(id){
     $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
     var tabs = $('#particpanttabs').tabs();
     
-    tabs.tabs('url', 0, 'participants/' + id + '/registrationDetail').tabs('load', 0).tabs('select', 0);
     tabs.tabs('url', 1, 'participants/' + id + '/addresses').tabs('load', 1);
     tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);
     tabs.tabs('url', 3, 'participants/' + id + '/edited_bio').tabs('load', 3);
     tabs.tabs('url', 4, 'tags/' + id + '?class=Person').tabs('load', 4);
+    tabs.tabs('url', 0, 'participants/' + id + '/registrationDetail').tabs('load', 0).tabs('select', 0);
 }
 
 /* Initialize the tags - load is called when a new participant/person is selected in the grid */

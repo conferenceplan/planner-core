@@ -56,8 +56,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :programme_items, :member => {:updateParticipants => :post}
   map.resources :programme_items
 
-  map.resources :registrationDetails, :has_one => :participant
-  map.resources :edited_bios, :has_one => :participant
+  map.resources :registrationDetails, :has_one => :person
+  map.resources :edited_bios, :has_one => :person
 
   map.resources :postal_addresses, :has_many => :people
   map.resources :email_addresses, :has_many => :people
