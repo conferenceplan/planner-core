@@ -2,11 +2,13 @@
 	<% @allTags.each do |context, tags| %>
 	    <div class="tag-context-title-area">
 		<div class="tag-context-title"><%= context %></div>
+<% permitted_to? :edit, @className do %>
 		<div class='tag-controls'>
 			<div class='edit-form'>
 				<%= link_to "new", {:controller => 'tags', :action => 'edit', :class => @className, :context => context}, :class => 'entrydialog' %>
 			</div>
 		</div>
+<% end %>        
         </div>
 		<div class='tag-area'>
 		<%tags.each do |t|%>

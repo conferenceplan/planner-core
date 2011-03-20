@@ -9,7 +9,7 @@ class VenueController < PlannerController
 
    def list
      @venues = Venue.find :all
-     render :action => :list, :layout => "content"
+     render :action => :list, :layout => "plain"
    end
 
    def show

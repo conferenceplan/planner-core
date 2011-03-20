@@ -73,9 +73,9 @@ class PeopleController < PlannerController
        end
       end
     end
-    # TODO -
+
     if @person.update_attributes(params[:person])
-      redirect_to :action => 'show',:id => @person
+      render :action => 'edit', :layout => 'content'
     else
       render :action => 'edit', :layout => 'content'
     end
@@ -98,7 +98,6 @@ class PeopleController < PlannerController
     @page = params[:page]
     idx = params[:sidx]
     order = params[:sord]
-    tags = params[:tags]
     context = params[:context]
     nameSearch = params[:namesearch]
     
@@ -107,7 +106,7 @@ class PeopleController < PlannerController
     ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
     
     # add the name search for last of first etc
-    if nameSearch && ! nameSearch.empty? # TODO - fix
+    if nameSearch && ! nameSearch.empty? #
       clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ?','%' + nameSearch + '%')
       clause << '%' + nameSearch + '%'
     end

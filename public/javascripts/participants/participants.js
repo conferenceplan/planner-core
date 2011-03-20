@@ -15,7 +15,7 @@ jQuery(document).ready(function(){
         url: baseUrl,
         datatype: 'xml',
         mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix'],
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix', 'lock'],
         colModel: [{
             name: 'person[first_name]',
             index: 'people.first_name',
@@ -188,6 +188,18 @@ jQuery(document).ready(function(){
                 rowpos: 10,
                 label: "Pub Suffix"
             }
+        }, {
+            name: 'person[lock_version]',
+            width: 3,
+            index: 'lock_version',
+            hidden: true,
+            editable: true,
+            sortable: false,
+            search: false,
+            formoptions: {
+                rowpos: 11,
+                label: "lock"
+            }
         }],
         pager: jQuery('#pager'),
         rowNum: 10,
@@ -213,7 +225,7 @@ jQuery(document).ready(function(){
         search: false
     }, //options
     { // edit options
-        height: 320,
+        height: 400,
         reloadAfterSubmit: true,
         jqModal: true,
         closeOnEscape: true,
@@ -338,6 +350,8 @@ function processResponse(response, postdata){
         text = $("<div></div>").append(text);
         return [false, text.html()];
     }
+    
+    alert("Proc response");
     
     var $tabs = $('#particpanttabs').tabs();
     var selected = $tabs.tabs('option', 'selected');

@@ -39,6 +39,6 @@ class InvitationCategoriesController < PlannerController
   def list  
     # Get all the roles in the database
     @invitationCategories = InvitationCategory.find :all
-    render :layout => 'content'
+    render :layout => 'plain'
   end
 end

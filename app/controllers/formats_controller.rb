@@ -39,7 +39,7 @@ class FormatsController < PlannerController
   def list  
     # Get all the formats in the database
     @formats = Format.find :all
-    render :layout => 'content'
+    render :layout => 'plain'
   end
   
   def listwithblank

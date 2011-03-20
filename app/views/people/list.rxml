@@ -23,6 +23,8 @@ xml.rows do
         xml.cell("")
         xml.cell("")
       end
+      #
+      xml.cell(person.lock_version)
     end
   end
 end
