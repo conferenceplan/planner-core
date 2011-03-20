@@ -6,7 +6,7 @@ jQuery(document).ready(function(){
     jQuery("#rooms").jqGrid({
         url: '/rooms/list',
         datatype: 'xml',
-        colNames: ['Room Name', 'Venue', 'Capacity','Purpose','Comment'],
+        colNames: ['Room Name', 'Venue', 'Capacity','Purpose','Comment','lock_version'],
         colModel: [
 		{
             name: 'room[name]',
@@ -102,9 +102,6 @@ jQuery(document).ready(function(){
                 sopt: ['eq','ne','bw','bn','cn','nc']
             },
             edittype: "textarea",
-            editoptions: {
-            //    size: 20
-            },
             formoptions: {
                 rowpos: 5,
                 label: "Comment:",
@@ -113,6 +110,11 @@ jQuery(document).ready(function(){
                 required: false,
                 edithidden: true
             },
+        },{
+            name: 'room[lock_version]',
+            index: 'lock_version',
+            hidden: true,
+	    search: false,
         }
 		],
         pager: jQuery('#pager'),
@@ -134,7 +136,7 @@ jQuery(document).ready(function(){
     
     // Set up the pager menu for add, delete, and search
     jQuery("#rooms").navGrid('#pager', {
-       view: true
+       view: true,
     }, //options
     { // edit options
         height: 250,
