@@ -1,4 +1,5 @@
 <div class='programmeItem_show'>
+    <input id="programme_item_lock_version" name="programme_item[lock_version]" type="hidden" value="<%= @programmeItem.lock_version%>" />
     <% if @editable %>
     <div class='edit-form'>
         <%= link_to "edit", {:controller => 'programme_items', :action => 'edit', :id => @programmeItem}, :class => 'entrydialog' %>
