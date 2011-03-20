@@ -351,8 +351,6 @@ function processResponse(response, postdata){
         return [false, text.html()];
     }
     
-    alert("Proc response");
-    
     var $tabs = $('#particpanttabs').tabs();
     var selected = $tabs.tabs('option', 'selected');
     $tabs.tabs('load', selected);
