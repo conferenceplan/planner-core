@@ -132,7 +132,6 @@ jQuery(document).ready(function(){
     });
 });
 
-
 function initDialog(event, ui) {
 
 	$(".deletetag").click(function(event) {
@@ -186,11 +185,17 @@ function initDialog(event, ui) {
     });
 }
 
-
+var currentDialog = null;
+ 
 function adjust(dialog) {
-	$('.layerform', dialog.w).ajaxForm({
-		target: '#form-response'
-	});
+	currentDialog = dialog;
+    $('.layerform', dialog.w).ajaxForm({
+        target: '#form-response',
+        error: function(response, r) {
+            var errText = $(response.responseText).find(".error"); // class error
+            $('#form-response', currentDialog.w).append('ERROR: ' + errText.text());
+        }
+    });
 }
 
 function processResponse(response, postdata) { 
@@ -209,16 +214,100 @@ function processResponse(response, postdata) {
 	return [true, "Success"]; 
 }
 
-function populateTagCloud() {
-	/* Populate the tag cloud */
-    $.ajax({ //http://localhost:3000/tags?class=ProgrammeItem
+
+function populateTagCloud(){
+    /* Populate the tag cloud */
+    $.ajax({ // /tags?class=ProgrammeItem
         url: "/tags?class=ProgrammeItem",
         dataType: "html",
         success: function(response){
-			jQuery("#programmeitem-tag-cloud").html(response);
+            jQuery("#programmeitem-tag-cloud").html(response);
+            
+            jQuery(".tag-select").click(function(event){
+                var ctx = $(this).parents('.tag-group').find('.tag-context-title').text();
+                var tag = $(this).text();
+                
+                if (!tagQueryList[ctx]) {
+                    tagQueryList[ctx] = new Array();
+                }
+                
+                if ($.inArray(tag, tagQueryList[ctx]) == -1) { // only push if it does not already exist
+                    tagQueryList[ctx].push(tag);
+                }
+                issueTagQuery();
+            });
         }
     });
 }
+
+function issueTagQuery(){
+    var newUrl = baseUrl + "?" + createTagQuery();
+	
+    jQuery("#programmeItems").jqGrid('setGridParam', {
+        url: newUrl
+    }).trigger("reloadGrid");
+    
+    jQuery("#programmeitem-tag-facets").html(turnTagQueryToHTML());
+    applyFilterEventHandler();
+}
+
+function createTagQuery() {
+    // context='" + ctx + "'&tags='" + tag + "'"
+    var posn = 0;
+    var query = "";
+    for (var key in tagQueryList) {
+        query += "context[" + posn + "]=" + key + "&tags["+ posn + "]=";
+        for (var i = 0; i < tagQueryList[key].length; i++) {
+            query += tagQueryList[key][i] + ",";
+        }
+        query += "&";
+		posn += 1;
+    }
+    return query;
+}
+
+function turnTagQueryToHTML(){
+    var html = "<div class='tags'>";
+    for (var key in tagQueryList) {
+        html += "<div class='tag-group'>";
+        html += "<div class='tag-context-title'>" + key + "</div>";
+        html += "<div class='tag-area'>"
+        html += "<div class='tag'>"
+        for (var i = 0; i < tagQueryList[key].length; i++) {
+            html += '<div class="tag-name">';
+            html += tagQueryList[key][i];
+            html += '</div>';
+            html += '<a href="#context='+key+'&tag='+tagQueryList[key][i]+'" class="delete-filter-tag">';
+            html += '<div class="ui-icon ui-icon-close" style="float: left;"/>';
+            html += '</a>';
+        }
+        html += "</div>";
+        html += "</div>";
+        html += "</div>";
+        html += "</div>";
+    }
+    html += "</div>";
+    
+    return html;
+}
+
+function applyFilterEventHandler() {
+    jQuery(".delete-filter-tag").click(function(event){
+        var q = $(this).attr('href');
+        var strs = q.split('&');
+        var ctx = strs[0].substr(9,strs[0].length);
+        var tag = strs[1].substr(4,strs[1].length);
+        // extract the context and tag and then remove these from the tag query collection
+        // then force the elements to refresh
+        var posn = $.inArray(tag, tagQueryList[ctx]);
+        tagQueryList[ctx].splice(posn,1);
+        if (tagQueryList[ctx].length == 0) {
+            delete tagQueryList[ctx];
+        }
+        issueTagQuery();
+    });
+}
+
 
 function loadTabs(ids){
 	var data = jQuery("#programmeItems").jqGrid('getRowData', ids);
