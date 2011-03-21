@@ -1,25 +1,22 @@
 /**
  * @author rleibig
  */
+var baseUrl = "programme_items/list";
+var tagQueryList = {};
     
 jQuery(document).ready(function(){ 
     /* Populate the tag cloud */
 	populateTagCloud();
 	
-	jQuery("#programmeItems_tabs").tabs({
-		ajaxOptions: { async: false },
-		cache: false
-	}).tabs({
-        load: function(event, ui){
-            initDialog(event, ui);
-        }
-    });
+	createTabs();
+	
+	
 	
   jQuery("#programmeItems").jqGrid({
-    url:'programme_items/list',
+    url:baseUrl,
     datatype: 'xml',
     mtype: 'POST',
-    colNames:['Title','Format','Duration'],
+    colNames:['Title','Format','Duration','lock'],
     colModel :[ 
       {name:'programme_item[title]', 
 	   index:'title', 
@@ -59,7 +56,19 @@ jQuery(document).ready(function(){
 	   label: "Duration", 
 	   elmprefix:"(*)"},
 	   editrules:{required:true}
-      } ],
+      }, {
+            name: 'programme_items[lock_version]',
+            width: 3,
+            index: 'lock_version',
+            hidden: true,
+            editable: true,
+            sortable: false,
+            search: false,
+            formoptions: {
+                rowpos: 4,
+                label: "lock"
+            }
+        } ],
 	 
     pager: jQuery('#pager'),
     rowNum:10,
@@ -74,11 +83,7 @@ jQuery(document).ready(function(){
     caption: 'ProgrammeItems',
     editurl: '/programme_items', // need to ensure edit url is correct
      onSelectRow: function(ids){
-			var data = jQuery("#programmeItems").jqGrid('getRowData',ids);
-            $('#programmeItem_id').text(ids);
-            var $tabs = $('#programmeItems_tabs').tabs();   
-            $tabs.tabs('url', 0, 'programme_items/' + ids).tabs('load', 0).tabs('select', 0);; 
-			$tabs.tabs('url', 1, 'tags/' + ids + '?class=ProgrammeItem').tabs('load',1);
+			loadTabs(ids);  
             return false;
         }
   }); 
@@ -215,3 +220,25 @@ function populateTagCloud() {
     });
 }
 
+function loadTabs(ids){
+	var data = jQuery("#programmeItems").jqGrid('getRowData', ids);
+	$('#programmeItem_id').text(ids);
+	var $tabs = $('#programmeItems_tabs').tabs();
+	$tabs.tabs('url', 0, 'programme_items/' + ids).tabs('load', 0).tabs('select', 0);
+	;
+	$tabs.tabs('url', 1, 'tags/' + ids + '?class=ProgrammeItem').tabs('load', 1);
+}
+
+/* Initialize the tags - load is called when a new participant/person is selected in the grid */
+function createTabs() {
+	
+	jQuery("#programmeItems_tabs").tabs({
+		ajaxOptions: { async: false },
+		cache: false
+	}).tabs({
+        load: function(event, ui){
+            initDialog(event, ui);
+        }
+    });
+	
+}
