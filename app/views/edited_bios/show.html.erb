@@ -3,43 +3,43 @@
 <div class='edit-form'>
       <%=  link_to "edit", {:controller => 'edited_bios', :action => 'edit', :id => @editedBio}, :class => 'entrydialog' %>
 </div>
-<br>
+<br/>
 <% else %>
       <%= link_to "Add Edited Bio", @urlstr, :class => 'entrydialog' %>
-	  <br>
+	  <br/>
 <% end %>
 <% if @editedBio %>
   <label>Edited Bio:</label>
   <%=  markdown(@editedBio.bio) %>
-  <br>
+  <br/>
   Web site: 
   <% if ((@editedBio.website != nil) && (@editedBio.website != "")) %>
     <%= @editedBio.website %>
   <% else %>
   No Web Site
   <% end %>
-  <br>
+  <br/>
   Twitter Info:
   <% if ((@editedBio.twitterinfo != nil) && (@editedBio.twitterinfo != "")) %>
     <%= @editedBio.twitterinfo %>
   <% else %>
  No Twitter Info
   <% end %>
-  <br>
+  <br/>
   Other Social Media:
   <% if ((@editedBio.othersocialmedia != nil) && (@editedBio.othersocialmedia != "")) %>
     <%= @editedBio.othersocialmedia %>
   <% else %>
     No Other Social Media
   <% end %>
-  <br>
+  <br/>
   Photo Url:
   <% if ((@editedBio.photourl != nil) && (@editedBio.photourl != "")) %>
     <%= @editedBio.photourl %>
   <% else %>
     No Photo Url
   <% end %>
- <br>
+ <br/>
   Facebook:
   <% if ((@editedBio.facebook != nil) && (@editedBio.facebook != "")) %>
     <%= @editedBio.facebook %>
@@ -49,13 +49,13 @@
 <% else %>
 <p> No Edited Bio </p>
 <% end %>
-<br>
+<br/>
 <% if @surveyBio %>
-<br>
+<br/>
 <label>Survey Bio:</label>
-<br>
+<br/>
 <%= @surveyBio %>
-<br>
+<br/>
 <% else %>
 <p>No Survey Bio</p>
 <% end %>
