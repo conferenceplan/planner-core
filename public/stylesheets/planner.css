@@ -135,7 +135,7 @@ div.address div.address_email div.address_details {
 }
 
 div div.field_name {
-	width: 20%;
+	width: 30%;
 	float: left;
 	margin-right: 8px;
 	text-transform: capitalize;
@@ -147,7 +147,7 @@ div div.field_name {
 }
 
 div div.field_value {
-	width: 100%;
+	width: 70%;
 }
 
 div.boolean {

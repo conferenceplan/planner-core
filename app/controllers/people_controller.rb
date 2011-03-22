@@ -74,10 +74,12 @@ class PeopleController < PlannerController
       end
     end
 
+    @editable = false
     if @person.update_attributes(params[:person])
-      render :action => 'edit', :layout => 'content'
+      render :action => 'show', :layout => 'content'
+#      render :action => 'edit', :layout => 'content', :locals => { :editable => editable}
     else
-      render :action => 'edit', :layout => 'content'
+      render :action => 'show', :layout => 'content'
     end
   end
 

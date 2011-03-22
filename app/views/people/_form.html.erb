@@ -1,104 +1,104 @@
 <%= error_messages_for :person %>
 <% form_for @person,:html => {:class => "layerform", :id => "layerform"} do |f| -%>
 <div class='container_12'>
-    <div class='grid_6'>
-<div class='line'>
-    <div class='field_name'>
-        <%= f.label :first_name, "First Name" %>
-    </div>
-    <div class='field_value'>
-        <%= f.text_field :first_name %>
-    </div>
-</div>
-<div class='line'>
-    <div class='field_name'>
-        <%= f.label :last_name, "Last Name" %>
-    </div>
-    <div class='field_value'>
-        <%= f.text_field :last_name %>
-    </div>
-</div>
-<div class='line'>
-    <div class='field_name'>
-        <%= f.label :suffix, "Suffix" %>
-    </div>
-    <div class='field_value'>
-        <%= f.text_field :suffix %>
-    </div>
-</div>
-<div class='line'>
-    <div class='field_name'>
-        <%= f.label :mailing_number, "Mailing Number" %>
-    </div>
-    <div class='field_value'>
-        <%=f.text_field :mailing_number %>
-    </div>
-</div>
-<div class='line'>
-    <div class='field_name'>
-        <%= f.label :invitestatus_id %>
-    </div>
-    <div class='field_value'>
-        <%= f.select :invitestatus_id,
-        InviteStatus.find(:all).collect {|s| [s.name,s.id] },
-        {:include_blank => false} %>
-    </div>
-</div>
-<div class='line'>
-    <div class='field_name'>
-        <%= f.label :invitation_category_id %>
-    </div>
-    <div class='field_value'>
-        <%= f.select :invitation_category_id,
-        InvitationCategory.find(:all).collect {|s| [s.name,s.id] },
-        {:include_blank => true} %>
-    </div>
-</div>
-<div class='line'>
-    <div class='field_name'>
-        <%= f.label :acceptance_status_id %>
-    </div>
-    <div class='field_value'>
-        <%= f.select :acceptance_status_id,
-        AcceptanceStatus.find(:all).collect {|s| [s.name,s.id] },
-        {:include_blank =>false} %>
-    </div>
-</div>
-<% @person.build_pseudonym unless @person.pseudonym %>
-<% f.fields_for :pseudonym do |p| %>
-<div class='line'>
-    <div class='field_name'>
-        Pub Name First Name
-    </div>
-    <div class='field_value'>
-        <%= p.text_field :first_name %>
-    </div>
-    <div class='line'>
-        <div class='field_name'>
-            Pub Name Last Name
-        </div>
-        <div class='field_value'>
-            <%= p.text_field :last_name %>
+    <div class='grid_12'>
+        <div class='line'>
+            <div class='field_name'>
+                <%= f.label :first_name, "First Name" %>
+            </div>
+            <div class='field_value'>
+                <%= f.text_field :first_name %>
+            </div>
         </div>
         <div class='line'>
             <div class='field_name'>
-                Pub Name Suffix
+                <%= f.label :last_name, "Last Name" %>
             </div>
             <div class='field_value'>
-                <%= p.text_field :suffix %>
+                <%= f.text_field :last_name %>
             </div>
         </div>
+        <div class='line'>
+            <div class='field_name'>
+                <%= f.label :suffix, "Suffix" %>
+            </div>
+            <div class='field_value'>
+                <%= f.text_field :suffix %>
+            </div>
+        </div>
+        <div class='line'>
+            <div class='field_name'>
+                <%= f.label :mailing_number, "Mailing Number" %>
+            </div>
+            <div class='field_value'>
+                <%=f.text_field :mailing_number %>
+            </div>
+        </div>
+        <div class='line'>
+            <div class='field_name'>
+                <%= f.label :invitestatus_id %>
+            </div>
+            <div class='field_value'>
+                <%= f.select :invitestatus_id,
+                InviteStatus.find(:all).collect {|s| [s.name,s.id] },
+                {:include_blank => false} %>
+            </div>
+        </div>
+        <div class='line'>
+            <div class='field_name'>
+                <%= f.label :invitation_category_id %>
+            </div>
+            <div class='field_value'>
+                <%= f.select :invitation_category_id,
+                InvitationCategory.find(:all).collect {|s| [s.name,s.id] },
+                {:include_blank => true} %>
+            </div>
+        </div>
+        <div class='line'>
+            <div class='field_name'>
+                <%= f.label :acceptance_status_id %>
+            </div>
+            <div class='field_value'>
+                <%= f.select :acceptance_status_id,
+                AcceptanceStatus.find(:all).collect {|s| [s.name,s.id] },
+                {:include_blank =>false} %>
+            </div>
+        </div>
+        <% @person.build_pseudonym unless @person.pseudonym %>
+        <% f.fields_for :pseudonym do |p| %>
+        <div class='line'>
+            <div class='field_name'>
+                Pub Name First Name
+            </div>
+            <div class='field_value'>
+                <%= p.text_field :first_name %>
+            </div>
+            <div class='line'>
+                <div class='field_name'>
+                    Pub Name Last Name
+                </div>
+                <div class='field_value'>
+                    <%= p.text_field :last_name %>
+                </div>
+                <div class='line'>
+                    <div class='field_name'>
+                        Pub Name Suffix
+                    </div>
+                    <div class='field_value'>
+                        <%= p.text_field :suffix %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%= p.hidden_field :lock_version %>
+        <% end %>
+        <div class='form-buttons'>
+            <%= f.submit "Submit" %>
+            <button type="button" class='jqmClose'>
+                Close
+            </button>
+        </div>
     </div>
-</div>
-<%= p.hidden_field :lock_version %>
-<% end %>
-<div class='form-buttons'>
-    <%= f.submit "Submit" %>
-    <button type="button" class='jqmClose'>
-        Close
-    </button>
-</div>
-</div>
 </div>
 <% end %>
 <div id='form-response'>

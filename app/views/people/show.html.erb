@@ -1,11 +1,14 @@
+<%= error_messages_for :person %>
 <div>
     <div id="personid" style="display : none;">
         <%= @person.id %>
     </div>
     <div class='people_show'>
+        <%if (! defined? @editable) || (@editable == true)%>
         <div class='edit-form'>
             <%= link_to "edit", {:controller => 'people', :action => 'edit', :id => @person}, :class => 'entrydialog' %>
         </div>
+        <% end %>
         <div class='line'>
             First Name: <%= @person.first_name %>
         </div>
