@@ -25,15 +25,20 @@ class SurveyRespondents::ReviewsController < PlannerController
     clause = createWhereClause(params[:filters])
     clause = addClause(clause, 'submitted_survey = ?', true)
 
+    clause = addClause(clause,'people.acceptance_status_id != ? ',9)
+    args = { :conditions => clause }
+    args.merge!( :joins => 'LEFT JOIN people ON people.id = survey_respondents.person_id' )
+
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB      
-    @count = SurveyRespondent.count :conditions => clause
+    @count = SurveyRespondent.count args
     @nbr_pages = (@count / rows.to_i).floor + 1
     @nbr_pages += 1 if @count % rows.to_i > 0
     
     off = (@page.to_i - 1) * rows.to_i
-    @respondents = SurveyRespondent.find :all, :conditions => clause,
-      :offset => off, :limit => rows, :order => idx + " " + order
+    args.merge!(:offset => off, :limit => rows, :order => idx + " " + order)
+
+    @respondents = SurveyRespondent.find :all, args
    
     # We return the list of people as an XML structure which the 'table' can us
     respond_to do |format|

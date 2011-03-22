@@ -392,22 +392,22 @@ class PeopleController < PlannerController
 
  def invitestatuslist
    @inviteStatus = InviteStatus.find :all
-    render :layout => 'content'
+    render :layout => 'plain'
  end
 
 def invitestatuslistwithblank
    @inviteStatus = InviteStatus.find :all
-    render :layout => 'content'
+    render :layout => 'plain'
 end
 
 def acceptancestatuslist
    @acceptanceStatus = AcceptanceStatus.find :all
-    render :layout => 'content'
+    render :layout => 'plain'
 end
 
 def acceptancestatuslistwithblank
    @acceptanceStatus = AcceptanceStatus.find :all
-    render :layout => 'content'
+    render :layout => 'plain'
 end
 
 
