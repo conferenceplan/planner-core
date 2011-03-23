@@ -99,5 +99,29 @@ end
     redirect_to :action => 'index'
   end
   
+  def exportbiolist
+    exportSelect = params[:selectExportBioList][:export_select]
+    accepted = AcceptanceStatus.find_by_name("Accepted")        
+    invitestatus = InviteStatus.find_by_name("Invited")
+    
+    if (exportSelect == 'true')
+       updatedValueYear = params[:selectExportBioList]['updated_at(1i)']
+       updatedValueMon = params[:selectExportBioList]['updated_at(2i)']
+       updatedValueDay = params[:selectExportBioList]['updated_at(3i)']
+       updatedValueHour = params[:selectExportBioList]['updated_at(4i)']
+       updatedValueMinute = params[:selectExportBioList]['updated_at(5i)']
+       updatedValueSecond = params[:selectExportBioList]['updated_at(5i)']    
+       updateValue = Time.gm(updatedValueYear,updatedValueMon,updatedValueDay,updatedValueHour,updatedValueMinute,updatedValueSecond)
+    
+       @editedBios = EditedBio.find :all, :joins => :person, :conditions => ['people.acceptance_status_id = ? and people.invitestatus_id = ? and edited_bios.updated_at > ?', accepted.id, invitestatus.id, updateValue], :order => 'last_name, first_name'
+    else
+       @editedBios = EditedBio.find :all, :joins => :person, :conditions => ['people.acceptance_status_id = ? and people.invitestatus_id = ?', accepted.id, invitestatus.id], :order => 'last_name, first_name'
+    end
+    render :layout => 'content'
+  end
+  
+  def selectExportBioList
+    
+  end
 end
 

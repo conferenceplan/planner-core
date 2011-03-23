@@ -1,0 +1,35 @@
+<h1> List edited bios with following criteria</h1>
+<%=
+    if flash[:error]
+      content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
+    end
+%>
+<% form_for :selectExportBioList, :url=>{:controller=>"edited_bios", :action=>"exportbiolist",:method => "get"} do |f| -%>
+ <div>
+  <div class='line'>
+  	Select the criteria for the bio list, then submit. The list will be displayed in your browser.
+    "Save As" from your browser to save the list.
+  </div>
+  <div class='line'>
+     	<%= f.label :export_select,"Select criteria :"%>     	
+		<%= f.radio_button :export_select, :false%> Select All
+		<%= f.radio_button :export_select, :true%>Select Since Date
+  </div>
+  <div class='line'>
+  	 <div class = 'field_name', "Select Date"> 
+	    <%= f.label :updated_at %>
+	 </div>
+  </div>
+  <div class='line'>
+  	 <div class = 'field_value'> 
+	    <%= f.datetime_select :updated_at, :default => Time.now %>
+	 </div>
+  </div>
+  
+  <div class='form-buttons'>
+		<%= f.submit "Submit" %>
+  </div>
+  <div>
+  		<%= link_to 'Cancel', people_path%>
+  </div>
+<% end -%>

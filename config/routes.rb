@@ -57,6 +57,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :programme_items
 
   map.resources :registrationDetails, :has_one => :person
+ 
+  map.connect 'edited_bios/exportbiolist', :controller => 'edited_bios',:action => 'exportbiolist'
+  map.connect 'edited_bios/selectExportBioList', :controller => 'edited_bios',:action => 'selectExportBioList'
   map.resources :edited_bios, :has_one => :person
 
   map.resources :postal_addresses, :has_many => :people
@@ -64,7 +67,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :phone_numbers, :has_many => :people
   map.resources :menus
   
-  map.connect 'participants/exportbiolist', :controller => 'people',:action => 'exportbiolist'
   map.connect 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
   map.connect 'participants/doReportInviteStatus', :controller => 'people', :action => 'doReportInviteStatus'
   map.connect 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'
