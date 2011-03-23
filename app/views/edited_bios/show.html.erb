@@ -1,64 +1,80 @@
+
 <div class='people_bio'>
-<% if @editedBio %>
-<div class='edit-form'>
+	<div>
+  <% if @editedBio %>
+  <div class='edit-form'>
       <%=  link_to "edit", {:controller => 'edited_bios', :action => 'edit', :id => @editedBio}, :class => 'entrydialog' %>
-</div>
-<br/>
-<% else %>
+  </div>
+  <% else %>
       <%= link_to "Add Edited Bio", @urlstr, :class => 'entrydialog' %>
-	  <br/>
+  <% end %>
+  <% if @editedBio %>
+    <label>Edited Bio:</label>
+	<div>
+    <%=  markdown(@editedBio.bio) %>
+    <br/>
+	</div>
+	<div>
+    Web site: 
+    <% if ((@editedBio.website != nil) && (@editedBio.website != "")) %>
+      <%= @editedBio.website %>
+    <% else %>
+    No Web Site
+    <% end %>
+    <br/>
+	</div>
+	<div>
+    Twitter Info:
+    <% if ((@editedBio.twitterinfo != nil) && (@editedBio.twitterinfo != "")) %>
+      <%= @editedBio.twitterinfo %>
+    <% else %>
+        No Twitter Info
+    <% end %>
+    <br/>
+	</div>
+	<div>
+    Other Social Media:
+    <% if ((@editedBio.othersocialmedia != nil) && (@editedBio.othersocialmedia != "")) %>
+      <%= @editedBio.othersocialmedia %>
+    <% else %>
+      No Other Social Media
+    <% end %>
+    <br/>
+	</div>
+	<div>
+    Photo Url:
+    <% if ((@editedBio.photourl != nil) && (@editedBio.photourl != "")) %>
+      <%= @editedBio.photourl %>
+    <% else %>
+      No Photo Url
+    <% end %>
+    <br/>
+	</div>
+	<div>
+    Facebook:
+    <% if ((@editedBio.facebook != nil) && (@editedBio.facebook != "")) %>
+      <%= @editedBio.facebook %>
+    <% else %>
+      No Facebook
+    <% end %>
+	</div>
+    <% else %>
+    <p> No Edited Bio </p>
 <% end %>
-<% if @editedBio %>
-  <label>Edited Bio:</label>
-  <%=  markdown(@editedBio.bio) %>
-  <br/>
-  Web site: 
-  <% if ((@editedBio.website != nil) && (@editedBio.website != "")) %>
-    <%= @editedBio.website %>
-  <% else %>
-  No Web Site
-  <% end %>
-  <br/>
-  Twitter Info:
-  <% if ((@editedBio.twitterinfo != nil) && (@editedBio.twitterinfo != "")) %>
-    <%= @editedBio.twitterinfo %>
-  <% else %>
- No Twitter Info
-  <% end %>
-  <br/>
-  Other Social Media:
-  <% if ((@editedBio.othersocialmedia != nil) && (@editedBio.othersocialmedia != "")) %>
-    <%= @editedBio.othersocialmedia %>
-  <% else %>
-    No Other Social Media
-  <% end %>
-  <br/>
-  Photo Url:
-  <% if ((@editedBio.photourl != nil) && (@editedBio.photourl != "")) %>
-    <%= @editedBio.photourl %>
-  <% else %>
-    No Photo Url
-  <% end %>
- <br/>
-  Facebook:
-  <% if ((@editedBio.facebook != nil) && (@editedBio.facebook != "")) %>
-    <%= @editedBio.facebook %>
-  <% else %>
-    No Facebook
-  <% end %>
-<% else %>
-<p> No Edited Bio </p>
-<% end %>
 <br/>
-<% if @surveyBio %>
-<br/>
-<label>Survey Bio:</label>
-<br/>
-<%= @surveyBio %>
-<br/>
-<% else %>
-<p>No Survey Bio</p>
-<% end %>
+</div>
+<div>
+  <% if @surveyBio %>
+  <br/>
+  <label>Survey Bio:</label>
+  <br/>
+  <%= @surveyBio %>
+  <br/>
+  <% else %>
+  <p>No Survey Bio</p>
+  <% end %>
+</div>
   <div class='message' id='tab-messages'></div>
   <div class="jqmWindow" id="edialog">Please wait...</div>
 </div>
+
