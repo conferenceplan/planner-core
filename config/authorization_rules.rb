@@ -29,6 +29,7 @@ authorization do
   role :Itemeditor do
     includes :Viewer
     has_permission_on :programme_items, :to => :manage
+    has_permission_on :tags, :to => :manage
   end
   
   role :Planner do
