@@ -64,15 +64,15 @@ jQuery(document).ready(function(){
         colModel: [
 		{
             name: 'respondent[first_name]',
-            index: 'first_name',
+            index: 'survey_respondents.first_name',
             width: 250,
         },{
 			name:'respondent[last_name]',
-			index:'last_name',
+			index:'survey_respondents.last_name',
 			width: 250,
         },{
 			name:'Update Date',
-			index:'updated_at',
+			index:'survey_respondents.updated_at',
 			width: 100,
         },{
 			name:'participant[id]',
