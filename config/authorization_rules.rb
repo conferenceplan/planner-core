@@ -67,5 +67,5 @@ privileges do
     privilege :create, :includes => [:new,:import,:doimport]
     privilege :update, :includes => [:edit,:states,:copySurvey]
     privilege :delete, :includes => :destroy
-    privilege :communicate, :includes => [:exportemailxml,:doexportemailxml,:exportbiolist]
+    privilege :communicate, :includes => [:exportemailxml,:doexportemailxml,:exportbiolist, :selectExportBioList]
 end
