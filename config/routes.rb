@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+
   map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
   map.resources :tags, :member => {:remove => :get, :add => :post, :index => :get, :edit => :get},
       :except => [:destroy, :new, :create]
@@ -12,6 +13,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :monitor, :only => :index # we only need the one method/route for this
 
   map.resources :item_planner, :only => :index # TODO - check
+
+  map.resources :program_planner, :only => :index # TODO - check
 
   # The priority is based upon order of creation: first created -> highest priority.
 

@@ -10,9 +10,7 @@
 		</style>
     </head>
     <body>
-    	<!--div class='container_12'-->
-        	<%=render 'layouts/common_page_top' %>
-        	<%= yield(:content) or yield %>
-    	<!--div-->
+        <%=render 'layouts/common_page_top' %>
+        <%= yield(:content) or yield %>
     </body>
 </html>

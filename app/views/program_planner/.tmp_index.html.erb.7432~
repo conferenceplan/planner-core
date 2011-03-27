@@ -1,0 +1,62 @@
+<% content_for :jsheader do %>
+<%= stylesheet_link_tag 'planner/itemplanner' %>
+<%= javascript_include_tag 'planner/itemplanner' %>
+<%= stylesheet_link_tag 'planner/programplanner' %>
+<%= javascript_include_tag 'planner/programplanner' %>
+<% end %>
+<div class='container_12'>
+    <div class="grid_3">
+        <span id="item-name-search"><input type='text' id='item-name-search-text'>
+            </input></span>
+        <div class="spacer">
+        </div>
+        <span id="item-toolbar" class="ui-widget-header ui-corner-all">
+            <button id="item-beginning">
+                go to beginning
+            </button>
+            <button id="item-rewind">
+                rewind
+            </button>
+            <input type='text' size='2' id='current-item-page'>
+            </input>
+            <button id="item-forward">
+                fast forward
+            </button>
+            <button id="item-end">
+                go to end
+            </button>
+        </span>
+        <div class="spacer">
+        </div>
+        <div id="items-widget" class="ui-widget ui-widget-content ui-corner-all">
+            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
+                Items
+            </div>
+            <div id="items-widget-content">
+            </div>
+        </div>
+        <!-- TODO - put in mechanism to page and to filter -->
+    </div>
+    <div id="program-widget" class="ui-widget ui-widget-content ui-corner-all grid_8">
+        <div class="spacer">
+        </div>
+        <span id="program-toolbar">
+            <button id="program-beginning">
+                go to beginning
+            </button>
+            <button id="program-rewind">
+                rewind
+            </button>
+            <input type='text' size='2' id='current-program-page'>
+            </input>
+            <button id="program-forward">
+                fast forward
+            </button>
+            <button id="program-end">
+                go to end
+            </button>
+        </span>
+        <div class="spacer">
+        </div>
+    </div>
+</div>
