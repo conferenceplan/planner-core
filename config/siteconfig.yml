@@ -1,0 +1,20 @@
+#
+# The variables for the conference
+#
+# TODO : we want to manage this in the DB eventually so that we can have many conferences
+#
+
+development:
+    :conference:
+        :start_date: 2011-08-17
+        :number_of_days: 5
+    
+production:
+    :conference:
+        :start_date: 2011-08-17
+        :number_of_days: 5
+
+test:
+    :conference:
+        :start_date: 2011-08-17
+        :number_of_days: 5
