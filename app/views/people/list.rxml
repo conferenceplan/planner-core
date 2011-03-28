@@ -23,6 +23,11 @@ xml.rows do
         xml.cell("")
         xml.cell("")
       end
+      if (person.survey_respondent)
+        xml.cell(person.survey_respondent.id)
+      else
+        xml.cell("0")
+      end
       #
       xml.cell(person.lock_version)
     end

@@ -15,7 +15,7 @@ jQuery(document).ready(function(){
         url: baseUrl,
         datatype: 'xml',
         mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix', 'lock'],
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix', 'survey id','lock'],
         colModel: [{
             name: 'person[first_name]',
             index: 'people.first_name',
@@ -188,7 +188,19 @@ jQuery(document).ready(function(){
                 rowpos: 10,
                 label: "Pub Suffix"
             }
-        }, {
+        },{
+            name: 'person[survey_respondent_attributes][id]',
+            width: 3,
+            index: 'survey_respondent.id',
+            hidden: true,
+            editable: false,
+            sortable: false,
+            search: false,
+            formoptions: {
+                rowpos: 11,
+                label: "survey_respondent_id"
+            }
+        },{
             name: 'person[lock_version]',
             width: 3,
             index: 'lock_version',
@@ -197,7 +209,7 @@ jQuery(document).ready(function(){
             sortable: false,
             search: false,
             formoptions: {
-                rowpos: 11,
+                rowpos: 12,
                 label: "lock"
             }
         }],
@@ -470,8 +482,10 @@ function loadTabs(id){
     var data = jQuery("#participants").jqGrid('getRowData', id);
     $('#participant_id').text(id);
     $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
+	var survey_id = data['person[survey_respondent_attributes][id]'];
+	
     var tabs = $('#particpanttabs').tabs();
-    
+    tabs.tabs('url', 5, 'survey_respondents/reviews/' + survey_id).tabs('load',5);
     tabs.tabs('url', 1, 'participants/' + id + '/addresses').tabs('load', 1);
     tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);
     tabs.tabs('url', 3, 'participants/' + id + '/edited_bio').tabs('load', 3);

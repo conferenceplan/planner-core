@@ -5,14 +5,21 @@ class SurveyRespondents::ReviewsController < PlannerController
 
   def show
     # Get the respondent
-    respondent = SurveyRespondent.find(params[:id])
+    @form = nil
     
-    # Get the survey
-    @smerf_user_id = respondent.id # check
-    @form = SmerfForm.find_by_id(1)
-    smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-    @responses = smerf_forms_surveyrespondent.responses
-
+    respondent = SurveyRespondent.find_all_by_id( params[:id])
+    @form = nil
+    if (respondent.length >  0)
+      # Get the survey
+      @smerf_user_id = respondent[0].id 
+      @form = SmerfForm.find_by_id(1)
+      smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent[0].id, 1)
+      if (smerf_forms_surveyrespondent)
+        @responses = smerf_forms_surveyrespondent.responses
+      else
+        @form = nil
+      end
+    end
     render :layout => 'content'
   end
 

@@ -1,7 +1,11 @@
 
 <div class='survey_responses'>
-<% @form.form.groups.each do |group| %>
+<% if @form %>
+  <% @form.form.groups.each do |group| %>
 	<%= html_format_group(group) %>
+  <% end %>
+<% else %>
+<p>No Survey</p>
 <% end %>
 </div>
 
