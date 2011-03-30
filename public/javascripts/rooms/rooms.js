@@ -125,7 +125,7 @@ jQuery(document).ready(function(){
         sortname: 'name',
         sortorder: "asc",
         viewrecords: true,
-        imgpath: 'stylesheets/cupertino/images',
+        imgpath: 'stylesheets/start/images',
         caption: 'Rooms',
         editurl: '/rooms',
         onSelectRow: function(ids){

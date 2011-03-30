@@ -94,6 +94,10 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'venue/list', :controller => 'venue', :action => 'list'
   map.resources :venue
 
+  map.connect 'survey_reports/library_talks/', :controller => 'survey_reports', :action => 'library_talks'
+  map.connect 'survey_reports/missing_bio/', :controller => 'survey_reports', :action => 'missing_bio'
+  map.resources :survey_reports
+
   map.connect 'invitation_categories/list', :controller => 'invitation_categories', :action => 'list'
 
   map.resources :invitation_categories
