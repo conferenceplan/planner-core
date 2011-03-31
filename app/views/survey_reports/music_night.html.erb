@@ -1,0 +1,18 @@
+<div class='container_12'>
+<h1>Music Night notes</h1>
+<h2><%= @music_night.count %> People:</h2>
+<p>
+<% if @music_night.blank? %>
+   No one right now.
+<% else %>
+   <dl>
+   <% @music_night.each do |p| %>
+       <dt><%= p.GetFullName %></dt>
+       <dd><%= p.response %></dd>
+   <% end %>
+   </dl>
+<% end %>
+
+</p>
+<hr />
+</div>
