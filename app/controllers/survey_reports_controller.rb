@@ -2,7 +2,7 @@
 #
 #
 class SurveyReportsController < PlannerController
-  before_filter :check_for_single_access_token, :only => [:show, :index]
+  include ReportHelpers
   
   def show
   end
@@ -11,7 +11,7 @@ class SurveyReportsController < PlannerController
   end
  
   def library_talks
-    @library_talkers = Person.all :select => 'people.*, smerf_forms_surveyrespondents.id', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join smerf_forms_surveyrespondents on survey_respondents.id = smerf_forms_surveyrespondents.surveyrespondent_id join smerf_responses on smerf_forms_surveyrespondents.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => "question_code = 'g93q7' and response = '1'", :group => 'people.id', :having => 'smerf_forms_surveyrespondents.id = max(smerf_forms_surveyrespondents.id)', :order => 'last_name'
+    @library_talkers = search_survey('g93q7', '1')
   end
  
   def missing_bio
@@ -19,14 +19,20 @@ class SurveyReportsController < PlannerController
   end
   
   def moderators
-    @moderators = Person.all :select => 'people.*, smerf_forms_surveyrespondents.id', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join smerf_forms_surveyrespondents on survey_respondents.id = smerf_forms_surveyrespondents.surveyrespondent_id join smerf_responses on smerf_forms_surveyrespondents.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => "question_code = 'g9q4' and response = '1'", :group => 'people.id', :having => 'smerf_forms_surveyrespondents.id = max(smerf_forms_surveyrespondents.id)', :order => 'last_name'
+    @moderators = search_survey('g9q4', '1')
   end
  
   def music_night
-    @music_night = Person.all :select => 'people.*, smerf_responses.response, smerf_forms_surveyrespondents.id', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join smerf_forms_surveyrespondents on survey_respondents.id = smerf_forms_surveyrespondents.surveyrespondent_id join smerf_responses on smerf_forms_surveyrespondents.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => "question_code = 'g91q1'", :group => 'people.id', :having => 'smerf_forms_surveyrespondents.id = max(smerf_forms_surveyrespondents.id)', :order => 'last_name'
+    @music_night = search_survey('g91q1', '%')
   end
 
   def art_night
-    @art_night = Person.all :select => 'people.*, smerf_responses.response, smerf_forms_surveyrespondents.id', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join smerf_forms_surveyrespondents on survey_respondents.id = smerf_forms_surveyrespondents.surveyrespondent_id join smerf_responses on smerf_forms_surveyrespondents.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => "question_code = 'g92q1'", :group => 'people.id', :having => 'smerf_forms_surveyrespondents.id = max(smerf_forms_surveyrespondents.id)', :order => 'last_name'
+    @art_night = search_survey('g92q1', '%')
+  end
+
+  def program_types
+    @program_types = GetProgramTypes()
+
+    @interested = search_survey('g9q1', params[:type_id])
   end
 end
