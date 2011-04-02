@@ -57,6 +57,18 @@
                 Pub Name same as Name
             </div>
             <% end %>
+			<% if (@person.comments) %>
+			<div>
+			   <label>Comments:</label>
+			   <div>
+			   <%= @person.comments %>
+			   </div>
+		    </div>
+			<% else %>
+			<div class='line'>
+			    No Comments
+			</div>
+			<% end %>
             <div class='message' id='tab-messages'>
             </div>
             <div class="jqmWindow" id="edialog">
