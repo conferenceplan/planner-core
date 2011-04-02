@@ -130,6 +130,8 @@ private
       survey_respondent.suffix = smerf_forms_surveyrespondent.responses['g2q4']
       survey_respondent.submitted_survey = true
       
+      # TODO - Add a count field to force the timestamp on the survey_respondent to be updated
+      survey_respondent.updated_at_will_change!
       survey_respondent.save
 
       person = survey_respondent.person
