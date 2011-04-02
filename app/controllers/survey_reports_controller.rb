@@ -11,7 +11,7 @@ class SurveyReportsController < PlannerController
   end
  
   def library_talks
-    @library_talkers = search_survey('g93q7', '1')
+    @library_talkers = search_survey_exact('g93q7', '1')
   end
  
   def missing_bio
@@ -19,7 +19,7 @@ class SurveyReportsController < PlannerController
   end
   
   def moderators
-    @moderators = search_survey('g9q4', '1')
+    @moderators = search_survey_exact('g9q4', '1')
   end
  
   def music_night
@@ -32,7 +32,15 @@ class SurveyReportsController < PlannerController
 
   def program_types
     @program_types = GetProgramTypes()
-
-    @interested = search_survey('g9q1', params[:type_id])
+    @interested = search_survey_exact('g9q1', params[:type_id])
   end
+ 
+  def free_text
+    @free_text_qs = GetFreeTextQuestions()
+    if params[:q_id]
+      search_string = '%'+params[:search_string]+'%'
+      @names = search_survey(params[:q_id], search_string)
+    end
+  end
+
 end

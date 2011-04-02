@@ -1,17 +1,5 @@
 <div class='container_12'>
 <h1>Missing bios</h1>
-<h2><%= @missing_bio.count %> People:</h2>
-<p>
-<% if @missing_bio.blank? %>
-   No one right now.
-<% else %>
-   <ul>
-   <% @missing_bio.each do |p| %>
-       <li><%= p.GetFullName %></li>
-   <% end %>
-   </ul>
-<% end %>
-
-</p>
+<%= render :partial => "namelist", :object => @missing_bio %> 
 <hr />
 </div>

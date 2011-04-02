@@ -8,13 +8,6 @@
 </p>
 <% end %>
 
-<% if @interested.blank? %>
-<hr />
-<% else %>
-  <%= @interested.count %> People:
-  <ul>
-  <% @interested.each do |p| %>
-      <li><%= p.GetFullName %></li>
-  <% end %>
-  </ul>
+<% if params[:type_id]  %>
+<%= render :partial => "namelist", :object => @interested %> 
 <% end %>

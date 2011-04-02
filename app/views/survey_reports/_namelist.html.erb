@@ -1,0 +1,14 @@
+
+<h2><%= namelist.count %> People:</h2>
+<p>
+<% if namelist.blank? %>
+   No one right now.
+<% else %>
+   <ul>
+   <% namelist.each do |p| %>
+       <li><%= p.GetFullName %></li>
+   <% end %>
+   </ul>
+<% end %>
+
+</p>
