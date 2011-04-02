@@ -14,6 +14,6 @@ module ReportHelpers
   end
 
   def GetFreeTextQuestions
-    free_text_qs = [['Topic Knowledge', 'g7q8'], ['Program Ideas / Comments', 'g93q1'], ["Topic We Don't Know About", 'g93q2'], ['Nevada Connection', 'g93q4']]
+    free_text_qs = [['Topic Knowledge', 'g7q8'], ['Program Ideas / Comments', 'g93q1'], ["Topics We Don't Know About", 'g93q2'], ['Nevada Connection', 'g93q4']]
   end
 end
