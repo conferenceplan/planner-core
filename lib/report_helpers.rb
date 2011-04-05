@@ -1,11 +1,11 @@
 module ReportHelpers
 
   def search_survey_exact(question, target)
-    return Person.all :select => 'people.*, smerf_responses.response, smerf_forms_surveyrespondents.id', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join smerf_forms_surveyrespondents on survey_respondents.id = smerf_forms_surveyrespondents.surveyrespondent_id join smerf_responses on smerf_forms_surveyrespondents.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and smerf_responses.response = ?", question, target], :group => 'people.id', :having => 'smerf_forms_surveyrespondents.id = max(smerf_forms_surveyrespondents.id)', :order => 'last_name'
+    return Person.all :select => 'people.*, smerf_responses.response', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join(select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id = max_resp.surveyrespondent_id join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and smerf_responses.response = ?", question, target], :order => 'last_name'
   end
 
   def search_survey(question, target)
-    return Person.all :select => 'people.*, smerf_responses.response, smerf_forms_surveyrespondents.id', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join smerf_forms_surveyrespondents on survey_respondents.id = smerf_forms_surveyrespondents.surveyrespondent_id join smerf_responses on smerf_forms_surveyrespondents.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and lower(smerf_responses.response) like lower(?)", question, target], :group => 'people.id', :having => 'smerf_forms_surveyrespondents.id = max(smerf_forms_surveyrespondents.id)', :order => 'last_name'
+    return Person.all :select => 'people.*, smerf_responses.response', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join (select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id =max_resp.surveyrespondent_id join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and lower(smerf_responses.response) like lower(?)", question, target], :order => 'last_name'
   end
 
   def GetProgramTypes
