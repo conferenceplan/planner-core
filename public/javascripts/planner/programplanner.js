@@ -1,7 +1,10 @@
+var currentDay = 0;
+
 jQuery(document).ready(function(){
     initialiseDayButtons();
-    
+    setUpRoomGrid();
 });
+
     
 function makeItemWidgetSelectable(){
     //    $('#selectable-item > li').click(function(event){
@@ -35,10 +38,10 @@ function initialiseDayButtons(){
             primary: "ui-icon-seek-start"
         }
     }).click(function(){
-//        if (itemPage > 1) {
-//            itemPage = 1;
-//            loadItemWidget();
-//        };
+        if (currentDay > 0) {
+            currentDay = 0;
+            setUpRoomGrid();
+        };
     });
     $("#program-rewind").button({
         text: false,
@@ -46,10 +49,10 @@ function initialiseDayButtons(){
             primary: "ui-icon-seek-prev"
         }
     }).click(function(){
-//        if (itemPage > 1) {
-//            itemPage -= 1;
-//            loadItemWidget();
-//        }
+        if (currentDay > 0) {
+            currentDay -= 1;
+            setUpRoomGrid();
+        }
     });
     $("#program-forward").button({
         text: false,
@@ -57,10 +60,10 @@ function initialiseDayButtons(){
             primary: "ui-icon-seek-next"
         }
     }).click(function(){
-//        if (itemPage < itemPageNbr) {
-//            itemPage += 1;
-//            loadItemWidget();
-//        }
+        if (currentDay < numberOfDays) {
+            currentDay += 1;
+            setUpRoomGrid();
+        }
     });
     $("#program-end").button({
         text: false,
@@ -68,9 +71,69 @@ function initialiseDayButtons(){
             primary: "ui-icon-seek-end"
         }
     }).click(function(){
-//        if (itemPage < itemPageNbr) {
-//            itemPage = itemPageNbr;
-//            loadItemWidget();
-//        }
+        if (currentDay < numberOfDays) {
+            currentDay = numberOfDays;
+            setUpRoomGrid();
+        }
+    });
+
+    $("#scroll-left").button({
+        text: false,
+        icons: {
+            primary: "ui-icon-circle-arrow-w"
+        }
+    }).click(function(){
+        $('#program-grid-rooms').scrollTo({top:'-=0px', left:'-=100'}, 0);
+        $('#program-grid').scrollTo({top:'-=0px', left:'-=100'}, 0);
+    });
+    $("#scroll-right").button({
+        text: false,
+        icons: {
+            primary: "ui-icon-circle-arrow-e"
+        }
+    }).click(function(){
+        $('#program-grid-rooms').scrollTo({top:'-=0px', left:'+=100'}, 0);
+        $('#program-grid').scrollTo({top:'-=0px', left:'+=100'}, 0);
+    });
+    $("#scroll-up").button({
+        text: false,
+        icons: {
+            primary: "ui-icon-circle-arrow-n"
+        }
+    }).click(function(){
+        $('#program-grid').scrollTo({top:'-=40px', left:'-=0'}, 0);
+        $('#program-grid-times').scrollTo({top:'-=40px', left:'-=0'}, 0);
+    });
+    $("#scroll-down").button({
+        text: false,
+        icons: {
+            primary: "ui-icon-circle-arrow-s"
+        }
+    }).click(function(){
+        $('#program-grid').scrollTo({top:'+=40px', left:'+=0'}, 0);
+        $('#program-grid-times').scrollTo({top:'+=40px', left:'+=0'}, 0);
     });
 }
+
+function setUpRoomGrid(){
+    $.ajax({
+        type: 'POST',
+        url: "/program_planner/list?day=" + currentDay,
+        dataType: "html",
+        data: {
+            sidx: 'title',
+            sord: 'asc',
+        },
+        context: $('#program-grid-data'),
+        success: function(response){
+            titles = $(response).find('#room-titles');
+            res = $(response).find('#room-timetable');
+            $('#program-room-data').html(titles);
+            $(this).html(res);
+            $('#program-grid').scrollTo(0);
+            $('#program-grid-times').scrollTo(0);
+            jQuery('#current-day-page').val(currentDay+1);
+        }
+    });
+}
+

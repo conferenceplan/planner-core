@@ -1,27 +1,120 @@
 
 .program-grid-shell {
+}
+
+.rooms-views {
+    display: inline-block;
     width: 100%;
 }
 
+/*
+ * .room-entries,
+.program-grid-entry,
+*/
+.room-control,
+.room-slider {
+    display: inline;
+}
+
+/*
+ *     height: 100%;
+    width: 98%;
+
+ */
+.program-grid {
+    height: 32em;
+    margin: 0 0 0 10px;
+    overflow: hidden;
+    width: 100%;
+    float: left;
+}
+
+.program-grid-times {
+    height: 32em;
+    margin: 10px 0 0 10px;
+    overflow: hidden;
+    width: 3em;
+    float: left;
+}
+
+.program-entry,
+.program-time {
+    height: 4em;
+}
+
+.program-entry {
+    float: left;
+    width: 95%;
+    border: 1px solid #A6C9E2;
+}
+
 .time-slider {
-    width: 99%;
     text-align: center;
     border: 1px solid #A6C9E2;
     margin: 3px 3px 3px 3px;
+    background: #A6C9E2;
+}
+
+.rooms-views {
 }
 
 .room-slider {
     height: 100%;
     position: relative;
-    float: left;
     border: 1px solid #A6C9E2;
+    background: #A6C9E2;
     margin-left: 3px;
     margin-right: 3px;
+    width: 26px;
+    height: 36em;
 }
 
 .room-control {
     position: relative;
     top: 50%;
+}
+
+.program-grid-rooms {
+    height: 2em;
+    margin: 10px 0 0 10px;
+    overflow: hidden;
+    width: 100%;
+    float: left;
+}
+
+.room-container {
+    float:left;
+    width: 80%;
+}
+
+.time-column {
+    float: left;
+    width: 3em;
+    height: 30em;
+}
+.time-spacer {
+    float: left;
+    height: 2em;
+    width: 3em;
+}
+
+.program-room {
+    float: left;
+    width: 240px;
+    margin-right: 3px;
+    margin-left: 3px;
+    text-align: center;
+}
+
+.room-entries {
+    float: left;
+    height: 96em;
+    width: 240px;
+    margin-right: 3px;
+    margin-left: 3px;
+}
+
+.program-grid-entry {
 }
 
 #room-slider-left {
@@ -32,14 +125,114 @@
     float: right;
 }
 
-#program-grid {
+#program-grid-data {
+    height: 96em;
+    width: 2490px;
+}
+
+#program-room-data {
+    height: 2em;
+    width: 2490px;
+}
+
+#program-times {
+    float: left;
+    height: 96em;
+}
+
+.hour-1 {
+    height: 4em;
+}
+
+.hour-2 {
+    height: 8em;
+}
+
+.hour-3 {
+    height: 12em;
+}
+
+.hour-4 {
+    height: 16em;
+}
+
+.hour-5 {
     height: 20em;
 }
 
-#program-grid-data {
-    border: 1px solid #A6C9E2;
-    height: 100%;
-    width: 96%;
-    float: left;
+.hour-6 {
+    height: 24em;
+}
+
+.hour-7 {
+    height: 28em;
+}
+
+.hour-8 {
+    height: 32em;
+}
+
+.hour-9 {
+    height: 36em;
+}
+
+.hour-10 {
+    height: 40em;
+}
+
+.hour-11 {
+    height: 44em;
+}
+
+.hour-12 {
+    height: 48em;
+}
+
+.hour-13 {
+    height: 52em;
+}
+
+.hour-14 {
+    height: 56em;
+}
+
+.hour-15 {
+    height: 60em;
+}
+
+.hour-16 {
+    height: 64em;
+}
+
+.hour-17 {
+    height: 68em;
+}
+
+.hour-18 {
+    height: 72em;
+}
+
+.hour-19 {
+    height: 76em;
+}
+
+.hour-20-0 {
+    height: 80em;
+}
+
+.hour-21-0 {
+    height: 84em;
+}
+
+.hour-22-0 {
+    height: 88em;
+}
+
+.hour-23-0 {
+    height: 92em;
+}
+
+.hour-24-0 {
+    height: 96em;
 }
 

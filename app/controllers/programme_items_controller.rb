@@ -105,7 +105,7 @@ class ProgrammeItemsController < PlannerController
     
     # We return the list of ProgrammeItems as an XML structure which the 'table' can use.
     respond_to do |format|
-      format.html { render :layout => 'content' } # list.html.erb
+      format.html { render :layout => 'plain' } # list.html.erb
       format.xml
     end
   end

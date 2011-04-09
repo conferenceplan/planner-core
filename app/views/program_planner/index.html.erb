@@ -1,9 +1,15 @@
 <% content_for :jsheader do %>
+<%= javascript_include_tag 'jquery.scrollTo-1.4.2-min' %>
 <%= stylesheet_link_tag 'planner/itemplanner' %>
 <%= javascript_include_tag 'planner/itemwidget' %>
 <%= stylesheet_link_tag 'planner/programplanner' %>
 <%= javascript_include_tag 'planner/programplanner' %>
 <% end %>
+<script type='text/javascript'>
+//<![CDATA[
+var numberOfDays = "<%=SITE_CONFIG[:conference][:number_of_days]%>" -1;
+//]]>
+</script>
 <div class='container_12'>
     <div class="grid_3">
         <span id="item-name-search"><input type='text' id='item-name-search-text'>
@@ -47,7 +53,7 @@
             <button id="program-rewind">
                 rewind
             </button>
-            <input type='text' size='2' id='current-program-page'>
+            <input type='text' size='2' id='current-day-page'>
             </input>
             <button id="program-forward">
                 fast forward
@@ -59,14 +65,57 @@
         <div class="spacer">
         </div>
         <div class='program-grid-shell'>
-        <div class="time-slider" id="time-slider-up">up</div>
-        <div id='program-grid'>
-            <div class="room-slider" id="room-slider-left"><div class='room-control'>l</div></div>
-            <div id='program-grid-data'>
+            <div class="time-slider" id="time-slider-up">
+                <button id="scroll-up">
+                    up
+                </button>
             </div>
-            <div class="room-slider" id="room-slider-right"><div class='room-control'>r</div></div>
-        </div>
-        <div class="time-slider" id="time-slider-down">down</div>
+            <div class='rooms-views'>
+                <div class="room-slider" id="room-slider-left">
+                    <div class='room-control'>
+                        <button id="scroll-left">
+                            left
+                        </button>
+                    </div>
+                </div>
+                <div class='time-column'>
+                    <div class="time-spacer">
+                    </div>
+                    <div id='program-grid-times' class='program-grid-times'>
+                        <div id='program-times'>
+                            <% (0..23).each do |i| %>
+                            <div class='program-time'>
+                                <%= (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + i.hours).strftime('%H:%M') %>
+                            </div>
+                            <% end %>
+                        </div>
+                    </div>
+                </div>
+                <div class='room-container'>
+                    <div id='program-grid-rooms' class='program-grid-rooms'>
+                        <div id='program-room-data' class='program-room-entry'>
+                            loading...
+                        </div>
+                    </div>
+                    <div id='program-grid' class='program-grid'>
+                        <div id='program-grid-data' class='program-grid-entry'>
+                            loading...
+                        </div>
+                    </div>
+                </div>
+                <div class="room-slider" id="room-slider-right">
+                    <div class='room-control'>
+                        <button id="scroll-right">
+                            right
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="time-slider" id="time-slider-down">
+                <button id="scroll-down">
+                    down
+                </button>
+            </div>
         </div>
     </div>
 </div>

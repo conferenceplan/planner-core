@@ -1,0 +1,32 @@
+
+<div id='room-titles'>
+<% current_room = nil %>
+<%@roomListing.each do |room| %>
+<div class='program-room'>
+    <%= room.name %>
+</div>
+<%end%>
+</div>
+
+<div id='room-timetable'>
+<% current_room = nil %>
+<% new_column = true %>
+<%@roomAssignments.each do |assignment| %>
+<% new_column = (current_room == nil) || (current_room.id != assignment.room) %>
+<% if new_column %>
+<div class='room-entries'>
+<% end %>
+    <% current_room = assignment.room %>
+    <% nbrQuarterHours = (((assignment.time_slot.end - assignment.time_slot.start) / 3600) / 0.25).round%>
+    <div style='height:<%=nbrQuarterHours%>em;' class='program-entry'>
+    <% if assignment.programme_item %>
+        <%= assignment.programme_item.title %>&nbsp;
+    <% else %>
+        <%= assignment.time_slot.start %>&nbsp;
+    <% end%>
+    </div>
+</div>
+<%end%>
+<% if new_column %>
+</div>
+<% end %>

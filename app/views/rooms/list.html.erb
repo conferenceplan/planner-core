@@ -1,2 +1,8 @@
-<h1>Rooms#list</h1>
-<p>Find me in app/views/rooms/list.html.erb</p>
+<% @rooms.each do |room| %>
+    <div class='room-entries'>
+        <div class='program-entry'>
+            <div class="roomid" style="display: none;"><%= room.id %></div>
+            <%= room.name %>
+        </div>
+    </div>
+<% end %>
