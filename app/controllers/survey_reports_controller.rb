@@ -2,10 +2,7 @@
 #
 #
 class SurveyReportsController < PlannerController
-  include ReportHelpers
-  
-  def show
-  end
+  include SurveyReportHelpers
   
   def index
   end

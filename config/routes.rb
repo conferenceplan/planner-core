@@ -94,6 +94,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'venue/list', :controller => 'venue', :action => 'list'
   map.resources :venue
 
+  map.connect 'planner_reports/:action', :controller => 'planner_reports'
+  map.resources :planner_reports
+
   map.connect 'survey_reports/:action', :controller => 'survey_reports'
   map.resources :survey_reports
 
