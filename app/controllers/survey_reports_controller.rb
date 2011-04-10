@@ -39,5 +39,11 @@ class SurveyReportsController < PlannerController
       @names = search_survey(params[:q_id], search_string)
     end
   end
-
+  
+  def tags_by_context
+    @contexts = GetTagContexts()
+    if params[:q_id]
+      @names = search_survey(params[:q_id], '%')
+    end
+  end
 end

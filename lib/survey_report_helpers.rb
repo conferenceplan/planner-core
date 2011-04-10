@@ -16,4 +16,8 @@ module SurveyReportHelpers
   def GetFreeTextQuestions
     free_text_qs = [['Topic Knowledge', 'g7q8'], ['Program Ideas / Comments', 'g93q1'], ["Topics We Don't Know About", 'g93q2'], ['Nevada Connection', 'g93q4']]
   end
+
+  def GetTagContexts
+    contexts = [['scienceItems', 'g7q1'], ['literature', 'g7q2'], ["art", 'g7q3'], ['media', 'g7q4'], ['fandom', 'g7q5'], ['nevada', 'g7q6'], ["othertopics", 'g7q7'], ["authors", 'g8q1']]
+  end
 end
