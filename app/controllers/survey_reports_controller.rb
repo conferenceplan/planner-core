@@ -12,7 +12,7 @@ class SurveyReportsController < PlannerController
   end
  
   def missing_bio
-    @missing_bio = Person.all :joins => 'join survey_respondents on people.id = survey_respondents.person_id left join edited_bios on survey_respondents.person_id = edited_bios.person_id', :conditions => "edited_bios.id is NULL and survey_respondents.attending = '1' and survey_respondents.submitted_survey = '1'", :order => 'last_name'
+    @missing_bio = Person.all :joins => 'join survey_respondents on people.id = survey_respondents.person_id left join edited_bios on survey_respondents.person_id = edited_bios.person_id', :conditions => "edited_bios.id is NULL and survey_respondents.attending = '1' and survey_respondents.submitted_survey = '1' and people.invitestatus_id = 5", :order => 'last_name'
   end
   
   def moderators
