@@ -1,39 +1,53 @@
-
 <div id='room-titles'>
-<% current_room = nil %>
-<%@roomListing.each do |room| %>
-<div class='program-room'>
-    <%= room.name %>
-</div>
-<%end%>
-</div>
-
-<div id='room-timetable'>
-<% current_room = nil %>
-<% new_column = true %>
-<% free_time = true %>
-<%@roomAssignments.each do |assignment| %>
-<% new_column = (current_room == nil) || (current_room.id != assignment.room) %>
-<% if new_column %>
-<div class='room-entries'>
-<% end %>
-    <% current_room = assignment.room %>
-    <% nbrQuarterHours = (((assignment.time_slot.end - assignment.time_slot.start) / 3600) / 0.25).round%>
-    <% free_time = assignment.programme_item == nil %>
-    <div style='height:<%=nbrQuarterHours%>em;' class='program-entry droppable <%= free_time ? "free-time" : "" %>'
-        id = '<%= free_time ? "time-" + assignment.time_slot.id.to_s : "item-" + assignment.programme_item.id.to_s %>' >
-    <div class="roomid" style="display: none;"><%= current_room.id %></div>
-    <% if !free_time %>
-        <div class="itemid" style="display: none;"><%= assignment.programme_item.id %></div>
-        <%= assignment.programme_item.title %>
-    <% else %>
-        <div class="timeid" style="display: none;"><%= assignment.time_slot.id %></div>
-        <div class="timestart" style="display: none;"><%= assignment.time_slot.start %></div>
-        <div class="timeend" style="display: none;"><%= assignment.time_slot.end %></div>
-    <% end %>
+    <% current_room = nil %>
+    <%@roomListing.each do |room| %>
+    <div class='program-room'>
+        <%= room.name %>
     </div>
+    <%end %>
 </div>
-<%end%>
-<% if new_column %>
+<div id='room-timetable'>
+    <% first = true %>
+    <% current_room = nil %>
+    <% new_column = true %>
+    <% free_time = true %>
+    <%@roomAssignments.each do |assignment| %>
+    <% new_column = (current_room == nil) || (current_room.id != assignment.room.id) %>
+    <% if new_column %>
+    <% if !first %>
+    </div>
+    <% end %>
+    <div class='room-entries'>
+    <% end %>
+        <% first = false %>
+        <% current_room = assignment.room %>
+        <% nbrQuarterHours = (((assignment.time_slot.end - assignment.time_slot.start) / 3600) / 0.25).round %>
+        <% free_time = assignment.programme_item == nil %>
+        <div style='height:<%=nbrQuarterHours%>em;' class='program-entry <%= free_time ? "droppable free-time" : "item-draggable" %>' id = '<%= free_time ? "time-" + assignment.time_slot.id.to_s : "item-" + assignment.programme_item.id.to_s %>'>
+            <div class="roomid" style="display: none;">
+                <%= current_room.id %>
+            </div>
+            <% if !free_time %>
+            <div class="itemid" style="display: none;">
+                <%= assignment.programme_item.id %>
+            </div>
+            <div class="timeid" style="display: none;">
+                <%= assignment.time_slot.id %>
+            </div>
+            <div>
+                <%= assignment.programme_item.title %>
+            </div>
+            <% else %>
+            <div class="timeid" style="display: none;">
+                <%= assignment.time_slot.id %>
+            </div>
+            <div class="timestart" style="display: none;">
+                <%= assignment.time_slot.start %>
+            </div>
+            <div class="timeend" style="display: none;">
+                <%= assignment.time_slot.end %>
+            </div>
+            <% end %>
+        </div>
+    <%end %>
 </div>
-<% end %>

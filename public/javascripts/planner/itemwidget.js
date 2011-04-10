@@ -94,9 +94,15 @@ jQuery(document).ready(function(){
 });
 
 function loadItemWidget(){
+    urlStr = "/programme_items/list";
+    if (typeof ignoreScheduled != 'undefined') {
+        if (ignoreScheduled == true) {
+            urlStr += "?igs=true";
+        }
+    }
     $.ajax({
         type: 'POST',
-        url: "/programme_items/list",
+        url: urlStr,
         dataType: "html",
         data: {
             page: itemPage,

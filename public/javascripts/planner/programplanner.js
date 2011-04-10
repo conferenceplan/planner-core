@@ -1,4 +1,5 @@
 var currentDay = 0;
+var ignoreScheduled = true;
 
 jQuery(document).ready(function(){
     initialiseDayButtons();
@@ -135,6 +136,7 @@ function setUpRoomGrid(){
             $('#program-grid-times').scrollTo(0);
             jQuery('#current-day-page').val(currentDay+1);
             makeDroppables();
+            makeDraggables();
         }
     });
 }
@@ -145,16 +147,9 @@ function makeDraggables(){
     });
 }
 
-//            createDialog(itemid, roomid, timeid, timestart, timeend);
-//    @day = params[:day]
-//    @time = params[:time]
-//    @item_id = params[:itemid]
-//    @room_id = params[:roomid]
-//    @freetime_id = params[:timeid]
-//             createDialog(itemid, roomid, timeid, timestart.getHours(), duration);
 function createDialog(itemid, roomid, timeid, timestart, duration) {
-    // TODO change the parameters
-    var url = "/program_planner/"+ roomid + "/edit?itemid="+itemid+'timeid='+timeid+'&day='+currentDay;
+
+    var url = "/program_planner/"+ roomid + "/edit?itemid="+itemid+'&timeid='+timeid+'&day='+currentDay;
 
     $('#edialog').jqm({
         ajax: url,
@@ -162,9 +157,13 @@ function createDialog(itemid, roomid, timeid, timestart, duration) {
         onLoad: function(dialog){
                 // Put the start time in the field - format as hh:ii
                 // Put in the date selector
+                startHour = parseInt($('#firsthour', dialog.w).text().trim());
+                startMinute= parseInt($('#firstminute', dialog.w).text().trim());
+                endHour = parseInt($('#lasthour', dialog.w).text().trim());
+                endMinute= parseInt($('#lastminute', dialog.w).text().trim());
                 $('#time-selection', dialog.w).timepicker({
                         timeSeparator: ':',
-                        defaultTime: '12:00',
+                        defaultTime: startHour + ":" + startMinute,
                         onHourShow: OnHourShowCallback,
                         onMinuteShow: OnMinuteShowCallback
                         });

@@ -122,6 +122,14 @@
     border: none;
 }
 
+.program-entry {
+    width:240px;
+}
+
+.item-draggable {
+    background-color: white;
+}
+
 #room-slider-left {
     float: left;
 }

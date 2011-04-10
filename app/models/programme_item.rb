@@ -12,8 +12,8 @@ class ProgrammeItem < ActiveRecord::Base
   
   belongs_to   :format 
   
-  has_one :room_item_assignments
-  has_one :room, :through => :room_item_assignments
+  has_one :room_item_assignment # really we only use one anyway...
+  has_one :room, :through => :room_item_assignments # TODO - check that this is still ok
   has_one :time_slot, :through => :room_item_assignments
   
   acts_as_audited
