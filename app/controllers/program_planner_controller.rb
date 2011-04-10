@@ -25,5 +25,49 @@ class ProgramPlannerController < PlannerController
       format.xml
     end
   end
+
+  def edit
+    @day = params[:day]
+    @time = params[:time]
+    @item_id = params[:itemid]
+    @room_id = params[:roomid]
+    @freetime_id = params[:timeid]
+    
+    
+    render :layout => 'content'
+  end
+  
+  #
+  # Add an item to a room
+  #
+  def addItem
+    day = params[:day]
+    time = params[:time]
+    item_id = params[:itemid]
+    room_id = params[:roomid]
+    freetime_id = params[:timeid]
+    
+    # 1. Split the freetime so that a new time slot is created for the item
+    # 2. Create an association between the program item, time slot, and room
+    #
+    # NOTE: if this is a move i.e. already assigned then add the previous timeslot back into free time
+    # need a mechanism to defragment the free time...
+    
+    render :layout => 'content'
+  end
+  
+  #
+  # Unschedule an item
+  #
+  def removeItem
+    item_id = params[:itemid]
+    room_id = params[:roomid]
+
+    #
+    # 1. Unassociate a room with the program item i.e. remove the program item from the association
+    # 2. Take the time slot and merge back into free time
+    #
+    render :layout => 'content'
+  end
   
 end

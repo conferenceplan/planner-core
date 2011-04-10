@@ -1,0 +1,23 @@
+<h1>Add program item to schedule (EDIT</h1>
+<% form_tag("/program_planner/addItem", :method => "post", :id => "layerform", :class => "layerform") do %>
+<div class='container_12'>
+    <div class='grid_6'>
+        <div class='line'>
+            <div class='field_name'>Time</div>
+            <div class='field_value'><input type='text' name='time' id='time-selection' value='<%=@time%>' /></div>
+            <input type='hidden' id='time-selection' name='day' value='<%=@day%>' />
+            <input type='hidden' id='time-selection' name='itemid' value='<%=@item_id%>' />
+            <input type='hidden' id='time-selection' name='roomid' value='<%=@room_id%>' />
+            <input type='hidden' id='time-selection' name='timeid' value='<%=@freetime_id%>' />
+        </div>
+        <span id="item-update-toolbar">
+            <button id="item-save">
+                save
+            </button>
+        </span>
+        <div id='form-response'></div>
+    </div>
+</div>
+<% end %>
+<div id='form-response'>
+</div>

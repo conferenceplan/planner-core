@@ -15,7 +15,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :item_planner, :only => :index # TODO - check
 
   map.connect 'program_planner/list', :controller => 'program_planner', :action => 'list'
-  map.resources :program_planner, :only => :index # TODO - check
+  map.connect 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
+  map.connect 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :method => 'post'
+  map.resources :program_planner, :member => {:index => :get, :edit => :get} #:only => :index # TODO - check
 
   # The priority is based upon order of creation: first created -> highest priority.
 

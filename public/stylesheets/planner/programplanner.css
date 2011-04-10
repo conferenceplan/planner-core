@@ -130,14 +130,15 @@
     float: right;
 }
 
+/* With = 40 program items * 246px*/
 #program-grid-data {
     height: 96em;
-    width: 2490px;
+    width: 9850px;
 }
 
 #program-room-data {
     height: 2em;
-    width: 2490px;
+    width: 9850px;
 }
 
 #program-times {

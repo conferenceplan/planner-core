@@ -145,20 +145,75 @@ function makeDraggables(){
     });
 }
 
+//            createDialog(itemid, roomid, timeid, timestart, timeend);
+//    @day = params[:day]
+//    @time = params[:time]
+//    @item_id = params[:itemid]
+//    @room_id = params[:roomid]
+//    @freetime_id = params[:timeid]
+//             createDialog(itemid, roomid, timeid, timestart.getHours(), duration);
+function createDialog(itemid, roomid, timeid, timestart, duration) {
+    // TODO change the parameters
+    var url = "/program_planner/"+ roomid + "/edit?itemid="+itemid+'timeid='+timeid+'&day='+currentDay;
+
+    $('#edialog').jqm({
+        ajax: url,
+        trigger: 'a.entrydialog',
+        onLoad: function(dialog){
+                // Put the start time in the field - format as hh:ii
+                // Put in the date selector
+                $('#time-selection', dialog.w).timepicker({
+                        timeSeparator: ':',
+                        defaultTime: '12:00',
+                        onHourShow: OnHourShowCallback,
+                        onMinuteShow: OnMinuteShowCallback
+                        });
+                adjust(dialog);
+            },
+        onHide: function(hash){
+            hash.w.fadeOut('2000', function(){
+                hash.o.remove();
+            });
+        }
+    });
+    // TODO - move the setting of the ajax url to here and then we can move the dialog init out
+    $('#edialog').jqmShow();
+}
+
+var currentDialog = null;
+function adjust(dialog){
+    // TODO - would like to display message, disable form, and only allow a close
+    currentDialog = dialog;
+    $('.layerform', dialog.w).ajaxForm({
+        target: '#form-response',
+        error: function(response, r) {
+            var errText = $(response.responseText).find(".error"); // class error
+            $('#form-response', currentDialog.w).append('ERROR: ' + errText.text());
+        }
+    });
+}
+
 function makeDroppables(){
     $(".droppable").droppable({
         hoverClass: "ui-state-hover",
         accept: ":not(.removeable)",
         drop: function(event, ui){
-//            var type = $(this).attr('id');
-//<div class="itemid" style="display: none;">2 </div>
-            var itemid = ui.draggable.find('.itemid').text();
-            var roomid = $(this).find('.roomid').text();
-            var timeid = $(this).find('.timeid').text();
-            var timestart = $(this).find('.timestart').text();
-            var timeend = $(this).find('.timeend').text();
-            var dt = Date.parse(timestart);
-            alert("DROPPED " + itemid + " " + roomid + " "+ timeid + " " + timestart);
+            var itemid = ui.draggable.find('.itemid').text().trim();
+            var roomid = $(this).find('.roomid').text().trim();
+            var timeid = $(this).find('.timeid').text().trim();
+            var timestart = Date.strtodate( $(this).find('.timestart').text().trim(), 'yy-mm-dd hh:ii:ss O');
+            var timeend = Date.strtodate( $(this).find('.timeend').text().trim(), 'yy-mm-dd hh:ii:ss O');
+            startHour = timestart.getHours();
+            startMinute = timestart.getMinutes();
+            endHour = timeend.getHours(); // subtract the period from this
+            endMinute = timeend.getMinutes();
+            var one_min=1000*60*60;
+            // to nearest 5 minutes period (one 12th)
+            var duration = (Math.round(((timeend.getTime() - timestart.getTime())/one_min)*12))/12.0;
+            
+            // Calculate what the limits for the time picker
+            
+            createDialog(itemid, roomid, timeid, timestart.getHours(), duration);
             // Ask the user what the start time should be (dialog)
             // Then add the item to the room at the given time
             
@@ -187,3 +242,21 @@ function makeDroppables(){
         }
     });
 }
+
+var startHour = 0;
+var endHour = 23;
+function OnHourShowCallback(hour) {
+    if ((hour >= startHour) && (hour <= endHour)) {
+        return true; // valid
+    }
+    return false; // not valid
+}
+
+var startMinute = 0;
+var endMinute = 60;
+function OnMinuteShowCallback(hour, minute) {
+    if ((hour == endHour ) && (minute >= endMinute)) { return false; } // not valid
+    if ((hour == startHour) && (minute < startMinute)) { return false; }   // not valid
+    return true;  // valid
+}
+

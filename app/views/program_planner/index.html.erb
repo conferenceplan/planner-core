@@ -1,5 +1,9 @@
 <% content_for :jsheader do %>
 <%= javascript_include_tag 'jquery.scrollTo-1.4.2-min' %>
+<%= javascript_include_tag 'jquery.ui.datetime.min' %>
+<%= javascript_include_tag 'jquery.ui.timepicker' %>
+<%= stylesheet_link_tag 'jquery.ui.datetime' %>
+<%= stylesheet_link_tag 'jquery-ui-timepicker' %>
 <%= stylesheet_link_tag 'planner/itemplanner' %>
 <%= javascript_include_tag 'planner/itemwidget' %>
 <%= stylesheet_link_tag 'planner/programplanner' %>
@@ -119,3 +123,4 @@ var numberOfDays = "<%=SITE_CONFIG[:conference][:number_of_days]%>" -1;
         </div>
     </div>
 </div>
+<div class="jqmWindow" id="edialog">Please wait...</div>
