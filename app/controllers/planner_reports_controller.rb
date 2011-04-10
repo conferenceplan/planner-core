@@ -4,6 +4,7 @@
 class PlannerReportsController < PlannerController
   include PlannerReportHelpers
   require 'fastercsv'
+  require 'iconv'
   
   def show
   end
@@ -44,7 +45,9 @@ class PlannerReportsController < PlannerController
        end
      end
 
-   send_data csv_data,
+   c = Iconv.new('ISO-8859-15','UTF-8')
+
+   send_data c.iconv(csv_data),
       :type => 'text/csv; charset=iso-8859-1; header=present',
       :disposition => "attachment; filename=#{@outfile}"
 
