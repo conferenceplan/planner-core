@@ -1,0 +1,116 @@
+class AvailableDatesController < ApplicationController
+  
+  def index
+    @availableDates = AvailableDate.find :all
+  end
+  
+  def show
+    if (params[:person_id])
+       @person = Person.find(params[:person_id])
+       @urlstr = '/participants/'+ params[:person_id]  + '/available_date/new'
+
+       @availableDate = @person.available_date
+       
+    else
+      @urlstr = '/available_dates/new'
+
+      @availableDate = AvailableDate.find(params[:id])
+    end
+    
+    render :layout => 'content'
+  end
+  
+  def create
+    
+    if (params[:person_id])
+      @person = Person.find(params[:person_id])
+      startTime = GetDateFromInput(params[:available_date],'start_time')
+      endTime = GetDateFromInput(params[:available_date],'end_time')
+      updateParams = { :start_time => startTime, :end_time => endTime}
+     
+      @availableDate = @person.create_available_date(updateParams);
+    else
+      @availableDate = AvailableDates.new(params[:available_date])
+    end
+    
+    if (@availableDate.save)
+#      We want to go back to?
+          redirect_to :action => 'show', :id => @availableDate
+    else
+         render :action => 'new'
+    end
+
+end
+  
+  def new
+     if (params[:person_id])
+      @urlstr = '/participants/' + params[:person_id] + '/available_date'
+    else
+      @urlstr = '/available_dates'
+    end
+    @availableDate = AvailableDate.new
+    person = Person.find(params[:person_id])
+    tmp = person.GetSurveyStartDate
+    if (tmp)
+       @availableDate.start_time = tmp
+    else
+         @availableDate.start_time  =  GetDefaultStart()
+    end
+
+    tmp = person.GetSurveyEndDate
+    if (tmp)
+       @availableDate.end_time = tmp
+    else
+       @availableDate.end_time =  GetDefaultEnd()
+    end
+    
+    render :layout => 'content'
+  end
+  
+  def edit
+    @availableDate = AvailableDate.find(params[:id])
+    
+    @urlstr = '/available_dates/' + params[:id]
+    render :layout => 'content'
+  end
+  
+  def update
+
+    @availableDate = AvailableDate.find(params[:id])
+    startTime = GetDateFromInput(params[:available_date],'start_time')
+    endTime = GetDateFromInput(params[:available_date],'end_time')
+    updateParams = { :start_time => startTime, :end_time => endTime}
+    
+    if @availableDate.update_attributes(updateParams)
+      redirect_to :action => 'show', :id => @availableDate
+    else
+      render :action => 'edit'
+    end
+    
+  end
+  
+  def destroy
+    @availableDate = AvailableDate.find(params[:id])
+    @availableDate.destroy
+    redirect_to :action => 'index'
+  end
+  
+  def GetDefaultStart
+    return Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + 12.hours;
+  end
+  
+   def GetDefaultEnd
+    return Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + (SITE_CONFIG[:conference][:number_of_days]-1).days + 16.hours;
+  end
+ 
+  def GetDateFromInput(inParams,baseParamName)
+       updatedValueYear = inParams[baseParamName+'(1i)']
+       updatedValueMon = inParams[baseParamName+'(2i)']
+       updatedValueDay = inParams[baseParamName+'(3i)']
+       updatedValueHour = inParams[baseParamName+'(4i)']
+       updatedValueMinute = inParams[baseParamName+'(5i)']
+       updatedValueSecond = inParams[baseParamName+'(5i)']    
+       updateValue = Time.local(updatedValueYear,updatedValueMon,updatedValueDay,updatedValueHour,updatedValueMinute,updatedValueSecond)
+       return updateValue
+  end
+end

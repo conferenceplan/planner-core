@@ -1,0 +1,37 @@
+<%= error_messages_for :availableDate%>
+<% form_for @availableDate, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
+   <div class='container_16'>
+   <div class='grid_10'>
+     <div class='form-buttons'>
+		<%= f.submit "Submit" %>
+		<button type="button" class='jqmClose'>Close</button>
+	  </div>
+      <div class='line'>
+  	    <div class = 'field_name'> 
+	      <%= f.label :start_time, "Arrival Date" %>
+	    </div>
+      </div>
+      <div class='line'>
+  	    <div class = 'field_value'> 
+	      <%= f.datetime_select :start_time, :default => @availableDate.start_time %>
+	    </div>
+      </div>
+	  <div class='line'>
+  	    <div class = 'field_name'> 
+	      <%= f.label :end_time, "Departure Date" %>
+	    </div>
+      </div>
+      <div class='line'>
+  	    <div class = 'field_value'> 
+	      <%= f.datetime_select :end_time, :default => @availableDate.end_time %>
+	    </div>
+      </div>
+	</div>
+	</div>
+<% end %>
+<div class='container_16'>
+<div class='grid_16'>
+<div id='form-response'>
+</div>
+</div>
+</div>

@@ -62,8 +62,11 @@ class Person < ActiveRecord::Base
   has_one  :pseudonym
   accepts_nested_attributes_for :pseudonym
   
-  has_one :edited_bio
+  has_one :edited_bio, :dependent => :delete
   accepts_nested_attributes_for :edited_bio
+  
+  has_one :available_date, :dependent => :delete
+  accepts_nested_attributes_for :available_date
   
   def GetFullNameHelper(first_name,last_name,suffix)
       name = ""
@@ -217,6 +220,63 @@ class Person < ActiveRecord::Base
    else
      return (GetSurveyQuestionResponse('g95q3'))
    end
+ end
+ 
+ def GetSurveyStartDate()
+ #  startDate = GetSurveyQuestionResponse('g6s1q2')
+ #  startTime = GetSurveyQuestionResponsen('g6s1q3')
+   availability = GetSurveyQuestionResponse('g6q1')
+   if (availability == nil)
+     return nil
+   end
+   startDateTime =  Time.zone.parse(SITE_CONFIG[:conference][:start_date]);
+
+   if (availability == '1')
+     # start time is noon (add seconds since midnight to start day)
+     startDateTime = startDateTime + 12.hours
+   elsif (availability == '2')
+      startDate = GetSurveyQuestionResponse('g6s1q2')
+      daycode = startDate[0].to_i
+      startTime = GetSurveyQuestionResponse('g6s1q3')
+      hourcode = startTime[0].to_i
+      #day code has 1 as the start day of the convention
+      startDateTime = startDateTime + (daycode-1).days
+      # 0 means they did not specify - we assume midnight (hour 0)
+      if (hourcode != 0)
+         # hour code starts with 1 as 10:00 am
+         startDateTime = startDateTime + (hourcode+9).hours    
+      end
+   end
+   return startDateTime
+ end
+ 
+ def GetSurveyEndDate()
+ #  startDate = GetSurveyQuestionResponse('g6s1q2')
+ #  startTime = GetSurveyQuestionResponsen('g6s1q3')
+   availability = GetSurveyQuestionResponse('g6q1')
+   numDays = SITE_CONFIG[:conference][:number_of_days]
+   endDateTime =  Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + (numDays-1).days;
+   
+   if (availability == nil)
+     return nil
+   end
+   if (availability == '1')
+     # end time is 4pm (add seconds since midnight to start day)
+     endDateTime = endDateTime + 16.hours
+   elsif (availability == '2')
+      endDate = GetSurveyQuestionResponse('g6s1q4')
+      daycode = endDate[0].to_i
+      endTime = GetSurveyQuestionResponse('g6s1q5')
+      hourcode = endTime[0].to_i
+      #day code has 1 as the start day of the convention
+      endDateTime = endDateTime - (numDays-daycode).days
+      # 0 means they did not specify - we assume midnight (hour 0)
+      if (hourcode != 0)
+         # hour code starts with 1 as 10:00 am
+         endDateTime = endDateTime + (hourcode+9).hours     
+      end
+   end
+   return endDateTime
  end
  
   def removePostalAddress(address)

@@ -1,0 +1,22 @@
+<div class='available_dates'>
+  <div>
+  	<% if @availableDate%>
+      <div class='edit-form'>
+         <%= link_to "edit", {:controller => 'available_dates', :action => 'edit', :id => @availableDate}, :class => 'entrydialog' %>
+      </div>
+  	<% else %>
+		 <%= link_to "Add Availability", @urlstr, :class => 'entrydialog' %>
+    <% end %>
+  <% if @availableDate %>
+   <div class='line'>
+     Arrival: <%= @availableDate.start_time%>
+   </div>
+	<div class='line'>
+     Departure: <%= @availableDate.end_time%>
+   </div>
+  <% else %>
+  <% end %>
+  <div class='message' id='tab-messages'></div>
+  <div class="jqmWindow" id="edialog">Please wait...</div>
+</div>
+

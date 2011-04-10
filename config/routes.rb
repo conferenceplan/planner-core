@@ -66,6 +66,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'edited_bios/selectExportBioList', :controller => 'edited_bios',:action => 'selectExportBioList'
   map.resources :edited_bios, :has_one => :person
 
+  map.resources :available_dates, :has_one => :person
+
   map.resources :postal_addresses, :has_many => :people
   map.resources :email_addresses, :has_many => :people
   map.resources :phone_numbers, :has_many => :people
@@ -84,7 +86,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers],
-    :has_one => [:registrationDetail, :edited_bio],
+    :has_one => [:registrationDetail, :edited_bio, :available_date],
     :collection => {:list => :get }
 
   map.connect 'participants/list', :controller => 'people', :action => 'list'
