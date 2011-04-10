@@ -7,6 +7,7 @@ jQuery(document).ready(function(){
 
     
 function makeItemWidgetSelectable(){
+    makeDraggables();
     //    $('#selectable-item > li').click(function(event){
     //        $("#selectable-item").children(".ui-selected").removeClass("ui-selected"); //make all unselected
     //        // highlight selected only
@@ -133,7 +134,56 @@ function setUpRoomGrid(){
             $('#program-grid').scrollTo(0);
             $('#program-grid-times').scrollTo(0);
             jQuery('#current-day-page').val(currentDay+1);
+            makeDroppables();
         }
     });
 }
 
+function makeDraggables(){
+    $(".item-draggable").draggable({
+        helper: 'clone'
+    });
+}
+
+function makeDroppables(){
+    $(".droppable").droppable({
+        hoverClass: "ui-state-hover",
+        accept: ":not(.removeable)",
+        drop: function(event, ui){
+//            var type = $(this).attr('id');
+//<div class="itemid" style="display: none;">2 </div>
+            var itemid = ui.draggable.find('.itemid').text();
+            var roomid = $(this).find('.roomid').text();
+            var timeid = $(this).find('.timeid').text();
+            var timestart = $(this).find('.timestart').text();
+            var timeend = $(this).find('.timeend').text();
+            var dt = Date.parse(timestart);
+            alert("DROPPED " + itemid + " " + roomid + " "+ timeid + " " + timestart);
+            // Ask the user what the start time should be (dialog)
+            // Then add the item to the room at the given time
+            
+            // Add the item to the room
+//            // Check to make sure that this has not already been added to the item
+//            // 1. Find the .selectable-participant
+//            var places = jQuery(".selectable-participant");
+//            var doNotInsert = false;
+//            places.each(function(index){
+//                p = $(this).find("input");
+//                p.each(function(ix){
+//                    val = $(this).attr('value');
+//                    if (val == id) {
+//                        doNotInsert = true;
+//                    }
+//                });
+//            });
+//            if (!doNotInsert) {
+//                $(this).find(".placeholder").remove();
+//                // 2. check that none of them 
+//                type += '[' + id + '][person_id]'; // TODO - insert the role
+//                ui.draggable.find('input').attr('name', type);
+//                $("<li class='ui-widget-content removeable'></li>").html(ui.draggable.html()).appendTo($(this).find("ol"));
+//                makeRemoveables();
+//            }
+        }
+    });
+}
