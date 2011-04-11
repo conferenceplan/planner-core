@@ -1,0 +1,13 @@
+<h2>Admin Tags by Context</h2>
+
+<% form_tag('/planner_reports/admin_tags_by_context', :method => 'post') do %>
+<p>
+   <%= label_tag :tag_context, "Select a Context: "%>
+   <%= select_tag :tag_context, options_from_collection_for_select(TagContext.all(:order => 'name'), :name, :name, params[:tag_context]) %>
+   <%= submit_tag "Search" %>
+</p>
+<% end %>
+
+<% if params[:tag_context]  %>
+<%= render :partial => "resplist", :object => @names %> 
+<% end %>

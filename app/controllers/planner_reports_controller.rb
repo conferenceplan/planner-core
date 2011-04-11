@@ -55,4 +55,21 @@ class PlannerReportsController < PlannerController
     
   end
 
+  def admin_tags_by_context
+    if params[:tag_context]
+      context = params[:tag_context]
+      tags = ActsAsTaggableOn::Tagging.all(:conditions => ['context = ?', context], :joins => ["join tags on taggings.tag_id = tags.id"], :select => 'distinct(name)')
+      tags.collect! {|t| t.name}
+      @names = Array.new
+      tags.each do |tag|
+         @names.concat Person.tagged_with(tag, :on => context)
+      end
+      @names.uniq!
+      @names.sort! {|x,y| x.last_name <=> y.last_name}
+      @names.each do |n|
+        n[:details] = n.tag_list_on(context)
+      end
+    end
+  end
+
 end

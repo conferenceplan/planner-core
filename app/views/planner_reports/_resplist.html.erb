@@ -1,0 +1,15 @@
+
+<h2><%= resplist.count %> People:</h2>
+<p>
+<% if resplist.blank? %>
+   No one right now.
+<% else %>
+   <dl>
+   <% resplist.each do |p| %>
+       <dt><%= p.GetFullName %></dt>
+       <dd><%= p.details %></dd>
+   <% end %>
+   </dl>
+<% end %>
+
+</p>
