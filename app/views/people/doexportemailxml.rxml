@@ -8,7 +8,11 @@ xml.people do
           xml.address(email_address.email)
         end
       end
-      xml.key(p.survey_respondent.key)
+      if p.survey_respondent
+        xml.key(p.survey_respondent.key)
+      else
+        xml.key(NO KEY)
+      end
     end
   end
 end
