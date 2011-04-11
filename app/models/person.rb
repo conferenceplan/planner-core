@@ -139,7 +139,11 @@ class Person < ActiveRecord::Base
   def GetFullPublicationName
    # if we set the pseudonym in people table, use that
    if (self.pseudonym != nil)
-       return GetFullNameHelper(self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix)
+        name = GetFullNameHelper(self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix)
+        if (name =~ /^\s*$/)
+           name = GetFullName()
+        end
+        return name
     else
       # TODO - This should be removed, as the pseudonym will be copied from the survey after it has been reviewed...
       # if they don't have a pseudonym in people, check survey
