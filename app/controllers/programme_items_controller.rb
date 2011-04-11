@@ -68,15 +68,15 @@ class ProgrammeItemsController < PlannerController
       clause = addClause(clause,'title like ?','%' + nameSearch + '%')
     end
     if ignoreScheduled
-      clause = addClause( clause, 'programme_item_assignments.programme_item_id is null', nil )
+      clause = addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
     end
 
     args = { :conditions => clause }
     
     if ignoreScheduled
-      args.merge!( :joins => 'LEFT JOIN programme_item_assignments ON programme_item_assignments.programme_item_id = programme_items.id' )
+      args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id' )
     end
-  
+
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
     args.merge!(:include => :format)

@@ -9,28 +9,6 @@ jQuery(document).ready(function(){
     
 function makeItemWidgetSelectable(){
     makeDraggables();
-    //    $('#selectable-item > li').click(function(event){
-    //        $("#selectable-item").children(".ui-selected").removeClass("ui-selected"); //make all unselected
-    //        // highlight selected only
-    //        $(this).addClass('ui-selected');
-    //        var id = $(this).find('.itemid').text().trim();
-    //        // To get the item context
-    //        $.ajax({
-    //            type: 'GET',
-    //            url: "/programme_items/" + id + "?edit=false",
-    //            dataType: "html",
-    //            context: $('#current-item-content'),
-    //            success: function(response){
-    //                $(this).html(response).append('<input type="hidden" name="itemid" value ="' + id + '"/>');
-    //                makeDraggables();
-    //                makeRemoveables();
-    //                currentItem = true;
-    //                // change target of form - /programme_items/1/updateParticipants
-    //                jQuery('#item-update-form').attr('action', '/programme_items/' + id + '/updateParticipants');
-    //                // TODO - reset the participant and reserve areas
-    //            }
-    //        });
-    //    });
 }
 
 function initialiseDayButtons(){
@@ -132,8 +110,10 @@ function setUpRoomGrid(){
             res = $(response).find('#room-timetable');
             $('#program-room-data').html(titles);
             $(this).html(res);
-            $('#program-grid').scrollTo(0);
-            $('#program-grid-times').scrollTo(0);
+            $('#program-grid').scrollTo({top:'-=400px', left:'+=0'}, 0); // position in middle of day
+//            $('#program-grid-times').scrollTo(0);
+        $('#program-grid').scrollTo({top:'320px', left:'0'}, 0);
+        $('#program-grid-times').scrollTo({top:'320px', left:'0'}, 0);
             jQuery('#current-day-page').val(currentDay+1);
             makeDroppables();
             makeDraggables();
@@ -173,6 +153,8 @@ function createDialog(itemid, roomid, timeid, timestart, duration) {
             hash.w.fadeOut('2000', function(){
                 hash.o.remove();
             });
+           setUpRoomGrid(); /* *************** */
+           loadItemWidget();
         }
     });
     // TODO - move the setting of the ajax url to here and then we can move the dialog init out
@@ -185,6 +167,9 @@ function adjust(dialog){
     currentDialog = dialog;
     $('.layerform', dialog.w).ajaxForm({
         target: '#form-response',
+        success : function() {
+                $('#edialog').jqmHide();
+        },
         error: function(response, r) {
             var errText = $(response.responseText).find(".error"); // class error
             $('#form-response', currentDialog.w).append('ERROR: ' + errText.text());
@@ -215,29 +200,6 @@ function makeDroppables(){
             createDialog(itemid, roomid, timeid, timestart.getHours(), duration);
             // Ask the user what the start time should be (dialog)
             // Then add the item to the room at the given time
-            
-            // Add the item to the room
-//            // Check to make sure that this has not already been added to the item
-//            // 1. Find the .selectable-participant
-//            var places = jQuery(".selectable-participant");
-//            var doNotInsert = false;
-//            places.each(function(index){
-//                p = $(this).find("input");
-//                p.each(function(ix){
-//                    val = $(this).attr('value');
-//                    if (val == id) {
-//                        doNotInsert = true;
-//                    }
-//                });
-//            });
-//            if (!doNotInsert) {
-//                $(this).find(".placeholder").remove();
-//                // 2. check that none of them 
-//                type += '[' + id + '][person_id]'; // TODO - insert the role
-//                ui.draggable.find('input').attr('name', type);
-//                $("<li class='ui-widget-content removeable'></li>").html(ui.draggable.html()).appendTo($(this).find("ol"));
-//                makeRemoveables();
-//            }
         }
     });
 }
