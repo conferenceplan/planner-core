@@ -99,7 +99,7 @@ end
     return Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + 12.hours;
   end
   
-   def GetDefaultEnd
+  def GetDefaultEnd
     return Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + (SITE_CONFIG[:conference][:number_of_days]-1).days + 16.hours;
   end
  

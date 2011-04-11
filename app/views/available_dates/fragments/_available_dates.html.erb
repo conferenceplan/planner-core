@@ -1,0 +1,17 @@
+<div class='available_dates'>
+	 
+  <em>Program Availability</em><br/>
+  <% if @availableDate %>
+   <div class='line'>
+     Arrival: <%= @availableDate.start_time%>
+   </div>
+	<div class='line'>
+     Departure: <%= @availableDate.end_time%>
+   </div>
+  <% else %>
+  <div>
+     No Available Dates Set
+  </div>
+  <% end %>
+</div>
+

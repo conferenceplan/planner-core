@@ -16,6 +16,7 @@ class PeopleController < PlannerController
       @postalAddresses = @person.postal_addresses
       @emailAddresses = @person.email_addresses
       @phoneNumbers= @person.phone_numbers
+      @availableDate = @person.available_date
       render :comphrensive, :layout => 'content'
     else  
       render :layout => 'content'

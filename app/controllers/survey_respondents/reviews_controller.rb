@@ -88,7 +88,7 @@ class SurveyRespondents::ReviewsController < PlannerController
     copyPhone(survey, person, @copyStatus) if params[:phone] != nil
     copyEmail(survey, person, @copyStatus) if params[:email] != nil
     copyTags(respondent, person, @copyStatus) if params[:tags] != nil
-    
+    copyAvailableDates(respondent, person, @copyStatus) if params[:available_date]
     # 2. update the status with the information
     if (person.save)
       @copyStatus.save
@@ -196,7 +196,17 @@ class SurveyRespondents::ReviewsController < PlannerController
     # go through each of the tag contexts attached to the respondent and set the same information in the person
     copystatus.tagsCopied = true
   end
-
+  
+  def copyAvailableDates(respondent,person,copystatus)
+      startTime = person.GetSurveyStartDate
+      endTime = person.GetSurveyEndDate
+      if (startTime && endTime)
+          updateParams = { :start_time => startTime, :end_time => endTime}
+          @availableDate = person.create_available_date(updateParams)
+          copystatus.availableDatesCopied = true
+      end
+  end
+  
   def getContexts
     taggings = ActsAsTaggableOn::Tagging.find :all,
                   :select => "DISTINCT(context)",
