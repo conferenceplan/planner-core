@@ -129,14 +129,15 @@ function setUpRoomGrid(){
         success: function(response){
             titles = $(response).find('#room-titles');
             res = $(response).find('#room-timetable');
+            currentDateString = $(response).find('#current-date');
             $('#program-room-data').html(titles);
             $(this).html(res);
             $('#program-grid').scrollTo({top:'-=400px', left:'+=0'}, 0); // position in middle of day (approximately)
         $('#program-grid').scrollTo({top:'320px', left:'0'}, 0);
         $('#program-grid-times').scrollTo({top:'320px', left:'0'}, 0);
-//            jQuery('#current-day-page').val(currentDay+1);
             makeDroppables();
             makeDraggables();
+            jQuery('#current-day-page').val(currentDateString.text());
         }
     });
 }

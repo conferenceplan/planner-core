@@ -17,8 +17,8 @@ class ProgramPlannerController < PlannerController
     args.merge!(:order => 'rooms.id, time_slots.start asc')
     
     @roomAssignments = RoomItemAssignment.find :all, args
-    
     @roomListing = Room.all(:order => 'rooms.id')
+    @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + day.to_i.day
     
     respond_to do |format|
       format.html { render :layout => 'content' } # list.html.erb

@@ -82,7 +82,9 @@ private
       clause[0] += ") AND ( " if ! isEmpty
       clause[0] += " " + clausestr
       clause[0] += " ) "  if ! isEmpty
-      clause << field
+      if field
+        clause << field
+      end
     end
     
     return clause
