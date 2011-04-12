@@ -46,4 +46,11 @@ class SurveyReportsController < PlannerController
       @names = search_survey(params[:q_id], '%')
     end
   end
+ 
+  def available_during
+    @conflicts = GetConflictItems()
+    if params[:conflict_id]
+      @names = search_survey_negative('g6q6', params[:conflict_id])
+    end
+  end
 end
