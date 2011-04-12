@@ -11,6 +11,27 @@ function makeItemWidgetSelectable(){
     makeDraggables();
 }
 
+function initialiseRemoveButtons(){
+    jQuery(".remove-item").click(function(event){
+        var q = $(this).attr('href');
+        var strs = q.split('&');
+        var item = strs[0].substr(8, strs[0].length);
+        var room = strs[1].substr(7, strs[1].length);
+        // extract the context and tag and then remove these from the tag query collection
+        // then force the elements to refresh
+        $.ajax({
+            type: 'GET',
+            url: "/program_planner/removeItem?roomid=" + room + "&itemid=" + item + "",
+            dataType: "html",
+            success: function(response){
+                setUpRoomGrid();
+                loadItemWidget();
+            }
+        });
+        
+    });
+}
+
 function initialiseDayButtons(){
     $("#program-beginning").button({
         text: false,
@@ -110,11 +131,10 @@ function setUpRoomGrid(){
             res = $(response).find('#room-timetable');
             $('#program-room-data').html(titles);
             $(this).html(res);
-            $('#program-grid').scrollTo({top:'-=400px', left:'+=0'}, 0); // position in middle of day
-//            $('#program-grid-times').scrollTo(0);
+            $('#program-grid').scrollTo({top:'-=400px', left:'+=0'}, 0); // position in middle of day (approximately)
         $('#program-grid').scrollTo({top:'320px', left:'0'}, 0);
         $('#program-grid-times').scrollTo({top:'320px', left:'0'}, 0);
-            jQuery('#current-day-page').val(currentDay+1);
+//            jQuery('#current-day-page').val(currentDay+1);
             makeDroppables();
             makeDraggables();
         }
@@ -125,12 +145,16 @@ function makeDraggables(){
     $(".item-draggable").draggable({
         helper: 'clone'
     });
+    initialiseRemoveButtons();
 }
 
 function createDialog(itemid, roomid, timeid, timestart, duration) {
-
     var url = "/program_planner/"+ roomid + "/edit?itemid="+itemid+'&timeid='+timeid+'&day='+currentDay;
+    initAddItemDialog(url);
+    $('#edialog').jqmShow();
+}
 
+function initAddItemDialog(url) {
     $('#edialog').jqm({
         ajax: url,
         trigger: 'a.entrydialog',
@@ -153,17 +177,14 @@ function createDialog(itemid, roomid, timeid, timestart, duration) {
             hash.w.fadeOut('2000', function(){
                 hash.o.remove();
             });
-           setUpRoomGrid(); /* *************** */
+           setUpRoomGrid();
            loadItemWidget();
         }
     });
-    // TODO - move the setting of the ajax url to here and then we can move the dialog init out
-    $('#edialog').jqmShow();
 }
 
 var currentDialog = null;
 function adjust(dialog){
-    // TODO - would like to display message, disable form, and only allow a close
     currentDialog = dialog;
     $('.layerform', dialog.w).ajaxForm({
         target: '#form-response',

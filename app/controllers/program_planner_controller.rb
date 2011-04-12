@@ -89,13 +89,20 @@ class ProgramPlannerController < PlannerController
   # Unschedule an item
   #
   def removeItem
-    item_id = params[:itemid]
-    room_id = params[:roomid]
+    @item = ProgrammeItem.find(params[:itemid])
+    @room = Room.find(params[:roomid])
     
     #
     # 1. Unassociate a room with the program item i.e. remove the program item from the association
+    candidate = @item.room_item_assignment
+    day = candidate.day
+    room = candidate.room
+    candidate.programme_item = nil
+    candidate.save
+
     # 2. Take the time slot and merge back into free time
-    #
+    defragmentFreeTimes(room, day)
+
     render :layout => 'content'
   end
   
