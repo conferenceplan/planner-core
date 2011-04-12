@@ -1,15 +1,15 @@
 module SurveyReportHelpers
 
   def search_survey_exact(question, target)
-    return Person.all :select => 'people.*, smerf_responses.response', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join(select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id = max_resp.surveyrespondent_id join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and smerf_responses.response = ? and people.invitestatus_id = 5", question, target], :order => 'last_name'
+    return Person.all :select => 'people.*, smerf_responses.response', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join(select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id = max_resp.surveyrespondent_id join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and smerf_responses.response = ? and people.invitestatus_id = 5 and people.acceptance_status_id = 8 and survey_respondents.attending = '1'", question, target], :order => 'last_name'
   end
 
   def search_survey_negative(question, target)
-    return Person.all :select => 'people.*, smerf_responses.response', :joins => "join survey_respondents on people.id = survey_respondents.person_id join (select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id = max_resp.surveyrespondent_id left join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id and smerf_responses.question_code = '#{question}' and smerf_responses.response = '#{target}'", :conditions => ["people.invitestatus_id = 5 and smerf_responses.response is NULL"], :order => 'last_name'
+    return Person.all :select => 'people.*, smerf_responses.response', :joins => "join survey_respondents on people.id = survey_respondents.person_id join (select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id = max_resp.surveyrespondent_id left join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id and smerf_responses.question_code = '#{question}' and smerf_responses.response = '#{target}'", :conditions => ["people.invitestatus_id = 5 and smerf_responses.response is NULL and people.acceptance_status_id = 8 and survey_respondents.attending = '1'"], :order => 'last_name'
   end
 
   def search_survey(question, target)
-    return Person.all :select => 'people.*, smerf_responses.response', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join (select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id =max_resp.surveyrespondent_id join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and lower(smerf_responses.response) like lower(?) and people.invitestatus_id = 5", question, target], :order => 'last_name'
+    return Person.all :select => 'people.*, smerf_responses.response', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join (select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id =max_resp.surveyrespondent_id join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and lower(smerf_responses.response) like lower(?) and people.invitestatus_id = 5 and people.acceptance_status_id = 8 and survey_respondents.attending = '1'", question, target], :order => 'last_name'
   end
 
   def GetProgramTypes
@@ -26,7 +26,7 @@ module SurveyReportHelpers
   end
 
   def GetConflictItems
-    conflicts = [['Opening Ceremony', 'g6q6|1'], ['Chesley Awards', 'g6q6|2'], ['Masquerade', 'g6q6|3'], ['Hugo Ceremony', 'g6q6|4'], ['Closing Ceremony', 'g6q6|5'], ['Tricky Pixie Concert', 'g6q6|6'], ['WSFS Meetings', 'g6q6|7'], ['SFWA Meeting', 'g6q6|8'], ['ASFA Meeting', 'g6q6|9'], ['Masq Rehearssal', 'g6q6|10'], ['Art Auction', 'g6q6|11'], ['Regency Dance', 'g6q6|12'], ['Charity and Fan Fund Auction', 'g6q6|13'], ['Before 11 AM', 'g6q4|1'], ['6 PM - 8 PM', 'g6g4|2'], ['After 8 PM', 'g6g4|3']]
+    conflicts = [['Opening Ceremony', 'g6q6|1'], ['Chesley Awards', 'g6q6|2'], ['Masquerade', 'g6q6|3'], ['Hugo Ceremony', 'g6q6|4'], ['Closing Ceremony', 'g6q6|5'], ['Tricky Pixie Concert', 'g6q6|6'], ['WSFS Meetings', 'g6q6|7'], ['SFWA Meeting', 'g6q6|8'], ['ASFA Meeting', 'g6q6|9'], ['Masq Rehearssal', 'g6q6|10'], ['Art Auction', 'g6q6|11'], ['Regency Dance', 'g6q6|12'], ['Charity and Fan Fund Auction', 'g6q6|13'], ['Before 11 AM', 'g6q4|1'], ['6 PM - 8 PM', 'g6q4|2'], ['After 8 PM', 'g6q4|3']]
   end
 
 end
