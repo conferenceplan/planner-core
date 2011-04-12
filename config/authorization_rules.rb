@@ -6,11 +6,13 @@ authorization do
     has_permission_on :email_addresses, :to => [:read]
     has_permission_on :formats, :to => [:read]
     has_permission_on :invitation_categories, :to => [:read]
+    has_permission_on :item_planner, :to => [:read]
     has_permission_on :pending_import_people, :to => [:read]
     has_permission_on :people, :to => [:read]
     has_permission_on :phone_numbers, :to => [:read]
     has_permission_on :postal_addresses, :to => [:read]
     has_permission_on :programme_items, :to => [:read]
+    has_permission_on :program_planner, :to => [:read]
     has_permission_on :registration_details, :to => [:read]
     has_permission_on :roles, :to => [:read]
     has_permission_on :rooms, :to => [:read]
@@ -46,6 +48,7 @@ authorization do
     has_permission_on :phone_numbers, :to => :manage
     has_permission_on :postal_addresses, :to => :manage
     has_permission_on :programme_items, :to => :manage
+    has_permission_on :program_planner, :to => :manage
     has_permission_on :registration_details, :to => :manage
     has_permission_on :roles, :to => [:read]
     has_permission_on :rooms, :to => :manage
@@ -65,7 +68,8 @@ end
 
 privileges do
     privilege :read, :includes => [:index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,:doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:library_talks,:missing_bio,:moderators,:art_night,:music_night,:program_types,:free_text]
-    privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants, :SetInvitePendingToInvited, :doSetInvitePendingToInvited]
+    privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants,
+                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :removeItem]
     privilege :create, :includes => [:new,:import,:doimport]
     privilege :update, :includes => [:edit,:states,:copySurvey]
     privilege :delete, :includes => :destroy
