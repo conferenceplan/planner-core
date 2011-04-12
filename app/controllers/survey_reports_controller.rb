@@ -50,7 +50,10 @@ class SurveyReportsController < PlannerController
   def available_during
     @conflicts = GetConflictItems()
     if params[:conflict_id]
-      @names = search_survey_negative('g6q6', params[:conflict_id])
+      (q_id, target) = params[:conflict_id].split('|')
+logger.debug "q id: #{q_id}"
+logger.debug "target: #{target}"
+      @names = search_survey_negative(q_id, target)
     end
   end
 end
