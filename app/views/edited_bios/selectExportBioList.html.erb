@@ -22,7 +22,7 @@
   </div>
   <div class='line'>
   	 <div class = 'field_value'> 
-	    <%= f.datetime_select :updated_at, :default => Time.now %>
+	    <%= f.datetime_select :updated_at, :default => Time.zone.now %>
 	 </div>
   </div>
   

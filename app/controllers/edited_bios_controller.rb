@@ -111,7 +111,7 @@ end
        updatedValueHour = params[:selectExportBioList]['updated_at(4i)']
        updatedValueMinute = params[:selectExportBioList]['updated_at(5i)']
        updatedValueSecond = params[:selectExportBioList]['updated_at(5i)']    
-       updateValue = Time.gm(updatedValueYear,updatedValueMon,updatedValueDay,updatedValueHour,updatedValueMinute,updatedValueSecond)
+       updateValue = Time.zone.local(updatedValueYear,updatedValueMon,updatedValueDay,updatedValueHour,updatedValueMinute,updatedValueSecond)
     
        @editedBios = EditedBio.find :all, :joins => :person, :conditions => ['people.acceptance_status_id = ? and people.invitestatus_id = ? and edited_bios.updated_at > ?', accepted.id, invitestatus.id, updateValue], :order => 'last_name, first_name'
     else

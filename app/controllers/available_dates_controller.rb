@@ -110,7 +110,7 @@ end
        updatedValueHour = inParams[baseParamName+'(4i)']
        updatedValueMinute = inParams[baseParamName+'(5i)']
        updatedValueSecond = inParams[baseParamName+'(5i)']    
-       updateValue = Time.local(updatedValueYear,updatedValueMon,updatedValueDay,updatedValueHour,updatedValueMinute,updatedValueSecond)
+       updateValue = Time.zone.local(updatedValueYear,updatedValueMon,updatedValueDay,updatedValueHour,updatedValueMinute,updatedValueSecond)
        return updateValue
   end
 end
