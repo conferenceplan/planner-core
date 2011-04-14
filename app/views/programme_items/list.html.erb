@@ -9,7 +9,9 @@ var itemPageNbr = "<%=@nbr_pages%>";
 <% @programmeItems.each do |programmeItem| %>
     <li class="ui-widget-content item-draggable">
         <div class="itemid" style="display: none;"><%= programmeItem.id %>
-        </div> <%= programmeItem.title %>
+        </div>
+        <%= programmeItem.title %><br/>
+        <em><%= programmeItem.duration %> minutes<em>
     </li>
 <% end %>
 </ol>

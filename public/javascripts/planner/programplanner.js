@@ -139,6 +139,7 @@ function setUpRoomGrid(){
             makeDraggables();
             jQuery('#current-day-page').val(currentDateString.text());
             initialiseRemoveButtons();
+            loadConflictWidget();
         }
     });
 }
@@ -243,3 +244,24 @@ function OnMinuteShowCallback(hour, minute) {
     return true;  // valid
 }
 
+function loadConflictWidget(){
+    urlStr = "/program_planner/getConflicts?day=" + currentDay;
+    $.ajax({
+        type: 'GET',
+        url: urlStr,
+        dataType: "html",
+//        data: {
+//            page: itemPage,
+//            rows: 10,
+//            sidx: 'title',
+//            sord: 'asc',
+//            namesearch: currentItemName
+//        },
+        context: $('#conflict-widget-content'),
+        success: function(response){
+            $(this).html(response);
+//            makeItemWidgetSelectable();
+//            jQuery('#current-item-page').val(itemPage);
+        }
+    });
+}
