@@ -29,7 +29,14 @@
     <div class='line'>
         Maximum # of people:<%= @programmeItem.maximum_people %>
     </div>
-    <label>
+    <div class='line'>
+    	<% if @programmeItem.room_item_assignment %>
+		Room: <%= @programmeItem.room_item_assignment.room.name %>
+		Start Time: <%= @programmeItem.room_item_assignment.time_slot.start %>
+		End Time: <%= @programmeItem.room_item_assignment.time_slot.end %>
+		<% end %>
+    </div>
+	<label>
         Precis:
     </label>
     <div class='city'>
