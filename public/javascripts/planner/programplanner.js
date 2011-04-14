@@ -250,18 +250,21 @@ function loadConflictWidget(){
         type: 'GET',
         url: urlStr,
         dataType: "html",
-//        data: {
-//            page: itemPage,
-//            rows: 10,
-//            sidx: 'title',
-//            sord: 'asc',
-//            namesearch: currentItemName
-//        },
         context: $('#conflict-widget-content'),
         success: function(response){
             $(this).html(response);
-//            makeItemWidgetSelectable();
-//            jQuery('#current-item-page').val(itemPage);
+            makeConflictWidgetSelectable();
         }
+    });
+}
+
+function makeConflictWidgetSelectable(){
+    $('#item-conflict-report > div').click(function(event){
+        $("#item-conflict-report").children(".ui-selected").removeClass("ui-selected"); //make all unselected
+        // highlight selected only
+        $(this).addClass('ui-selected');
+            var id = $(this).find('.itemid').text().trim();
+            var itemid = 'item-'+id;
+            $('#program-grid').scrollTo($('#'+itemid),800);
     });
 }
