@@ -133,11 +133,12 @@ function setUpRoomGrid(){
             $('#program-room-data').html(titles);
             $(this).html(res);
             $('#program-grid').scrollTo({top:'-=400px', left:'+=0'}, 0); // position in middle of day (approximately)
-        $('#program-grid').scrollTo({top:'320px', left:'0'}, 0);
-        $('#program-grid-times').scrollTo({top:'320px', left:'0'}, 0);
+            $('#program-grid').scrollTo({top:'320px', left:'0'}, 0);
+            $('#program-grid-times').scrollTo({top:'320px', left:'0'}, 0);
             makeDroppables();
             makeDraggables();
             jQuery('#current-day-page').val(currentDateString.text());
+            initialiseRemoveButtons();
         }
     });
 }
@@ -146,7 +147,6 @@ function makeDraggables(){
     $(".item-draggable").draggable({
         helper: 'clone'
     });
-    initialiseRemoveButtons();
 }
 
 function createDialog(itemid, roomid, timeid, timestart, duration) {
