@@ -61,10 +61,19 @@ class PlannerReportsController < PlannerController
     
     @names.each do |name|
        panels = Array.new
-       name.programmeItems.each do |p|
-          panels.push p.title
+       name.programmeItems.find_each(:include => [:time_slot, :room]) do |p|
+          panelstr = "#{p.title}"
+          panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
+          panelstr << ", #{p.room.name} (#{Venue.find(p.room.id).name})" unless p.room.nil?
+          if p.time_slot.nil?
+             panels.push ['', "<li>#{panelstr}</li>"]
+          else
+             panels.push [p.time_slot.start, "<li>#{panelstr}</li>"]
+          end
        end
-       name[:details] = panels.join(', ')
+       panels.sort! {|a,b| a[0] <=> b[0]}
+       panels.collect! {|a| a[1]}
+       name[:details] = "<ul>#{panels.join('')}</ul>"
     end
 
   end
