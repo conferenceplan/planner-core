@@ -55,6 +55,20 @@ class PlannerReportsController < PlannerController
     
   end
 
+  def panelists_with_panels
+
+    @names = Person.all(:include => :programmeItems, :conditions => {"acceptance_status_id" => "8"}, :order => "people.last_name, programme_items.id") 
+    
+    @names.each do |name|
+       panels = Array.new
+       name.programmeItems.each do |p|
+          panels.push p.title
+       end
+       name[:details] = panels.join(', ')
+    end
+
+  end
+
   def admin_tags_by_context
     if params[:tag_context]
       context = params[:tag_context]
