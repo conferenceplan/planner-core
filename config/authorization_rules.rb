@@ -69,7 +69,7 @@ authorization do
 end
 
 privileges do
-    privilege :report, :includes => [:library_talks,:missing_bio,:moderators,:art_night,:music_night,:program_types,:free_text,:tags_by_context,:available_during,:panels_with_panelists,:admin_tags_by_context,:panels_date_form]
+    privilege :report, :includes => [:library_talks,:missing_bio,:moderators,:art_night,:music_night,:program_types,:free_text,:tags_by_context,:available_during,:panels_with_panelists,:panelists_with_panels,:admin_tags_by_context,:panels_date_form]
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
         :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants,
