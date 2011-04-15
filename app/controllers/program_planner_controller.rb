@@ -13,6 +13,7 @@ class ProgramPlannerController < PlannerController
     
     # We need to know which rooms we are going for...
     args = { :conditions => clause }
+    # TODO - join is already done - we need to extract the variables from the joined tables in the query so that there is no need to do a further query
     args.merge!(:joins => 'LEFT JOIN time_slots ON time_slots.id = time_slot_id LEFT JOIN rooms ON rooms.id = room_id')
     args.merge!(:order => 'rooms.id, time_slots.start asc')
     
@@ -117,7 +118,11 @@ class ProgramPlannerController < PlannerController
 #    Room.find_by_sql(CONFLICT_QUERY)
 
     respond_to do |format|
-      format.html { render :layout => 'plain' }
+      format.html { 
+        if @day
+          render :layout => 'plain'
+        end
+      }
     end
   end
 
