@@ -66,7 +66,8 @@ class PlannerReportsController < PlannerController
           panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
           panelstr << ", #{p.room.name} (#{Venue.find(p.room.id).name})" unless p.room.nil?
           if p.time_slot.nil?
-             panels.push ['', "<li>#{panelstr}</li>"]
+             zeroTime = Time.at(0)
+             panels.push [zeroTime, "<li>#{panelstr}</li>"]
           else
              panels.push [p.time_slot.start, "<li>#{panelstr}</li>"]
           end
