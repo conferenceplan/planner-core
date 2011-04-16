@@ -264,7 +264,10 @@ function makeConflictWidgetSelectable(){
         // highlight selected only
         $(this).addClass('ui-selected');
             var id = $(this).find('.itemid').text().trim();
+            var roomid = $(this).find('.roomid').text().trim();
             var itemid = 'item-'+id;
+            var roomidstr = 'room-title-'+roomid;
+            $('#program-grid-rooms').scrollTo($('#'+roomidstr),800);
             $('#program-grid').scrollTo($('#'+itemid),800);
     });
 }

@@ -1,8 +1,7 @@
 <div id='current-date'><%= @currentDate.strftime('%A') %></div>
 <div id='room-titles'>
-    <% current_room = nil %>
     <%@roomListing.each do |room| %>
-    <div class='program-room'>
+    <div class="program-room" id='<%= "room-title-" + room.id.to_s%>'>
         <%= room.name %>
     </div>
     <%end %>
