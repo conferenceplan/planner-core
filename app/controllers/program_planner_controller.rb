@@ -13,9 +13,9 @@ class ProgramPlannerController < PlannerController
     
     # We need to know which rooms we are going for...
     args = { :conditions => clause }
-    # TODO - join is already done - we need to extract the variables from the joined tables in the query so that there is no need to do a further query
     args.merge!(:joins => 'LEFT JOIN time_slots ON time_slots.id = time_slot_id LEFT JOIN rooms ON rooms.id = room_id')
     args.merge!(:order => 'rooms.id, time_slots.start asc')
+    args.merge!(:include => [:time_slot, :programme_item, :room]) # eager loads the associated objects to reduce number of queries
     
     @roomAssignments = RoomItemAssignment.find :all, args
     @roomListing = Room.all(:order => 'rooms.id')
