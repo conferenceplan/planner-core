@@ -1,10 +1,7 @@
-<h1>Add program item to schedule (EDIT)</h1>
+<h2><%= "Assign <em>" + @item.title + "</em> to " + @room.name + " with duration " + @item.duration.to_s + " minutes" %></h2>
 <% form_tag("/program_planner/addItem", :method => "post", :id => "layerform", :class => "layerform") do %>
 <div class='container_12'>
-    <div class='grid_6'>
-        <div class='line'>
-            <div class='field_name'>Time</div>
-            <div class='field_value'><input type='text' name='time' id='time-selection' value='<%=@time%>' /></div>
+    <div class='grid_10'>
             <input type='hidden' name='day' value='<%=@day%>' />
             <input type='hidden' name='itemid' value='<%=@item.id%>' />
             <input type='hidden' name='roomid' value='<%=@room.id%>' />
@@ -13,15 +10,10 @@
             <div style='display: none;' id='firstminute'><%=@freetime.start.min%></div>
             <div style='display: none;' id='lasthour'><%=(@freetime.end - @item.duration.minutes).hour%></div>
             <div style='display: none;' id='lastminute'><%=(@freetime.end - @item.duration.minutes).min%></div>
-            
-            
-        </div>
-        <button id="item-save">save</button>
-        <div>
-        <%= @item.title + " assign to " + @room.name + " with duration " + @item.duration.to_s + " between " + @freetime.start.hour.to_s + " and " + @freetime.end.to_s %>
-        </div>
+        <div><%= "Select start time between " + @freetime.start.to_s + " and " + (@freetime.end - @item.duration.minutes).to_s%></div>
+        <div class='field_value'><input type='text' name='time' id='time-selection' value='<%=@time%>' /></div>
+        <div><button id="item-save">save</button></div>
     </div>
 </div>
 <% end %>
-<div id='form-response'>
-</div>
+<div id='form-response'></div>
