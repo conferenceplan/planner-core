@@ -132,7 +132,8 @@ function setUpRoomGrid(){
             currentDateString = $(response).find('#current-date');
             $('#program-room-data').html(titles);
             $(this).html(res);
-            $('#program-grid').scrollTo({top:'-=400px', left:'+=0'}, 0); // position in middle of day (approximately)
+//            $('#program-grid').scrollTo({top:'-=400px', left:'+=0'}, 0); // position in middle of day (approximately)
+            $('#program-grid-rooms').scrollTo({top:'0', left:'0'}, 0);
             $('#program-grid').scrollTo({top:'320px', left:'0'}, 0);
             $('#program-grid-times').scrollTo({top:'320px', left:'0'}, 0);
             makeDroppables();
@@ -203,26 +204,28 @@ function adjust(dialog){
 function makeDroppables(){
     $(".droppable").droppable({
         hoverClass: "ui-state-hover",
-        accept: ":not(.removeable)",
         drop: function(event, ui){
-            var itemid = ui.draggable.find('.itemid').text().trim();
-            var roomid = $(this).find('.roomid').text().trim();
-            var timeid = $(this).find('.timeid').text().trim();
-            var timestart = Date.strtodate( $(this).find('.timestart').text().trim(), 'yy-mm-dd hh:ii:ss O');
-            var timeend = Date.strtodate( $(this).find('.timeend').text().trim(), 'yy-mm-dd hh:ii:ss O');
-            startHour = timestart.getHours();
-            startMinute = timestart.getMinutes();
-            endHour = timeend.getHours(); // subtract the period from this
-            endMinute = timeend.getMinutes();
-            var one_min=1000*60*60;
-            // to nearest 5 minutes period (one 12th)
-            var duration = (Math.round(((timeend.getTime() - timestart.getTime())/one_min)*12))/12.0;
-            
-            // Calculate what the limits for the time picker
-            
-            createDialog(itemid, roomid, timeid, timestart.getHours(), duration);
-            // Ask the user what the start time should be (dialog)
-            // Then add the item to the room at the given time
+            if (intersect($(ui.helper), $(".program-grid"))) {
+                var itemid = ui.draggable.find('.itemid').text().trim();
+                var roomid = $(this).find('.roomid').text().trim();
+                var timeid = $(this).find('.timeid').text().trim();
+                var timestart = Date.strtodate($(this).find('.timestart').text().trim(), 'yy-mm-dd hh:ii:ss O');
+                var timeend = Date.strtodate($(this).find('.timeend').text().trim(), 'yy-mm-dd hh:ii:ss O');
+                startHour = timestart.getHours();
+                startMinute = timestart.getMinutes();
+                endHour = timeend.getHours(); // subtract the period from this
+                endMinute = timeend.getMinutes();
+                var one_min = 1000 * 60 * 60;
+                // to nearest 5 minutes period (one 12th)
+                var duration = (Math.round(((timeend.getTime() - timestart.getTime()) / one_min) * 12)) / 12.0;
+                
+                // Calculate what the limits for the time picker
+                
+                createDialog(itemid, roomid, timeid, timestart.getHours(), duration);
+                // Ask the user what the start time should be (dialog)
+                // Then add the item to the room at the given time
+            };
+            return true;
         }
     });
 }
@@ -270,4 +273,21 @@ function makeConflictWidgetSelectable(){
             $('#program-grid-rooms').scrollTo($('#'+roomidstr),800);
             $('#program-grid').scrollTo($('#'+itemid),800);
     });
+}
+
+function intersect(draggable, dropArea){
+
+    var x1 = draggable.offset().left, 
+        x2 = x1 + draggable.width(), 
+        y1 = draggable.offset().top, 
+        y2 = y1 + draggable.height();
+    var l = dropArea.offset().left, 
+        r = l + dropArea.width(), 
+        t = dropArea.offset().top, 
+        b = t + dropArea.height();
+
+    return (l < x1 + (draggable.width() / 2) // Right Half
+             && x2 - (draggable.width() / 2) < r // Left Half
+             && t < y1 + (draggable.height() / 2) // Bottom Half
+             && y2 - (draggable.height() / 2) < b);
 }
