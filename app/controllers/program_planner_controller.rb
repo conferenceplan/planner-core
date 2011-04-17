@@ -18,7 +18,7 @@ class ProgramPlannerController < PlannerController
     args.merge!(:include => [:time_slot, :programme_item, :room]) # eager loads the associated objects to reduce number of queries
     
     @roomAssignments = RoomItemAssignment.find :all, args
-    @roomListing = Room.all(:order => 'rooms.id')
+    @roomListing = Room.all(:order => 'rooms.name ASC')
     @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + day.to_i.day
     
     respond_to do |format|
@@ -156,7 +156,7 @@ class ProgramPlannerController < PlannerController
             fts[idx].time_slot.start = fts[idx-1].time_slot.start # we need this so that the math works
             # But since the find was with a join we need to do new finds to make actual database updates
             ts = TimeSlot.find(fts[idx].time_slot.id)
-            ts.start =fts[idx-1].time_slot.start
+            ts.start = fts[idx-1].time_slot.start
             ts.save
             tso = TimeSlot.find(fts[idx-1].time_slot.id)
             tso.destroy
