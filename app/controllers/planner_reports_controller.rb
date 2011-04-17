@@ -64,7 +64,7 @@ class PlannerReportsController < PlannerController
        name.programmeItems.find_each(:include => [:time_slot, :room, :format]) do |p|
           panelstr = "#{p.title} (#{p.format.name})"
           panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
-          panelstr << ", #{p.room.name} (#{Venue.find(p.room.id).name})" unless p.room.nil?
+          panelstr << ", #{p.room.name} (#{Venue.find(p.room.venue_id).name})" unless p.room.nil?
           if p.time_slot.nil?
              zeroTime = Time.at(0)
              panels.push [zeroTime, "<li>#{panelstr}</li>"]
