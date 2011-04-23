@@ -128,7 +128,10 @@
 
 .item-draggable {
     background-color: white;
+    z-index: 100;
 }
+
+.selectable li { z-index:10; }
 
 #room-slider-left {
     float: left;

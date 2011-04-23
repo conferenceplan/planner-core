@@ -1,4 +1,6 @@
-<div id='current-date'><%= @currentDate.strftime('%A') %></div>
+<div id='current-date'>
+    <%= @currentDate.strftime('%A') %>
+</div>
 <div id='room-titles'>
     <%@roomListing.each do |room| %>
     <div class="program-room" id='<%= "room-title-" + room.id.to_s%>'>
@@ -11,23 +13,21 @@
     <% current_room = nil %>
     <% new_column = true %>
     <% free_time = true %>
-    <%@roomAssignments.each do |assignment| %>
-    <% new_column = (current_room == nil) || (current_room.id != assignment.room.id) %>
-    <% if new_column %>
-    <% if !first %>
-    </div>
-    <% end %>
-    <div class='room-entries'>
-    <% end %>
-        <% first = false %>
-        <% current_room = assignment.room %>
-        <% nbrQuarterHours = (((assignment.time_slot.end - assignment.time_slot.start) / 3600) / 0.25).round %>
-        <% free_time = assignment.programme_item == nil %>
-        <div style='height:<%=nbrQuarterHours%>em;' class='program-entry <%= free_time ? "droppable free-time" : "item-draggable" %>' id = '<%= free_time ? "time-" + assignment.time_slot.id.to_s : "item-" + assignment.programme_item.id.to_s %>'>
+    <%@roomListing.each do |room| %>
+    <div class='room-entries' style='position: relative;'>
+        <div style='height:96em; z-index: -99;' class='program-entry droppable free-time'>
             <div class="roomid" style="display: none;">
-                <%= current_room.id %>
+                <%= room.id %>
             </div>
-            <% if !free_time %>
+        </div>
+        <%room.room_item_assignments.day(@day).each do |assignment| %>
+        <% nbrQuarterHours = (((assignment.time_slot.end - assignment.time_slot.start) / 3600) / 0.25).round %>
+        <% startPosn = assignment.time_slot.start.hour / 0.25 %>
+        <% styleStr = 'height:' + nbrQuarterHours.to_s + 'em;' + 'position: absolute; top: ' + startPosn.to_s + 'em;' %>
+        <div style='<%=styleStr%>' class='program-entry item-draggable' id = 'item-<%=assignment.programme_item.id.to_s %>'>
+            <div class="roomid" style="display: none;">
+                <%= room.id %>
+            </div>
             <div class="itemid" style="display: none;">
                 <%= assignment.programme_item.id %>
             </div>
@@ -37,18 +37,10 @@
             <div style="width=85%; display:inline;">
                 <%= assignment.programme_item.title %>
             </div>
-            <a href="#itemid=<%= assignment.programme_item.id %>&roomid=<%= current_room.id %>" class="remove-item"><div class="ui-icon ui-icon-close" style="display:inline; float: right;"/></a>
-            <% else %>
-            <div class="timeid" style="display: none;">
-                <%= assignment.time_slot.id %>
-            </div>
-            <div class="timestart" style="display: none;">
-                <%= assignment.time_slot.start %>
-            </div>
-            <div class="timeend" style="display: none;">
-                <%= assignment.time_slot.end %>
-            </div>
-            <% end %>
+            <a href="#itemid=<%= assignment.programme_item.id %>&roomid=<%= room.id %>" class="remove-item">
+            <div class="ui-icon ui-icon-close" style="display:inline; float: right;"/></a>
         </div>
+        <%end %>
+    </div>
     <%end %>
 </div>

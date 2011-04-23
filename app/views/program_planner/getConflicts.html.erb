@@ -1,4 +1,12 @@
 <div id='item-conflict-report'>
+    <%@roomConflicts.each do |conflict| %>
+    <div class='selectable item-conflict ui-widget-content'>
+        <div class="itemid" style="display: none;"><%= conflict[2] %></div>
+        <div class="roomid" style="display: none;"><%= conflict[0] %></div>
+        <div>In room <b><%= conflict[1] %></b> <em><%= conflict[3] %></em>  has a conflict with</div>
+        <div><em><%= conflict[5] %></em> at <%= conflict[6].to_datetime.in_time_zone.strftime('%H:%M %A') %> </div>
+    </div>
+    <%end %>
     <%@conflicts.each do |conflict| %>
     <div class='selectable item-conflict ui-widget-content'>
         <div class="itemid" style="display: none;"><%= conflict[5] %></div>

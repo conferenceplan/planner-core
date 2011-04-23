@@ -151,8 +151,9 @@ function makeDraggables(){
     });
 }
 
-function createDialog(itemid, roomid, timeid, timestart, duration) {
-    var url = "/program_planner/"+ roomid + "/edit?itemid="+itemid+'&timeid='+timeid+'&day='+currentDay;
+function createDialog(itemid, roomid) { //}, timeid, timestart, duration) {
+    var url = "/program_planner/"+ roomid + "/edit?itemid="+itemid+'&day='+currentDay;
+//    +'&timeid='+timeid
     initAddItemDialog(url);
     $('#edialog').jqmShow();
 }
@@ -164,16 +165,16 @@ function initAddItemDialog(url) {
         onLoad: function(dialog){
                 // Put the start time in the field - format as hh:ii
                 // Put in the date selector
-                startHour = parseInt($('#firsthour', dialog.w).text().trim());
-                startMinute= parseInt($('#firstminute', dialog.w).text().trim());
-                endHour = parseInt($('#lasthour', dialog.w).text().trim());
-                endMinute= parseInt($('#lastminute', dialog.w).text().trim());
-                $('#time-selection', dialog.w).timepicker({
-                        timeSeparator: ':',
-                        defaultTime: startHour + ":" + startMinute,
-                        onHourShow: OnHourShowCallback,
-                        onMinuteShow: OnMinuteShowCallback
-                        });
+//                startHour = parseInt($('#firsthour', dialog.w).text().trim());
+//                startMinute= parseInt($('#firstminute', dialog.w).text().trim());
+//                endHour = parseInt($('#lasthour', dialog.w).text().trim());
+//                endMinute= parseInt($('#lastminute', dialog.w).text().trim());
+//                $('#time-selection', dialog.w).timepicker({
+//                        timeSeparator: ':',
+//                        defaultTime: startHour + ":" + startMinute,
+//                        onHourShow: OnHourShowCallback,
+//                        onMinuteShow: OnMinuteShowCallback
+//                        });
                 adjust(dialog);
             },
         onHide: function(hash){
@@ -208,43 +209,14 @@ function makeDroppables(){
             if (intersect($(ui.helper), $(".program-grid"))) {
                 var itemid = ui.draggable.find('.itemid').text().trim();
                 var roomid = $(this).find('.roomid').text().trim();
-                var timeid = $(this).find('.timeid').text().trim();
-                var timestart = Date.strtodate($(this).find('.timestart').text().trim(), 'yy-mm-dd hh:ii:ss O');
-                var timeend = Date.strtodate($(this).find('.timeend').text().trim(), 'yy-mm-dd hh:ii:ss O');
-                startHour = timestart.getHours();
-                startMinute = timestart.getMinutes();
-                endHour = timeend.getHours(); // subtract the period from this
-                endMinute = timeend.getMinutes();
-                var one_min = 1000 * 60 * 60;
-                // to nearest 5 minutes period (one 12th)
-                var duration = (Math.round(((timeend.getTime() - timestart.getTime()) / one_min) * 12)) / 12.0;
                 
-                // Calculate what the limits for the time picker
-                
-                createDialog(itemid, roomid, timeid, timestart.getHours(), duration);
+                createDialog(itemid, roomid); //, timeid, timestart.getHours(), duration);
                 // Ask the user what the start time should be (dialog)
                 // Then add the item to the room at the given time
             };
             return true;
         }
     });
-}
-
-var startHour = 0;
-var endHour = 23;
-function OnHourShowCallback(hour) {
-    if ((hour >= startHour) && (hour <= endHour)) {
-        return true; // valid
-    }
-    return false; // not valid
-}
-
-var startMinute = 0;
-var endMinute = 60;
-function OnMinuteShowCallback(hour, minute) {
-    if ((hour == endHour ) && (minute >= endMinute)) { return false; } // not valid
-    if ((hour == startHour) && (minute < startMinute)) { return false; }   // not valid
-    return true;  // valid
 }
 
 function loadConflictWidget(){
@@ -270,6 +242,8 @@ function makeConflictWidgetSelectable(){
             var roomid = $(this).find('.roomid').text().trim();
             var itemid = 'item-'+id;
             var roomidstr = 'room-title-'+roomid;
+            var topPosn = $('#'+itemid).position().top;
+            $('#program-grid-times').scrollTo(topPosn+'px', 800, {axis:'y'});
             $('#program-grid-rooms').scrollTo($('#'+roomidstr),800);
             $('#program-grid').scrollTo($('#'+itemid),800);
     });

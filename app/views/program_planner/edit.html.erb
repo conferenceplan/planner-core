@@ -5,12 +5,7 @@
             <input type='hidden' name='day' value='<%=@day%>' />
             <input type='hidden' name='itemid' value='<%=@item.id%>' />
             <input type='hidden' name='roomid' value='<%=@room.id%>' />
-            <input type='hidden' name='timeid' value='<%=@freetime.id%>' />
-            <div style='display: none;' id='firsthour'><%=@freetime.start.hour%></div>
-            <div style='display: none;' id='firstminute'><%=@freetime.start.min%></div>
-            <div style='display: none;' id='lasthour'><%=(@freetime.end - @item.duration.minutes).hour%></div>
-            <div style='display: none;' id='lastminute'><%=(@freetime.end - @item.duration.minutes).min%></div>
-        <div><%= "Select start time between " + @freetime.start.to_s + " and " + (@freetime.end - @item.duration.minutes).to_s%></div>
+        <div>Select start time</div>
         <div class='field_value'><input type='text' name='time' id='time-selection' value='<%=@time%>' /></div>
         <div><button id="item-save">save</button></div>
     </div>

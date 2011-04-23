@@ -37,7 +37,6 @@ class RoomsController < PlannerController
   def create
     @room = Room.new(params[:room])
     if (@room.save)
-       initialiseFreeTime(@room)
        render :action => 'index', :layout => 'content'
     else
       render :content
@@ -75,16 +74,4 @@ class RoomsController < PlannerController
     
   end
   
-private
-
-  def initialiseFreeTime(room)
-      SITE_CONFIG[:conference][:number_of_days].times { |d|
-        ts = TimeSlot.new(:start => Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + d.day,
-              :end => Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + d.day + 23.hours + 59.minutes)
-        ts.save
-        ft = RoomItemAssignment.new(:room => room, :time_slot => ts, :day => d)
-        ft.save
-      }
-  end
-
 end
