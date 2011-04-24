@@ -20,10 +20,17 @@
                 <%= room.id %>
             </div>
         </div>
+        <%previousAssignment = nil%>
+        <%leftPosn = 5%>
         <%room.room_item_assignments.day(@day).each do |assignment| %>
         <% nbrQuarterHours = (((assignment.time_slot.end - assignment.time_slot.start) / 3600) / 0.25).round %>
         <% startPosn = assignment.time_slot.start.hour / 0.25 %>
         <% styleStr = 'height:' + nbrQuarterHours.to_s + 'em;' + 'position: absolute; top: ' + startPosn.to_s + 'em;' %>
+        <% if previousAssignment && (previousAssignment.time_slot.start == assignment.time_slot.start)%>
+            <% styleStr += 'left: ' + leftPosn.to_s + 'px' %>
+            <% leftPosn += 5%>
+        <% end %>
+        <% previousAssignment = assignment %>
         <div style='<%=styleStr%>' class='program-entry item-draggable' id = 'item-<%=assignment.programme_item.id.to_s %>'>
             <div class="roomid" style="display: none;">
                 <%= room.id %>
