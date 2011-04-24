@@ -333,8 +333,10 @@ function loadTabs(ids){
     var data = jQuery("#programmeItems").jqGrid('getRowData', ids);
     $('#programmeItem_id').text(ids);
     var $tabs = $('#programmeItems_tabs').tabs();
+    $tabs.tabs('url', 2, 'programme_items/' + ids + '/excluded_items_survey_maps').tabs('load', 2);
     $tabs.tabs('url', 1, 'tags/' + ids + '?class=ProgrammeItem').tabs('load', 1);
-    $tabs.tabs('url', 0, 'programme_items/' + ids).tabs('load', 0).tabs('select', 0);
+	$tabs.tabs('url', 0, 'programme_items/' + ids).tabs('load', 0).tabs('select', 0);
+
 }
 
 /* Initialize the tags - load is called when a new participant/person is selected in the grid */

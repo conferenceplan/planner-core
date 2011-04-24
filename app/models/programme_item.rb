@@ -16,5 +16,8 @@ class ProgrammeItem < ActiveRecord::Base
   has_one :room, :through => :room_item_assignment # TODO - check that this is still ok
   has_one :time_slot, :through => :room_item_assignment
   
+  has_many :excluded_items_survey_maps
+  has_many :mapped_survey_questions, :through => :excluded_items_survey_maps
+  
   acts_as_audited
 end

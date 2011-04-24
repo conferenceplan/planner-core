@@ -92,6 +92,9 @@ ActionController::Routing::Routes.draw do |map|
     :has_one => [:registrationDetail, :edited_bio, :available_date],
     :collection => {:list => :get }
 
+  map.resources :programme_items,
+    :has_many => [:excluded_items_survey_maps,:mapped_survey_questions]
+
   map.connect 'participants/list', :controller => 'people', :action => 'list'
  
   map.connect 'rooms/list', :controller => 'rooms', :action => 'list'
@@ -168,5 +171,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :index 
 
   map.connect '', :controller => "user_sessions", :action => "new" 
+  
+  map.resources :excluded_items_survey_maps, :has_many => :programme_items,:has_many => :mapped_survey_questions
 
 end

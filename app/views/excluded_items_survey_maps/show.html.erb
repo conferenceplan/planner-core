@@ -1,0 +1,14 @@
+<div class='excluded_items_survey_map'>
+  <div>
+   
+  <% if @excludedItemsSurveyMaps %>
+    <% @excludedItemsSurveyMaps.each do |survey_map| %>
+  	<div class='line'>
+  		SurveyQuestion: 
+		<%= survey_map.mapped_survey_question.name %>
+  	</div>
+  <% end %>
+  <% end %>
+ 
+</div>
+
