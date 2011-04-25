@@ -96,18 +96,18 @@ class ProgramPlannerController < PlannerController
   
 CONFLICT_QUERY_PT1 = <<"EOS"
   select 
-  R.id id, R.name name,
-  P.id person_id, P.first_name person_first_name, P.last_name, 
-  S.id item_id, S.title item_name, Conflicts.startA item_start,
-  RB.id conflict_room_id, RB.name conflict_room_name,
-  SB.id conflict_item_id, SB.title conflict_item_title,
-  Conflicts.startB conflict_start
+  R.id as id, R.name as name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
+  RB.id as conflict_room_id, RB.name as conflict_room_name,
+  SB.id as conflict_item_id, SB.title as conflict_item_title,
+  Conflicts.startB as conflict_start
   from people P, rooms R, programme_items S,
   rooms RB, programme_items SB, 
-   (select progA.person_id pidA, progB.person_id pidB, 
-   roomA.room_id roomA, progA.programme_item_id progA, 
-   progA.role_id roleA, progB.role_id roleB, tsA.start startA, tsA.end endA,
-   roomB.room_id roomB, progB.programme_item_id progB, tsB.start startB, tsA.end endB
+   (select progA.person_id as pidA, progB.person_id as pidB, 
+   roomA.room_id as roomA, progA.programme_item_id as progA, 
+   progA.role_id as roleA, progB.role_id as roleB, tsA.start as startA, tsA.end as endA,
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
    from programme_item_assignments progA, room_item_assignments roomA, time_slots tsA,
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
    where
@@ -132,16 +132,16 @@ CONFLICT_QUERY_PT2 = <<"EOS"
 EOS
 
 ITEM_CONFLICT_QUERY_PT1 = <<"EOS"
-select room.id, room.name name, 
-S.id item_id, S.title item_name,
-SB.id conflict_item_id, SB.title conflict_item_name,
-Conflicts.startA item_start,
-Conflicts.startB conflict_start
+select room.id, room.name as name, 
+S.id as item_id, S.title as item_name,
+SB.id as conflict_item_id, SB.title as conflict_item_name,
+Conflicts.startA as item_start,
+Conflicts.startB as conflict_start
 from
 Rooms room, programme_items S, programme_items SB,
 (select 
-   roomA.room_id roomA, roomA.programme_item_id progA, tsA.start startA, tsA.end endA,
-   roomB.room_id roomB, roomB.programme_item_id progB, tsB.start startB, tsA.end endB
+   roomA.room_id as roomA, roomA.programme_item_id as progA, tsA.start as startA, tsA.end as endA,
+   roomB.room_id as roomB, roomB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
 from 
    room_item_assignments roomA, time_slots tsA,
    room_item_assignments roomB, time_slots tsB
