@@ -16,7 +16,7 @@ jQuery(document).ready(function(){
         url: baseUrl,
         datatype: 'xml',
         mtype: 'POST',
-        colNames: ['Title', 'Format', 'Duration', 'lock'],
+        colNames: ['Title', 'Format', 'Duration', 'Room', 'Day','Start', 'lock'],
         colModel: [{
             name: 'programme_item[title]',
             index: 'title',
@@ -70,6 +70,56 @@ jQuery(document).ready(function(){
                 required: true
             }
         }, {
+            name: 'room',
+            sortable: false,
+            search: false,
+            width: 80,
+            editable: true,
+            edittype: "select",
+            editoptions: {
+                dataUrl: '/rooms/listwithblank'
+            },
+            formoptions: {
+                rowpos: 4,
+                label: "Room",
+            },
+            editrules: {
+                required: false
+            }
+        }, {
+            name: 'start_day',
+            sortable: false,
+            search: false,
+            width: 100,
+            editable: true,
+            edittype: "select",
+            editoptions: {
+                value: "-1:;0:Wednesday;1:Thursday;2:Friday;3:Saturday;4:Sunday"
+            },
+            formoptions: {
+                rowpos: 5,
+                label: "Day",
+            },
+            editrules: {
+                required: false
+            }
+        }, {
+            name: 'start_time',
+            sortable: false,
+            search: false,
+            width: 60,
+            editable: true,
+            editoptions: {
+                size: 20
+            },
+            formoptions: {
+                rowpos: 6,
+                label: "Start Time",
+            },
+            editrules: {
+                required: false
+            }
+        }, {
             name: 'programme_items[lock_version]',
             width: 3,
             index: 'lock_version',
@@ -78,7 +128,7 @@ jQuery(document).ready(function(){
             sortable: false,
             search: false,
             formoptions: {
-                rowpos: 4,
+                rowpos: 7,
                 label: "lock"
             }
         }],
@@ -114,12 +164,14 @@ jQuery(document).ready(function(){
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
         beforeSubmit: function(postdata, formid){
-        
             this.ajaxEditOptions = {
                 url: '/programme_items/' + postdata.programmeItems_id,
                 type: 'put'
             };
             return [true, "ok"];
+        },
+        beforeShowForm: function(frm) {
+            $('#start_time').timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], spinnerImage: 'images/spinnerDefault.png'});
         }
     }, // edit options
     { // add options

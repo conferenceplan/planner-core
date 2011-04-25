@@ -1,4 +1,5 @@
 class ProgrammeItemsController < PlannerController
+  include ProgramPlannerHelper
   
   def index
     @programmeItems = ProgrammeItem.find :all
@@ -33,10 +34,40 @@ class ProgrammeItemsController < PlannerController
     @programmeItem = ProgrammeItem.find(params[:id])
     render :layout => 'content'
   end
-  
+
   def update
+    saved = false
     @programmeItem = ProgrammeItem.find(params[:id])
-    if @programmeItem.update_attributes(params[:programme_item])
+    startDay = params[:start_day]
+    startTime = params[:start_time]
+    roomId = params[:room]
+    
+    begin
+      ProgrammeItem.transaction do
+        
+        if @programmeItem.update_attributes(params[:programme_item])
+          if startDay && startTime && roomId
+            room = Room.find(roomId)
+            addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
+          else
+            ts = @programmeItem.time_slot
+            if (ts)
+              ts.end = ts.start + @programmeItem.duration.minutes
+              ts.save
+            end
+          end
+          saved = true
+        else
+          saved = false
+        end
+      end
+    rescue Exception
+      logger.info '**** PROBLEM'
+      saved = false
+      raise
+    end
+
+    if saved
       redirect_to :action => 'show', :id => @programmeItem
     else
       render :action => 'edit', :layout => 'content'
@@ -104,7 +135,7 @@ class ProgrammeItemsController < PlannerController
     @nbr_pages += 1 if @count % rows.to_i > 0
     
     offset = (@page.to_i - 1) * rows.to_i
-    args.merge!(:offset => offset, :limit => rows, :order => idx + " " + order)
+    args.merge!(:offset => offset, :limit => rows, :order => idx + " " + order, :include => [:room, :time_slot])
     if tagquery.empty?
       @programmeItems = ProgrammeItem.find :all, args
     else

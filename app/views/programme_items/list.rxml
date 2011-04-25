@@ -11,6 +11,18 @@ xml.rows do
          xml.cell('none')
       end
       xml.cell(programmeItem.duration)
+      if programmeItem.room
+        xml.cell(programmeItem.room.name)
+      else
+        xml.cell('')
+      end
+      if programmeItem.time_slot
+        xml.cell(programmeItem.time_slot.start.strftime('%A'))
+        xml.cell(programmeItem.time_slot.start.strftime('%H:%M'))
+      else  
+        xml.cell('')
+        xml.cell('')
+      end
     end
   end
 end

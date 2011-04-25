@@ -2,6 +2,12 @@ class RoomsController < PlannerController
   def index
   end
 
+  def listwithblank
+    # Get all the rooms in the database
+    @rooms = Room.find :all
+    render :layout => 'plain'
+  end
+
   #
   def list
     rows = params[:rows]

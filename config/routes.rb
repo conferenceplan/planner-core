@@ -99,6 +99,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/list', :controller => 'people', :action => 'list'
  
   map.connect 'rooms/list', :controller => 'rooms', :action => 'list'
+  map.connect 'rooms/listwithblank', :controller => 'rooms', :action => 'listwithblank'
   map.resources :rooms
 
   map.connect 'venue/list', :controller => 'venue', :action => 'list'
