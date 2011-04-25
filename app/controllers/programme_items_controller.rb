@@ -98,6 +98,10 @@ class ProgrammeItemsController < PlannerController
   
   def destroy
     @programmeItem = ProgrammeItem.find(params[:id])
+    
+    TimeSlot.delete(@programmeItem.time_slot_id)
+    RoomItemAssignment.delete(@programmeItem.room_item_assignment.id)
+    
     @programmeItem.destroy
     redirect_to :action => 'index'
   end

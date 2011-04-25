@@ -20,6 +20,7 @@
             <% styleStr += 'left: ' + leftPosn.to_s + 'px' %>
             <% leftPosn += 5 %>
         <% end %>
+        <% if assignment.programme_item %>
         <div style='<%=styleStr%>' class='program-entry item-draggable' id = 'item-<%=assignment.programme_item.id.to_s %>'>
             <div class="roomid" style="display: none;"><%= room.id %></div>
             <div class="itemid" style="display: none;"><%= assignment.programme_item.id %></div>
@@ -29,6 +30,7 @@
             <div class="ui-icon ui-icon-close" style="display:inline; float: right;"/></a>
         </div>
         <% previousAssignment = assignment %>
+        <% end %>
         <% end %>
     </div>
     <% end %>

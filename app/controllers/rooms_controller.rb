@@ -54,11 +54,6 @@ class RoomsController < PlannerController
     @venues = Venue.find :all
   end
   
-  #def edit
-    #@room = Room.find(params[:id])
-    #@venues = Venue.find :all
-  #end
-  
   def update
     @room = Room.find(params[:id])
     if @room.update_attributes(params[:room])

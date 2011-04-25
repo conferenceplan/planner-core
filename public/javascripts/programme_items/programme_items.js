@@ -180,7 +180,10 @@ jQuery(document).ready(function(){
         closeOnEscape: true,
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
-        closeAfterAdd: true
+        closeAfterAdd: true,
+        beforeShowForm: function(frm) {
+            $('#start_time').timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], spinnerImage: 'images/spinnerDefault.png'});
+        }
     }, // add options
     { // del options
         reloadAfterSubmit: false,
