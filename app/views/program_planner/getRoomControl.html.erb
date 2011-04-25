@@ -1,0 +1,7 @@
+<div id='room-selection'>
+    <% @roomListing.each do |room| %>
+        <div class='room-check'>
+        <input id='<%= "room-sel-id-" + room.id.to_s%>' name="<%= room.name %>" value="<%= room.id.to_s %>" type="checkbox"><%= room.name %></input>
+        </div>
+    <% end %>
+</div>

@@ -1,91 +1,65 @@
 <% content_for :jsheader do %>
-<%= javascript_include_tag 'jquery.scrollTo-1.4.2-min' %>
-<%= javascript_include_tag 'jquery.ui.datetime.min' %>
-<%= javascript_include_tag 'jquery.ui.timepicker' %>
-<%= stylesheet_link_tag 'jquery.ui.datetime' %>
-<%= stylesheet_link_tag 'jquery-ui-timepicker' %>
 <%= stylesheet_link_tag 'planner/itemplanner' %>
+<%= stylesheet_link_tag 'planner/programplanner' %>
+<%= stylesheet_link_tag 'jquery.timeentry' %>
+<%= javascript_include_tag 'jquery.scrollTo-1.4.2-min' %>
+<%= javascript_include_tag 'jquery.timeentry.min' %>
+<%= javascript_include_tag 'jquery.repeatedclick.min' %>
 <%= javascript_include_tag 'planner/programplanner' %>
 <%= javascript_include_tag 'planner/itemwidget' %>
-<%= stylesheet_link_tag 'planner/programplanner' %>
 <% end %>
 <script type='text/javascript'>
-//<![CDATA[
-var numberOfDays = "<%=SITE_CONFIG[:conference][:number_of_days]%>" -1;
-//]]>
+    //<![CDATA[
+    var numberOfDays = "<%=SITE_CONFIG[:conference][:number_of_days]%>" - 1;
+    //]]>
 </script>
 <div class='container_12'>
     <div class="grid_3">
-        <span id="item-name-search"><input type='text' id='item-name-search-text'>
-            </input></span>
-        <div class="spacer">
-        </div>
+        <span id="item-name-search"><input type='text' id='item-name-search-text'></input></span>
+        <div class="spacer"></div>
         <span id="item-toolbar" class="ui-widget-header ui-corner-all">
-            <button id="item-beginning">
-                go to beginning
-            </button>
-            <button id="item-rewind">
-                rewind
-            </button>
+            <button id="item-beginning">goto first set item</button>
+            <button id="item-rewind">previous set of items</button>
             <input type='text' size='8' id='current-item-page'></input>
-            <button id="item-forward">
-                fast forward
-            </button>
-            <button id="item-end">
-                go to end
-            </button>
+            <button id="item-forward">next set of items</button>
+            <button id="item-end">goto last set of items</button>
         </span>
         <div class="spacer"></div>
         <div id="items-widget" class="ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
-                Items
-            </div>
-            <div id="items-widget-content">
-            </div>
+            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">Items</div>
+            <div id="items-widget-content"></div>
         </div>
-        <!-- TODO - put in mechanism to page and to filter -->
         <div class="spacer"></div>
         <div id="items-widget" class="ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
-                Conflicts
-            </div>
-            <div id="conflict-widget-content">
-            </div>
+            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">Conflicts</div>
+            <div id="conflict-widget-content"></div>
         </div>
         <div class="spacer"></div>
     </div>
     <div id="program-widget" class="ui-widget ui-widget-content ui-corner-all grid_8">
-        <div class="spacer">
-        </div>
+        <div class="spacer"></div>
+        <div class="grid-toolbar">
         <span id="program-toolbar">
-            <button id="program-beginning">
-                go to beginning
-            </button>
-            <button id="program-rewind">
-                rewind
-            </button>
+            <button id="program-beginning">first day</button>
+            <button id="program-rewind">previous day</button>
             <input type='text' size='10' id='current-day-page' value='loading'></input>
-            <button id="program-forward">
-                fast forward
-            </button>
-            <button id="program-end">
-                go to end
-            </button>
+            <button id="program-forward">next day</button>
+            <button id="program-end">last day</button>
         </span>
-        <div class="spacer">
+        <div class='room-selector-widget'>
+        <button id='room-selector-button'>Filter Room(s)</button>
+        <div id='room-selector'></div>
         </div>
+        </div>
+        <div class="spacer"></div>
         <div class='program-grid-shell'>
             <div class="time-slider" id="time-slider-up">
-                <button id="scroll-up">
-                    up
-                </button>
+                <button id="scroll-up">up</button>
             </div>
             <div class='rooms-views'>
                 <div class="room-slider" id="room-slider-left">
                     <div class='room-control'>
-                        <button id="scroll-left">
-                            left
-                        </button>
+                        <button id="scroll-left">left</button>
                     </div>
                 </div>
                 <div class='time-column'>
@@ -115,16 +89,12 @@ var numberOfDays = "<%=SITE_CONFIG[:conference][:number_of_days]%>" -1;
                 </div>
                 <div class="room-slider" id="room-slider-right">
                     <div class='room-control'>
-                        <button id="scroll-right">
-                            right
-                        </button>
+                        <button id="scroll-right">right</button>
                     </div>
                 </div>
             </div>
             <div class="time-slider" id="time-slider-down">
-                <button id="scroll-down">
-                    down
-                </button>
+                <button id="scroll-down">down</button>
             </div>
         </div>
     </div>

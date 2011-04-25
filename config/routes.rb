@@ -14,10 +14,11 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :item_planner, :only => :index # TODO - check
 
-  map.connect 'program_planner/list', :controller => 'program_planner', :action => 'list'
+  map.connect 'program_planner/list', :controller => 'program_planner', :action => 'list', :method => 'post'
   map.connect 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
   map.connect 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :method => 'get'
   map.connect 'program_planner/getConflicts', :controller => 'program_planner', :action => 'getConflicts', :method => 'get'
+  map.connect 'program_planner/getRoomControl', :controller => 'program_planner', :action => 'getRoomControl', :method => 'get'
   map.resources :program_planner, :member => {:index => :get, :edit => :get}
 
   # The priority is based upon order of creation: first created -> highest priority.

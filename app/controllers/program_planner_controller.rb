@@ -1,15 +1,26 @@
 class ProgramPlannerController < PlannerController
   def index
   end
+
+  def getRoomControl
+    @roomListing = Room.all(:order => 'rooms.name ASC') 
+
+    respond_to do |format|
+      format.html { render :layout => 'plain' }
+      format.xml
+    end
+  end
   
   #
   # Get the rooms and times for a given day
   # order by room and time
   #
   def list
-    # Day
-    @day = params[:day]
-    @roomListing = Room.all(:order => 'rooms.name ASC') #, :include => [:room_item_assignments]) # need to limit by day?
+    j = ActiveSupport::JSON
+    rooms = j.decode params[:rooms] if params[:rooms] # the rooms that we want to show
+    conditions = ['id in (?)', rooms] if rooms && (rooms.size > 0)
+    @day = params[:day] # Day
+    @roomListing = Room.all(:order => 'rooms.name ASC', :conditions => conditions) # use room_item_assignments.day(@day) to filter list of assignments by day
     
     @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + @day.to_i.day
     

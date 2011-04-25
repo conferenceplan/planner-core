@@ -1,9 +1,11 @@
 var currentDay = 0;
 var ignoreScheduled = true;
+var roomList = '[]';
 
 jQuery(document).ready(function(){
     initialiseDayButtons();
     setUpRoomGrid();
+    initialiseRoomSelection();
 });
 
     
@@ -83,36 +85,52 @@ function initialiseDayButtons(){
         icons: {
             primary: "ui-icon-circle-arrow-w"
         }
-    }).click(function(){
+    }).repeatedclick(function(){
         $('#program-grid-rooms').scrollTo({top:'-=0px', left:'-=100'}, 0);
         $('#program-grid').scrollTo({top:'-=0px', left:'-=100'}, 0);
+    },{
+        duration: 500,
+        speed: 0.8,
+        min: 100
     });
     $("#scroll-right").button({
         text: false,
         icons: {
             primary: "ui-icon-circle-arrow-e"
         }
-    }).click(function(){
+    }).repeatedclick(function(){
         $('#program-grid-rooms').scrollTo({top:'-=0px', left:'+=100'}, 0);
         $('#program-grid').scrollTo({top:'-=0px', left:'+=100'}, 0);
+    },{
+        duration: 500,
+        speed: 0.8,
+        min: 100
     });
     $("#scroll-up").button({
         text: false,
         icons: {
             primary: "ui-icon-circle-arrow-n"
         }
-    }).click(function(){
+    }).repeatedclick(function(){
         $('#program-grid').scrollTo({top:'-=40px', left:'-=0'}, 0);
         $('#program-grid-times').scrollTo({top:'-=40px', left:'-=0'}, 0);
+    },{
+        duration: 500,
+        speed: 0.8,
+        min: 100
     });
     $("#scroll-down").button({
         text: false,
         icons: {
             primary: "ui-icon-circle-arrow-s"
         }
-    }).click(function(){
+    }).repeatedclick(function(){
         $('#program-grid').scrollTo({top:'+=40px', left:'+=0'}, 0);
         $('#program-grid-times').scrollTo({top:'+=40px', left:'+=0'}, 0);
+    }, {
+        duration: 500,
+        speed: 0.8,
+        min: 100
     });
 }
 
@@ -124,15 +142,16 @@ function setUpRoomGrid(){
         data: {
             sidx: 'title',
             sord: 'asc',
+            rooms: roomList
         },
         context: $('#program-grid-data'),
         success: function(response){
+            roomSelector = $(response).find('#room-selection');
             titles = $(response).find('#room-titles');
             res = $(response).find('#room-timetable');
             currentDateString = $(response).find('#current-date');
             $('#program-room-data').html(titles);
             $(this).html(res);
-//            $('#program-grid').scrollTo({top:'-=400px', left:'+=0'}, 0); // position in middle of day (approximately)
             $('#program-grid-rooms').scrollTo({top:'0', left:'0'}, 0);
             $('#program-grid').scrollTo({top:'320px', left:'0'}, 0);
             $('#program-grid-times').scrollTo({top:'320px', left:'0'}, 0);
@@ -153,7 +172,6 @@ function makeDraggables(){
 
 function createDialog(itemid, roomid) { //}, timeid, timestart, duration) {
     var url = "/program_planner/"+ roomid + "/edit?itemid="+itemid+'&day='+currentDay;
-//    +'&timeid='+timeid
     initAddItemDialog(url);
     $('#edialog').jqmShow();
 }
@@ -163,18 +181,8 @@ function initAddItemDialog(url) {
         ajax: url,
         trigger: 'a.entrydialog',
         onLoad: function(dialog){
-                // Put the start time in the field - format as hh:ii
-                // Put in the date selector
-//                startHour = parseInt($('#firsthour', dialog.w).text().trim());
-//                startMinute= parseInt($('#firstminute', dialog.w).text().trim());
-//                endHour = parseInt($('#lasthour', dialog.w).text().trim());
-//                endMinute= parseInt($('#lastminute', dialog.w).text().trim());
-//                $('#time-selection', dialog.w).timepicker({
-//                        timeSeparator: ':',
-//                        defaultTime: startHour + ":" + startMinute,
-//                        onHourShow: OnHourShowCallback,
-//                        onMinuteShow: OnMinuteShowCallback
-//                        });
+                // Put in the time selector
+                $('#time-selection', dialog.w).timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], spinnerImage: 'images/spinnerDefault.png'});
                 adjust(dialog);
             },
         onHide: function(hash){
@@ -231,6 +239,41 @@ function loadConflictWidget(){
             makeConflictWidgetSelectable();
         }
     });
+}
+
+function initialiseRoomSelection() {
+    $.ajax({
+        type: 'GET',
+        url: '/program_planner/getRoomControl',
+        dataType: "html",
+        context: $('#room-selector'),
+        success: function(response){
+            $(this).html(response);
+            jQuery("#room-selection > .room-check > input").click(function(event){
+                roomList = '';
+                jQuery("#room-selection").find("input[type=checkbox][checked]").each( 
+                    function() { 
+                        if (roomList.length > 0) {
+                            roomList += ',';
+                        };
+                       roomList +=  $(this).val();
+                    } 
+                );
+                roomList = '[' + roomList + ']';
+                // re-issue query for grid
+                setUpRoomGrid();
+            });
+        }
+    });
+    
+	$( "#room-selector" ).toggle( false ); // Initial hide the copy/edit menu
+    
+    $( "#room-selector-button" ).button({
+    }).click(function() {
+	    $( "#room-selector" ).toggle( "slide", {}, 500 );
+		return false;
+	});
+
 }
 
 function makeConflictWidgetSelectable(){

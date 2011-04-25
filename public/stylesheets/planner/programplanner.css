@@ -157,3 +157,40 @@
     height: 96em;
 }
 
+/** **/
+div.grid-toolbar {
+	display: inline-block;
+    width: 100%;
+}
+
+.room-selector-link {
+    width: 100px;
+}
+
+span#program-toolbar {
+	float: left;
+}
+
+.room-selector-widget {
+    width: 40%;
+    float: left;
+}
+
+div#room-selector {
+	position: relative;
+	width: 200%;
+}
+
+#room-selection {
+	z-index: 200;
+	position: absolute;
+	display: inline;
+	width: 100%;
+    background-color: white;
+    border: 1px solid black;
+}
+
+#room-selection div.room-check {
+	float: left;
+	width: 90px;
+}
