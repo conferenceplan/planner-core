@@ -14,14 +14,37 @@ class ProgrammeItemsController < PlannerController
     render :layout => 'content'
   end
   def create
-# NOTE - name of the programmeItem passed in from form
+    # NOTE - name of the programmeItem passed in from form
     @programmeItem = ProgrammeItem.new(params[:programme_item])
-    if (@programmeItem.save)
+    startDay = params[:start_day]
+    startTime = params[:start_time]
+    roomId = params[:room]
+    saved = false
+
+    begin
+      ProgrammeItem.transaction do
+        if @programmeItem.save
+          if (startDay.to_i > -1) && startTime && (roomId.to_i > 0)
+            room = Room.find(roomId)
+            addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
+          end
+          saved = true
+        else
+          saved = false
+        end
+      end
+    rescue Exception
+      saved = false
+      raise
+    end
+
+    if saved
        redirect_to :action => 'index', :id => @programmeItem
     else
       render :action => 'new'
     end 
   end
+
   def new
     @programmeItem = ProgrammeItem.new
     @programmeItem.duration = 60
@@ -46,7 +69,7 @@ class ProgrammeItemsController < PlannerController
       ProgrammeItem.transaction do
         
         if @programmeItem.update_attributes(params[:programme_item])
-          if startDay && startTime && roomId
+          if (startDay.to_i > -1) && startTime && (roomId.to_i > 0)
             room = Room.find(roomId)
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           else
@@ -62,7 +85,6 @@ class ProgrammeItemsController < PlannerController
         end
       end
     rescue Exception
-      logger.info '**** PROBLEM'
       saved = false
       raise
     end
