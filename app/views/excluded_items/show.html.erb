@@ -1,0 +1,13 @@
+<div class='excluded_items_survey_map'>
+  <div>
+   
+  <% if @excludedItems %>
+    <% @excludedItems.each do |excluded| %>
+  	<div class='line'>
+		<%= excluded.title %>
+  	</div>
+  <% end %>
+  <% end %>
+ 
+</div>
+

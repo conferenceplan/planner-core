@@ -485,7 +485,7 @@ function loadTabs(id){
 	var survey_id = data['person[survey_respondent_attributes][id]'];
 	
     var tabs = $('#particpanttabs').tabs();
-	tabs.tabs('url', 6, 'participants/' + id + '/available_date').tabs('load', 6);
+	tabs.tabs('url', 6, 'participants/' + id + '/availabilities').tabs('load', 6);
     tabs.tabs('url', 5, 'survey_respondents/reviews/' + survey_id).tabs('load',5);
     tabs.tabs('url', 1, 'participants/' + id + '/addresses').tabs('load', 1);
     tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);

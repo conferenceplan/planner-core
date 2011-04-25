@@ -1,0 +1,12 @@
+<div class='availability'>
+    <div>
+        <%= render :partial => 'available_dates/fragments/available_dates', :locals => { :available_date => @availableDate} %>
+
+        <%= render :partial => 'excluded_items/show', :locals => {:excluded_items => @excludedItems} %>
+        <div class='message' id='tab-messages'>
+        </div>
+        <div class="jqmWindow" id="edialog">
+            Please wait...
+        </div>
+    </div>
+</div>
