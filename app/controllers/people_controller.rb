@@ -1,4 +1,5 @@
 class PeopleController < PlannerController
+  include SurveyReportHelpers
 
   def destroy
     person = Person.find(params[:id])
@@ -411,5 +412,32 @@ def acceptancestatuslistwithblank
     render :layout => 'plain'
 end
 
+def updateExcludedItemsFromSurveys
+    accepted = AcceptanceStatus.find_by_name("Accepted")        
+    invitestatus = InviteStatus.find_by_name("Invited")
+    excludedItemMaps = ExcludedItemsSurveyMap.find :all
+    peopleIdMap = {}
+    @peopleUpdate = []
+    excludedItemMaps.each do |excludedItemMap|
+      @people = search_survey_exact(excludedItemMap.mapped_survey_question.question,excludedItemMap.mapped_survey_question.code)
+      @programmeItem = ProgrammeItem.find(excludedItemMap.programme_item_id)
+      @people.each do |person|
+        found = false
+        person.excluded_items.each do |personItem|
+          if (personItem.id == @programmeItem.id)
+            found = true
+          end
+        end
+        if (found == false)
+          @excludedItem = person.excluded_items << @programmeItem
+          person.save
+          if (peopleIdMap.has_key?(person.id) == false)
+            @peopleUpdate << person
+            peopleIdMap[person.id] = 1
+          end
+        end
+      end
+    end
+end
 
 end
