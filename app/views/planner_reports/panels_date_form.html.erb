@@ -3,7 +3,10 @@
 <% form_tag('/planner_reports/panels_with_panelists', :method => 'post') do %>
 <p>
    <%= label_tag :mod_date, "Modified since (YYYY-MM-DD): "%>
-   <%= text_field_tag :mod_date %>
-   <%= submit_tag "Export CSV" %>
+   <%= text_field_tag :mod_date %><br /><br />
+   <%= label_tag :sort_by, "Sort By: "%>
+   <%= select_tag :sort_by, options_for_select([['Date / Time', 'time'], ['Room', 'room'], ['Item Name', 'name']]) %><br /><br />
+   <%= submit_tag "Export CSV", :name=>"csv" %>
+   <%= submit_tag "View in Browser", :name => "html" %>
 </p>
 <% end %>
