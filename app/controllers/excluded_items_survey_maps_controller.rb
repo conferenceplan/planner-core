@@ -1,4 +1,4 @@
-class ExcludedItemsSurveyMapsController < ApplicationController
+class ExcludedItemsSurveyMapsController < PlannerController
   def index
     @programmeItem = ProgrammeItem.find(params[:programme_item_id])
 

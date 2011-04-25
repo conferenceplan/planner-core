@@ -23,6 +23,10 @@ authorization do
     has_permission_on :venue, :to => [:read]
     has_permission_on :survey_reports, :to => [:read]
     has_permission_on :planner_reports, :to => [:read]
+    has_permission_on :availabilities, :to => [:read]
+    has_permission_on :excluded_items, :to => [:read]
+    has_permission_on :excluded_items_survey_maps, :to => [:read]
+    has_permission_on :available_dates, :to => [:read]
   end
 
   role :TagAdmin do
@@ -60,6 +64,8 @@ authorization do
     has_permission_on :venue, :to => :manage
     has_permission_on :survey_reports, :to => :manage
     has_permission_on :planner_reports, :to => :manage
+    has_permission_on :availabilities, :to => :manage
+    has_permission_on :available_dates, :to => :manage
   end
   
   role :Admin do
@@ -73,7 +79,7 @@ privileges do
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
         :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants,
-                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem]
+                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:updateExcludedItemsFromSurveys]
     privilege :create, :includes => [:new,:import,:doimport]
     privilege :update, :includes => [:edit,:states,:copySurvey]
     privilege :delete, :includes => [:destroy, :removeItem]

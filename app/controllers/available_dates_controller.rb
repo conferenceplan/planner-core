@@ -1,4 +1,4 @@
-class AvailableDatesController < ApplicationController
+class AvailableDatesController < PlannerController
   
   def index
     @availableDates = AvailableDate.find :all

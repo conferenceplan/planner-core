@@ -1,4 +1,4 @@
-class AvailabilitiesController < ApplicationController
+class AvailabilitiesController < PlannerController
   def index
     @person = Person.find(params[:person_id])
         

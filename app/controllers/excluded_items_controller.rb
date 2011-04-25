@@ -1,4 +1,4 @@
-class AddressesController < PlannerController
+class ExcludedItemController < PlannerController
 
   def show
    if (params[:person_id])
