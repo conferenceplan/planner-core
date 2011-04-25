@@ -682,7 +682,7 @@ smerfform:
               default: N
             artAuction:
               code: 11
-              answer: | Art Auction (Sat aft)
+              answer: | Art Auction (Sun noon)
               sort_order: 11
               default: N
             regencyDance:
