@@ -333,7 +333,7 @@ function createTagQuery(){
     for (var key in tagQueryList) {
         query += "context[" + posn + "]=" + key + "&tags[" + posn + "]=";
         for (var i = 0; i < tagQueryList[key].length; i++) {
-            query += tagQueryList[key][i] + ",";
+            query += escape(tagQueryList[key][i]) + ",";
         }
         query += "&";
         posn += 1;
