@@ -138,7 +138,7 @@ SB.id as conflict_item_id, SB.title as conflict_item_name,
 Conflicts.startA as item_start,
 Conflicts.startB as conflict_start
 from
-Rooms room, programme_items S, programme_items SB,
+rooms room, programme_items S, programme_items SB,
 (select 
    roomA.room_id as roomA, roomA.programme_item_id as progA, tsA.start as startA, tsA.end as endA,
    roomB.room_id as roomB, roomB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
