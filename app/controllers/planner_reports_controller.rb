@@ -49,10 +49,10 @@ class PlannerReportsController < PlannerController
             part_list = names.join(', ')
             rsvd_list = rsvd.join(', ')
             output.push [panel.title,
-                         (panel.format.nil) ? '' : panel.format.name,
-                         (panel.room.nil?) ? '' : panel.room.name,
-                         (panel.room.nil?) ? '' : Venue.find(panel.room.id).name,
-                         (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%a %H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
+                         (panel.format == nil) ? '' : panel.format.name,
+                         (panel.room == nil) ? '' : panel.room.name,
+                         (panel.room == nil) ? '' : panel.room.venue.name,
+                         (panel.time_slot == nil) ? '' : "#{panel.time_slot.start.strftime('%a %H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
                          part_list,
                          rsvd_list,
                         ]
