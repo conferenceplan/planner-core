@@ -1,6 +1,8 @@
 var currentDay = 0;
 var ignoreScheduled = true;
 var roomList = '[]';
+var leftPosn = 0;
+var topPosn = 320;
 
 jQuery(document).ready(function(){
     initialiseDayButtons();
@@ -88,6 +90,7 @@ function initialiseDayButtons(){
     }).repeatedclick(function(){
         $('#program-grid-rooms').scrollTo({top:'-=0px', left:'-=100'}, 0);
         $('#program-grid').scrollTo({top:'-=0px', left:'-=100'}, 0);
+        leftPosn = $('#program-grid').scrollLeft();
     },{
         duration: 500,
         speed: 0.8,
@@ -101,6 +104,7 @@ function initialiseDayButtons(){
     }).repeatedclick(function(){
         $('#program-grid-rooms').scrollTo({top:'-=0px', left:'+=100'}, 0);
         $('#program-grid').scrollTo({top:'-=0px', left:'+=100'}, 0);
+        leftPosn = $('#program-grid').scrollLeft();
     },{
         duration: 500,
         speed: 0.8,
@@ -114,6 +118,7 @@ function initialiseDayButtons(){
     }).repeatedclick(function(){
         $('#program-grid').scrollTo({top:'-=40px', left:'-=0'}, 0);
         $('#program-grid-times').scrollTo({top:'-=40px', left:'-=0'}, 0);
+topPosn = $('#program-grid').scrollTop();
     },{
         duration: 500,
         speed: 0.8,
@@ -127,6 +132,7 @@ function initialiseDayButtons(){
     }).repeatedclick(function(){
         $('#program-grid').scrollTo({top:'+=40px', left:'+=0'}, 0);
         $('#program-grid-times').scrollTo({top:'+=40px', left:'+=0'}, 0);
+topPosn = $('#program-grid').scrollTop();
     }, {
         duration: 500,
         speed: 0.8,
@@ -152,9 +158,9 @@ function setUpRoomGrid(){
             currentDateString = $(response).find('#current-date');
             $('#program-room-data').html(titles);
             $(this).html(res);
-            $('#program-grid-rooms').scrollTo({top:'0', left:'0'}, 0);
-            $('#program-grid').scrollTo({top:'320px', left:'0'}, 0);
-            $('#program-grid-times').scrollTo({top:'320px', left:'0'}, 0);
+            $('#program-grid-rooms').scrollTo({top:'0', left:leftPosn}, 0);
+            $('#program-grid').scrollTo({top:topPosn, left:leftPosn}, 0);
+            $('#program-grid-times').scrollTo({top:topPosn, left:leftPosn}, 0);
             makeDroppables();
             makeDraggables();
             jQuery('#current-day-page').val(currentDateString.text());
@@ -281,14 +287,20 @@ function makeConflictWidgetSelectable(){
         $("#item-conflict-report").children(".ui-selected").removeClass("ui-selected"); //make all unselected
         // highlight selected only
         $(this).addClass('ui-selected');
-            var id = $(this).find('.itemid').text().trim();
-            var roomid = $(this).find('.roomid').text().trim();
-            var itemid = 'item-'+id;
-            var roomidstr = 'room-title-'+roomid;
-            var topPosn = $('#'+itemid).position().top;
-            $('#program-grid-times').scrollTo(topPosn+'px', 800, {axis:'y'});
-            $('#program-grid-rooms').scrollTo($('#'+roomidstr),800);
-            $('#program-grid').scrollTo($('#'+itemid),800);
+        var id = $(this).find('.itemid').text().trim();
+        var roomid = $(this).find('.roomid').text().trim();
+        var itemid = 'item-' + id;
+        var roomidstr = 'room-title-' + roomid;
+        var topPn = $('#' + itemid).position().top;
+        $('#program-grid-times').scrollTo(topPn + 'px', 800, {axis: 'y'});
+        $('#program-grid-rooms').scrollTo($('#' + roomidstr), 800);
+        $('#program-grid').scrollTo($('#' + itemid), 800, {
+            onAfter : function() {
+                //topPosn = $('#' + itemid).position().top;
+                topPosn = $('#program-grid').scrollTop();
+                leftPosn = $('#program-grid').scrollLeft();
+            }
+        });
     });
 }
 
