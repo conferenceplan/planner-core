@@ -171,7 +171,7 @@ jQuery(document).ready(function(){
             return [true, "ok"];
         },
         beforeShowForm: function(frm) {
-            $('#start_time').timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], spinnerImage: 'images/spinnerDefault.png'});
+            $('#start_time').timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], defaultTime: '09:00', spinnerImage: 'images/spinnerDefault.png'});
         }
     }, // edit options
     { // add options

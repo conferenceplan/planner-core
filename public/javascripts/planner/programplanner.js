@@ -176,7 +176,7 @@ function makeDraggables(){
     });
 }
 
-function createDialog(itemid, roomid) { //}, timeid, timestart, duration) {
+function createDialog(itemid, roomid) {
     var url = "/program_planner/"+ roomid + "/edit?itemid="+itemid+'&day='+currentDay;
     initAddItemDialog(url);
     $('#edialog').jqmShow();
@@ -188,7 +188,9 @@ function initAddItemDialog(url) {
         trigger: 'a.entrydialog',
         onLoad: function(dialog){
                 // Put in the time selector
-                $('#time-selection', dialog.w).timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], spinnerImage: 'images/spinnerDefault.png'});
+                $('#time-selection', dialog.w).timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], 
+                    defaultTime: '09:00',
+                    spinnerImage: 'images/spinnerDefault.png'});
                 adjust(dialog);
             },
         onHide: function(hash){
