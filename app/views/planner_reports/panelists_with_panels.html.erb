@@ -1,3 +1,19 @@
 <h2>Panelists with Panels</h2>
 
-<%= render :partial => "itemlist", :object => @names %> 
+<% form_tag('/planner_reports/panelists_with_panels', :method => 'post') do %>
+<p>
+   <%= check_box_tag :incl_rsvd, '1', params[:incl_rsvd] %>
+   <%= label_tag :incl_rsvd, "Include reserve panelists? "%><br /><br />
+   <%= submit_tag "Export CSV", :name=>"csv" %>
+   <%= submit_tag "View in Browser", :name => "html" %>
+</p>
+<% end %>
+<p>
+<% if params[:html] %>
+   <% if @names.blank? %>
+      No one right now.
+   <% else %>
+      <%= render :partial => "itemlist", :object => @names %> 
+   <% end %>
+<% end %>
+</p>

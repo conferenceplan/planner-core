@@ -39,8 +39,8 @@ class PlannerReportsController < PlannerController
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
             if a.role_id == 16
                names.push "#{p.GetFullName.strip} (M)"
-            elsif a.role_id == 18
-               rsvd.push p.GetFullName.strip
+            elsif a.role_id == 18 
+               rsvd.push p.GetFullName.strip if params[:incl_rsvd]
             else
                names.push p.GetFullName.strip
             end
@@ -82,6 +82,8 @@ class PlannerReportsController < PlannerController
    def panelists_with_panels
 
       @names = Person.all(:include => :programmeItems, :conditions => {"acceptance_status_id" => "8"}, :order => "people.last_name, programme_items.id") 
+
+      output = Array.new
     
       @names.each do |name|
          panels = Array.new
@@ -92,9 +94,13 @@ class PlannerReportsController < PlannerController
                panelstr << " (M)"
             end
             panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
-            panelstr << ", #{p.room.name} (#{Venue.find(p.room.venue_id).name})" unless p.room.nil?
+            panelstr << ", #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
             if a.role_id == 18
-               panelstr = "<i>#{panelstr}</i>"
+               if params[:incl_rsvd]
+                  panelstr = "<i>#{panelstr}</i>"
+               else
+                  next
+               end
             end
             if p.time_slot.nil?
                zeroTime = Time.at(0)
@@ -102,10 +108,33 @@ class PlannerReportsController < PlannerController
             else
                panels.push [p.time_slot.start, panelstr]
             end
+            if params[:csv]
+               output.push [name.GetFullName,
+                            (a.role_id == 18) ? 'R' : (a.role_id == 16) ? 'M' : '',
+                            p.title,
+                            (p.format.nil?) ? '' : p.format.name,
+                            (p.room.nil?) ? '' : p.room.name,
+                            (p.room.nil?) ? '' : p.room.venue.name,
+                            (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}",
+                           ]
+            end
          end
          panels.sort! {|a,b| a[0] <=> b[0]}
          panels.collect! {|a| a[1]}
          name[:items] = panels
+      end
+      if params[:csv]
+         outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+
+         output.unshift ["Name",
+                         "Role",
+                         "Panel Title",
+                         "Format",
+                         "Room",
+                         "Venue",
+                         "Time"
+                        ]
+         csv_out(output, outfile)
       end
    end
 
