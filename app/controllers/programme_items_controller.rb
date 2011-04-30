@@ -2,7 +2,13 @@ class ProgrammeItemsController < PlannerController
   include ProgramPlannerHelper
   
   def index
-    @programmeItems = ProgrammeItem.find :all
+    if params[:person_id] # then we only get the items for a given person
+      @person = Person.find(params[:person_id])
+      @programmeItems = @person.programmeItems
+      render :template => 'people/items', :layout => 'content'
+    else
+      @programmeItems = ProgrammeItem.find :all
+    end
   end
   def show
     @programmeItem = ProgrammeItem.find(params[:id])
@@ -98,9 +104,13 @@ class ProgrammeItemsController < PlannerController
   
   def destroy
     @programmeItem = ProgrammeItem.find(params[:id])
-    
-    TimeSlot.delete(@programmeItem.time_slot_id)
-    RoomItemAssignment.delete(@programmeItem.room_item_assignment.id)
+
+    if @programmeItem.time_slot
+      TimeSlot.delete(@programmeItem.time_slot_id)
+    end
+    if @programmeItem.room_item_assignment
+      RoomItemAssignment.delete(@programmeItem.room_item_assignment.id)
+    end
     
     @programmeItem.destroy
     redirect_to :action => 'index'
