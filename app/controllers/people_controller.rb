@@ -36,6 +36,7 @@ class PeopleController < PlannerController
   end
 
   def create
+    plain = params[:plain]
     # if pseudonym is empty, we don't want to insert an empty record
     # so delete attributes from input parameter list so
     # it won't get created
@@ -50,9 +51,14 @@ class PeopleController < PlannerController
     end
     
     @person = Person.new(params[:person])
+    @person.lock_version = 0
     
     if (@person.save)
-      render :action => 'show', :layout => 'content'
+      if plain
+        render :action => 'show', :layout => 'content'
+      else  
+        render :action => 'show'
+      end
     else
       render :action => 'new'
     end 
@@ -79,7 +85,6 @@ class PeopleController < PlannerController
     @editable = false
     if @person.update_attributes(params[:person])
       render :action => 'show', :layout => 'content'
-#      render :action => 'edit', :layout => 'content', :locals => { :editable => editable}
     else
       render :action => 'show', :layout => 'content'
     end

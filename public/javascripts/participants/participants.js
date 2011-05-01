@@ -224,7 +224,7 @@ jQuery(document).ready(function(){
         viewrecords: true,
         imgpath: 'stylesheets/cupertino/images',
         caption: 'Participants',
-        editurl: '/participants',
+        editurl: '/participants?plain=true',
         onSelectRow: function(ids){
             loadTabs(ids);            
             return false;
@@ -494,7 +494,7 @@ function loadTabs(id){
     tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);
     tabs.tabs('url', 3, 'participants/' + id + '/edited_bio').tabs('load', 3);
     tabs.tabs('url', 4, 'tags/' + id + '?class=Person').tabs('load', 4);
-    tabs.tabs('url', 0, 'participants/' + id + '/registrationDetail').tabs('load', 0).tabs('select', 0);
+    tabs.tabs('url', 0, 'participants/' + id + '/registrationDetail').tabs('load', 0);//.tabs('select', 0);
 }
 
 /* Initialize the tags - load is called when a new participant/person is selected in the grid */

@@ -144,7 +144,7 @@ jQuery(document).ready(function(){
         viewrecords: true,
         imgpath: 'stylesheets/cupertino/images',
         caption: 'ProgrammeItems',
-        editurl: '/programme_items', // need to ensure edit url is correct
+        editurl: '/programme_items?plain=true', // need to ensure edit url is correct
         onSelectRow: function(ids){
             loadTabs(ids);
             return false;
@@ -179,7 +179,7 @@ jQuery(document).ready(function(){
         jqModal: true,
         closeOnEscape: true,
         bottominfo: "Fields marked with (*) are required",
-        afterSubmit: processResponse,
+        afterSubmit: processAddResponse,
         closeAfterAdd: true,
         beforeShowForm: function(frm) {
             $('#start_time').timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], spinnerImage: 'images/spinnerDefault.png'});
@@ -286,9 +286,23 @@ function processResponse(response, postdata){
     var selected = $tabs.tabs('option', 'selected');
     $tabs.tabs('load', selected);
     
-    return [true, "Success"];
+    return [true, "Success", ""];
 }
 
+function processAddResponse(response, postdata) {
+    // examine return for problem - look for errorExplanation in the returned HTML
+    var text = jQuery(response.responseText).find(".errorExplanation");
+    if (text.size() > 0) {
+        text.css('font-size', '6pt');
+        text = jQuery("<div></div>").append(text);
+        return [false, text.html()];
+    }
+    
+    // get the id of the new entry and change the id of the 
+    var id = jQuery(response.responseText).find("#progitemid");
+
+    return [true, "Success", id.text()]; // Last param is the id of the new item
+}
 
 function populateTagCloud(){
     /* Populate the tag cloud */
@@ -390,7 +404,7 @@ function loadTabs(ids){
     var $tabs = $('#programmeItems_tabs').tabs();
     $tabs.tabs('url', 2, 'programme_items/' + ids + '/excluded_items_survey_maps').tabs('load', 2);
     $tabs.tabs('url', 1, 'tags/' + ids + '?class=ProgrammeItem').tabs('load', 1);
-	$tabs.tabs('url', 0, 'programme_items/' + ids).tabs('load', 0).tabs('select', 0);
+	$tabs.tabs('url', 0, 'programme_items/' + ids + '?plain=true').tabs('load', 0).tabs('select', 0);
 
 }
 

@@ -11,17 +11,24 @@ class ProgrammeItemsController < PlannerController
     end
   end
   def show
+    plain = params[:plain]
     @programmeItem = ProgrammeItem.find(params[:id])
     @editable = params[:edit] ? params[:edit] == "true" : true
     
     @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] 
     @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] 
-    
-    render :layout => 'content'
+
+    if plain
+      render :layout => 'content'
+    else  
+      render
+    end
   end
   def create
+    plain = params[:plain]
     # NOTE - name of the programmeItem passed in from form
     @programmeItem = ProgrammeItem.new(params[:programme_item])
+    @programmeItem.lock_version = 0
     startDay = params[:start_day]
     startTime = params[:start_time]
     roomId = params[:room]
@@ -45,7 +52,11 @@ class ProgrammeItemsController < PlannerController
     end
 
     if saved
-       redirect_to :action => 'index', :id => @programmeItem
+      if plain
+        redirect_to :action => 'show', :id => @programmeItem, :plain => plain
+      else  
+        redirect_to :action => 'show', :id => @programmeItem
+      end
     else
       render :action => 'new'
     end 
