@@ -106,7 +106,7 @@ class ProgrammeItemsController < PlannerController
     @programmeItem = ProgrammeItem.find(params[:id])
 
     if @programmeItem.time_slot
-      TimeSlot.delete(@programmeItem.time_slot_id)
+      TimeSlot.delete(@programmeItem.time_slot.id)
     end
     if @programmeItem.room_item_assignment
       RoomItemAssignment.delete(@programmeItem.room_item_assignment.id)

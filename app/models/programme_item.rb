@@ -7,14 +7,30 @@ class ProgrammeItem < ActiveRecord::Base
   has_many  :people, :through => :programme_item_assignments
   
   acts_as_taggable
-  # TODO - check if stream tagging is needed
-  acts_as_taggable_on :streams
   
   belongs_to   :format 
   
   has_one :room_item_assignment # really we only use one anyway...
-  has_one :room, :through => :room_item_assignment # TODO - check that this is still ok
+  has_one :room, :through => :room_item_assignment #
   has_one :time_slot, :through => :room_item_assignment
+  
+  def start_day
+    # change to selection
+    if time_slot
+      return time_slot.start.strftime('%A')
+    else
+      return Time.zone.parse(SITE_CONFIG[:conference][:start_date]).strftime('%A')
+    end
+  end
+
+  def start_time
+    if time_slot
+      # correct format
+      return time_slot.start.strftime('%H:%M')
+    else
+      return '09:00'
+    end
+  end
   
   has_many :excluded_items_survey_maps
   has_many :mapped_survey_questions, :through => :excluded_items_survey_maps
