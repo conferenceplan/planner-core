@@ -9,13 +9,13 @@ jQuery(document).ready(function(){
     populateTagCloud();
     
     createTabs();
-        
+    
     // The grid containing the list of paricipants
     jQuery("#participants").jqGrid({
         url: baseUrl,
         datatype: 'xml',
         mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix', 'survey id','lock'],
+        colNames: ['First Name', 'Last Name', 'Suffix', 'Mailing #', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix', 'survey id', 'lock'],
         colModel: [{
             name: 'person[first_name]',
             index: 'people.first_name',
@@ -188,7 +188,7 @@ jQuery(document).ready(function(){
                 rowpos: 10,
                 label: "Pub Suffix"
             }
-        },{
+        }, {
             name: 'person[survey_respondent_attributes][id]',
             width: 3,
             index: 'survey_respondent.id',
@@ -200,7 +200,7 @@ jQuery(document).ready(function(){
                 rowpos: 11,
                 label: "survey_respondent_id"
             }
-        },{
+        }, {
             name: 'person[lock_version]',
             width: 3,
             index: 'lock_version',
@@ -226,7 +226,7 @@ jQuery(document).ready(function(){
         caption: 'Participants',
         editurl: '/participants?plain=true',
         onSelectRow: function(ids){
-            loadTabs(ids);            
+            loadTabs(ids);
             return false;
         }
     });
@@ -272,12 +272,12 @@ jQuery(document).ready(function(){
             return [true, "ok"];
         },
     }, // del options
-    {
+    {  // view options
         height: 150,
         jqModal: true,
         closeOnEscape: true
-    } // view options
-);
+    });
+    
     jQuery("#participants").jqGrid('filterToolbar', {
         stringResult: true,
         searchOnEnter: false
@@ -347,7 +347,7 @@ function adjust(dialog){
     currentDialog = dialog;
     $('.layerform', dialog.w).ajaxForm({
         target: '#form-response',
-        error: function(response, r) {
+        error: function(response, r){
             var errText = $(response.responseText).find(".error"); // class error
             $('#form-response', currentDialog.w).append('ERROR: ' + errText.text());
         }
@@ -370,7 +370,7 @@ function processResponse(response, postdata){
     return [true, "Success", ""];
 }
 
-function processAddResponse(response, postdata) {
+function processAddResponse(response, postdata){
     // examine return for problem - look for errorExplanation in the returned HTML
     var text = jQuery(response.responseText).find(".errorExplanation");
     if (text.size() > 0) {
@@ -381,7 +381,7 @@ function processAddResponse(response, postdata) {
     
     // get the id of the new entry and change the id of the 
     var id = jQuery(response.responseText).find("#personid");
-
+    
     return [true, "Success", id.text()]; // Last param is the id of the new item
 }
 
@@ -405,7 +405,7 @@ function populateTagCloud(){
                 if ($.inArray(tag, tagQueryList[ctx]) == -1) { // only push if it does not already exist
                     tagQueryList[ctx].push(tag);
                 }
-
+                
                 issueTagQuery();
             });
         }
@@ -422,17 +422,17 @@ function issueTagQuery(){
     applyFilterEventHandler();
 }
 
-function createTagQuery() {
+function createTagQuery(){
     // context='" + ctx + "'&tags='" + tag + "'"
     var posn = 0;
     var query = "";
     for (var key in tagQueryList) {
-        query += "context[" + posn + "]=" + key + "&tags["+ posn + "]=";
+        query += "context[" + posn + "]=" + key + "&tags[" + posn + "]=";
         for (var i = 0; i < tagQueryList[key].length; i++) {
             query += escape(tagQueryList[key][i]) + ",";
         }
         query += "&";
-		posn += 1;
+        posn += 1;
     }
     return query;
 }
@@ -448,7 +448,7 @@ function turnTagQueryToHTML(){
             html += '<div class="tag-name">';
             html += tagQueryList[key][i];
             html += '</div>';
-            html += '<a href="#context='+key+'&tag='+tagQueryList[key][i]+'" class="delete-filter-tag">';
+            html += '<a href="#context=' + key + '&tag=' + tagQueryList[key][i] + '" class="delete-filter-tag">';
             html += '<div class="ui-icon ui-icon-close" style="float: left;"/>';
             html += '</a>';
         }
@@ -462,16 +462,16 @@ function turnTagQueryToHTML(){
     return html;
 }
 
-function applyFilterEventHandler() {
+function applyFilterEventHandler(){
     jQuery(".delete-filter-tag").click(function(event){
         var q = $(this).attr('href');
         var strs = q.split('&');
-        var ctx = strs[0].substr(9,strs[0].length);
-        var tag = strs[1].substr(4,strs[1].length);
+        var ctx = strs[0].substr(9, strs[0].length);
+        var tag = strs[1].substr(4, strs[1].length);
         // extract the context and tag and then remove these from the tag query collection
         // then force the elements to refresh
         var posn = $.inArray(tag, tagQueryList[ctx]);
-        tagQueryList[ctx].splice(posn,1);
+        tagQueryList[ctx].splice(posn, 1);
         if (tagQueryList[ctx].length == 0) {
             delete tagQueryList[ctx];
         }
@@ -483,13 +483,17 @@ function loadTabs(id){
     var data = jQuery("#participants").jqGrid('getRowData', id);
     $('#participant_id').text(id);
     $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
-	var survey_id = data['person[survey_respondent_attributes][id]'];
-	
+    var survey_id = data['person[survey_respondent_attributes][id]'];
     var tabs = $('#particpanttabs').tabs();
-
-	tabs.tabs('url', 7, 'participants/' + id + '/programme_items').tabs('load', 7);
-	tabs.tabs('url', 6, 'participants/' + id + '/availabilities').tabs('load', 6);
-    tabs.tabs('url', 5, 'survey_respondents/reviews/' + survey_id).tabs('load',5);
+    
+    tabs.tabs('url', 7, 'participants/' + id + '/programme_items').tabs('load', 7);
+    tabs.tabs('url', 6, 'participants/' + id + '/availabilities').tabs('load', 6);
+    if (survey_id.trim().length > 0) {
+        tabs.tabs('url', 5, 'survey_respondents/reviews/' + survey_id).tabs('load', 5);
+    } else {
+        tabs.tabs('url', 5, 'survey_respondents/reviews/' + 0).tabs('load', 5);
+        
+    };
     tabs.tabs('url', 1, 'participants/' + id + '/addresses').tabs('load', 1);
     tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);
     tabs.tabs('url', 3, 'participants/' + id + '/edited_bio').tabs('load', 3);
@@ -498,7 +502,7 @@ function loadTabs(id){
 }
 
 /* Initialize the tags - load is called when a new participant/person is selected in the grid */
-function createTabs() {
+function createTabs(){
     jQuery("#particpanttabs").tabs({
         ajaxOptions: {
             async: false

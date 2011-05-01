@@ -91,7 +91,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items],
     :has_one => [:registrationDetail, :edited_bio, :available_date],
-    :collection => {:list => :get }
+    :collection => {:list => :get },
+    :member => {:show => :get}
 
   map.resources :programme_items,
     :has_many => [:excluded_items_survey_maps,:mapped_survey_questions]
