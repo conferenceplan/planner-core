@@ -85,21 +85,14 @@ function loadParticipantWidget(){
         context: $('#participant-widget-content'),
         success: function(response){
             $(this).html(response);
-            //            makeParticipantWidgetSelectable();
+            makeParticipantWidgetSelectable();
             if (currentItem == true) {
                 makeDraggables();
             };
             // current-participant-page => participantPage
             jQuery('#current-participant-page').val(participantPage);
+            $('#current-items-content').html('');
         }
-    });
-}
-
-function makeParticipantWidgetSelectable(){
-    $('#selectable-person > li').click(function(event){
-        $("#selectable-person").find(".ui-selected").removeClass("ui-selected"); //make all unselected
-        // highlight selected only
-        $(this).addClass('ui-selected');
     });
 }
 
@@ -182,6 +175,24 @@ function makeItemWidgetSelectable(){
                 // change target of form - /programme_items/1/updateParticipants
                 jQuery('#item-update-form').attr('action', '/programme_items/' + id + '/updateParticipants');
                 // TODO - reset the participant and reserve areas
+            }
+        });
+    });
+}
+
+function makeParticipantWidgetSelectable(){
+    $('#selectable-person > li').click(function(event){
+        var id = $(this).find('.personid').text().trim();
+        $("#selectable-person").find(".ui-selected").removeClass("ui-selected"); //make all unselected
+        // highlight selected only
+        $(this).addClass('ui-selected');
+        $.ajax({
+            type: 'GET',
+            url: "/participants/" + id + "/programme_items",
+            dataType: "html",
+            context: $('#current-items-content'),
+            success: function(response){
+                $(this).html(response);
             }
         });
     });

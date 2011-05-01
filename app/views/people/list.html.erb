@@ -7,7 +7,7 @@ var participantPageNbr = "<%=@nbr_pages%>";
 <div>Page <%= @page%> of <%= @nbr_pages%> of <%=@count%> People</div>
 <ol id="selectable-person" class="selectable">
 <% @people.each do |person| %>
-    <li class="draggable ui-widget-content">
+    <li class="draggable participant-selectable ui-widget-content">
 	    <input type="hidden" name="participant" value="<%= person.id %>" >
         <div class="personid" style="display: none;"><%= person.id %> </div>
         <% if person.pseudonym %>
