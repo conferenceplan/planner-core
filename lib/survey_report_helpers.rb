@@ -26,7 +26,7 @@ module SurveyReportHelpers
   end
 
   def GetConflictItems
-    conflicts = [['Opening Ceremony', 'g6q6|1'], ['Chesley Awards', 'g6q6|2'], ['Masquerade', 'g6q6|3'], ['Hugo Ceremony', 'g6q6|4'], ['Closing Ceremony', 'g6q6|5'], ['Tricky Pixie Concert', 'g6q6|6'], ['WSFS Meetings', 'g6q6|7'], ['SFWA Meeting', 'g6q6|8'], ['ASFA Meeting', 'g6q6|9'], ['Masq Rehearssal', 'g6q6|10'], ['Art Auction', 'g6q6|11'], ['Regency Dance', 'g6q6|12'], ['Charity and Fan Fund Auction', 'g6q6|13'], ['Before 11 AM', 'g6q4|1'], ['6 PM - 8 PM', 'g6q4|2'], ['After 8 PM', 'g6q4|3']]
+    conflicts = [['Opening Ceremony', 'g6q6|1'], ['Chesley Awards', 'g6q6|2'], ['Masquerade', 'g6q6|3'], ['Hugo Ceremony', 'g6q6|4'], ['Closing Ceremony', 'g6q6|5'], ['Tricky Pixie Concert', 'g6q6|6'], ['WSFS Meetings', 'g6q6|7'], ['SFWA Meeting', 'g6q6|8'], ['ASFA Meeting', 'g6q6|9'], ['Masq Rehearssal', 'g6q6|10'], ['Art Auction', 'g6q6|11'], ['Regency Dance', 'g6q6|12'], ['Charity and Fan Fund Auction', 'g6q6|13'], ['Before 11 AM', 'g6q4|1'], ['6 PM - 8 PM', 'g6q4|2'], ['After 8 PM', 'g6q4|3'], ['Tim Powers GOH Item', 'g6q5|1'], ['Boris Vallejo GOH Item', 'g6q5|2'], ['Ellen Asher GOH Item', 'q6q5|3'], ['Charles N. Brown GOH Item', 'g6q5|4'], ['Bill Willingham Item', 'g6q5|5'], ['Tricky Pixie Item', 'g6q5|6']]
   end
 
 end
