@@ -177,10 +177,10 @@ EXCLUDED_ITEM_QUERY_PT1 = <<"EOS"
   Conflicts.startB as conflict_start
   from people P, rooms R, programme_items S,
   rooms RB, programme_items SB, 
-   (select exA.person_id pidA, progB.person_id pidB, 
-   roomA.room_id roomA, exA.excludable_id progA, 
-   tsA.start startA, tsA.end endA,
-   roomB.room_id roomB, progB.programme_item_id progB, tsB.start startB, tsA.end endB
+   (select exA.person_id as pidA, progB.person_id as pidB, 
+   roomA.room_id as roomA, exA.excludable_id as progA, 
+   tsA.start as startA, tsA.end as endA,
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
    from exclusions exA, room_item_assignments roomA, time_slots tsA,
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
    where
