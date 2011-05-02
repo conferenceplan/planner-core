@@ -151,11 +151,12 @@ class ProgrammeItemsController < PlannerController
 
     args = { :conditions => clause }
     
+#    LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id
     args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id' )
 
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    args.merge!(:include => :format)
+#    args.merge!(:include => :format)
     
     tagquery = ""
     if context
@@ -180,7 +181,7 @@ class ProgrammeItemsController < PlannerController
     @nbr_pages += 1 if @count % rows.to_i > 0
     
     offset = (@page.to_i - 1) * rows.to_i
-    args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc, " + idx + " " + order, :include => [:room, :time_slot])
+    args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc, " + idx + " " + order)
     if tagquery.empty?
       @programmeItems = ProgrammeItem.find :all, args
     else
