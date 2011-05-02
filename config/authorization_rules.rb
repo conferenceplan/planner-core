@@ -66,6 +66,7 @@ authorization do
     has_permission_on :planner_reports, :to => :manage
     has_permission_on :availabilities, :to => :manage
     has_permission_on :available_dates, :to => :manage
+    has_permission_on :excluded_items_survey_maps, :to => [:manage]
   end
   
   role :Admin do
