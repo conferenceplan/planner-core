@@ -164,7 +164,7 @@ function makeItemWidgetSelectable(){
         // To get the item context
         $.ajax({
             type: 'GET',
-            url: "/programme_items/" + id + "?edit=false",
+            url: "/programme_items/" + id + "?edit=false&plain=true",
             dataType: "html",
             context: $('#current-item-content'),
             success: function(response){
