@@ -82,6 +82,13 @@ class ProgramPlannerController < PlannerController
     query += ITEM_CONFLICT_QUERY_PT2
     @roomConflicts = ActiveRecord::Base.connection.select_rows(query)
     
+    query = EXCLUDED_ITEM_QUERY_PT1
+    if (@day)
+      query += 'AND roomA.day = ' + @day.to_s+ ' AND roomB.day = ' + @day.to_s
+    end
+    query += EXCLUDED_ITEM_QUERY_PT2
+    @excludedItemConflicts = ActiveRecord::Base.connection.select_rows(query)
+    
     respond_to do |format|
       format.html { 
         if @day
@@ -160,4 +167,40 @@ AND S.id = progA
 AND SB.id = progB
 EOS
   
+EXCLUDED_ITEM_QUERY_PT1 = <<"EOS"
+  select 
+  R.id as id, R.name as name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
+  RB.id as conflict_room_id, RB.name as conflict_room_name,
+  SB.id as conflict_item_id, SB.title as conflict_item_title,
+  Conflicts.startB as conflict_start
+  from people P, rooms R, programme_items S,
+  rooms RB, programme_items SB, 
+   (select exA.person_id pidA, progB.person_id pidB, 
+   roomA.room_id roomA, exA.excludable_id progA, 
+   tsA.start startA, tsA.end endA,
+   roomB.room_id roomB, progB.programme_item_id progB, tsB.start startB, tsA.end endB
+   from exclusions exA, room_item_assignments roomA, time_slots tsA,
+   programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
+   where
+   (exA.excludable_type = 'ProgrammeItem' AND roomA.programme_item_id = exA.excludable_id AND roomA.time_slot_id = tsA.id) AND
+   (roomB.programme_item_id = progB.programme_item_id AND roomB.time_slot_id = tsB.id) AND
+    ((tsB.start >= tsA.start AND tsA.end > tsB.start) OR
+     (tsB.start < tsA.start AND tsB.end > tsA.start))
+  AND exA.excludable_id <> progB.programme_item_id
+  AND exA.person_id = progB.person_id
+EOS
+  
+EXCLUDED_ITEM_QUERY_PT2 = <<"EOS"
+  ) as Conflicts
+  where
+  R.id = Conflicts.roomA AND
+  P.id = Conflicts.pidA AND
+  S.id = Conflicts.progA AND
+  RB.id = Conflicts.roomB AND
+  SB.id = Conflicts.progB
+  order by P.id
+EOS
+
 end
