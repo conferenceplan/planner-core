@@ -2,6 +2,8 @@
 #
 #
 class Published::ProgrammeItem < ActiveRecord::Base
+  acts_as_audited
+
   has_many  :published_programme_item_assignments, :class_name => 'Published::ProgrammeItemAssignment'
   has_many  :people, :through => :published_programme_item_assignments
   
