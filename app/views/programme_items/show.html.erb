@@ -96,7 +96,7 @@
         <ol class="selectable selectable-participant">
             <% @reserveAssociations.each do |assoc| %>
             <li class="ui-widget-content removeable">
-                <input type="hidden" value="<%=assoc.person.id%>" name="item-participants[<%=assoc.person.id%>][person_id]">
+                <input type="hidden" value="<%=assoc.person.id%>" name="item-reserve-participants[<%=assoc.person.id%>][person_id]">
                 <div style="display: none;" class="personid">
                     <%=assoc.person.id %>
                 </div>
