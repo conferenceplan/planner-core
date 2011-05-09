@@ -90,11 +90,13 @@ class ProgrammeItemsController < PlannerController
             room = Room.find(roomId)
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           else
-            ts = @programmeItem.time_slot
-            if (ts)
-              ts.end = ts.start + @programmeItem.duration.minutes
-              ts.save
-            end
+            @programmeItem.room_item_assignment.delete
+          end
+          
+          ts = @programmeItem.time_slot
+          if (ts)
+            ts.end = ts.start + @programmeItem.duration.minutes
+            ts.save
           end
           saved = true
         else
@@ -107,10 +109,10 @@ class ProgrammeItemsController < PlannerController
     end
 
     if saved
-      redirect_to :action => 'show', :id => @programmeItem
+        redirect_to :action => 'show', :id => @programmeItem, :plain => true
     else
       render :action => 'edit', :layout => 'content'
-    end
+    end 
   end
   
   def destroy

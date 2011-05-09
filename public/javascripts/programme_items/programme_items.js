@@ -16,6 +16,11 @@ jQuery(document).ready(function(){
         url: baseUrl,
         datatype: 'xml',
         mtype: 'POST',
+        ajaxGridOptions: {
+            beforeSend: function(jqXHR, settings) {
+//                alert(unescape(this.data));
+            }
+        },
         colNames: ['Title', 'Format', 'Duration', 'Room', 'Day','Start', 'lock'],
         colModel: [{
             name: 'programme_item[title]',
@@ -25,6 +30,15 @@ jQuery(document).ready(function(){
             editoptions: {
                 size: 20
             },
+//            searchoptions: {
+//                dataEvents: [{
+//                    type: 'keyup',
+//                    fn: function(e){
+//                        //alert('query: ' + this.value );
+//                        this.value = escape(this.value); //.replace(/"/g, '');
+//                    }
+//                }]
+//            },
             formoptions: {
                 rowpos: 1,
                 label: "Title",
