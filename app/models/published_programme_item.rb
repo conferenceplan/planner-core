@@ -14,8 +14,8 @@ class PublishedProgrammeItem < ActiveRecord::Base
   has_one :published_time_slot, :through => :published_room_item_assignment
 
   # The relates the published programme item back to the original programme item
-  has_one :publication #, :class_name => 'Published::Publication'
-  has_one :original, :through => :publication, #:class_name => 'PublishedPublication',
+  has_one :publication, :foreign_key => :published_id
+  has_one :original, :through => :publication,
           :source => :original,
           :source_type => 'ProgrammeItem'
 

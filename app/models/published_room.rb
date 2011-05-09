@@ -12,8 +12,8 @@ class PublishedRoom < ActiveRecord::Base
   has_many :published_time_slots, :through => :published_room_item_assignments #, :source_type => 'TimeSlot'
   
   # The relates the published room back to the original room
-  has_one :publication #, :class_name => 'Published::Publication'
-  has_one :original, :through => :publication, #, :class_name => 'PublishedPublication',
+  has_one :publication, :foreign_key => :published_id
+  has_one :original, :through => :publication,
           :source => :original,
           :source_type => 'Room'
 end
