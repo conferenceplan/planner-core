@@ -8,7 +8,10 @@ class AvailabilitiesController < PlannerController
     
     @excludedItems = @person.excluded_items
    
+    @excludedGroup = @person.GetExcludedTimesGroup
     
+    
+ 
  #   @excludedItems = person.excluded_items
     
     

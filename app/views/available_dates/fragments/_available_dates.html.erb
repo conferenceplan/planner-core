@@ -10,10 +10,10 @@
     <% end %>
   <% if @availableDate %>
    <div class='line'>
-     Arrival: <%= @availableDate.start_time%>
+     Arrival: <%= @availableDate.start_time.to_s(:weekdatetime)%>
    </div>
 	<div class='line'>
-     Departure: <%= @availableDate.end_time%>
+     Departure: <%= @availableDate.end_time.to_s(:weekdatetime)%>
    </div>
   <% else %>
   <div>

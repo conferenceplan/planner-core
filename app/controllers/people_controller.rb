@@ -418,8 +418,7 @@ def acceptancestatuslistwithblank
 end
 
 def updateExcludedItemsFromSurveys
-    accepted = AcceptanceStatus.find_by_name("Accepted")        
-    invitestatus = InviteStatus.find_by_name("Invited")
+  
     excludedItemMaps = ExcludedItemsSurveyMap.find :all
     peopleIdMap = {}
     @peopleUpdate = []
@@ -449,4 +448,34 @@ def updateExcludedItemsFromSurveys
     end
 end
 
+def updateExcludedTimesFromSurveys
+    
+    excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
+    peopleIdMap = {}
+    @peopleUpdate = []
+    excludedTimesMaps.each do |excludedTimesMap|
+      @people = search_survey_exact(excludedTimesMap.survey_question,excludedTimesMap.survey_code)
+      @people.each do |person|
+        found = false
+        person.excluded_periods.each do |personPeriod|
+          if (personPeriod == excludedTimesMap.period)
+            found = true
+          end
+        end
+        if (found == false)
+          excludedPeriod = Period.find excludedTimesMap.period_id
+          @excludedTime = person.excluded_periods << excludedPeriod
+        
+          person.save
+          @exclusion = Exclusion.find_by_person_id_and_excludable_id_and_excludable_type(person.id,excludedTimesMap.period_id,'TimeSlot')
+          @exclusion.source = 'survey'
+          @exclusion.save
+          if (peopleIdMap.has_key?(person.id) == false)
+            @peopleUpdate << person
+            peopleIdMap[person.id] = 1
+          end
+        end
+      end
+    end
+end
 end

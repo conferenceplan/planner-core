@@ -1,0 +1,19 @@
+<div class='excluded_times'>
+
+   
+  <% if @excludedGroup %>
+    <% @excludedGroup.each_value do |excludedList| %>
+	   <div class='line'>
+	     Not At Times: 
+	   </div>
+		 	<% excludedList.each do |excluded| %>
+			   <div class='line'>
+  	           <%= excluded.start.to_s(:weekdatetime) %>
+			   <%= excluded.end.to_s(:weekdatetime) %>
+			   </div>
+			<% end %>
+  <% end %>
+  <% end %>
+ 
+</div>
+

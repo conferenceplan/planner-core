@@ -34,7 +34,7 @@ class Person < ActiveRecord::Base
   
   has_many  :excluded_periods, :through => :exclusions,
             :source => :excludable,
-            :source_type => 'Period'
+            :source_type => 'TimeSlot'
   
   has_many  :excluded_items, :through => :exclusions,
             :source => :excludable,
@@ -395,4 +395,28 @@ class Person < ActiveRecord::Base
     end
   end
   
+  def GetExcludedTimesGroup
+   excludedGroup = nil
+   if (self.excluded_periods)    
+     excludedTimes = self.excluded_periods
+     # we need to figure out if we have daily repeating exclusions
+     excludedGroup = {}
+     @inExcludedGroup = {}
+     self.excluded_periods.each do |excluded|
+       next if (@inExcludedGroup.has_key?( excluded))
+         
+       excludedList = [excluded]
+       excludedGroup[excluded] = excludedList
+       @inExcludedGroup[excluded] = 1
+       excludedTimes.each do |excluded1|
+           if ((excluded.start.hour == excluded1.start.hour) and (excluded.start.min == excluded1.start.min) and (excluded.start.day != excluded1.start.day))
+              excludedGroup[excluded] << excluded1
+              @inExcludedGroup[excluded1] = 1
+           end
+       end
+     end
+   end
+   return excludedGroup
+ end
+ 
 end
