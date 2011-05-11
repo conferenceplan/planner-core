@@ -91,6 +91,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/acceptancestatuslist', :controller => 'people', :action => 'acceptancestatuslist'
   map.connect 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
   map.connect 'participants/updateExcludedTimesFromSurveys',:controller => 'people', :action => 'updateExcludedTimesFromSurveys', :method => 'post'
+  map.connect 'participants/updateExcludedItemsFromSurveys',:controller => 'people', :action => 'updateExcludedItemsFromSurveys', :method => 'post'
 
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items],
