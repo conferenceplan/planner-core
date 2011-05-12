@@ -89,6 +89,13 @@ class ProgramPlannerController < PlannerController
     query += EXCLUDED_ITEM_QUERY_PT2
     @excludedItemConflicts = ActiveRecord::Base.connection.select_rows(query)
     
+    query = EXCLUDED_TIME_QUERY_PT1
+    if (@day)
+      query += 'AND roomB.day = ' + @day.to_s
+    end
+    query += EXCLUDED_TIME_QUERY_PT2
+    @excludedTimeConflicts = ActiveRecord::Base.connection.select_rows(query)
+    
     respond_to do |format|
       format.html { 
         if @day
@@ -201,6 +208,35 @@ EXCLUDED_ITEM_QUERY_PT2 = <<"EOS"
   RB.id = Conflicts.roomB AND
   SB.id = Conflicts.progB
   order by P.id
+EOS
+
+EXCLUDED_TIME_QUERY_PT1 = <<"EOS"
+ select 
+  R.id as id, R.name as name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  S.id as item_id, S.title as item_name, Conflicts.startB as item_start,
+  Conflicts.startA as period_start, Conflicts.endA as period_end
+  from people P, rooms R, programme_items S,
+   (select exA.person_id as pidA, progB.person_id as pidB, 
+   tsA.start as startA, tsA.end as endA,
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
+   from exclusions exA, time_slots tsA,
+   programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
+   where
+   (exA.excludable_type = 'TimeSlot' AND exA.excludable_id = tsA.id) AND
+   (exA.person_id = progB.person_id) AND
+   (roomB.programme_item_id = progB.programme_item_id AND roomB.time_slot_id = tsB.id) AND
+    ((tsB.start >= tsA.start AND tsA.end > tsB.start) OR
+     (tsB.start < tsA.start AND tsB.end > tsA.start)) 
+EOS
+
+EXCLUDED_TIME_QUERY_PT2 = <<"EOS"
+) as Conflicts
+  where
+  R.id = Conflicts.roomB AND
+  S.id = Conflicts.progB AND
+  P.id = Conflicts.pidA
+  order by P.id;
 EOS
 
 end

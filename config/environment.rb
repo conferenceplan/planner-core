@@ -53,3 +53,4 @@ Rails::Initializer.run do |config|
 end
 
 Time::DATE_FORMATS[:weekdatetime] = "%A, %d %b %H:%M"
+Time::DATE_FORMATS[:conflicttime] = "%H:%M %A"
