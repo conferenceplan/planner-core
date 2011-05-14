@@ -13,7 +13,8 @@
         <% previousAssignment = nil %>
         <% leftPosn = 5 %>
         <% room.room_item_assignments.day(@day).each do |assignment| %>
-        <% nbrQuarterHours = (((assignment.time_slot.end - assignment.time_slot.start) / 3600) / 0.25).round %>
+        <% endTime = assignment.time_slot.end >  assignment.time_slot.start.end_of_day ? assignment.time_slot.start.end_of_day : assignment.time_slot.end %>
+        <% nbrQuarterHours = (((endTime - assignment.time_slot.start) / 3600) / 0.25).round %>
         <% startPosn = (assignment.time_slot.start.hour / 0.25)  + (assignment.time_slot.start.min / 15) %>
         <% styleStr = 'height:' + nbrQuarterHours.to_s + 'em;' + 'position: absolute; top: ' + startPosn.to_s + 'em;' %>
         <% if previousAssignment && (previousAssignment.time_slot.start == assignment.time_slot.start) %>
