@@ -80,9 +80,9 @@ privileges do
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
         :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants,
-                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:updateExcludedItemsFromSurveys]
+                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem]
     privilege :create, :includes => [:new,:import,:doimport]
-    privilege :update, :includes => [:edit,:states,:copySurvey]
+    privilege :update, :includes => [:edit,:states,:copySurvey,:updateExcludedItemsFromSurveys,:updateExcludedTimesFromSurveys]
     privilege :delete, :includes => [:destroy, :removeItem]
     privilege :communicate, :includes => [:exportemailxml,:doexportemailxml,:exportbiolist, :selectExportBioList]
 end
