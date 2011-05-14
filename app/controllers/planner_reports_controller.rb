@@ -80,8 +80,9 @@ class PlannerReportsController < PlannerController
    end
 
    def panelists_with_panels
-
-      @names = Person.all(:include => :programmeItems, :conditions => {"acceptance_status_id" => "8"}, :order => "people.last_name, programme_items.id") 
+      accepted = AcceptanceStatus.find_by_name("Accepted")
+      probable = AcceptanceStatus.find_by_name("Probable")
+      @names = Person.all(:include => :programmeItems, :conditions => ['acceptance_status_id = ? or acceptance_status_id = ?',accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
 
       output = Array.new
     
@@ -110,6 +111,7 @@ class PlannerReportsController < PlannerController
             end
             if params[:csv]
                output.push [name.GetFullName,
+                            (name.acceptance_status_id == accepted.id) ? 'Accepted':'Probable',
                             (a.role_id == 18) ? 'R' : (a.role_id == 16) ? 'M' : '',
                             p.title,
                             (p.format.nil?) ? '' : p.format.name,
@@ -127,6 +129,7 @@ class PlannerReportsController < PlannerController
          outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
 
          output.unshift ["Name",
+                         "Acceptance Status",
                          "Role",
                          "Panel Title",
                          "Format",
