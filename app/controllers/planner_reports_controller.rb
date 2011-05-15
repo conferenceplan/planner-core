@@ -99,7 +99,7 @@ class PlannerReportsController < PlannerController
       @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, ], :conditions => {"print" => 1}, :order => "time_slots.start, people.last_name") 
 
       @panels.each do |panel|
-         next if panel.time_slot == nil;
+         next if panel.time_slot.nil?
          names = Array.new
          panel.people.each do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
@@ -113,8 +113,10 @@ class PlannerReportsController < PlannerController
          context = panel.tags_on(:PrimaryArea)
 	       part_list = names.join(', ')
          unless (panel.time_slot.nil?)
-            if (panel.duration % 60)
+            if (panel.duration % 60 == 0)
                duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%H')[:diff]
+            elsif (panel.duration < 60)
+               duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%N')[:diff]
             else
                duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%H %N')[:diff]
             end
