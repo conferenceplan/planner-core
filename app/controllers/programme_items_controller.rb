@@ -90,7 +90,9 @@ class ProgrammeItemsController < PlannerController
             room = Room.find(roomId)
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           else
-            @programmeItem.room_item_assignment.delete
+            if (@programmeItem.room_item_assignment)
+               @programmeItem.room_item_assignment.delete
+            end
           end
           
           ts = @programmeItem.time_slot
