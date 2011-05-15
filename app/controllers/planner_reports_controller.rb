@@ -3,6 +3,7 @@
 #
 class PlannerReportsController < PlannerController
    include PlannerReportHelpers
+   require 'time_diff'
   
    def show
    end
@@ -38,21 +39,21 @@ class PlannerReportsController < PlannerController
          panel.people.each do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
             if a.role_id == 16
-               names.push "#{p.GetFullName.strip} (M)"
+               names.push "#{p.GetFullPublicationName.strip} (M)"
             elsif a.role_id == 18 
-               rsvd.push p.GetFullName.strip if params[:incl_rsvd]
+               rsvd.push p.GetFullPublicationName.strip if params[:incl_rsvd]
             else
-               names.push p.GetFullName.strip
+               names.push p.GetFullPublicationName.strip
             end
          end
          if params[:csv]
             part_list = names.join(', ')
             rsvd_list = rsvd.join(', ')
             output.push [panel.title,
-                         (panel.format == nil) ? '' : panel.format.name,
-                         (panel.room == nil) ? '' : panel.room.name,
-                         (panel.room == nil) ? '' : panel.room.venue.name,
-                         (panel.time_slot == nil) ? '' : "#{panel.time_slot.start.strftime('%a %H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
+                         (panel.format.nil?) ? '' : panel.format.name,
+                         (panel.room.nil?) ? '' : panel.room.name,
+                         (panel.room.nil?) ? '' : panel.room.venue.name,
+                         (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%a %H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
                          part_list,
                          rsvd_list,
                         ]
@@ -77,6 +78,62 @@ class PlannerReportsController < PlannerController
          csv_out(output, outfile)
       end
     
+   end
+
+   def program_book_report
+
+      outfile = "prog_guide_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+      output = Array.new
+      output.push ["sessionid",
+                   "day",
+                   "time", 
+                   "duration",
+		   "room",
+		   "track",
+		   "type",
+		   "kids category",
+		   "title",
+		   "description",
+		   "participants",
+                  ]
+      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, ], :conditions => {"print" => 1}, :order => "time_slots.start, people.last_name") 
+
+      @panels.each do |panel|
+         names = Array.new
+         panel.people.each do |p|
+            a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
+            if a.role_id == 16
+               names.push "#{p.GetFullPublicationName.strip} (M)"
+            elsif a.role_id != 18 
+               names.push p.GetFullPublicationName.strip
+            end
+         end
+#         context = ActsAsTaggableOn::Tagging.first(:conditions => {"taggable_type" => 'ProgrammeItem', "taggable_id" => panel.id}, :select => 'context')
+         context = panel.tags_on(:PrimaryArea)
+	 part_list = names.join(', ')
+         unless (panel.time_slot.nil?)
+            if (panel.duration % 60)
+               duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%H')[:diff]
+            else
+               duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%H %N')[:diff]
+            end
+         end
+         output.push [panel.id,
+	              (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
+	              (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%I:%M %p'),
+	              (panel.time_slot.nil?) ? '' : duration,
+                      (panel.room.nil?) ? '' : panel.room.name,
+		      (context.nil?) ? '' : context[0],
+                      (panel.format.nil?) ? '' : panel.format.name,
+		      '',
+	              panel.title,
+	              panel.precis,
+                      part_list,
+                     ]
+      end
+      
+      csv_out(output, outfile)
+
    end
 
    def panelists_with_panels
@@ -110,7 +167,7 @@ class PlannerReportsController < PlannerController
                panels.push [p.time_slot.start, panelstr]
             end
             if params[:csv]
-               output.push [name.GetFullName,
+               output.push [name.GetFullPublicationName,
                             (name.acceptance_status_id == accepted.id) ? 'Accepted':'Probable',
                             (a.role_id == 18) ? 'R' : (a.role_id == 16) ? 'M' : '',
                             p.title,
