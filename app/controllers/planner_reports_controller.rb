@@ -46,10 +46,12 @@ class PlannerReportsController < PlannerController
                names.push p.GetFullPublicationName.strip
             end
          end
+         context = panel.tags_on(:PrimaryArea)
          if params[:csv]
             part_list = names.join(', ')
             rsvd_list = rsvd.join(', ')
             output.push [panel.title,
+		         (context.nil?) ? '' : context[0],
                          (panel.format.nil?) ? '' : panel.format.name,
                          (panel.room.nil?) ? '' : panel.room.name,
                          (panel.room.nil?) ? '' : panel.room.venue.name,
@@ -58,6 +60,7 @@ class PlannerReportsController < PlannerController
                          rsvd_list,
                         ]
          else
+            panel[:context] = context[0]
             panel[:names] = names
             panel[:rsvd] = rsvd
          end
@@ -67,6 +70,7 @@ class PlannerReportsController < PlannerController
          outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
  
          output.unshift ["Panel",
+                         "Track",
                          "Format",
                          "Room",
                          "Venue",
@@ -109,9 +113,8 @@ class PlannerReportsController < PlannerController
                names.push p.GetFullPublicationName.strip
             end
          end
-#         context = ActsAsTaggableOn::Tagging.first(:conditions => {"taggable_type" => 'ProgrammeItem', "taggable_id" => panel.id}, :select => 'context')
          context = panel.tags_on(:PrimaryArea)
-	       part_list = names.join(', ')
+	 part_list = names.join(', ')
          unless (panel.time_slot.nil?)
             if (panel.duration % 60 == 0)
                duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%H')[:diff]
