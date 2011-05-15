@@ -140,6 +140,7 @@ class ProgrammeItemsController < PlannerController
     context = params[:context]
     nameSearch = params[:namesearch]
     ignoreScheduled = params[:igs]
+    ignorePending = params[:igp]
 
     clause = createWhereClause(params[:filters], 
                   ['format_id'],
@@ -152,11 +153,16 @@ class ProgrammeItemsController < PlannerController
     if ignoreScheduled
       clause = addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
     end
+    if ignorePending
+      clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
+    end
 
     args = { :conditions => clause }
     
 #    LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id
-    args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id' )
+    args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
+                           'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
+                           'LEFT JOIN pending_publication_items on pending_publication_items.programme_item_id = programme_items.id ' )
 
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB

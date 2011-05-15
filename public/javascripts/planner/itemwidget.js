@@ -3,6 +3,10 @@ var currentItem = false;
 var currentItemName = "";
 
 jQuery(document).ready(function(){
+	itemPage = 1;
+	currentItem = false;
+	currentItemName = "";
+
     loadItemWidget();
     
     jQuery('#item-name-search-text').change(function(){
@@ -14,7 +18,7 @@ jQuery(document).ready(function(){
     
     jQuery('#current-item-page').change(function(){
         // set the age to the one indicated and then do a load
-        var np = jQuery('#current-item-page').val();
+        var np = parseInt(jQuery('#current-item-page').val());
         if ((np >= 1) && (np <= itemPageNbr)) {
             itemPage = np;
             loadItemWidget();
@@ -98,6 +102,11 @@ function loadItemWidget(){
     if (typeof ignoreScheduled != 'undefined') {
         if (ignoreScheduled == true) {
             urlStr += "?igs=true";
+        }
+    }
+    if (typeof ignorePending != 'undefined') {
+        if (ignorePending == true) {
+            urlStr += "?igp=true";
         }
     }
     $.ajax({

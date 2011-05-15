@@ -35,5 +35,11 @@ class ProgrammeItem < ActiveRecord::Base
   has_many :excluded_items_survey_maps
   has_many :mapped_survey_questions, :through => :excluded_items_survey_maps
   
+  # The relates the published programme item back to the original programme item
+  has_one :publication, :foreign_key => :original_id
+  has_one :published, :through => :publication,
+          :source => :published,
+          :source_type => 'PublishedProgrammeItem'
+  
   acts_as_audited
 end

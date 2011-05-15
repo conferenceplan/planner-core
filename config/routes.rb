@@ -1,5 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
 
+  map.connect 'pending_publication_item/list', :controller => 'pending_publication_item', :action => 'list', :method => 'post'
+  map.connect 'pending_publication_item/add', :controller => 'pending_publication_item', :action => 'add', :method => 'post'
+#  map.resources :pending_publication_item, :member => {:add => :post},
+#      :except => [:destroy, :new, :create, :edit, :show, :update, :index]
+
   map.resources :publisher, :member => {:index => :get, :publish => :post, :list => :get},
       :except => [:destroy, :new, :create, :edit, :show, :update]
 

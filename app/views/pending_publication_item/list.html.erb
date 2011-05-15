@@ -1,0 +1,17 @@
+<script type='text/javascript'>
+//<![CDATA[
+var pendingItemPageNbr = "<%=@nbr_pages%>";
+//]]>
+</script>
+<div>Page <%= @page%> of <%= @nbr_pages%> of <%=@count%> Items</div>
+
+<ol id="selectable-item" class="selectable">
+<% @pendingItems.each do |pendingItem| %>
+    <li class="ui-widget-content item-draggable">
+        <div class="pendingItemid" style="display: none;"><%= pendingItem.id %>
+        </div>
+        <%= pendingItem.programme_item.title %><br/>
+        <em><%= pendingItem.programme_item.duration %> minutes</em>
+    </li>
+<% end %>
+</ol>

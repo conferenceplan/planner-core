@@ -11,6 +11,11 @@ class Room < ActiveRecord::Base
   has_many :programme_items, :through => :room_item_assignments # through the room item assignment
   has_many :time_slots, :through => :room_item_assignments #, :source_type => 'TimeSlot'
 
+  has_one :publication, :foreign_key => :original_id
+  has_one :published, :through => :publication,
+          :source => :published,
+          :source_type => 'PublishedRoom'
+
   acts_as_audited :parent => :venue
 
   def removeAllTimes()
