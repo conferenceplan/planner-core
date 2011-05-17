@@ -100,7 +100,7 @@ class PlannerReportsController < PlannerController
 		   "description",
 		   "participants",
                   ]
-      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, ], :conditions => {"print" => 1}, :order => "time_slots.start, people.last_name") 
+      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, ], :conditions => {"print" => true}, :order => "time_slots.start, people.last_name") 
 
       @panels.each do |panel|
          next if panel.time_slot.nil?
