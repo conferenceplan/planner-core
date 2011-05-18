@@ -42,11 +42,13 @@ class PendingPublicationItemController < PlannerController
   # also maintain relationship back to the programme item
   def add
     items = params[:items]
-    items.each do |item|
-      programmeItem = ProgrammeItem.find(item)
-      pendingItem = PendingPublicationItem.new
-      pendingItem.programme_item = programmeItem
-      pendingItem.save
+    if items
+      items.each do |item|
+        programmeItem = ProgrammeItem.find(item)
+        pendingItem = PendingPublicationItem.new
+        pendingItem.programme_item = programmeItem
+        pendingItem.save
+      end
     end
   end
   

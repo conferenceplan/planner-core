@@ -155,6 +155,7 @@ class ProgrammeItemsController < PlannerController
     end
     if ignorePending
       clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
+      clause = addClause( clause, 'programme_items.print = true', nil )
     end
 
     args = { :conditions => clause }
