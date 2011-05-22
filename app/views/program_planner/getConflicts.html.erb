@@ -1,4 +1,7 @@
 <div id='item-conflict-report'>
+	<div class='line'>
+		Number of conflicts: <%= @roomConflicts.size + @conflicts.size + @excludedItemConflicts.size + @excludedTimeConflicts.size + @availableTimeConflicts.size %>
+	</div>
     <%@roomConflicts.each do |conflict| %>
     <div class='selectable item-conflict ui-widget-content'>
         <div class="itemid" style="display: none;"><%= conflict[2] %></div>
