@@ -96,6 +96,13 @@ class ProgramPlannerController < PlannerController
     query += EXCLUDED_TIME_QUERY_PT2
     @excludedTimeConflicts = ActiveRecord::Base.connection.select_rows(query)
     
+    query = AVAILABLE_TIME_CONFLICT_QUERY_PT1
+    if (@day)
+      query += 'AND roomB.day = ' + @day.to_s
+    end
+    query += AVAILABLE_TIME_CONFLICTS_QUERY_PT2
+    @availableTimeConflicts = ActiveRecord::Base.connection.select_rows(query)
+    
     respond_to do |format|
       format.html { 
         if @day
@@ -121,7 +128,7 @@ CONFLICT_QUERY_PT1 = <<"EOS"
    (select progA.person_id as pidA, progB.person_id as pidB, 
    roomA.room_id as roomA, progA.programme_item_id as progA, 
    progA.role_id as roleA, progB.role_id as roleB, tsA.start as startA, tsA.end as endA,
-   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
    from programme_item_assignments progA, room_item_assignments roomA, time_slots tsA,
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
    where
@@ -155,7 +162,7 @@ from
 rooms room, programme_items S, programme_items SB,
 (select 
    roomA.room_id as roomA, roomA.programme_item_id as progA, tsA.start as startA, tsA.end as endA,
-   roomB.room_id as roomB, roomB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
+   roomB.room_id as roomB, roomB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
 from 
    room_item_assignments roomA, time_slots tsA,
    room_item_assignments roomB, time_slots tsB
@@ -187,7 +194,7 @@ EXCLUDED_ITEM_QUERY_PT1 = <<"EOS"
    (select exA.person_id as pidA, progB.person_id as pidB, 
    roomA.room_id as roomA, exA.excludable_id as progA, 
    tsA.start as startA, tsA.end as endA,
-   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
    from exclusions exA, room_item_assignments roomA, time_slots tsA,
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
    where
@@ -219,7 +226,7 @@ EXCLUDED_TIME_QUERY_PT1 = <<"EOS"
   from people P, rooms R, programme_items S,
    (select exA.person_id as pidA, progB.person_id as pidB, 
    tsA.start as startA, tsA.end as endA,
-   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsA.end as endB
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
    from exclusions exA, time_slots tsA,
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
    where
@@ -231,6 +238,34 @@ EXCLUDED_TIME_QUERY_PT1 = <<"EOS"
 EOS
 
 EXCLUDED_TIME_QUERY_PT2 = <<"EOS"
+) as Conflicts
+  where
+  R.id = Conflicts.roomB AND
+  S.id = Conflicts.progB AND
+  P.id = Conflicts.pidA
+  order by P.id;
+EOS
+
+AVAILABLE_TIME_CONFLICT_QUERY_PT1 = <<"EOS"
+select 
+  R.id as id, R.name as name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  S.id as item_id, S.title as item_name, Conflicts.startB as item_start,
+  Conflicts.startA as period_start, Conflicts.endA as period_end
+  from people P, rooms R, programme_items S,
+   (select availA.person_id as pidA, progB.person_id as pidB, 
+   availA.start_time as startA, availA.end_time as endA,
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
+   from available_dates availA, 
+   programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
+   where
+   (availA.person_id = progB.person_id) AND
+   (roomB.programme_item_id = progB.programme_item_id AND roomB.time_slot_id = tsB.id) AND
+    ((availA.start_time > tsB.start) OR (availA.start_time > tsB.end) OR
+     (availA.end_time < tsB.start) OR (availA.end_time < tsB.end)) 
+EOS
+
+AVAILABLE_TIME_CONFLICTS_QUERY_PT2 = <<"EOS"
 ) as Conflicts
   where
   R.id = Conflicts.roomB AND
