@@ -145,38 +145,7 @@ class Person < ActiveRecord::Base
         end
         return name
     else
-      # TODO - This should be removed, as the pseudonym will be copied from the survey after it has been reviewed...
-      # if they don't have a pseudonym in people, check survey
-      if (self.hasSurvey?)
-        
-         survey = SmerfFormsSurveyrespondent.find_user_smerf_form(self.survey_respondent.id, 1)
-         if (survey == nil)
-           return GetFullName()
-         else
-            #pull names out of survey if they exist
-            survey_first_name = survey.responses['g3q1']
-            if (survey_first_name == "First name")
-              survey_first_name = ""
-            end
-            survey_last_name = survey.responses['g3q3']
-            if (survey_last_name == "Last Name")
-              survey_last_name = ""
-            end
-            survey_suffix = survey.responses['g3q4']
-            if (survey_suffix == "Suffix")
-              survey_suffix = ""
-            end
-            name = GetFullNameHelper(survey_first_name,survey_last_name,survey_suffix)
-            # if we don't get a valid publication name in survey, just use name
-            if (name =~ /^\s*$/)
-              name = GetFullName()
-            end
-            return name
-         end
-      else
-        # no survey, just use name
         return GetFullName()
-      end
     end
   end
   

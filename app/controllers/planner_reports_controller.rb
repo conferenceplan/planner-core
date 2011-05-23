@@ -202,6 +202,46 @@ class PlannerReportsController < PlannerController
                         ]
          csv_out(output, outfile)
       end
+  end
+  
+  def schedule_report
+      accepted = AcceptanceStatus.find_by_name("Accepted")
+      probable = AcceptanceStatus.find_by_name("Probable")
+      @names = Person.all(:include => :programmeItems, :conditions => ['acceptance_status_id = ? or acceptance_status_id = ?',accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
+
+      output = Array.new
+    
+      @names.each do |name|
+         panels = Array.new
+         name.programmeItems.find_each(:include => [:time_slot, :room, :format, ]) do |p|
+            allParticipants = ProgrammeItemAssignment.all(:conditions => {:programme_item_id => p.id})
+             if p.time_slot.nil?
+              next
+            end
+            panelstr = "#{p.title} (#{p.format.name})"
+            panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}"
+            panelstr << ", #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
+            partList = []
+            allParticipants.each do |a|             
+               if a.role_id == 18
+                  next
+              end
+              partName =  a.person.GetFullPublicationName
+              if a.role_id == 16
+                partName = partName + "(M)"
+              end
+              partList.push partName
+            end
+            partstr = partList.join(', ')
+
+            panels.push [p.time_slot.start, panelstr, p.precis, partstr]
+         end
+         panels.sort! {|a,b| a[0] <=> b[0]}
+         name[:items] = panels
+      end
+      respond_to do |format|
+         format.xml 
+      end
    end
 
    def admin_tags_by_context

@@ -1,0 +1,23 @@
+xml.people do
+  @names.each do |p|
+    xml.person do
+      name = p.GetFullName()
+      xml.name(name)
+      p.email_addresses.each do |email_address|
+        if (email_address.isdefault == true)
+          xml.address(email_address.email)
+        end
+      end
+    
+      xml.items do
+        p.items.each do |i|
+          xml.item do
+            xml.title(i[1])
+            xml.description(i[2]) 
+            xml.participants(i[3])
+          end
+        end
+      end
+    end
+ end
+end
