@@ -100,8 +100,16 @@ class ProgramPlannerController < PlannerController
     if (@day)
       query += 'AND roomB.day = ' + @day.to_s
     end
+    
     query += AVAILABLE_TIME_CONFLICTS_QUERY_PT2
     @availableTimeConflicts = ActiveRecord::Base.connection.select_rows(query)
+    
+    query = BACK_TO_BACK_QUERY_PT1
+    if (@day)
+      query += 'AND roomB.day = ' + @day.to_s
+    end
+    query += BACK_TO_BACK_QUERY_PT2
+    @backtobackConflicts = ActiveRecord::Base.connection.select_rows(query)
     
     respond_to do |format|
       format.html { 
@@ -272,6 +280,42 @@ AVAILABLE_TIME_CONFLICTS_QUERY_PT2 = <<"EOS"
   S.id = Conflicts.progB AND
   P.id = Conflicts.pidA
   order by P.id;
+EOS
+
+BACK_TO_BACK_QUERY_PT1 = <<"EOS"
+  select 
+  R.id as id, R.name as name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
+  RB.id as conflict_room_id, RB.name as conflict_room_name,
+  SB.id as conflict_item_id, SB.title as conflict_item_title,
+  Conflicts.startB as conflict_start
+  from people P, rooms R, programme_items S,
+  rooms RB, programme_items SB, 
+   (select progA.person_id as pidA, progB.person_id as pidB, 
+   roomA.room_id as roomA, progA.programme_item_id as progA, 
+   progA.role_id as roleA, progB.role_id as roleB, tsA.start as startA, tsA.end as endA,
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
+   from programme_item_assignments progA, room_item_assignments roomA, time_slots tsA,
+   programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
+   where
+   roomA.programme_item_id = progA.programme_item_id AND roomA.time_slot_id = tsA.id AND
+   roomB.programme_item_id = progB.programme_item_id AND roomB.time_slot_id = tsB.id AND
+   (tsA.end = tsB.start)
+  AND progA.programme_item_id <> progB.programme_item_id
+  AND progA.person_id = progB.person_id
+  AND progA.role_id = progB.role_id
+EOS
+  
+BACK_TO_BACK_QUERY_PT2 = <<"EOS"
+  ) as Conflicts
+  where
+  R.id = Conflicts.roomA AND
+  P.id = Conflicts.pidA AND
+  S.id = Conflicts.progA AND
+  RB.id = Conflicts.roomB AND
+  SB.id = Conflicts.progB
+  order by P.id,Conflicts.startA
 EOS
 
 end
