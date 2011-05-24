@@ -55,7 +55,8 @@ class PlannerReportsController < PlannerController
                          (panel.format.nil?) ? '' : panel.format.name,
                          (panel.room.nil?) ? '' : panel.room.name,
                          (panel.room.nil?) ? '' : panel.room.venue.name,
-                         (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%a %H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
+	                 (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
+                         (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
                          part_list,
                          rsvd_list,
                         ]
@@ -74,6 +75,7 @@ class PlannerReportsController < PlannerController
                          "Format",
                          "Room",
                          "Venue",
+                         "Day",
                          "Time Slot",
                          "Participants",
                          "Reserved",
