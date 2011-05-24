@@ -3,6 +3,7 @@
 #
 class SurveyReportsController < PlannerController
   include SurveyReportHelpers
+  include PlannerReportHelpers
   
   def index
   end
@@ -51,9 +52,35 @@ class SurveyReportsController < PlannerController
     @conflicts = GetConflictItems()
     if params[:conflict_id]
       (q_id, target) = params[:conflict_id].split('|')
-logger.debug "q id: #{q_id}"
-logger.debug "target: #{target}"
       @names = search_survey_negative(q_id, target)
     end
   end
+
+  def panelists_with_metadata
+     outfile = "panelist_details" + Time.now.strftime("%m-%d-%Y") + ".csv"
+     output = Array.new
+     output.push ['Name',
+                  'Start Day',
+                  'Start Time',
+                  'End Day',
+                  'End Time',
+                  'Max per Day',
+                  'Max Total',
+                  'Registered',
+                 ]
+     @names = search_survey('g6q1', '%')
+     @names.each do |n|
+        output.push [ n.GetFullPublicationName,
+                      n.GetSurveyStartDate.strftime('%a'),
+                      n.GetSurveyStartDate.strftime('%H:%M'),
+                      n.GetSurveyEndDate.strftime('%a'),
+                      n.GetSurveyEndDate.strftime('%H:%M'),
+                      n.GetSurveyQuestionResponse('g6q2'), 
+                      n.GetSurveyQuestionResponse('g6q3'),
+                      n.registrationDetail.nil? ? '--' : n.registrationDetail.registration_type.nil? ? '--': n.registrationDetail.registration_type
+                    ]
+     end
+     csv_out(output, outfile)
+  end
+
 end
