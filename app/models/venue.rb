@@ -5,4 +5,8 @@ class Venue < ActiveRecord::Base
 
   acts_as_audited
 
+  has_one :publication, :foreign_key => :original_id, :as => :original
+  has_one :published, :through => :publication,
+          :source => :published,
+          :source_type => 'PublishedVenue'
 end

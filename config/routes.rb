@@ -5,7 +5,8 @@ ActionController::Routing::Routes.draw do |map|
 #  map.resources :pending_publication_item, :member => {:add => :post},
 #      :except => [:destroy, :new, :create, :edit, :show, :update, :index]
 
-  map.resources :publisher, :member => {:index => :get, :publish => :post, :list => :get},
+  map.connect 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'
+  map.resources :publisher, :member => {:index => :get, :list => :get},
       :except => [:destroy, :new, :create, :edit, :show, :update]
 
   map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
@@ -185,7 +186,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.connect '', :controller => "user_sessions", :action => "new" 
   
-  map.resources :excluded_items_survey_maps, :has_many => :programme_items,:has_many => :mapped_survey_questions
+  map.resources :excluded_items_survey_maps, :has_many => [:programme_items, :mapped_survey_questions]
 
   map.connect 'excluded_times/PopulateExcludedTimesMap',:controller => 'excluded_times', :action => 'PopulateExcludedTimesMap', :method => 'post'
 
