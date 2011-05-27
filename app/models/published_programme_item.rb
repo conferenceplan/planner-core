@@ -20,7 +20,4 @@ class PublishedProgrammeItem < ActiveRecord::Base
   has_one :original, :through => :publication,
           :source => :original,
           :source_type => 'ProgrammeItem'
-
-  # TODO : need to put in code to clean up on delete
-
 end

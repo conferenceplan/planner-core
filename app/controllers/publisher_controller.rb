@@ -1,6 +1,9 @@
 #
 #
 #
+#
+# TODO - create a change log for the publications - link to published programme item and have a timestamped list of what has changed...
+#
 class PublisherController < PlannerController
   include TagUtils
   
@@ -11,6 +14,9 @@ class PublisherController < PlannerController
   def publish
     # TODO - report on the number of programme items published etc
     copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
+    copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
+    # Get a list of all objects that have been deleted (assignments, items etc)
+    unPublish(getRemovedProgramItems())
   end
   
   # list all the published programme items
@@ -18,21 +24,6 @@ class PublisherController < PlannerController
   end
   
   private
-  
-  def getPendingPublications()
-    
-    # Get a list of all objects that have been deleted (assignments, items etc)
-    # - i.e. all objects for which the original in the publication now points to an invalid object
-    # Get a list of all objects that have been modified
-    # - i.e. all objects that have an update date > update date of the publication
-    # Get a list of all new objects
-    # - i.e. all items that do not have an associated publication
-    
-    # if the prog item has been updated (new time) then the room item assignment will be new
-    # if a new person has been added to the item then there will be a new programme item assignment
-    # if the prog item itself has changed then the update date will be newer than the publication update date
-    
-  end
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getNewProgramItems
@@ -46,21 +37,31 @@ class PublisherController < PlannerController
   def getModifiedProgramItems
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
-    clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = "ProgrammeItem" AND )', nil)
+    clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = "ProgrammeItem")', nil)
+    clause = addClause(clause,'publications.publication_date < programme_items.updated_at OR publications.publication_date < room_item_assignments.updated_at OR publications.publication_date < programme_item_assignments.updated_at', nil)
     # check the date of the programme item compared with the published
-    # check the date of the room assignment compared with the published
-    # check the date of the people assignments compared with the published
-    args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publications] }
+    args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication] }
     return ProgrammeItem.find :all, args
   end
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getRemovedProgramItems
     # publications with no original or that the published flag is no longer true
+    clause = addClause(nil,'published_programme_items.id not in (select publications.published_id from publications where publications.published_type = "PublishedProgrammeItem")', nil)
+    args = { :conditions => clause, :include => [:publication] }
+    return PublishedProgrammeItem.find :all, args
   end
   
   def getRemovedParticipants
     # Select from publications and programme item assignments where published_id is not in the programme item assignments
+  end
+  
+  def unPublish(pubItems)
+    PublishedProgrammeItem.transaction do
+      pubItems.each do |item|
+        item.destroy
+      end
+    end
   end
   
   def copyProgrammeItems(srcItems)
@@ -73,10 +74,6 @@ class PublisherController < PlannerController
         newItem = copy(srcItem, newItem)
         newItem.original = srcItem # this create the Publication record as well to tie the two together
  
-        # Put the date and the person who did the publish into the association (Publication)
-#        newItem.publication.publication_date = DateTime.current
-#        newItem.publication.user = @current_user
-
         # TODO - along with the reason
         newItem.save
 
@@ -107,6 +104,7 @@ class PublisherController < PlannerController
           assignment.save
         end
 
+        # Put the date and the person who did the publish into the association (Publication)
         newItem.publication.publication_date = DateTime.current
         newItem.publication.user = @current_user
         newItem.publication.save
@@ -148,6 +146,7 @@ class PublisherController < PlannerController
   
   # Copy the assignments of people from the unpublished item to the published item
   def copyAssignments(src, dest)
+    # TODO - if the destination has a person that the source does not then we need to remove that assignment
     if src.programme_item_assignments
       src.programme_item_assignments.each do |srcAssignment|
         # add the person only if the destination does not have that person
@@ -162,6 +161,16 @@ class PublisherController < PlannerController
             dest[idx].save
           end
         end
+      end
+      
+      dest.published_programme_item_assignments.each do |pitem|
+        if (src.people.index(pitem.person) == nil)
+          pitem.destroy
+        end
+      end
+    else # since there are no source assignments we should then remove all the destination assignments (if there are any)
+      if dest.published_programme_item_assignments
+        dest.published_programme_item_assignments.destroy
       end
     end
   end
