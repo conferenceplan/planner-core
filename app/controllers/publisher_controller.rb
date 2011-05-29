@@ -1,8 +1,7 @@
 #
 #
-#
-#
 # TODO - create a change log for the publications - link to published programme item and have a timestamped list of what has changed...
+# NOTE: Look at the audit table for this information
 #
 class PublisherController < PlannerController
   include TagUtils
@@ -60,6 +59,7 @@ class PublisherController < PlannerController
     PublishedProgrammeItem.transaction do
       pubItems.each do |item|
         item.destroy
+        # TODO - log the fact that the program item is no longer scheduled...
       end
     end
   end
@@ -73,19 +73,18 @@ class PublisherController < PlannerController
         # copy the details from the unpublished item to the new
         newItem = copy(srcItem, newItem)
         newItem.original = srcItem # this create the Publication record as well to tie the two together
- 
-        # TODO - along with the reason
         newItem.save
 
         # Need to copy the tags...
         copyTags(srcItem, newItem, 'PrimaryArea')
         
         # link to the people (and their roles)
-        copyAssignments(srcItem, newItem)
+        updateAssignments(srcItem, newItem)
         
         newRoom = publishRoom(srcItem.room)
         if newItem.published_room_item_assignment
           newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
+          # TODO - log the room change
           
           # Only need to copy time if the new time slot is more recent than the published
           if newItem.published_time_slot != nil
@@ -93,6 +92,7 @@ class PublisherController < PlannerController
               newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
               newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
               newItem.published_time_slot = newTimeSlot
+              # TODO - log the time change
             end
           end
         else
@@ -102,6 +102,7 @@ class PublisherController < PlannerController
                   :day => srcItem.room_item_assignment.day, 
                   :published_programme_item => newItem)
           assignment.save
+          # TODO - log this new programme item
         end
 
         # Put the date and the person who did the publish into the association (Publication)
@@ -144,38 +145,47 @@ class PublisherController < PlannerController
     return pubVenue
   end
   
-  # Copy the assignments of people from the unpublished item to the published item
-  def copyAssignments(src, dest)
-    # TODO - if the destination has a person that the source does not then we need to remove that assignment
+  #
+  # Update the assignments of people from the unpublished item to the published item
+  #
+  def updateAssignments(src, dest)
     if src.programme_item_assignments
       src.programme_item_assignments.each do |srcAssignment|
         # add the person only if the destination does not have that person
         if (dest.people == nil) || (dest.people.index(srcAssignment.person) == nil)
           assignment = dest.published_programme_item_assignments.new(:person => srcAssignment.person, :role => srcAssignment.role)
           assignment.save
+          # TODO - log the fact that the person has been added to the programme item
+          # check their role for reserved
         else # the destination has the person, but their role may have changed
           # find the index of the person only if the role is also different
           idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && (a.role != srcAssignment.role) }
           if idx != nil
             dest[idx].role = srcAssignment.role
             dest[idx].save
+            # TODO - log the fact that the person's role in the programme item has been changed
           end
         end
       end
       
+      # if the destination has a person that the source does not then we need to remove that assignment
       dest.published_programme_item_assignments.each do |pitem|
         if (src.people.index(pitem.person) == nil)
+          # TODO - Log the fact that the person has been removed from the item
           pitem.destroy
         end
       end
     else # since there are no source assignments we should then remove all the destination assignments (if there are any)
       if dest.published_programme_item_assignments
+        # TODO - log the fact that the people have been removed from the item
         dest.published_programme_item_assignments.destroy
       end
     end
   end
   
-  # copy the attributes from the source that have an equivalent in the destination
+  #
+  # Copy the attributes from the source that have an equivalent in the destination
+  #
   def copy(src, dest)
     src.attributes.each do |name, val|
       # but do not copy any of the variables needed for the optimistic locking, the id, etc
