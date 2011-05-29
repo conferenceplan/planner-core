@@ -5,7 +5,7 @@ class ProgramPlannerController < PlannerController
   end
 
   def getRoomControl
-    @roomListing = Room.all(:order => 'rooms.name ASC') 
+    @roomListing = Room.all(:order => 'venues.name DESC, rooms.name ASC', :joins => :venue) 
 
     respond_to do |format|
       format.html { render :layout => 'plain' }
@@ -22,7 +22,7 @@ class ProgramPlannerController < PlannerController
     rooms = j.decode params[:rooms] if params[:rooms] # the rooms that we want to show
     conditions = ['id in (?)', rooms] if rooms && (rooms.size > 0)
     @day = params[:day] # Day
-    @roomListing = Room.all(:order => 'rooms.name ASC', :conditions => conditions) # use room_item_assignments.day(@day) to filter list of assignments by day
+    @roomListing = Room.all(:order => 'venues.name DESC, rooms.name ASC', :joins => :venue, :conditions => conditions) # use room_item_assignments.day(@day) to filter list of assignments by day
     
     @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + @day.to_i.day
     
