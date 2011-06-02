@@ -44,12 +44,14 @@ class ProgramPlannerController < PlannerController
   # Add an item to a room
   #
   def addItem
-    @item = ProgrammeItem.find(params[:itemid])
-    @room = Room.find(params[:roomid])
-    @day = params[:day]
-    time = params[:time] # The start time in hours and minutes for the programme item
+    if !params[:cancel]
+      @item = ProgrammeItem.find(params[:itemid])
+      @room = Room.find(params[:roomid])
+      @day = params[:day]
+      time = params[:time] # The start time in hours and minutes for the programme item
     
-    addItemToRoomAndTime(@item, @room, @day, time)
+      addItemToRoomAndTime(@item, @room, @day, time)
+    end
         
     render :layout => 'content'
   end
