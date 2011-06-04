@@ -8,6 +8,8 @@
    <%= select_tag :sort_by, options_for_select([['Date / Time', 'time'], ['Room', 'room'], ['Item Name', 'name']], params[:sort_by]) %><br /><br />
    <%= check_box_tag :incl_rsvd, '1', params[:incl_rsvd] %>
    <%= label_tag :incl_rsvd, "Include reserve panelists? "%><br /><br />
+   <%= check_box_tag :sched_only, '1', params[:sched_only] %>
+   <%= label_tag :sched_only, "Include scheduled panels only? "%><br /><br />
    <%= submit_tag "Export CSV", :name=>"csv" %>
    <%= submit_tag "View in Browser", :name => "html" %>
 </p>

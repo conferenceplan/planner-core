@@ -30,7 +30,11 @@ class PlannerReportsController < PlannerController
          ord_str = "programme_items.title, people.last_name"
       end
 
-      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format,], :conditions => ["programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?)", mod_date, mod_date, mod_date, mod_date], :order => ord_str) 
+      if params[:sched_only]
+         @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format,], :conditions => ["time_slots.start is not NULL and (programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?))", mod_date, mod_date, mod_date, mod_date], :order => ord_str) 
+      else
+         @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format,], :conditions => ["programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?)", mod_date, mod_date, mod_date, mod_date], :order => ord_str) 
+      end
 
       output = Array.new
       @panels.each do |panel|
@@ -69,17 +73,19 @@ class PlannerReportsController < PlannerController
          
       if params[:csv]
          outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+         headers = ["Panel",
+                    "Track",
+                    "Format",
+                    "Room",
+                    "Venue",
+                    "Day",
+                    "Time Slot",
+                    "Participants",
+                   ]
+
+         headers.push "Reserved" if params[:incl_rsvd]
  
-         output.unshift ["Panel",
-                         "Track",
-                         "Format",
-                         "Room",
-                         "Venue",
-                         "Day",
-                         "Time Slot",
-                         "Participants",
-                         "Reserved",
-                        ]
+         output.unshift headers
 
          csv_out(output, outfile)
       end
