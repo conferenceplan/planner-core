@@ -230,19 +230,26 @@ class PlannerReportsController < PlannerController
             panelstr << ", #{p.title} (#{p.format.name})"
             
             partList = []
+            skipreserved = false;
             allParticipants.each do |a|             
                if a.role_id == 18
-                  next
-              end
-              partName =  a.person.GetFullPublicationName
-              if a.role_id == 16
-                partName = partName + "(M)"
-              end
-              partList.push partName
+                 if (a.id == name.id)
+                   skipreserved = true
+                   break
+                 end
+                 next
+               end
+               partName =  a.person.GetFullPublicationName
+             
+               if a.role_id == 16
+                 partName = partName + "(M)"
+               end
+               partList.push partName
             end
-            partstr = partList.join(', ')
-
-            panels.push [p.time_slot.start, panelstr, p.precis, partstr]
+            if (skipreserved == false)
+              partstr = partList.join(', ')
+              panels.push [p.time_slot.start, panelstr, p.precis, partstr]
+            end
          end
          panels.sort! {|a,b| a[0] <=> b[0]}
          name[:items] = panels
