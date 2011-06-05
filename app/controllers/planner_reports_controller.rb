@@ -226,8 +226,9 @@ class PlannerReportsController < PlannerController
              if p.time_slot.nil?
               next
             end
-            panelstr = "#{p.title} (#{p.format.name})"
-            panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}"
+            panelstr = "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}"
+            panelstr << ", #{p.title} (#{p.format.name})"
+            
             partList = []
             allParticipants.each do |a|             
                if a.role_id == 18
