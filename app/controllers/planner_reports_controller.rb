@@ -215,7 +215,9 @@ class PlannerReportsController < PlannerController
   def schedule_report
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
-      @names = Person.all(:include => :programmeItems, :conditions => ['acceptance_status_id = ? or acceptance_status_id = ?',accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
+      invitestatus = InviteStatus.find_by_name("Invited")
+
+      @names = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ? ',accepted.id,probable.id,invitestatus.id], :order => "people.last_name, programme_items.id") 
 
       output = Array.new
     
@@ -251,8 +253,10 @@ class PlannerReportsController < PlannerController
               panels.push [p.time_slot.start, panelstr, p.precis, partstr]
             end
          end
-         panels.sort! {|a,b| a[0] <=> b[0]}
-         name[:items] = panels
+         if (panels.size != 0)
+           panels.sort! {|a,b| a[0] <=> b[0]}
+           name[:items] = panels
+         end
       end
       respond_to do |format|
          format.xml 

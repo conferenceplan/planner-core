@@ -1,6 +1,7 @@
 xml.people do
   @names.each do |p|
-    xml.person do
+     if (p[:items] != nil)
+     xml.person do
       name = p.GetFullName()
       xml.name(name)
       p.email_addresses.each do |email_address|
@@ -17,7 +18,8 @@ xml.people do
             xml.participants(i[3])
           end
         end
-      end
     end
+   end
+  end
  end
 end
