@@ -11,11 +11,13 @@ class PublisherController < PlannerController
   
   # publish the selected program items
   def publish
-    # TODO - report on the number of programme items published etc
-    copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
-    copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
-    # Get a list of all objects that have been deleted (assignments, items etc)
-    unPublish(getRemovedProgramItems())
+    @newItems = 0
+    @modifiedItems = 0
+    @renmovedItems = 0
+    @newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
+    @modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
+    @renmovedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
+    render :layout => 'content'
   end
   
   # list all the published programme items
@@ -46,6 +48,7 @@ class PublisherController < PlannerController
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getRemovedProgramItems
     # publications with no original or that the published flag is no longer true
+    # TODO - need to put in the test for the published flag
     clause = addClause(nil,'published_programme_items.id not in (select publications.published_id from publications where publications.published_type = "PublishedProgrammeItem")', nil)
     args = { :conditions => clause, :include => [:publication] }
     return PublishedProgrammeItem.find :all, args
@@ -56,15 +59,19 @@ class PublisherController < PlannerController
   end
   
   def unPublish(pubItems)
+    nbrProcessed = 0
     PublishedProgrammeItem.transaction do
       pubItems.each do |item|
         item.destroy
+        nbrProcessed += 1
         # TODO - log the fact that the program item is no longer scheduled...
       end
     end
+    return nbrProcessed
   end
   
   def copyProgrammeItems(srcItems)
+    nbrProcessed = 0
     PublishedProgrammeItem.transaction do
       srcItems.each do |srcItem|
         # check for existence of already published item and if it is there then use that
@@ -109,8 +116,10 @@ class PublisherController < PlannerController
         newItem.publication.publication_date = DateTime.current
         newItem.publication.user = @current_user
         newItem.publication.save
+        nbrProcessed += 1
       end
     end
+    return nbrProcessed
   end
 
   def publishRoom(srcRoom)

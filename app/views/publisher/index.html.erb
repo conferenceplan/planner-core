@@ -1,77 +1,11 @@
 <% content_for :jsheader do %>
-<%= stylesheet_link_tag 'planner/itemplanner' %>
-<%= javascript_include_tag 'planner/itemwidget' %>
 <%= javascript_include_tag 'planner/publisher' %>
 <% end %>
 <div class='container_12'>
     <div class="grid_3">
-        <span id="item-name-search"><input type='text' id='item-name-search-text'>
-            </input></span>
-        <div class="spacer">
-        </div>
-        <span id="item-toolbar" class="ui-widget-header ui-corner-all">
-            <button id="item-beginning">
-                go to beginning
-            </button>
-            <button id="item-rewind">
-                rewind
-            </button>
-            <input type='text' size='2' id='current-item-page'>
-            </input>
-            <button id="item-forward">
-                fast forward
-            </button>
-            <button id="item-end">
-                go to end
-            </button>
-        </span>
-        <div class="spacer">
-        </div>
-        <div id="items-widget" class="ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
-                Items
-            </div>
-            <div id="items-widget-content">
-            </div>
-        </div>
-    </div>
-
-    <div class="grid_3">
             <button id="items-publish">
                 Publish Items
             </button>
-    </div>
-
-    <div class="grid_3">
-        <span id="pending-item-name-search">
-            <input type='text' id='pending-item-name-search-text'></input>
-        </span>
-        <div class="spacer">
-        </div>
-        <span id="pending-item-toolbar" class="ui-widget-header ui-corner-all">
-            <button id="pending-item-beginning">
-                go to beginning
-            </button>
-            <button id="pending-item-rewind">
-                rewind
-            </button>
-            <input type='text' size='2' id='current-pending-item-page'>
-            </input>
-            <button id="pending-item-forward">
-                fast forward
-            </button>
-            <button id="pending-item-end">
-                go to end
-            </button>
-        </span>
-        <div class="spacer">
-        </div>
-        <div id="pending-items-widget" class="ui-widget ui-widget-content ui-corner-all">
-            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
-                Items Pending Publication
-            </div>
-            <div id="pending-items-widget-content">
-            </div>
-        </div>
+            <div id='result'></div>
     </div>
 </div>

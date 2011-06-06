@@ -1,0 +1,7 @@
+<div>
+<% @assignments.each do |assignment| %>
+    <p><%= assignment.published_time_slot.start %></p>
+    <p><%= assignment.published_programme_item.title %></p>
+    <p><%= assignment.published_room.name %></p>
+<% end %>
+</div>
