@@ -29,7 +29,7 @@ class PublisherController < PlannerController
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getNewProgramItems
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
-    clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = "ProgrammeItem")', nil)
+    clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
     args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments] }
     return ProgrammeItem.find :all, args
@@ -38,7 +38,7 @@ class PublisherController < PlannerController
   def getModifiedProgramItems
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
-    clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = "ProgrammeItem")', nil)
+    clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
     clause = addClause(clause,'publications.publication_date < programme_items.updated_at OR publications.publication_date < room_item_assignments.updated_at OR publications.publication_date < programme_item_assignments.updated_at', nil)
     # check the date of the programme item compared with the published
     args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication] }
@@ -49,7 +49,7 @@ class PublisherController < PlannerController
   def getRemovedProgramItems
     # publications with no original or that the published flag is no longer true
     # TODO - need to put in the test for the published flag
-    clause = addClause(nil,'published_programme_items.id not in (select publications.published_id from publications where publications.published_type = "PublishedProgrammeItem")', nil)
+    clause = addClause(nil,'published_programme_items.id not in (select publications.published_id from publications where publications.published_type = ?)', 'PublishedProgrammeItem')
     args = { :conditions => clause, :include => [:publication] }
     return PublishedProgrammeItem.find :all, args
   end
