@@ -12,6 +12,7 @@ atom_feed do |feed|
       entry.title(assignment.published_programme_item.title)
       entry.content(
         '<p>' + assignment.published_time_slot.start.strftime('%A %H:%M') + ' to ' + assignment.published_time_slot.end.strftime('%H:%M') + '</p>' +
+        '<p>' + assignment.published_room.published_venue.name + ' '+ assignment.published_room.name + '</p>' +
         '<p>' + assignment.published_programme_item.precis + '</p>' +
         str,
         :type => 'html')
