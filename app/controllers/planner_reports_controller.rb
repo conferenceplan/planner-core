@@ -153,6 +153,8 @@ class PlannerReportsController < PlannerController
    def panelists_with_panels
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
+      reserved = PersonItemRole.find_by_name("Reserved")
+      moderator = PersonItemRole.find_by_name("Moderator")
       @names = Person.all(:include => :programmeItems, :conditions => ['acceptance_status_id = ? or acceptance_status_id = ?',accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
 
       output = Array.new
@@ -162,12 +164,12 @@ class PlannerReportsController < PlannerController
          name.programmeItems.find_each(:include => [:time_slot, :room, :format, ]) do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
             panelstr = "#{p.title} (#{p.format.name})"
-            if a.role_id == 16
+            if a.role_id == moderator.id
                panelstr << " (M)"
             end
             panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
             panelstr << ", #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
-            if a.role_id == 18
+            if a.role_id == reserved.id
                if params[:incl_rsvd]
                   panelstr = "<i>#{panelstr}</i>"
                else
@@ -183,7 +185,7 @@ class PlannerReportsController < PlannerController
             if params[:csv]
                output.push [name.GetFullPublicationName,
                             (name.acceptance_status_id == accepted.id) ? 'Accepted':'Probable',
-                            (a.role_id == 18) ? 'R' : (a.role_id == 16) ? 'M' : '',
+                            (a.role_id == reserved.id) ? 'R' : (a.role_id == moderator.id) ? 'M' : '',
                             p.title,
                             (p.format.nil?) ? '' : p.format.name,
                             (p.room.nil?) ? '' : p.room.name,
@@ -215,6 +217,8 @@ class PlannerReportsController < PlannerController
   def schedule_report
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
+      reserved = PersonItemRole.find_by_name("Reserved")
+      moderator = PersonItemRole.find_by_name("Moderator")
       invitestatus = InviteStatus.find_by_name("Invited")
 
       @names = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ? ',accepted.id,probable.id,invitestatus.id], :order => "people.last_name, programme_items.id") 
@@ -234,8 +238,8 @@ class PlannerReportsController < PlannerController
             partList = []
             skipreserved = false;
             allParticipants.each do |a|             
-               if a.role_id == 18
-                 if (a.id == name.id)
+               if a.role_id == reserved.id
+                 if (a.person_id == name.id)
                    skipreserved = true
                    break
                  end
@@ -243,7 +247,7 @@ class PlannerReportsController < PlannerController
                end
                partName =  a.person.GetFullPublicationName
              
-               if a.role_id == 16
+               if a.role_id == moderator.id
                  partName = partName + "(M)"
                end
                partList.push partName
