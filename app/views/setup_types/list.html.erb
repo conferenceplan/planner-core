@@ -1,0 +1,8 @@
+<% @setup_types.each do |type| %>
+    <div class='setup-entries'>
+        <div class='program-entry'>
+            <div class="setupid" style="display: none;"><%= type.id %></div>
+            <%= type.name %>
+        </div>
+    </div>
+<% end %>

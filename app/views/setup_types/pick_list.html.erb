@@ -1,0 +1,5 @@
+<select> 
+<% for type in @setup_types %>
+	<option value='<%=type.id%>'><%= type.name%></option> 
+<%end%>
+</select>
