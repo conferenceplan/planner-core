@@ -1,6 +1,7 @@
 #
 #
 #
+#
 class PlannerReportsController < PlannerController
    include PlannerReportHelpers
    require 'time_diff'
