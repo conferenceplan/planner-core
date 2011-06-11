@@ -36,16 +36,17 @@ class PlannerReportsController < PlannerController
       else
          @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format,], :conditions => ["programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?)", mod_date, mod_date, mod_date, mod_date], :order => ord_str) 
       end
-
+      reserved = PersonItemRole.find_by_name("Reserved")
+      moderator = PersonItemRole.find_by_name("Moderator")
       output = Array.new
       @panels.each do |panel|
          names = Array.new
          rsvd = Array.new
          panel.people.each do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
-            if a.role_id == 16
+            if a.role_id == moderator.id
                names.push "#{p.GetFullPublicationName.strip} (M)"
-            elsif a.role_id == 18 
+            elsif a.role_id == reserved.id
                rsvd.push p.GetFullPublicationName.strip if params[:incl_rsvd]
             else
                names.push p.GetFullPublicationName.strip
@@ -110,15 +111,17 @@ class PlannerReportsController < PlannerController
 		   "participants",
                   ]
       @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, ], :conditions => {"print" => true}, :order => "time_slots.start, people.last_name") 
-
+      reserved = PersonItemRole.find_by_name("Reserved")
+      moderator = PersonItemRole.find_by_name("Moderator")
+      
       @panels.each do |panel|
          next if panel.time_slot.nil?
          names = Array.new
          panel.people.each do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
-            if a.role_id == 16
-               names.push "#{p.GetFullPublicationName.strip} (M)"
-            elsif a.role_id != 18 
+            if a.role_id == moderator.id
+               names.push "#{p.GetFullPublicationName.strip}"
+            elsif a.role_id != reserved.id
                names.push p.GetFullPublicationName.strip
             end
          end

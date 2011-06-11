@@ -57,6 +57,37 @@
         Please wait...
     </div>
 </div>
+<div id="item-moderator-participants" class="droppable">
+    <div class="ui-widget-content">
+        <div>
+            Moderator
+        </div>
+        <ol class="selectable selectable-participant">
+            <% @moderatorAssociations.each do |assoc| %>
+            <li class="ui-widget-content removeable">
+                <input type="hidden" value="<%=assoc.person.id%>" name="item-moderator-participants[<%=assoc.person.id%>][person_id]">
+                <div style="display: none;" class="personid">
+                    <%=assoc.person.id %>
+                </div>
+                <% if assoc.person.pseudonym %>
+                <%= assoc.person.pseudonym.first_name %> <%= assoc.person.pseudonym.last_name %> <%= assoc.person.pseudonym.suffix %>
+                <br/>
+                (<%= assoc.person.first_name %> <%= assoc.person.last_name %> <%= assoc.person.suffix %>)<%else %>
+                <%= assoc.person.first_name %> <%= assoc.person.last_name %> <%= assoc.person.suffix %>
+                <% end %>
+            </li>
+            <%end %>
+            <%if @moderatorAssociations.empty? %>
+            <div class="placeholder">
+                <br/>
+                <em>No Moderator ...</em>
+                <br/>
+                <br/>
+            </div>
+        </ol>
+        <% end %>
+    </div>
+</div>
 <div id="item-participants" class="droppable">
     <div class="ui-widget-content">
         <div>
