@@ -234,6 +234,22 @@
 		    	return result;
 		    };
 
+//  Hidden data
+		    
+		    $.planIt.hidden = function
+		    (
+		    		nameArray 		//  Hierarchy of names in the model
+		    ){
+		    	var result = {};
+
+	            result.name = nestedNames(nameArray);		//  The shifts kill most of the array
+		    	result.index = nameArray[0];
+	            result.hidden = true;
+	            result.search = false;
+
+		    	return result;
+		    };
+
 //  End of field definition functions
 		    
 //  Response function
