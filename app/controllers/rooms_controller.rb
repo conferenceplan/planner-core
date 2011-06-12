@@ -40,14 +40,22 @@ class RoomsController < PlannerController
     @room = Room.find(params[:id])
     @venue = Venue.find @room.venue_id
   end
+  
   def create
     @room = Room.new(params[:room])
     if (@room.save)
-       render :action => 'index', :layout => 'content'
+      type = SetupType.find_by_name(SetupType::THEATRE)
+      roomSetup = RoomSetup.new(:room_id => @room.id, :setup_type_id => type.id)
+      roomSetup.save
+      
+      @room.setup_type_id = roomSetup.id
+      @room.save
+      render :action => 'index', :layout => 'content'
     else
       render :content
     end 
   end
+  
   def new
     @room = Room.new
     
@@ -75,4 +83,9 @@ class RoomsController < PlannerController
     
   end
   
+   def picklist
+     @rooms = Room.find([params[:room_id]])
+     render :action => :picklist, :layout => "plain"
+   end
+
 end
