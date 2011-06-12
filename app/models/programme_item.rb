@@ -7,7 +7,9 @@ class ProgrammeItem < ActiveRecord::Base
   has_many  :people, :through => :programme_item_assignments
   
   acts_as_taggable
-  
+
+  belongs_to :setup_type
+ 
   belongs_to   :format 
   
   has_one :room_item_assignment # really we only use one anyway...
