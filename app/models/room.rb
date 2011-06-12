@@ -11,6 +11,10 @@ class Room < ActiveRecord::Base
   has_many :programme_items, :through => :room_item_assignments # through the room item assignment
   has_many :time_slots, :through => :room_item_assignments #, :source_type => 'TimeSlot'
 
+  has_many :room_setups
+  has_many :setup_types, :through => :room_setups
+  has_one :setup_type
+  
   has_one :publication, :foreign_key => :original_id, :as => :original
   has_one :published, :through => :publication,
           :source => :published,
