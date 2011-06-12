@@ -62,6 +62,6 @@ class SetupTypesController < ApplicationController
 
    def picklist
      @setup_types = SetupType.find :all
-     render :action => :list, :layout => "plain"
+     render :action => :picklist, :layout => "plain"
    end
 end
