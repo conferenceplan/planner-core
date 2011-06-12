@@ -1,0 +1,2 @@
+module RoomSetupHelper
+end

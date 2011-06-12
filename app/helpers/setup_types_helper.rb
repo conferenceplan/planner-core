@@ -1,0 +1,2 @@
+module SetupTypesHelper
+end
