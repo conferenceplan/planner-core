@@ -115,7 +115,15 @@ ActionController::Routing::Routes.draw do |map|
  
   map.connect 'rooms/list', :controller => 'rooms', :action => 'list'
   map.connect 'rooms/listwithblank', :controller => 'rooms', :action => 'listwithblank'
+  map.connect 'rooms/picklist', :controller => 'rooms', :action => 'picklist'
   map.resources :rooms
+
+  map.connect 'setup_types/list', :controller => 'setup_types', :action => 'list'
+  map.connect 'setup_types/picklist', :controller => 'setup_types', :action => 'picklist'
+  map.resources :setup_types
+
+  map.connect 'room_setups/list', :controller => 'room_setups', :action => 'list'
+  map.resources :room_setups
 
   map.connect 'venue/list', :controller => 'venue', :action => 'list'
   map.resources :venue
@@ -146,7 +154,7 @@ ActionController::Routing::Routes.draw do |map|
   #
   # The new(s) were removed so as to prevent anonymous people creating new accounts
   #
-  map.resource :account, :controller => "users", :except => :new
+  map.resource :account, :controller => "users"
   map.resources :users, :except => :new
   map.connect 'usersadmin/list', :controller => 'users/admin', :action => 'list'
   map.resources :usersadmin, :controller => 'users/admin'
