@@ -5,5 +5,6 @@ class AddVenuesToMenu < ActiveRecord::Migration
   end
 
   def self.down
+    MenuItem.find_by_name("Venues").destroy
   end
 end

@@ -1,0 +1,6 @@
+<select> 
+<option value='0'></option>
+<% for room in @rooms %>
+	<option value='<%=room.id%>'><%= room.name%></option> 
+<%end%>
+</select>

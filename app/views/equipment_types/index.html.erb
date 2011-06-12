@@ -1,0 +1,17 @@
+<div class='container_12'>
+<% if @equipment_types.blank? %>
+   <p>There are not any equipment types currently in the system.</p>
+<% else %>
+   <p>These are the current equipment types in our system:</p>
+   <ul id="equipment_types">
+   <% @equipment_types.each do |e| %>
+      <li><h3><%= e.description %></h3> 
+      <%= link_to 'Edit', {:action => "edit", :id => e.id} %>
+      <%= link_to 'Delete', {:id => e.id, :action => "destroy"}, :confirm => "Are you sure you want to delete this equipment type?", :method => :delete%>
+      </li>
+   <% end %>
+   </ul>
+<% end %>
+<hr />
+<p><%= link_to "Add new equipment type", {:action => 'new' }%></p>
+</div>

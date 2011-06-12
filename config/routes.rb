@@ -128,6 +128,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'venue/list', :controller => 'venue', :action => 'list'
   map.resources :venue
 
+  map.connect 'equipment_types/list', :controller => 'equipment_types', :action => 'list'
+  map.resources :equipment_types
+
   map.connect 'planner_reports/:action', :controller => 'planner_reports'
   map.resources :planner_reports
 
