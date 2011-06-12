@@ -7,10 +7,6 @@
 		<%= f.text_field :name %>
 	</p>
 	<p>
-		<%= f.label :capacity, "Capacity " %> <br/>
-		<%= f.text_field :capacity %>
-	</p>
-	<p>
 		<%= f.label :venue_id, "Venue " %> <br/>
 		<%= f.collection_select :venue_id, @venues, :id, :name %>
 	</p>
