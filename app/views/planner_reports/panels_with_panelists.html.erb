@@ -7,9 +7,14 @@
    <%= label_tag :sort_by, "Sort By: "%>
    <%= select_tag :sort_by, options_for_select([['Date / Time', 'time'], ['Room', 'room'], ['Item Name', 'name']], params[:sort_by]) %><br /><br />
    <%= check_box_tag :incl_rsvd, '1', params[:incl_rsvd] %>
-   <%= label_tag :incl_rsvd, "Include reserve panelists? "%><br /><br />
+   <%= label_tag :incl_rsvd, "Display reserve panelists? "%><br /><br />
    <%= check_box_tag :sched_only, '1', params[:sched_only] %>
    <%= label_tag :sched_only, "Include scheduled panels only? "%><br /><br />
+   <%= label_tag :type, "Format: "%>
+   <%= select_tag :type, options_for_select(((Format.all.map { |type| [type.name, type.id] }).unshift(['All', 0])), params[:type].to_i) %><br /><br />
+   <%= text_field_tag :num, nil, :value => params[:num] || '', :size => 3 %>
+   <%= label_tag :num, "or fewer panelists (leave empty for all panels meeting the other criteria)"%>
+   <br /><br />
    <%= submit_tag "Export CSV", :name=>"csv" %>
    <%= submit_tag "View in Browser", :name => "html" %>
 </p>
@@ -21,7 +26,7 @@
    <% else %>
       <dl>
       <% @panels.each do |p| %>
-          <dt><h3><%= p.title %> (track: <%= p.context unless p.context.nil? %>, format: <%= p.format.name unless p.format.nil? %>)<%= ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%a %H:%M')}" unless p.time_slot.nil? %><%= ", #{p.room.name} (#{Venue.find(p.room.venue_id).name})" unless p.room.nil? %></h3> </dt>
+          <dt><h3><%= p.title %> (<%= p.context unless p.context.nil? %>, <%= p.format.name unless p.format.nil? %>)<%= ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%a %H:%M')}" unless p.time_slot.nil? %><%= ", #{p.room.name} (#{Venue.find(p.room.venue_id).name})" unless p.room.nil? %></h3> </dt>
           <% unless p[:names].blank? %>
              <dd>Panelists:
                  <ul><% p[:names].each do |n| %>

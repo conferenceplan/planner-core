@@ -31,13 +31,26 @@ class PlannerReportsController < PlannerController
          ord_str = "programme_items.title, people.last_name"
       end
 
+      cond_str = "(programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?))"
+
+      conditions = [mod_date, mod_date, mod_date, mod_date]
+
       if params[:sched_only]
-         @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format,], :conditions => ["time_slots.start is not NULL and (programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?))", mod_date, mod_date, mod_date, mod_date], :order => ord_str) 
-      else
-         @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format,], :conditions => ["programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?)", mod_date, mod_date, mod_date, mod_date], :order => ord_str) 
+         cond_str << " and time_slots.start is not NULL"
       end
+
+      if params[:type] && params[:type].to_i > 0
+         cond_str << " and formats.id = ?"
+         conditions.push params[:type]
+      end
+      
+      conditions.unshift cond_str
+
+      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format,], :conditions => conditions, :order => ord_str) 
+      
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
+      num = params[:num].to_i
       output = Array.new
       @panels.each do |panel|
          names = Array.new
@@ -54,6 +67,9 @@ class PlannerReportsController < PlannerController
          end
          context = panel.tags_on(:PrimaryArea)
          if params[:csv]
+
+            next if (num > 0 && names.count > num)
+               
             part_list = names.join(', ')
             rsvd_list = rsvd.join(', ')
             output.push [panel.title,
@@ -90,6 +106,11 @@ class PlannerReportsController < PlannerController
          output.unshift headers
 
          csv_out(output, outfile)
+      else
+      # we filtered them out of the CSV while building it, but I don't see a clean way to do it for the HTML except at the end
+         if num > 0
+            @panels.delete_if {|p| p.names.count > num}
+         end
       end
     
    end
@@ -150,7 +171,7 @@ class PlannerReportsController < PlannerController
                      ]
       end
       
-      csv_out(output, outfile)
+      csv_out_noconv(output, outfile)
 
    end
 
@@ -287,5 +308,4 @@ class PlannerReportsController < PlannerController
          end
       end
    end
-
 end
