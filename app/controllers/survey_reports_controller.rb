@@ -66,6 +66,7 @@ class SurveyReportsController < PlannerController
                   'End Time',
                   'Max per Day',
                   'Max Total',
+                  'Invitation Category',
                   'Registered',
                  ]
      @names = search_survey('g6q1', '%')
@@ -77,6 +78,7 @@ class SurveyReportsController < PlannerController
                       n.GetSurveyEndDate.strftime('%H:%M'),
                       n.GetSurveyQuestionResponse('g6q2'), 
                       n.GetSurveyQuestionResponse('g6q3'),
+                      n.invitation_category.nil? ? '--' : n.invitation_category.name.nil? ? '--' : n.invitation_category.name,
                       n.registrationDetail.nil? ? '--' : n.registrationDetail.registration_type.nil? ? '--': n.registrationDetail.registration_type
                     ]
      end
