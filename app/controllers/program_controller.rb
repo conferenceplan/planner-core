@@ -11,7 +11,7 @@ class ProgramController < ApplicationController
     conditionStr = ''
     
     conditionStr += 'published_room_item_assignments.day = ? ' if day
-    conditionStr += ' AND ' if day
+    conditionStr += ' AND ' if day && name
     conditionStr += 'people.last_name like ? OR people.first_name like ? ' if name
     conditions = [conditionStr] if day || name
     conditions += [day] if day
