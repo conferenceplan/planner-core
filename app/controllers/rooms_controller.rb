@@ -39,6 +39,7 @@ class RoomsController < PlannerController
   def show
     @room = Room.find(params[:id])
     @venue = Venue.find @room.venue_id
+    @room_setup = RoomSetup.find @room.room_setup_id
   end
   
   def create

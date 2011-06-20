@@ -31,6 +31,7 @@ class RoomSetupsController < ApplicationController
   end
 
   def show
+Rails.logger.debug params
     @room_setup = RoomSetup.find(params[:id])
   end
 

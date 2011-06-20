@@ -48,12 +48,16 @@ jQuery(document).ready(function(){
 	var columns = [];
 	columns[index++] = $.planIt.textSearch(['room', 'name'], 125, 1, "Name:", true);
 	columns[index++] = $.planIt.select(['room', 'venue_id'], 125, 2, "Venue:", true, 'venue/list');
-	var setup = $.planIt.select(['room', 'room_setup_id'], 125, 3, "Room Setup:", false, 'room_setups/picklist');
+	
+	var setup = $.planIt.select(['room', 'room_setup_id'], 125, 3, "Room Setup:", false, 'room_setups/list');
 	setup.editable = false;
+	setup.search = false;
 	columns[index++] = setup;
+	
 	var capacity = $.planIt.textSearch(['room', 'capacity'], 125, 4, "Capacity:", false);
 	capacity.editable = false;
 	columns[index++] = capacity;
+	
 	columns[index++] = $.planIt.textSearch(['room', 'purpose'], 125, 5, "Purpose:", false);
 	columns[index++] = $.planIt.textarea(['room', 'comment'], 125, 6, "Comment:", false);
 	columns[index++] = $.planIt.hidden(['room', 'id']);
@@ -92,8 +96,10 @@ jQuery(document).ready(function(){
 	var edit = $.planIt.editOptions('rooms', editFetch);
 	var add = $.planIt.addOptions('rooms');
 	var del = $.planIt.deleteOptions('rooms');
+	var search = $.planIt.searchOptions();
+	var view = $.planIt.viewOptions("Rooms");
 	
-    jQuery("#rooms").navGrid('#pager', {search:false, view:false}, edit, add, del);
+    jQuery("#rooms").navGrid('#pager', {}, edit, add, del, search, view);
     
 //    setupGrid();
     });
