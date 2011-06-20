@@ -75,7 +75,11 @@ jQuery(document).ready(function(){
         	setupGrid(room_id);
         }
     }
-            		
+    
+    params.loadComplete = function(){
+    	clearGrid();
+    }
+    
     jQuery("#rooms").jqGrid(params);
     
 	var editFetch = function(postData)
