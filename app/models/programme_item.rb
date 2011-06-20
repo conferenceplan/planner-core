@@ -6,6 +6,9 @@ class ProgrammeItem < ActiveRecord::Base
   has_many  :programme_item_assignments
   has_many  :people, :through => :programme_item_assignments
   
+  has_many :equipment_needs
+  has_many :equipment_types, :through => :equipment_needs
+  
   acts_as_taggable
 
   belongs_to :setup_type

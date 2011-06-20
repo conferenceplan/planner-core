@@ -1,0 +1,23 @@
+    <%= error_messages_for :equipmentNeed %>
+    <% form_for @equipmentNeed, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
+    <div>
+       <div class='line'>
+            <div class='field_name'>
+                <%= f.label :equipment_type_id, "Equipment Type" %>
+            </div>
+            <div class='field_value'>
+                <%= f.select :equipment_type_id,
+                EquipmentType.find(:all).collect {|r| [r.description,r.id] },
+                {:include_blank => false} %>
+            </div>
+        </div>
+		 <div class='form-buttons'>
+            <%= f.submit "Submit" %>
+            <button type="button" class='jqmClose'>
+                Close
+            </button>
+        </div>
+	</div
+    <% end %>
+    <div id='form-response'>
+    </div>

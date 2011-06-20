@@ -108,8 +108,10 @@ ActionController::Routing::Routes.draw do |map|
     :collection => {:list => :get },
     :member => {:show => :get}
 
+  map.resources :equipment_needs, :has_many => :programme_items
+
   map.resources :programme_items,
-    :has_many => [:excluded_items_survey_maps,:mapped_survey_questions]
+    :has_many => [:excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs]
 
   map.connect 'participants/list', :controller => 'people', :action => 'list'
  

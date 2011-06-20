@@ -256,5 +256,9 @@ class ProgrammeItemsController < PlannerController
       format.xml
     end
   end
-
+  def showEquipment
+    @programmeItem = ProgrammeItem.find(params[:id])
+    
+  end
+ 
 end

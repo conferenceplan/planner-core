@@ -58,7 +58,7 @@ end
   def edit
     @excludedItemsSurveyMap = ExcludedItemsSurveyMap.find(params[:id])
     
-    @urlstr = '/available_dates/' + params[:id]
+    @urlstr = '/excluded_items_survey_maps/' + params[:id]
     render :layout => 'content'
   end
   

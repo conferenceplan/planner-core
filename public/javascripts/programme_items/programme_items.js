@@ -416,6 +416,7 @@ function loadTabs(ids){
     var data = jQuery("#programmeItems").jqGrid('getRowData', ids);
     $('#programmeItem_id').text(ids);
     var $tabs = $('#programmeItems_tabs').tabs();
+	$tabs.tabs('url', 3, 'programme_items/' + ids + '/equipment_needs').tabs('load', 3);
     $tabs.tabs('url', 2, 'programme_items/' + ids + '/excluded_items_survey_maps').tabs('load', 2);
     $tabs.tabs('url', 1, 'tags/' + ids + '?class=ProgrammeItem').tabs('load', 1);
 	$tabs.tabs('url', 0, 'programme_items/' + ids + '?plain=true').tabs('load', 0).tabs('select', 0);

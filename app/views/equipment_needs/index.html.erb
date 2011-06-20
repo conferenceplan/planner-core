@@ -1,0 +1,15 @@
+  <div class='equipment_needs'>
+         <div class='infolabel'>
+                Equipment Needs
+         </div>
+		 <%= link_to "Add Equipment", @urlstr, :class => 'entrydialog' %>
+  
+         <% @equipmentNeeds.each do |equipmentNeed| %>
+			   <div class='line'><%= equipmentNeed.equipment_type.description %></div>
+			   <div class='remove-form'>
+			      <%= button_to "remove", equipmentNeed, :method => :delete, :class => 'remove-button' %>
+	           </div>
+	     <% end %>
+  <div class='message' id='tab-messages'></div>
+  <div class="jqmWindow" id="edialog">Please wait...</div>
+ </div>
