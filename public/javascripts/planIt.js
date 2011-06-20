@@ -106,6 +106,27 @@
 		    	return result;
 		    }
 		    
+// String editing
+		    
+		    $.planIt.text = function
+		    (
+	    		nameArray, 		//  Hierarchy of names in the model
+	    		width, 			//  Width of edit field
+	    		rowpos,			//  Row position of field in edit dialogue
+	    		label, 			//  Label of field in edit 
+	    		required		//  Boolean indicating an entry is required
+		    ){
+		    	var result = fieldBase(nameArray, width);
+		    	
+	            result.formoptions = formOptions(rowpos, label, required);
+	            
+	            result.editrules = {
+	                required : required
+	            }
+	            
+	            return result;
+		    };
+		    
 // String editing with search capability
 		    
 		    $.planIt.textSearch = function
@@ -218,22 +239,6 @@
 		    	return result;
 		    };
 		    
-//  Hidden data
-		    
-		    $.planIt.hidden = function
-		    (
-		    		nameArray 		//  Hierarchy of names in the model
-		    ){
-		    	var result = {};
-
-	            result.name = nestedNames(nameArray);		//  The shifts kill most of the array
-		    	result.index = nameArray[0];
-	            result.hidden = true;
-	            result.search = false;
-
-		    	return result;
-		    };
-
 //  Hidden data
 		    
 		    $.planIt.hidden = function
