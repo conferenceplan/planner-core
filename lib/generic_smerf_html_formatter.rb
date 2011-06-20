@@ -35,7 +35,7 @@ module GenericSmerfHtmlFormatter
     answer = ''
     if question.code == 'g93q6'
       okToShow = false
-      controller.permitted_to? :manage, :survey_respondents_reviews do
+      controller.permitted_to? :supermanage, :survey_respondents_reviews do
         okToShow = true
       end
     end

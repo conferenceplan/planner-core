@@ -88,7 +88,7 @@ jQuery(document).ready(function(){
             sortable: false,
             search: false,
             width: 80,
-            editable: true,
+            editable: false,
             edittype: "select",
             editoptions: {
                 dataUrl: '/rooms/listwithblank'
@@ -105,7 +105,7 @@ jQuery(document).ready(function(){
             sortable: false,
             search: false,
             width: 100,
-            editable: true,
+            editable: false,
             edittype: "select",
             editoptions: {
                 value: "-1:;0:Wednesday;1:Thursday;2:Friday;3:Saturday;4:Sunday"
@@ -122,7 +122,7 @@ jQuery(document).ready(function(){
             sortable: false,
             search: false,
             width: 60,
-            editable: true,
+            editable: false,
             editoptions: {
                 size: 20
             },

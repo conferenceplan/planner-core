@@ -73,7 +73,8 @@
                 <%= f.text_field :maximum_people %>
             </div>
         </div>
-        <div>
+	   <% if controller.permitted_to? :schedule, :programme_items %>
+          <div>
             <div class='line'>
                 <div class='field_name'>
                     <%= f.label :room, "room" %>
@@ -85,8 +86,8 @@
                 		{:include_blank => true} %>
                 </div>
             </div>
-        </div>
-        <div>
+          </div>
+          <div>
             <div class='line'>
                 <div class='field_name'>
                     <%= f.label :start_day, "Day" %>
@@ -100,8 +101,8 @@
                 		{:include_blank => true} %>
                 </div>
             </div>
-        </div>
-        <div>
+          </div>
+          <div>
             <div class='line'>
                 <div class='field_name'>
                     <%= f.label :start_time, "Start Time" %>
@@ -110,7 +111,8 @@
                     <%= text_field_tag 'start_time', @programmeItem.start_time %>
                 </div>
             </div>
-        </div>
+          </div>
+		  <% end %>
     </div>
     <div class='grid_2'>
         <div class='line'>

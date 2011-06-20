@@ -67,8 +67,37 @@ authorization do
     has_permission_on :availabilities, :to => :manage
     has_permission_on :available_dates, :to => :manage
     has_permission_on :excluded_items_survey_maps, :to => [:manage]
+    has_permission_on :programme_items, :to => :schedule
   end
   
+  role :SuperPlanner do
+     includes :Planner
+     has_permission_on :addresses, :to => :supermanage
+     has_permission_on :edited_bios, :to => :supermanage
+     has_permission_on :email_addresses, :to => :supermanage
+     has_permission_on :formats, :to => :supermanage
+     has_permission_on :invitation_categories, :to => :supermanage
+     has_permission_on :item_planner, :to => :supermanage
+     has_permission_on :pending_import_people, :to => :supermanage
+     has_permission_on :people, :to => :supermanage
+     has_permission_on :phone_numbers, :to => :supermanage
+     has_permission_on :postal_addresses, :to => :supermanage
+     has_permission_on :programme_items, :to => :supermanage
+     has_permission_on :program_planner, :to => :supermanage
+     has_permission_on :registration_details, :to => :supermanage
+     has_permission_on :rooms, :to => :supermanage
+     has_permission_on :survey_respondents, :to => :supermanage
+     has_permission_on :survey_respondents_reviews, :to => :supermanage
+     has_permission_on :tag_contexts, :to => :supermanage
+     has_permission_on :tags, :to => :supermanage
+     has_permission_on :venue, :to => :supermanage
+     has_permission_on :survey_reports, :to => :supermanage
+     has_permission_on :planner_reports, :to => :supermanage
+     has_permission_on :availabilities, :to => :supermanage
+     has_permission_on :available_dates, :to => :supermanage
+     has_permission_on :excluded_items_survey_maps, :to => [:supermanage]
+  end
+
   role :Admin do
     has_omnipotence
   end
@@ -85,4 +114,5 @@ privileges do
     privilege :update, :includes => [:edit,:states,:copySurvey,:updateExcludedItemsFromSurveys,:updateExcludedTimesFromSurveys]
     privilege :delete, :includes => [:destroy, :removeItem]
     privilege :communicate, :includes => [:exportemailxml,:doexportemailxml,:exportbiolist, :selectExportBioList, :schedule_report]
+    privilege :schedule, :includes => [:manage]
 end
