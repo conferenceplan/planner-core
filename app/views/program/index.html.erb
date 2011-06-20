@@ -1,7 +1,56 @@
-<div>
-<% @assignments.each do |assignment| %>
-    <p><%= assignment.published_time_slot.start %></p>
-    <p><%= assignment.published_programme_item.title %></p>
-    <p><%= assignment.published_room.name %></p>
-<% end %>
+<div class="programme">
+    <table class="programme-grid">
+        <thead class="programme-grid-header">
+            <th class="time-slot">
+                Time
+            </th>
+            <% @rooms.each do |room| %>
+            <th class="venue-room">
+                <div class="venue"><%= room.published_venue.name %></div><div class="room"><%= room.name %></div>
+            </th>
+            <% end %>
+        </thead>
+        <tbody>
+        <% previousTime = nil %>
+        <% previousRoom = nil %>
+        <% currentTime = nil %>
+        <% currentRoom = nil %>
+        <% currentColumn = 1 %>
+        <% newRow = true %>
+        <% @assignments.each do |assignment| %>
+        <% currentTime = assignment.published_time_slot.start %>
+        <% newRow = (previousTime == nil) || (currentTime != previousTime) %>
+        <%if newRow %>
+        <% currentColumn = 1 %>
+        <% if !previousTime %>
+        </tr>
+        <%end %>
+        <tr class="programme-grid-row">
+        <td class="programme-grid-empty">
+            <%= currentTime.strftime('%A %H:%M') %>
+            <% previousTime = currentTime %>
+        </td>
+        <% end %>
+        <% idx = @rooms.index{|x| x.name == assignment.published_room.name} %>
+        <% (currentColumn..idx).each do |i| %>
+        <td>
+        </td>
+        <% end %>
+        <% currentColumn = idx + 2 %>
+        <td class="programme-grid-item">
+            <div class="program-item-title"><%= assignment.published_programme_item.title %></div>
+            <div class="program-item-duration">Duration: <%= assignment.published_programme_item.duration.to_s %> minutes</div>
+            <div class="program-item-room">(<%= assignment.published_room.name %>)</div>
+            <span class="program-item-particpants">
+            <% assignment.published_programme_item.people.each do |person| %>
+            <div class="program-item-particpant"><a href="http://renovationsf.org/participants/<%= person.GetFullPublicationName.gsub(/[ \.]/,'').downcase %>.php"><%= person.GetFullPublicationName %></a></div>
+            <% end %>
+            </span>
+        </td>
+        <%if newRow %>
+        <% newRow = false %>
+        <% end %>
+        <% end %>
+    </tbody>
+    </table>
 </div>

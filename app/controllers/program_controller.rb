@@ -1,23 +1,59 @@
 class ProgramController < ApplicationController
   
-  # Provide the program as a grid
+  #
+  # Get the full programme
+  # If the day is specified then just return the items for that day
+  # Can return formatted as an Atom feed or plain HTML
+  #
   def index
-    @assignments = PublishedRoomItemAssignment.all(:include => [{:published_room => [:published_venue]}, :published_time_slot, {:published_programme_item => [:publication, {:people => :pseudonym}]}],
-                                                   :order => 'published_time_slots.start ASC, published_rooms.name ASC')
+    day = params[:day] # Day
+    name = params[:name]
+    conditionStr = ''
     
+    conditionStr += 'published_room_item_assignments.day = ? ' if day
+    conditionStr += ' AND ' if day
+    conditionStr += 'people.last_name like ? OR people.first_name like ? ' if name
+    conditions = [conditionStr] if day || name
+    conditions += [day] if day
+    conditions += ['%'+name+'%', '%'+name+'%'] if name
+    
+    @rooms = PublishedRoom.all(:order => 'published_venues.name DESC, published_rooms.name ASC', :joins => :published_venue)
+    @assignments = PublishedRoomItemAssignment.all(:include => [{:published_room => [:published_venue]}, :published_time_slot, {:published_programme_item => [:publication, {:people => :pseudonym}]}],
+                                                   :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
+                                                   :conditions => conditions)
+    
+    respond_to do |format|
+      format.html { render :layout => 'content' } # This should generate an HTML grid
+      format.atom # for an Atom feed (for readers)
+    end
+  end
+
+  def list
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.atom # for an Atom feed (for readers)
     end
   end
 
-  def list
-  end
-
   def stream
+    respond_to do |format|
+      format.html { render :layout => 'content' }
+      format.atom # for an Atom feed (for readers)
+    end
   end
 
   def feed
+    respond_to do |format|
+      format.html { render :layout => 'content' }
+      format.atom # for an Atom feed (for readers)
+    end
+  end
+
+  def participants
+    respond_to do |format|
+      format.html { render :layout => 'content' }
+      format.atom # for an Atom feed (for readers)
+    end
   end
 
 end

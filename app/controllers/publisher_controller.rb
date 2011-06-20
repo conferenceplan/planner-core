@@ -31,6 +31,7 @@ class PublisherController < PlannerController
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
+    clause = addClause(clause,'programme_item_assignments.role_id != ? ', PersonItemRole['Reserved'])
     args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments] }
     return ProgrammeItem.find :all, args
   end
