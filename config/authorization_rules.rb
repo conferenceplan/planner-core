@@ -27,6 +27,8 @@ authorization do
     has_permission_on :excluded_items, :to => [:read]
     has_permission_on :excluded_items_survey_maps, :to => [:read]
     has_permission_on :available_dates, :to => [:read]
+    has_permission_on :equipment_types, :to => :read
+    has_permission_on :equipment_needs, :to => :read
   end
 
   role :TagAdmin do
@@ -38,6 +40,8 @@ authorization do
     includes :Viewer
     has_permission_on :programme_items, :to => :manage
     has_permission_on :tags, :to => :manage
+    has_permission_on :equipment_types, :to => :manage
+    has_permission_on :equipment_needs, :to => :manage
   end
   
   role :Planner do
@@ -68,6 +72,8 @@ authorization do
     has_permission_on :available_dates, :to => :manage
     has_permission_on :excluded_items_survey_maps, :to => [:manage]
     has_permission_on :programme_items, :to => :schedule
+    has_permission_on :equipment_types, :to => :manage
+    has_permission_on :equipment_needs, :to => :manage
   end
   
   role :SuperPlanner do
@@ -96,6 +102,8 @@ authorization do
      has_permission_on :availabilities, :to => :supermanage
      has_permission_on :available_dates, :to => :supermanage
      has_permission_on :excluded_items_survey_maps, :to => [:supermanage]
+     has_permission_on :equipment_types, :to => :supermanage
+     has_permission_on :equipment_needs, :to => :supermanage
   end
 
   role :Admin do

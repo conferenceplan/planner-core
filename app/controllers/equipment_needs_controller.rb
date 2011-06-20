@@ -1,4 +1,4 @@
-class EquipmentNeedsController < ApplicationController
+class EquipmentNeedsController < PlannerController
   
   def new
     if (params[:programme_item_id])
