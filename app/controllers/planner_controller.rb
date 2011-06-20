@@ -57,6 +57,10 @@ private
             clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' >= ?' }.call
           elsif subclause["op"] == 'le'
             clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' <= ?' }.call
+          elsif subclause["op"] == 'gt'
+            clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' > ?' }.call
+          elsif subclause["op"] == 'lt'
+            clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' < ?' }.call
           else # also the eq, cn, bw
             clausestr << subclause['field'] + lambda { return isInteger ? ' = ?' : ' like ?' }.call
           end
