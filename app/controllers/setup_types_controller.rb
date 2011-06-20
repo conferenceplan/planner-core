@@ -35,7 +35,7 @@ class SetupTypesController < ApplicationController
     if (@setup_type.save)
        render :action => 'index', :layout => 'content'
     else
-      render :content
+       render :action => 'model_errors', :layout => 'content'
     end 
   end
 
@@ -44,7 +44,7 @@ class SetupTypesController < ApplicationController
     if @setup_type.update_attributes(params[:setup_type])
       render :action => 'index', :layout => 'content'
     else
-      render :action => 'edit', :layout => 'content'
+       render :action => 'model_errors', :layout => 'content'
     end
   end
 
@@ -56,7 +56,7 @@ class SetupTypesController < ApplicationController
       @setup_type.destroy
        render :action => 'index', :layout => 'content'
     else
-      render :action => 'in_use', :layout => "plain"
+       render :action => 'in_use', :layout => 'content'
     end
   end
 
