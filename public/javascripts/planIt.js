@@ -40,6 +40,7 @@
 		        result.imgpath = 'stylesheets/start/images';
 		        result.caption = caption;
 		        result.editurl = '/' + baseName;
+		        result.multipleSearch = true;
 		        result.onSelectRow = function(ids){
 		            $('#' + idName).text(ids);
 		            return false;
@@ -204,6 +205,32 @@
 
 		    	return result;
 		    };
+
+// String number editing with search capability
+		    
+		    $.planIt.numberSearch = function
+		    (
+	    		nameArray, 		//  Hierarchy of names in the model
+	    		width, 			//  Width of edit field
+	    		rowpos,			//  Row position of field in edit dialogue
+	    		label, 			//  Label of field in edit 
+	    		required		//  Boolean indicating an entry is required
+		    ){
+		    	var result = fieldBase(nameArray, width);
+		    	
+		    	result.searchoptions = {
+	                sopt: ['eq','ne','lt','le','gt','ge']
+	            };
+	            
+	            result.formoptions = formOptions(rowpos, label, required);
+	            
+	            result.editrules = {
+	                required : required
+	            }
+	            
+	            return result;
+		    };
+		    
 		    
 //  Select field
 		    

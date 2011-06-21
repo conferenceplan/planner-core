@@ -15,6 +15,7 @@ class RoomsController < PlannerController
     idx = params[:sidx]
     order = params[:sord]
 
+Rails.logger.debug params[:filters]
     clause = createWhereClause(params[:filters])
 
     args = { :conditions => clause }

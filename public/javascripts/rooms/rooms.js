@@ -54,8 +54,9 @@ jQuery(document).ready(function(){
 	setup.search = false;
 	columns[index++] = setup;
 	
-	var capacity = $.planIt.textSearch(['room', 'capacity'], 125, 4, "Capacity:", false);
+	var capacity = $.planIt.numberSearch(['room', 'capacity'], 125, 4, "Capacity:", false);
 	capacity.editable = false;
+	capacity.search = false;
 	columns[index++] = capacity;
 	
 	columns[index++] = $.planIt.textSearch(['room', 'purpose'], 125, 5, "Purpose:", false);
