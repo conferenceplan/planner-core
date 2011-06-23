@@ -6,24 +6,21 @@ module SurveyMailerHelper
     question_content = ''
     
     group.questions.each do |question|
-      question_content += smerf_html_group_question(question)
+      begin
+        question_content += smerf_html_group_question(question)
+      rescue => msg
+        logger.error msg + ": in question: " + question
+      end
     end
     
     if (!question_content.blank?)
       content += content_tag(:h3, group.name) if !group.name.blank?
-#      content += group.description + ':' if !group.description.blank?
       content += question_content
-#      content += '<br/>' if !group.description.blank?
     end
     
     return content
-#              <%= content_tag(:h3, group.name) if !group.name.blank? %>
-#          <%= group.description + ':' if !group.description.blank? %>
-#          <% group.questions.each do |question| %>
-#            <%= smerf_html_group_question(question) %>
-#          <% end %>
-#          <%= '<br/>' if !group.description.blank? %>
   end
+
   #
   #
   #
