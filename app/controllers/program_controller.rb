@@ -19,8 +19,8 @@ class ProgramController < ApplicationController
     
     roomconditions = ['published_room_item_assignments.day = ?', day] if day
     
-    @rooms = PublishedRoom.all(:select => 'distinct published_rooms.*',
-                               :order => 'published_venues.name DESC, published_rooms.name ASC', 
+    @rooms = PublishedRoom.all(:select => 'distinct published_rooms.*, published_venues.name as v_name',
+                               :order => 'v_name DESC, published_rooms.name ASC', 
                                :joins => [:published_venue, :published_room_item_assignments],
                                :conditions => roomconditions)
     
