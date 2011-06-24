@@ -13,23 +13,23 @@ class ProgramController < ApplicationController
     conditionStr = "" if day || name
     conditionStr += '(published_room_item_assignments.day = ?) ' if day
     conditionStr += ' AND ' if day && name
-    conditionStr += '(people.last_name like ? OR people.first_name like ?)' if name
+    conditionStr += '(people.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ? OR pseudonyms.last_name like ? )' if name
     conditions = [conditionStr] if day || name
     conditions += [day] if day
-    conditions += ['%'+name+'%', '%'+name+'%'] if name
+    conditions += ['%'+name+'%', '%'+name+'%', '%'+name+'%', '%'+name+'%'] if name
     
-    @rooms = PublishedRoom.all(:select => 'distinct published_rooms.*, published_venues.name as v_name',
-                               :order => 'v_name DESC, published_rooms.name ASC', 
-                               :joins => [:published_venue, {:published_room_item_assignments => {:published_programme_item => :people}}],
+    @rooms = PublishedRoom.all(:select => 'distinct published_rooms.name',
+                               :order => 'published_venues.name DESC, published_rooms.name ASC', 
+                               :include => [:published_venue, {:published_room_item_assignments => {:published_programme_item => {:people => :pseudonym}}}],
                                :conditions => conditions)
     
     if stream
       @programmeItems = PublishedProgrammeItem.tagged_with( stream, :on => 'PrimaryArea', :op => true).all(
-                                                 :include => [:publication, :published_time_slot, :published_room_item_assignment, :people, {:published_room => [:published_venue]} ],
+                                                 :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => :pseudonym}, {:published_room => [:published_venue]} ],
                                                  :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                                                  :conditions => conditions)
     else
-      @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, :people, {:published_room => [:published_venue]} ],
+      @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => :pseudonym}, {:published_room => [:published_venue]} ],
                                                  :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                                                  :conditions => conditions)
     end
