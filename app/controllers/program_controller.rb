@@ -17,7 +17,12 @@ class ProgramController < ApplicationController
     conditions += [day] if day
     conditions += ['%'+name+'%', '%'+name+'%'] if name
     
-    @rooms = PublishedRoom.all(:order => 'published_venues.name DESC, published_rooms.name ASC', :joins => :published_venue)
+    roomconditions = ['published_room_item_assignments.day = ?', day] if day
+    
+    @rooms = PublishedRoom.all(:select => 'distinct published_rooms.*',
+                               :order => 'published_venues.name DESC, published_rooms.name ASC', 
+                               :joins => [:published_venue, :published_room_item_assignments],
+                               :conditions => roomconditions)
     
     if stream
       @programmeItems = PublishedProgrammeItem.tagged_with( stream, :on => 'PrimaryArea', :op => true).all(
