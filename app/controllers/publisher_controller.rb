@@ -81,11 +81,11 @@ class PublisherController < PlannerController
         # copy the details from the unpublished item to the new
         newItem = copy(srcItem, newItem)
         newItem.original = srcItem # this create the Publication record as well to tie the two together
-        newItem.save
-
         # Need to copy the tags...
         copyTags(srcItem, newItem, 'PrimaryArea')
         
+        newItem.save
+
         # link to the people (and their roles)
         updateAssignments(srcItem, newItem)
         

@@ -11,7 +11,12 @@ module GenericSmerfHtmlFormatter
     question_content = ''
     
     group.questions.each do |question|
-      question_content += html_group_question(question)
+      begin
+        question_content += html_group_question(question)
+      rescue => msg
+        logger.error question.code
+        logger.error msg #+ ": in question: " + question
+      end
     end
     
     if (!question_content.blank?)
