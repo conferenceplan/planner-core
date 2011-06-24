@@ -40,7 +40,7 @@ class Person < ActiveRecord::Base
             :source => :excludable,
             :source_type => "ProgrammeItem" 
   
-  # TODO - check this
+  #
   has_many  :programmeItemAssignments
   has_many  :programmeItems, :through => :programmeItemAssignments
 

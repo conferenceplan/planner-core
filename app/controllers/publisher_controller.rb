@@ -171,8 +171,8 @@ class PublisherController < PlannerController
           # find the index of the person only if the role is also different
           idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && (a.role != srcAssignment.role) }
           if idx != nil
-            dest[idx].role = srcAssignment.role
-            dest[idx].save
+            dest.published_programme_item_assignments[idx].role = srcAssignment.role
+            dest.published_programme_item_assignments[idx].save
             # TODO - log the fact that the person's role in the programme item has been changed
           end
         end

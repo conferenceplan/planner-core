@@ -4,6 +4,7 @@ atom_feed do |feed|
   feed.updated(DateTime.now)
   
   @programmeItems.each do |item|
+    if item.published_time_slot
     feed.entry(item, :url => '/') do |entry|
       str = ''
       item.people.each do |person| 
@@ -15,10 +16,10 @@ atom_feed do |feed|
         '<p>' + item.published_room.published_venue.name + ' '+ item.published_room.name + '</p>' +
         '<p>' + item.precis + '</p>' +
         '<p>' + item.duration.to_s + ' minutes</p>' +
-        str +
-        '<p>' + item.tags_on(:PrimaryArea).to_s + '</p>',
+        str,
         :type => 'html')
-      entry.updated(item.publication.publication_date) # needed to work with Google Reader.
+      entry.updated(item.publication.publication_date.utc.strftime("%Y-%m-%dT%H:%M:%S%z")) # needed to work with Google Reader.
+    end
     end
   end
   

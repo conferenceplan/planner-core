@@ -19,7 +19,10 @@
         <% currentRoom = nil %>
         <% currentColumn = 1 %>
         <% newRow = true %>
+        <% logger.debug "HELP"%>
         <% @programmeItems.each do |item| %>
+        <% logger.debug "HELP " + item.title %>
+<% if item.published_time_slot %>
         <% currentTime = item.published_time_slot.start %>
         <% newRow = (previousTime == nil) || (currentTime != previousTime) %>
         <%if newRow %>
@@ -46,12 +49,13 @@
             <div class="program-item-room">(<%= item.published_room.name %>)</div>
             <div class="program-item-participants">
             <% item.people.each do |person| %>
-            <div class="program-item-participant"><a href="http://renovationsf.org/participants/<%= person.GetFullPublicationName.gsub(/[ \.]/,'').downcase %>.php"><%= person.GetFullPublicationName %></a></div>
+            <div class="program-item-participant"><a href="http://renovationsf.org/participants/<%= person.GetFullPublicationName.gsub(/[ \.\-]/,'').downcase %>.php"><%= person.GetFullPublicationName %></a></div>
             <% end %>
             </div>
         </td>
         <%if newRow %>
         <% newRow = false %>
+<% end %>
         <% end %>
         <% end %>
         <% end %>

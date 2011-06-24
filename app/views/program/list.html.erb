@@ -1,1 +1,25 @@
-TEST
+<div class="programme">
+    <% @programmeItems.each do |item| %>
+    <div class="programme-line-item">
+        <div class="program-item-time">
+            <%= item.published_time_slot.start.strftime('%A %H:%M') %>
+        </div>
+        <div class="program-item-room">
+            (<%= item.published_room.name %>)
+        </div>
+        <div class="program-item-duration">
+            Duration: <%= item.duration.to_s %> minutes
+        </div>
+        <div class="program-item-title">
+            <%= item.title %>
+        </div>
+        <div class="program-item-participants">
+            <% item.people.each do |person| %>
+            <div class="program-item-participant">
+                <a href="http://renovationsf.org/participants/<%= person.GetFullPublicationName.gsub(/[ \.]/,'').downcase %>.php"><%= person.GetFullPublicationName %></a>
+            </div>
+            <% end %>
+        </div>
+    </div>
+    <% end %>
+</div>
