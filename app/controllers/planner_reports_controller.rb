@@ -36,7 +36,17 @@ class PlannerReportsController < PlannerController
       conditions = [mod_date, mod_date, mod_date, mod_date]
 
       if params[:sched_only]
-         cond_str << " and time_slots.start is not NULL"
+            cond_str << " and time_slots.start is not NULL"
+      end
+
+      if params[:equip_only]
+         if params[:plus_setups]
+            setup = Format.find_by_name('RESET')
+            cond_str << " and (equipment_needs.programme_item_id is not NULL or formats.id = ?)"
+            conditions.push setup
+         else
+            cond_str << " and equipment_needs.programme_item_id is not NULL"
+         end
       end
 
       if params[:type] && params[:type].to_i > 0
@@ -50,7 +60,8 @@ class PlannerReportsController < PlannerController
       
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
-      num = params[:num].to_i
+      min = params[:min].to_i
+      max = params[:max].to_i
       output = Array.new
       @panels.each do |panel|
          names = Array.new
@@ -73,7 +84,8 @@ class PlannerReportsController < PlannerController
          context = panel.tags_on(:PrimaryArea)
          if params[:csv]
 
-            next if (num > 0 && names.count > num)
+            next if (min > 0 && names.count > min)
+            next if (max > 0 && names.count < max)
                
             part_list = names.join(', ')
             rsvd_list = rsvd.join(', ')
@@ -116,8 +128,11 @@ class PlannerReportsController < PlannerController
          csv_out(output, outfile)
       else
       # we filtered them out of the CSV while building it, but I don't see a clean way to do it for the HTML except at the end
-         if num > 0
-            @panels.delete_if {|p| p.names.count > num}
+         if min > 0
+            @panels.delete_if {|p| p.names.count > min}
+         end
+         if max > 0
+            @panels.delete_if {|p| p.names.count < max}
          end
       end
     

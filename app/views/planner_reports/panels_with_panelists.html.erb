@@ -10,10 +10,17 @@
    <%= label_tag :incl_rsvd, "Display reserve panelists? "%><br /><br />
    <%= check_box_tag :sched_only, '1', params[:sched_only] %>
    <%= label_tag :sched_only, "Include scheduled panels only? "%><br /><br />
+   <%= check_box_tag :equip_only, '1', params[:equip_only] %>
+   <%= label_tag :equip_only, "Include only panels with equipment needs? " %>
+   &nbsp;&nbsp;(<%= check_box_tag :plus_setups, '1', params[:plus_setups] %>
+   <%= label_tag :plus_setups, "Plus RESET items?" %>)<br /><br />
    <%= label_tag :type, "Format: "%>
    <%= select_tag :type, options_for_select(((Format.all.map { |type| [type.name, type.id] }).unshift(['All', 0])), params[:type].to_i) %><br /><br />
-   <%= text_field_tag :num, nil, :value => params[:num] || '', :size => 3 %>
-   <%= label_tag :num, "or fewer panelists (leave empty for all panels meeting the other criteria)"%>
+   <%= text_field_tag :min, nil, :value => params[:min] || '', :size => 3 %>
+   <%= label_tag :min, "or fewer panelists (leave empty for all panels meeting the other criteria)"%>
+   <br /><br />
+   <%= text_field_tag :max, nil, :value => params[:max] || '', :size => 3 %>
+   <%= label_tag :max, "or more panelists (leave empty for all panels meeting the other criteria)"%>
    <br /><br />
    <%= submit_tag "Export CSV", :name=>"csv" %>
    <%= submit_tag "View in Browser", :name => "html" %>
