@@ -14,9 +14,12 @@ class PublisherController < PlannerController
     @newItems = 0
     @modifiedItems = 0
     @renmovedItems = 0
+    p = PublicationDate.new
+    p.timestamp = DateTime.current
     @newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
     @modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
     @renmovedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
+    p.save
     render :layout => 'content'
   end
   
@@ -36,6 +39,8 @@ class PublisherController < PlannerController
     return ProgrammeItem.find :all, args
   end
   
+  # TODO - check this for modified items - i.e. what happens if the time is changed?
+  # in that case the room item assignment is recreated...
   def getModifiedProgramItems
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
@@ -46,15 +51,27 @@ class PublisherController < PlannerController
     return ProgrammeItem.find :all, args
   end
   
-  # Select from publications and room item assignments items where published_id is not in the room item assignments items
+  # TODO - the query used in this method is not correct
   def getRemovedProgramItems
     # publications with no original or that the published flag is no longer true
     # TODO - need to put in the test for the published flag
-    clause = addClause(nil,'published_programme_items.id not in (select publications.published_id from publications where publications.published_type = ?)', 'PublishedProgrammeItem')
+    clause = [REMOVE_CLAUSE, 'PublishedProgrammeItem', 'PublishedProgrammeItem']
     args = { :conditions => clause, :include => [:publication] }
     return PublishedProgrammeItem.find :all, args
   end
+
+REMOVE_CLAUSE = <<"EOS"
+  published_programme_items.id in (
+  select publications.published_id from publications 
+  LEFT OUTER JOIN room_item_assignments on publications.original_id = room_item_assignments.programme_item_id 
+  WHERE publications.published_type like ? AND room_item_assignments.id is null)
+  OR
+  published_programme_items.id not in (
+  select published_id from publications where publications.published_type =  ?)
+EOS
+
   
+    
   def getRemovedParticipants
     # Select from publications and programme item assignments where published_id is not in the programme item assignments
   end
@@ -99,9 +116,17 @@ class PublisherController < PlannerController
             if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
               newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
               newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+              newTimeSlot.save
               newItem.published_time_slot = newTimeSlot
+              newItem.save
+              logger.info "Moved item times"
               # TODO - log the time change
             end
+          else
+              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+              newTimeSlot.save
+              newItem.published_time_slot = newTimeSlot
+              newItem.save
           end
         else
           newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)

@@ -4,7 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
   map.connect 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
   map.connect 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
-  map.connect 'program/updates.:format', :controller => 'program', :action => 'feed', :method => 'get'
+  map.connect 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
 
 #  map.connect 'pending_publication_item/list', :controller => 'pending_publication_item', :action => 'list', :method => 'post'
 #  map.connect 'pending_publication_item/add', :controller => 'pending_publication_item', :action => 'add', :method => 'post'
