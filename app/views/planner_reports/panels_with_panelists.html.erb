@@ -36,8 +36,16 @@
              </dd>
           <% end %>
           <% unless p[:rsvd].blank? %>
-             <dd>Reserved:
+             <br><dd>Reserved:
                  <ul><% p[:rsvd].each do |n| %>
+                        <li><%= n %></li>
+                     <% end %>
+                 </ul>
+             </dd>
+          <% end %>
+          <% unless p[:equip].blank? %>
+             <br><dd>Equipment Needed:
+                 <ul><% p[:equip].each do |n| %>
                         <li><%= n %></li>
                      <% end %>
                  </ul>

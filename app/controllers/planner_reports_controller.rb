@@ -46,7 +46,7 @@ class PlannerReportsController < PlannerController
       
       conditions.unshift cond_str
 
-      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format,], :conditions => conditions, :order => ord_str) 
+      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, :equipment_needs,], :conditions => conditions, :order => ord_str) 
       
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
@@ -65,6 +65,11 @@ class PlannerReportsController < PlannerController
                names.push p.GetFullPublicationName.strip
             end
          end
+
+         needs = Array.new
+         needs = panel.equipment_needs.all(:include => :equipment_type).map! {|n| n.equipment_type.description} 
+         equip = needs.join(', ')
+      
          context = panel.tags_on(:PrimaryArea)
          if params[:csv]
 
@@ -79,6 +84,7 @@ class PlannerReportsController < PlannerController
                          (panel.room.nil?) ? '' : panel.room.venue.name,
 	                 (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
                          (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
+                         equip,
                          part_list,
                          rsvd_list,
                         ]
@@ -86,6 +92,7 @@ class PlannerReportsController < PlannerController
             panel[:context] = context[0]
             panel[:names] = names
             panel[:rsvd] = rsvd
+            panel[:equip] = needs
          end
       end
          
@@ -98,6 +105,7 @@ class PlannerReportsController < PlannerController
                     "Venue",
                     "Day",
                     "Time Slot",
+                    "Equipment Needs",
                     "Participants",
                    ]
 
