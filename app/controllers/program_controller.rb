@@ -120,6 +120,12 @@ class ProgramController < ApplicationController
           title = audit.changes['title']
           @listOfAdds <<  " " + title + " " + audit.action
           # need to know what the time was ....
+        elsif audit.auditable_type == "PublishedProgrammeItemAssignment" # person was removed...
+          # TODO - we do not want to go in here if the person removal was because of the programme item removal
+          programmeItem = PublishedProgrammeItem.find(audit.changes["published_programme_item_id"]) # this will fail, TODO catch exception and go on?
+          role = PersonItemRole[audit.changes["role_id"]]
+          person = Person.find(audit.changes["person_id"])
+          @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + role.name
         end
       else  
         if audit.auditable_type == "PublishedProgrammeItemAssignment" # person added or removed
@@ -130,6 +136,7 @@ class ProgramController < ApplicationController
           @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + role.name
         elsif audit.auditable_type == "PublishedRoomItemAssignment" # item added, or moved
           # Get all the room item assignments that have changed - this is the set of rooms and times
+          # TODO - when there were no people originally then we get a "new" assignment with an oldtime == newtime... Why?
           programmeItemAssignment = PublishedRoomItemAssignment.find(audit.auditable_id)
           programmeItem = programmeItemAssignment.published_programme_item
           oldtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"][audit.changes["published_time_slot_id"].size-2])
