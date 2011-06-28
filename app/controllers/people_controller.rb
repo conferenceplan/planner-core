@@ -116,7 +116,9 @@ class PeopleController < PlannerController
     
     # add the name search for last of first etc
     if nameSearch && ! nameSearch.empty? #
-      clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ?','%' + nameSearch + '%')
+      clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + nameSearch + '%')
+      clause << '%' + nameSearch + '%'
+      clause << '%' + nameSearch + '%'
       clause << '%' + nameSearch + '%'
     end
 
