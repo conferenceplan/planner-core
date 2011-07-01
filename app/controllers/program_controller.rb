@@ -25,7 +25,7 @@ class ProgramController < ApplicationController
                                                  :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                                                  :conditions => conditions)
     end
-
+    
     respond_to do |format|
       format.html { 
         if layout && layout == 'line'
@@ -33,7 +33,7 @@ class ProgramController < ApplicationController
         else  
           render :layout => 'content' 
         end
-        } # This should generate an HTML grid
+      } # This should generate an HTML grid
       format.atom # for an Atom feed (for readers)
       format.js { render :json => @programmeItems.to_json(
         :except => [:created_at , :updated_at, :lock_version, :format_id, :id],
@@ -52,12 +52,12 @@ class ProgramController < ApplicationController
                                :order => 'published_venues.name DESC, published_rooms.name ASC', 
                                :include => [:published_venue, {:published_room_item_assignments => {:published_programme_item => {:people => :pseudonym}}}],
                                :conditions => conditions)
-
+    
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.js { render :json => @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :id, :published_venue_id],
                                                  :include => [:published_venue]
-                                                ) }
+        ) }
     end
   end
   
@@ -66,25 +66,25 @@ class ProgramController < ApplicationController
   #
   def streams
     tags = PublishedProgrammeItem.tag_counts_on( 'PrimaryArea' )
-
+    
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.js { render :json => tags.to_json(
                                     :except => [:created_at , :updated_at, :lock_version, :id, :count]
-                                    ) }
+        ) }
     end
   end
-
+  
   def participants
     @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
-
+    
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.js { render :json => @participants.to_json(
-      ) }
+        ) }
     end
   end
-
+  
   #
   # What is coming up in the next x hours
   #
@@ -97,6 +97,7 @@ class ProgramController < ApplicationController
   
   #
   # What has been changed since X
+  # TODO - would be a good idea to find a mechanism to cache this so as to minimise queries
   #
   def updates
     # To get the updates:
@@ -105,6 +106,7 @@ class ProgramController < ApplicationController
     
     @listOfAdds = []
     
+    # TODO - do items first then assignments, also if item has been removed we do not need the remove from it...
     audits = Audit.all(
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?)", lastPubDate.timestamp, 'Published%'],
       :order => "audits.created_at asc"
@@ -122,26 +124,59 @@ class ProgramController < ApplicationController
           # need to know what the time was ....
         elsif audit.auditable_type == "PublishedProgrammeItemAssignment" # person was removed...
           # TODO - we do not want to go in here if the person removal was because of the programme item removal
-          programmeItem = PublishedProgrammeItem.find(audit.changes["published_programme_item_id"]) # this will fail, TODO catch exception and go on?
-          role = PersonItemRole[audit.changes["role_id"]]
-          person = Person.find(audit.changes["person_id"])
-          @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + role.name
+          begin
+            programmeItem = PublishedProgrammeItem.find(audit.changes["published_programme_item_id"]) # this will fail
+            role = PersonItemRole[audit.changes["role_id"]]
+            person = Person.find(audit.changes["person_id"])
+            @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + role.name
+          rescue
+            # do nowt, kuldge to get round assigment destroys where programme item does not exist
+          end
         end
       else  
         if audit.auditable_type == "PublishedProgrammeItemAssignment" # person added or removed
           # Get the programme item assignments that have changed - this is the set of people
-          programmeItem = PublishedProgrammeItem.find(audit.changes["published_programme_item_id"])
-          role = PersonItemRole[audit.changes["role_id"]]
-          person = Person.find(audit.changes["person_id"])
-          @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + role.name
+          if audit.changes["published_programme_item_id"]
+            programmeItem = PublishedProgrammeItem.find(audit.changes["published_programme_item_id"])
+            role = PersonItemRole[audit.changes["role_id"]]
+            person = Person.find(audit.changes["person_id"])
+            @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + role.name
+          else
+            if audit.changes["role_id"].kind_of?(Array) # then we have a role change
+              newrole = PersonItemRole[audit.changes["role_id"][1]]
+              assignment = PublishedProgrammeItemAssignment.find(audit.auditable_id)
+              programmeItem = assignment.published_programme_item
+              person = assignment.person
+              if newrole != PersonItemRole['Reserved']
+                oldrole = PersonItemRole[audit.changes["role_id"][0]]
+                @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + newrole.name
+              else
+                @listOfAdds << person.GetFullPublicationName + " removed from " + programmeItem.title
+              end
+            end
+          end
         elsif audit.auditable_type == "PublishedRoomItemAssignment" # item added, or moved
           # Get all the room item assignments that have changed - this is the set of rooms and times
           # TODO - when there were no people originally then we get a "new" assignment with an oldtime == newtime... Why?
           programmeItemAssignment = PublishedRoomItemAssignment.find(audit.auditable_id)
           programmeItem = programmeItemAssignment.published_programme_item
-          oldtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"][audit.changes["published_time_slot_id"].size-2])
-          newtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"][audit.changes["published_time_slot_id"].size-1])
-          @listOfAdds <<  " " + programmeItem.title + " " + audit.action + " " + oldtime.start.strftime('%A %H:%M') + " to " + newtime.start.strftime('%A %H:%M')
+          if audit.changes["published_time_slot_id"]
+            movedTime = audit.changes["published_time_slot_id"].kind_of?(Array) && audit.changes["published_time_slot_id"].size > 1
+            if audit.changes["published_time_slot_id"].kind_of?(Array)
+              oldtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"][audit.changes["published_time_slot_id"].size-2]) if movedTime == true
+              newtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"][audit.changes["published_time_slot_id"].size-1])
+            else
+              newtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"])
+            end
+            if movedTime && newtime.start != oldtime.start # then we have move time slot
+              @listOfAdds <<  " " + programmeItem.title + " " + audit.action + " " + oldtime.start.strftime('%A %H:%M') + " to " + newtime.start.strftime('%A %H:%M')
+            else
+              @listOfAdds <<  " " + programmeItem.title + " " + audit.action + " to " + newtime.start.strftime('%A %H:%M')
+            end
+          else # check if we have move room/venue
+#            audit.changes["published_room_id"]
+            @listOfAdds <<  " " + programmeItem.title + " " + audit.action
+          end
         end
       end
     end
@@ -151,7 +186,7 @@ class ProgramController < ApplicationController
       format.atom # for an Atom feed (for readers)
     end
   end
-
+  
   protected
   
   def getConditions(params)
@@ -183,5 +218,5 @@ PARTICIPANT_QUERY = <<"EOS"
   left join pseudonyms ON pseudonyms.person_id = people.id
   ORDER BY last_name;
 EOS
-
+  
 end

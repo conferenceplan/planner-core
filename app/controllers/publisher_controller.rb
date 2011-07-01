@@ -1,7 +1,5 @@
 #
 #
-# TODO - create a change log for the publications - link to published programme item and have a timestamped list of what has changed...
-# NOTE: Look at the audit table for this information
 #
 class PublisherController < PlannerController
   include TagUtils
@@ -18,7 +16,8 @@ class PublisherController < PlannerController
     p.timestamp = DateTime.current
     @newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
     @modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
-    @renmovedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
+    @removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
+    @removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
     p.save
     render :layout => 'content'
   end
@@ -34,12 +33,12 @@ class PublisherController < PlannerController
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
-    clause = addClause(clause,'programme_item_assignments.role_id != ? ', PersonItemRole['Reserved'])
-    args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments] }
+#    clause = addClause(clause,'programme_item_assignments.role_id != ? ', PersonItemRole['Reserved'])
+    args = { :conditions => clause, :include => :room_item_assignment } #, :programme_item_assignments] }
     return ProgrammeItem.find :all, args
   end
   
-  # TODO - check this for modified items - i.e. what happens if the time is changed?
+  # Check this for modified items - i.e. what happens if the time is changed?
   # in that case the room item assignment is recreated...
   def getModifiedProgramItems
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
@@ -51,12 +50,16 @@ class PublisherController < PlannerController
     return ProgrammeItem.find :all, args
   end
   
-  # TODO - the query used in this method is not correct
   def getRemovedProgramItems
     # publications with no original or that the published flag is no longer true
-    # TODO - need to put in the test for the published flag
     clause = [REMOVE_CLAUSE, 'PublishedProgrammeItem', 'PublishedProgrammeItem']
     args = { :conditions => clause, :include => [:publication] }
+    return PublishedProgrammeItem.find :all, args
+  end
+  
+  def getUnpublishedItems
+    clause = [UNPUBLISH_CLAUSE, 'ProgrammeItem', false]
+    args = { :conditions => clause }
     return PublishedProgrammeItem.find :all, args
   end
 
@@ -70,7 +73,12 @@ REMOVE_CLAUSE = <<"EOS"
   select published_id from publications where publications.published_type =  ?)
 EOS
 
-  
+UNPUBLISH_CLAUSE = <<"EOS"
+  published_programme_items.id in (select publications.published_id from programme_items 
+  left join publications on publications.original_id = programme_items.id and publications.original_type = ?
+  where print = ? 
+  and publications.published_id is not null)
+EOS
     
   def getRemovedParticipants
     # Select from publications and programme item assignments where published_id is not in the programme item assignments
@@ -82,7 +90,6 @@ EOS
       pubItems.each do |item|
         item.destroy
         nbrProcessed += 1
-        # TODO - log the fact that the program item is no longer scheduled...
       end
     end
     return nbrProcessed
@@ -109,7 +116,6 @@ EOS
         newRoom = publishRoom(srcItem.room)
         if newItem.published_room_item_assignment
           newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
-          # TODO - log the room change
           
           # Only need to copy time if the new time slot is more recent than the published
           if newItem.published_time_slot != nil
@@ -120,7 +126,6 @@ EOS
               newItem.published_time_slot = newTimeSlot
               newItem.save
               logger.info "Moved item times"
-              # TODO - log the time change
             end
           else
               newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
@@ -135,7 +140,6 @@ EOS
                   :day => srcItem.room_item_assignment.day, 
                   :published_programme_item => newItem)
           assignment.save
-          # TODO - log this new programme item
         end
 
         # Put the date and the person who did the publish into the association (Publication)
@@ -188,17 +192,18 @@ EOS
       src.programme_item_assignments.each do |srcAssignment|
         # add the person only if the destination does not have that person
         if (dest.people == nil) || (dest.people.index(srcAssignment.person) == nil)
-          assignment = dest.published_programme_item_assignments.new(:person => srcAssignment.person, :role => srcAssignment.role)
-          assignment.save
-          # TODO - log the fact that the person has been added to the programme item
-          # check their role for reserved
+          # check their role for reserved, if reserved then we do not want that person published
+          if (srcAssignment.role != PersonItemRole['Reserved'] )
+            assignment = dest.published_programme_item_assignments.new(:person => srcAssignment.person, :role => srcAssignment.role)
+            assignment.save
+          end
         else # the destination has the person, but their role may have changed
           # find the index of the person only if the role is also different
           idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && (a.role != srcAssignment.role) }
           if idx != nil
             dest.published_programme_item_assignments[idx].role = srcAssignment.role
             dest.published_programme_item_assignments[idx].save
-            # TODO - log the fact that the person's role in the programme item has been changed
+            # TODO - if the role is changed to reserved then they should be removed...
           end
         end
       end
@@ -206,13 +211,11 @@ EOS
       # if the destination has a person that the source does not then we need to remove that assignment
       dest.published_programme_item_assignments.each do |pitem|
         if (src.people.index(pitem.person) == nil)
-          # TODO - Log the fact that the person has been removed from the item
           pitem.destroy
         end
       end
     else # since there are no source assignments we should then remove all the destination assignments (if there are any)
       if dest.published_programme_item_assignments
-        # TODO - log the fact that the people have been removed from the item
         dest.published_programme_item_assignments.destroy
       end
     end
