@@ -18,6 +18,13 @@ class RoomsController < PlannerController
     clause = createWhereClause(params[:filters])
 
     args = { :conditions => clause }
+    
+    joinSQL  = "LEFT JOIN venues ON venues.id=rooms.venue_id "
+    joinSQL += "LEFT JOIN room_setups ON room_setups.id=rooms.setup_id "
+    joinSQL += "LEFT JOIN setup_types ON setup_types.id=room_setups.setup_type_id"
+    
+    args.merge!(:joins => joinSQL)
+ 
     # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
     @count = Room.count args
@@ -28,12 +35,7 @@ class RoomsController < PlannerController
       args.merge!(:offset => off, :limit => rows, :order => idx + " " + order)
     end
 
-    joinSQL  = "LEFT JOIN venues ON venues.id=rooms.venue_id "
-    joinSQL += "LEFT JOIN room_setups ON room_setups.id=rooms.setup_id "
-    joinSQL += "LEFT JOIN setup_types ON setup_types.id=room_setups.setup_type_id"
-    
-    args.merge!(:joins => joinSQL)
-    @rooms = Room.find :all, args
+   @rooms = Room.find :all, args
    
     respond_to do |format|
       format.html { render :layout => 'plain' } # list.html.erb
