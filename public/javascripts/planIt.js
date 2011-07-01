@@ -315,6 +315,7 @@
 		    	
 		        result.jqModal = true;
 		        result.closeOnEscape = true;
+		        result.afterSubmit = $.planIt.showError(name);
 
 		        return result;
 		    }
@@ -332,7 +333,6 @@
 		        result.jqModal = true;
 		        result.closeOnEscape = true;
 		        result.bottominfo = "Fields marked with (*) are required";
-		        result.afterSubmit = $.planIt.showError(name);
 		        
 		        return result;
 		    };
