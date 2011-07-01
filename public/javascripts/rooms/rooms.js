@@ -47,16 +47,14 @@ jQuery(document).ready(function(){
 	var index = 0;
 	var columns = [];
 	columns[index++] = $.planIt.textSearch(['room', 'name'], 125, 1, "Name:", true);
-	columns[index++] = $.planIt.select(['room', 'venue_id'], 125, 2, "Venue:", true, 'venue/list');
+	columns[index++] = $.planIt.select(['room', 'venues.name'], 125, 2, "Venue:", true, 'venue/list');
 	
-	var setup = $.planIt.select(['room', 'room_setup_id'], 125, 3, "Room Setup:", false, 'room_setups/list');
+	var setup = $.planIt.textSearch(['room', 'setup_types.name'], 125, 3, "Room Setup:", false);
 	setup.editable = false;
-	setup.search = false;
 	columns[index++] = setup;
 	
-	var capacity = $.planIt.numberSearch(['room', 'capacity'], 125, 4, "Capacity:", false);
+	var capacity = $.planIt.numberSearch(['room', 'room_setups.capacity'], 125, 4, "Capacity:", false);
 	capacity.editable = false;
-	capacity.search = false;
 	columns[index++] = capacity;
 	
 	columns[index++] = $.planIt.textSearch(['room', 'purpose'], 125, 5, "Purpose:", false);
