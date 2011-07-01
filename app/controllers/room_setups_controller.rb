@@ -40,7 +40,7 @@ Rails.logger.debug params
      if (@room_setup.save)
       render :action => 'index', :layout => 'content'
     else
-      render :content
+      render :action => 'model_errors', :layout => 'content'
     end 
  end
 
@@ -49,18 +49,19 @@ Rails.logger.debug params
     if @room_setup.update_attributes(params[:room_setups])
       render :action => 'index', :layout => 'content'
     else
-      render :action => 'edit', :layout => 'content'
+      render :action => 'model_errors', :layout => 'content'
     end
   end
 
   def destroy
     @room_setup = RoomSetup.find(params[:id])
-    test = Room.find_by_setup_type_id(@room_setup.id)
-    if test.nil?
+    room = Room.find_by_setup_id(@room_setup.id)
+    if room.nil?
       @room_setup.destroy
       render :action => 'index', :layout => 'content'
     else
-      render :action => 'index', :layout => 'content'
+      @setup_type = SetupType.find(@room_setup.setup_type_id)
+      render :action => 'in_use', :layout => 'content'
     end  
   end
 end

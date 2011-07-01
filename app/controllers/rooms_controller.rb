@@ -15,7 +15,6 @@ class RoomsController < PlannerController
     idx = params[:sidx]
     order = params[:sord]
 
-Rails.logger.debug params[:filters]
     clause = createWhereClause(params[:filters])
 
     args = { :conditions => clause }
@@ -29,6 +28,11 @@ Rails.logger.debug params[:filters]
       args.merge!(:offset => off, :limit => rows, :order => idx + " " + order)
     end
 
+    joinSQL  = "LEFT JOIN venues ON venues.id=rooms.venue_id "
+    joinSQL += "LEFT JOIN room_setups ON room_setups.id=rooms.setup_id "
+    joinSQL += "LEFT JOIN setup_types ON setup_types.id=room_setups.setup_type_id"
+    
+    args.merge!(:joins => joinSQL)
     @rooms = Room.find :all, args
    
     respond_to do |format|
@@ -50,7 +54,7 @@ Rails.logger.debug params[:filters]
       roomSetup = RoomSetup.new(:room_id => @room.id, :setup_type_id => type.id)
       roomSetup.save
       
-      @room.setup_type_id = roomSetup.id
+      @room.setup_id = roomSetup.id
       @room.save
       render :action => 'index', :layout => 'content'
     else
