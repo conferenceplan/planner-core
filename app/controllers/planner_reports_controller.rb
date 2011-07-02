@@ -62,6 +62,8 @@ class PlannerReportsController < PlannerController
       
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
+      invisible = PersonItemRole.find_by_name("Invisible")
+
       min = params[:min].to_i
       max = params[:max].to_i
       output = Array.new
@@ -72,6 +74,8 @@ class PlannerReportsController < PlannerController
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
             if a.role_id == moderator.id
                names.push "#{p.GetFullPublicationName.strip} (M)"
+            elsif a.role_id == invisible.id
+               names.push "#{p.GetFullPublicationName.strip} (I)"
             elsif a.role_id == reserved.id
                rsvd.push p.GetFullPublicationName.strip if params[:incl_rsvd]
             else
@@ -159,6 +163,7 @@ class PlannerReportsController < PlannerController
       @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, ], :conditions => {"print" => true}, :order => "time_slots.start, people.last_name") 
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
+      invisible = PersonItemRole.find_by_name("Invisible")
       
       @panels.each do |panel|
          next if panel.time_slot.nil?
@@ -167,7 +172,7 @@ class PlannerReportsController < PlannerController
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
             if a.role_id == moderator.id
                names.push "#{p.GetFullPublicationName.strip} (M)"
-            elsif a.role_id != reserved.id
+            elsif a.role_id != reserved.id and a.role_id != invisible.id
                names.push p.GetFullPublicationName.strip
             end
          end
@@ -205,6 +210,8 @@ class PlannerReportsController < PlannerController
       probable = AcceptanceStatus.find_by_name("Probable")
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
+      invisible = PersonItemRole.find_by_name("Invisible")
+
       @names = Person.all(:include => :programmeItems, :conditions => ['acceptance_status_id = ? or acceptance_status_id = ?',accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
 
       output = Array.new
@@ -216,6 +223,8 @@ class PlannerReportsController < PlannerController
             panelstr = "#{p.title} (#{p.format.name})"
             if a.role_id == moderator.id
                panelstr << " (M)"
+            elsif a.role_id == invisible.id
+              panelstr << " (I)"
             end
             panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
             panelstr << ", #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
@@ -235,7 +244,7 @@ class PlannerReportsController < PlannerController
             if params[:csv]
                output.push [name.GetFullPublicationName,
                             (name.acceptance_status_id == accepted.id) ? 'Accepted':'Probable',
-                            (a.role_id == reserved.id) ? 'R' : (a.role_id == moderator.id) ? 'M' : '',
+                            (a.role_id == reserved.id) ? 'R' : (a.role_id == moderator.id) ? 'M' : (a.role_id == invisible.id) ? 'I' : '',
                             p.title,
                             (p.format.nil?) ? '' : p.format.name,
                             (p.room.nil?) ? '' : p.room.name,
@@ -269,6 +278,8 @@ class PlannerReportsController < PlannerController
       probable = AcceptanceStatus.find_by_name("Probable")
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
+      invisible = PersonItemRole.find_by_name("Invisible")
+
       invitestatus = InviteStatus.find_by_name("Invited")
       @names = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ? ',accepted.id,probable.id,invitestatus.id], :order => "people.last_name, programme_items.id") 
 
@@ -301,12 +312,16 @@ class PlannerReportsController < PlannerController
                if a.role_id == moderator.id
                  partName = partName + "(M)"
                end
+               
+               if (a.role_id != invisible.id)
                if (a.person.GetShareEmail() == true)
                  defaultEmail = a.person.getDefaultEmail
                  if (defaultEmail != nil)
                    partName = partName + "(" + defaultEmail.email + ")"
                  end
                end
+               end
+               
                partList.push partName
             end
             if (skipreserved == false)

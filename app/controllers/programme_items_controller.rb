@@ -15,6 +15,7 @@ class ProgrammeItemsController < PlannerController
     @programmeItem = ProgrammeItem.find(params[:id])
     @editable = params[:edit] ? params[:edit] == "true" : true
     
+    @invisibleAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id =?',@programmeItem,PersonItemRole['Invisible']]
     @moderatorAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']] 
     @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] 
     @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] 
@@ -251,14 +252,20 @@ class ProgrammeItemsController < PlannerController
       end
     end
   
+    invisible = params['item-invisible-participants'] # this is a collection of the information about the participants to add (id and role)
+    if invisible
+      invisible.each do |candidate_id, candidate|
+        p = Person.find(candidate[:person_id])
+        assignment = ProgrammeItemAssignment.create(:programme_item_id => @programmeItem.id, :person => p, :role => PersonItemRole['Invisible'])
+        assignment.save
+      end
+    end
     respond_to do |format|
       format.html { render :layout => 'content' } # updateParticipants.html.erb
       format.xml
     end
   end
-  def showEquipment
-    @programmeItem = ProgrammeItem.find(params[:id])
-    
-  end
+  
+
  
 end
