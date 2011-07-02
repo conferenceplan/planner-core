@@ -166,7 +166,7 @@ class PlannerReportsController < PlannerController
          panel.people.each do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
             if a.role_id == moderator.id
-               names.push "#{p.GetFullPublicationName.strip}"
+               names.push "#{p.GetFullPublicationName.strip} (M)"
             elsif a.role_id != reserved.id
                names.push p.GetFullPublicationName.strip
             end
