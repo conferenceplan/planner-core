@@ -252,6 +252,21 @@ class Person < ActiveRecord::Base
    return endDateTime
  end
  
+ def GetShareEmail()
+   shareEmail = true
+
+   if (self.hasSurvey?)
+    surveyList = GetSurveyQuestionResponse('g93q7')
+    if (surveyList != nil)
+      if (surveyList.has_key?('3'))
+          shareEmail = false
+      end
+    end
+   end
+   return shareEmail
+  
+ end
+ 
   def removePostalAddress(address)
     # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person

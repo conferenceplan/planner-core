@@ -4,6 +4,8 @@
 #
 class PlannerReportsController < PlannerController
    include PlannerReportHelpers
+   include SurveyReportHelpers
+
    require 'time_diff'
   
    def show
@@ -268,7 +270,6 @@ class PlannerReportsController < PlannerController
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
       invitestatus = InviteStatus.find_by_name("Invited")
-
       @names = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ? ',accepted.id,probable.id,invitestatus.id], :order => "people.last_name, programme_items.id") 
 
       output = Array.new
@@ -294,9 +295,17 @@ class PlannerReportsController < PlannerController
                  next
                end
                partName =  a.person.GetFullPublicationName
-             
+              
+               surveyList = a.person.GetSurveyQuestionResponse('g93q7')
+               
                if a.role_id == moderator.id
                  partName = partName + "(M)"
+               end
+               if (a.person.GetShareEmail() == true)
+                 defaultEmail = a.person.getDefaultEmail
+                 if (defaultEmail != nil)
+                   partName = partName + "(" + defaultEmail.email + ")"
+                 end
                end
                partList.push partName
             end
