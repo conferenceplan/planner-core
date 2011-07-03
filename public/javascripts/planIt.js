@@ -138,18 +138,12 @@
 	    		label, 			//  Label of field in edit 
 	    		required		//  Boolean indicating an entry is required
 		    ){
-		    	var result = fieldBase(nameArray, width);
+		    	var result = $.planIt.text(nameArray, width, rowpos, label, required);
 		    	
 		    	result.searchoptions = {
 	                sopt: ['eq','ne','bw','bn','cn','nc']
 	            };
-	            
-	            result.formoptions = formOptions(rowpos, label, required);
-	            
-	            result.editrules = {
-	                required : required
-	            }
-	            
+	            	            
 	            return result;
 		    };
 		    
@@ -163,16 +157,9 @@
 	    		label, 			//  Label of field in edit 
 	    		required		//  Boolean indicating an entry is required
 		    ){
-		    	var result = fieldBase(nameArray, width);
+		    	var result = $.planIt.text(nameArray, width, rowpos, label, required);
 		    	
 	            result.sortable = true;
-
-	            result.formoptions = formOptions(rowpos, label, required);
-	            
-	            result.editrules = {
-	                required: required
-	            }
-
 		    	return result;
 		    };
 		    
@@ -263,6 +250,34 @@
 	            result.editoptions.dataUrl = data;
 	            result.editoptions.size = 3;
 	            
+		    	return result;
+		    };
+		    
+//  Checkbox field
+		    
+		    $.planIt.checkbox = function
+		    (
+	    		nameArray, 		//  Hierarchy of names in the model
+	    		width, 			//  Width of edit field
+	    		rowpos,			//  Row position of field in edit dialogue
+	    		label, 			//  Label of field in edit 
+	    		required		//  Boolean indicating an entry is required
+		    ){
+		    	var result = fieldBase(nameArray, width);
+		    	
+		    	result.edittype = 'checkbox';
+	            result.sortable = true;
+
+	            result.searchoptions = {
+	                sopt: ['eq','ne']
+	            };
+
+	            result.formoptions = formOptions(rowpos, label, required);
+	            
+	            result.editrules = {
+	                required: required
+	            }
+
 		    	return result;
 		    };
 		    
