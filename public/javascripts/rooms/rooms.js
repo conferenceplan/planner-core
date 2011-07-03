@@ -10,15 +10,21 @@ jQuery(document).ready(function(){
         var index = 0;
 		var columns = [];
 		var pickroom = 'rooms/picklist?room_id=' + room_id;
-		columns[index++] = $.planIt.select(['room_setups', 'room_id'], 255, 1, "Room:", true, pickroom);
-		columns[index++] = $.planIt.select(['room_setups', 'setup_type_id'], 225, 2, "Setup type:", true, 'setup_types/picklist');
-		columns[index++] = $.planIt.textSearch(['room_setups', 'capacity'], 225, 3, "Capacity:", true);
+
+		var rooms = $.planIt.select(['room_setups', 'room_id'], 255, 0, "Room:", false, pickroom);
+		rooms.editable = false;
+		columns[index++] = rooms;
+		
+		columns[index++] = $.planIt.select(['room_setups', 'setup_type_id'], 225, 1, "Setup type:", true, 'setup_types/picklist');
+		columns[index++] = $.planIt.textSearch(['room_setups', 'capacity'], 225, 2, "Capacity:", true);
+		columns[index++] = $.planIt.checkbox(['default_setup'], 225, 3, "Default:", false);
 		columns[index++] = $.planIt.hidden(['room_setups', 'lock_version']);
 		
-	    var colNames = ['Room', 'Type', 'Capacity', 'lock_version'];
+	    var colNames = ['Room', 'Type', 'Capacity', 'Default', 'lock_version'];
 	 	
 	    var params = $.planIt.gridParams('room_setups', 'room_setups_id', colNames, columns, 'Room Setups');
 	    params.url = 'room_setups/list/?room_id=' + room_id;
+	    params.editurl = 'room_setups/?room_id=' + room_id;
 		params.pager = "#setups_pager";
 
 		jQuery("#room_setups").jqGrid(params);
