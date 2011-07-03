@@ -31,26 +31,39 @@ class RoomSetupsController < ApplicationController
   end
 
   def show
-Rails.logger.debug params
     @room_setup = RoomSetup.find(params[:id])
   end
 
   def create
-    @room_setup = RoomSetup.new(params[:room_setups])
-     if (@room_setup.save)
-      render :action => 'index', :layout => 'content'
-    else
-      render :action => 'model_errors', :layout => 'content'
-    end 
- end
+    setupData = params[:room_setups].merge({:room_id => params[:room_id]})
+    defaultSetup = params[:default_setup] == 'on'
+    
+    @room_setup = RoomSetup.new(setupData)
+      if (@room_setup.save)
+        setRoomDefault if defaultSetup
+        render :action => 'index', :layout => 'content'
+      else
+        render :action => 'model_errors', :layout => 'content'
+      end 
+  end
 
   def update
+    setupData = params[:room_setups]
+    defaultSetup = params[:default_setup] == 'on'
+
     @room_setup = RoomSetup.find(params[:id])
-    if @room_setup.update_attributes(params[:room_setups])
+    if @room_setup.update_attributes(setupData)
+      setRoomDefault if defaultSetup
       render :action => 'index', :layout => 'content'
     else
       render :action => 'model_errors', :layout => 'content'
     end
+  end
+
+  def setRoomDefault
+    room = Room.find(@room_setup.room_id)
+    room.setup_id = @room_setup.id
+    room.save
   end
 
   def destroy
