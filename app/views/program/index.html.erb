@@ -19,9 +19,7 @@
         <% currentRoom = nil %>
         <% currentColumn = 1 %>
         <% newRow = true %>
-        <% logger.debug "HELP"%>
         <% @programmeItems.each do |item| %>
-        <% logger.debug "HELP " + item.title %>
 <% if item.published_time_slot %>
         <% currentTime = item.published_time_slot.start %>
         <% newRow = (previousTime == nil) || (currentTime != previousTime) %>

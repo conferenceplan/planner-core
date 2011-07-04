@@ -44,7 +44,7 @@ class PublisherController < PlannerController
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'publications.publication_date < programme_items.updated_at OR publications.publication_date < room_item_assignments.updated_at OR publications.publication_date < programme_item_assignments.updated_at', nil)
+    clause = addClause(clause,'(publications.publication_date < programme_items.updated_at) OR (publications.publication_date < room_item_assignments.updated_at) OR (publications.publication_date < programme_item_assignments.updated_at)', nil)
     # check the date of the programme item compared with the published
     args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication] }
     return ProgrammeItem.find :all, args

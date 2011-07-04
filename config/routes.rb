@@ -6,14 +6,9 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
   map.connect 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
 
-#  map.connect 'pending_publication_item/list', :controller => 'pending_publication_item', :action => 'list', :method => 'post'
-#  map.connect 'pending_publication_item/add', :controller => 'pending_publication_item', :action => 'add', :method => 'post'
-#  map.resources :pending_publication_item, :member => {:add => :post},
-#      :except => [:destroy, :new, :create, :edit, :show, :update, :index]
-
   map.connect 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'
-  map.resources :publisher, :member => {:index => :get, :list => :get},
-      :except => [:destroy, :new, :create, :edit, :show, :update]
+  map.resources :publisher, :member => {:index => :get},
+      :except => [:destroy, :new, :create, :edit, :show, :update, :list]
 
   map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
   map.resources :tags, :member => {:remove => :get, :add => :post, :index => :get, :edit => :get},

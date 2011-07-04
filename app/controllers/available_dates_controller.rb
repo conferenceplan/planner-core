@@ -96,7 +96,7 @@ end
   end
   
   def GetDefaultStart
-    return Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + 12.hours;
+    return Time._load(SITE_CONFIG[:conference][:start_date]) + 12.hours;
   end
   
   def GetDefaultEnd

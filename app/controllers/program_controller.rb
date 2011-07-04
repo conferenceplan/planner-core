@@ -96,19 +96,36 @@ class ProgramController < ApplicationController
   end
   
   #
-  # What has been changed since X
+  # Report back on what has changed. This is used to generate the pink sheets.
+  #
   # TODO - would be a good idea to find a mechanism to cache this so as to minimise queries
   #
+  # Item time and room changes
+  # New Items
+  # Dropped Items
+  # Participants Added
+  # Participants Dropped
+  #
+  # Title and Description changes
+  #
+  # Person add
+  # Person roleChange
+  # Person remove
+  #
+  #
   def updates
+    @resultantChanges = {}
+    
     # To get the updates:
     # Get a list of all publications that have changed since the last publication date
-    lastPubDate = PublicationDate.last
+    @lastPubDate = PublicationDate.last
     
-    @listOfAdds = []
+    if !@lastPubDate
+      return
+    end
     
-    # TODO - do items first then assignments, also if item has been removed we do not need the remove from it...
     audits = Audit.all(
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?)", lastPubDate.timestamp, 'Published%'],
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?)", @lastPubDate.timestamp, 'Published%'],
       :order => "audits.created_at asc"
     )
     
@@ -120,63 +137,32 @@ class ProgramController < ApplicationController
         # All are destroy events... but we only need to know the one i.e. the programme item was destroyed
         if audit.auditable_type == "PublishedProgrammeItem"
           title = audit.changes['title']
-          @listOfAdds <<  " " + title + " " + audit.action
+          id = audit.auditable_id
           # need to know what the time was ....
+          @resultantChanges = addPinkSheetEntryWithKey(@resultantChanges, id , :removeItem , :title, title) # TODO - add other values from the audit table provide more info i.e. dropped from day & time
         elsif audit.auditable_type == "PublishedProgrammeItemAssignment" # person was removed...
-          # TODO - we do not want to go in here if the person removal was because of the programme item removal
           begin
             programmeItem = PublishedProgrammeItem.find(audit.changes["published_programme_item_id"]) # this will fail
             role = PersonItemRole[audit.changes["role_id"]]
             person = Person.find(audit.changes["person_id"])
-            @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + role.name
+            @resultantChanges = addPinkSheetEntry(@resultantChanges, programmeItem, :removePerson, person, role)
           rescue
             # do nowt, kuldge to get round assigment destroys where programme item does not exist
           end
-        end
+        elsif audit.auditable_type == 'PublishedRoomItemAssignment'
+          id = audit.changes['published_programme_item_id']
+          room = PublishedRoom.find(audit.changes['published_room_id'])
+          timeAudit = Audit.all(
+            :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?) AND (audits.auditable_id = ?)", 
+              @lastPubDate.timestamp, 'PublishedTimeSlot%', audit.changes['published_time_slot_id']]
+          )
+          @resultantChanges = addPinkSheetEntryWithKey(@resultantChanges, id, :removeItem, :info, room, timeAudit[0].changes['start'])
+        end # we are ignoring the destroys of the room item assignment and the timeslot... TODO - collect for information on the prog item
       else  
         if audit.auditable_type == "PublishedProgrammeItemAssignment" # person added or removed
-          # Get the programme item assignments that have changed - this is the set of people
-          if audit.changes["published_programme_item_id"]
-            programmeItem = PublishedProgrammeItem.find(audit.changes["published_programme_item_id"])
-            role = PersonItemRole[audit.changes["role_id"]]
-            person = Person.find(audit.changes["person_id"])
-            @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + role.name
-          else
-            if audit.changes["role_id"].kind_of?(Array) # then we have a role change
-              newrole = PersonItemRole[audit.changes["role_id"][1]]
-              assignment = PublishedProgrammeItemAssignment.find(audit.auditable_id)
-              programmeItem = assignment.published_programme_item
-              person = assignment.person
-              if newrole != PersonItemRole['Reserved']
-                oldrole = PersonItemRole[audit.changes["role_id"][0]]
-                @listOfAdds << person.GetFullPublicationName + " " + audit.action + " " + programmeItem.title + " as " + newrole.name
-              else
-                @listOfAdds << person.GetFullPublicationName + " removed from " + programmeItem.title
-              end
-            end
-          end
+          @resultantChanges = getPeopleChange(audit, @resultantChanges)
         elsif audit.auditable_type == "PublishedRoomItemAssignment" # item added, or moved
-          # Get all the room item assignments that have changed - this is the set of rooms and times
-          # TODO - when there were no people originally then we get a "new" assignment with an oldtime == newtime... Why?
-          programmeItemAssignment = PublishedRoomItemAssignment.find(audit.auditable_id)
-          programmeItem = programmeItemAssignment.published_programme_item
-          if audit.changes["published_time_slot_id"]
-            movedTime = audit.changes["published_time_slot_id"].kind_of?(Array) && audit.changes["published_time_slot_id"].size > 1
-            if audit.changes["published_time_slot_id"].kind_of?(Array)
-              oldtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"][audit.changes["published_time_slot_id"].size-2]) if movedTime == true
-              newtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"][audit.changes["published_time_slot_id"].size-1])
-            else
-              newtime = PublishedTimeSlot.find(audit.changes["published_time_slot_id"])
-            end
-            if movedTime && newtime.start != oldtime.start # then we have move time slot
-              @listOfAdds <<  " " + programmeItem.title + " " + audit.action + " " + oldtime.start.strftime('%A %H:%M') + " to " + newtime.start.strftime('%A %H:%M')
-            else
-              @listOfAdds <<  " " + programmeItem.title + " " + audit.action + " to " + newtime.start.strftime('%A %H:%M')
-            end
-          else # check if we have move room/venue
-#            audit.changes["published_room_id"]
-            @listOfAdds <<  " " + programmeItem.title + " " + audit.action
-          end
+            @resultantChanges = getItemChange(audit, @resultantChanges)
         end
       end
     end
@@ -189,6 +175,146 @@ class ProgramController < ApplicationController
   
   protected
   
+  def getProgrammeItemChanges(id)
+    audits = Audit.all(
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?) AND (audits.auditable_id = ?)", @lastPubDate.timestamp, 'PublishedProgrammeItem', id],
+      :order => "audits.created_at asc"
+    )
+    
+    return audits
+  end
+  
+  def getPeopleChange(auditInfo, resultantChanges)
+    # Get the programme item assignments that have changed - this is the set of people
+    if auditInfo.changes["published_programme_item_id"] # Add person
+      programmeItem = PublishedProgrammeItem.find(auditInfo.changes["published_programme_item_id"])
+      role = PersonItemRole[auditInfo.changes["role_id"]]
+      person = Person.find(auditInfo.changes["person_id"])
+      resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :addPerson, person, role)
+    else
+      if auditInfo.changes["role_id"].kind_of?(Array) # then we have a role change
+        newrole = PersonItemRole[auditInfo.changes["role_id"][1]]
+        assignment = PublishedProgrammeItemAssignment.find(auditInfo.auditable_id)
+        programmeItem = assignment.published_programme_item
+        person = assignment.person
+        if newrole != PersonItemRole['Reserved']
+          oldrole = PersonItemRole[auditInfo.changes["role_id"][0]]
+          resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :newRole, person, oldrole, newrole)
+        else
+          resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :removePerson, person)
+        end
+      end
+    end
+
+    return resultantChanges
+  end
+  
+  #
+  #
+  
+  #
+  # Item add
+  # Item move
+  #
+  # { programmeItem => [action, action, action] }
+  # action == {'timeMove' => [from, to]}
+  # action == {'roomMove' => to}
+  # action == 'add'
+  #
+  def getItemChange(auditInfo, resultantChanges)
+    programmeItemAssignment = PublishedRoomItemAssignment.find(auditInfo.auditable_id) # get the associated program item assignment
+    programmeItem = programmeItemAssignment.published_programme_item # from that we can get the program item
+    if auditInfo.changes["published_time_slot_id"] # if it is a change to the time slote then we report on that
+      # the time slot has changed if we have an array of changed time information and that array contains more than one value      
+      movedTime = auditInfo.changes["published_time_slot_id"].kind_of?(Array) && auditInfo.changes["published_time_slot_id"].size > 1
+      
+      if movedTime # Item X has been rescheduled from time A to time B
+        oldtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"][auditInfo.changes["published_time_slot_id"].size-2]) if movedTime == true
+        newtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"][auditInfo.changes["published_time_slot_id"].size-1])
+      else # 
+        newtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"])
+      end
+      
+      if movedTime && newtime.start != oldtime.start # then we have move time slot
+        # Item X has been rescheduled from time A to time B
+        resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :timeMove, oldtime.start, newtime.start)
+      else # we have moved room or added an item
+        # TODO - could also be a change to one of the other attributes
+        if resultantChanges[:update] && resultantChanges[:update][programmeItem]
+          resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :add, newtime.start)
+        else
+          # TODO - if the item was update (Title etc) then it is not a new....
+          # Look for the PublishedProgrammeItem and see if it is an update
+          if (auditInfo.action == 'update')
+            a = getProgrammeItemChanges(programmeItem.id);
+            resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :updateDetails, a[0].changes)
+          else  
+            resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :new, newtime.start)
+          end
+        end
+        # Item X has been added to room B at time C
+      end
+    else # The item has been moved to a new venue
+      # else it is an addition of the program item to the schedule
+      # Item X has been added or moved to the program in room A at time B
+      room = nil
+      fromRoom = nil
+      if auditInfo.changes['published_room_id']
+        if auditInfo.changes['published_room_id'].kind_of?(Array)
+          fromRoom = PublishedRoom.find(auditInfo.changes["published_room_id"][0])
+          room = PublishedRoom.find(auditInfo.changes["published_room_id"][1])
+        else
+          room = PublishedRoom.find(auditInfo.changes["published_room_id"])
+        end
+      end
+      resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :roomMove, room, fromRoom)
+    end
+    # TODO - if we have a move + add of the same item then it is a move not an add
+    
+    return resultantChanges
+  end
+  
+  # Person add
+  # Person roleChange
+  # Person remove
+  #
+  # action => { programmeItem => [] }
+  #
+  # { programmeItem => [action, action, action] }
+  # action == {'timeMove' => [from, to]}
+  # action == {'roomMove' => to}
+  # action == 'add'
+  #
+  def addPinkSheetEntry(resultCollection, programmeItem, operation, *args)
+    
+    if resultCollection[operation]
+      if resultCollection[operation][programmeItem]
+        resultCollection[operation][programmeItem].concat args
+      else
+        resultCollection[operation][programmeItem] = args
+      end
+    else
+      resultCollection[operation] = {programmeItem => args}
+    end
+    
+    return resultCollection
+  end
+  
+  def addPinkSheetEntryWithKey(resultCollection, programmeItem, operation, key, *args)
+    
+    if resultCollection[operation]
+      if resultCollection[operation][programmeItem]
+        resultCollection[operation][programmeItem][key] = args
+      else
+        resultCollection[operation][programmeItem] = { key => args }
+      end
+    else
+      resultCollection[operation] = {programmeItem => {key => args}}
+    end
+    
+    return resultCollection
+  end
+
   def getConditions(params)
     day = params[:day] # Day
     name = params[:name]
