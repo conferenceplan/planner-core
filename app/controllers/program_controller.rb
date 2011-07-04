@@ -229,8 +229,8 @@ class ProgramController < ApplicationController
       movedTime = auditInfo.changes["published_time_slot_id"].kind_of?(Array) && auditInfo.changes["published_time_slot_id"].size > 1
       
       if movedTime # Item X has been rescheduled from time A to time B
-        oldtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"][auditInfo.changes["published_time_slot_id"].size-2]) if movedTime == true
-        newtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"][auditInfo.changes["published_time_slot_id"].size-1])
+        oldtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"][0]) if movedTime == true
+        newtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"][1])
       else # 
         newtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"])
       end
