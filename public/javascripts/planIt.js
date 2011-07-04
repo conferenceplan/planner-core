@@ -221,14 +221,13 @@
 		    
 //  Select field
 		    
-		    $.planIt.select = function
+		    selectBase = function
 		    (
 	    		nameArray, 		//  Hierarchy of names in the model
 	    		width, 			//  Width of edit field
 	    		rowpos,			//  Row position of field in edit dialogue
 	    		label, 			//  Label of field in edit 
-	    		required,		//  Boolean indicating an entry is required
-	    		data			//  URL of data source
+	    		required		//  Boolean indicating an entry is required
 		    ){
 		    	var result = fieldBase(nameArray, width);
 		    	
@@ -237,7 +236,6 @@
 	            result.sortable = true;
 
 	            result.searchoptions = {
-	                dataUrl: data,
 	                sopt: ['eq','ne']
 	            };
 
@@ -247,8 +245,44 @@
 	                required: required
 	            }
 
-	            result.editoptions.dataUrl = data;
 	            result.editoptions.size = 3;
+	            
+		    	return result;
+		    };
+		    
+//  Select field
+		    
+		    $.planIt.select = function
+		    (
+	    		nameArray, 		//  Hierarchy of names in the model
+	    		width, 			//  Width of edit field
+	    		rowpos,			//  Row position of field in edit dialogue
+	    		label, 			//  Label of field in edit 
+	    		required,		//  Boolean indicating an entry is required
+	    		data			//  URL of data source
+		    ){
+		    	var result = selectBase(nameArray, width);
+		    	
+	            result.editoptions.dataUrl = data;
+	            result.searchoptions.dataUrl = data;
+	            
+		    	return result;
+		    };
+		    
+//  Select field using string
+		    
+		    $.planIt.selectString = function
+		    (
+	    		nameArray, 		//  Hierarchy of names in the model
+	    		width, 			//  Width of edit field
+	    		rowpos,			//  Row position of field in edit dialogue
+	    		label, 			//  Label of field in edit 
+	    		required,		//  Boolean indicating an entry is required
+	    		data			//  String data source
+		    ){
+		    	var result = selectBase(nameArray, width);
+		    	
+	            result.editoptions.value = data;
 	            
 		    	return result;
 		    };
