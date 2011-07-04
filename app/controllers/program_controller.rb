@@ -246,8 +246,12 @@ class ProgramController < ApplicationController
           # TODO - if the item was update (Title etc) then it is not a new....
           # Look for the PublishedProgrammeItem and see if it is an update
           if (auditInfo.action == 'update')
-            a = getProgrammeItemChanges(programmeItem.id);
-            resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :updateDetails, a[0].changes)
+            auditChange = getProgrammeItemChanges(programmeItem.id);
+            if auditChange
+              auditChange.each do |a|
+                resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :updateDetails, a.changes)
+              end
+            end
           else  
             resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :new, newtime.start)
           end
