@@ -197,7 +197,7 @@ class ProgramController < ApplicationController
         assignment = PublishedProgrammeItemAssignment.find(auditInfo.auditable_id)
         programmeItem = assignment.published_programme_item
         person = assignment.person
-        if newrole != PersonItemRole['Reserved']
+        if newrole != PersonItemRole['Reserved'] && newrole != PersonItemRole['Invisible']
           oldrole = PersonItemRole[auditInfo.changes["role_id"][0]]
           resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :newRole, person, oldrole, newrole)
         else
