@@ -1,7 +1,13 @@
 <script type='text/javascript'>
     //<![CDATA[
     jQuery(document).ready(function(){
-            $('#start_time').timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], defaultTime: '09:00', spinnerImage: '/images/spinnerDefault.png'});
+        $('#start_time').timeEntry({
+            show24Hours: true,
+            showSeconds: false,
+            timeSteps: [1, 15, 0],
+            defaultTime: '09:00',
+            spinnerImage: '/images/spinnerDefault.png'
+        });
     });
     //]]>
 </script>
@@ -73,36 +79,36 @@
                 <%= f.text_field :maximum_people %>
             </div>
         </div>
-	   <% if controller.permitted_to? :schedule, :programme_items %>
-          <div>
+        <% if controller.permitted_to? :schedule, :programme_items %>
+        <div>
             <div class='line'>
                 <div class='field_name'>
                     <%= f.label :room, "room" %>
                 </div>
                 <div class='field_value'>
                     <%= select_tag 'room',
-                		options_for_select([['','']].concat(Room.find(:all).collect {|r| [r.name,r.id] }),
-									@programmeItem.room ? @programmeItem.room.id : ''),
-                		{:include_blank => true} %>
+                    options_for_select([['','']].concat(Room.find(:all).collect {|r| [r.name,r.id] }),
+                    @programmeItem.room ? @programmeItem.room.id : ''),
+                    {:include_blank => true} %>
                 </div>
             </div>
-          </div>
-          <div>
+        </div>
+        <div>
             <div class='line'>
                 <div class='field_name'>
                     <%= f.label :start_day, "Day" %>
                 </div>
                 <div class='field_value'>
                     <%= select_tag 'start_day',
-                		options_for_select([['','-1']].concat(
-(0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]}
-),
-									@programmeItem.time_slot ? (@programmeItem.time_slot.start.day - Time.zone.parse(SITE_CONFIG[:conference][:start_date]).day) : ''),
-                		{:include_blank => true} %>
+                    options_for_select([['','-1']].concat(
+                    (0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]}
+                    ),
+                    @programmeItem.time_slot ? (@programmeItem.time_slot.start.day - Time.zone.parse(SITE_CONFIG[:conference][:start_date]).day) : ''),
+                    {:include_blank => true} %>
                 </div>
             </div>
-          </div>
-          <div>
+        </div>
+        <div>
             <div class='line'>
                 <div class='field_name'>
                     <%= f.label :start_time, "Start Time" %>
@@ -111,8 +117,12 @@
                     <%= text_field_tag 'start_time', @programmeItem.start_time %>
                 </div>
             </div>
-          </div>
-		  <% end %>
+        </div>
+        <% else %>
+        <%= hidden_field_tag 'room', @programmeItem.room ? @programmeItem.room.id : '' %>
+        <%= hidden_field_tag 'start_day', @programmeItem.time_slot ? (@programmeItem.time_slot.start.day - Time.zone.parse(SITE_CONFIG[:conference][:start_date]).day) : '' %>
+        <%= hidden_field_tag 'start_time', @programmeItem.start_time, {:id => 'hidden_start_time'} %>
+        <% end %>
     </div>
     <div class='grid_2'>
         <div class='line'>
