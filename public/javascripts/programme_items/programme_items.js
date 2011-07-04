@@ -167,9 +167,11 @@ jQuery(document).ready(function(){
     
     jQuery("#programmeItems").navGrid('#pager', {
         view: false,
-        search: false
+        search: false,
+        edit: false
     }, //options
     { // edit options
+        view: false,
         height: 320,
         reloadAfterSubmit: true,
         jqModal: true,
