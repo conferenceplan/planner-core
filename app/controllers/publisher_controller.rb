@@ -22,6 +22,14 @@ class PublisherController < PlannerController
     render :layout => 'content'
   end
   
+  def review
+    @candidateNewItems = getNewProgramItems() # copy all unpublished programme items
+    @candidateModifiedItems = getModifiedProgramItems() # copy all programme items that have changes made (room assignment, added person, details etc)
+    @candidateRemovedItems = []
+    @candidateRemovedItems.concat(getRemovedProgramItems()) # remove all items that should no longer be published
+    @candidateRemovedItems.concat(getUnpublishedItems()) # remove all items that should no longer be published
+  end
+  
   # list all the published programme items
   def list
   end

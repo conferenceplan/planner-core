@@ -7,6 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
 
   map.connect 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'
+  map.connect 'publisher/review', :controller => 'publisher', :action => 'review', :method => 'get'
   map.resources :publisher, :member => {:index => :get},
       :except => [:destroy, :new, :create, :edit, :show, :update, :list]
 

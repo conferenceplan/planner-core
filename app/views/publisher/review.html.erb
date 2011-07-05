@@ -1,0 +1,45 @@
+<h2>Publish Review</h2>
+<h3>Candidates for Publish</h3>
+<% @candidateNewItems.each do |c| %>
+    <div>
+    <div>
+        <%= c.room.name %>
+    </div>
+    <div>
+        <%= c.time_slot.start.getlocal().strftime("%A at %H:%M") %>
+    </div>
+    </div>
+    <div><div><%= c.title %></div><div><%= c.pub_reference_number%></div></div>
+    <div><%= c.precis %></div>
+    <div>
+        <% c.programme_item_assignments.each do |a| %>
+            <% if a.role != PersonItemRole['Invisible'] &&  a.role != PersonItemRole['Reserved'] %>
+                <div><%= a.person.GetFullPublicationName %> as <%= a.role.name %></div>
+            <% end %>
+        <% end %>
+    </div>
+<% end %>
+<h3>Candidates that have been updated</h3>
+<% @candidateModifiedItems.each do |c| %>
+    <div>
+    <div>
+        <%= c.room.name %>
+    </div>
+    <div>
+        <%= c.time_slot.start.getlocal().strftime("%A at %H:%M") %>
+    </div>
+    </div>
+    <div><div><%= c.title %></div><div><%= c.pub_reference_number%></div></div>
+    <div><%= c.precis %></div>
+    <div>
+        <% c.programme_item_assignments.each do |a| %>
+            <% if a.role != PersonItemRole['Invisible'] &&  a.role != PersonItemRole['Reserved'] %>
+                <div><%= a.person.GetFullPublicationName %> as <%= a.role.name %></div>
+            <% end %>
+        <% end %>
+    </div>
+<% end %>
+<h3>Candidates for Unpublish/Drop</h3>
+<% @candidateRemovedItems.each do |c| %>
+    <div><div><%= c.title %></div><div><%= c.pub_reference_number%></div></div>
+<% end %>
