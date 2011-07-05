@@ -148,7 +148,6 @@ CONFLICT_QUERY_PT1 = <<"EOS"
   AND tsA.end > tsB.start
   AND progA.programme_item_id <> progB.programme_item_id
   AND progA.person_id = progB.person_id
-  AND progA.role_id = progB.role_id
 EOS
   
 CONFLICT_QUERY_PT2 = <<"EOS"
@@ -306,7 +305,6 @@ BACK_TO_BACK_QUERY_PT1 = <<"EOS"
    (tsA.end = tsB.start)
   AND progA.programme_item_id <> progB.programme_item_id
   AND progA.person_id = progB.person_id
-  AND progA.role_id = progB.role_id
 EOS
   
 BACK_TO_BACK_QUERY_PT2 = <<"EOS"
