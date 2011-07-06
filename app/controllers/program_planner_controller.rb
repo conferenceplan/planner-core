@@ -69,8 +69,12 @@ class ProgramPlannerController < PlannerController
   end
   
   def getConflicts
+    reserved = PersonItemRole.find_by_name("Reserved")
+    
     @day = params[:day]
-    query = CONFLICT_QUERY_PT1
+    query = CONFLICT_QUERY_PT1 + "AND (progA.role_id != " + reserved.id.to_s + " AND progB.role_id != " + reserved.id.to_s + ")"
+    
+    
     if (@day)
       query += 'AND roomA.day = ' + @day.to_s+ ' AND roomB.day = ' + @day.to_s
     end
@@ -81,10 +85,12 @@ class ProgramPlannerController < PlannerController
     if (@day)
       query += 'AND roomA.day = ' + @day.to_s+ ' AND roomB.day = ' + @day.to_s
     end
+    
     query += ITEM_CONFLICT_QUERY_PT2
     @roomConflicts = ActiveRecord::Base.connection.select_rows(query)
     
-    query = EXCLUDED_ITEM_QUERY_PT1
+    query = EXCLUDED_ITEM_QUERY_PT1 + "AND (progB.role_id != " + reserved.id.to_s + ")"
+
     if (@day)
       query += 'AND roomA.day = ' + @day.to_s+ ' AND roomB.day = ' + @day.to_s
     end
