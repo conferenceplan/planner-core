@@ -112,7 +112,7 @@ class ProgramPlannerController < PlannerController
     query += AVAILABLE_TIME_CONFLICTS_QUERY_PT2
     @availableTimeConflicts = ActiveRecord::Base.connection.select_rows(query)
     
-    query = BACK_TO_BACK_QUERY_PT1
+    query = BACK_TO_BACK_QUERY_PT1 + "AND (progA.role_id != " + reserved.id.to_s + " AND progB.role_id != " + reserved.id.to_s + ")"
     if (@day)
       query += 'AND roomB.day = ' + @day.to_s
     end
