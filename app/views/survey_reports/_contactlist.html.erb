@@ -1,0 +1,21 @@
+
+<h2><%= contactlist.count %> People:</h2>
+<p>
+<% if contactlist.blank? %>
+   No one right now.
+<% else %>
+   <ul>
+   <% contactlist.each do |p| %>
+       <li><%= p.GetFullPublicationName %> 
+           <ul>
+              <li> <%= p.getDefaultEmail.email %>  </li>
+              <% p.phone_numbers.each do |n| %>
+                 <li> <%= n.number %> (<%= n.phone_type.name %>) </li>
+              <% end %>
+            </ul>
+       </li>
+   <% end %>
+   </ul>
+<% end %>
+
+</p>
