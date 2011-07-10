@@ -143,8 +143,11 @@ class PlannerReportsController < PlannerController
       end
     
    end
-
    def program_book_report
+     
+   end
+   
+   def do_program_book_report
 
       outfile = "prog_guide_" + Time.now.strftime("%m-%d-%Y") + ".csv"
       output = Array.new
@@ -152,13 +155,15 @@ class PlannerReportsController < PlannerController
                    "day",
                    "time", 
                    "duration",
-		   "room",
-		   "track",
-		   "type",
-		   "kids category",
-		   "title",
-		   "description",
-		   "participants",
+		               "room",
+		               "track",
+		               "type",
+		               "kids category",
+		               "title",
+		               "description",
+		               "participants",
+                   "short title",
+                   "reference number",
                   ]
       @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, ], :conditions => {"print" => true}, :order => "time_slots.start, people.last_name") 
       reserved = PersonItemRole.find_by_name("Reserved")
@@ -198,6 +203,8 @@ class PlannerReportsController < PlannerController
 	              panel.title,
 	              panel.precis,
                       part_list,
+                      panel.short_title,
+                      panel.pub_reference_number
                      ]
       end
       

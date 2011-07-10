@@ -1,0 +1,9 @@
+<h2>Program Book Report</h2>
+
+<% form_tag('/planner_reports/do_program_book_report', :method => 'post') do %>
+<p>
+   <%= check_box_tag :renumber_items, '1', params[:renumber_items] %>
+   <%= label_tag :renumber_items, "Update item numbers? "%><br /><br />
+   <%= submit_tag "Export CSV", :name=>"csv" %>
+</p>
+<% end %>
