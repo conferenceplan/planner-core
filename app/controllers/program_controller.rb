@@ -35,10 +35,15 @@ class ProgramController < ApplicationController
         end
       } # This should generate an HTML grid
       format.atom # for an Atom feed (for readers)
-      format.js { render :json => @programmeItems.to_json(
-        :except => [:created_at , :updated_at, :lock_version, :format_id, :id],
-        :include => [:published_time_slot, :published_room]
+      format.js { render_json @programmeItems.to_json(
+        :except => [:created_at , :updated_at, :lock_version, :format_id],
+        :methods => [:shortDate, :timeString],
+        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
         ) }
+#      format.js { render :json => @programmeItems.to_json(
+#        :except => [:created_at , :updated_at, :lock_version, :format_id, :id],
+#        :include => [:published_time_slot, :published_room]
+#        ) }
     end
   end
   
@@ -55,7 +60,7 @@ class ProgramController < ApplicationController
     
     respond_to do |format|
       format.html { render :layout => 'content' }
-      format.js { render :json => @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :id, :published_venue_id],
+      format.js { render_json @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :id, :published_venue_id],
                                                  :include => [:published_venue]
         ) }
     end
@@ -69,7 +74,7 @@ class ProgramController < ApplicationController
     
     respond_to do |format|
       format.html { render :layout => 'content' }
-      format.js { render :json => tags.to_json(
+      format.js { render_json tags.to_json(
                                     :except => [:created_at , :updated_at, :lock_version, :id, :count]
         ) }
     end
@@ -80,7 +85,7 @@ class ProgramController < ApplicationController
     
     respond_to do |format|
       format.html { render :layout => 'content' }
-      format.js { render :json => @participants.to_json(
+      format.js { render_json  @participants.to_json(
         ) }
     end
   end

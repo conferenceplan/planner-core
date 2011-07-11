@@ -9,6 +9,23 @@ class ApplicationController < ActionController::Base
   # filter_parameter_logging :password
   filter_parameter_logging :password, :password_confirmation
   helper_method :current_user_session, :current_user
+  
+  protected  
+    def render_json(json, options={})  
+      callback, variable = params[:callback], params[:variable]  
+      response = begin  
+        if callback && variable  
+          "var #{variable} = #{json};\n#{callback}(#{variable});"  
+        elsif variable  
+          "var #{variable} = #{json};"  
+        elsif callback  
+          "#{callback}(#{json});"  
+        else  
+          json  
+        end  
+      end  
+      render({:content_type => :json, :text => response}.merge(options))  
+    end 
 
   private
     def current_user_session

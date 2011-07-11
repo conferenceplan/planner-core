@@ -20,4 +20,12 @@ class PublishedProgrammeItem < ActiveRecord::Base
   has_one :original, :through => :publication,
           :source => :original,
           :source_type => 'ProgrammeItem'
+          
+  def timeString
+    return published_time_slot.start.strftime('%m%d %H:%M')
+  end
+  
+  def shortDate
+    return published_time_slot.start.strftime('%m/%d')
+  end
 end
