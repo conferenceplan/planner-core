@@ -26,6 +26,7 @@ jQuery(document).ready(function(){
 	    params.url = 'room_setups/list/?room_id=' + room_id;
 	    params.editurl = 'room_setups/?room_id=' + room_id;
 		params.pager = "#setups_pager";
+		
 
 		jQuery("#room_setups").jqGrid(params);
 
@@ -53,7 +54,10 @@ jQuery(document).ready(function(){
 	var index = 0;
 	var columns = [];
 	columns[index++] = $.planIt.textSearch(['room', 'name'], 125, 1, "Name:", true);
-	columns[index++] = $.planIt.select(['room', 'venues.name'], 125, 2, "Venue:", true, 'venue/list');
+	
+	var venue = $.planIt.select(['room', 'venue_id'], 125, 2, "Venue:", true, 'venue/list');
+	venue.index ='venues.name';
+	columns[index++] = venue;
 	
 	var setup = $.planIt.textSearch(['room', 'setup_types.name'], 125, 3, "Room Setup:", false);
 	setup.editable = false;
@@ -96,7 +100,7 @@ jQuery(document).ready(function(){
 		return postData.rooms_id;
 	};
 
-    // Set up the pager menu for edit, add, and delete
+    // Set up the pager menu
 
 	var edit = $.planIt.editOptions('rooms', editFetch);
 	var add = $.planIt.addOptions('rooms');
@@ -105,7 +109,5 @@ jQuery(document).ready(function(){
 	var view = $.planIt.viewOptions("Rooms");
 	
     jQuery("#rooms").navGrid('#pager', {}, edit, add, del, search, view);
-    
-//    setupGrid();
-    });
+});
 
