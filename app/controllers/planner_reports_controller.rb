@@ -143,11 +143,8 @@ class PlannerReportsController < PlannerController
       end
     
    end
+ 
    def program_book_report
-     
-   end
-   
-   def do_program_book_report
 
       outfile = "prog_guide_" + Time.now.strftime("%m-%d-%Y") + ".csv"
       output = Array.new
@@ -164,8 +161,9 @@ class PlannerReportsController < PlannerController
 		               "participants",
                    "short title",
                    "reference number",
+                   "venue",
                   ]
-      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, ], :conditions => {"print" => true}, :order => "time_slots.start, people.last_name") 
+      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :format,{:room => [:venue]}], :conditions => {"print" => true}, :order => "programme_items.pub_reference_number,people.last_name") 
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
       invisible = PersonItemRole.find_by_name("Invisible")
@@ -204,7 +202,8 @@ class PlannerReportsController < PlannerController
 	              panel.precis,
                       part_list,
                       panel.short_title,
-                      panel.pub_reference_number
+                      panel.pub_reference_number,
+                      panel.room.venue.name,
                      ]
       end
       
