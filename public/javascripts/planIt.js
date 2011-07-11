@@ -26,6 +26,7 @@
 			) {
 				var result = {};
 				
+				result.height = 'auto';
 				result.url = '/' + baseName + '/list';
 		        result.datatype= 'xml';
 		        result.colNames = colNames;
