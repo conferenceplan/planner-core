@@ -68,6 +68,14 @@ class Person < ActiveRecord::Base
   has_one :available_date, :dependent => :delete
   accepts_nested_attributes_for :available_date
   
+  def bio
+    if edited_bio
+      return edited_bio.bio
+    else
+      return ""
+    end
+  end
+  
   def GetFullNameHelper(first_name,last_name,suffix)
       name = ""
       # set first name if it exists

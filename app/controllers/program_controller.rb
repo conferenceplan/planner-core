@@ -17,11 +17,11 @@ class ProgramController < ApplicationController
     
     if stream
       @programmeItems = PublishedProgrammeItem.tagged_with( stream, :on => 'PrimaryArea', :op => true).all(
-                                                 :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => :pseudonym}, {:published_room => [:published_venue]} ],
+                                                 :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
                                                  :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                                                  :conditions => conditions)
     else
-      @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => :pseudonym}, {:published_room => [:published_venue]} ],
+      @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
                                                  :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                                                  :conditions => conditions)
     end
@@ -39,8 +39,8 @@ class ProgramController < ApplicationController
       format.atom # for an Atom feed (for readers)
       format.js { render_json @programmeItems.to_json(
         :except => [:created_at , :updated_at, :lock_version, :format_id],
-        :methods => [:shortDate, :timeString],
-        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
+        :methods => [:shortDate, :timeString, :bio],
+        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {:include => {:pseudonym => {}}}}
         ) }
 #      format.js { render :json => @programmeItems.to_json(
 #        :except => [:created_at , :updated_at, :lock_version, :format_id, :id],
