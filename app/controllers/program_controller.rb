@@ -26,6 +26,8 @@ class ProgramController < ApplicationController
                                                  :conditions => conditions)
     end
     
+    ActiveRecord::Base.include_root_in_json = false # hack for now
+     
     respond_to do |format|
       format.html { 
         if layout && layout == 'line'
