@@ -1,7 +1,7 @@
-<div class="programme">
-    <table class="programme-grid">
-        <thead class="programme-grid-header">
-            <tr class="programme-grid-header-row">
+<div class="program">
+    <table class="program-grid">
+        <thead class="program-grid-header">
+            <tr class="program-grid-header-row">
             <th class="time-slot">
                 Time
             </th>
@@ -28,8 +28,8 @@
         <% if !previousTime %>
         </tr>
         <%end %>
-        <tr class="programme-grid-row">
-        <td class="programme-grid-empty">
+        <tr class="program-grid-row">
+        <td class="program-grid-empty">
             <%= currentTime.strftime('%A %H:%M') %>
             <% previousTime = currentTime %>
         </td>
@@ -37,13 +37,13 @@
         <% idx = @rooms.index{|x| x.name == item.published_room.name} %>
         <% if idx %>
         <% (currentColumn..idx).each do |i| %>
-        <td>
+        <td class="program-grid-item-empty">
         </td>
         <% end %>
         <% currentColumn = idx + 2 %>
-        <td class="programme-grid-item">
+        <td class="program-grid-item">
             <div class="program-item-title"><%= item.title %></div>
-            <div class="program-item-duration">Duration: <%= item.duration.to_s %> minutes</div>
+            <div class="program-item-duration"><%= item.duration.to_s %> mins</div>
             <div class="program-item-room">(<%= item.published_room.name %>)</div>
             <div class="program-item-participants">
             <% item.people.each do |person| %>
