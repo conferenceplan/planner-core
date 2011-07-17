@@ -39,7 +39,7 @@ class ProgramController < ApplicationController
       format.atom # for an Atom feed (for readers)
       format.js { render_json @programmeItems.to_json(
         :except => [:created_at , :updated_at, :lock_version, :format_id],
-        :methods => [:shortDate, :timeString, :bio],
+        :methods => [:shortDate, :timeString, :bio, :pub_number],
         :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {:include => {:pseudonym => {}}}}
         ) }
 #      format.js { render :json => @programmeItems.to_json(

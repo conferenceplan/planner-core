@@ -20,6 +20,14 @@ class PublishedProgrammeItem < ActiveRecord::Base
   has_one :original, :through => :publication,
           :source => :original,
           :source_type => 'ProgrammeItem'
+
+  def pub_number
+    if pub_reference_number
+      return pub_reference_number
+    else
+      return id.to_s
+    end
+  end
           
   def timeString
     return published_time_slot.start.strftime('%m%d %H:%M')
