@@ -1,4 +1,11 @@
 class ProgramController < ApplicationController
+
+  #
+  # Set up the cache for the published data. This is so we do not need to hit the DB everytime someone request the published programme grid
+  #
+  caches_action :index,
+                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
+  # TODO - put in an observer that clears the cache when a new publish has been done
   
   #
   # Get the full programme
@@ -37,15 +44,14 @@ class ProgramController < ApplicationController
         end
       } # This should generate an HTML grid
       format.atom # for an Atom feed (for readers)
+      # TODO - put in a temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
       format.js { render_json @programmeItems.to_json(
-        :except => [:created_at , :updated_at, :lock_version, :format_id],
-        :methods => [:shortDate, :timeString, :bio, :pub_number],
+        :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+              :last_name, :first_name, :suffix, :pub_reference_number],
+        :methods => [:shortDate, :timeString, :bio, :pub_number, :pubFirstName, :pubLastName, :pubSuffix, :twitterinfo, :website, :facebook],
         :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {:include => {:pseudonym => {}}}}
         ) }
-#      format.js { render :json => @programmeItems.to_json(
-#        :except => [:created_at , :updated_at, :lock_version, :format_id, :id],
-#        :include => [:published_time_slot, :published_room]
-#        ) }
     end
   end
   

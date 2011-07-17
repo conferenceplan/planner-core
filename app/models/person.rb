@@ -75,6 +75,30 @@ class Person < ActiveRecord::Base
       return ""
     end
   end
+
+  def twitterinfo
+    if edited_bio
+      return edited_bio.twitterinfo
+    else
+      return ""
+    end
+  end
+
+  def website
+    if edited_bio
+      return edited_bio.website
+    else
+      return ""
+    end
+  end
+
+  def facebook
+    if edited_bio
+      return edited_bio.facebook
+    else
+      return ""
+    end
+  end
   
   def GetFullNameHelper(first_name,last_name,suffix)
       name = ""
@@ -155,6 +179,24 @@ class Person < ActiveRecord::Base
     else
         return GetFullName()
     end
+  end
+  
+  def pubFirstName
+    return self.pseudonym.first_name if (self.pseudonym != nil) && !(self.pseudonym.first_name.empty? && self.pseudonym.first_name.empty?)
+    
+    return first_name
+  end
+
+  def pubLastName
+    return self.pseudonym.last_name if (self.pseudonym != nil) && !(self.pseudonym.last_name.empty? && self.pseudonym.last_name.empty?)
+    
+    return last_name
+  end
+  
+  def pubSuffix
+    return self.pseudonym.suffix if (self.pseudonym != nil) && !(self.pseudonym.suffix.empty? && self.pseudonym.suffix.empty?)
+    
+    return suffix
   end
   
   def GetSurveyBio
