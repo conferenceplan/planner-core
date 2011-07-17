@@ -16,6 +16,7 @@ xml.people do
             xml.title(i[1])
             xml.description(i[2]) 
             xml.participants(i[3])
+            xml.equipment(i[4])
           end
         end
     end

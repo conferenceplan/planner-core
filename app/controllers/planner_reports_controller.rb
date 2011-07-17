@@ -293,14 +293,15 @@ class PlannerReportsController < PlannerController
     
       @names.each do |name|
          panels = Array.new
-         name.programmeItems.find_each(:include => [:time_slot, :room, :format, ]) do |p|
+         name.programmeItems.find_each(:include => [:time_slot, :room, :format, :equipment_needs ]) do |p|
             allParticipants = ProgrammeItemAssignment.all(:conditions => {:programme_item_id => p.id})
              if p.time_slot.nil?
               next
             end
             panelstr = "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}"
             panelstr << ", #{p.title} (#{p.format.name})"
-            
+            panelstr << ", #{p.room.name} (#{p.room.venue.name})"
+
             partList = []
             skipreserved = false;
             allParticipants.each do |a|             
@@ -309,6 +310,9 @@ class PlannerReportsController < PlannerController
                    skipreserved = true
                    break
                  end
+                 next
+               end
+               if (a.role_id == invisible.id)
                  next
                end
                partName =  a.person.GetFullPublicationName
@@ -332,8 +336,18 @@ class PlannerReportsController < PlannerController
             end
             if (skipreserved == false)
               partstr = partList.join(', ')
-              panels.push [p.time_slot.start, panelstr, p.precis, partstr]
-            end
+              equiplist = []
+              if (p.equipment_needs && p.equipment_needs.size != 0)
+                p.equipment_needs.each do |equip|
+                  equiplist << equip.equipment_type.description
+                end
+              else
+                 equiplist << "None"
+              end
+              equipstr = equiplist.join(', ')
+              equipstr = "Required Equipment: "+ equipstr
+              panels.push [p.time_slot.start, panelstr, p.precis, partstr,equipstr]
+            end                      
          end
          if (panels.size != 0)
            panels.sort! {|a,b| a[0] <=> b[0]}
