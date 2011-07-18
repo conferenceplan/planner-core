@@ -110,9 +110,34 @@ class ProgramController < ApplicationController
   # What is coming up in the next x hours
   #
   def feed
+    
+    start_time = Time.zone.parse(SITE_CONFIG[:conference][:start_date])
+    if Time.now > start_time
+      start_time = Time.now
+    else
+      start_time = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + 9.hours
+    end
+
+    end_time = start_time + 3.hours
+    conditions = ["(published_time_slots.start >= ?) AND (published_time_slots.start <= ?)", start_time, end_time]
+    
+    @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
+                                                 :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
+                                                 :conditions => conditions)
+
+    ActiveRecord::Base.include_root_in_json = false # hack for now
+     
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.atom # for an Atom feed (for readers)
+      # TODO - put in a temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
+      format.js { render_json @programmeItems.to_json(
+        :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+              :last_name, :first_name, :suffix, :pub_reference_number],
+        :methods => [:shortDate, :timeString, :bio, :pub_number, :pubFirstName, :pubLastName, :pubSuffix, :twitterinfo, :website, :facebook],
+        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {:include => {:pseudonym => {}}}}
+        ) }
     end
   end
   
