@@ -93,8 +93,16 @@ class ProgramController < ApplicationController
     
     respond_to do |format|
       format.html { render :layout => 'content' }
-      format.js { render_json  @participants.to_json(
-        ) }
+      format.js { render_json  @participants.to_json() }
+      format.csv {
+           csv_string = FasterCSV.generate do |csv|
+             csv << ['FirstName', 'LastName']
+             @participants.each do |n|
+                csv << [ n[0], n[1]]
+             end
+           end
+           send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present'
+        }
     end
   end
   

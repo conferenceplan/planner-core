@@ -19,95 +19,129 @@
 
 <% changedItems = @resultantChanges[:update] %>
 <% if changedItems %>
+<div class='prog-changes'>
 <h2>Item Time and Room Changes</h2>
 <% changedItems.each do |k, v| %>
-    <%= k.title %></br>
+<div class='prog-change'>
+    <div class='prog-update-title'><%= k.title %></div>
+    <div class='prog-schedule-item-room'><%= k.published_room.published_venue.name %> <%= k.published_room.name %></div>
     <% if v.size > 0 %>
     <% if v[:timeMove]%>
-    Schedule Change: 
-    <%= v[:timeMove][0].getlocal().strftime("%A at %H:%M") %> has changed to
-    <%= v[:timeMove][1].getlocal().strftime("%A at %H:%M") %>
+    <div class='proc-schedule-change'>Schedule Change: 
+        <div class='prog-schedule-change-from'><%= v[:timeMove][0].strftime("%A at %H:%M") %></div>
+        has changed to
+        <div class='prog-schedule-change-to'><%= v[:timeMove][1].strftime("%A at %H:%M") %></div>
+    </div>
     <% else %>
-    <%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %>
+    <div class='prog-schedule-item-time'><%= k.published_time_slot.start.strftime("%A at %H:%M") %></div>
     <% end%>
     <% if v[:roomMove] && v[:roomMove].kind_of?(Array) && v[:roomMove].size > 1 %>
-    The room change: 
-    <%= v[:roomMove][1].name %> to
-    <%= v[:roomMove][0].name %>
+    <div class='prog-room-change'>
+        The room change: 
+        <div class='prog-room-change-from'><%= v[:roomMove][1].name %></div> to
+        <div class='prog-room-change-to'><%= v[:roomMove][0].name %></div>
+    </div>
     <% end%>
     <% end %>
-    <br/>
+</div>
 <% end %>
+</div>
 <% end %>
 
 <% addedItems = @resultantChanges[:new] %>
 <% if addedItems %>
+<div class='prog-changes'>
 <h2>New Items Added to Program</h2>
 <% addedItems.each do |k, v| %>
-    <%= k.title %></br>
-    <%= v[0].getlocal().strftime("%A at %H:%M") %> in <%= k.published_room.published_venue.name %>( <%= k.published_room.name %> ) <br/>
-    <%= k.precis %></br>
-    <br/>
+<div class='prog-change'>
+    <div class='prog-update-title'><%= k.title %></div>
+    <div class='prog-schedule-item-room'><%= k.published_room.published_venue.name %>( <%= k.published_room.name %> )</div>
+    <div class='prog-schedule-item-time'><%= v[0].strftime("%A at %H:%M") %></div>
+    <div class='prog-schedule-item-description'><%= k.precis %></div>
+</div>
 <% end %>
+</div>
 <% end %>
 
 <% droppedItems = @resultantChanges[:removeItem] %>
 <% if droppedItems %>
+<div class='prog-changes'>
 <h2>Dropped Items</h2>
 <% droppedItems.each do |k, v| %>
-    <!-- TODO: Add the program number, also add the venue -->
-    <%= v[:title] %></br>
-    dropped from <%= v[:info][1].getlocal().strftime("%A at %H:%M") %>
-    in <%= v[:info][0].published_venue.name %>( <%= v[:info][0].name %> )<br/>
-    <br/>
+<div class='prog-change'>
+    <div class='prog-update-title'><%= v[:title] %></div>
+    dropped from 
+    <div class='prog-schedule-item-time'><%= v[:info][1].getlocal().strftime("%A at %H:%M") %></div>
+    in 
+    <div class='prog-schedule-item-room'><%= v[:info][0].published_venue.name %>( <%= v[:info][0].name %> )</div>
+</div>
 <% end %>
+</div>
 <% end %>
 
 <% peopleAdded = @resultantChanges[:addPerson] %>
 <% if peopleAdded %>
+<div class='prog-changes'>
 <h2>Program Participants Added to Programme Items</h2>
 <% peopleAdded.each do |k, v| %>
-    <%= k.title %></br>
-    <%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %><br/>
+<div class='prog-change'>
+    <div class='prog-update-title'><%= k.title %></div>
+    <div class='prog-schedule-item-time'><%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %></div>
+    <div class='prog-schedule-participants'>
     <% v.each_index do |idx| %>
         <% if idx % 2 == 0 %>
-        <%= v[idx].GetFullPublicationName %> as <%= v[idx +1].name %> <br/>
+        <div class='prog-schedule-participant'><%= v[idx].GetFullPublicationName %></div>
+        as
+        <div class='prog-schedule-participant-role'><%= v[idx +1].name %></div>
         <% end %>
     <% end %>
-    <br/>
+    </div>
+</div>
 <% end %>
+</div>
 <% end %>
 
 <% peopleRemoved = @resultantChanges[:removePerson] %>
 <% if peopleRemoved %>
+<div class='prog-changes'>
 <h2>Program Participants Dropped from Particular  Programme Items</h2>
 <% peopleRemoved.each do |k, v| %>
-    <%= k.title %></br>
-    <%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %><br/>
+<div class='prog-change'>
+    <div class='prog-update-title'><%= k.title %></div>
+    <div class='prog-schedule-item-time'><%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %></div>
+    <div class='prog-schedule-participants'>
     <% v.each_index do |idx| %>
         <% if idx % 2 == 0 %>
-        <%= v[idx].GetFullPublicationName %><br/>
+        <div class='prog-schedule-participant'><%= v[idx].GetFullPublicationName %></div>
         <% end %>
     <% end %>
-    <br/>
+    </div>
+</div>
 <% end %>
+</div>
 <% end %>
 
 <% updatedItemDetails = @resultantChanges[:updateDetails] %>
 <% if updatedItemDetails %>
+<div class='prog-changes'>
 <h2>Title and Description Changes</h2>
 <% updatedItemDetails.each do |k, v| %>
-    <%= k.title %></br>
+<div class='prog-change'>
+    <div class='prog-update-title'><%= k.title %></div>
+    <div class='prog-schedule-item-time'><%= k.published_time_slot.start.strftime("%A at %H:%M") %></div>
+    <div class='prog-schedule-item-room'><%= k.published_room.published_venue.name %> <%= k.published_room.name %></div>
     <% if v.size > 0 %>
     <% if v.kind_of?(Array) %>
         <% v.each do |change| %>
             <% change.each do |name, vals| %>
-                <%=name %> changed to: 
-                <%= vals[1] %>
+                <div class="prog-update-old-value"><%=name %></div>
+                changed to:
+                <div class="prog-update-new-value"><%= vals[1] %></div>
             <% end %>
         <% end %>
     <% end%>
     <% end %>
-    <br/>
+</div>
 <% end %>
+</div>
 <% end %>
