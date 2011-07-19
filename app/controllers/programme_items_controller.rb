@@ -145,8 +145,8 @@ class ProgrammeItemsController < PlannerController
     ignorePending = params[:igp]
 
     clause = createWhereClause(params[:filters], 
-                  ['format_id'],
-                  ['format_id'])
+                  ['format_id','pub_reference_number'],
+                  ['format_id','pub_reference_number'])
 
     # add the name search of the title
     if nameSearch && ! nameSearch.empty?
@@ -194,7 +194,13 @@ class ProgrammeItemsController < PlannerController
     @nbr_pages += 1 if @count % rows.to_i > 0
     
     offset = (@page.to_i - 1) * rows.to_i
-    args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc, " + idx + " " + order)
+    if (idx != nil && idx != "")
+       args.merge!(:offset => offset, :limit => rows, :order => idx + " " + order)
+    else
+       args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc")
+    end
+      
+
     if tagquery.empty?
       @programmeItems = ProgrammeItem.find :all, args
     else

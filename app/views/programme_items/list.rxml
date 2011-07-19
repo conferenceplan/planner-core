@@ -23,6 +23,11 @@ xml.rows do
         xml.cell('')
         xml.cell('')
       end
+      if (programmeItem.pub_reference_number)
+        xml.cell(programmeItem.pub_reference_number)
+      else
+        xml.cell('')
+      end
     end
   end
 end

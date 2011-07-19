@@ -21,7 +21,7 @@ jQuery(document).ready(function(){
 //                alert(unescape(this.data));
             }
         },
-        colNames: ['Title', 'Format', 'Duration', 'Room', 'Day','Start', 'lock'],
+        colNames: ['Title', 'Format', 'Duration', 'Room', 'Day','Start', 'RefNum','lock'],
         colModel: [{
             name: 'programme_item[title]',
             index: 'title',
@@ -70,7 +70,7 @@ jQuery(document).ready(function(){
         {
             name: 'programme_item[duration]',
             index: 'duration',
-            width: 80,
+            width: 60,
             editable: true,
             editoptions: {
                 size: 20
@@ -134,6 +134,17 @@ jQuery(document).ready(function(){
                 required: false
             }
         }, {
+            name: 'programme_item[pub_reference_number]',
+            index: 'pub_reference_number',
+            width: 60,
+            editable: false,
+            formoptions: {
+                rowpos: 7,
+                label: "Ref Number",
+				elmprefix: "(*)"
+            },
+           
+        },{
             name: 'programme_items[lock_version]',
             width: 3,
             index: 'lock_version',
@@ -142,7 +153,7 @@ jQuery(document).ready(function(){
             sortable: false,
             search: false,
             formoptions: {
-                rowpos: 7,
+                rowpos: 8,
                 label: "lock"
             }
         }],
@@ -153,8 +164,8 @@ jQuery(document).ready(function(){
         height: "100%",
         rowList: [10, 20, 30],
         pager: jQuery('#pager'),
-        sortname: 'title',
-        sortorder: "asc",
+        sortname: '',
+        sortorder: "",
         viewrecords: true,
         imgpath: 'stylesheets/cupertino/images',
         caption: 'ProgrammeItems',
