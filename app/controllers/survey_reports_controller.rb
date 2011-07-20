@@ -86,7 +86,7 @@ class SurveyReportsController < PlannerController
                       n.registrationDetail.nil? ? '--' : n.registrationDetail.registration_type.nil? ? '--': n.registrationDetail.registration_type
                     ]
      end
-     csv_out(output, outfile)
+     csv_out_utf16(output, outfile)
   end
 
 end

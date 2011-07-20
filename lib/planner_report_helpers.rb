@@ -16,6 +16,20 @@ module PlannerReportHelpers
       
    end
 
+   def csv_out_utf16(data, filename)
+      csv_data = FasterCSV.generate do |csv|
+         data.each do |r|
+            csv << r
+         end
+      end
+      c = Iconv.new('UTF-16//IGNORE','UTF-8')
+      send_data c.iconv(csv_data),
+         :type => 'text/csv; charset=utf-16; header=present',
+         :disposition => "attachment; filename=#{filename}"
+      flash[:notice] = "Export complete!"
+      
+   end
+
    def csv_out_noconv(data, filename)
       csv_data = FasterCSV.generate do |csv|
          data.each do |r|

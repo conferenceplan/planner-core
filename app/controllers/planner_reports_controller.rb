@@ -26,9 +26,9 @@ class PlannerReportsController < PlannerController
       end
 
       if params[:sort_by] == 'time'
-         ord_str = "time_slots.start, rooms.name, people.last_name"
+         ord_str = "time_slots.start, venues.name desc, rooms.name, people.last_name"
       elsif params[:sort_by] == 'room'
-         ord_str = "rooms.name, time_slots.start, people.last_name"
+         ord_str = "venues.name desc, rooms.name, time_slots.start, people.last_name"
       else
          ord_str = "programme_items.title, people.last_name"
       end
@@ -58,7 +58,7 @@ class PlannerReportsController < PlannerController
       
       conditions.unshift cond_str
 
-      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :room, :format, :equipment_needs,], :conditions => conditions, :order => ord_str) 
+      @panels = ProgrammeItem.all(:include => [:people, :time_slot, {:room => :venue}, :format, :equipment_needs,], :conditions => conditions, :order => ord_str) 
       
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
@@ -75,7 +75,7 @@ class PlannerReportsController < PlannerController
             if a.role_id == moderator.id
                names.push "#{p.GetFullPublicationName.strip} (M)"
             elsif a.role_id == invisible.id
-               names.push "#{p.GetFullPublicationName.strip} (I)"
+               names.push "#{p.GetFullPublicationName.strip} (I)" if params[:incl_invis]
             elsif a.role_id == reserved.id
                rsvd.push p.GetFullPublicationName.strip if params[:incl_rsvd]
             else
@@ -95,17 +95,22 @@ class PlannerReportsController < PlannerController
                
             part_list = names.join(', ')
             rsvd_list = rsvd.join(', ')
-            output.push [panel.title,
-		         (context.nil?) ? '' : context[0],
-                         (panel.format.nil?) ? '' : panel.format.name,
-                         (panel.room.nil?) ? '' : panel.room.name,
-                         (panel.room.nil?) ? '' : panel.room.venue.name,
-	                 (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
-                         (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
-                         equip,
-                         part_list,
-                         rsvd_list,
-                        ]
+           
+            line = [panel.title,
+		    (context.nil?) ? '' : context[0],
+                    (panel.format.nil?) ? '' : panel.format.name,
+                    (panel.room.nil?) ? '' : panel.room.name,
+                    (panel.room.nil?) ? '' : panel.room.venue.name,
+	            (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
+                    (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
+                   ]
+            line.push panel.precis if (!panel.precis.nil? && params[:incl_desc])
+            line.push equip, part_list
+
+            line.push rsvd_list if params[:incl_rsvd]
+
+            output.push line
+
          else
             panel[:context] = context[0]
             panel[:names] = names
@@ -123,15 +128,17 @@ class PlannerReportsController < PlannerController
                     "Venue",
                     "Day",
                     "Time Slot",
-                    "Equipment Needs",
-                    "Participants",
                    ]
+
+       
+         headers.push "Description" if params[:incl_desc]
+         headers.push "Equipment Needs", "Participants"
 
          headers.push "Reserved" if params[:incl_rsvd]
  
          output.unshift headers
 
-         csv_out(output, outfile)
+         csv_out_utf16(output, outfile)
       else
       # we filtered them out of the CSV while building it, but I don't see a clean way to do it for the HTML except at the end
          if min > 0
@@ -275,7 +282,7 @@ class PlannerReportsController < PlannerController
                          "Venue",
                          "Time"
                         ]
-         csv_out(output, outfile)
+         csv_out_utf16(output, outfile)
       end
   end
   

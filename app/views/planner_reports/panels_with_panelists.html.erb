@@ -3,24 +3,39 @@
 <% form_tag('/planner_reports/panels_with_panelists', :method => 'post') do %>
 <p>
    <%= label_tag :mod_date, "Modified since (YYYY-MM-DD): "%>
-   <%= text_field_tag :mod_date %><br /><br />
+   <%= text_field_tag :mod_date, params[:mod_date] %><br /><br />
+
    <%= label_tag :sort_by, "Sort By: "%>
    <%= select_tag :sort_by, options_for_select([['Date / Time', 'time'], ['Room', 'room'], ['Item Name', 'name']], params[:sort_by]) %><br /><br />
+
    <%= check_box_tag :incl_rsvd, '1', params[:incl_rsvd] %>
    <%= label_tag :incl_rsvd, "Display reserve panelists? "%><br /><br />
+
+   <%= check_box_tag :incl_invis, '1', params[:incl_invis] %>
+   <%= label_tag :incl_invis, "Display invisible panelists? "%><br /><br />
+
    <%= check_box_tag :sched_only, '1', params[:sched_only] %>
    <%= label_tag :sched_only, "Include scheduled panels only? "%><br /><br />
+
+   <%= check_box_tag :incl_desc, '1', params[:incl_desc] %>
+   <%= label_tag :incl_desc, "Include item descriptions? "%><br /><br />
+
    <%= check_box_tag :equip_only, '1', params[:equip_only] %>
    <%= label_tag :equip_only, "Include only panels with equipment needs? " %>
+
    &nbsp;&nbsp;(<%= check_box_tag :plus_setups, '1', params[:plus_setups], :onclick => "if (this.checked) {document.getElementById('equip_only').checked=true}" %>
    <%= label_tag :plus_setups, "Plus RESET items?" %>)<br /><br />
+
    <%= label_tag :type, "Format: "%>
    <%= select_tag :type, options_for_select(((Format.all.map { |type| [type.name, type.id] }).unshift(['All', 0])), params[:type].to_i) %><br /><br />
+
    <%= text_field_tag :min, nil, :value => params[:min] || '', :size => 3 %>
    <%= label_tag :min, "or fewer panelists (leave empty for all panels meeting the other criteria)"%>
+
    <br /><br />
    <%= text_field_tag :max, nil, :value => params[:max] || '', :size => 3 %>
    <%= label_tag :max, "or more panelists (leave empty for all panels meeting the other criteria)"%>
+
    <br /><br />
    <%= submit_tag "Export CSV", :name=>"csv" %>
    <%= submit_tag "View in Browser", :name => "html" %>
@@ -34,6 +49,9 @@
       <dl>
       <% @panels.each do |p| %>
           <dt><h3><%= p.title %> (<%= p.context unless p.context.nil? %>, <%= p.format.name unless p.format.nil? %>)<%= ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%a %H:%M')}" unless p.time_slot.nil? %><%= ", #{p.room.name} (#{Venue.find(p.room.venue_id).name})" unless p.room.nil? %></h3> </dt>
+          <% if params[:incl_desc] && !p.precis.nil? %>
+            <dd> <%= p.precis %> <br /><br /> </dd>
+          <% end %>
           <% unless p[:names].blank? %>
              <dd>Panelists:
                  <ul><% p[:names].each do |n| %>
