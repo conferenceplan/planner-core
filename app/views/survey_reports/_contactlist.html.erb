@@ -8,9 +8,16 @@
    <% contactlist.each do |p| %>
        <li><%= p.GetFullPublicationName %> 
            <ul>
-              <li> <%= p.getDefaultEmail.email %>  </li>
-              <% p.phone_numbers.each do |n| %>
-                 <li> <%= n.number %> (<%= n.phone_type.name %>) </li>
+              <% unless p.getDefaultPostalAddress.nil? %>
+                 <li> <%= p.getDefaultPostalAddress.city %>, <%= p.getDefaultPostalAddress.state %>, <%= p.getDefaultPostalAddress.country %> </li>
+              <% end %>
+              <% unless p.getDefaultEmail.nil? %>
+                 <li> <%= p.getDefaultEmail.email %>  </li>
+              <% end %>
+              <% unless p.phone_numbers.nil? %>
+                 <% p.phone_numbers.each do |n| %>
+                    <li> <%= n.number %> (<%= n.phone_type.name %>) </li>
+                 <% end %>
               <% end %>
             </ul>
        </li>
