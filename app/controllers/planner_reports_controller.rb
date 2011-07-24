@@ -303,17 +303,24 @@ class PlannerReportsController < PlannerController
       invisible = PersonItemRole.find_by_name("Invisible")
 
       invitestatus = InviteStatus.find_by_name("Invited")
-      @names = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ? ',accepted.id,probable.id,invitestatus.id], :order => "people.last_name, programme_items.id") 
-
-      output = Array.new
+      @names = Person.all(:include => [:programmeItems => [:time_slot, :room, :format,:equipment_needs]], :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ? ',accepted.id,probable.id,invitestatus.id], :order => "people.last_name, programme_items.id") 
+      @NoShareEmailers = search_survey_exact('g93q7', '3')
+      @shareEmail ={}
       
+      @NoShareEmailers.each do |p|
+        @shareEmail[p.id] = true
+      end
+      
+      output = Array.new
       @names.each do |name|
          panels = Array.new
-         name.programmeItems.find_each(:include => [:time_slot, :room, :format, :equipment_needs ]) do |p|
-            allParticipants = ProgrammeItemAssignment.all(:conditions => {:programme_item_id => p.id})
-             if p.time_slot.nil?
+         
+         name.programmeItems.each do |p|
+            if p.time_slot.nil?
               next
             end
+            allParticipants = ProgrammeItemAssignment.all(:conditions => {:programme_item_id => p.id},:include => [:person => [:addresses, :pseudonym]])
+      
             panelstr = "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}"
             panelstr << ", #{p.title} (#{p.format.name})"
             panelstr << ", #{p.room.name} (#{p.room.venue.name})"
@@ -332,20 +339,18 @@ class PlannerReportsController < PlannerController
                  next
                end
                partName =  a.person.GetFullPublicationName
-              
-               surveyList = a.person.GetSurveyQuestionResponse('g93q7')
-               
+                             
                if a.role_id == moderator.id
                  partName = partName + "(M)"
                end
                
                if (a.role_id != invisible.id)
-               if (a.person.GetShareEmail() == true)
-                 defaultEmail = a.person.getDefaultEmail
-                 if (defaultEmail != nil)
-                   partName = partName + "(" + defaultEmail.email + ")"
+                 if (@shareEmail.has_key?(a.person_id) == false)
+                   defaultEmail = a.person.getDefaultEmail
+                   if (defaultEmail != nil)
+                     partName = partName + "(" + defaultEmail.email + ")"
+                   end
                  end
-               end
                end
                
                partList.push partName
@@ -439,7 +444,7 @@ class PlannerReportsController < PlannerController
            personList << name.GetFullPublicationName;
            personList << panels.size()
            1.upto(maxItems) do |number|
-            if (number <= panels.size())
+            if (numb  er <= panels.size())
               personList << panels[number-1];
             else
               personList << "";
