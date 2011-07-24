@@ -3,8 +3,8 @@ class ProgramController < ApplicationController
   #
   # Set up the cache for the published data. This is so we do not need to hit the DB everytime someone request the published programme grid
   #
-  caches_action :index,
-                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
+#  caches_action :index,
+#                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
   # TODO - put in an observer that clears the cache when a new publish has been done
   
   #
@@ -45,13 +45,18 @@ class ProgramController < ApplicationController
       } # This should generate an HTML grid
       format.atom # for an Atom feed (for readers)
       # TODO - put in a temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
-      format.js { render_json @programmeItems.to_json(
+      format.js { 
+#        send_file 'progtest.json', :type=>"text/json", :x_sendfile=>true
+        render_json @programmeItems.to_json(
         :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
               :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
-              :last_name, :first_name, :suffix, :pub_reference_number],
-        :methods => [:shortDate, :timeString, :bio, :pub_number, :pubFirstName, :pubLastName, :pubSuffix, :twitterinfo, :website, :facebook],
-        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {:include => {:pseudonym => {}}}}
-        ) }
+              :last_name, :first_name, :suffix, :pub_reference_number, :end, :duration, :short_title, :published_venue_id,
+              ],
+        :methods => [:shortDate, :timeString, :pub_number, :pubFirstName, :pubLastName, :pubSuffix], #:bio, :twitterinfo, :website, :facebook
+        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
+        ) 
+        #, :people => {} :include => {:pseudonym => {}}
+        }
     end
   end
   
@@ -89,12 +94,19 @@ class ProgramController < ApplicationController
   end
   
   def participants
-    @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
-    
     respond_to do |format|
       format.html { render :layout => 'content' }
-      format.js { render_json  @participants.to_json() }
+      format.js { 
+          @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
+          jsonstr = ''
+          @participants.each do |p|
+            jsonstr += '[' + p[0] + ',"' + p[1] + '","' + p[2] + '",' + p[3] + ']'
+          end  
+          render_json  jsonstr
+#          @participants.to_json() 
+        }
       format.csv {
+          @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
            csv_string = FasterCSV.generate do |csv|
              csv << ['FirstName', 'LastName']
              @participants.each do |n|
@@ -104,7 +116,7 @@ class ProgramController < ApplicationController
            send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present'
         }
     end
-  end
+  end  
   
   #
   # What is coming up in the next x hours
@@ -143,8 +155,6 @@ class ProgramController < ApplicationController
   
   #
   # Report back on what has changed. This is used to generate the pink sheets.
-  #
-  # TODO - would be a good idea to find a mechanism to cache this so as to minimise queries
   #
   # Item time and room changes
   # New Items
@@ -384,8 +394,29 @@ class ProgramController < ApplicationController
     
     return conditions
   end
-  
+
+#
+# NOTE: the GROUP_CONCAT is a MySQL specific function. If you want to use this on another DB then the query needs to be altered
+#  
 PARTICIPANT_QUERY = <<"EOS"
+  select distinct
+  people.id,
+  case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
+  case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name,
+  CONCAT('[',GROUP_CONCAT('[', published_room_item_assignments.day, ' , ', published_programme_items.id, ']' SEPARATOR ','), ']' )
+  from people
+  join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
+  left join pseudonyms ON pseudonyms.person_id = people.id
+  join published_programme_items on published_programme_items.id = published_programme_item_assignments.published_programme_item_id
+  join published_room_item_assignments on published_room_item_assignments.published_programme_item_id = published_programme_items.id
+  GROUP BY people.id
+  ORDER BY people.last_name, published_room_item_assignments.day;
+EOS
+
+#
+# Use this for plain CSV with no programme information
+#
+PARTICIPANT_QUERY_PLAIN = <<"EOS"
   select distinct 
   case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
   case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name

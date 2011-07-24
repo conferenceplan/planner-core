@@ -11,28 +11,24 @@ atom_feed do |feed|
     changedItems.each do |k, v|
       title = k.title
       
-      content = "<div class='prog-change'>"
-      content += "<div class='prog-schedule-item-room'>#{k.published_room.published_venue.name} #{k.published_room.name}</div>"
+      content = "#{k.published_room.published_venue.name} #{k.published_room.name} "
       if v.size > 0
         if v[:timeMove]
-          content += "<div class='proc-schedule-change'>Schedule Change: "
-          t = v[:timeMove][0].strftime("%A at %H:%M")
-          content += "<div class='prog-schedule-change-from'>#{t}</div> has changed to "
-          t = v[:timeMove][1].strftime("%A at %H:%M")
-          content += "<div class='prog-schedule-change-to'>#{t}</div></div>"
+          t1 = v[:timeMove][0].strftime("%A at %H:%M")
+          t2 = v[:timeMove][1].strftime("%A at %H:%M")
+          content += "Schedule Change: #{t1} has changed to #{t2}.<br/>"
         else
           t = k.published_time_slot.start.strftime("%A at %H:%M")
-          content += "<div class='prog-schedule-item-time'>#{t}</div>"
+          content += " at #{t}<br/>"
         end
         if v[:roomMove] && v[:roomMove].kind_of?(Array) && v[:roomMove].size > 1
-          content += "<div class='prog-room-change'>The room change: "
-          r = v[:roomMove][1].name
-          content += "<div class='prog-room-change-from'>#{r}</div>"
-          r = v[:roomMove][0].name
-          content += "<div class='prog-room-change-to'>#{r}</div></div>"
+          r1 = v[:roomMove][1].name
+          r2 = v[:roomMove][0].name
+          content += "The room has changed: "
+          content += "from #{r1} to #{r2}"
         end
       end
-      content += "</div>"
+
       feed.entry(title, :url => '/') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
@@ -46,15 +42,12 @@ atom_feed do |feed|
     #<h2>New Items Added to Program</h2>
     addedItems.each do |k, v|
       title = k.title
-      content = "<div class='prog-change'>"
       venue = k.published_room.published_venue.name
       r = k.published_room.name
-      content += "<div class='prog-schedule-item-room'>#{venue}( #{r} )</div>"
       t = v[0].strftime("%A at %H:%M")
-      content += "<div class='prog-schedule-item-time'>#{t}</div>"
       precis = k.precis
-      content += "<div class='prog-schedule-item-description'>#{precis}</div>"
-      content += "</div>"
+      content = "Has been added to the progam, #{t} in #{venue}( #{r} )<br/><br/>#{precis}"
+
       feed.entry(title, :url => '/') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
@@ -65,17 +58,13 @@ atom_feed do |feed|
   
   droppedItems = @resultantChanges[:removeItem]
   if droppedItems
-    #<h2>Dropped Items</h2>
     droppedItems.each do |k, v|
       title = v[:title]
-      content = "<div class='prog-change'>"
-      content += "dropped from "
       t = v[:info][1].getlocal().strftime("%A at %H:%M")
-      content += "<div class='prog-schedule-item-time'>#{t}</div> in "
       venue = v[:info][0].published_venue.name
       room = v[:info][0].name
-      content += "<div class='prog-schedule-item-room'>#{venue}( #{room} )</div>"
-      content += "</div>"
+      content = "Has been dropped. From #{venue}( #{room} ) at #{t}."
+
       feed.entry(title, :url => '/') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
@@ -86,23 +75,18 @@ atom_feed do |feed|
   
   peopleAdded = @resultantChanges[:addPerson]
   if peopleAdded
-    #<h2>Program Participants Added to Programme Items</h2>
     peopleAdded.each do |k, v|
-      content = "<div class='prog-change'>"
       title = k.title
       t = k.published_time_slot.start.getlocal().strftime("%A at %H:%M")
-      content += "<div class='prog-schedule-item-time'>#{t}</div>"
-      content += "<div class='prog-schedule-participants'>"
+      content = "#{t}. Program Participants have been added: <br/>"
       v.each_index do |idx|
         if idx % 2 == 0
           n = v[idx].GetFullPublicationName
-          content += "<div class='prog-schedule-participant'>#{n}</div> as "
           r = v[idx +1].name
-          content += "<div class='prog-schedule-participant-role'>#{r}</div>"
+          content += "<b>#{n}</b> as a <em>#{r}</em><br/>"
         end
       end
-      content += "</div>"
-      content += "</div>"
+
       feed.entry(title, :url => '/') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
@@ -113,21 +97,17 @@ atom_feed do |feed|
   
   peopleRemoved = @resultantChanges[:removePerson]
   if peopleRemoved
-    #<h2>Program Participants Dropped from Particular  Programme Items</h2>
     peopleRemoved.each do |k, v|
       title = k.title
-      content = "<div class='prog-change'>"
       t = k.published_time_slot.start.getlocal().strftime("%A at %H:%M")
-      content += "<div class='prog-schedule-item-time'>#{t}</div>"
-      content += "<div class='prog-schedule-participants'>"
+      content = "#{t}. The following Program Participants have been dropped:<br/>"
       v.each_index do |idx|
         if idx % 2 == 0
           n = v[idx].GetFullPublicationName
-          content += "<div class='prog-schedule-participant'>#{n}</div>"
+          content += "#{n}<br/>"
         end
       end
-      content += "</div>"
-      content += "</div>"
+
       feed.entry(title, :url => '/') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
@@ -136,28 +116,25 @@ atom_feed do |feed|
     end
   end
   
+  
   updatedItemDetails = @resultantChanges[:updateDetails]
   if updatedItemDetails
-    #<h2>Title and Description Changes</h2>
     updatedItemDetails.each do |k, v|
-      content = "<div class='prog-change'>"
       title = k.title
       t = k.published_time_slot.start.strftime("%A at %H:%M")
-      content += "<div class='prog-schedule-item-time'>#{t}</div>"
       venue = k.published_room.published_venue.name
       room = k.published_room.name
-      content += "<div class='prog-schedule-item-room'>#{venue}( #{room} )</div>"
+      content = "#{t} in #{venue}( #{room} ) has been updated <br/>"
       if v.size > 0
         if v.kind_of?(Array)
           v.each do |change|
             change.each do |name, vals|
-              content += "<div class='prog-update-old-value'>#{name}</div> changed to:"
-              content += "<div class='prog-update-new-value'>#{vals[1]}</div>"
+              content += "#{name} has been changed to: \"#{vals[1]}\" <br/>"
             end
           end
         end
       end
-      content += "</div>"
+
       feed.entry(title, :url => '/') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
