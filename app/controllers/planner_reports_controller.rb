@@ -138,7 +138,7 @@ class PlannerReportsController < PlannerController
  
          output.unshift headers
 
-         csv_out_utf16(output, outfile)
+         csv_out(output, outfile)
       else
       # we filtered them out of the CSV while building it, but I don't see a clean way to do it for the HTML except at the end
          if min > 0
@@ -286,6 +286,15 @@ class PlannerReportsController < PlannerController
       end
   end
   
+  def selectBadgeLabel
+      accepted = AcceptanceStatus.find_by_name("Accepted")
+      probable = AcceptanceStatus.find_by_name("Probable")
+      invitestatus = InviteStatus.find_by_name("Invited")
+
+      @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
+      
+  end
+  
   def schedule_report
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
@@ -297,7 +306,7 @@ class PlannerReportsController < PlannerController
       @names = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ? ',accepted.id,probable.id,invitestatus.id], :order => "people.last_name, programme_items.id") 
 
       output = Array.new
-    
+      
       @names.each do |name|
          panels = Array.new
          name.programmeItems.find_each(:include => [:time_slot, :room, :format, :equipment_needs ]) do |p|
@@ -365,7 +374,88 @@ class PlannerReportsController < PlannerController
          format.xml 
       end
    end
+   
+   def BackOfBadge
+      accepted = AcceptanceStatus.find_by_name("Accepted")
+      probable = AcceptanceStatus.find_by_name("Probable")
+      reserved = PersonItemRole.find_by_name("Reserved")
+      moderator = PersonItemRole.find_by_name("Moderator")
+      invisible = PersonItemRole.find_by_name("Invisible")
+      peopleList = nil
+      if (params[:backofbadge] != nil)
+       peopleList = params[:backofbadge][:person_id]
+      end
 
+      maxquery = "select MAX(x) from (select Count(*) as x from programme_item_assignments group by person_id) l;"
+      maxList = ActiveRecord::Base.connection.select_rows(maxquery)
+      maxItems = maxList[0][0].to_i;
+      @people = nil
+      selectConditions = '(acceptance_status_id = '+ accepted.id.to_s + ' OR acceptance_status_id = ' + probable.id.to_s + ')'
+      if (peopleList != nil && peopleList.size() != 0)
+            addOr = "AND ("
+        peopleList.each do |p|
+          selectConditions = selectConditions + addOr + 'people.id ='+ p
+          addOr = " OR "
+        end
+        selectConditions = selectConditions + ")"
+      end
+      @names = Person.all(:include => [:programmeItems => [:time_slot, :room, :format]], :conditions => selectConditions, :order => "people.last_name,people.first_name, time_slots.start") 
+
+      output = Array.new
+      headerList = Array.new
+      headerList << "Name"
+      headerList << "Number Of Panels"
+      1.upto(maxItems) do |number|
+        headerValue = "Panel"+number.to_s
+        headerList << headerValue
+      end
+      output.push headerList 
+
+      @names.each do |name|
+         panels = Array.new
+         items = name.programmeItems;
+         items.each do |p|
+            a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
+            next if p.time_slot.nil?
+            panelstr = "#{p.time_slot.start.strftime('%a %H:%M')} "
+            panelstr << ": #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
+            if (p.short_title.nil? == false && p.short_title != '')
+             panelstr << " #{p.short_title}"
+            else
+             panelstr << " #{p.title}"
+            end
+            if a.role_id == moderator.id
+               panelstr << " (M)"
+            elsif a.role_id == invisible.id
+              panelstr << " (I)"
+            end
+            if a.role_id == reserved.id
+                next
+            end
+            panels << panelstr
+         end
+         if (panels.size() != 0)
+           personList = Array.new
+           personList << name.GetFullPublicationName;
+           personList << panels.size()
+           1.upto(maxItems) do |number|
+            if (number <= panels.size())
+              personList << panels[number-1];
+            else
+              personList << "";
+            end
+           end
+           output.push personList 
+         end
+                           
+      end
+      outfile = "badge_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+
+      csv_out_utf16(output, outfile)
+      
+  end
+  
+  
    def admin_tags_by_context
       if params[:tag_context]
          context = params[:tag_context]
