@@ -44,9 +44,6 @@ class Person < ActiveRecord::Base
   has_many  :programmeItemAssignments
   has_many  :programmeItems, :through => :programmeItemAssignments
 
-#  has_many  :published_programme_item_assignments
-#  has_many  :published_programme_items, :through => :published_programme_item_assignments
-
   has_one   :registrationDetail, :dependent => :delete
   has_one   :survey_respondent
   has_enumerated :invitestatus, :class_name => 'InviteStatus'

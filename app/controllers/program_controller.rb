@@ -100,10 +100,9 @@ class ProgramController < ApplicationController
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
           jsonstr = ''
           @participants.each do |p|
-            jsonstr += '[' + p[0] + ',"' + p[1] + '","' + p[2] + '",' + p[3] + ']'
+            jsonstr += '[' + p[0] + ',"' + p[1] + '","' + p[2] + '","' + p[3] +  '","' + p[4] +  '","' + p[5] +  '","' + p[6] + '","items":'+ p[7] + ']'
           end  
           render_json  jsonstr
-#          @participants.to_json() 
         }
       format.csv {
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
@@ -403,12 +402,17 @@ PARTICIPANT_QUERY = <<"EOS"
   people.id,
   case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
   case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name,
+  IFNULL(edited_bios.bio,''),
+  IFNULL(edited_bios.website,''),
+  IFNULL(edited_bios.twitterinfo,''),
+  IFNULL(edited_bios.facebook,''),
   CONCAT('[',GROUP_CONCAT('[', published_room_item_assignments.day, ' , ', published_programme_items.id, ']' SEPARATOR ','), ']' )
   from people
   join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
   left join pseudonyms ON pseudonyms.person_id = people.id
   join published_programme_items on published_programme_items.id = published_programme_item_assignments.published_programme_item_id
   join published_room_item_assignments on published_room_item_assignments.published_programme_item_id = published_programme_items.id
+  join edited_bios on edited_bios.person_id = people.id
   GROUP BY people.id
   ORDER BY people.last_name, published_room_item_assignments.day;
 EOS
