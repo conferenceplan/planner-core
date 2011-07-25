@@ -92,7 +92,7 @@ class ProgramController < ApplicationController
         ) }
     end
   end
-  
+
   def participants
     respond_to do |format|
       format.html { render :layout => 'content' }
@@ -100,8 +100,15 @@ class ProgramController < ApplicationController
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
           jsonstr = ''
           @participants.each do |p|
-            jsonstr += '[' + p[0] + ',"' + p[1] + '","' + p[2] + '","' + p[3] +  '","' + p[4] +  '","' + p[5] +  '","' + p[6] + '","items":'+ p[7] + ']'
-          end  
+            if jsonstr.length > 0
+              jsonstr += ','
+            end
+            jsonstr += '{"id":"' + p[0] + '","first_name":' + p[1].to_json + ',"last_name":' + p[2].to_json 
+            jsonstr += ',"bio":' + p[3].to_json 
+            jsonstr += ',"website":' + p[4].to_json +  ',"twitterinfo":' 
+            jsonstr += p[5].to_json +  ',"facebook":' + p[6].to_json + '}'
+          end
+          jsonstr = '[' + jsonstr + ']'
           render_json  jsonstr
         }
       format.csv {
@@ -395,26 +402,21 @@ class ProgramController < ApplicationController
   end
 
 #
-# NOTE: the GROUP_CONCAT is a MySQL specific function. If you want to use this on another DB then the query needs to be altered
-#  
 PARTICIPANT_QUERY = <<"EOS"
   select distinct
   people.id,
   case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
   case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name,
-  IFNULL(edited_bios.bio,''),
+  IFNULL(edited_bios.bio, ''),
   IFNULL(edited_bios.website,''),
   IFNULL(edited_bios.twitterinfo,''),
-  IFNULL(edited_bios.facebook,''),
-  CONCAT('[',GROUP_CONCAT('[', published_room_item_assignments.day, ' , ', published_programme_items.id, ']' SEPARATOR ','), ']' )
+  IFNULL(edited_bios.facebook,'')
   from people
-  join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
   left join pseudonyms ON pseudonyms.person_id = people.id
-  join published_programme_items on published_programme_items.id = published_programme_item_assignments.published_programme_item_id
-  join published_room_item_assignments on published_room_item_assignments.published_programme_item_id = published_programme_items.id
   join edited_bios on edited_bios.person_id = people.id
+  join published_programme_item_assignments where published_programme_item_assignments.person_id = people.id
   GROUP BY people.id
-  ORDER BY people.last_name, published_room_item_assignments.day;
+  ORDER BY people.last_name;
 EOS
 
 #
