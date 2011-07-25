@@ -282,7 +282,10 @@ class PlannerReportsController < PlannerController
                          "Venue",
                          "Time"
                         ]
-         csv_out_utf16(output, outfile)
+                        # TODO: need to figure out how to handle utf16. Chnage this report
+#to utf16 after publication deadline
+#         csv_out_utf16(output, outfile)
+          csv_out(output,outfile)
       end
   end
   
