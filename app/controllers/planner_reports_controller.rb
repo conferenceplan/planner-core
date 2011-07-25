@@ -294,8 +294,23 @@ class PlannerReportsController < PlannerController
       @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
       
   end
-  
+  def selectScheduleReport
+    
+      accepted = AcceptanceStatus.find_by_name("Accepted")
+      probable = AcceptanceStatus.find_by_name("Probable")
+      invitestatus = InviteStatus.find_by_name("Invited")
+
+      @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
+      
+  end
   def schedule_report
+      peopleList = nil
+      categoryList = nil
+      if (params[:schedule] != nil)
+       peopleList = params[:schedule][:person_id]
+       categoryList = params[:schedule][:invitation_category_id]
+     end
+     
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
       reserved = PersonItemRole.find_by_name("Reserved")
@@ -303,7 +318,25 @@ class PlannerReportsController < PlannerController
       invisible = PersonItemRole.find_by_name("Invisible")
 
       invitestatus = InviteStatus.find_by_name("Invited")
-      @names = Person.all(:include => [:programmeItems => [:time_slot, :room, :format,:equipment_needs]], :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ? ',accepted.id,probable.id,invitestatus.id], :order => "people.last_name, programme_items.id") 
+      
+      selectConditions = '(acceptance_status_id = '+ accepted.id.to_s + ' OR acceptance_status_id = ' + probable.id.to_s + ')'
+      if (peopleList != nil && peopleList.size() != 0)
+            addOr = "AND ("
+        peopleList.each do |p|
+          selectConditions = selectConditions + addOr + 'people.id ='+ p
+          addOr = " OR "
+        end
+        selectConditions = selectConditions + ")"
+      end
+       if (categoryList != nil && categoryList.size() != 0)
+            addOr = "AND ("
+        categoryList.each do |p|
+          selectConditions = selectConditions + addOr + 'people.invitation_category_id ='+ p
+          addOr = " OR "
+        end
+        selectConditions = selectConditions + ")"
+      end
+      @names = Person.all(:include => [:programmeItems => [:time_slot, :room, :format,:equipment_needs]], :conditions => selectConditions, :order => "people.last_name, programme_items.id") 
       @NoShareEmailers = search_survey_exact('g93q7', '3')
       @shareEmail ={}
       
@@ -344,7 +377,7 @@ class PlannerReportsController < PlannerController
                  partName = partName + "(M)"
                end
                
-               if (a.role_id != invisible.id)
+               if (a.role_id != invisible.id && params[:incl_email])
                  if (@shareEmail.has_key?(a.person_id) == false)
                    defaultEmail = a.person.getDefaultEmail
                    if (defaultEmail != nil)
@@ -444,7 +477,7 @@ class PlannerReportsController < PlannerController
            personList << name.GetFullPublicationName;
            personList << panels.size()
            1.upto(maxItems) do |number|
-            if (numb  er <= panels.size())
+            if (number <= panels.size())
               personList << panels[number-1];
             else
               personList << "";
