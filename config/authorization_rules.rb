@@ -29,6 +29,7 @@ authorization do
     has_permission_on :available_dates, :to => [:read]
     has_permission_on :equipment_types, :to => :read
     has_permission_on :equipment_needs, :to => :read
+    has_permission_on :publisher, :to => :review
   end
 
   role :TagAdmin do
@@ -113,6 +114,7 @@ authorization do
 end
 
 privileges do
+    privilege :review, :includes => [:review]
     privilege :report, :includes => [:library_talks,:missing_bio,:moderators,:art_night,:music_night,:program_types,:free_text,:tags_by_context,:available_during,:panels_with_panelists,:panelists_with_panels,:admin_tags_by_context,:panels_date_form,:panelists_with_metadata,:interviewable]
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
         :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl]
