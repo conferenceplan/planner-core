@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xml:lang="en-US" xmlns="http://www.w3.org/2005/Atom">
+  <id>tag:localhost,2005:/program/updates</id>
+  <link type="text/html" rel="alternate" href="http://localhost:3000"/>
+  <link type="application/atom+xml" rel="self" href="http://localhost:3000/program/updates.atom"/>
+  <title>Renovation Program Updates</title>
+  <updated>2011-07-20T19:00:35-07:00</updated>
+  <entry>
+    <id>tag:localhost,2005:String/2301911380</id>
+    <link type="text/html" rel="alternate" href="/"/>
+    <title>Welcome to Reno 2</title>
+    <content type="html">Wednesday at 15:00. The following Program Participants have been dropped:&lt;br/&gt;John Joseph Adams &lt;br/&gt;</content>
+    <updated>2011-07-21T02:00:35-0500</updated>
+  </entry>
+
+</feed>

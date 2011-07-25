@@ -15,6 +15,7 @@ class ProgramController < ApplicationController
   def index
     stream = params[:stream]
     layout = params[:layout]
+    day = params[:day]
     conditions = getConditions(params)
     
     @rooms = PublishedRoom.all(:select => 'distinct published_rooms.name',
@@ -46,16 +47,22 @@ class ProgramController < ApplicationController
       format.atom # for an Atom feed (for readers)
       # TODO - put in a temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
       format.js { 
+        file = File.open("public/program-"+day.to_s+".js", "rb")
+        fileStr = file.read
+        if params[:callback]
+          render :inline => params[:callback] + "(" + fileStr + ")"
+        else  
+          render :inline => fileStr
+      end
 #        send_file 'progtest.json', :type=>"text/json", :x_sendfile=>true
-        render_json @programmeItems.to_json(
-        :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
-              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
-              :last_name, :first_name, :suffix, :pub_reference_number, :end, :duration, :short_title, :published_venue_id,
-              ],
-        :methods => [:shortDate, :timeString, :pub_number, :pubFirstName, :pubLastName, :pubSuffix], #:bio, :twitterinfo, :website, :facebook
-        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
-        ) 
-        #, :people => {} :include => {:pseudonym => {}}
+#        render_json @programmeItems.to_json(
+#        :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+#              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+#              :last_name, :first_name, :suffix, :pub_reference_number, :end, :duration, :short_title, :published_venue_id,
+#              ],
+#        :methods => [:shortDate, :timeString, :pub_number, :pubFirstName, :pubLastName, :pubSuffix], #:bio, :twitterinfo, :website, :facebook
+#        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
+#        ) 
         }
     end
   end
@@ -97,19 +104,26 @@ class ProgramController < ApplicationController
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.js { 
-          @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
-          jsonstr = ''
-          @participants.each do |p|
-            if jsonstr.length > 0
-              jsonstr += ','
-            end
-            jsonstr += '{"id":"' + p[0] + '","first_name":' + p[1].to_json + ',"last_name":' + p[2].to_json 
-            jsonstr += ',"bio":' + p[3].to_json 
-            jsonstr += ',"website":' + p[4].to_json +  ',"twitterinfo":' 
-            jsonstr += p[5].to_json +  ',"facebook":' + p[6].to_json + '}'
-          end
-          jsonstr = '[' + jsonstr + ']'
-          render_json  jsonstr
+        file = File.open("public/participants.js", "rb")
+        fileStr = file.read
+        if params[:callback]
+          render :inline => params[:callback] + "(" + fileStr + ")"
+        else  
+          render :inline => fileStr
+        end
+#          @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
+#          jsonstr = ''
+#          @participants.each do |p|
+#            if jsonstr.length > 0
+#              jsonstr += ','
+#            end
+#            jsonstr += '{"id":"' + p[0] + '","first_name":' + p[1].to_json + ',"last_name":' + p[2].to_json 
+#            jsonstr += ',"bio":' + p[3].to_json 
+#            jsonstr += ',"website":' + p[4].to_json +  ',"twitterinfo":' 
+#            jsonstr += p[5].to_json +  ',"facebook":' + p[6].to_json + '}'
+#          end
+#          jsonstr = '[' + jsonstr + ']'
+#          render_json  jsonstr
         }
       format.csv {
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
@@ -149,13 +163,22 @@ class ProgramController < ApplicationController
       format.html { render :layout => 'content' }
       format.atom # for an Atom feed (for readers)
       # TODO - put in a temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
-      format.js { render_json @programmeItems.to_json(
-        :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
-              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
-              :last_name, :first_name, :suffix, :pub_reference_number],
-        :methods => [:shortDate, :timeString, :bio, :pub_number, :pubFirstName, :pubLastName, :pubSuffix, :twitterinfo, :website, :facebook],
-        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {:include => {:pseudonym => {}}}}
-        ) }
+      format.js { 
+        file = File.open("public/feed.js", "rb")
+        fileStr = file.read
+        if params[:callback]
+          render :inline => params[:callback] + "(" + fileStr + ")"
+        else  
+          render :inline => fileStr
+        end
+#        render_json @programmeItems.to_json(
+#        :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+#              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+#              :last_name, :first_name, :suffix, :pub_reference_number],
+#        :methods => [:shortDate, :timeString, :bio, :pub_number, :pubFirstName, :pubLastName, :pubSuffix, :twitterinfo, :website, :facebook],
+#        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {:include => {:pseudonym => {}}}}
+#        ) 
+        }
     end
   end
   
@@ -231,7 +254,7 @@ class ProgramController < ApplicationController
     
     respond_to do |format|
       format.html { render :layout => 'content' }
-      format.atom # for an Atom feed (for readers)
+      format.atom { send_file 'public/updates', :type => 'application/atom+xml', :x_sendfile => true } # for an Atom feed (for readers)
     end
   end
   
