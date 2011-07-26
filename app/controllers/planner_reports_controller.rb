@@ -306,6 +306,23 @@ class PlannerReportsController < PlannerController
       @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
       
   end
+
+  #
+  # This is a sample to do the same as the query report in less time...
+  #
+  def schedule_report_opt
+    @people = Person.all(
+        :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))',
+          [PersonItemRole['Reserved'].id,PersonItemRole['Moderator'].id,PersonItemRole['Invisible'].id],
+          [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
+        :include => [:programmeItemAssignments, {:programmeItems => [{:people => :pseudonym}, :equipment_types]} ]
+      )
+    
+    respond_to do |format|
+      format.xml 
+    end
+  end
+  
   def schedule_report
       peopleList = nil
       categoryList = nil
@@ -355,7 +372,7 @@ class PlannerReportsController < PlannerController
             if p.time_slot.nil?
               next
             end
-            allParticipants = ProgrammeItemAssignment.all(:conditions => {:programme_item_id => p.id},:include => [:person => [:addresses, :pseudonym]])
+            allParticipants = ProgrammeItemAssignment.all(:conditions => {:programme_item_id => p.id},:include => [:person => [:email_addresses, :pseudonym]])
       
             panelstr = "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}"
             panelstr << ", #{p.title} (#{p.format.name})"

@@ -1,0 +1,25 @@
+xml.people do
+  @people.each do |p|
+    xml.person do
+      xml.name(p.GetFullName())
+      xml.items do
+        p.programmeItems.each do |itm|
+          xml.item do
+            xml.title(itm.title)
+            xml.description(itm.precis)
+            xml.participants do
+              itm.people.each do |part|
+                xml.participant(part.GetFullName())
+              end
+            end
+            xml.equipment do
+              itm.equipment_types.each do |equip|
+                xml.piece(equip.description)
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+end
