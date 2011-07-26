@@ -17,6 +17,9 @@ xml.people do
               end
             end
             xml.equipment do
+              if itm.equipment_types.size == 0
+                xml.piece("No Equipment Needed")
+              end
               itm.equipment_types.each do |equip|
                 xml.piece(equip.description)
               end

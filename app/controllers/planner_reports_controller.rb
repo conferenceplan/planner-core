@@ -316,10 +316,8 @@ class PlannerReportsController < PlannerController
           [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id],
           [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
         :include => [{:programmeItems => [{:programme_item_assignments => {:person => :pseudonym}}, :equipment_types]} ],
-        #{:people => :pseudonym}, 
         :order => "people.last_name asc"
       )  
-          #[PersonItemRole['Reserved'].id,PersonItemRole['Moderator'].id,PersonItemRole['Invisible'].id],
     
     respond_to do |format|
       format.xml 
