@@ -9,7 +9,11 @@ xml.people do
             xml.description(itm.precis)
             xml.participants do
               itm.programme_item_assignments.each do |asg| #.people.each do |part|
-                xml.participant(asg.person.GetFullName())
+                if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
+                  name = asg.person.GetFullName()
+                  name += " (M)" if asg.role == PersonItemRole['Moderator']
+                  xml.participant(name)
+                end
               end
             end
             xml.equipment do
