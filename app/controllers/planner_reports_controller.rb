@@ -313,10 +313,13 @@ class PlannerReportsController < PlannerController
   def schedule_report_opt
     @people = Person.all(
         :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))',
-          [PersonItemRole['Reserved'].id,PersonItemRole['Moderator'].id,PersonItemRole['Invisible'].id],
+          [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id],
           [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
-        :include => [:programmeItemAssignments, {:programmeItems => [{:people => :pseudonym}, :equipment_types]} ]
-      )
+        :include => [{:programmeItems => [{:programme_item_assignments => {:person => :pseudonym}}, :equipment_types]} ],
+        #{:people => :pseudonym}, 
+        :order => "people.last_name asc"
+      )  
+          #[PersonItemRole['Reserved'].id,PersonItemRole['Moderator'].id,PersonItemRole['Invisible'].id],
     
     respond_to do |format|
       format.xml 

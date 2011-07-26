@@ -8,8 +8,8 @@ xml.people do
             xml.title(itm.title)
             xml.description(itm.precis)
             xml.participants do
-              itm.people.each do |part|
-                xml.participant(part.GetFullName())
+              itm.programme_item_assignments.each do |asg| #.people.each do |part|
+                xml.participant(asg.person.GetFullName())
               end
             end
             xml.equipment do
