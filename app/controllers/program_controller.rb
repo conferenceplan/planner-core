@@ -258,7 +258,9 @@ class ProgramController < ApplicationController
     
     respond_to do |format|
       format.html { render :layout => 'content' }
-      format.atom { send_file 'public/updates', :type => 'application/atom+xml', :x_sendfile => true } # for an Atom feed (for readers)
+#################################      
+#      format.atom { send_file 'public/updates', :type => 'application/atom+xml', :x_sendfile => true } # for an Atom feed (for readers)
+      format.atom
     end
   end
   
