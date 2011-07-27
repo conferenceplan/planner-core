@@ -311,11 +311,13 @@ class PlannerReportsController < PlannerController
   # This is a sample to do the same as the query report in less time...
   #
   def schedule_report_opt
+    @NoShareEmailers = search_survey_exact('g93q7', '3')
+
     @people = Person.all(
         :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))',
           [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
           [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
-        :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => :pseudonym}}, 
+        :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
                      :equipment_types, {:room => :venue}, :time_slot]} ],
         :order => "people.last_name asc"
       )  

@@ -20,7 +20,14 @@ xml.people do
                   if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
                     name = asg.person.GetFullName()
                     name += " (M)" if asg.role == PersonItemRole['Moderator']
-                    xml.participant(name)
+                    xml.participant do
+                      xml.name(name)
+                      asg.person.email_addresses.each do |addr|
+                        if addr.isdefault && (!@NoShareEmailers.index(asg.person))
+                          xml.email(addr.email)
+                        end
+                      end
+                    end
                   end
                 end
               end
