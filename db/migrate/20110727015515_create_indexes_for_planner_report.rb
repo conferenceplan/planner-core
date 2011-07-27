@@ -3,11 +3,13 @@ class CreateIndexesForPlannerReport < ActiveRecord::Migration
     add_index :addresses, [:addressable_id], :name => 'addr_id_index'
     add_index :addresses, [:addressable_type], :name => 'addr_type_index'
     add_index :addresses, [:person_id], :name => 'addr_person_id_index'
+    add_index :equipment_needs, [:programme_item_id], :name => 'equip_item_id_index'
   end
 
   def self.down
     remove_index :addresses, :name => 'addr_id_index'
     remove_index :addresses, :name => 'addr_type_index'
     remove_index :addresses, :name => 'addr_person_id_index'
+    remove_index :equipment_needs, :name => 'equip_item_id_index'
   end
 end
