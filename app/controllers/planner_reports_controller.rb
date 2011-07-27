@@ -306,8 +306,7 @@ class PlannerReportsController < PlannerController
       @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
       
   end
-
-  #
+#
   # This is a sample to do the same as the query report in less time...
   #
   def schedule_report_opt
@@ -327,23 +326,19 @@ class PlannerReportsController < PlannerController
     end
   end
   
+  #
+  # This is a sample to do the same as the query report in less time...
+  #
   def schedule_report
-      peopleList = nil
-      categoryList = nil
-      if (params[:schedule] != nil)
+    peopleList = nil
+    categoryList = nil
+    if (params[:schedule] != nil)
        peopleList = params[:schedule][:person_id]
        categoryList = params[:schedule][:invitation_category_id]
      end
      
-      accepted = AcceptanceStatus.find_by_name("Accepted")
-      probable = AcceptanceStatus.find_by_name("Probable")
-      reserved = PersonItemRole.find_by_name("Reserved")
-      moderator = PersonItemRole.find_by_name("Moderator")
-      invisible = PersonItemRole.find_by_name("Invisible")
-
-      invitestatus = InviteStatus.find_by_name("Invited")
-      
-      selectConditions = '(acceptance_status_id = '+ accepted.id.to_s + ' OR acceptance_status_id = ' + probable.id.to_s + ')'
+    @NoShareEmailers = search_survey_exact('g93q7', '3')
+      selectConditions = ''
       if (peopleList != nil && peopleList.size() != 0)
             addOr = "AND ("
         peopleList.each do |p|
@@ -360,83 +355,21 @@ class PlannerReportsController < PlannerController
         end
         selectConditions = selectConditions + ")"
       end
-      @names = Person.all(:include => [:programmeItems => [:time_slot, :room, :format,:equipment_needs]], :conditions => selectConditions, :order => "people.last_name, programme_items.id") 
-      @NoShareEmailers = search_survey_exact('g93q7', '3')
-      @shareEmail ={}
       
-      @NoShareEmailers.each do |p|
-        @shareEmail[p.id] = true
-      end
-      
-      output = Array.new
-      @names.each do |name|
-         panels = Array.new
-         
-         name.programmeItems.each do |p|
-            if p.time_slot.nil?
-              next
-            end
-            allParticipants = ProgrammeItemAssignment.all(:conditions => {:programme_item_id => p.id},:include => [:person => [:email_addresses, :pseudonym]])
-      
-            panelstr = "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}"
-            panelstr << ", #{p.title} (#{p.format.name})"
-            panelstr << ", #{p.room.name} (#{p.room.venue.name})"
-
-            partList = []
-            skipreserved = false;
-            allParticipants.each do |a|             
-               if a.role_id == reserved.id
-                 if (a.person_id == name.id)
-                   skipreserved = true
-                   break
-                 end
-                 next
-               end
-               if (a.role_id == invisible.id)
-                 next
-               end
-               partName =  a.person.GetFullPublicationName
-                             
-               if a.role_id == moderator.id
-                 partName = partName + "(M)"
-               end
-               
-               if (a.role_id != invisible.id && params[:incl_email])
-                 if (@shareEmail.has_key?(a.person_id) == false)
-                   defaultEmail = a.person.getDefaultEmail
-                   if (defaultEmail != nil)
-                     partName = partName + "(" + defaultEmail.email + ")"
-                   end
-                 end
-               end
-               
-               partList.push partName
-            end
-            if (skipreserved == false)
-              partstr = partList.join(', ')
-              equiplist = []
-              if (p.equipment_needs && p.equipment_needs.size != 0)
-                p.equipment_needs.each do |equip|
-                  equiplist << equip.equipment_type.description
-                end
-              else
-                 equiplist << "None"
-              end
-              equipstr = equiplist.join(', ')
-              equipstr = "Required Equipment: "+ equipstr
-              panels.push [p.time_slot.start, panelstr, p.precis, partstr,equipstr]
-            end                      
-         end
-         if (panels.size != 0)
-           panels.sort! {|a,b| a[0] <=> b[0]}
-           name[:items] = panels
-         end
-      end
-      respond_to do |format|
-         format.xml 
-      end
-   end
-   
+    @people = Person.all(
+        :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))' + selectConditions,
+          [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
+          [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
+        :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
+                     :equipment_types, {:room => :venue}, :time_slot]} ],
+        :order => "people.last_name asc"
+      )  
+    
+    respond_to do |format|
+      format.xml 
+    end
+  end
+  
    def BackOfBadge
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
