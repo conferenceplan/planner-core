@@ -1,0 +1,36 @@
+<h2>Panels by Room</h2>
+
+Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Special Interest Group, Workshop, Dialog, Game Show, Book Discussion, Auction, and Demonstration only.
+
+<% form_tag('/planner_reports/panels_by_room', :method => 'post') do %>
+<p>
+   <%= submit_tag "Export CSV", :name=>"csv" %>
+   <%= submit_tag "View in Browser", :name => "html" %>
+</p>
+<% end %>
+<p>
+<% if params[:html] %>
+   <% if @rooms.blank? %>
+      None right now.
+   <% else %>
+      <dl>
+      <% @rooms.each do |r| %>
+          <dt><h4><%= r.name %> (<%= r.venue.name unless r.venue.nil? %>)</h4>
+
+          <dd><ul><% r.programme_items.each do |p| %>
+             <li><%= "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%a %H:%M')}" unless p.time_slot.nil? %><%= ", #{p.title}" %>
+             <% unless p[:equip].blank? %>
+                <br>Equipment Needed:
+                    <ul><% p[:equip].each do |n| %>
+                           <li><%= n %></li>
+                        <% end %>
+                    </ul>
+             <% end %>
+          <% end %>
+          </ul></dd>
+      <% end %>
+      </dl>
+   <% end %>
+   
+   </p>
+<% end %>
