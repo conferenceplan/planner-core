@@ -199,14 +199,14 @@ class PlannerReportsController < PlannerController
       
             if params[:csv]
 
-               line = [panel.title,
-                       (panel.format.nil?) ? '' : panel.format.name,
+               line = [
                        (panel.room.nil?) ? '' : panel.room.name,
                        (panel.room.nil?) ? '' : panel.room.venue.name,
-	               (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
+                       (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
                        (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
+	               panel.title,
+                       equip,
                       ]
-               line.push equip
    
                output.push line
 
@@ -218,17 +218,14 @@ class PlannerReportsController < PlannerController
          
       if params[:csv]
          outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-         headers = ["Panel",
-                    "Track",
-                    "Format",
+         headers = [
                     "Room",
                     "Venue",
                     "Day",
                     "Time Slot",
+                    "Panel",
+                    "Equipment Needs"
                    ]
-
-       
-         headers.push "Equipment Needs"
 
          output.unshift headers
 
