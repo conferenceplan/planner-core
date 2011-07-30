@@ -13,16 +13,20 @@ Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Spec
    <% if @times.blank? %>
       None right now.
    <% else %>
-      <% @times.each do |t| %>
-          <br /><b><%= "#{t.start.strftime('%a')} #{t.start.strftime('%H:%M')} - #{t.end.strftime('%H:%M')}" %></b>
-          <% t.programme_items.each do |p| %>
-             <%= p.room.name %> (<%= p.room.venue.name unless p.room.venue.nil? %>)
+      <dl><% @times.each do |t| %>
+          <dt><h4><%= t[0] %></h4></dt>
+          <dd><ul><% t[1].each do |p| %>
+             <li><%= p.room.name %> (<%= p.room.venue.name unless p.room.venue.nil? %>)
                     <%= "#{p.title}" %>
                     <% unless p[:equip].blank? %>
-                           <%= "(<b>EQUIP:</b> #{p[:equip].join(', ')})" %>
-                    <% end %>
-              <% end %>
-      <% end %>
+                       <br>Equipment Needed:
+                           <ul><% p[:equip].each do |n| %>
+                                  <li><%= n %></li>
+                               <% end %>
+                           </ul>
+                    <% end %></li>
+              <% end %></ul></dd>
+      <% end %></dl>
    <% end %>
    
    </p>

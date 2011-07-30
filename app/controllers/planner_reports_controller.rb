@@ -272,6 +272,7 @@ class PlannerReportsController < PlannerController
       @times = TimeSlot.all(:joins => [{:rooms => :venue}, {:programme_items => :format}], :include => [{:rooms => :venue}, {:programme_items => :equipment_needs}], :conditions => conditions, :order => ord_str) 
       
       output = Array.new
+      @grouped_times = Hash.new
       @times.each do |time|
          time.programme_items.each do |panel|
 
@@ -294,8 +295,14 @@ class PlannerReportsController < PlannerController
    
                else
                   panel[:equip] = needs
+                  unless @grouped_times.has_key?("#{panel.time_slot.start.strftime('%a')} #{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}")
+                     @grouped_times["#{panel.time_slot.start.strftime('%a')} #{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}"] = Array.new
+                  end
+                  @grouped_times["#{panel.time_slot.start.strftime('%a')} #{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}"] << panel
                end
          end
+
+         @times = @grouped_times.sort{|a, b| a[1][0].time_slot.start <=> b[1][0].time_slot.start || a[1][0].time_slot.end <=> b[1][0].time_slot.end }
       end
          
       if params[:csv]
