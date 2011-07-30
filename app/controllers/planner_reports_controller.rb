@@ -19,6 +19,8 @@ class PlannerReportsController < PlannerController
  
    def panels_with_panelists
 
+      return unless params[:html] || params[:csv] 
+
       if params[:mod_date] == ''
          mod_date = '1900-01-01'
       else 
@@ -154,6 +156,8 @@ class PlannerReportsController < PlannerController
 
    def panels_by_room
 
+      return unless params[:html] || params[:csv] 
+   
       cond_str = " time_slots.start is not NULL"
       conditions = Array.new
 
@@ -235,6 +239,8 @@ class PlannerReportsController < PlannerController
    end
 
    def panels_by_timeslot
+
+      return unless params[:html] || params[:csv] 
 
       cond_str = " time_slots.start is not NULL"
       conditions = Array.new
@@ -391,6 +397,9 @@ class PlannerReportsController < PlannerController
    end
 
    def panelists_with_panels
+
+      return unless params[:html] || params[:csv] 
+
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
       reserved = PersonItemRole.find_by_name("Reserved")
