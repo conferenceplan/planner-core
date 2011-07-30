@@ -1,0 +1,29 @@
+<h2>Panels by Timeslot</h2>
+
+Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Special Interest Group, Workshop, Dialog, Game Show, Book Discussion, Auction, and Demonstration only.
+
+<% form_tag('/planner_reports/panels_by_timeslot', :method => 'post') do %>
+<p>
+   <%= submit_tag "Export CSV", :name=>"csv" %>
+   <%= submit_tag "View in Browser", :name => "html" %>
+</p>
+<% end %>
+<p>
+<% if params[:html] %>
+   <% if @times.blank? %>
+      None right now.
+   <% else %>
+      <% @times.each do |t| %>
+          <br /><b><%= "#{t.start.strftime('%a')} #{t.start.strftime('%H:%M')} - #{t.end.strftime('%H:%M')}" %></b>
+          <% t.programme_items.each do |p| %>
+             <%= p.room.name %> (<%= p.room.venue.name unless p.room.venue.nil? %>)
+                    <%= "#{p.title}" %>
+                    <% unless p[:equip].blank? %>
+                           <%= "(<b>EQUIP:</b> #{p[:equip].join(', ')})" %>
+                    <% end %>
+              <% end %>
+      <% end %>
+   <% end %>
+   
+   </p>
+<% end %>

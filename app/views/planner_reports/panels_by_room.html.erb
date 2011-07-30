@@ -15,7 +15,7 @@ Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Spec
    <% else %>
       <dl>
       <% @rooms.each do |r| %>
-          <dt><h4><%= r.name %> (<%= r.venue.name unless r.venue.nil? %>)</h4>
+          <dt><h4><%= r.name %> (<%= r.venue.name unless r.venue.nil? %>)</h4></dt>
 
           <dd><ul><% r.programme_items.each do |p| %>
              <li><%= "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%a %H:%M')}" unless p.time_slot.nil? %><%= ", #{p.title}" %>
@@ -26,7 +26,7 @@ Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Spec
                         <% end %>
                     </ul>
              <% end %>
-          <% end %>
+          </li><% end %>
           </ul></dd>
       <% end %>
       </dl>

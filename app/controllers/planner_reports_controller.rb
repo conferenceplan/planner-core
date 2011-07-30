@@ -187,7 +187,7 @@ class PlannerReportsController < PlannerController
 
       ord_str = "venues.name desc, rooms.name, time_slots.start"
 
-      @rooms = Room.all(:include => [:venue, {:programme_items => [:people, :time_slot, :format, :equipment_needs,]}], :conditions => conditions, :order => ord_str) 
+      @rooms = Room.all(:include => [:venue, {:programme_items => [:time_slot, :format, :equipment_needs,]}], :conditions => conditions, :order => ord_str) 
       
       output = Array.new
       @rooms.each do |room|
@@ -223,6 +223,88 @@ class PlannerReportsController < PlannerController
                     "Venue",
                     "Day",
                     "Time Slot",
+                    "Panel",
+                    "Equipment Needs"
+                   ]
+
+         output.unshift headers
+
+         csv_out_utf16(output, outfile)
+      end
+    
+   end
+
+   def panels_by_timeslot
+
+      cond_str = " time_slots.start is not NULL"
+      conditions = Array.new
+
+      cond_str << " and formats.id in ("
+      conditions.push Format.find_by_name("Panel")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Reading")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Publisher Presentation")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Talk")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Interview")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Special Interest Group")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Workshop")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Dialog")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Game Show")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Book Discussion")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Auction")
+      cond_str << "?,"
+      conditions.push Format.find_by_name("Demonstration")
+      cond_str << "?)"
+
+      conditions.unshift cond_str
+
+      ord_str = "time_slots.start, venues.name desc, rooms.name"
+
+      @times = TimeSlot.all(:joins => [{:rooms => :venue}, {:programme_items => :format}], :include => [{:rooms => :venue}, {:programme_items => :equipment_needs}], :conditions => conditions, :order => ord_str) 
+      
+      output = Array.new
+      @times.each do |time|
+         time.programme_items.each do |panel|
+
+               needs = Array.new
+               needs = panel.equipment_needs.all(:include => :equipment_type).map! {|n| n.equipment_type.description} 
+               equip = needs.join(', ')
+      
+               if params[:csv]
+   
+                  line = [
+                          (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
+                          (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
+                          (panel.room.nil?) ? '' : panel.room.name,
+                          (panel.room.nil?) ? '' : panel.room.venue.name,
+	                  panel.title,
+                          equip,
+                         ]
+      
+                  output.push line
+   
+               else
+                  panel[:equip] = needs
+               end
+         end
+      end
+         
+      if params[:csv]
+         outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+         headers = [
+                    "Day",
+                    "Time Slot",
+                    "Room",
+                    "Venue",
                     "Panel",
                     "Equipment Needs"
                    ]
