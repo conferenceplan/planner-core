@@ -1,35 +1,7 @@
-#
-#
-#
-class PublisherController < PlannerController
+class PublishJob #< ActiveRecord::Base
   include TagUtils
   
-  def index
-    @publicationInfo = PublicationDate.last
-  end
-  
-  # publish the selected program items
-  def publish
-#    @newItems = 0
-#    @modifiedItems = 0
-#    @renmovedItems = 0
-#    p = PublicationDate.new
-#    p.timestamp = DateTime.current
-#    @newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
-#    @modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
-#    @removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
-#    @removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
-#    p.save
-#    PublisherController.delay.publishjob # run the publish asynchronously
-
-    # Create a job that will be run seperately
-    pubjob = PublishJob.new
-    Delayed::Job.enqueue pubjob #PublishJob.publish()
-        
-    render :layout => 'content'
-  end
-  
-  def publishjob
+  def perform
     newItems = 0
     modifiedItems = 0
     renmovedItems = 0
@@ -39,22 +11,30 @@ class PublisherController < PlannerController
     modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
     removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
     removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
+    p.newitems = newItems
+    p.modifieditems = modifiedItems
+    p.removeditems = renmovedItems
     p.save
   end
   
-  def review
-    @candidateNewItems = getNewProgramItems() # copy all unpublished programme items
-    @candidateModifiedItems = getModifiedProgramItems() # copy all programme items that have changes made (room assignment, added person, details etc)
-    @candidateRemovedItems = []
-    @candidateRemovedItems.concat(getRemovedProgramItems()) # remove all items that should no longer be published
-    @candidateRemovedItems.concat(getUnpublishedItems()) # remove all items that should no longer be published
-  end
-  
-  # list all the published programme items
-  def list
-  end
-  
   private
+  
+  def addClause(clause, clausestr, field)
+    if clause == nil || clause.empty?
+      clause = [clausestr, field]
+    else
+      isEmpty = clause[0].strip().empty?
+      clause[0] = " ( " + clause[0]
+      clause[0] += ") AND ( " if ! isEmpty
+      clause[0] += " " + clausestr
+      clause[0] += " ) "  if ! isEmpty
+      if field
+        clause << field
+      end
+    end
+    
+    return clause
+  end
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getNewProgramItems
@@ -66,7 +46,7 @@ class PublisherController < PlannerController
     return ProgrammeItem.find :all, args
   end
   
-  # Check this for modified items - i.e. what happens if the time is changed?
+  # Check this for modified items - i.e what happens if the time is changed?
   # in that case the room item assignment is recreated...
   def getModifiedProgramItems
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
@@ -153,7 +133,7 @@ EOS
               newTimeSlot.save
               newItem.published_time_slot = newTimeSlot
               newItem.save
-              logger.info "Moved item times"
+#              logger.info "Moved item times"
             end
           else
               newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 

@@ -2,7 +2,12 @@
 <%= javascript_include_tag 'planner/publisher' %>
 <% end %>
 <div class='container_12'>
-    <div class="grid_3">
+    <div class="grid_6">
+            <p>The last Publish run was on <%=@publicationInfo.timestamp.strftime('%m/%d/%y at %H:%M %Z')%> and had:</p>
+            <div>New: <%= @publicationInfo.newitems%></div>
+            <div>Modified: <%= @publicationInfo.modifieditems%></div>
+            <div>Removed: <%= @publicationInfo.removeditems%></div>
+            <p>If you wish to schedule another publish press the publish button.</p>
             <button id="items-publish">
                 Publish Items
             </button>
