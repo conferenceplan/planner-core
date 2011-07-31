@@ -34,7 +34,7 @@
             <% previousTime = currentTime %>
         </td>
         <% end %>
-        <% idx = @rooms.index{|x| x.name == item.published_room.name} %>
+        <% idx = @rooms.index{|x| (item.published_room != nil) && (x.name == item.published_room.name)} %>
         <% if idx %>
         <% (currentColumn..idx).each do |i| %>
         <td class="program-grid-item-empty">

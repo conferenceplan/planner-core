@@ -1,6 +1,8 @@
-<!--
-<p><%= @newItems %> new items published.</p>
-<p><%= @modifiedItems %> items modified.</p>
-<p><%= @removedItems %> items removed.</p>
--->
-<p>The Publish Job has been queued.</p>
+<%if ENV['SENDGRID_DOMAIN'] == 'heroku.com'%>
+    <p>The Publish Job has completed.</p>
+    <div>New: <%= @publicationInfo.newitems%></div>
+    <div>Modified: <%= @publicationInfo.modifieditems%></div>
+    <div>Removed: <%= @publicationInfo.removeditems%></div>
+<%else%>
+    <p>The Publish Job has been queued.</p>
+<%end%>

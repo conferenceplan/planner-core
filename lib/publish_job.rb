@@ -17,25 +17,6 @@ class PublishJob #< ActiveRecord::Base
     p.save
   end
   
-  private
-  
-  def addClause(clause, clausestr, field)
-    if clause == nil || clause.empty?
-      clause = [clausestr, field]
-    else
-      isEmpty = clause[0].strip().empty?
-      clause[0] = " ( " + clause[0]
-      clause[0] += ") AND ( " if ! isEmpty
-      clause[0] += " " + clausestr
-      clause[0] += " ) "  if ! isEmpty
-      if field
-        clause << field
-      end
-    end
-    
-    return clause
-  end
-  
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getNewProgramItems
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
@@ -71,6 +52,25 @@ class PublishJob #< ActiveRecord::Base
     return PublishedProgrammeItem.find :all, args
   end
 
+  private
+  
+  def addClause(clause, clausestr, field)
+    if clause == nil || clause.empty?
+      clause = [clausestr, field]
+    else
+      isEmpty = clause[0].strip().empty?
+      clause[0] = " ( " + clause[0]
+      clause[0] += ") AND ( " if ! isEmpty
+      clause[0] += " " + clausestr
+      clause[0] += " ) "  if ! isEmpty
+      if field
+        clause << field
+      end
+    end
+    
+    return clause
+  end
+  
 REMOVE_CLAUSE = <<"EOS"
   published_programme_items.id in (
   select publications.published_id from publications 
