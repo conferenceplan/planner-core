@@ -1,10 +1,12 @@
 class ProgramController < ApplicationController
 
   #
-  # Set up the cache for the published data. This is so we do not need to hit the DB everytime someone request the published programme grid
+  # Set up the cache for the published data. This is so we do not need to hit the DB everytime someone request the published programme grid.
+  # For now we only have the cached objects around for 10 minutes. Which means that when the publish has been done within 10 minutes folks
+  # will see the new data...
   #
-  caches_action :participants
-  caches_action :index,
+  caches_action :participants, :expires_in => 10.minutes
+  caches_action :index, :expires_in => 10.minutes,
                 :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
   # TODO - put in an observer that clears the cache when a new publish has been done
   

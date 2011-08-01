@@ -12,23 +12,19 @@ class PublisherController < PlannerController
   
   # publish the selected program items
   def publish
-    # Create a job that will be run seperately
     pubjob = PublishJob.new
     if ENV['SENDGRID_DOMAIN'] == 'heroku.com'
+      # if we are on Heroku then the job can not be run in background with the free account
       pubjob.perform
       @publicationInfo = PublicationDate.last
     else
+      # Create a job that will be run seperately
       Delayed::Job.enqueue pubjob
     end
 
     if (cache_configured?)
-      if (Rails.cache === ActiveSupport::Cache::MemCacheStore)
-        expire_action(:controller => 'program', :action => :participants, :expires_in => 10.minutes) #10.minutes
-        expire_action(:controller => 'program', :action => :index, :expires_in => 10.minutes)
-      else
-        expire_action(:controller => 'program', :action => :participants)
-        expire_action(:controller => 'program', :action => :index)
-      end
+      expire_action(:controller => 'program', :action => :participants)
+      expire_action(:controller => 'program', :action => :index)
     end
         
     render :layout => 'content'

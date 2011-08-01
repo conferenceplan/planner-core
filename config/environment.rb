@@ -15,7 +15,6 @@ Rails::Initializer.run do |config|
   config.gem "fastercsv"
   config.gem "time_diff"
   config.gem 'delayed_job', :version => '~>2.0.7'
-#  config.gem "delayed_job", :version => "2.0.7"
   
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
