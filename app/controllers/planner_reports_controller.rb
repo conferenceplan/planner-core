@@ -659,13 +659,14 @@ class PlannerReportsController < PlannerController
        currString = currDateTime.utc.strftime('%Y-%m-%d %H:%M')
        nextDateTime = startDateTime + ((day)*24).hours
        nextString = nextDateTime.utc.strftime('%Y-%m-%d %H:%M')
-       selectConditions = selectConditions + "AND (time_slots.start >= '" + currString + "' and time_slots.start < '" + nextString + "')"
+       selectConditions = selectConditions + " AND (time_slots.start >= '" + currString + "' and time_slots.start < '" + nextString + "')"
      end
      
      if (roomList != nil && roomList.size() != 0)
        addOr = 'AND ('
        roomList.each do |r|
-         selectConditions = selectConditions + addOr + "rooms.id = " + r.to_s;
+         selectConditions = selectConditions + addOr + " rooms.id = " + r.to_s;
+         addOr = ' OR '
        end
        selectConditions = selectConditions + ')'
      end
