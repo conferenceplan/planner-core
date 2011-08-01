@@ -4,7 +4,7 @@ atom_feed do |feed|
   
   @programmeItems.each do |item|
     if item.published_time_slot
-    feed.entry(item, :url => '/') do |entry|
+    feed.entry(item, :url => 'http://renovationsf.org/prog-get.php') do |entry|
       str = ''
       item.people.each do |person| 
         str += '<a href="http://renovationsf.org/participants/' + person.GetFullPublicationName.gsub(/[ \.-]/,'').downcase + '.php">' + person.GetFullPublicationName + '</a>, '
