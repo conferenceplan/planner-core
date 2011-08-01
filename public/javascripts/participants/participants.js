@@ -516,6 +516,26 @@ function createTabs(){
                 collapsible: true,
                 autoHeight: false
             });
+            
+            $("#items-drop").button({}).click(function(){
+                var newpid = jQuery('#current-person-id').text();
+                $.ajax({
+                    type: 'GET',
+                    url: "/programme_items/drop?person_id=" + newpid,
+                    dataType: "html",
+                    success: function(response){
+//                        alert($('#result').text(response));
+                        // reload the tab
+                        var $tabs = $('#particpanttabs').tabs();
+                        var selected = $tabs.tabs('option', 'selected');
+                        $tabs.tabs('load', selected);
+                    },
+//                    beforeSend: function(){
+//                        $('#result').html("<p>Please wait, the system is processing your request...<p>");
+//                    }
+                });
+            });
+            
         }
     });
 }

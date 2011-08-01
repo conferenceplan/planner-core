@@ -1,3 +1,10 @@
 <% @programmeItems.each do |item| %>
 <div class='ui-widget-content'><%= item.title %></div>
 <% end %>
+<!-- If the user is not allowed to do a drop then leave out the button -->
+<div class='edit-form'>
+    <div id='current-person-id' style='visibility:hidden;'><%= @person.id %></div>
+    <button id="items-drop">
+        Drop Items
+    </button>
+</div>

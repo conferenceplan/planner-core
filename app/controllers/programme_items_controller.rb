@@ -1,6 +1,24 @@
 class ProgrammeItemsController < PlannerController
   include ProgramPlannerHelper
   
+  def drop
+    if params[:person_id]
+      # Remove the person from the programme
+      @person = Person.find(params[:person_id])
+
+      @person.programmeItemAssignments.each do |assign|
+        progitem = assign.programmeItem
+        assign.destroy
+        
+        progitem.updated_at_will_change! # NOTE: this will force the update date of the programme item to be changed
+        progitem.save
+      end
+
+    end
+    
+    render :layout => 'content'
+  end
+  
   def index
     if params[:person_id] # then we only get the items for a given person
       @person = Person.find(params[:person_id])
