@@ -6,7 +6,7 @@
 %>
 <% form_for :backofbadge, :url=>{:controller=>"planner_reports", :action=>"BackOfBadge",:method => "post"} do |f| -%>
  <div>
-  <div class='line'><div class='field_name'><%= f.label :invitation_category_id,"Select People to get back of badge. No selection will export all people with schedule" %></div>
+  <div class='line'><div class='field_name'><%= f.label :person_id,"Select People to get back of badge. No selection will export all people with schedule" %></div>
                     <div class='field_value'>   	
 					<%= select_tag 'backofbadge[person_id]',options_from_collection_for_select(
 	                 @people, "id", "GetFullName"), :multiple => true %></div></div>

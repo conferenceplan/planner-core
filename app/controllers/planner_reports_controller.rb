@@ -631,6 +631,160 @@ class PlannerReportsController < PlannerController
       
   end
   
+  def RoomSign
+     moderator = PersonItemRole.find_by_name("Moderator")
+     invisible = PersonItemRole.find_by_name("Invisible")
+     reserved = PersonItemRole.find_by_name("Reserved")
+
+     roomList = nil
+ 
+     if (params[:roomSign] != nil)
+         roomList = params[:roomSign][:room_id]
+     end
+
+     if (params[:roomSign] != nil)
+         day = params[:roomSign][':day_id'].to_i
+     end
+     
+      #list anything starting after 3am (before is part of the previous day
+     startDateTime =  Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + 3.hours;
+     
+     selectConditions = '(time_slots.start IS NOT NULL) and (programme_items.print = true)'
+     hasDate = false;
+     currDateTime = startDateTime
+     nextDateTime = startDateTime
+     if (day != nil)
+       hasDate = true
+       currDateTime = startDateTime + ((day-1)*24).hours
+       currString = currDateTime.utc.strftime('%Y-%m-%d %H:%M')
+       nextDateTime = startDateTime + ((day)*24).hours
+       nextString = nextDateTime.utc.strftime('%Y-%m-%d %H:%M')
+       selectConditions = selectConditions + "AND (time_slots.start >= '" + currString + "' and time_slots.start < '" + nextString + "')"
+     end
+     
+     if (roomList != nil && roomList.size() != 0)
+       addOr = 'AND ('
+       roomList.each do |r|
+         selectConditions = selectConditions + addOr + "rooms.id = " + r.to_s;
+       end
+       selectConditions = selectConditions + ')'
+     end
+     
+     # get max panels per room
+     maxquery = "select MAX(x) from (select Count(*) as x from room_item_assignments join time_slots on (room_item_assignments.time_slot_id = time_slots.id) join programme_items on (room_item_assignments.programme_item_id = programme_items.id) join rooms on (room_item_assignments.room_id = rooms.id) "
+     if (selectConditions != '')
+       maxquery = maxquery + "where " + selectConditions
+     end
+     maxquery = maxquery + " group by room_id) l;"
+     maxList = ActiveRecord::Base.connection.select_rows(maxquery)
+     maxItems = maxList[0][0].to_i;
+      
+     @panels = ProgrammeItem.all(:include => [:people, :time_slot, {:room => :venue}, :format, :equipment_needs,], :conditions => selectConditions, :order => "venues.name,rooms.name,time_slots.start") 
+  
+
+    maxPanelInRoom = 0
+    panellist = []
+    panelinfo = {}
+    currRoom = 0
+    currDay = ""
+    output = []
+      headerList = Array.new
+      headerList << "Room"
+      headerList << "day"
+      1.upto(maxItems) do |number|
+        numberString = number.to_s
+        headerValue = "Time"+numberString
+        headerList << headerValue
+        headerValue = "Title"+numberString
+        headerList << headerValue
+        headerValue = "Description"+numberString
+        headerList << headerValue
+        headerValue = "Participants"+numberString
+        headerList << headerValue
+      end      
+      output.push headerList 
+      
+    @panels.each do |p|
+      if ((currDay != "" && currDay != p.time_slot.start.strftime('%a')) || (currRoom != 0 and currRoom != p.room.id))
+          outputlist = []
+          outputlist << panellist[0]['roomName']
+          outputlist << panellist[0]['day']
+          1.upto(maxItems) do |num|
+            if (panellist.size() != 0 && num <= panellist.size())
+              outputlist << panellist[num-1]['time']
+              outputlist << panellist[num-1]['title']
+              outputlist << panellist[num-1]['description']
+              outputlist << panellist[num-1]['participants']
+            else
+              outputlist << "";
+              outputlist << "";
+              outputlist << "";
+              outputlist << "";
+            end
+          end
+          output.push outputlist
+          panellist = []
+      end
+      currDay = p.time_slot.start.strftime('%a')
+      currRoom = p.room.id
+      
+      panelinfo['roomName'] = p.room.name
+      panelinfo['day'] = p.time_slot.start.strftime('%a')
+      panelTime = p.time_slot.start.strftime('%l:%M %p')
+      panelinfo['time'] = panelTime
+      panelinfo['title'] = p.title
+      panelinfo['description'] = p.precis
+      partlist = []
+      p.programme_item_assignments.each do |part|
+         if part.role_id == moderator.id
+            partlist.push "#{part.person.GetFullPublicationName.strip} (M)"
+         elsif part.role_id != reserved.id and part.role_id != invisible.id
+            partlist.push part.person.GetFullPublicationName.strip
+         end
+      end
+      partstr = partlist.join(", ")
+      panelinfo['participants'] = partstr
+      panellist << panelinfo
+      panelinfo = {}
+    end
+    
+    if (panellist.size() != 0)
+          outputlist = []
+          outputlist << panellist[0]['roomName']
+          outputlist << panellist[0]['day']
+          1.upto(maxItems) do |num|
+            if (panellist.size() != 0 && num <= panellist.size())
+              outputlist << panellist[num-1]['time']
+              outputlist << panellist[num-1]['title']
+              outputlist << panellist[num-1]['description']
+              outputlist << panellist[num-1]['participants']
+            else
+              outputlist << "";
+              outputlist << "";
+              outputlist << "";
+              outputlist << "";
+            end
+          end
+          output.push outputlist
+    end
+    
+    outfile = "room_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+
+    csv_out_utf16(output, outfile)
+  end
+
+  def selectRoomSign
+      @rooms   = Room.find :all
+      startDateTime =  Time.zone.parse(SITE_CONFIG[:conference][:start_date]);
+      numDays = SITE_CONFIG[:conference][:number_of_days]
+      @days = []
+      1.upto(numDays) do |day|
+        currDate = startDateTime;
+        currDate = currDate + ((day-1)*24).hours
+        @days << [currDate.strftime('%a'),day];
+      end
+   
+  end
   
    def admin_tags_by_context
       if params[:tag_context]

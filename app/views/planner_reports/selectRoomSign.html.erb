@@ -1,0 +1,28 @@
+<h1> Room Sign csv export</h1>
+<%=
+    if flash[:error]
+      content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
+    end
+%>
+<% form_for :roomSign, :url=>{:controller=>"planner_reports", :action=>"RoomSign",:method => "post"} do |f| -%>
+ <div>
+ 	
+ <div class='line'><div class='field_name'><%= f.label :room_id,"Select Room. No selection will export all rooms. Multiple allowed" %></div>
+                    <div class='field_value'>   	
+					<%= select_tag 'roomSign[room_id]',options_from_collection_for_select(
+	                 @rooms, "id", "name"), :multiple => true %></div>
+</div>
+
+ <div class='line'><div class='field_name'><%= f.label :day_id,"Select Day (only 1). No selection will export all days" %></div>
+                    <div class='field_value'>   	
+					<%= select_tag 'roomSign[:day_id]',options_for_select(@days,"1"), :multiple => false %></div>
+ </div>
+ 
+  <div class='form-buttons'>
+		<%= f.submit "Submit" %>
+	
+  </div>
+  <div>
+  		<%= link_to 'Cancel', planner_reports_path%>
+  </div>
+<% end -%>
