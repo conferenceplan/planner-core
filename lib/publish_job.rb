@@ -1,4 +1,4 @@
-class PublishJob #< ActiveRecord::Base
+class PublishJob
   include TagUtils
   
   def perform

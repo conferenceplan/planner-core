@@ -15,3 +15,7 @@ config.action_controller.perform_caching             = true # FOR testing
 
 # Don't care if the mailer can't send
 config.action_mailer.raise_delivery_errors = false
+
+#ActionController::Base.cache_store = :mem_cache_store, "localhost"
+#ActionController::Base.cache_store = :file_store, "/tmp"
+

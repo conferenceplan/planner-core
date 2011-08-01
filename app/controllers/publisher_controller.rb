@@ -4,6 +4,8 @@
 class PublisherController < PlannerController
   include TagUtils
   
+  cache_sweeper :program_sweeper, :only => [ :publish ]
+  
   def index
     @publicationInfo = PublicationDate.last
   end
@@ -16,7 +18,17 @@ class PublisherController < PlannerController
       pubjob.perform
       @publicationInfo = PublicationDate.last
     else
-      Delayed::Job.enqueue pubjob #PublishJob.publish()
+      Delayed::Job.enqueue pubjob
+    end
+
+    if (cache_configured?)
+      if (Rails.cache === ActiveSupport::Cache::MemCacheStore)
+        expire_action(:controller => 'program', :action => :participants, :expires_in => 10.minutes) #10.minutes
+        expire_action(:controller => 'program', :action => :index, :expires_in => 10.minutes)
+      else
+        expire_action(:controller => 'program', :action => :participants)
+        expire_action(:controller => 'program', :action => :index)
+      end
     end
         
     render :layout => 'content'
