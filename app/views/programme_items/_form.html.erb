@@ -37,6 +37,16 @@
                 <%= f.text_field :short_title %>
             </div>
         </div>
+		<div class='line'>
+			<% if controller.permitted_to? :schedule, :programme_items %>
+			<div class='field_name'>
+			    <%= f.label :pub_reference_number,"RefNum" %>
+			</div>
+			<div class='field_value'>
+			   	 <%= f.text_field :pub_reference_number %>
+			</div>
+			<%end%>
+		</div>
         <div class='line'>
             <div class='field_name'>
                 <%= f.label :format_id, "Format" %>

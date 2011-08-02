@@ -13,6 +13,9 @@
     <div class='line'>
         ShortTitle: <%= @programmeItem.short_title %>
     </div>
+	<div class='line'>
+		RefNum: <%= @programmeItem.pub_reference_number %>
+	</div>
     <div class='line'>
         Format: <% if @programmeItem.format %>
         <%= @programmeItem.format.name %>
