@@ -28,9 +28,9 @@ class PlannerReportsController < PlannerController
       end
 
       if params[:sort_by] == 'time'
-         ord_str = "time_slots.start, venues.name desc, rooms.name, people.last_name"
+         ord_str = "time_slots.start, time_slots.end, venues.name desc, rooms.name, people.last_name"
       elsif params[:sort_by] == 'room'
-         ord_str = "venues.name desc, rooms.name, time_slots.start, people.last_name"
+         ord_str = "venues.name desc, rooms.name, time_slots.start, time_slots.end, people.last_name"
       else
          ord_str = "programme_items.title, people.last_name"
       end
@@ -189,7 +189,7 @@ class PlannerReportsController < PlannerController
 
       conditions.unshift cond_str
 
-      ord_str = "venues.name desc, rooms.name, time_slots.start"
+      ord_str = "venues.name desc, rooms.name, time_slots.start, time_slots.end"
 
       @rooms = Room.all(:include => [:venue, {:programme_items => [:time_slot, :format, :equipment_needs,]}], :conditions => conditions, :order => ord_str) 
       
@@ -273,7 +273,7 @@ class PlannerReportsController < PlannerController
 
       conditions.unshift cond_str
 
-      ord_str = "time_slots.start, venues.name desc, rooms.name"
+      ord_str = "time_slots.start, time_slots.end, venues.name desc, rooms.name"
 
       @times = TimeSlot.all(:joins => [{:rooms => :venue}, {:programme_items => :format}], :include => [{:rooms => :venue}, {:programme_items => :equipment_needs}], :conditions => conditions, :order => ord_str) 
       
