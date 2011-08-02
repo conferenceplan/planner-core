@@ -1,51 +1,24 @@
 <h1>Convention Guide Corrections</h1>
-<!--
-<% @resultantChanges.each do |key, val| %>
-    <%= key %><br/>
-    <% if val.kind_of?(PublishedProgrammeItem) %>
-        <%= val.title %>
-    <% else %>
-        <% val.each do |k,v| %>
-            <% if k.kind_of?(PublishedProgrammeItem) %>
-                <%= k.title %>
-            <% else %>
-                <%= k %>
-            <% end %>
-            <%= v %><br/>
-        <% end %>
-    <% end %>
-<% end %>
--->
 
 <% changedItems = @resultantChanges[:update] %>
 <% if changedItems %>
-<div class='prog-changes'>
 <h2>Item Time and Room Changes</h2>
 <% changedItems.each do |k, v| %>
-<div class='prog-change'>
-    <div class='prog-update-title'><%= k.title %></div>
-    <div class='prog-schedule-item-room'><%= k.published_room.published_venue.name %> <%= k.published_room.name %></div>
+    <%=k.title %><br/>
+    <%=k.published_room.published_venue.name %> <%=k.published_room.name %>
+    <p>
     <% if v.size > 0 %>
-    <% if v[:timeMove]%>
-    <div class='proc-schedule-change'>Schedule Change: 
-        <div class='prog-schedule-change-from'><%= v[:timeMove][0].strftime("%A at %H:%M") %></div>
-        has changed to
-        <div class='prog-schedule-change-to'><%= v[:timeMove][1].strftime("%A at %H:%M") %></div>
-    </div>
-    <% else %>
-    <div class='prog-schedule-item-time'><%= k.published_time_slot.start.strftime("%A at %H:%M") %></div>
-    <% end%>
-    <% if v[:roomMove] && v[:roomMove].kind_of?(Array) && v[:roomMove].size > 1 %>
-    <div class='prog-room-change'>
-        The room change: 
-        <div class='prog-room-change-from'><%= v[:roomMove][1].name %></div> to
-        <div class='prog-room-change-to'><%= v[:roomMove][0].name %></div>
-    </div>
-    <% end%>
+        <% if v[:timeMove]%>
+            Schedule Change: <%= v[:timeMove][0].strftime("%A at %H:%M") %> has changed to <%= v[:timeMove][1].strftime("%A at %H:%M") %>
+        <% else %>
+            at <%= k.published_time_slot.start.strftime("%A at %H:%M") %>
+        <% end%>
+        <% if v[:roomMove] && v[:roomMove].kind_of?(Array) && v[:roomMove].size > 1 %>
+            The room has changed: from <%= v[:roomMove][1].name %> to <%= v[:roomMove][0].name %>
+        <% end%>
     <% end %>
-</div>
+    </p>
 <% end %>
-</div>
 <% end %>
 
 <% addedItems = @resultantChanges[:new] %>

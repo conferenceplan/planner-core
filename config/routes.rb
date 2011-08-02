@@ -5,6 +5,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
   map.connect 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
   map.connect 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
+  map.connect 'program/updateSelect', :controller => 'program', :action => 'updateSelect', :method => 'get'
 
   map.connect 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'
   map.connect 'publisher/review', :controller => 'publisher', :action => 'review', :method => 'get'

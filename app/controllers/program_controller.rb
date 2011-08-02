@@ -189,6 +189,10 @@ class ProgramController < ApplicationController
     end
   end
   
+  def updateSelect
+    @pubDateList = PublicationDate.all(:order => "created_at DESC")
+  end
+  
   #
   # Report back on what has changed. This is used to generate the pink sheets.
   #
@@ -206,11 +210,16 @@ class ProgramController < ApplicationController
   #
   #
   def updates
+    pubIndex = params[:pubidx]
     @resultantChanges = {}
     
     # To get the updates:
     # Get a list of all publications that have changed since the last publication date
-    @lastPubDate = PublicationDate.last
+    if pubIndex
+      @lastPubDate = PublicationDate.find(pubIndex)
+    else
+      @lastPubDate = PublicationDate.last
+    end
     
     if !@lastPubDate
       return
