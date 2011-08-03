@@ -785,6 +785,55 @@ class PlannerReportsController < PlannerController
         @days << [currDate.strftime('%a'),day];
       end
    
+   end
+ 
+   def tableTents
+
+      accepted = AcceptanceStatus.find_by_name("Accepted")
+      probable = AcceptanceStatus.find_by_name("Probable")
+      reserved = PersonItemRole.find_by_name("Reserved")
+      moderator = PersonItemRole.find_by_name("Moderator")
+      invisible = PersonItemRole.find_by_name("Invisible")
+
+      @names = Person.all(:include => :programmeItems, :conditions => ['acceptance_status_id = ? or acceptance_status_id = ?',accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
+
+      output = Array.new
+    
+      @names.each do |name|
+         panels = Array.new
+         name.programmeItems.find_each(:include => [:time_slot, :room, :format, ],:conditions => 'print = true') do |p|
+            next if p.time_slot.nil?
+            a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
+            panelstr = "#{p.title} (#{p.format.name})"
+            next if a.role_id == invisible.id || a.role_id == reserved.id                      
+            output.push [name.GetFullPublicationName,
+                            p.title,
+                            p.precis,
+                            (p.format.nil?) ? '' : p.format.name,
+                            (p.room.nil?) ? '' : p.room.name,
+                            (p.room.nil?) ? '' : p.room.venue.name,
+                            (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%a')}",
+                            (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%H:%M')}",
+                            (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%Y-%m-%d')}",
+                           ]
+         end       
+      end
+         outfile = "table_tents_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+
+         output.unshift ["Name",
+                         "Panel Title",
+                         "Description",
+                         "Format",
+                         "Room",
+                         "Venue",
+                         "Day",
+                         "Time",
+                         "Date"
+                        ]
+                        # TODO: need to figure out how to handle utf16. Chnage this report
+#to utf16 after publication deadline
+#         csv_out_utf16(output, outfile)
+          csv_out(output,outfile)
   end
   
    def admin_tags_by_context
