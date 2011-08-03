@@ -17,7 +17,7 @@ Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Spec
           <dt><h4><%= t[0] %></h4></dt>
           <dd><ul><% t[1].each do |p| %>
              <li><%= p.room.name %> (<%= p.room.venue.name unless p.room.venue.nil? %>)
-                    <%= "#{p.title}" %>
+                    <%= p.title %> 
                     <% unless p[:equip].blank? %>
                        <br>Equipment Needed:
                            <ul><% p[:equip].each do |n| %>

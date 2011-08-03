@@ -308,7 +308,7 @@ class PlannerReportsController < PlannerController
                end
          end
 
-         @times = @grouped_times.sort{|a, b| a[1][0].time_slot.start <=> b[1][0].time_slot.start || a[1][0].time_slot.end <=> b[1][0].time_slot.end }
+         @times = @grouped_times.sort{|a, b| [a[1][0].time_slot.start, a[1][0].time_slot.end] <=> [b[1][0].time_slot.start, b[1][0].time_slot.end] }
       end
          
       if params[:csv]
