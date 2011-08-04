@@ -11,10 +11,10 @@
             Duration: <%= item.duration.to_s %> minutes
         </div>
         <div class="program-item-title">
-            <%= item.title %>
+            <%= markdown(item.title) %>
         </div>
         <div class="program-item-description">
-            <%= item.precis %>
+            <%= markdown(item.precis) %>
         </div>
         <div class="program-item-participants">
             <% item.people.each do |person| %>
