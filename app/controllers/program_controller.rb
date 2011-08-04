@@ -5,7 +5,8 @@ class ProgramController < ApplicationController
   # For now we only have the cached objects around for 10 minutes. Which means that when the publish has been done within 10 minutes folks
   # will see the new data...
   #
-  caches_action :participants, :expires_in => 10.minutes
+  caches_action :participants, :expires_in => 10.minutes,
+                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
   caches_action :index, :expires_in => 10.minutes,
                 :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
   # TODO - put in an observer that clears the cache when a new publish has been done
@@ -454,7 +455,7 @@ PARTICIPANT_QUERY = <<"EOS"
   IFNULL(edited_bios.facebook,'')
   from people
   left join pseudonyms ON pseudonyms.person_id = people.id
-  join edited_bios on edited_bios.person_id = people.id
+  left join edited_bios on edited_bios.person_id = people.id
   join published_programme_item_assignments where published_programme_item_assignments.person_id = people.id
   GROUP BY people.id
   ORDER BY people.last_name;
