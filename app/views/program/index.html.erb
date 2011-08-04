@@ -13,6 +13,7 @@
             </tr>
         </thead>
         <tbody>
+        <% hasAnchor = false %>
         <% previousTime = nil %>
         <% previousRoom = nil %>
         <% currentTime = nil %>
@@ -30,6 +31,10 @@
         <%end %>
         <tr class="program-grid-row">
         <td class="program-grid-empty">
+            <%if !hasAnchor && (currentTime.strftime('%H') == "09") %>
+                <a name="start"></a>
+                <% hasAnchor = true %>
+            <%end%>
             <%= currentTime.strftime('%A %H:%M') %>
             <% previousTime = currentTime %>
         </td>
