@@ -406,71 +406,90 @@ class PlannerReportsController < PlannerController
       moderator = PersonItemRole.find_by_name("Moderator")
       invisible = PersonItemRole.find_by_name("Invisible")
 
-      @names = Person.all(:include => :programmeItems, :conditions => ['acceptance_status_id = ? or acceptance_status_id = ?',accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
+      cond_str = 'acceptance_status_id = ? or acceptance_status_id = ?'
+      if params[:sched_only]
+            cond_str << " and time_slots.start is not NULL"
+      end
+
+      @names = Person.all(:include => [:programmeItems => :time_slot], :conditions => [cond_str,accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
 
       output = Array.new
     
       @names.each do |name|
-         panels = Array.new
-         name.programmeItems.find_each(:include => [:time_slot, :room, :format, ]) do |p|
-            a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
-            panelstr = "#{p.title} (#{p.format.name})"
-            if a.role_id == moderator.id
-               panelstr << " (M)"
-            elsif a.role_id == invisible.id
-              panelstr << " (I)"
-            end
-            panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
-            panelstr << ", #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
-            if a.role_id == reserved.id
-               if params[:incl_rsvd]
-                  panelstr = "<i>#{panelstr}</i>"
-               else
-                  next
-               end
-            end
-            if p.time_slot.nil?
-               zeroTime = Time.at(0)
-               panels.push [zeroTime, panelstr]
-            else
-               panels.push [p.time_slot.start, panelstr]
-            end
+         if params[:names_only]
+            name[:items] = nil
             if params[:csv]
                output.push [name.GetFullPublicationName,
-                            (name.acceptance_status_id == accepted.id) ? 'Accepted':'Probable',
-                            (a.role_id == reserved.id) ? 'R' : (a.role_id == moderator.id) ? 'M' : (a.role_id == invisible.id) ? 'I' : '',
-                            p.title,
-                            (p.format.nil?) ? '' : p.format.name,
-                            (p.room.nil?) ? '' : p.room.name,
-                            (p.room.nil?) ? '' : p.room.venue.name,
-                            (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}",
-                           ]
+                            name.acceptance_status.name]
             end
+         else
+
+            panels = Array.new
+            name.programmeItems.find_each(:include => [:time_slot, :room, :format, ]) do |p|
+               a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
+               panelstr = "#{p.title} (#{p.format.name})"
+               if a.role_id == moderator.id
+                  panelstr << " (M)"
+               elsif a.role_id == invisible.id
+                 panelstr << " (I)"
+               end
+               panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
+               panelstr << ", #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
+               if a.role_id == reserved.id
+                  if params[:incl_rsvd]
+                     panelstr = "<i>#{panelstr}</i>"
+                  else
+                     next
+                  end
+               end
+               if p.time_slot.nil?
+                  zeroTime = Time.at(0)
+                  panels.push [zeroTime, panelstr]
+               else
+                  panels.push [p.time_slot.start, panelstr]
+               end
+               if params[:csv]
+                  output.push [name.GetFullPublicationName,
+                               name.acceptance_status.name,
+                               (a.role_id == reserved.id) ? 'R' : (a.role_id == moderator.id) ? 'M' : (a.role_id == invisible.id) ? 'I' : '',
+                               p.title,
+                               (p.format.nil?) ? '' : p.format.name,
+                               (p.room.nil?) ? '' : p.room.name,
+                               (p.room.nil?) ? '' : p.room.venue.name,
+                               (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}",
+                              ]
+               end
+            end
+            panels.sort! {|a,b| a[0] <=> b[0]}
+            panels.collect! {|a| a[1]}
+            name[:items] = panels
          end
-         panels.sort! {|a,b| a[0] <=> b[0]}
-         panels.collect! {|a| a[1]}
-         name[:items] = panels
       end
       if params[:csv]
          outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
 
-         output.unshift ["Name",
-                         "Acceptance Status",
-                         "Role",
-                         "Panel Title",
-                         "Format",
-                         "Room",
-                         "Venue",
-                         "Time"
-                        ]
+         if params[:names_only]
+            output.unshift ["Name",
+                            "Acceptance Status"]
+         else
+            output.unshift ["Name",
+                            "Acceptance Status",
+                            "Role",
+                            "Panel Title",
+                            "Format",
+                            "Room",
+                            "Venue",
+                            "Time"
+                           ]
+         end
                         # TODO: need to figure out how to handle utf16. Chnage this report
 #to utf16 after publication deadline
 #         csv_out_utf16(output, outfile)
           csv_out(output,outfile)
       end
-  end
+   end
   
-  def selectBadgeLabel
+   def selectBadgeLabel
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
       invitestatus = InviteStatus.find_by_name("Invited")

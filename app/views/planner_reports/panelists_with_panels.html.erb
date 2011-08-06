@@ -4,6 +4,10 @@
 <p>
    <%= check_box_tag :incl_rsvd, '1', params[:incl_rsvd] %>
    <%= label_tag :incl_rsvd, "Include reserve panelists? "%><br /><br />
+   <%= check_box_tag :sched_only, '1', params[:sched_only] %>
+   <%= label_tag :sched_only, "Include scheduled panelists only? "%><br /><br />
+   <%= check_box_tag :names_only, '1', params[:names_only] %>
+   <%= label_tag :names_only, "Include names only? "%><br /><br />
    <%= submit_tag "Export CSV", :name=>"csv" %>
    <%= submit_tag "View in Browser", :name => "html" %>
 </p>
