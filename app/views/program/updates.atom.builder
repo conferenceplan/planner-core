@@ -29,7 +29,7 @@ atom_feed do |feed|
         end
       end
 
-      feed.entry(title, :url => 'http://renovationsf.org/prog-get.php') do |entry|
+      feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
@@ -48,7 +48,7 @@ atom_feed do |feed|
       precis = k.precis
       content = "Has been added to the progam, #{t} in #{venue}( #{r} )<br/><br/>#{precis}"
 
-      feed.entry(title, :url => 'http://renovationsf.org/prog-get.php') do |entry|
+      feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
@@ -65,7 +65,7 @@ atom_feed do |feed|
       room = v[:info][0].name
       content = "Has been dropped. From #{venue}( #{room} ) at #{t}."
 
-      feed.entry(title, :url => 'http://renovationsf.org/prog-get.php') do |entry|
+      feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
@@ -86,8 +86,7 @@ atom_feed do |feed|
           content += "<b>#{n}</b> as a <em>#{r}</em><br/>"
         end
       end
-
-      feed.entry(title, :url => 'http://renovationsf.org/prog-get.php') do |entry|
+      feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
@@ -108,7 +107,7 @@ atom_feed do |feed|
         end
       end
 
-      feed.entry(title, :url => 'http://renovationsf.org/prog-get.php') do |entry|
+      feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
@@ -135,7 +134,7 @@ atom_feed do |feed|
         end
       end
 
-      feed.entry(title, :url => 'http://renovationsf.org/prog-get.php') do |entry|
+      feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
         entry.title(title)
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
