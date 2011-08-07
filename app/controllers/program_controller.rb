@@ -68,7 +68,7 @@ class ProgramController < ApplicationController
               ],
         :methods => [:shortDate, :timeString, :pub_number, :pubFirstName, :pubLastName, :pubSuffix], #:bio, :twitterinfo, :website, :facebook
         :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
-        ) 
+        ), :content_type => 'application/json' 
         }
     end
   end
@@ -88,7 +88,7 @@ class ProgramController < ApplicationController
       format.html { render :layout => 'content' }
       format.js { render_json @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :id, :published_venue_id],
                                                  :include => [:published_venue]
-        ) }
+        ), :content_type => 'application/json' }
     end
   end
   
@@ -102,7 +102,7 @@ class ProgramController < ApplicationController
       format.html { render :layout => 'content' }
       format.js { render_json tags.to_json(
                                     :except => [:created_at , :updated_at, :lock_version, :id, :count]
-        ) }
+        ), :content_type => 'application/json' }
     end
   end
 
@@ -131,7 +131,7 @@ class ProgramController < ApplicationController
             jsonstr += p[5].to_json +  ',"facebook":' + p[6].to_json + '}'
           end
           jsonstr = '[' + jsonstr + ']'
-          render_json  jsonstr
+          render_json  jsonstr, :content_type => 'application/json'
         }
       format.csv {
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
@@ -186,7 +186,7 @@ class ProgramController < ApplicationController
               :last_name, :first_name, :suffix, :pub_reference_number],
         :methods => [:shortDate, :timeString, :bio, :pub_number, :pubFirstName, :pubLastName, :pubSuffix, :twitterinfo, :website, :facebook],
         :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {:include => {:pseudonym => {}}}}
-        ) 
+        ), :content_type => 'application/json' 
         }
     end
   end
