@@ -6,11 +6,11 @@ class ProgramController < ApplicationController
   # will see the new data...
   #
   caches_action :participants, :expires_in => 10.minutes,
-                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} },
-                :unless => Proc.new { |c| c.params.has_key?('callback') }
+                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }#,
+#                :unless => Proc.new { |c| c.params.has_key?('callback') }
   caches_action :index, :expires_in => 10.minutes,
-                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} },
-                :unless => Proc.new { |c| c.params.has_key?('callback') }
+                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }#,
+#                :unless => Proc.new { |c| c.params.has_key?('callback') }
   # TODO - put in an observer that clears the cache when a new publish has been done
   
   #
