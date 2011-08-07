@@ -348,20 +348,19 @@ class ProgramController < ApplicationController
         # TODO - could also be a change to one of the other attributes
         if resultantChanges[:update] && resultantChanges[:update][programmeItem]
           resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :add, newtime.start)
-        else
-          # TODO - if the item was update (Title etc) then it is not a new....
+        end
+          # If the item was update (Title etc) then it is not a new....
           # Look for the PublishedProgrammeItem and see if it is an update
           if (auditInfo.action == 'update')
             auditChange = getProgrammeItemChanges(programmeItem.id);
             if auditChange
               auditChange.each do |a|
-                resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :updateDetails, a.changes)
+                resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :detailUpdate, a.changes)
               end
             end
           else  
             resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :new, newtime.start)
           end
-        end
         # Item X has been added to room B at time C
       end
     else # The item has been moved to a new venue

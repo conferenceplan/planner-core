@@ -116,7 +116,7 @@ atom_feed do |feed|
   end
   
   
-  updatedItemDetails = @resultantChanges[:updateDetails]
+  updatedItemDetails = @resultantChanges[:detailUpdate]
   if updatedItemDetails
     updatedItemDetails.each do |k, v|
       title = k.title
