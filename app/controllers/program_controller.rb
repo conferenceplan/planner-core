@@ -136,7 +136,6 @@ class ProgramController < ApplicationController
       format.csv {
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
            csv_string = FasterCSV.generate do |csv|
-             csv << ['FirstName', 'LastName']
              @participants.each do |n|
                 csv << [ n[0], n[1]]
              end
