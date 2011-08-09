@@ -13,7 +13,7 @@
 	                 @rooms, "id", "name"), :multiple => true %></div>
 </div>
 
- <div class='line'><div class='field_name'><%= f.label :day_id,"Select Day (only 1). No selection will export all days" %></div>
+ <div class='line'><div class='field_name'><%= f.label :day_id,"Select Day. There can be only 1" %></div>
                     <div class='field_value'>   	
 					<%= select_tag 'roomSign[:day_id]',options_for_select(@days,"1"), :multiple => false %></div>
  </div>
