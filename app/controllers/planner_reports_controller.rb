@@ -922,7 +922,7 @@ class PlannerReportsController < PlannerController
       invitestatus = InviteStatus.find_by_name("Invited")
 
       @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
-      @items = ProgrammeItem.all(:include => :programme_item_assignments, :conditions => 'programme_item_assignments.id IS NOT NULL && print = true',:order => "programme_items.title")
+      @items = ProgrammeItem.all(:include => :programme_item_assignments, :conditions => 'programme_item_assignments.id IS NOT NULL AND print = true',:order => "programme_items.title")
    end
 
    def tableTents
