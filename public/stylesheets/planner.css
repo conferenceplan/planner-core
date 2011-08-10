@@ -349,3 +349,8 @@ div.tag-count {
 
 .selectable li { margin: 2px; padding: 0.1em; font-size: 1em; background-color: transparent; }
 
+.prog-review {
+	border-style: solid;
+	border-width: 1px;
+	margin-bottom: 5px;    
+}
