@@ -4,7 +4,7 @@
 <% if changedItems %>
 <h2>Item Time and Room Changes</h2>
 <% changedItems.each do |k, v| %>
-    <%=k.title %><br/>
+    <%=markdown(k.title) %>
     <%=k.published_room.published_venue.name %> ( <%=k.published_room.name %> )
     <p>
     <% if v.size > 0 %>
@@ -25,7 +25,7 @@
 <% if addedItems %>
 <h2>New Items Added to Program</h2>
 <% addedItems.each do |k, v| %>
-    <%= k.title %><br/>
+    <%= markdown(k.title) %>
     <p>
         Has been added to the program, <%= v[0].strftime("%A at %H:%M") %> in <%= k.published_room.published_venue.name %>( <%= k.published_room.name %> )
     </p>
@@ -39,7 +39,7 @@
 <% if droppedItems %>
 <h2>Dropped Items</h2>
 <% droppedItems.each do |k, v| %>
-    <%= v[:title] %><br/>
+    <%= markdown(v[:title]) %>
     <p>
         Has been dropped. From <%= v[:info][0].published_venue.name %>( <%= v[:info][0].name %> ) at <%= v[:info][1].getlocal().strftime("%A at %H:%M") %>.
     </p>
@@ -50,7 +50,7 @@
 <% if peopleAdded %>
 <h2>Program Participants Added to Programme Items</h2>
 <% peopleAdded.each do |k, v| %>
-    <%= k.title %></br>
+    <%= markdown(k.title) %>
     <p>
         <%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %>. Program Participants have been added:<br/>
     <% v.each_index do |idx| %>
@@ -66,7 +66,7 @@
 <% if peopleRemoved %>
 <h2>Program Participants Dropped from Particular  Programme Items</h2>
 <% peopleRemoved.each do |k, v| %>
-    <%= k.title %><br/>
+    <%= markdown(k.title) %>
     <p>
        <%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %>. The following Program Participants have been dropped:<br/> 
     <% v.each_index do |idx| %>
@@ -82,14 +82,14 @@
 <% if updatedItemDetails %>
 <h2>Title and Description Changes</h2>
 <% updatedItemDetails.each do |k, v| %>
-    <%= k.title %><br/>
+    <%= markdown(k.title) %>
     <p>
         <%= k.published_time_slot.start.strftime("%A at %H:%M") %> in <%= k.published_room.published_venue.name %>(<%= k.published_room.name %>) has been updated <br/>
     <% if v.size > 0 %>
     <% if v.kind_of?(Array) %>
         <% v.each do |change| %>
             <% change.each do |name, vals| %>
-                <%=name %> changed to: <%= vals[1] %><br/>
+                <%=name %> changed to: <%= (name == 'precis')? markdown(vals[1]) : vals[1] %><br/>
             <% end %>
         <% end %>
     <% end%>

@@ -30,7 +30,7 @@ atom_feed do |feed|
       end
 
       feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
-        entry.title(title)
+        entry.title(markdown(title))
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
       end
@@ -49,7 +49,7 @@ atom_feed do |feed|
       content = "Has been added to the progam, #{t} in #{venue}( #{r} )<br/><br/>#{precis}"
 
       feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
-        entry.title(title)
+        entry.title(markdown(title))
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
       end
@@ -66,7 +66,7 @@ atom_feed do |feed|
       content = "Has been dropped. From #{venue}( #{room} ) at #{t}."
 
       feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
-        entry.title(title)
+        entry.title(markdown(title))
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
       end
@@ -87,7 +87,7 @@ atom_feed do |feed|
         end
       end
       feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
-        entry.title(title)
+        entry.title(markdown(title))
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
       end
@@ -108,7 +108,7 @@ atom_feed do |feed|
       end
 
       feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
-        entry.title(title)
+        entry.title(markdown(title))
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
       end
@@ -128,6 +128,7 @@ atom_feed do |feed|
         if v.kind_of?(Array)
           v.each do |change|
             change.each do |name, vals|
+              changedv = name == 'precis' ? markdown(vals[1]) : vals[1]
               content += "#{name} has been changed to: \"#{vals[1]}\" <br/>"
             end
           end
@@ -135,7 +136,7 @@ atom_feed do |feed|
       end
 
       feed.entry(v, :url => 'http://renovationsf.org/prog-get.php') do |entry|
-        entry.title(title)
+        entry.title(markdown(title))
         entry.content(content, :type => 'html')
         entry.updated(@lastPubDate.timestamp.utc.strftime("%Y-%m-%dT%H:%M:%S%z"))
       end
