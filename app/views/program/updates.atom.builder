@@ -60,7 +60,7 @@ atom_feed do |feed|
   if droppedItems
     droppedItems.each do |k, v|
       title = v[:title]
-      t = v[:info][1].getlocal().strftime("%A at %H:%M")
+      t = v[:info][1].strftime("%A at %H:%M")
       venue = v[:info][0].published_venue.name
       room = v[:info][0].name
       content = "Has been dropped. From #{venue}( #{room} ) at #{t}."
@@ -77,7 +77,7 @@ atom_feed do |feed|
   if peopleAdded
     peopleAdded.each do |k, v|
       title = k.title
-      t = k.published_time_slot.start.getlocal().strftime("%A at %H:%M")
+      t = k.published_time_slot.start.strftime("%A at %H:%M")
       content = "#{t}. Program Participants have been added: <br/>"
       v.each_index do |idx|
         if idx % 2 == 0
@@ -98,7 +98,7 @@ atom_feed do |feed|
   if peopleRemoved
     peopleRemoved.each do |k, v|
       title = k.title
-      t = k.published_time_slot.start.getlocal().strftime("%A at %H:%M")
+      t = k.published_time_slot.start.strftime("%A at %H:%M")
       content = "#{t}. The following Program Participants have been dropped:<br/>"
       v.each_index do |idx|
         if idx % 2 == 0

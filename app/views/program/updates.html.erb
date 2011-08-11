@@ -41,7 +41,7 @@
 <% droppedItems.each do |k, v| %>
     <%= markdown(v[:title]) %>
     <p>
-        Has been dropped. From <%= v[:info][0].published_venue.name %>( <%= v[:info][0].name %> ) at <%= v[:info][1].getlocal().strftime("%A at %H:%M") %>.
+        Has been dropped. From <%= v[:info][0].published_venue.name %>( <%= v[:info][0].name %> ) at <%= v[:info][1].strftime("%A at %H:%M") %>.
     </p>
 <% end %>
 <% end %>
@@ -52,7 +52,7 @@
 <% peopleAdded.each do |k, v| %>
     <%= markdown(k.title) %>
     <p>
-        <%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %>. Program Participants have been added:<br/>
+        <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. Program Participants have been added:<br/>
     <% v.each_index do |idx| %>
         <% if idx % 2 == 0 %>
         <%= v[idx].GetFullPublicationName %> as <%= v[idx +1].name %>.<br/>
@@ -68,7 +68,7 @@
 <% peopleRemoved.each do |k, v| %>
     <%= markdown(k.title) %>
     <p>
-       <%= k.published_time_slot.start.getlocal().strftime("%A at %H:%M") %>. The following Program Participants have been dropped:<br/> 
+       <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. The following Program Participants have been dropped:<br/> 
     <% v.each_index do |idx| %>
         <% if idx % 2 == 0 %>
         <%= v[idx].GetFullPublicationName %><br/>
