@@ -292,10 +292,13 @@ class ProgramController < ApplicationController
   def getPeopleChange(auditInfo, resultantChanges)
     # Get the programme item assignments that have changed - this is the set of people
     if auditInfo.changes["published_programme_item_id"] # Add person
+      begin
       programmeItem = PublishedProgrammeItem.find(auditInfo.changes["published_programme_item_id"])
       role = PersonItemRole[auditInfo.changes["role_id"]]
       person = Person.find(auditInfo.changes["person_id"])
       resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :addPerson, person, role)
+      rescue  
+      end
     else
       if auditInfo.changes["role_id"].kind_of?(Array) # then we have a role change
         newrole = PersonItemRole[auditInfo.changes["role_id"][1]]
@@ -327,6 +330,7 @@ class ProgramController < ApplicationController
   # action == 'add'
   #
   def getItemChange(auditInfo, resultantChanges)
+    begin
     programmeItemAssignment = PublishedRoomItemAssignment.find(auditInfo.auditable_id) # get the associated program item assignment
     programmeItem = programmeItemAssignment.published_programme_item # from that we can get the program item
     if auditInfo.changes["published_time_slot_id"] # if it is a change to the time slote then we report on that
@@ -379,6 +383,8 @@ class ProgramController < ApplicationController
     end
     # TODO - if we have a move + add of the same item then it is a move not an add
     
+    rescue
+    end
     return resultantChanges
   end
   
@@ -394,7 +400,7 @@ class ProgramController < ApplicationController
   # action == 'add'
   #
   def addPinkSheetEntry(resultCollection, programmeItem, operation, *args)
-    
+    begin
     if resultCollection[operation]
       if resultCollection[operation][programmeItem]
         resultCollection[operation][programmeItem].concat args
@@ -405,6 +411,8 @@ class ProgramController < ApplicationController
       resultCollection[operation] = {programmeItem => args}
     end
     
+    rescue  
+    end
     return resultCollection
   end
   
