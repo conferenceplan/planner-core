@@ -306,7 +306,7 @@ function initDialog(event, ui){
         
         event.preventDefault();
     });
-    
+
     $('#edialog', ui.panel).jqm({
         ajax: '@href',
         trigger: 'a.entrydialog',
@@ -485,6 +485,7 @@ function loadTabs(id){
     $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
     var survey_id = data['person[survey_respondent_attributes][id]'];
     var tabs = $('#particpanttabs').tabs();
+    var selected = tabs.tabs('option', 'selected');
     
     tabs.tabs('url', 7, 'participants/' + id + '/programme_items').tabs('load', 7);
     tabs.tabs('url', 6, 'participants/' + id + '/availabilities').tabs('load', 6);
@@ -494,11 +495,11 @@ function loadTabs(id){
         tabs.tabs('url', 5, 'survey_respondents/reviews/' + 0).tabs('load', 5);
         
     };
-    tabs.tabs('url', 1, 'participants/' + id + '/addresses').tabs('load', 1);
-    tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);
-    tabs.tabs('url', 3, 'participants/' + id + '/edited_bio').tabs('load', 3);
     tabs.tabs('url', 4, 'tags/' + id + '?class=Person').tabs('load', 4);
-    tabs.tabs('url', 0, 'participants/' + id + '/registrationDetail').tabs('load', 0);//.tabs('select', 0);
+    tabs.tabs('url', 3, 'participants/' + id + '/edited_bio').tabs('load', 3);
+    tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);
+    tabs.tabs('url', 1, 'participants/' + id + '/addresses').tabs('load', 1);
+    tabs.tabs('url', 0, 'participants/' + id + '/registrationDetail').tabs('load', 0);
 }
 
 /* Initialize the tags - load is called when a new participant/person is selected in the grid */
@@ -510,7 +511,6 @@ function createTabs(){
         cache: false
     }).tabs({
         load: function(event, ui){
-            initDialog(event, ui);
             $(".addressAccordian").accordion({
                 header: 'h3',
                 collapsible: true,
@@ -524,18 +524,15 @@ function createTabs(){
                     url: "/programme_items/drop?person_id=" + newpid,
                     dataType: "html",
                     success: function(response){
-//                        alert($('#result').text(response));
                         // reload the tab
                         var $tabs = $('#particpanttabs').tabs();
                         var selected = $tabs.tabs('option', 'selected');
                         $tabs.tabs('load', selected);
-                    },
-//                    beforeSend: function(){
-//                        $('#result').html("<p>Please wait, the system is processing your request...<p>");
-//                    }
+                    }
                 });
             });
-            
+
+            initDialog(event, ui);
         }
     });
 }

@@ -1,17 +1,16 @@
 --- 
 smerfform:   
-  name: Renovation Program Participant Questionnaire
+  name: Boskone 49 Program Participant Questionnaire
   welcome: |
     <p>
-    Please complete this form if you've been invited to be on Renovation Program.
+    Please complete this form if you've been invited to be on Boskone 49 Program.
     </p>
     <p>
     Whether you're new to SF cons or have participated in
     Worldcon programs before, welcome! We know this questionnaire
     is lengthy, but please complete as much as you can to help us
     create the best possible program and to ensure that we match
-    you with suitable program items. You can return to the form
-    to update it.
+    you with suitable program items.
     </p>
     <p>
     If you need help with a particular field, hover over the blue
@@ -47,7 +46,7 @@ smerfform:
       style: grid_12
       description_style: grid_3 mandatory
       description: | Name
-      help: | Enter your Reno Registration name
+      help: | Enter your Boskone Registration name
       questions:
         First Name:
           code: g2q1
@@ -237,36 +236,36 @@ smerfform:
 # NOTE: we want to be able to attach sub questions to text - this needs to be an extension to SMERF
 # also want the ability to to an add more of this type, and a tag choice (with cloud display)
 # change render to get rid of <p> and put in div with style so we an have first and last name on one line etc
-    membership_status:
-      code: 5
-      name: Membership Status
-      questions:
-        I am a Member:
-          code: g5q1
-          type: singlechoice
-          style: grid_12
-          answer_style: grid_12
-          sort_order: 1
-          answers:
-            Yes:
-              code: 1
-              answer: | I am an attending member of Renovation.
-                <div class='grid_11 suffix_2'>
-                <i>Check our <a href='http://www.renovationsf.org/memlist.php' target='new'>online member search</a> if you aren't sure of your status.</i>
-                </div>
-              sort_order: 1
-              default: N
-              help: | Select this option only if you have already purchased a membership.
-            No:
-              code: 2
-              answer: | I'm not yet an attending member. I understand I need to buy a membership in order to be scheduled for Program.<br/>
-                <div class='grid_8 suffix_2'>
-                <i>You can complete the rest of the questionnaire, but you need to buy a membership by June 15, 2011 in order to be scheduled.
-                Membership can be purchased <a href='http://www.renovationsf.org/register.php' target='new'>here</a>.</i>
-                </div>
-              sort_order: 2
-              default: N
-              help: | Select this option if you do not have a membership yet.
+#    membership_status:
+#      code: 5
+#      name: Membership Status
+#      questions:
+#        I am a Member:
+#          code: g5q1
+#          type: singlechoice
+#          style: grid_12
+#          answer_style: grid_12
+#          sort_order: 1
+#          answers:
+#            Yes:
+#              code: 1
+#              answer: | I am an attending member of Boskone 49.
+#                <div class='grid_11 suffix_2'>
+#                <i>Check our <a href='http://www.renovationsf.org/memlist.php' target='new'>online member search</a> if you aren't sure of your status.</i>
+#                </div>
+#              sort_order: 1
+#              default: N
+#              help: | Select this option only if you have already purchased a membership.
+#            No:
+#              code: 2
+#              answer: | I'm not yet an attending member. I understand I need to buy a membership in order to be scheduled for Program.<br/>
+#                <div class='grid_8 suffix_2'>
+#                <i>You can complete the rest of the questionnaire, but you need to buy a membership by June 15, 2011 in order to be scheduled.
+#                Membership can be purchased <a href='http://www.renovationsf.org/register.php' target='new'>here</a>.</i>
+#                </div>
+#              sort_order: 2
+#              default: N
+#              help: | Select this option if you do not have a membership yet.
     program_availability:
       code: 6
       name: Program Availability
@@ -285,18 +284,18 @@ smerfform:
               code: 1
               answer_id: timedisable
               answer: | I am available for Program for the complete duration of the convention. 
-                     Renovation Program will officially begin at noon, Wednesday, August 17 and 
-                     will end by 4 pm on Sunday, August 21.
+                     Boskone 49 Program will officially begin at 4pm, Friday, February 17 and 
+                     will end by 3 pm on Sunday, February 19.
               sort_order: 1
               default: N
-              help: Select this option if you plan to be in Reno and will be available for Program by noon on Wednesday, August 17 and will be in Reno until at least 2pm on Sunday, August 21.
+              help: Select this option if you plan to be in Boston and will be available for Program by noon on Friday, February 17 and will be in Boston until at least 4pm on Sunday, February 19.
             Know Time:
               code: 2
               answer_id: timeselect
               answer: | I plan to be at the convention. 
               sort_order: 2
               default: N
-              help: Select the day/time options to let us know, roughly, when you expect to be available for Program in Reno and when you expect to leave.
+              help: Select the day/time options to let us know, roughly, when you expect to be available for Program in Boston and when you expect to leave.
               subquestions:
                 Not Sure:
                   code: g6s1q1
@@ -306,10 +305,10 @@ smerfform:
                   answers:
                     not_sure:
                       code: 1
-                      answer: | I am extremely uncertain when I will be available to be on Reno Program 
+                      answer: | I am extremely uncertain when I will be available to be on Boskone Program 
                       default: N
                       sort_order: 1
-                      help: Select this option if you are really not sure when you are coming into Reno and when you are leaving. However, we cannot schedule you until we have a general idea of when you are coming.  Please try to make your travel plans as soon as you can, and let us know your availability.
+                      help: Select this option if you are really not sure when you are coming into Boston and when you are leaving. However, we cannot schedule you until we have a general idea of when you are coming.  Please try to make your travel plans as soon as you can, and let us know your availability.
                 Start Date:
                   code: g6s1q2
 #                  validation: validate_sub_question
@@ -319,32 +318,22 @@ smerfform:
                   style: grid_12
                   question_style: grid_6
                   answer_style: grid_4 timeselect
-                  question: | I will be available to be on Renovation Program beginning:
+                  question: | I will be available to be on Boskone 49 Program beginning:
                   answers:
-                    Wed:
+                    Fri:
                       code: 1
-                      answer: | Wednesday, August 17
+                      answer: | Friday, February 17
                       sort_order: 1
                       default: N
-                    Thu:
+                    Sat:
                       code: 2
-                      answer: | Thursday, August 18
+                      answer: | Saturday, February 18
                       sort_order: 2
                       default: N
-                    Fri:
-                      code: 3
-                      answer: | Friday, August 19
-                      sort_order: 3
-                      default: N
-                    Sat:
-                      code: 4
-                      answer: | Saturday, August 20
-                      sort_order: 4
-                      default: N
                     Sun:
-                      code: 5
-                      answer: | Sunday, August 21
-                      sort_order: 5
+                      code: 3
+                      answer: | Sunday, February 19
+                      sort_order: 3
                       default: N
                 Start Time:
                   code: g6s1q3
@@ -433,30 +422,20 @@ smerfform:
                   question_style: grid_6
                   answer_style: grid_4 timeselect
                   answers:
-                    Wed:
+                    Fri:
                       code: 1
-                      answer: | Wednesday, August 17
+                      answer: | Friday, February 17
                       sort_order: 5
                       default: N
-                    Thu:
+                    Sat:
                       code: 2
-                      answer: | Thursday, August 18
+                      answer: | Saturday, February 18
                       sort_order: 4
                       default: N
-                    Fri:
-                      code: 3
-                      answer: | Friday, August 19
-                      sort_order: 3
-                      default: N
-                    Sat:
-                      code: 4
-                      answer: | Saturday, August 20
-                      sort_order: 2
-                      default: N
                     Sun:
-                      code: 5
-                      answer: | Sunday, August 21
-                      sort_order: 1
+                      code: 3
+                      answer: | Sunday, February 19
+                      sort_order: 3
                       default: N
                 End Time:
                   code: g6s1q5
@@ -591,35 +570,30 @@ smerfform:
           question: | Do not schedule me against the main GoH item for: 
           help: | Check the guests whose main GoH item (speech, performance, etc.) you do not want to be scheduled against.
           answers:
-            powersGOH:
+            scalziGOH:
               code: 1
-              answer: | Tim Powers GoH Item
+              answer: | John Scalzi GoH Item
               sort_order: 1
               default: N
-            vallejoGOH:
+            santosGOH:
               code: 2
-              answer: | Boris Vallejo GoH Item
+              answer: | Daniel dos Santos (Official Artist)
               sort_order: 2
               default: N
-            asherGOH:
+            weisskopfGOH:
               code: 3
-              answer: | Ellen Asher GoH Item
+              answer: | Toni Weisskopf (Special Guest)
               sort_order: 3
               default: N
-            brownGOH:
+            trickyPixie:
               code: 4
-              answer: | Charles N. Brown GoH Item
+              answer: | Tricky Pixie (Featured Filker)
               sort_order: 4
               default: N
-            billWillingham:
+            clementGOH:
               code: 5
-              answer: | Bill Willingham Item
+              answer: | Hal Clement Science Speaker (TBA)
               sort_order: 5
-              default: N
-            trickyPixie:
-              code: 6
-              answer: | Tricky Pixie Item
-              sort_order: 6
               default: N
         item_conflicts:
           code: g6q6
@@ -632,68 +606,23 @@ smerfform:
           answers:
             openingCermony:
               code: 1
-              answer: | Opening Ceremony (Wed night)
+              answer: | Opening Ceremony (Friday aft)
               sort_order: 1
               default: N
-            chesleys:
+            artShowReception:
               code: 2
-              answer: | Chesley Awards
+              answer: | Art Show Reception (Friday night)
               sort_order: 2
               default: N
-            masquerade:
+            trickyPixie:
               code: 3
-              answer: | Masquerade (Fri night)
+              answer: | Tricky Pixie Concert
               sort_order: 3
               default: N
-            hugos:
-              code: 4
-              answer: | Hugo Ceremony (Sat night)
-              sort_order: 4
-              default: N
             closingCeremony:
-              code: 5
+              code: 4
               answer: | Closing Ceremony (Sun aft)
-              sort_order: 5
-              default: N
-            trickyPixie:
-              code: 6
-              answer: | Tricky Pixie Concert
-              sort_order: 6
-              default: N
-            wsfsMeetings:
-              code: 7
-              answer: | WSFS Meetings (mornings)
-              sort_order: 7
-              default: N
-            sfwaMeetings:
-              code: 8
-              answer: | SFWA Meeting
-              sort_order: 8
-              default: N
-            asfaMeetings:
-              code: 9
-              answer: | ASFA Meeting
-              sort_order: 9
-              default: N
-            masqRehearsal:
-              code: 10
-              answer: | Masq Rehearsal (Fri)
-              sort_order: 10
-              default: N
-            artAuction:
-              code: 11
-              answer: | Art Auction (Sun noon)
-              sort_order: 11
-              default: N
-            regencyDance:
-              code: 12
-              answer: | Regency Dance
-              sort_order: 12
-              default: N
-            charityAuction:
-              code: 13
-              answer: | Charity and Fan Fund Auctions
-              sort_order: 13
+              sort_order: 4
               default: N
         excludedTimesText:
           code: g6q7
@@ -772,7 +701,7 @@ smerfform:
           question: | Fandom
           tags: fandom
           validation: add_tags
-        nevada:
+        gaming:
           code: g7q6
           type: textfield
           textfield_size: 100
@@ -780,8 +709,8 @@ smerfform:
           question_style: grid_1
           answer_style: grid_6
           sort_order: 6
-          question: | Nevada
-          tags: nevada
+          question: | Gaming
+          tags: gaming
           validation: add_tags
         othertopics:
           code: g7q7
@@ -802,12 +731,12 @@ smerfform:
           answer_style: grid_11
           sort_order: 8
           question: | Please feel free to tell us why you’re interested in/how you’re knowledgeable of the topics that you selected above.
-    personal_details_intro:
-      code: 71
-      name: 
-      description: | If you are interested in presenting an academic paper at the convention, 
-           please visit this <a href='http://www.renovationsf.org/program-academic.php' target="new">link</a>
-           which explains the process
+#    personal_details_intro:
+#      code: 71
+#      name: 
+#      description: | If you are interested in presenting an academic paper at the convention, 
+#           please visit this <a href='http://www.renovationsf.org/program-academic.php' target="new">link</a>
+#           which explains the process
     author_topics:
       code: 8
       name: Are there any Authors/Artists whom you’d like to talk about? If so, who are they?
@@ -846,33 +775,33 @@ smerfform:
               help: | Signing books or other items for attendees.  In the event of long lines, attendees may be limited to 3  items.
               sort_order: 1
               default: N
-            WritersWorkshop:
-              code: 2
-              answer: | Writers Workshop
-              help: | Leading morning workshops at the Peppermill 
-                that will last for 2 hours, involve 2 writers and several 
-                aspiring writers; advanced preparation required.
-              sort_order: 2
-              default: N
-            NewProOrientation:
-              code: 3
-              answer: | New Pro Orientation
-              help: | Discussing agents and publishers and other introductory topics for new writers
-              sort_order: 3
-              default: N
+#            WritersWorkshop:
+#              code: 2
+#              answer: | Writers Workshop
+#              help: | Leading morning workshops at the Peppermill 
+#                that will last for 2 hours, involve 2 writers and several 
+#                aspiring writers; advanced preparation required.
+#              sort_order: 2
+#              default: N
+#            NewProOrientation:
+#              code: 3
+#              answer: | New Pro Orientation
+#              help: | Discussing agents and publishers and other introductory topics for new writers
+#              sort_order: 3
+#              default: N
             LiteraryBeer:
               code: 5
               answer: | Literary Beer
               help: | Talking with a small group of attendees who signed up to see you. One beer is provided for you.
               sort_order: 5
               default: N
-            StrollwithStars:
-              code: 6
-              answer: | Stroll with Stars
-              help: | Walking around the Virginia Avenue area with attendees. 
-                 Starts at 9am and ends at about 9:50 at the Convention Center
-              sort_order: 6
-              default: N
+#            StrollwithStars:
+#              code: 6
+#              answer: | Stroll with Stars
+#              help: | Walking around the Virginia Avenue area with attendees. 
+#                 Starts at 9am and ends at about 9:50 at the Convention Center
+#              sort_order: 6
+#              default: N
             GameShow:
               code: 7
               answer: | Game Show
@@ -906,10 +835,8 @@ smerfform:
               default: N
             Reading:
               code: 12
-              answer: | Reading (20 minute)
-              help: | Reading an excerpt from your work, limited to 20-25 minute reading. 
-                Due to a lack of small rooms, the 25 minute limit needs to be strictly enforced to 
-                give more writers a chance to read.
+              answer: | Reading (25 minute)
+              help: | Reading an excerpt from your work, limited to 25 minute reading. Intimate 5-10 person gatherings, held in the consuite.
               sort_order: 12
               default: N
             Teen Writing:
@@ -918,30 +845,30 @@ smerfform:
               help: | Leading an informal writers workshop involving a few teenagers
               sort_order: 13
               default: N
-            MusicWorkshop:
-              code: 14
-              answer: | Music Workshop
-              help: | Leading an informal workshop on a specific instrument or musical style
-              sort_order: 14
-              default: N
+#            MusicWorkshop:
+#              code: 14
+#              answer: | Music Workshop
+#              help: | Leading an informal workshop on a specific instrument or musical style
+#              sort_order: 14
+#              default: N
             ArtWorkshop:
               code: 15
               answer: | Art Workshop
               help: | Leading an informal workshop.
               sort_order: 15
               default: N
-            CostumeWorkshop:
-              code: 16
-              answer: | Costume Workshop
-              help: | Leading an informal workshop on an aspect of costume development
-              sort_order: 16
-              default: N
-            Con_runningWorkshop:
-              code: 17
-              answer: |  Con-running Workshop
-              help: | Participating in a workshop about convention planning and management
-              sort_order: 17
-              default: N
+#            CostumeWorkshop:
+#              code: 16
+#              answer: | Costume Workshop
+#              help: | Leading an informal workshop on an aspect of costume development
+#              sort_order: 16
+#              default: N
+#            Con_runningWorkshop:
+#              code: 17
+#              answer: |  Con-running Workshop
+#              help: | Participating in a workshop about convention planning and management
+#              sort_order: 17
+#              default: N
             Demo:
               code: 18
               answer: | Demo (art, tech, video etc.)
@@ -1039,48 +966,48 @@ smerfform:
               help: | Check here if you are willing to moderate panels at the convention.
               sort_order: 1
               default: N
-    music_night:
-      code: 91
-      name: Wednesday Music Night
-      description: | Wednesday Music night: Play an instrument or sing well? Are you part of music group? 
-              Participate in one of our Wednesday perfomances. 
-              Enter notes about what you'd like to do in the Comments area below.
-      questions:
-        musicNightVolunteer:
-          code: g91q1
-          type: textbox
-          style: grid_12
-          question_style: grid_3
-          answer_style: grid_7
-          sort_order: 1
-          question: | Notes for Music Night
-          help: | Wednesday&rsquo;s music night is a festival of performances, sing-a-longs, 
-            workshops and demos of varied musical instruments and styles. 
-            If you have some musical skills we may not know about and would like to be involved, please let us know.
-    art_night:
-      code: 92
-      name: Thursday Art Night
-      description: | 
-          Thursday Art Night: Would you like to give an art talk or demo or lead some sort of 
-          interactive art event (game or workshop)? Enter notes about what you'd like to do 
-          in the Comments area below.
-      questions:
-        artNightVolunteer:
-          code: g92q1
-          type: textbox
-          style: grid_12
-          question_style: grid_3
-          answer_style: grid_7
-          sort_order: 1
-          question: | Notes for Art Night
-          help: | We are aiming to have a strong art program throughout the convention, 
-            but in addition we are dedicating the second evening of the con to a 
-            festival of the visual arts called Art Night.  Arts-related demos, 
-            displays, and interactive events will fill the concourse and exhibit 
-            hall, complementing talks and panels and the film festival going on in 
-            the programming rooms at the same time. The Art Show will stay open 
-            extended hours so that fans and artists can visit it throughout the 
-            festivities.
+#    music_night:
+#      code: 91
+#      name: Wednesday Music Night
+#      description: | Wednesday Music night: Play an instrument or sing well? Are you part of music group? 
+#              Participate in one of our Wednesday perfomances. 
+#              Enter notes about what you'd like to do in the Comments area below.
+#      questions:
+#        musicNightVolunteer:
+#          code: g91q1
+#          type: textbox
+#          style: grid_12
+#          question_style: grid_3
+#          answer_style: grid_7
+#          sort_order: 1
+#          question: | Notes for Music Night
+#          help: | Wednesday&rsquo;s music night is a festival of performances, sing-a-longs, 
+#            workshops and demos of varied musical instruments and styles. 
+#            If you have some musical skills we may not know about and would like to be involved, please let us know.
+#    art_night:
+#      code: 92
+#      name: Thursday Art Night
+#      description: | 
+#          Thursday Art Night: Would you like to give an art talk or demo or lead some sort of 
+#          interactive art event (game or workshop)? Enter notes about what you'd like to do 
+#          in the Comments area below.
+#      questions:
+#        artNightVolunteer:
+#          code: g92q1
+#          type: textbox
+#          style: grid_12
+#          question_style: grid_3
+#          answer_style: grid_7
+#          sort_order: 1
+#          question: | Notes for Art Night
+#          help: | We are aiming to have a strong art program throughout the convention, 
+#            but in addition we are dedicating the second evening of the con to a 
+#            festival of the visual arts called Art Night.  Arts-related demos, 
+#            displays, and interactive events will fill the concourse and exhibit 
+#            hall, complementing talks and panels and the film festival going on in 
+#            the programming rooms at the same time. The Art Show will stay open 
+#            extended hours so that fans and artists can visit it throughout the 
+#            festivities.
     other_info:
       code: 93
       name: Other Information and Comments
@@ -1102,7 +1029,7 @@ smerfform:
           question_style: grid_7
           answer_style: grid_11
           sort_order: 2
-          question: | Is there something else we don't know about you that you'd be willing to talk about?
+          question: | What other items would you be willing to talk about?
           help: | What have you never talked about at a convention that might make an interesting panel item.
         Panels With:
           code: g93q3
@@ -1113,15 +1040,15 @@ smerfform:
           sort_order: 3
           question: | Who do you want to be on panels with?
           help: | List 4-6 people you particularly enjoy being on panels with and we will try to schedule you with some of them.
-        NevadaConnections:
-          code: g93q4
-          type: textbox
-          style: grid_12
-          question_style: grid_7
-          answer_style: grid_11
-          sort_order: 4
-          question: | Do you have any Nevada connections (born there/school/job)?
-          help: | Did you witness above-ground nuclear testing in Nevada, or perhaps saw something unusual around Area 51?   If you have an interesting Nevada-related tale to tell, let us know.
+#        NevadaConnections:
+#          code: g93q4
+#          type: textbox
+#          style: grid_12
+#          question_style: grid_7
+#          answer_style: grid_11
+#          sort_order: 4
+#          question: | Do you have any Nevada connections (born there/school/job)?
+#          help: | Did you witness above-ground nuclear testing in Nevada, or perhaps saw something unusual around Area 51?   If you have an interesting Nevada-related tale to tell, let us know.
         exclusionTopics:
           code: g93q5
           type: textbox
@@ -1138,7 +1065,7 @@ smerfform:
           question_style: grid_11
           answer_style: grid_11
           sort_order: 6
-          question: | Please do not schedule me under any circumstances with the following people (information will not be shared except with the core Renovation Program team):
+          question: | Please do not schedule me under any circumstances with the following people (information will not be shared except with the core Boskone 49 Program team). Boskone will not disclose this information to other staff or participants.:
           help: | We believe strongly that panels should be intelligent, respectful discussions that do not devolve into verbal fistfights.  If there are people you would rather not be panelists with, let us know so we can discreetly avoid scheduling you with them.
         localtalk:
           code: g93q7
@@ -1148,18 +1075,18 @@ smerfform:
           sort_order: 10
           question: | 
           answers:
-             localtalk:
-               code: 1
-               answer: | I am willing to do a reading or a talk at a local library.
-               help: | Renovation is exploring doing some events at a library that is about two blocks away from the convention center. Check this box if you would be willing to be involved in community outreach for the science fiction field.
-               sort_order: 1
-               default: N
-             sfworkshop:
-               code: 2
-               answer: | Assisting with the "Teaching SF" workshop on Wednesday.
-               help: | Check this box if you would like to talk at the AboutSF workshop for librarians, teachers and parents on 8/17.
-               sort_order: 2
-               default: N
+#             localtalk:
+#               code: 1
+#               answer: | I am willing to do a reading or a talk at a local library.
+#               help: | Boskone 49 is exploring doing some events at a library that is about two blocks away from the convention center. Check this box if you would be willing to be involved in community outreach for the science fiction field.
+#               sort_order: 1
+#               default: N
+#             sfworkshop:
+#               code: 2
+#               answer: | Assisting with the "Teaching SF" workshop on Wednesday.
+#               help: | Check this box if you would like to talk at the AboutSF workshop for librarians, teachers and parents on 8/17.
+#               sort_order: 2
+#               default: N
              doNotShareEmail:
                code: 3
                answer: | Do not share e-mail contact info with other participants
@@ -1201,7 +1128,7 @@ smerfform:
 #
     pub_info:
       code: 95
-      name: Information for Renovation's Web Site and Publications
+      name: Information for Boskone 49's Web Site and Publications
       description: | 
       questions:
         mini_bio:
@@ -1211,14 +1138,13 @@ smerfform:
           question_style: grid_10
           answer_style: grid_10
           sort_order: 1
-          question: | <b><u>Mini-Bio</u></b> Please provide a short (100 - 200 words) bio for the 
-              Renovation web site that includes information about your most
+          question: | <b><u>Mini-Bio</u></b> Please provide a short (50 words) bio for the 
+              Boskone 49 web site that includes information about your most
               recent publications/activities. Use initial capitals for the
               title rather than ALL CAPS. This bio might be edited for
               space considerations.
-              <a href="http://www.fanac.org/Denvention3/programming/bios2.html" target="new">
-              Some sample participant bios from other Worldcons</a>.
-          help: Information in this section will be published in our web site, social media, Progress Reports, and Souvenir Book to better inform our members about you and your appearance at Renovation.
+              These bios may be used for press purposes, on the Boskone website, or in Boskone publications only.
+          help: Information in this section will be published in our web site, social media, Progress Reports, and Souvenir Book to better inform our members about you and your appearance at Boskone 49.
         homepage:
           code: g95q2
           type: textfield
