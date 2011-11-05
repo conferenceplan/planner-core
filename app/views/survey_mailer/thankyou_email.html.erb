@@ -2,13 +2,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Renovation Questionaire</title>
+        <title>Boskone Questionaire</title>
     </head>
     <body>
         <h1><%=h @user.first_name %> <%=h @user.last_name %></h1>
-        <p>Thank you for completing the Program questionnaire for the 2011 Worldcon, Renovation. 
+        <p>Thank you for completing the Program questionnaire for the Boskone. 
 		You can always review and edit your response by returning to 
-		<a href='<%= survey_respondents_url(:host => "program.renovationsf.org") %>'>survey</a> 
+		<a href='<%= survey_respondents_url(:host => "boskone.myconferenceplanning.org") %>'>survey</a> 
 	    and entering the following 'invitation code': <b><%= @user.key %></b>
         </p>
 		<p>A summary of your responses to the questionnaire follow below</p>
