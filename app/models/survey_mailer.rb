@@ -4,8 +4,8 @@ class SurveyMailer < ActionMailer::Base
     sform = SmerfForm.find_by_id(1)
     
     recipients get_email(respondent)
-    cc       "program-form@renovationsf.org"
-    from      "no-reply@renovationsf.org"
+    cc       "boskone@myconferenceplanning.org"
+    from      "no-reply@myconferenceplanning.org"
     subject   "Thank you for completing the questionnaire"
     sent_on   Time.now
     content_type "text/html"
@@ -15,8 +15,8 @@ class SurveyMailer < ActionMailer::Base
 
   def decline_email(respondent)
     recipients get_email(respondent)
-    cc       "program-form@renovationsf.org"
-    from      "no-reply@renovationsf.org"
+    cc       "boskone@myconferenceplanning.org"
+    from      "no-reply@myconferenceplanning.org"
     subject   "Your wish to decline in participating has been recorded"
     sent_on   Time.now
     content_type "text/html"
