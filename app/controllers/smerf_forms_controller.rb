@@ -42,7 +42,7 @@ class SmerfFormsController < SurveyApplicationController
     retrieve_smerf_form(params[:id])
     @current_key = params[:key];
     @respondent = SurveyRespondent.find_by_single_access_token(params[:key]) 
-    @page_title = 'Renovation Program Participant Questionnaire'
+    @page_title = 'Boskone Program Participant Questionnaire'
 
     if (@smerf_forms_surveyrespondent)
       # Retrieve the responses

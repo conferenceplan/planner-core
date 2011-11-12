@@ -592,8 +592,13 @@ smerfform:
               default: N
             clementGOH:
               code: 5
-              answer: | Hal Clement Science Speaker (TBA)
+              answer: | Hal Clement Science Speaker (Bruce Schneier)
               sort_order: 5
+              default: N
+            nesfaPressGuest:
+              code: 6
+              answer: | NESFA Press Guest (Jerry Pournelle)
+              sort_order: 6
               default: N
         item_conflicts:
           code: g6q6

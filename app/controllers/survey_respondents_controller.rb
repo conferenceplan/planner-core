@@ -6,7 +6,7 @@ class SurveyRespondentsController < SurveyApplicationController
   
   def new
     @survey_respondent = SurveyRespondent.new
-    @page_title = "Renovation Questionnaire Start"
+    @page_title = "Boskone Questionnaire Start"
   end
   
   def create
