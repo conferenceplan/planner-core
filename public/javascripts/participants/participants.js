@@ -479,27 +479,34 @@ function applyFilterEventHandler(){
     });
 }
 
+
 function loadTabs(id){
     var data = jQuery("#participants").jqGrid('getRowData', id);
+    var survey_id = data['person[survey_respondent_attributes][id]'];
+    if (survey_id.trim().length <= 0) {
+        survey_id = 0;
+    }
+    var allTabs = {
+        0: 'participants/' + id + '/registrationDetail',
+        1: 'participants/' + id + '/addresses',
+        2: 'participants/' + id,
+        3: 'participants/' + id + '/edited_bio',
+        4: 'tags/' + id + '?class=Person',
+        5: 'survey_respondents/reviews/' + survey_id,
+        6: 'participants/' + id + '/availabilities',
+        7: 'participants/' + id + '/programme_items',
+    };
     $('#participant_id').text(id);
     $('#participant_name').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
-    var survey_id = data['person[survey_respondent_attributes][id]'];
     var tabs = $('#particpanttabs').tabs();
     var selected = tabs.tabs('option', 'selected');
     
-    tabs.tabs('url', 7, 'participants/' + id + '/programme_items').tabs('load', 7);
-    tabs.tabs('url', 6, 'participants/' + id + '/availabilities').tabs('load', 6);
-    if (survey_id.trim().length > 0) {
-        tabs.tabs('url', 5, 'survey_respondents/reviews/' + survey_id).tabs('load', 5);
-    } else {
-        tabs.tabs('url', 5, 'survey_respondents/reviews/' + 0).tabs('load', 5);
-        
+    for (i = 7; i >= 0; i--) {
+        if (i != selected) {
+            tabs.tabs('url', i, allTabs[i]).tabs('load', i);
+        }
     };
-    tabs.tabs('url', 4, 'tags/' + id + '?class=Person').tabs('load', 4);
-    tabs.tabs('url', 3, 'participants/' + id + '/edited_bio').tabs('load', 3);
-    tabs.tabs('url', 2, 'participants/' + id).tabs('load', 2);
-    tabs.tabs('url', 1, 'participants/' + id + '/addresses').tabs('load', 1);
-    tabs.tabs('url', 0, 'participants/' + id + '/registrationDetail').tabs('load', 0);
+    tabs.tabs('url', selected, allTabs[selected]).tabs('load', selected);
 }
 
 /* Initialize the tags - load is called when a new participant/person is selected in the grid */
