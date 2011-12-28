@@ -40,20 +40,21 @@ config.time_zone = '#{Capistrano::CLI.ui.ask("Enter Application Timezone: ")}'
 
 EOF
 
-        location = fetch(:template_dir, "config/deploy") + '/production.rb.erb'
+        location = fetch(:template_dir, "config/deploy") + '/#{stage}.rb.erb'
         template = File.file?(location) ? File.read(location) : default_template
 
         config = ERB.new(template)
 
         run "mkdir -p #{shared_path}/config/environments" 
-        put config.result(binding), "#{shared_path}/config/environments/production.rb"
+        put config.result(binding), "#{shared_path}/config/environments/#{stage}.rb"
       end
 
       desc <<-DESC
-        [internal] Updates the symlink for production.rb file to the just deployed release.
+        [internal] Updates the symlink for stage.rb file to the just deployed release.
       DESC
+      
       task :symlink, :except => { :no_release => true } do
-        run "ln -nfs #{shared_path}/config/environments/production.rb #{release_path}/config/environments/production.rb" 
+        run "ln -nfs #{shared_path}/config/environments/#{stage}.rb #{release_path}/config/environments/#{stage}.rb" 
       end
 
     end

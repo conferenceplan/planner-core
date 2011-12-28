@@ -115,6 +115,7 @@ Capistrano::Configuration.instance.load do
   reconnect: false
   pool: 5
   socket: /var/run/mysqld/mysqld.sock
+  host: #{Capistrano::CLI.ui.ask("Enter MySQL database server: ")}
   database: #{Capistrano::CLI.ui.ask("Enter MySQL database name: ")}
   username: #{Capistrano::CLI.ui.ask("Enter MySQL database user: ")}
   password: #{Capistrano::CLI.ui.ask("Enter MySQL database password: ")}
