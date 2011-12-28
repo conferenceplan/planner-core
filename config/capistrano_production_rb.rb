@@ -17,28 +17,28 @@ Capistrano::Configuration.instance.load do
       task :setup, :except => { :no_release => true } do
 
         default_template = <<-EOF
-          config.threadsafe!
-          config.cache_classes = true
-          config.action_controller.consider_all_requests_local = false
-          config.action_controller.perform_caching             = true
-          config.action_view.cache_template_loading            = true
-          # ActionController::Base.cache_store = :mem_cache_store, "10.180.186.87"
-          # Disable delivery errors, bad email addresses will be ignored
-          # config.action_mailer.raise_delivery_errors = false
-          ActionMailer::Base.delivery_method = :smtp
-          ActionMailer::Base.smtp_settings = {
-            :tls => true,
-            :address => "",
-            :user_name => "",
-            :domain => "",
-            :password => "",
-            :authentication => :plain,
-            :port => 587
-          }
-          
-          config.time_zone = '#{Capistrano::CLI.ui.ask("Enter Application Timezone: ")}'
+config.threadsafe!
+config.cache_classes = true
+config.action_controller.consider_all_requests_local = false
+config.action_controller.perform_caching             = true
+config.action_view.cache_template_loading            = true
+# ActionController::Base.cache_store = :mem_cache_store, "10.180.186.87"
+# Disable delivery errors, bad email addresses will be ignored
+# config.action_mailer.raise_delivery_errors = false
+ActionMailer::Base.delivery_method = :smtp
+ActionMailer::Base.smtp_settings = {
+  :tls => true,
+  :address => "",
+  :user_name => "",
+  :domain => "",
+  :password => "",
+  :authentication => :plain,
+  :port => 587
+}
 
-        EOF
+config.time_zone = '#{Capistrano::CLI.ui.ask("Enter Application Timezone: ")}'
+
+EOF
 
         location = fetch(:template_dir, "config/deploy") + '/production.rb.erb'
         template = File.file?(location) ? File.read(location) : default_template

@@ -109,15 +109,15 @@ Capistrano::Configuration.instance.load do
       task :setup, :except => { :no_release => true } do
 
         default_template = <<-EOF
-          production:
-          adapter: mysql
-          encoding: utf8
-          reconnect: false
-          pool: 5
-          socket: /var/run/mysqld/mysqld.sock
-          database: #{Capistrano::CLI.ui.ask("Enter MySQL database name: ")}
-          username: #{Capistrano::CLI.ui.ask("Enter MySQL database user: ")}
-          password: #{Capistrano::CLI.ui.ask("Enter MySQL database password: ")}
+#{stage}:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  pool: 5
+  socket: /var/run/mysqld/mysqld.sock
+  database: #{Capistrano::CLI.ui.ask("Enter MySQL database name: ")}
+  username: #{Capistrano::CLI.ui.ask("Enter MySQL database user: ")}
+  password: #{Capistrano::CLI.ui.ask("Enter MySQL database password: ")}
         EOF
 
         location = fetch(:template_dir, "config/deploy") + '/database.yml.erb'
