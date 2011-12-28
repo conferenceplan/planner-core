@@ -28,3 +28,4 @@ config.action_mailer.raise_delivery_errors = false
 #   :urlencode => false
 #}
 
+config.time_zone = 'Pacific Time (US & Canada)'
