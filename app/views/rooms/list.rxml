@@ -5,7 +5,11 @@ xml.rows do
   @rooms.each do |room|
     xml.row({:id => room.id}) do
       xml.cell(room.name)
-      xml.cell(Venue.find(room.venue_id).name)
+      if room.venue_id
+         xml.cell(Venue.find(room.venue_id).name)
+      else
+         xml.cell()
+      end
       
       setup_pointer = RoomSetup.find(room.setup_id)
 
