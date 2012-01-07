@@ -8,6 +8,7 @@ set :deploy_to, "/opt/www"
 require "capistrano/ext/multistage"
 require "config/capistrano_database_yml"
 require "config/capistrano_production_rb"
+require "config/capistrano_config_yml"
 
 set :scm, :subversion
 set :group, "www-data"
