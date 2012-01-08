@@ -1,0 +1,21 @@
+<br/>
+<h1> Edit a Mapped Survey Question</h1>
+<%= error_messages_for :mapped_survey_questions %>
+<% form_for @mapped_survey_question do |f| -%>
+	<p>
+		<%= f.label :name, "Survey Question Text " %> <br/>
+		<%= f.text_field :name %>
+	</p>
+	<p>
+		<%= f.label :question, "Survey Question Code" %> <br/>
+		<%= f.text_field :question %>
+	</p>
+    <p>
+		<%= f.label :code, "Survey Question Code Value" %> <br/>
+		<%= f.text_field :code %>
+	</p>
+	<p>
+		<%= f.submit "Submit" %>
+	</p>
+<% end %>
+

@@ -147,6 +147,8 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :invitation_categories
   
+  map.resources :mapped_survey_questions
+  
   map.connect 'formats/list', :controller => 'formats', :action => 'list'
   map.connect 'formats/listwithblank', :controller => 'formats', :action => 'listwithblank'
   map.resources :formats

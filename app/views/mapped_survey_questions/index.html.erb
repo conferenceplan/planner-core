@@ -1,0 +1,10 @@
+<br/>
+<br/>
+<% for mapped_survey_question in @mapped_survey_questions %>
+	<li>Question is <%= mapped_survey_question.name %> question code is <%= mapped_survey_question.question%> question code value is <%= mapped_survey_question.code%>&nbsp; 
+		<%=  link_to "edit", :action => 'edit', :id => mapped_survey_question %>&nbsp; 
+		<%=  link_to "remove", mapped_survey_question, :method => :delete,:confirm => "Are you Sure?" %>
+	</li>
+<%end%>
+<p> <%= link_to "create new mapped survey question", :action => 'new' %></p>
+
