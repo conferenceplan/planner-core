@@ -24,7 +24,7 @@ class SurveyRespondentsController < SurveyApplicationController
     # find a respondent with the key and last name
     if (key)
       @survey_respondent = SurveyRespondent.find :first, 
-        :conditions => ["survey_respondents.key = ? AND last_name like ?", key, last_name]
+        :conditions => ["survey_respondents.key = ? AND last_name = ?", key, last_name]
     end
     
     if @survey_respondent
