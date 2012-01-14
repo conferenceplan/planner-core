@@ -8,6 +8,8 @@
    <%= label_tag :sched_only, "Include scheduled panelists only? "%><br /><br />
    <%= check_box_tag :names_only, '1', params[:names_only] %>
    <%= label_tag :names_only, "Include names only? "%><br /><br />
+    <%= check_box_tag :names_and_city, '1', params[:names_and_city] %>
+   <%= label_tag :names_and_city, "Just names,city,invitation and acceptance status? "%><br /><br />
    <%= submit_tag "Export CSV", :name=>"csv" %>
    <%= submit_tag "View in Browser", :name => "html" %>
 </p>
@@ -17,7 +19,7 @@
    <% if @names.blank? %>
       No one right now.
    <% else %>
-      <%= render :partial => "itemlist", :object => @names %> 
+      <%= render :partial => "itemlist", :object => @names,:locals => {:include_city => @include_city} %> 
    <% end %>
 <% end %>
 </p>

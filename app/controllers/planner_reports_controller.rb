@@ -414,13 +414,39 @@ class PlannerReportsController < PlannerController
       @names = Person.all(:include => [:programmeItems => :time_slot], :conditions => [cond_str,accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
 
       output = Array.new
-    
+      @include_city = false
+      if (params[:names_and_city])
+        @include_city = true
+      end
       @names.each do |name|
          if params[:names_only]
             name[:items] = nil
             if params[:csv]
                output.push [name.GetFullPublicationName,
                             name.acceptance_status.name]
+            end
+         elsif @include_city
+            name[:items] = nil
+            defaultcity = '';
+            defaultstate = '';
+            defaultcountry = '';
+            unless (name.getDefaultPostalAddress.nil?)
+                defaultcity = name.getDefaultPostalAddress.city
+                defaultstate = name.getDefaultPostalAddress.state
+                defaultcountry = name.getDefaultPostalAddress.country
+             end
+           
+            if params[:csv]
+               output.push [name.first_name,
+                            name.last_name,
+                            name.GetFullPublicationName,
+                            name.acceptance_status.name,
+                            name.invitestatus ? name.invitestatus.name : "",
+                            name.invitation_category ? name.invitation_category.name : "",
+                            defaultcity,
+                            defaultstate,
+                            defaultcountry
+                            ]
             end
          else
 
@@ -471,6 +497,17 @@ class PlannerReportsController < PlannerController
          if params[:names_only]
             output.unshift ["Name",
                             "Acceptance Status"]
+         elsif params[:names_and_city]
+           output.unshift ["First Name",
+                           "Last Name",
+                           "Pseudonym",
+                           "Acceptance Status",
+                           "Invitation Status",
+                           "Invitation Category",
+                           "City",
+                           "State",
+                           "Country"
+                           ]
          else
             output.unshift ["Name",
                             "Acceptance Status",
