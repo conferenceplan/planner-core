@@ -140,8 +140,12 @@ private
         person.save
       end
 
-      SurveyMailer.deliver_thankyou_email(survey_respondent) # send out email to the new email address
-      
+      begin
+        SurveyMailer.deliver_thankyou_email(survey_respondent) # send out email to the new email address
+      rescue
+        # We had a problem with the mail send, but we just want to log it and not tell the user
+        logger.error "Problem sending email to " + survey_respondent.email
+      end
   end
   
   # This method retrieves the smerf form and user responses if user
