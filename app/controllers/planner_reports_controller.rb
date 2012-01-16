@@ -427,12 +427,18 @@ class PlannerReportsController < PlannerController
             end
          elsif @include_city
             name[:items] = nil
+            defaultline1 = '';
+            defaultline2 = '';
             defaultcity = '';
             defaultstate = '';
+            defaultpostcode = '';
             defaultcountry = '';
             unless (name.getDefaultPostalAddress.nil?)
+                defaultline1 = name.getDefaultPostalAddress.line1;
+                defaultline2 = name.getDefaultPostalAddress.line2;
                 defaultcity = name.getDefaultPostalAddress.city
                 defaultstate = name.getDefaultPostalAddress.state
+                defaultpostcode = name.getDefaultPostalAddress.postcode
                 defaultcountry = name.getDefaultPostalAddress.country
              end
            
@@ -443,8 +449,11 @@ class PlannerReportsController < PlannerController
                             name.acceptance_status.name,
                             name.invitestatus ? name.invitestatus.name : "",
                             name.invitation_category ? name.invitation_category.name : "",
+                            defaultline1,
+                            defaultline2,
                             defaultcity,
                             defaultstate,
+                            defaultpostcode,
                             defaultcountry
                             ]
             end
@@ -504,8 +513,11 @@ class PlannerReportsController < PlannerController
                            "Acceptance Status",
                            "Invitation Status",
                            "Invitation Category",
+                           "line1",
+                           "Line2",
                            "City",
                            "State",
+                           "Post Code",
                            "Country"
                            ]
          else

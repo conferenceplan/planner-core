@@ -15,7 +15,8 @@
 		       <li> Invitation Category: <%= p.invitation_category.name %> </li>
 		  <% end %>
 	      <% unless p.getDefaultPostalAddress.nil? %>
-                 <li> City: <%= p.getDefaultPostalAddress.city %>, <%= p.getDefaultPostalAddress.state %>, <%= p.getDefaultPostalAddress.country %> </li>
+	      		 <li><%= p.getDefaultPostalAddress.line1 %>, <%= p.getDefaultPostalAddress.line2 %></li>
+                 <li><%= p.getDefaultPostalAddress.city %>, <%= p.getDefaultPostalAddress.state %>, <%= p.getDefaultPostalAddress.postcode %>, <%= p.getDefaultPostalAddress.country %> </li>
            <% end %>
 	   <% end %>
        <% unless p.items.nil? %>
