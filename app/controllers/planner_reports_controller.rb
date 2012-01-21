@@ -616,7 +616,7 @@ class PlannerReportsController < PlannerController
           [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
         :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
                      :equipment_types, {:room => :venue}, :time_slot]} ],
-        :order => "people.last_name asc"
+        :order => "people.last_name asc, time_slots.start asc"
       )  
     if params[:csv]
       output = Array.new
