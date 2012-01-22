@@ -348,7 +348,7 @@ class PlannerReportsController < PlannerController
                    "reference number",
                    "venue",
                   ]
-      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :format,{:room => [:venue]}], :conditions => {"print" => true}, :order => "programme_items.pub_reference_number,people.last_name") 
+      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :format,{:room => [:venue]}], :conditions => {"print" => true}, :order => "time_slots.start asc, rooms.name asc") 
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
       invisible = PersonItemRole.find_by_name("Invisible")
