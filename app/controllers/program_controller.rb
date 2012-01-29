@@ -1,3 +1,6 @@
+#
+#
+#
 class ProgramController < ApplicationController
 
   #
@@ -52,15 +55,6 @@ class ProgramController < ApplicationController
       } # This should generate an HTML grid
       format.atom # for an Atom feed (for readers)
       format.js { 
-# temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
-#        file = File.open("public/program-"+day.to_s+".js", "rb")
-#        fileStr = file.read
-#        if params[:callback]
-#          render :inline => params[:callback] + "(" + fileStr + ")"
-#        else  
-#          render :inline => fileStr
-#      end
-##################################################################################
         render_json @programmeItems.to_json(
         :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
               :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
@@ -110,15 +104,6 @@ class ProgramController < ApplicationController
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.js { 
-# temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
-#        file = File.open("public/participants.js", "rb")
-#        fileStr = file.read
-#        if params[:callback]
-#          render :inline => params[:callback] + "(" + fileStr + ")"
-#        else  
-#          render :inline => fileStr
-#        end
-##################################################################################
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
           jsonstr = ''
           @participants.each do |p|
@@ -169,17 +154,7 @@ class ProgramController < ApplicationController
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.atom # for an Atom feed (for readers)
-      # TODO - put in a temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
       format.js { 
-# temporary patch for the JSON in prod to simulate so that the iphone app can point to the correct URL
-#        file = File.open("public/feed.js", "rb")
-#        fileStr = file.read
-#        if params[:callback]
-#          render :inline => params[:callback] + "(" + fileStr + ")"
-#        else  
-#          render :inline => fileStr
-#        end
-##################################################################################
         render_json @programmeItems.to_json(
         :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
               :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,

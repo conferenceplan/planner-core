@@ -52,7 +52,7 @@
             <div class="program-item-room">(<%= item.published_room.name %>)</div>
             <div class="program-item-participants">
             <% item.people.each do |person| %>
-            <div class="program-item-participant"><a href="http://renovationsf.org/participants/<%= person.GetFullPublicationName.gsub(/[ \.\-]/,'').downcase %>.php"><%= person.GetFullPublicationName %></a></div>
+            <div class="program-item-participant"><%= person.GetFullPublicationName %></div>
             <% end %>
             </div>
         </td>
