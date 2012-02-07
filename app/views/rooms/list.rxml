@@ -12,8 +12,14 @@ xml.rows do
       end
       
       setup_pointer = RoomSetup.find(room.setup_id)
-
-      xml.cell(SetupType.find(setup_pointer.setup_type_id).name)
+	  
+	  begin
+		  setup = SetupType.find(setup_pointer.setup_type_id)
+	      xml.cell(setup.name)
+	  rescue
+         xml.cell()
+      end
+	
       xml.cell(setup_pointer.capacity)
       
       xml.cell(room.purpose)
