@@ -101,6 +101,7 @@ class ProgramController < ApplicationController
                line << item.title
                prevTime = curTime
              end
+                 csv << [prevTime.strftime('%Y %B %d %H:%M'), line].flatten
            end
            send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present'
       }
