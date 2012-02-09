@@ -67,6 +67,50 @@ class ProgramController < ApplicationController
     end
   end
   
+  def grid
+    @rooms = PublishedRoom.all(:select => 'distinct published_rooms.name',
+      :order => 'published_venues.name DESC, published_rooms.name ASC', :include => [:published_venue]) #,
+#      :include => [:published_venue, {:published_room_item_assignments => {:published_programme_item => {:people => :pseudonym}}}])
+
+    @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, {:published_room => [:published_venue]} ],
+      :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC')
+
+    # TODO - sort out ordering
+    respond_to do |format|
+      format.csv {
+           csv_string = FasterCSV.generate do |csv|
+             prevTime = nil
+             line = []
+             csv << ["", @rooms.collect{|e| e.name}].flatten
+             currentColumn = 1
+             @programmeItems.each do |item|
+               # if time is the same then keep on one row...
+               curTime = item.published_time_slot.start
+               if ((prevTime != nil) && (curTime != prevTime))
+                 csv << [prevTime.strftime('%Y %B %d %H:%M'), line].flatten
+                 line = []                 
+                 currentColumn = 1
+               end
+               idx = @rooms.index{|x| (item.published_room != nil) && (x.name == item.published_room.name)} # get column that the current item's room is in
+               if idx
+                 (currentColumn..idx).each do |i|
+                   line << ""
+                 end
+                 currentColumn = idx + 2
+               end
+               line << item.title
+               prevTime = curTime
+             end
+           end
+           send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present'
+      }
+      format.html {
+          render :layout => 'content' 
+      }
+    end
+
+  end
+  
   #
   # Return a list of rooms - use the same parameters as for the grid
   #
