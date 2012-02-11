@@ -67,30 +67,69 @@ class ProgramController < ApplicationController
     end
   end
   
+  # Merge into the current lie
+  def mergeTimeLines(curLine, prevLine, time)
+    nl = []
+    
+    curLine.each_index do |idx|
+      if (curLine[idx].is_a? PublishedProgrammeItem) && (curLine[idx].published_time_slot.start == time)
+        nl << curLine[idx]
+      elsif (curLine[idx].is_a? PublishedProgrammeItem) && (curLine[idx].published_time_slot.end > time)
+        nl << curLine[idx]
+      elsif (prevLine[idx].is_a? PublishedProgrammeItem) && (prevLine[idx].published_time_slot.end > time)
+        nl << prevLine[idx]
+      else
+        nl << ""#curLine[idx]
+      end
+    end
+    
+    return nl
+  end
+  
   def grid
     @rooms = PublishedRoom.all(:select => 'distinct published_rooms.name',
       :order => 'published_venues.name DESC, published_rooms.name ASC', :include => [:published_venue]) #,
-#      :include => [:published_venue, {:published_room_item_assignments => {:published_programme_item => {:people => :pseudonym}}}])
 
     @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, {:published_room => [:published_venue]} ],
       :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC')
 
-    # TODO - sort out ordering
     respond_to do |format|
       format.csv {
            csv_string = FasterCSV.generate do |csv|
-             prevTime = nil
-             line = []
-             csv << ["", @rooms.collect{|e| e.name}].flatten
+             # prevTime = nil
+             # nl = []
+             # line = []
+             # prevLine = []
+             
+             csv << ["", @rooms.collect{|e| e.name}].flatten # first row is the list of rooms
+
              currentColumn = 1
+             line = prevline = []
+             prevTime = nil
              @programmeItems.each do |item|
                # if time is the same then keep on one row...
-               curTime = item.published_time_slot.start
-               if ((prevTime != nil) && (curTime != prevTime))
-                 csv << [prevTime.strftime('%Y %B %d %H:%M'), line].flatten
-                 line = []                 
+               currentTime = item.published_time_slot.start
+               
+               if ((prevTime != nil) && (currentTime != prevTime))
+                 # we output the line and then start the new line
+                 if prevline != nil
+                   nl = mergeTimeLines(line, prevline, prevTime)
+                   csv << [prevTime.strftime('%Y %B %d %H:%M'), nl.collect{|e| (e.is_a? PublishedProgrammeItem) ? e.title : e }].flatten
+                 else
+                   csv << [prevTime.strftime('%Y %B %d %H:%M'), line.collect{|e| (e.is_a? PublishedProgrammeItem) ? e.title : e }].flatten
+                 end
+                 
+                 if prevTime + 30.minutes < currentTime # insert an extra line
+                   nl = mergeTimeLines(line, prevline, prevTime+ 30.minutes)
+                   csv << [(prevTime+ 30.minutes).strftime('%Y %B %d %H:%M'), nl.collect{|e| (e.is_a? PublishedProgrammeItem) ? e.title : e }].flatten
+                 end
+                 
+                 prevline = line
+                 line =[]
                  currentColumn = 1
                end
+
+               # fill up the current line               
                idx = @rooms.index{|x| (item.published_room != nil) && (x.name == item.published_room.name)} # get column that the current item's room is in
                if idx
                  (currentColumn..idx).each do |i|
@@ -98,10 +137,11 @@ class ProgramController < ApplicationController
                  end
                  currentColumn = idx + 2
                end
-               line << item.title
-               prevTime = curTime
+               line << item
+
+               prevTime = currentTime
              end
-                 csv << [prevTime.strftime('%Y %B %d %H:%M'), line].flatten
+                 csv << [prevTime.strftime('%Y %B %d %H:%M'), line.collect{|e| (e.is_a? PublishedProgrammeItem) ? e.title : e }].flatten
            end
            send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present'
       }
