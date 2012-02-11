@@ -67,25 +67,6 @@ class ProgramController < ApplicationController
     end
   end
   
-  # Merge into the current lie
-  def mergeTimeLines(curLine, prevLine, time)
-    nl = []
-    
-    curLine.each_index do |idx|
-      if (curLine[idx].is_a? PublishedProgrammeItem) && (curLine[idx].published_time_slot.start == time)
-        nl << curLine[idx]
-      elsif (curLine[idx].is_a? PublishedProgrammeItem) && (curLine[idx].published_time_slot.end > time)
-        nl << curLine[idx]
-      elsif (prevLine[idx].is_a? PublishedProgrammeItem) && (prevLine[idx].published_time_slot.end > time)
-        nl << prevLine[idx]
-      else
-        nl << ""#curLine[idx]
-      end
-    end
-    
-    return nl
-  end
-  
   def grid
     @rooms = PublishedRoom.all(:select => 'distinct published_rooms.name',
       :order => 'published_venues.name DESC, published_rooms.name ASC', :include => [:published_venue]) #,
@@ -96,11 +77,6 @@ class ProgramController < ApplicationController
     respond_to do |format|
       format.csv {
            csv_string = FasterCSV.generate do |csv|
-             # prevTime = nil
-             # nl = []
-             # line = []
-             # prevLine = []
-             
              csv << ["", @rooms.collect{|e| e.name}].flatten # first row is the list of rooms
 
              currentColumn = 1
@@ -124,7 +100,7 @@ class ProgramController < ApplicationController
                    csv << [(prevTime+ 30.minutes).strftime('%Y %B %d %H:%M'), nl.collect{|e| (e.is_a? PublishedProgrammeItem) ? e.title : e }].flatten
                  end
                  
-                 prevline = line
+                 prevline = nl
                  line =[]
                  currentColumn = 1
                end
@@ -339,6 +315,28 @@ class ProgramController < ApplicationController
   end
   
   protected
+
+  # Merge into the current line
+  def mergeTimeLines(curLine, prevLine, time)
+    nl = []
+    
+    curLine.each_index do |idx|
+
+      if (curLine[idx].is_a? PublishedProgrammeItem) && ((curLine[idx].published_time_slot.start == time) || (curLine[idx].published_time_slot.end > time))
+        nl << curLine[idx]
+        next
+      end
+      
+      if (prevLine[idx].is_a? PublishedProgrammeItem) && (prevLine[idx].published_time_slot.end > time)
+        nl << prevLine[idx]
+        next
+      end
+      
+      nl << ""
+    end
+    
+    return nl
+  end
   
   def getProgrammeItemChanges(id)
     audits = Audit.all(
