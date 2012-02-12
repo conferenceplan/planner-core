@@ -738,12 +738,16 @@ class PlannerReportsController < PlannerController
       if (params[:backofbadge] != nil)
        peopleList = params[:backofbadge][:person_id]
       end
-
+      excludeNonPublished = false;
+      if (params[:excludeNonPublished])
+        excludeNonPublished = true;
+      end
       maxquery = "select MAX(x) from (select Count(*) as x from programme_item_assignments group by person_id) l;"
       maxList = ActiveRecord::Base.connection.select_rows(maxquery)
       maxItems = maxList[0][0].to_i;
       @people = nil
       selectConditions = '(acceptance_status_id = '+ accepted.id.to_s + ' OR acceptance_status_id = ' + probable.id.to_s + ')'
+   
       if (peopleList != nil && peopleList.size() != 0)
             addOr = "AND ("
         peopleList.each do |p|
@@ -768,8 +772,11 @@ class PlannerReportsController < PlannerController
          panels = Array.new
          items = name.programmeItems;
          items.each do |p|
+            next if ((excludeNonPublished == true) and (p.print == false))
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
             next if p.time_slot.nil?
+            next if ((excludeNonPublished == true) and (a.role_id == invisible.id))
+            next if (a.role_id == reserved.id)
             panelstr = "#{p.time_slot.start.strftime('%a %H:%M')} "
             panelstr << ": #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
             if (p.short_title.nil? == false && p.short_title != '')
@@ -782,9 +789,7 @@ class PlannerReportsController < PlannerController
             elsif a.role_id == invisible.id
               panelstr << " (I)"
             end
-            if a.role_id == reserved.id
-                next
-            end
+        
             panels << panelstr
          end
          if (panels.size() != 0)

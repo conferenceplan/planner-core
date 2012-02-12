@@ -11,6 +11,8 @@
 					<%= select_tag 'backofbadge[person_id]',options_from_collection_for_select(
 	                 @people, "id", "GetFullName"), :multiple => true %></div></div>
 					
+  <%= check_box_tag :excludeNonPublished, '1', params[:excludeNonPublished] %>
+  <%= label_tag :excludeNonPublished, "Exclude Invisible and No Print? "%><br /><br />
  
  </div>
   <div class='form-buttons'>
