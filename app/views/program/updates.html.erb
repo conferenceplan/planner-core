@@ -58,7 +58,7 @@
 <% if peopleAdded %>
 <h2>Program Participants Added to Programme Items</h2>
 <% peopleAdded.each do |k, v| %>
-    <%if !addedItems[k] %>
+    <%if addedItems && !addedItems[k] %>
     <%= markdown(k.title) %>
     <p>
         <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. Program Participants have been added:<br/>
@@ -99,7 +99,9 @@
     <% if v.kind_of?(Array) %>
         <% v.each do |change| %>
             <% change.each do |name, vals| %>
-                <%=name %> changed to: <%= (name == 'precis')? markdown(vals[1]) : vals[1] %><br/>
+            	<%if vals %>
+	                <%=name %> changed to: <%= (name == 'precis')? markdown(vals[1]) : vals[1] %><br/>
+            	<%end%>
             <% end %>
         <% end %>
     <% end%>
