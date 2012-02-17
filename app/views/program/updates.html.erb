@@ -58,7 +58,7 @@
 <% if peopleAdded %>
 <h2>Program Participants Added to Programme Items</h2>
 <% peopleAdded.each do |k, v| %>
-    <%if addedItems && !addedItems[k] %>
+    <%if (addedItems == nil) || !addedItems[k] %>
     <%= markdown(k.title) %>
     <p>
         <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. Program Participants have been added:<br/>
