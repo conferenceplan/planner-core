@@ -105,6 +105,7 @@ authorization do
      has_permission_on :excluded_items_survey_maps, :to => [:supermanage]
      has_permission_on :equipment_types, :to => :supermanage
      has_permission_on :equipment_needs, :to => :supermanage
+     has_permission_on :surveys, :to => :supermanage
   end
 
   role :Admin do

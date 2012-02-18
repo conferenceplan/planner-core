@@ -215,4 +215,5 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :excluded_times
 
+  map.resources :surveys
 end
