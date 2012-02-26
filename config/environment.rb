@@ -15,6 +15,7 @@ Rails::Initializer.run do |config|
   config.gem "fastercsv"
   config.gem "time_diff"
   config.gem 'delayed_job', :version => '~>2.0.7'
+  config.gem 'i18n', :version => '0.4.2' # because later gems cause problems with error message display for rails 2.3.8
   
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers

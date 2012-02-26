@@ -1,0 +1,11 @@
+<%= error_messages_for :survey %>
+<% form_for @survey, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
+<div class='survey_form'>
+	<div class='line'><div class='field_name'>Name:</div><div class='field_value'><%= f.text_field :name %></div></div>
+	<div class='line'><div class='field_name'>Welcome:</div><div class='field_value'><%= f.text_field :welcome %></div></div>
+	<div class='line'><div class='field_name'>Thank You:</div><div class='field_value'><%= f.text_field :thank_you %></div></div>
+	<div class='form-buttons'>
+		<%= f.submit "Submit" %>
+	</div>
+</div>
+<% end %>

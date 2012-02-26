@@ -17,8 +17,3 @@ class CreateSurveyGroups < ActiveRecord::Migration
     drop_table :survey_groups
   end
 end
-
-    # @fields = {
-      # 'style'                     => {'mandatory' => 'N'},
-      # 'description_style'                     => {'mandatory' => 'N'}
-    # }     
