@@ -160,7 +160,7 @@ class ProgramController < ApplicationController
         ), :content_type => 'application/json' }
     end
   end
-
+  
   def participants
     respond_to do |format|
       format.html { render :layout => 'content' }
@@ -183,7 +183,7 @@ class ProgramController < ApplicationController
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
            csv_string = FasterCSV.generate do |csv|
              @participants.each do |n|
-                csv << [ n[0], n[1]]
+                csv << [ n[0], n[1], n[2], BlueCloth.new(n[2]).to_html]
              end
            end
            send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present'
@@ -533,10 +533,12 @@ EOS
 PARTICIPANT_QUERY_PLAIN = <<"EOS"
   select distinct 
   case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
-  case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name
+  case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name,
+  IFNULL(edited_bios.bio, '')
   from people
   join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
   left join pseudonyms ON pseudonyms.person_id = people.id
+  left join edited_bios on edited_bios.person_id = people.id
   ORDER BY last_name;
 EOS
   
