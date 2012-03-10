@@ -8,12 +8,16 @@ module PlannerReportHelpers
             csv << r
          end
       end
-      c = Iconv.new('ISO-8859-15//IGNORE','UTF-8')
-      send_data c.iconv(csv_data),
-         :type => 'text/csv; charset=iso-8859-1; header=present',
-         :disposition => "attachment; filename=#{filename}"
-      flash[:notice] = "Export complete!"
       
+      # This prevents keeping large strings in memory
+      c = Iconv.new('ISO-8859-15//IGNORE','UTF-8')
+      headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
+      render :content_type => 'text/csv; charset=iso-8859-1; header=present',
+             :text => proc { |response, output|
+         csv_data.each do |csvline|
+            output.write(c.iconv(csvline))
+         end
+      }
    end
 
    def csv_out_utf16(data, filename)
