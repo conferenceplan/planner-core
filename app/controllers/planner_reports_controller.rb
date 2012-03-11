@@ -72,7 +72,8 @@ class PlannerReportsController < PlannerController
       @panels.each do |panel|
          names = Array.new
          rsvd = Array.new
-         panel.people.each do |p|
+         panel.people.sort {|x,y| x.pubLastName.downcase <=> y.pubLastName.downcase}.each do |p|
+         # panel.people.each do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
             if a.role_id == moderator.id
                names.push "#{p.GetFullPublicationName.strip} (M)"
@@ -411,7 +412,8 @@ class PlannerReportsController < PlannerController
             cond_str << " and time_slots.start is not NULL"
       end
 
-      @names = Person.all(:include => [:programmeItems => :time_slot], :conditions => [cond_str,accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
+      @names = Person.all(:include => [:pseudonym, {:programmeItems => :time_slot}], :conditions => [cond_str,accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
+      @names = @names.sort {|x,y| x.pubLastName.downcase <=> y.pubLastName.downcase}
 
       output = Array.new
       @include_city = false
