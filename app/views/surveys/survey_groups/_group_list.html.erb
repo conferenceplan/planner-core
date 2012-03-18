@@ -1,0 +1,11 @@
+<ol id="selectable">
+<% @groups.each do |g| %> 
+<li class="ui-widget-content">
+	<div class="group-buttons">
+			<%= link_to g.name, survey_survey_group_path(@survey,g), :class => "group-dialog group-name" %>
+			<%= link_to 'edit', edit_survey_survey_group_path(@survey,g), :class => "group-edit" %>
+			<%= link_to "remove", survey_survey_group_path(@survey,g), :class => "group-delete" %>
+	</div>
+</li>
+<% end %>
+</ol>

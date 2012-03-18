@@ -12,7 +12,7 @@
 			return this.bind('click.cpDialog', function(event) {
 				$.ajax({
 					type : 'GET',
-					url : event.target.href,
+					url : event.currentTarget.href,
 					dataType : "html",
 					success : function(response) {
 						var form = $(response);
@@ -35,8 +35,9 @@
 										form.find(settings['form']).replaceWith(d);
 									},
 									success : function(data) {
-										$(settings['target']).html(data);
 										$(this).dialog("close");
+										$(settings['target']).html(data);
+										settings['success']();
 									}
 								});
 							};

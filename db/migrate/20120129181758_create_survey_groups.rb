@@ -6,7 +6,7 @@ class CreateSurveyGroups < ActiveRecord::Migration
       t.string :altname, { :default => "" }
       t.string :description, { :default => "" }
 
-      t.references :Survey
+      t.references :survey
 
       t.timestamps
       t.column :lock_version, :integer, { :default => 0 }

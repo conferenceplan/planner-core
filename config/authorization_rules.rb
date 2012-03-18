@@ -75,6 +75,7 @@ authorization do
     has_permission_on :programme_items, :to => :schedule
     has_permission_on :equipment_types, :to => :manage
     has_permission_on :equipment_needs, :to => :manage
+    has_permission_on :publisher, :to => :schedule
   end
   
   role :SuperPlanner do
@@ -125,6 +126,6 @@ privileges do
     privilege :update, :includes => [:edit,:states,:copySurvey,:updateExcludedItemsFromSurveys,:updateExcludedTimesFromSurveys]
     privilege :delete, :includes => [:destroy, :removeItem]
     privilege :communicate, :includes => [:exportemailxml,:doexportemailxml,:exportbiolist, :selectExportBioList, :schedule_report, :BackOfBadge, :selectBadgeLabel, :selectScheduleReport,:RoomSign,:selectRoomSign, :tableTents,:selectTableTents]
-    privilege :schedule, :includes => [:manage]
+    privilege :schedule, :includes => [:manage, :publish]
     privilege :supermanage, :includes => [:drop]
 end

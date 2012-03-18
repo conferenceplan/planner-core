@@ -216,4 +216,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :excluded_times
 
   map.resources :surveys
+
+  #map.resources :surveys, :has_many => :survey_groups
+  map.resources :surveys do |survey|
+    survey.resources :survey_groups, :controller => 'surveys/survey_groups'
+  end
 end

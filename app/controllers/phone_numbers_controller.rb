@@ -29,7 +29,7 @@ class PhoneNumbersController < PlannerController
   def create
     if (params[:person_id])
       @person = Person.find(params[:person_id])      
-      @phoneNumber = @person.phone_numbers.new(params[:phone_number]);
+      @phoneNumber = @person.phone_numbers.new(params[:phone_number])
     else
       # TODO - we may not want to create an address without having a person to assigned it to it?
       @phoneNumber = PhoneNumber.new(params[:phone_number]);

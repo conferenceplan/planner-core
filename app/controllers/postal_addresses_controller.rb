@@ -29,7 +29,7 @@ class PostalAddressesController < PlannerController
   def create
     if (params[:person_id])
       @person = Person.find(params[:person_id])      
-      @postalAddress = @person.postal_addresses.new(params[:postal_address]);
+      @postalAddress = @person.postal_addresses.new(params[:postal_address])
     else
     logger.debug "HERE"
       # TODO - we may not want to create an address without having a person to assigned it to it?

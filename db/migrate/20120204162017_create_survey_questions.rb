@@ -12,7 +12,7 @@ class CreateSurveyQuestions < ActiveRecord::Migration
       t.integer :additional, { :default => 0 } # for repeating questions i.e. multiple adresses, multiple phone numbers etc.
       t.string :validation, { :default => "" } # name of method to assist with the validation of input
 
-      t.references :SurveyGroup
+      t.references :surveygroup
 
       t.timestamps
       t.column :lock_version, :integer, { :default => 0 }

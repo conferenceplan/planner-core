@@ -29,7 +29,7 @@ class EmailAddressesController < PlannerController
   def create
     if (params[:person_id])
       @person = Person.find(params[:person_id])      
-      @emailAddress = @person.email_addresses.new(params[:email_address]);
+      @emailAddress = @person.email_addresses.new(params[:email_address])
     else
       # TODO - we may not want to create an address without having a person to assigned it to it?
       @emailAddress = EmailAddress.new(params[:email_address]);

@@ -1,20 +1,43 @@
 <% content_for :styleheader do %>
+
+.survey-name, .survey-edit, .survey-delete,
+.group-name, .group-edit, .group-delete {
+	white-space:nowrap;
+	overflow: hidden;
+}
+
+.survey-name, .group-name {
+	width: 70%;
+	text-align: left;
+}
+	#toolbar {
+		padding: 10px 4px;
+	}
+	
+#feedback { font-size: 1.4em; }
+#selectable .ui-selecting { background: #FECA40; }
+#selectable .ui-selected { background: #F39814; color: white; }
+#selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+#selectable li { margin: 3px; padding: 0.4em; height: 26px; }
 <% end %>
 <% content_for :jsheader do %>
-  <%= javascript_include_tag 'plugins/cpdialog' %>
-  <%= javascript_include_tag 'surveys/surveys' %>
+<%= javascript_include_tag 'plugins/cpdialog' %>
+<%= javascript_include_tag 'plugins/cpremovebutton' %>
+<%= javascript_include_tag 'surveys/surveys' %>
 <% end %>
-
-<!-- TODO - put in a list of the suveys, plus new, delete etc. -->
-<% @surveys.each do |survey| %>
 <div class='container_12'>
-	<div><%= survey.name %></div>
-    <div><%= link_to 'Show', survey, :class => "survey-dialog" %></div>
-    <div><%= link_to 'Edit', edit_survey_path(survey), :class => "survey-dialog" %></div>
-    <div><%= link_to 'Destroy', survey, :confirm => 'Are you sure?', :method => :delete %></div>
+	<div>
+		<%= link_to 'New survey', new_survey_path, :class => "survey-dialog" %>
+	</div>
 </div>
-<% end %>
-
-<br />
-
-<div><%= link_to 'New survey', new_survey_path, :class => "survey-dialog" %></div>
+<div class='container_12'>
+	<div class="grid_3">
+		<%=render :partial => 'survey_list' %>
+	</div>
+	<div class="grid_7">
+	</div>
+</div>
+<div class='container_12'>
+	<div id="messages">
+	</div>
+</div>

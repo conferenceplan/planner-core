@@ -21,16 +21,17 @@ class SurveysController < PlannerController
 
   def edit
     @survey = Survey.find params[:id]
-    
+
     render :layout => 'content'
   end
 
   def update
     @survey = Survey.find params[:id]
-    
+
     if @survey.update_attributes(params[:survey])
       # Go back to the main page
-      redirect_to :action => 'index'
+      @surveys = Survey.all
+      render :survey_list, :layout => 'plain'
     else
       render :action => 'edit', :status => 500, :layout => 'content'
     end
@@ -39,16 +40,19 @@ class SurveysController < PlannerController
   def destroy
     @survey = Survey.find params[:id]
     @survey.destroy
-    redirect_to :action => 'index'
+    # redirect_to :action => 'index'
+      @surveys = Survey.all
+          render :survey_list, :layout => 'plain'
   end
 
   def create
-      @survey = Survey.new params[:survey]
-      if @survey.save
-         redirect_to :action => 'index'
-      else
-         render :action => 'new'
-      end
+    @survey = Survey.new params[:survey]
+    if @survey.save
+      @surveys = Survey.all
+      render :survey_list, :layout => 'plain'
+    else
+      render :action => 'new'
+    end
   end
 
 end

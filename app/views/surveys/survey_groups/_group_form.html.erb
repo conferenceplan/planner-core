@@ -1,0 +1,9 @@
+<%= error_messages_for :surveyGroup %>
+<% form_for [@survey,@group], :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
+<div class='group_form'>
+	<div class='line'><div class='field_name'>Name:</div><div class='field_value'><%= f.text_field :name %></div></div>
+	<div class='form-buttons'>
+		<%= f.submit "Submit" %>
+	</div>
+</div>
+<% end %>
