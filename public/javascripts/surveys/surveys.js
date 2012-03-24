@@ -10,7 +10,7 @@ function init() {
 	});
 	$(".survey-edit" ).button({
 		icons: {
-                primary: "ui-icon-wrench"
+                primary: "ui-icon-pencil"
        },
        text : false
 	});
@@ -47,6 +47,19 @@ function init() {
 	});
 }
 
+function edit_form_submit() {
+	$(".survey_group_submit").click( function(event) {
+				$.ajax({
+					url : event.currentTarget.href,
+					dataType : "html",
+		            success: function(data){
+						$('#edit-area').html(data);
+            		}
+            	});
+				event.preventDefault();
+	});
+}
+
 function init_group(id) {
 	$(".group-delete" ).button({
 		icons: {
@@ -56,7 +69,7 @@ function init_group(id) {
 	});
 	$(".group-edit" ).button({
 		icons: {
-                primary: "ui-icon-wrench"
+                primary: "ui-icon-pencil"
        },
        text : false
 	});
@@ -64,8 +77,20 @@ function init_group(id) {
 	
 	$( ".group-buttons" ).buttonset();
 
-	$(".group-dialog, .group-edit" ).cpDialog('destroy');
-	$(".group-dialog, .group-edit" ).cpDialog({
+$(".group-edit").click( function(event) {
+				$.ajax({
+					url : event.currentTarget.href,
+					dataType : "html",
+		            success: function(data){
+						$('#edit-area').html(data);
+            		}
+            	});
+				event.preventDefault();
+			});
+
+
+	$(".group-dialog").cpDialog('destroy');
+	$(".group-dialog" ).cpDialog({
 		'target' : '#group_list-'+ id,
 		'form' : '.group_form',
 		'success' : function() {
@@ -83,80 +108,3 @@ function init_group(id) {
 jQuery(document).ready(function() {
 	init();
 });
-	
-	// $("#surveys")
-        // .jstree({
-            // "plugins" : ["themes","json_data","ui","crrm","hotkeys","types", "themeroller"],
-// //            "plugins" : ["themes","html_data","ui","crrm","hotkeys","types"],
-            // "core" : { "initially_open" : [ "phtml_1" ] },
-            // "types" : {
-            	// "max_depth" : -2, 
-            	// "max_children" : -2,
-            	// "valid_children" : ["survey"],
-            	// "types" : {
-            		// "survey" : {
-            			// "valid_children" : "group",
-            			// "icon" : { "image" : "/images/icons/survey.png"}
-            		// },
-            		// "group" : {
-            			// "valid_children" : "question",
-            			// "icon" : { "image" : "/images/icons/group.png"}
-            		// },
-            		// "question" : {
-            			// "valid_children" : ["answer", "question"],
-            			// "icon" : { "image" : "/images/icons/question.png"}
-            		// },
-            		// "answer" : {
-            			// "valid_children" : "none",
-            			// "icon" : { "image" : "/images/icons/answer.png"}
-            		// }//,
-            		// // "default" : {
-            			// // "icon" : { "image" : "/images/icons/survey.png"}//,
-            		// // }
-            	// }
-            // },
-			// "json_data" : {
-				// "data" : [
-					// {
-						// "data" : "survey1",
-						// "attr" : { "rel" : "survey" },
-						// "children" : [
-							// "child 1", "child 2"
-						// ]
-					// },
-					// {
-						// "data" : "survey2",
-						// "attr" : { "rel" : "survey" },
-						// "children" : [
-							// {
-								// "data" : "group 3",
-								// "attr" : { "rel" : "group" }
-							// },
-							// {
-								// "data" : "group 4",
-								// "attr" : { "rel" : "group" },
-								// "children": [
-									// {
-										// "data" : "question 3",
-										// "attr" : { "rel" : "question" },
-										// "children": [
-											// {
-												// "data" : "answer 3",
-												// "attr" : { "rel" : "answer" }
-											// }
-										// ]
-									// }
-								// ]
-							// },
-							// {
-								// "data" : "group 5",
-								// "attr" : { "rel" : "group" }
-							// }
-						// ]
-					// }
-				// ]
-			// }
-        // })
-        // .bind("loaded.jstree", function (event, data) {
-            // // you get two params - event & data - check the core docs for a detailed description
-        // });
