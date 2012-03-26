@@ -77,12 +77,32 @@ function init_group(id) {
 	
 	$( ".group-buttons" ).buttonset();
 
-$(".group-edit").click( function(event) {
+	$(".group-edit").click( function(event) {
 				$.ajax({
 					url : event.currentTarget.href,
 					dataType : "html",
 		            success: function(data){
+		            	var form = $(data);
 						$('#edit-area').html(data);
+						$('#edit-area').find("input[type='submit']").click(function(event) {
+								var myform = $('#edit-area').find('#layerform');
+								var serializedForm = $('#edit-area').find('#layerform').serialize(); // TODO - test with hidden variables
+								$.ajax({
+									url : myform.attr('action'),
+									type : myform.attr('method'),
+									context : this,
+									data : serializedForm,
+									error : function(data) {
+										var d = $(data.response);
+										$('#edit-area').find(settings['form']).replaceWith(d);
+									},
+									success : function(response) {
+										$('#group_list-'+ id).html(response);
+										init_group(id);
+									}
+								});
+								event.preventDefault();
+						});
             		}
             	});
 				event.preventDefault();

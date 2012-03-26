@@ -17,10 +17,8 @@
         		    	'_method' : 'delete' // TODO - would be good to have the authenticity token as well
            			},
 		            success: function(data){
-						//$('#group_list-'+ id).html(data);
 						$(settings['target']).html(data);
 						settings['success']();
-						//init_group(id);
             		}
             	});
 				event.preventDefault();
