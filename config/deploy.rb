@@ -1,5 +1,5 @@
 #
-set :stages, %w(production staging sandbox boskone)
+set :stages, %w(production staging sandbox boskone lonestartest)
 set :default_stage, "staging"
 set :application, "PlannerPrototype"
 set :repository,  "https://conferenceplan.svn.sourceforge.net/svnroot/conferenceplan/PlannerPrototype"
