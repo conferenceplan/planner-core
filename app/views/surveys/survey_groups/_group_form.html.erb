@@ -2,6 +2,8 @@
 <% form_for [@survey,@group], :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
 <div class='group_form'>
 	<div class='line'><div class='field_name'>Name:</div><div class='field_value'><%= f.text_field :name %></div></div>
+	<div class='line'><div class='field_name'>Alternative Name:</div><div class='field_value'><%= f.text_field :altname %></div></div>
+	<div class='line'><div class='field_name'>Description:</div><div class='field_value'><%= f.text_field :description %></div></div>
 	<div class='form-buttons'>
 		<%= f.submit "Submit" %>
 	</div>

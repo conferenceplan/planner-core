@@ -55,6 +55,7 @@
 				});
 
 				event.preventDefault();
+				$(this).removeClass("ui-state-focus ui-state-hover");
 			});
 		},
 		destroy : function() {

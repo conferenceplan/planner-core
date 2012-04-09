@@ -1,5 +1,4 @@
 <% content_for :styleheader do %>
-
 .survey-name, .survey-edit, .survey-delete,
 .group-name, .group-edit, .group-delete {
 	white-space:nowrap;
@@ -10,19 +9,26 @@
 	width: 70%;
 	text-align: left;
 }
-	#toolbar {
-		padding: 10px 4px;
-	}
+
+#toolbar {
+	padding: 10px 4px;
+}
 	
 #feedback { font-size: 1.4em; }
 #selectable .ui-selecting { background: #FECA40; }
 #selectable .ui-selected { background: #F39814; color: white; }
 #selectable { list-style-type: none; margin: 0; padding: 0; width: 100%; }
 #selectable li { margin: 3px; padding: 0.4em; height: 26px; }
+
+#selectable-questions .ui-selecting { background: #FECA40; }
+#selectable-questions .ui-selected { background: #F39814; color: white; }
+#selectable-questions { list-style-type: none; margin: 0; padding: 0; width: 100%; }
+#selectable-questions li { margin: 3px; padding: 0.4em; }
 <% end %>
 <% content_for :jsheader do %>
 <%= javascript_include_tag 'plugins/cpdialog' %>
 <%= javascript_include_tag 'plugins/cpremovebutton' %>
+<%= javascript_include_tag 'plugins/cpDynamicArea' %>
 <%= javascript_include_tag 'surveys/surveys' %>
 <% end %>
 <div class='container_12'>
@@ -34,7 +40,9 @@
 	<div class="grid_3">
 		<%=render :partial => 'survey_list' %>
 	</div>
-	<div class="grid_7" id='edit-area'>
+	<div class="grid_7">
+		<div id='edit-area-1'></div>
+		<div id='edit-area-2'></div>
 	</div>
 </div>
 <div class='container_12'>

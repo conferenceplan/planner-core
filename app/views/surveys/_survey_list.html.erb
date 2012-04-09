@@ -4,7 +4,7 @@
 			<h3 surveyid='<%= survey.id %>'><a href="#"><%= survey.name %></a></h3>
 			<div>
 			<div class="survey-buttons">
-					<%= link_to survey.name, survey, :class => "survey-dialog survey-name" %>
+					<%= link_to survey.name, survey, :class => "survey-display survey-name" %>
 					<%= link_to 'Edit', edit_survey_path(survey), :class => "survey-edit" %>
 					<%= link_to "Destroy", survey_path(survey), :class => "survey-delete" %>
 

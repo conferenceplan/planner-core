@@ -1,1 +1,5 @@
 <%=render :partial => 'group_form' %>
+<!-- For each question in the group we render it - the template renders partials -->
+<ol id='selectable-questions'>
+<%= render :partial => 'surveys/survey_groups/survey_questions/survey_question', :collection => @group.survey_questions %>
+</ol>
