@@ -9,7 +9,11 @@
 	<div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= f.text_field :validation %></div></div>
 	<div class='form-buttons'>
 		<%= f.submit "Submit" %>
-		<%= link_to "Cancel", {:action => 'show'}, {:class =>'cancel-link'} %> <!-- TODO - change to a button ... -->
+		<%if @question.id != nil %>
+			<%= link_to "Cancel", survey_survey_group_survey_question_path(@survey,@group,@question), {:class =>'cancel-link'} %> <!-- TODO - change to a button ... -->
+		<%else%>
+			<%= link_to "Cancel", survey_survey_group_survey_questions_path(@survey,@group), {:class =>'cancel-link'} %> <!-- TODO - change to a button ... -->
+		<%end%>
 	</div>
 </div>
 <% end %>

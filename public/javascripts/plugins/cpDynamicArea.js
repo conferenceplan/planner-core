@@ -17,6 +17,9 @@
 				$.ajax({
 					url : event.currentTarget.href,
 					dataType : "html",
+		            error: function(xhr, textStatus, errorThrown){
+		            	alert(textStatus); // TODO - we want to put in more descriptive errors ...
+		            },
 		            success: function(data){
 		            	var form = $(data);
 						$(settings['target']).html(data);
