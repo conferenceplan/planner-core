@@ -71,6 +71,23 @@ function init_question(element) {
 				init_question(element);
 			}
 		});
+		
+		$(el).find('.question-delete-link').cpRemoveButton({
+			'target'  : '#selectable-questions',
+			'success' : function() {
+					init_question(element);
+			}
+		});
+		// $(el).find('.question-delete-link').click(function(event) {
+			// $.ajax({
+				// url : event.currentTarget.href,
+				// success : function(data) {
+					// $('#edit-area').replaceWith(data);
+					// init_question();
+				// }
+			// });
+			// event.preventDefault();
+		// });
 	});
 
 	// $().appendTo('#selectable-questions')

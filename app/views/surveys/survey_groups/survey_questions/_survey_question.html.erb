@@ -1,6 +1,7 @@
 <li class="ui-widget-content">
 <div class='question-stuff'>
 <div class='question-edit'><%= link_to 'edit', edit_survey_survey_group_survey_question_path(@survey,@group,survey_question), :class => "question-edit-link" %></div>
+<div class='question-delete'><%= link_to 'delete', survey_survey_group_survey_question_path(@survey,@group,survey_question), :class => "question-delete-link" %></div>
 <div class='question_detail' id='questionid-<%=survey_question.id%>'>
 	<div class='line'><div class='field_name'>Title:</div><div class='field_value'><%= survey_question.title %></div></div>
 	<div class='line'><div class='field_name'>Question:</div><div class='field_value'><%= survey_question.question %></div></div>

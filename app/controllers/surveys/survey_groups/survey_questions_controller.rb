@@ -54,7 +54,7 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     @question.destroy
     
     @questions = @group.survey_questions
-    render :question_list, :layout => 'plain'
+    render :action => 'index', :layout => 'plain'
   end
 
   def create
