@@ -9,6 +9,10 @@ class Surveys::SurveyGroupsController < PlannerController
   def show
     @survey = Survey.find(params[:survey_id])
     @group = @survey.survey_groups.find params[:id]
+    # if params[:show_questions]
+    # else
+      @showQuestions = params[:show_questions]
+    # end
 
     render :layout => 'content'
   end

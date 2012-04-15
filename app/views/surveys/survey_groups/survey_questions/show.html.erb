@@ -1,8 +1,1 @@
-<div class='question_detail' id='questionid-<%=@question.id%>'>
-	<div class='line'><div class='field_name'>Title:</div><div class='field_value'><%= @question.title %></div></div>
-	<div class='line'><div class='field_name'>Question:</div><div class='field_value'><%= @question.question %></div></div>
-	<div class='line'><div class='field_name'>Question Type:</div><div class='field_value'><%= @question.question_type %></div></div>
-	<div class='line'><div class='field_name'>Tag Label:</div><div class='field_value'><%= @question.tags_label %></div></div>
-	<div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= @question.additional %></div></div>
-	<div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= @question	.validation %>&nbsp;</div></div>
-</div>
+<%=render :partial => 'survey_question_detail', :locals => {:survey_question => @question} %>

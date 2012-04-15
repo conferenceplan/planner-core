@@ -1,9 +1,20 @@
+<%if ! @showQuestions %>
+<div class="ui-widget-content">
+<div class='group_detail'>
+<%end%>
 <%=render :partial => 'group' %>
+<%if ! @showQuestions %>
+</div>
+</div>
+<%end%>
+
 <!-- TODO - when add a question need to select the question type
 	ALSO make sure that errors are reported -->
+<%if ! @showQuestions %>
 <!-- For each question in the group we render it - the template renders partials -->
 <div class='question-new'><%= link_to 'Add Question', new_survey_survey_group_survey_question_path(@survey,@group), :class => "question-new-link" %></div>
 <ol id='selectable-questions'>
 <%= render :partial => 'surveys/survey_groups/survey_questions/survey_question', :collection => @group.survey_questions %>
 </ol>
 <div id='edit-area'></div>
+<%end%>

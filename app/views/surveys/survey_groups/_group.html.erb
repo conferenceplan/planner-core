@@ -1,5 +1,30 @@
-<div class='group_detail'>
-	<div class='line'><div class='field_name'>Name:</div><div class='field_value'><%= @group.name %></div></div>
-	<div class='line'><div class='field_name'>Alt Name:</div><div class='field_value'><%= @group.altname %></div></div>
-	<div class='line'><div class='field_name'>Description</div><div class='field_value'><%= @group.description %></div></div>
+<div class='group-edit'>
+	<%= link_to 'edit', edit_survey_survey_group_path(@survey,@group), :class => "group-edit-link" %>
+</div>
+<div class='group-delete'>
+	<%= link_to 'delete', survey_survey_group_path(@survey,@group), :class => "group-delete-link" %>
+</div>
+<div class='line'>
+	<div class='field_name'>
+		Name:
+	</div>
+	<div class='field_value'>
+		<%= @group.name %>
+	</div>
+</div>
+<div class='line'>
+	<div class='field_name'>
+		Alt Name:
+	</div>
+	<div class='field_value'>
+		<%= @group.altname %>
+	</div>
+</div>
+<div class='line'>
+	<div class='field_name'>
+		Description
+	</div>
+	<div class='field_value'>
+		<%= @group.description %>&nbsp;
+	</div>
 </div>

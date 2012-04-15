@@ -6,6 +6,9 @@
 	<div class='line'><div class='field_name'>Description:</div><div class='field_value'><%= f.text_field :description %></div></div>
 	<div class='form-buttons'>
 		<%= f.submit "Submit" %>
+		<% if @group.id != nil %>
+			<%= link_to "Cancel", survey_survey_group_path(@survey,@group) + '?show_questions=false', {:class =>'cancel-link'} %> <!-- TODO - change to a button ... -->
+		<% end %>
 	</div>
 </div>
 <% end %>

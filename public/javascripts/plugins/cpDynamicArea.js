@@ -9,9 +9,18 @@
       			'target'        : 'body',
       			'form'        	: '#layerform',
       			'form-target'   : 'body',
+      			'form-cancel-target' : null,
+      			'cancel-success' : null,
       			'idprefix'      : '#id-',
       			'init'			: function() {}
     		}, options);
+
+    		if (settings['form-cancel-target'] == null) {
+	    		settings['form-cancel-target'] = settings['form-target'];
+    		};
+    		if (settings['cancel-success'] == null) {
+	    		settings['cancel-success'] = settings['success'];
+    		};
     		
 			return this.bind('click.cpDynamicArea', function(event) {
 				$.ajax({
@@ -50,8 +59,8 @@
 									type : 'GET',
 									context : this,
 									success : function(response) {
-										$(settings['form-target']).html(response);
-										settings['success']();
+										$(settings['form-cancel-target']).html(response);
+										settings['cancel-success']();
 									}
 									// TODO - add error handling, i.e., server is down
 								});

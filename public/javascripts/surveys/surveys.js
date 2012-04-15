@@ -78,20 +78,8 @@ function init_question(element) {
 					init_question(element);
 			}
 		});
-		// $(el).find('.question-delete-link').click(function(event) {
-			// $.ajax({
-				// url : event.currentTarget.href,
-				// success : function(data) {
-					// $('#edit-area').replaceWith(data);
-					// init_question();
-				// }
-			// });
-			// event.preventDefault();
-		// });
 	});
 
-	// $().appendTo('#selectable-questions')
-	// Add event to question-new-link
 	element.find('.question-new-link').cpDynamicArea('destroy');
 	element.find('.question-new-link').cpDynamicArea({
 		'target' : '#edit-area',
@@ -104,6 +92,33 @@ function init_question(element) {
 		}
 	});
 }
+
+
+function init_group_edit(id, el) {
+	$(el).find('.group-edit-link').cpDynamicArea('destroy');
+	$(el).find('.group-edit-link').cpDynamicArea({
+		'target' : '.group_detail', //'#edit-area-1',
+		'form' : '#layerform',
+		'form-target' : '#group_list-' + id,
+		'form-cancel-target' : '.group_detail',
+		'success' : function() {
+			init_group(id);
+		},
+		'cancel-success' : function() {
+			// TODO - return edit to non-edit ie fix #edit-area-1
+			init_group_edit(id, el);
+		}
+	});
+
+	// TODO - area that gets updated needs to be fixed etc
+	$(el).find('.group-delete-link').cpRemoveButton({
+		'target'  : '#selectable-questions',
+		'success' : function() {
+			init_group(id);
+		}
+	});
+};
+
 
 function init_group(id) {
 	init_buttons({
@@ -119,9 +134,12 @@ function init_group(id) {
     	},
     	'edit-success'		: function() {
 			init_group(id);
-    		$('#edit-area-1').html('');
+    		$('#edit-area-1').html(''); // clears the area
     	},
-    	'init'				: init_question
+    	'init'				: function(el) {
+    		init_question(el);
+    		init_group_edit(id,el);
+    	}
 	});
 
 	$(".group-dialog" ).button();
