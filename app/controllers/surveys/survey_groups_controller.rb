@@ -49,9 +49,9 @@ class Surveys::SurveyGroupsController < PlannerController
     @group = @survey.survey_groups.find params[:id]
     @group.destroy
   
-      @groups = @survey.survey_groups
-      render :group_list, :layout => 'plain'
-    # redirect_to :action => 'index' # TODO - these needs to be changed.
+    @groups = @survey.survey_groups
+
+    render :group_list, :layout => 'plain'
   end
 
   def create

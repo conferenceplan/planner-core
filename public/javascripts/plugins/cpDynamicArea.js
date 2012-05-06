@@ -46,7 +46,7 @@
 									},
 									success : function(response) {
 										$(settings['form-target']).html(response);
-										settings['success']();
+										settings['success']($(settings['form-target']));
 									}
 								});
 								event.preventDefault();
@@ -60,7 +60,7 @@
 									context : this,
 									success : function(response) {
 										$(settings['form-cancel-target']).html(response);
-										settings['cancel-success']();
+										settings['cancel-success']($(settings['form-cancel-target']));
 									}
 									// TODO - add error handling, i.e., server is down
 								});

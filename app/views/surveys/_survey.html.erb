@@ -1,3 +1,6 @@
+<div class='survey-edit'>
+	<%= link_to 'edit', edit_survey_path(@survey), :class => "survey-edit-link" %>
+</div>
 <div class='survey_detail'>
 	<div class='line'><div class='field_name'>Name:</div><div class='field_value'><%= @survey.name %></div></div>
 	<div class='line'><div class='field_name'>Welcome:</div><div class='field_value'><%= @survey.welcome %></div></div>

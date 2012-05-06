@@ -11,8 +11,7 @@ function init_buttons(options) {
     	'form-target'		: '#survey_list',
     	'form'				: '#layerform',
     	'success'			: init,
-    	'edit-success'		: init,
-    	'init'				: function() { }
+    	'edit-success'		: init
     }, options);
 
 	
@@ -22,12 +21,14 @@ function init_buttons(options) {
        	},
        	text : false
 	});
+	if (settings['edit-button'].length > 0) {
 	$(settings['edit-button']).button({
 		icons: {
                 primary: "ui-icon-pencil"
        },
        text : false
 	});
+	}
 	$(settings['display-button']).button();
 	
 	$(settings['button-set']).buttonset();
@@ -37,15 +38,6 @@ function init_buttons(options) {
 		'target' : settings['target'],
 		'form' : settings['form'],
 		'success' : settings['success'],
-		'init' : settings['init']
-	});
-
-	$(settings['edit-button']).cpDynamicArea('destroy');
-	$(settings['edit-button']).cpDynamicArea({
-		'target' : settings['target'],
-		'form' : settings['form'],
-		'form-target' : settings['form-target'],
-		'success' : settings['edit-success'],
 		'init' : settings['init']
 	});
 
@@ -154,17 +146,35 @@ function init_group(id) {
 	});
 }
 
+
+function init_survey_area(el) {
+	$(el).find('.survey-edit-link').cpDynamicArea({
+		'target' : '#edit-area-1',
+		'form' : '#layerform',
+		'form-target' : '#survey_list',
+		'form-cancel-target' : '#edit-area-1',
+		'success' : function() {
+			init();
+			$(el).html('');
+		},
+		'cancel-success' : function(el) {
+			init_survey_area(el);
+		}
+	});
+}
+
 function init() {
 	init_buttons({
     	'delete-button'		: '.survey-delete',
-    	'edit-button'       : '.survey-edit',
+    	'edit-button'       : '',
     	'display-button'    : '.survey-display',
     	'button-set'		: '.survey-buttons',
     	'target'			: '#edit-area-1',
     	'form-target'		: '#survey_list',
     	'form'				: '#layerform',
     	'success'			: init,
-    	'edit-success'		: init
+    	'edit-success'		: init,
+    	'init'				: init_survey_area
 	});
 
 	$(".survey-dialog").button();
@@ -184,6 +194,8 @@ function init() {
 			$.ajax({
 				url : "/surveys/" + id + "/survey_groups",
 				success : function(data) {
+					$('#edit-area-1').html('');
+					$('#edit-area-2').html('');
 					$('#current_groups-' + id + ' div').replaceWith(data);
 					init_group(id);
 				}

@@ -6,6 +6,7 @@
 	<div class='line'><div class='field_name'>Thank You:</div><div class='field_value'><%= f.text_field :thank_you %></div></div>
 	<div class='form-buttons'>
 		<%= f.submit "Submit" %>
+		<%= link_to "Cancel", survey_path(@survey), {:class =>'cancel-link'} %> <!-- TODO - change to a button ... -->
 	</div>
 </div>
 <% end %>
