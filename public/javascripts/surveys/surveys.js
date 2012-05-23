@@ -70,6 +70,8 @@ function init_question(element) {
 					init_question(element);
 			}
 		});
+		
+        $(el).find('.survey_question_format').coolfieldset({collapsed:true, animation:false});
 	});
 
 	element.find('.question-new-link').cpDynamicArea('destroy');
@@ -97,16 +99,7 @@ function init_group_edit(id, el) {
 			init_group(id);
 		},
 		'cancel-success' : function() {
-			// TODO - return edit to non-edit ie fix #edit-area-1
 			init_group_edit(id, el);
-		}
-	});
-
-	// TODO - area that gets updated needs to be fixed etc
-	$(el).find('.group-delete-link').cpRemoveButton({
-		'target'  : '#selectable-questions',
-		'success' : function() {
-			init_group(id);
 		}
 	});
 };
@@ -148,6 +141,7 @@ function init_group(id) {
 
 
 function init_survey_area(el) {
+    
 	$(el).find('.survey-edit-link').cpDynamicArea({
 		'target' : '#edit-area-1',
 		'form' : '#layerform',
@@ -159,6 +153,21 @@ function init_survey_area(el) {
 		},
 		'cancel-success' : function(el) {
 			init_survey_area(el);
+		},
+		'init' : function(el) {
+			$(el).find('textarea.rte').each(function() {
+				// alert($(this)[0].id);
+			    try {
+					if(CKEDITOR.instances[$(this)[0].id] != null) {
+            			delete CKEDITOR.instances[$(this)[0].id];
+			        }
+        	    } catch(e){
+			    }
+			});
+			$(el).find( 'textarea.rte' ).ckeditor({
+				removePlugins : "elementspath,flash"
+//				toolbar : 'Basic'
+			});
 		}
 	});
 }
@@ -206,4 +215,5 @@ function init() {
 
 jQuery(document).ready(function() {
 	init();
+	
 });

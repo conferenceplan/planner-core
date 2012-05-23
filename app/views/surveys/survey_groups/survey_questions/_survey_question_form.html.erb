@@ -3,10 +3,22 @@
 <div class='group_form'>
 	<div class='line'><div class='field_name'>Title:</div><div class='field_value'><%= f.text_field :title %></div></div>
 	<div class='line'><div class='field_name'>Question:</div><div class='field_value'><%= f.text_field :question %></div></div>
-	<div class='line'><div class='field_name'>Question Type:</div><div class='field_value'><%= f.text_field :question_type %></div></div>
+	<!-- TODO - change to add answers if the user selects a non-text question -->
+	<div class='line'><div class='field_name'>Question Type:</div><div class='field_value'>
+		<%= f.select :question_type, [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox], {}, {:class =>'question-type'} %>
+	</div></div>
 	<div class='line'><div class='field_name'>Tag Label:</div><div class='field_value'><%= f.text_field :tags_label %></div></div>
 	<div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= f.text_field :additional %></div></div>
 	<div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= f.text_field :validation %></div></div>
+	<!-- format information -->
+	<div class='question-format'>
+	  <% f.fields_for :survey_format do |ff| %>
+			<div class='line'><div class='field_name'>CSS</div><div class='field_value'><%= ff.text_field :style %></div></div>
+			<div class='line'><div class='field_name'>Order</div><div class='field_value'><%= ff.text_field :sort_order %></div></div>
+			<div class='line'><div class='field_name'>Help Text</div><div class='field_value'><%= ff.text_field :help %></div></div>
+			<div class='line'><div class='field_name'>Text Size</div><div class='field_value'><%= ff.text_field :textfield_size %></div></div>
+	  <%end%>
+	</div>
 	<div class='form-buttons'>
 		<%= f.submit "Submit" %>
 		<%if @question.id != nil %>

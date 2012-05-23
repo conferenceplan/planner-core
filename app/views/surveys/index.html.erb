@@ -30,11 +30,17 @@
 #selectable-questions { list-style-type: none; margin: 0; padding: 0; width: 100%; }
 #selectable-questions li { margin: 3px; padding: 0.4em; }
 <% end %>
+<%= stylesheet_link_tag 'jquery.coolfieldset.css' %>
 <% content_for :jsheader do %>
+<%= javascript_include_tag '/ckeditor/ckeditor.js' %>
+<%= javascript_include_tag '/ckeditor/adapters/jquery.js' %>
+<%= javascript_include_tag 'jquery.coolfieldset' %>
+
 <%= javascript_include_tag 'plugins/cpdialog' %>
 <%= javascript_include_tag 'plugins/cpremovebutton' %>
 <%= javascript_include_tag 'plugins/cpDynamicArea' %>
 <%= javascript_include_tag 'surveys/surveys' %>
+
 <% end %>
 <div class='container_12'>
 	<div>

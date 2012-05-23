@@ -19,6 +19,7 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     @survey = Survey.find(params[:survey_id])
     @group = @survey.survey_groups.find params[:survey_group_id]
     @question = @group.survey_questions.new
+    @question.survey_format = SurveyFormat.new
     
     render :layout => 'content'
   end
@@ -27,6 +28,9 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     @survey = Survey.find(params[:survey_id])
     @group = @survey.survey_groups.find params[:survey_group_id]
     @question = @group.survey_questions.find params[:id]
+    if @question.survey_format == nil
+      @question.survey_format = SurveyFormat.new
+    end
 
     render :layout => 'content'
   end

@@ -5,4 +5,15 @@
 	<div class='line'><div class='field_name'>Tag Label:</div><div class='field_value'><%= survey_question.tags_label %></div></div>
 	<div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= survey_question.additional %></div></div>
 	<div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= survey_question.validation %>&nbsp;</div></div>
+	<% if survey_question.survey_format != nil %>
+    <fieldset class="coolfieldset survey_question_format">
+        <legend>Formatting</legend>
+        <div>
+			<div class='line'><div class='field_name'>CSS</div><div class='field_value'><%= survey_question.survey_format.style %></div></div>
+			<div class='line'><div class='field_name'>Order</div><div class='field_value'><%= survey_question.survey_format.sort_order %></div></div>
+			<div class='line'><div class='field_name'>Help Text</div><div class='field_value'><%= survey_question.survey_format.help %></div></div>
+			<div class='line'><div class='field_name'>Text Size</div><div class='field_value'><%= survey_question.survey_format.textfield_size %>&nbsp;</div></div>
+		</div>
+	</fieldset>
+	<% end %>
 </div>
