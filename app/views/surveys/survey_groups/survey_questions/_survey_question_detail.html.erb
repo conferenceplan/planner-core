@@ -1,10 +1,13 @@
 <div class='question_detail' id='questionid-<%=survey_question.id%>'>
 	<div class='line'><div class='field_name'>Title:</div><div class='field_value'><%= survey_question.title %></div></div>
 	<div class='line'><div class='field_name'>Question:</div><div class='field_value'><%= survey_question.question %></div></div>
-	<div class='line'><div class='field_name'>Question Type:</div><div class='field_value'><%= survey_question.question_type %></div></div>
-	<div class='line'><div class='field_name'>Tag Label:</div><div class='field_value'><%= survey_question.tags_label %></div></div>
-	<div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= survey_question.additional %></div></div>
-	<div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= survey_question.validation %>&nbsp;</div></div>
+	<div class='line'><div class='field_name'>Question Type:</div><div class='field_value question-type-value'><%= survey_question.question_type %>&nbsp;</div></div>
+    <fieldset class="coolfieldset survey_question_advanced">
+        <legend>Advanced</legend>
+        <div class='line'><div class='field_name'>Tag Label:</div><div class='field_value'><%= survey_question.tags_label %></div></div>
+        <div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= survey_question.additional %></div></div>
+	    <div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= survey_question.validation %></div></div>
+    </fieldset>
 	<% if survey_question.survey_format != nil %>
     <fieldset class="coolfieldset survey_question_format">
         <legend>Formatting</legend>
@@ -16,4 +19,14 @@
 		</div>
 	</fieldset>
 	<% end %>
+    <% if survey_question.question_type.to_s.include? 'text' %>
+    <div class='question-answers' style='display: none;'>
+    <% else %>
+    <div class='question-answers' style='display: block;'>
+    <% end%>
+        <fieldset class="coolfieldset survey_question_answers" >
+            <legend>Answers</legend>
+        </fieldset>
+    </div>
+
 </div>

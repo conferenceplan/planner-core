@@ -51,27 +51,43 @@ function init_buttons(options) {
 }
 
 function init_question(element) {
+        var targetid = $(element).find('.question_detail').attr('id');
+        $(element).find('.question-edit-link').cpDynamicArea('destroy');
+        $(element).find('.question-edit-link').cpDynamicArea({
+            'target' : '#' + targetid,
+            'form' : '#question_form-' + targetid,
+            'form-target' : '#' + targetid,
+            'success' : init_question,
+            'init' : init_question
+        });
+        
+        $(element).find('.question-delete-link').cpRemoveButton({
+            'target'  : '#selectable-questions',
+            'success' : function(els) {
+                //alert(els.html());
+                init_questions(els);
+            }
+        });
+        
+        $(element).find('.survey_question_format, .survey_question_advanced, .survey_question_answers').coolfieldset({collapsed:true, animation:false});
+
+        $(element).find('.question-type').change(
+            function(event) {
+                // TODO - Add code so that 'answers' can be added to question if type is not text
+                // also if type changes to text then the answers need to be removed...
+                if (event.currentTarget.value.indexOf('text') != -1) {
+                    $(element).find('.question-answers').hide();
+                } else {
+                    $(element).find('.question-answers').show();
+                }
+            }
+        );
+}
+
+function init_questions(element) {
 	// go through each question and assign the edit logic
 	element.find('.question-stuff').each(function(idx, el) {
-		var targetid = $(el).find('.question_detail').attr('id');
-	    $(el).find('.question-edit-link').cpDynamicArea('destroy');
-	    $(el).find('.question-edit-link').cpDynamicArea({
-			'target' : '#' + targetid,
-			'form' : '#question_form-' + targetid,
-			'form-target' : '#' + targetid,
-			'success' : function() {
-				init_question(element);
-			}
-		});
-		
-		$(el).find('.question-delete-link').cpRemoveButton({
-			'target'  : '#selectable-questions',
-			'success' : function() {
-					init_question(element);
-			}
-		});
-		
-        $(el).find('.survey_question_format').coolfieldset({collapsed:true, animation:false});
+	    init_question(el);
 	});
 
 	element.find('.question-new-link').cpDynamicArea('destroy');
@@ -79,10 +95,10 @@ function init_question(element) {
 		'target' : '#edit-area',
 		'form' : '#question_form-questionid-',
 		'form-target' : '#selectable-questions',
+        'init' : init_question,
 		'success' : function() {
-			init_question(element);
+			init_questions(element);
 			$('#edit-area').html('');
-			// and clear the add area
 		}
 	});
 }
@@ -122,7 +138,7 @@ function init_group(id) {
     		$('#edit-area-1').html(''); // clears the area
     	},
     	'init'				: function(el) {
-    		init_question(el);
+    		init_questions(el);
     		init_group_edit(id,el);
     	}
 	});

@@ -7,17 +7,30 @@
 	<div class='line'><div class='field_name'>Question Type:</div><div class='field_value'>
 		<%= f.select :question_type, [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox], {}, {:class =>'question-type'} %>
 	</div></div>
+    <fieldset class="coolfieldset survey_question_advanced">
+        <legend>Advanced</legend>
 	<div class='line'><div class='field_name'>Tag Label:</div><div class='field_value'><%= f.text_field :tags_label %></div></div>
 	<div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= f.text_field :additional %></div></div>
 	<div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= f.text_field :validation %></div></div>
+    </fieldset>
 	<!-- format information -->
-	<div class='question-format'>
+    <fieldset class="coolfieldset survey_question_format">
+        <legend>Formatting</legend>
 	  <% f.fields_for :survey_format do |ff| %>
 			<div class='line'><div class='field_name'>CSS</div><div class='field_value'><%= ff.text_field :style %></div></div>
 			<div class='line'><div class='field_name'>Order</div><div class='field_value'><%= ff.text_field :sort_order %></div></div>
 			<div class='line'><div class='field_name'>Help Text</div><div class='field_value'><%= ff.text_field :help %></div></div>
 			<div class='line'><div class='field_name'>Text Size</div><div class='field_value'><%= ff.text_field :textfield_size %></div></div>
 	  <%end%>
+	</fieldset>
+	<% if @question.question_type.to_s.include? 'text' %>
+        <div class='question-answers' style='display: none;'>
+	<% else %>
+        <div class='question-answers' style='display: block;'>
+	<% end%>
+    <fieldset class="coolfieldset survey_question_answers" >
+        <legend>Answers</legend>
+    </fieldset>
 	</div>
 	<div class='form-buttons'>
 		<%= f.submit "Submit" %>

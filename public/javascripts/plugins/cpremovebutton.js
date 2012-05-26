@@ -18,7 +18,7 @@
            			},
 		            success: function(data){
 						$(settings['target']).html(data);
-						settings['success']();
+						settings['success']($(settings['target']));
             		}
             	});
 				event.preventDefault();
