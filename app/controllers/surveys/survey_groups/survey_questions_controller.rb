@@ -28,9 +28,6 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     @survey = Survey.find(params[:survey_id])
     @group = @survey.survey_groups.find params[:survey_group_id]
     @question = @group.survey_questions.find params[:id]
-    if @question.survey_format == nil
-      @question.survey_format = SurveyFormat.new
-    end
 
     render :layout => 'content'
   end
@@ -41,6 +38,9 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     @question = @group.survey_questions.find params[:id]
 
     if @question.update_attributes(params[:survey_question])
+      # If we have answers to add to the question then do so here
+      # TODO - if the question is a type that does not accept answers then do no worry... make sure the answers if any are cleared
+      
       # Go back to the main page
       @questions = @group.survey_questions
       render :show, :layout => 'content'

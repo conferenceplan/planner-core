@@ -1,0 +1,11 @@
+<%-
+# commented line
+-%>
+<div class='survey_answer'>
+    <% new_or_existing = answer_form.new_record? ? 'new' : 'existing' %>
+    <% prefix = "survey_question[#{new_or_existing}_answer_attributes][]" %>
+    <% fields_for prefix, answer_form do |el| %>
+        <div class='line'><div class='field_name'>Answer</div><div class='field_value'><%= el.text_field :answer%></div></div>
+        <%= link_to_function "remove", "$(this).parent('.survey_answer').remove()" %>
+    <%end%>
+</div>

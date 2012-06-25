@@ -11,21 +11,15 @@
 	<% if survey_question.survey_format != nil %>
     <fieldset class="coolfieldset survey_question_format">
         <legend>Formatting</legend>
-        <div>
-			<div class='line'><div class='field_name'>CSS</div><div class='field_value'><%= survey_question.survey_format.style %></div></div>
-			<div class='line'><div class='field_name'>Order</div><div class='field_value'><%= survey_question.survey_format.sort_order %></div></div>
-			<div class='line'><div class='field_name'>Help Text</div><div class='field_value'><%= survey_question.survey_format.help %></div></div>
-			<div class='line'><div class='field_name'>Text Size</div><div class='field_value'><%= survey_question.survey_format.textfield_size %>&nbsp;</div></div>
-		</div>
+        <%= render :partial => 'surveys/survey_groups/survey_questions/format_detail', :object => survey_question.survey_format %>
 	</fieldset>
 	<% end %>
-    <% if survey_question.question_type.to_s.include? 'text' %>
-    <div class='question-answers' style='display: none;'>
-    <% else %>
-    <div class='question-answers' style='display: block;'>
-    <% end%>
+	
+    <% answersstyle = (survey_question.question_type.to_s.include? 'text') ? 'none' : 'block' %>
+    <div class='question-answers' style='<%= "display: #{answersstyle};"%>'>
         <fieldset class="coolfieldset survey_question_answers" >
             <legend>Answers</legend>
+            <%= render :partial => 'surveys/survey_groups/survey_questions/answer_detail', :collection => survey_question.survey_answers %>
         </fieldset>
     </div>
 
