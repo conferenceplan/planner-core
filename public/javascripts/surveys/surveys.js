@@ -86,7 +86,7 @@ function init_question(element) {
 
 function init_questions(element) {
 	// go through each question and assign the edit logic
-	element.find('.question-stuff').each(function(idx, el) {
+	element.find('.survey-question-display').each(function(idx, el) {
 	    init_question(el);
 	});
 
