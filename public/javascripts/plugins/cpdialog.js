@@ -49,7 +49,8 @@
 
 						$("<div />").html(form).dialog({
 							modal : true,
-							buttons : buttons
+							buttons : buttons,
+							width: 600
 						});
 					}
 				});
