@@ -182,7 +182,17 @@ function init_survey_area(el) {
 			});
 			$(el).find( 'textarea.rte' ).ckeditor({
 				removePlugins : "elementspath,flash",
-//				toolbar : 'Basic'
+				toolbar : 'CPlan',
+                toolbar_CPlan : [
+                        { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+                        { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+                        { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
+                        { name: 'insert', items : [ 'Table','HorizontalRule','SpecialChar' ] }, // 'Image',
+                        // '/',
+                        // { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
+                        // { name: 'colors', items : [ 'TextColor','BGColor' ] },
+                        { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+                    ]
 			});
 		}
 	});
