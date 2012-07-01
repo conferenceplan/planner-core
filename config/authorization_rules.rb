@@ -107,6 +107,7 @@ authorization do
      has_permission_on :equipment_types, :to => :supermanage
      has_permission_on :equipment_needs, :to => :supermanage
      has_permission_on :surveys, :to => :supermanage
+     has_permission_on :survey_respondents_tags_admin, :to => :manage
   end
 
   role :Admin do
@@ -127,5 +128,5 @@ privileges do
     privilege :delete, :includes => [:destroy, :removeItem]
     privilege :communicate, :includes => [:exportemailxml,:doexportemailxml,:exportbiolist, :selectExportBioList, :schedule_report, :BackOfBadge, :selectBadgeLabel, :selectScheduleReport,:RoomSign,:selectRoomSign, :tableTents,:selectTableTents]
     privilege :schedule, :includes => [:manage, :publish]
-    privilege :supermanage, :includes => [:drop]
+    privilege :supermanage, :includes => [:manage, :drop]
 end
