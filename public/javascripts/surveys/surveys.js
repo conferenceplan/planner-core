@@ -181,7 +181,7 @@ function init_survey_area(el) {
 			    }
 			});
 			$(el).find( 'textarea.rte' ).ckeditor({
-				removePlugins : "elementspath,flash"
+				removePlugins : "elementspath,flash",
 //				toolbar : 'Basic'
 			});
 		}
