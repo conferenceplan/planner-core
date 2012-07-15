@@ -12,7 +12,9 @@ class PeopleController < PlannerController
   def show
     @person = Person.find(params[:id])
     comp = params[:comp]
-    
+    if (@person.datasource.nil?)
+      @postalAddresses = nil
+    end
     if comp
       @postalAddresses = @person.postal_addresses
       @emailAddresses = @person.email_addresses
@@ -52,7 +54,8 @@ class PeopleController < PlannerController
     
     @person = Person.new(params[:person])
     @person.lock_version = 0
-    
+    datasourcetmp = Datasource.find_by_name("Application")
+    @person.datasource = datasourcetmp
     if (@person.save)
       if plain
         render :action => 'show', :layout => 'content'

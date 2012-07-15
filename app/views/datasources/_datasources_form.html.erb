@@ -1,0 +1,18 @@
+<%= error_messages_for :datasource %>
+<% form_for(@datasource) do |f| %>
+<div class='line'>
+	<label for="name">Name</label>:
+    <%= f.text_field :name %>
+</div>
+<div class='boolean'>
+    <div class='field_name'>
+         primary?:
+    </div>
+    <div class='field_value'>
+         <%= f.check_box :primary %>
+    </div>
+</div>
+<%= submit_tag "Save" %>
+<% end  %>
+<hr />
+<%= link_to 'Datasource List', {:action => 'index'} %>

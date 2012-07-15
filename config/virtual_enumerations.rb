@@ -86,5 +86,8 @@ ActiveRecord::VirtualEnumerations.define do |config|
 
  config.define 'PersonItemRole',
     :extends => 'Enum'
+    
+ config.define 'PendingType',
+    :extends => 'Enum'
 
 end

@@ -14,22 +14,22 @@
         <div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= f.text_field :validation %></div></div>
     </fieldset>
 
-    <%-
+    <%
     # ------------------------------------------------------------------------
     # The input area for format information
-    -%>
+    %>
     <fieldset class="coolfieldset survey_question_format">
         <legend>Formatting</legend>
         <%= render :partial => 'format_form', :object => @question.survey_format %>
     </fieldset>
-    <%-
+    <%
     # ------------------------------------------------------------------------
-    -%>
+    %>
 
-    <%-
+    <%
     # ------------------------------------------------------------------------
     # The input area for answers (if applicable)
-    -%>
+    %>
     <% answersstyle = (@question.question_type.to_s.include? 'text') ? 'none' : 'block' %>
     <% answersid = "survey_answers_#{@question.id}" %>
     <div class='question-answers' style='<%= "display: #{answersstyle};"%>'>
@@ -41,9 +41,9 @@
             <div><%= add_answer_link "Add an Answer", answersid %></div>
         </fieldset>
     </div>
-    <%-
+    <%
     # ------------------------------------------------------------------------
-    -%>
+    %>
 
     <div class='form-buttons'>
         <%= f.submit "Submit" %>

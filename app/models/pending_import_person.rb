@@ -1,4 +1,6 @@
 class PendingImportPerson < ActiveRecord::Base
+  has_enumerated :pendingtype, :class_name => 'PendingType'
+  
   def addressNil?
     if ((self.line1 == nil || self.line1 == "") &&
         (self.line2 == nil || self.line2 == "") &&
