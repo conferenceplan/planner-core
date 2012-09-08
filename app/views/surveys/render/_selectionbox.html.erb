@@ -1,0 +1,33 @@
+<%= select_tag "selection_#{question.id}"  , question.survey_answers.collect{ |e| '<option>' + e.answer + '</option>'}, :class =>  question.survey_format.answer_style %>
+
+<!-- 
+    TODO - need the array for the result value responses[#{question.code}][]
+    
+     select_tag(name, option_tags = nil, options = {}) 
+        answer.answer
+        
+              html = "\n" + select_tag("responses[#{question.code}][]", answers, :multiple => 
+        # Check if multiple choice
+        (question.selectionbox_multiplechoice and 
+        !question.selectionbox_multiplechoice.blank?() and
+        question.selectionbox_multiplechoice.upcase == 'Y'))
+      contents += content_tag(:div, html, :class => style, :id => question.answer_id)
+    
+    TODO - cloud tagging and styling
+    
+      style = ""
+      style += question.tags if question.tags
+      style += " " + question.answer_style if question.answer_style
+      contents = text_area_tag("responses[#{question.code}]",    
+        # Set value to user response if available
+        if (answered)
+          user_answer
+        else
+          nil
+        end,
+        :size => (!question.textbox_size.blank?) ? question.textbox_size : "30x5",
+        :class => style, :id => question.answer_id )
+      if (question.tags)
+        contents += content_tag(:div, "", :class => "cloud")
+      end
+-->

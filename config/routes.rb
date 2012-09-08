@@ -224,5 +224,6 @@ ActionController::Routing::Routes.draw do |map|
     survey.resources :survey_groups, :controller => 'surveys/survey_groups' do |group|
       group.resources :survey_questions, :controller => 'surveys/survey_groups/survey_questions'
     end
+    survey.resources :render, :controller => 'surveys/render'
   end
 end

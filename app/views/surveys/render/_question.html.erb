@@ -1,0 +1,15 @@
+<% content_tag :div, :class => "grid_12" do %>
+    <% content_tag :div, :id => "cpl_question_#{ question.id }", :class => "smerfQuestion #{(question.validation.include? 'mandatory') ? 'mandatory' : ''}" do %>
+        <%= question.question %>
+        <% if question.survey_format.help && !question.survey_format.help.blank? %>
+            <a title="<%= question.survey_format.help%>"><%= image_tag("smerf_help.gif") %></a>
+        <%end%>
+    <%end%>
+    <% content_tag :div, :class => question.survey_format.style do %>
+        <%= render :partial => "#{question.question_type}", :locals => {:question => question} %>
+    <%end%>
+<% end %> 
+<!-- TODO - 
+    Check fields (and styling)
+-->
+    

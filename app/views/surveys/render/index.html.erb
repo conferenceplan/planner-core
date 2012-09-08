@@ -1,0 +1,24 @@
+ <!-- Handle notice messages -->
+  <!-- %= get_notice_messages() % -->
+  <!-- Handle error messages -->       
+  <!-- %= get_error_messages(@errors) % -->
+  <!-- Specify page title -->
+<div class="container_12">
+  <h2><%= @survey.name %></h2>
+  <div class="smerfWelcome"><%= @survey.welcome %></div>
+    <% if @survey %>
+        <fieldset id="survey-set">
+        <% @survey.survey_groups.each do |group| %>
+            <%=render :partial => 'group', :locals => {:group => group}%>
+        <% end %>
+        </fieldset>
+    <% else %>
+        <p>No Valid Survey</p>
+    <% end %>
+</div>
+
+<!--
+    TODO - group sort order
+    TODO - error messaging
+    TODO - question sort order
+    -->

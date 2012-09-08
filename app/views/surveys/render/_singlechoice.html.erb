@@ -1,0 +1,13 @@
+<%question.survey_answers.each do |answer|%>
+    <div class="radiobutton <%=question.survey_format.answer_style%>">
+    <label>
+        <%= radio_button_tag "radio_#{question.id}", "#{answer.id}", false, :class =>  question.survey_format.answer_style %>
+        <%= answer.answer %>
+    </label>
+    </div>
+<%end%>
+
+<!-- 
+    TODO - styling and input value
+    TODO - have time input as seperate type
+-->
