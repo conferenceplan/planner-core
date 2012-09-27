@@ -8,12 +8,14 @@ h3 {
 
 div.smerfSubquestion,
 div.smerfQuestion,
+div.survey-question,
 p {
 	font-size: 10pt;
 	margin-top: 5px;
 	margin-bottom: 5px;
 }
 
+div.survey-group,
 div.smerfGroup {
 	padding: 5px;
 	margin-top: 3px;
@@ -65,6 +67,7 @@ div.cloud div#content div {
 	display: inline;
 }
 
+.survey-question-area,
 .smerfQuestionArea,
 .smerfQuestionArea.toggle {
 	padding-top: 3px;

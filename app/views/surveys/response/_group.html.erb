@@ -1,7 +1,7 @@
 <div class='clear'></div>
 <div class="survey-group">
     <h3><%= group.name %></h3> <!-- ADD group style-->
-    <% content_tag :div, :class => "#{group.survey_format.style if group.survey_format}" do %>
+    <% content_tag :div, :class => "survey-group #{group.survey_format.style if group.survey_format}" do %>
         <%= group_help(group) %>
         <% content_tag :div, :class => "#{group.survey_format ? group.survey_format.description_style : ""}" do%>
             <%= group.description %>
