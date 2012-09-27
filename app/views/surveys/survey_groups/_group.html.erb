@@ -19,9 +19,23 @@
 </div>
 <div class='line'>
 	<div class='field_name'>
-		Description
+		Description:
 	</div>
 	<div class='field_value'>
-		<%= @group.description %>&nbsp;
+		<%= @group.description %>
 	</div>
 </div>
+<div class='line'>
+    <div class='field_name'>
+        Sort Order:
+    </div>
+    <div class='field_value'>
+        <%= @group.sort_order %>&nbsp;
+    </div>
+</div>
+<% if @group.survey_format != nil %>
+    <fieldset class="coolfieldset survey_group_format">
+        <legend>Formatting</legend>
+        <%= render :partial => 'surveys/format_detail', :object => @group.survey_format %>
+    </fieldset>
+<% end %>

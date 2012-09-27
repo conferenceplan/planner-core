@@ -1,17 +1,18 @@
 <div class='question_detail' id='questionid-<%=survey_question.id%>'>
-	<div class='line'><div class='field_name'>Title:</div><div class='field_value'><%= survey_question.title %></div></div>
 	<div class='line'><div class='field_name'>Question:</div><div class='field_value'><%= survey_question.question %></div></div>
 	<div class='line'><div class='field_name'>Question Type:</div><div class='field_value question-type-value'><%= survey_question.question_type %>&nbsp;</div></div>
     <fieldset class="coolfieldset survey_question_advanced">
         <legend>Advanced</legend>
+        <div class='line'><div class='field_name'>Sort Order:</div><div class='field_value'><%= survey_question.sort_order %></div></div>
         <div class='line'><div class='field_name'>Tag Label:</div><div class='field_value'><%= survey_question.tags_label %></div></div>
         <div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= survey_question.additional %></div></div>
-	    <div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= survey_question.validation %></div></div>
+	    <div class='line'><div class='field_name'>Mandatory:</div><div class='field_value'><%= survey_question.mandatory %></div></div>
+        <div class='line'><div class='field_name'>Text Size:</div><div class='field_value'><%= survey_question.text_size %></div></div>
     </fieldset>
 	<% if survey_question.survey_format != nil %>
     <fieldset class="coolfieldset survey_question_format">
         <legend>Formatting</legend>
-        <%= render :partial => 'surveys/survey_groups/survey_questions/format_detail', :object => survey_question.survey_format %>
+        <%= render :partial => 'surveys/format_detail', :object => survey_question.survey_format %>
 	</fieldset>
 	<% end %>
 	

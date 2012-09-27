@@ -1,0 +1,10 @@
+<%#
+%>
+<% fields_for param, format_form do |ff| %>
+    <%if format_form.id  %>
+    <%= ff.hidden_field :id %>
+    <%end%>
+    <div class='line'><div class='field_name'>CSS</div><div class='field_value'><%= ff.text_field :style %></div></div>
+    <div class='line'><div class='field_name'>Answer Style CSS</div><div class='field_value'><%= ff.text_field :answer_style %></div></div>
+    <div class='line'><div class='field_name'>Help Text</div><div class='field_value'><%= ff.text_field :help %></div></div>
+<%end%>

@@ -1,0 +1,30 @@
+ <!-- Handle notice messages -->
+  <!-- %= get_notice_messages() % -->
+  <!-- Handle error messages -->
+  <%= get_error_messages(@errors) %>
+  <% if @survey %>
+    <% form_tag "/surveys/#{@survey.id}/response", :class => "" do -%>
+    <h2><%= @survey.name %></h2>
+    <div class="survey-welcome"><%= @survey.welcome %></div>
+    <fieldset class="survey-set">
+    <!-- Get Biogragraphic info -->
+    <%=render :partial => 'respondent'%>
+    <% @survey.survey_groups.each do |group| %>
+        <%=render :partial => 'group', :locals => {:group => group}%>
+    <% end %>
+    </fieldset>
+    <div class="submit"><p><%= submit_tag @survey.submit_string %></p></div> 
+    <% end %>
+
+    <form class="" method="post" action="/surveys/<%=@survey.id%>/response">
+    </form>
+  <% else %>
+    <p>No Valid Survey</p>
+    <%= @survey_id%>
+  <% end %>
+
+<!--
+    TODO - error messaging
+    TODO - group sort order
+    TODO - question sort order
+    -->

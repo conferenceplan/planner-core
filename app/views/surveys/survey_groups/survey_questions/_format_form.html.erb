@@ -1,8 +1,0 @@
-<%#
-%>
-<% fields_for 'survey_question[survey_format_attributes]', format_form do |ff| %>
-    <div class='line'><div class='field_name'>CSS</div><div class='field_value'><%= ff.text_field :style %></div></div>
-    <div class='line'><div class='field_name'>Order</div><div class='field_value'><%= ff.text_field :sort_order %></div></div>
-    <div class='line'><div class='field_name'>Help Text</div><div class='field_value'><%= ff.text_field :help %></div></div>
-    <div class='line'><div class='field_name'>Text Size</div><div class='field_value'><%= ff.text_field :textfield_size %></div></div>
-<%end%>

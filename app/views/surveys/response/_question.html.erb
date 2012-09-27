@@ -1,0 +1,20 @@
+<%#
+%>
+<% content_tag :div, :class => "grid_12" do %>
+    <% content_tag :div, :id => "cpl_question_#{ question.id }", :class => "survey-question #{question.survey_format.style} #{(question.mandatory) ? 'mandatory' : ''}" do %>
+        <%= question.question %>
+        <% if question.survey_format.help && !question.survey_format.help.blank? %>
+            <a title="<%= question.survey_format.help%>"><%= image_tag("smerf_help.gif") %></a>
+        <%end%>
+        <% if @errors && @errors[question.id] %>
+        <div class="smerfQuestionError">
+            <p>
+            <img src="/images/smerf_error.gif?1322929610" alt="Error">
+            <%=@errors[question.id][question.question]%>
+            </p>
+        </div>
+        <% end %>
+    <%end%>
+    <%= render :partial => "#{question.question_type}", :locals => {:question => question} %>
+<% end %> 
+    

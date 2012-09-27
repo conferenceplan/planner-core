@@ -1,7 +1,6 @@
 <%= error_messages_for :surveyQuestion %>
 <% form_for [@survey,@group,@question], :html => {:class => "question-form", :id => "question_form-questionid-" + @question.id.to_s} do |f| %>
 <div class='group_form'>
-    <div class='line'><div class='field_name'>Title:</div><div class='field_value'><%= f.text_field :title %></div></div>
     <div class='line'><div class='field_name'>Question:</div><div class='field_value'><%= f.text_field :question %></div></div>
     <div class='line'>
         <div class='field_name'>Question Type:</div>
@@ -9,9 +8,11 @@
     </div>
     <fieldset class="coolfieldset survey_question_advanced">
         <legend>Advanced</legend>
+        <div class='line'><div class='field_name'>Sort Order:</div><div class='field_value'><%= f.text_field :sort_order %></div></div>
         <div class='line'><div class='field_name'>Tag Label:</div><div class='field_value'><%= f.text_field :tags_label %></div></div>
         <div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= f.text_field :additional %></div></div>
-        <div class='line'><div class='field_name'>Validation:</div><div class='field_value'><%= f.text_field :validation %></div></div>
+        <div class='line'><div class='field_name'>Mandatory:</div><div class='field_value'><%= f.check_box :mandatory %></div></div>
+        <div class='line'><div class='field_name'>Text Size:</div><div class='field_value'><%= f.text_field :text_size %></div></div>
     </fieldset>
 
     <%
@@ -20,7 +21,7 @@
     %>
     <fieldset class="coolfieldset survey_question_format">
         <legend>Formatting</legend>
-        <%= render :partial => 'format_form', :object => @question.survey_format %>
+        <%= render :partial => 'surveys/format_form', :locals => {:param => 'survey_question[survey_format_attributes]'}, :object => @question.survey_format %>
     </fieldset>
     <%
     # ------------------------------------------------------------------------

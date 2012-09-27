@@ -109,15 +109,20 @@ function init_group_edit(id, el) {
 	$(el).find('.group-edit-link').cpDynamicArea({
 		'target' : '.group_detail', //'#edit-area-1',
 		'form' : '#layerform',
-		'form-target' : '#group_list-' + id,
+		'form-target' : '.group_detail',
 		'form-cancel-target' : '.group_detail',
 		'success' : function() {
-			init_group(id);
+            init_group_edit(id, el);
 		},
 		'cancel-success' : function() {
 			init_group_edit(id, el);
+		},
+		'init' : function(el) {
+            $(el).find('.survey_group_format').coolfieldset({collapsed:true, animation:false});
 		}
 	});
+
+    $(el).find('.survey_group_format').coolfieldset({collapsed:true, animation:false});
 };
 
 
@@ -153,6 +158,7 @@ function init_group(id) {
     		$('#edit-area-1').html('');
 		}
 	});
+
 }
 
 

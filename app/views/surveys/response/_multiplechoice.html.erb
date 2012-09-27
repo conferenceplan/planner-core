@@ -1,0 +1,12 @@
+<%#
+#    TODO - have time input as seperate type
+#
+%>
+<%question.survey_answers.each do |answer|%>
+    <div class="checkbox <%=question.survey_format.answer_style%>">
+    <label>
+        <%= check_box_tag "survey_response[#{question.id}][#{answer.id}]", "#{answer.answer}", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s][answer.id.to_s] : false %>
+        <%= answer.answer %>
+    </label>
+    </div>
+<%end%>

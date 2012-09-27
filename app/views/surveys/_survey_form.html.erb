@@ -2,6 +2,8 @@
 <% form_for @survey, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
 <div class='survey_form'>
 	<div class='line'><div class='field_name'>Name:</div><div class='field_value'><%= f.text_field :name %></div></div>
+    <div class='line'><div class='field_name'>Alias:</div><div class='field_value'><%= f.text_field :alias %></div></div>
+    <div class='line'><div class='field_name'>Save Button:</div><div class='field_value'><%= f.text_field :submit_string %></div></div>
 	<div class='line'><div class='field_name'>Welcome:</div></div>
 	<div class='line'><%= f.text_area :welcome, :cols => "80", :rows => "10", :class => "rte" %></div>
 	<div class='line'><div class='field_name'>Thank You:</div></div>

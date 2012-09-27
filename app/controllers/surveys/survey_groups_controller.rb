@@ -9,10 +9,7 @@ class Surveys::SurveyGroupsController < PlannerController
   def show
     @survey = Survey.find(params[:survey_id])
     @group = @survey.survey_groups.find params[:id]
-    # if params[:show_questions]
-    # else
-      @showQuestions = params[:show_questions]
-    # end
+    @showQuestions = params[:show_questions]
 
     render :layout => 'content'
   end
@@ -20,6 +17,7 @@ class Surveys::SurveyGroupsController < PlannerController
   def new
     @survey = Survey.find(params[:survey_id])
     @group = @survey.survey_groups.new
+    @group.survey_format = SurveyFormat.new
 
     render :layout => 'content'
   end
@@ -34,11 +32,11 @@ class Surveys::SurveyGroupsController < PlannerController
   def update
     @survey = Survey.find(params[:survey_id])
     @group = @survey.survey_groups.find params[:id]
-
+    @showQuestions = true
     if @group.update_attributes(params[:survey_group])
       # Go back to the main page
       @groups = @survey.survey_groups
-      render :group_list, :layout => 'plain'
+      render :show, :layout => 'plain'
     else
       render :action => 'edit', :status => 500, :layout => 'content'
     end

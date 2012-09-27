@@ -1,0 +1,3 @@
+<%#
+%>
+<%= text_area_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :cols => 30, :rows => 5, :size => question.text_size, :class => question.survey_format.answer_style %>
