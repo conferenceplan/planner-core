@@ -2,7 +2,7 @@
 <div class="survey-group">
     <h3>Personal Details</h3>
     <div class="grid_12">
-      <a><img alt="Help" src="/images/smerf_help.gif" title="AAAATTTT"></a>
+      <a><img alt="Help" src="/images/smerf_help.gif" title="Enter your Registration name"></a>
       <div class="grid_3 mandatory">Name</div>
         <% if @errors && @errors['first_name'] %>
         <div class="smerfQuestionError">
@@ -25,7 +25,7 @@
         <div class="survey-question grid_2"><div class="text"><input id="name_suffix" name="survey_respondent_detail[suffix]" size="5" title="Suffix" type="text" value="<%=@survey_respondent_details['suffix'] if @survey_respondent_details %>"></div></div>
     </div>
     <div class="grid_12">
-        <div class="survey-question grid_3 mandatory" title="AAAAA">E-mail Address <a><img src="/images/smerf_help.gif?" alt="Help"></a></div>
+        <div class="survey-question grid_3 mandatory" title="Enter your primary e-mail address; the one you&rsquo;re most likely to monitor.">E-mail Address <a><img src="/images/smerf_help.gif?" alt="Help"></a></div>
         <% if @errors && @errors['email'] %>
         <div class="smerfQuestionError">
             <p>
