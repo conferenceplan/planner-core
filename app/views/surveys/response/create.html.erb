@@ -1,4 +1,7 @@
-<h2><%= @survey.name %></h2>
 <% if @survey %>
-    <%= @survey.thank_you %>
+    <% if !@survey.header_image.empty? %>
+    <div><img src="<%= @survey.header_image if @survey.header_image %>"></div>
+    <% end %>
+    <h2><%= @survey.name %></h2>
+    <div class="survey-thankyou"><%= @survey.thank_you %></div>
 <% end %>
