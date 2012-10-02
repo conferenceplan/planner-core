@@ -1,6 +1,6 @@
 <%#
 %>
-<% content_tag :div, :class => "grid_12" do %>
+<% content_tag :div, :class => "grid_12 survey-question-area" do %>
     <% content_tag :div, :id => "cpl_question_#{ question.id }", :class => "survey-question #{question.survey_format.style} #{(question.mandatory) ? 'mandatory' : ''}" do %>
         <%= question.question %>
         <% if question.survey_format.help && !question.survey_format.help.blank? %>

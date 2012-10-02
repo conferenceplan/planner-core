@@ -1,9 +1,12 @@
-/* @override http://localhost:3000/stylesheets/survey.css?1287340713 */
-
 h3 {
 	font-size: 12pt;
 	margin-top: 12px;
 	margin-bottom: 3px;
+}
+
+div.survey-question-area {
+    margin-bottom : 0.5em;
+    margin-top : 0.5em;
 }
 
 div.smerfSubquestion,
@@ -137,5 +140,5 @@ div.tag-title {
 div.tag-count {
 	float: left;
 	font-size: 8pt;	
-	color : grey;
+	color : gray;
 }
