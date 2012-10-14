@@ -7,6 +7,7 @@ class PlannerReportsController < PlannerController
    include SurveyReportHelpers
 
    require 'time_diff'
+   require 'fastercsv'
   
    def show
    end
@@ -399,17 +400,26 @@ class PlannerReportsController < PlannerController
 
    def panelists_with_panels
 
-      return unless params[:html] || params[:csv] 
-
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
+      cond_str = '(acceptance_status_id = ? or acceptance_status_id = ?)'
+
+      @panelists = Person.all(:include => :pseudonym, :conditions => [cond_str,accepted.id,probable.id], :order => "people.last_name")
+      @panelists = @panelists.sort {|x,y| x.pubLastName.downcase <=> y.pubLastName.downcase}
+
+      return unless params[:html] || params[:csv] 
+
       reserved = PersonItemRole.find_by_name("Reserved")
       moderator = PersonItemRole.find_by_name("Moderator")
       invisible = PersonItemRole.find_by_name("Invisible")
 
-      cond_str = 'acceptance_status_id = ? or acceptance_status_id = ?'
       if params[:sched_only]
             cond_str << " and time_slots.start is not NULL"
+      end
+
+logger.debug(params[:specific_panelists].join(","))
+      if params[:specific_panelists]
+            cond_str << " and people.id in (" << params[:specific_panelists].join(",") << ")"
       end
 
       @names = Person.all(:include => [:pseudonym, {:programmeItems => :time_slot}], :conditions => [cond_str,accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
@@ -577,153 +587,175 @@ class PlannerReportsController < PlannerController
     end
   end
   
+  def schedule_report_test
+    generate_schedule_csv
+    respond_to do |format|
+      format.xml 
+    end
+  end
+
   #
   # This is a sample to do the same as the query report in less time...
   #
   def schedule_report
     peopleList = nil
     categoryList = nil
+
     if (params[:schedule] != nil)
-       peopleList = params[:schedule][:person_id]
-       categoryList = params[:schedule][:invitation_category_id]
-     end
-     
+      peopleList = params[:schedule][:person_id]
+      categoryList = params[:schedule][:invitation_category_id]
+    end
+
     @NoShareEmailers = search_survey_exact('g93q7', '3')
-      selectConditions = ''
-      if (peopleList != nil && peopleList.size() != 0)
-            addOr = "AND ("
-        peopleList.each do |p|
-          selectConditions = selectConditions + addOr + 'people.id ='+ p
-          addOr = " OR "
-        end
-        selectConditions = selectConditions + ")"
+
+    selectConditions = ''
+
+    if (peopleList != nil && peopleList.size() != 0)
+      addOr = "AND ("
+      peopleList.each do |p|
+        selectConditions = selectConditions + addOr + 'people.id ='+ p
+        addOr = " OR "
       end
-       if (categoryList != nil && categoryList.size() != 0)
-            addOr = "AND ("
-        categoryList.each do |p|
-          selectConditions = selectConditions + addOr + 'people.invitation_category_id ='+ p
-          addOr = " OR "
-        end
-        selectConditions = selectConditions + ")"
+      selectConditions = selectConditions + ")"
+    end
+
+    if (categoryList != nil && categoryList.size() != 0)
+      addOr = "AND ("
+      categoryList.each do |p|
+        selectConditions = selectConditions + addOr + 'people.invitation_category_id ='+ p
+        addOr = " OR "
       end
+      selectConditions = selectConditions + ")"
+    end
+
     maxquery = "select MAX(x) from (select Count(*) as x from programme_item_assignments group by person_id) l;"
     maxList = ActiveRecord::Base.connection.select_rows(maxquery)
     maxItems = maxList[0][0].to_i;
     maxPanelInRoom = 0
   
-   
-    @people = Person.all(
-        :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))' + selectConditions,
+    if params[:csv]
+        csv = Array.new
+        csv << "Name"
+        csv << "email"
+        1.upto(maxItems) do |number|
+          numberString = number.to_s
+          headerValue = "Title"+numberString
+          csv << headerValue
+          headerValue = "Room"+numberString
+          csv << headerValue
+          headerValue = "Venue"+numberString
+          csv << headerValue
+          headerValue = "StrTime"+numberString
+          csv << headerValue
+          headerValue = "Description"+numberString
+          csv << headerValue
+          headerValue = "Participants"+numberString
+          csv << headerValue
+          headerValue = "Equipment"+numberString
+          csv << headerValue
+  logger.debug "before retrieval loop: #{Time.now}" 
+     
+        Person.find_each(
+          :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))' + selectConditions,
           [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
           [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
-        :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
-                     :equipment_types, {:room => :venue}, :time_slot]} ],
-        :order => "people.last_name asc, time_slots.start asc"
-      )  
-    if params[:csv]
-      output = Array.new
-      output = []
-      headerList = Array.new
-      headerList << "Name"
-      headerList << "email"
-      1.upto(maxItems) do |number|
-        numberString = number.to_s
-        headerValue = "Title"+numberString
-        headerList << headerValue
-        headerValue = "Room"+numberString
-        headerList << headerValue
-        headerValue = "Venue"+numberString
-        headerList << headerValue
-        headerValue = "StrTime"+numberString
-        headerList << headerValue
-        headerValue = "Description"+numberString
-        headerList << headerValue
-        headerValue = "Participants"+numberString
-        headerList << headerValue
-        headerValue = "Equipment"+numberString
-        headerList << headerValue
-      end      
-      output.push headerList 
-     
-      @people.each do |person|
-        panellist = []
-        defaultEmail = ''
-        if (params[:incl_email])
-          person.email_addresses.each do |addr|
-             if addr.isdefault
-               defaultEmail = addr.email
-             end
-          end
-        end 
-        person.programmeItems.each do |itm|
-          next if itm.time_slot.nil?
-          names = []
-          panelinfo = {}
-          itm.programme_item_assignments.each do |asg| #.people.each do |part|              
-             if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']      
-               name = asg.person.GetFullPublicationName()
-               name += " (M)" if asg.role == PersonItemRole['Moderator']  
-               if (params[:incl_email])
-                   asg.person.email_addresses.each do |addr|
-                     if addr.isdefault && (!@NoShareEmailers.index(asg.person))
-                       name += "(" + addr.email + ")"
-                     end
-                   end
-               end
-               names << name
-             end
-          end
-          equipList = []
-          if itm.equipment_types.size == 0
-             equipList << "No Equipment Needed"
-          end
-          itm.equipment_types.each do |equip|
-             equipList << equip.description
-          end
-          panelinfo = {}
-          panelinfo['title'] = itm.title
-          panelinfo['room'] = itm.room.name
-          panelinfo['venue'] = itm.room.venue.name
-          panelinfo['time'] = itm.time_slot.start.strftime('%Y-%m-%d %H:%M')
-          panelinfo['strtime'] = "#{itm.time_slot.start.strftime('%a %H:%M')} - #{itm.time_slot.end.strftime('%H:%M')}"
-          description = itm.precis.gsub('\n','')
-          description = description.gsub('\r','')
-          panelinfo['description'] = description
-          panelinfo['participants'] = names.join(', ')
-          panelinfo['equipment'] = equipList.join(', ')                      
-          panellist << panelinfo
-        
-      end
-       panellist.sort! {|a,b| a['time'] <=> b['time']}
-
-      outputlist = []
-        outputlist << person.GetFullPublicationName
-        outputlist << defaultEmail
-        1.upto(maxItems) do |num|
-            if (panellist.size() != 0 && num <= panellist.size())
-              outputlist << panellist[num-1]['title']
-              outputlist << panellist[num-1]['room']
-              outputlist << panellist[num-1]['venue']
-              outputlist << panellist[num-1]['strtime']
-              outputlist << panellist[num-1]['description']
-              outputlist << panellist[num-1]['participants']
-              outputlist << panellist[num-1]['equipment']
-            else
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
+          :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
+          :equipment_types, {:room => :venue}, :time_slot]} ]
+        ) do |person|
+          panellist = []
+          defaultEmail = ''
+          if (params[:incl_email])
+            person.email_addresses.each do |addr|
+              if addr.isdefault
+                defaultEmail = addr.email
+              end
             end
           end
-          output.push outputlist
-      end
-      outfile = "schedule_" + Time.now.strftime("%m-%d-%Y") + ".csv"
 
-      csv_out_noconv(output, outfile)
-    else
+          person.programmeItems.each do |itm|
+            next if itm.time_slot.nil?
+            names = []
+            panelinfo = {}
+
+            itm.programme_item_assignments.each do |asg| 
+              if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']      
+                name = asg.person.GetFullPublicationName()
+                name += " (M)" if asg.role == PersonItemRole['Moderator']  
+  
+                if (params[:incl_email])
+                  asg.person.email_addresses.each do |addr|
+                    if addr.isdefault && (!@NoShareEmailers.index(asg.person))
+                      name += "(" + addr.email + ")"
+                    end
+                  end
+                end
+  
+                names << name
+              end
+            end
+  
+            equipList = []
+
+            if itm.equipment_types.size == 0
+              equipList << "No Equipment Needed"
+            end
+  
+            itm.equipment_types.each do |equip|
+              equipList << equip.description
+            end
+  
+            panelinfo = {}
+            panelinfo['title'] = itm.title
+            panelinfo['room'] = itm.room.name
+            panelinfo['venue'] = itm.room.venue.name
+            panelinfo['time'] = itm.time_slot.start.strftime('%Y-%m-%d %H:%M')
+            panelinfo['strtime'] = "#{itm.time_slot.start.strftime('%a %H:%M')} - #{itm.time_slot.end.strftime('%H:%M')}"
+            description = itm.precis.gsub('\n','')
+            description = description.gsub('\r','')
+            panelinfo['description'] = description
+            panelinfo['participants'] = names.join(', ')
+            panelinfo['equipment'] = equipList.join(', ')                      
+            panellist << panelinfo
+               
+          end # person.programmeItems.each do |itm|
+          panellist.sort! {|a,b| a['time'] <=> b['time']}
+
+          csv << person.GetFullPublicationName
+          csv << defaultEmail
+          1.upto(maxItems) do |num|
+            if (panellist.size() != 0 && num <= panellist.size())
+              csv << panellist[num-1]['title']
+              csv << panellist[num-1]['room']
+              csv << panellist[num-1]['venue']
+              csv << panellist[num-1]['strtime']
+              csv << panellist[num-1]['description']
+              csv << panellist[num-1]['participants']
+              csv << panellist[num-1]['equipment']
+            else
+              csv << "";
+              csv << "";
+              csv << "";
+              csv << "";
+              csv << "";
+              csv << "";
+              csv << "";
+            end
+          end
+        end # Person.find_each(
+      end #FasterCSV.open(outfile, "w") do |csv|
+    logger.debug "after retrieval loop: #{Time.now}" 
+      outfile = "schedule_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+      csv_out_noconv(csv, outfile)
+    else  # if params[:csv]
+      @people = Person.all(
+        :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))' + selectConditions,
+        [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
+        [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
+        :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
+        :equipment_types, {:room => :venue}, :time_slot]} ],
+        :order => "people.last_name asc, time_slots.start asc"
+      )  
+
       respond_to do |format|
         format.xml 
       end
