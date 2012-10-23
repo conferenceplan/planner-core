@@ -1,5 +1,6 @@
 class PendingImportPerson < ActiveRecord::Base
   has_enumerated :pendingtype, :class_name => 'PendingType'
+  belongs_to :datasource
   
   def addressNil?
     if ((self.line1 == nil || self.line1 == "") &&
@@ -22,9 +23,26 @@ class PendingImportPerson < ActiveRecord::Base
       return false
     end
   end
+  
+  def alt_emailNil?
+    if (self.alt_email == nil || self.alt_email == "")
+      return true
+    else
+      return false
+    end
+  end
+  
+  def phoneNil?
+     if (self.phone == nil || self.phone == "")
+      return true
+    else
+      return false
+    end
+  end
+  
   def addressMatch?(matchaddress)
-     if ((self.line1 == matchaddress.line1)
-        (self.line2 == matchaddress.line2)
+     if ((self.line1 == matchaddress.line1) &&
+        (self.line2 == matchaddress.line2) &&
         (self.line3 == matchaddress.line3) &&
          (self.city == matchaddress.city) &&
          (self.state == matchaddress.state) &&

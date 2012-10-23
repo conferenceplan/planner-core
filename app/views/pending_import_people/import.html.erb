@@ -11,13 +11,41 @@
        <%= f.file_field :file -%>
  </p>
  <p>
- 	<label for="dump_importtype">
- 		File Data Type :
-		</label>
-		<%= f.radio_button :importtype, :reno%>Reno Registration
-		<%= f.radio_button :importtype, :renotest-%>Reno Test
-		<%= f.radio_button :importtype, :master%>Master
- 	</p
+ 	 <div class='line'>
+            <div class='field_name'>
+                <%= f.label :datasource_id, "Datasource" %>
+            </div>
+            <div class='field_value'>
+                <%= f.select :datasource_id,
+                Datasource.find(:all, :conditions => ["name != ?","Application"]).collect {|r| [r.name,r.id] },
+                {:include_blank => false} %>
+            </div>
+    </div>
+	<p></p>
+ 	<label for="address_options">
+ 		For Address (select one) :
+	</label>
+	<div>
+	<%= f.radio_button :addressupdate, :review%>Put address changes in pending for review
+	</div>
+	<div>
+	<%= f.radio_button :addressupdate, :alternate%>Automatically add address changes as alternate
+	</div>
+	<div>
+	<%= f.radio_button :addressupdate, :auto%>Automatically update primary address on address change
+    </div>
+	<p></p>
+ 	<label for="name_options">
+ 		For Name (select one) :
+	</label>
+	<div>
+	<%= f.radio_button :nameupdate, :review%>Put name changes in pending for review
+	</div>
+
+	<div>
+	<%= f.radio_button :nameupdate, :auto%>Automatically update name on name change
+    </div>
+ </p>
  <p>
        <%= submit_tag 'Submit' -%>
  </p>

@@ -355,81 +355,201 @@ class Person < ActiveRecord::Base
     end
   end
   
-  def UpdateIfPendingPersonDifferent(pending_id)
-  pendingImportPerson = PendingImportPerson.find(pending_id)
+  def UpdateIfPendingPersonDifferent(pending_id,updateAddressFlag,updateNameFlag,newRegistrationDetail)
+    
+    pendingImportPerson = PendingImportPerson.find(pending_id)
     postalAddresses = self.postal_addresses
-    emailAddresses = self.email_addresses
+    emailAddresses = self.email_addresses 
+    
     myRegistrationDetail = self.registrationDetail
     
-    if ((myRegistrationDetail == nil) && (pendingImportPerson.registration_number) && pendingImportPerson.registration_number != "")
-      myRegistrationDetail = new RegistrationDetail(:registration_number => pendingImportPerson.registration_number,
-                                                    :registration_type => pendingImportPerson.registration_type)
-      self.registrationDetail = myRegistrationDetail
+    
+    savePendingStatus = nil
+    # figure out if anything different first
+
+    # see if need address update
+    addressSame = false
+    defaultAddress = nil
+    self.postal_addresses.each do |matchaddress|
+       if (pendingImportPerson.addressMatch?(matchaddress))
+           addressSame = true
+       end
+       if (matchaddress.isdefault = true)
+         defaultAddress = matchaddress
+       end
     end
-    # we can only automatically update addresses from pendingImportPerson
-    # if we have 1 email and postal address in our database
-    # if we have more than 1, we can't tell which one to update
-    # and require user intervention
-    if postalAddresses.size <= 1 && emailAddresses.size <= 1
-      newPostalAddress = true
-      newEmailAddress = true
-      # check if postal address in database is different - if so, remove from database
-      if (postalAddresses.size == 1)
-        address = postalAddresses[0]
-      
-        if ((pendingImportPerson.line1 != address.line1) ||
-            (pendingImportPerson.line2 != address.line2) ||
-            (pendingImportPerson.city != address.city ) ||
-            (pendingImportPerson.country != address.country) ||
-            (pendingImportPerson.postcode != address.postcode) ||
-            (pendingImportPerson.phone != address.phone))
-            self.removePostalAddress(address)  
-        else
-            newPostalAddress = false
+    if (addressSame == false)
+         pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleAddressUpdate")
+    end
+    #see if need email update
+    emailSame = false
+    defaultEmail = nil
+    self.email_addresses.each do |matchaddress|
+        if (pendingImportPerson.email == matchaddress.email)
+           emailSame = true
+        end #if
+        if (matchaddress.isdefault = true)
+          defaultEmail = matchaddress
         end
+    end #each person
+    if (emailSame == false)
+       pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleAddressUpdate")
+    end
+    
+    # check if name is same
+    nameSame = false    
+    if (self.last_name == pendingImportPerson.last_name && self.first_name == pendingImportPerson.first_name && self.suffix == pendingImportPerson.suffix)
+      nameSame = true
+    end
+    
+    if (nameSame == false)
+      pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleNameUpdate")
+    end
+    
+    newRegistration = false
+    if ((myRegistrationDetail == nil) && (newRegistrationDetail != nil))
+      newRegistration = true
+    end
+
+    # see if we can update or just want to save in pending - return false if
+    # saving in pending
+    forceSaveAsPending = false
+    if (nameSame == false)
+      # don't update if the name does not match and an address doesn't match
+      # could be an input file problem
+      if (emailSame == false || addressSame == false)
+        savePendingStatus = pendingImportPerson.pendingtype
+        return savePendingStatus
+        # if name is different, but we are not auto updating names, just return false to
+        # save in pending
+      elsif (nameUpdateFlag == 'review')
+        savePendingStatus = pendingImportPerson.pendingtype
+        return savePendingStatus
       end
-      # check if email address is different - if so, remove email from database
-      if (emailAddresses.size == 1)
-        eaddress = emailAddresses[0]
-        if (pendingImportPerson.email != eaddress.email)
-          self.removeEmailAddress(eaddress)
-        else
-          newEmailAddress = false
-        end
-      end
-      # we have a new postal address, so create one
-      if (newPostalAddress == true)
-           self.postal_addresses.new(:line1 => pendingImportPerson.line1,
-                                     :line2 => pendingImportPerson.line2,
-                                     :city  => pendingImportPerson.city,
-                                     :postcode => pendingImportPerson.postcode,
-                                     :state => pendingImportPerson.state,
-                                     :country => pendingImportPerson.country,
-                                     :phone => pendingImportPerson.phone)
-      end
-      # the person may have previously not had a registration number
-      newRegistration = false
-      if ((myRegistrationDetail == nil) && (pendingImportPerson.registration_number) && pendingImportPerson.registration_number != "")
-         myRegistrationDetail = new RegistrationDetail(:registration_number => pendingImportPerson.registration_number,
-                                                       :registration_type => pendingImportPerson.registration_type)
-         self.registrationDetail = myRegistrationDetail
-         newRegistration = true
-      end
-      # we have a new email address, so create one
-      if (newEmailAddress == true)
-        self.email_addresses.new(:email => pendingImportPerson.email)
-      end
-      
-      # save new addresses
-      if (newEmailAddress == true || newPostalAddress == true || newRegistration)
-        self.save
-      end
-      # update successful
-      return true
     else
-      # can't update since we have multiple addresses
-      return false
+      # don't need to update, can just delete pending since it is the same as 
+      # what we have
+      if (emailSame == true && addressSame == true && newRegistration == false)
+        return nil
+      else
+        if (emailSame == false || addressSame == false)
+          # don't update if we are reviewing address and no reg change - save to pending
+          if (updateAddressFlag == 'review')
+             if (newRegistration == false)
+               savePendingStatus = pendingImportPerson.pendingtype
+               return savePendingStatus          
+             else
+               # force save to pending if reg change and address change
+               forceSaveAsPending = true
+             end
+          end
+        end
+      end
     end
+
+    # if we get here, there is something to update, but we only do record updates
+    # from the primary datasource - there is too much complexity to manage
+    # updates from multiple sources.Generally, the primary source is registration
+    # and since ultimately, everyone should be in registration, we should not
+    # need other updates.Other sources are for acquiring contact info before
+    # people are registered and should not need updating
+    if (pendingImportPerson.datasource.primary == false)
+      savePendingStatus = pendingImportPerson.pendingtype
+      return savePendingStatus
+    end
+    
+    # check if new address, and if so, figure out if want to save
+    # it as alternate or default
+    newPostalAddress = false
+    setAddressDefault = false
+    if (addressSame == false)
+        if (updateAddressFlag == 'auto')
+          # update default address
+          newPostalAddress = true
+          setAddressDefault = true
+          if (defaultAddress != nil)
+            self.removePostalAddress(defaultAddress)
+          end
+        elsif (updateAddressFlag == 'alternate')
+          #add alternate Address if already have default
+          newPostalAddress = true
+          # no default, go ahead and use this as default
+          if (defaultAddress == nil)
+            setAddressDefault = true
+          end
+        end
+    end
+    
+      
+    # check if new address, and if so, figure out if want to save
+    # it as alternate or default
+    newEmailAddress = false
+    setEmailDefault = false
+    if (emailSame == false)
+      if (inds.primary == true)
+        if (updateAddressFlag == 'auto')
+          # update default address
+          newEmailAddress = true
+          setEmailDefault = true
+          if (defaultEmail != nil)
+              self.removeEmailAddress(defaultEmail)
+          end
+        elsif (updateAddressFlag == 'alternate')
+          #add alternate Address
+          newEmailAddress = true
+          # if no default, go ahead and use this a default
+          if (defaultEmail == nil)
+            setEmailDefault = true
+          end
+        end
+      end
+    end
+    
+ 
+   # we have a new postal address, so create one
+   if (newPostalAddress == true)
+       self.postal_addresses.new(:line1 => pendingImportPerson.line1,
+                                 :line2 => pendingImportPerson.line2,
+                                 :city  => pendingImportPerson.city,
+                                 :postcode => pendingImportPerson.postcode,
+                                 :state => pendingImportPerson.state,
+                                 :country => pendingImportPerson.country,
+                                 :phone => pendingImportPerson.phone,
+                                 :isDefault => setAddressDefault)
+   end
+      
+   # the person may have previously not had a registration number
+   newRegistration = false
+   if ((myRegistrationDetail == nil) && (newRegistrationDetail != nil))
+   
+      self.registrationDetail = newRegistrationDetail
+      newRegistration = true
+   end
+   
+   # we have a new email address, so create one
+   if (newEmailAddress == true)
+      self.email_addresses.new(:email => pendingImportPerson.email,
+                                 :isdefault => setEmailDefault)
+   end
+      
+   # save new addresses
+   if (forceSaveAsPending == false)
+     if (inds.primary == true)
+       
+     end
+     if (newEmailAddress == true || newPostalAddress == true || newRegistration )
+        self.save
+     end
+   end
+      
+   # update successful
+   if (forceSaveAsPending == true)
+     savePendingStatus = pendingImportPerson.pendingtype
+     return savePendingStatus
+   else
+     return nil
+   end
+   
   end
   
   def GetExcludedTimesGroup
