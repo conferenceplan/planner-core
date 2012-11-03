@@ -3,7 +3,7 @@
     <h3>Personal Details</h3>
     <div class="grid_12">
       <a><img alt="Help" src="/images/smerf_help.gif" title="Enter your Registration name"></a>
-      <div class="grid_3 mandatory">Name</div>
+      <div class="grid_3">Name</div>
         <% if @errors && @errors['first_name'] %>
         <div class="smerfQuestionError">
             <p>
@@ -12,7 +12,7 @@
             </p>
         </div>
         <% end %>
-        <div class="survey-question grid_3"><div class="text"><input id="first_name" name="survey_respondent_detail[first_name]" size="30" title="First Name" type="text" value="<%=@survey_respondent_details['first_name'] if @survey_respondent_details %>"></div></div>
+        <div class="survey-question grid_3 mandatory"><div class="text"><input id="first_name" name="survey_respondent_detail[first_name]" size="30" title="First Name" type="text" value="<%=@survey_respondent_details['first_name'] if @survey_respondent_details %>"></div></div>
         <% if @errors && @errors['last_name'] %>
         <div class="smerfQuestionError">
             <p>

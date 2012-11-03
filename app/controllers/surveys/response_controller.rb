@@ -87,10 +87,6 @@ private
   def validate_responses(params, errors)
     
     if params[:survey_respondent_detail]
-      if params[:survey_respondent_detail]['first_name'].empty?
-        errors['first_name'] = Hash.new if (errors['first_name'].nil?())
-        errors['first_name']['First Name'] = "Question requires an answer" 
-      end
       if params[:survey_respondent_detail]['last_name'].empty?
         errors['last_name'] = Hash.new if (errors['last_name'].nil?())
         errors['last_name']['Last Name'] = "Question requires an answer" 
