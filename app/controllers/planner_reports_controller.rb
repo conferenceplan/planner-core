@@ -417,8 +417,8 @@ class PlannerReportsController < PlannerController
             cond_str << " and time_slots.start is not NULL"
       end
 
-logger.debug(params[:specific_panelists].join(","))
       if params[:specific_panelists]
+logger.debug(params[:specific_panelists].join(","))
             cond_str << " and people.id in (" << params[:specific_panelists].join(",") << ")"
       end
 
