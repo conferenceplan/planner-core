@@ -1,9 +1,9 @@
 --- 
 smerfform:   
-  name: Boskone 49 Program Participant Questionnaire
+  name: Boskone 50 Program Participant Questionnaire
   welcome: |
     <p>
-    Please complete this form if you've been invited to be on Boskone 49 Program.
+    In order to build a dynamic Boskone 50 program, we ask all invited program participants to complete this survey.
     </p>
     <p>
     Whether you're new to SF cons or have participated in
@@ -18,14 +18,16 @@ smerfform:
     that are in red are required.
     </p>
     <p>
-    <em>Please note that to save the questionnaire you need to click the submit button 
-    at the end of the page. <b>You can always come back and make changes to your saved 
+    <em>Please note that to save the questionnaire you need to click the button 
+    at the end of the page that says "save your answers". <b>You can always come back and make changes to your saved 
     answers at a later date.</b></em>
     </p>
 
   thank_you: | 
     <p>
     <b>Thank you for your input.</b>
+    You can always come back and make changes to your saved answers at a later date. We hope to send out preliminary scheduling in mid-January, 
+    but program participants can contact us at any time
     </p>
 
   group_sort_order_field: code
@@ -249,7 +251,7 @@ smerfform:
 #          answers:
 #            Yes:
 #              code: 1
-#              answer: | I am an attending member of Boskone 49.
+#              answer: | I am an attending member of Boskone 50.
 #                <div class='grid_11 suffix_2'>
 #                <i>Check our <a href='http://www.renovationsf.org/memlist.php' target='new'>online member search</a> if you aren't sure of your status.</i>
 #                </div>
@@ -284,8 +286,8 @@ smerfform:
               code: 1
               answer_id: timedisable
               answer: | I am available for Program for the complete duration of the convention. 
-                     Boskone 49 Program will officially begin at 4pm, Friday, February 17 and 
-                     will end by 3 pm on Sunday, February 19.
+                     Boskone 50 Program will officially begin at 4pm, Friday, February 15 and 
+                     will end by 3 pm on Sunday, February 17.
               sort_order: 1
               default: N
               help: Select this option if you plan to be in Boston and will be available for Program by noon on Friday, February 17 and will be in Boston until at least 4pm on Sunday, February 19.
@@ -318,21 +320,21 @@ smerfform:
                   style: grid_12
                   question_style: grid_6
                   answer_style: grid_4 timeselect
-                  question: | I will be available to be on Boskone 49 Program beginning:
+                  question: | I will be available to be on Boskone 50 Program beginning:
                   answers:
                     Fri:
                       code: 1
-                      answer: | Friday, February 17
+                      answer: | Friday, February 15
                       sort_order: 1
                       default: N
                     Sat:
                       code: 2
-                      answer: | Saturday, February 18
+                      answer: | Saturday, February 16
                       sort_order: 2
                       default: N
                     Sun:
                       code: 3
-                      answer: | Sunday, February 19
+                      answer: | Sunday, February 17
                       sort_order: 3
                       default: N
                 Start Time:
@@ -424,17 +426,17 @@ smerfform:
                   answers:
                     Fri:
                       code: 1
-                      answer: | Friday, February 17
+                      answer: | Friday, February 15
                       sort_order: 5
                       default: N
                     Sat:
                       code: 2
-                      answer: | Saturday, February 18
+                      answer: | Saturday, February 16
                       sort_order: 4
                       default: N
                     Sun:
                       code: 3
-                      answer: | Sunday, February 19
+                      answer: | Sunday, February 17
                       sort_order: 3
                       default: N
                 End Time:
@@ -570,34 +572,34 @@ smerfform:
           question: | Do not schedule me against the main GoH item for: 
           help: | Check the guests whose main GoH item (speech, performance, etc.) you do not want to be scheduled against.
           answers:
-            scalziGOH:
+            vingeGOH:
               code: 1
-              answer: | John Scalzi GoH Item
+              answer: | Vernor Vinge (GoH Item)
               sort_order: 1
               default: N
-            santosGOH:
+            snellingsGOH:
               code: 2
-              answer: | Daniel dos Santos (Official Artist)
+              answer: | Lisa Snellings (Official Artist)
               sort_order: 2
               default: N
-            weisskopfGOH:
+            hertzGOH:
               code: 3
-              answer: | Toni Weisskopf (Special Guest)
+              answer: | John Hertz (Special Guest)
               sort_order: 3
               default: N
-            trickyPixie:
+            daleGOH:
               code: 4
-              answer: | Tricky Pixie (Featured Filker)
+              answer: | Heather Dale (Featured Filker)
               sort_order: 4
               default: N
-            clementGOH:
+            pournellGOH:
               code: 5
-              answer: | Hal Clement Science Speaker (Bruce Schneier)
+              answer: | Jerry Pournelle (NESFA Press Guest)
               sort_order: 5
               default: N
-            nesfaPressGuest:
+            kareGOH:
               code: 6
-              answer: | NESFA Press Guest (Jerry Pournelle)
+              answer: | Jordin Kare (Hal Clement Science Speaker)
               sort_order: 6
               default: N
         item_conflicts:
@@ -619,16 +621,6 @@ smerfform:
               answer: | Art Show Reception (Friday night)
               sort_order: 2
               default: N
-            trickyPixie:
-              code: 3
-              answer: | Tricky Pixie Concert
-              sort_order: 3
-              default: N
-            closingCeremony:
-              code: 4
-              answer: | Closing Ceremony (Sun aft)
-              sort_order: 4
-              default: N
         excludedTimesText:
           code: g6q7
           type: textbox
@@ -642,11 +634,11 @@ smerfform:
       code: 7
       style: grid_12
       description_style: grid_11
-      name: What topics are you interested in talking about?
+      name: Which topics would you like to discuss?
       description: | To help us to get a better idea of your interest and knowledge in 
             each of the areas listed below, please use the text box next to the 
             area to indicate up to 6 topics within this field (separated with 
-            commas) which particularly interest you. Topics that other respondents 
+            commas) that particularly interest you. Topics that other respondents 
             have already entered are shown below the text field. Don't restrict 
             yourself to those topics, but include any of them in your list if they 
             are also relevant to you.
@@ -1034,7 +1026,7 @@ smerfform:
           question_style: grid_7
           answer_style: grid_11
           sort_order: 2
-          question: | What other items would you be willing to talk about?
+          question: | What other items or topics would you like to discuss?
           help: | What have you never talked about at a convention that might make an interesting panel item.
         Panels With:
           code: g93q3
@@ -1043,7 +1035,7 @@ smerfform:
           question_style: grid_7
           answer_style: grid_11
           sort_order: 3
-          question: | Who do you want to be on panels with?
+          question: | Are there other program participants with whom you would like to be on panels?
           help: | List 4-6 people you particularly enjoy being on panels with and we will try to schedule you with some of them.
 #        NevadaConnections:
 #          code: g93q4
@@ -1070,7 +1062,7 @@ smerfform:
           question_style: grid_11
           answer_style: grid_11
           sort_order: 6
-          question: | Please do not schedule me under any circumstances with the following people (information will not be shared except with the core Boskone 49 Program team). Boskone will not disclose this information to other staff or participants.:
+          question: | Please do not schedule me under any circumstances with the following people (information will not be shared except with the core Boskone 50 Program team). Boskone will not disclose this information to other staff or participants.:
           help: | We believe strongly that panels should be intelligent, respectful discussions that do not devolve into verbal fistfights.  If there are people you would rather not be panelists with, let us know so we can discreetly avoid scheduling you with them.
         localtalk:
           code: g93q7
@@ -1083,7 +1075,7 @@ smerfform:
 #             localtalk:
 #               code: 1
 #               answer: | I am willing to do a reading or a talk at a local library.
-#               help: | Boskone 49 is exploring doing some events at a library that is about two blocks away from the convention center. Check this box if you would be willing to be involved in community outreach for the science fiction field.
+#               help: | Boskone 50 is exploring doing some events at a library that is about two blocks away from the convention center. Check this box if you would be willing to be involved in community outreach for the science fiction field.
 #               sort_order: 1
 #               default: N
 #             sfworkshop:
@@ -1133,7 +1125,7 @@ smerfform:
 #
     pub_info:
       code: 95
-      name: Information for Boskone 49's Web Site and Publications
+      name: Information for Boskone 50's Web Site and Publications
       description: | 
       questions:
         mini_bio:
@@ -1144,12 +1136,12 @@ smerfform:
           answer_style: grid_10
           sort_order: 1
           question: | <b><u>Mini-Bio</u></b> Please provide a short (50 words) bio for the 
-              Boskone 49 web site that includes information about your most
+              Boskone 50 web site that includes information about your most
               recent publications/activities. Use initial capitals for the
               title rather than ALL CAPS. This bio might be edited for
               space considerations.
               These bios may be used for press purposes, on the Boskone website, or in Boskone publications only.
-          help: Information in this section will be published in our web site, social media, Progress Reports, and Souvenir Book to better inform our members about you and your appearance at Boskone 49.
+          help: Information in this section will be published in our web site, social media, Progress Reports, and Souvenir Book to better inform our members about you and your appearance at Boskone 50.
         homepage:
           code: g95q2
           type: textfield

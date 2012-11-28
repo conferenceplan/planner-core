@@ -2,13 +2,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Boskone Questionaire</title>
+        <title><%= @smerfform.name %></title>
     </head>
     <body>
         <h1><%=h @user.first_name %> <%=h @user.last_name %></h1>
         <p>Thank you. It has been noted that you have declined to participate in the program at Boskone. 
 		If, at a later date, you decide to change your mind you can return to the survey using the following
-		URL <a href='<%= survey_respondents_url(:host => "boskone.myconferenceplanning.org") %>'>survey</a> 
+		URL <a href='<%= survey_respondents_url(:host => @host) %>'>survey</a> 
 	    and entering the following 'invitation code': <b><%= @user.key %></b>
         </p>
     </body>
