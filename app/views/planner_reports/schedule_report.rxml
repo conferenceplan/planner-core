@@ -16,7 +16,8 @@ xml.people do
               xml.title(titlestr)
               xml.description(itm.precis)
               names = []
-              itm.programme_item_assignments.each do |asg| #.people.each do |part|                 
+              itm.programme_item_assignments.each do |asg| #.people.each do |part|
+                if asg.person != nil
                   if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
                     name = asg.person.GetFullPublicationName()
                     name += " (M)" if asg.role == PersonItemRole['Moderator']                
@@ -27,6 +28,7 @@ xml.people do
                     end
                     names << name
                   end
+                end
               end
               xml.participants(names.join(', '))
               equipList = []
