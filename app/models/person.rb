@@ -370,28 +370,39 @@ class Person < ActiveRecord::Base
     # see if need address update
     addressSame = false
     defaultAddress = nil
-    self.postal_addresses.each do |matchaddress|
-       if (pendingImportPerson.addressMatch?(matchaddress))
-           addressSame = true
-       end
-       if (matchaddress.isdefault = true)
-         defaultAddress = matchaddress
-       end
-    end
+    if ((pendingImportPerson.addressNil? == true) && (self.postal_addresses.length() == 0))
+      addressSame = true
+    else
+       self.postal_addresses.each do |matchaddress|
+         if (pendingImportPerson.addressMatch?(matchaddress))
+            addressSame = true
+         end
+         if (matchaddress.isdefault = true)
+           defaultAddress = matchaddress
+         end
+     end
+   end
+   
     if (addressSame == false)
          pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleAddressUpdate")
     end
+   
     #see if need email update
     emailSame = false
     defaultEmail = nil
-    self.email_addresses.each do |matchaddress|
-        if (pendingImportPerson.email == matchaddress.email)
-           emailSame = true
-        end #if
-        if (matchaddress.isdefault = true)
-          defaultEmail = matchaddress
-        end
-    end #each person
+    if ((pendingImportPerson.emailNil? == true) && (self.email_addresses.length() == 0))
+         emailSame = true
+    else
+      self.email_addresses.each do |matchaddress|
+          if (pendingImportPerson.email == matchaddress.email)
+             emailSame = true
+          end #if
+          if (matchaddress.isdefault = true)
+            defaultEmail = matchaddress
+          end
+      end #each person
+    end
+    
     if (emailSame == false)
        pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleAddressUpdate")
     end

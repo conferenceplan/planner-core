@@ -141,7 +141,7 @@ class PendingImportPeopleController < PlannerController
         savePersonAsPending = false
         realMatchPerson = nil
 
-        matchPeople = Person.find(:all,:include => [:peoplesource], :conditions => ["peoplesources.datasource_id = ? AND peoplesources.datasource_dbid = ?",inDatasourceId, row[0]])
+        matchPeople = Person.find(:all,:include => [:peoplesource], :conditions => ["peoplesources.datasource_id = ? AND peoplesources.datasource_dbid = ?",inDatasourceId,row[0]])
         if (matchPeople.length() != 0)
           newPersonFlag = false
           if (matchPeople.length() == 1)
@@ -156,16 +156,23 @@ class PendingImportPeopleController < PlannerController
           # there is duplicate registration number somewhere (bad) or someone entered it
           # by hand and not through the import. If the name matches, we should update the registration
           if (foundReg == true)
-             matchPeople = Person.find(:all,:include => [:registrationDetail],:conditions => ["last_name = ? AND first_name = ? AND suffix = ? and registration_details.registration_number = ?", pendingImportPerson.last_name, pendingImportPerson.first_name,pendingImportPerson.suffix, pendingImportPerson.registration_number])        
+             matchPeople = Person.find(:all,:include => [:registrationDetail,:peoplesource],:conditions => ["last_name = ? AND first_name = ? AND suffix = ? and registration_details.registration_number = ?", pendingImportPerson.last_name, pendingImportPerson.first_name,pendingImportPerson.suffix, pendingImportPerson.registration_number])        
              if (matchPeople.length() == 0)
                # name did not match, we need to save as pending, registration problem
                savePersonAsPending = true
                newPersonFlag = false
                pendingImportPerson.pendingtype = PendingType.find_by_name("RegistrationInUse")
              else
-               # we already have this person, just need to update
-               newPersonFlag = false
-               realMatchPerson = matchPeople[0]
+               # check the datasource for the registration number is the same, if not we have a problem, save as pending
+               if (matchPeople[0].peoplesource.datasource_id != inds.id || matchPeople[0].peoplesource.datasource_dbid != row[0])
+                 # name did not match, we need to save as pending, registration problem
+                 savePersonAsPending = true
+                 newPersonFlag = false
+                 pendingImportPerson.pendingtype = PendingType.find_by_name("RegistrationInUse")
+               else  # we already have this person, just need to update
+                 newPersonFlag = false
+                 realMatchPerson = matchPeople[0]
+               end
              end
           end
        end
@@ -192,7 +199,7 @@ class PendingImportPeopleController < PlannerController
             end
             
             # check for matching email                
-            if (addressSame == true)
+            if (addressSame == true && (pendingPersonEmail.emailNil? == false))
                addressSame = false
                matchPeople.each do |matchperson|
                  matchperson.email_addresses.each do |matcheaddress|
@@ -234,8 +241,6 @@ class PendingImportPeopleController < PlannerController
               p.registrationDetail = nReg
            end
           
-           
-           p.save
            if (pendingImportPerson.addressNil? == false)
                 a=p.postal_addresses.new( :line1 => pendingImportPerson.line1,
                                           :line2 => pendingImportPerson.line2,
@@ -251,7 +256,7 @@ class PendingImportPeopleController < PlannerController
                e=p.email_addresses.new(:email => pendingImportPerson.email,
                                          :isdefault => true)
            end
-           if (pendingImportPerson.alt_emailNil? != nil)
+           if (pendingImportPerson.alt_emailNil? == false)
                e=p.email_addresses.new(:email => pendingImportPerson.alt_email,
                                        :isdefault => false)
            end
@@ -261,22 +266,31 @@ class PendingImportPeopleController < PlannerController
                e=p.phone_numbers.new(:number => pendingImportPerson.phone,
                                      :phone_type_id => defaultType.id)
            end
-         
            if (p.save)
-                 xp = Peoplesource.find_by_person_id(p.id)
-                 xp.datasource_dbid = row[0]
-                 xp.save
+             xp = Peoplesource.new
+             xp.datasource = inds
+             xp.datasource_dbid = row[0]
+             xp.person_id = p.id
+             xp.save
+             if (xp.save)
                  pendingImportPerson.destroy
                  n=n+1
                  GC.start if n%50==0
+             end
            end
            flash.now[:message]="CSV Import Successful,  #{n} new
                                 records added to data base"
        else
          if (!savePersonAsPending)
             if (inds.primary == true && ((realMatchPerson.datasource == nil) || (realMatchPerson.datasource.primary == false)))
-                realMatchPerson.datasource = inds
-                realMatchPerson.save
+                xp = Peoplesource.find_by_person(realMatchPerson.id)
+                if (xp == nil)
+                   xp = Peoplesource.new
+                end
+                xp.datasource = inds;
+                xp.person_id = realMatchPerson.id
+                xp.datasource_dbid = row[0]
+                xp.save
             end
              # we are updating, if registration not in database, pass in one to update
              newRegistrationDetail = nil
