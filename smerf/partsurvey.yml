@@ -609,13 +609,8 @@ smerfform:
           question_style: grid_11
           answer_style: grid_3
           sort_order: 10
-          question: | Please do not schedule me against the following events: 
+          question: | Please do not schedule me against the following event(s): 
           answers:
-            openingCermony:
-              code: 1
-              answer: | Opening Ceremony (Friday aft)
-              sort_order: 1
-              default: N
             artShowReception:
               code: 2
               answer: | Art Show Reception (Friday night)
