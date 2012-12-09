@@ -213,60 +213,14 @@ class PeopleController < PlannerController
   end
   
   def doexportemailxml
+    selectConditions = getEmailConditions()
     
-    mailingSelect = params[:exportemail][:mailing_select]
-    mailingNumber = params[:exportemail][:mailing_number]
-    acceptanceSelect = params[:exportemail][:acceptance_select]
-    acceptanceStatus = params[:exportemail][:acceptance_status_id]
-    invitecategory = params[:exportemail][:invitation_category_id]
-    categorySelect = params[:exportemail][:category_select]
-    invited_index = params[:exportemail][:invitestatus_id]
-    inviteStatus = InviteStatus.find(invited_index)
-    
-    if (inviteStatus.name == "Not Set")
-       flash[:error]= "Invite status cannot be Not Set" 
-       redirect_to :action => 'exportemailxml'
-       return
-    end
-    
-    if (mailingSelect == nil)
-       flash[:error]= "Mailing select cannot be empty"
-       redirect_to :action => 'exportemailxml'
-       return
-    end
-    if (acceptanceSelect == nil)
-       flash[:error]= "Acceptance select cannot be empty"
-       redirect_to :action => 'exportemailxml'
-       return
-    end
-    if (categorySelect == nil)
-       flash[:error]= "Category select cannot be empty"
-       redirect_to :action => 'exportemailxml'
-       return
-    end
-    
-    selectConditions = {}
-    selectConditions[:invitestatus_id] = invited_index
-    
-    
-    if (categorySelect == "true")
-      # category can be empty and we may want to select people with no category
-      selectConditions[:invitation_category_id] = nil
-      if (invitecategory != "") 
-        selectConditions[:invitation_category_id] = invitecategory
-      end
-    end
-    
-    if (acceptanceSelect == "true")
-        selectConditions[:acceptance_status_id] = acceptanceStatus
-    end
-    
-    if (mailingSelect == "true")
-      selectConditions[:mailing_number] = mailingNumber
-    end
+    if selectConditions
+      # look at the submit button and determine whether we export XML or schedule an email job
+      createEmailJob = params[:commit] == "Submit Job"
     
      @people = Person.find :all, :conditions => selectConditions, :order => 'last_name, first_name'
-     
+      
      @people.each do |person|
       if (person.survey_respondent == nil)
          # Add the email address to the survey respondent
@@ -298,24 +252,40 @@ class PeopleController < PlannerController
                                          :key => newKeyValue,
                                          :suffix => person.suffix,
                                          :submitted_survey => false)
-         else  
+         else
+           emailStatus = nil
+           if createEmailJob
+             emailStatus = EmailStatus[:Pending]
+           end
            person.create_survey_respondent(:last_name => person.last_name, 
                                          :first_name => person.first_name,
                                          :key => newKeyValue,
                                          :suffix => person.suffix,
                                          :email => theEmail.email,
+                                         :email_status => emailStatus,
                                          :submitted_survey => false)
          end
          person.save
+      else # we want to reset sending the email if appropriate
+        if createEmailJob
+          person.survey_respondent.email_status = EmailStatus[:Pending]
+          person.survey_respondent.save
+        end
       end
     end
 
-    @people = Person.find :all, :conditions => selectConditions, :order => 'last_name, first_name'
-    respond_to do |format|
+    if createEmailJob
+      @count = Person.count :all, :conditions => selectConditions
+      # schedule the job
+      emailjob = EmailJob.new
+      Delayed::Job.enqueue emailjob
+      # and tell the user
+    else  
+      @people = Person.find :all, :conditions => selectConditions, :order => 'last_name, first_name'
+      respond_to do |format|
          format.xml 
-         #{
- #            send_data @people.to_xml(:only => [:first_name,:last_name,:email_addresses,:email,:survey_respondent,:key],:include => [:email_addresses,:survey_respondent]), :filename => filename
-       #  }
+      end
+    end
     end
   end
   
@@ -483,4 +453,63 @@ def updateExcludedTimesFromSurveys
       end
     end
 end
+
+private
+
+  def getEmailConditions
+    mailingSelect = params[:exportemail][:mailing_select]
+    mailingNumber = params[:exportemail][:mailing_number]
+    acceptanceSelect = params[:exportemail][:acceptance_select]
+    acceptanceStatus = params[:exportemail][:acceptance_status_id]
+    invitecategory = params[:exportemail][:invitation_category_id]
+    categorySelect = params[:exportemail][:category_select]
+    invited_index = params[:exportemail][:invitestatus_id]
+    inviteStatus = InviteStatus.find(invited_index)
+    
+    if (inviteStatus.name == "Not Set")
+       flash[:error]= "Invite status cannot be Not Set" 
+       redirect_to :action => 'exportemailxml'
+       return nil
+    end
+    
+    if (mailingSelect == nil)
+       flash[:error]= "Mailing select cannot be empty"
+       redirect_to :action => 'exportemailxml'
+       return nil
+    end
+    if (acceptanceSelect == nil)
+       flash[:error]= "Acceptance select cannot be empty"
+       redirect_to :action => 'exportemailxml'
+       return nil
+    end
+    if (categorySelect == nil)
+       flash[:error]= "Category select cannot be empty"
+       redirect_to :action => 'exportemailxml'
+       return nil
+    end
+    
+    selectConditions = {}
+    selectConditions[:invitestatus_id] = invited_index
+    
+    
+    if (categorySelect == "true")
+      # category can be empty and we may want to select people with no category
+      selectConditions[:invitation_category_id] = nil
+      if (invitecategory != "") 
+        selectConditions[:invitation_category_id] = invitecategory
+      end
+    end
+    
+    if (acceptanceSelect == "true")
+        selectConditions[:acceptance_status_id] = acceptanceStatus
+    end
+    
+    if (mailingSelect == "true")
+      selectConditions[:mailing_number] = mailingNumber
+    end
+    
+    return selectConditions
+  end
+  
+
 end

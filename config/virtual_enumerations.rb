@@ -89,5 +89,10 @@ ActiveRecord::VirtualEnumerations.define do |config|
     
  config.define 'PendingType',
     :extends => 'Enum'
+    
+ config.define 'MailUse',
+    :extends => 'Enum'
 
+ config.define 'EmailStatus',
+    :extends => 'Enum'
 end

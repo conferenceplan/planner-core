@@ -47,8 +47,6 @@ class Surveys::ResponseController < ApplicationController
         render :index #", :page => "first"
       end
     end
-
-    # TODO - we need to respond with the thankyou message for the survey
   end
 
 # TODO - we need an update mechanism for returning survey respondents

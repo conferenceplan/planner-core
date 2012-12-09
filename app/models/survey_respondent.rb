@@ -9,6 +9,7 @@ class SurveyRespondent < ActiveRecord::Base
     
   belongs_to  :person 
   has_one   :survey_copy_status
+  has_enumerated :email_status, :class_name => 'EmailStatus'
 
   # So we can add tags of various types to the Survey respondents
   acts_as_taggable

@@ -1,5 +1,5 @@
 #
-set :stages, %w(production staging sandbox boskone lonestartest lonestarcon smofcon)
+set :stages, %w(production staging sandbox boskone lonestartest smofcon lscprog)
 set :default_stage, "staging"
 set :application, "PlannerPrototype"
 set :repository,  "https://conferenceplan.svn.sourceforge.net/svnroot/conferenceplan/PlannerPrototype"

@@ -141,12 +141,25 @@ private
       end
 
       begin
-        SurveyMailer.deliver_thankyou_email(survey_respondent) # send out email to the new email address
-      rescue
+        SurveyMailer.deliver_email(survey_respondent.email, MailUse[:CompletedSurvey], { 
+          :email => survey_respondent.email,
+          :user => survey_respondent,
+          :form => SmerfForm.find_by_id(1),
+          :responses => smerf_forms_surveyrespondent  
+           }) # send out email to the new email address
+      rescue => msg
         # We had a problem with the mail send, but we just want to log it and not tell the user
         logger.error "Problem sending email to " + survey_respondent.email
+        logger.error msg
       end
   end
+  
+  def get_responses(respondent)
+    smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
+    
+    return smerf_forms_surveyrespondent.responses
+  end
+
   
   # This method retrieves the smerf form and user responses if user
   # has already completed this form in the past.

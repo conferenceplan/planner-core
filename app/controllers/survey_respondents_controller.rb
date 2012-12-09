@@ -47,7 +47,9 @@ class SurveyRespondentsController < SurveyApplicationController
         if (fillSurvey)
           redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
         else
-          SurveyMailer.deliver_decline_email(@survey_respondent)
+          SurveyMailer.deliver_email(@survey_respondent.email, MailUse[:DeclinedSurvey], { 
+            :user => @survey_respondent,
+           })
 
           redirect_to  '/nosurvey.html'
         end

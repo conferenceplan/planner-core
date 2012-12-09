@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :mail_templates
+
+  map.resources :mail_configs
+
   map.connect 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
   map.connect 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
   map.connect 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
