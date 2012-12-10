@@ -232,4 +232,10 @@ ActionController::Routing::Routes.draw do |map|
   end
   
   map.form '/form/:page', :controller => 'surveys/response', :action => 'renderalias'
+  
+  #map.resources :emailreports
+  map.connect 'emailreports', :controller => 'emailreports', :action => 'index', :method => 'get'  
+  map.connect 'emailreports/failed', :controller => 'emailreports', :action => 'failed', :method => 'get'  
+  map.connect 'emailreports/sent', :controller => 'emailreports', :action => 'sent', :method => 'get'  
+
 end

@@ -1,0 +1,2 @@
+module EmailreportsHelper
+end
