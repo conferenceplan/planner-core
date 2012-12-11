@@ -256,14 +256,21 @@ class PeopleController < PlannerController
            emailStatus = nil
            if createEmailJob
              emailStatus = EmailStatus[:Pending]
-           end
-           person.create_survey_respondent(:last_name => person.last_name, 
+             person.create_survey_respondent(:last_name => person.last_name, 
                                          :first_name => person.first_name,
                                          :key => newKeyValue,
                                          :suffix => person.suffix,
                                          :email => theEmail.email,
                                          :email_status => emailStatus,
                                          :submitted_survey => false)
+           else
+             person.create_survey_respondent(:last_name => person.last_name, 
+                                         :first_name => person.first_name,
+                                         :key => newKeyValue,
+                                         :suffix => person.suffix,
+                                         :email => theEmail.email,
+                                         :submitted_survey => false)
+           end
          end
          person.save
       else # we want to reset sending the email if appropriate
