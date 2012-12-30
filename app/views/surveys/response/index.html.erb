@@ -5,7 +5,11 @@
   <%end%>
   <%= get_error_messages(@errors) %>
   <% if @survey %>
-    <% form_tag "/surveys/#{@survey.id}/response", :class => "" do -%>
+    <% if @survey_response %>
+        <!-- form_tag "/surveys/#{@survey.id}/response/10", :method => :put, :class => "" do -->
+    <% end %>
+    <% form_tag @path, :method => :post, :class => "" do -%>
+    <%= hidden_field_tag("key", @current_key) %>
     <h2><%= @survey.name %></h2>
     <div class="survey-welcome"><%= @survey.welcome %></div>
     <fieldset class="survey-set">

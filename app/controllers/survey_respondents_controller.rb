@@ -45,7 +45,16 @@ class SurveyRespondentsController < SurveyApplicationController
         end
 
         if (fillSurvey)
-          redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
+          # TODO - if there is a survey to fill out in the new mechanism and use that, otherwise use the SMERF mechanism
+          # for now look for the alias questionaire
+          # /form/volunteer?key=
+          # TODO - if the survey has a key use that tp find the person etc...
+          survey = Survey.find_by_alias('partsurvey')
+          if survey
+            redirect_to '/form/partsurvey?key=' + @survey_respondent.single_access_token
+          else  
+            redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
+          end
         else
           SurveyMailer.deliver_email(@survey_respondent.email, MailUse[:DeclinedSurvey], { 
             :user => @survey_respondent,
