@@ -6,15 +6,21 @@
 
 development:
     :conference:
+        :name: MyConvention
+        :email: help@help.com
         :start_date: 2011-08-17 00:00:00
         :number_of_days: 5
     
 production:
     :conference:
+        :name: MyConvention
+        :email: help@help.com
         :start_date: 2011-08-17 00:00:00
         :number_of_days: 5
 
 test:
     :conference:
+        :name: MyConvention
+        :email: help@help.com
         :start_date: 2011-08-17 00:00:00
         :number_of_days: 5

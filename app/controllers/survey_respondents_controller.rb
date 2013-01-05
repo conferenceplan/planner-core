@@ -45,10 +45,9 @@ class SurveyRespondentsController < SurveyApplicationController
         end
 
         if (fillSurvey)
-          # TODO - if there is a survey to fill out in the new mechanism and use that, otherwise use the SMERF mechanism
+          # If there is a survey to fill out in the new mechanism and use that, otherwise use the SMERF mechanism
           # for now look for the alias questionaire
-          # /form/volunteer?key=
-          # TODO - if the survey has a key use that tp find the person etc...
+          # TODO - change so that the survey can be db driven rather than by name (partsurvey)
           survey = Survey.find_by_alias('partsurvey')
           if survey
             redirect_to '/form/partsurvey?key=' + @survey_respondent.single_access_token

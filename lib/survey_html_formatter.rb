@@ -1,7 +1,41 @@
-# This module contains all the helper methods used by the smerf form views.
-module SurveyMailerHelper
+#
+#
+#
+module SurveyHtmlFormatter
   
+  #
+  # For a given survey produce an HTML version of the questions and answers
+  #
+  def survey_to_html(survey, respondent_detail)
+    content = '<h2>' + survey.name + '</h2>'
+    
+    survey.survey_groups.each do |group|
+      
+      content += group_to_html(group, respondent_detail)
+      
+    end
+    
+    return content
+  end
   
+  #
+  #
+  #
+  def group_to_html(group, respondent_detail)
+    content = '<h3>' + group.name + '</h3>'
+    
+    group.survey_questions.each do |question|
+      if respondent_detail.hasResponsesForQuestion(group.survey.id, question.id)
+        content += question_to_html(question, respondent_detail)
+      end
+    end
+    
+    return content
+  end
+
+  # --------------------------
+  # This is a temporary fix while sites are using SMERF
+  #
   def format_group(group)
     content = ''
     question_content = ''
@@ -10,18 +44,17 @@ module SurveyMailerHelper
       begin
         question_content += smerf_html_group_question(question)
       rescue => msg
-        logger.error msg + ": in question: " + question
+        logger.error msg #+ ": in question: " + question
       end
     end
     
     if (!question_content.blank?)
-      content += content_tag(:h3, group.name) if !group.name.blank?
+      content += '<h3>' + group.name + '</h3>' if !group.name.blank?
       content += question_content
     end
     
     return content
   end
-
   #
   #
   #
@@ -104,7 +137,7 @@ module SurveyMailerHelper
           @responses.has_key?("#{question.code}") and
           @responses["#{question.code}"].has_key?("#{answer.code}"))
           user_answer = @responses["#{question.code}"]["#{answer.code}"]
-          contents += content_tag(:b, answer.answer) + ', '
+          contents += '<b>' + answer.answer + '</b>, '
         end
         # Process any sub questions this answer may have
         contents += ' ' + process_sub_questions(answer)
@@ -122,7 +155,7 @@ module SurveyMailerHelper
         @responses.has_key?("#{question.code}"))
         user_answer = @responses["#{question.code}"]
         if (user_answer and !user_answer.blank?())
-          contents += content_tag(:b, user_answer) + ' '
+          contents += '<b>' + user_answer + '</b> '
         end
       end
 
@@ -136,7 +169,7 @@ module SurveyMailerHelper
         @responses.has_key?("#{question.code}"))
         user_answer = @responses["#{question.code}"]
         if (user_answer and !user_answer.blank?())
-          contents += content_tag(:pre, user_answer) + ' '
+          contents += '<pre>' + user_answer + '</pre> '
         end
       end
 
@@ -154,7 +187,7 @@ module SurveyMailerHelper
            if ( answer.answer ) 
              user_answer = @responses["#{question.code}"]
              if ((user_answer and !user_answer.blank?() and user_answer.to_s() == answer.code.to_s()))
-             contents += content_tag(:b, answer.answer) + ' '
+             contents += '<b>' + answer.answer + '</b> '
              end
           end
         end
@@ -173,11 +206,32 @@ module SurveyMailerHelper
         if (@responses and !@responses.empty?() and 
           @responses.has_key?("#{question.code}") and
           @responses["#{question.code}"].include?("#{answer.code}"))
-          contents += content_tag(:b, answer.answer)
+          contents += '<b>' + answer.answer + '</b>'
         end
       end        
       
       return contents
     end
-   
+
+  #
+  #
+  #
+  def question_to_html(question, respondent_detail)
+    content = '<h3>' + question.question + '</h3>'
+    
+    responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+    responses.each do |response|
+      content += response_to_html(response)
+    end
+    
+    return content
+  end
+  
+  #
+  #
+  #
+  def response_to_html(response)
+    return '<b>' + response.response + '</b>'
+  end
+  
 end

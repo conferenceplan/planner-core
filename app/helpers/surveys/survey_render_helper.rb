@@ -1,5 +1,5 @@
 module Surveys::SurveyRenderHelper
-  
+
     def format_group(group)
       content = ''
       question_content = ''
