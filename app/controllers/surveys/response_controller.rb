@@ -28,9 +28,9 @@ class Surveys::ResponseController < SurveyApplicationController
             respondentDetails = SurveyRespondentDetail.new(params[:survey_respondent_detail])
             respondentDetails.save!
             if @respondent
-            # and assign the details to the respondent
-            @respondent.survey_respondent_detail = respondentDetails
-            @respondent.save!
+              # and assign the details to the respondent
+              @respondent.survey_respondent_detail = respondentDetails
+              @respondent.save!
             end
           end
 
@@ -49,40 +49,29 @@ class Surveys::ResponseController < SurveyApplicationController
                 end
               else
                 res[1].each do |r|
-                  response = respondentDetails.getResponse(@survey.id, res[0])
-                  if response != nil
-                    response.response = r
-                  else
-                    response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => r, :survey_respondent_detail => respondentDetails
-                  end
-
-                  surveyQuestion = SurveyQuestion.find(res[0])
-                  if surveyQuestion.question_type == :textfield
-                    saveTags(@respondent, response.response, surveyQuestion.tags_label) if surveyQuestion.tags_label
-                  end
-
-                  response.save!
+                  saveResponse(@respondent, @survey, res[0], r)
                 end
               end
             else
-              response = respondentDetails.getResponse(@survey.id, res[0])
-              if response != nil
-                response.response = res[1]
-              else
-                response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => res[1], :survey_respondent_detail => respondentDetails
-              end
-
-              surveyQuestion = SurveyQuestion.find(res[0])
-              if surveyQuestion.question_type == :textfield
-                # TODO - we need to uppercase the tags...
-                saveTags(@respondent, response.response, surveyQuestion.tags_label) if surveyQuestion.tags_label
-              end
-
-              response.save!
+              saveResponse(@respondent, @survey, res[0], res[1])
             end
           end
 
         end
+        
+        # send email confirmation of survey etc., use the email address that they provided in the survey
+        begin
+          SurveyMailer.deliver_email(@respondent.email, MailUse[:CompletedSurvey], {
+            :email => @respondent.email,
+            :user => @respondent,
+            :survey => @survey,
+            :respondentDetails => @respondent.survey_respondent_detail
+          })
+        rescue Exception => err
+          logger.error "Unable to send the email to " + @respondent.email
+          logger.error err
+        end
+
       rescue Exception => err
         logger.error "We were unable to save the survey"
         logger.error err
@@ -90,22 +79,9 @@ class Surveys::ResponseController < SurveyApplicationController
         render :index
       end
       
-      begin
-          # send email confirmation of survey etc., use the email address that they provided in the survey
-          SurveyMailer.deliver_email(@respondent.email, MailUse[:CompletedSurvey], { 
-            :email => @respondent.email,
-            :user => @respondent,
-            :survey => @survey,
-            :respondentDetails => @respondent.survey_respondent_detail
-          })
-      rescue Exception => err
-        logger.error "Unable to send the email to " + @respondent.email
-        logger.error err
-      end
-      
     end
   end
-
+  
   # This needs to be done via the respondent id (cookie or other if the person is logged in)
   def index
     if !@survey
@@ -152,6 +128,27 @@ class Surveys::ResponseController < SurveyApplicationController
 
   private
   
+  def saveResponse(surveyRespondent, survey, questionId, responseText)
+    surveyQuestion = SurveyQuestion.find(questionId)
+    
+    if surveyQuestion.tags_label
+      responseText = responseText.split(' ').map {|w|
+        w[0] = w[0].chr.upcase
+        w }.join(' ')
+    end
+    
+    response = surveyRespondent.survey_respondent_detail.getResponse(survey.id, questionId)
+    if response != nil
+      response.response = responseText
+    else
+      response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, :response => responseText, :survey_respondent_detail => surveyRespondent.survey_respondent_detail
+    end
+
+    saveTags(surveyRespondent, responseText, surveyQuestion.tags_label) if (!surveyQuestion.tags_label.empty? && surveyQuestion.question_type == :textfield)
+
+    response.save!
+  end
+ 
   #
   #
   # set the tag list on the respondent for the context
