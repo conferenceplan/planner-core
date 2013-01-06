@@ -55,6 +55,12 @@ class Surveys::ResponseController < SurveyApplicationController
                   else
                     response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => r, :survey_respondent_detail => respondentDetails
                   end
+
+                  surveyQuestion = SurveyQuestion.find(res[0])
+                  if surveyQuestion.question_type == :textfield
+                    saveTags(@respondent, response.response, surveyQuestion.tags_label) if surveyQuestion.tags_label
+                  end
+
                   response.save!
                 end
               end
@@ -65,7 +71,14 @@ class Surveys::ResponseController < SurveyApplicationController
               else
                 response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => res[1], :survey_respondent_detail => respondentDetails
               end
-            response.save!
+
+              surveyQuestion = SurveyQuestion.find(res[0])
+              if surveyQuestion.question_type == :textfield
+                # TODO - we need to uppercase the tags...
+                saveTags(@respondent, response.response, surveyQuestion.tags_label) if surveyQuestion.tags_label
+              end
+
+              response.save!
             end
           end
 
@@ -138,6 +151,15 @@ class Surveys::ResponseController < SurveyApplicationController
   end
 
   private
+  
+  #
+  #
+  # set the tag list on the respondent for the context
+  #
+  def saveTags(respondent, responseText, context)
+    respondent.set_tag_list_on(context, responseText)
+    respondent.save!
+  end
 
   #
   #
