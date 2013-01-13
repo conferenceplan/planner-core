@@ -397,7 +397,7 @@ class Person < ActiveRecord::Base
           if (pendingImportPerson.email == matchaddress.email)
              emailSame = true
           end #if
-          if (matchaddress.isdefault = true)
+          if (matchaddress.isdefault == true)
             defaultEmail = matchaddress
           end
       end #each person
@@ -433,7 +433,7 @@ class Person < ActiveRecord::Base
         return savePendingStatus
         # if name is different, but we are not auto updating names, just return false to
         # save in pending
-      elsif (nameUpdateFlag == 'review')
+      elsif (updateNameFlag == 'review')
         savePendingStatus = pendingImportPerson.pendingtype
         return savePendingStatus
       end
@@ -478,9 +478,6 @@ class Person < ActiveRecord::Base
           # update default address
           newPostalAddress = true
           setAddressDefault = true
-          if (defaultAddress != nil)
-            self.removePostalAddress(defaultAddress)
-          end
         elsif (updateAddressFlag == 'alternate')
           #add alternate Address if already have default
           newPostalAddress = true
@@ -497,14 +494,11 @@ class Person < ActiveRecord::Base
     newEmailAddress = false
     setEmailDefault = false
     if (emailSame == false)
-      if (inds.primary == true)
+      if (pendingImportPerson.datasource.primary == true)
         if (updateAddressFlag == 'auto')
           # update default address
           newEmailAddress = true
           setEmailDefault = true
-          if (defaultEmail != nil)
-              self.removeEmailAddress(defaultEmail)
-          end
         elsif (updateAddressFlag == 'alternate')
           #add alternate Address
           newEmailAddress = true
@@ -526,7 +520,11 @@ class Person < ActiveRecord::Base
                                  :state => pendingImportPerson.state,
                                  :country => pendingImportPerson.country,
                                  :phone => pendingImportPerson.phone,
-                                 :isDefault => setAddressDefault)
+                                 :isdefault => setAddressDefault)
+      if ((defaultAddress != nil) && (setAddressDefault == true))
+          defaultAddress.isdefault = false
+          defaultAddress.save
+      end
    end
       
    # the person may have previously not had a registration number
@@ -541,15 +539,18 @@ class Person < ActiveRecord::Base
    if (newEmailAddress == true)
       self.email_addresses.new(:email => pendingImportPerson.email,
                                  :isdefault => setEmailDefault)
+      if ((defaultEmail != nil) && (setEmailDefault == true))
+          defaultEmail.isdefault = false
+          defaultEmail.save
+      end
    end
       
    # save new addresses
    if (forceSaveAsPending == false)
-     if (inds.primary == true)
-       
-     end
-     if (newEmailAddress == true || newPostalAddress == true || newRegistration )
-        self.save
+     if (pendingImportPerson.datasource.primary == true)
+        if (newEmailAddress == true || newPostalAddress == true || newRegistration )
+          self.save
+        end
      end
    end
       
