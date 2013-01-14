@@ -69,16 +69,23 @@ function init_question(element) {
             }
         });
         
-        $(element).find('.survey_question_format, .survey_question_advanced, .survey_question_answers').coolfieldset({collapsed:true, animation:false});
+        $(element).find('.survey_question_format, .survey_question_advanced, .survey_question_answers, .survey_question_availability').coolfieldset({collapsed:true, animation:false});
 
         $(element).find('.question-type').change(
             function(event) {
-                // TODO - Add code so that 'answers' can be added to question if type is not text
+                // Add code so that 'answers' can be added to question if type is not text
                 // also if type changes to text then the answers need to be removed...
-                if (event.currentTarget.value.indexOf('text') != -1) {
+                if ((event.currentTarget.value.indexOf('text') != -1) || (event.currentTarget.value == 'availability')) {
                     $(element).find('.question-answers').hide();
                 } else {
                     $(element).find('.question-answers').show();
+                }
+                
+                //
+                if (event.currentTarget.value.indexOf('availability') != -1) {
+                    $(element).find('.question-availability').show();
+                } else {
+                    $(element).find('.question-availability').hide();
                 }
             }
         );
@@ -89,6 +96,13 @@ function init_questions(element) {
 	element.find('.survey-question-display').each(function(idx, el) {
 	    init_question(el);
 	});
+
+    //
+    element.find(".question-new a").one("click", function(eventObj){
+        var dest = element.find("#question-select-link-url").text();
+        var qtype = element.find("#question_type").val();;
+        $(this).attr('href', dest + "?question_type=" + qtype);
+    });
 
 	element.find('.question-new-link').cpDynamicArea('destroy');
 	element.find('.question-new-link').cpDynamicArea({

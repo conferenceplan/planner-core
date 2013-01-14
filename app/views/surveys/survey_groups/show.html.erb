@@ -9,10 +9,17 @@
 <%end%>
 
 <!-- TODO - when add a question need to select the question type
-	ALSO make sure that errors are reported -->
+	make sure that errors are reported -->
 <%if ! @showQuestions %>
 <!-- For each question in the group we render it - the template renders partials -->
-<div class='question-new'><%= link_to 'Add Question', new_survey_survey_group_survey_question_path(@survey,@group), :class => "question-new-link" %></div>
+
+<div class='line'>
+    <div class='question-new' id='question-new'>
+        <div id='question-select-link-url' style='display : none'><%= new_survey_survey_group_survey_question_path(@survey,@group) %></div>
+        <%= select_tag :question_type, options_from_collection_for_select([:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone],'to_s','to_s'), :class => 'question-select' %>
+        <%= link_to 'Add Question', new_survey_survey_group_survey_question_path(@survey,@group) + '?question_type=textfield', :class => "question-new-link", :id => 'question-select-link' %>
+    </div>
+</div>
 <ol id='selectable-questions'>
 <%= render :partial => 'surveys/survey_groups/survey_questions/survey_question', :collection => @group.survey_questions %>
 </ol>

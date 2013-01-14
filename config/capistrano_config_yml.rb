@@ -22,6 +22,8 @@ Capistrano::Configuration.instance.load do
         default_template = <<-EOF
 #{stage}:
     :conference:
+        :name: #{Capistrano::CLI.ui.ask("Enter name of the convention (ex: Loncon): ")}
+        :email: #{Capistrano::CLI.ui.ask("Enter email address for program inquiries (ex: program@loncon.org): ")}
         :start_date: #{Capistrano::CLI.ui.ask("Enter start date and time (ex: 2012-02-17 00:00:00): ")}
         :number_of_days: #{Capistrano::CLI.ui.ask("Enter number of days: ")}
         EOF

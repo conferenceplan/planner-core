@@ -1,6 +1,8 @@
 <div class='question_detail' id='questionid-<%=survey_question.id%>'>
-	<div class='line'><div class='field_name'>Question:</div><div class='field_value'><%= survey_question.question %></div></div>
 	<div class='line'><div class='field_name'>Question Type:</div><div class='field_value question-type-value'><%= survey_question.question_type %>&nbsp;</div></div>
+
+    <%= render :partial => 'surveys/survey_groups/survey_questions/' + survey_question.question_type.to_s + '_detail', :object => survey_question %>
+
     <fieldset class="coolfieldset survey_question_advanced">
         <legend>Advanced</legend>
         <div class='line'><div class='field_name'>Sort Order:</div><div class='field_value'><%= survey_question.sort_order %></div></div>
@@ -16,12 +18,12 @@
 	</fieldset>
 	<% end %>
 	
-    <% answersstyle = (survey_question.question_type.to_s.include? 'text') ? 'none' : 'block' %>
+    <% answersstyle = ((survey_question.question_type.to_s.include? 'text') || (survey_question.question_type.to_s == 'availability')) ? 'none' : 'block' %>
     <div class='question-answers' style='<%= "display: #{answersstyle};"%>'>
         <fieldset class="coolfieldset survey_question_answers" >
             <legend>Answers</legend>
             <%= render :partial => 'surveys/survey_groups/survey_questions/answer_detail', :collection => survey_question.survey_answers %>
         </fieldset>
     </div>
-
+    
 </div>

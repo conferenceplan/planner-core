@@ -7,7 +7,7 @@ class SurveyQuestion < ActiveRecord::Base
   has_many :survey_answers, :dependent => :destroy
   accepts_nested_attributes_for :survey_answers
   
-  validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox]
+  validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone]
   
   def question_type
     read_attribute(:question_type).to_sym

@@ -8,19 +8,19 @@ development:
     :conference:
         :name: MyConvention
         :email: help@help.com
-        :start_date: 2011-08-17 00:00:00
-        :number_of_days: 5
+        :start_date: 2013-02-15 00:00:00
+        :number_of_days: 3
     
 production:
     :conference:
         :name: MyConvention
         :email: help@help.com
-        :start_date: 2011-08-17 00:00:00
-        :number_of_days: 5
+        :start_date: 2013-02-15 00:00:00
+        :number_of_days: 3
 
 test:
     :conference:
         :name: MyConvention
         :email: help@help.com
-        :start_date: 2011-08-17 00:00:00
-        :number_of_days: 5
+        :start_date: 2013-02-15 00:00:00
+        :number_of_days: 3

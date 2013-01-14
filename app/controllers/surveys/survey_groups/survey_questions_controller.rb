@@ -20,6 +20,7 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     @group = @survey.survey_groups.find params[:survey_group_id]
     @question = @group.survey_questions.new
     @question.survey_format = SurveyFormat.new
+    @question.question_type = params[:question_type] if params[:question_type]
     
     render :layout => 'content'
   end

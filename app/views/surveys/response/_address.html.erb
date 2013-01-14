@@ -1,0 +1,79 @@
+<%#
+%>
+<div class=" grid_12">
+    <div class="smerfQuestion grid_3"> 
+        <%= question.question %>
+        <% if question.survey_format.help && !question.survey_format.help.blank? %>
+            <a title="<%= question.survey_format.help%>"><%= image_tag("smerf_help.gif") %></a>
+        <%end%>
+        <% if @errors && @errors[question.id] %>
+        <div class="smerfQuestionError">
+            <p>
+            <img src="/images/smerf_error.gif" alt="Error">
+            <%=@errors[question.id][question.question]%>
+            </p>
+        </div>
+        <% end %>
+    </div>
+    <div class="text grid_8">
+        <%= text_field_tag "survey_response[#{ question.id }][question]", "#{@survey_response ? @survey_response[question.id.to_s]['response'] : ''}", :size => 100 %>
+    </div>
+</div>
+<div class=" grid_12">
+    <div class="smerfQuestion grid_3"> 
+        <%= question.question1 %>
+        <% if question.survey_format.help1 && !question.survey_format.help1.blank? %>
+            <a title="<%= question.survey_format.help1 %>"><%= image_tag("smerf_help.gif") %></a>
+        <%end%>
+        <% if @errors && @errors[question.id] %>
+        <div class="smerfQuestionError">
+            <p>
+            <img src="/images/smerf_error.gif" alt="Error">
+            <%=@errors[question.id][question.question1]%>
+            </p>
+        </div>
+        <% end %>
+    </div>
+    <div class="text grid_4">
+        <%= text_field_tag "survey_response[#{ question.id }][question1]", "#{@survey_response ? @survey_response[question.id.to_s]['response1'] : ''}", :size => 20 %>
+    </div>
+</div>
+<div class=" grid_12">
+    <div class="smerfQuestion grid_3"> 
+        <%= question.question2 %>
+        <% if question.survey_format.help2 && !question.survey_format.help2.blank? %>
+            <a title="<%= question.survey_format.help2 %>"><%= image_tag("smerf_help.gif") %></a>
+        <%end%>
+        <% if @errors && @errors[question.id] %>
+        <div class="smerfQuestionError">
+            <p>
+            <img src="/images/smerf_error.gif" alt="Error">
+            <%=@errors[question.id][question.question2]%>
+            </p>
+        </div>
+        <% end %>
+    </div>
+    <div class="text grid_4">
+        <%= text_field_tag "survey_response[#{ question.id }][question2]", "#{@survey_response ? @survey_response[question.id.to_s]['response2'] : ''}", :size => 20 %>
+    </div>
+</div>
+<div class=" grid_12">
+    <div class="smerfQuestion grid_3"> 
+        <%= question.question3 %>
+        <% if question.survey_format.help3 && !question.survey_format.help3.blank? %>
+            <a title="<%= question.survey_format.help3 %>"><%= image_tag("smerf_help.gif") %></a>
+        <%end%>
+        <% if @errors && @errors[question.id] %>
+        <div class="smerfQuestionError">
+            <p>
+            <img src="/images/smerf_error.gif" alt="Error">
+            <%=@errors[question.id][question.question3]%>
+            </p>
+        </div>
+        <% end %>
+    </div>
+    <div class="text grid_4">
+        <%= text_field_tag "survey_response[#{ question.id }][question3]", "#{@survey_response ? @survey_response[question.id.to_s]['response3'] : ''}", :size => 15 %>
+    </div>
+</div>
+
