@@ -40,7 +40,6 @@ class Surveys::ResponseController < SurveyApplicationController
           # check the type of the response and if an array then go though them
             if res[1].respond_to?('each')
               if res[1].is_a?(Hash)
-                logger.debug "XXXXXX"
                 # TODO - fix if this is a multiple response for the same question...
                 # {"question"=>"1", "question1"=>"11", "question2"=>"21", "question3"=>"13"}
                 responses = respondentDetails.getResponsesForQuestion(@survey.id, res[0])
@@ -61,7 +60,6 @@ class Surveys::ResponseController < SurveyApplicationController
                   end
                 end
               else
-                logger.debug "TTTTTTTT"
                 res[1].each do |r|
                   saveResponse(@respondent, @survey, res[0], r, respondentDetails)
                 end
@@ -130,7 +128,7 @@ class Surveys::ResponseController < SurveyApplicationController
               @survey_response = convertInputArray(@respondent.survey_respondent_detail)
             end
           else
-          # if we have a respondent and empty details then we want to pre-populate the details
+            # if we have a respondent and empty details then we want to pre-populate the details
             @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.suffix})
             @respondent.survey_respondent_detail.save
             @survey_respondent_details = getSurveyResponseDetails(@respondent.survey_respondent_detail)
@@ -146,7 +144,6 @@ class Surveys::ResponseController < SurveyApplicationController
   private
   
   def saveAvailability(values, survey, questionId, respondentDetails)
-    logger.debug "SAVING AVAIL ----------"
     response = respondentDetails.getResponse(survey.id, questionId)
     if response != nil
       response.response = values['question']
@@ -169,7 +166,6 @@ class Surveys::ResponseController < SurveyApplicationController
   end
   
   def saveAddress(values, survey, questionId, respondentDetails)
-    logger.debug "SAVING ADDRESS ----------"
     response = respondentDetails.getResponse(survey.id, questionId)
     if response != nil
       response.response = values['question']

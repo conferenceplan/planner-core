@@ -1,7 +1,7 @@
 <%#
 %>
 <div class=" grid_12">
-    <div class="smerfQuestion grid_3"> 
+    <div class="smerfQuestion grid_3">
         <%= question.question %>
         <% if question.survey_format.help && !question.survey_format.help.blank? %>
             <a title="<%= question.survey_format.help%>"><%= image_tag("smerf_help.gif") %></a>
