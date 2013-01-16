@@ -12,7 +12,6 @@
             <%end%>
             I am available for Program for the complete duration of the convention.
         </label>
-        <a><img src="/images/smerf_help.gif" alt="Help"></a>
     </div>
     <div class="radiobutton">
         <label id='timeselect'>
@@ -23,13 +22,12 @@
             <%end%>
             I plan to be at the convention. 
         </label>
-        <a><img src="/images/smerf_help.gif" alt="Help"></a>
     </div>
     <div class=" grid_12">
         <div class="smerfSubquestion grid_6">I will be available to be on Program beginning:</div>
         <div class="select grid_4 timeselect">
             <%= select_tag "survey_response[#{question.id}][question1]",
-                options_for_select((1..SITE_CONFIG[:conference][:number_of_days].to_i).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'].to_i : nil) %>
+                options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'].to_i : nil) %>
         </div>
     </div>
     <div class=" grid_12">
@@ -43,7 +41,7 @@
         <div class="smerfSubquestion grid_6">I will not be available for program after:</div>
         <div class="select grid_4 timeselect">
             <%= select_tag "survey_response[#{question.id}][question3]",
-                options_for_select((1..SITE_CONFIG[:conference][:number_of_days].to_i).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'].to_i : nil) %>
+                options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}.reverse!, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'].to_i : nil) %>
         </div>
         <div class=" grid_12">
             <div class="smerfSubquestion grid_6">ending at:</div>
@@ -59,7 +57,6 @@
                 <%= check_box_tag "survey_response[#{question.id}][question5]", "1", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response5'] == '1' : false %>
                 I am extremely uncertain when I will be available to be on the Program
             </label>
-            <a><img src="/images/smerf_help.gif" alt="Help"></a>
         </div>
     </div>
 </div>

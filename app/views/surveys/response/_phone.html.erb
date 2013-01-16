@@ -16,7 +16,7 @@
         <% end %>
     </div>
     <div class="text grid_8">
-        <%= text_field_tag "survey_response[#{ question.id }][question]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 100 %>
+        <%= text_field_tag "survey_response[#{ question.id }][question]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 35 %>
     </div>
 </div>
 
