@@ -125,13 +125,16 @@ class Surveys::ResponseController < SurveyApplicationController
             @survey_respondent_details = getSurveyResponseDetails(@respondent.survey_respondent_detail)
 
             if @respondent.survey_respondent_detail.hasResponses(@survey.id)
-              @survey_response = convertInputArray(@respondent.survey_respondent_detail)
+              @survey_response = convertInputArray(@respondent.survey_respondent_detail, @respondent.person)
+            else
+              @survey_response = convertInitialInputArray(@survey, @respondent.person)
             end
           else
             # if we have a respondent and empty details then we want to pre-populate the details
             @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.suffix})
             @respondent.survey_respondent_detail.save
             @survey_respondent_details = getSurveyResponseDetails(@respondent.survey_respondent_detail)
+              @survey_response = convertInitialInputArray(@survey, @respondent.person)
           end
         end
 
@@ -172,14 +175,28 @@ class Surveys::ResponseController < SurveyApplicationController
       response.response1 = values['question1']
       response.response2 = values['question2']
       response.response3 = values['question3']
+      response.response4 = values['question4']
     else
       response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, 
         :response => values['question'], 
         :response1 => values['question1'], 
         :response2 => values['question2'], 
         :response3 => values['question3'], 
+        :response4 => values['question4'], 
         :survey_respondent_detail => respondentDetails
     end
+    
+    # If we have an actual respondent then we can update their address
+    # street, city, state, zip
+    if @respondent
+      # get the underlying person
+      person = @respondent.person
+      # update their default address if this is not already the default address
+      if !person.addressMatch?(response.response, response.response1, response.response2, response.response3, response.response4)
+        person.updateDefaultAddress(response.response, response.response1, response.response2, response.response3, response.response4)
+      end
+    end
+    
     response.save!
   end
   
@@ -263,7 +280,7 @@ class Surveys::ResponseController < SurveyApplicationController
   #
   #
   #
-  def convertInputArray(details) # arg os SurveyRespondentDetail, need the questions!!
+  def convertInputArray(details, person) # arg os SurveyRespondentDetail, need the questions!!
     res = {}
     details.survey_responses.each do |response|
       if response.survey_question && response.survey_question.question_type == :multiplechoice
@@ -288,20 +305,70 @@ class Surveys::ResponseController < SurveyApplicationController
         res[response.survey_question_id.to_s]['response4'] = response.response4
         res[response.survey_question_id.to_s]['response5'] = response.response5
       elsif response.survey_question && response.survey_question.question_type == :address
+        # TODO - get from the person...
         if !res[response.survey_question_id.to_s]
           res[response.survey_question_id.to_s] = {}
         end
-        res[response.survey_question_id.to_s]['response'] = response.response
-        res[response.survey_question_id.to_s]['response1'] = response.response1
-        res[response.survey_question_id.to_s]['response2'] = response.response2
-        res[response.survey_question_id.to_s]['response3'] = response.response3
+        if person
+          address = person.getDefaultPostalAddress()
+          res[response.survey_question_id.to_s]['response'] = address.line1
+          res[response.survey_question_id.to_s]['response1'] = address.city
+          res[response.survey_question_id.to_s]['response2'] = address.state
+          res[response.survey_question_id.to_s]['response3'] = address.postcode
+          res[response.survey_question_id.to_s]['response4'] = address.country
+        else  
+          res[response.survey_question_id.to_s]['response'] = response.response
+          res[response.survey_question_id.to_s]['response1'] = response.response1
+          res[response.survey_question_id.to_s]['response2'] = response.response2
+          res[response.survey_question_id.to_s]['response3'] = response.response3
+          res[response.survey_question_id.to_s]['response4'] = response.response4
+        end
       else
         res[response.survey_question_id.to_s] = response.response.to_s
       end
     end
     return res
   end
+  
+  def convertInitialInputArray(survey, person)
+    res = {}
 
+    if person
+      address = person.getDefaultPostalAddress()
+      
+      if address
+        # find all questions in this survey that are of type address
+        results = SurveyQuestion.all(
+          :conditions => ['survey_groups.survey_id = ? AND question_type = ?', survey.id, 'address'],
+          :include => [:survey_group]
+        )
+        
+        if results.respond_to?('each')
+          results.each do |q|
+            if !res[q.id.to_s]
+              res[q.id.to_s] = {}
+            end
+            res[q.id.to_s]['response'] = address.line1
+            res[q.id.to_s]['response1'] = address.city
+            res[q.id.to_s]['response2'] = address.state
+            res[q.id.to_s]['response3'] = address.postcode
+            res[q.id.to_s]['response4'] = address.country
+          end
+        else
+          res[results.id.to_s] = {}
+          res[results.id.to_s]['response'] = address.line1
+          res[results.id.to_s]['response1'] = address.city
+          res[results.id.to_s]['response2'] = address.state
+          res[results.id.to_s]['response3'] = address.postcode
+          res[results.id.to_s]['response4'] = address.country
+        end
+      end
+      
+    end
+    
+    return res
+  end
+  
   #
   #
   #

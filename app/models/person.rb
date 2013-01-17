@@ -133,6 +133,40 @@ class Person < ActiveRecord::Base
       return GetFullNameHelper(self.first_name,self.last_name,self.suffix)
   end
   
+  #
+  #
+  #
+  def addressMatch?(new_line1, new_city, new_state, new_postcode, new_country)
+    address = getDefaultPostalAddress()
+
+    if ((address.line1 == new_line1) &&
+         (address.city == new_city) &&
+         (address.state == new_state) &&
+         (address.postcode == new_postcode) &&
+         (address.country == new_country))
+         return true
+    else
+        return false
+    end
+  end
+
+  #
+  #
+  #
+  def updateDefaultAddress(new_line1, new_city, new_state, new_postcode, new_country)
+    # We will create a new address object and make that the default (so the old one will no longer be used but will still be in the list)
+    address = getDefaultPostalAddress
+    address.isdefault = false
+    address.save!
+    
+    postalAddress = self.postal_addresses.new :line1 => new_line1, :city => new_city, :state => new_state, :postcode => new_postcode, :country => new_country, :isdefault => true 
+
+    self.save!
+  end
+
+  #
+  #
+  #
   def getDefaultPostalAddress()
     possibleAddresses = postal_addresses
     theAddress = nil
@@ -140,7 +174,7 @@ class Person < ActiveRecord::Base
       possibleAddresses.each do |addr| 
         if addr.isdefault
           theAddress = addr
-        else # if the email is empty we want to take the first one (unless there is a default)
+        else # if the address is empty we want to take the first one (unless there is a default)
           if theAddress == nil
             theAddress = addr
           end
@@ -150,6 +184,9 @@ class Person < ActiveRecord::Base
     return theAddress
   end
 
+  #
+  #
+  #
   def getDefaultEmail()
     possibleEmails = email_addresses
     theEmail = nil
