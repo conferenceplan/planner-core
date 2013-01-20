@@ -12,7 +12,7 @@
             </p>
         </div>
         <% end %>
-        <div class="survey-question grid_3 mandatory"><div class="text"><input id="first_name" name="survey_respondent_detail[first_name]" size="30" title="First Name" type="text" value="<%=@survey_respondent_details['first_name'] if @survey_respondent_details %>"></div></div>
+        <div class="survey-question grid_3 mandatory"><div class="text"><input id="first_name" name="survey_respondent_detail[first_name]" size="30" title="First Name" type="text" value="<%=@survey_respondent_detail['first_name'] if @survey_respondent_detail %>"></div></div>
         <% if @errors && @errors['last_name'] %>
         <div class="smerfQuestionError">
             <p>
@@ -21,8 +21,8 @@
             </p>
         </div>
         <% end %>
-        <div class="survey-question grid_3"><div class="text"><input id="last_name" name="survey_respondent_detail[last_name]" size="30" title="Last Name" type="text" value="<%=@survey_respondent_details['last_name'] if @survey_respondent_details %>"></div></div>
-        <div class="survey-question grid_2"><div class="text"><input id="name_suffix" name="survey_respondent_detail[suffix]" size="5" title="Suffix" type="text" value="<%=@survey_respondent_details['suffix'] if @survey_respondent_details %>"></div></div>
+        <div class="survey-question grid_3"><div class="text"><input id="last_name" name="survey_respondent_detail[last_name]" size="30" title="Last Name" type="text" value="<%=@survey_respondent_detail['last_name'] if @survey_respondent_detail %>"></div></div>
+        <div class="survey-question grid_2"><div class="text"><input id="name_suffix" name="survey_respondent_detail[suffix]" size="5" title="Suffix" type="text" value="<%=@survey_respondent_detail['suffix'] if @survey_respondent_detail %>"></div></div>
     </div>
     <div class="grid_12">
         <div class="survey-question grid_3 mandatory" title="Enter your primary e-mail address; the one you&rsquo;re most likely to monitor.">E-mail Address <a><img src="/images/smerf_help.gif?" alt="Help"></a></div>
@@ -34,6 +34,6 @@
             </p>
         </div>
         <% end %>
-        <div class="text grid_4"><input type="text" size="50" name="survey_respondent_detail[email]" id="email_address" value="<%=@survey_respondent_details['email'] if @survey_respondent_details %>"></div>
+        <div class="text grid_4"><input type="text" size="50" name="survey_respondent_detail[email]" id="email_address" value="<%=@survey_respondent_detail['email'] if @survey_respondent_detail %>"></div>
     </div>
 </div>

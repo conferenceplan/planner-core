@@ -133,6 +133,38 @@ class Person < ActiveRecord::Base
       return GetFullNameHelper(self.first_name,self.last_name,self.suffix)
   end
   
+  def findPhoneByType(phonetype)
+    # go through the phones and see if any of them match the given phonetype
+    # if they do then say so
+    
+    phone_numbers.each do |p|
+      if p.phone_type == PhoneTypes[phonetype]
+        return p
+      end
+    end
+    
+    return nil
+  end
+  
+  def updatePhone(new_phone, phonetype)
+    
+    # first find the existing phone of the given type
+    # if found update it
+    # otherwise create a new instance
+    phone = findPhoneByType(phonetype)
+    if phone
+      phone.number = new_phone
+      phone.phone_type = PhoneTypes[phonetype]
+      phone.save!
+    else
+      phone = self.phone_numbers.new :number => new_phone
+      phone.number = new_phone
+      phone.phone_type = PhoneTypes[phonetype]
+      self.save!
+    end
+    
+  end
+  
   #
   #
   #

@@ -16,7 +16,7 @@
         <% end %>
     </div>
     <div class="text grid_8">
-        <%= text_field_tag "survey_response[#{ question.id }][question]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 100 %>
+        <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 100 %>
     </div>
 </div>
 <div class=" grid_12">
@@ -35,7 +35,7 @@
         <% end %>
     </div>
     <div class="text grid_4">
-        <%= text_field_tag "survey_response[#{ question.id }][question1]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] : ''}", :size => 20 %>
+        <%= text_field_tag "survey_response[#{ question.id }][response1]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] : ''}", :size => 20 %>
     </div>
 </div>
 <div class=" grid_12">
@@ -54,7 +54,7 @@
         <% end %>
     </div>
     <div class="text grid_4">
-        <%= text_field_tag "survey_response[#{ question.id }][question2]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : ''}", :size => 20 %>
+        <%= text_field_tag "survey_response[#{ question.id }][response2]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : ''}", :size => 20 %>
     </div>
 </div>
 <div class=" grid_12">
@@ -73,7 +73,7 @@
         <% end %>
     </div>
     <div class="text grid_4">
-        <%= text_field_tag "survey_response[#{ question.id }][question3]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'] : ''}", :size => 15 %>
+        <%= text_field_tag "survey_response[#{ question.id }][response3]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'] : ''}", :size => 15 %>
     </div>
 </div>
 <div class=" grid_12">
@@ -92,7 +92,7 @@
         <% end %>
     </div>
     <div class="text grid_4">
-        <%= text_field_tag "survey_response[#{ question.id }][question4]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : ''}", :size => 20 %>
+        <%= text_field_tag "survey_response[#{ question.id }][response4]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : ''}", :size => 20 %>
     </div>
 </div>
 

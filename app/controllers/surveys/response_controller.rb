@@ -53,6 +53,8 @@ class Surveys::ResponseController < SurveyApplicationController
                   saveAddress(res[1], @survey, res[0], respondentDetails)
                 elsif surveyQuestion.question_type == :availability
                   saveAvailability(res[1], @survey, res[0], respondentDetails)
+                elsif surveyQuestion.question_type == :phone
+                  savePhone(res[1], @survey, res[0], respondentDetails)
                 else  
                   res[1].each do |r, v|
                     response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => v, :survey_respondent_detail => respondentDetails
@@ -69,29 +71,28 @@ class Surveys::ResponseController < SurveyApplicationController
             end
           end
         end
-        # TODO - need to be able to roll back the transaction
-        
-        # send email confirmation of survey etc., use the email address that they provided in the survey
-        begin
-          if @respondent
-          SurveyMailer.deliver_email(@respondent.email, MailUse[:CompletedSurvey], {
-            :email => @respondent.email,
-            :user => @respondent,
-            :survey => @survey,
-            :respondentDetails => @respondent.survey_respondent_detail
-          })
-          end
-        rescue Exception => err
-          logger.error "Unable to send the email to " + @respondent.email
-          logger.error err
-        end
-
+        # roll back the transaction if there is an issue
       rescue Exception => err
         logger.error "We were unable to save the survey"
         logger.error err
         logger.error err.backtrace
         @current_key = params[:key];
         render :index
+      end
+      
+      # send email confirmation of survey etc., use the email address that they provided in the survey
+      begin
+        if @respondent
+          SurveyMailer.deliver_email(@respondent.email, MailUse[:CompletedSurvey], {
+            :email => @respondent.email,
+            :user => @respondent,
+            :survey => @survey,
+            :respondentDetails => @respondent.survey_respondent_detail
+          })
+        end
+      rescue Exception => err
+        logger.error "Unable to send the email to " + @respondent.email
+        logger.error err
       end
       
     end
@@ -122,7 +123,7 @@ class Surveys::ResponseController < SurveyApplicationController
 
         if @respondent
           if @respondent.survey_respondent_detail
-            @survey_respondent_details = getSurveyResponseDetails(@respondent.survey_respondent_detail)
+            @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail)
 
             if @respondent.survey_respondent_detail.hasResponses(@survey.id)
               @survey_response = convertInputArray(@respondent.survey_respondent_detail, @respondent.person)
@@ -133,7 +134,7 @@ class Surveys::ResponseController < SurveyApplicationController
             # if we have a respondent and empty details then we want to pre-populate the details
             @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.suffix})
             @respondent.survey_respondent_detail.save
-            @survey_respondent_details = getSurveyResponseDetails(@respondent.survey_respondent_detail)
+            @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail)
               @survey_response = convertInitialInputArray(@survey, @respondent.person)
           end
         end
@@ -149,40 +150,65 @@ class Surveys::ResponseController < SurveyApplicationController
   def saveAvailability(values, survey, questionId, respondentDetails)
     response = respondentDetails.getResponse(survey.id, questionId)
     if response != nil
-      response.response = values['question']
-      response.response1 = values['question1']
-      response.response2 = values['question2']
-      response.response3 = values['question3']
-      response.response4 = values['question4']
-      response.response5 = values['question5']
+      response.response = values['response']
+      response.response1 = values['response1']
+      response.response2 = values['response2']
+      response.response3 = values['response3']
+      response.response4 = values['response4']
+      response.response5 = values['response5']
     else
       response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, 
-        :response => values['question'], 
-        :response1 => values['question1'], 
-        :response2 => values['question2'], 
-        :response3 => values['question3'], 
-        :response4 => values['question4'], 
-        :response5 => values['question5'], 
+        :response => values['response'], 
+        :response1 => values['response1'], 
+        :response2 => values['response2'], 
+        :response3 => values['response3'], 
+        :response4 => values['response4'], 
+        :response5 => values['response5'], 
         :survey_respondent_detail => respondentDetails
     end
     response.save!
   end
   
+  def savePhone(values, survey, questionId, respondentDetails)
+    response = respondentDetails.getResponse(survey.id, questionId)
+    if response != nil
+      response.response = values['response']
+      response.response1 = values['response1']
+    else
+      response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, 
+        :response => values['response'], 
+        :response1 => values['response1'], 
+        :survey_respondent_detail => respondentDetails
+    end
+    
+    # If we have an actual respondent then we can update their address
+    # street, city, state, zip
+    if @respondent
+      # get the underlying person
+      person = @respondent.person
+      # update their default address if this is not already the default address
+      person.updatePhone(response.response, response.response1)
+    end
+    
+    response.save!
+  end
+
+  
   def saveAddress(values, survey, questionId, respondentDetails)
     response = respondentDetails.getResponse(survey.id, questionId)
     if response != nil
-      response.response = values['question']
-      response.response1 = values['question1']
-      response.response2 = values['question2']
-      response.response3 = values['question3']
-      response.response4 = values['question4']
+      response.response = values['response']
+      response.response1 = values['response1']
+      response.response2 = values['response2']
+      response.response3 = values['response3']
+      response.response4 = values['response4']
     else
       response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, 
-        :response => values['question'], 
-        :response1 => values['question1'], 
-        :response2 => values['question2'], 
-        :response3 => values['question3'], 
-        :response4 => values['question4'], 
+        :response => values['response'], 
+        :response1 => values['response1'], 
+        :response2 => values['response2'], 
+        :response3 => values['response3'], 
+        :response4 => values['response4'], 
         :survey_respondent_detail => respondentDetails
     end
     
@@ -230,7 +256,7 @@ class Surveys::ResponseController < SurveyApplicationController
     respondent.set_tag_list_on(context, responseText)
     respondent.save!
   end
-
+  
   #
   #
   #
@@ -245,7 +271,7 @@ class Surveys::ResponseController < SurveyApplicationController
     # and then check that we have a response
     validate_responses(params, @errors)
     @survey_response = params[:survey_response]
-    @survey_respondent_details = params[:survey_respondent_detail]
+    @survey_respondent_detail = params[:survey_respondent_detail]
   end
 
   #
@@ -304,8 +330,13 @@ class Surveys::ResponseController < SurveyApplicationController
         res[response.survey_question_id.to_s]['response3'] = response.response3
         res[response.survey_question_id.to_s]['response4'] = response.response4
         res[response.survey_question_id.to_s]['response5'] = response.response5
+      elsif response.survey_question && response.survey_question.question_type == :phone
+        if !res[response.survey_question_id.to_s]
+          res[response.survey_question_id.to_s] = {}
+        end
+        res[response.survey_question_id.to_s]['response'] = response.response
+        res[response.survey_question_id.to_s]['response1'] = response.response1
       elsif response.survey_question && response.survey_question.question_type == :address
-        # TODO - get from the person...
         if !res[response.survey_question_id.to_s]
           res[response.survey_question_id.to_s] = {}
         end
