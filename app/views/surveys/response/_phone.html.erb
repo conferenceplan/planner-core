@@ -21,19 +21,19 @@
         </div>
     </div>
     <div class="grid_1">
-        <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Home', @survey_response ? @survey_response[question.id.to_s]['response1'] == 'Home' : false %>
+        <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Home', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Home' : false %>
         home
     </div>
     <div class="grid_1">
-        <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Work', @survey_response ? @survey_response[question.id.to_s]['response1'] == 'Work' : false %>
+        <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Work', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Work' : false %>
         work
     </div>
     <div class="grid_1">
-        <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Fax', @survey_response ? @survey_response[question.id.to_s]['response1'] == 'Fax' : false %>
+        <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Fax', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Fax' : false %>
         fax
     </div>
     <div class="grid_2">
-        <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Mobile', @survey_response ? @survey_response[question.id.to_s]['response1'] == 'Mobile' : false %>
+        <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Mobile', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Mobile' : false %>
         cell/mobile
     </div>
 </div>
