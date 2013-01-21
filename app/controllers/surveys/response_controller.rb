@@ -33,6 +33,9 @@ class Surveys::ResponseController < SurveyApplicationController
               @respondent.save!
             end
           end
+          
+          # also update the underlying person
+          updatePerson(@respondent, params[:survey_respondent_detail]) if @respondent
 
           # TODO - we need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
           # make sure that we have a name and email address
@@ -40,14 +43,12 @@ class Surveys::ResponseController < SurveyApplicationController
           # check the type of the response and if an array then go though them
             if res[1].respond_to?('each')
               if res[1].is_a?(Hash)
-                # TODO - fix if this is a multiple response for the same question...
-                # {"question"=>"1", "question1"=>"11", "question2"=>"21", "question3"=>"13"}
+
                 responses = respondentDetails.getResponsesForQuestion(@survey.id, res[0])
                 responses.each do |r|
                   r.delete
                 end
-                # {"question"=>"1", "question1"=>"11", "question2"=>"21", "question3"=>"13"}
-                # res[1].keys
+
                 surveyQuestion = SurveyQuestion.find(res[0])
                 if surveyQuestion.question_type == :address
                   saveAddress(res[1], @survey, res[0], respondentDetails)
@@ -93,6 +94,7 @@ class Surveys::ResponseController < SurveyApplicationController
       rescue Exception => err
         logger.error "Unable to send the email to " + @respondent.email
         logger.error err
+        logger.error err.backtrace
       end
       
     end
@@ -123,7 +125,7 @@ class Surveys::ResponseController < SurveyApplicationController
 
         if @respondent
           if @respondent.survey_respondent_detail
-            @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail)
+            @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail, @respondent.person)
 
             if @respondent.survey_respondent_detail.hasResponses(@survey.id)
               @survey_response = convertInputArray(@respondent.survey_respondent_detail, @respondent.person)
@@ -134,7 +136,7 @@ class Surveys::ResponseController < SurveyApplicationController
             # if we have a respondent and empty details then we want to pre-populate the details
             @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.suffix})
             @respondent.survey_respondent_detail.save
-            @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail)
+            @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail, @respondent.person)
               @survey_response = convertInitialInputArray(@survey, @respondent.person)
           end
         end
@@ -255,6 +257,57 @@ class Surveys::ResponseController < SurveyApplicationController
   def saveTags(respondent, responseText, context)
     respondent.set_tag_list_on(context, responseText)
     respondent.save!
+    
+    # attach tags to the underlying person as well
+    person = respondent.person
+    if person
+      person.set_tag_list_on(context, responseText)
+      person.save!
+    end
+  end
+  
+  #
+  #
+  #
+  def updatePerson(respondent, respondentParams)
+    person = respondent.person
+    details = respondent
+    if person
+      # then update it with the various details
+      # email
+      detail = respondent.survey_respondent_detail
+      respondent.email = detail.email if detail.email
+      # add email to person
+      if !person.emailMatch?(detail.email)
+        person.updateDefaultEmail(detail.email)
+      end
+      
+      # Now do Publication Name
+      if respondentParams['pub_first_name'] || respondentParams['pub_last_name'] || respondentParams['pub_suffix']
+        if !person.pseudonym
+          person.pseudonym = Pseudonym.new :first_name => respondentParams['pub_first_name'], :last_name => respondentParams['pub_last_name'], :suffix => respondentParams['pub_suffix'] 
+        else
+          person.pseudonym.first_name = respondentParams['pub_first_name']
+          person.pseudonym.last_name = respondentParams['pub_last_name']
+          person.pseudonym.suffix = respondentParams['pub_suffix']
+        end
+        
+        person.pseudonym.save!
+      end
+      
+      # Names
+      respondent.first_name = detail.first_name if detail.first_name
+      respondent.last_name = detail.last_name if detail.last_name
+      respondent.suffix = detail.suffix if detail.suffix
+      
+      person.first_name = detail.first_name if detail.first_name
+      person.last_name = detail.last_name if detail.last_name
+      person.suffix = detail.suffix if detail.suffix
+      
+      #
+      respondent.save!
+      person.save!
+    end
   end
   
   #
@@ -286,7 +339,10 @@ class Surveys::ResponseController < SurveyApplicationController
       end
       if params[:survey_respondent_detail]['email'].empty?
         errors['email'] = Hash.new if (errors['email'].nil?())
-        errors['email']['Email Address'] = "Question requires an answer"
+        errors['email']['Email Address'] = "requires an answer"
+      elsif params[:survey_respondent_detail]['email'].index(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,6}$/) == nil
+        errors['email'] = Hash.new if (errors['email'].nil?())
+        errors['email']['Email Address'] = "format is incorrect"
       end #email_address
     end
 
@@ -403,13 +459,20 @@ class Surveys::ResponseController < SurveyApplicationController
   #
   #
   #
-  def getSurveyResponseDetails(details)
+  def getSurveyResponseDetails(details, person)
     res = {}
 
     res['first_name'] = details.first_name  if details.first_name
     res['last_name'] = details.last_name  if details.last_name
     res['suffix'] = details.suffix if details.suffix
     res['email'] = details.email if details.email
+    
+    # if we have a pseudonym then use it
+    if person && person.pseudonym
+      res['pub_first_name'] = person.pseudonym.first_name  if person.pseudonym.first_name
+      res['pub_last_name'] = person.pseudonym.last_name  if person.pseudonym.last_name
+      res['pub_suffix'] = person.pseudonym.suffix if person.pseudonym.suffix
+    end
 
     return res
   end

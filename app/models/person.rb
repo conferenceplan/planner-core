@@ -181,6 +181,25 @@ class Person < ActiveRecord::Base
         return false
     end
   end
+  
+  #
+  #
+  #
+  def emailMatch?(email)
+    e = getDefaultEmail()
+    
+    return e == email
+  end
+
+  def updateDefaultEmail(email)
+    e = getDefaultEmail()
+    e.isdefault = false
+    e.save!
+ 
+    e = self.email_addresses.new :email => email, :isdefault => true 
+   
+    self.save!
+  end
 
   #
   #

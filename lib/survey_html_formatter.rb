@@ -7,7 +7,16 @@ module SurveyHtmlFormatter
   # For a given survey produce an HTML version of the questions and answers
   #
   def survey_to_html(survey, respondent_detail)
-    content = '<h2>' + survey.name + '</h2>'
+    content = '<h1>' + survey.name + '</h1>'
+    
+    # Need to add information about the name, pub name, and addres of the participant - TODO
+    if respondent_detail.survey_respondent
+      person = respondent_detail.survey_respondent.person
+      if person
+        fname = person.GetFullPublicationName()
+        content += '<p>Publication Name: <b>' + fname + '</b></p>'
+      end      
+    end
     
     survey.survey_groups.each do |group|
       
@@ -22,11 +31,12 @@ module SurveyHtmlFormatter
   #
   #
   def group_to_html(group, respondent_detail)
-    content = '<h3>' + group.name + '</h3>'
+    content = '<h2>' + group.name + '</h2>'
     
     group.survey_questions.each do |question|
       if respondent_detail.hasResponsesForQuestion(group.survey.id, question.id)
         content += question_to_html(question, respondent_detail)
+        logger.debug content
       end
     end
     
@@ -217,13 +227,45 @@ module SurveyHtmlFormatter
   #
   #
   def question_to_html(question, respondent_detail)
-    content = '<h3>' + question.question + '</h3>'
+    content = ''
     
-    responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
-    responses.each do |response|
-      content += response_to_html(response)
+    case question.question_type
+    when :availability
+      content = '<h3>Availability</h3>'
+      responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      responses.each do |response|
+        if response.response && response.response == '1'
+          content += '<b>I am available for the complete duration of the Convention.</b>'
+        elsif response.response1
+          content += 'From: <b>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + response.response1.to_i.day).strftime('%A, %B %e') + ' at ' + response.response2 + '</b><br/>'
+          content += 'To: <b>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + response.response3.to_i.day).strftime('%A, %B %e') + ' at ' + response.response4 + '</b>'
+        elsif response.response5
+          content += '<b>I am extremely uncertain when I will be available to be on the Program .</b>'
+        end
+      end
+    when :address
+      content = '<h3>' + question.question + '</h3>'
+      responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      responses.each do |response|
+        content += 'Street: <b>' + response.response + '</b><br/>'
+        content += 'City: <b>' + response.response1 + '</b><br/>'
+        content += 'State/County/Provence: <b>' + response.response2 + '</b><br/>'
+        content += 'Postal Code/Zip: <b>' + response.response3 + '</b><br/>'
+        content += 'Country: <b>' + response.response4 + '</b><br/>'
+      end
+    when :phone
+      responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      responses.each do |response|
+        content += 'Phone: <b>' + response.response + ' (' + response.response1 + ')</b><br/>'
+      end
+    else
+      content = '<h3>' + question.question + '</h3>'
+      responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      responses.each do |response|
+        content += response_to_html(response)
+      end
     end
-    
+
     return content
   end
   
