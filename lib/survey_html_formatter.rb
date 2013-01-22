@@ -256,7 +256,9 @@ module SurveyHtmlFormatter
     when :phone
       responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
       responses.each do |response|
-        content += 'Phone: <b>' + response.response + ' (' + response.response1 + ')</b><br/>'
+        if  response.response &&  response.response1
+          content += 'Phone: <b>' + response.response + ' (' + response.response1 + ')</b><br/>'
+        end
       end
     else
       content = '<h3>' + question.question + '</h3>'

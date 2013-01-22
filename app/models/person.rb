@@ -171,6 +171,7 @@ class Person < ActiveRecord::Base
   def addressMatch?(new_line1, new_city, new_state, new_postcode, new_country)
     address = getDefaultPostalAddress()
 
+    if address
     if ((address.line1 == new_line1) &&
          (address.city == new_city) &&
          (address.state == new_state) &&
@@ -179,6 +180,9 @@ class Person < ActiveRecord::Base
          return true
     else
         return false
+    end
+    else
+      return false
     end
   end
   
@@ -193,8 +197,10 @@ class Person < ActiveRecord::Base
 
   def updateDefaultEmail(email)
     e = getDefaultEmail()
-    e.isdefault = false
-    e.save!
+    if e
+      e.isdefault = false
+      e.save!
+    end
  
     e = self.email_addresses.new :email => email, :isdefault => true 
    
@@ -207,8 +213,11 @@ class Person < ActiveRecord::Base
   def updateDefaultAddress(new_line1, new_city, new_state, new_postcode, new_country)
     # We will create a new address object and make that the default (so the old one will no longer be used but will still be in the list)
     address = getDefaultPostalAddress
-    address.isdefault = false
-    address.save!
+    
+    if address
+      address.isdefault = false
+      address.save!
+    end
     
     postalAddress = self.postal_addresses.new :line1 => new_line1, :city => new_city, :state => new_state, :postcode => new_postcode, :country => new_country, :isdefault => true 
 

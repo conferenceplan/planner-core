@@ -189,7 +189,9 @@ class Surveys::ResponseController < SurveyApplicationController
       # get the underlying person
       person = @respondent.person
       # update their default address if this is not already the default address
-      person.updatePhone(response.response, response.response1)
+      if response.response && response.response1
+        person.updatePhone(response.response, response.response1)
+      end
     end
     
     response.save!
