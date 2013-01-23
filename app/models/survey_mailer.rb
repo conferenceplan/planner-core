@@ -19,7 +19,8 @@ class SurveyMailer < ActionMailer::Base
     content = ERB.new(template.content, 0, "%<>").result(binding) # pass in a context with the parameters i.e. ruby binding
     
     # then send the email
-    recipients recipient #get_email(respondent)
+    headers "return-path" => config.from
+    recipients recipient
     cc        config.cc
     from      config.from
     subject   template.subject # to get from the mail template
