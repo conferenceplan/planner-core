@@ -7,6 +7,9 @@ class SurveyRespondentsController < SurveyApplicationController
   def new
     @survey_respondent = SurveyRespondent.new
     @page_title = "Questionnaire Start"
+    
+    config = MailConfig.first
+    @ourEmail = config.from
   end
   
   def create
