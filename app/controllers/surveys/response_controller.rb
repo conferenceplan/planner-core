@@ -366,6 +366,7 @@ class Surveys::ResponseController < SurveyApplicationController
   #
   def convertInputArray(details, person) # arg os SurveyRespondentDetail, need the questions!!
     res = {}
+    if details && details.survey_responses
     details.survey_responses.each do |response|
       if response.survey_question && response.survey_question.question_type == :multiplechoice
         # then we need to add a hash
@@ -415,6 +416,7 @@ class Surveys::ResponseController < SurveyApplicationController
       else
         res[response.survey_question_id.to_s] = response.response.to_s
       end
+    end
     end
     return res
   end
