@@ -273,12 +273,11 @@ class Surveys::ResponseController < SurveyApplicationController
   #
   def updatePerson(respondent, respondentParams)
     person = respondent.person
-    details = respondent
+    # details = respondent
     if person
       # then update it with the various details
       # email
       detail = respondent.survey_respondent_detail
-      respondent.email = detail.email if detail.email
       # add email to person
       if !person.emailMatch?(detail.email)
         person.updateDefaultEmail(detail.email)
@@ -297,17 +296,12 @@ class Surveys::ResponseController < SurveyApplicationController
         person.pseudonym.save!
       end
       
-      # Names
-      respondent.first_name = detail.first_name if detail.first_name
-      respondent.last_name = detail.last_name if detail.last_name
-      respondent.suffix = detail.suffix if detail.suffix
-      
       person.first_name = detail.first_name if detail.first_name
       person.last_name = detail.last_name if detail.last_name
       person.suffix = detail.suffix if detail.suffix
       
       #
-      respondent.save!
+      # respondent.save!
       person.save!
     end
   end
@@ -466,10 +460,17 @@ class Surveys::ResponseController < SurveyApplicationController
   def getSurveyResponseDetails(details, person)
     res = {}
 
-    res['first_name'] = details.first_name  if details.first_name
-    res['last_name'] = details.last_name  if details.last_name
-    res['suffix'] = details.suffix if details.suffix
-    res['email'] = details.email if details.email
+    if person
+      res['first_name'] = person.first_name
+      res['last_name'] = person.last_name
+      res['suffix'] = person.suffix
+      res['email'] = person.getDefaultEmail().email
+    else  
+      res['first_name'] = details.first_name  if details.first_name
+      res['last_name'] = details.last_name  if details.last_name
+      res['suffix'] = details.suffix if details.suffix
+      res['email'] = details.email if details.email
+    end
     
     # if we have a pseudonym then use it
     if person && person.pseudonym

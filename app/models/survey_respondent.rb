@@ -15,5 +15,23 @@ class SurveyRespondent < ActiveRecord::Base
 
   # So we can add tags of various types to the Survey respondents
   acts_as_taggable
+  
+  # add helper methods so we can get the details from the underlying person
+  
+  def last_name
+    return person.last_name
+  end
+
+  def first_name
+    return person.first_name
+  end
+
+  def suffix
+    return person.first_name
+  end
+
+  def email
+    return person.getDefaultEmail().email
+  end
 
 end

@@ -19,12 +19,13 @@
 <div class="clear"></div>
 <div class="container_12">
 <%= form.label "First Name:", nil ,:class => "grid_2" %>
-<%= form.text_field :first_name, :class => "grid_5" %><a title='Enter your first name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+<%= text_field_tag :first_name, nil, :class => "grid_5" %>
+<a title='Enter your first name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed.' ><img src="/images/smerf_help.gif" alt="Help"></a>
 </div>
 <div class="clear"></div>
 <div class="container_12">
 <%= form.label "Last Name:", nil ,:class => "grid_2" %>
-<%= form.text_field :last_name, :class => "grid_5" %><a title='Enter your last name as it appears in your invitation e-mail.  You can change this in the questionnaire itself if needed.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+<%= text_field_tag :last_name, nil, :class => "grid_5" %><a title='Enter your last name as it appears in your invitation e-mail.  You can change this in the questionnaire itself if needed.' ><img src="/images/smerf_help.gif" alt="Help"></a>
 </div>
 <div class="clear"></div>
 <div class="container_12">
@@ -34,7 +35,7 @@
 <div class="clear"></div>
 <div class="container_12">
 <%= form.label "Invitation Code:", nil ,:class => "grid_2" %>
-<%= form.text_field :key, :class => "grid_1" %><a title='Enter the invitation code as it appears in your invitation e-mail. If the mail did not include an invitation code or if the invitation code did not work, write to <%= @ourEmail %> so we can send you the correct code.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+<%= text_field_tag :key, nil, :class => "grid_1" %><a title='Enter the invitation code as it appears in your invitation e-mail. If the mail did not include an invitation code or if the invitation code did not work, write to <%= @ourEmail %> so we can send you the correct code.' ><img src="/images/smerf_help.gif" alt="Help"></a>
 </div>
 </div>
 <div class="clear"></div>

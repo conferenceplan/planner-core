@@ -14,8 +14,8 @@ class SurveyRespondentsController < SurveyApplicationController
   
   def create
     @survey_respondent = nil
-    key = params[:survey_respondent][:key]
-    last_name = params[:survey_respondent][:last_name]
+    key = params[:key]
+    last_name = params[:last_name]
     fillSurvey = true
     
     # Check to see if the respondent has said that they will not be attending
@@ -26,8 +26,12 @@ class SurveyRespondentsController < SurveyApplicationController
     
     # find a respondent with the key and last name
     if (key)
-      @survey_respondent = SurveyRespondent.find :first, 
-        :conditions => ["survey_respondents.key = ? AND last_name = ?", key, last_name]
+      # use the join to lookup by the name of the person
+      candidate = SurveyRespondent.find :first,
+        :joins => :person, 
+        :conditions => ["survey_respondents.key = ? AND people.last_name = ?", key, last_name]
+      # since the join is a read only result set we need to get the actual survey_respondent to store the acceptance status in
+      @survey_respondent = SurveyRespondent.find(candidate.id)
     end
     
     if @survey_respondent
