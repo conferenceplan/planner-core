@@ -26,7 +26,7 @@ module Surveys::SurveyRenderHelper
     
   def group_help(group)
     if group.survey_format && !group.survey_format.help.blank?
-      "<a title='"+group.help+"' >"+image_tag("smerf_help.gif", :alt => "Help")+"</a>"
+      "<a title='"+group.survey_format.help+"' >"+image_tag("smerf_help.gif", :alt => "Help")+"</a>"
     end
   end
 
