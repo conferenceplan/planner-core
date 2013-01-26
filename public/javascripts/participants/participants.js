@@ -27,10 +27,10 @@ jQuery(document).ready(function(){
             formoptions: {
                 rowpos: 1,
                 label: "First Name",
-                elmprefix: "(*)"
+                elmprefix: ""
             },
             editrules: {
-                required: true
+                required: false
             }
         }, {
             name: 'person[last_name]',
