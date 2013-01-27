@@ -247,28 +247,20 @@ class PeopleController < PlannerController
          end until survey_respondent == nil
          
          if theEmail == nil
-           person.create_survey_respondent(:last_name => person.last_name, 
-                                         :first_name => person.first_name,
+           person.create_survey_respondent(
                                          :key => newKeyValue,
-                                         :suffix => person.suffix,
                                          :submitted_survey => false)
          else
            emailStatus = nil
            if createEmailJob
              emailStatus = EmailStatus[:Pending]
-             person.create_survey_respondent(:last_name => person.last_name, 
-                                         :first_name => person.first_name,
+             person.create_survey_respondent(
                                          :key => newKeyValue,
-                                         :suffix => person.suffix,
-                                         :email => theEmail.email,
                                          :email_status => emailStatus,
                                          :submitted_survey => false)
            else
-             person.create_survey_respondent(:last_name => person.last_name, 
-                                         :first_name => person.first_name,
+             person.create_survey_respondent( 
                                          :key => newKeyValue,
-                                         :suffix => person.suffix,
-                                         :email => theEmail.email,
                                          :submitted_survey => false)
            end
          end
