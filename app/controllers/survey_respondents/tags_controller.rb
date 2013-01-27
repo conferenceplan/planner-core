@@ -1,11 +1,10 @@
 #
 # For tags associated with Survey respondents
 #
-# TODO: this should only be accessed via authenticated respondent (for update)
+# This should only be accessed via authenticated respondent (for updates)
 #
 class SurveyRespondents::TagsController < ApplicationController
-# TODO: how do we get the id of the respondent, how do I find the current
-# survey respondent?
+
   # get a list of tags for a specific tag list for a specific respondent
   def list
     respondent = SurveyRespondent.find(params[:respondent_id])
@@ -23,7 +22,6 @@ class SurveyRespondents::TagsController < ApplicationController
     tag_context = params[:context] # tag context
     tag_list = params[:tags] # comma seperated list of tags
 
-# TODO - change so that the tags are consistent from a case perspective
     respondent.set_tag_list_on(tag_context, tag_list) # set the tag list on the respondent for the context
     
     respondent.save
@@ -45,7 +43,15 @@ class SurveyRespondents::TagsController < ApplicationController
   def cloud
     tag_context = params[:context] # tag context
     target = params[:target] # tag context
+    limit = params[:limit] # if there is a limit then we only report back on the limit number of tags and sort by most popular
     @tags = SurveyRespondent.tag_counts_on(tag_context).sort { |x, y| x.name.downcase <=> y.name.downcase }
+    
+    if limit
+      l = limit.to_i
+      # We now have a collection of names and count, so sort based on count and limit
+      @tags = @tags.sort { |x, y| y.count <=> x.count }
+      @tags = @tags[0..(l -1)]
+    end
     
     if target == 'selection'
       render 'selection', :layout => 'content'
@@ -55,7 +61,7 @@ class SurveyRespondents::TagsController < ApplicationController
   end
 end
 
-# TODO : use act as taggable to create dynamic tag contexts. These can be tag contexts for a given
+# NOTE : use act as taggable to create dynamic tag contexts. These can be tag contexts for a given
 # name.
 # @user = User.new(:name => "Bobby")
 #    @user.set_tag_list_on(:customs, "same, as, tag, list")
