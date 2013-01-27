@@ -8,10 +8,10 @@ class Cleansurveyrespondent < ActiveRecord::Migration
   end
 
   def self.down
-    add_column :survey_respondents, :answer_type, :first_name
-    add_column :survey_respondents, :answer_type, :last_name
-    add_column :survey_respondents, :answer_type, :suffix
-    add_column :survey_respondents, :answer_type, :prefix
-    add_column :survey_respondents, :answer_type, :email
+    add_column :survey_respondents, :first_name, :string
+    add_column :survey_respondents, :last_name, :string
+    add_column :survey_respondents, :suffix, :string
+    add_column :survey_respondents, :prefix, :string
+    add_column :survey_respondents, :email, :string
   end
 end

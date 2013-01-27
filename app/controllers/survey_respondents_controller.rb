@@ -9,7 +9,11 @@ class SurveyRespondentsController < SurveyApplicationController
     @page_title = "Questionnaire Start"
     
     config = MailConfig.first
-    @ourEmail = config.from
+    if config.info
+      @ourEmail = config.info
+    else
+      @ourEmail = config.from
+    end  
   end
   
   def create
