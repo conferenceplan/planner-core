@@ -14,7 +14,7 @@ module SurveyHtmlFormatter
       person = respondent_detail.survey_respondent.person
       if person
         fname = person.GetFullPublicationName()
-        content += '<p>Publication Name: <b>' + fname + '</b></p>'
+        content += '<p>Publication Name: <em>' + fname + '</em></p>'
       end      
     end
     
@@ -147,7 +147,7 @@ module SurveyHtmlFormatter
           @responses.has_key?("#{question.code}") and
           @responses["#{question.code}"].has_key?("#{answer.code}"))
           user_answer = @responses["#{question.code}"]["#{answer.code}"]
-          contents += '<b>' + answer.answer + '</b>, '
+          contents += '<em>' + answer.answer + '</em>, '
         end
         # Process any sub questions this answer may have
         contents += ' ' + process_sub_questions(answer)
@@ -165,7 +165,7 @@ module SurveyHtmlFormatter
         @responses.has_key?("#{question.code}"))
         user_answer = @responses["#{question.code}"]
         if (user_answer and !user_answer.blank?())
-          contents += '<b>' + user_answer + '</b> '
+          contents += '<em>' + user_answer + '</em> '
         end
       end
 
@@ -197,7 +197,7 @@ module SurveyHtmlFormatter
            if ( answer.answer ) 
              user_answer = @responses["#{question.code}"]
              if ((user_answer and !user_answer.blank?() and user_answer.to_s() == answer.code.to_s()))
-             contents += '<b>' + answer.answer + '</b> '
+              contents += 'HHHHHH <em>' + answer.answer + '</em> '
              end
           end
         end
@@ -216,7 +216,7 @@ module SurveyHtmlFormatter
         if (@responses and !@responses.empty?() and 
           @responses.has_key?("#{question.code}") and
           @responses["#{question.code}"].include?("#{answer.code}"))
-          contents += '<b>' + answer.answer + '</b>'
+          contents += '<em>' + answer.answer + '</em>'
         end
       end        
       
@@ -231,40 +231,73 @@ module SurveyHtmlFormatter
     
     case question.question_type
     when :availability
-      content = '<h3>Availability</h3>'
       responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      if !responses.empty?
+      content = '<h3>Availability</h3>'
       responses.each do |response|
         if response.response && response.response == '1'
-          content += '<b>I am available for the complete duration of the Convention.</b>'
+          content += '<em>I am available for the complete duration of the Convention.</em><br/>'
         elsif response.response1
-          content += 'From: <b>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + response.response1.to_i.day).strftime('%A, %B %e') + ' at ' + response.response2 + '</b><br/>'
-          content += 'To: <b>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + response.response3.to_i.day).strftime('%A, %B %e') + ' at ' + response.response4 + '</b>'
+          content += 'From: <em>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + response.response1.to_i.day).strftime('%A, %B %e') + ' at ' + response.response2 + '</em><br/>'
+          content += 'To: <em>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + response.response3.to_i.day).strftime('%A, %B %e') + ' at ' + response.response4 + '</em><br/>'
         elsif response.response5
-          content += '<b>I am extremely uncertain when I will be available to be on the Program .</b>'
+          content += '<em>I am extremely uncertain when I will be available to be on the Program .</em><br/>'
         end
       end
+      end
     when :address
-      content = '<h3>' + question.question + '</h3>'
       responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      if !responses.empty?
+      content = '<h3>' + question.question + '</h3>'
       responses.each do |response|
-        content += 'Street: <b>' + response.response + '</b><br/>'
-        content += 'City: <b>' + response.response1 + '</b><br/>'
-        content += 'State/County/Provence: <b>' + response.response2 + '</b><br/>'
-        content += 'Postal Code/Zip: <b>' + response.response3 + '</b><br/>'
-        content += 'Country: <b>' + response.response4 + '</b><br/>'
+        content += 'Street: <em>' + response.response + '</em><br/>'
+        content += 'City: <em>' + response.response1 + '</em><br/>'
+        content += 'State/County/Provence: <em>' + response.response2 + '</em><br/>'
+        content += 'Postal Code/Zip: <em>' + response.response3 + '</em><br/>'
+        content += 'Country: <em>' + response.response4 + '</em><br/>'
+      end
       end
     when :phone
       responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      if !responses.empty?
       responses.each do |response|
         if  response.response &&  response.response1
-          content += 'Phone: <b>' + response.response + ' (' + response.response1 + ')</b><br/>'
+          content += 'Phone: <em>' + response.response + ' (' + response.response1 + ')</em><br/>'
+        end
+      end
+      end
+    when :singlechoice
+      responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      if !responses.empty?
+        content = '<h3>' + question.question + '</h3>'
+        responses.each do |response|
+          # we have a number that needs to be converted
+          content += '<em>' + SurveyAnswer.find(response.response.to_i).answer + '</em>&nbsp;'
+        end
+      end
+    when :selectionbox
+      responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      if !responses.empty?
+        content = '<h3>' + question.question + '</h3>'
+        responses.each do |response|
+          content += response_to_html("HELP")
+        end
+      end
+    when :textbox
+      responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+      if !responses.empty?
+        content = '<h3>' + question.question + '</h3>'
+        responses.each do |response|
+          content += "<pre>" + response.response + "</pre>"
         end
       end
     else
-      content = '<h3>' + question.question + '</h3>'
       responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
-      responses.each do |response|
-        content += response_to_html(response)
+      if !responses.empty?
+        content = '<h3>' + question.question + '</h3>'
+        responses.each do |response|
+          content += response_to_html(response)
+        end
       end
     end
 
@@ -275,7 +308,7 @@ module SurveyHtmlFormatter
   #
   #
   def response_to_html(response)
-    return '<b>' + response.response + '</b>'
+    return '<em>' + response.response + '</em>&nbsp;'
   end
   
 end

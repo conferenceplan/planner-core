@@ -4,7 +4,7 @@
 class SurveyRespondentsController < SurveyApplicationController
   before_filter :check_for_single_access_token, :only => [:show, :edit, :update, :confirm]
 
-  layout "dynasurvey"
+  # layout "dynasurvey"
 
   def new
     @survey_respondent = SurveyRespondent.new
@@ -31,7 +31,7 @@ class SurveyRespondentsController < SurveyApplicationController
     end
     
     # find a respondent with the key and last name
-    if (key)
+    if (key && key != '')
       # use the join to lookup by the name of the person
       candidate = SurveyRespondent.find :first,
         :joins => :person, 

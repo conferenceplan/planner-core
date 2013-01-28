@@ -63,8 +63,10 @@ class Surveys::ResponseController < SurveyApplicationController
                   end
                 end
               else
-                res[1].each do |r|
-                  saveResponse(@respondent, @survey, res[0], r, respondentDetails)
+                if res[1].empty?
+                  saveResponse(@respondent, @survey, res[0], '', respondentDetails)
+                else
+                  saveResponse(@respondent, @survey, res[0], res[1].to_s, respondentDetails)
                 end
               end
             else
@@ -234,7 +236,7 @@ class Surveys::ResponseController < SurveyApplicationController
     surveyQuestion = SurveyQuestion.find(questionId)
     response = nil
     
-    if surveyQuestion.tags_label
+    if !surveyQuestion.tags_label.empty? && surveyQuestion.question_type == :textfield
       responseText = responseText.split(' ').map {|w|
         w[0] = w[0].chr.upcase
         w }.join(' ')
