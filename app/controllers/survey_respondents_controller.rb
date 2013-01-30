@@ -37,7 +37,7 @@ class SurveyRespondentsController < SurveyApplicationController
         :joins => :person, 
         :conditions => ["survey_respondents.key = ? AND people.last_name = ?", key, last_name]
       # since the join is a read only result set we need to get the actual survey_respondent to store the acceptance status in
-      @survey_respondent = SurveyRespondent.find(candidate.id)
+      @survey_respondent = SurveyRespondent.find(candidate.id) if candidate != nil
     end
     
     if @survey_respondent

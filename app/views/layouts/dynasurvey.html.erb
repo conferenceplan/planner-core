@@ -165,7 +165,7 @@
                     
                     // create the cloud for /survey_respondents/tags/cloud?context=excludedTimes
                     $.ajax({
-                        url: "/survey_respondents/tags/cloud?limit=9&context=" + context,
+                        url: "/survey_respondents/tags/cloud?limit=15&context=" + context,
                         dataType: "html",
                         success: function(response){
                             cloud.append(response);
