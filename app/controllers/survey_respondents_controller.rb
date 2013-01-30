@@ -10,6 +10,8 @@ class SurveyRespondentsController < SurveyApplicationController
     @survey_respondent = SurveyRespondent.new
     @page_title = "Questionnaire Start"
     
+    @survey = Survey.find_by_alias('partsurvey')
+    
     config = MailConfig.first
     if config.info
       @ourEmail = config.info
