@@ -25,7 +25,8 @@ class SurveyRespondentsController < SurveyApplicationController
     key = params[:key]
     last_name = params[:last_name]
     fillSurvey = true
-    
+    @survey = Survey.find_by_alias('partsurvey')
+
     # Check to see if the respondent has said that they will not be attending
     if (params[:cancel]) # Then we do not go to the survey
       # Save the fact that they will not be attending and then forward to a thank you page

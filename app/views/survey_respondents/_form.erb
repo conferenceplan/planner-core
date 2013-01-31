@@ -10,11 +10,16 @@
 <div class="container_12">
 	<div class="grid_10">
 	<p>
-	Please complete this survey if you want to participate in the <%= SITE_CONFIG[:conference][:name]%> Program.
-	If you cannot attend or do not want to be on Program, simply fill in your name, 
-	Invitation code and click the "I will not attend/participate" button.
+	Please complete this questionnaire if you want to participate in the <%= SITE_CONFIG[:conference][:name]%> Program. 
+	If you cannot attend or do not want to be on Program, simply fill in your name, Invitation code and click the "I do not wish to be on program" button.
 	<p/>
 	</div>
+</div>
+<div class="clear"></div>
+<div class="container_12">
+<%= form.label "First Name:", nil ,:class => "grid_2" %>
+<%= text_field_tag :first_name, nil, :class => "grid_5" %>
+<a title='Enter your first name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed.' ><img src="/images/smerf_help.gif" alt="Help"></a>
 </div>
 <div class="clear"></div>
 <div class="container_12">
@@ -35,11 +40,11 @@
 <div class="clear"></div>
 <div class="container_12">
 <br/>
-<div class="grid_2">
+<div class="grid_3">
 <%= form.submit button %><a title='Select this button if you plan to attend <%= SITE_CONFIG[:conference][:name]%> and want to participate on Program. Selecting the button will take you to the next page in the questionnaire' ><img src="/images/smerf_help.gif" alt="Help"></a>
 </div>
 <div class="grid_4">
-<%= submit_tag "I will not attend/participate", :name => "cancel", :confirm => "Are you sure?" %><a title='Select this button if you do not plan to attend <%= SITE_CONFIG[:conference][:name]%>, or if you are attending and do not want to be on Program.' ><img src="/images/smerf_help.gif" alt="Help"></a>
+<%= submit_tag "I do not wish to be on program", :name => "cancel", :confirm => "Are you sure?" %><a title='Select this button if you do not plan to attend <%= SITE_CONFIG[:conference][:name]%>, or if you are attending and do not want to be on Program.' ><img src="/images/smerf_help.gif" alt="Help"></a>
 </div>
 </div>
 <div class="clear"></div>

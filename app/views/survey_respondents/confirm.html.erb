@@ -1,3 +1,8 @@
+  <% if @survey %>
+    <% if !@survey.header_image.empty? %>
+    <div><img src="<%= @survey.header_image if @survey.header_image %>"></div>
+    <% end %>
+  <%end%>
 <div class="container_12">
 <h1 class="grid_8 push_2">Program Participant Questionnaire</h1>
 </div>
