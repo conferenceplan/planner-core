@@ -24,6 +24,7 @@ class EmailJob
       end
 
       respondent.save
+      sleep 20 # For 20 seconds
     end
   end
 end
