@@ -31,7 +31,11 @@ class SurveyRespondent < ActiveRecord::Base
   end
 
   def email
-    return person.getDefaultEmail().email
+    if person.getDefaultEmail()
+      return person.getDefaultEmail().email
+    else
+      return ''  
+    end
   end
 
 end
