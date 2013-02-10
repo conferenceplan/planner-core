@@ -128,7 +128,7 @@ privileges do
     privilege :create, :includes => [:new,:import,:doimport]
     privilege :update, :includes => [:edit,:states,:copySurvey,:updateExcludedItemsFromSurveys,:updateExcludedTimesFromSurveys]
     privilege :delete, :includes => [:destroy, :removeItem]
-    privilege :communicate, :includes => [:exportemailxml,:doexportemailxml,:exportbiolist, :selectExportBioList, :schedule_report, :BackOfBadge, :selectBadgeLabel, :selectScheduleReport,:RoomSign,:selectRoomSign, :tableTents,:selectTableTents]
+    privilege :communicate, :includes => [:doexportemailxml,:exportbiolist, :selectExportBioList, :schedule_report, :BackOfBadge, :selectBadgeLabel, :selectScheduleReport,:RoomSign,:selectRoomSign, :tableTents,:selectTableTents]
     privilege :schedule, :includes => [:manage, :publish]
-    privilege :supermanage, :includes => [:manage, :drop]
+    privilege :supermanage, :includes => [:manage, :drop, :exportemailxml]
 end
