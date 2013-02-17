@@ -11,6 +11,7 @@ gem 'acts_as_audited', "1.1.1"
 gem 'acts-as-taggable-on', '2.0.5'
 gem 'authlogic', '~> 2.1.0'
 gem "bluecloth"
+gem "cells", "3.3.9"
 gem "declarative_authorization", "~> 0.5.6"
 gem 'delayed_job', '~>2.0.7'
 #gem "enumerations_mixin"
