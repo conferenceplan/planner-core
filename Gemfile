@@ -20,6 +20,7 @@ gem 'i18n', '0.4.2' # because later gems cause problems with error message displ
 gem 'jrails', '0.6.0'
 gem 'mysql', '2.8.1'
 gem "rack", "1.1.3"
+gem "rake", "0.8.7"
 gem "rails", "~> 2.3.17"
 gem "time_diff"
 gem 'will_paginate', '~> 2.3.11'
