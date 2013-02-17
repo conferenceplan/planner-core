@@ -11,6 +11,8 @@ require "config/capistrano_production_rb"
 require "config/capistrano_config_yml"
 require "config/capistrano_delayed_job_yml"
 
+require "bundler/capistrano"
+
 set :scm, :subversion
 set :group, "www-data"
 set :use_sudo, false
