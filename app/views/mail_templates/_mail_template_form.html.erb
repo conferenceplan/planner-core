@@ -1,5 +1,5 @@
 
-<% form_for(@mail_template) do |f| %>
+<% form_for(@mail_template, :html => {:'accept-charset' => 'UTF-8'}) do |f| %>
     <%= f.error_messages %>
     <div class='line'><div class='field_name'>Use</div><div class='field_value'>
                 <%= f.select :mail_use_id,

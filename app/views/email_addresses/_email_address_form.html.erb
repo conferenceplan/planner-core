@@ -1,6 +1,6 @@
 <div>
     <%= error_messages_for :emailAddress %>
-    <% form_for @emailAddress, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
+    <% form_for @emailAddress, :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
     <div class='address_email'>
         <div class='email_details'>
             <div class='email'>

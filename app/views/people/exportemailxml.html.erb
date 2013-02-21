@@ -4,7 +4,7 @@
       content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
     end
 %>
-<% form_for :exportemail, :url=>{:controller=>"people", :action=>"doexportemailxml",:method => "post"} do |f| -%>
+<% form_for :exportemail, :url=>{:controller=>"people", :action=>"doexportemailxml",:method => "post"}, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
  <div>
   <div class='line'>
   	Select the criteria for the xml list, then submit. The xml will be displayed in your browser.

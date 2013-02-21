@@ -1,7 +1,7 @@
 <br/>
 <h1> Edit an invitation category</h1>
 <%= error_messages_for :invitation_category %>
-<% form_for @invitationCategory do |f| -%>
+<% form_for @invitationCategory, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
 	<p>
 		<%= f.label :name, "Name " %> <br/>
 		<%= f.text_field :name %>

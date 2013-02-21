@@ -4,7 +4,7 @@
       content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
     end
 %>
-<% form_for :tableTents, :url=>{:controller=>"planner_reports", :action=>"tableTents",:method => "post"} do |f| -%>
+<% form_for :tableTents, :url=>{:controller=>"planner_reports", :action=>"tableTents",:method => "post"}, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
  <div>
  	 <div class='line'><div class='field_name'><%= f.label :person_id,"Select People. (Multiple can be selected, no selection is all)" %></div>
                     <div class='field_value'>   	

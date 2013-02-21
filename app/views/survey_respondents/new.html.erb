@@ -16,6 +16,6 @@
 <h1 class="grid_8 push_2">Program Participant Questionnaire</h1>
 </div>
 <div class="clear"></div>
-<% form_for @survey_respondent do |f| %>
+<% form_for @survey_respondent, :html => {:'accept-charset' => 'UTF-8'} do |f| %>
   <%= render :partial => "form", :locals => {:object => f, :button => "I wish to be on program"} %>
 <% end %>

@@ -1,6 +1,6 @@
 <div>
     <%= error_messages_for :registrationDetail %>
-    <% form_for @registrationDetail, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
+    <% form_for @registrationDetail, :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
     <div class='line'>
         Registration Number: <%= f.text_field :registration_number %>
     </div>

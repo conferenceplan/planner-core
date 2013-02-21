@@ -1,5 +1,5 @@
 <%= error_messages_for :postalAddress %>
-<% form_for @postalAddress, :url => @urlstr, :html => {:class => "layerform", :id => "layerform"} do |f| %>
+<% form_for @postalAddress, :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
 <div class='address_postal'>
 <div class='address_details'>
 	<div class='line'><div class='field_name'>Line1:</div><div class='field_value'><%= f.text_field :line1 %></div></div>
