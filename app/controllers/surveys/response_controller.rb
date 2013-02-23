@@ -302,6 +302,8 @@ class Surveys::ResponseController < SurveyApplicationController
       person.last_name = detail.last_name if detail.last_name
       person.suffix = detail.suffix if detail.suffix
       
+      person.acceptance_status = AcceptanceStatus[:Accepted]
+      
       #
       # respondent.save!
       person.save!
