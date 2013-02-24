@@ -4,6 +4,7 @@ class SurveyRespondents::ReviewsController < PlannerController
   end
 
   def show
+    @respondent = nil
     if !@survey
       @survey = Survey.find_by_alias('partsurvey') #find(params[:survey_id])
     end
