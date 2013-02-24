@@ -4,29 +4,13 @@ class SurveyRespondents::ReviewsController < PlannerController
   end
 
   def show
-    # Get the respondent
-    # @form = nil
     if !@survey
       @survey = Survey.find_by_alias('partsurvey') #find(params[:survey_id])
     end
   
     # we need the survey and the survey respondent
-    @respondent = SurveyRespondent.find(params[:id])
+    @respondent = SurveyRespondent.find(params[:id]) if params[:id] != 0
     
-    
-    # @form = nil
-    # if (respondent.length >  0)
-      # # Get the survey
-      # @smerf_user_id = respondent[0].id 
-      # @form = SmerfForm.find_by_id(1)
-      # smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent[0].id, 1)
-      # if (smerf_forms_surveyrespondent)
-        # @responses = smerf_forms_surveyrespondent.responses
-      # else
-        # @form = nil
-      # end
-    # end
-
     render :layout => 'content'
   end
 
