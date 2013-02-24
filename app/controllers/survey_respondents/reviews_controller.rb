@@ -22,9 +22,9 @@ class SurveyRespondents::ReviewsController < PlannerController
     order = params[:sord]
 
     clause = createWhereClause(params[:filters])
-    clause = addClause(clause, 'submitted_survey = ?', true)
+    # clause = addClause(clause, 'submitted_survey = ?', true)
 
-    clause = addClause(clause,'people.acceptance_status_id != ? ',9)
+    clause = addClause(clause,'people.acceptance_status_id = ? ',8)
     args = { :conditions => clause }
     args.merge!( :joins => 'LEFT JOIN people ON people.id = survey_respondents.person_id' )
 
