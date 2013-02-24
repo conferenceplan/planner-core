@@ -1,5 +1,3 @@
 module SurveyRespondents::ReviewsHelper
-
-  include GenericSmerfHtmlFormatter
-
+  include SurveyHtmlFormatter
 end
