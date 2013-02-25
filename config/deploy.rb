@@ -2,7 +2,8 @@
 set :stages, %w(production staging sandbox boskone lonestartest smofcon lscprog)
 set :default_stage, "staging"
 set :application, "PlannerPrototype"
-set :repository,  "https://conferenceplan.svn.sourceforge.net/svnroot/conferenceplan/PlannerPrototype"
+#set :repository,  "https://conferenceplan.svn.sourceforge.net/svnroot/conferenceplan/PlannerPrototype"
+set :repository,  "https://svn.code.sf.net/p/conferenceplan/code/Planner"
 set :deploy_to, "/opt/www"
 
 require "capistrano/ext/multistage"
