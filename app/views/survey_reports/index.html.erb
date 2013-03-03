@@ -1,3 +1,12 @@
-<p>
-Please select a report
-</p>
+
+<% content_for :jsheader do %>
+  <%= render_cell :survey_report, :javascript %>
+<% end %>
+
+<div class='survey-query-selector' id='survey-query-selector'>
+<%= render_cell :survey_report, :show %>
+<div>
+<div class='survey-query-results' id='survey-query-results'>
+<%= render_cell :survey_report, :results %>
+<div>
+    

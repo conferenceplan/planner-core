@@ -67,7 +67,7 @@ class SurveyRespondentsController < SurveyApplicationController
           survey = Survey.find_by_alias('partsurvey')
           if survey
             redirect_to '/form/partsurvey?key=' + @survey_respondent.single_access_token
-          else  
+          else # TODO - change to remove smerf, need error page instead
             redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
           end
         else

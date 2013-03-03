@@ -69,16 +69,18 @@ private
     
       new_tags = tags.collect {|tag| (tag.name == old_value) ? new_value : tag.name }
       
+#       TODO - change for new survey mechanism
+      
       respondent.set_tag_list_on(context, new_tags.join(",") )
 
-      smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-      if smerf_forms_surveyrespondent
-        str = smerf_forms_surveyrespondent.responses[questionId]
-        str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? new_value : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-        smerf_forms_surveyrespondent.responses[questionId] = str.compact.join(',')
-      
-        smerf_forms_surveyrespondent.save
-      end
+      # smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
+      # if smerf_forms_surveyrespondent
+        # str = smerf_forms_surveyrespondent.responses[questionId]
+        # str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? new_value : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+        # smerf_forms_surveyrespondent.responses[questionId] = str.compact.join(',')
+#       
+        # smerf_forms_surveyrespondent.save
+      # end
       
       respondent.save
     end
@@ -103,18 +105,20 @@ private
 
       respondent.set_tag_list_on(destination, dest_tags.join(",") )
 
-      smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-      
-      if smerf_forms_surveyrespondent
-        str = smerf_forms_surveyrespondent.responses[srcQuestionId]
-        str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-        smerf_forms_surveyrespondent.responses[srcQuestionId] = str.compact.join(',')
+#       TODO - change for new survey mechanism
 
-        str = smerf_forms_surveyrespondent.responses[destQuestionId]
-        smerf_forms_surveyrespondent.responses[destQuestionId] = (str && str.strip != '') ? str + "," + old_value : old_value
-
-        smerf_forms_surveyrespondent.save
-      end
+      # smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
+#       
+      # if smerf_forms_surveyrespondent
+        # str = smerf_forms_surveyrespondent.responses[srcQuestionId]
+        # str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+        # smerf_forms_surveyrespondent.responses[srcQuestionId] = str.compact.join(',')
+# 
+        # str = smerf_forms_surveyrespondent.responses[destQuestionId]
+        # smerf_forms_surveyrespondent.responses[destQuestionId] = (str && str.strip != '') ? str + "," + old_value : old_value
+# 
+        # smerf_forms_surveyrespondent.save
+      # end
 
       respondent.save
     end
@@ -131,16 +135,18 @@ private
       new_tags.delete(old_value)
       
       respondent.set_tag_list_on(context, new_tags.join(",") )
-      
-      smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-      
-      if smerf_forms_surveyrespondent
-        str = smerf_forms_surveyrespondent.responses[questionId]
-        str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-        smerf_forms_surveyrespondent.responses[questionId] = str.compact.join(',')
 
-        smerf_forms_surveyrespondent.save
-      end
+#       TODO - change for new survey mechanism
+      
+      # smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
+#       
+      # if smerf_forms_surveyrespondent
+        # str = smerf_forms_surveyrespondent.responses[questionId]
+        # str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+        # smerf_forms_surveyrespondent.responses[questionId] = str.compact.join(',')
+# 
+        # smerf_forms_surveyrespondent.save
+      # end
     
       respondent.save
     end

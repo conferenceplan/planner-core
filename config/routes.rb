@@ -25,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :survey_copy_statuses
 
-  map.resources :smerf_forms
+  # map.resources :smerf_forms
 
   map.resources :monitor, :only => :index # we only need the one method/route for this
 

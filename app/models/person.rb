@@ -299,6 +299,7 @@ class Person < ActiveRecord::Base
     return suffix
   end
   
+  # TODO - these need to change
   def GetSurveyBio
     return (GetSurveyQuestionResponse('g95q1'))    
   end
