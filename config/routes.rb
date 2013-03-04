@@ -172,7 +172,7 @@ ActionController::Routing::Routes.draw do |map|
   #
   # The new(s) were removed so as to prevent anonymous people creating new accounts
   #
-  map.resource :account, :controller => "users"
+  map.resource :account, :controller => "users", :except => :new
   map.resources :users, :except => :new
   map.connect 'usersadmin/list', :controller => 'users/admin', :action => 'list'
   map.resources :usersadmin, :controller => 'users/admin'
