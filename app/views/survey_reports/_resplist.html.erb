@@ -7,7 +7,7 @@
    <dl>
    <% resplist.each do |p| %>
        <dt><%= p.GetFullPublicationName %></dt>
-       <dd><%= p.response %></dd>
+       <dd><%= p.tag_list_on( context ) %></dd>
    <% end %>
    </dl>
 <% end %>
