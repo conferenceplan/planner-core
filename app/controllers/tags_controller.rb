@@ -7,13 +7,13 @@ class TagsController < PlannerController
     
     if isok(className)
       # 1. Get the set of contexts
-      contexts = TagContext.all
+      contexts = getContexts(className)
       # 2. For each context get the tags for thie person and add them to the results
       @allTagCounts = Hash.new
       contexts.each do |context|
-        tags = eval(className).tag_counts_on( context.name )
+        tags = eval(className).tag_counts_on( context )
         if tags != nil
-          @allTagCounts[context.name] = tags
+          @allTagCounts[context] = tags
         end
       end
     end
@@ -38,13 +38,13 @@ class TagsController < PlannerController
       obj = eval(@className).find(params[:id])
       
       # 1. Get the set of contexts
-      contexts = TagContext.all
+      contexts = getContexts(@className)
       # 2. For each context get the tags for thie person and add them to the results
       @allTags = Hash.new
       contexts.each do |context|
-        tags = obj.tag_list_on( context.name )
+        tags = obj.tag_list_on( context )
         if tags != nil
-          @allTags[context.name] = tags
+          @allTags[context] = tags
         end
       end
     end
@@ -147,6 +147,24 @@ class TagsController < PlannerController
   def isok(input)
     # make sure that the input does not contain system ''
     ! input.downcase.include? 'system'
+  end
+  
+  #
+  # For a given class get all the tag contexts that are being used
+  #
+  def getContexts(className)
+    taggings = ActsAsTaggableOn::Tagging.find :all,
+                  :select => "DISTINCT(context)",
+                  :conditions => "taggable_type like '" + className + "'"
+                  
+    contexts = Array.new
+
+    # for each context get the set of tags (sorted), and add them to the collection for display on the page
+    taggings.each do |tagging|
+      contexts << tagging.context
+    end
+    
+    return contexts
   end
   
 end
