@@ -8,14 +8,14 @@ module SurveyHtmlFormatter
   #
   def survey_to_html(survey, respondent_detail, forEmail = true)
     content = '<div class="survey_responses"><h1>' + survey.name + '</h1>'
-    content += '\n' if forEmail
+    content += "\n" if forEmail
     
     if respondent_detail.survey_respondent
       person = respondent_detail.survey_respondent.person
       if person
         fname = person.GetFullPublicationName()
         content += '<h3 class="response_group_header">Publication Name:</h3><div class="response_group_body"><div class="response_answer"><div class="response_text">' + fname + '</div></div></div>'
-        content += '\n' if forEmail
+        content += "\n" if forEmail
       end      
     end
     
@@ -24,7 +24,7 @@ module SurveyHtmlFormatter
     end
     
     content += '</div>'
-    content += '\n' if forEmail
+    content += "\n" if forEmail
     
     return content
   end
@@ -42,7 +42,7 @@ module SurveyHtmlFormatter
     end
     
     content += "</div>"
-    content += '\n' if forEmail
+    content += "\n" if forEmail
     
     return content
   end
@@ -82,11 +82,11 @@ module SurveyHtmlFormatter
         content += '<div class="response_answer">'
         content += '<div class="response_text">' + response.response + "</div>"
         content += '</div>'
-        content += '\n' if forEmail
+        content += "\n" if forEmail
       end
     end
     content += '</div>'
-    content += '\n' if forEmail
+    content += "\n" if forEmail
   end
   
   def textbox_to_html(question, respondent_detail, forEmail)
@@ -96,21 +96,21 @@ module SurveyHtmlFormatter
       content += '<div class="response_question_text"'
       content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
       content += '>' + question.question + "</div>"
-      content += '\n' if forEmail
+      content += "\n" if forEmail
       responses.each do |response|
         content += '<div class="response_answer">'
         content += '<div class="response_text_box">' 
-        content += '\n' if forEmail
+        content += "\n" if forEmail
         content += '<pre>' if forEmail
         content += response.response 
         content += '</pre>' if forEmail
-        content += '\n' if forEmail
+        content += "\n" if forEmail
         content += '</div></div>'
-        content += '\n' if forEmail
+        content += "\n" if forEmail
       end
     end
     content += '</div>'
-    content += '\n' if forEmail
+    content += "\n" if forEmail
   end
   
   def single_choice_to_html(question, respondent_detail, forEmail)
@@ -120,16 +120,16 @@ module SurveyHtmlFormatter
       content += '<div class="response_question_text"'
       content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
       content += '>' + question.question + "</div>"
-      content += '\n' if forEmail
+      content += "\n" if forEmail
       responses.each do |response|
         content += '<div class="response_answer">'
         content += '<div class="response_text">' + SurveyAnswer.find(response.response.to_i).answer + "</div>"
         content += '</div>'
-        content += '\n' if forEmail
+        content += "\n" if forEmail
       end
     end
     content += '</div>'
-    content += '\n' if forEmail
+    content += "\n" if forEmail
   end
   
   def phone_to_html(question, respondent_detail, forEmail)
@@ -144,11 +144,11 @@ module SurveyHtmlFormatter
         content += ' (' + response.response1 + ')' if response.response1
         content += "</div></div>"
         content += '</div>'
-        content += '\n' if forEmail
+        content += "\n" if forEmail
       end
     end
     content += '</div>'
-    content += '\n' if forEmail
+    content += "\n" if forEmail
   end
   
   def address_to_html(question, respondent_detail, forEmail)
@@ -162,29 +162,29 @@ module SurveyHtmlFormatter
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
         content += '>Street Address</div><div class="response_answer"><div class="response_text">' + response.response + "</div></div>"
-        content += '\n' if forEmail
+        content += "\n" if forEmail
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
         content += '>City</div><div class="response_answer"><div class="response_text">' + response.response1 + "</div></div>"
-        content += '\n' if forEmail
+        content += "\n" if forEmail
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
         content += '>State/County/Provence</div><div class="response_answer"><div class="response_text">' + response.response2 + "</div></div>"
-        content += '\n' if forEmail
+        content += "\n" if forEmail
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
         content += '>Postal Code/Zip</div><div class="response_answer"><div class="response_text">' + response.response3 + "</div></div>"
-        content += '\n' if forEmail
+        content += "\n" if forEmail
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
         content += '>Country</div><div class="response_answer"><div class="response_text">' + response.response4 + "</div></div>"
         content += '</div>'
-        content += '\n' if forEmail
+        content += "\n" if forEmail
       end
     end
 
     content += '</div>'
-    content += '\n' if forEmail
+    content += "\n" if forEmail
     return content
   end
   
@@ -208,7 +208,7 @@ module SurveyHtmlFormatter
     end
     
     content += '</div>'
-    content += '\n' if forEmail
+    content += "\n" if forEmail
     return content
   end
     
