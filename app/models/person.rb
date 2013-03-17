@@ -299,10 +299,13 @@ class Person < ActiveRecord::Base
     return suffix
   end
   
-  # TODO - these need to change
   def GetSurveyBio
-    return (GetSurveyQuestionResponse('g95q1'))    
+    response = SurveyResponse.first :joins => {:survey_respondent_detail => {:survey_respondent => :person}}, :conditions => {:isbio => true, :people => {:id => id}}
+    
+    return response.response
   end
+  
+  # TODO - these need to change
   
   def GetSurveyQuestionResponse(questionId)
     if (self.hasSurvey?)
