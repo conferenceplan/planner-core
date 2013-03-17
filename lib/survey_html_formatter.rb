@@ -87,6 +87,7 @@ module SurveyHtmlFormatter
     end
     content += '</div>'
     content += "\n" if forEmail
+    return content
   end
   
   def textbox_to_html(question, respondent_detail, forEmail)
@@ -111,6 +112,7 @@ module SurveyHtmlFormatter
     end
     content += '</div>'
     content += "\n" if forEmail
+    return content
   end
   
   def single_choice_to_html(question, respondent_detail, forEmail)
@@ -130,6 +132,7 @@ module SurveyHtmlFormatter
     end
     content += '</div>'
     content += "\n" if forEmail
+    return content
   end
   
   def phone_to_html(question, respondent_detail, forEmail)
@@ -149,6 +152,7 @@ module SurveyHtmlFormatter
     end
     content += '</div>'
     content += "\n" if forEmail
+    return content
   end
   
   def address_to_html(question, respondent_detail, forEmail)
