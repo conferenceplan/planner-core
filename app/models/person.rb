@@ -302,7 +302,10 @@ class Person < ActiveRecord::Base
   def GetSurveyBio
     response = SurveyResponse.first :joins => {:survey_respondent_detail => {:survey_respondent => :person}}, :conditions => {:isbio => true, :people => {:id => id}}
     
-    return response.response
+    if response
+      return response.response
+    else
+      return ''
   end
   
   # TODO - these need to change
