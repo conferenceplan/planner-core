@@ -306,6 +306,7 @@ class Person < ActiveRecord::Base
       return response.response
     else
       return ''
+    end
   end
   
   # TODO - these need to change
