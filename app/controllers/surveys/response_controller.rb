@@ -59,6 +59,7 @@ class Surveys::ResponseController < SurveyApplicationController
                 else  
                   res[1].each do |r, v|
                     response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => v, :survey_respondent_detail => respondentDetails
+                    response.isbio = surveyQuestion.isbio
                     response.save!
                   end
                 end
@@ -248,6 +249,8 @@ class Surveys::ResponseController < SurveyApplicationController
     else
       response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, :response => responseText, :survey_respondent_detail => respondentDetails
     end
+    
+    response.isbio = surveyQuestion.isbio
 
     saveTags(surveyRespondent, responseText, surveyQuestion.tags_label) if (!surveyQuestion.tags_label.empty? && surveyQuestion.question_type == :textfield) if surveyRespondent
 
