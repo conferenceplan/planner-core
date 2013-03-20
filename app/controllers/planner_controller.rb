@@ -38,7 +38,7 @@ private
     
     if (filters)
       queryParams = j.decode(filters)
-      if (queryParams)
+      if (queryParams && queryParams["rules"].any?)
         clausestr = ""
         queryParams["rules"].each do |subclause|
           # these are the select type filters - position 0 is the empty position and means it is not selected,
