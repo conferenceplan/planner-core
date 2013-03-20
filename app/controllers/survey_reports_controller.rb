@@ -91,32 +91,7 @@ class SurveyReportsController < PlannerController
   end
 
   def panelists_with_metadata
-     outfile = "panelist_details" + Time.now.strftime("%m-%d-%Y") + ".csv"
-     output = Array.new
-     output.push ['Name',
-                  'Start Day',
-                  'Start Time',
-                  'End Day',
-                  'End Time',
-                  'Max per Day',
-                  'Max Total',
-                  'Invitation Category',
-                  'Registered',
-                 ]
-     @names = search_survey('g6q1', '%')
-     @names.each do |n|
-        output.push [ n.GetFullPublicationName,
-                      n.GetSurveyStartDate.strftime('%a'),
-                      n.GetSurveyStartDate.strftime('%H:%M'),
-                      n.GetSurveyEndDate.strftime('%a'),
-                      n.GetSurveyEndDate.strftime('%H:%M'),
-                      n.GetSurveyQuestionResponse('g6q2'), 
-                      n.GetSurveyQuestionResponse('g6q3'),
-                      n.invitation_category.nil? ? '--' : n.invitation_category.name.nil? ? '--' : n.invitation_category.name,
-                      n.registrationDetail.nil? ? '--' : n.registrationDetail.registration_type.nil? ? '--': n.registrationDetail.registration_type
-                    ]
-     end
-     csv_out_utf16(output, outfile)
+    @names = []
   end
 
 end
