@@ -2,47 +2,62 @@
 #
 #
 class SurveyReportsController < PlannerController
-  include SurveyReportHelpers
   include PlannerReportHelpers
   
   def index
   end
  
   def library_talks
-    @library_talkers = search_survey_exact('g93q7', '1')
+    @library_talkers = Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}, 
+                :conditions => {:survey_questions => {:id => 73}, :survey_responses => {:response => 62}},
+                :order => "people.last_name ASC"
   end
  
   def interviewable
-    @interviewable = search_survey_exact('g93q7', '4')
+    @interviewable = Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}, 
+                :conditions => {:survey_questions => {:id => 73}, :survey_responses => {:response => 68}},
+                :order => "people.last_name ASC"
   end
  
   def missing_bio
-    @missing_bio = Person.all :joins => 'join survey_respondents on people.id = survey_respondents.person_id left join edited_bios on survey_respondents.person_id = edited_bios.person_id', :conditions => "edited_bios.id is NULL and survey_respondents.attending = '1' and survey_respondents.submitted_survey = '1' and people.invitestatus_id = 5 and people.acceptance_status_id = 8", :order => 'last_name'
+    @missing_bio = Person.all :joins => {:survey_respondent => {:survey_respondent_detail => :survey_responses}}, 
+                :include => :edited_bio,
+                :conditions => {:survey_responses => {:isbio => true}, :edited_bios => { :person_id => nil} },
+                :order => "people.last_name ASC"
   end
-  
+
+  # TODO - these are a temp queries for LSC  
   def moderators
-    @moderators = search_survey_exact('g9q4', '1')
+    @moderators = Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}, 
+                :conditions => {:survey_questions => {:id => 56}, :survey_responses => {:response => 55}},
+                :order => "people.last_name ASC"
   end
  
   def music_night
-    @music_night = search_survey('g91q1', '%')
+    @music_night = Person.all :select => "people.*, survey_responses.response",
+                :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}, 
+                :conditions => "survey_questions.id = 61 AND survey_responses.response <> ''", #{:survey_questions => {:id => 61}, :survey_responses => {:response => '' }},
+                :order => "people.last_name ASC"
   end
 
   def art_night
-    @art_night = search_survey('g92q1', '%')
+    @art_night = Person.all :select => "people.*, survey_responses.response",
+                :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}, 
+                :conditions => "survey_questions.id = 62 AND survey_responses.response <> ''", #{:survey_questions => {:id => 61}, :survey_responses => {:response => '' }},
+                :order => "people.last_name ASC"
   end
 
   def program_types
-    @program_types = GetProgramTypes()
-    @interested = search_survey_exact('g9q1', params[:type_id])
+    # @program_types = GetProgramTypes()
+    # @interested = search_survey_exact('g9q1', params[:type_id])
   end
  
   def free_text
-    @free_text_qs = GetFreeTextQuestions()
-    if params[:q_id]
-      search_string = '%'+params[:search_string]+'%'
-      @names = search_survey(params[:q_id], search_string)
-    end
+    # @free_text_qs = GetFreeTextQuestions()
+    # if params[:q_id]
+      # search_string = '%'+params[:search_string]+'%'
+      # @names = search_survey(params[:q_id], search_string)
+    # end
   end
   
   def tags_by_context
@@ -68,11 +83,11 @@ class SurveyReportsController < PlannerController
   end
  
   def available_during
-    @conflicts = GetConflictItems()
-    if params[:conflict_id]
-      (q_id, target) = params[:conflict_id].split('|')
-      @names = search_survey_negative(q_id, target)
-    end
+    # @conflicts = GetConflictItems()
+    # if params[:conflict_id]
+      # (q_id, target) = params[:conflict_id].split('|')
+      # @names = search_survey_negative(q_id, target)
+    # end
   end
 
   def panelists_with_metadata

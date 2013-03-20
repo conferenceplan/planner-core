@@ -3,10 +3,25 @@
   <%= render_cell :survey_report, :javascript %>
 <% end %>
 
-<div class='survey-query-selector' id='survey-query-selector'>
-<%= render_cell :survey_report, :show %>
-<div>
-<div class='survey-query-results' id='survey-query-results'>
-<%= render_cell :survey_report, :results %>
-<div>
+<div class='container_12'>
+    <div class='grid_3 survey-query-query-area'>
+        <div class='survey-query-control' id='survey-query-control'>
+            <%= render_cell :survey_report, :controller %>
+        </div>
+        <div class='survey-query-my-queries' id='survey-query-my-queries'>
+            <%= render_cell :survey_report, :myQueries %>
+        </div>
+        <div class='survey-query-shared-queries' id='survey-query-shared-queries'>
+            <%= render_cell :survey_report, :sharedQueries %>
+        </div>
+    </div>
+    <div class='grid_9 survey-query-result-area'>
+        <div class='survey-query-current-query' id='survey-query-current-query'>
+            <%= render_cell :survey_report, :currentQuery    %>
+        </div>
+        <div class='survey-query-results' id='survey-query-results'>
+            <%= render_cell :survey_report, :results %>
+        </div>
+    </div>
+</div>
     
