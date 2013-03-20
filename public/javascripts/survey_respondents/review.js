@@ -64,11 +64,11 @@ jQuery(document).ready(function(){
         colModel: [
 		{
             name: 'respondent[first_name]',
-            index: 'survey_respondents.first_name',
+            index: 'people.first_name',
             width: 250,
         },{
 			name:'respondent[last_name]',
-			index:'survey_respondents.last_name',
+			index:'people.last_name',
 			width: 250,
         },{
 			name:'Update Date',
