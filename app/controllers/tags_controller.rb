@@ -34,17 +34,30 @@ class TagsController < PlannerController
     # For each of the possible contexts get the tags...
     @className = params[:class]
     
-    if isok(@className)
+    if isok(@className) && @className == 'ProgrammeItem'
       obj = eval(@className).find(params[:id])
       
       # 1. Get the set of contexts
-      contexts = getContexts(@className)
+      contexts = TagContext.all
       # 2. For each context get the tags for thie person and add them to the results
       @allTags = Hash.new
       contexts.each do |context|
-        tags = obj.tag_list_on( context )
+        tags = obj.tag_list_on( context.name )
         if tags != nil
-          @allTags[context] = tags
+          @allTags[context.name] = tags
+        end
+      end
+    elsif isok(@className)
+      obj = eval(@className).find(params[:id])
+      
+      # 1. Get the set of contexts
+      contexts = TagContext.all
+      # 2. For each context get the tags for thie person and add them to the results
+      @allTags = Hash.new
+      contexts.each do |context|
+        tags = obj.tag_list_on( context.name )
+        if tags != nil
+          @allTags[context.name] = tags
         end
       end
     end
