@@ -9,13 +9,13 @@ class SurveyReportsController < PlannerController
  
   def library_talks
     @library_talkers = Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}, 
-                :conditions => {:survey_questions => {:id => 73}, :survey_responses => {:response => 62}},
+                :conditions => {:survey_questions => {:id => 73}, :survey_responses => {:response => 'I am willing to do a reading or a talk at a local library.'}},
                 :order => "people.last_name ASC"
   end
  
   def interviewable
     @interviewable = Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}, 
-                :conditions => {:survey_questions => {:id => 73}, :survey_responses => {:response => 68}},
+                :conditions => {:survey_questions => {:id => 73}, :survey_responses => {:response => 'I am willing to be interviewed by the media.'}},
                 :order => "people.last_name ASC"
   end
  
