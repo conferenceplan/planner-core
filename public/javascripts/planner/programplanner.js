@@ -259,7 +259,7 @@ function initialiseRoomSelection() {
             $(this).html(response);
             jQuery("#room-selection > .room-check > input").click(function(event){
                 roomList = '';
-                jQuery("#room-selection").find("input[type=checkbox][checked]").each( 
+                jQuery("#room-selection").find("input:checked").each( 
                     function() { 
                         if (roomList.length > 0) {
                             roomList += ',';

@@ -1,0 +1,26 @@
+<div class='tags'>
+	<% @allTags.each do |context, tags| %>
+	    <div class="tag-context-title-area">
+		<div class="tag-context-title"><%= context %></div>
+
+		<div class='tag-controls'>
+			<div class='edit-form'>
+				<%= link_to "new", {:controller => 'tags', :action => 'edit', :class => @className, :context => context}, :class => 'entrydialog' %>
+			</div>
+		</div>
+       
+        </div>
+		<div class='tag-area'>
+		<%tags.each do |t|%>
+			<div class="tag">
+		  		<div class="tag-name"><%= t %></div>
+				<%link_to({:controller => 'tags', :action => 'remove', :class => @className, :context => context, :tag => t}, :class => 'deletetag') do%>
+					<div class="ui-icon ui-icon-close" style="float: left;"/>
+				<%end%>
+			</div>
+		<% end %>
+        </div>
+    <% end %>
+</div>
+<div class='message' id='tab-messages'></div>
+<div class="jqmWindow" id="edialog">Please wait...</div>

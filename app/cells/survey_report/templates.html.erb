@@ -1,0 +1,53 @@
+
+<script type="text/template" id="predicate-template">
+    <select class="questionID" name="questionID">
+    <option value="">--select a question--</option>
+    {{_.each(col.models, function(n) { }}
+        <option value="{{= n.get('id')}}" {{= n.get('id') == question_id ? 'selected="SELECTED"' : ''}}>{{= n.get('question') }}</option>
+    {{ });}}
+    </select>
+    <!-- TODO - mark selected -->
+    <select class="operator" name="operator">
+        <option value="">--select a question--</option>
+        <option value="contains">contains</option>
+        <option value="does not contain">does not contain</option>
+        <option value="equal">==</option>
+        <option value="not equal">!=</option>
+    </select>
+    <input type="text" class="query-text" />
+    <button class="remove-button">del</button>
+</script>
+
+<script type="text/template" id="query-template">
+    <div>Match {{= operation }}
+    <select id="match" name="match">
+        <option value="ANY" {{= operation == 'ANY' ? 'selected="SELECTED"' : ''}}>Any</option>
+        <option value="ALL" {{= operation == 'ALL' ? 'selected="SELECTED"' : ''}}>All</option>
+    </select>
+    <button class="add-button">ADD</button>
+    <button class="run-button">Run</button>
+    </div>
+    <ul id="query-list"></ul>
+</script>
+
+<!-- The dialog for creating a new query -->
+<script type="text/template" id="new-query-template">
+    <select id="surveyID" name="surveyID">
+    <option value="">--select a survey--</option>
+    {{_.each(col.models, function(n) { }}
+        <option value="{{= n.get('id')}}" {{= n.get('id') == selected ? 'selected="SELECTED"' : ''}}>{{= n.get('name') }}</option>
+    {{ });}}
+    </select>
+    <button id="close-button">Cancel</button>
+    <button id="save-button">Create</button>
+</script>
+
+<script type="text/template" id="query-ctl-template">
+    <button class="new-query">New Query</button>
+</script>
+
+<script type="text/template" id="query-results-template">
+    <table id="results-t" class="result-table"><tr><td/></tr></table>
+    <div id="result-pager" />
+</script>
+

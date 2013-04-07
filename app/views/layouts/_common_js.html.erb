@@ -1,13 +1,18 @@
-<%= javascript_include_tag 'jquery-1.4.2.min' %>
-<%= javascript_include_tag 'jquery.timers-1.2' %>
-<%= javascript_include_tag 'jquery.freeow' %>
-<%= javascript_include_tag 'jquery.form' %>
-<%= javascript_include_tag 'jquery-ui-1.8.1.custom.min' %>
-<%= javascript_include_tag 'jrails' %>
-<%= javascript_include_tag 'grid.locale-en' if params[:action] == 'index' %>
-<%= javascript_include_tag 'jquery.jqGrid.min' if params[:action] == 'index' %>
-<%= javascript_include_tag 'jquery.timeentry.min' %>
-<%= javascript_include_tag 'backbone-min' %>
+<%= javascript_include_tag 'vendor/jquery-1.8.3' %>
+<%= javascript_include_tag 'vendor/jquery-ui-1.9.2.custom.min' %>
+<%= javascript_include_tag 'vendor/jquery-migrate-1.1.1' %>
+<%= javascript_include_tag 'vendor/grid.locale-en' if params[:action] == 'index' %>
+<%= javascript_include_tag 'vendor/jquery.jqGrid.src' if params[:action] == 'index' %>
+
+<%= javascript_include_tag 'vendor/jquery.timers-1.2' %>
+<%= javascript_include_tag 'vendor/jquery.freeow' %>
+<%= javascript_include_tag 'vendor/jquery.form' %>
+<%= javascript_include_tag 'vendor/jrails' %>
+<%= javascript_include_tag 'vendor/jquery.timeentry.min' %>
+
+<%= javascript_include_tag 'vendor/underscore-min' %>
+<%= javascript_include_tag 'vendor/backbone-min' %>
+<%= javascript_include_tag 'vendor/backbone-relational' %>
 <%= javascript_include_tag 'application'%>
 <%= javascript_include_tag 'planIt' if params[:action] == 'index' %>
         <% if protect_against_forgery? %>
