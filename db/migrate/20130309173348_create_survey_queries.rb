@@ -5,7 +5,7 @@ class CreateSurveyQueries < ActiveRecord::Migration
       # Name
       t.string :name
       # Operation
-      t.boolean :operation # indicate whether to AND or OR this with the rest of the queries
+      t.string :operation # indicate whether to ALL or ANY i.e. to AND or OR this with the rest of the queries
       
       # Survey id
       t.integer :survey_id
