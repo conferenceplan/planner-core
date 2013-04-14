@@ -4,7 +4,7 @@
     <select class="questionID" name="questionID">
     <option value="">--select a question--</option>
     {{_.each(col.models, function(n) { }}
-        <option value="{{= n.get('id')}}" {{= n.get('id') == survey_question_id ? 'selected="SELECTED"' : ''}}>{{= n.get('question') }} {{= n.get('question_type') }}</option>
+        <option value="{{= n.get('id')}}" {{= n.get('id') == survey_question_id ? 'selected="SELECTED"' : ''}}>{{= n.get('question') }}</option>
     {{ });}}
     </select>
     </div>

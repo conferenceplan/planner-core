@@ -59,16 +59,20 @@ class SurveyReportsController < PlannerController
   def createJoinPart1(queryPredicates, metadata)
     selectPart = 'select res.id, res.first_name, res.last_name, res.suffix, res.survey_respondent_id'
     nbrOfResponse = 1
+    questionIds = Set.new
     
     if (queryPredicates)
       queryPredicates.each  do |subclause|
+        if !questionIds.include?(subclause["survey_question_id"].to_i)
           selectPart += ', res.q' +  nbrOfResponse.to_s 
           if ((metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text") || (metadata['r' + nbrOfResponse.to_s]['question_type'].include? "multiplechoice"))
             selectPart += ', res.r' + nbrOfResponse.to_s + ' as r' +  nbrOfResponse.to_s
           else  
             selectPart += ', IFNULL(a' + nbrOfResponse.to_s + '.answer,res.r' + nbrOfResponse.to_s + ') as r' +  nbrOfResponse.to_s
           end
-          nbrOfResponse += 1
+          questionIds.add(subclause["survey_question_id"].to_i)
+        end
+        nbrOfResponse += 1
       end
     end
     
@@ -78,11 +82,15 @@ class SurveyReportsController < PlannerController
   def createJoinPart2(queryPredicates, metadata)
     result = ' ) res '
     nbrOfResponse = 1
+    questionIds = Set.new
 
     if (queryPredicates)
       queryPredicates.each  do |subclause|
-        if (! metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text")
-          result += ' left join survey_answers a' + nbrOfResponse.to_s + ' on a' + nbrOfResponse.to_s + '.id = res.r' + nbrOfResponse.to_s
+        if !questionIds.include?(subclause["survey_question_id"].to_i)
+          if (! metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text")
+            result += ' left join survey_answers a' + nbrOfResponse.to_s + ' on a' + nbrOfResponse.to_s + '.id = res.r' + nbrOfResponse.to_s
+          end
+          questionIds.add(subclause["survey_question_id"].to_i)
         end
         nbrOfResponse += 1
       end
