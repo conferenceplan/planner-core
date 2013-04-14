@@ -57,18 +57,20 @@ class SurveyReportsController < PlannerController
   end
   
   def createJoinPart1(queryPredicates, metadata)
-    selectPart = 'select res.id, res.first_name, res.last_name, res.suffix, res.survey_respondent_id'
+    selectPart = 'select @rownum:=@rownum+1 as id, res.id as oid, res.first_name, res.last_name, res.suffix, res.survey_respondent_id'
     nbrOfResponse = 1
     questionIds = Set.new
     
     if (queryPredicates)
       queryPredicates.each  do |subclause|
         if !questionIds.include?(subclause["survey_question_id"].to_i)
-          selectPart += ', res.q' +  nbrOfResponse.to_s 
-          if ((metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text") || (metadata['r' + nbrOfResponse.to_s]['question_type'].include? "multiplechoice"))
-            selectPart += ', res.r' + nbrOfResponse.to_s + ' as r' +  nbrOfResponse.to_s
-          else  
+          selectPart += ', res.q' +  nbrOfResponse.to_s
+          
+#:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone
+          if ((metadata['r' + nbrOfResponse.to_s]['question_type'].include? "singlechoice"))
             selectPart += ', IFNULL(a' + nbrOfResponse.to_s + '.answer,res.r' + nbrOfResponse.to_s + ') as r' +  nbrOfResponse.to_s
+          else  
+            selectPart += ', res.r' + nbrOfResponse.to_s + ' as r' +  nbrOfResponse.to_s
           end
           questionIds.add(subclause["survey_question_id"].to_i)
         end
@@ -76,7 +78,7 @@ class SurveyReportsController < PlannerController
       end
     end
     
-    return selectPart + ' from ( '
+    return selectPart + ' from (SELECT @rownum:=0) rn, ( '
   end
 
   def createJoinPart2(queryPredicates, metadata)
@@ -87,7 +89,8 @@ class SurveyReportsController < PlannerController
     if (queryPredicates)
       queryPredicates.each  do |subclause|
         if !questionIds.include?(subclause["survey_question_id"].to_i)
-          if (! metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text")
+          if ((metadata['r' + nbrOfResponse.to_s]['question_type'].include? "singlechoice"))
+          # if (! metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text")
             result += ' left join survey_answers a' + nbrOfResponse.to_s + ' on a' + nbrOfResponse.to_s + '.id = res.r' + nbrOfResponse.to_s
           end
           questionIds.add(subclause["survey_question_id"].to_i)
