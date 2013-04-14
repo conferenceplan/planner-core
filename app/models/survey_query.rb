@@ -1,13 +1,14 @@
 
-# SurveyQuestion contains 1 or more conditions
-# SurveyQuestionCondition - question operation value
+# SurveyQuestion contains 1 or more predicates
+# SurveyQuestionPredicate - question operation value
 
 class SurveyQuery < ActiveRecord::Base
   
-  has_many :survey_query_conditions
+  # queryPredicates
+  has_many :survey_query_predicates
   
-  # List of anded statements
+  accepts_nested_attributes_for :survey_query_predicates, :allow_destroy => true
   
-  # List of or'd statements
-
+  belongs_to :user
+  
 end

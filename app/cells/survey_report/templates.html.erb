@@ -1,33 +1,68 @@
 
 <script type="text/template" id="predicate-template">
+    <div class="report-select">
     <select class="questionID" name="questionID">
     <option value="">--select a question--</option>
     {{_.each(col.models, function(n) { }}
-        <option value="{{= n.get('id')}}" {{= n.get('id') == question_id ? 'selected="SELECTED"' : ''}}>{{= n.get('question') }}</option>
+        <option value="{{= n.get('id')}}" {{= n.get('id') == survey_question_id ? 'selected="SELECTED"' : ''}}>{{= n.get('question') }} {{= n.get('question_type') }}</option>
     {{ });}}
     </select>
-    <!-- TODO - mark selected -->
-    <select class="operator" name="operator">
-        <option value="">--select a question--</option>
-        <option value="contains">contains</option>
-        <option value="does not contain">does not contain</option>
-        <option value="equal">==</option>
-        <option value="not equal">!=</option>
-    </select>
-    <input type="text" class="query-text" />
+    </div>
+    <!-- The select field needs to depend on the question 
+        question has answers then we use that otherwise it is treated as text
+        -->
+    {{ var result = _.find(col.models, function(obj) { return obj.id == survey_question_id }); }}
+    <!-- TODO enable or disable text depending on option -->
+    {{ if (result && (result.get('survey_answers').length > 0)) { }}
+        <div class="report-operator">
+        <select class="operator" name="operator">
+            <option value="">--select operation--</option>
+            <option value="is" {{= operation == 'is' ? 'selected="SELECTED"' : ''}}>is</option>
+            <option value="is not" {{= operation == 'is not' ? 'selected="SELECTED"' : ''}}>is not</option>
+        </select>
+        </div>
+        <div class="report-select">
+        <select class="answerId" name="answerId">
+            <option value="">--select answer--</option>
+            {{_.each(result.get('survey_answers'), function(n, idx, lst) { }}
+                {{ if (this.get('question_type') == "multiplechoice") { }}
+                    <option value="{{= n.answer }}" {{= n.answer == value ? 'selected="SELECTED"' : ''}}>{{= n.answer }}</option>
+                {{ } else { }}
+                    <option value="{{= n.id }}" {{= n.id == value ? 'selected="SELECTED"' : ''}}>{{= n.answer }}</option>
+                {{ }; }}
+            {{ }, result);}}
+        </select>
+        </div>
+    {{ } else { }}
+        <div class="report-operator">
+        <select class="operator" name="operator">
+            <option value="">--select operation--</option>
+            <option value="contains" {{= operation == 'contains' ? 'selected="SELECTED"' : ''}}>contains</option>
+            <option value="does not contain" {{= operation == 'does not contain' ? 'selected="SELECTED"' : ''}}>does not contain</option>
+            <option value="answered" {{= operation == 'answered' ? 'selected="SELECTED"' : ''}}>answered</option>
+            <option value="not answered" {{= operation == 'not answered' ? 'selected="SELECTED"' : ''}}>not answered</option>
+        </select>
+        </div>
+        <div class="report-text-input">
+        <input type="text" class="query-text" value="{{= value }}"/>
+        </div>
+    {{ }; }}
+    <div class="report-button">
     <button class="remove-button">del</button>
+    </div>
 </script>
 
 <script type="text/template" id="query-template">
-    <div>Match {{= operation }}
+    <div>Match {{= operation }} {{= name }} 
     <select id="match" name="match">
         <option value="ANY" {{= operation == 'ANY' ? 'selected="SELECTED"' : ''}}>Any</option>
         <option value="ALL" {{= operation == 'ALL' ? 'selected="SELECTED"' : ''}}>All</option>
     </select>
     <button class="add-button">ADD</button>
     <button class="run-button">Run</button>
+    <input type="text" class="query-name" value="{{= name }}"/>
+    <button class="save-button">Save</button>
     </div>
-    <ul id="query-list"></ul>
 </script>
 
 <!-- The dialog for creating a new query -->
@@ -39,7 +74,7 @@
     {{ });}}
     </select>
     <button id="close-button">Cancel</button>
-    <button id="save-button">Create</button>
+    <button id="create-button">Create</button>
 </script>
 
 <script type="text/template" id="query-ctl-template">

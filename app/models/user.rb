@@ -8,4 +8,6 @@ class User < ActiveRecord::Base
   def role_symbols
    (roles || []).map {|r| r.title.to_sym}
   end
+  
+  has_many :survey_queries
 end

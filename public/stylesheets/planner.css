@@ -354,3 +354,45 @@ div.tag-count {
 	border-width: 1px;
 	margin-bottom: 5px;    
 }
+
+
+#query-list li {
+    list-style-type: none;
+    float:  left;
+}
+
+div.report-select select {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
+ul#query-list {
+    display: inline-block;
+}
+
+div.report-select {
+   background: transparent;
+   width: 230px;
+   -webkit-appearance: none;
+    float: left;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-right: 5px;
+}
+
+div.report-operator {
+   background: transparent;
+   -webkit-appearance: none;
+    float: left;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-right: 5px;
+}
+
+div.report-button,
+div.report-text-input {
+    float: left;
+}

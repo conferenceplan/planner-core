@@ -18,13 +18,13 @@ class SurveyReportsController < PlannerController
   def questions
     surveyId = params[:survey]
     
-    questions = SurveyQuestion.all :joins => {:survey_group => :survey},
+    questions = SurveyQuestion.all :joins => {:survey_group => :survey}, :include => :survey_answers,
                 :conditions => {:surveys => {:id => surveyId}}
     
     ActiveRecord::Base.include_root_in_json = false
     # (:only => [ :id, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order ]), 
-    render_json questions.to_json(:only => [ :id, :name, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order ],
-                                  :include => {:survey_group => {}}
+    render_json questions.to_json(:only => [ :id, :name, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order, :answer ],
+                                  :include => {:survey_group => {}, :survey_answers => {}}
                                 ), :content_type => 'application/json'
   end
   
@@ -33,12 +33,10 @@ class SurveyReportsController < PlannerController
     j = ActiveSupport::JSON
     queryArg = j.decode(q)
     
-    selectStr = createSelectPart(queryArg["queryPredicates"], queryArg["operation"])
+    selectStr = createSelectPart(queryArg["survey_query_predicates"], queryArg["operation"])
     logger.debug selectStr
-    query = createQuery(queryArg["queryPredicates"], queryArg["operation"])
+    query = createQuery(queryArg["survey_query_predicates"], queryArg["operation"])
     count = SurveyRespondentDetail.count_by_sql('SELECT count(*) ' + query[0])
-    
-    resultSet = SurveyRespondentDetail.connection.select_all(selectStr + query[0] + ' order by last_name') #ActiveRecord::Base.connection.select_rows(query)
     
     # logger.debug resultSet
     cols = SurveyRespondentDetail.connection.select_all("select id, question, question_type from survey_questions where id in (" + query[1].to_a.join(',') + ')')
@@ -46,14 +44,51 @@ class SurveyReportsController < PlannerController
     metadata = {}
     if (cols.size() > 0)
       cols.each do |c|
-        metadata['r'+ query[2][c['id']].to_s] = c
+        metadata['r'+ query[2][c['id'].to_i].to_s] = c
       end
     end
+
+    resultSet = SurveyRespondentDetail.connection.select_all(createJoinPart1(queryArg["survey_query_predicates"], metadata) + selectStr + query[0] + ' order by last_name' + createJoinPart2(queryArg["survey_query_predicates"], metadata))
     
     ActiveRecord::Base.include_root_in_json = false # TODO - check that this is safe, and a better place to put it
 
     render_json '{ "id" : 1, "totalpages": 1, "currpage": 1, "totalrecords": ' + count.to_s + ', "userdata": ' + metadata.to_json() + ', "rowdata": ' + resultSet.to_json() + '}',
                :content_type => 'application/json'
+  end
+  
+  def createJoinPart1(queryPredicates, metadata)
+    selectPart = 'select res.id, res.first_name, res.last_name, res.suffix, res.survey_respondent_id'
+    nbrOfResponse = 1
+    
+    if (queryPredicates)
+      queryPredicates.each  do |subclause|
+          selectPart += ', res.q' +  nbrOfResponse.to_s 
+          if ((metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text") || (metadata['r' + nbrOfResponse.to_s]['question_type'].include? "multiplechoice"))
+            selectPart += ', res.r' + nbrOfResponse.to_s + ' as r' +  nbrOfResponse.to_s
+          else  
+            selectPart += ', IFNULL(a' + nbrOfResponse.to_s + '.answer,res.r' + nbrOfResponse.to_s + ') as r' +  nbrOfResponse.to_s
+          end
+          nbrOfResponse += 1
+      end
+    end
+    
+    return selectPart + ' from ( '
+  end
+
+  def createJoinPart2(queryPredicates, metadata)
+    result = ' ) res '
+    nbrOfResponse = 1
+
+    if (queryPredicates)
+      queryPredicates.each  do |subclause|
+        if (! metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text")
+          result += ' left join survey_answers a' + nbrOfResponse.to_s + ' on a' + nbrOfResponse.to_s + '.id = res.r' + nbrOfResponse.to_s
+        end
+        nbrOfResponse += 1
+      end
+    end
+    
+    return result
   end
   
   def createSelectPart(queryPredicates, operation)
@@ -64,11 +99,12 @@ class SurveyReportsController < PlannerController
     if (queryPredicates)
       queryPredicates.each  do |subclause|
         # select part
-        if !questionIds.include?(subclause["question_id"])
-        selectPart += ', r' + nbrOfResponse.to_s + '.survey_question_id as q' +  nbrOfResponse.to_s + ', r' + nbrOfResponse.to_s + '.response as r' + nbrOfResponse.to_s
-        questionIds.add(subclause["question_id"])
+        if !questionIds.include?(subclause["survey_question_id"])
+          selectPart += ', r' + nbrOfResponse.to_s + '.survey_question_id as q' +  nbrOfResponse.to_s 
+          selectPart += ', r' + nbrOfResponse.to_s + '.response as r' + nbrOfResponse.to_s
+          questionIds.add(subclause["survey_question_id"])
         
-        nbrOfResponse += 1
+          nbrOfResponse += 1
         end
       end
     end  
@@ -76,10 +112,7 @@ class SurveyReportsController < PlannerController
     return selectPart
   end
 
-  # TODO - change generated query so that if the two clauses are for the same filed we do not need to add to the fromPart
-  # TODO - we need to return meta information
   def createQuery(queryPredicates, operation)
-    # selectPart = 'SELECT d.id, d.first_name, d.last_name, d.suffix, d.survey_respondent_id'
     fromPart = ' FROM survey_respondent_details d'
     wherePart = ' WHERE '
     andPart = ' AND ('
@@ -88,30 +121,41 @@ class SurveyReportsController < PlannerController
     mapping = {}
 
     if (queryPredicates)
+      lastid = queryPredicates.count() 
       queryPredicates.each  do |subclause|
-        # select part
-        # selectPart += ', r' + nbrOfResponse.to_s + '.survey_question_id as q' +  nbrOfResponse.to_s + ', r' + nbrOfResponse.to_s + '.response as r' + nbrOfResponse.to_s
+        op = mapToOperator(subclause['operation'])
+        logger.debug op
         
         # where part
-        if !questionIds.include?(subclause["question_id"])
+        if !questionIds.include?(subclause["survey_question_id"].to_i)
           # from part
           fromPart += ', survey_responses as r' + nbrOfResponse.to_s
-        
+          
           wherePart += ' AND ' if nbrOfResponse > 1
-          wherePart += 'r' + nbrOfResponse.to_s + '.survey_respondent_detail_id = d.id AND r' + nbrOfResponse.to_s + ".survey_question_id = '" + subclause["question_id"].to_s + "'"
-          questionIds.add(subclause["question_id"])
+          wherePart += 'r' + nbrOfResponse.to_s + '.survey_respondent_detail_id = d.id AND r' + nbrOfResponse.to_s + ".survey_question_id = '" + subclause["survey_question_id"].to_s + "'"
+          questionIds.add(subclause["survey_question_id"].to_i)
           
           # andPart
           andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
-          andPart += 'r' + nbrOfResponse.to_s + ".response like '%" + subclause["value"] + "%'" # TODO - change like depending on operator
+          andPart += 'r' + nbrOfResponse.to_s + ".response " + op[0]
+          andPart += " '"
+          andPart += "%" if (op[1] == true && op[2] == false)
+          andPart += subclause["value"] if (op[1] == true)
+          andPart += "%" if (op[1] == true && op[2] == false)
+          andPart += "'"
           
-          mapping[subclause["question_id"]] = nbrOfResponse
+          mapping[subclause["survey_question_id"]] = nbrOfResponse
         
           nbrOfResponse += 1
         else
           # andPart
           andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
-          andPart += 'r' + (nbrOfResponse -1).to_s + ".response like '%" + subclause["value"] + "%'" # TODO - change like depending on operator
+          andPart += 'r' + (nbrOfResponse -1).to_s + ".response " + op[0] 
+          andPart += " '"
+          andPart += "%" if (op[1] == true && op[2] == false)
+          andPart += subclause["value"] if (op[1] == true)
+          andPart += "%" if (op[1] == true && op[2] == false)
+          andPart += "'"
         end
         
       end
@@ -119,44 +163,34 @@ class SurveyReportsController < PlannerController
     
     return [fromPart + wherePart + andPart + ')', questionIds, mapping]
   end
+  
+  def mapToOperator(operation)
+    op = ''
+    useValue = true
+    noWildcard = false
 
-  def createClauses(queryPredicates, operation)
-    clause = nil
-    fields = Array::new
-    
-    if (queryPredicates)
-      clausestr = ""
-      queryPredicates.each  do |subclause|
-        if clausestr.length > 0 
-          # if operation == 'ALL'
-            # clausestr << ' ' + 'AND' + ' '
-          # else
-            # clausestr << ' ' + 'OR' + ' '
-          # end
-          clausestr << ' ' + 'OR' + ' '
-        end
-        clausestr << "("
-        clausestr << "survey_question_id = ? AND "
-        if subclause["operation"] == 'contains'
-          clausestr << "response like ? "
-        elsif subclause[operation] == 'does not contain' 
-          clausestr << "response not like ? "
-        end
-        clausestr << ")"
-
-        fields << subclause["question_id"]
-        fields << '%' + subclause["value"] + '%'
-      end
-      # logger.debug fields
-      clause = [clausestr] + fields
+    case operation
+    when 'does not contain'
+      op = ' not like '
+    when 'answered'
+      op = " != '' "
+      useValue = false
+    when 'not answered'
+      op = " = '' "
+      useValue = false
+    when 'is not'
+      op = " != "
+      noWildcard = true
+    when 'is'
+      op = " = "
+      noWildcard = true
+    else
+      op = ' like '
     end
-    
-    # logger.debug clause
-    
-    return clause
+
+    return [op, useValue, noWildcard]    
   end
 
- 
   def library_talks
     @library_talkers = Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}, 
                 :conditions => {:survey_questions => {:id => 73}, :survey_responses => {:response => 'I am willing to do a reading or a talk at a local library.'}},

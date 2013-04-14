@@ -1,4 +1,4 @@
-<%# 
+<%# TODO - namespace
 %>    
 <script type="text/javascript">
 //<![CDATA[
@@ -48,17 +48,6 @@ jQuery(document).ready(function() {
     });
     
     
-    // var tr = new ResultSet(
-    // { "id" : 1, "totalpages": 1, "currpage": 1, "totalrecords": 1, 
-    // rowdata: [{"survey_respondent_id":null,"first_name":"Bradford","lock_version":0,"survey_question_id":"1",
-    // "survey_respondent_detail_id":"13","created_at":"2012-12-12T00:59:38-05:00","updated_at":"2012-12-12T00:59:38-05:00",
-    // "suffix":"","response":"San Mateo, CA, USA","email":"bradlyau@aol.com","id":81,"survey_id":"1",
-    // "response6":null,"response5":null,"response4":null,"response3":null,"response2":null,"response1":null,"last_name":"Lyau",
-    // "isbio":null}]}
-    // );
-    // alert(JSON.stringify(tr.toJSON()));
-
-
     SurveyNameCollection = Backbone.Collection.extend({
         model : SurveyName,
         url : '/survey_reports/surveyNames'
@@ -68,8 +57,6 @@ jQuery(document).ready(function() {
         model : Question,
         url : '/survey_reports/questions'
     });
-
-
 
     //
     //
@@ -83,16 +70,16 @@ jQuery(document).ready(function() {
         // Collection predicates
         relations : [{
             type : Backbone.HasMany,
-            key : 'queryPredicates',
+            key : 'survey_query_predicates',
             relatedModel : 'QueryPredicate',
             //includeInJSON: Backbone.Model.prototype.idAttribute,
             collectionType : 'PredicateCollection', // ?????
             reverseRelation : {
-                key : 'surveyQuery',
+                key : 'survey_query_id',
             }
         }],
 
-        // urlRoot: '/survey_query', // URL for the save or update of a survey query i.e URL for the controller using REST based semantics
+        urlRoot: '/survey_query', // URL for the save or update of a survey query i.e URL for the controller using REST based semantics
     });
 
 
@@ -101,13 +88,20 @@ jQuery(document).ready(function() {
     //
     QueryPredicate = Backbone.RelationalModel.extend({
         defaults : {
-            question_id : '', // The id of the question from the database
+            survey_question_id : 0, // The id of the question from the database
             operation : '=', // The operation: =, <>, contains
             value : '' // The value that we are searching for
-        }
+        },
+        
+        sync : function() {
+            // do nowt, i.e. we do not want to comminicate individual change to the server. Done in bulk in Survey Query
+        },
+        
+        urlRoot: 'survey_query_predicate'
     });
 
-    PredicateCollection = Backbone.Collection.extend();
+    PredicateCollection = Backbone.Collection.extend({
+    });
     // TODO - add URL method to create a URL for the whole collection
 
     
@@ -142,10 +136,6 @@ jQuery(document).ready(function() {
             
             this.grid = $('.result-table').jqGrid({
                 colModel : colModel,
-                // [ 
-                    // {name:'First Name', jsonmap: "first_name", sortable:true}, 
-                    // {name:'Last Name', jsonmap: "last_name", sortable:true}, 
-                // ],
                 datatype: 'jsonstring',
                 datastr: this.resultsCollection.toJSON(),
                 jsonReader :{
@@ -157,7 +147,6 @@ jQuery(document).ready(function() {
                     id : "id",
                     // userdata : "userdata"
                 },
-                // rowNum: 2,
                 viewrecords: true,
                 height: "auto",
                 autowidth: true,
@@ -179,10 +168,6 @@ jQuery(document).ready(function() {
         },
     });
 
-
-
-
-
     //
     PredicateView = Backbone.View.extend({
         tagName : 'li',
@@ -190,14 +175,39 @@ jQuery(document).ready(function() {
         template : _.template($('#predicate-template').html()),
 
         events : {
+            'click .answerId' : 'selectAnswer',
             'click .questionID' : 'selectQuestion',
             'click .operator' : 'selectOperator',
             'blur .query-text' : 'selectText',
-            'click .remove-button' : 'removeQuestion',
+            'click .remove-button' : 'removePredicate',
         },
 
+        initialize : function() {
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'destroy', this.delPredicate);
+        },
+
+        render : function() {
+            if (this.model) {
+                if (this.model.has('survey_question_id')) {
+                    this.$el.html(this.template(_.extend({
+                        col : questionsCollection
+                    }, this.model.toJSON())));
+                }
+            } else {
+                this.$el.html("");
+            };
+            return this;
+        },
+        
         selectQuestion : function(ev) {
-            this.model.set("question_id", $(ev.currentTarget).val());
+            var oid = parseInt($(ev.currentTarget).val());
+            var result = _.find(questionsCollection.models, function(obj) { return obj.id == oid });
+            this.model.set("survey_question_id", oid);
+        },
+
+        selectAnswer : function(ev) {
+            this.model.set("value", $(ev.currentTarget).val());
         },
 
         selectOperator : function(ev) {
@@ -208,91 +218,91 @@ jQuery(document).ready(function() {
             this.model.set("value", $(ev.currentTarget).val());
         },
 
-        removeQuestion : function(ev) {
-            this.$el.html("");
-            this.model.destroy();
-            // remove from the model - now we need to update the view
+        delPredicate : function(ev) {
+            //this.$el.html(""); // update the view
+            this.remove();
         },
 
-        initialize : function() {
-        },
-
-        render : function() {
-            this.$el.html(this.template(_.extend({
-                col : questionsCollection
-            }, this.model.toJSON())));
-            return this;
+        removePredicate : function(ev) {
+            this.model.destroy(); // remove from the model
         },
     }); 
 
-  
-  
-  
-    // ResultRow = Backbone.Model.extend({});
-    // RowData = Backbone.Collection.extend({
-        // model : ResultRow
-    // });
-    // ResultSet = Backbone.Model.extend({
-        // url : '/survey_reports/runReport',
-//         
-        // defaults : { rowdata : [] },
-//         
-        // initialize : function() {
-            // this.rowdata = new RowData(this.get('rowdata'));
-            // // alert('HH');
-            // // //this.rowdata = this.get('rowdata');
-            // // _.bindAll(this, 'fetch_success');
-            // // this.bind('change', this.fetch_success);
-        // },
-//         
-        // parse : function(response, options) {
-            // alert(response);
-//             
-            // return response;
-        // }
-//         
-        // // fetch_success : function() {
-            // // this.rowdata = new RowData(this.get('rowdata'))
-        // // }
-    // });
-
     QueryView = Backbone.View.extend({
-        el : '#queryapp',
+        tagName : 'div',
+        // el : '#queryapp',
 
         selected : 0,
-        // operation : 'ANY',
 
         template : _.template($('#query-template').html()),
 
+        reset : function() {
+            if (this.model) {
+                //this.model.get('survey_query_predicates').reset();
+                var col = this.model.get('survey_query_predicates');
+                var toClear = [];
+                while ( (c = col.models.pop()) ) { //{ silent : true }
+                    toClear.push(c);
+                    //c.clear();  //{ silent : true }
+                };
+                _.each(toClear, function(el) { el.clear(); } );
+                this.model = null;
+            };
+            if (this.questionsCollection) {
+                this.questionsCollection = null;
+            };
+            
+            //this.$el.html(""); // update the view
+            this.remove();
+        },
+        
         render : function() {
-            this.$el.html(this.template({
-                operation : this.model.get('operation')
-            }));
-            // {col : questionsCollection, selected : this.selected}
+            // alert("render qv");
+            // this.$el.append(this.template(this.model.toJSON()));
+            
+            this.$el.html(this.template(this.model.toJSON()));
+            
             return this;
         },
 
         initialize : function() {
-            this.model.on('remove:queryPredicates', this.elementRemoved, this)
+            this.model.on('remove:survey_query_predicates', this.removePredicate, this);
+            this.model.on('add:survey_query_predicates', this.addPredicate, this);
+            this.model.on('reset', this.reset, this);
+            
+            this.model.on('change', this.render, this); // or 'change' ????
         },
-
-        elementRemoved : function(removed, related) {
-            this.$('#query-list li:empty').remove();
+        
+        removePredicate : function(removed, related) {
+            if (! removed.get('id')) { // If the id does not exist in the backend
+               removed.destroy();
+            }
         },
 
         events : {
             "click .add-button" : "addOne",
             "click .run-button" : "run",
             'click #match' : 'selectMatch',
+            "click .save-button" : "save",
+            'blur .query-name' : 'selectText',
         },
         
+        selectText : function(ev) {
+            if (this.model) {
+                this.model.set('name', $(ev.currentTarget).val());
+            };
+        },
+
+        save : function(ev) {
+            alert('TBD');
+            // this.model.save(null,{ wait: true });
+        },
+
         selectMatch : function(ev) {
             this.model.set('operation', $(ev.currentTarget).val());
         },
 
         run : function() {
-            var q = questionsCollection;
-
             resultSet = new ResultSet();
             resultSet.fetch({
                 type : 'POST',
@@ -303,30 +313,29 @@ jQuery(document).ready(function() {
                 success : function(model) {
                     if (this.resultView) {
                         this.resultView.resultsCollection = model;
-                        this.resultView.queryColl = q;
                     } else {
                         this.resultView = new ResultsView({});
                         this.resultView.resultsCollection = model;
-                        this.resultView.queryColl = q;
                     }
                     this.resultView.render();
                 }
             })
         },
-
+        
+        addPredicate : function(qp) {
+          var view = new PredicateView({
+              model : qp,
+              col : questionsCollection
+          });
+          $('#query-list').append(view.render().el);
+        },
+        
         addOne : function() {
             // create a new predicate add it to the collection and put it in the view
             var qp = new QueryPredicate();
-            //alert(JSON.stringify(qp.toJSON()));
             qp.set({
-                'surveyQuery' : this.model
+                'survey_query_id' : this.model
             });
-
-            var view = new PredicateView({
-                model : qp,
-                col : questionsCollection
-            });
-            $('#query-list').append(view.render().el);
         },
     }); 
 
@@ -354,12 +363,8 @@ jQuery(document).ready(function() {
 
         events : {
             'click #surveyID' : 'setSelected',
-            'click #save-button' : 'save',
+            'click #create-button' : 'createQuery',
             'click #close-button' : 'close',
-        },
-
-        createQuery : function() {
-            alert("selected = " + this.selected);
         },
 
         setSelected : function(ev) {
@@ -367,7 +372,7 @@ jQuery(document).ready(function() {
             this.selected = $(ev.currentTarget).val();
         },
 
-        save : function(ev) {
+        createQuery : function(ev) {
             // alert(this.selected);
             this.dialog.dialog('close');
 
@@ -377,21 +382,18 @@ jQuery(document).ready(function() {
             questionsCollection.fetch({
                 success : function(model) {
                     // and pass that to the next view
-                    CurrentQuery = new SurveyQuery;
                     if (this.qv) {
-                        //this.qv.remove;
-                        this.qv.questionsCollection = model;
-                        this.qv.model = CurrentQuery;
-                    } else {
-                        this.qv = new QueryView({
-                            questionsCollection : model,
-                            model : CurrentQuery
-                        });
-                    }
+                        this.qv.reset();
+                    };
+                    
+                    var currentQuery = new SurveyQuery;
+                    this.qv = new QueryView({
+                        questionsCollection : model,
+                        model : currentQuery
+                    });
 
-                    this.qv.render();
+                    $('#queryapp').append(this.qv.render().el);
 
-                    //return this.qv;
                 }
             });
         },
@@ -404,9 +406,6 @@ jQuery(document).ready(function() {
             this.render();
         },
     });
-
-  
-
 
     AppView = Backbone.View.extend({
         el : '#query-ctl',
@@ -450,9 +449,6 @@ jQuery(document).ready(function() {
         routes : {
         },
     });
-
-  
-    var CurrentQuery = new SurveyQuery;
 
     //
     //
