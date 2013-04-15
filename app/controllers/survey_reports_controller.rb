@@ -48,7 +48,7 @@ class SurveyReportsController < PlannerController
       end
     end
 
-    resultSet = SurveyRespondentDetail.connection.select_all(createJoinPart1(queryArg["survey_query_predicates"], metadata) + selectStr + query[0] + ' order by last_name' + createJoinPart2(queryArg["survey_query_predicates"], metadata))
+    resultSet = SurveyRespondentDetail.connection.select_all(createJoinPart1(queryArg["survey_query_predicates"], metadata, query[2]) + selectStr + query[0] + ' order by last_name' + createJoinPart2(queryArg["survey_query_predicates"], metadata, query[2]))
     
     ActiveRecord::Base.include_root_in_json = false # TODO - check that this is safe, and a better place to put it
 
@@ -56,46 +56,42 @@ class SurveyReportsController < PlannerController
                :content_type => 'application/json'
   end
   
-  def createJoinPart1(queryPredicates, metadata)
+  def createJoinPart1(queryPredicates, metadata, mapping)
     selectPart = 'select @rownum:=@rownum+1 as id, res.id as oid, res.first_name, res.last_name, res.suffix, res.survey_respondent_id'
-    nbrOfResponse = 1
     questionIds = Set.new
     
     if (queryPredicates)
       queryPredicates.each  do |subclause|
+        # if  metadata['r' + nbrOfResponse.to_s]
         if !questionIds.include?(subclause["survey_question_id"].to_i)
-          selectPart += ', res.q' +  nbrOfResponse.to_s
+          selectPart += ', res.q' +  mapping[subclause["survey_question_id"]].to_s
           
-#:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone
-          if ((metadata['r' + nbrOfResponse.to_s]['question_type'].include? "singlechoice"))
-            selectPart += ', IFNULL(a' + nbrOfResponse.to_s + '.answer,res.r' + nbrOfResponse.to_s + ') as r' +  nbrOfResponse.to_s
+          if ((metadata['r' + mapping[subclause["survey_question_id"]].to_s]['question_type'].include? "singlechoice"))
+            selectPart += ', IFNULL(a' + mapping[subclause["survey_question_id"]].to_s + '.answer,res.r' + mapping[subclause["survey_question_id"]].to_s + ') as r' +  mapping[subclause["survey_question_id"]].to_s
           else  
-            selectPart += ', res.r' + nbrOfResponse.to_s + ' as r' +  nbrOfResponse.to_s
+            selectPart += ', res.r' + mapping[subclause["survey_question_id"]].to_s + ' as r' +  mapping[subclause["survey_question_id"]].to_s
           end
           questionIds.add(subclause["survey_question_id"].to_i)
         end
-        nbrOfResponse += 1
       end
     end
     
     return selectPart + ' from (SELECT @rownum:=0) rn, ( '
   end
 
-  def createJoinPart2(queryPredicates, metadata)
+  def createJoinPart2(queryPredicates, metadata, mapping)
     result = ' ) res '
-    nbrOfResponse = 1
     questionIds = Set.new
 
     if (queryPredicates)
       queryPredicates.each  do |subclause|
+        # if  metadata['r' + nbrOfResponse.to_s]
         if !questionIds.include?(subclause["survey_question_id"].to_i)
-          if ((metadata['r' + nbrOfResponse.to_s]['question_type'].include? "singlechoice"))
-          # if (! metadata['r' + nbrOfResponse.to_s]['question_type'].include? "text")
-            result += ' left join survey_answers a' + nbrOfResponse.to_s + ' on a' + nbrOfResponse.to_s + '.id = res.r' + nbrOfResponse.to_s
+          if ((metadata['r' + mapping[subclause["survey_question_id"]].to_s]['question_type'].include? "singlechoice"))
+            result += ' left join survey_answers a' + mapping[subclause["survey_question_id"]].to_s + ' on a' + mapping[subclause["survey_question_id"]].to_s + '.id = res.r' + mapping[subclause["survey_question_id"]].to_s
           end
           questionIds.add(subclause["survey_question_id"].to_i)
         end
-        nbrOfResponse += 1
       end
     end
     
@@ -161,7 +157,7 @@ class SurveyReportsController < PlannerController
         else
           # andPart
           andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
-          andPart += 'r' + (nbrOfResponse -1).to_s + ".response " + op[0] 
+          andPart += 'r' + mapping[subclause["survey_question_id"]].to_s + ".response " + op[0] 
           andPart += " '"
           andPart += "%" if (op[1] == true && op[2] == false)
           andPart += subclause["value"] if (op[1] == true)
