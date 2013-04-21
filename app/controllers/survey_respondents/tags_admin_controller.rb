@@ -46,50 +46,34 @@ private
     return str;  
   end
 
-  # Mapping from the tag context to the survey question id
-  def initialize
-    @tagContexts = {
-      'scienceItems'  => 'g7q1',
-      'literature'    => 'g7q2',
-      'art'           => 'g7q3',
-      'media'         => 'g7q4',
-      'fandom'        => 'g7q5',
-      'nevada'        => 'g7q6',
-      'othertopics'   => 'g7q7',
-      'authors'       => 'g8q1'
-    }
-  end
-  
   def edit(context, old_value, new_value)
     respondents = SurveyRespondent.tagged_with(old_value, :on => context)
-    questionId = @tagContexts[context]
+    # questionId = @tagContexts[context]
     
     respondents.each do |respondent|
       tags = respondent.tag_counts_on(context)
     
       new_tags = tags.collect {|tag| (tag.name == old_value) ? new_value : tag.name }
       
-#       TODO - change for new survey mechanism
-      
       respondent.set_tag_list_on(context, new_tags.join(",") )
-
-      # smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-      # if smerf_forms_surveyrespondent
-        # str = smerf_forms_surveyrespondent.responses[questionId]
-        # str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? new_value : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-        # smerf_forms_surveyrespondent.responses[questionId] = str.compact.join(',')
-#       
-        # smerf_forms_surveyrespondent.save
-      # end
-      
       respondent.save
+      
+      if (respondent.person)
+        respondent.person.set_tag_list_on(context, new_tags.join(",") )
+        respondent.person.save
+      end
     end
+    
+    responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
+    responses.each do |response|
+      response.response = response.response.sub(Regexp.new(old_value),new_value)
+      response.save
+    end
+
   end
   
   def move(context, old_value, destination)
     respondents = SurveyRespondent.tagged_with(old_value, :on => context)
-    srcQuestionId = @tagContexts[context]
-    destQuestionId = @tagContexts[destination]
     
     respondents.each do |respondent|
       tags = respondent.tag_counts_on(context)
@@ -105,28 +89,38 @@ private
 
       respondent.set_tag_list_on(destination, dest_tags.join(",") )
 
-#       TODO - change for new survey mechanism
-
-      # smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-#       
-      # if smerf_forms_surveyrespondent
-        # str = smerf_forms_surveyrespondent.responses[srcQuestionId]
-        # str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-        # smerf_forms_surveyrespondent.responses[srcQuestionId] = str.compact.join(',')
-# 
-        # str = smerf_forms_surveyrespondent.responses[destQuestionId]
-        # smerf_forms_surveyrespondent.responses[destQuestionId] = (str && str.strip != '') ? str + "," + old_value : old_value
-# 
-        # smerf_forms_surveyrespondent.save
-      # end
-
       respondent.save
+      
+      if (respondent.person)
+        respondent.person.set_tag_list_on(context, new_tags.join(",") )
+        respondent.person.set_tag_list_on(destination, dest_tags.join(",") )
+        respondent.person.save
+      end
+    end
+    
+    # delete it
+    responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
+    responses.each do |response|
+      str = response.response
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+      response.response = str.compact.join(',')
+      response.save
+    end
+    
+    # add to the destination
+    responses = SurveyResponse.all( :conditions => ["survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", destination])
+    responses.each do |response|
+      str = response.response
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+      str << old_value
+      response.response = str.compact.join(',')
+      response.save
     end
   end
   
   def delete(context, old_value)
     respondents = SurveyRespondent.tagged_with(old_value, :on => context)
-    questionId = @tagContexts[context]
+    # questionId = @tagContexts[context]
     
     respondents.each do |respondent|
       tags = respondent.tag_counts_on(context)
@@ -135,20 +129,20 @@ private
       new_tags.delete(old_value)
       
       respondent.set_tag_list_on(context, new_tags.join(",") )
-
-#       TODO - change for new survey mechanism
-      
-      # smerf_forms_surveyrespondent = SmerfFormsSurveyrespondent.find_user_smerf_form(respondent.id, 1)
-#       
-      # if smerf_forms_surveyrespondent
-        # str = smerf_forms_surveyrespondent.responses[questionId]
-        # str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-        # smerf_forms_surveyrespondent.responses[questionId] = str.compact.join(',')
-# 
-        # smerf_forms_surveyrespondent.save
-      # end
-    
       respondent.save
+      
+      if (respondent.person)
+        respondent.person.set_tag_list_on(context, new_tags.join(",") )
+        respondent.person.save
+      end
+    end
+    
+    responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
+    responses.each do |response|
+      str = response.response
+      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
+      response.response = str.compact.join(',')
+      response.save
     end
   end
 
