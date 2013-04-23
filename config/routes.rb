@@ -189,6 +189,7 @@ ActionController::Routing::Routes.draw do |map|
   # TODO - check these routes
   map.connect 'survey_respondents/tags_admin', :controller => 'survey_respondents/tags_admin', :action => 'index'
   map.connect 'survey_respondents/tags_admin/update', :controller => 'survey_respondents/tags_admin', :action => 'update', :via => :post
+  map.connect 'survey_respondents/tags_admin/fix', :controller => 'survey_respondents/tags_admin', :action => 'fix'
   
   #
   map.connect 'survey_respondents/reviews/list', :controller => 'survey_respondents/reviews', :action => 'list'

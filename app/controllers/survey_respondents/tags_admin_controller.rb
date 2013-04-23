@@ -36,6 +36,41 @@ class SurveyRespondents::TagsAdminController < PlannerController
     
     render :layout => 'content'
   end
+  
+  def fix
+    taggings = ActsAsTaggableOn::Tagging.find :all,
+                  :select => "DISTINCT(context)",
+                  :conditions => "taggable_type like 'SurveyRespondent'"
+                  
+    tcs = Array.new
+    # for each context get the set of tags (sorted), and add them to the collection for display on the page
+    taggings.each do |tagging|
+      tcs << tagging.context
+    end
+    
+    # go through all the respondents and fix the tags....
+    respondents = SurveyRespondent.all
+    respondents.each do |respondent|
+      tcs.each do |context|
+        tags = respondent.tag_counts_on(context)
+        if (respondent.person)
+          respondent.person.set_tag_list_on(context, tags )
+          respondent.person.save
+        end
+      end
+    end
+
+    tcs.each do |context|
+      responses = SurveyResponse.all :include => :survey_question, :conditions => {:survey_questions => {:tags_label => context}}
+      responses.each do |response|
+        tags = response.survey_respondent_detail.survey_respondent.tag_counts_on(context)
+        new_tags = tags.collect {|tag| tag.name }
+        response.response = new_tags.join(",")
+        response.save
+      end
+    end
+    
+  end
 
 private
 
