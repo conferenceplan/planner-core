@@ -49,16 +49,16 @@ class SurveyRespondents::TagsAdminController < PlannerController
     end
     
     # go through all the respondents and fix the tags....
-    respondents = SurveyRespondent.all
-    respondents.each do |respondent|
-      tcs.each do |context|
-        tags = respondent.tag_counts_on(context)
-        if (respondent.person)
-          respondent.person.set_tag_list_on(context, tags )
-          respondent.person.save
-        end
-      end
-    end
+    # respondents = SurveyRespondent.all
+    # respondents.each do |respondent|
+      # tcs.each do |context|
+        # tags = respondent.tag_counts_on(context)
+        # if (respondent.person)
+          # respondent.person.set_tag_list_on(context, tags )
+          # respondent.person.save
+        # end
+      # end
+    # end
 
     tcs.each do |context|
       responses = SurveyResponse.all :include => :survey_question, :conditions => {:survey_questions => {:tags_label => context}}
