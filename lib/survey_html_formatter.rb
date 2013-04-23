@@ -102,9 +102,23 @@ module SurveyHtmlFormatter
         content += '<div class="response_answer">'
         content += '<div class="response_text_box">' 
         content += "\n" if forEmail
-        content += '<pre>' if forEmail
-        content += response.response 
-        content += '</pre>' if forEmail
+        # NOTE: there is a 1000 character line limit so need to split close to 900 to be safe and insert a new line
+        content += "<pre>\n" if forEmail
+        if forEmail
+          # split on white space and keep a count
+          count = 0
+          response.response.each_line(' ') { |s|
+            if count > 900
+              content += "\n"
+              count = 0
+            end
+            content += s
+            count += s.size + 1
+          }
+        else  
+          content += response.response 
+        end
+        content += "\n</pre>" if forEmail
         content += "\n" if forEmail
         content += '</div></div>'
         content += "\n" if forEmail
