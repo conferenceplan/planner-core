@@ -190,13 +190,17 @@ jQuery(document).ready(function(){
         closeAfterEdit: true,
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
-        beforeSubmit: function(postdata, formid){
-            this.ajaxEditOptions = {
-                url: '/programme_items/' + postdata.programmeItems_id,
-                type: 'put'
-            };
-            return [true, "ok"];
+        mtype: 'PUT',
+        onclickSubmit : function(params, postdata) {
+            params.url = '/programme_items/' + postdata.programmeItems_id;
         },
+        // beforeSubmit: function(postdata, formid){
+            // this.ajaxEditOptions = {
+                // url: '/programme_items/' + postdata.programmeItems_id,
+                // type: 'put'
+            // };
+            // return [true, "ok"];
+        // },
         beforeShowForm: function(frm) {
             $('#start_time').timeEntry({show24Hours: true, showSeconds: false, timeSteps: [1, 15, 0], defaultTime: '09:00', spinnerImage: 'images/spinnerDefault.png'});
         }
@@ -216,13 +220,17 @@ jQuery(document).ready(function(){
         reloadAfterSubmit: false,
         jqModal: true,
         closeOnEscape: true,
-        beforeSubmit: function(postdata){
-            this.ajaxDelOptions = {
-                url: '/programme_items/' + postdata,
-                type: 'delete'
-            };
-            return [true, "ok"];
+        mtype: 'DELETE',
+        onclickSubmit : function(params, postdata) {
+            params.url = '/programme_items/' + postdata;
         },
+        // beforeSubmit: function(postdata){
+            // this.ajaxDelOptions = {
+                // url: '/programme_items/' + postdata,
+                // type: 'delete'
+            // };
+            // return [true, "ok"];
+        // },
     }, // del options
     {
         height: 150,

@@ -397,13 +397,10 @@
 		    	var result = $.planIt.optionsChange(name);
 		    	
 		        result.closeAfterEdit = true;
-		        result.beforeSubmit = function(postdata, formid){
-		            this.ajaxEditOptions = {
-		                url: '/' + name + '/' + fetchData(postdata),
-		                type: 'put'
-		            };
-		            return [true, "ok"];
-		        }
+                result.mtype = 'PUT';
+                result.onclickSubmit = function(params, postdata) {
+                    params.url = '/' + name + '/' + fetchData(postdata);
+                };
 		    	return result;
 		    };
 		    
@@ -424,19 +421,16 @@
 		      
 		    $.planIt.deleteOptions = function
 		    (
-		    	name				// route name for deleting data  	
+		    	name				// route name for deleting data  
 		    )
 		    {
 		    	var result = $.planIt.optionsBase();
 		    	
 		    	result.loadAfterSubmit = true;
-		        result.beforeSubmit = function(postdata){
-		            this.ajaxDelOptions = {
-		                url: '/' + name + '/' + postdata,
-		                type: 'delete'
-		            };
-		            return [true, "ok"];
-		        };
+		    	result.mtype = 'DELETE';
+		    	result.onclickSubmit = function(params, postdata) {
+		    	    params.url = '/' + name + '/' + postdata;
+		    	};
 		        
 		    	return result;
 		    };

@@ -28,7 +28,7 @@ jQuery(document).ready(function(){
 		params.pager = "#setups_pager";
 		
 
-		jQuery("#room_setups").jqGrid(params);
+		var grid = jQuery("#room_setups").jqGrid(params);
 
         // Set up the pager menu for edit, add, and delete
 

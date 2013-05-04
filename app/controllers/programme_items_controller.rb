@@ -148,7 +148,8 @@ class ProgrammeItemsController < PlannerController
     end
     
     @programmeItem.destroy
-    redirect_to :action => 'index'
+    # redirect_to :action => 'index'
+    render :layout => 'success'
   end
   #
   

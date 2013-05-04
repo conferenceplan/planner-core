@@ -244,13 +244,10 @@ jQuery(document).ready(function(){
         closeAfterEdit: true,
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
-        beforeSubmit: function(postdata, formid){
-            this.ajaxEditOptions = {
-                url: '/participants/' + postdata.participants_id,
-                type: 'put'
-            };
-            return [true, "ok"];
-        }
+        mtype: 'PUT',
+        onclickSubmit : function(params, postdata) {
+            params.url = '/participants/' + postdata.participants_id;
+        },
     }, // edit options
     { // add options
         reloadAfterSubmit: false,
@@ -264,12 +261,9 @@ jQuery(document).ready(function(){
         reloadAfterSubmit: false,
         jqModal: true,
         closeOnEscape: true,
-        beforeSubmit: function(postdata){
-            this.ajaxDelOptions = {
-                url: '/participants/' + postdata,
-                type: 'delete'
-            };
-            return [true, "ok"];
+        mtype: 'DELETE',
+        onclickSubmit : function(params, postdata) {
+            params.url = '/participants/' + postdata;
         },
     }, // del options
     {  // view options
