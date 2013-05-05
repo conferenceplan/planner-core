@@ -101,7 +101,10 @@ private
     
     responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
     responses.each do |response|
-      response.response = response.response.sub(Regexp.new(old_value),new_value)
+      tags = response.survey_respondent_detail.survey_respondent.tag_counts_on(context)
+      new_tags = tags.collect {|tag| tag.name }
+      response.response = new_tags.join(",")
+      # response.response = response.response.sub(Regexp.new(old_value),new_value)
       response.save
     end
 
