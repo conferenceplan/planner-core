@@ -54,7 +54,7 @@
     <div class=" timeselect grid_12">
         <div class="checkbox">
             <label>
-                <%= check_box_tag "survey_response[#{question.id}][question5]", "1", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response5'] == '1' : false %>
+                <%= check_box_tag "survey_response[#{question.id}][response5]", "1", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response5'] == '1' : false %>
                 I am extremely uncertain when I will be available to be on the Program
             </label>
         </div>

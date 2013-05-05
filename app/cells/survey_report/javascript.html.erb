@@ -8,11 +8,20 @@ jQuery(document).ready(function() {
         interpolate : /\{\{\=(.+?)\}\}/g,
         evaluate : /\{\{(.+?)\}\}/g
     };
-
+    
+    var eventAggregator = _.extend({}, Backbone.Events);
 
     //
     // Model for Query
     //
+    QueryName = Backbone.Model.extend({
+        defaults : {
+            name : 'name',
+            shared : false
+        },
+        // url : '/survey_query/'
+    });
+    
     SurveyName = Backbone.Model.extend({
         defaults : {
             name : 'name',
@@ -25,12 +34,8 @@ jQuery(document).ready(function() {
         },
     }); 
 
-
-
     ResultRow = Backbone.RelationalModel.extend({});
     
-    // ResultMetaDataRow = Backbone.RelationalModel.extend({});
-
     ResultRowCollection = Backbone.Collection.extend({
         model : ResultRow
     });
@@ -57,7 +62,13 @@ jQuery(document).ready(function() {
         model : Question,
         url : '/survey_reports/questions'
     });
-
+    
+    QueryCollection = Backbone.Collection.extend({
+        model : QueryName,
+        // NOTE: URL will be set ...
+        url : '/survey_reports/surveyQueryNames'
+    });
+    
     //
     //
     //
@@ -94,15 +105,14 @@ jQuery(document).ready(function() {
         },
         
         sync : function() {
-            // do nowt, i.e. we do not want to comminicate individual change to the server. Done in bulk in Survey Query
+            // do nowt, i.e. we do not want to communicate individual change to the server. Done in bulk in Survey Query
         },
         
-        urlRoot: 'survey_query_predicate'
+        //urlRoot: 'survey_query_predicate'
     });
 
     PredicateCollection = Backbone.Collection.extend({
     });
-    // TODO - add URL method to create a URL for the whole collection
 
     
     //
@@ -116,15 +126,10 @@ jQuery(document).ready(function() {
         template : _.template($('#query-results-template').html()),
 
         render : function() {
-            // TODO - determine the col model from the array : this.resultsCollection
-            // this.query
-            // q1, q2 etc.
-            // alert(JSON.stringify(this.resultsCollection.get('userdata').toJSON()));
-            
-            //talpages":1,"currpage":1,"totalrecords":2,"userdata":
             var colModel = [ 
-                    {name:'First Name', jsonmap: "first_name", sortable:true, width: 30}, 
+                    {name:'First Name', jsonmap: "first_name", sortable:true, width: 20}, 
                     {name:'Last Name', jsonmap: "last_name", sortable:true, width: 30}, 
+                    {name:'Email', jsonmap: "email", sortable:true, width: 35}, 
                 ];
                 
             for (var key in this.resultsCollection.get('userdata')) {
@@ -185,13 +190,17 @@ jQuery(document).ready(function() {
         initialize : function() {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.delPredicate);
+            
+            _.bindAll(this, "cleanup");
+            this.options.evAggregator.bind("cleanup", this.cleanup);
         },
 
         render : function() {
             if (this.model) {
                 if (this.model.has('survey_question_id')) {
+                    //alert(this.options.questionsCollection);
                     this.$el.html(this.template(_.extend({
-                        col : questionsCollection
+                        col : this.options.col
                     }, this.model.toJSON())));
                 }
             } else {
@@ -226,6 +235,11 @@ jQuery(document).ready(function() {
         removePredicate : function(ev) {
             this.model.destroy(); // remove from the model
         },
+        
+        cleanup : function() {
+          // alert('clean up');
+          this.remove();
+        },
     }); 
 
     QueryView = Backbone.View.extend({
@@ -236,41 +250,46 @@ jQuery(document).ready(function() {
 
         template : _.template($('#query-template').html()),
 
-        reset : function() {
+        renderPredicates : function() {
             if (this.model) {
-                //this.model.get('survey_query_predicates').reset();
                 var col = this.model.get('survey_query_predicates');
-                var toClear = [];
-                while ( (c = col.models.pop()) ) { //{ silent : true }
-                    toClear.push(c);
-                    //c.clear();  //{ silent : true }
-                };
-                _.each(toClear, function(el) { el.clear(); } );
-                this.model = null;
+                // alert(col);
+                // Need to go through the predicates abd render those
+                _.each(col.models, function(v) {
+                    this.addPredicate(v);
+                }, this);
             };
-            if (this.questionsCollection) {
-                this.questionsCollection = null;
-            };
-            
-            //this.$el.html(""); // update the view
-            this.remove();
         },
-        
+
         render : function() {
-            // alert("render qv");
-            // this.$el.append(this.template(this.model.toJSON()));
-            
             this.$el.html(this.template(this.model.toJSON()));
             
+            //alert(this.options.questionsCollection);
+            
+            // if there are predicates then we want to render them
+            this.renderPredicates();
+            
             return this;
+        },
+        
+        remove : function() {
+            
+            // this.unbind();
+            // this.model.unbind( 'change', this.render, this );
+
+            // remove the view from the DOM
+            Backbone.View.prototype.remove.apply(this);
+            if (this.options.evAggregator) {
+                // And do the same for the predicates...
+                this.options.evAggregator.trigger("cleanup", this.model);
+            };
+            // delete this.$el;
+            // delete this.el;
         },
 
         initialize : function() {
             this.model.on('remove:survey_query_predicates', this.removePredicate, this);
             this.model.on('add:survey_query_predicates', this.addPredicate, this);
-            this.model.on('reset', this.reset, this);
-            
-            this.model.on('change', this.render, this); // or 'change' ????
         },
         
         removePredicate : function(removed, related) {
@@ -294,8 +313,9 @@ jQuery(document).ready(function() {
         },
 
         save : function(ev) {
-            alert('TBD');
-            // this.model.save(null,{ wait: true });
+            // alert('TBD');
+            this.model.save(null, { wait: true });
+            // TODO - on save we need to send an event so that the "menus" are updated
         },
 
         selectMatch : function(ev) {
@@ -325,9 +345,11 @@ jQuery(document).ready(function() {
         addPredicate : function(qp) {
           var view = new PredicateView({
               model : qp,
-              col : questionsCollection
+              col : this.options.questionsCollection,
+              evAggregator : this.options.evAggregator
           });
           $('#query-list').append(view.render().el);
+          //view.listenTo(this, 'remove', view.cleanup);
         },
         
         addOne : function() {
@@ -380,19 +402,21 @@ jQuery(document).ready(function() {
             questionsCollection = new QuestionsCollection();
             questionsCollection.url = "/survey_reports/questions?survey=" + this.selected;
             questionsCollection.fetch({
-                success : function(model) {
+                data : { surveyid : this.selected },
+                success : function(qc,r,opt) {
                     // and pass that to the next view
-                    if (this.qv) {
-                        this.qv.reset();
+                    if (currentQueryView) {
+                        currentQueryView.remove(); // TODO - also need to reset the predicate list...
                     };
                     
-                    var currentQuery = new SurveyQuery;
-                    this.qv = new QueryView({
-                        questionsCollection : model,
-                        model : currentQuery
+                    var currentQuery = new SurveyQuery({ survey_id : opt.data.surveyid });
+                    currentQueryView = new QueryView({
+                        questionsCollection : qc,
+                        model : currentQuery,
+                        evAggregator : eventAggregator
                     });
 
-                    $('#queryapp').append(this.qv.render().el);
+                    $('#queryapp').append(currentQueryView.render().el);
 
                 }
             });
@@ -405,6 +429,112 @@ jQuery(document).ready(function() {
         initialize : function() {
             this.render();
         },
+    });
+    
+    QueryListView = Backbone.View.extend({
+        tagName : 'li',
+
+        template : _.template($('#query-button-template').html()),
+        
+        events : {
+            'click .get-query' : 'getQuery',
+            'click .delete-query' : 'removeQuery',
+        },
+        
+        removeQuery : function(ev) {
+            // alert('remove query');
+            this.model.destroy(); // TODO - need to send event to the server
+            this.remove();
+            return false;
+        },
+
+        getQuery : function(ev) {
+            $('.get-query').removeClass('ui-selected');
+            $(ev.currentTarget).addClass('ui-selected');
+
+            var cq = SurveyQuery.findOrCreate({ id : this.model.get('id')});
+            cq.fetch({ // TODO - if model already in memory then it does not populate the predicates
+                success : function(mdl, resp, options) {
+                    // and pass that to the next view
+                    if (currentQueryView) {
+                        currentQueryView.remove();
+                    };
+
+                    var currentQuestion = mdl;
+                    var questionsCollection = new QuestionsCollection();
+                    questionsCollection.url = "/survey_reports/questions?survey=" + mdl.get('survey_id');
+                    questionsCollection.fetch({
+                        data : mdl.get('survey_id'),
+                        mdl : mdl,
+                        success : function(qc,r,opt) {
+                            currentQueryView = new QueryView({
+                                questionsCollection : qc,
+                                model : opt.mdl,
+                                evAggregator : eventAggregator
+                            });
+
+                            $('#queryapp').append(currentQueryView.render().el);
+                        }
+                    });
+                }
+            });
+            
+        },
+        
+        render : function() {
+            this.$el.addClass('ui-widget-content');
+            this.$el.html(this.template(this.model.toJSON())); //
+            
+            return this;
+        },
+    });
+    
+    MyQueriesView = Backbone.View.extend({
+        el : 'my-queries-view',
+        
+        template : _.template($('#my-queries-template').html()),
+        
+        render : function() {
+            // Go through the model and create the query buttons
+            _.each(this.model.models, function(el, idx, list) { 
+                    var view = new QueryListView({
+                        model : el,
+                    });
+                    $('#my-queries').append(view.render().el);
+                } );
+        },
+        
+        initialize : function() {
+            // this.model.on('remove', this.removeQuery, this);
+            // this.model.on('add', this.addQuery, this);
+            // this.model.on('reset', this.reset, this);
+            // this.model.on('change', this.change, this); // or 'change' ????
+            
+            this.render();
+            
+            // Add event
+        },
+        
+        events : {
+            'click .delete-query' : 'removeQuery',
+        },
+        
+        removeQuery : function(ev) {
+            alert('remove query');
+        },
+        
+        // addQuery : function() {
+            // alert('add query');
+        // },
+//         
+        // reset : function() {
+            // alert('reset query');
+        // },
+//         
+        // change : function() {
+            // alert('change query');
+        // },
+        
     });
 
     AppView = Backbone.View.extend({
@@ -439,6 +569,18 @@ jQuery(document).ready(function() {
 
         initialize : function() {
             this.render();
+            this.populateMyQueries();
+        },
+        
+        populateMyQueries : function() {
+          // Get my queries from the backend
+          queryColl = new QueryCollection();
+          // and then create the views...  
+          queryColl.fetch({
+              success : function(model) {
+                  this.myQueries = new MyQueriesView({ model : model });
+              }
+          });
         },
     });
 
@@ -454,6 +596,8 @@ jQuery(document).ready(function() {
     //
     //
     var app = new AppView();
+    
+    var currentQueryView = null;
 
     var app_router = new AppRouter();
 

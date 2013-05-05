@@ -145,7 +145,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'planner_reports/:action', :controller => 'planner_reports'
   map.resources :planner_reports
 
-  map.connect 'survey_reports/:action', :controller => 'survey_reports'
+  map.connect 'survey_reports/:action', :controller => 'survey_reports' #,  :member => {:list => :get, :del => :delete }
+  map.connect 'survey_reports/surveyQueryNames/:id', :controller => 'survey_reports', :action => 'delSurveyQuery', :method => :delete
   map.resources :survey_reports
 
   map.connect 'invitation_categories/list', :controller => 'invitation_categories', :action => 'list'

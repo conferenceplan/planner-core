@@ -13,6 +13,9 @@
         -->
     {{ var result = _.find(col.models, function(obj) { return obj.id == survey_question_id }); }}
     <!-- TODO enable or disable text depending on option -->
+    {{ if (result) { }}
+    {{= result.get('question_type')}}
+    {{ } }}
     {{ if (result && (result.get('survey_answers').length > 0)) { }}
         <div class="report-operator">
         <select class="operator" name="operator">
@@ -53,7 +56,7 @@
 </script>
 
 <script type="text/template" id="query-template">
-    <div>Match {{= operation }} {{= name }} 
+    <div>Match 
     <select id="match" name="match">
         <option value="ANY" {{= operation == 'ANY' ? 'selected="SELECTED"' : ''}}>Any</option>
         <option value="ALL" {{= operation == 'ALL' ? 'selected="SELECTED"' : ''}}>All</option>
@@ -75,6 +78,15 @@
     </select>
     <button id="close-button">Cancel</button>
     <button id="create-button">Create</button>
+</script>
+
+<script type="text/template" id="my-queries-template">
+</script>
+
+<script type="text/template" id="query-button-template">
+    <div class='get-query'>
+   {{= name}} <a class='delete-query' href='#'><div class="ui-icon ui-icon-close" style="display:inline; float: right;"></div></a>
+    </div>
 </script>
 
 <script type="text/template" id="query-ctl-template">

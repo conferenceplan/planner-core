@@ -3,10 +3,6 @@ class SurveyRespondent < ActiveRecord::Base
     c.validate_email_field = false
   end
 
-  validates_length_of :first_name, :within => 0..40, :too_long => "pick a shorter name", :too_short => "pick a longer name"
-  validates_length_of :last_name, :within => 1..40, :too_long => "pick a shorter name", :too_short => "pick a longer name"
-  
-    
   belongs_to  :person 
   has_one   :survey_copy_status
   has_enumerated :email_status, :class_name => 'EmailStatus'

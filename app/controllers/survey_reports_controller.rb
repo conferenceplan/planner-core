@@ -15,14 +15,37 @@ class SurveyReportsController < PlannerController
     render_json surveys.to_json(:only => [ :id, :name ]), :content_type => 'application/json'
   end
   
+  def surveyQueryNames
+    # TODO - either get the queries for current user or get the queries that are shared
+    queries = SurveyQuery.all
+    
+    ActiveRecord::Base.include_root_in_json = false
+
+    render_json queries.to_json(:only => [ :id, :name, :shared ]), :content_type => 'application/json'
+  end
+  
+  def delSurveyQuery
+    # delete the survey query with the id passed in
+    survey = SurveyQuery.find(params[:id])
+    survey.destroy
+    
+    # and return the remaining list of surveys
+    queries = SurveyQuery.all
+    
+    ActiveRecord::Base.include_root_in_json = false
+
+    render_json queries.to_json(:only => [ :id, :name, :shared ]), :content_type => 'application/json'
+  end
+  
   def questions
     surveyId = params[:survey]
     
+    # TODO - use the group and question ordering
     questions = SurveyQuestion.all :joins => {:survey_group => :survey}, :include => :survey_answers,
-                :conditions => {:surveys => {:id => surveyId}}
+                :conditions => {:surveys => {:id => surveyId}, :question_type => ['textfield', 'textbox', 'singlechoice', 'multiplechoice', 'selectionbox', 'availability']}
     
     ActiveRecord::Base.include_root_in_json = false
-    # (:only => [ :id, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order ]), 
+
     render_json questions.to_json(:only => [ :id, :name, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order, :answer ],
                                   :include => {:survey_group => {}, :survey_answers => {}}
                                 ), :content_type => 'application/json'
@@ -52,12 +75,12 @@ class SurveyReportsController < PlannerController
     
     ActiveRecord::Base.include_root_in_json = false # TODO - check that this is safe, and a better place to put it
 
-    render_json '{ "id" : 1, "totalpages": 1, "currpage": 1, "totalrecords": ' + count.to_s + ', "userdata": ' + metadata.to_json() + ', "rowdata": ' + resultSet.to_json() + '}',
+    render_json '{ "totalpages": 1, "currpage": 1, "totalrecords": ' + count.to_s + ', "userdata": ' + metadata.to_json() + ', "rowdata": ' + resultSet.to_json() + '}',
                :content_type => 'application/json'
   end
   
   def createJoinPart1(queryPredicates, metadata, mapping)
-    selectPart = 'select @rownum:=@rownum+1 as id, res.id as oid, res.first_name, res.last_name, res.suffix, res.survey_respondent_id'
+    selectPart = 'select @rownum:=@rownum+1 as id, res.id as oid, res.first_name, res.last_name, res.suffix, res.email, res.survey_respondent_id'
     questionIds = Set.new
     
     if (queryPredicates)
@@ -99,7 +122,7 @@ class SurveyReportsController < PlannerController
   end
   
   def createSelectPart(queryPredicates, operation)
-    selectPart = 'SELECT d.id, d.first_name, d.last_name, d.suffix, d.survey_respondent_id'
+    selectPart = 'SELECT d.id, d.first_name, d.last_name, d.suffix, d.email, d.survey_respondent_id'
     nbrOfResponse = 1
     questionIds = Set.new
 
