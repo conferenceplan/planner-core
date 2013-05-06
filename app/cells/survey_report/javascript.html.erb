@@ -9,37 +9,24 @@ jQuery(document).ready(function() {
         evaluate : /\{\{(.+?)\}\}/g
     };
     
-    var eventAggregator = _.extend({}, Backbone.Events);
+    var eventAggregator = _.extend({}, Backbone.Events); // Event aggregator for the page
 
-    //
-    // Model for Query
-    //
-    QueryName = Backbone.Model.extend({
+    // Model for Names
+    Name = Backbone.Model.extend({
         defaults : {
-            name : 'name',
-            shared : false
-        },
-        // url : '/survey_query/'
-    });
-    
-    SurveyName = Backbone.Model.extend({
-        defaults : {
-            name : 'name',
-        },
+            name : 'name'
+        }
     });
 
-    Question = Backbone.Model.extend({
-        defaults : {
-            question : 'name',
-        },
-    }); 
-
+    // Individual result from a query
     ResultRow = Backbone.RelationalModel.extend({});
     
+    // The collection of query results
     ResultRowCollection = Backbone.Collection.extend({
         model : ResultRow
     });
     
+    // Model for results from q survey query
     ResultSet = Backbone.RelationalModel.extend({
         url : '/survey_reports/runReport',
         
@@ -52,21 +39,19 @@ jQuery(document).ready(function() {
 
     });
     
-    
     SurveyNameCollection = Backbone.Collection.extend({
-        model : SurveyName,
+        model : Name,
         url : '/survey_reports/surveyNames'
     });
 
     QuestionsCollection = Backbone.Collection.extend({
-        model : Question,
+        model : Name,
         url : '/survey_reports/questions'
     });
     
     QueryCollection = Backbone.Collection.extend({
-        model : QueryName,
-        // NOTE: URL will be set ...
-        url : '/survey_reports/surveyQueryNames'
+        model : Name,
+        url : '/survey_reports/surveyQueryNames' // URL to get the names of the surveys
     });
     
     //
@@ -75,7 +60,8 @@ jQuery(document).ready(function() {
     SurveyQuery = Backbone.RelationalModel.extend({
         defaults : {
             name : '', // The name of the query
-            operation : 'ALL' // can be ALL or ANY
+            operation : 'ALL', // can be ALL or ANY
+            shared : false
         },
 
         // Collection predicates
@@ -83,8 +69,7 @@ jQuery(document).ready(function() {
             type : Backbone.HasMany,
             key : 'survey_query_predicates',
             relatedModel : 'QueryPredicate',
-            //includeInJSON: Backbone.Model.prototype.idAttribute,
-            collectionType : 'PredicateCollection', // ?????
+            collectionType : 'PredicateCollection', // 
             reverseRelation : {
                 key : 'survey_query_id',
             }
@@ -108,12 +93,10 @@ jQuery(document).ready(function() {
             // do nowt, i.e. we do not want to communicate individual change to the server. Done in bulk in Survey Query
         },
         
-        //urlRoot: 'survey_query_predicate'
     });
 
     PredicateCollection = Backbone.Collection.extend({
     });
-
     
     //
     //
@@ -211,7 +194,8 @@ jQuery(document).ready(function() {
         
         selectQuestion : function(ev) {
             var oid = parseInt($(ev.currentTarget).val());
-            var result = _.find(questionsCollection.models, function(obj) { return obj.id == oid });
+            // var result = _.find(questionsCollection.models, function(obj) { return obj.id == oid });
+            var result = _.find(this.options.col.models, function(obj) { return obj.id == oid });
             this.model.set("survey_question_id", oid);
         },
 
@@ -237,14 +221,12 @@ jQuery(document).ready(function() {
         },
         
         cleanup : function() {
-          // alert('clean up');
           this.remove();
         },
     }); 
 
     QueryView = Backbone.View.extend({
         tagName : 'div',
-        // el : '#queryapp',
 
         selected : 0,
 
@@ -303,7 +285,12 @@ jQuery(document).ready(function() {
             "click .run-button" : "run",
             'click #match' : 'selectMatch',
             "click .save-button" : "save",
+            "click .query-shared" : "queryShared",
             'blur .query-name' : 'selectText',
+        },
+        
+        queryShared : function(ev) {
+          this.model.set('shared', !this.model.set('shared') );
         },
         
         selectText : function(ev) {
@@ -316,6 +303,9 @@ jQuery(document).ready(function() {
             // alert('TBD');
             this.model.save(null, { wait: true });
             // TODO - on save we need to send an event so that the "menus" are updated
+            if (this.options.evAggregator) {
+                this.options.evAggregator.trigger("refreshQueryLists");
+            };
         },
 
         selectMatch : function(ev) {
@@ -436,6 +426,14 @@ jQuery(document).ready(function() {
 
         template : _.template($('#query-button-template').html()),
         
+        initialize : function() {
+            // this.listenTo(this.model, 'destroy', this.del);
+        },
+        
+        // del : function() {
+            // alert('del');
+        // },
+        
         events : {
             'click .get-query' : 'getQuery',
             'click .delete-query' : 'removeQuery',
@@ -505,36 +503,17 @@ jQuery(document).ready(function() {
         },
         
         initialize : function() {
-            // this.model.on('remove', this.removeQuery, this);
-            // this.model.on('add', this.addQuery, this);
-            // this.model.on('reset', this.reset, this);
-            // this.model.on('change', this.change, this); // or 'change' ????
-            
             this.render();
-            
-            // Add event
+            this.listenTo(this.model, 'add', this.add);
         },
         
-        events : {
-            'click .delete-query' : 'removeQuery',
+        add : function(obj) {
+                    var view = new QueryListView({
+                        model : obj,
+                    });
+                    $('#my-queries').append(view.render().el);
         },
-        
-        removeQuery : function(ev) {
-            alert('remove query');
-        },
-        
-        // addQuery : function() {
-            // alert('add query');
-        // },
-//         
-        // reset : function() {
-            // alert('reset query');
-        // },
-//         
-        // change : function() {
-            // alert('change query');
-        // },
-        
+                
     });
 
     AppView = Backbone.View.extend({
@@ -570,15 +549,34 @@ jQuery(document).ready(function() {
         initialize : function() {
             this.render();
             this.populateMyQueries();
+            
+            this.options.evAggregator.bind("refreshQueryLists", this.refresh, this);
+        },
+        
+        refresh : function() {
+            // alert('REFRESH');
+            // Remove the old list - TODO
+            // if (this.queryColl) {
+                // this.queryColl.reset();
+            // };
+            // Get the list from the server
+            this.populateMyQueries();
         },
         
         populateMyQueries : function() {
           // Get my queries from the backend
-          queryColl = new QueryCollection();
+          if (!this.queryColl) {
+              this.queryColl = new QueryCollection();
+          };
           // and then create the views...  
-          queryColl.fetch({
+          this.queryColl.fetch({
               success : function(model) {
-                  this.myQueries = new MyQueriesView({ model : model });
+                  if (!this.myQueries) {
+                      this.myQueries = new MyQueriesView({ 
+                          model : model,
+                          evAggregator : eventAggregator
+                          });
+                  } // else use the add event to myQueries
               }
           });
         },
@@ -595,7 +593,7 @@ jQuery(document).ready(function() {
     //
     //
     //
-    var app = new AppView();
+    var app = new AppView({evAggregator : eventAggregator});
     
     var currentQueryView = null;
 
