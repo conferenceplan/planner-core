@@ -113,7 +113,7 @@
                     options_for_select([['','-1']].concat(
                     (0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]}
                     ),
-                    @programmeItem.time_slot ? (@programmeItem.time_slot.start.day - Time.zone.parse(SITE_CONFIG[:conference][:start_date]).day) : ''),
+                    @programmeItem.time_slot ? ((@programmeItem.time_slot.start.beginning_of_day()  - Time.zone.parse(SITE_CONFIG[:conference][:start_date]).beginning_of_day())/1.day).to_i  : ''),
                     {:include_blank => true} %>
                 </div>
             </div>
