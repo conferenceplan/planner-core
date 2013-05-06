@@ -290,7 +290,7 @@ jQuery(document).ready(function() {
         },
         
         queryShared : function(ev) {
-          this.model.set('shared', !this.model.set('shared') );
+          this.model.set('shared', !this.model.get('shared') );
         },
         
         selectText : function(ev) {
@@ -427,12 +427,14 @@ jQuery(document).ready(function() {
         template : _.template($('#query-button-template').html()),
         
         initialize : function() {
-            // this.listenTo(this.model, 'destroy', this.del);
+            this.listenTo(this.model, 'remove', this.del);
         },
         
-        // del : function() {
+        del : function() {
             // alert('del');
-        // },
+            this.remove();
+            return false;
+        },
         
         events : {
             'click .get-query' : 'getQuery',
@@ -440,8 +442,8 @@ jQuery(document).ready(function() {
         },
         
         removeQuery : function(ev) {
-            // alert('remove query');
-            this.model.destroy(); // TODO - need to send event to the server
+            //alert('remove query');
+            this.model.destroy();
             this.remove();
             return false;
         },
@@ -493,27 +495,28 @@ jQuery(document).ready(function() {
         template : _.template($('#my-queries-template').html()),
         
         render : function() {
+            var place = this.options.listid;
             // Go through the model and create the query buttons
             _.each(this.model.models, function(el, idx, list) { 
                     var view = new QueryListView({
                         model : el,
                     });
-                    $('#my-queries').append(view.render().el);
+                    $(place).append(view.render().el);
                 } );
         },
         
         initialize : function() {
             this.render();
             this.listenTo(this.model, 'add', this.add);
+            this.listenTo(this.model, 'remove', this.remove);
         },
         
         add : function(obj) {
-                    var view = new QueryListView({
-                        model : obj,
-                    });
-                    $('#my-queries').append(view.render().el);
+            var view = new QueryListView({
+                model : obj,
+            });
+            $(this.options.listid).append(view.render().el);
         },
-                
     });
 
     AppView = Backbone.View.extend({
@@ -549,37 +552,53 @@ jQuery(document).ready(function() {
         initialize : function() {
             this.render();
             this.populateMyQueries();
+            this.populateSharedQueries();
             
-            this.options.evAggregator.bind("refreshQueryLists", this.refresh, this);
-        },
-        
-        refresh : function() {
-            // alert('REFRESH');
-            // Remove the old list - TODO
-            // if (this.queryColl) {
-                // this.queryColl.reset();
-            // };
-            // Get the list from the server
-            this.populateMyQueries();
+            this.options.evAggregator.bind("refreshQueryLists", this.populateMyQueries, this);
+            this.options.evAggregator.bind("refreshQueryLists", this.populateSharedQueries, this);
         },
         
         populateMyQueries : function() {
           // Get my queries from the backend
-          if (!this.queryColl) {
-              this.queryColl = new QueryCollection();
+          if (!this.myQueryColl) {
+              this.myQueryColl = new QueryCollection();
+              //this.myQueryColl.url = this.myQueryColl.url + '?myQueries=1'
           };
           // and then create the views...  
-          this.queryColl.fetch({
+          this.myQueryColl.fetch({
+              beforeSend : function(xhr) {
+                this.url = this.url + '?myQueries=1';
+              },
               success : function(model) {
                   if (!this.myQueries) {
                       this.myQueries = new MyQueriesView({ 
                           model : model,
-                          evAggregator : eventAggregator
+                          evAggregator : eventAggregator,
+                          listid : '#my-queries'
                           });
                   } // else use the add event to myQueries
               }
           });
         },
+        
+        populateSharedQueries : function() {
+          if (!this.sharedQueryColl) {
+              this.sharedQueryColl = new QueryCollection();
+          };
+          // and then create the views...  
+          this.sharedQueryColl.fetch({
+              success : function(model) {
+                  if (!this.sharedQueries) {
+                      this.sharedQueries = new MyQueriesView({ 
+                          model : model,
+                          evAggregator : eventAggregator,
+                          el : 'shared-queries-view',
+                          listid : '#shared-queries'
+                          });
+                  } // else use the add event to myQueries
+              }
+          });
+        }
     });
 
     //

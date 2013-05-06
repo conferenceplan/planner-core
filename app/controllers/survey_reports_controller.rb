@@ -17,7 +17,11 @@ class SurveyReportsController < PlannerController
   
   def surveyQueryNames
     # TODO - either get the queries for current user or get the queries that are shared
-    queries = SurveyQuery.all
+    if (params[:myQueries])
+      queries = SurveyQuery.all :conditions => {:user_id => @current_user, :shared => false}
+    else  
+      queries = SurveyQuery.all :conditions => {:shared => true}
+    end
     
     ActiveRecord::Base.include_root_in_json = false
 
