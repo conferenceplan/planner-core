@@ -163,9 +163,9 @@ jQuery(document).ready(function() {
         template : _.template($('#predicate-template').html()),
 
         events : {
-            'click .answerId' : 'selectAnswer',
-            'click .questionID' : 'selectQuestion',
-            'click .operator' : 'selectOperator',
+            'change .answerId' : 'selectAnswer',
+            'change .questionID' : 'selectQuestion',
+            'change .operator' : 'selectOperator',
             'blur .query-text' : 'selectText',
             'click .remove-button' : 'removePredicate',
         },
@@ -374,18 +374,19 @@ jQuery(document).ready(function() {
         },
 
         events : {
-            'click #surveyID' : 'setSelected',
+            'change #surveyID' : 'setSelected',
             'click #create-button' : 'createQuery',
             'click #close-button' : 'close',
         },
 
         setSelected : function(ev) {
+            //alert($(ev.currentTarget).val());
             // get the questions for the given survey
             this.selected = $(ev.currentTarget).val();
         },
 
         createQuery : function(ev) {
-            // alert(this.selected);
+            //alert(this.selected);
             this.dialog.dialog('close');
 
             // instantiate the list of questions

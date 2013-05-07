@@ -13,9 +13,6 @@
         -->
     {{ var result = _.find(col.models, function(obj) { return obj.id == survey_question_id }); }}
     <!-- TODO enable or disable text depending on option -->
-    {{ if (result) { }}
-    {{= result.get('question_type')}}
-    {{ } }}
     {{ if (result && (result.get('survey_answers').length > 0)) { }}
         <div class="report-operator">
         <select class="operator" name="operator">
@@ -71,8 +68,8 @@
 
 <!-- The dialog for creating a new query -->
 <script type="text/template" id="new-query-template">
-    <select id="surveyID" name="surveyID">
-    <option value="">--select a survey--</option>
+    <select id="surveyID" name="surveyID" class="surveyID">
+    <option value="-1">--select a survey--</option>
     {{_.each(col.models, function(n) { }}
         <option value="{{= n.get('id')}}" {{= n.get('id') == selected ? 'selected="SELECTED"' : ''}}>{{= n.get('name') }}</option>
     {{ });}}
