@@ -6,11 +6,11 @@ class EmailreportsController < PlannerController
   end
   
   def failed
-    @failed = SurveyRespondent.find :all, :conditions => [ "email_status_id = ?", EmailStatus[:Failed].id ]
+    @failed = SurveyRespondent.find :all, :conditions => [ "email_status_id = ?", EmailStatus[:Failed].id ], :include => { :person }
   end
 
   def sent
-    @sent = SurveyRespondent.find :all, :conditions => [ "email_status_id = ?", EmailStatus[:Sent].id ]
+    @sent = SurveyRespondent.find :all, :conditions => [ "email_status_id = ?", EmailStatus[:Sent].id ], :include => { :person }
   end
 
 end

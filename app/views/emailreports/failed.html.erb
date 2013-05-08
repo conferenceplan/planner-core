@@ -1,4 +1,4 @@
 <h1>Emailreports#failed</h1>
 <%@failed.each do |s|%>
-<%=s.first_name%> <%=s.last_name%>, <%=s.email%><br/>
+<%=s.person.first_name%> <%=s.person.last_name%>, <%=s.person.getDefaultEmail()%><br/>
 <%end%>
