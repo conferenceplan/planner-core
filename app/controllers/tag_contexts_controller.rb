@@ -25,7 +25,7 @@ class TagContextsController < PlannerController
   # GET /tag_contexts/new.xml
   def new
     @tag_context = TagContext.new
-
+    
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @tag_context }
@@ -40,7 +40,10 @@ class TagContextsController < PlannerController
   # POST /tag_contexts
   # POST /tag_contexts.xml
   def create
-    @tag_context = TagContext.new(params[:tag_context])
+    # Make sure that the context does not contain a space
+    str = params[:tag_context]
+    str['name'] = str['name'].gsub(/ /,'_')
+    @tag_context = TagContext.new(str)
 
     respond_to do |format|
       if @tag_context.save
