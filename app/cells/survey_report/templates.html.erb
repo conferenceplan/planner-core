@@ -12,7 +12,6 @@
         question has answers then we use that otherwise it is treated as text
         -->
     {{ var result = _.find(col.models, function(obj) { return obj.id == survey_question_id }); }}
-    <!-- TODO enable or disable text depending on option -->
     {{ if (result && (result.get('survey_answers').length > 0)) { }}
         <div class="report-operator">
         <select class="operator" name="operator">
@@ -59,10 +58,11 @@
         <option value="ALL" {{= operation == 'ALL' ? 'selected="SELECTED"' : ''}}>All</option>
     </select>
     <button class="add-button">ADD</button>
-    <button class="run-button">Run</button>
     <input type="text" class="query-name" value="{{= name }}"/>
     Shared: <input type="checkbox" class="query-shared" {{= shared ? 'checked' : ''}}/>
+    <button class="run-button">Run</button>
     <button class="save-button">Save</button>
+    <button class="save-copy-button">Save As Copy</button>
     </div>
 </script>
 

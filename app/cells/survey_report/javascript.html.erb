@@ -9,8 +9,6 @@ jQuery(document).ready(function() {
         evaluate : /\{\{(.+?)\}\}/g
     };
     
-    var eventAggregator = _.extend({}, Backbone.Events); // Event aggregator for the page
-
     // Model for Names
     Name = Backbone.Model.extend({
         defaults : {
@@ -116,7 +114,6 @@ jQuery(document).ready(function() {
                 ];
                 
             for (var key in this.resultsCollection.get('userdata')) {
-                // alert(key + ' => ' + this.resultsCollection.get('userdata')[key]['question']);
                 colModel.push( {name: this.resultsCollection.get('userdata')[key]['question'], jsonmap: key, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"' } } );
             };
 
@@ -133,17 +130,12 @@ jQuery(document).ready(function() {
                     root : "rowdata",
                     total: "totalpages",
                     id : "id",
-                    // userdata : "userdata"
                 },
                 viewrecords: true,
                 height: "auto",
                 autowidth: true,
                 ignoreCase: true,
                 gridview: true,
-                // rowList: [10, 20, 500],
-                // gridview: true,
-                // autowidth: true,
-                // viewrecords: true,
                 pager : '#result-pager',
                 caption: 'Results'
             });
@@ -181,7 +173,6 @@ jQuery(document).ready(function() {
         render : function() {
             if (this.model) {
                 if (this.model.has('survey_question_id')) {
-                    //alert(this.options.questionsCollection);
                     this.$el.html(this.template(_.extend({
                         col : this.options.col
                     }, this.model.toJSON())));
@@ -194,7 +185,6 @@ jQuery(document).ready(function() {
         
         selectQuestion : function(ev) {
             var oid = parseInt($(ev.currentTarget).val());
-            // var result = _.find(questionsCollection.models, function(obj) { return obj.id == oid });
             var result = _.find(this.options.col.models, function(obj) { return obj.id == oid });
             this.model.set("survey_question_id", oid);
         },
@@ -212,7 +202,6 @@ jQuery(document).ready(function() {
         },
 
         delPredicate : function(ev) {
-            //this.$el.html(""); // update the view
             this.remove();
         },
 
@@ -235,7 +224,7 @@ jQuery(document).ready(function() {
         renderPredicates : function() {
             if (this.model) {
                 var col = this.model.get('survey_query_predicates');
-                // alert(col);
+
                 // Need to go through the predicates abd render those
                 _.each(col.models, function(v) {
                     this.addPredicate(v);
@@ -246,8 +235,6 @@ jQuery(document).ready(function() {
         render : function() {
             this.$el.html(this.template(this.model.toJSON()));
             
-            //alert(this.options.questionsCollection);
-            
             // if there are predicates then we want to render them
             this.renderPredicates();
             
@@ -255,18 +242,12 @@ jQuery(document).ready(function() {
         },
         
         remove : function() {
-            
-            // this.unbind();
-            // this.model.unbind( 'change', this.render, this );
-
             // remove the view from the DOM
             Backbone.View.prototype.remove.apply(this);
             if (this.options.evAggregator) {
                 // And do the same for the predicates...
                 this.options.evAggregator.trigger("cleanup", this.model);
             };
-            // delete this.$el;
-            // delete this.el;
         },
 
         initialize : function() {
@@ -285,6 +266,7 @@ jQuery(document).ready(function() {
             "click .run-button" : "run",
             'click #match' : 'selectMatch',
             "click .save-button" : "save",
+            "click .save-copy-button" : "saveCopy",
             "click .query-shared" : "queryShared",
             'blur .query-name' : 'selectText',
         },
@@ -300,9 +282,31 @@ jQuery(document).ready(function() {
         },
 
         save : function(ev) {
-            // alert('TBD');
             this.model.save(null, { wait: true });
-            // TODO - on save we need to send an event so that the "menus" are updated
+            // on save we need to send an event so that the "menus" are updated
+            if (this.options.evAggregator) {
+                this.options.evAggregator.trigger("refreshQueryLists");
+            };
+        },
+        
+        saveCopy : function(ev) {
+            // we need to create a new instance that is a copy of the old
+            var nv = this.model.clone();
+            var newName = this.model.get('name') + ' copy';
+            nv.set('name', newName);
+            // we need to clone the children ...
+            var col = this.model.get('survey_query_predicates');
+            _.each(col.models, function(el, idx, list) { 
+                    var nel = el.clone();
+                    nel.set({
+                        'survey_query_id' : nv
+                    });
+                } );
+
+            // then save the copy
+            nv.save(null, { wait: true });
+            //this.model.save(null, { wait: true });
+            // on save we need to send an event so that the "menus" are updated
             if (this.options.evAggregator) {
                 this.options.evAggregator.trigger("refreshQueryLists");
             };
@@ -339,7 +343,6 @@ jQuery(document).ready(function() {
               evAggregator : this.options.evAggregator
           });
           $('#query-list').append(view.render().el);
-          //view.listenTo(this, 'remove', view.cleanup);
         },
         
         addOne : function() {
@@ -380,13 +383,11 @@ jQuery(document).ready(function() {
         },
 
         setSelected : function(ev) {
-            //alert($(ev.currentTarget).val());
             // get the questions for the given survey
             this.selected = $(ev.currentTarget).val();
         },
 
         createQuery : function(ev) {
-            //alert(this.selected);
             this.dialog.dialog('close');
 
             // instantiate the list of questions
@@ -432,7 +433,6 @@ jQuery(document).ready(function() {
         },
         
         del : function() {
-            // alert('del');
             this.remove();
             return false;
         },
@@ -443,7 +443,6 @@ jQuery(document).ready(function() {
         },
         
         removeQuery : function(ev) {
-            //alert('remove query');
             this.model.destroy();
             this.remove();
             return false;
@@ -596,28 +595,20 @@ jQuery(document).ready(function() {
                           el : 'shared-queries-view',
                           listid : '#shared-queries'
                           });
-                  } // else use the add event to myQueries
+                  }
               }
           });
         }
     });
 
     //
-    // Routes
     //
-    AppRouter = Backbone.Router.extend({
-        routes : {
-        },
-    });
+    //
+    var eventAggregator = _.extend({}, Backbone.Events); // Event aggregator for the page
 
-    //
-    //
-    //
     var app = new AppView({evAggregator : eventAggregator});
     
     var currentQueryView = null;
-
-    var app_router = new AppRouter();
 
     Backbone.history.start();
 }); 
