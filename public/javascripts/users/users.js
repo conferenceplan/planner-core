@@ -158,13 +158,10 @@ jQuery(document).ready(function(){
         closeOnEscape: true,
         bottominfo: "Fields marked with (*) are required",
         afterSubmit: processResponse,
-        beforeSubmit: function(postdata, formid){
-            this.ajaxEditOptions = {
-                url: '/usersadmin/' + postdata.users_id, // TODO
-                type: 'put'
-            };
-            return [true, "ok"];
-        }
+        mtype: 'PUT',
+        onclickSubmit : function(params, postdata) {
+            params.url = '/usersadmin/' + postdata.users_id;
+        },
     }, // edit options
     { // add options
         reloadAfterSubmit: false,
@@ -178,12 +175,9 @@ jQuery(document).ready(function(){
         reloadAfterSubmit: false,
         jqModal: true,
         closeOnEscape: true,
-        beforeSubmit: function(postdata){
-            this.ajaxDelOptions = {
-                url: '/usersadmin/' + postdata,
-                type: 'delete'
-            };
-            return [true, "ok"];
+        mtype: 'DELETE',
+        onclickSubmit : function(params, postdata) {
+            params.url = '/usersadmin/' + postdata;
         },
     }, // del options
 	{ // search options
