@@ -77,6 +77,8 @@ authorization do
     has_permission_on :equipment_needs, :to => :manage
     has_permission_on :publisher, :to => :schedule
     has_permission_on :emailreports, :to => :read
+    has_permission_on :survey_query, :to => :manage
+    has_permission_on :survey_reports, :to => :report
   end
   
   role :SuperPlanner do
