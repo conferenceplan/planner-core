@@ -95,4 +95,8 @@ ActiveRecord::VirtualEnumerations.define do |config|
 
  config.define 'EmailStatus',
     :extends => 'Enum'
+    
+ config.define 'AnswerType',
+    :extends => 'Enum'
+    
 end

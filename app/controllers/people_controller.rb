@@ -422,6 +422,124 @@ def updateExcludedItemsFromSurveys
     end
 end
 
+def updateConflictsFromSurvey
+    excludedItemMaps = ExcludedItemsSurveyMap.find :all
+    peopleIdMap = {}
+    @peopleUpdate = []
+    excludedItemMaps.each do |excludedItemMap|
+      next if (excludedItemMap.survey_answer_id == nil)
+      @people = search_newsurvey_by_answer(excludedItemMap.survey_answer)
+      @programmeItem = ProgrammeItem.find(excludedItemMap.programme_item_id)
+      @people.each do |person|
+        found = false
+        person.excluded_items.each do |personItem|
+          if (personItem.id == @programmeItem.id)
+            found = true
+          end
+        end
+        
+        person.save
+        if (found == false)
+          @excludedItem = person.excluded_items << @programmeItem
+          
+          person.save
+          @exclusion = Exclusion.find_by_person_id_and_excludable_id_and_excludable_type(person.id,@programmeItem.id,'ProgrammeItem')
+          @exclusion.source = 'survey'
+          @exclusion.save
+          if (peopleIdMap.has_key?(person.id) == false)
+            @peopleUpdate << person
+            peopleIdMap[person.id] = 1
+          end
+        end
+      end
+      # TODO: delete exclusions that are no longer selected
+  end
+  excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
+  
+  excludedTimesMaps.each do |excludedTimesMap|
+      next if (excludedTimesMap.survey_answer_id == nil)
+
+      @people = search_newsurvey_by_answer(excludedTimesMap.survey_answer)
+
+      @people.each do |person|
+        found = false
+        person.excluded_periods.each do |personPeriod|
+          if (personPeriod == excludedTimesMap.period)
+            found = true
+          end
+        end
+        if (found == false)
+          excludedPeriod = Period.find excludedTimesMap.period_id
+          @excludedTime = person.excluded_periods << excludedPeriod
+        
+          person.save
+          @exclusion = Exclusion.find_by_person_id_and_excludable_id_and_excludable_type(person.id,excludedTimesMap.period_id,'TimeSlot')
+          @exclusion.source = 'survey'
+          @exclusion.save
+          if (peopleIdMap.has_key?(person.id) == false)
+            @peopleUpdate << person
+            peopleIdMap[person.id] = 1
+          end
+        end
+      end
+   end
+   # TODO: delete exclusions that are no longer selected
+
+   availSurveyQuestion = SurveyQuestion.find_by_question_type("availability")
+   if (availSurveyQuestion != nil)
+        startOfConference = Time.zone.parse(SITE_CONFIG[:conference][:start_date])
+        numberOfDays = SITE_CONFIG[:conference][:number_of_days]
+
+        @people = search_newsurvey_by_question(availSurveyQuestion)
+        @people.each do |person|
+          surveyResponse = get_newsurvey_responses_for_question_for_person(availSurveyQuestion,person.id)
+          if (surveyResponse != nil)
+            if (surveyResponse[0].response == '2')
+              if (surveyResponse[0].response2 != '---')
+                if (surveyResponse[0].response2.downcase == 'noon')
+                   startTime = startOfConference + (12.hour) + (surveyResponse[0].response1.to_i).day
+                else
+                   startTime = startOfConference + (Time.parse(surveyResponse[0].response2) - Time.now.beginning_of_day) + (surveyResponse[0].response1.to_i).day
+                end
+              else
+                startTime = startOfConference + 8.hour + (surveyResponse[0].response1.to_i).day
+              end
+              
+              if (surveyResponse[0].response4 != '---')
+                if (surveyResponse[0].response4.downcase == 'noon')
+                    endTime = startOfConference + 12.hour + (surveyResponse[0].response3.to_i).day
+                else
+                    endTime = startOfConference + (Time.parse(surveyResponse[0].response4) - Time.now.beginning_of_day) + (surveyResponse[0].response3.to_i).day
+                end
+              else
+               endTime = startOfConference + 21.hour + (surveyResponse[0].response3.to_i).day
+              end
+              updateParams = { :start_time => startTime, :end_time => endTime}
+              if (person.available_date != nil)
+                if ((person.available_date.start_time != startTime) || (person.available_date.end_time != endTime))                 
+                  person.available_date.start_time = startTime
+                  person.available_date.end_time = endTime
+                  person.save
+                  if (peopleIdMap.has_key?(person.id) == false)
+                     @peopleUpdate << person
+                     peopleIdMap[person.id] = 1
+                 end
+                 
+                end
+              else
+                @availableDate = person.create_available_date(updateParams)
+                if (peopleIdMap.has_key?(person.id) == false)
+                     @peopleUpdate << person
+                     peopleIdMap[person.id] = 1
+                end
+              end
+            end
+          end
+        end
+   end
+  
+end
+
 def updateExcludedTimesFromSurveys
     
     excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all

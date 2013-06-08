@@ -26,9 +26,9 @@ class ExcludedItemsSurveyMapsController < PlannerController
   def create
     
      @programmeItem = ProgrammeItem.find(params[:programme_item_id])
-     @mappedQuestion = MappedSurveyQuestion.find(params[:excluded_items_survey_map][:mapped_survey_question_id])
+     @surveyAnswer = SurveyAnswer.find(params[:excluded_items_survey_map][:survey_answer_id])
      @excludedItemsSurveyMap = ExcludedItemsSurveyMap.new(:programme_item_id => params[:programme_item_id],
-                                 :mapped_survey_question_id => params[:excluded_items_survey_map][:mapped_survey_question_id])
+                                 :survey_answer_id => params[:excluded_items_survey_map][:survey_answer_id])
      @programmeItem.excluded_items_survey_maps << @excludedItemsSurveyMap
      
    
@@ -51,7 +51,7 @@ end
     end
     @excludedItemsSurveyMap = ExcludedItemsSurveyMap.new
     @excludedItemsSurveyMap.programme_item_id = params[:programme_item_id]
-    
+
     render :layout => 'content'
   end
   
@@ -65,21 +65,22 @@ end
   def update
 
     @excludedItemsSurveyMap = ExcludedItemsSurveyMap.find(params[:id])
-    
-    if @excludedItemsSurveyMap.update_attributes(updateParams)
-       redirect_to :action => 'show', :id => params[:id]
-
+    if (updateParams[:survey_answer_id] == nil)
+      @excludedItemsSurveyMap.destroy
     else
-      render :action => 'edit'
+      if @excludedItemsSurveyMap.update_attributes(updateParams)
+         redirect_to :action => 'show', :id => params[:id]
+      else  
+        render :action => 'edit'
+      end
     end
-    
   end
   
   def destroy
     @excludedItemsSurveyMap = ExcludedItemsSurveyMap.find(params[:id])
     @programItem = @excludedItemsSurveyMap.programme_item
     @excludedItemsSurveyMap.destroy
-    gopath = "/programme_items/" + @programItem.id.to_s + "/excluded_items_survey_map"
+    gopath = "/programme_items/" + @programItem.id.to_s + "/excluded_items_survey_maps"
     redirect_to gopath
   end
 end

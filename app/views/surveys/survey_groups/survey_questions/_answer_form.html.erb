@@ -1,12 +1,44 @@
 <%
 # commented line
 %>
+<script type='text/javascript'>
+    //<![CDATA[
+    jQuery(document).ready(function(){
+        $("[name*='start_time']").timeEntry({
+            show24Hours: true,
+            showSeconds: false,
+            timeSteps: [1, 15, 0],
+            defaultTime: '09:00',
+            spinnerImage: '/images/spinnerDefault.png'
+        });
+    });
+    //]]>
+</script>
 <div class='survey_answer'>
     <% new_or_existing = answer_form.new_record? ? 'new' : 'existing' %>
     <% prefix = "survey_question[#{new_or_existing}_answer_attributes][]" %>
     <% fields_for prefix, answer_form do |el| %>
         <div class='line'><div class='field_name'>Answer</div><div class='field_value'><%= el.text_field :answer%></div></div>
-        <div class='boolean'><div class='field_name'>Default?:</div><div class='field_value'><%= el.check_box :default %></div></div>
-        <%= link_to_function "remove", "$(this).parent('.survey_answer').remove()" %>
-    <%end%>
+        <div class='boolean'><div class='field_name'>Defaulting?:</div><div class='field_value'><%= el.check_box :default %></div></div>
+	    <div class='line'>
+	    	<div class='field_name'>Answer Type:</div>
+			<div class='field_value'><%= el.select :answertype_id,AnswerType.find(:all).collect {|s| [s.name,s.id] },{:include_blank => false} %></div>
+		 </div>
+		 <div class='line'><div class='field_name'>Conflict Day:</div>
+                <div class='field_value'><%= el.select :start_day, getDayConflictCollection(),{:include_blank => true} %></div>
+		 </div>
+	     <div class='line'>
+	     	<div class='field_name'>Conflict Start Time:</div>
+			<div class='field_value'><%= el.text_field :start_time%></div>
+		 </div>
+    	 <div class='line'>
+            <div class='field_name'>Duration in minutes:</div>
+            <div class='field_value'><%= el.text_field :duration %></div>
+        </div>
+
+	<%end%>
+	
+	<%= link_to_function "remove", "$(this).parent('.survey_answer').remove()" %>
+
+
 </div>

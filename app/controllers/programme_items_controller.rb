@@ -208,7 +208,9 @@ class ProgrammeItemsController < PlannerController
     else
       @count = eval "ProgrammeItem#{tagquery}.count :all, " + args.inspect
     end
-
+    if (rows.to_i == 0)
+      rows = '10'
+    end
     @nbr_pages = (@count / rows.to_i).floor
     @nbr_pages += 1 if @count % rows.to_i > 0
     

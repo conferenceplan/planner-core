@@ -108,8 +108,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'
   map.connect 'participants/acceptancestatuslist', :controller => 'people', :action => 'acceptancestatuslist'
   map.connect 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
-  map.connect 'participants/updateExcludedTimesFromSurveys',:controller => 'people', :action => 'updateExcludedTimesFromSurveys', :method => 'post'
-  map.connect 'participants/updateExcludedItemsFromSurveys',:controller => 'people', :action => 'updateExcludedItemsFromSurveys', :method => 'post'
+  map.connect 'participants/updateConflictsFromSurvey',:controller => 'people', :action => 'updateConflictsFromSurvey', :method => 'post'
 
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items],
@@ -218,8 +217,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '', :controller => "user_sessions", :action => "new" 
   
   map.resources :excluded_items_survey_maps, :has_many => [:programme_items, :mapped_survey_questions]
-
-  map.connect 'excluded_times/PopulateExcludedTimesMap',:controller => 'excluded_times', :action => 'PopulateExcludedTimesMap', :method => 'post'
 
   map.resources :excluded_times
 

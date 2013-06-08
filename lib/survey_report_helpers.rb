@@ -12,7 +12,26 @@ module SurveyReportHelpers
   def search_survey(question, target)
     return Person.all :select => 'people.*, smerf_responses.response', :joins => 'join survey_respondents on people.id = survey_respondents.person_id join (select surveyrespondent_id, max(id) as id from smerf_forms_surveyrespondents group by surveyrespondent_id) max_resp on survey_respondents.id =max_resp.surveyrespondent_id join smerf_responses on max_resp.id = smerf_responses.smerf_forms_surveyrespondent_id', :conditions => ["smerf_responses.question_code = ? and lower(smerf_responses.response) like lower(?) and people.invitestatus_id = 5 and people.acceptance_status_id = 8 and survey_respondents.attending = '1'", question, target], :order => 'last_name, first_name'
   end
-
+  
+  def search_newsurvey_by_answer(answer)
+    accepted = AcceptanceStatus.find_by_name("Accepted")        
+    invited = InviteStatus.find_by_name("Invited")
+    return Person.all :select => 'people.*', :joins => 'join (survey_respondents join (survey_respondent_details join survey_responses on survey_respondent_details.id = survey_responses.survey_respondent_detail_id) on survey_respondents.id = survey_respondent_details.survey_respondent_id) on people.id = survey_respondents.person_id',  :conditions => ["survey_responses.survey_question_id = ? and lower(survey_responses.response) like lower(?) and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = '1'", answer.survey_question_id, answer.answer,invited,accepted], :order => 'last_name, first_name'
+  end
+  
+  def search_newsurvey_by_question(question)
+    accepted = AcceptanceStatus.find_by_name("Accepted")        
+    invited = InviteStatus.find_by_name("Invited")
+    return Person.all :select => 'people.*', :joins => 'join (survey_respondents join (survey_respondent_details join survey_responses on survey_respondent_details.id = survey_responses.survey_respondent_detail_id) on survey_respondents.id = survey_respondent_details.survey_respondent_id) on people.id = survey_respondents.person_id',  :conditions => ["survey_responses.survey_question_id = ? and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = '1'", question.id,invited,accepted], :order => 'last_name, first_name'
+  end
+  
+  def get_newsurvey_responses_for_question_for_person(question,person_id)
+    accepted = AcceptanceStatus.find_by_name("Accepted")        
+    invited = InviteStatus.find_by_name("Invited")
+    return SurveyResponse.all :select => 'survey_responses.*',:joins => 'join (survey_respondent_details join (survey_respondents join people on people.id = survey_respondents.person_id) on survey_respondent_details.survey_respondent_id = survey_respondents.id) on survey_responses.survey_respondent_detail_id = survey_respondent_details.id', :conditions => ["survey_responses.survey_question_id = ? and people.id = ? and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = '1'",question.id,person_id,invited,accepted]; 
+  end
+  
+  
   # def GetProgramTypes
     # prog_types = [['Autographing', "1"], ['Writers Workshop', "2"], ['New Pro Orientation', "3"], ['Literary Beer', "5"], ['Stroll with Stars', "6"], ['Game Show', "7"], ['Literary Tea / Kaffeklatsch', "8"], ['Program for Young Adults / Kids', "9"], ['Docent Tours', "10"], ['Book / Story Discussion Group', "11"], ['Reading', "12"], ['Teen Writing', "13"], ['Music Workshop', "14"], ['Art Workshop', "15"], ['Costume Workshop', "16"], ['Con-running Workshop', "17"], ['Demo', "18"], ['Solo Presentation', "19"], ['Panel', "20"]]
     # return prog_types

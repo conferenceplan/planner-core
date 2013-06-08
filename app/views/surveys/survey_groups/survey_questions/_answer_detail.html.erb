@@ -1,4 +1,10 @@
 <div class='survey_answer'>
     <div class='line'><div class='field_name'>Answer</div><div class='field_value'><%= answer_detail.answer %></div></div>
     <div class='boolean'>Default?: <%= answer_detail.default %></div>
+	<div class='line'><div class='field_name'>AnswerType:</div><% if answer_detail.answertype%><div class='field_value'><%= answer_detail.answertype.name %></div><% end %>
+	<% if answer_detail.answertype && answer_detail.answertype.name == 'TimeConflict'%>
+	<div class='line'><div class='field_name'>StarTime:</div><div class='field_value'><%= answer_detail.start_time %></div>
+ 	<div class='line'><div class='field_name'>Duration(minutes):</div><div class='field_value'><%= answer_detail.duration %></div>
+    <% end %>
+     </div>
 </div>

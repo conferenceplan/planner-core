@@ -1,7 +1,7 @@
 <%= error_messages_for :excludedItemsSurveyMap %>
 <% form_for @excludedItemsSurveyMap,:url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| -%>
-<div class='container_12'>
-    <div class='grid_6'>
+<div class='container_12'> 
+    <div class='grid_6'> 
         <div class='form-buttons'>
             <%= f.submit "Submit" %>
             <button type="button" class='jqmClose'>
@@ -11,16 +11,16 @@
       
         <div class='line'>
             <div class='field_name'>
-                <%= f.label :mapped_survey_question_id, "Survey Question" %>
+                <%= f.label :survey_answer_id, "Survey Question" %>
             </div>
             <div class='field_value'>
-                <%= f.select :mapped_survey_question_id,
-                MappedSurveyQuestion.find(:all).collect {|r| [r.name,r.id] },
+                <%= f.select :survey_answer_id,
+                GetSurveyAnswerExcludedItems().collect {|r| [r.answer,r.id] },
                 {:include_blank => false} %>
             </div>
         </div>
      </div>
-</div>
+</div>y
 <% end %>
 <div id='form-response'>
 </div>

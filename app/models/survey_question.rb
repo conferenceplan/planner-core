@@ -42,5 +42,9 @@ class SurveyQuestion < ActiveRecord::Base
        answer.save(false)
      end
   end
-  
+  def updateTimeConflict(params)
+     survey_answers.each do |answer|
+       answer.updateTimeConflict(params[answer.id.to_s])
+     end
+  end
 end

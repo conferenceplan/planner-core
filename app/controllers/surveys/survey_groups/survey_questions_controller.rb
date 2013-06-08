@@ -41,6 +41,8 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     if @question.update_attributes(params[:survey_question])
       # If we have answers to add to the question then do so here
       # TODO - if the question is a type that does not accept answers then do no worry... make sure the answers if any are cleared
+      @question.updateTimeConflict(params[:survey_question][:existing_answer_attributes]);
+      
       
       # Go back to the main page
       @questions = @group.survey_questions
@@ -68,6 +70,8 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     @question = @group.survey_questions.new(params[:survey_question])
     
     if @question.save
+      @question.updateTimeConflict(params[:survey_question][:new_answer_attributes]);
+
       @questions = @group.survey_questions
       render :action => 'index', :layout => 'plain'
     else
