@@ -53,17 +53,10 @@ class ProgramController < ApplicationController
           render :layout => 'content' 
         end
       } # This should generate an HTML grid
-      format.atom # for an Atom feed (for readers)
-      format.js { 
-        render_json @programmeItems.to_json(
-        :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
-              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
-              :last_name, :first_name, :suffix, :pub_reference_number, :end, :duration, :short_title, :published_venue_id,
-              ],
-        :methods => [:shortDate, :timeString, :pub_number, :pubFirstName, :pubLastName, :pubSuffix], #:bio, :twitterinfo, :website, :facebook
-        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
-        ), :content_type => 'application/json' 
-        }
+      format.atom # for an Atom feed (for readers) TODO - need to check were the domain for the Bio URL is set and fix
+      format.js {
+        render :json => @programmeItems, :callback => params[:callback]
+      }
     end
   end
   
@@ -187,6 +180,28 @@ class ProgramController < ApplicationController
              end
            end
            send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present'
+        }
+    end
+  end  
+
+  def participants_and_bios
+    respond_to do |format|
+      format.html { render :layout => 'content' }
+      format.json { 
+          @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_WITH_BIO_QUERY)
+          jsonstr = ''
+          @participants.each do |p|
+            if jsonstr.length > 0
+              jsonstr += ','
+            end
+            jsonstr += '{"id":"' + p[0] + '","first":' + p[1].to_json + ',"last":' + p[2].to_json 
+            jsonstr += ',"bio":' + p[3].to_json 
+            jsonstr += ',"website":' + p[4].to_json +  ',"twitterinfo":' 
+            jsonstr += p[5].to_json +  ',"facebook":' + p[6].to_json 
+            jsonstr += ',"photo":' + p[7].to_json + '}'
+          end
+          jsonstr = '[' + jsonstr + ']'
+          render_json  jsonstr, :content_type => 'application/json'
         }
     end
   end  
@@ -518,11 +533,31 @@ PARTICIPANT_QUERY = <<"EOS"
   IFNULL(edited_bios.bio, ''),
   IFNULL(edited_bios.website,''),
   IFNULL(edited_bios.twitterinfo,''),
-  IFNULL(edited_bios.facebook,'')
+  IFNULL(edited_bios.facebook,''),
+  IFNULL(edited_bios.photourl,''),
   from people
   left join pseudonyms ON pseudonyms.person_id = people.id
   left join edited_bios on edited_bios.person_id = people.id
   join published_programme_item_assignments where published_programme_item_assignments.person_id = people.id
+  GROUP BY people.id
+  ORDER BY people.last_name;
+EOS
+
+#
+PARTICIPANT_WITH_BIO_QUERY = <<"EOS"
+  select distinct
+  people.id,
+  case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
+  case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name,
+  IFNULL(edited_bios.bio, ''),
+  IFNULL(edited_bios.website,''),
+  IFNULL(edited_bios.twitterinfo,''),
+  IFNULL(edited_bios.facebook,''),
+  IFNULL(edited_bios.photourl,'')
+  from people
+  left join pseudonyms ON pseudonyms.person_id = people.id
+  left join edited_bios on edited_bios.person_id = people.id
+  where edited_bios.bio is not null
   GROUP BY people.id
   ORDER BY people.last_name;
 EOS

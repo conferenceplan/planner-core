@@ -153,12 +153,19 @@ class PeopleController < PlannerController
     else
       @count = eval "Person#{tagquery}.count :all, " + args.inspect
     end
-    @nbr_pages = (@count / rows.to_i).floor
-    @nbr_pages += 1 if @count % rows.to_i > 0
+    if rows.to_i > 0
+      @nbr_pages = (@count / rows.to_i).floor
+      @nbr_pages += 1 if @count % rows.to_i > 0
+    else
+      @nbr_pages = 1
+    end
     
     # now we get the actual data
     offset = (@page.to_i - 1) * rows.to_i
-    args.merge!(:offset => offset, :limit => rows, :order => idx + " " + order)
+    args.merge!(:offset => offset, :limit => rows)
+    if idx
+      args.merge!(:order => idx + " " + order)
+    end
     
     if tagquery.empty?
       @people = Person.find :all, args
@@ -166,10 +173,15 @@ class PeopleController < PlannerController
       @people = eval "Person#{tagquery}.find :all, " + args.inspect
     end
     
+    ActiveRecord::Base.include_root_in_json = false # hack for now
+
     # We return the list of people as an XML structure which the 'table' can use
     respond_to do |format|
       format.html { render :layout => 'content' } # list.html.erb
       format.xml
+      format.json {
+        render :json => @people, :callback => params[:callback]
+      }
     end
   end
   

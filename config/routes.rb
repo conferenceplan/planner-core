@@ -1,12 +1,18 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :mail_templates
+  
+  map.resources :mailing, :controller => 'admin/mailings'
+  map.connect 'mailings/:action', :controller => 'admin/mailings' #,  :member => {:list => :get, :del => :delete }
+
+  map.resources :mailing_configs, :controller => 'admin/mailing_configs'
 
   map.resources :mail_configs
-
+  
   map.connect 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
   map.connect 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
   map.connect 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
   map.connect 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
+  map.connect 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
   map.connect 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
   map.connect 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
   map.connect 'program/updateSelect', :controller => 'program', :action => 'updateSelect', :method => 'get'
