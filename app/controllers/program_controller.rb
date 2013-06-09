@@ -183,6 +183,16 @@ class ProgramController < ApplicationController
         }
     end
   end  
+  
+  # {
+        # "id": "1234",
+        # "name": [ "Galahad", "", "Sir" ],
+        # "prog": [ "416" ],
+        # "links": {
+            # "url": "http://en.wikipedia.org/wiki/Galahad"
+        # },
+        # "bio": "Sir Galahad (/ˈɡæləhæd/; Middle Welsh: Gwalchavad, sometimes referred to as Galeas /ɡəˈliːəs/ or Galath /ˈɡæləθ/), in Arthurian legend, is a knight of King Arthur's Round Table and one of the three achievers of the Holy Grail."
+    # },
 
   def participants_and_bios
     respond_to do |format|
@@ -194,11 +204,15 @@ class ProgramController < ApplicationController
             if jsonstr.length > 0
               jsonstr += ','
             end
-            jsonstr += '{"id":"' + p[0] + '","first":' + p[1].to_json + ',"last":' + p[2].to_json 
-            jsonstr += ',"bio":' + p[3].to_json 
-            jsonstr += ',"website":' + p[4].to_json +  ',"twitterinfo":' 
-            jsonstr += p[5].to_json +  ',"facebook":' + p[6].to_json 
-            jsonstr += ',"photo":' + p[7].to_json + '}'
+            jsonstr += '{"id":"' + p[0]  + '"'
+            jsonstr += ',"name": [' + p[1].to_json + ',' + p[2].to_json + ',' + p[3].to_json + ']'
+            jsonstr += ',"links": {' 
+            jsonstr += '"url":' + p[5].to_json +  ',"twitter":' 
+            jsonstr += p[6].to_json +  ',"facebook":' + p[7].to_json 
+            jsonstr += '}'
+            jsonstr += ',"bio":' + p[4].to_json 
+            jsonstr += ',"photo":' + p[8].to_json 
+            jsonstr += '}'
           end
           jsonstr = '[' + jsonstr + ']'
           render_json  jsonstr, :content_type => 'application/json'
@@ -534,7 +548,7 @@ PARTICIPANT_QUERY = <<"EOS"
   IFNULL(edited_bios.website,''),
   IFNULL(edited_bios.twitterinfo,''),
   IFNULL(edited_bios.facebook,''),
-  IFNULL(edited_bios.photourl,''),
+  IFNULL(edited_bios.photourl,'')
   from people
   left join pseudonyms ON pseudonyms.person_id = people.id
   left join edited_bios on edited_bios.person_id = people.id
@@ -549,6 +563,7 @@ PARTICIPANT_WITH_BIO_QUERY = <<"EOS"
   people.id,
   case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
   case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name,
+  case when pseudonyms.suffix is not null AND char_length(pseudonyms.suffix) > 0 then pseudonyms.suffix else people.suffix end as suffix,
   IFNULL(edited_bios.bio, ''),
   IFNULL(edited_bios.website,''),
   IFNULL(edited_bios.twitterinfo,''),
