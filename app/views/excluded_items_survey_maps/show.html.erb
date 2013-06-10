@@ -4,8 +4,10 @@
   <% if @excludedItemsSurveyMaps %>
     <% @excludedItemsSurveyMaps.each do |survey_map| %>
   	<div class='line'>
+  		<%if survey_map.survey_answer_id != nil%>
   		SurveyQuestion: 
 		<%= survey_map.survey_answer.answer %>
+		<% end %>
   	</div>
   <% end %>
   <% end %>
