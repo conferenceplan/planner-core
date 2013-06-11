@@ -208,9 +208,9 @@ class ProgramController < ApplicationController
             linksstr += '"photo":' + p[8].to_json if !p[8].empty?
             linksstr += "," if !linksstr.empty?
             linksstr += '"url":' + p[5].to_json if !p[5].empty?
-            linksstr += "," if !linksstr.empty?
+            linksstr += "," if !linksstr.empty? && !p[5].empty?
             linksstr += '"twitter":' + p[6].to_json if !p[6].empty?
-            linksstr += "," if !linksstr.empty?
+            linksstr += "," if !linksstr.empty? && !p[6].empty?
             linksstr += '"fb":' + p[7].to_json if !p[7].empty?
             
             jsonstr += linksstr + '}'
