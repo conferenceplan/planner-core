@@ -184,16 +184,9 @@ class ProgramController < ApplicationController
     end
   end  
   
-  # {
-        # "id": "1234",
-        # "name": [ "Galahad", "", "Sir" ],
-        # "prog": [ "416" ],
-        # "links": {
-            # "url": "http://en.wikipedia.org/wiki/Galahad"
-        # },
-        # "bio": "Sir Galahad (/ˈɡæləhæd/; Middle Welsh: Gwalchavad, sometimes referred to as Galeas /ɡəˈliːəs/ or Galath /ˈɡæləθ/), in Arthurian legend, is a knight of King Arthur's Round Table and one of the three achievers of the Holy Grail."
-    # },
-
+  #
+  # Return the participants and their Bios
+  #
   def participants_and_bios
     respond_to do |format|
       format.html { render :layout => 'content' }
@@ -205,13 +198,24 @@ class ProgramController < ApplicationController
               jsonstr += ','
             end
             jsonstr += '{"id":"' + p[0]  + '"'
-            jsonstr += ',"name": [' + p[1].to_json + ',' + p[2].to_json + ',' + p[3].to_json + ']'
-            jsonstr += ',"links": {' 
-            jsonstr += '"url":' + p[5].to_json +  ',"twitter":' 
-            jsonstr += p[6].to_json +  ',"facebook":' + p[7].to_json 
-            jsonstr += '}'
+            jsonstr += ',"name": [' + p[1].to_json + ',' + p[2].to_json # first, last, prefix, suffix
+            jsonstr += ', "",' + p[3].to_json if !p[3].empty?
+            jsonstr += ']' 
+            jsonstr += ',"tags": []' # Add tags - TODO 
+            jsonstr += ',"links": {'
+            
+            linksstr = ""
+            linksstr += '"photo":' + p[8].to_json if !p[8].empty?
+            linksstr += "," if !linksstr.empty?
+            linksstr += '"url":' + p[5].to_json if !p[5].empty?
+            linksstr += "," if !linksstr.empty?
+            linksstr += '"twitter":' + p[6].to_json if !p[6].empty?
+            linksstr += "," if !linksstr.empty?
+            linksstr += '"fb":' + p[7].to_json if !p[7].empty?
+            
+            jsonstr += linksstr + '}'
             jsonstr += ',"bio":' + p[4].to_json 
-            jsonstr += ',"photo":' + p[8].to_json 
+            jsonstr += ',"prog": []' # Add progam if any - TODO 
             jsonstr += '}'
           end
           jsonstr = '[' + jsonstr + ']'
