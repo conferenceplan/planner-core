@@ -59,6 +59,8 @@ class PublishedProgrammeItem < ActiveRecord::Base
         :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
         )
         
+        res['hhhh'] = 'hhhh'
+        
         
     # logger.debug res
 

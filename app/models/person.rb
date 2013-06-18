@@ -54,6 +54,11 @@ class Person < ActiveRecord::Base
   has_enumerated :acceptance_status, :class_name => 'AcceptanceStatus'
   
   #
+  has_many  :person_mailing_assignments
+  has_many  :mailings, :through => :person_mailing_assignments
+  has_many  :mail_histories, :through => :person_mailing_assignments
+  
+  #
   acts_as_taggable
   
   named_scope :by_last_name, :order => "last_name ASC"
@@ -70,6 +75,16 @@ class Person < ActiveRecord::Base
   
   has_one :peoplesource, :dependent => :delete
   has_one :datasource, :through => :peoplesource
+  
+  def as_json(options={})
+    if options[:include_pseudonym]
+      res = super(:include => :pseudonym)
+    else  
+      res = super()
+    end
+
+    return res
+  end
   
   def bio
     if edited_bio

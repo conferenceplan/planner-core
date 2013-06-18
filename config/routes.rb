@@ -5,6 +5,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'mailings/:action', :controller => 'admin/mailings' #,  :member => {:list => :get, :del => :delete }
 
   map.resources :mailing_configs, :controller => 'admin/mailing_configs'
+  map.resources :person_mailing_assignments, :controller => 'admin/person_mailing_assignments'
 
   map.resources :mail_configs
   
@@ -119,7 +120,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :people, :as => "participants", 
     :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items],
     :has_one => [:registrationDetail, :edited_bio, :available_date],
-    :collection => {:list => :get },
+    :collection => {:list => [:post, :get] },
     :member => {:show => :get}
 
   map.resources :equipment_needs, :has_many => :programme_items

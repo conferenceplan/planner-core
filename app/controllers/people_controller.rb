@@ -112,17 +112,31 @@ class PeopleController < PlannerController
     order = params[:sord]
     context = params[:context]
     nameSearch = params[:namesearch]
+    mailing_id = params[:mailing_id]
+    scheduled = params[:scheduled]
     
     clause = createWhereClause(params[:filters], 
-    ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
+    ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'],
     ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
     
     # add the name search for last of first etc
-    if nameSearch && ! nameSearch.empty? #
+    if nameSearch && ! nameSearch.empty?
       clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + nameSearch + '%')
       clause << '%' + nameSearch + '%'
       clause << '%' + nameSearch + '%'
       clause << '%' + nameSearch + '%'
+    end
+    
+    if mailing_id && ! mailing_id.empty? # add not in
+      clause = addClause( clause, 'people.id not in (select person_id from person_mailing_assignments where mailing_id = ?)', mailing_id)
+    end
+    
+    if scheduled && ! scheduled.empty?
+      if scheduled == "true"
+        # Then we want to filter for scehduled people
+        # select distinct person_id from programme_item_assignments;
+        clause = addClause( clause, 'people.id in (select distinct person_id from programme_item_assignments)', nil)
+      end
     end
 
     # if the where clause contains pseudonyms. then we need to add the join
@@ -130,11 +144,13 @@ class PeopleController < PlannerController
     if nameSearch && ! nameSearch.empty?
       args.merge!( :joins => 'LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
     else
-      if clause != nil && clause[0].index('pseudonyms.') != nil
-        args.merge!( :joins => :pseudonym )
-      end
+      # if clause != nil && clause[0].index('pseudonyms.') != nil
+        args.merge!( :include => [:pseudonym] )
+        #args.merge!( :joins => :person_mailing_assignments )
+        # args.merge!( :joins => 'LEFT OUTER JOIN person_mailing_assignments ON person_mailing_assignments.person_id = people.id' )
+      # end
     end
-    
+        
     tagquery = ""
     if context
       if context.class == HashWithIndifferentAccess
@@ -167,6 +183,8 @@ class PeopleController < PlannerController
       args.merge!(:order => idx + " " + order)
     end
     
+    # args.merge!(:select => "DISTINCT people.id as id, last_name, first_name, suffix, language, invitestatus_id, invitation_category_id, acceptance_status_id, mailing_number, comments, people.lock_version as lock_version")
+    
     if tagquery.empty?
       @people = Person.find :all, args
     else
@@ -180,7 +198,8 @@ class PeopleController < PlannerController
       format.html { render :layout => 'content' } # list.html.erb
       format.xml
       format.json {
-        render :json => @people, :callback => params[:callback]
+        # TODO - make the pseudonym inclusion a paramter from the request
+        render :json => { :data => @people, :totalRecords => @count }.to_json(:include_pseudonym => true), :callback => params[:callback] 
       }
     end
   end
