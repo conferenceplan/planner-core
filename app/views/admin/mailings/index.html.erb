@@ -1,0 +1,34 @@
+<% content_for :jsheader do %>
+  <%= render_cell :mailing, :javascript %>
+<% end %>
+<%= render_cell :mailing, :templates %>
+
+<div class='container_12'>
+    <div class='grid_3 mailings-area'>
+        <div class='mailing-configs-control' id='mailing-configs-control'>
+        </div>
+    </div>
+    <div class='grid_9 mailings-config-area'>
+        <div class='current-mailing-configs' id='current-mailing-configs'>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<div class='container_12'>
+    <div class='grid_4 mailings-people-area'>
+        <div class='mailing-people-pager' id='mailing-people-pager'>
+        </div>
+        <ul class='mailing-people selectable' id='mailing-people'>
+        </ul>
+    </div>
+    <div class='grid_1'>
+        <div class='mailing-people-controls' id='mailing-people-controls'>
+        </div>
+    </div>
+    <div class='grid_5 mailings-assigned-people-area'>
+        <div class='current-mailing-control' id='current-mailing-control'>
+        </div>
+        <ul class='current-mailing-people selectable' id='current-mailing-people'>
+        </ul>
+    </div>
+</div>

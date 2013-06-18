@@ -1,0 +1,100 @@
+
+<script type="text/template" id="mailing-config-template">
+    <div class='mailing-create'>
+        <button class="create-button">New Mailing</button>
+    </div>
+    <div class='mailing-select'>
+    <select id="mailingID" name="mailingID" class="mailingID">
+    <option value="-1">--select a mailing--</option>
+    {{_.each(col.models, function(n) { }}
+        <option value="{{= n.get('id')}}" >{{= n.get('mailing_number') }} -- {{= n.get('mail_use') }}</option>
+    {{ });}}
+    </select>
+    </div>
+</script>
+
+<script type="text/template" id="mailing-create-template">
+    <div>
+    Mailing Number: <input type="text" class="mailing-number"/>
+    </div>
+    <select id="configID" name="configID" class="configID">
+    <option value="-1">--select a template--</option>
+    {{_.each(templates.models, function(n) { }}
+        <option value="{{= n.get('id')}}">{{= n.get('title') }} -- {{= n.get('mail_use') }}</option>
+    {{ });}}
+    </select>
+    <div>
+        <button id="close-button">Cancel</button>
+        <button id="create-button">Create</button>
+    </div>
+</script>
+
+<script type="text/template" id="mailing-setup-template">
+    <div>
+        Schedule: <input type="checkbox" class="mailing-scheduled" {{= scheduled ? 'checked' : ''}}/>
+    </div>    
+    <div>
+        Test Run: <input type="checkbox" class="mailing-test-run" {{= testrun ? 'checked' : ''}}/>
+    </div>    
+    <div>
+        <button id="save-mailing-button">Save</button>
+    </div>
+</script>
+
+<script type="text/template" id="person-template">
+    <div class='person-row'>
+        <div class='name'>
+            {{= person.first_name }} {{= person.last_name }}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="mailing-person-template">
+    <div class='person-row'>
+        <div class='name'>
+            {{= person.first_name }} {{= person.last_name }}
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="list-control-template">
+    <div><button class="add">ADD</button></div>
+    <div><button class="remove">REMOVE</button><div>
+</script>
+
+<script type="text/template" id="people-pager-template">
+    <div>
+        
+    <div class="pagination span4">
+        {{ if (currentPage > firstPage) { }}
+          <button class="previous">Previous</button>
+        {{ }else{ }}
+          <span>Previous</span>
+        {{ } }}
+        {{ if (currentPage < totalPages) { }}
+          <button class="next">Next</button>
+        {{ } else { }}
+          <span>Next</span>
+        {{ } }}
+        {{ if (firstPage != currentPage) { }}
+          <button class="first">First</button>
+        {{ } else { }}
+          <span>First</span>
+        {{ } }}
+        {{ if (totalPages != currentPage) { }}
+          <button class="last">Last</button>
+        {{ } else { }}
+          <span>Last</span>
+        {{ } }}
+    </div>
+    
+    </div>
+
+
+</script>
+
+<script type="text/template" id="current-mailing-control-template">
+    <div class="mailing-list-controls">
+          <button class="preview">Preview</button>
+    </div>
+</script>
