@@ -452,6 +452,16 @@ def updateExcludedItemsFromSurveys
       end
     end
 end
+def clearConflictsFromSurvey
+  
+end
+
+def doClearConflictsFromSurvey
+  exclusionsToRemove = Exclusion.find_all_by_source('survey')
+  exclusionsToRemove.each do |exclusion|
+     exclusion.destroy
+  end
+end
 
 def updateConflictsFromSurvey
     excludedItemMaps = ExcludedItemsSurveyMap.find :all
