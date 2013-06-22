@@ -30,6 +30,11 @@ class Admin::MailingsController < PlannerController
     mailing.scheduled = params[:scheduled]
     
     mailing.save!
+
+    if mailing.scheduled
+      mailingJob = MailingJob.new
+      Delayed::Job.enqueue mailingJob
+    end
     
     ActiveRecord::Base.include_root_in_json = false
     
