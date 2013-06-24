@@ -135,7 +135,7 @@ class PeopleController < PlannerController
       if scheduled == "true"
         # Then we want to filter for scehduled people
         # select distinct person_id from programme_item_assignments;
-        clause = addClause( clause, 'people.id in (select distinct person_id from programme_item_assignments)', nil)
+        clause = addClause( clause, 'people.id in (select distinct person_id from room_item_assignments ra join programme_item_assignments pa on pa.programme_item_id = ra.programme_item_id)', nil)
       end
     end
 
