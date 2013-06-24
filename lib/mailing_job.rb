@@ -43,7 +43,8 @@ class MailingJob
 
       mailing.scheduled = false
       mailing.save
-      
+      sleep 20 # For 20 seconds
+
     end
   end
   

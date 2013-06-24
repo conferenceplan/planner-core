@@ -80,17 +80,18 @@ class SurveyMailer < ActionMailer::Base
       # item
       result += '<div>'
       # title
-      result += '<h2>' + assignment.programmeItem.title  + '</h2>'
+      result += '<h2>' + assignment.programmeItem.title  + '</h2>' if assignment.programmeItem
       # time
       if (assignment.programmeItem.time_slot)
         result += '<p>' + assignment.programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + assignment.programmeItem.time_slot.end.strftime('%H:%M') + '</p>'
       end
-      # description
-      result += '<p>' + assignment.programmeItem.precis + '</p>'
+      #description
+      result += '<p>' + assignment.programmeItem.precis + '</p>' if assignment.programmeItem.precis
       # participants (name + email)
       names = []
       assignment.programmeItem.programme_item_assignments.each do |asg|
         if asg.person != nil
+          name = ''
           if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
             name = asg.person.GetFullPublicationName()
             name += " (M)" if asg.role == PersonItemRole['Moderator']                
@@ -100,8 +101,8 @@ class SurveyMailer < ActionMailer::Base
               end
             end
           end
+          names << name
         end
-        names << name
       end
         
       result += '<p>' + names.join(', ') + '</p>'
