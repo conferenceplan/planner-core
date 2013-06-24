@@ -78,15 +78,15 @@ class SurveyMailer < ActionMailer::Base
     assignments.each do | assignment |
       
       # item
-      result += '<div>'
+      result += "<div>\n"
       # title
-      result += '<h2>' + assignment.programmeItem.title  + '</h2>' if assignment.programmeItem
+      result += '<h2>' + assignment.programmeItem.title  + "</h2>\n" if assignment.programmeItem
       # time
       if (assignment.programmeItem.time_slot)
-        result += '<p>' + assignment.programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + assignment.programmeItem.time_slot.end.strftime('%H:%M') + '</p>'
+        result += '<p>' + assignment.programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + assignment.programmeItem.time_slot.end.strftime('%H:%M') + "</p>\n"
       end
       #description
-      result += '<p>' + assignment.programmeItem.precis + '</p>' if assignment.programmeItem.precis
+      result += '<p>' + assignment.programmeItem.precis + "</p>\n" if assignment.programmeItem.precis
       # participants (name + email)
       names = []
       assignment.programmeItem.programme_item_assignments.each do |asg|
@@ -97,7 +97,7 @@ class SurveyMailer < ActionMailer::Base
             name += " (M)" if asg.role == PersonItemRole['Moderator']                
             asg.person.email_addresses.each do |addr|
               if addr.isdefault #&& (!@NoShareEmailers.index(asg.person))
-                name += "(" + addr.email + ")"
+                name += "(" + addr.email + ")\n"
               end
             end
           end
@@ -105,10 +105,10 @@ class SurveyMailer < ActionMailer::Base
         end
       end
         
-      result += '<p>' + names.join(', ') + '</p>'
+      result += '<p>' + names.join(', ') + "</p>\n"
       
       # equipment
-      result += '</div></br>'
+      result += "</div></br>\n"
     end
     
     return result
