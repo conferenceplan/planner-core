@@ -219,7 +219,7 @@ jQuery(document).ready(function(){
         height: "100%",
         rowList: [10, 20, 30],
         pager: jQuery('#pager'),
-        sortname: 'last_name',
+        sortname: 'people.last_name',
         sortorder: "asc",
         viewrecords: true,
         imgpath: 'stylesheets/cupertino/images',
