@@ -55,7 +55,7 @@ module PlannerReportHelpers
          categoryList = params[:schedule][:invitation_category_id]
       end
 
-      @NoShareEmailers = search_survey_exact('g93q7', '3')
+      @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
 
       selectConditions = ''
 

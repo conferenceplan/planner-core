@@ -571,7 +571,7 @@ logger.debug(params[:specific_panelists].join(","))
   # This is a sample to do the same as the query report in less time...
   #
   def schedule_report_opt
-    @NoShareEmailers = search_survey_exact('g93q7', '3')
+    @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
 
     @people = Person.all(
         :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))',
@@ -606,7 +606,8 @@ logger.debug(params[:specific_panelists].join(","))
        categoryList = params[:schedule][:invitation_category_id]
      end
      
-    @NoShareEmailers = search_survey_exact('g93q7', '3')
+    @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
+
       selectConditions = ''
       if (peopleList != nil && peopleList.size() != 0)
             addOr = "AND ("
@@ -761,7 +762,7 @@ logger.debug(params[:specific_panelists].join(","))
       categoryList = params[:schedule][:invitation_category_id]
     end
 
-    @NoShareEmailers = search_survey_exact('g93q7', '3')
+    @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
 
     selectConditions = ''
 

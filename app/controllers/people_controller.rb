@@ -422,36 +422,6 @@ def acceptancestatuslistwithblank
     render :layout => 'plain'
 end
 
-def updateExcludedItemsFromSurveys
-  
-    excludedItemMaps = ExcludedItemsSurveyMap.find :all
-    peopleIdMap = {}
-    @peopleUpdate = []
-    excludedItemMaps.each do |excludedItemMap|
-      @people = search_survey_exact(excludedItemMap.mapped_survey_question.question,excludedItemMap.mapped_survey_question.code)
-      @programmeItem = ProgrammeItem.find(excludedItemMap.programme_item_id)
-      @people.each do |person|
-        found = false
-        person.excluded_items.each do |personItem|
-          if (personItem.id == @programmeItem.id)
-            found = true
-          end
-        end
-        if (found == false)
-          @excludedItem = person.excluded_items << @programmeItem
-          
-          person.save
-          @exclusion = Exclusion.find_by_person_id_and_excludable_id_and_excludable_type(person.id,@programmeItem.id,'ProgrammeItem')
-          @exclusion.source = 'survey'
-          @exclusion.save
-          if (peopleIdMap.has_key?(person.id) == false)
-            @peopleUpdate << person
-            peopleIdMap[person.id] = 1
-          end
-        end
-      end
-    end
-end
 def clearConflictsFromSurvey
   
 end
@@ -579,37 +549,6 @@ def updateConflictsFromSurvey
         end
    end
   
-end
-
-def updateExcludedTimesFromSurveys
-    
-    excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
-    peopleIdMap = {}
-    @peopleUpdate = []
-    excludedTimesMaps.each do |excludedTimesMap|
-      @people = search_survey_exact(excludedTimesMap.survey_question,excludedTimesMap.survey_code)
-      @people.each do |person|
-        found = false
-        person.excluded_periods.each do |personPeriod|
-          if (personPeriod == excludedTimesMap.period)
-            found = true
-          end
-        end
-        if (found == false)
-          excludedPeriod = Period.find excludedTimesMap.period_id
-          @excludedTime = person.excluded_periods << excludedPeriod
-        
-          person.save
-          @exclusion = Exclusion.find_by_person_id_and_excludable_id_and_excludable_type(person.id,excludedTimesMap.period_id,'TimeSlot')
-          @exclusion.source = 'survey'
-          @exclusion.save
-          if (peopleIdMap.has_key?(person.id) == false)
-            @peopleUpdate << person
-            peopleIdMap[person.id] = 1
-          end
-        end
-      end
-    end
 end
 
 private
