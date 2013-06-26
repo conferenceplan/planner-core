@@ -50,19 +50,10 @@ end
     end
     @availableDate = AvailableDate.new
     person = Person.find(params[:person_id])
-    tmp = person.GetSurveyStartDate
-    if (tmp)
-       @availableDate.start_time = tmp
-    else
-         @availableDate.start_time  =  GetDefaultStart()
-    end
+    
+    @availableDate.start_time  =  GetDefaultStart() # TODO - limit by start date at con from survey if answered
 
-    tmp = person.GetSurveyEndDate
-    if (tmp)
-       @availableDate.end_time = tmp
-    else
-       @availableDate.end_time =  GetDefaultEnd()
-    end
+    @availableDate.end_time =  GetDefaultEnd() # TODO - limit by end date at con from survey if answered
     
     render :layout => 'content'
   end

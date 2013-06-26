@@ -118,34 +118,8 @@ class Person < ActiveRecord::Base
     end
   end
   
-  def GetFullNameHelper(first_name,last_name,suffix)
-      name = ""
-      # set first name if it exists
-      if (first_name != nil)
-        name = first_name
-      end
-      
-      # append last name if exits
-      if (last_name != nil)
-        # if there is a first name append with space
-        if (name != "")
-           name = name + " " + last_name
-        else
-          # no first name, don't put space in
-          name = last_name
-        end
-      end
-    
-      # append suffix if it exits
-      if (suffix != nil)
-        name = name + " " + suffix
-      end
-      
-      return name
-  end
-  
   def GetFullName()
-      return GetFullNameHelper(self.first_name,self.last_name,self.suffix)
+    [self.first_name,self.last_name,self.suffix].compact.join(' ')
   end
   
   def findPhoneByType(phonetype)
@@ -286,7 +260,7 @@ class Person < ActiveRecord::Base
   def GetFullPublicationName
    # if we set the pseudonym in people table, use that
    if (self.pseudonym != nil)
-        name = GetFullNameHelper(self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix)
+        name = [self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix].compact.join(' ')
         if (name =~ /^\s*$/)
            name = GetFullName()
         end
@@ -323,68 +297,6 @@ class Person < ActiveRecord::Base
       return ''
     end
   end
- 
-  # TODO - these need to change
-  
-  def GetSurveyQuestionResponse(questionId)
-    if (self.hasSurvey?)
-         survey = SmerfFormsSurveyrespondent.find_user_smerf_form(self.survey_respondent.id, 1)
-         if (survey == nil)
-           return nil
-         else
-           if (survey.responses[questionId] != "")
-           return survey.responses[questionId]
-         else
-           return nil
-         end
-       end
-     else
-       return nil
-     end
-  end
-  
-  def GetWebSite()
-       return (GetSurveyQuestionResponse('g95q2'))    
-  end
- 
-  def GetFacebookInfo()
-    return (GetSurveyQuestionResponse('g96q1'))    
-  end
- 
- def GetTwitterInfo()
-   return (GetSurveyQuestionResponse('g96q2'))
- end
- 
- def GetOtherSocialMediaInfo()
-      return (GetSurveyQuestionResponse('g96q3'))
- end
- 
- def GetPhotoUrl()
-   doNotPostPhoto = GetSurveyQuestionResponse('g95q4')
-   if (doNotPostPhoto)
-     return "Do Not Post Photo"
-   else
-     return (GetSurveyQuestionResponse('g95q3'))
-   end
- end
- 
- 
- 
- 
- def GetShareEmail()
-   shareEmail = true
-
-   if (self.hasSurvey?)
-    surveyList = GetSurveyQuestionResponse('g93q7')
-    if (surveyList != nil)
-      if (surveyList.has_key?('3'))
-          shareEmail = false
-      end
-    end
-   end
-   return shareEmail
-  
- end
  
   def removePostalAddress(address)
     # TODO - change to handle any address type
