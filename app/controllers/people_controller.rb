@@ -1,5 +1,4 @@
 class PeopleController < PlannerController
-  include SurveyReportHelpers
 
   def destroy
     person = Person.find(params[:id])
@@ -439,7 +438,7 @@ def updateConflictsFromSurvey
     @peopleUpdate = []
     excludedItemMaps.each do |excludedItemMap|
       next if (excludedItemMap.survey_answer_id == nil)
-      @people = search_newsurvey_by_answer(excludedItemMap.survey_answer)
+      @people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer)
       @programmeItem = ProgrammeItem.find(excludedItemMap.programme_item_id)
       @people.each do |person|
         found = false
@@ -470,7 +469,7 @@ def updateConflictsFromSurvey
   excludedTimesMaps.each do |excludedTimesMap|
       next if (excludedTimesMap.survey_answer_id == nil)
 
-      @people = search_newsurvey_by_answer(excludedTimesMap.survey_answer)
+      @people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer)
 
       @people.each do |person|
         found = false
@@ -501,9 +500,9 @@ def updateConflictsFromSurvey
         startOfConference = Time.zone.parse(SITE_CONFIG[:conference][:start_date])
         numberOfDays = SITE_CONFIG[:conference][:number_of_days]
 
-        @people = search_newsurvey_by_question(availSurveyQuestion)
+        @people = SurveyService.findPeopleWhoAnsweredQuestion(availSurveyQuestion)
         @people.each do |person|
-          surveyResponse = get_newsurvey_responses_for_question_for_person(availSurveyQuestion,person.id)
+          surveyResponse = SurveyService.findResponseToQuestionForPerson(availSurveyQuestion,person)
           if (surveyResponse != nil)
             if (surveyResponse[0].response == '2')
               if (surveyResponse[0].response2 != '---')

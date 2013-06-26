@@ -4,7 +4,6 @@
 #
 class PlannerReportsController < PlannerController
    include PlannerReportHelpers
-   include SurveyReportHelpers
 
    require 'time_diff'
    require 'fastercsv'
