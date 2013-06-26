@@ -23,6 +23,10 @@
         <div class='line'><div class='field_name'>Additional:</div><div class='field_value'><%= f.text_field :additional %></div></div>
         <div class='line'><div class='field_name'>Mandatory:</div><div class='field_value'><%= f.check_box :mandatory %></div></div>
         <div class='line'><div class='field_name'>Text Size:</div><div class='field_value'><%= f.text_field :text_size %></div></div>
+        <div class='line'>
+            <div class='field_name'>Mapping:</div>
+            <div class='field_value'><%= f.select :questionmapping_id,QuestionMapping.find(:all).collect {|s| [s.name,s.id] },{:include_blank => false} %></div>
+        </div>
     </fieldset>
 
     <%
