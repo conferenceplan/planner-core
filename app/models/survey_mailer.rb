@@ -91,8 +91,8 @@ class SurveyMailer < ActionMailer::Base
         names = []
         assignment.programmeItem.programme_item_assignments.each do |asg|
           if asg.person != nil
-            name = ''
             if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
+              name = ''
               name = asg.person.GetFullPublicationName()
               name += " (M)" if asg.role == PersonItemRole['Moderator']                
               asg.person.email_addresses.each do |addr|
@@ -100,8 +100,8 @@ class SurveyMailer < ActionMailer::Base
                   name += "(" + addr.email + ")\n"
                 end
               end
+              names << name
             end
-            names << name
           end
         end
         result += '<p>' + names.join(', ') + "</p>\n"
