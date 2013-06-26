@@ -77,6 +77,8 @@ class SurveyMailer < ActionMailer::Base
   def assignments_to_html(assignments)
     result = ''
     
+    noShareEmails = SurveyService.findPeopleWithDoNotShareEmail
+    
     assignments.each do | assignment |
       if (assignment.programmeItem.time_slot) # only interested in items that have been assigned to a time slot
         # item
@@ -96,7 +98,7 @@ class SurveyMailer < ActionMailer::Base
               name = asg.person.GetFullPublicationName()
               name += " (M)" if asg.role == PersonItemRole['Moderator']                
               asg.person.email_addresses.each do |addr|
-                if addr.isdefault #&& (!@NoShareEmailers.index(asg.person))
+                if addr.isdefault && (!noShareEmails.index(asg.person))
                   name += "(" + addr.email + ")\n"
                 end
               end
