@@ -51,5 +51,12 @@ class SurveyService
         question.id, person.id, inviteStatus, acceptanceStatus, attending]
          
   end
+  
+  #
+  # Each question will have a subtype (plain, url, twitter, photo, etc that can be used to provide semantic info)
+  #
+  def self.findResponseToQuestionTypeForPerson(questionSubType, person)
+    return '' # TODO - this should be based on the type of answer to the question i.e. time etc
+  end
 
 end

@@ -118,32 +118,14 @@ class Person < ActiveRecord::Base
     end
   end
   
-  def GetFullName()
-    [self.first_name,self.last_name,self.suffix].compact.join(' ')
-  end
-  
-  def findPhoneByType(phonetype)
-    # go through the phones and see if any of them match the given phonetype
-    # if they do then say so
-    
-    phone_numbers.each do |p|
-      if p.phone_type == PhoneTypes[phonetype]
-        return p
-      end
-    end
-    
-    return nil
-  end
-  
   def updatePhone(new_phone, phonetype)
     
     # first find the existing phone of the given type
     # if found update it
     # otherwise create a new instance
-    phone = findPhoneByType(phonetype)
+    phone = phone_numbers.detect { |ph| ph.phone_type == PhoneTypes[phonetype] }# findPhoneByType(phonetype)
     if phone
       phone.number = new_phone
-      phone.phone_type = PhoneTypes[phonetype]
       phone.save!
     else
       phone = self.phone_numbers.new :number => new_phone
@@ -262,11 +244,11 @@ class Person < ActiveRecord::Base
    if (self.pseudonym != nil)
         name = [self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix].compact.join(' ')
         if (name =~ /^\s*$/)
-           name = GetFullName()
+           name = [self.first_name,self.last_name,self.suffix].compact.join(' ')
         end
         return name
     else
-        return GetFullName()
+        return [self.first_name,self.last_name,self.suffix].compact.join(' ')
     end
   end
   

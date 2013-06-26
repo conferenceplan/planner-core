@@ -99,4 +99,6 @@ ActiveRecord::VirtualEnumerations.define do |config|
  config.define 'AnswerType',
     :extends => 'Enum'
     
+ config.define 'QuestionMapping',
+    :extends => 'Enum'
 end
