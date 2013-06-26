@@ -1,6 +1,5 @@
 class SurveyAnswer < ActiveRecord::Base
-  # has_many :survey_sub_questions
-  # has_many :survey_questions, :through => :survey_sub_questions
+
   has_enumerated :answertype, :class_name => 'AnswerType'
   belongs_to :survey_question
   has_many :excluded_periods_survey_maps, :dependent => :destroy

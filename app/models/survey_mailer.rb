@@ -42,19 +42,21 @@ class SurveyMailer < ActionMailer::Base
       sendto = config.test_email
       ccTo = nil
     else
-      sendto = person.getDefaultEmail
+      sendto = person.getDefaultEmail.email
       ccTo = config.cc
     end
 
     # then send the email
-    headers "return-path" => config.from
-    recipients sendto
-    cc        ccTo
-    from      config.from
-    subject   template.subject # to get from the mail template
-    sent_on   Time.now
-    content_type "text/html"
-    body      :title => template.title, :body => content
+    if sendto
+      headers "return-path" => config.from
+      recipients sendto
+      cc        ccTo
+      from      config.from
+      subject   template.subject # to get from the mail template
+      sent_on   Time.now
+      content_type "text/html"
+      body      :title => template.title, :body => content
+    end
   end
   
   def preview(person, mailuse, args) 
@@ -76,39 +78,37 @@ class SurveyMailer < ActionMailer::Base
     result = ''
     
     assignments.each do | assignment |
-      
-      # item
-      result += "<div>\n"
-      # title
-      result += '<h2>' + assignment.programmeItem.title  + "</h2>\n" if assignment.programmeItem
-      # time
-      if (assignment.programmeItem.time_slot)
+      if (assignment.programmeItem.time_slot) # only interested in items that have been assigned to a time slot
+        # item
+        result += "<div>\n"
+        # title
+        result += '<h2>' + assignment.programmeItem.title  + "</h2>\n" if assignment.programmeItem
+        # time
         result += '<p>' + assignment.programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + assignment.programmeItem.time_slot.end.strftime('%H:%M') + "</p>\n"
-      end
-      #description
-      result += '<p>' + assignment.programmeItem.precis + "</p>\n" if assignment.programmeItem.precis
-      # participants (name + email)
-      names = []
-      assignment.programmeItem.programme_item_assignments.each do |asg|
-        if asg.person != nil
-          name = ''
-          if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
-            name = asg.person.GetFullPublicationName()
-            name += " (M)" if asg.role == PersonItemRole['Moderator']                
-            asg.person.email_addresses.each do |addr|
-              if addr.isdefault #&& (!@NoShareEmailers.index(asg.person))
-                name += "(" + addr.email + ")\n"
+        # description
+        result += '<p>' + assignment.programmeItem.precis + "</p>\n" if assignment.programmeItem.precis
+        # participants (name + email)
+        names = []
+        assignment.programmeItem.programme_item_assignments.each do |asg|
+          if asg.person != nil
+            name = ''
+            if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
+              name = asg.person.GetFullPublicationName()
+              name += " (M)" if asg.role == PersonItemRole['Moderator']                
+              asg.person.email_addresses.each do |addr|
+                if addr.isdefault #&& (!@NoShareEmailers.index(asg.person))
+                  name += "(" + addr.email + ")\n"
+                end
               end
             end
+            names << name
           end
-          names << name
         end
-      end
-        
-      result += '<p>' + names.join(', ') + "</p>\n"
+        result += '<p>' + names.join(', ') + "</p>\n"
       
-      # equipment
-      result += "</div></br>\n"
+        # equipment
+        result += "</div></br>\n"
+      end
     end
     
     return result

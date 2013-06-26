@@ -421,6 +421,7 @@ jQuery(document).ready(function() {
         
         setTestRun : function(ev) {
             this.options.model.set('testrun', !this.options.model.get('testrun') );
+            this.options.model.save();
         },
         
         saveMailing : function(ev) {
@@ -623,10 +624,11 @@ jQuery(document).ready(function() {
             this.selected = new SelectedPeople(); //
             
             this.options.evAggregator.bind("addToMailing", this.addToMailing, this);
+            this.options.evAggregator.bind("refreshLists", this.refreshList, this);
         },
         
         refreshList : function() {
-            //this.options.model.fetch();
+            this.options.model.fetch();
             this.selected.reset();
         },
         
