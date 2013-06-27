@@ -704,8 +704,12 @@ logger.debug(params[:specific_panelists].join(","))
           panelinfo['venue'] = itm.room.venue.name
           panelinfo['time'] = itm.time_slot.start.strftime('%Y-%m-%d %H:%M')
           panelinfo['strtime'] = "#{itm.time_slot.start.strftime('%a %H:%M')} - #{itm.time_slot.end.strftime('%H:%M')}"
-          description = itm.precis.gsub('\n','')
-          description = description.gsub('\r','')
+          if itm.precis
+            description = itm.precis.gsub('\n','')
+            description = description.gsub('\r','')
+          else
+            description = ''  
+          end
           panelinfo['description'] = description
           panelinfo['participants'] = names.join(', ')
           panelinfo['equipment'] = equipList.join(', ')                      

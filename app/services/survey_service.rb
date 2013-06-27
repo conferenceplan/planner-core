@@ -53,10 +53,15 @@ class SurveyService
   end
   
   #
-  # Each question will have a subtype (plain, url, twitter, photo, etc that can be used to provide semantic info)
+  # For a given person find the value for the mapped question if there is an answer...
   #
-  def self.findResponseToQuestionTypeForPerson(questionSubType, person)
-    return '' # TODO - this should be based on the type of answer to the question i.e. time etc
+  def self.getValueOfMappedQuestion(person, questionMapping)
+    
+    # Get the first value that maps to the question...
+    response = SurveyResponse.first :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
+      :conditions => ["survey_questions.questionmapping_id = ? and people.id = ?", questionMapping.id, person.id]
+    
+    response.response
   end
 
 end

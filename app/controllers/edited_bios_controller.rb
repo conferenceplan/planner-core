@@ -48,12 +48,12 @@ end
     @editedBio = EditedBio.new
     person = Person.find(params[:person_id])
     # TODO - these need to come from the new survey mechanism
-    # @editedBio.bio = person.GetSurveyBio
-    # @editedBio.website = person.GetWebSite
-    # @editedBio.twitterinfo = person.GetTwitterInfo
-    # @editedBio.othersocialmedia = person.GetOtherSocialMediaInfo
-    # @editedBio.photourl = person.GetPhotoUrl
-    # @editedBio.facebook = person.GetFacebookInfo
+    @editedBio.bio = person.GetSurveyBio
+    @editedBio.website = person.GetWebSite
+    @editedBio.twitterinfo = person.GetTwitterInfo
+    @editedBio.othersocialmedia = person.GetOtherSocialMediaInfo
+    @editedBio.photourl = person.GetPhotoUrl
+    @editedBio.facebook = person.GetFacebookInfo
     render :layout => 'content'
   end
   

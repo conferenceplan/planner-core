@@ -1,5 +1,6 @@
 class SurveyQuestion < ActiveRecord::Base
-  
+  has_enumerated :questionmapping, :class_name => 'QuestionMapping'
+
   belongs_to  :survey_group
   has_one :survey_format, :as => :formatable, :dependent => :destroy
   accepts_nested_attributes_for :survey_format

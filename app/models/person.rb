@@ -118,6 +118,10 @@ class Person < ActiveRecord::Base
     end
   end
   
+  def GetFullName()
+    [self.first_name,self.last_name,self.suffix].compact.join(' ')
+  end
+  
   def updatePhone(new_phone, phonetype)
     
     # first find the existing phone of the given type
@@ -279,6 +283,36 @@ class Person < ActiveRecord::Base
       return ''
     end
   end
+  
+  def GetWebSite()
+    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['WebSite'])
+  end
+ 
+  def GetFacebookInfo()
+    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Facebook'])
+  end
+ 
+ def GetTwitterInfo()
+    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Twitter'])
+ end
+ 
+ def GetOtherSocialMediaInfo()
+    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['OtherSocialMedia'])
+ end
+ 
+ def GetPhotoUrl()
+   # doNotPostPhoto = GetSurveyQuestionResponse('g95q4')
+   # if (doNotPostPhoto)
+     # return "Do Not Post Photo"
+   # else
+     # return (GetSurveyQuestionResponse('g95q3'))
+   # end
+    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Photo'])
+ end
+
+
+
+
  
   def removePostalAddress(address)
     # TODO - change to handle any address type
