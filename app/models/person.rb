@@ -284,36 +284,32 @@ class Person < ActiveRecord::Base
     end
   end
   
-  def GetWebSite()
-    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['WebSite'])
-  end
- 
-  def GetFacebookInfo()
-    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Facebook'])
-  end
- 
- def GetTwitterInfo()
-    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Twitter'])
- end
- 
- def GetOtherSocialMediaInfo()
-    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['OtherSocialMedia'])
- end
- 
- def GetPhotoUrl()
-   # doNotPostPhoto = GetSurveyQuestionResponse('g95q4')
-   # if (doNotPostPhoto)
-     # return "Do Not Post Photo"
-   # else
-     # return (GetSurveyQuestionResponse('g95q3'))
-   # end
-    SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Photo'])
- end
+  # def GetWebSite()
+    # SurveyService.getValueOfMappedQuestion(self, QuestionMapping['WebSite'])
+  # end
+#  
+  # def GetFacebookInfo()
+    # SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Facebook'])
+  # end
+#  
+ # def GetTwitterInfo()
+    # SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Twitter'])
+ # end
+#  
+ # def GetOtherSocialMediaInfo()
+    # SurveyService.getValueOfMappedQuestion(self, QuestionMapping['OtherSocialMedia'])
+ # end
+#  
+ # def GetPhotoUrl()
+   # # doNotPostPhoto = GetSurveyQuestionResponse('g95q4')
+   # # if (doNotPostPhoto)
+     # # return "Do Not Post Photo"
+   # # else
+     # # return (GetSurveyQuestionResponse('g95q3'))
+   # # end
+    # SurveyService.getValueOfMappedQuestion(self, QuestionMapping['Photo'])
+ # end
 
-
-
-
- 
   def removePostalAddress(address)
     # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person

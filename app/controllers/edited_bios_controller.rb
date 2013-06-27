@@ -47,13 +47,13 @@ end
     end
     @editedBio = EditedBio.new
     person = Person.find(params[:person_id])
-    # TODO - these need to come from the new survey mechanism
+
     @editedBio.bio = person.GetSurveyBio
-    @editedBio.website = person.GetWebSite
-    @editedBio.twitterinfo = person.GetTwitterInfo
-    @editedBio.othersocialmedia = person.GetOtherSocialMediaInfo
-    @editedBio.photourl = person.GetPhotoUrl
-    @editedBio.facebook = person.GetFacebookInfo
+    @editedBio.website = SurveyService.getValueOfMappedQuestion(person, QuestionMapping['WebSite'])
+    @editedBio.twitterinfo = SurveyService.getValueOfMappedQuestion(person, QuestionMapping['Twitter'])
+    @editedBio.othersocialmedia = SurveyService.getValueOfMappedQuestion(person, QuestionMapping['OtherSocialMedia'])
+    @editedBio.photourl = SurveyService.getValueOfMappedQuestion(person, QuestionMapping['Photo'])
+    @editedBio.facebook = SurveyService.getValueOfMappedQuestion(person, QuestionMapping['Facebook'])
     render :layout => 'content'
   end
   
