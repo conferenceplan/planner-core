@@ -61,22 +61,22 @@ end
     @editedBio = EditedBio.find(params[:id])
     
     if (@editedBio.website == nil)
-      @editedBio.website = @editedBio.person.GetWebSite
+      @editedBio.website = SurveyService.getValueOfMappedQuestion(@editedBio.person, QuestionMapping['WebSite'])
     end
     
     if (@editedBio.twitterinfo == nil)
-      @editedBio.twitterinfo = @editedBio.person.GetTwitterInfo
+      @editedBio.twitterinfo = SurveyService.getValueOfMappedQuestion(@editedBio.person, QuestionMapping['Twitter'])
     end
     
     if (@editedBio.othersocialmedia == nil)
-      @editedBio.othersocialmedia = @editedBio.person.GetOtherSocialMediaInfo
+      @editedBio.othersocialmedia = SurveyService.getValueOfMappedQuestion(@editedBio.person, QuestionMapping['OtherSocialMedia'])
     end
     
     if (@editedBio.photourl == nil)
-      @editedBio.photourl = @editedBio.person.GetPhotoUrl
+      @editedBio.photourl = SurveyService.getValueOfMappedQuestion(@editedBio.person, QuestionMapping['Photo'])
     end
       if (@editedBio.facebook == nil)
-      @editedBio.facebook = @editedBio.person.GetFacebookInfo
+      @editedBio.facebook = SurveyService.getValueOfMappedQuestion(@editedBio.person, QuestionMapping['Facebook'])
     end
     
     @urlstr = '/edited_bios/' + params[:id]
