@@ -13,7 +13,7 @@ module SurveyHtmlFormatter
     if respondent_detail.survey_respondent
       person = respondent_detail.survey_respondent.person
       if person
-        fname = person.GetFullPublicationName()
+        fname = person.getFullPublicationName()
         content += '<h3 class="response_group_header">Publication Name:</h3><div class="response_group_body"><div class="response_answer"><div class="response_text">' + fname + '</div></div></div>'
         content += "\n" if forEmail
       end      

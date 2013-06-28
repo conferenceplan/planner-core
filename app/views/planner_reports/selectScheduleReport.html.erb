@@ -14,7 +14,7 @@
      <div class='line'><div class='field_name'><%= f.label :invitation_category_id,"Select People to generate xml schedule for. No selection will export all people with schedule" %></div>
                     <div class='field_value'>   	
 					<%= select_tag 'schedule[person_id]',options_from_collection_for_select(
-	                 @people, "id", "GetFullName"), :multiple => true %></div></div>
+	                 @people, "id", "getFullName"), :multiple => true %></div></div>
 	<div class='line'>				 
      <%= check_box_tag :incl_email, '1', params[:incl_email] %>
 	 <%= label_tag :incl_email, "Include email in listing? "%><br /><br />

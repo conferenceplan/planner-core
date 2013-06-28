@@ -1,4 +1,3 @@
-
 <h2><%= itemlist.count %> People:</h2>
 <p>
 <% if itemlist.blank? %>
@@ -6,7 +5,7 @@
 <% else %>
    <dl>
    <% itemlist.each do |p| %>
-       <dt><%= p.GetFullPublicationName %> (<%= p.acceptance_status.name %>)</dt>
+       <dt><%= p.getFullPublicationName %> (<%= p.acceptance_status.name %>)</dt>
 	   <% if include_city %>
 	      <% unless p.invitestatus.nil? %>
 		       <li> Invitation Status: <%= p.invitestatus.name %> </li>

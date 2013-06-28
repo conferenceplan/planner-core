@@ -11,7 +11,7 @@
    <%= check_box_tag :names_and_city, '1', params[:names_and_city] %>
    <%= label_tag :names_and_city, "Just names, city, invitation and acceptance status? "%><br /><br />
    <%= label_tag :specific_panelists, "Select specific panelist(s): "%><br /><br />
-   <%= select_tag :specific_panelists, options_from_collection_for_select(@panelists, "id", "GetFullPublicationName"), :multiple => true %><br /><br />
+   <%= select_tag :specific_panelists, options_from_collection_for_select(@panelists, "id", "getFullPublicationName"), :multiple => true %><br /><br />
    <%= submit_tag "Export CSV", :name=>"csv" %>
    <%= submit_tag "View in Browser", :name => "html" %>
 </p>

@@ -6,7 +6,7 @@
 <% else %>
    <dl>
    <% resplistwithtags.each do |p| %>
-       <dt><%= p.GetFullPublicationName %></dt>
+       <dt><%= p.getFullPublicationName %></dt>
        <dd><%= p.tag_list_on( context ) %></dd>
    <% end %>
    </dl>

@@ -87,38 +87,22 @@ class Person < ActiveRecord::Base
   end
   
   def bio
-    if edited_bio
-      return edited_bio.bio
-    else
-      return ""
-    end
+    edited_bio ? edited_bio.bio : ""
   end
 
   def twitterinfo
-    if edited_bio
-      return edited_bio.twitterinfo
-    else
-      return ""
-    end
+    edited_bio ? edited_bio.twitterinfo : ""
   end
 
   def website
-    if edited_bio
-      return edited_bio.website
-    else
-      return ""
-    end
+    edited_bio ? edited_bio.website : ""
   end
 
   def facebook
-    if edited_bio
-      return edited_bio.facebook
-    else
-      return ""
-    end
+    edited_bio ? edited_bio.facebook : ""
   end
   
-  def GetFullName()
+  def getFullName()
     [self.first_name,self.last_name,self.suffix].compact.join(' ')
   end
   
@@ -243,7 +227,7 @@ class Person < ActiveRecord::Base
     return self.survey_respondent != nil ? self.survey_respondent.submitted_survey : false
   end
   
-  def GetFullPublicationName
+  def getFullPublicationName
    # if we set the pseudonym in people table, use that
    if (self.pseudonym != nil)
         name = [self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix].compact.join(' ')

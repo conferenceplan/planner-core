@@ -95,7 +95,7 @@ class SurveyMailer < ActionMailer::Base
           if asg.person != nil
             if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
               name = ''
-              name = asg.person.GetFullPublicationName()
+              name = asg.person.getFullPublicationName()
               name += " (M)" if asg.role == PersonItemRole['Moderator']                
               asg.person.email_addresses.each do |addr|
                 if addr.isdefault && (!noShareEmails.index(asg.person))

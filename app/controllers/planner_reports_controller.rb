@@ -76,13 +76,13 @@ class PlannerReportsController < PlannerController
          # panel.people.each do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
             if a.role_id == moderator.id
-               names.push "#{p.GetFullPublicationName.strip} (M)"
+               names.push "#{p.getFullPublicationName.strip} (M)"
             elsif a.role_id == invisible.id
-               names.push "#{p.GetFullPublicationName.strip} (I)" if params[:incl_invis]
+               names.push "#{p.getFullPublicationName.strip} (I)" if params[:incl_invis]
             elsif a.role_id == reserved.id
-               rsvd.push p.GetFullPublicationName.strip if params[:incl_rsvd]
+               rsvd.push p.getFullPublicationName.strip if params[:incl_rsvd]
             else
-               names.push p.GetFullPublicationName.strip
+               names.push p.getFullPublicationName.strip
             end
          end
 
@@ -360,9 +360,9 @@ class PlannerReportsController < PlannerController
          panel.people.each do |p|
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
             if a.role_id == moderator.id
-               names.push "#{p.GetFullPublicationName.strip} (M)"
+               names.push "#{p.getFullPublicationName.strip} (M)"
             elsif a.role_id != reserved.id and a.role_id != invisible.id
-               names.push p.GetFullPublicationName.strip
+               names.push p.getFullPublicationName.strip
             end
          end
          context = panel.tags_on(:PrimaryArea)
@@ -433,7 +433,7 @@ logger.debug(params[:specific_panelists].join(","))
          if params[:names_only]
             name[:items] = nil
             if params[:csv]
-               output.push [name.GetFullPublicationName,
+               output.push [name.getFullPublicationName,
                             name.acceptance_status.name]
             end
          elsif @include_city
@@ -456,7 +456,7 @@ logger.debug(params[:specific_panelists].join(","))
             if params[:csv]
                output.push [name.first_name,
                             name.last_name,
-                            name.GetFullPublicationName,
+                            name.getFullPublicationName,
                             name.acceptance_status.name,
                             name.invitestatus ? name.invitestatus.name : "",
                             name.invitation_category ? name.invitation_category.name : "",
@@ -495,7 +495,7 @@ logger.debug(params[:specific_panelists].join(","))
                   panels.push [p.time_slot.start, panelstr]
                end
                if params[:csv]
-                  output.push [name.GetFullPublicationName,
+                  output.push [name.getFullPublicationName,
                                name.acceptance_status.name,
                                (a.role_id == reserved.id) ? 'R' : (a.role_id == moderator.id) ? 'M' : (a.role_id == invisible.id) ? 'I' : '',
                                p.title,
@@ -679,7 +679,7 @@ logger.debug(params[:specific_panelists].join(","))
           panelinfo = {}
           itm.programme_item_assignments.each do |asg| #.people.each do |part|              
              if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']      
-               name = asg.person.GetFullPublicationName()
+               name = asg.person.getFullPublicationName()
                name += " (M)" if asg.role == PersonItemRole['Moderator']  
                if (params[:incl_email])
                    asg.person.email_addresses.each do |addr|
@@ -719,7 +719,7 @@ logger.debug(params[:specific_panelists].join(","))
        panellist.sort! {|a,b| a['time'] <=> b['time']}
 
       outputlist = []
-        outputlist << person.GetFullPublicationName
+        outputlist << person.getFullPublicationName
         outputlist << defaultEmail
         1.upto(maxItems) do |num|
             if (panellist.size() != 0 && num <= panellist.size())
@@ -838,7 +838,7 @@ logger.debug(params[:specific_panelists].join(","))
 
             itm.programme_item_assignments.each do |asg| 
               if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']      
-                name = asg.person.GetFullPublicationName()
+                name = asg.person.getFullPublicationName()
                 name += " (M)" if asg.role == PersonItemRole['Moderator']  
   
                 if (params[:incl_email])
@@ -879,7 +879,7 @@ logger.debug(params[:specific_panelists].join(","))
           end # person.programmeItems.each do |itm|
           panellist.sort! {|a,b| a['time'] <=> b['time']}
 
-          csv << person.GetFullPublicationName
+          csv << person.getFullPublicationName
           csv << defaultEmail
           1.upto(maxItems) do |num|
             if (panellist.size() != 0 && num <= panellist.size())
@@ -987,7 +987,7 @@ logger.debug(params[:specific_panelists].join(","))
          end
          if (panels.size() != 0)
            personList = Array.new
-           personList << name.GetFullPublicationName;
+           personList << name.getFullPublicationName;
            personList << panels.size()
            1.upto(maxItems) do |number|
             if (number <= panels.size())
@@ -1113,9 +1113,9 @@ logger.debug(params[:specific_panelists].join(","))
       partlist = []
       p.programme_item_assignments.each do |part|
          if part.role_id == moderator.id
-            partlist.push "#{part.person.GetFullPublicationName.strip} (M)"
+            partlist.push "#{part.person.getFullPublicationName.strip} (M)"
          elsif part.role_id != reserved.id and part.role_id != invisible.id
-            partlist.push part.person.GetFullPublicationName.strip
+            partlist.push part.person.getFullPublicationName.strip
          end
       end
       partstr = partlist.join(", ")
@@ -1231,7 +1231,7 @@ logger.debug(params[:specific_panelists].join(","))
             a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
             panelstr = "#{p.title} (#{p.format.name})"
             next if a.role_id == invisible.id || a.role_id == reserved.id                      
-            output.push [name.GetFullPublicationName,
+            output.push [name.getFullPublicationName,
                             p.title,
                             p.precis,
                             (p.format.nil?) ? '' : p.format.name,

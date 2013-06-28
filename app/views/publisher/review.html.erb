@@ -10,7 +10,7 @@
     <div>
         <% c.programme_item_assignments.each do |a| %>
             <% if a.role != PersonItemRole['Invisible'] &&  a.role != PersonItemRole['Reserved'] %>
-                <%= a.person.GetFullPublicationName %> as <%= a.role.name %><br/>
+                <%= a.person.getFullPublicationName %> as <%= a.role.name %><br/>
             <% end %>
         <% end %>
     </div>
@@ -27,7 +27,7 @@
     <div>
         <% c.programme_item_assignments.each do |a| %>
             <% if a.role != PersonItemRole['Invisible'] &&  a.role != PersonItemRole['Reserved'] %>
-                <%= a.person.GetFullPublicationName %> as <%= a.role.name %><br/>
+                <%= a.person.getFullPublicationName %> as <%= a.role.name %><br/>
             <% end %>
         <% end %>
     </div>

@@ -125,7 +125,7 @@ module PlannerReportHelpers
 
             itm.programme_item_assignments.each do |asg| 
               if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']      
-                name = asg.person.GetFullPublicationName()
+                name = asg.person.getFullPublicationName()
                 name += " (M)" if asg.role == PersonItemRole['Moderator']  
   
                 if (params[:incl_email])
@@ -166,7 +166,7 @@ module PlannerReportHelpers
           end # person.programmeItems.each do |itm|
           panellist.sort! {|a,b| a['time'] <=> b['time']}
 
-          csv << person.GetFullPublicationName
+          csv << person.getFullPublicationName
           csv << defaultEmail
           1.upto(maxItems) do |num|
             if (panellist.size() != 0 && num <= panellist.size())

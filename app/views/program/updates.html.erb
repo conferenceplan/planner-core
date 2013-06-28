@@ -37,7 +37,7 @@
         <%val = peopleAdded[k]%>
         <% val.each_index do |idx| %>
             <% if idx % 2 == 0 %>
-            <%= val[idx].GetFullPublicationName %> as <%= val[idx +1].name %>.<br/>
+            <%= val[idx].getFullPublicationName %> as <%= val[idx +1].name %>.<br/>
             <% end %>
         <% end %>
     <%end%>
@@ -64,7 +64,7 @@
         <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. Program Participants have been added:<br/>
     <% v.each_index do |idx| %>
         <% if idx % 2 == 0 %>
-        <%= v[idx].GetFullPublicationName %> as <%= v[idx +1].name %>.<br/>
+        <%= v[idx].getFullPublicationName %> as <%= v[idx +1].name %>.<br/>
         <% end %>
     <% end %>
     </p>
@@ -81,7 +81,7 @@
        <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. The following Program Participants have been dropped:<br/> 
     <% v.each_index do |idx| %>
         <% if idx % 2 == 0 %>
-        <%= v[idx].GetFullPublicationName %><br/>
+        <%= v[idx].getFullPublicationName %><br/>
         <% end %>
     <% end %>
     </p>

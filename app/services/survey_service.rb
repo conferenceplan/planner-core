@@ -1,7 +1,9 @@
 #
 # This service contains utility methods related to survey functionality.
 #
-class SurveyService
+# NOTE: defined as a module so that we can not instantiate it.
+#
+module SurveyService
 
   #
   # Get all the people who said that they do not want to share their email with other participants
@@ -61,7 +63,7 @@ class SurveyService
     response = SurveyResponse.first :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
       :conditions => ["survey_questions.questionmapping_id = ? and people.id = ?", questionMapping.id, person.id]
     
-    response.response
+    response.response if response
   end
 
 end

@@ -6,7 +6,7 @@
 <% else %>
    <ul>
    <% contactlist.each do |p| %>
-       <li><%= p.GetFullPublicationName %> 
+       <li><%= p.getFullPublicationName %> 
            <ul>
               <% unless p.getDefaultPostalAddress.nil? %>
                  <li> <%= p.getDefaultPostalAddress.city %>, <%= p.getDefaultPostalAddress.state %>, <%= p.getDefaultPostalAddress.country %> </li>

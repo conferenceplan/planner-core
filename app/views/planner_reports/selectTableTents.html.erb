@@ -9,7 +9,7 @@
  	 <div class='line'><div class='field_name'><%= f.label :person_id,"Select People. (Multiple can be selected, no selection is all)" %></div>
                     <div class='field_value'>   	
 					<%= select_tag 'tableTents[person_id]',options_from_collection_for_select(
-	                 @people, "id", "GetFullName"), :multiple => true %></div></div>
+	                 @people, "id", "getFullName"), :multiple => true %></div></div>
 	
  	 <div class='line'><div class='field_name'><%= f.label :programme_item_id,"Select Item. (Multiple can be selected, no selection is all)" %></div>
                     <div class='field_value'>   	

@@ -5,7 +5,7 @@
 </p>
 <br/>
 <% for person in  @people %>
-	<%= person.GetFullPublicationName %>
+	<%= person.getFullPublicationName %>
 	<br/>
 <%end%>
 <br/>
@@ -14,7 +14,7 @@
 <p> People are listed as accepted but have not finished survey
 </p>
 <% for person in  @nosurveypeople %>
-	<%= person.GetFullPublicationName %>
+	<%= person.getFullPublicationName %>
 	<br/>
 <%end%>
 <%end%>

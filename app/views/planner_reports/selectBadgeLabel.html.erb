@@ -9,7 +9,7 @@
   <div class='line'><div class='field_name'><%= f.label :person_id,"Select People to get back of badge. No selection will export all people with schedule" %></div>
                     <div class='field_value'>   	
 					<%= select_tag 'backofbadge[person_id]',options_from_collection_for_select(
-	                 @people, "id", "GetFullName"), :multiple => true %></div></div>
+	                 @people, "id", "getFullName"), :multiple => true %></div></div>
 					
   <%= check_box_tag :excludeNonPublished, '1', params[:excludeNonPublished] %>
   <%= label_tag :excludeNonPublished, "Exclude Invisible and No Print? "%><br /><br />
