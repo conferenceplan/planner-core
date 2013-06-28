@@ -289,7 +289,7 @@ class Surveys::ResponseController < SurveyApplicationController
       end
       
       # Now do Publication Name
-      if respondentParams['pub_first_name'] || respondentParams['pub_last_name'] || respondentParams['pub_suffix']
+      if !respondentParams['pub_first_name'].blank? || !respondentParams['pub_last_name'].blank? || !respondentParams['pub_suffix'].blank?
         if !person.pseudonym
           person.pseudonym = Pseudonym.new :first_name => respondentParams['pub_first_name'], :last_name => respondentParams['pub_last_name'], :suffix => respondentParams['pub_suffix'] 
         else
@@ -299,6 +299,10 @@ class Surveys::ResponseController < SurveyApplicationController
         end
         
         person.pseudonym.save!
+      else
+        if person.pseudonym
+          person.pseudonym.delete
+        end
       end
       
       person.first_name = detail.first_name if detail.first_name
