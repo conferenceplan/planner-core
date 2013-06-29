@@ -24,7 +24,7 @@ class MailingJob
         begin
           # TODO - need to set the content of the history mailHistory.content
           # Add the args to the mailing
-          SurveyMailer.deliver_mailingEmail(person, mailing, {
+          SurveyMailer.deliver_mailingEmail(person, mailing, mailHistory, {
             :person => person,
             :assignments => getProgramItems(person)
           })
@@ -33,6 +33,7 @@ class MailingJob
           mailHistory.email_status = EmailStatus[:Sent]
         rescue => msg
           mailHistory.email_status = EmailStatus[:Failed]
+          mailHistory.content = msg
           Delayed::Worker.logger.add(Logger::ERROR, msg)
         end
         

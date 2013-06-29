@@ -60,7 +60,4 @@ class Admin::PersonMailingAssignmentsController < PlannerController
     render :layout => 'success' # TODO - check
   end
 
-  # def new
-  # end
-
 end

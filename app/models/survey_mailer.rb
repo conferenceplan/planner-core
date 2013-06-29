@@ -3,6 +3,7 @@ class SurveyMailer < ActionMailer::Base
 
   #
   # Generic email mechanism, uses templates that have been defined in the database
+  # TODO - deprecate this and use the new mechanism, need to add the other variables to the arguments
   #  
   def email(recipient, mailuse, args)
     # get the mail parameters from the database
@@ -29,25 +30,33 @@ class SurveyMailer < ActionMailer::Base
     body      :title => template.title, :body => content
   end
   
-  def mailingEmail(person, mailing, args)
-    # get the mail parameters from the database
-    config = MailConfig.first # it will be the first mail config anyway
+  #
+  # Generic email mechanism used for the mailings
+  #
+  def mailingEmail(person, mailing, mailHistory, args)
+    begin
+      # get the mail parameters from the database
+      config = MailConfig.first # it will be the first mail config anyway
+      raise "there is no mail configuration" if !config
+      
+      # we have the mailing so get the template
+      template = mailing.mail_template
+      raise "can not fine a template for the email" if !template
+     
+      content = generateEmail(template, args)
+      mailHistory.content = content
     
-    # we have the mailing so get the template
-    template = mailing.mail_template
-    
-    content = generateEmail(template, args)
-    
-    if (mailing.testrun)
-      sendto = config.test_email
-      ccTo = nil
-    else
-      sendto = person.getDefaultEmail.email
-      ccTo = config.cc
-    end
+      if (mailing.testrun)
+        sendto = config.test_email
+        ccTo = nil
+      else
+        sendto = person.getDefaultEmail.email
+        ccTo = config.cc
+      end
+      
+      raise "No email found for the recipient" if !sendto
 
-    # then send the email
-    if sendto
+      # then send the email
       headers "return-path" => config.from
       recipients sendto
       cc        ccTo
@@ -56,24 +65,29 @@ class SurveyMailer < ActionMailer::Base
       sent_on   Time.now
       content_type "text/html"
       body      :title => template.title, :body => content
+    rescue Exception => e
+      logger.error e.message
+      self.message.perform_deliveries = false
+      
+      # Log the problem
+      raise e
     end
   end
-  
-  def preview(person, mailuse, args) 
-    # get the mail parameters from the database
-    config = MailConfig.first # it will be the first mail config anyway
-    
+
+  #
+  #
+  #  
+  def preview(person, mailing, args) 
     # get the template from the database that matches the specified use
-    template = MailTemplate.first(:conditions => ["mail_use_id = ?",mailuse.id])
+    template = mailing.mail_template
     
-    # do parameter substitution for the body
-    if args[:responses] != nil
-      @responses = args[:responses].responses
-    end
-    
-    return ERB.new(template.content, 0, "%<>").result(binding) # pass in a context with the parameters i.e. ruby binding
+    # Then generate the email content from the template and arguments
+    generateEmail(template, args)
   end
   
+  #
+  #
+  #
   def assignments_to_html(assignments)
     result = ''
     
@@ -108,7 +122,7 @@ class SurveyMailer < ActionMailer::Base
         end
         result += '<p>' + names.join(', ') + "</p>\n"
       
-        # equipment
+        # 
         result += "</div></br>\n"
       end
     end
