@@ -1,7 +1,7 @@
 xml.people do
   @people.each do |p|
     xml.person do
-      xml.name(p.GetFullName())
+      xml.name(p.getFullName())
       p.email_addresses.each do |addr|
         if addr.isdefault
           xml.address(addr.email)
