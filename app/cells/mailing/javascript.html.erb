@@ -157,37 +157,6 @@ jQuery(document).ready(function() {
         }
     });
 
-/***
-    MailingParticipantView = Backbone.View.extend({
-        tagName : 'li',
-        template: _.template($('#mailing-person-template').html()),
-        className : 'ui-widget-content',
-        
-        events: {
-            'click .person-row' : 'selectPerson'
-        },
-        
-        selectPerson : function(ev) {
-            // Add the model to the list of selected or remove it as per 
-            if ($(ev.currentTarget).hasClass('ui-selected')) {
-                $(ev.currentTarget).removeClass('ui-selected');
-            } else {
-                $(ev.currentTarget).addClass('ui-selected');
-            }
-        },
-        
-        initialize: function() {
-            this.model.bind('change', this.render, this);
-            this.model.bind('remove', this.remove, this);
-        },
-        
-        render : function () { 
-            this.$el.html(this.template(this.model.toJSON()));
-            return this;
-        }
-    });
-***/
-
     ListControlView = Backbone.View.extend({
         
         el : '#mailing-people-controls',

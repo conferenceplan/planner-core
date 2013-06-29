@@ -1,19 +1,19 @@
 class Admin::PersonMailingAssignmentsController < PlannerController
   def index
     # Return a list of the person mailing assignments
-    # TODO - we need to pass in a paramter that specifies the mailing so that we can filter
+    # pass in a paramter that specifies the mailing so that we can filter
     mailing_id = params[:mailing_id]
     mailingAssignments = nil
     
     if mailing_id
-      mailingAssignments = PersonMailingAssignment.find :all, :conditions => {:mailing_id => mailing_id}, :include => :person, :order => "people.last_name asc"
+      mailingAssignments = PersonMailingAssignment.find :all, :conditions => {:mailing_id => mailing_id}, :include => {:person => :pseudonym}, :order => "people.last_name asc"
     else  
-      mailingAssignments = PersonMailingAssignment.find :all
+      mailingAssignments = PersonMailingAssignment.find :all, :include => {:person => :pseudonym}, :order => "people.last_name asc"
     end
     
     ActiveRecord::Base.include_root_in_json = false # hack for now
 
-    render :json => mailingAssignments, :callback => params[:callback]
+    render :json => mailingAssignments.to_json( :include => { :person => {:include => :pseudonym}, :mailing => {}} ), :callback => params[:callback]
   end
   
   def new

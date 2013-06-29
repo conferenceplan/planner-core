@@ -43,17 +43,18 @@
 
 <script type="text/template" id="person-template">
     <div class='person-row'>
+        {{ if (person.pseudonym) { }}
+        <div class='name'>
+            {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}
+        </div>
+        <div class='name'>
+            ( {{= person.first_name }} {{= person.last_name }} )
+        </div>
+        {{ } else { }}
         <div class='name'>
             {{= person.first_name }} {{= person.last_name }}
         </div>
-    </div>
-</script>
-
-<script type="text/template" id="mailing-person-template">
-    <div class='person-row'>
-        <div class='name'>
-            {{= person.first_name }} {{= person.last_name }}
-        </div>
+        {{ } }}
     </div>
 </script>
 
