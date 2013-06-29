@@ -22,7 +22,6 @@ class MailingJob
         mailHistory.date_sent = Date.today
         
         begin
-          # TODO - need to set the content of the history mailHistory.content
           # Add the args to the mailing
           SurveyMailer.deliver_mailingEmail(person, mailing, mailHistory, {
             :person => person,

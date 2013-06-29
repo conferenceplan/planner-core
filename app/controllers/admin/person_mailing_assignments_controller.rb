@@ -34,7 +34,7 @@ class Admin::PersonMailingAssignmentsController < PlannerController
     
     ActiveRecord::Base.include_root_in_json = false # hack for now
 
-    render :json => mailingAssignment, :callback => params[:callback]
+    render :json => mailingAssignment.to_json( :include => { :person => {:include => :pseudonym}, :mailing => {}} ), :callback => params[:callback]
   end
 
   def update
