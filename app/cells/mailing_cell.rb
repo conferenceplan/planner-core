@@ -11,5 +11,5 @@ class MailingCell < ::Cell::Base
   def javascript
     render
   end
-
+  
 end

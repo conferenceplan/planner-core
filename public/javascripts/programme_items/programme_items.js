@@ -297,9 +297,71 @@ function initDialog(event, ui){
 
 var currentDialog = null;
 
+var defaultDiacriticsRemovalMap = {
+    '\x80' : '\u20AC', // EURO SIGN
+    '\x82' : '\u201A', // SINGLE LOW-9 QUOTATION MARK
+    '\x83' : '\u0192', // LATIN SMALL LETTER F WITH HOOK
+    '\x84' : '\u201E', // DOUBLE LOW-9 QUOTATION MARK
+    '\x85' : '\u2026', // HORIZONTAL ELLIPSIS
+    // \x86 : \u2020, // DAGGER
+    // \x87 : \u2021, // DOUBLE DAGGER
+    // \x88 : \u02C6, // MODIFIER LETTER CIRCUMFLEX ACCENT
+    // \x89 : \u2030, // PER MILLE SIGN
+    // \x8A : \u0160, // LATIN CAPITAL LETTER S WITH CARON
+    // \x8B : \u2039, // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
+    // \x8C : \u0152, // LATIN CAPITAL LIGATURE OE
+    // \x8E : \u017D, // LATIN CAPITAL LETTER Z WITH CARON
+    // \x91 : \u2018, // LEFT SINGLE QUOTATION MARK
+    // \x92 : \u2019, // RIGHT SINGLE QUOTATION MARK
+    // \x93 : \u201C, // LEFT DOUBLE QUOTATION MARK
+    // \x94 : \u201D, // RIGHT DOUBLE QUOTATION MARK
+    // \x95 : \u2022, // BULLET
+    '\x96' : '\u2013', // EN DASH
+    // \x97 : \u2014, // EM DASH
+    // \x98 : \u02DC, // SMALL TILDE
+    // \x99 : \u2122, // TRADE MARK SIGN
+    // \x9A : \u0161, // LATIN SMALL LETTER S WITH CARON
+    // \x9B : \u203A, // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
+    // \x9C : \u0153, // LATIN SMALL LIGATURE OE
+    // \x9E : \u017E, // LATIN SMALL LETTER Z WITH CARON
+    // \x9F : \u0178, // LATIN CAPITAL LETTER Y WITH DIAERESIS
+};
+    // // {'base':'AA','letters':/[\uA732]/g},
+// ];
+
+function mapString(str) {
+    var s = str.replace(/[\x80-\x9F]/g ,function(m) {
+        return ' '; //defaultDiacriticsRemovalMap[m];
+    });
+    
+    return s;
+}
+
 function adjust(dialog){
     currentDialog = dialog;
     $('.layerform', dialog.w).ajaxForm({
+        beforeSubmit : function(arr, $form, options) {
+            // alert("hh");
+            for (var key in arr) {
+                // // var bytelike= unescape(encodeURIComponent(arr[key].value));
+                // // var characters= decodeURIComponent(escape(bytelike));
+                // var re1 = /(?![\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})./g;
+//                 
+                // var re = /(?![\x09\x0A\x0D\x20-\x7E]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}|\xED[\x80-\x9F][\x80-\xBF]|\xF0[\x90-\xBF][\x80-\xBF]{2}|[\xF1-\xF3][\x80-\xBF]{3}|\xF4[\x80-\x8F][\x80-\xBF]{2})./g;
+//                 
+                arr[key].value = mapString(arr[key].value);
+                
+                // alert(key);
+                if (arr[key].name == "programme_item[title]") {
+                    alert('hhh');
+                 arr[key].value += '\x96';
+                };
+                // .replace(re, "")
+// 
+                // // alert(bytelike);
+                // // arr[key].value = characters;
+            }
+        },
         target: '#form-response',
         error: function(response, r){
             var errText = $(response.responseText).find(".error"); // class error

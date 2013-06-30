@@ -10,6 +10,7 @@ module PlannerReportHelpers
       end
       c = Iconv.new('ISO-8859-15//IGNORE','UTF-8')
       send_data c.iconv(csv_data),
+      # send_data csv_data,
          :type => 'text/csv; charset=iso-8859-1; header=present',
          :disposition => "attachment; filename=#{filename}"
       flash[:notice] = "Export complete!"

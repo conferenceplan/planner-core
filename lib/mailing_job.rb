@@ -19,7 +19,7 @@ class MailingJob
 
         mailHistory.testrun = mailing.testrun
         mailHistory.email = person.getDefaultEmail
-        mailHistory.date_sent = Date.today
+        mailHistory.date_sent = DateTime.now
         mailHistory.person = person
         mailHistory.mailing = mailing
         
