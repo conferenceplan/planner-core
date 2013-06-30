@@ -3,6 +3,12 @@
     display: none;
 }
 <% end %>
+<% content_for :cssheader do %>
+<%= stylesheet_link_tag '/vendor/backgrid/backgrid' %>
+<%= stylesheet_link_tag '/vendor/backgrid/extensions/text-cell/backgrid-text-cell' %>
+<%= stylesheet_link_tag '/vendor/bootstrap' %>
+<%= stylesheet_link_tag '/vendor/bootstrap-responsive' %>
+<% end %>
 <% content_for :jsheader do %>
   <%= render_cell :mail_report, :javascript %>
 <% end %>

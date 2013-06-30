@@ -6,6 +6,7 @@
         <title><%= @page_title or 'Convention Planner' %></title>
         <%=render 'layouts/common_styles' %>
         <%=render 'layouts/common_js' %>
+        <%= yield(:cssheader) if @content_for_cssheader %>
 		<%= yield(:jsheader) if @content_for_jsheader %>
 		<style type="text/css">
 			<%= yield(:styleheader) if @content_for_styleheader %>
