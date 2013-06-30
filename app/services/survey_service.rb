@@ -14,6 +14,19 @@ module SurveyService
             :conditions => ["survey_answers.answertype_id = ? AND survey_answers.answer = survey_responses.response", AnswerType['DoNotShareEmail'].id]
     
   end
+
+  #
+  # Get all people who responded to survey
+  #
+  def self.findPeopleWhoRespondedToSurvey(survey_name, inviteStatus = InviteStatus['Invited'], acceptanceStatus = AcceptanceStatus['Accepted'], attending = true)
+    
+    Person.all :select => 'people.*',
+      :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey}}},
+      :conditions => ["surveys.name = ?, people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = ?",
+        survey_name, inviteStatus.id, acceptanceStatus.id, attending], 
+      :order => 'last_name, first_name'
+      
+  end
   
   #
   #
@@ -65,5 +78,5 @@ module SurveyService
     
     response.response if response
   end
-
+    
 end

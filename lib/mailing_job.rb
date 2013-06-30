@@ -20,6 +20,8 @@ class MailingJob
         mailHistory.testrun = mailing.testrun
         mailHistory.email = person.getDefaultEmail
         mailHistory.date_sent = Date.today
+        mailHistory.person = person
+        mailHistory.mailing = mailing
         
         begin
           # Add the args to the mailing
