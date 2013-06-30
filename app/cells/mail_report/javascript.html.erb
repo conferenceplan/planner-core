@@ -1,0 +1,80 @@
+<script type="text/javascript">
+//<![CDATA[
+jQuery(document).ready(function() {
+    //Patch for template variables in _underscore top stop class with Rails variables in the file
+    _.templateSettings = {
+        interpolate : /\{\{\=(.+?)\}\}/g,
+        evaluate : /\{\{(.+?)\}\}/g
+    };
+    
+    MailingHistory = Backbone.Model.extend({});
+    
+    MailingHistoryCollection = Backbone.Collection.extend({
+       model : MailingHistory,
+       url : "http://localhost:3000/mail_history"
+    });
+    
+    var columns = [
+    {
+        name : 'person',
+        label : 'Name',
+        editable : false,
+        cell: Backgrid.StringCell.extend({
+        }),
+        formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
+                fromRaw: function (rawValue) {
+                return rawValue.first_name + ' ' + rawValue.last_name;
+            }
+    })
+    }, {
+        name : 'mailing',
+        label : 'Mailing',
+        editable : false,
+        cell: Backgrid.StringCell.extend({
+        }),
+        formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
+                fromRaw: function (rawValue) {
+                return rawValue.mailing_number;
+            }
+        })
+    }, {
+        name : 'content',
+        label : 'Content',
+        // editable : false,
+        cell: "text"
+        // cell: Backgrid.Extension.TextCell.extend({
+            // editor: Backgrid.Extension.TextareaEditor.extend({
+                // cols : 10
+            // })
+        // }),
+    }, {
+        name : 'email_status_id',
+        label : 'Status',
+        editable : false,
+        cell: Backgrid.StringCell.extend({
+        }),
+    }, {
+        name : 'date_sent',
+        label : 'Date Sent',
+        editable : false,
+        cell: Backgrid.Extension.MomentCell.extend({
+            displayFormat: "YYYY-MMM-DD hh:mm"
+        })
+    }
+    ];
+    
+    var mailingHistories = new MailingHistoryCollection();
+    
+    var grid = new Backgrid.Grid({
+       columns: columns,
+       collection: mailingHistories 
+    });
+    
+    $('#mailing-report-grid').append(grid.render().$el)
+    
+    mailingHistories.fetch({ reset : true });
+        
+    // Backbone.history.start();
+}); 
+//]]>
+</script>
