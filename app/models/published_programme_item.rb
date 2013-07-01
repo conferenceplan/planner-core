@@ -50,20 +50,41 @@ class PublishedProgrammeItem < ActiveRecord::Base
     
     # "people":[{"id":"2539","name":"Elliott Mason"},{"id":"2318","name":"Jan DiMasi"}]}
   def as_json(options={})
-    res = super(
+     res = super(
         :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
               :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
-              :last_name, :first_name, :suffix, :pub_reference_number, :end, :duration, :short_title, :published_venue_id,
+              :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
               ],
-        :methods => [:shortDate, :timeString, :pub_number, :pubFirstName, :pubLastName, :pubSuffix],
-        :include => {:published_time_slot => {}, :published_room => {:include => :published_venue}, :people => {}}
+        :methods => [:pub_number]
         )
+     
+     res['people'] = people.collect{ |p|
+        p.as_json({:except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+              :first_name, :last_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
+              ],
+            :methods => [:pubFirstName, :pubLastName, :pubSuffix]}).tap { |hash| 
+              hash[:first_name] = hash.delete :pubFirstName
+              hash[:last_name] = hash.delete :pubLastName
+              hash[:suffix] = hash.delete :pubSuffix
+            }
+     }
+     
+     res['time'] = published_time_slot.start
+     # res['time_slot'] = published_time_slot.as_json({:except => [:id, :created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+              # :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+              # :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
+              # ]})
+     res['room'] = published_room.as_json({:except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+              :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
+              ]})
+              
+     res['room']['venue'] = published_room.published_venue.as_json({:except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+              :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
+              ]})
         
-        res['hhhh'] = 'hhhh'
-        
-        
-    # logger.debug res
-
-    return res
+     return res
   end
 end

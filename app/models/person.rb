@@ -80,7 +80,7 @@ class Person < ActiveRecord::Base
     if options[:include_pseudonym]
       res = super(:include => :pseudonym)
     else  
-      res = super()
+      res = super(options)
     end
 
     return res

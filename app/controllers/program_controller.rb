@@ -134,7 +134,7 @@ class ProgramController < ApplicationController
     
     respond_to do |format|
       format.html { render :layout => 'content' }
-      format.js { render_json @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :id, :published_venue_id],
+      format.js { render_json @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :published_venue_id],
                                                  :include => [:published_venue]
         ), :content_type => 'application/json' }
     end
@@ -159,15 +159,15 @@ class ProgramController < ApplicationController
       format.html { render :layout => 'content' }
       format.js { 
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
-          jsonstr = ''
+          jsonstr = '' 
           @participants.each do |p|
             if jsonstr.length > 0
               jsonstr += ','
             end
-            jsonstr += '{"id":"' + p[0] + '","first_name":' + p[1].to_json + ',"last_name":' + p[2].to_json 
-            jsonstr += ',"bio":' + p[3].to_json 
-            jsonstr += ',"website":' + p[4].to_json +  ',"twitterinfo":' 
-            jsonstr += p[5].to_json +  ',"facebook":' + p[6].to_json + '}'
+            jsonstr += '{"id":"' + p[0] + '","first_name":' + p[1].to_json + ',"last_name":' + p[2].to_json + ',"suffix":' + p[3].to_json
+            jsonstr += ',"bio":' + p[4].to_json 
+            jsonstr += ',"website":' + p[5].to_json +  ',"twitterinfo":' 
+            jsonstr += p[6].to_json +  ',"facebook":' + p[7].to_json + '}'
           end
           jsonstr = '[' + jsonstr + ']'
           render_json  jsonstr, :content_type => 'application/json'
@@ -176,7 +176,7 @@ class ProgramController < ApplicationController
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
            csv_string = FasterCSV.generate do |csv|
              @participants.each do |n|
-                csv << [ n[0], n[1], n[2], BlueCloth.new(n[2]).to_html]
+                csv << [ n[0], n[1], n[2], n[3], BlueCloth.new(n[4]).to_html]
              end
            end
            send_data csv_string, :type => 'text/csv; charset=iso-8859-1; header=present'
@@ -548,6 +548,7 @@ PARTICIPANT_QUERY = <<"EOS"
   people.id,
   case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
   case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name,
+  case when pseudonyms.suffix is not null AND char_length(pseudonyms.suffix) > 0 then pseudonyms.suffix else people.suffix end as suffix,
   IFNULL(edited_bios.bio, ''),
   IFNULL(edited_bios.website,''),
   IFNULL(edited_bios.twitterinfo,''),
@@ -588,6 +589,7 @@ PARTICIPANT_QUERY_PLAIN = <<"EOS"
   select distinct 
   case when pseudonyms.first_name is not null AND char_length(pseudonyms.first_name) > 0 then pseudonyms.first_name else people.first_name end as first_name,
   case when pseudonyms.last_name is not null AND char_length(pseudonyms.last_name) > 0 then pseudonyms.last_name else people.last_name end as last_name,
+  case when pseudonyms.suffix is not null AND char_length(pseudonyms.suffix) > 0 then pseudonyms.suffix else people.suffix end as suffix,
   IFNULL(edited_bios.bio, '')
   from people
   join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
