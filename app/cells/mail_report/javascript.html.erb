@@ -15,8 +15,12 @@ jQuery(document).ready(function() {
         state: {
             firstPage: 1,
             pageSize: 15,
-            totalRecords: 200
+            totalRecords: 200,
         },
+        queryParams : {
+            person_id : <%= @person_id.nil? ? '""' : @person_id %>,
+            mailing_id : <%= @mailing_id.nil? ? '""' : @mailing_id %>
+        }
     });
     
     var columns = [
@@ -109,6 +113,10 @@ jQuery(document).ready(function() {
     ];
     
     jQuery.ajax('/mail_history/count', {
+        data : {
+            person_id : <%= @person_id.nil? ? '""' : @person_id %>,
+            mailing_id : <%= @mailing_id.nil? ? '""' : @mailing_id %>
+        },
         success : function(data, textStatus, jqXHR) {
             var mailingHistories = new MailingHistoryCollection([], {
                 state: {

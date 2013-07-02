@@ -23,12 +23,16 @@
     <%= javascript_include_tag '/vendor/backbone-pageable' %>
     <%= javascript_include_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
     <%= javascript_include_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
-  <%= render_cell :mail_report, :javascript %>
+  <%= render_cell :mail_report, :javascript, :person_id => @person_id, :mailing_id => @mailing_id %>
 <% end %>
 <%= render_cell :mail_report, :templates %>
 <div class='container_12'>
     <div class='grid_11'>
-        <h3>Mailing History</h3>
+        <h3>
+            Mailing History
+            <%= @mailing.nil? ? '' : ', ' + @mailing.mailing_number.to_s + ' - ' + @mailing.mail_template.title %>
+            <%= @person.nil? ? '' : ', ' + @person.getFullName()  %>
+        </h3>
     </div>
     <div class="clear"></div>
 </div>

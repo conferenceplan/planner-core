@@ -10,11 +10,15 @@ module MailReportsService
     "status" => "email_status_id",
     "date_sent" => "date_sent",
     "testrun" => "testrun",
+    "mailing_id" => "mailing_id",
+    "person_id" => "person_id",
   }
   
   @@types = {
     "person" => :string,
     "mailing" => :integer,
+    "mailing_id" => :integer,
+    "person_id" => :integer,
   }
   
   #
