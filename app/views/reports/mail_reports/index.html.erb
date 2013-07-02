@@ -2,19 +2,27 @@
 .modal-footer {
     display: none;
 }
+.form-search {
+    float: left;
+    margin-right: 2em;
+}
+.mailing-report-control {
+    color: #333333;
+}
 <% end %>
 <% content_for :cssheader do %>
 <%= stylesheet_link_tag '/vendor/backgrid/backgrid' %>
-<%= stylesheet_link_tag '/vendor/backgrid/extensions/text-cell/backgrid-text-cell' %>
-<%= stylesheet_link_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
 <%= stylesheet_link_tag '/vendor/bootstrap' %>
 <%= stylesheet_link_tag '/vendor/bootstrap-responsive' %>
+<%= stylesheet_link_tag '/vendor/backgrid/extensions/text-cell/backgrid-text-cell' %>
+<%= stylesheet_link_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
+<%= stylesheet_link_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
 <% end %>
 <% content_for :jsheader do %>
     <%= javascript_include_tag '/vendor/lunr' %>
     <%= javascript_include_tag '/vendor/backbone-pageable' %>
-    <%= javascript_include_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
     <%= javascript_include_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
+    <%= javascript_include_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
   <%= render_cell :mail_report, :javascript %>
 <% end %>
 <%= render_cell :mail_report, :templates %>
@@ -26,6 +34,7 @@
 </div>
 <div class='container_12'>
     <div class='grid_11 control-area'>
+        <div class='mailing-report-control' id='mailing-report-control'></div>
     </div>
     <div class="clear"></div>
 </div>

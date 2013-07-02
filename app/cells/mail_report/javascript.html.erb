@@ -124,6 +124,7 @@ jQuery(document).ready(function() {
             });
     
             var gridplace = $('#mailing-report-grid');
+            var conrolplace = $('#mailing-report-control');
     
             // Initialize the paginator
             var paginator = new Backgrid.Extension.Paginator({
@@ -131,6 +132,21 @@ jQuery(document).ready(function() {
             });
             gridplace.append(paginator.render().$el);
             gridplace.append(grid.render().$el);
+            
+            var name_filter = new Backgrid.Extension.ServerSideFilter({
+                placeholder: "Search Last Name...",
+                collection: mailingHistories,
+                name: "person",
+                wait: 150
+            });
+            var mailing_filter = new Backgrid.Extension.ServerSideFilter({
+                placeholder: "Search Mailing #...",
+                collection: mailingHistories,
+                name: "mailing",
+            });
+
+            conrolplace.append(name_filter.render().$el);
+            conrolplace.append(mailing_filter.render().$el);
     
             mailingHistories.fetch({ reset : true });
         },

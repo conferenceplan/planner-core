@@ -30,7 +30,9 @@
     /** @property */
     events: {
       "click .close": "clear",
-      "submit": "search"
+      "submit": "search",
+      "change input[type=text]": "search",
+      "keyup input[type=text]": "search",
     },
 
     /** @property {string} [name='q'] Query key */
@@ -46,10 +48,15 @@
        @param {String} [options.placeholder]
     */
     initialize: function (options) {
+
       Backgrid.requireOptions(options, ["collection"]);
       Backbone.View.prototype.initialize.apply(this, arguments);
       this.name = options.name || this.name;
       this.placeholder = options.placeholder || this.placeholder;
+
+      this.wait = options.wait || this.wait;
+
+      this._debounceMethods(["search", "clear"]);
 
       var collection = this.collection, self = this;
       if (Backbone.PageableCollection &&
@@ -59,6 +66,19 @@
           return self.$el.find("input[type=text]").val();
         };
       }
+    },
+    _debounceMethods: function (methodNames) {
+      if (_.isString(methodNames)) methodNames = [methodNames];
+
+      this.undelegateEvents();
+
+      for (var i = 0, l = methodNames.length; i < l; i++) {
+        var methodName = methodNames[i];
+        var method = this[methodName];
+        this[methodName] = _.debounce(method, this.wait);
+      }
+
+      this.delegateEvents();
     },
 
     /**
@@ -148,6 +168,7 @@
        @param {String} [options.wait=149]
     */
     initialize: function (options) {
+
       ServerSideFilter.prototype.initialize.apply(this, arguments);
 
       this.fields = options.fields || this.fields;
@@ -269,6 +290,7 @@
        @param {number} [options.wait]
     */
     initialize: function (options) {
+
       ClientSideFilter.prototype.initialize.apply(this, arguments);
 
       this.ref = options.ref || this.ref;
