@@ -9,9 +9,14 @@ jQuery(document).ready(function() {
     
     MailingHistory = Backbone.Model.extend({});
     
-    MailingHistoryCollection = Backbone.Collection.extend({
-       model : MailingHistory,
-       url : "http://localhost:3000/mail_history"
+    MailingHistoryCollection = Backbone.PageableCollection.extend({
+        model: MailingHistory,
+        url: '/mail_history',
+        state: {
+            firstPage: 1,
+            pageSize: 15,
+            totalRecords: 200
+        },
     });
     
     var columns = [
@@ -19,19 +24,35 @@ jQuery(document).ready(function() {
         name : 'person',
         label : 'Name',
         editable : false,
-        cell: Backgrid.StringCell.extend({
+        cell: Backgrid.Extension.TextCell.extend({
+              render: function () {
+                this.$el.empty();
+                this.$el.html(this.formatter.fromRaw(this.model.get(this.column.get("name"))));
+                this.delegateEvents();
+                return this;
+              },
         }),
+
         formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
-                fromRaw: function (rawValue) {
-                return rawValue.first_name + ' ' + rawValue.last_name;
+            fromRaw: function (rawValue) {
+                var res = "";
+                if (rawValue.pseudonym) {
+                    res = rawValue.pseudonym.first_name + " " + rawValue.pseudonym.last_name;
+                    res += "<br/>( " + rawValue.first_name + " " + rawValue.last_name + " )"
+                } else {
+                    res = rawValue.first_name + " " + rawValue.last_name;
+                };
+                return res; 
+            },
+            render : function () {
+                alert('h');
             }
     })
     }, {
         name : 'mailing',
         label : 'Mailing',
         editable : false,
-        cell: Backgrid.StringCell.extend({
-        }),
+        cell: 'string',
         formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
                 fromRaw: function (rawValue) {
                 return rawValue.mailing_number;
@@ -40,41 +61,81 @@ jQuery(document).ready(function() {
     }, {
         name : 'content',
         label : 'Content',
-        // editable : false,
-        cell: "text"
-        // cell: Backgrid.Extension.TextCell.extend({
-            // editor: Backgrid.Extension.TextareaEditor.extend({
-                // cols : 10
-            // })
-        // }),
+        cell: Backgrid.Extension.TextCell.extend({
+            editor: Backgrid.Extension.TextareaEditor.extend({
+                template: _.template('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h3>{{= column.get("label") }}</h3></div><div class="modal-body">{{= content }}'),
+                render: function () {
+                    this.$el.html($(this.template({
+                        column: this.column,
+                        cols: this.cols,
+                        rows: this.rows,
+                        content: this.formatter.fromRaw(this.model.get(this.column.get("name")))
+                    })));
+
+                  this.delegateEvents();
+
+                  this.$el.modal(this.modalOptions);
+
+                  return this;
+                },
+                saveOrCancel: function (e) {}, // to prevent the dialog asking to save etc.
+            }),
+            render: function () {
+                this.$el.empty();
+                this.$el.text(this.formatter.fromRaw(this.model.get(this.column.get("name"))));
+                this.delegateEvents();
+                return this;
+            },
+        }),
     }, {
-        name : 'email_status_id',
+        name : 'status',
         label : 'Status',
         editable : false,
-        cell: Backgrid.StringCell.extend({
-        }),
+        cell: 'string'
     }, {
         name : 'date_sent',
         label : 'Date Sent',
         editable : false,
         cell: Backgrid.Extension.MomentCell.extend({
-            displayFormat: "YYYY-MMM-DD hh:mm"
+            displayInUTC : false,
+            displayFormat: "YYYY MMMM DD, hh:mm a"
         })
+    }, {
+        name : 'testrun',
+        label : 'Test Run',
+        editable : false,
+        cell: 'string'
     }
     ];
     
-    var mailingHistories = new MailingHistoryCollection();
+    jQuery.ajax('/mail_history/count', {
+        success : function(data, textStatus, jqXHR) {
+            var mailingHistories = new MailingHistoryCollection([], {
+                state: {
+                    firstPage: 1,
+                    pageSize: 15,
+                    totalRecords: data
+                }
+            });
     
-    var grid = new Backgrid.Grid({
-       columns: columns,
-       collection: mailingHistories 
+            var grid = new Backgrid.Grid({
+               columns: columns,
+               collection: mailingHistories 
+            });
+    
+            var gridplace = $('#mailing-report-grid');
+    
+            // Initialize the paginator
+            var paginator = new Backgrid.Extension.Paginator({
+                collection: mailingHistories
+            });
+            gridplace.append(paginator.render().$el);
+            gridplace.append(grid.render().$el);
+    
+            mailingHistories.fetch({ reset : true });
+        },
     });
     
-    $('#mailing-report-grid').append(grid.render().$el)
-    
-    mailingHistories.fetch({ reset : true });
-        
-    // Backbone.history.start();
 }); 
 //]]>
 </script>

@@ -6,14 +6,24 @@
 <% content_for :cssheader do %>
 <%= stylesheet_link_tag '/vendor/backgrid/backgrid' %>
 <%= stylesheet_link_tag '/vendor/backgrid/extensions/text-cell/backgrid-text-cell' %>
+<%= stylesheet_link_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
 <%= stylesheet_link_tag '/vendor/bootstrap' %>
 <%= stylesheet_link_tag '/vendor/bootstrap-responsive' %>
 <% end %>
 <% content_for :jsheader do %>
+    <%= javascript_include_tag '/vendor/lunr' %>
+    <%= javascript_include_tag '/vendor/backbone-pageable' %>
+    <%= javascript_include_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
+    <%= javascript_include_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
   <%= render_cell :mail_report, :javascript %>
 <% end %>
 <%= render_cell :mail_report, :templates %>
-
+<div class='container_12'>
+    <div class='grid_11'>
+        <h3>Mailing History</h3>
+    </div>
+    <div class="clear"></div>
+</div>
 <div class='container_12'>
     <div class='grid_11 control-area'>
     </div>
@@ -22,5 +32,6 @@
 <div class='container_12'>
     <div class='grid_11 mailing-report-area'>
         <div class='mailing-report-grid' id='mailing-report-grid'></div>
+        <div class='mailing-report-grid-paginator' id='mailing-report-grid-paginator'></div>
     </div>
 </div>

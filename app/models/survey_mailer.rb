@@ -67,7 +67,7 @@ class SurveyMailer < ActionMailer::Base
       body      :title => template.title, :body => content
     rescue Exception => e
       logger.error e.message
-      self.message.perform_deliveries = false
+      # self.message.perform_deliveries = false
       
       # Log the problem
       raise e
@@ -94,7 +94,7 @@ class SurveyMailer < ActionMailer::Base
     noShareEmails = SurveyService.findPeopleWithDoNotShareEmail
     
     assignments.each do | assignment |
-      if (assignment.programmeItem.time_slot) # only interested in items that have been assigned to a time slot
+      if (assignment.programmeItem && assignment.programmeItem.time_slot) # only interested in items that have been assigned to a time slot
         # item
         result += "<div>\n"
         # title

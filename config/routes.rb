@@ -1,6 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :mail_templates
   map.resources :mail_history, :controller => 'mail/mail_history', :only => [:index]
+  map.connect 'mail_history/count', :controller => 'mail/mail_history', :action => 'count', :method => 'get'
   
   map.resources :mailing, :controller => 'admin/mailings'
   map.connect 'mailings/:action', :controller => 'admin/mailings' #,  :member => {:list => :get, :del => :delete }

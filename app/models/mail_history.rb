@@ -6,5 +6,12 @@ class MailHistory < ActiveRecord::Base
   
   has_enumerated :email_status, :class_name => 'EmailStatus'
 
-  
+  def as_json(options={})
+    res = super(options)
+    
+    res[:status] = email_status.name
+    
+    return res
+  end
+
 end
