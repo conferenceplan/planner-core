@@ -25,7 +25,6 @@ module MailReportsService
   # Get the histories order by person
   #
   def self.getMailHistory(conditions = {}, options = {} )
-    
     per_page = nil
     count = MailHistory.count :joins => [ :person , :mailing ], :conditions => conditions
 
@@ -41,6 +40,26 @@ module MailReportsService
       order = @@mapping[options[:sort_by]] + " " + options[:order]
     end
     
+    conditions = buildClause options
+
+    MailHistory.all :joins => [ :person , :mailing ], :conditions => conditions,
+        :order => 'people.last_name, people.first_name, mailings.id',
+        :offset => offset, :limit => per_page, :order => order
+  end
+
+  #
+  #
+  #  
+  def self.getNumberOfMailHistories(conditions = {}, options = {})
+    conditions = self.buildClause options
+    
+    MailHistory.count :joins => [ :person , :mailing ], :conditions => conditions
+  end
+  
+  #
+  #
+  #
+  def self.buildClause(options)
     clause = ""
     if options[:filters]
       options[:filters].each do |key, val|
@@ -55,32 +74,7 @@ module MailReportsService
         end
       end
     end
-    
-    conditions = clause
-    
-    MailHistory.all :joins => [ :person , :mailing ], :conditions => conditions,
-        :order => 'people.last_name, people.first_name, mailings.id',
-        :offset => offset, :limit => per_page, :order => order
-    
-  end
-
-  #
-  #
-  #  
-  def self.getNumberOfMailHistories(conditions = {}, options = {})
-    clause = nil
-    if options[:filters]
-      options[:filters].each do |key, val|
-        if val && @@mapping[key.to_s]
-          clause += " AND " if clause
-          clause = @@mapping[key.to_s] + " like '%" + val + "%'" 
-        end
-      end
-    end
-    
-    conditions = clause
-    
-    MailHistory.count :joins => [ :person , :mailing ], :conditions => conditions
+    return clause
   end
   
 end
