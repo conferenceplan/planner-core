@@ -10,10 +10,12 @@ class SurveyRespondents::ReviewsController < PlannerController
     end
   
     # we need the survey and the survey respondent
-    @respondent = SurveyRespondent.find(
-        params[:id],
+    if params[:id].to_i != 0
+      @respondent = SurveyRespondent.find(
+          params[:id],
         :include => { :survey_respondent_detail => {:survey_responses => {}, :survey_respondent => {}} }
-      ) if params[:id] != 0
+        ) 
+    end
     
     render :layout => 'content'
   end
