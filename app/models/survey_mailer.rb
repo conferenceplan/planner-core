@@ -43,7 +43,7 @@ class SurveyMailer < ActionMailer::Base
       template = mailing.mail_template
       raise "can not fine a template for the email" if !template
      
-      content = generateEmail(template, args)
+      content = SurveyMailer.generateEmail(template, args)
       mailHistory.content = content
     
       if (mailing.testrun)
@@ -77,18 +77,18 @@ class SurveyMailer < ActionMailer::Base
   #
   #
   #  
-  def preview(person, mailing, args) 
+  def self.preview(person, mailing, args) 
     # get the template from the database that matches the specified use
     template = mailing.mail_template
     
     # Then generate the email content from the template and arguments
-    generateEmail(template, args)
+    SurveyMailer.generateEmail(template, args)
   end
   
   #
   #
   #
-  def assignments_to_html(assignments)
+  def self.assignments_to_html(assignments)
     result = ''
     
     noShareEmails = SurveyService.findPeopleWithDoNotShareEmail
@@ -132,12 +132,7 @@ class SurveyMailer < ActionMailer::Base
 
 private 
   
-  def generateEmail(template, args)
-    # do parameter substitution for the body
-    if args[:responses] != nil
-      @responses = args[:responses].responses
-    end
-    
+  def self.generateEmail(template, args)
     return ERB.new(template.content, 0, "%<>").result(binding) # pass in a context with the parameters i.e. ruby binding
   end
   

@@ -1,6 +1,25 @@
+<% content_for :cssheader do %>
+<%= stylesheet_link_tag '/vendor/backgrid/backgrid' %>
+<%= stylesheet_link_tag '/vendor/bootstrap' %>
+<%= stylesheet_link_tag '/vendor/bootstrap-responsive' %>
+<%= stylesheet_link_tag '/vendor/backgrid/extensions/text-cell/backgrid-text-cell' %>
+<%= stylesheet_link_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
+<%= stylesheet_link_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
+<% end %>
 <% content_for :jsheader do %>
+    <%= javascript_include_tag '/vendor/lunr' %>
+    <%= javascript_include_tag '/vendor/backbone-pageable' %>
+    <%= javascript_include_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
+    <%= javascript_include_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
   <%= render_cell :mailing, :javascript %>
 <% end %>
+<% content_for :styleheader do %>
+.pagination {
+    margin : 0 0;
+    float: none;
+}
+<% end %>
+
 <%= render_cell :mailing, :templates %>
 
 <div class='container_12'>

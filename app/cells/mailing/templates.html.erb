@@ -1,4 +1,17 @@
 
+<script type="text/template" id="mailing-preview-template">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3>Preview</h3>
+  </div>
+  <div class="modal-body">
+      {{= content }}
+  </div>
+  <div class="modal-footer">
+    <button type="button" data-dismiss="modal" class="btn">Close</button>
+  </div>
+</script>
+
 <script type="text/template" id="mailing-config-template">
     <div class='mailing-create'>
         <button class="create-button">New Mailing</button>

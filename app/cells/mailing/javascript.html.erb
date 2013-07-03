@@ -186,6 +186,37 @@ jQuery(document).ready(function() {
             return this;
         }
     });
+    
+    MailPreviewView = Backbone.View.extend({
+        tagName: "div",
+        
+        className: "modal hide fade",
+        
+        template : _.template($('#mailing-preview-template').html()),
+        
+        render: function () {
+            
+            // http://localhost:3000/mailings/previewEmail?person_id=2608&mailing_id=1
+            var vw = this;
+            jQuery.ajax('/mailings/previewEmail', {
+                data : {
+                    person_id : this.options.person_id,
+                    mailing_id : this.options.mailing_id
+                },
+                success : function(data, textStatus, jqXHR) {
+                    var obj = vw.$el.html(vw.template({
+                        content: data.content
+                    }));
+
+                    vw.dialog = obj.modal({
+                        show : true,
+                        backdrop: false
+                    });
+                }
+           });
+           return this;
+        },
+    });
 
     ParticipantsMailingView = Backbone.View.extend({
         el : '#current-mailing-control',
@@ -202,7 +233,15 @@ jQuery(document).ready(function() {
         },
         
         preview : function(e) {
-            alert('preview');
+            var mdl = this.selected.at(0);
+            if (mdl) {
+                var preview = new MailPreviewView({
+                    // Mailing id, and person id are needed here
+                    person_id : mdl.get('person_id'),
+                    mailing_id : mdl.get('mailing_id')
+                });
+                preview.render();
+            }
         },
         
         reinit : function() {
@@ -218,22 +257,17 @@ jQuery(document).ready(function() {
         },
         
         removeFromMailing : function() {
-            //
             if (this.selected.length > 0) {
-                // alert('remove items ' + this.selected.length ); // test
                 var candidates = []
                 _.each(this.selected.models, function(el, idx, list) {
-                    // alert(el.id);
-                    // el.destroy();
                     candidates.push(el)
                 });
                 
                 for (var i = 0; i < candidates.length; i++) {
                     candidates[i].destroy();
                 }
-                // this.selected.reset();
     
-                this.refreshList(); //
+                this.refreshList();
 
                 this.options.evAggregator.trigger("refreshScheduledList");            
             }
@@ -429,6 +463,7 @@ jQuery(document).ready(function() {
         
         render : function() {
             // alert(this.options.templates); //.get("templates"));
+            
             var obj = this.$el.html(this.template({
                 templates : this.options.templates,
                 // selected : this.selected

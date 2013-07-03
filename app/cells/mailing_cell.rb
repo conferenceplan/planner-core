@@ -1,9 +1,5 @@
 class MailingCell < ::Cell::Base
   
-  def mailingConfigs
-    render
-  end
-  
   def templates
     render
   end

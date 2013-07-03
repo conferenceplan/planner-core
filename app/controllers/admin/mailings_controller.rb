@@ -56,10 +56,25 @@ class Admin::MailingsController < PlannerController
 
   def listMailTemplates
     templates = MailTemplate.find :all #, :joins => :enumrecord, :conditions => {:mail_use_id => :enumrecord}
-    
+
     ActiveRecord::Base.include_root_in_json = false # hack for now
 
     render :json => templates, :callback => params[:callback]
+  end
+  
+  def previewEmail
+    # For person for given mailing
+    person = Person.find params[:person_id]
+    mailing = Mailing.find params[:mailing_id]
+    
+    # mailer = SurveyMailer.new
+
+    content = SurveyMailer.preview(person, mailing, {
+            :person => person,
+            :assignments => ProgramItemsService.findProgramItemsForPerson(person)
+    }) 
+    
+    render :json => {:content => content}, :callback => params[:callback]
   end
   
 end
