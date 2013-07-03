@@ -340,24 +340,6 @@ function mapString(str) {
 function adjust(dialog){
     currentDialog = dialog;
     $('.layerform', dialog.w).ajaxForm({
-        beforeSubmit : function(arr, $form, options) {
-            // alert("hh");
-            for (var key in arr) {
-                // // var bytelike= unescape(encodeURIComponent(arr[key].value));
-                // // var characters= decodeURIComponent(escape(bytelike));
-                // var re1 = /(?![\x00-\x7F]|[\xC0-\xDF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF]{2}|[\xF0-\xF7][\x80-\xBF]{3})./g;
-//                 
-                // var re = /(?![\x09\x0A\x0D\x20-\x7E]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}|\xED[\x80-\x9F][\x80-\xBF]|\xF0[\x90-\xBF][\x80-\xBF]{2}|[\xF1-\xF3][\x80-\xBF]{3}|\xF4[\x80-\x8F][\x80-\xBF]{2})./g;
-//                 
-                arr[key].value = mapString(arr[key].value);
-                
-                // alert(key);
-                // .replace(re, "")
-// 
-                // // alert(bytelike);
-                // // arr[key].value = characters;
-            }
-        },
         target: '#form-response',
         error: function(response, r){
             var errText = $(response.responseText).find(".error"); // class error
