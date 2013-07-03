@@ -3,12 +3,18 @@
 #
 module SurveyHtmlFormatter
   
+  def getResponsesForQuestion(responses, surveyId, questionId)
+    responses.collect { |x| (x.survey_id == surveyId && x.survey_question_id == questionId) ? x : nil }.compact
+  end
+  
   #
   # For a given survey produce an HTML version of the questions and answers
   #
   def survey_to_html(survey, respondent_detail, forEmail = true)
     content = '<div class="survey_responses"><h1>' + survey.name + '</h1>'
     content += "\n" if forEmail
+    
+    responses = respondent_detail.getResponses(survey.id)
     
     if respondent_detail.survey_respondent
       person = respondent_detail.survey_respondent.person
@@ -20,7 +26,7 @@ module SurveyHtmlFormatter
     end
     
     survey.survey_groups.each do |group|
-      content += group_to_html(group, respondent_detail, forEmail)
+      content += group_to_html(group, respondent_detail, forEmail, responses)
     end
     
     content += '</div>'
@@ -32,12 +38,12 @@ module SurveyHtmlFormatter
   #
   #
   #
-  def group_to_html(group, respondent_detail, forEmail)
+  def group_to_html(group, respondent_detail, forEmail, responses)
     content = '<h3 class="response_group_header">' + group.name + '</h2><div class="response_group_body">'
     
     group.survey_questions.each do |question|
-      if respondent_detail.hasResponsesForQuestion(group.survey.id, question.id)
-        content += question_to_html(question, respondent_detail, forEmail)
+      if getResponsesForQuestion(responses, group.survey.id, question.id) #respondent_detail.hasResponsesForQuestion(group.survey.id, question.id)
+        content += question_to_html(question, respondent_detail, forEmail, responses)
       end
     end
     
@@ -50,30 +56,30 @@ module SurveyHtmlFormatter
   
   private
   
-  def question_to_html(question, respondent_detail, forEmail)
+  def question_to_html(question, respondent_detail, forEmail, responses)
     content = ''
     
     case question.question_type
     when :availability
-      content += availabilty_to_html(question, respondent_detail, forEmail)
+      content += availabilty_to_html(question, respondent_detail, forEmail, responses)
     when :address
-      content += address_to_html(question, respondent_detail, forEmail)
+      content += address_to_html(question, respondent_detail, forEmail, responses)
     when :phone
-      content += phone_to_html(question, respondent_detail, forEmail)
+      content += phone_to_html(question, respondent_detail, forEmail, responses)
     when :singlechoice
-      content += single_choice_to_html(question, respondent_detail, forEmail)
+      content += single_choice_to_html(question, respondent_detail, forEmail, responses)
     when :textbox
-      content += textbox_to_html(question, respondent_detail, forEmail)
+      content += textbox_to_html(question, respondent_detail, forEmail, responses)
     else
-      content += text_to_html(question, respondent_detail, forEmail)
+      content += text_to_html(question, respondent_detail, forEmail, responses)
     end
     
     return content    
   end
 
-  def text_to_html(question, respondent_detail, forEmail)
+  def text_to_html(question, respondent_detail, forEmail, responses)
     content = '<div class="response_answer">'
-    responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+    responses = getResponsesForQuestion(responses, question.survey_group.survey.id, question.id)
     if !responses.empty? && !responses[0].response.blank?
       content += '<div class="response_question_text"'
       content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
@@ -90,9 +96,9 @@ module SurveyHtmlFormatter
     return content
   end
   
-  def textbox_to_html(question, respondent_detail, forEmail)
+  def textbox_to_html(question, respondent_detail, forEmail, responses)
     content = '<div class="response_answer">'
-    responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+    responses = getResponsesForQuestion(responses, question.survey_group.survey.id, question.id)
     if !responses.empty? && !responses[0].response.blank?
       content += '<div class="response_question_text"'
       content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
@@ -129,9 +135,9 @@ module SurveyHtmlFormatter
     return content
   end
   
-  def single_choice_to_html(question, respondent_detail, forEmail)
+  def single_choice_to_html(question, respondent_detail, forEmail, responses)
     content = '<div class="response_answer">'
-    responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+    responses = getResponsesForQuestion(responses, question.survey_group.survey.id, question.id)
     if !responses.empty? && !responses[0].response.blank?
       content += '<div class="response_question_text"'
       content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
@@ -149,9 +155,9 @@ module SurveyHtmlFormatter
     return content
   end
   
-  def phone_to_html(question, respondent_detail, forEmail)
+  def phone_to_html(question, respondent_detail, forEmail, responses)
     content = '<div class="response_answer">'
-    responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+    responses = getResponsesForQuestion(responses, question.survey_group.survey.id, question.id)
     if !responses.empty? && !responses[0].response.blank?
       responses.each do |response|
         content += '<div class="response_answer">'
@@ -169,11 +175,11 @@ module SurveyHtmlFormatter
     return content
   end
   
-  def address_to_html(question, respondent_detail, forEmail)
+  def address_to_html(question, respondent_detail, forEmail, responses)
     content = '<div class="response_answer">'
     
     
-    responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+    responses = getResponsesForQuestion(responses, question.survey_group.survey.id, question.id) 
     if !responses.empty?
       responses.each do |response|
         content += '<div class="response_answer">'
@@ -206,10 +212,10 @@ module SurveyHtmlFormatter
     return content
   end
   
-  def availabilty_to_html(question, respondent_detail, forEmail)
+  def availabilty_to_html(question, respondent_detail, forEmail, responses)
     content = '<div class="response_answer">'
     
-    responses = respondent_detail.getResponsesForQuestion(question.survey_group.survey.id, question.id)
+    responses = getResponsesForQuestion(responses, question.survey_group.survey.id, question.id) 
 
     responses.each do |response|
       if response.response && response.response == '1'

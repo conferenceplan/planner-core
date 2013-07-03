@@ -15,7 +15,7 @@ class SurveyRespondentDetail < ActiveRecord::Base
     return survey_responses.first(:all, :conditions => {:survey_id => surveyId, :survey_question_id => questionId})
   end
   
-  def getResponsesForQuestion(surveyId, questionId)
+  def getResponsesForQuestion(surveyId, questionId) # TODO - optimize usage
     return survey_responses.find(:all, :conditions => {:survey_id => surveyId, :survey_question_id => questionId})
   end
   
@@ -24,7 +24,7 @@ class SurveyRespondentDetail < ActiveRecord::Base
     return survey_responses.exists?({:survey_id => surveyId})
   end
 
-  def hasResponsesForQuestion(surveyId, questionId)
+  def hasResponsesForQuestion(surveyId, questionId) # TODO - optimize usage
     return survey_responses.exists?({:survey_id => surveyId, :survey_question_id => questionId})
   end
 
