@@ -352,10 +352,6 @@ function adjust(dialog){
                 arr[key].value = mapString(arr[key].value);
                 
                 // alert(key);
-                if (arr[key].name == "programme_item[title]") {
-                    alert('hhh');
-                 arr[key].value += '\x96';
-                };
                 // .replace(re, "")
 // 
                 // // alert(bytelike);
