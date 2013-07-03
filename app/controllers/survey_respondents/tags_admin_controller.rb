@@ -104,7 +104,6 @@ private
       tags = response.survey_respondent_detail.survey_respondent.tag_counts_on(context)
       new_tags = tags.collect {|tag| tag.name }
       response.response = new_tags.join(",")
-      # response.response = response.response.sub(Regexp.new(old_value),new_value)
       response.save
     end
 
@@ -134,26 +133,25 @@ private
         respondent.person.set_tag_list_on(destination, dest_tags.join(",") )
         respondent.person.save
       end
+
+      # Make sure that it is moved to the corresponding question for the respondent    
+      responses = SurveyResponse.all :include => :survey_question, :conditions => {:survey_questions => {:tags_label => destination}, :survey_respondent_detail_id => respondent.survey_respondent_detail }
+      responses.each do |response|
+        tags = response.survey_respondent_detail.survey_respondent.tag_counts_on(destination)
+        new_tags = tags.collect {|tag| tag.name }
+        response.response = new_tags.join(",")
+        response.save
+      end
     end
     
     # delete it
     responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
     responses.each do |response|
       str = response.response
-      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-      response.response = str.compact.join(',')
+      response.response = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}.compact.join(',')
       response.save
     end
-    
-    # add to the destination
-    responses = SurveyResponse.all( :conditions => ["survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", destination])
-    responses.each do |response|
-      str = response.response
-      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-      str << old_value
-      response.response = str.compact.join(',')
-      response.save
-    end
+
   end
   
   def delete(context, old_value)
@@ -178,8 +176,7 @@ private
     responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
     responses.each do |response|
       str = response.response
-      str = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}
-      response.response = str.compact.join(',')
+      response.response = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}.compact.join(',')
       response.save
     end
   end
