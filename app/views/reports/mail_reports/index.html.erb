@@ -12,15 +12,15 @@
 <% end %>
 <% content_for :cssheader do %>
 <%= stylesheet_link_tag '/vendor/backgrid/backgrid' %>
-<%= stylesheet_link_tag '/vendor/bootstrap' %>
-<%= stylesheet_link_tag '/vendor/bootstrap-responsive' %>
+<%= stylesheet_link_tag '/vendor/bootstrap/bootstrap' %>
+<%= stylesheet_link_tag '/vendor/bootstrap/bootstrap-responsive' %>
 <%= stylesheet_link_tag '/vendor/backgrid/extensions/text-cell/backgrid-text-cell' %>
 <%= stylesheet_link_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
 <%= stylesheet_link_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
 <% end %>
 <% content_for :jsheader do %>
     <%= javascript_include_tag '/vendor/lunr' %>
-    <%= javascript_include_tag '/vendor/backbone-pageable' %>
+    <%= javascript_include_tag '/vendor/backbone/extensions/backbone-pageable' %>
     <%= javascript_include_tag '/vendor/backgrid/extensions/paginator/backgrid-paginator' %>
     <%= javascript_include_tag '/vendor/backgrid/extensions/filter/backgrid-filter' %>
   <%= render_cell :mail_report, :javascript, :person_id => @person_id, :mailing_id => @mailing_id %>

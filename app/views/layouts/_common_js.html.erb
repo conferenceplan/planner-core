@@ -1,5 +1,5 @@
 <%= javascript_include_tag 'vendor/jquery-1.8.3' %>
-<%= javascript_include_tag '/vendor/bootstrap' %>
+<%= javascript_include_tag '/vendor/bootstrap/bootstrap' %>
 <%= javascript_include_tag 'vendor/jquery-ui-1.9.2.custom.min' %>
 <%= javascript_include_tag 'vendor/jquery-migrate-1.1.1' %>
 <%= javascript_include_tag 'vendor/grid.locale-en' if params[:action] == 'index' %>
@@ -11,10 +11,10 @@
 <%= javascript_include_tag 'vendor/jrails' %>
 <%= javascript_include_tag 'vendor/jquery.timeentry.min' %>
 
-<%= javascript_include_tag 'vendor/underscore-min' %>
-<%= javascript_include_tag 'vendor/backbone' %>
-<%= javascript_include_tag 'vendor/backbone-relational' %>
-<%= javascript_include_tag 'vendor/backbone.paginator' %>
+<%= javascript_include_tag '/vendor/backbone/underscore-min' %>
+<%= javascript_include_tag '/vendor/backbone/backbone' %>
+<%= javascript_include_tag '/vendor/backbone/extensions/backbone-relational' %>
+<%= javascript_include_tag '/vendor/backbone/extensions/backbone.paginator.js' %>
 <%= javascript_include_tag '/vendor/backgrid/backgrid' %>
 <%= javascript_include_tag '/vendor/moment/moment' %>
 <%= javascript_include_tag '/vendor/backgrid/extensions/moment-cell/backgrid-moment-cell' %>
