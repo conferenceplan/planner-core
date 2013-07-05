@@ -57,6 +57,9 @@ class ProgramController < ApplicationController
       format.js {
         render :json => @programmeItems, :callback => params[:callback]
       }
+      format.json {
+        render :json => @programmeItems.to_json(:new_format => true), :callback => params[:callback]
+      }
     end
   end
   

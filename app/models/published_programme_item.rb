@@ -37,20 +37,46 @@ class PublishedProgrammeItem < ActiveRecord::Base
     return published_time_slot.start.strftime('%m/%d')
   end
 
-# TODO - change the JSON representation  
-    # {"id":"1865",
-    # "title":"Sing Along Chicon 2000 Songbook",
-    # "precis":"Everyone who comes to the sing-a-long gets to keep the Chicon 2000 filk book.",
+  def as_json(options={}) 
     
-    # "day":"2012-08-30",
-    # "time":"10:30",
+    if options[:new_format] == true
+      # New JSON representation  
+      # {"id":"1865",
+      # "title":"Sing Along Chicon 2000 Songbook",
+      # "precis":"Everyone who comes to the sing-a-long gets to keep the Chicon 2000 filk book.",
+      res = super(
+        :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+              :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
+              :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
+              ]
+        )
+      # map duration to mins
+      # map precis to desc
+      
+      res.tap { |hash|
+        hash[:mins] =  hash.delete 'duration'
+        hash[:desc] =  hash.delete 'precis'
+      }
+       
+      res[:day] = published_time_slot.start.strftime('%A') # currentTime.strftime('%A %H:%M')
+      res[:time] = published_time_slot.start.strftime('%H:%M')
     
-    # "floor":"Bronze West",
-    # "room":"Gold Coast",
-    
-    # "people":[{"id":"2539","name":"Elliott Mason"},{"id":"2318","name":"Jan DiMasi"}]}
-  def as_json(options={})
-     res = super(
+      # "loc": [ "Some Room", "Some Area" ],
+      res[:loc] = [ published_room.name, published_room.published_venue.name ]
+
+      # "people":[{"id":"2539","name":"Elliott Mason"},{"id":"2318","name":"Jan DiMasi"}]}
+      res[:people] = people.collect{ |p|
+        { 
+          :id => p.id , 
+          :name => p.getFullPublicationName.strip
+        }
+      }
+      
+      
+        
+    else  
+
+      res = super(
         :except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
               :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
               :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
@@ -58,7 +84,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
         :methods => [:pub_number]
         )
      
-     res['people'] = people.collect{ |p|
+      res['people'] = people.collect{ |p|
         p.as_json({:except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
               :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
               :first_name, :last_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
@@ -68,23 +94,20 @@ class PublishedProgrammeItem < ActiveRecord::Base
               hash[:last_name] = hash.delete :pubLastName
               hash[:suffix] = hash.delete :pubSuffix
             }
-     }
+      }
      
-     res['time'] = published_time_slot.start
-     # res['time_slot'] = published_time_slot.as_json({:except => [:id, :created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
-              # :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
-              # :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
-              # ]})
-     res['room'] = published_room.as_json({:except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+      res['time'] = published_time_slot.start
+      res['room'] = published_room.as_json({:except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
               :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
               :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
               ]})
               
-     res['room']['venue'] = published_room.published_venue.as_json({:except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
+      res['room']['venue'] = published_room.published_venue.as_json({:except => [:created_at , :updated_at, :lock_version, :format_id, :end, :comments, :language,
               :acceptance_status_id, :mailing_number, :invitestatus_id, :invitation_category_id,
               :last_name, :first_name, :suffix, :pub_reference_number, :end, :short_title, :published_venue_id,
               ]})
-        
-     return res
+    end
+    
+    return res
   end
 end
