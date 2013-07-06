@@ -74,7 +74,6 @@ class ProgramPlannerController < PlannerController
     @day = params[:day]
     query = CONFLICT_QUERY_PT1 + "AND (progA.role_id != " + reserved.id.to_s + " AND progB.role_id != " + reserved.id.to_s + ")"
     
-    
     if (@day)
       query += 'AND roomA.day = ' + @day.to_s+ ' AND roomB.day = ' + @day.to_s
     end
@@ -135,9 +134,10 @@ CONFLICT_QUERY_PT1 = <<"EOS"
   select 
   R.id as id, R.name as name,
   P.id as person_id, P.first_name as person_first_name, P.last_name, 
-  S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
+  S.id as item_id, S.title as item_name, Conflicts.roleA item_role,
+  Conflicts.startA as item_start,
   RB.id as conflict_room_id, RB.name as conflict_room_name,
-  SB.id as conflict_item_id, SB.title as conflict_item_title,
+  SB.id as conflict_item_id, SB.title as conflict_item_title, Conflicts.roleB as conflict_item_role,
   Conflicts.startB as conflict_start
   from people P, rooms R, programme_items S,
   rooms RB, programme_items SB, 
@@ -203,13 +203,17 @@ EXCLUDED_ITEM_QUERY_PT1 = <<"EOS"
   S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
   RB.id as conflict_room_id, RB.name as conflict_room_name,
   SB.id as conflict_item_id, SB.title as conflict_item_title,
-  Conflicts.startB as conflict_start
+  Conflicts.startB as conflict_start,
+  Conflicts.roleA item_role,
+  Conflicts.roleB conflict_item_role
   from people P, rooms R, programme_items S,
   rooms RB, programme_items SB, 
    (select exA.person_id as pidA, progB.person_id as pidB, 
    roomA.room_id as roomA, exA.excludable_id as progA, 
    tsA.start as startA, tsA.end as endA,
-   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB,
+   progB.role_id as roleA,
+   progB.role_id as roleB
    from exclusions exA, room_item_assignments roomA, time_slots tsA,
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
    where
@@ -237,11 +241,13 @@ EXCLUDED_TIME_QUERY_PT1 = <<"EOS"
   R.id as id, R.name as name,
   P.id as person_id, P.first_name as person_first_name, P.last_name, 
   S.id as item_id, S.title as item_name, Conflicts.startB as item_start,
-  Conflicts.startA as period_start, Conflicts.endA as period_end
+  Conflicts.startA as period_start, Conflicts.endA as period_end,
+  Conflicts.roleB item_role
   from people P, rooms R, programme_items S,
    (select exA.person_id as pidA, progB.person_id as pidB, 
    tsA.start as startA, tsA.end as endA,
-   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB,
+   progB.role_id as roleB
    from exclusions exA, time_slots tsA,
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
    where
@@ -266,11 +272,13 @@ select
   R.id as id, R.name as name,
   P.id as person_id, P.first_name as person_first_name, P.last_name, 
   S.id as item_id, S.title as item_name, Conflicts.startB as item_start,
-  Conflicts.startA as period_start, Conflicts.endA as period_end
+  Conflicts.startA as period_start, Conflicts.endA as period_end,
+  Conflicts.roleB item_role
   from people P, rooms R, programme_items S,
    (select availA.person_id as pidA, progB.person_id as pidB, 
    availA.start_time as startA, availA.end_time as endA,
-   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB
+   roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB,
+   progB.role_id as roleB
    from available_dates availA, 
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
    where
@@ -296,7 +304,9 @@ BACK_TO_BACK_QUERY_PT1 = <<"EOS"
   S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
   RB.id as conflict_room_id, RB.name as conflict_room_name,
   SB.id as conflict_item_id, SB.title as conflict_item_title,
-  Conflicts.startB as conflict_start
+  Conflicts.startB as conflict_start,
+  Conflicts.roleA item_role,
+  Conflicts.roleB conflict_item_role
   from people P, rooms R, programme_items S,
   rooms RB, programme_items SB, 
    (select progA.person_id as pidA, progB.person_id as pidB, 

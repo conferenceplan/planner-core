@@ -16,8 +16,8 @@
         <div class="roomid" style="display: none;"><%= conflict[0] %></div>
         <div class="conflict-roomid" style="display: none;"><%= conflict[8] %></div>
         <div><em><%= conflict[3] %> <%= conflict[4] %></em> has a conflict</div>
-        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %> with</div>
-        <div><%= conflict[9] %> : <b><%= conflict[11] %></b> at <%= conflict[12].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
+        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> (<%= PersonItemRole.find(conflict[7].to_i).name %>) at <%= conflict[8].to_datetime.in_time_zone.strftime('%H:%M %A') %> with</div>
+        <div><%= conflict[10] %> : <b><%= conflict[12] %></b> (<%= PersonItemRole.find(conflict[13].to_i).name %>) at <%= conflict[14].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
     </div>
     <%end %>
 	
@@ -27,8 +27,8 @@
         <div class="roomid" style="display: none;"><%= conflict[0] %></div>
         <div class="conflict-roomid" style="display: none;"><%= conflict[8] %></div>
         <div><em><%= conflict[3] %> <%= conflict[4] %></em> has a conflict with excluded item</div>
-        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %> with</div>
-        <div><%= conflict[9] %> : <b><%= conflict[11] %></b> at <%= conflict[12].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
+        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> (<%= PersonItemRole.find(conflict[13].to_i).name %>) at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %> with</div>
+        <div><%= conflict[9] %> : <b><%= conflict[11] %></b> (<%= PersonItemRole.find(conflict[14].to_i).name %>) at <%= conflict[12].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
     </div>
     <%end %>
 	
@@ -37,7 +37,7 @@
 	    <div class="itemid" style="display: none;"><%= conflict[5] %></div>
         <div class="roomid" style="display: none;"><%= conflict[0] %></div>
         <div><em><%= conflict[3] %> <%= conflict[4] %></em> has a conflict with excluded time</div>
-        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
+        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> (<%= PersonItemRole.find(conflict[10].to_i).name %>) at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
 		<div>excluded period: from <b><%= conflict[8].to_datetime.in_time_zone.to_s(:conflicttime) %></b> to <%= conflict[9].to_datetime.in_time_zone.to_s(:conflicttime)%></div>
 	</div>
 	<% end%>
@@ -47,7 +47,7 @@
 	    <div class="itemid" style="display: none;"><%= conflict[5] %></div>
         <div class="roomid" style="display: none;"><%= conflict[0] %></div>
         <div><em><%= conflict[3] %> <%= conflict[4] %></em> has a conflict with arrival/departure time</div>
-        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
+        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> (<%= PersonItemRole.find(conflict[10].to_i).name %>) at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
 		<div>arrival/departure: from <b><%= conflict[8].to_datetime.in_time_zone.to_s(:conflicttime) %></b> to <%= conflict[9].to_datetime.in_time_zone.to_s(:conflicttime)%></div>
 	</div>
 	<% end%>
@@ -58,8 +58,8 @@
         <div class="roomid" style="display: none;"><%= conflict[0] %></div>
         <div class="conflict-roomid" style="display: none;"><%= conflict[8] %></div>
         <div><em><%= conflict[3] %> <%= conflict[4] %></em> has a back to back</div>
-        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %> with</div>
-        <div><%= conflict[9] %> : <b><%= conflict[11] %></b> at <%= conflict[12].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
+        <div><%= conflict[1] %> : <b><%= conflict[6] %></b> (<%= PersonItemRole.find(conflict[13].to_i).name %>) at <%= conflict[7].to_datetime.in_time_zone.strftime('%H:%M %A') %> with</div>
+        <div><%= conflict[9] %> : <b><%= conflict[11] %></b> (<%= PersonItemRole.find(conflict[14].to_i).name %>) at <%= conflict[12].to_datetime.in_time_zone.strftime('%H:%M %A') %></div>
     </div>
     <%end %>
 </div>
