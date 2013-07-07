@@ -175,6 +175,37 @@ class ProgramController < ApplicationController
           jsonstr = '[' + jsonstr + ']'
           render_json  jsonstr, :content_type => 'application/json'
         }
+      format.json {
+          @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
+          jsonstr = '' 
+          @participants.each do |p|
+            if jsonstr.length > 0
+              jsonstr += ','
+            end
+            jsonstr += '{"id":"' + p[0]  + '"'
+            jsonstr += ',"name": [' + p[1].to_json + ',' + p[2].to_json # first, last, prefix, suffix
+            jsonstr += ', "",' + p[3].to_json if !p[3].empty?
+            jsonstr += ']' 
+            jsonstr += ',"tags": []' # Add tags - TODO 
+            jsonstr += ',"links": {'
+            
+            linksstr = ""
+            linksstr += '"photo":' + p[8].to_json if !p[8].empty?
+            linksstr += "," if !linksstr.empty?
+            linksstr += '"url":' + p[5].to_json if !p[5].empty?
+            linksstr += "," if !linksstr.empty? && !p[5].empty?
+            linksstr += '"twitter":' + p[6].to_json if !p[6].empty?
+            linksstr += "," if !linksstr.empty? && !p[6].empty?
+            linksstr += '"fb":' + p[7].to_json if !p[7].empty?
+            
+            jsonstr += linksstr + '}'
+            jsonstr += ',"bio":' + p[4].to_json 
+            jsonstr += ',"prog": ' + p[9].split(",").to_json  # Add progam ids if any - TODO 
+            jsonstr += '}'
+          end
+          jsonstr = '[' + jsonstr + ']'
+          render_json  jsonstr, :content_type => 'application/json'
+      }
       format.csv {
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
            csv_string = FasterCSV.generate do |csv|
@@ -218,7 +249,7 @@ class ProgramController < ApplicationController
             
             jsonstr += linksstr + '}'
             jsonstr += ',"bio":' + p[4].to_json 
-            jsonstr += ',"prog": []' # Add progam if any - TODO 
+            jsonstr += ',"prog": ' + p[9].split(",").to_json  # Add progam ids if any - TODO 
             jsonstr += '}'
           end
           jsonstr = '[' + jsonstr + ']'
@@ -556,11 +587,12 @@ PARTICIPANT_QUERY = <<"EOS"
   IFNULL(edited_bios.website,''),
   IFNULL(edited_bios.twitterinfo,''),
   IFNULL(edited_bios.facebook,''),
-  IFNULL(edited_bios.photourl,'')
+  IFNULL(edited_bios.photourl,''),
+  GROUP_CONCAT(published_programme_item_assignments.published_programme_item_id)
   from people
   left join pseudonyms ON pseudonyms.person_id = people.id
   left join edited_bios on edited_bios.person_id = people.id
-  join published_programme_item_assignments where published_programme_item_assignments.person_id = people.id
+  join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
   GROUP BY people.id
   ORDER BY people.last_name;
 EOS
@@ -576,10 +608,12 @@ PARTICIPANT_WITH_BIO_QUERY = <<"EOS"
   IFNULL(edited_bios.website,''),
   IFNULL(edited_bios.twitterinfo,''),
   IFNULL(edited_bios.facebook,''),
-  IFNULL(edited_bios.photourl,'')
+  IFNULL(edited_bios.photourl,''),
+  GROUP_CONCAT(published_programme_item_assignments.published_programme_item_id)
   from people
   left join pseudonyms ON pseudonyms.person_id = people.id
   left join edited_bios on edited_bios.person_id = people.id
+  join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
   where edited_bios.bio is not null
   GROUP BY people.id
   ORDER BY people.last_name;
