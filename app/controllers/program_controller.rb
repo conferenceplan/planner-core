@@ -39,6 +39,7 @@ class ProgramController < ApplicationController
                                                  :conditions => conditions)
     else
       @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
+                                                 :joins => 'LEFT OUTER JOIN taggings ON taggings.taggable_id = Published_Programme_Items.id AND taggings.taggable_type = "PublishedProgrammeItem"',
                                                  :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                                                  :conditions => conditions)
     end
@@ -138,6 +139,9 @@ class ProgramController < ApplicationController
     respond_to do |format|
       format.html { render :layout => 'content' }
       format.js { render_json @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :published_venue_id],
+                                                 :include => [:published_venue]
+        ), :content_type => 'application/json' }
+      format.json { render_json @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :published_venue_id],
                                                  :include => [:published_venue]
         ), :content_type => 'application/json' }
     end
@@ -249,7 +253,8 @@ class ProgramController < ApplicationController
             
             jsonstr += linksstr + '}'
             jsonstr += ',"bio":' + p[4].to_json 
-            jsonstr += ',"prog": ' + p[9].split(",").to_json  # Add progam ids if any - TODO 
+            jsonstr += ',"prog": '
+            jsonstr += p[9] ? p[9].split(",").to_json : '[]' # Add progam ids if any - TODO 
             jsonstr += '}'
           end
           jsonstr = '[' + jsonstr + ']'
@@ -613,10 +618,10 @@ PARTICIPANT_WITH_BIO_QUERY = <<"EOS"
   from people
   left join pseudonyms ON pseudonyms.person_id = people.id
   left join edited_bios on edited_bios.person_id = people.id
-  join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
+  left join published_programme_item_assignments on published_programme_item_assignments.person_id = people.id
   where edited_bios.bio is not null
   GROUP BY people.id
-  ORDER BY people.last_name;
+  ORDER BY last_name;
 EOS
 
 #

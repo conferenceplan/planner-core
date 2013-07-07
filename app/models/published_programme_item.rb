@@ -72,6 +72,11 @@ class PublishedProgrammeItem < ActiveRecord::Base
         }
       }
       
+      # Tags for the Primary Area
+      tracks = tag_list_on('PrimaryArea')
+      if tracks && !tracks.empty?
+        res[:track] = tag_list_on('PrimaryArea')
+      end
       
         
     else  

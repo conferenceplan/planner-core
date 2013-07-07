@@ -18,8 +18,9 @@ class PublishedRoom < ActiveRecord::Base
           :source_type => 'Room'
           
   def as_json(options={})
-    super(options).tap { |hash|
-      hash[:venue] =  hash.delete :published_venue
-      }
+    return { 
+      :id => id,
+      :loc => [ name, published_venue.name ]
+    }
   end
 end
