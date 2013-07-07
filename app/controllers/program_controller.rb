@@ -39,7 +39,6 @@ class ProgramController < ApplicationController
                                                  :conditions => conditions)
     else
       @programmeItems = PublishedProgrammeItem.all(:include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
-                                                 :joins => 'LEFT OUTER JOIN taggings ON taggings.taggable_id = Published_Programme_Items.id AND taggings.taggable_type = "PublishedProgrammeItem"',
                                                  :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                                                  :conditions => conditions)
     end
