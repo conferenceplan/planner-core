@@ -96,14 +96,14 @@ class ProgramPlannerController < PlannerController
     query += EXCLUDED_ITEM_QUERY_PT2
     @excludedItemConflicts = ActiveRecord::Base.connection.select_rows(query)
     
-    query = EXCLUDED_TIME_QUERY_PT1
+    query = EXCLUDED_TIME_QUERY_PT1 + "AND (progB.role_id != " + reserved.id.to_s + ")"
     if (@day)
       query += 'AND roomB.day = ' + @day.to_s
     end
     query += EXCLUDED_TIME_QUERY_PT2
     @excludedTimeConflicts = ActiveRecord::Base.connection.select_rows(query)
     
-    query = AVAILABLE_TIME_CONFLICT_QUERY_PT1
+    query = AVAILABLE_TIME_CONFLICT_QUERY_PT1 + "AND (progB.role_id != " + reserved.id.to_s + ")"
     if (@day)
       query += 'AND roomB.day = ' + @day.to_s
     end
@@ -204,15 +204,13 @@ EXCLUDED_ITEM_QUERY_PT1 = <<"EOS"
   RB.id as conflict_room_id, RB.name as conflict_room_name,
   SB.id as conflict_item_id, SB.title as conflict_item_title,
   Conflicts.startB as conflict_start,
-  Conflicts.roleA item_role,
-  Conflicts.roleB conflict_item_role
+  Conflicts.roleB item_role
   from people P, rooms R, programme_items S,
   rooms RB, programme_items SB, 
    (select exA.person_id as pidA, progB.person_id as pidB, 
    roomA.room_id as roomA, exA.excludable_id as progA, 
    tsA.start as startA, tsA.end as endA,
    roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB,
-   progB.role_id as roleA,
    progB.role_id as roleB
    from exclusions exA, room_item_assignments roomA, time_slots tsA,
    programme_item_assignments progB, room_item_assignments roomB, time_slots tsB
