@@ -2,6 +2,8 @@
 
 <%= form_tag('/planner_reports/panelists_with_panels', :method => 'post') do %>
 <p>
+   <%= check_box_tag :prog_nbr, '1', params[:prog_nbr] %>
+   <%= label_tag :prog_nbr, "Display Program Ref Id? "%><br /><br />
    <%= check_box_tag :incl_rsvd, '1', params[:incl_rsvd] %>
    <%= label_tag :incl_rsvd, "Include reserve panelists? "%><br /><br />
    <%= check_box_tag :sched_only, '1', params[:sched_only] %>
@@ -18,10 +20,6 @@
 <% end %>
 <p>
 <% if params[:html] %>
-   <% if @names.blank? %>
-      No one right now.
-   <% else %>
-      <%= render :partial => "itemlist", :object => @names,:locals => {:include_city => @include_city} %> 
-   <% end %>
+      <%= render :partial => "itemlist", :object => @people, :locals => {:include_city => @include_city} %> 
 <% end %>
 </p>

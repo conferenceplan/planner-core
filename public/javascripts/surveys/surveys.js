@@ -242,6 +242,7 @@ function init() {
 
 	$("#survey-accordian").accordion({
 		active : false,
+		collapsible : true,
 		autoHeight: false,
 		change : function(e, ui) {
 			// show the groups associated with the survey

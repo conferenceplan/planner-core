@@ -31,6 +31,16 @@ module SurveyService
   #
   #
   #
+  def self.personAnsweredSurvey(person, survey_alias)
+    nbr = SurveyResponse.count :joins => [{:survey_question => {:survey_group => :survey}}, {:survey_respondent_detail => {:survey_respondent => :person}}],
+      :conditions => ["people.id = ? && surveys.alias = ?", person.id, survey_alias]
+      
+    nbr > 0
+  end
+  
+  #
+  #
+  #
   def self.findPeopleWhoGaveAnswer(answer, inviteStatus = InviteStatus['Invited'], acceptanceStatus = AcceptanceStatus['Accepted'], attending = true)
     
     # Put in the :select so as to over-ride the active record "read only true when a :join is used"

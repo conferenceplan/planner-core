@@ -16,6 +16,8 @@ class Surveys::ResponseController < SurveyApplicationController
       @current_key = params[:key];
       render :index
     else
+      respondentDetails = nil
+      
       begin
         SurveyRespondentDetail.transaction do
           if @respondent && @respondent.survey_respondent_detail
@@ -87,15 +89,23 @@ class Surveys::ResponseController < SurveyApplicationController
       # send email confirmation of survey etc., use the email address that they provided in the survey
       begin
         if @respondent
-          SurveyMailer.deliver_email(@respondent.email, MailUse[:CompletedSurvey], {
+          SurveyMailer.deliver_email(@respondent.email, MailUse[:CompletedSurvey], @survey.id, {
             :email => @respondent.email,
             :user => @respondent,
             :survey => @survey,
             :respondentDetails => @respondent.survey_respondent_detail
           })
+        elsif respondentDetails
+          SurveyMailer.deliver_email(respondentDetails.email, MailUse[:CompletedSurvey], @survey.id, {
+            :email => respondentDetails.email,
+            :user => respondentDetails, # TODO - check that this will work
+            :survey => @survey,
+            :respondentDetails => respondentDetails
+          })
         end
       rescue Exception => err
-        logger.error "Unable to send the email to " + @respondent.email
+        logger.error "Unable to send the email to " + @respondent.email if @respondent
+        logger.error "Unable to send the email to " + respondentDetails.email if !@respondent
         logger.error err
         logger.error err.backtrace
       end

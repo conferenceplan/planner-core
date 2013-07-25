@@ -18,6 +18,7 @@ PlannerRc1::Application.routes.draw do
   match 'usersadmin/list' => 'users/admin#list'
   resources :usersadmin, :controller => 'users/admin'
   match 'roles/list' => 'roles#list'
+  map.connect 'program/publicationDates.:format', :controller => 'program', :action => 'publicationDates', :method => 'get'
 
 
 # TODO - test

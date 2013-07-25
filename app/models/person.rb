@@ -43,6 +43,9 @@ class Person < ActiveRecord::Base
   #
   has_many  :programmeItemAssignments
   has_many  :programmeItems, :through => :programmeItemAssignments
+  
+  has_many  :publishedProgrammeItemAssignments
+  has_many  :published_programme_items, :through => :publishedProgrammeItemAssignments
 
   has_one   :registrationDetail, :dependent => :delete
   has_one   :survey_respondent
@@ -78,10 +81,33 @@ class Person < ActiveRecord::Base
   
   has_one :peoplesource, :dependent => :delete
   has_one :datasource, :through => :peoplesource
+
+  def simple_json()
+    
+    return res
+  end
   
   def as_json(options={})
     if options[:include_pseudonym]
       res = super(:include => :pseudonym)
+    elsif options[:terse]
+      res = {
+        :id => id,
+        :name => getFullPublicationName,
+        :links => {
+        },
+        :bio => bio,
+        :prog => published_programme_items.collect { |p| p.id }
+      }
+    
+      if edited_bio
+        res[:links] = {
+          :photo => edited_bio.photourl,
+          :url => edited_bio.website,
+          :twitter => edited_bio.twitterinfo,
+          :fb => edited_bio.facebook
+        }
+      end
     else  
       res = super(options)
     end
@@ -225,11 +251,7 @@ class Person < ActiveRecord::Base
     end
     return theEmail
   end
-  
-  def hasSurvey?
-    return self.survey_respondent != nil ? self.survey_respondent.submitted_survey : false
-  end
-  
+    
   def getFullPublicationName
    # if we set the pseudonym in people table, use that
    if (self.pseudonym != nil)

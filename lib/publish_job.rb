@@ -174,6 +174,8 @@ EOS
       # we will need the venues as well
       pubVenue = publishVenue(srcRoom.venue)
       pubRoom.published_venue = pubVenue
+      
+      pubRoom.save
     end
     
     return pubRoom
@@ -187,6 +189,8 @@ EOS
       pubVenue.original = srcVenue
       pubVenue.publication.publication_date = DateTime.current
       pubVenue.publication.user = @current_user
+      
+      pubVenue.save
     end
     
     return pubVenue

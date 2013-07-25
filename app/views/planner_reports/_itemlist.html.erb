@@ -4,29 +4,45 @@
    No one right now.
 <% else %>
    <dl>
-   <% itemlist.each do |p| %>
-       <dt><%= p.getFullPublicationName %> (<%= p.acceptance_status.name %>)</dt>
-	   <% if include_city %>
-	      <% unless p.invitestatus.nil? %>
-		       <li> Invitation Status: <%= p.invitestatus.name %> </li>
-		  <% end %>
-		  <% unless p.invitation_category.nil? %>
-		       <li> Invitation Category: <%= p.invitation_category.name %> </li>
-		  <% end %>
-	      <% unless p.getDefaultPostalAddress.nil? %>
-	      		 <li><%= p.getDefaultPostalAddress.line1 %>, <%= p.getDefaultPostalAddress.line2 %></li>
-                 <li><%= p.getDefaultPostalAddress.city %>, <%= p.getDefaultPostalAddress.state %>, <%= p.getDefaultPostalAddress.postcode %>, <%= p.getDefaultPostalAddress.country %> </li>
+   <% itemlist.each do |person| %>
+       <dt><%= person.getFullPublicationName %> (<%= person.acceptance_status.name %>)</dt>
+       <% if !@names_only && !@names_city_only%>
+       <dd>
+        <ul>
+            <% person.programmeItemAssignments.each do |pi| %>
+                <% if pi.programmeItem %>
+                <% if @displayIds %>
+                    <li><%= pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number : 'N/A' %></li>
+                <% else %>
+                    <li>
+                    <%if pi.role == PersonItemRole['Reserved'] %>
+                        <em><%= pi.programmeItem.title %></em>
+                    <% else %>
+                        <%= pi.programmeItem.title %>
+                    <% end %>
+                    (<%= pi.programmeItem.format.name %>)
+                    (<%= pi.role.name %>),
+                    <%= (pi.programmeItem.time_slot ? pi.programmeItem.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.time_slot.end.strftime('%H:%M') + ',': '') %>
+                    <%= (pi.programmeItem.room ? pi.programmeItem.room.name : '') %>
+                    <%= (pi.programmeItem.room ? '(' + pi.programmeItem.room.venue.name + ')': '') %>
+                    </li>
+                <% end %>
+                <% end %>
+            <% end %>
+        </ul>
+       </dd>
+       <% elsif @names_city_only %>
+          <% unless person.invitestatus.nil? %>
+               <li> Invitation Status: <%= person.invitestatus.name %> </li>
+          <% end %>
+          <% unless person.invitation_category.nil? %>
+               <li> Invitation Category: <%= person.invitation_category.name %> </li>
+          <% end %>
+          <% unless person.getDefaultPostalAddress.nil? %>
+                 <li><%= person.getDefaultPostalAddress.line1 %>, <%= person.getDefaultPostalAddress.line2 %></li>
+                 <li><%= person.getDefaultPostalAddress.city %>, <%= person.getDefaultPostalAddress.state %>, <%= person.getDefaultPostalAddress.postcode %>, <%= person.getDefaultPostalAddress.country %> </li>
            <% end %>
-	   <% end %>
-       <% unless p.items.nil? %>
-          <dd><ul><% p.items.each do |i| %>
-                     <li><%= i %></li>
-                  <% end %>
-              </ul>
-          </dd>
        <% end %>
    <% end %>
    </dl>
-<% end %>
-
-</p>
+<% end %></p>

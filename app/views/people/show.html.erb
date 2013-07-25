@@ -37,7 +37,7 @@
                 <% end %>
             </div>
             <div class='line'>
-                Survey?: <%if @person.hasSurvey? %>
+                Survey?: <%if SurveyService.personAnsweredSurvey( @person, 'partsurvey') %>
                 Y<% else %>
                 N<% end %>
             </div>
