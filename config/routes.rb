@@ -132,9 +132,19 @@ PlannerRc1::Application.routes.draw do
       # :except => [:destroy, :new, :create, :edit, :remove]
   # end
 # 
-  # # These also take the context as a parameter...
-  # map.connect 'survey_respondents/tags/alltags', :controller => 'survey_respondents/tags', :action => 'alltags'
-  # map.connect 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
+  resources :survey_respondents do
+    resources :tags, :controller => 'survey_respondents/tags', :except => [:destroy, :new, :create, :edit, :remove] do
+      member do
+        get 'cloud'
+        get 'alltags'
+        get 'list'
+        post 'update'
+      end
+    end
+  end
+  # These also take the context as a parameter...
+  match 'survey_respondents/tags/alltags', :controller => 'survey_respondents/tags', :action => 'alltags'
+  match 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
 
   resources :equipment_needs do
     resources :programme_items

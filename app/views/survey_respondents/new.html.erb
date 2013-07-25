@@ -17,5 +17,5 @@
 </div>
 <div class="clear"></div>
 <%= form_for @survey_respondent, :html => {:'accept-charset' => 'UTF-8'} do |f| %>
-  <%= render :partial => "form", :locals => {:object => f, :button => "I wish to be on program"} %>
+  <%= render :partial => "form", :locals => {:form => f, :button => "I wish to be on program"} %>
 <% end %>

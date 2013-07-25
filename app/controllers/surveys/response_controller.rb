@@ -20,14 +20,15 @@ class Surveys::ResponseController < SurveyApplicationController
       
       begin
         SurveyRespondentDetail.transaction do
+          p = params[:survey_respondent_detail].reject {|x| ['pub_first_name', 'pub_last_name', 'pub_suffix'].include? x }
           if @respondent && @respondent.survey_respondent_detail
             respondentDetails = @respondent.survey_respondent_detail
-            respondentDetails.update_attributes(params[:survey_respondent_detail])
+            respondentDetails.update_attributes(p)
             respondentDetails.save!
             responses = @respondent.survey_respondent_detail.getResponses(@survey.id)
           else
             # save the details and add to the respondent, create the respondent details and link to the responses
-            respondentDetails = SurveyRespondentDetail.new(params[:survey_respondent_detail])
+            respondentDetails = SurveyRespondentDetail.new(p)
             respondentDetails.save!
             if @respondent
               # and assign the details to the respondent
