@@ -5,12 +5,12 @@ class SurveyMailer < ActionMailer::Base
   # Generic email mechanism, uses templates that have been defined in the database
   # TODO - deprecate this and use the new mechanism, need to add the other variables to the arguments
   #  
-  def email(recipient, mailuse, args)
+  def email(recipient, mailuse, surveyid, args)
     # get the mail parameters from the database
     config = MailConfig.first # it will be the first mail config anyway
     
     # get the template from the database that matches the specified use
-    template = MailTemplate.first(:conditions => ["mail_use_id = ?",mailuse.id])
+    template = MailTemplate.first(:conditions => ["mail_use_id = ? and survey_id = ?",mailuse.id, surveyid])
     
     
     # do parameter substitution for the body
@@ -18,16 +18,28 @@ class SurveyMailer < ActionMailer::Base
       @responses = args[:responses].responses
     end
     content = ERB.new(template.content, 0, "%<>").result(binding) # pass in a context with the parameters i.e. ruby binding
-    
+
     # then send the email
-    headers "return-path" => config.from
-    recipients recipient
-    cc        config.cc
-    from      config.from
-    subject   template.subject # to get from the mail template
-    sent_on   Time.now
-    content_type "text/html"
-    body      :title => template.title, :body => content
+    # headers "return-path" => config.from
+    # recipients recipient
+    # cc        config.cc
+    # from      config.from
+    # subject   template.subject # to get from the mail template
+    # sent_on   Time.now
+    # content_type "text/html"
+    # body      :title => template.title, :body => content
+    
+    mail(
+        to: recipient,
+        subject: template.subject,
+        from: config.from,
+        cc: config.cc,
+        subject: template.subject,
+        content_type: "text/html",
+        title: template.title,
+        body: content
+    )
+
   end
   
   #

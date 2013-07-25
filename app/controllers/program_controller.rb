@@ -198,7 +198,7 @@ class ProgramController < ApplicationController
             if jsonstr.length > 0
               jsonstr += ','
             end
-            jsonstr += '{"id":"' + p[0]  + '"'
+            jsonstr += '{"id":"' + p[0].to_s  + '"'
             jsonstr += ',"name": [' + p[1].to_json + ',' + p[2].to_json # first, last, prefix, suffix
             jsonstr += ', "",' + p[3].to_json if !p[3].empty?
             jsonstr += ']' 
@@ -223,7 +223,7 @@ class ProgramController < ApplicationController
           if params[:func]
             render :json  => "var "+ params[:func] +" = " + jsonstr, :content_type => 'application/json', :callback => params[:callback]
           else  
-            render_json  jsonstr, :content_type => 'application/json', :callback => params[:callback]
+            render :json  => jsonstr, :content_type => 'application/json', :callback => params[:callback]
           end
       }
       format.csv {
@@ -251,7 +251,7 @@ class ProgramController < ApplicationController
             if jsonstr.length > 0
               jsonstr += ','
             end
-            jsonstr += '{"id":"' + p[0]  + '"'
+            jsonstr += '{"id":"' + p[0].to_s  + '"'
             jsonstr += ',"name": [' + p[1].to_json + ',' + p[2].to_json # first, last, prefix, suffix
             jsonstr += ', "",' + p[3].to_json if !p[3].empty?
             jsonstr += ']' 
@@ -277,7 +277,7 @@ class ProgramController < ApplicationController
           if params[:func]
             render :json  => "var "+ params[:func] +" = " + jsonstr, :content_type => 'application/json', :callback => params[:callback]
           else  
-            render_json  jsonstr, :content_type => 'application/json', :callback => params[:callback]
+            render :json  => jsonstr, :content_type => 'application/json', :callback => params[:callback]
           end
         }
     end

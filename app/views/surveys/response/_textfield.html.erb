@@ -1,7 +1,7 @@
 <%#
 #
 %>
-<% content_tag :div, :class => question.survey_format.answer_style do %>
+<%= content_tag :div, :class => question.survey_format.answer_style do %>
 <% if question.tags_label && !question.tags_label.empty? %>
 <div class='taggable grid_10'>
 <div id='context' style='display:none'><%= question.tags_label %></div>

@@ -2,7 +2,7 @@
 #
 #
 class PublishedRoomItemAssignment < ActiveRecord::Base
-  audited
+  audited :allow_mass_assignment => true
 
   belongs_to :published_room
   belongs_to :published_programme_item

@@ -110,10 +110,10 @@ EOS
         # check for existence of already published item and if it is there then use that
         newItem = (srcItem.published == nil) ? PublishedProgrammeItem.new : srcItem.published
         
-        # copy the details from the unpublished item to the new
+        # # copy the details from the unpublished item to the new
         newItem = copy(srcItem, newItem)
-        newItem.original = srcItem # this create the Publication record as well to tie the two together
-        # Need to copy the tags...
+        newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
+        # # Need to copy the tags...
         copyTags(srcItem, newItem, 'PrimaryArea')
         
         newItem.save
@@ -241,7 +241,7 @@ EOS
       # but do not copy any of the variables needed for the optimistic locking, the id, etc
       if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id"].index(name) == nil)
         # Only copy values that have changed?
-        dest.write_attribute(name , val) if (dest.attributes[name] == nil) || (dest.attributes[name] != val)
+        dest.send("#{name}=",val) if (dest.attributes[name] == nil) || (dest.attributes[name] != val) || (val != nil)
       end
     end
     

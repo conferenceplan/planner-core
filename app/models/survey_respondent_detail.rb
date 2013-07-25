@@ -12,7 +12,7 @@ class SurveyRespondentDetail < ActiveRecord::Base
 
   # Get a particular response for a given survey and question  
   def getResponse(surveyId, questionId)
-    return survey_responses.first(:all, :conditions => {:survey_id => surveyId, :survey_question_id => questionId})
+    return survey_responses.first(:conditions => {:survey_id => surveyId, :survey_question_id => questionId})
   end
   
   def getResponsesForQuestion(surveyId, questionId) # TODO - optimize usage

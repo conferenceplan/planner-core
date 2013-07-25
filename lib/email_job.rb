@@ -11,10 +11,10 @@ class EmailJob
     respondents.each do |respondent|
       # Send the email
       begin
-        SurveyMailer.deliver_email(respondent.email, MailUse[:Invite], { 
+        SurveyMailer.email(respondent.email, MailUse[:Invite], { 
           :user => respondent,
           :key => respondent.key
-           }) # send out invite email
+           }).deliver # send out invite email
         # Mark the status
         respondent.email_status = EmailStatus[:Sent]
       rescue => msg

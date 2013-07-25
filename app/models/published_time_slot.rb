@@ -2,7 +2,7 @@
 #
 #
 class PublishedTimeSlot < ActiveRecord::Base
-  audited
+  audited :allow_mass_assignment => true
   
   def as_json(options={})
     

@@ -36,7 +36,7 @@ class Surveys::ResponseController < SurveyApplicationController
             end
           end
           
-          # also update the underlying person
+          # # also update the underlying person
           updatePerson(@respondent, params[:survey_respondent_detail]) if @respondent
 
           # TODO - we need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
@@ -89,19 +89,19 @@ class Surveys::ResponseController < SurveyApplicationController
       # send email confirmation of survey etc., use the email address that they provided in the survey
       begin
         if @respondent
-          SurveyMailer.deliver_email(@respondent.email, MailUse[:CompletedSurvey], @survey.id, {
+          SurveyMailer.email(@respondent.email, MailUse[:CompletedSurvey], @survey.id, {
             :email => @respondent.email,
             :user => @respondent,
             :survey => @survey,
             :respondentDetails => @respondent.survey_respondent_detail
-          })
+          }).deliver
         elsif respondentDetails
-          SurveyMailer.deliver_email(respondentDetails.email, MailUse[:CompletedSurvey], @survey.id, {
+          SurveyMailer.email(respondentDetails.email, MailUse[:CompletedSurvey], @survey.id, {
             :email => respondentDetails.email,
             :user => respondentDetails, # TODO - check that this will work
             :survey => @survey,
             :respondentDetails => respondentDetails
-          })
+          }).deliver
         end
       rescue Exception => err
         logger.error "Unable to send the email to " + @respondent.email if @respondent

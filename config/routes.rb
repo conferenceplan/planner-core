@@ -18,8 +18,6 @@ PlannerRc1::Application.routes.draw do
   match 'usersadmin/list' => 'users/admin#list'
   resources :usersadmin, :controller => 'users/admin'
   match 'roles/list' => 'roles#list'
-  map.connect 'program/publicationDates.:format', :controller => 'program', :action => 'publicationDates', :method => 'get'
-
 
 # TODO - test
   match 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
@@ -156,32 +154,27 @@ PlannerRc1::Application.routes.draw do
 
   resources :excluded_items_survey_maps do 
     resources :programme_items, :mapped_survey_questions
-  end #, :has_many => [:programme_items, :mapped_survey_questions]
-
+  end
 
   resources :registrationDetails do
     resources :person
-  end#, :has_one => :person
+  end
 
-# 
   resources :postal_addresses do
     resources :people
-  end#, :has_many => :people
+  end
   resources :email_addresses do
     resources :people
-  end#, :has_many => :people
+  end
   resources :phone_numbers do
     resources :people
-  end#, :has_many => :people
+  end
 
   match 'pending_import_people/import', :controller => 'pending_import_people', :action => 'import'
   match 'pending_import_people/doimport', :controller => 'pending_import_people', :action => 'doimport', :method => 'post'   
   resources :pending_import_people
 
-
-
   resources :item_planner, :only => :index # TODO - check
-
 
   match 'program_planner/list', :controller => 'program_planner', :action => 'list', :method => 'post'
   match 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
@@ -221,33 +214,21 @@ PlannerRc1::Application.routes.draw do
   match 'emailreports', :controller => 'emailreports', :action => 'index', :method => 'get'  
   resources :emailreports
 
-  # match 'equipment_types/list', :controller => 'equipment_types', :action => 'list'
   resources :equipment_types
-
 
   resources :mail_history, :controller => 'mail/mail_history', :only => [:index]
   match 'mail_history/count', :controller => 'mail/mail_history', :action => 'count', :method => 'get'
-#   
-  # match 'mailings/:action', :controller => 'admin/mailings', :member => {:list => :get, :del => :delete }
+
   match 'mailings/list', :controller => 'admin/mailings', :action => 'list', :method => 'get'
   match 'mailings/del', :controller => 'admin/mailings', :action => 'del', :method => 'delete'
-  resources :mailings, :controller => 'admin/mailings' do
-    # member do
-      # get 'list'
-      # delete 'del'
-    # end
-    
-  end
-#   
-  # match 'reports/mail_reports', :controller => 'reports/mail_reports' #, :only => [:index]
+  resources :mailings, :controller => 'admin/mailings'
+
   namespace :reports do
     resources :mail_reports, :only => [:index]
   end
 
-# 
   resources :person_mailing_assignments, :controller => 'admin/person_mailing_assignments'
   match :mailing_configs, :controller => 'admin/mailing_configs'
-
 
   resources :surveys do
     resources :response, :controller => 'surveys/response'
@@ -256,15 +237,6 @@ PlannerRc1::Application.routes.draw do
     end
   end
   resources :survey_query
-  # map.form '/form/:page', :controller => 'surveys/response', :action => 'renderalias'
-  # #map.resources :surveys, :has_many => :survey_groups
-  # map.resources :surveys do |survey|
-    # survey.resources :survey_groups, :controller => 'surveys/survey_groups' do |group|
-      # group.resources :survey_questions, :controller => 'surveys/survey_groups/survey_questions'
-    # end
-    # survey.resources :response, :controller => 'surveys/response'
-  # end
-#   
 
   match 'survey_reports/:action', :controller => 'survey_reports' #,  :member => {:list => :get, :del => :delete }
   match 'survey_reports/surveyQueryNames/:id', :controller => 'survey_reports', :action => 'delSurveyQuery', :method => :delete
@@ -273,57 +245,38 @@ PlannerRc1::Application.routes.draw do
   match 'planner_reports/:action', :controller => 'planner_reports'
   resources :planner_reports
 
-
-  # map.connect 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
-  # map.connect 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
-  # map.connect 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
-  # map.connect 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
-  # map.connect 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
-  # map.connect 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
-  # map.connect 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
+  match 'program/publicationDates.:format', :controller => 'program', :action => 'publicationDates', :method => 'get'
   match 'program/updateSelect', :controller => 'program', :action => 'updateSelect', :method => 'get'
-  # map.connect 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
+  
+  match 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
+  match 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
+  match 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
+  match 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
+  match 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
+  match 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
+  match 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
+  match 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
+  resources :program
 
-
-
-# 
+  match '/form/:page', :controller => 'surveys/response', :action => 'renderalias'
+  # #map.resources :surveys, :has_many => :survey_groups
+  # map.resources :surveys do |survey|
+    # survey.resources :survey_groups, :controller => 'surveys/survey_groups' do |group|
+      # group.resources :survey_questions, :controller => 'surveys/survey_groups/survey_questions'
+    # end
+    # survey.resources :response, :controller => 'surveys/response'
+  # end
 #   
 # 
-# 
+#   
 # 
   # map.resources :survey_copy_statuses
-# 
-  # # map.resources :smerf_forms
-# 
   # map.resources :monitor, :only => :index # we only need the one method/route for this
-# 
-# 
-# 
-# 
-#  
-#   
-# 
-# 
-#  
-# 
-# 
-# 
-# 
-#   
-#   
   # map.resources :mapped_survey_questions
-#   
-#   
   # map.resource :user_session
   # map.root :controller => "user_sessions", :action => "new"
   # map.login "login", :controller => "user_sessions", :action => "new"
   # map.logout "logout", :controller => "user_sessions", :action => "destroy"
-# 
-# 
-# 
-#   
-#   
-# 
   # map.resources :excluded_times
 # 
 #   

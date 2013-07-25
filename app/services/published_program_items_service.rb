@@ -22,11 +22,11 @@ module PublishedProgramItemsService
   def self.getUpdatesFromPublishDate(pubDate)
     resultantChanges = {}
 
-    audits = Audit.all(
+    audits = Audited::Adapters::ActiveRecord::Audit.all(
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?)", pubDate.timestamp, 'Published%'],
       :order => "audits.created_at asc"
     )
-    
+        
     # item, action, person, as role
     audits.each do |audit|
       if audit.action == 'destroy' # item removed
@@ -69,7 +69,7 @@ module PublishedProgramItemsService
   end
   
   def self.getProgrammeItemChanges(id, pubDate)
-    audits = Audit.all(
+    audits = Audited::Adapters::ActiveRecord::Audit.all(
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?) AND (audits.auditable_id = ?)", pubDate.timestamp, 'PublishedProgrammeItem', id],
       :order => "audits.created_at asc"
     )
