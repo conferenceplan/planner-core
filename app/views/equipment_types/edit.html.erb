@@ -1,7 +1,7 @@
 <div class='container_12'>
 <h1>Edit Equipment Type</h1>
-<%= error_messages_for :equipment_type %>
-<% form_for(@equipment_type, :html => {:'accept-charset' => 'UTF-8'}) do |f| %>
+<!-- %= error_messages_for :equipment_type % -->
+<%= form_for(@equipment_type, :html => {:'accept-charset' => 'UTF-8'}) do |f| %>
 <p><label for="description">Description</label>:
 <%= f.text_field :description %></p>
 <%= submit_tag "Save" %>

@@ -1,5 +1,17 @@
 <div class='container_12'>
-<%= object.error_messages %>
+<div class="prefix_2 grid_9">
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+ 
+      <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
 <%= form.label :login %><br />
 <%= form.text_field :login %><br />
 <br />
@@ -9,4 +21,5 @@
 <%= form.label :password_confirmation %><br />
 <%= form.password_field :password_confirmation %><br />
 <%= form.submit button %>
+</div>
 </div>

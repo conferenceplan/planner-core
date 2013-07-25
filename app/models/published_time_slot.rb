@@ -2,7 +2,7 @@
 #
 #
 class PublishedTimeSlot < ActiveRecord::Base
-  acts_as_audited
+  audited
   
   def as_json(options={})
     

@@ -1,6 +1,6 @@
 class AvailableDate < ActiveRecord::Base
   belongs_to  :person 
 
-  acts_as_audited :parent => :person
+  audited :associated_with => :person, :allow_mass_assignment => true
 
 end

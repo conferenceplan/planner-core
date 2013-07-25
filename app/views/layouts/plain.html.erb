@@ -1,1 +1,1 @@
-<%= yield(:content) or yield %>
+<%= content_for?(:content) ? yield(:content) : yield %>

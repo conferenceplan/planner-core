@@ -1,5 +1,5 @@
-<%= error_messages_for :tags %>
-<% form_tag(tags_path + '/' + @id + '/add?class=' + @className + '&context=' + @context, :id => "layerform", :class => "layerform" ) do %>
+<!-- %= error_messages_for :tags % -->
+<%= form_tag(tags_path + '/' + @id + '/add?class=' + @className + '&context=' + @context, :id => "layerform", :class => "layerform" ) do %>
   <%= label_tag(:tag, "Tags:") %>
   <%= text_field_tag(:tag) %>
 	<div class='form-buttons'>

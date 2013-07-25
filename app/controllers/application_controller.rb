@@ -1,31 +1,26 @@
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
 class ApplicationController < ActionController::Base
-  helper :all # include all helpers, all the time
-  protect_from_forgery # See ActionController::RequestForgeryProtection for details
+  # Prevent CSRF attacks by raising an exception.
+  # For APIs, you may want to use :null_session instead.
+  protect_from_forgery
   
-  # Scrub sensitive parameters from your log
-  # filter_parameter_logging :password
-  filter_parameter_logging :password, :password_confirmation
   helper_method :current_user_session, :current_user
   
   protected  
-    def render_json(json, options={})  
-      callback, variable = params[:callback], params[:variable]  
-      response = begin  
-        if callback && variable  
-          "var #{variable} = #{json};\n#{callback}(#{variable});"  
-        elsif variable  
-          "var #{variable} = #{json};"  
-        elsif callback  
-          "#{callback}(#{json});"  
-        else  
-          json  
-        end  
-      end  
-      render({:content_type => :json, :text => response}.merge(options))  
-    end 
+    # def render_json(json, options={})  
+      # callback, variable = params[:callback], params[:variable]  
+      # response = begin  
+        # if callback && variable  
+          # "var #{variable} = #{json};\n#{callback}(#{variable});"  
+        # elsif variable  
+          # "var #{variable} = #{json};"  
+        # elsif callback  
+          # "#{callback}(#{json});"  
+        # else  
+          # json  
+        # end  
+      # end  
+      # render({:content_type => :json, :text => response}.merge(options))  
+    # end 
 
   private
     def current_user_session
@@ -47,17 +42,18 @@ class ApplicationController < ActionController::Base
       end
     end
 
+# TODO - FIX
     def require_no_user
       if current_user
         store_location
-        flash[:notice] = "You must be logged out to access this page"
+        #flash[:notice] = "You must be logged out to access this page"
         redirect_to account_url
         return false
       end
     end
     
     def store_location
-      session[:return_to] = request.request_uri
+      session[:return_to] = request.url
     end
     
     def redirect_back_or_default(default)

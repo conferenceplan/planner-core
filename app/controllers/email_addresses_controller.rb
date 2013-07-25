@@ -35,12 +35,14 @@ class EmailAddressesController < PlannerController
       @emailAddress = EmailAddress.new(params[:email_address]);
     end
     
-    if (@person.save)
-#      We want to go back to?
-       redirect_to :action => 'show', :id => @emailAddress
-    else
-      render :action => 'new'
-    end 
+    @person.save
+    # if (@person.save)
+# #      We want to go back to?
+       # redirect_to :action => 'show', :id => @emailAddress
+    # else
+      # render :action => 'new'
+    # end 
+    render :layout => 'content'
   end
 
   def show

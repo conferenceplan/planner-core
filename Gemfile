@@ -1,33 +1,38 @@
 source "https://rubygems.org"
+source 'http://rubygems.org'
 source 'http://gemcutter.org'
 
-# bundler requires these gems in all environments
-gem 'actionmailer', '2.3.17'
-gem 'actionpack', '2.3.17'
-gem 'activerecord', '2.3.17'
-gem 'activeresource', '2.3.17'
-gem 'activesupport', '2.3.17'
-gem 'acts_as_audited', "1.1.1"
-gem 'acts-as-taggable-on', '2.0.5'
-gem 'authlogic', '~> 2.1.0'
-gem "bluecloth"
-gem "cells", "3.3.9"
-gem "declarative_authorization", "~> 0.5.6"
-gem 'delayed_job', '~>2.0.7'
-#gem "enumerations_mixin"
-gem "fastercsv", '1.5.5'
-gem 'i18n', '0.4.2' # because later gems cause problems with error message display for rails 2.3.8
-gem 'jrails', '0.6.0'
-gem 'mysql', '2.8.1'
-gem "rack", "1.1.3"
-gem "rake", "0.8.7"
-#gem "rake", "10.0.3"
-gem "rails", "~> 2.3.17"
-gem "time_diff"
-gem 'will_paginate', '~> 2.3.11'
+gem 'actionmailer' 
+gem 'activerecord' 
+gem "audited-activerecord", "~> 3.0"
+gem 'acts-as-taggable-on' 
+gem 'authlogic'
+gem 'bluecloth'
+gem 'cells'
+gem "declarative_authorization" 
+gem "daemons"
+gem 'delayed_job' 
+gem 'delayed_job_active_record'
+#gem 'enumerations_mixin' # put in vendor plugin because it has to be updated to R3.2
+gem 'fastercsv'
+gem 'i18n' 
+gem 'jquery-rails'
+gem 'mysql2' 
+gem 'rails', '3.2.12' # TODO - check version 3.2.13
+gem 'time_diff'
+gem 'turbolinks'
+gem 'will_paginate' 
+
+# Needed for the new asset pipeline
+group :assets do
+  # gem 'sass-rails',   '~> 3.2.3'
+  # gem 'coffee-rails', '~> 3.2.1'
+  gem 'uglifier',     '>= 1.0.3'
+end
 
 group :development do
   # bundler requires these gems in development
+  # gem 'ruby-debug-ide'
 end
 
 group :test do

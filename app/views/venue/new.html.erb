@@ -1,6 +1,6 @@
 <div class='container_12'>
 <h1>Add new venue</h1>
-<% form_tag :action => 'create'  do %>
+<%= form_tag :action => 'create'  do %>
 <p><label for="venue_name">Name</label>:
 <%= text_field 'venue', 'name' %></p>
 <%= submit_tag "Create" %>

@@ -1,6 +1,6 @@
 <div class='container_12'>
-<% form_for @user_session, :url => user_session_path, :html => {:'accept-charset' => 'UTF-8'} do |f| %>
-  <%= f.error_messages %>
+<div class="prefix_2 grid_9">
+<%= form_for @user_session, :url => user_session_path do |f| %>
   <%= f.label :login %><br />
   <%= f.text_field :login %><br />
   <br />
@@ -11,4 +11,5 @@
   <br />
   <%= f.submit "Login" %>
 <% end %>
+</div>
 </div>

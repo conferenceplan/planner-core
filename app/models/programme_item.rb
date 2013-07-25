@@ -46,5 +46,5 @@ class ProgrammeItem < ActiveRecord::Base
           :source => :published,
           :source_type => 'PublishedProgrammeItem'
   
-  acts_as_audited
+  audited :allow_mass_assignment => true
 end

@@ -11,10 +11,10 @@
             Duration: <%= item.duration.to_s %> minutes
         </div>
         <div class="program-item-title">
-            <%= markdown(item.title) %>
+            <%= BlueCloth.new(item.title).to_html.html_safe %>
         </div>
         <div class="program-item-description">
-            <%= markdown(item.precis) %>
+            <%= BlueCloth.new(item.precis).to_html.html_safe %>
         </div>
         <div class="program-item-participants">
             <% item.people.each do |person| %>

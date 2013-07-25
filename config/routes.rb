@@ -1,256 +1,330 @@
-ActionController::Routing::Routes.draw do |map|
-  map.resources :mail_templates
-  map.resources :mail_history, :controller => 'mail/mail_history', :only => [:index]
-  map.connect 'mail_history/count', :controller => 'mail/mail_history', :action => 'count', :method => 'get'
+PlannerRc1::Application.routes.draw do
+  # Default routes 
+  root :to => 'user_sessions#new'
   
-  map.resources :mailing, :controller => 'admin/mailings'
-  map.connect 'mailings/:action', :controller => 'admin/mailings' #,  :member => {:list => :get, :del => :delete }
-  
-  map.connect 'reports/mail_reports', :controller => 'reports/mail_reports' #, :only => [:index]
-
-  map.resources :mailing_configs, :controller => 'admin/mailing_configs'
-  map.resources :person_mailing_assignments, :controller => 'admin/person_mailing_assignments'
-
-  map.resources :mail_configs
-  
-  map.connect 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
-  map.connect 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
-  map.connect 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
-  map.connect 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
-  map.connect 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
-  map.connect 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
-  map.connect 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
-  map.connect 'program/updateSelect', :controller => 'program', :action => 'updateSelect', :method => 'get'
-  map.connect 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
-
-  map.connect 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'
-  map.connect 'publisher/review', :controller => 'publisher', :action => 'review', :method => 'get'
-  map.resources :publisher, :member => {:index => :get},
-      :except => [:destroy, :new, :create, :edit, :show, :update, :list]
-
-  map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
-  map.resources :tags, :member => {:remove => :get, :add => :post, :index => :get, :edit => :get},
-      :except => [:destroy, :new, :create]
-
-  map.resources :tag_contexts
-
-  map.resources :survey_copy_statuses
-
-  # map.resources :smerf_forms
-
-  map.resources :monitor, :only => :index # we only need the one method/route for this
-
-  map.resources :item_planner, :only => :index # TODO - check
-
-  map.connect 'program_planner/list', :controller => 'program_planner', :action => 'list', :method => 'post'
-  map.connect 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
-  map.connect 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :method => 'get'
-  map.connect 'program_planner/getConflicts', :controller => 'program_planner', :action => 'getConflicts', :method => 'get'
-  map.connect 'program_planner/getRoomControl', :controller => 'program_planner', :action => 'getRoomControl', :method => 'get'
-  map.resources :program_planner, :member => {:index => :get, :edit => :get}
-
-  # The priority is based upon order of creation: first created -> highest priority.
-
-  # Sample of regular route:
-  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   map.resources :products
-
-  # Sample resource route with options:
-  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
-
-  # Sample resource route with sub-resources:
-  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
-  
-  # Sample resource route with more complex sub-resources
-  #   map.resources :products do |products|
-  #     products.resources :comments
-  #     products.resources :sales, :collection => { :recent => :get }
-  #   end
-
-  # Sample resource route within a namespace:
-  #   map.namespace :admin do |admin|
-  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
-  #     admin.resources :products
-  #   end
-
-  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  # map.root :controller => "welcome"
-
-  # See how all your routes lay out with "rake routes"
-
-  # Install the default routes as the lowest priority.
-  # Note: These default routes make all actions in every controller accessible via GET requests. You should
-  # consider removing or commenting them out if you're using named routes and resources.
-  map.connect 'programme_items/assign_reference_numbers', :controller => 'programme_items', :action => 'assign_reference_numbers'
-  map.connect 'programme_items/do_assign_reference_numbers', :controller => 'programme_items', :action => 'do_assign_reference_numbers',:method => 'post'
-  map.connect 'programme_items/drop', :controller => 'programme_items', :action => 'drop', :method => 'get'
- 
-  map.connect 'programme_items/list', :controller => 'programme_items', :action => 'list'
-  map.resources :programme_items, :member => {:updateParticipants => :post}
-  map.resources :programme_items
-
-  map.resources :registrationDetails, :has_one => :person
- 
-  map.connect 'edited_bios/exportbiolist', :controller => 'edited_bios',:action => 'exportbiolist'
-  map.connect 'edited_bios/selectExportBioList', :controller => 'edited_bios',:action => 'selectExportBioList'
-  map.resources :edited_bios, :has_one => :person
-
-  map.resources :available_dates, :has_one => :person
-
-  map.resources :postal_addresses, :has_many => :people
-  map.resources :email_addresses, :has_many => :people
-  map.resources :phone_numbers, :has_many => :people
-  map.resources :menus
-  
-  map.connect 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
-  map.connect 'participants/doReportInviteStatus', :controller => 'people', :action => 'doReportInviteStatus'
-  map.connect 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'
-  map.connect 'participants/doexportemailxml', :controller => 'people', :action => 'doexportemailxml', :method => 'post'
-  map.connect 'participants/doSetInvitePendingToInvited', :controller => 'people', :action => 'doSetInvitePendingToInvited', :method => 'post'
-  map.connect 'participants/SetInvitePendingToInvited', :controller => 'people', :action => 'SetInvitePendingToInvited'
-  map.connect 'participants/invitestatuslist', :controller => 'people', :action => 'invitestatuslist'
-  map.connect 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'
-  map.connect 'participants/acceptancestatuslist', :controller => 'people', :action => 'acceptancestatuslist'
-  map.connect 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
-  map.connect 'participants/updateConflictsFromSurvey',:controller => 'people', :action => 'updateConflictsFromSurvey', :method => 'post'
-  map.connect 'participants/clearConflictsFromSurvey',:controller => 'people', :action => 'clearConflictsFromSurvey'
-  map.connect 'participants/doClearConflictsFromSurvey',:controller => 'people', :action => 'doClearConflictsFromSurvey', :method => 'post'
-
-
-  map.resources :people, :as => "participants", 
-    :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items],
-    :has_one => [:registrationDetail, :edited_bio, :available_date],
-    :collection => {:list => [:post, :get] },
-    :member => {:show => :get}
-
-  map.resources :equipment_needs, :has_many => :programme_items
-
-  map.resources :programme_items,
-    :has_many => [:excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs]
-
-  map.connect 'participants/list', :controller => 'people', :action => 'list'
- 
-  map.connect 'rooms/list', :controller => 'rooms', :action => 'list'
-  map.connect 'rooms/listwithblank', :controller => 'rooms', :action => 'listwithblank'
-  map.connect 'rooms/picklist', :controller => 'rooms', :action => 'picklist'
-  map.resources :rooms
-
-  map.connect 'setup_types/list', :controller => 'setup_types', :action => 'list'
-  map.connect 'setup_types/picklist', :controller => 'setup_types', :action => 'picklist'
-  map.resources :setup_types
-
-  map.connect 'room_setups/list', :controller => 'room_setups', :action => 'list'
-  map.resources :room_setups
-
-  map.connect 'venue/list', :controller => 'venue', :action => 'list'
-  map.resources :venue
-
-  map.connect 'equipment_types/list', :controller => 'equipment_types', :action => 'list'
-  map.resources :equipment_types
-
-  map.connect 'planner_reports/:action', :controller => 'planner_reports'
-  map.resources :planner_reports
-
-  map.connect 'survey_reports/:action', :controller => 'survey_reports' #,  :member => {:list => :get, :del => :delete }
-  map.connect 'survey_reports/surveyQueryNames/:id', :controller => 'survey_reports', :action => 'delSurveyQuery', :method => :delete
-  map.resources :survey_reports
-
-  map.connect 'invitation_categories/list', :controller => 'invitation_categories', :action => 'list'
-
-  map.resources :invitation_categories
-  
-  map.resources :datasources
-  
-  map.resources :mapped_survey_questions
-  
-  map.connect 'formats/list', :controller => 'formats', :action => 'list'
-  map.connect 'formats/listwithblank', :controller => 'formats', :action => 'listwithblank'
-  map.resources :formats
-  
-  map.connect 'pending_import_people/import', :controller => 'pending_import_people', :action => 'import'
-  map.connect 'pending_import_people/doimport', :controller => 'pending_import_people', :action => 'doimport', :method => 'post'   
-  map.resources :pending_import_people
-  
-  map.resource :user_session
-  map.root :controller => "user_sessions", :action => "new"
-  map.login "login", :controller => "user_sessions", :action => "new"
-  map.logout "logout", :controller => "user_sessions", :action => "destroy"
+  # The top level menu - TODO - change in redesign
+  resources :menus
 
   #
   # The new(s) were removed so as to prevent anonymous people creating new accounts
   #
-  map.resource :account, :controller => "users", :except => :new
-  map.resources :users, :except => :new
-  map.connect 'usersadmin/list', :controller => 'users/admin', :action => 'list'
-  map.resources :usersadmin, :controller => 'users/admin'
+  resources :users, :except => [:new, :index]
+  resource :user, :as => 'account', :except => [:new, :index]  # convenience route
+  resource :user_session
+  match 'login' => 'user_sessions#new', :as => :login
+  match 'logout' => 'user_sessions#destroy', :as => :logout
 
-  map.connect 'roles/list', :controller => 'roles', :action => 'list'
+  # For user and user management
+  match 'usersadmin/list' => 'users/admin#list'
+  resources :usersadmin, :controller => 'users/admin'
+  match 'roles/list' => 'roles#list'
 
-  #
-  #
-  #
-  map.resources :survey_respondent_sessions # just for the new session...
 
+# TODO - test
+  match 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
+  match 'participants/doReportInviteStatus', :controller => 'people', :action => 'doReportInviteStatus'
+  match 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'
+  match 'participants/doexportemailxml.:format', :controller => 'people', :action => 'doexportemailxml', :method => 'post'
+  match 'participants/doSetInvitePendingToInvited', :controller => 'people', :action => 'doSetInvitePendingToInvited', :method => 'post'
+  match 'participants/SetInvitePendingToInvited', :controller => 'people', :action => 'SetInvitePendingToInvited'
+  match 'participants/invitestatuslist', :controller => 'people', :action => 'invitestatuslist'
+  match 'participants/acceptancestatuslist', :controller => 'people', :action => 'acceptancestatuslist'
+  match 'participants/updateConflictsFromSurvey',:controller => 'people', :action => 'updateConflictsFromSurvey', :method => 'post'
+  match 'participants/clearConflictsFromSurvey',:controller => 'people', :action => 'clearConflictsFromSurvey'
+  match 'participants/doClearConflictsFromSurvey',:controller => 'people', :action => 'doClearConflictsFromSurvey', :method => 'post'
+# 
+  # resources :people, :as => "participants" do
+  match 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
+  match 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'
+  # resources :participants, :controller => "people" do
+  resources :people, :path => "participants" do
+    resources :addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items
+    resources :registrationDetails do
+      get 'show'
+    end
+    resources :edited_bios, :available_dates
+    collection do
+      get 'list'
+      post 'list'
+    end
+    # member do # TODO - check the member methods that we need to make sure are in place
+      # get 'show'
+    # end
+  end
+
+  match 'formats/list', :controller => 'formats', :action => 'list'
+  match 'formats/listwithblank', :controller => 'formats', :action => 'listwithblank'
+  resources :formats
+
+  match 'edited_bios/exportbiolist.:format', :controller => 'edited_bios',:action => 'exportbiolist'
+  match 'edited_bios/selectExportBioList', :controller => 'edited_bios',:action => 'selectExportBioList'
+  resources :edited_bios do
+    resources :person
+  end#, :has_one => :person
+
+  # map.resources :people, :as => "participants", 
+    # :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items],
+    # :has_one => [:registrationDetail, :edited_bio, :available_date],
+    # :collection => {:list => [:post, :get] },
+    # :member => {:show => :get}
+  # map.connect 'participants/list', :controller => 'people', :action => 'list'
+
+  # map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
+  match 'tags/list.:format', :controller => 'tags', :action => 'list'
+  resources :tags do
+    member do
+      get 'remove'
+      post 'add'
+      get 'show'
+      get 'index'
+      get 'edit'
+    end
+  end
+   #, :member => {:remove => :get, :add => :post, :index => :get, :edit => :get} #,
+      # :except => [:destroy, :new, :create]
+# 
+  resources :tag_contexts
+
+  match 'invitation_categories/list', :controller => 'invitation_categories', :action => 'list'
+  resources :invitation_categories
+
+  resources :available_dates do
+    resources :person
+  end  
+#    , :has_one => :person
+# 
+
+  # #
+  # #
+  # #
+  # map.resources :survey_respondent_sessions # just for the new session...
+# 
   #
   #
   # TODO - check these routes
-  map.connect 'survey_respondents/tags_admin', :controller => 'survey_respondents/tags_admin', :action => 'index'
-  map.connect 'survey_respondents/tags_admin/update', :controller => 'survey_respondents/tags_admin', :action => 'update', :via => :post
-  map.connect 'survey_respondents/tags_admin/fix', :controller => 'survey_respondents/tags_admin', :action => 'fix'
+  match 'survey_respondents/tags_admin', :controller => 'survey_respondents/tags_admin', :action => 'index'
+  match 'survey_respondents/tags_admin/update', :controller => 'survey_respondents/tags_admin', :action => 'update', :via => :post
+  match 'survey_respondents/tags_admin/fix', :controller => 'survey_respondents/tags_admin', :action => 'fix'
   
   #
-  map.connect 'survey_respondents/reviews/list', :controller => 'survey_respondents/reviews', :action => 'list'
-  map.namespace :survey_respondents do |respondent|
-    respondent.resources :reviews, :member => {:list => :get, :states => :get, :copySurvey => :post }
-  end
-    
-  map.resources :survey_respondents
-
-  # 
-  map.resources :survey_respondents do |respondent|
-    respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 
-      :controller => 'survey_respondents/tags',
-      :except => [:destroy, :new, :create, :edit, :remove]
-  end
-
-  # These also take the context as a parameter...
-  map.connect 'survey_respondents/tags/alltags', :controller => 'survey_respondents/tags', :action => 'alltags'
-  map.connect 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
-  
-  # Default routes 
-  map.index 'index', :controller => "user_sessions", :action => "new"
-  map.root :index 
-
-  map.connect '', :controller => "user_sessions", :action => "new" 
-  
-  map.resources :excluded_items_survey_maps, :has_many => [:programme_items, :mapped_survey_questions]
-
-  map.resources :excluded_times
-
-  map.resources :surveys
-  
-  map.resources :survey_query
-
-  #map.resources :surveys, :has_many => :survey_groups
-  map.resources :surveys do |survey|
-    survey.resources :survey_groups, :controller => 'surveys/survey_groups' do |group|
-      group.resources :survey_questions, :controller => 'surveys/survey_groups/survey_questions'
+  match 'survey_respondents/reviews/list', :controller => 'survey_respondents/reviews', :action => 'list'
+  # map.namespace :survey_respondents do |respondent|
+    # respondent.resources :reviews, :member => {:list => :get, :states => :get, :copySurvey => :post }
+  # end
+  namespace :survey_respondents do
+    resources :reviews do
+      member do
+        get 'list'
+        get 'states'
+        post 'copySurvey'
+      end
     end
-    survey.resources :response, :controller => 'surveys/response'
   end
-  
-  map.form '/form/:page', :controller => 'surveys/response', :action => 'renderalias'
-  
-  #map.resources :emailreports
-  map.connect 'emailreports', :controller => 'emailreports', :action => 'index', :method => 'get'  
-  map.connect 'emailreports/failed', :controller => 'emailreports', :action => 'failed', :method => 'get'  
-  map.connect 'emailreports/sent', :controller => 'emailreports', :action => 'sent', :method => 'get'  
+#     
+  match 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
+  match 'survey_respondents/tags/alltags', :controller => 'survey_respondents/alltags', :action => 'alltags'
+  match 'survey_respondents/tags/list', :controller => 'survey_respondents/list', :action => 'list'
+  match 'survey_respondents/tags/update', :controller => 'survey_respondents/update', :action => 'list', :method => 'post'
+  resources :survey_respondents 
+
+  # map.resources :survey_respondents do |respondent|
+    # respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 
+      # :controller => 'survey_respondents/tags',
+      # :except => [:destroy, :new, :create, :edit, :remove]
+  # end
+# 
+  # # These also take the context as a parameter...
+  # map.connect 'survey_respondents/tags/alltags', :controller => 'survey_respondents/tags', :action => 'alltags'
+  # map.connect 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
+
+  resources :equipment_needs do
+    resources :programme_items
+  end
+
+  match 'programme_items/assign_reference_numbers', :controller => 'programme_items', :action => 'assign_reference_numbers'
+  match 'programme_items/do_assign_reference_numbers', :controller => 'programme_items', :action => 'do_assign_reference_numbers',:method => 'post'
+  match 'programme_items/drop', :controller => 'programme_items', :action => 'drop', :method => 'get'
+  match 'programme_items/list', :controller => 'programme_items', :action => 'list'
+
+  resources :programme_items do
+    resources :excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs
+    member do
+      post 'updateParticipants'
+    end
+  end
+
+  resources :excluded_items_survey_maps do 
+    resources :programme_items, :mapped_survey_questions
+  end #, :has_many => [:programme_items, :mapped_survey_questions]
+
+
+  resources :registrationDetails do
+    resources :person
+  end#, :has_one => :person
+
+# 
+  resources :postal_addresses do
+    resources :people
+  end#, :has_many => :people
+  resources :email_addresses do
+    resources :people
+  end#, :has_many => :people
+  resources :phone_numbers do
+    resources :people
+  end#, :has_many => :people
+
+  match 'pending_import_people/import', :controller => 'pending_import_people', :action => 'import'
+  match 'pending_import_people/doimport', :controller => 'pending_import_people', :action => 'doimport', :method => 'post'   
+  resources :pending_import_people
+
+
+
+  resources :item_planner, :only => :index # TODO - check
+
+
+  match 'program_planner/list', :controller => 'program_planner', :action => 'list', :method => 'post'
+  match 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
+  match 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :method => 'get'
+  match 'program_planner/getConflicts', :controller => 'program_planner', :action => 'getConflicts', :method => 'get'
+  match 'program_planner/getRoomControl', :controller => 'program_planner', :action => 'getRoomControl', :method => 'get'
+  resources :program_planner, :member => {:index => :get, :edit => :get}
+
+
+  match 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'
+  match 'publisher/review', :controller => 'publisher', :action => 'review', :method => 'get'
+  resources :publisher, :member => {:index => :get},
+      :except => [:destroy, :new, :create, :edit, :show, :update, :list]
+
+
+  match 'rooms/list.:format', :controller => 'rooms', :action => 'list'
+  match 'rooms/listwithblank', :controller => 'rooms', :action => 'listwithblank'
+  match 'rooms/picklist', :controller => 'rooms', :action => 'picklist'
+  resources :rooms
+
+  match 'setup_types/list.:format', :controller => 'setup_types', :action => 'list'
+  match 'setup_types/picklist', :controller => 'setup_types', :action => 'picklist'
+  resources :setup_types
+
+  match 'room_setups/list', :controller => 'room_setups', :action => 'list'
+  resources :room_setups
+
+  match 'venue/list', :controller => 'venue', :action => 'list'
+  resources :venue
+
+  resources :datasources
+  resources :mail_configs
+  resources :mail_templates
+
+  match 'emailreports/failed', :controller => 'emailreports', :action => 'failed', :method => 'get'  
+  match 'emailreports/sent', :controller => 'emailreports', :action => 'sent', :method => 'get'  
+  match 'emailreports', :controller => 'emailreports', :action => 'index', :method => 'get'  
+  resources :emailreports
+
+  # match 'equipment_types/list', :controller => 'equipment_types', :action => 'list'
+  resources :equipment_types
+
+
+  resources :mail_history, :controller => 'mail/mail_history', :only => [:index]
+  match 'mail_history/count', :controller => 'mail/mail_history', :action => 'count', :method => 'get'
+#   
+  # match 'mailings/:action', :controller => 'admin/mailings', :member => {:list => :get, :del => :delete }
+  match 'mailings/list', :controller => 'admin/mailings', :action => 'list', :method => 'get'
+  match 'mailings/del', :controller => 'admin/mailings', :action => 'del', :method => 'delete'
+  resources :mailings, :controller => 'admin/mailings' do
+    # member do
+      # get 'list'
+      # delete 'del'
+    # end
+    
+  end
+#   
+  # match 'reports/mail_reports', :controller => 'reports/mail_reports' #, :only => [:index]
+  namespace :reports do
+    resources :mail_reports, :only => [:index]
+  end
+
+# 
+  resources :person_mailing_assignments, :controller => 'admin/person_mailing_assignments'
+  match :mailing_configs, :controller => 'admin/mailing_configs'
+
+
+  resources :surveys do
+    resources :response, :controller => 'surveys/response'
+    resources :survey_groups, :controller => 'surveys/survey_groups' do
+      resources :survey_questions, :controller => 'surveys/survey_groups/survey_questions'
+    end
+  end
+  resources :survey_query
+  # map.form '/form/:page', :controller => 'surveys/response', :action => 'renderalias'
+  # #map.resources :surveys, :has_many => :survey_groups
+  # map.resources :surveys do |survey|
+    # survey.resources :survey_groups, :controller => 'surveys/survey_groups' do |group|
+      # group.resources :survey_questions, :controller => 'surveys/survey_groups/survey_questions'
+    # end
+    # survey.resources :response, :controller => 'surveys/response'
+  # end
+#   
+
+  match 'survey_reports/:action', :controller => 'survey_reports' #,  :member => {:list => :get, :del => :delete }
+  match 'survey_reports/surveyQueryNames/:id', :controller => 'survey_reports', :action => 'delSurveyQuery', :method => :delete
+  resources :survey_reports
+
+  match 'planner_reports/:action', :controller => 'planner_reports'
+  resources :planner_reports
+
+
+  # map.connect 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
+  # map.connect 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
+  # map.connect 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
+  # map.connect 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
+  # map.connect 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
+  # map.connect 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
+  # map.connect 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
+  match 'program/updateSelect', :controller => 'program', :action => 'updateSelect', :method => 'get'
+  # map.connect 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
+
+
+
+# 
+#   
+# 
+# 
+# 
+  # map.resources :survey_copy_statuses
+# 
+  # # map.resources :smerf_forms
+# 
+  # map.resources :monitor, :only => :index # we only need the one method/route for this
+# 
+# 
+# 
+# 
+#  
+#   
+# 
+# 
+#  
+# 
+# 
+# 
+# 
+#   
+#   
+  # map.resources :mapped_survey_questions
+#   
+#   
+  # map.resource :user_session
+  # map.root :controller => "user_sessions", :action => "new"
+  # map.login "login", :controller => "user_sessions", :action => "new"
+  # map.logout "logout", :controller => "user_sessions", :action => "destroy"
+# 
+# 
+# 
+#   
+#   
+# 
+  # map.resources :excluded_times
+# 
+#   
 
 end

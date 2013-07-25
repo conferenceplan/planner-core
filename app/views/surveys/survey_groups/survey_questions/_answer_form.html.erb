@@ -15,9 +15,10 @@
     //]]>
 </script>
 <div class='survey_answer'>
+    <% answer_form = answer_form ? answer_form : SurveyAnswer.new %>
     <% new_or_existing = answer_form.new_record? ? 'new' : 'existing' %>
     <% prefix = "survey_question[#{new_or_existing}_answer_attributes][]" %>
-    <% fields_for prefix, answer_form do |el| %>
+    <%= fields_for prefix, answer_form do |el| %>
         <div class='line'><div class='field_name'>Answer</div><div class='field_value'><%= el.text_field :answer%></div></div>
         <div class='boolean'><div class='field_name'>Defaulting?:</div><div class='field_value'><%= el.check_box :default %></div></div>
 	    <div class='line'>
@@ -35,10 +36,13 @@
             <div class='field_name'>Duration in minutes:</div>
             <div class='field_value'><%= el.text_field :duration %></div>
         </div>
+        
+        <% if answer_form.new_record? %>
+            <%= link_to_function "remove", "$(this).parent('.survey_answer').remove()" %>
+        <% else %>
+            <%= link_to_function "remove", "$(this).parent('.survey_answer').replaceWith('#{el.hidden_field :_destroy, :value => "true"}')" %>
+        <% end %>
 
 	<%end%>
-	
-	<%= link_to_function "remove", "$(this).parent('.survey_answer').remove()" %>
-
-
 </div>
+

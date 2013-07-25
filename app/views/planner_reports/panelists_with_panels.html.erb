@@ -1,6 +1,6 @@
 <h2>Panelists with Panels</h2>
 
-<% form_tag('/planner_reports/panelists_with_panels', :method => 'post') do %>
+<%= form_tag('/planner_reports/panelists_with_panels', :method => 'post') do %>
 <p>
    <%= check_box_tag :incl_rsvd, '1', params[:incl_rsvd] %>
    <%= label_tag :incl_rsvd, "Include reserve panelists? "%><br /><br />

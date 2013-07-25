@@ -2,5 +2,5 @@ class Exclusion < ActiveRecord::Base
   belongs_to  :person
   belongs_to  :excludable, :polymorphic => true
 
-  acts_as_audited :parent => :person
+  audited :associated_with => :person
 end

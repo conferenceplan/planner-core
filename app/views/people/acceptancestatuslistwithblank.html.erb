@@ -1,6 +1,6 @@
 <select> 
 <option value='0'></option>
-<% for acceptanceEntry in @acceptanceStatus %>
+<% @acceptanceStatus.each do |acceptanceEntry| %>
 	<option value='<%= acceptanceEntry.id%>'><%= acceptanceEntry.name %></option> 
-<%end%>
+<% end %>
 </select>

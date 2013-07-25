@@ -1,7 +1,7 @@
 <br/>
 <h1> Edit a format</h1>
-<%= error_messages_for :formats %>
-<% form_for @format, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
+<!-- %= error_messages_for :formats % -->
+<%= form_for @format, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
 	<p>
 		<%= f.label :name, "Name " %> <br/>
 		<%= f.text_field :name %>

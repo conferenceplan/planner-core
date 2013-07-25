@@ -1,24 +1,25 @@
-<%= javascript_include_tag 'vendor/jquery-1.8.3' %>
-<%= javascript_include_tag '/vendor/bootstrap/js/bootstrap' %>
-<%= javascript_include_tag 'vendor/jquery-ui-1.9.2.custom.min' %>
-<%= javascript_include_tag 'vendor/jquery-migrate-1.1.1' %>
-<%= javascript_include_tag 'vendor/grid.locale-en' if params[:action] == 'index' %>
-<%= javascript_include_tag 'vendor/jquery.jqGrid.src' if params[:action] == 'index' %>
+<%= javascript_include_tag 'jquery-1.9.1.min' %>
+<%= javascript_include_tag 'bootstrap/js/bootstrap' %>
+<%= javascript_include_tag 'jquery-ui-1.9.2.custom.min' %>
+<%= javascript_include_tag 'jquery-migrate-1.1.1' %>
+<%= javascript_include_tag 'grid.locale-en' if params[:action] == 'index' %>
+<%= javascript_include_tag 'jquery.jqGrid.src' if params[:action] == 'index' %>
 
-<%= javascript_include_tag 'vendor/jquery.timers-1.2' %>
-<%= javascript_include_tag 'vendor/jquery.freeow' %>
-<%= javascript_include_tag 'vendor/jquery.form' %>
-<%= javascript_include_tag 'vendor/jrails' %>
-<%= javascript_include_tag 'vendor/jquery.timeentry.min' %>
+<%= javascript_include_tag 'jquery.timers-1.2' %>
+<%= javascript_include_tag 'jquery.freeow' %>
+<%= javascript_include_tag 'jquery.form' %>
+<!-- %= javascript_include_tag 'jrails' % -->
+<%= javascript_include_tag 'jquery.timeentry.min' %>
 
-<%= javascript_include_tag '/vendor/backbone/underscore-min' %>
-<%= javascript_include_tag '/vendor/backbone/backbone' %>
-<%= javascript_include_tag '/vendor/backbone/extensions/backbone-relational' %>
-<%= javascript_include_tag '/vendor/backbone/extensions/backbone.paginator.js' %>
-<%= javascript_include_tag '/vendor/backgrid/backgrid' %>
-<%= javascript_include_tag '/vendor/moment/moment' %>
-<%= javascript_include_tag '/vendor/backgrid/extensions/moment-cell/backgrid-moment-cell' %>
-<%= javascript_include_tag '/vendor/backgrid/extensions/text-cell/backgrid-text-cell' %>
+<%= javascript_include_tag 'backbone/underscore-min' %>
+<%= javascript_include_tag 'backbone/backbone' %>
+<%= javascript_include_tag 'backbone/extensions/backbone-relational' %>
+<%= javascript_include_tag 'backbone/extensions/backbone.paginator.js' %>
+<%= javascript_include_tag 'backgrid/backgrid' %>
+<%= javascript_include_tag 'moment/moment' %>
+<%= javascript_include_tag 'backgrid/extensions/moment-cell/backgrid-moment-cell' %>
+<%= javascript_include_tag 'backgrid/extensions/text-cell/backgrid-text-cell' %>
+
 <%= javascript_include_tag 'application'%>
 <%= javascript_include_tag 'planIt' if params[:action] == 'index' %>
         <% if protect_against_forgery? %>

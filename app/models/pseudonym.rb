@@ -1,6 +1,6 @@
 class Pseudonym < ActiveRecord::Base
   belongs_to  :person 
   
-  acts_as_audited :parent => :person
+  audited :associated_with => :person
 
 end

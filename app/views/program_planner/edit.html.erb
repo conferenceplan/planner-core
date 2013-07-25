@@ -1,5 +1,5 @@
 <h2><%= "Assign <em>" + @item.title + "</em> to " + @room.name + " with duration " + @item.duration.to_s + " minutes" %></h2>
-<% form_tag("/program_planner/addItem", :method => "post", :id => "layerform", :class => "layerform") do %>
+<%= form_tag("/program_planner/addItem", :method => "post", :id => "layerform", :class => "layerform") do %>
 <div class='container_12'>
     <div class='grid_10'>
             <input type='hidden' name='day' value='<%=@day%>' />

@@ -1,4 +1,8 @@
-<%= error_messages_for :person %>
+<div>
+<% @person.errors.full_messages.each do |msg| %>
+      <p><%= msg %></p>
+<% end %>
+</div>
 <div>
     <div id="personid" style="display : none;">
         <%= @person.id %>

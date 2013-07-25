@@ -1,7 +1,7 @@
 
 <div class='survey_responses'>
 <% if @respondent && @respondent.survey_respondent_detail %>
-    <%= survey_to_html(@survey,@respondent.survey_respondent_detail, false) %>
+    <%= survey_to_html(@survey,@respondent.survey_respondent_detail, false).html_safe %>
 <% else %>
 <p>No Survey</p>
 <% end %>

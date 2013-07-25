@@ -1,6 +1,6 @@
 
-<% form_for(@mail_config, :html => {:'accept-charset' => 'UTF-8'}) do |f| %>
-    <%= f.error_messages %>
+<%= form_for(@mail_config, :html => {:'accept-charset' => 'UTF-8'}) do |f| %>
+    <!-- %= f.error_messages % -->
     <div class='line'><div class='field_name'>Conference Name</div><div class='field_value'><%= f.text_field :conference_name %></div></div>
     <div class='line'><div class='field_name'>CC</div><div class='field_value'><%= f.text_field :cc %></div></div>
     <div class='line'><div class='field_name'>From</div><div class='field_value'><%= f.text_field :from %></div></div>

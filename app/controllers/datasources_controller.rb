@@ -35,7 +35,7 @@ class DatasourcesController < ApplicationController
    end
    def destroy
       @peoplesources = Peoplesource.find_by_datasource_dbid(params[:id])
-      if (@peoplesources.blank?)
+      if (!@peoplesources.blank?)
          Datasource.find(params[:id]).destroy
       end
       redirect_to :action => 'index'

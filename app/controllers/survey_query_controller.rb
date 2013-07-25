@@ -8,7 +8,7 @@ class SurveyQueryController < PlannerController
     
     ActiveRecord::Base.include_root_in_json = false # TODO - check that this is safe, and a better place to put it
 
-    render_json query.to_json(:include => {:survey_query_predicates => {}},
+    render json: query.to_json(:include => {:survey_query_predicates => {}},
       :except => [:created_at, :updated_at, :lock_version]
       ), :content_type => 'application/json' # need to return the model so that the client has the id
   end
@@ -28,14 +28,14 @@ class SurveyQueryController < PlannerController
     
     ActiveRecord::Base.include_root_in_json = false # TODO - check that this is safe, and a better place to put it
 
-    render_json query.to_json(:include => {:survey_query_predicates => {}}, 
+    render json: query.to_json(:include => {:survey_query_predicates => {}}, 
           :except => [:created_at, :updated_at, :lock_version]),
     :content_type => 'application/json' # need to return the model so that the client has the id
   end
 
   def edit
   end
-
+  
   def update
     # get the survey
     query = SurveyQuery.find(params[:id])
@@ -43,13 +43,13 @@ class SurveyQueryController < PlannerController
     # and then update it's attributes
     p = params.reject{|k, v| ['action', 'controller', 'updated_at', 'created_at', 'lock_version', 'id'].include?(k) }
     p['survey_query_predicates_attributes'] = p['survey_query_predicates']
+    p.delete('survey_query')
     p.delete('survey_query_predicates')
-    # TODO - I want to delete the "removed" attributes
     query.update_attributes(p)
     
     ActiveRecord::Base.include_root_in_json = false # TODO - check that this is safe, and a better place to put it
 
-    render_json query.to_json(:include => {:survey_query_predicates => {}},
+    render json: query.to_json(:include => {:survey_query_predicates => {}},
       :except => [:created_at, :updated_at, :lock_version]
       ), :content_type => 'application/json' # need to return the model so that the client has the id
   end

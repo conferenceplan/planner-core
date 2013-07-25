@@ -221,7 +221,7 @@
         <div class="clear">
         </div>
         <div class="container_12">
-            <%= yield(:content) or yield %>
+            <%= content_for?(:content) ? yield(:content) : yield %>
         </div>
     </body>
 </html>

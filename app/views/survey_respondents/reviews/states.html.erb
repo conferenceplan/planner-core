@@ -1,6 +1,6 @@
 <!-- TODO: put in survey form id in the path and have a copy method -->
 <div class='copy-form'>
-<% form_tag('/survey_respondents/reviews/'+@respondentId+'/copySurvey') do %>
+<%= form_tag('/survey_respondents/reviews/'+@respondentId+'/copySurvey') do %>
 	<%= check_box_tag(:name, 1) %> <%= label_tag(:name, "Name") %>
 	<% if @copyStatus && @copyStatus.nameCopied %>
 	<em>(Copied)</em>

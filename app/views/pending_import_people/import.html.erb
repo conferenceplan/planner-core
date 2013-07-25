@@ -1,5 +1,5 @@
 <br/>
-<% form_for :dump, :url=>{:controller=>"pending_import_people",
+<%= form_for :dump, :url=>{:controller=>"pending_import_people",
                     :action=>"doimport",:method => "post"},
                     :html => { :multipart => true, :'accept-charset' => 'UTF-8' } do |f| -%>
  <p>

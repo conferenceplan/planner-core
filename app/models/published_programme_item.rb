@@ -2,7 +2,7 @@
 #
 #
 class PublishedProgrammeItem < ActiveRecord::Base
-  acts_as_audited
+  audited
 
   has_many  :published_programme_item_assignments, :dependent => :destroy #, :class_name => 'Published::ProgrammeItemAssignment'
   has_many  :people, :through => :published_programme_item_assignments

@@ -1,5 +1,5 @@
-<%= error_messages_for :survey %>
-<% form_for @survey, :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
+<!-- %= error_messages_for :survey % -->
+<%= form_for @survey, :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
 <div class='survey_form'>
 	<div class='line'><div class='field_name'>Name:</div><div class='field_value'><%= f.text_field :name %></div></div>
     <div class='line'><div class='field_name'>Alias:</div><div class='field_value'><%= f.text_field :alias %></div></div>

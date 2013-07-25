@@ -2,7 +2,7 @@ class AvailabilitiesController < PlannerController
   def index
     @person = Person.find(params[:person_id])
         
-    @urlstr = '/participants/'+ params[:person_id]  + '/available_date/new'
+    @urlstr = '/participants/'+ params[:person_id]  + '/available_dates/new'
 
     @availableDate = @person.available_date
     

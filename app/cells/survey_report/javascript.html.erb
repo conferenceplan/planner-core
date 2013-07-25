@@ -220,7 +220,7 @@ jQuery(document).ready(function() {
         selected : 0,
 
         template : _.template($('#query-template').html()),
-
+        
         renderPredicates : function() {
             if (this.model) {
                 var col = this.model.get('survey_query_predicates');
@@ -242,11 +242,13 @@ jQuery(document).ready(function() {
         },
         
         remove : function() {
+            // alert("Remoeve Query View");
             // remove the view from the DOM
             Backbone.View.prototype.remove.apply(this);
             if (this.options.evAggregator) {
                 // And do the same for the predicates...
                 this.options.evAggregator.trigger("cleanup", this.model);
+            // col.models.reset();
             };
         },
 
@@ -255,7 +257,14 @@ jQuery(document).ready(function() {
             this.model.on('add:survey_query_predicates', this.addPredicate, this);
         },
         
+        resetEvents : function() {
+            // alert("reset"); // 
+            this.model.off('remove:survey_query_predicates', this.removePredicate, this);
+            this.model.off('add:survey_query_predicates', this.addPredicate, this);
+        },
+        
         removePredicate : function(removed, related) {
+            // alert("REMOVE")
             if (! removed.get('id')) { // If the id does not exist in the backend
                removed.destroy();
             }
@@ -337,6 +346,7 @@ jQuery(document).ready(function() {
         },
         
         addPredicate : function(qp) {
+            // alert("ADD ONE VIEW");
           var view = new PredicateView({
               model : qp,
               col : this.options.questionsCollection,
@@ -346,6 +356,7 @@ jQuery(document).ready(function() {
         },
         
         addOne : function() {
+            // alert("ADD ONE");
             // create a new predicate add it to the collection and put it in the view
             var qp = new QueryPredicate();
             qp.set({
@@ -457,7 +468,9 @@ jQuery(document).ready(function() {
                 success : function(mdl, resp, options) {
                     // and pass that to the next view
                     if (currentQueryView) {
-                        currentQueryView.remove();
+                        //
+                        currentQueryView.resetEvents(); 
+                        currentQueryView.remove(); // TODO - cleanup
                     };
 
                     var currentQuestion = mdl;

@@ -1,6 +1,6 @@
 <div class='container_12'>
 <h1>Add new equipment type</h1>
-<% form_tag :action => 'create'  do %>
+<%= form_tag :action => 'create'  do %>
 <p><label for="description">Description</label>:
 <%= text_field 'equipment_type', 'description' %></p>
 <%= submit_tag "Create" %>

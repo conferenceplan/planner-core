@@ -1,5 +1,5 @@
-<%= error_messages_for :surveyQuestion %>
-<% form_for [@survey,@group,@question], :html => {:class => "question-form", :id => "question_form-questionid-" + @question.id.to_s, :'accept-charset' => 'UTF-8'} do |f| %>
+<!-- %= error_messages_for :surveyQuestion % -->
+<%= form_for [@survey,@group,@question], :html => {:class => "question-form", :id => "question_form-questionid-" + @question.id.to_s, :'accept-charset' => 'UTF-8'} do |f| %>
 <div class='group_form'>
     <div class='line'>
         <div class='field_name'>Question Type:</div>
@@ -53,7 +53,9 @@
             <div id="<%= answersid %>">
                 <%= render :partial => 'answer_form', :collection => @question.survey_answers %>
             </div>
-            <div><%= add_answer_link "Add an Answer", answersid %></div>
+            <div>
+                <%=link_to_function "Add an Answer", "$('##{answersid}').append(\"#{escape_javascript(render 'answer_form')}\")" %>
+            </div>
         </fieldset>
     </div>
     <%

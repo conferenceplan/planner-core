@@ -1,5 +1,5 @@
 class RolesController < PlannerController
-    layout "plain"
+  layout "plain"
     
   def list
     # Get all the roles in the database

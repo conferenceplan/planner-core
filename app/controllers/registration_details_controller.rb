@@ -9,17 +9,15 @@ class RegistrationDetailsController < PlannerController
   def update
     @registrationDetail = RegistrationDetail.find(params[:id])
     @urlstr = '/registrationDetails/' + params[:id]
+    
+    @registrationDetail.update_attributes(params[:registration_detail])
 
-    if @registrationDetail.update_attributes(params[:registration_detail])
-      redirect_to :action => 'show', :id => @registrationDetail
-    else
-      render :action => 'edit'
-    end
+    render :layout => 'content'
   end
 
   def new
     if (params[:person_id])
-      @urlstr = '/participants/' + params[:person_id] + '/registrationDetail'
+      @urlstr = '/participants/' + params[:person_id] + '/registrationDetails'
     else
       @urlstr = '/registrationDetails'
     end
@@ -37,18 +35,14 @@ class RegistrationDetailsController < PlannerController
       @registrationDetail = RegistrationDetail.new(params[:registration_detail]);
     end
     
-    if (@registrationDetail.save)
-       redirect_to :action => 'show', :id => @registrationDetail
-    else
-      render :action => 'new'
-    end 
+    render :layout => 'content'
   end
 
   def show
     if (params[:person_id])
       person = Person.find(params[:person_id])
 
-     @urlstr = '/participants/'+ params[:person_id]  + '/registrationDetail/new'
+     @urlstr = '/participants/'+ params[:person_id]  + '/registrationDetails/new'
 
       @registrationDetail = person.registrationDetail
     else
@@ -59,6 +53,16 @@ class RegistrationDetailsController < PlannerController
   end
 
   def index
+    if (params[:person_id])
+      person = Person.find(params[:person_id])
+
+     @urlstr = '/participants/'+ params[:person_id]  + '/registrationDetails/new'
+
+      @registrationDetail = person.registrationDetail
+    else
+      @registrationDetail = RegistrationDetail.find(params[:id])
+    end
+    
     render :layout => 'content'
   end
 

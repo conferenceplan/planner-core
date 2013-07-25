@@ -1,6 +1,6 @@
 class PostalAddress < ActiveRecord::Base
 
-  acts_as_audited :parent => :address
+  audited :allow_mass_assignment => true
 
   has_many :addresses, :as => :addressable
   has_many :people, :through => :addresses,

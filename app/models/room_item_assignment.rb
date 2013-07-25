@@ -1,5 +1,5 @@
 class RoomItemAssignment < ActiveRecord::Base
-  acts_as_audited
+  audited :allow_mass_assignment => true
 
   belongs_to :room
   belongs_to :programme_item

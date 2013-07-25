@@ -1,6 +1,6 @@
 <%#
 %>
-<% fields_for param, format_form do |ff| %>
+<%= fields_for param, format_form do |ff| %>
     <%if format_form.id  %>
     <%= ff.hidden_field :id %>
     <%end%>

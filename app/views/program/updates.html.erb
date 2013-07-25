@@ -5,7 +5,7 @@
 <% if changedItems %>
 <h2>Item Time and Room Changes</h2>
 <% changedItems.each do |k, v| %>
-    <%=markdown(k.title) %>
+    <%=BlueCloth.new(k.title).to_html.html_safe %>
     <%=k.published_room.published_venue.name %> ( <%=k.published_room.name %> )
     <p>
     <% if v.size > 0 %>
@@ -26,7 +26,7 @@
 <% if addedItems %>
 <h2>New Items Added to Program</h2>
 <% addedItems.each do |k, v| %>
-    <%= markdown(k.title) %>
+    <%= BlueCloth.new((k.title)).to_html.html_safe %>
     <p>
         Has been added to the program, <%= v[0].strftime("%A at %H:%M") %> in <%= k.published_room.published_venue.name %>( <%= k.published_room.name %> )
     </p>
@@ -48,7 +48,7 @@
 <% if droppedItems %>
 <h2>Dropped Items</h2>
 <% droppedItems.each do |k, v| %>
-    <%= markdown(v[:title]) %>
+    <%= BlueCloth.new(v[:title]).to_html.html_safe %>
     <p> <!-- Time.zone.parse config.time_zone -->
         Has been dropped. From <%= v[:info][0].published_venue.name %>( <%= v[:info][0].name %> ) at <%= v[:info][1].in_time_zone(Time.zone_default).strftime("%A at %H:%M") %>.
     </p>
@@ -59,7 +59,7 @@
 <h2>Program Participants Added to Programme Items</h2>
 <% peopleAdded.each do |k, v| %>
     <%if (addedItems == nil) || !addedItems[k] %>
-    <%= markdown(k.title) %>
+    <%= BlueCloth.new(k.title).to_html.html_safe %>
     <p>
         <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. Program Participants have been added:<br/>
     <% v.each_index do |idx| %>
@@ -76,7 +76,7 @@
 <% if peopleRemoved %>
 <h2>Program Participants Dropped from Particular  Programme Items</h2>
 <% peopleRemoved.each do |k, v| %>
-    <%= markdown(k.title) %>
+    <%= BlueCloth.new(k.title).to_html.html_safe %>
     <p>
        <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. The following Program Participants have been dropped:<br/> 
     <% v.each_index do |idx| %>
@@ -92,7 +92,7 @@
 <% if updatedItemDetails %>
 <h2>Title and Description Changes</h2>
 <% updatedItemDetails.each do |k, v| %>
-    <%= markdown(k.title) %>
+    <%= BlueCloth.new(k.title).to_html.html_safe %>
     <p>
         <%= k.published_time_slot.start.strftime("%A at %H:%M") %> in <%= k.published_room.published_venue.name %>(<%= k.published_room.name %>) has been updated <br/>
     <% if v.size > 0 %>
@@ -100,7 +100,7 @@
         <% v.each do |change| %>
             <% change.each do |name, vals| %>
             	<%if vals %>
-	                <%=name %> changed to: <%= (name == 'precis')? markdown(vals[1]) : vals[1] %><br/>
+	                <%=name %> changed to: <%= (name == 'precis')? BlueCloth.new(vals[1]).to_html.html_safe : vals[1] %><br/>
             	<%end%>
             <% end %>
         <% end %>

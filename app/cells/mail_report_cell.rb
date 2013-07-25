@@ -8,7 +8,7 @@ class MailReportCell < ::Cell::Base
     render
   end
 
-  def javascript
+  def javascript(args)
     render
   end
 

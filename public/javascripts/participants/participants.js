@@ -484,7 +484,7 @@ function loadTabs(id){
         0: 'participants/' + id + '/registrationDetail',
         1: 'participants/' + id + '/addresses',
         2: 'participants/' + id,
-        3: 'participants/' + id + '/edited_bio',
+        3: 'participants/' + id + '/edited_bios',
         4: 'tags/' + id + '?class=Person',
         5: 'survey_respondents/reviews/' + survey_id,
         6: 'participants/' + id + '/availabilities',

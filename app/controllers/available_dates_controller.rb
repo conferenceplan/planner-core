@@ -7,7 +7,7 @@ class AvailableDatesController < PlannerController
   def show
     if (params[:person_id])
        @person = Person.find(params[:person_id])
-       @urlstr = '/participants/'+ params[:person_id]  + '/available_date/new'
+       @urlstr = '/participants/'+ params[:person_id]  + '/available_dates/new'
 
        @availableDate = @person.available_date
        
@@ -44,7 +44,7 @@ end
   
   def new
      if (params[:person_id])
-      @urlstr = '/participants/' + params[:person_id] + '/available_date'
+      @urlstr = '/participants/' + params[:person_id] + '/available_dates'
     else
       @urlstr = '/available_dates'
     end
@@ -88,7 +88,6 @@ end
   
   def GetDefaultStart
     return Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + 12.hours
-    # return Time._load(SITE_CONFIG[:conference][:start_date]) + 12.hours;
   end
   
   def GetDefaultEnd
@@ -102,7 +101,7 @@ end
        updatedValueHour = inParams[baseParamName+'(4i)']
        updatedValueMinute = inParams[baseParamName+'(5i)']
        updatedValueSecond = inParams[baseParamName+'(5i)']    
-       updateValue = Time.zone.local(updatedValueYear,updatedValueMon,updatedValueDay,updatedValueHour,updatedValueMinute,updatedValueSecond)
+       updateValue = Time.zone.local(updatedValueYear.to_i,updatedValueMon.to_i,updatedValueDay.to_i,updatedValueHour.to_i,updatedValueMinute.to_i,updatedValueSecond.to_i)
        return updateValue
   end
 end

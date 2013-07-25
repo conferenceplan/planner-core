@@ -1,0 +1,144 @@
+h3 {
+	font-size: 12pt;
+	margin-top: 12px;
+	margin-bottom: 3px;
+}
+
+div.survey-question-area {
+    margin-bottom : 0.5em;
+    margin-top : 0.5em;
+}
+
+div.smerfSubquestion,
+div.smerfQuestion,
+div.survey-question,
+p {
+	font-size: 10pt;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+div.survey-group,
+div.smerfGroup {
+	padding: 5px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+
+div.css1,
+div.css2,
+div.css3,
+div.css4 {
+	color: #1a99cb;
+	padding: 4px;
+	font-weight: bold;
+}
+
+label input,
+label {
+	font-size: 10pt;	
+}
+
+
+div.css4 {
+	font-size: medium;
+}
+
+div.css3 {
+	font-size: small;
+}
+
+div.css2 {
+	font-size: x-small;
+}
+
+div.css1 {
+	font-size: xx-small;
+}
+
+div.cloud {
+	margin: 8px;
+}
+
+div.cloud div#content {
+	text-transform: capitalize;
+}
+
+div.cloud div#content div {
+	clear: both;
+	float: none;
+	display: inline;
+}
+
+.survey-question-area,
+.smerfQuestionArea,
+.smerfQuestionArea.toggle {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.smerfSubquestionArea {
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+a.toggleLink.toggle, a.toggleLink, a.toggle_pub_name {
+	color: blue;
+	font-size: 8pt;
+}
+
+div.radiobutton {
+	margin-right: 5px;
+	margin-left: 5px;
+}
+
+/* Need a more specific class for the type of numbers etc*/
+div.smerfGroup div.phonetype div {
+}
+
+body {
+	font-size: 10pt;
+}
+
+form.smerfForm {
+	font-size: 10pt;
+}
+
+div.smerfGroup div.smerfQuestionArea > div.text,
+div.textarea,
+div.text {
+	font-size: 10pt;
+	width: 50%;
+}
+
+div.taggable div.textarea {
+}
+
+.mandatory {
+	color: #CC0033;
+}
+
+.availabilitySection {
+	background : #99DDDD;
+}
+
+div.tag,
+div.tag-count,
+div.tag-title {
+	font-size: 10pt;	
+}
+
+div.tag-name {
+	float: left;
+}
+
+div.tag-title {
+	font-size: 8pt;	
+	font-style: italic;
+}
+
+div.tag-count {
+	float: left;
+	font-size: 8pt;	
+	color : gray;
+}

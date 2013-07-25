@@ -25,7 +25,7 @@ class Users::AdminController < PlannerController
     @users = User.find :all, :offset => off, :limit => rows, :order => idx + " " + order, :conditions => clause
    
     respond_to do |format|
-      format.xml
+      format.xml #render xml: @users #format.xml
     end
   end
 

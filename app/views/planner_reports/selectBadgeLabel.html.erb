@@ -4,7 +4,7 @@
       content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
     end
 %>
-<% form_for :backofbadge, :url=>{:controller=>"planner_reports", :action=>"BackOfBadge",:method => "post"}, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
+<%= form_for :backofbadge, :url=>{:controller=>"planner_reports", :action=>"BackOfBadge",:method => "post"}, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
  <div>
   <div class='line'><div class='field_name'><%= f.label :person_id,"Select People to get back of badge. No selection will export all people with schedule" %></div>
                     <div class='field_value'>   	

@@ -18,8 +18,8 @@ jQuery(document).ready(function() {
             totalRecords: 200,
         },
         queryParams : {
-            person_id : <%= @person_id.nil? ? '""' : @person_id %>,
-            mailing_id : <%= @mailing_id.nil? ? '""' : @mailing_id %>
+            person_id : <%= (@person_id.nil? ? '""' : @person_id).html_safe %>,
+            mailing_id : <%= (@mailing_id.nil? ? '""' : @mailing_id).html_safe %>
         }
     });
     
@@ -114,8 +114,8 @@ jQuery(document).ready(function() {
     
     jQuery.ajax('/mail_history/count', {
         data : {
-            person_id : <%= @person_id.nil? ? '""' : @person_id %>,
-            mailing_id : <%= @mailing_id.nil? ? '""' : @mailing_id %>
+            person_id : <%= (@person_id.nil? ? '""' : @person_id).html_safe %>,
+            mailing_id : <%= (@mailing_id.nil? ? '""' : @mailing_id).html_safe %>
         },
         success : function(data, textStatus, jqXHR) {
             var mailingHistories = new MailingHistoryCollection([], {

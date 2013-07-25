@@ -3,7 +3,7 @@
 <% for format in @formats %>
 	<li>name is <%= format.name %> menu order is <%= format.position%>&nbsp; 
 		<%=  link_to "edit", :action => 'edit', :id => format %>&nbsp; 
-		<%=  link_to "remove", format, :method => :delete,:confirm => "Are you Sure?" %>
+		<%=  link_to "remove", format, :method => :delete, :confirm => "Are you Sure?" %>
 	</li>
 <%end%>
 <p> <%= link_to "create new format", :action => 'new' %></p>

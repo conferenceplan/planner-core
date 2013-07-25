@@ -8,7 +8,7 @@ development:
     :conference:
         :name: MyConvention
         :email: help@help.com
-        :start_date: 2013-08-29 00:00:00
+        :start_date: "2013-08-29 00:00:00"
         :number_of_days: 5
     
 production:

@@ -4,7 +4,7 @@
       content_tag(:div, content_tag(:p, flash[:error]), :class => "error grid_10")
     end
 %>
-<% form_for :reportInviteStatus, :url=>{:controller=>"people", :action=>"doReportInviteStatus",:method => "get"}, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
+<%= form_for :reportInviteStatus, :url=>{:controller=>"people", :action=>"doReportInviteStatus",:method => "get"}, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
  <div>
   <div class='line'>
   	Select the criteria for the people list, then submit. The list will be displayed in your browser.

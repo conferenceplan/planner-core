@@ -2,7 +2,7 @@
 
 Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Special Interest Group, Workshop, Dialog, Game Show, Book Discussion, Auction, and Demonstration only.
 
-<% form_tag('/planner_reports/panels_by_room', :method => 'post') do %>
+<%= form_tag('/planner_reports/panels_by_room', :method => 'post') do %>
 <p>
    <%= submit_tag "Export CSV", :name=>"csv" %>
    <%= submit_tag "View in Browser", :name => "html" %>

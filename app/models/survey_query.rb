@@ -11,4 +11,27 @@ class SurveyQuery < ActiveRecord::Base
   
   belongs_to :user
   
+  #
+  #
+  #
+  def survey_query_predicates_attributes=(predicate_attributes)
+
+    # First the new ones
+    predicate_attributes.reject {|x| !x['id'].blank? }.each do |predicate| # if there is an id then it is not new
+      survey_query_predicates.build(predicate)
+    end
+    
+    # Then the updates and deletes
+    survey_query_predicates.reject(&:new_record?).each do |predicate|
+      idx = predicate_attributes.find_index { |it| it['id'] == predicate.id }
+      if idx
+        attributes = predicate_attributes[idx]
+        predicate.attributes = attributes
+      else
+        survey_query_predicates.delete(predicate)
+      end
+    end
+    
+  end
+    
 end

@@ -1,7 +1,22 @@
 class EditedBiosController < PlannerController
 
   def index
-    @editedBios = EditedBio.find :all
+    # @editedBios = EditedBio.find :all
+    if (params[:person_id])
+       @person = Person.find(params[:person_id])
+       @urlstr = '/participants/'+ params[:person_id]  + '/edited_bio/new'
+
+       @editedBio = @person.edited_bio
+       @surveyBio = @person.GetSurveyBio
+    else
+      @urlstr = '/edited_bios/new'
+
+      @editedBio = EditedBio.find(params[:id])
+      @surveyBio = @editedBio.person.GetSurveyBio
+    end
+    
+    render :layout => 'content'
+
   end
   
   def show
@@ -114,9 +129,9 @@ end
        updatedValueSecond = params[:selectExportBioList]['updated_at(5i)']    
        updateValue = Time.zone.local(updatedValueYear,updatedValueMon,updatedValueDay,updatedValueHour,updatedValueMinute,updatedValueSecond)
     
-       @editedBios = EditedBio.find :all, :joins => :person, :conditions => ['people.acceptance_status_id = ? and people.invitestatus_id = ? and edited_bios.updated_at > ?', accepted.id, invitestatus.id, updateValue], :order => 'last_name, first_name'
+       @editedBios = EditedBio.find :all, :include => {:person => :pseudonym}, :conditions => ['people.acceptance_status_id = ? and people.invitestatus_id = ? and edited_bios.updated_at > ?', accepted.id, invitestatus.id, updateValue], :order => 'people.last_name, people.first_name'
     else
-       @editedBios = EditedBio.find :all, :joins => :person, :conditions => ['people.acceptance_status_id = ? and people.invitestatus_id = ?', accepted.id, invitestatus.id], :order => 'last_name, first_name'
+       @editedBios = EditedBio.find :all, :include => {:person => :pseudonym}, :conditions => ['people.acceptance_status_id = ? and people.invitestatus_id = ?', accepted.id, invitestatus.id], :order => 'people.last_name, people.first_name'
     end
     render :layout => 'content'
   end

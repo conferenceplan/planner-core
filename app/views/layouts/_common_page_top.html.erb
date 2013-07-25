@@ -13,7 +13,16 @@
 </div>
 <div class='container_12'>
     <% if current_user %>
-    <%= menu %>
-    <div class="large-spacer"></div>
+        <%= menu %>
+        <div class="large-spacer"></div>
     <% end %>
+</div>
+<div class='container_12'>
+    <div class="prefix_2 grid_9">
+    <% flash.each do |name, msg| %>
+        <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+            <p class='error'><%= msg %></p>
+        </div>
+    <% end %>
+    </div>
 </div>

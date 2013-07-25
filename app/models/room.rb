@@ -20,7 +20,7 @@ class Room < ActiveRecord::Base
           :source => :published,
           :source_type => 'PublishedRoom'
 
-  acts_as_audited :parent => :venue
+  audited :associated_with => :venue, :allow_mass_assignment => true
 
   def removeAllTimes()
     self.room_item_assignments.each do |ts|

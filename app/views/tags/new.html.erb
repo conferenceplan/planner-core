@@ -5,7 +5,7 @@
 1. Get the class name from the controller
 2. Get the context from the controller
 -->
-<% form_tag(tags_path, :method => "get") do %>
+<%= form_tag(tags_path, :method => "get") do %>
   <%= label_tag(:q, "Search for:") %>
   <%= text_field_tag(:q) %>
   <%= submit_tag("Search") %>

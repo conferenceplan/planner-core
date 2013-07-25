@@ -5,7 +5,7 @@ xml.people do
       xml.name(name)    
       if (p.edited_bio)
          xml.bio do
-           xml.cdata! (markdown(p.edited_bio.bio))
+           xml.cdata! (BlueCloth.new(p.edited_bio.bio).to_html)
          end
       
          if (p.edited_bio.website)

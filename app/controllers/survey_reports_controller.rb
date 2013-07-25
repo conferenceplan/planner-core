@@ -12,7 +12,7 @@ class SurveyReportsController < PlannerController
     surveys = Survey.all
     
     ActiveRecord::Base.include_root_in_json = false # TODO - this is not the most elegent way to set it since it has a side-effect
-    render_json surveys.to_json(:only => [ :id, :name ]), :content_type => 'application/json'
+    render json: surveys.to_json(:only => [ :id, :name ]), :content_type => 'application/json'
   end
   
   def surveyQueryNames
@@ -25,7 +25,7 @@ class SurveyReportsController < PlannerController
     
     ActiveRecord::Base.include_root_in_json = false
 
-    render_json queries.to_json(:only => [ :id, :name, :shared ]), :content_type => 'application/json'
+    render json: queries.to_json(:only => [ :id, :name, :shared ]), :content_type => 'application/json'
   end
   
   def delSurveyQuery
@@ -38,7 +38,7 @@ class SurveyReportsController < PlannerController
     
     ActiveRecord::Base.include_root_in_json = false
 
-    render_json queries.to_json(:only => [ :id, :name, :shared ]), :content_type => 'application/json'
+    render json: queries.to_json(:only => [ :id, :name, :shared ]), :content_type => 'application/json'
   end
   
   def questions
@@ -50,7 +50,7 @@ class SurveyReportsController < PlannerController
     
     ActiveRecord::Base.include_root_in_json = false
 
-    render_json questions.to_json(:only => [ :id, :name, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order, :answer ],
+    render json: questions.to_json(:only => [ :id, :name, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order, :answer ],
                                   :include => {:survey_group => {}, :survey_answers => {}}
                                 ), :content_type => 'application/json'
   end
@@ -79,7 +79,7 @@ class SurveyReportsController < PlannerController
     
     ActiveRecord::Base.include_root_in_json = false # TODO - check that this is safe, and a better place to put it
 
-    render_json '{ "totalpages": 1, "currpage": 1, "totalrecords": ' + count.to_s + ', "userdata": ' + metadata.to_json() + ', "rowdata": ' + resultSet.to_json() + '}',
+    render json: '{ "totalpages": 1, "currpage": 1, "totalrecords": ' + count.to_s + ', "userdata": ' + metadata.to_json() + ', "rowdata": ' + resultSet.to_json() + '}',
                :content_type => 'application/json'
   end
   

@@ -25,10 +25,10 @@ class MailingJob
         
         begin
           # Add the args to the mailing
-          SurveyMailer.deliver_mailingEmail(person, mailing, mailHistory, {
+          SurveyMailer.mailingEmail(person, mailing, mailHistory, {
             :person => person,
             :assignments => ProgramItemsService.findProgramItemsForPerson(person)
-          })
+          }).deliver
           
           # set the status
           mailHistory.email_status = EmailStatus[:Sent]
@@ -49,18 +49,5 @@ class MailingJob
 
     end
   end
-  
-  # def getProgramItems(person)
-    # assignments = ProgrammeItemAssignment.all(
-        # :conditions => ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
-            # person.id, 
-            # [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]],
-            # :include => {:programmeItem => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, :equipment_types, {:room => :venue}, :time_slot]},
-            # :order => "time_slots.start asc"
-      # )
-# 
-    # return assignments
-  # end
-
   
 end

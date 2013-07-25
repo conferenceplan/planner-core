@@ -1,4 +1,5 @@
 class Admin::PersonMailingAssignmentsController < PlannerController
+  
   def index
     # Return a list of the person mailing assignments
     # pass in a paramter that specifies the mailing so that we can filter

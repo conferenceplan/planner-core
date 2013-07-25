@@ -5,8 +5,13 @@ class User < ActiveRecord::Base
   has_many  :roleAssignments
   has_many  :roles, :through => :roleAssignments
   has_one   :preference
+  
   def role_symbols
-   (roles || []).map {|r| r.title.to_sym}
+   (roles || []).map {|r| r.title.to_sym }
+  end
+  
+  def role_strings
+   (roles || []).map {|r| r.title }
   end
   
   has_many :survey_queries

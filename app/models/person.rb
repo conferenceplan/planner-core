@@ -2,7 +2,7 @@ class Person < ActiveRecord::Base
   validates_numericality_of :mailing_number, :allow_nil => true # TODO - set the deafilt to 0 in DB, or move to a separate table containing the mailing information
 
   # Put in audit for people
-  acts_as_audited
+  audited :allow_mass_assignment => true
 
   has_many  :addresses
   
@@ -61,7 +61,10 @@ class Person < ActiveRecord::Base
   #
   acts_as_taggable
   
-  named_scope :by_last_name, :order => "last_name ASC"
+  # named_scope :by_last_name, :order => "last_name ASC"
+  def by_last_name
+    order("ast_name ASC")
+  end
   
   #
   has_one  :pseudonym

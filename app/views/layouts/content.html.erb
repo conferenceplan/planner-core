@@ -1,9 +1,11 @@
 <div>
 <% if not @messages_rendered -%>
-  <% if flash[:error] -%>
-    <p class='error'><%= flash[:error] %></p>
-  <% end -%>
+    <% flash.each do |name, msg| %>
+        <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+            <p class='error'><%= msg %></p>
+        </div>
+    <% end %>
 <% end -%>
 <% @messages_rendered = true -%>
-<%= yield(:content) or yield %>
+<%= content_for?(:content) ? yield(:content) : yield %>
 </div>
