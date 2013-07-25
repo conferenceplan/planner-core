@@ -397,158 +397,30 @@ class PlannerReportsController < PlannerController
 
    end
 
+   #
+   #
+   #
    def panelists_with_panels
-
-      accepted = AcceptanceStatus.find_by_name("Accepted")
-      probable = AcceptanceStatus.find_by_name("Probable")
-      cond_str = '(acceptance_status_id = ? or acceptance_status_id = ?)'
-
-      @panelists = Person.all(:include => :pseudonym, :conditions => [cond_str,accepted.id,probable.id], :order => "people.last_name")
+      @panelists = Person.all(:include => :pseudonym, 
+            :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?)', AcceptanceStatus['Accepted'].id,AcceptanceStatus['Probable'].id], 
+            :order => "people.last_name")
       @panelists = @panelists.sort {|x,y| x.pubLastName.downcase <=> y.pubLastName.downcase}
-
+      
       return unless params[:html] || params[:csv] 
+      
+      @displayIds = params[:prog_nbr] ? true : false
+      @names_only = params[:names_only] ? true : false
+      @names_city_only = params[:names_and_city] ? true : false
 
-      reserved = PersonItemRole.find_by_name("Reserved")
-      moderator = PersonItemRole.find_by_name("Moderator")
-      invisible = PersonItemRole.find_by_name("Invisible")
-
-      if params[:sched_only]
-            cond_str << " and time_slots.start is not NULL"
-      end
-
-      if params[:specific_panelists]
-logger.debug(params[:specific_panelists].join(","))
-            cond_str << " and people.id in (" << params[:specific_panelists].join(",") << ")"
-      end
-
-      @names = Person.all(:include => [:pseudonym, {:programmeItems => :time_slot}], :conditions => [cond_str,accepted.id,probable.id], :order => "people.last_name, programme_items.id") 
-      @names = @names.sort {|x,y| x.pubLastName.downcase <=> y.pubLastName.downcase}
-
-      output = Array.new
-      @include_city = false
-      if (params[:names_and_city])
-        @include_city = true
-      end
-      @names.each do |name|
-         if params[:names_only]
-            name[:items] = nil
-            if params[:csv]
-               output.push [name.getFullPublicationName,
-                            name.acceptance_status.name]
-            end
-         elsif @include_city
-            name[:items] = nil
-            defaultline1 = '';
-            defaultline2 = '';
-            defaultcity = '';
-            defaultstate = '';
-            defaultpostcode = '';
-            defaultcountry = '';
-            unless (name.getDefaultPostalAddress.nil?)
-                defaultline1 = name.getDefaultPostalAddress.line1;
-                defaultline2 = name.getDefaultPostalAddress.line2;
-                defaultcity = name.getDefaultPostalAddress.city
-                defaultstate = name.getDefaultPostalAddress.state
-                defaultpostcode = name.getDefaultPostalAddress.postcode
-                defaultcountry = name.getDefaultPostalAddress.country
-             end
-           
-            if params[:csv]
-               output.push [name.first_name,
-                            name.last_name,
-                            name.getFullPublicationName,
-                            name.acceptance_status.name,
-                            name.invitestatus ? name.invitestatus.name : "",
-                            name.invitation_category ? name.invitation_category.name : "",
-                            defaultline1,
-                            defaultline2,
-                            defaultcity,
-                            defaultstate,
-                            defaultpostcode,
-                            defaultcountry
-                            ]
-            end
-         else
-
-            panels = Array.new
-            name.programmeItems.find_each(:include => [:time_slot, :room, :format, ]) do |p|
-               a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
-               panelstr = "#{p.title} (#{p.format.name})"
-               if a.role_id == moderator.id
-                  panelstr << " (M)"
-               elsif a.role_id == invisible.id
-                 panelstr << " (I)"
-               end
-               panelstr << ", #{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}" unless p.time_slot.nil?
-               panelstr << ", #{p.room.name} (#{p.room.venue.name})" unless p.room.nil?
-               if a.role_id == reserved.id
-                  if params[:incl_rsvd]
-                     panelstr = "<i>#{panelstr}</i>"
-                  else
-                     next
-                  end
-               end
-               if p.time_slot.nil?
-                  zeroTime = Time.at(0)
-                  panels.push [zeroTime, panelstr]
-               else
-                  panels.push [p.time_slot.start, panelstr]
-               end
-               if params[:csv]
-                  output.push [name.getFullPublicationName,
-                               name.acceptance_status.name,
-                               (a.role_id == reserved.id) ? 'R' : (a.role_id == moderator.id) ? 'M' : (a.role_id == invisible.id) ? 'I' : '',
-                               p.title,
-                               (p.format.nil?) ? '' : p.format.name,
-                               (p.room.nil?) ? '' : p.room.name,
-                               (p.room.nil?) ? '' : p.room.venue.name,
-                               (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%a %H:%M')} - #{p.time_slot.end.strftime('%H:%M')}",
-                              ]
-               end
-            end
-            panels.sort! {|a,b| a[0] <=> b[0]}
-            panels.collect! {|a| a[1]}
-            name[:items] = panels
-         end
-      end
+      @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], (params[:incl_rsvd]? [PersonItemRole['Reserved'].id] : nil), (params[:sched_only] ? true : false)
+      
       if params[:csv]
-         outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-
-         if params[:names_only]
-            output.unshift ["Name",
-                            "Acceptance Status"]
-         elsif params[:names_and_city]
-           output.unshift ["First Name",
-                           "Last Name",
-                           "Pseudonym",
-                           "Acceptance Status",
-                           "Invitation Status",
-                           "Invitation Category",
-                           "line1",
-                           "Line2",
-                           "City",
-                           "State",
-                           "Post Code",
-                           "Country"
-                           ]
-         else
-            output.unshift ["Name",
-                            "Acceptance Status",
-                            "Role",
-                            "Panel Title",
-                            "Format",
-                            "Room",
-                            "Venue",
-                            "Time"
-                           ]
-         end
-                        # TODO: need to figure out how to handle utf16. Chnage this report
-#to utf16 after publication deadline
-#         csv_out_utf16(output, outfile)
-          csv_out(output,outfile)
+        csv_out(generatePanelistsWithPanelsArray,'panelists_' + Time.now.strftime("%m-%d-%Y") + '.csv') if !@names_only && !@names_city_only
+        csv_out(generatePanelistsNamesArray,'panelists_' + Time.now.strftime("%m-%d-%Y") + '.csv') if @names_city_only || @names_only
       end
+        
    end
-  
+   
    def selectBadgeLabel
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
@@ -1277,4 +1149,75 @@ logger.debug(params[:specific_panelists].join(","))
          end
       end
    end
+
+protected
+
+   ###
+   def generatePanelistsNamesArray
+        output = Array.new
+        
+        @people.each do |person|
+          line = []
+          
+          line.concat [person.first_name, person.last_name] if @names_city_only
+          
+          line.concat [person.getFullPublicationName, person.acceptance_status.name]
+          
+          address = person.getDefaultPostalAddress if @names_city_only
+              
+          line.concat [
+            (person.invitestatus ? person.invitestatus.name : ''),
+            (person.invitation_category ? person.invitation_category.name : ''),
+            (address ? address.line1 : ''),
+            (address ? address.line2 : ''),
+            (address ? address.city : ''),
+            (address ? address.state : ''),
+            (address ? address.postcode : ''),
+            (address ? address.country : '')
+          ] if @names_city_only
+
+          output << line
+        end
+        
+        titles = ["Name", "Acceptance Status"] if !@names_city_only
+          
+        titles = ["Fisrt Name", "Last Name","Pseudonym", "Acceptance Status", "Invite Status", "Invite Category", "Line1", "Line2", "City", "State", "Post Code", "Country"] if @names_city_only
+        
+        output.unshift titles
+   end
+   
+   def generatePanelistsWithPanelsArray
+        output = Array.new
+        
+        @people.each do |person|
+          person.programmeItemAssignments.each do |pi|
+            if pi.programmeItem
+              line = [person.getFullPublicationName, person.acceptance_status.name]
+              
+              line.concat [  pi.role.name,
+                (@displayIds ? (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number : 'N/A') : pi.programmeItem.title),
+                pi.programmeItem.format.name,
+                (pi.programmeItem.room ? pi.programmeItem.room.name : ''),
+                (pi.programmeItem.room ? pi.programmeItem.room.venue.name : ''),
+                (pi.programmeItem.time_slot ? pi.programmeItem.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.time_slot.end.strftime('%H:%M') : '')
+              ] if !@names_only
+              
+              output << line
+            end
+          end
+        end
+        
+        titles = ["Name", "Acceptance Status"]
+          
+        titles .concat [ "Role",
+          (@displayIds ? "Ref. Number" : "Panel Title"),
+          "Format",
+          "Room",
+          "Venue",
+          "Time"
+        ] if !@names_only
+        
+        output.unshift titles
+   end
+   
 end

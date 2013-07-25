@@ -14,7 +14,6 @@ class ProgramController < ApplicationController
   caches_action :index, :expires_in => 10.minutes,
                 :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }#,
 #                :unless => Proc.new { |c| c.params.has_key?('callback') }
-  # TODO - put in an observer that clears the cache when a new publish has been done
   
   #
   # Get the full programme
@@ -53,12 +52,15 @@ class ProgramController < ApplicationController
           render :layout => 'content' 
         end
       } # This should generate an HTML grid
-      format.atom # for an Atom feed (for readers) TODO - need to check were the domain for the Bio URL is set and fix
       format.js {
         render :json => @programmeItems, :callback => params[:callback]
       }
       format.json {
-        render :json => @programmeItems.to_json(:new_format => true), :callback => params[:callback]
+        if params[:func]
+          render :json => "var "+ params[:func] +" = " + @programmeItems.to_json(:new_format => true), :callback => params[:callback] 
+        else  
+          render :json => @programmeItems.to_json(:new_format => true), :callback => params[:callback]
+        end
       }
     end
   end
@@ -140,9 +142,17 @@ class ProgramController < ApplicationController
       format.js { render_json @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :published_venue_id],
                                                  :include => [:published_venue]
         ), :content_type => 'application/json' }
-      format.json { render_json @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :published_venue_id],
-                                                 :include => [:published_venue]
-        ), :content_type => 'application/json' }
+      format.json { 
+          if params[:func]
+            render :json => "var "+ params[:func] +" = " + @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :published_venue_id],
+                                                   :include => [:published_venue]
+            ), :content_type => 'application/json', :callback => params[:callback] 
+          else  
+            render :json => @rooms.to_json(:except => [:created_at , :updated_at, :lock_version, :published_venue_id],
+                                                   :include => [:published_venue]
+            ), :content_type => 'application/json', :callback => params[:callback] 
+          end
+        }
     end
   end
   
@@ -160,6 +170,9 @@ class ProgramController < ApplicationController
     end
   end
   
+  #
+  #
+  #
   def participants
     respond_to do |format|
       format.html { render :layout => 'content' }
@@ -203,11 +216,15 @@ class ProgramController < ApplicationController
             
             jsonstr += linksstr + '}'
             jsonstr += ',"bio":' + p[4].to_json 
-            jsonstr += ',"prog": ' + p[9].split(",").to_json  # Add progam ids if any - TODO 
+            jsonstr += ',"prog": ' + p[9].split(",").to_json  # Add progam ids if any 
             jsonstr += '}'
           end
           jsonstr = '[' + jsonstr + ']'
-          render_json  jsonstr, :content_type => 'application/json'
+          if params[:func]
+            render :json  => "var "+ params[:func] +" = " + jsonstr, :content_type => 'application/json', :callback => params[:callback]
+          else  
+            render_json  jsonstr, :content_type => 'application/json', :callback => params[:callback]
+          end
       }
       format.csv {
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
@@ -253,11 +270,15 @@ class ProgramController < ApplicationController
             jsonstr += linksstr + '}'
             jsonstr += ',"bio":' + p[4].to_json 
             jsonstr += ',"prog": '
-            jsonstr += p[9] ? p[9].split(",").to_json : '[]' # Add progam ids if any - TODO 
+            jsonstr += p[9] ? p[9].split(",").to_json : '[]' # Add progam ids if any 
             jsonstr += '}'
           end
           jsonstr = '[' + jsonstr + ']'
-          render_json  jsonstr, :content_type => 'application/json'
+          if params[:func]
+            render :json  => "var "+ params[:func] +" = " + jsonstr, :content_type => 'application/json', :callback => params[:callback]
+          else  
+            render_json  jsonstr, :content_type => 'application/json', :callback => params[:callback]
+          end
         }
     end
   end  
@@ -298,8 +319,41 @@ class ProgramController < ApplicationController
     end
   end
   
+  #
+  #
+  #
   def updateSelect
     @pubDateList = PublicationDate.all(:order => "created_at DESC")
+  end
+  
+  #
+  #
+  #
+  def publicationDates
+    pubDates = PublicationDate.all
+    res = []
+    
+    if pubDates
+      pubDates.each do |v|
+        res << {
+          :date => v.created_at,
+          :id => v.id,
+          :new => v.newitems,
+          :updates => v.modifieditems,
+          :removed => v.removeditems
+        }
+      end
+    end
+    
+    respond_to do |format|
+      format.json {
+        if params[:func]
+          render :json => "var "+ params[:func] +" = " + res.to_json, :callback => params[:callback] 
+        else  
+          render :json => res, :content_type => 'application/json', :callback => params[:callback]
+        end
+      }
+    end
   end
   
   #
@@ -334,54 +388,44 @@ class ProgramController < ApplicationController
       return
     end
     
-    audits = Audit.all(
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?)", @lastPubDate.timestamp, 'Published%'],
-      :order => "audits.created_at asc"
-    )
+    @resultantChanges = PublishedProgramItemsService.getUpdatesFromPublishDate(@lastPubDate)
     
-    # item, action, person, as role
-    audits.each do |audit|
-      if audit.action == 'destroy' # item removed
-        # when an item is removed there are multiple entries in the audit table. PublishedProgrammeItemAssignment, PublishedRoomItemAssignment, PublishedTimeSlot, PublishedProgrammeItem
-        # all for the one event. We need to be able to infer that this is one event and not mony...
-        # All are destroy events... but we only need to know the one i.e. the programme item was destroyed
-        if audit.auditable_type == "PublishedProgrammeItem"
-          title = audit.changes['title']
-          id = audit.auditable_id
-          # need to know what the time was ....
-          @resultantChanges = addPinkSheetEntryWithKey(@resultantChanges, id , :removeItem , :title, title) # TODO - add other values from the audit table provide more info i.e. dropped from day & time
-        elsif audit.auditable_type == "PublishedProgrammeItemAssignment" # person was removed...
-          begin
-            programmeItem = PublishedProgrammeItem.find(audit.changes["published_programme_item_id"]) # this will fail
-            role = PersonItemRole[audit.changes["role_id"]]
-            person = Person.find(audit.changes["person_id"])
-            @resultantChanges = addPinkSheetEntry(@resultantChanges, programmeItem, :removePerson, person, role)
-          rescue
-            # do nowt, kuldge to get round assigment destroys where programme item does not exist
-          end
-        elsif audit.auditable_type == 'PublishedRoomItemAssignment'
-          id = audit.changes['published_programme_item_id']
-          room = PublishedRoom.find(audit.changes['published_room_id'])
-          timeAudit = Audit.all(
-            :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?) AND (audits.auditable_id = ?)", 
-              @lastPubDate.timestamp, 'PublishedTimeSlot%', audit.changes['published_time_slot_id']]
-          )
-          @resultantChanges = addPinkSheetEntryWithKey(@resultantChanges, id, :removeItem, :info, room, timeAudit[0].changes['start'])
-        end # we are ignoring the destroys of the room item assignment and the timeslot... TODO - collect for information on the prog item
-      else  
-        if audit.auditable_type == "PublishedProgrammeItemAssignment" # person added or removed
-          @resultantChanges = getPeopleChange(audit, @resultantChanges)
-        elsif audit.auditable_type == "PublishedRoomItemAssignment" # item added, or moved
-            @resultantChanges = getItemChange(audit, @resultantChanges)
-        end
-      end
-    end
-    
+    ActiveRecord::Base.include_root_in_json = false # hack for now
     respond_to do |format|
       format.html { render :layout => 'content' }
-#################################      
-#      format.atom { send_file 'public/updates', :type => 'application/atom+xml', :x_sendfile => true } # for an Atom feed (for readers)
-      format.atom
+      format.atom # for an Atom feed (for readers)
+      format.json {
+        jsonstr = ""
+        jsonstr += '{"new":' + @resultantChanges[:new].keys.collect { |v| v }.to_json(:new_format => true) + "}" if @resultantChanges[:new]
+        jsonstr += ',' if @resultantChanges[:removeItem] && !jsonstr.empty? 
+        jsonstr += '{"removed":' + @resultantChanges[:removeItem].keys.to_json() + "}" if @resultantChanges[:removeItem]
+         
+        if (@resultantChanges[:update] || @resultantChanges[:removePerson] ||  @resultantChanges[:addPerson] || @resultantChanges[:detailUpdate])
+          list = []
+          jsonstr += ',' if !jsonstr.empty?
+          jsonstr += '{"updates":' 
+          
+          list = list.concat @resultantChanges[:update].keys if @resultantChanges[:update]
+          list = list.concat @resultantChanges[:removePerson].keys if @resultantChanges[:removePerson]
+          list = list.concat @resultantChanges[:addPerson].keys if @resultantChanges[:addPerson]
+          list = list.concat @resultantChanges[:detailUpdate].keys if @resultantChanges[:detailUpdate]
+          
+          jsonstr += list.uniq{|v| v[:id]}.to_json(:new_format => true) 
+          jsonstr += "}"
+        end
+        
+        # now the add and remove people
+        jsonstr += ',' if @resultantChanges[:removePerson] && !jsonstr.empty? 
+        jsonstr += '{"peopleRemoved":' + @resultantChanges[:removePerson].values.collect {|x| x[0]}.to_json({:terse => true}) + "}" if @resultantChanges[:removePerson]
+        jsonstr += ',' if @resultantChanges[:addPerson] && !jsonstr.empty? 
+        jsonstr += '{"peopleAdded":' + @resultantChanges[:addPerson].values.collect {|x| x[0]}.to_json({:terse => true}) + "}" if @resultantChanges[:addPerson]
+        
+        if params[:func]
+          render :json  => "var "+ params[:func] +" = [" + jsonstr + "]", :content_type => 'application/json' #  
+        else  
+          render :json  => "[" + jsonstr + "]", :content_type => 'application/json', :callback => params[:callback] #  
+        end
+      }
     end
   end
   
@@ -409,157 +453,6 @@ class ProgramController < ApplicationController
     return nl
   end
   
-  def getProgrammeItemChanges(id)
-    audits = Audit.all(
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like ?) AND (audits.auditable_id = ?)", @lastPubDate.timestamp, 'PublishedProgrammeItem', id],
-      :order => "audits.created_at asc"
-    )
-    
-    return audits
-  end
-  
-  def getPeopleChange(auditInfo, resultantChanges)
-    # Get the programme item assignments that have changed - this is the set of people
-    if auditInfo.changes["published_programme_item_id"] # Add person
-      begin
-      programmeItem = PublishedProgrammeItem.find(auditInfo.changes["published_programme_item_id"])
-      role = PersonItemRole[auditInfo.changes["role_id"]]
-      person = Person.find(auditInfo.changes["person_id"])
-      resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :addPerson, person, role)
-      rescue  
-      end
-    else
-      if auditInfo.changes["role_id"].kind_of?(Array) # then we have a role change
-        newrole = PersonItemRole[auditInfo.changes["role_id"][1]]
-        assignment = PublishedProgrammeItemAssignment.find(auditInfo.auditable_id)
-        programmeItem = assignment.published_programme_item
-        person = assignment.person
-        if newrole != PersonItemRole['Reserved'] && newrole != PersonItemRole['Invisible']
-          oldrole = PersonItemRole[auditInfo.changes["role_id"][0]]
-          resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :newRole, person, oldrole, newrole)
-        else
-          resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :removePerson, person)
-        end
-      end
-    end
-
-    return resultantChanges
-  end
-  
-  #
-  #
-  
-  #
-  # Item add
-  # Item move
-  #
-  # { programmeItem => [action, action, action] }
-  # action == {'timeMove' => [from, to]}
-  # action == {'roomMove' => to}
-  # action == 'add'
-  #
-  def getItemChange(auditInfo, resultantChanges)
-    begin
-    programmeItemAssignment = PublishedRoomItemAssignment.find(auditInfo.auditable_id) # get the associated program item assignment
-    programmeItem = programmeItemAssignment.published_programme_item # from that we can get the program item
-    if auditInfo.changes["published_time_slot_id"] # if it is a change to the time slote then we report on that
-      # the time slot has changed if we have an array of changed time information and that array contains more than one value      
-      movedTime = auditInfo.changes["published_time_slot_id"].kind_of?(Array) && auditInfo.changes["published_time_slot_id"].size > 1
-      
-      if movedTime # Item X has been rescheduled from time A to time B
-        oldtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"][0]) if movedTime == true
-        newtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"][1])
-      else # 
-        newtime = PublishedTimeSlot.find(auditInfo.changes["published_time_slot_id"])
-      end
-      
-      if movedTime && newtime.start != oldtime.start # then we have move time slot
-        # Item X has been rescheduled from time A to time B
-        resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :timeMove, oldtime.start, newtime.start)
-      else # we have moved room or added an item
-        # TODO - could also be a change to one of the other attributes
-        if resultantChanges[:update] && resultantChanges[:update][programmeItem]
-          resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :add, newtime.start)
-        end
-          # If the item was update (Title etc) then it is not a new....
-          # Look for the PublishedProgrammeItem and see if it is an update
-          if (auditInfo.action == 'update')
-            auditChange = getProgrammeItemChanges(programmeItem.id);
-            if auditChange
-              auditChange.each do |a|
-                resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :detailUpdate, a.changes)
-              end
-            end
-          else  
-            resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :new, newtime.start)
-          end
-        # Item X has been added to room B at time C
-      end
-    else # The item has been moved to a new venue
-      # else it is an addition of the program item to the schedule
-      # Item X has been added or moved to the program in room A at time B
-      room = nil
-      fromRoom = nil
-      if auditInfo.changes['published_room_id']
-        if auditInfo.changes['published_room_id'].kind_of?(Array)
-          fromRoom = PublishedRoom.find(auditInfo.changes["published_room_id"][0])
-          room = PublishedRoom.find(auditInfo.changes["published_room_id"][1])
-        else
-          room = PublishedRoom.find(auditInfo.changes["published_room_id"])
-        end
-      end
-      resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :roomMove, room, fromRoom)
-    end
-    # TODO - if we have a move + add of the same item then it is a move not an add
-    
-    rescue
-    end
-    return resultantChanges
-  end
-  
-  # Person add
-  # Person roleChange
-  # Person remove
-  #
-  # action => { programmeItem => [] }
-  #
-  # { programmeItem => [action, action, action] }
-  # action == {'timeMove' => [from, to]}
-  # action == {'roomMove' => to}
-  # action == 'add'
-  #
-  def addPinkSheetEntry(resultCollection, programmeItem, operation, *args)
-    begin
-    if resultCollection[operation]
-      if resultCollection[operation][programmeItem]
-        resultCollection[operation][programmeItem].concat args
-      else
-        resultCollection[operation][programmeItem] = args
-      end
-    else
-      resultCollection[operation] = {programmeItem => args}
-    end
-    
-    rescue  
-    end
-    return resultCollection
-  end
-  
-  def addPinkSheetEntryWithKey(resultCollection, programmeItem, operation, key, *args)
-    
-    if resultCollection[operation]
-      if resultCollection[operation][programmeItem]
-        resultCollection[operation][programmeItem][key] = args
-      else
-        resultCollection[operation][programmeItem] = { key => args }
-      end
-    else
-      resultCollection[operation] = {programmeItem => {key => args}}
-    end
-    
-    return resultCollection
-  end
-
   def getConditions(params)
     day = params[:day] # Day
     name = params[:name]
