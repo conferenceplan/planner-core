@@ -14,7 +14,6 @@ gem "daemons"
 gem 'delayed_job' 
 gem 'delayed_job_active_record'
 #gem 'enumerations_mixin' # put in vendor plugin because it has to be updated to R3.2
-gem 'fastercsv'
 gem 'i18n' 
 gem 'jquery-rails'
 gem 'mysql2' 

@@ -1,9 +1,9 @@
 module PlannerReportHelpers
-   require 'fastercsv'
+   require 'csv'
    require 'iconv'
  
    def csv_out(data, filename)
-      csv_data = FasterCSV.generate do |csv|
+      csv_data = CSV.generate do |csv|
          data.each do |r|
             csv << r
          end
@@ -18,7 +18,7 @@ module PlannerReportHelpers
    end
 
    def csv_out_utf16(data, filename)
-      csv_data = FasterCSV.generate do |csv|
+      csv_data = CSV.generate do |csv|
          data.each do |r|
             csv << r
          end
@@ -32,7 +32,7 @@ module PlannerReportHelpers
    end
 
    def csv_out_noconv(data, filename)
-      csv_data = FasterCSV.generate do |csv|
+      csv_data = CSV.generate do |csv|
          data.each do |r|
             csv << r
          end
@@ -80,7 +80,7 @@ module PlannerReportHelpers
 
       outfile = "schedule_" + Time.now.strftime("%m-%d-%Y") + ".csv"
 
-      FasterCSV.open(outfile, "w") do |csv|
+      CSV.open(outfile, "w") do |csv|
         csv << "Name"
         csv << "email"
         1.upto(maxItems) do |number|
@@ -189,7 +189,7 @@ module PlannerReportHelpers
             end
           end
         end # Person.find_each(
-      end #FasterCSV.open(outfile, "w") do |csv|
+      end #CSV.open(outfile, "w") do |csv|
       logger.debug "after retrieval loop: #{Time.now}" 
    end
 end

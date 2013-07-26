@@ -74,7 +74,7 @@ class ProgramController < ApplicationController
 
     respond_to do |format|
       format.csv {
-           csv_string = FasterCSV.generate do |csv|
+           csv_string = CSV.generate do |csv|
              csv << ["", @rooms.collect{|e| e.name}].flatten # first row is the list of rooms
 
              currentColumn = 1
@@ -228,7 +228,7 @@ class ProgramController < ApplicationController
       }
       format.csv {
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY_PLAIN)
-           csv_string = FasterCSV.generate do |csv|
+           csv_string = CSV.generate do |csv|
              @participants.each do |n|
                 csv << [ n[0], n[1], n[2], n[3], BlueCloth.new(n[4]).to_html]
              end

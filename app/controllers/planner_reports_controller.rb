@@ -6,7 +6,7 @@ class PlannerReportsController < PlannerController
    include PlannerReportHelpers
 
    require 'time_diff'
-   require 'fastercsv'
+   require 'csv'
   
    def show
    end
@@ -773,7 +773,7 @@ class PlannerReportsController < PlannerController
             end
           end
         end # Person.find_each(
-      end #FasterCSV.open(outfile, "w") do |csv|
+      end #CSV.open(outfile, "w") do |csv|
     logger.debug "after retrieval loop: #{Time.now}" 
       outfile = "schedule_" + Time.now.strftime("%m-%d-%Y") + ".csv"
       csv_out_noconv(csv, outfile)
