@@ -17,7 +17,7 @@ gem 'delayed_job_active_record'
 gem 'i18n' 
 gem 'jquery-rails'
 gem 'mysql2' 
-gem 'rails', '3.2.12' # TODO - check version 3.2.13
+gem 'rails', '~> 3.2.12'
 gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate' 
