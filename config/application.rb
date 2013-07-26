@@ -15,8 +15,6 @@ module PlannerRc1
     # Defaults to '/assets'
     #config.assets.prefix = '/asset-files'
     
-    config.session_store(:cookie_store, {:key => '_planner-rc1_session', :secret => 'asdgafgsjfvsfsdfsfgwefwef72345238523jbfw2783'})
-    
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
     config.autoload_paths += %W(#{config.root}/lib)
