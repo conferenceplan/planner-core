@@ -8,7 +8,7 @@
     <%= form_tag @path, :method => :post, :class => "", :'accept-charset' => "UTF-8" do -%>
     <%= hidden_field_tag("key", @current_key) %>
     <h2><%= @survey.name %></h2>
-    <div class="survey-welcome"><%= @survey.welcome %></div>
+    <div class="survey-welcome"><%= @survey.welcome.html_safe %></div>
     <fieldset class="survey-set">
     <!-- Get Biogragraphic info -->
     <%=render :partial => 'respondent'%>

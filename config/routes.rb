@@ -104,12 +104,14 @@ PlannerRc1::Application.routes.draw do
   match 'survey_respondents/tags_admin', :controller => 'survey_respondents/tags_admin', :action => 'index'
   match 'survey_respondents/tags_admin/update', :controller => 'survey_respondents/tags_admin', :action => 'update', :via => :post
   match 'survey_respondents/tags_admin/fix', :controller => 'survey_respondents/tags_admin', :action => 'fix'
+  match 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
+  match 'survey_respondents/tags/alltags', :controller => 'survey_respondents/tags', :action => 'alltags'
+  # match 'survey_respondents/tags/list', :controller => 'survey_respondents/list', :action => 'list'
+  match 'survey_respondents/tags/update', :controller => 'survey_respondents/update', :action => 'list', :method => 'post'
+  # resources :survey_respondents 
   
   #
   match 'survey_respondents/reviews/list', :controller => 'survey_respondents/reviews', :action => 'list'
-  # map.namespace :survey_respondents do |respondent|
-    # respondent.resources :reviews, :member => {:list => :get, :states => :get, :copySurvey => :post }
-  # end
   namespace :survey_respondents do
     resources :reviews do
       member do
@@ -120,11 +122,6 @@ PlannerRc1::Application.routes.draw do
     end
   end
 #     
-  match 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
-  match 'survey_respondents/tags/alltags', :controller => 'survey_respondents/alltags', :action => 'alltags'
-  match 'survey_respondents/tags/list', :controller => 'survey_respondents/list', :action => 'list'
-  match 'survey_respondents/tags/update', :controller => 'survey_respondents/update', :action => 'list', :method => 'post'
-  resources :survey_respondents 
 
   # map.resources :survey_respondents do |respondent|
     # respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 

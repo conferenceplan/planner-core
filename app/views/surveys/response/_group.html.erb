@@ -2,9 +2,9 @@
 <div class="survey-group">
     <h3><%= group.name %></h3> <!-- ADD group style-->
     <%= content_tag :div, :class => "survey-group #{group.survey_format.style if group.survey_format}" do %>
-        <%= group_help(group) %>
+        <%= group_help(group).html_safe %>
         <%= content_tag :div, :class => "#{group.survey_format ? group.survey_format.description_style : ""}" do%>
-            <%= group.description %>
+            <%= group.description.html_safe %>
         <%end%>
         <!-- TODO - deal with the alt text ????-->
         <!-- Display the questions within the group -->

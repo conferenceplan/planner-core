@@ -3,5 +3,5 @@
     <div><img src="<%= @survey.header_image if @survey.header_image %>"></div>
     <% end %>
     <h2><%= @survey.name %></h2>
-    <div class="survey-thankyou"><%= @survey.thank_you %></div>
+    <div class="survey-thankyou"><%= @survey.thank_you.html_safe %></div>
 <% end %>

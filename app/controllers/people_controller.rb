@@ -378,10 +378,10 @@ class PeopleController < PlannerController
     @people.each do |person|
       @accepted = AcceptanceStatus.find_by_name("Accepted")        
       if (person.acceptance_status_id == @accepted.id)
-        if (person.hasSurvey? == false)
-          @nosurveypeople << person
-        else
+        if SurveyService.personAnsweredSurvey(person, 'partsurvey')
           surveypeople << person
+        else
+          @nosurveypeople << person
         end
       else
         surveypeople << person

@@ -12,7 +12,7 @@ xml.rows do
       person.invitestatus ? xml.cell(person.invitestatus.name) : xml.cell("")
       person.invitation_category ? xml.cell(person.invitation_category.name) : xml.cell("")
       person.acceptance_status ? xml.cell(person.acceptance_status.name) : xml.cell("")
-      person.hasSurvey? ? xml.cell("Y") : xml.cell("N")
+      SurveyService.personAnsweredSurvey( person, 'partsurvey') ? xml.cell("Y") : xml.cell("N")
       #
       if person.pseudonym
         person.pseudonym.first_name ? xml.cell(person.pseudonym.first_name) : xml.cell("")

@@ -7,10 +7,10 @@
         <%= stylesheet_link_tag 'text.css' %>
         <%= stylesheet_link_tag '960.css' %>
         <%= stylesheet_link_tag 'survey.css' %>
-        <%= javascript_include_tag 'vendor/jquery-1.8.3' %>
-        <%= javascript_include_tag 'vendor/jquery-ui-1.9.2.custom.min' %>
-        <%= javascript_include_tag 'vendor/jquery-migrate-1.1.1' %>
-        <%= javascript_include_tag 'vendor/jquery.tooltip.min' %>
+        <%= javascript_include_tag 'jquery-1.9.1.min' %>
+        <%= javascript_include_tag 'jquery-ui-1.9.2.custom.min' %>
+        <%= javascript_include_tag 'jquery-migrate-1.1.1' %>
+        <%= javascript_include_tag 'jquery.tooltip.min' %>
         <script>
             $(function(){
 				
@@ -175,7 +175,7 @@
                     
                     //                    
                     $.ajax({
-                        url: "/survey_respondents/tags/alltags?context=" + context,
+                        url: "/survey_respondents/tags/alltags.xml?context=" + context,
                         async: true,
                         dataType: "xml",
                         success: function(xmlResponse){
