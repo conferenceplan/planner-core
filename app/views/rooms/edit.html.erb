@@ -1,6 +1,6 @@
 <br/>
 <h1> Edit a room</h1>
-<!-- %= error_messages_for :room % -->
+<%= render "shared/error_messages", :target => @room %>
 <%= form_for @room, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
 	<p>
 		<%= f.label :name, "Name " %> <br/>

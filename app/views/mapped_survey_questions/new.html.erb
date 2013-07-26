@@ -1,6 +1,6 @@
 <br/>
 <h1> Create a mapped survey question</h1>
-<!-- %= error_messages_for :mapped_survey_questions % -->
+<%= render "shared/error_messages", :target => @mapped_survey_question %>
 <%= form_for @mapped_survey_question, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
 	<p>
 		<%= f.label :name, "Name " %> <br/>

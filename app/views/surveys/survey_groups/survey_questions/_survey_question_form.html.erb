@@ -1,4 +1,4 @@
-<!-- %= error_messages_for :surveyQuestion % -->
+<%= render "shared/error_messages", :target => @question %>
 <%= form_for [@survey,@group,@question], :html => {:class => "question-form", :id => "question_form-questionid-" + @question.id.to_s, :'accept-charset' => 'UTF-8'} do |f| %>
 <div class='group_form'>
     <div class='line'>

@@ -1,4 +1,4 @@
-<!-- %= error_messages_for :phoneNumber % -->
+<%= render "shared/error_messages", :target => @phoneNumber %>
 <%= form_for @phoneNumber, :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
 <div class='address_phone'>
 <div class='address_details'>

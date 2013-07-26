@@ -1,4 +1,4 @@
-<!-- %= error_messages_for :availableDate% -->
+<%= render "shared/error_messages", :target => @availableDate %>
 <%= form_for @availableDate, :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
    <div class='container_16'>
    <div class='grid_10'>

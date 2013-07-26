@@ -1,6 +1,6 @@
 <br/>
 <h1> Edit an invitation category</h1>
-<!-- %= error_messages_for :invitation_category % -->
+<%= render "shared/error_messages", :target => @invitationCategory %>
 <%= form_for @invitationCategory, :html => {:'accept-charset' => 'UTF-8'} do |f| -%>
 	<p>
 		<%= f.label :name, "Name " %> <br/>

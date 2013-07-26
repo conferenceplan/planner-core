@@ -1,4 +1,4 @@
-<!-- %= error_messages_for :surveyGroup % -->
+<%= render "shared/error_messages", :target => @group %>
 <%= form_for [@survey,@group], :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
 <div class='group_form'>
 	<div class='line'><div class='field_name'>Name:</div><div class='field_value'><%= f.text_field :name %></div></div>

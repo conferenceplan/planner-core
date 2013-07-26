@@ -1,5 +1,5 @@
 <div>
-    <!-- %= error_messages_for :registrationDetail % -->
+    <%= render "shared/error_messages", :target => @registrationDetail %>
     <%= form_for @registrationDetail, :url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| %>
     <div class='line'>
         Registration Number: <%= f.text_field :registration_number %>

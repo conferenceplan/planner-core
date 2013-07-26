@@ -1,4 +1,4 @@
-<!-- %= error_messages_for :excludedItemsSurveyMap % -->
+<%= render "shared/error_messages", :target => @excludedItemsSurveyMap %>
 <%= form_for @excludedItemsSurveyMap,:url => @urlstr, :html => {:class => "layerform", :id => "layerform", :'accept-charset' => 'UTF-8'} do |f| -%>
 <div class='container_12'> 
     <div class='grid_6'> 
