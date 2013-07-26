@@ -1,35 +1,13 @@
-<%= javascript_include_tag 'jquery-1.9.1.min' %>
-<%= javascript_include_tag 'bootstrap/js/bootstrap' %>
-<%= javascript_include_tag 'jquery-ui-1.9.2.custom.min' %>
-<%= javascript_include_tag 'jquery-migrate-1.1.1' %>
-<%= javascript_include_tag 'grid.locale-en' if params[:action] == 'index' %>
-<%= javascript_include_tag 'jquery.jqGrid.src' if params[:action] == 'index' %>
 
-<%= javascript_include_tag 'jquery.timers-1.2' %>
-<%= javascript_include_tag 'jquery.freeow' %>
-<%= javascript_include_tag 'jquery.form' %>
-<!-- %= javascript_include_tag 'jrails' % -->
-<%= javascript_include_tag 'jquery.timeentry.min' %>
-
-<%= javascript_include_tag 'backbone/underscore-min' %>
-<%= javascript_include_tag 'backbone/backbone' %>
-<%= javascript_include_tag 'backbone/extensions/backbone-relational' %>
-<%= javascript_include_tag 'backbone/extensions/backbone.paginator.js' %>
-<%= javascript_include_tag 'backgrid/backgrid' %>
-<%= javascript_include_tag 'moment/moment' %>
-<%= javascript_include_tag 'backgrid/extensions/moment-cell/backgrid-moment-cell' %>
-<%= javascript_include_tag 'backgrid/extensions/text-cell/backgrid-text-cell' %>
-
-<%= javascript_include_tag 'application'%>
-<%= javascript_include_tag 'planIt' if params[:action] == 'index' %>
-        <% if protect_against_forgery? %>
-            <script type='text/javascript'>
-            //<![CDATA[
-            window._auth_token_name = "#{request_forgery_protection_token}";
-            window._auth_token = "#{form_authenticity_token}";
-            //]]>
-          </script>
-        <% end %>
+<% if protect_against_forgery? %>
+    <script type='text/javascript'>
+        //<![CDATA[
+        window._auth_token_name = "#{request_forgery_protection_token}";
+        window._auth_token = "#{form_authenticity_token}";
+        //]]>
+    </script>
+<% end %>
+        
 <% if current_user %>
 <script type='text/javascript'>
 var message_me = "<%= current_user.preference != nil ? current_user.preference : false %>" === 'true';
