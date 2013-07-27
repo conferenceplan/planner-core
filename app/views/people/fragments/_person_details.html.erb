@@ -5,7 +5,7 @@
   <div class='line'>Mailing Number: <%= @person.mailing_number %></div>
   <div class='line'>Acceptance Status: <%= @person.acceptance_status.name if @person.acceptance_status%></div>
   <div class='line'>Invitation Category: <%= @person.invitation_category.name if @person.invitation_category%></div>
-  <div class='line'>Survey?: <%if @person.hasSurvey? %>
+  <div class='line'>Survey?: <%if SurveyService.personAnsweredSurvey( @person, 'partsurvey') %>
      Y
 	 <% else %>
 	 N

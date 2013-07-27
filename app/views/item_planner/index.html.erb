@@ -3,8 +3,8 @@
 <%= javascript_include_tag 'planner/itemwidget' %>
 <%= javascript_include_tag 'planner/itemplanner' %>
 <% end %>
-<div class='container_12'>
-    <div class="grid_3">
+<div class='row-fluid'>
+    <div class="span3">
         <span id="participant-name-search"><input type='text' id='participant-name-search-text'>
             </input></span>
         <div class="spacer">
@@ -58,7 +58,7 @@
             </div>
         </div>
     </div>
-    <div id="item-widget" class="ui-widget ui-widget-content ui-corner-all grid_5">
+    <div id="item-widget" class="ui-widget ui-widget-content ui-corner-all span6">
         <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
             Current Item
         </div>
@@ -91,7 +91,7 @@
         <div id="item-update-messages">
         </div>
     </div>
-    <div class="grid_3">
+    <div class="span3">
         <span id="item-name-search"><input type='text' id='item-name-search-text'>
             </input></span>
         <div class="spacer">

@@ -2,32 +2,24 @@
   <%= javascript_include_tag 'survey_respondents/review' %>
 <% end %>
 <div id="respondent_id" style="display : none"></div>
-<div class='container_12'>
-<div class="grid_10">
-    <table id="respondents">
-    </table>
-    <div id="pager">
+
+<div class='row-fluid'>
+    <div class="span10">
+        <table id="respondents"></table>
+        <div id="pager"></div>
     </div>
 </div>
-<div class="clear"></div>
-<div class="grid_6">
-    <div id="survey-results" class="ui-widget ui-widget-content ui-corner-all">
-        <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
-            Participant Survey
+<div class='row-fluid'>
+    <div class="span6">
+        <div id="survey-results" class="ui-widget ui-widget-content ui-corner-all">
+            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">Participant Survey</div>
+            <div id="survey" class="ui-widget-content"></div>
         </div>
-    	<div id="survey" class="ui-widget-content">
-		</div>
     </div>
-</div>
-</div>
-<div class="grid_5">
-    <div id="participant-info" class="ui-widget ui-widget-content ui-corner-all">
-        <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
-            Participant Info
+    <div class="span6">
+        <div id="participant-info" class="ui-widget ui-widget-content ui-corner-all">
+            <div class="ui-widget-header ui-corner-top ui-helper-clearfix">Participant Info</div>
+            <div id="participant" class="ui-widget-content"></div>
         </div>
-    	<div id="participant" class="ui-widget-content">
-		</div>
     </div>
 </div>
-</div>
-<div class="clear"></div>

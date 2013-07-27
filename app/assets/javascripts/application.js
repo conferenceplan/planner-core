@@ -12,7 +12,7 @@
 //= require grid.locale-en
 //= require jquery.jqGrid.min
 
-//= require bootstrap/js/bootstrap
+//= require bootstrap
 
 //= require backbone/underscore-min
 //= require backbone/backbone

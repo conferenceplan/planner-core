@@ -6,22 +6,20 @@
 <% content_for :jsheader do %>
   <%= javascript_include_tag 'participants/participants' %>
 <% end %>
-<div class='container_12'>
+<div class='row-fluid'>
 <div id="participant_id" style="display : none"></div>
-<div class="grid_10">
+<div class="span12">
     <table id="participants">
     </table>
     <div id="pager">
     </div>
 </div>
 </div>
-<div class='container_12'>
-<div class="clear"></div>
-<div class="grid_2">Current Participant:</div><div id="participant_name" class="grid_8"></div>
-<div class="clear"></div>
+<div class='row-fluid'>
+<div class="span2">Current Participant:</div><div id="participant_name" class="span10"></div>
 </div>
-<div class='container_12'>
-<div class="grid_6">
+<div class='row-fluid'>
+<div class="span6">
     <div id="particpanttabs" style="font-size:11px;">
         <ul>
             <li>
@@ -67,14 +65,14 @@
 		</div>
     </div>
 </div>
-<div id="tag-cloud" class="ui-widget ui-widget-content ui-corner-all grid_3">
+<div id="tag-cloud" class="ui-widget ui-widget-content ui-corner-all span3">
         <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
             All Participant Tags
         </div>
         <div id="participant-tag-cloud">
         </div>
 </div>
-<div id="tag-facets" class="ui-widget ui-widget-content ui-corner-all grid_2">
+<div id="tag-facets" class="ui-widget ui-widget-content ui-corner-all span3">
         <div class="ui-widget-header ui-corner-top ui-helper-clearfix">
             Tag Filter(s)
         </div>
