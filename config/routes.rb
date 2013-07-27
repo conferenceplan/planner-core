@@ -228,6 +228,7 @@ PlannerRc1::Application.routes.draw do
 
   match 'mailings/list', :controller => 'admin/mailings', :action => 'list', :method => 'get'
   match 'mailings/del', :controller => 'admin/mailings', :action => 'del', :method => 'delete'
+  match 'mailings/previewEmail', :controller => 'admin/mailings', :action => 'previewEmail', :method => 'get'
   resources :mailings, :controller => 'admin/mailings'
 
   namespace :reports do
