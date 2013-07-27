@@ -4,12 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= content_for?(:title) ? yield(:title) : "Rails Bootstrap" %></title>
-    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Rails Bootstrap" %>">
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Convention Planner Application" %>">
+    <title><%= @page_title or 'Convention Planner' %></title>
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
-    <title><%= @page_title or 'Convention Planner' %></title>
     <%=render 'layouts/common_js' %>
     <%= yield(:cssheader) if content_for?(:cssheader) %>
     <%= yield(:jsheader) if content_for?(:jsheader) %>
@@ -32,7 +31,7 @@
         <div class="content">
            <div class="row-fluid">
             <div class="span12">
-              <%= render 'layouts/messages' %>
+              <%= render partial: 'layouts/messages', flash: flash %>
               <%= content_for?(:content) ? yield(:content) : yield %>
             </div>
           </div>
