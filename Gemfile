@@ -9,6 +9,7 @@ gem 'acts-as-taggable-on'
 gem 'authlogic'
 gem 'bluecloth'
 gem 'bootstrap-sass'
+gem 'bootswatch-rails'
 gem 'cells'
 gem "declarative_authorization" 
 gem "daemons"

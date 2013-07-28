@@ -1,4 +1,10 @@
 
+@import 'bootswatch/flatly/variables';
+
 @import "bootstrap";
-body { padding-top: 100px; } // For the navigation heading...
+body { padding-top: 150px; } // For the navigation heading...
 @import "bootstrap-responsive";
+
+@import "bootswatch/flatly/bootswatch";
+
+//@import "base";

@@ -10,12 +10,13 @@
  *
  *= require_tree .
  * 
- *= require redmond/jquery-ui
- *= require redmond/jquery.ui.theme
+ *= require custom-theme/jquery-ui-1.9.2.custom 
  *= require ui.jqgrid
+ *= require jqGrid/jqGrid.overrides
  *= require jqModal
  *= require jquery.timeentry
  *= require planner
+ * 
  * 
  *= require_self
  */

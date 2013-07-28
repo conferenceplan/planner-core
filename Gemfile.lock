@@ -43,6 +43,8 @@ GEM
     bluecloth (2.2.0)
     bootstrap-sass (2.3.2.1)
       sass (~> 3.2)
+    bootswatch-rails (0.5.0)
+      railties (>= 3.1)
     builder (3.0.4)
     cells (3.8.8)
       actionpack (>= 3.0)
@@ -140,6 +142,7 @@ DEPENDENCIES
   authlogic
   bluecloth
   bootstrap-sass
+  bootswatch-rails
   cells
   coffee-rails (~> 3.2.1)
   daemons
