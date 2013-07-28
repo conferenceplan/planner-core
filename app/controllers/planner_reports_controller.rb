@@ -411,8 +411,10 @@ class PlannerReportsController < PlannerController
       @displayIds = params[:prog_nbr] ? true : false
       @names_only = params[:names_only] ? true : false
       @names_city_only = params[:names_and_city] ? true : false
-
-      @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], (params[:incl_rsvd]? [PersonItemRole['Reserved'].id] : nil), (params[:sched_only] ? true : false)
+      @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], 
+                            (params[:incl_rsvd]? [PersonItemRole['Reserved'].id] : nil), 
+                            (params[:sched_only] ? true : false), 
+                            (params[:visible_only] ? true : false)
       
       if params[:csv]
         csv_out(generatePanelistsWithPanelsArray,'panelists_' + Time.now.strftime("%m-%d-%Y") + '.csv') if !@names_only && !@names_city_only

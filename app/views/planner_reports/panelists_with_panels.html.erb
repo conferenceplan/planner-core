@@ -8,6 +8,8 @@
    <%= label_tag :incl_rsvd, "Include reserve panelists? "%><br /><br />
    <%= check_box_tag :sched_only, '1', params[:sched_only] %>
    <%= label_tag :sched_only, "Include scheduled panelists only? "%><br /><br />
+   <%= check_box_tag :visible_only, '1', params[:visible_only] %>
+   <%= label_tag :visible_only, "Include for print only? "%><br /><br />
    <%= check_box_tag :names_only, '1', params[:names_only] %>
    <%= label_tag :names_only, "Include names only? "%><br /><br />
    <%= check_box_tag :names_and_city, '1', params[:names_and_city] %>
