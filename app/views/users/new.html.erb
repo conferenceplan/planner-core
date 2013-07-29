@@ -1,5 +1,5 @@
-<div class='container_12'>
-<div class="prefix_2 grid_9">
+<div class='row-fluid'>
+<div class="offset3 span9">
 <h1>Register</h1>
 <%= form_for @user, :url => account_path, do |f| %>
   <%= render :partial => "form", :object => f, :locals => {:button => "Register"} %>

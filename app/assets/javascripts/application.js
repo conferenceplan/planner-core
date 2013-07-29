@@ -1,6 +1,8 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
+//= require bootstrap
+
 //= require jquery-1.9.1.min
 //= require jquery-ui-1.9.2.custom.min
 //= require jquery_ujs
@@ -12,7 +14,6 @@
 //= require grid.locale-en
 //= require jquery.jqGrid.min
 
-//= require bootstrap
 
 //= require backbone/underscore-min
 //= require backbone/backbone

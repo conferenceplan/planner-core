@@ -1,8 +1,9 @@
+<ul class="nav">
+<a class="brand" href="/"><%= @page_title or 'Convention Planner' %></a>
 <% if current_user %>
-<ul class="nav">    
 <%= menu %>
 <li><a id="alert-me-toggle" href="#">Stop Messages</a></li>
 <li><%= link_to "Edit Profile", edit_user_path(:current) %></li>
 <li><%= link_to "Logout", logout_path %></li>
-</ul>
 <% end %>
+</ul>
