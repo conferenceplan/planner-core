@@ -1,0 +1,2 @@
+module Pages::SurveysDashHelper
+end

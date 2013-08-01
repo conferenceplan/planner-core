@@ -1,0 +1,14 @@
+
+<div class="row-fluid planner-top-nav">
+    <%= render_cell :nav_summary, :display, :width => 3, :target => "pages/participants_dash", :title => "Participants", :colour => "red", :icon => "user" %>
+    <%= render_cell :nav_summary, :display, :width => 3, :target => "programme_items", :title => "Program Items", :colour => "blue", :src => "item", :icon => "tasks" %>
+    <%= render_cell :nav_summary, :display, :width => 3, :target => "program_planner", :title => "Schedule", :colour => "blue", :icon => "calendar" %>
+    <%= render_cell :nav_summary, :display, :width => 3, :target => "survey_reports", :title => "Surveys", :colour => "turquiose", :icon => "pencil" %>
+</div>
+<div class="row-fluid planner-top-nav">
+    <%= render_cell :nav_summary, :display, :width => 3, :target => "mailings", :title => "Communications", :colour => "blue", :icon => "envelope" %>
+    <%= render_cell :nav_summary, :display, :width => 3, :target => "planner_reports", :title => "Reports", :colour => "blue", :icon => "bar-chart" %>
+    <%= render_cell :nav_summary, :display, :width => 2, :target => "equipment_types", :title => "Operations", :colour => "orange", :icon => "microphone" %>
+    <%= render_cell :nav_summary, :display, :width => 2, :target => "publications", :title => "Publications", :colour => "blue", :icon => "print" %>
+    <%= render_cell :nav_summary, :display, :width => 2, :target => "usersadmin", :title => "Admin", :colour => "green", :icon => "sitemap" %>
+</div>

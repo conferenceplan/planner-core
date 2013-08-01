@@ -1,6 +1,21 @@
 PlannerRc1::Application.routes.draw do
+
+  namespace :pages do
+    resources :home_dash
+    resources :participants_dash
+    resources :logistics_dash
+    resources :admin_dash
+    resources :publications_dash
+    resources :reports_dash
+    resources :mailings_dash
+    resources :surveys_dash
+    resources :schedule_dash
+    resources :items_dash
+  end
+  
   # Default routes 
-  root :to => 'user_sessions#new'
+  # root :to => 'user_sessions#new'
+  root :to => 'pages/home_dash#index'
   
   # The top level menu - TODO - change in redesign
   resources :menus

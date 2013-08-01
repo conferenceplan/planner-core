@@ -1,8 +1,7 @@
-
-@import 'bootswatch/flatly/variables';
+@import 'bootswatch/spacelab/variables';
 
 @import "bootstrap";
-body { padding-top: 150px; } // For the navigation heading...
+body { padding-top: 4em; } // For the navigation heading...
 .footer {
     background-color: #F5F5F5;
     border-top: 1px solid #E5E5E5;
@@ -10,8 +9,13 @@ body { padding-top: 150px; } // For the navigation heading...
     padding: 30px 0;
     text-align: center;
 }
+
+
 @import "bootstrap-responsive";
 
-@import "bootswatch/flatly/bootswatch";
+@import "bootswatch/spacelab/bootswatch";
+
+
+
 
 //@import "base";

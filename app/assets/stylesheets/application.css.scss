@@ -8,16 +8,111 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *= require_tree .
+ *  require_tree .
+ *
+ *= require bootstrap_and_overrides 
+ *  
+ *= require font-awesome
  * 
  *= require custom-theme/jquery-ui-1.9.2.custom 
  *= require ui.jqgrid
  *= require jqGrid/jqGrid.overrides
  *= require jqModal
  *= require jquery.timeentry
+ *= require jquery.easy-pie-chart
  *= require planner
  * 
  * 
  *= require_self
  */
 
+$red : #D53F40;
+$blue : #6FB3E0;
+$green : #9ABC32;
+$purple : #3366CC;
+$orange : #FF9900;
+$turquiose : #009999;
+
+
+.nav-box-red {
+  background-color : $red;
+  background-image: none;
+}
+
+.nav-box-blue {
+  background-color : $blue;
+  background-image: none;
+}
+
+.nav-box-green {
+  background-color : $green;
+  background-image: none;
+}
+
+.nav-box-purple {
+  background-color : $purple;
+  background-image: none;
+}
+
+.nav-box-turquiose {
+  background-color : $turquiose;
+  background-image: none;
+}
+
+.nav-box-orange {
+  background-color : $orange;
+  background-image: none;
+}
+
+.planner-top-nav [class*="span"]:first-child {
+  margin-top : 2px;
+  min-height : 10em;
+}
+
+.planner-top-nav a + [class*="span"] {
+  margin-left : 2px;
+  margin-top : 2px;
+  min-height : 10em;
+}
+
+.planner-top-nav .span3 {
+  width : 24.7%;
+}
+
+.planner-top-nav .span2 {
+  width : 16.4%;
+}
+
+.nav-box {
+  text-align : left;
+  border-radius : 0 0 0 0;
+}
+
+.nav-box-content {
+  font : {
+    size : 80%;
+  }
+}
+
+.chart-label {
+    text-align: center;
+}
+
+.chart-row {
+  // border: 1px dashed;
+  padding: 10px;
+  display: table;
+  margin: auto;
+}
+
+.chart-row .chart {
+    display: inline-block;
+}
+
+.chart .chart-label,
+.chart [class*="percentage"] {
+}
+
+.chart {
+  border: 1px solid;
+}

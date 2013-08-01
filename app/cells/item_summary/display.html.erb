@@ -1,0 +1,39 @@
+<script type="text/javascript">
+$(function() {
+    $('.percentage').easyPieChart({
+        lineWidth : 10,
+        size : 70,
+        scaleColor: false,
+        lineCap: 'butt',
+        trackColor: '#666',
+        barColor: function(percent) {
+                        percent /= 100;
+                        return "rgb(" + Math.round(255 * (1-percent)) + ", " + Math.round(255 * percent) + ", 0)";
+                    },
+    });
+    $('.percentage-inv').easyPieChart({
+        lineWidth : 10,
+        size : 70,
+        scaleColor: false,
+        lineCap: 'butt',
+        trackColor: '#666',
+        barColor: function(percent) {
+                        percent /= 100;
+                        return "rgb(" + Math.round(255 * percent) + ", " + Math.round(255 * (1-percent)) + ", 0)";
+                    },
+    });
+});
+</script>
+
+
+<div class='chart-row'>
+<div class="chart">
+<div class="percentage" data-percent="<%= (@nbrOfScheduledItems.to_f / @nbrOfItems.to_f) * 100 %>"><%= ((@nbrOfScheduledItems.to_f / @nbrOfItems.to_f) * 100).round 1 %>%</div>
+<div class="chart-label">Scheduled</div>
+</div>
+<div class="chart">
+<div class="percentage-inv" data-percent="<%= (@nbrOfConflicts.to_f / @nbrOfItems.to_f) * 100 %>"><%= ((@nbrOfConflicts.to_f / @nbrOfItems.to_f) * 100).round 1 %>%</div>
+<div class="chart-label">Conflicts</div>
+</div>
+</div>
+<div><%= @nbrOfItems %> Items</div>

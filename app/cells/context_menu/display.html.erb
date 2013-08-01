@@ -1,0 +1,9 @@
+<div class="navbar">
+    <div class="navbar-inner">
+        <ul class="nav">
+            <% @menu.each do |k, v| %>
+                <li><a href="<%= v %>"><%= k %></a></li>
+            <% end %>
+        </ul>
+    </div>
+</div>

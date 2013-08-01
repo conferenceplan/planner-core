@@ -1,0 +1,2 @@
+module Pages::LogisticsDashHelper
+end

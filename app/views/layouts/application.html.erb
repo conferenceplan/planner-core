@@ -6,10 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Convention Planner Application" %>">
     <title><%= @page_title or 'Convention Planner' %></title>
+    
     <%= stylesheet_link_tag "application", :media => "all" %>
+    <%= stylesheet_link_tag params[:controller] %>
+    
     <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag params[:controller] %>
+    
     <%= csrf_meta_tags %>
+    
     <%=render 'layouts/common_js' %>
+    
     <%= yield(:cssheader) if content_for?(:cssheader) %>
     <%= yield(:jsheader) if content_for?(:jsheader) %>
     
@@ -19,23 +26,13 @@
   </head>
   <body>
     <!-- %=render 'layouts/common_page_top' % -->
-    <header class="navbar navbar-fixed-top">
-      <nav class="navbar-inner">
-        <div class="container">
           <%= render 'layouts/navigation' %>
-        </div>
-      </nav>
-    </header>
     <main role="main">
       <div class="container-fluid">
-        <div class="content">
            <div class="row-fluid">
-            <div class="span12">
               <%= render partial: 'layouts/messages', flash: flash %>
               <%= content_for?(:content) ? yield(:content) : yield %>
             </div>
-          </div>
-        </div>
       </div>
       <footer class="footer">
       <div class="container-fluid">

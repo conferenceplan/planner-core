@@ -1,4 +1,7 @@
 
+input[type="text"] {
+    width : 8em;
+}
 
 #pending-item-participants div.ui-widget-contents,
 #item-participants div.ui-widget-contents {

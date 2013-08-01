@@ -1,9 +1,12 @@
-<ul class="nav">
-<a class="brand" href="/"><%= @page_title or 'Convention Planner' %></a>
-<% if current_user %>
-<%= menu %>
-<li><a id="alert-me-toggle" href="#">Stop Messages</a></li>
-<li><%= link_to "Edit Profile", edit_user_path(:current) %></li>
-<li><%= link_to "Logout", logout_path %></li>
-<% end %>
-</ul>
+<header class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar-inner">
+        <a class="brand" href="/"><%= @page_title or 'Convention Planner' %></a>
+        <ul class="nav pull-right">
+            <% if current_user %>
+                <li><a id="alert-me-toggle" href="#">Stop Messages</a></li>
+                <li><%= link_to "Edit Profile", edit_user_path(:current) %></li>
+                <li><%= link_to "Logout", logout_path %></li>
+            <% end %>
+        </ul>
+    </nav>
+</header>

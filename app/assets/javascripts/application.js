@@ -1,19 +1,20 @@
 // Place your application-specific JavaScript functions and classes here
 // This file is automatically included by javascript_include_tag :defaults
 
-//= require bootstrap
-
 //= require jquery-1.9.1.min
-//= require jquery-ui-1.9.2.custom.min
 //= require jquery_ujs
 //= require jquery-migrate-1.1.1
+
+//= require bootstrap
+
+//= require jquery-ui-1.9.2.custom.min
 //= require jquery.timers-1.2
 //= require jquery.freeow
 //= require jquery.form
 //= require jquery.timeentry.min
 //= require grid.locale-en
 //= require jquery.jqGrid.min
-
+//= require jquery.easy-pie-chart
 
 //= require backbone/underscore-min
 //= require backbone/backbone
@@ -25,11 +26,3 @@
 //= require backgrid/extensions/text-cell/backgrid-text-cell
 
 //= require planIt
-
-$(document).ready(function(){
-		$('li.menutop').hover(
-			function() { $('ul', this).css('visibility', 'visible'); },
-			function() { $('ul', this).css('visibility', 'hidden'); });
-			
-});
-	
