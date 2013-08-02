@@ -2,6 +2,7 @@ PlannerRc1::Application.routes.draw do
 
   namespace :pages do
     resources :home_dash
+    match "participants_dash/:cellname" => "participants_dash#index"
     resources :participants_dash
     resources :logistics_dash
     resources :admin_dash
@@ -46,6 +47,8 @@ PlannerRc1::Application.routes.draw do
   match 'participants/updateConflictsFromSurvey',:controller => 'people', :action => 'updateConflictsFromSurvey', :method => 'post'
   match 'participants/clearConflictsFromSurvey',:controller => 'people', :action => 'clearConflictsFromSurvey'
   match 'participants/doClearConflictsFromSurvey',:controller => 'people', :action => 'doClearConflictsFromSurvey', :method => 'post'
+  match 'participants/getList',:controller => 'people', :action => 'getList', :method => 'post'
+  match 'participants/count', :controller => 'people', :action => 'count', :method => 'get'
 # 
   # resources :people, :as => "participants" do
   match 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'

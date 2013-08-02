@@ -21,7 +21,7 @@
 
 .ui-jqgrid .ui-search-toolbar input[type="text"]{
     font-size: 12px;
-    height: 15px;
+    /*height: 15px;*/
     border: 1px solid #CCCCCC;
     border-radius: 4px;                
 }                       
@@ -67,7 +67,7 @@
 }
 .ui-jqgrid tr.ui-row-ltr td {
     border-bottom: 1px solid #DDDDDD;
-		border-right:none;
+    border-right: 1px solid #DDDDDD;
 		padding:8px;
 }
 

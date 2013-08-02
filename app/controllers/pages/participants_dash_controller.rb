@@ -1,4 +1,8 @@
 class Pages::ParticipantsDashController < ApplicationController
+
   def index
-  end
+  
+    @cellname = params[:cellname]
+  
+  end  
 end

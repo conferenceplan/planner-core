@@ -82,12 +82,7 @@ class Person < ActiveRecord::Base
   has_one :peoplesource, :dependent => :delete
   has_one :datasource, :through => :peoplesource
 
-  def simple_json()
-    
-    return res
-  end
-  
-  def as_json(options={})
+  def as_jsonDD(options={})
     if options[:include_pseudonym]
       res = super(:include => :pseudonym)
     elsif options[:terse]

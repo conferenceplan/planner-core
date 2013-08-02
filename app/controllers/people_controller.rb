@@ -52,7 +52,7 @@ class PeopleController < PlannerController
     end
     
     @person = Person.new(params[:person])
-    @person.lock_version = 0
+    @person.lock_version = 0 # TODO - this should not be done???
     datasourcetmp = Datasource.find_by_name("Application")
     @person.datasource = datasourcetmp
     if (@person.save)
@@ -101,6 +101,46 @@ class PeopleController < PlannerController
       format.html
       format.js {render :layout => false}
     end
+  end
+  
+  def count
+    rows = params[:per_page]
+    page = params[:page] ? params[:page].to_i : 0
+    
+    idx = params[:sidx]
+    order = params[:sord]
+    context = params[:context]
+    nameSearch = params[:namesearch]
+    mailing_id = params[:mailing_id]
+    scheduled = params[:scheduled]
+    
+    nbr = PeopleService.countPeople
+
+    render :json => nbr
+  end
+  
+  respond_to :json
+  def getList
+    rows = params[:rows] ? params[:rows] : 15
+    @page = params[:page] ? params[:page].to_i : 1
+    
+    idx = params[:sidx]
+    order = params[:sord]
+    context = params[:context]
+    nameSearch = params[:namesearch]
+    mailing_id = params[:mailing_id]
+    scheduled = params[:scheduled]
+    filters = params[:filters]
+    
+    @count = PeopleService.countPeople filters
+    if rows.to_i > 0
+      @nbr_pages = (@count / rows.to_i).floor
+      @nbr_pages += 1 if @count % rows.to_i > 0
+    else
+      @nbr_pages = 1
+    end
+    
+    @people = PeopleService.findPeople rows, @page, idx, order, filters
   end
 
   #

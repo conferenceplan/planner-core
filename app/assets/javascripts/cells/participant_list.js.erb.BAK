@@ -1,0 +1,124 @@
+//<![CDATA[
+jQuery(document).ready(function() {
+    //Patch for template variables in _underscore top stop class with Rails variables in the file
+    // TODO - move to a global place
+    _.templateSettings = {
+        interpolate : /\{\{\=(.+?)\}\}/g,
+        evaluate : /\{\{(.+?)\}\}/g
+    };
+    
+    // -----
+    //
+    Participant = Backbone.Model.extend({});
+    
+    ParticipantCollection = Backbone.PageableCollection.extend({
+        model: Participant,
+        url: '/participants/getList.json', // ?????
+        state: {
+            firstPage: 1,
+            pageSize: 15,
+            totalRecords: 200, //????
+        },
+        queryParams : {
+            sidx: 'people.last_name',
+            sord: 'asc'
+        }
+    });
+
+    // -----
+    //
+    var columns = [
+    {
+        name : 'first_name',
+        label : 'First Name',
+        editable : false,
+        cell: 'string',
+        <!-- headerCell: SelectAllHeaderCell -->
+    }, {
+        name : 'last_name',
+        label : 'Last Name',
+        editable : false,
+        cell: 'string',
+    }, {
+        name : 'suffix',
+        label : 'Suffix',
+        editable : false,
+        sortable: false,
+        cell: 'string',
+    }, {
+        name : 'pseudonym', //???? TODO
+        label : 'Publicaton Name',
+        editable : false,
+        sortable: false,
+        cell : 'string',
+        formatter: _.extend({}, Backgrid.CellFormatter.prototype, {
+            fromRaw: function (rawValue) {
+                var res = "";
+                if (rawValue) {
+                    res = rawValue.first_name + " " + rawValue.last_name;
+                };
+                return res; 
+            },
+            render : function () {
+            }
+        })
+    }, {
+        name : 'invitation_category',
+        label : 'Invite Category',
+        editable : false,
+        cell: 'string',
+    }, {
+        name : 'invitestatus',
+        label : 'Invite Status',
+        editable : false,
+        cell: 'string',
+    }, {
+        name : 'acceptance_status',
+        label : 'Acceptance',
+        editable : false,
+        cell: 'string',
+    }, {
+        name : 'has_survey', //???? TODO
+        label : 'Survey',
+        editable : false,
+        sortable: false,
+        cell: 'string',
+    }
+    ];
+    
+    // -----
+    //
+    jQuery.ajax('/participants/count', {
+        success : function(data, textStatus, jqXHR) {
+            var participants = new ParticipantCollection([], {
+                state: {
+                    firstPage: 1,
+                    pageSize: 15,
+                    totalRecords: data
+                }
+            });
+
+            var grid = new Backgrid.Grid({
+                columns: columns,
+                collection: participants 
+            });
+
+            var gridplace = $('#participants-grid');
+            var controlplace = $('#participants-control');
+            
+            // Initialize the paginator
+            var paginator = new Backgrid.Extension.Paginator({
+                collection: participants
+            });
+            
+            gridplace.append(paginator.render().$el);
+            gridplace.append(grid.render().$el);
+            
+            participants.fetch({ reset : true });
+        },
+    });
+    
+    
+            
+}); 
+//]]>

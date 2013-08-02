@@ -15,7 +15,7 @@
  *= require font-awesome
  * 
  *= require custom-theme/jquery-ui-1.9.2.custom 
- *= require ui.jqgrid
+ *= require jqGrid/ui.jqgrid
  *= require jqGrid/jqGrid.overrides
  *= require jqModal
  *= require jquery.timeentry
@@ -33,7 +33,15 @@ $purple : #3366CC;
 $orange : #FF9900;
 $turquiose : #009999;
 
-
+// .ui-jqgrid .ui-search-toolbar input[type="text"] {
+    // border: 1px solid #CCCCCC;
+    // border-radius: 4px 4px 4px 4px;
+    // font-size: 12px;
+// }
+.ui-jqgrid .ui-jqgrid-htable th div {
+    padding-bottom: 12px;
+    padding-top: 4px;
+}
 .nav-box-red {
   background-color : $red;
   background-image: none;

@@ -1,4 +1,13 @@
+<div class="row-fluid">
 <%= render_cell :context_menu, :display, :menu => {
-    "review surveys" => '/survey_respondents/reviews'
+    "participants" => '/pages/participants_dash/participant_list',
+    "review surveys" => '/pages/participants_dash/survey_review'
 } %>
-
+</div>
+<div class="row-fluid">
+<% if @cellname %>
+    <%= render_cell "participants/#{@cellname}", :display %>
+<% else %>
+    <%= render_cell "participants/participant_dash", :display %>
+<% end %>
+</div>
