@@ -1,0 +1,175 @@
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    
+    RegistrationDetail = Backbone.Model.extend({
+        schema : {
+            registration_number : { type : 'Number', title : 'Registration Number' },
+            registration_type : { type : 'Text', title : "Registration Type" },
+            registered : { type : 'Checkbox', title : 'Registered' }
+        },
+        urlRoot: '/registrationDetails'
+    });
+
+    //
+    //
+    //
+    MyModal = Backbone.View.extend({
+        tagName: "div",
+        className: "modal hide fade",
+        events: {
+            "submit": "submit",
+            "hidden": "close",
+            // "keydown textarea": "clearError",
+            // "hide": "saveOrCancel",
+            // "shown": "focus"
+        },
+        
+        initialize : function() {
+            this.template = _.template($('#registration-edit-template').html())
+        },
+
+        modalOptions: {
+          backdrop: false,
+        },
+        
+        render: function () {
+            this.$el.html($(this.template({
+                title : this.options.title
+                // column: this.column,
+                // cols: this.cols,
+                // rows: this.rows,
+                // content: this.formatter.fromRaw(this.model.get(this.column.get("name")))
+            })));
+
+            this.delegateEvents();
+            
+            this.form = new Backbone.Form({
+                    model: this.model
+                }).render();
+            
+            this.$el.find(".modal-body").append(this.form.el);
+            
+            this.$el.modal(this.modalOptions);
+
+            return this;
+        },
+        
+        submit : function(e) {
+            if (e && e.type == "submit") {
+                e.preventDefault();
+                e.stopPropagation();
+            };
+            
+            // gather the data and update the underlying model etc.
+            var errors = this.form.commit(); // To save the values from the form back into the model
+            // TODO - check for validation errors (client side???)
+            
+            this.model.save(null, { 
+                wait: true,
+                error : function() {
+                    alertMessage("Error saving the instance");
+                    // TODO - can we prevent the update propagation and ensure and revert the data?
+                }
+            }); // save the model to the server
+            
+            if (e.type != "hide") this.$el.modal("hide");
+        },
+        
+        close: function (e) {
+            this.remove();
+            this.unbind();
+            this.views = [];  
+        },
+    });
+    
+    RegistrationView = Backbone.View.extend({
+        el : '#registration-view',
+        
+        template : _.template($('#registration-view-template').html()),
+        
+        render : function() {
+            $(this.el).html( this.template(_.extend({
+                hasId : this.model.has('id')
+            }, this.model.toJSON()) ) );
+            return this;
+        },
+        
+        events : {
+            "click .edit-registration-button" : "editRegistration",
+            "click .new-registration-button" : "newRegistration"
+        },
+        
+        editRegistration : function() {
+            // Put up a modal dialog to edit the reg details
+            mdl = new MyModal({
+                model : this.model,
+                title : "Edit Registration Details"
+            });
+            mdl.render();
+        },
+        
+        newRegistration : function() {
+            // alert(this.options.person_id);
+            this.model.set('person_id',this.options.person_id);
+            mdl = new MyModal({
+                model : this.model,
+                title : "Add Registration Details"
+            });
+            mdl.render();
+        },
+
+        initialize : function() {
+            eventAggregator.on( 'CloseView', this.close, this );
+            
+            this.listenTo(this.model, 'change', this.render);
+        },
+        
+        remove : function() {
+            $(this.el).empty();
+            return this;
+        },
+        
+        close: function() {
+            this.stopListening();
+            this.undelegateEvents();
+
+            // Unregister for event to stop memory leak
+            eventAggregator.off( 'CloseView', this.close, this );
+            this.remove();
+            this.unbind();
+            this.views = [];   // Clear the view array ??????
+        }
+    });
+    
+    // var app = new AppView(); //{evAggregator : eventAggregator});
+    Backbone.history.start(); // TODO - this needs to be moved
+});
+
+    // TODO - prefer to have a global event aggregator. Move out of here.
+    var eventAggregator = _.extend({}, Backbone.Events); // Event aggregator for the page
+    
+    // create model
+    // attach to view
+    // render view
+    // var regView = null;
+    function showRegDetails(id) {
+        eventAggregator.trigger('CloseView'); // Trigger a global event to close the views i.e. get rid of the old stuff
+        
+        // Get registration details
+        var regDetail = new RegistrationDetail();
+        regDetail.fetch({
+                url : "/participants/" + id + "/registrationDetails.json",
+                error : function(model, response) {
+                    alertMessage("Error communicating with backend");
+                },
+                success : function(model) { // TODO - we need a way to get rid of the old view or to just change it's model and re-render
+                    var regView = new RegistrationView({
+                        person_id : id,
+                        model : model
+                    });
+                    regView.render();
+                }
+        });
+    };
+
+</script>

@@ -1,0 +1,36 @@
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    jQuery("#participants").cpParticipantTable({
+        caption : "<%= @caption %>",
+        selectNotifyMethod : <%= @selectNotifyMethod %>,
+        root_url : "<%= @root_url %>",
+        baseUrl : "<%= @baseUrl %>",
+        first_name : <%= @first_name %>,
+        last_name : <%= @last_name %>,
+        suffix : <%= @suffix %>,
+        
+        pub_first_name : <%= @pub_first_name %>,
+        pub_last_name : <%= @pub_last_name %>,
+        pub_suffix : <%= @pub_suffix %>,
+        
+        invite_status : <%= @invite_status%>,
+        invite_category : <%= @invite_category%>,
+        acceptance_status : <%= @acceptance_status%>,
+        has_survey : <%= @has_survey%>,
+        
+        view : <%= @view %>,
+        search : <%= @search %>,
+        del : <%= @del %>,
+        edit : <%= @edit %>,
+        add : <%= @add %>,
+        refresh : <%= @refresh %>,
+        pager : "<%= @pager %>",
+        
+        extraClause : "<%= @extraClause %>",
+        
+        onlySurveyRespondents : <%= @onlySurveyRespondents %>
+    });
+});
+
+</script>

@@ -6,8 +6,8 @@ module PeopleService
   #
   #
   #
-  def self.countPeople(filters = nil, nameSearch=nil, mailing_id=nil, scheduled=false, context=nil, tags = nil)
-    args = genArgsForSql(nameSearch, mailing_id, scheduled, filters)
+  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, mailing_id=nil, scheduled=false, context=nil, tags = nil)
+    args = genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
     tagquery = genTagSql(context, tags)
     
     if tagquery.empty?
@@ -20,8 +20,8 @@ module PeopleService
   #
   #
   #
-  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, nameSearch=nil, mailing_id=nil, scheduled=false,  context=nil, tags = nil)
-    args = genArgsForSql(nameSearch, mailing_id, scheduled, filters)
+  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, mailing_id=nil, scheduled=false,  context=nil, tags = nil)
+    args = genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
     tagquery = genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
@@ -60,11 +60,10 @@ module PeopleService
   #
   #
   #
-  def self.genArgsForSql(nameSearch, mailing_id, scheduled, filters)
-    # TODO - we need to deal with the filters....
-    clause = DataService.createWhereClause(filters, #params[:filters], 
-    ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
-    ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'])
+  def self.genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
+    clause = DataService.createWhereClause(filters, 
+          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
+          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'])
     
     # add the name search for last of first etc
     if nameSearch && ! nameSearch.empty?
@@ -74,6 +73,8 @@ module PeopleService
       clause << '%' + nameSearch + '%'
     end
     
+    clause = DataService.addClause( clause, extraClause['param'].to_s + ' = ?', extraClause['value'].to_s) if extraClause
+
     clause = DataService.addClause( clause, 'people.id not in (select person_id from person_mailing_assignments where mailing_id = ?)', mailing_id) if mailing_id && ! mailing_id.empty?
     
     # Then we want to filter for scehduled people
@@ -88,6 +89,10 @@ module PeopleService
       args.merge!( :include => [:pseudonym] )
     end
     
+    if onlySurveyRespondents
+      args.merge!( :joins => 'JOIN survey_respondents ON people.id = survey_respondents.person_id' )
+    end
+
     args
   end
   

@@ -1,0 +1,43 @@
+<!--
+
+1. We need the collection of people
+2. We need the  grid
+3. Then we display it
+
+-->
+
+<!-- TODO - change so that the list is parameterised re columns and the call back for row selection 
+    Also it would be good if we had a way to put this at the top or bottom of the page
+    -->
+
+<%= render_cell "participants/participant_details", :templates %>
+
+<%= render_cell "participants/participant_list", :javascript, 
+    :caption => "Participants",
+    :selectNotifyMethod => "showRegDetails",
+    %>
+    
+<%= render_cell "participants/participant_details", :javascript %>
+    
+<script type="text/javascript">
+
+function selectRow(ids) {
+    alert("row selected " + ids);    
+};
+
+</script>    
+
+<div class="row-fluid">
+    <div class="span11">
+        <%= render_cell "participants/participant_list", :display %>
+    </div>
+</div>
+
+<!-- TODO add detail that gets filled in when a person selects a row -->
+<!-- TODO - add the tabs for the people info -->
+<div class="row-fluid">
+    <div class="span11">
+        <%= render_cell "participants/participant_details", :display %>
+    </div>
+</div>
+

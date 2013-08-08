@@ -900,7 +900,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
   color:gray;
   outline:none;
 }
-.ui-tabs .ui-tabs-nav li.ui-tabs-active a{background-color: #ffffff;outline:none;border:none;}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a{background-color: #ffffff;outline:none;}
 .ui-tabs .ui-tabs-nav li.ui-tabs-active:hover{
   background:#ffffff;
   outline:none;

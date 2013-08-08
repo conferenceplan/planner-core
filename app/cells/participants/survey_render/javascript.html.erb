@@ -1,0 +1,19 @@
+<script type="text/javascript">
+function showSurvey(id) {
+    
+    // alert("Show the survey for " + id);
+    // Need the id of the survey respondent (not the person...)
+    // /survey_respondents/reviews/356
+    var url = "/survey_respondents/reviews/" + id;
+    jQuery.ajax(url, {
+        error : function(jqXHR, textStatus, errorThrown) {
+            alert("Error: " + errorThrown );
+        },
+        success : function(data, textStatus, jqXHR) {
+            $('#current-participant-survey').html(data);
+        }
+    });
+
+    
+};
+</script>

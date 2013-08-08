@@ -9,11 +9,11 @@
     
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= stylesheet_link_tag params[:controller] %>
-    <%= stylesheet_link_tag "cells/" + params[:cellname] if params[:cellname] %>
+    <%= stylesheet_link_tag "cells/" + params[:cellname] if params[:cellname] && PlannerRc1::Application.assets.find_asset("cells/" + params[:cellname] + ".css") %> 
     
     <%= javascript_include_tag "application" %>
     <%= javascript_include_tag params[:controller] %>
-    <%= javascript_include_tag "cells/" + params[:cellname] if params[:cellname] %>
+    <%= javascript_include_tag "cells/" + params[:cellname] if params[:cellname] && PlannerRc1::Application.assets.find_asset("cells/" + params[:cellname] + ".js") %>
     
     <%= csrf_meta_tags %>
     
@@ -32,7 +32,9 @@
     <main role="main">
       <div class="container-fluid">
            <div class="row-fluid">
-              <%= render partial: 'layouts/messages', flash: flash %>
+                <div id="alert-area">
+                <%= render partial: 'layouts/messages', flash: flash %>
+                </div>
            </div>
               <%= content_for?(:content) ? yield(:content) : yield %>
       </div>

@@ -131,8 +131,10 @@ class PeopleController < PlannerController
     mailing_id = params[:mailing_id]
     scheduled = params[:scheduled]
     filters = params[:filters]
+    extraClause = params[:extraClause]
+    onlySurveyRespondents = params[:onlySurveyRespondents]
     
-    @count = PeopleService.countPeople filters
+    @count = PeopleService.countPeople filters, extraClause
     if rows.to_i > 0
       @nbr_pages = (@count / rows.to_i).floor
       @nbr_pages += 1 if @count % rows.to_i > 0
@@ -140,7 +142,7 @@ class PeopleController < PlannerController
       @nbr_pages = 1
     end
     
-    @people = PeopleService.findPeople rows, @page, idx, order, filters
+    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents
   end
 
   #

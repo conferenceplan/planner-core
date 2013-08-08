@@ -63,7 +63,7 @@ module DataService
       clause[0] = " ( " + clause[0]
       clause[0] += ") AND ( " if ! isEmpty
       clause[0] += " " + clausestr
-      clause[0] += " ) "  if ! isEmpty
+      clause[0] += " ) "  #if ! isEmpty
       if field
         clause << field
       end

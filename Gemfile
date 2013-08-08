@@ -11,6 +11,7 @@ gem 'bluecloth'
 gem 'bootstrap-sass'
 gem 'bootswatch-rails'
 gem 'cells'
+#gem 'cells-capture', require: 'cells_capture'
 gem "declarative_authorization" 
 gem "daemons"
 gem 'delayed_job' 

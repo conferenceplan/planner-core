@@ -20,9 +20,32 @@
 //= require backbone/backbone
 //= require backbone/extensions/backbone-relational
 //= require backbone/extensions/backbone.paginator.js
+
+//= require backbone-forms/distribution/backbone-forms.min
+//= require backbone-forms/distribution/editors/list.min
+//= require backbone-forms/distribution/templates/bootstrap
+
 //= require backgrid/backgrid
 //= require moment/moment
 //= require backgrid/extensions/moment-cell/backgrid-moment-cell
 //= require backgrid/extensions/text-cell/backgrid-text-cell
 
 //= require planIt
+
+//= require_tree ./plugins
+
+//= require_self
+
+jQuery(document).ready(function() {
+
+    _.templateSettings = {
+        interpolate : /\{\{\=(.+?)\}\}/g,
+        evaluate : /\{\{(.+?)\}\}/g
+    };
+});
+
+function alertMessage(message) {
+    
+    $('#alert-area').html("<div class=\"alert alert-block fade in\"><button class=\"close\" data-dismiss=\"alert\">×</button>"+ message +"</div>");
+    
+};

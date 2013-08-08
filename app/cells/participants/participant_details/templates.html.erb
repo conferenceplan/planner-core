@@ -1,0 +1,45 @@
+<script type="text/template" id="registration-view-template">
+    <div id="registration-view-details">
+        {{ if (hasId) { }}
+        
+    <button class="edit-registration-button">Edit</button>
+
+    {{ if (registration_number) { }}
+<div>
+    Registration Number :    
+     {{= registration_number }}
+</div>
+    {{ }; }}
+    {{ if (registration_type) { }}
+<div>
+    Registration Type :    
+     {{= registration_type }}
+</div>
+    {{ }; }}
+<div>
+    Registered :    
+     {{= registered ? 'Yes' : 'No' }}
+</div>
+        {{ } else { }}
+    <div id="registration-view-details">
+    No Registration Details
+    <button class="new-registration-button">Add Details</button>
+    </div>
+        {{ }; }}
+    </div>
+</script>
+
+<script type="text/template" id="registration-edit-template">
+        <form>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">{{= title }}</h3>
+  </div>
+  <div class="modal-body" id="modal-body">
+  </div>
+  <div class="modal-footer">
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+    <button class="btn btn-primary">Save Changes</button>
+  </div>
+        </form>
+</script>

@@ -459,7 +459,7 @@
 		    	result.bClose = "Close";
 		        result.beforeShowForm = function(formid){
 		               $('.ui-jqdialog-content .form-view-data').css('white-space', 'normal');
-		               $('.ui-jqdialog-content .form-view-data').css('height', 'auto');
+		               $('.ui-jqdialog-content .form-view-data').css('height', '100%');
 		               $('.ui-jqdialog-content .form-view-data').css('vertical-align', 'text-top');
 		               $('.ui-jqdialog-content .form-view-data').css('padding-top', '2px');
 		        };

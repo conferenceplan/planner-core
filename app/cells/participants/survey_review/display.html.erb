@@ -1,7 +1,33 @@
-<h1>
-  Participants::SurveyReview#display
-</h1>
 
-<p>
-  Find me in app/cells/participants/survey_review/display.html.erb
-</p>
+<%= render_cell "participants/participant_list", :javascript, 
+    :caption => "Participants",
+    :del => false,
+    :edit => false,
+    :add => false,
+    :invite_status => false,
+    :invite_category => false,
+    :acceptance_status => false,
+    :has_survey => false,
+    
+    :pub_first_name => false,
+    :pub_last_name => false,
+    :pub_suffix => false,
+    :extraClause => "extraClause[param]=acceptance_status_id&extraClause[value]=8",
+    
+    :onlySurveyRespondents => true,
+    
+    :selectNotifyMethod => "showSurvey",
+
+    
+    %>
+
+<%= render_cell "participants/survey_render", :javascript %>
+
+<div class="row-fluid">
+    <div class="span5">
+        <%= render_cell "participants/participant_list", :display %>
+    </div>
+    <div class="span7">
+        <%= render_cell "participants/survey_render", :display %>
+    </div>
+</div>

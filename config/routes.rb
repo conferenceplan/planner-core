@@ -182,7 +182,7 @@ PlannerRc1::Application.routes.draw do
   end
 
   resources :registrationDetails do
-    resources :person
+    # resources :person
   end
 
   resources :postal_addresses do

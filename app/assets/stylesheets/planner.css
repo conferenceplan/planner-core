@@ -69,12 +69,11 @@
 	background: #7F1616;
 }
 
-div.controls {
+/*div.controls {
 	display: inline-block;
 	clear: none;
 	width: 100%;
-}
-
+}*/
 div.controls div.remove-form {
 	float: right;
 	vertical-align: top;

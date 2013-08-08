@@ -15,9 +15,10 @@ jQuery(document).ready(function() {
             id : "id",
         },
         mtype: 'POST',
-        colNames: ['First Name', 'Last Name', 'Suffix', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix', 'lock'],
+//        colNames: ['First Name', 'Last Name', 'Suffix', 'Invite Status', 'Invitation<br/>Category', 'Acceptance', 'Survey', 'Publication<br/>First Name', 'Publication<br/>Last Name', 'Pub<br/>Suffix', 'Comments', 'lock'],
         colModel: [{
             name: 'first_name',
+            label: 'First Name',
             index: 'people.first_name',
             width: 200,
             editable: true,
@@ -34,6 +35,7 @@ jQuery(document).ready(function() {
             }
         }, {
             name: 'last_name',
+            label: 'Last Name',
             index: 'people.last_name',
 //            width: 150,
             editable: true,
@@ -50,6 +52,7 @@ jQuery(document).ready(function() {
             }
         }, {
             name: 'suffix',
+            label: 'Suffix',
             index: 'people.suffix',
 //            width: 50,
             editable: true,
@@ -67,6 +70,7 @@ jQuery(document).ready(function() {
             }
         }, {
             name: 'invite_status',
+            label: 'Invite Status',
             index: 'invitestatus_id',
 //            width: 100,
             editable: true,
@@ -86,6 +90,7 @@ jQuery(document).ready(function() {
             }
         }, {
             name: 'invitation_category',
+            label: 'Invitation<br/>Category',
             index: 'invitation_category_id',
 //            width: 100,
             editable: true,
@@ -105,6 +110,7 @@ jQuery(document).ready(function() {
             }
         }, {
             name: 'acceptance_status',
+            label: 'Acceptance',
             index: 'acceptance_status_id',
 //            width: 100,
             editable: true,
@@ -124,6 +130,7 @@ jQuery(document).ready(function() {
             }
         }, {
             name: 'has_survey',
+            label: 'Survey',
 //            width: 50,
             editable: false,
             sortable: false,
@@ -131,6 +138,7 @@ jQuery(document).ready(function() {
             hidden: false
         }, {
             name: 'pseudonym.first_name',
+            label: 'Publication<br/>First Name',
 //            width: 150,
             index: 'pseudonyms.first_name',
             editable: true,
@@ -144,6 +152,7 @@ jQuery(document).ready(function() {
             }
         }, {
             name: 'pseudonym.last_name',
+            label: 'Publication<br/>Last Name',
 //            width: 150,
             index: 'pseudonyms.last_name',
             editable: true,
@@ -157,6 +166,7 @@ jQuery(document).ready(function() {
             }
         }, {
             name: 'pseudonym.suffix',
+            label: 'Publication<br/>Suffix',
 //            width: 50,
             index: 'pseudonyms.suffix',
             editable: true,
@@ -170,6 +180,30 @@ jQuery(document).ready(function() {
                 label: "Pub Suffix"
             }
         }, {
+            name: 'comments',
+            index: 'people.comments',
+            hidden: true,
+            editable: true,
+            edittype: 'textarea',
+            sortable: false,
+            search: false,
+//            width : 200,
+            editoptions: {
+//                size: 20
+//                rows : 3,
+//                cols : 10
+            },
+            editrules: {
+                edithidden: true
+            },
+            formoptions: {
+                rowpos: 10,
+                label: "Comments"
+            },
+//            cellattr: function (rowId, tv, rawObject, cm, rdata) { 
+//                    return " style=overflow: hidden; "
+//                 }
+        }, {
             name: 'lock_version',
 //            width: 3,
             index: 'lock_version',
@@ -178,7 +212,7 @@ jQuery(document).ready(function() {
             sortable: false,
             search: false,
             formoptions: {
-                rowpos: 10,
+                rowpos: 11,
                 label: "lock"
             }
         }],
@@ -193,7 +227,7 @@ jQuery(document).ready(function() {
         sortorder: "asc",
         viewrecords: true,
         imgpath: 'stylesheets/cupertino/images',
-        caption: 'Participants',
+        caption: caption,
         editurl: '/participants?plain=true',
         onSelectRow: function(ids){
 //            loadTabs(ids);
