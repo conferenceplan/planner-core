@@ -55,19 +55,11 @@ class PeopleController < PlannerController
     @person.lock_version = 0 # TODO - this should not be done???
     datasourcetmp = Datasource.find_by_name("Application")
     @person.datasource = datasourcetmp
-    if (@person.save)
-      if plain
-        render :action => 'show', :layout => 'content'
-      else  
-        render :action => 'show'
-      end
-    else
-      render :action => 'new'
-    end 
+    @person.save!
+    render json: @person.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
   end
 
   def update
-    
     @person = Person.find(params[:id])
     # if pseudonym is empty, we don't want to insert an empty record
     # so delete attributes from input parameter list so
@@ -84,12 +76,9 @@ class PeopleController < PlannerController
       end
     end
 
-    @editable = false
-    if @person.update_attributes(params[:person])
-      render :action => 'show', :layout => 'content'
-    else
-      render :action => 'show', :layout => 'content'
-    end
+    @person.update_attributes(params[:person])
+    
+    render json: @person.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
   end
 
   #

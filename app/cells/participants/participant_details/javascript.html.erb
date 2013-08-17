@@ -1,175 +1,372 @@
 <script type="text/javascript">
-jQuery(document).ready(function() {
+
+ParticipantApp = new Backbone.Marionette.Application();
+
+ParticipantApp.PeopleManagement = (function(Backbone){
+
+    //
+    //
+    //
+    Address = Backbone.Model.extend({
+        schema : {
+            line1 : { type : 'Text' },
+            line2 : { type : 'Text' },
+            line3 : { type : 'Text' },
+            city : { type : 'Text' },
+            state : { type : 'Text' },
+            postcode : { type : 'Text' },
+            country : { type : 'Text' },
+            isdefault : { type : 'Checkbox'}
+        },
+        urlRoot : '/postal_addresses'
+    });
     
+    AddressCollection = Backbone.Collection.extend({
+        model : Address
+    });
+    
+    EmailAddress = Backbone.Model.extend({
+        schema : {
+            email : { type : 'Text'},
+            isdefault : { type : 'Checkbox'}
+        },
+        urlRoot : '/email_addresses'
+    });
+    
+    EmailCollection = Backbone.Collection.extend({
+        model : EmailAddress
+    });
+    
+    PhoneNumber = Backbone.Model.extend({
+        schema : {
+            number : { type : 'Text'},
+            phone_type_id : { type : 'Select', options : <%= PhoneTypes.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+        },
+        urlRoot : '/phone_numbers'
+    });
+    
+    PhoneCollection = Backbone.Collection.extend({
+        model : PhoneNumber
+    });
+
+    //
+    //
+    //
     RegistrationDetail = Backbone.Model.extend({
         schema : {
             registration_number : { type : 'Number', title : 'Registration Number' },
             registration_type : { type : 'Text', title : "Registration Type" },
-            registered : { type : 'Checkbox', title : 'Registered' }
+            registered : { type : 'Checkbox', title : 'Registered' },
         },
         urlRoot: '/registrationDetails'
     });
-
+    
     //
-    //
-    //
-    MyModal = Backbone.View.extend({
-        tagName: "div",
-        className: "modal hide fade",
-        events: {
-            "submit": "submit",
-            "hidden": "close",
-            // "keydown textarea": "clearError",
-            // "hide": "saveOrCancel",
-            // "shown": "focus"
-        },
-        
-        initialize : function() {
-            this.template = _.template($('#registration-edit-template').html())
-        },
-
-        modalOptions: {
-          backdrop: false,
-        },
-        
-        render: function () {
-            this.$el.html($(this.template({
-                title : this.options.title
-                // column: this.column,
-                // cols: this.cols,
-                // rows: this.rows,
-                // content: this.formatter.fromRaw(this.model.get(this.column.get("name")))
-            })));
-
-            this.delegateEvents();
-            
-            this.form = new Backbone.Form({
-                    model: this.model
-                }).render();
-            
-            this.$el.find(".modal-body").append(this.form.el);
-            
-            this.$el.modal(this.modalOptions);
-
-            return this;
-        },
-        
-        submit : function(e) {
-            if (e && e.type == "submit") {
-                e.preventDefault();
-                e.stopPropagation();
-            };
-            
-            // gather the data and update the underlying model etc.
-            var errors = this.form.commit(); // To save the values from the form back into the model
-            // TODO - check for validation errors (client side???)
-            
-            this.model.save(null, { 
-                wait: true,
-                error : function() {
-                    alertMessage("Error saving the instance");
-                    // TODO - can we prevent the update propagation and ensure and revert the data?
-                }
-            }); // save the model to the server
-            
-            if (e.type != "hide") this.$el.modal("hide");
-        },
-        
-        close: function (e) {
-            this.remove();
-            this.unbind();
-            this.views = [];  
-        },
+    InviteDetails = Backbone.Model.extend({
+        urlRoot : '/inviteDetails'
     });
     
-    RegistrationView = Backbone.View.extend({
-        el : '#registration-view',
-        
-        template : _.template($('#registration-view-template').html()),
-        
-        render : function() {
-            $(this.el).html( this.template(_.extend({
-                hasId : this.model.has('id')
-            }, this.model.toJSON()) ) );
-            return this;
+    //
+    BioDetails = Backbone.Model.extend({
+        schema : {
+            survey_bio : { type : 'TextArea', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
+            bio : { type : 'TextArea', editorAttrs: { rows : 6, cols : 60 } },
+            facebook : { type : 'Text' },
+            othersocialmedia : { type : 'Text' },
+            photourl : { type : 'Text' },
+            twitterinfo : { type : 'Text' },
+            website : { type : 'Text' }
         },
-        
-        events : {
-            "click .edit-registration-button" : "editRegistration",
-            "click .new-registration-button" : "newRegistration"
+        urlRoot : '/edited_bios'
+    });
+    
+    //
+    ProgramItem = Backbone.Model.extend({
+    });
+    ProgramItemCollection = Backbone.Collection.extend({
+        model : ProgramItem
+    });
+    
+    //
+    TagContext = Backbone.Model.extend({
+        // schema : {
+            // tags : { type : 'Text' }
+        // }
+    });
+    TagContextCollection = Backbone.Collection.extend({
+        model : TagContext
+    });
+    
+    //
+    AvailabilityDateModel = Backbone.RelationalModel.extend({
+        schema : {
+            start_time : { type : 'DateTime', title : 'Arrival Time'},
+            end_time : { type : 'DateTime', title : 'Departure Time'}
         },
-        
-        editRegistration : function() {
-            // Put up a modal dialog to edit the reg details
-            mdl = new MyModal({
-                model : this.model,
-                title : "Edit Registration Details"
-            });
-            mdl.render();
-        },
-        
-        newRegistration : function() {
-            // alert(this.options.person_id);
-            this.model.set('person_id',this.options.person_id);
-            mdl = new MyModal({
-                model : this.model,
-                title : "Add Registration Details"
-            });
-            mdl.render();
-        },
-
-        initialize : function() {
-            eventAggregator.on( 'CloseView', this.close, this );
-            
-            this.listenTo(this.model, 'change', this.render);
-        },
-        
-        remove : function() {
-            $(this.el).empty();
-            return this;
-        },
-        
-        close: function() {
-            this.stopListening();
-            this.undelegateEvents();
-
-            // Unregister for event to stop memory leak
-            eventAggregator.off( 'CloseView', this.close, this );
-            this.remove();
-            this.unbind();
-            this.views = [];   // Clear the view array ??????
+        urlRoot : '/available_dates'
+    });
+    ExcludedItemModel = Backbone.RelationalModel.extend({});
+    ExcludedItemCollection = Backbone.Collection.extend({
+        model : ExcludedItemModel
+    });
+    ExcludedTimesModel = Backbone.RelationalModel.extend({});
+    ExcludedTimesCollection = Backbone.Collection.extend({
+        model : ExcludedTimesModel
+    });
+    Exclusions = Backbone.RelationalModel.extend({
+        relations: [{
+            type: Backbone.HasMany,
+            key: 'items',
+            relatedModel: 'ExcludedItemModel',
+            collectionType : 'ExcludedItemCollection',
+        }, {
+            type: Backbone.HasMany,
+            key: 'times',
+            relatedModel: 'ExcludedTimesModel',
+            collectionType : 'ExcludedTimesCollection',
+        }, {
+            type: Backbone.HasOne,
+            key: 'dates',
+            relatedModel: 'AvailabilityDateModel',
         }
+        ]
+    });
+
+    /******************************************************
+     * 
+     */
+    AddressLayout = Backbone.Marionette.Layout.extend({
+        template: "#address-layout-template",
+        
+        regions : {
+            postalControlRegion: "#postal-control-div",
+            postalRegion: "#postal-region-div",
+        },
+    });
+
+    PhoneLayout = Backbone.Marionette.Layout.extend({
+        template: "#phone-layout-template",
+        
+        regions : {
+            phoneControlRegion: "#phone-control-div",
+            phoneRegion: "#phone-region-div",
+        },
+    });
+    EmailLayout = Backbone.Marionette.Layout.extend({
+        template: "#email-layout-template",
+        
+        regions : {
+            emailControlRegion: "#email-control-div",
+            emailRegion: "#email-region-div",
+        },
     });
     
-    // var app = new AppView(); //{evAggregator : eventAggregator});
-    Backbone.history.start(); // TODO - this needs to be moved
-});
-
-    // TODO - prefer to have a global event aggregator. Move out of here.
-    var eventAggregator = _.extend({}, Backbone.Events); // Event aggregator for the page
-    
-    // create model
-    // attach to view
-    // render view
-    // var regView = null;
-    function showRegDetails(id) {
-        eventAggregator.trigger('CloseView'); // Trigger a global event to close the views i.e. get rid of the old stuff
+    ExclusionsLayout = Backbone.Marionette.Layout.extend({
+        template: "#exclusions-layout-template",
         
-        // Get registration details
-        var regDetail = new RegistrationDetail();
-        regDetail.fetch({
-                url : "/participants/" + id + "/registrationDetails.json",
-                error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
-                success : function(model) { // TODO - we need a way to get rid of the old view or to just change it's model and re-render
-                    var regView = new RegistrationView({
-                        person_id : id,
-                        model : model
-                    });
-                    regView.render();
-                }
-        });
+        regions : {
+            datesRegion: "#dates-exclusions-div",
+            itemsRegion: "#items-exclusions-div",
+            timesRegion: "#times-exclusions-div",
+        },
+    });
+
+    var tabLists = [];
+    var tabContent = [];
+
+    function clearRegDetails() {
+        $('#selected-participant').text("");
+        
+        _.invoke(tabLists, 'reset' );
+        _.invoke(tabContent, 'clear' );
     };
 
+    function showRegDetails(id) {
+        var data = jQuery("#participants").jqGrid('getRowData', id);
+        $('#selected-participant').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
+        
+        tabContent.push( TabUtils.createTabContent({
+            modelType : RegistrationDetail,
+            url : "/participants/" + id + "/registrationDetails.json",
+            template : '#registration-view-template',
+            place :'#registration-view',
+            id : id,
+            newTitle : "Create Registration",
+            editTitle : "Edit Registration",
+        }) );
+
+        tabContent.push( 
+            TabUtils.createTabContent({
+            modelType : InviteDetails,
+            url : "/participants/" + id + ".json",
+            template : '#invite-view-template',
+            place : '#invite-view',
+            id : id,
+            newTitle : "Create Invite",
+            editTitle : "Edit Invite",
+        }) );
+        
+        tabContent.push( 
+            TabUtils.createTabContent({
+            modelType : BioDetails,
+            url : "/participants/" + id + "/edited_bios.json",
+            template : '#bio-view-template',
+            place : '#bio-view',
+            id : id,
+            newTitle : "Create Bio",
+            editTitle : "Edit Bio",
+        }) );
+        
+        
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : ProgramItemCollection,
+            url : "/participants/"+ id + "/programme_items.json",
+            template : "#program-item-view-template",
+            view_refresh_event : "address:refresh",
+            place : '#items-view',
+        }) );
+
+        
+        // ------
+        addressLayout = new AddressLayout();
+        addressLayout.render();
+        $('#contacts-view').html(addressLayout.el);
+        
+        phoneLayout = new PhoneLayout();
+        phoneLayout.render();
+        $('#phone-view').html(phoneLayout.el);
+
+        emailLayout = new EmailLayout();
+        emailLayout.render();
+        $('#email-view').html(emailLayout.el);
+
+
+        TabUtils.createTabControl({
+            template : "#address-control-template",
+            modelType : Address,
+            id : id,
+            view_refresh_event : "address:refresh",
+            modal_create_title : "Create Address Details",
+            region : addressLayout.postalControlRegion
+        });
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : AddressCollection,
+            url : "/participants/"+ id + "/postalAddresses.json",
+            template : "#address-view-template",
+            view_refresh_event : "address:refresh",
+            region : addressLayout.postalRegion,
+            newTitle : "Create Address",
+            editTitle : "Edit Address",
+        }) );
+        
+        TabUtils.createTabControl({
+            template : "#phone-control-template",
+            modelType : PhoneNumber,
+            id : id,
+            view_refresh_event : "address:refresh",
+            modal_create_title : "Create Phone Number",
+            region : phoneLayout.phoneControlRegion,
+        });
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : PhoneCollection,
+            url : "/participants/"+ id + "/phoneNumbers.json",
+            template : "#phone-view-template",
+            view_refresh_event : "address:refresh",
+            region : phoneLayout.phoneRegion,
+            newTitle : "Create Phone Number",
+            editTitle : "Edit Phone Number",
+        }) );
+
+        TabUtils.createTabControl({
+            template : "#email-control-template", 
+            modelType : EmailAddress,
+            id : id,
+            view_refresh_event : "address:refresh",
+            modal_create_title : "Create Email",
+            region : emailLayout.emailControlRegion
+        });
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : EmailCollection,
+            url : "/participants/"+ id + "/emailAddresses.json",
+            template : "#email-view-template",
+            view_refresh_event : "address:refresh",
+            region : emailLayout.emailRegion,
+            newTitle : "Create Email",
+            editTitle : "Edit Email",
+        }) );
+        
+        // /tags/2108/add?class=Person&context=PrimaryArea 
+        tabLists.push( TabUtils.createTagListContent({
+            collectionType : TagContextCollection,
+            url : "/tags/"+ id + "?class=Person",
+            tagUrl : "/tags/"+ id + "/add?class=Person", // TODO - need context for tag
+            template : "#tag-context-layout-template",
+            view_refresh_event : "address:refresh",
+            place : '#tags-view',
+            newTitle : "Create Tag",
+        }) );
+
+        
+        //
+        // get the exclusions and show them within the layout
+        //
+        exclusionLayout = new ExclusionsLayout();
+        exclusionLayout.render();
+        $('#availability-view').html(exclusionLayout.el);
+        
+        exclusions = new Exclusions();
+        exclusions.fetch({
+            url : "/participants/" + id + "/availabilities.json",
+            success : function(obj) {
+                tabLists.push( TabUtils.createTabListContent({
+                    collection : obj.get('items'),
+                    template : "#item-exclusion-view-template",
+                    region : exclusionLayout.itemsRegion 
+                }) );
+                tabLists.push( TabUtils.createTabListContent({
+                    collection : obj.get('times'),
+                    template : "#time-exclusion-view-template",
+                    region : exclusionLayout.timesRegion 
+                }) );
+
+                var availability = obj.get('dates');
+                if (availability) {
+                    //alert(availability.id);
+                    availability.url = '/available_dates/' + availability.id;
+                    tabContent.push( TabUtils.createTabContent({
+                        id : id,
+                        modelType : AvailabilityDateModel,
+                        model : availability,
+                        template : '#date-exclusion-view-template',
+                        region : exclusionLayout.datesRegion,
+                        newTitle : "Create Availability",
+                        editTitle : "Edit Availability",
+                    }) );
+                } else {
+                    /* TODO TODO TODO */
+                    // TODO - need a control area to create a new instance
+                }
+            }
+        });
+        /****/
+
+    };
+
+    //
+    //
+    //    
+    return {
+        showDetails : function(id) {
+            showRegDetails(id);
+        },
+        clearDetails : function() {
+            clearRegDetails();
+        }
+    };
+})(Backbone);
+
+jQuery(document).ready(function() {
+    ParticipantApp.start();
+});
 </script>
+

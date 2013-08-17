@@ -78,6 +78,8 @@ PlannerRc1::Application.routes.draw do
   resources :edited_bios do
     resources :person
   end#, :has_one => :person
+  
+  resources :available_dates
 
   # map.resources :people, :as => "participants", 
     # :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items],
@@ -88,6 +90,9 @@ PlannerRc1::Application.routes.draw do
 
   # map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
   match 'tags/list.:format', :controller => 'tags', :action => 'list'
+  # match 'tags/:id', :controller => 'tags', :action => 'show', :via => 'get'
+  # match 'tags/:id', :controller => 'tags', :action => 'add', :via => 'post'  
+  # match 'tags/:id/remove', :controller => 'tags', :action => 'remove', :via => 'get'  
   resources :tags do
     member do
       get 'remove'
@@ -181,12 +186,10 @@ PlannerRc1::Application.routes.draw do
     resources :programme_items, :mapped_survey_questions
   end
 
-  resources :registrationDetails do
-    # resources :person
-  end
-
+  resources :registrationDetails
+  
   resources :postal_addresses do
-    resources :people
+    # resources :people
   end
   resources :email_addresses do
     resources :people

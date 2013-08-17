@@ -1,4 +1,4 @@
-@import 'bootswatch/spacelab/variables';
+@import 'bootswatch/united/variables';
 
 @import "bootstrap";
 body { padding-top: 4em; } // For the navigation heading...
@@ -11,9 +11,27 @@ body { padding-top: 4em; } // For the navigation heading...
 }
 
 
+.dl-horizontal-small dt {
+    clear: left;
+    float: left;
+    overflow: hidden;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 80px;
+}
+
+.dl-horizontal-small dd {
+    margin-left: 90px;
+}
+
+input, textarea, .uneditable-input {
+    width: 90%;
+}
+
 @import "bootstrap-responsive";
 
-@import "bootswatch/spacelab/bootswatch";
+@import "bootswatch/united/bootswatch";
 
 
 

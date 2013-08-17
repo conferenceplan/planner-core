@@ -4,6 +4,7 @@ jQuery(document).ready(function() {
     jQuery("#participants").cpParticipantTable({
         caption : "<%= @caption %>",
         selectNotifyMethod : <%= @selectNotifyMethod %>,
+        clearNotifyMethod : <%= @clearNotifyMethod %>,
         root_url : "<%= @root_url %>",
         baseUrl : "<%= @baseUrl %>",
         first_name : <%= @first_name %>,

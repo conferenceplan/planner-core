@@ -1,6 +1,16 @@
 class ProgrammeItemsController < PlannerController
   include ProgramPlannerHelper
-  
+
+  def index
+    # TODO - order the items by date (if there is a start time...)
+    if params[:person_id] # then we only get the items for a given person
+      person = Person.find(params[:person_id])
+      @programmeItems = person.programmeItems
+    else
+      @programmeItems = ProgrammeItem.find :all # Getting all the program items is probably not a good idea!!!!!
+    end
+  end
+
   def drop
     if params[:person_id]
       # Remove the person from the programme
@@ -19,15 +29,8 @@ class ProgrammeItemsController < PlannerController
     render :layout => 'content'
   end
   
-  def index
-    if params[:person_id] # then we only get the items for a given person
-      @person = Person.find(params[:person_id])
-      @programmeItems = @person.programmeItems
-      render :template => 'people/items', :layout => 'content'
-    else
-      @programmeItems = ProgrammeItem.find :all
-    end
-  end
+#   *********** TODO - check the code below ********************
+  
   def show
     plain = params[:plain]
     @programmeItem = ProgrammeItem.find(params[:id])

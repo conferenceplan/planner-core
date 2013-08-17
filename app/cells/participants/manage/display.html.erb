@@ -14,7 +14,8 @@
 
 <%= render_cell "participants/participant_list", :javascript, 
     :caption => "Participants",
-    :selectNotifyMethod => "showRegDetails",
+    :selectNotifyMethod => "ParticipantApp.PeopleManagement.showDetails",
+    :clearNotifyMethod => "ParticipantApp.PeopleManagement.clearDetails"
     %>
     
 <%= render_cell "participants/participant_details", :javascript %>
@@ -36,7 +37,8 @@ function selectRow(ids) {
 <!-- TODO add detail that gets filled in when a person selects a row -->
 <!-- TODO - add the tabs for the people info -->
 <div class="row-fluid">
-    <div class="span11">
+    <div class="span11 well">
+        <div class="well well-small"><h4 id='selected-participant'></h4></div>
         <%= render_cell "participants/participant_details", :display %>
     </div>
 </div>

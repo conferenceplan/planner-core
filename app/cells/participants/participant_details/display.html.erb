@@ -1,48 +1,28 @@
 
 <div>
-<ul class="nav nav-tabs" id="myTab">
+<ul class="nav nav-pills" id="myTab">
     <li class="active"><a href="#registration-tab" data-toggle="tab">Reg Detais</a></li>
     <li><a href="#contacts-tab" data-toggle="tab">Contact Info</a></li>
     <li><a href="#invite-tab" data-toggle="tab">Invite Details</a></li>
     <li><a href="#bio-tab" data-toggle="tab">Bio</a></li>
     <li><a href="#tags-tab" data-toggle="tab">Tags</a></li>
-    <li><a href="#survey-tab" data-toggle="tab">Survey</a></li>
     <li><a href="#availability-tab" data-toggle="tab">Availability</a></li>
     <li><a href="#items-tab" data-toggle="tab">Items</a></li>
 </ul>
  
 <div class="tab-content">
     <div class="tab-pane active" id="registration-tab"><div id="registration-view"></div></div>
-    <div class="tab-pane" id="contacts-tab"><div id="contacts-view"></div></div>
+    <div class="tab-pane" id="contacts-tab">
+        <ul class="thumbnails" id="contacts-view"></ul>
+        <ul class="thumbnails" id="email-view"></ul>
+        <ul class="thumbnails" id="phone-view"></ul>
+    </div>
     <div class="tab-pane" id="invite-tab"><div id="invite-view"></div></div>
     <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
-    <div class="tab-pane" id="tags-tab"><div id="tags-view"></div></div>
-    <div class="tab-pane" id="survey-tab"><div id="survey-view"></div></div>
+    <div class="tab-pane" id="tags-tab">
+        <div id="tags-view"></div> <!-- TODO - multiple tag contexts ... -->
+    </div>
     <div class="tab-pane" id="availability-tab"><div id="availability-view"></div></div>
     <div class="tab-pane" id="items-tab"><div id="items-view"></div></div>
 </div>
 </div>
-
-<!--
-<div id="particpanttabs">
-    <ul>
-        <li><a href="#regtab">Registration Details</a></li>
-        <li><a href="#addrstab">Contact Details</a></li>
-        <li><a href="#invitetab">Invite Details</a></li>
-        <li><a href="#biotab">Bio</a></li>
-        <li><a href="#tagstab">Tags</a></li>
-        <li><a href="#surveytab">Survey</a></li>
-        <li><a href="#availabledatetab">Availability</a></li>
-        <li><a href="#itemstab">Items</a></li>
-    </ul>
-    
-    <div id="regtab"></div>
-    <div id="addrstab"></div>
-    <div id="invitetab"></div>
-    <div id="biotab"></div>
-    <div id="tagstab"></div>
-    <div id="surveytab"></div>
-    <div id="availabledatetab"></div>
-    <div id="itemstab"></div>
-</div>
--->    

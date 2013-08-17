@@ -1,4 +1,4 @@
-class Pages::ParticipantsDashController < ApplicationController
+class Pages::ParticipantsDashController < PlannerController
 
   def index
   

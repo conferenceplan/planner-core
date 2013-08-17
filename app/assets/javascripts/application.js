@@ -18,8 +18,9 @@
 
 //= require backbone/underscore-min
 //= require backbone/backbone
+//= require backbone/backbone.marionette
 //= require backbone/extensions/backbone-relational
-//= require backbone/extensions/backbone.paginator.js
+//= require backbone/extensions/backbone.paginator
 
 //= require backbone-forms/distribution/backbone-forms.min
 //= require backbone-forms/distribution/editors/list.min
@@ -33,6 +34,8 @@
 //= require planIt
 
 //= require_tree ./plugins
+
+//= require TabViews
 
 //= require_self
 

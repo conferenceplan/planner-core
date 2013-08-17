@@ -1,6 +1,12 @@
+
+/*.ui-jqgrid .ui-jqgrid-htable th div {
+    padding-bottom: 10px;
+    padding-top: 4px;
+}*/
+
 .ui-jqgrid .ui-jqgrid-view,.ui-jqgrid .ui-paging-info, .ui-jqgrid .ui-pg-table,
 .ui-jqgrid .ui-pg-selbox {
-    font-size: 14px;
+    font-size: 12px;
 }
 .ui-jqgrid .ui-jqgrid-titlebar{
     height: 40px;
@@ -53,8 +59,8 @@
 }
 
 .ui-jqgrid .ui-jqgrid-htable th div {
-    padding-top: 12px;
-		padding-bottom: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
 }
 
 /**** Data rows ***/
@@ -68,7 +74,11 @@
 .ui-jqgrid tr.ui-row-ltr td {
     border-bottom: 1px solid #DDDDDD;
     border-right: 1px solid #DDDDDD;
-		padding:8px;
+		padding:2px;
+}
+
+.ui-jqgrid tr.jqgrow td {
+    height : 20px;
 }
 
 
@@ -131,6 +141,7 @@
 }
 .ui-jqgrid .ui-jqgrid-htable th div{
     overflow:visible;
+    font-size: 12px;    
 }
 .ui-jqgrid .ui-pager-control {
     height: 50px;

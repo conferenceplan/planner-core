@@ -1,5 +1,6 @@
 class RegistrationDetailsController < PlannerController
 
+  # TODO : edit is no longer needed
   def edit
     @registrationDetail = RegistrationDetail.find(params[:id])
     @urlstr = '/registrationDetails/' + params[:id]
@@ -25,10 +26,7 @@ class RegistrationDetailsController < PlannerController
     @registrationDetail = RegistrationDetail.new 
 
     # render :layout => 'content'
-        # ActiveRecord::Base.include_root_in_json = false # TODO - check that this is safe, and a better place to put it
-
     render json: @registrationDetail.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
-
   end
 
    def create

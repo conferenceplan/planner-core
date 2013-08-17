@@ -4,16 +4,11 @@ class AvailabilitiesController < PlannerController
         
     @urlstr = '/participants/'+ params[:person_id]  + '/available_dates/new'
 
-    @availableDate = @person.available_date
+    @availableDates = @person.available_date
     
     @excludedItems = @person.excluded_items
    
-    @excludedGroup = @person.GetExcludedTimesGroup
-    
-    
- 
- #   @excludedItems = person.excluded_items
-    
+    @excludedTimesGroup = @person.excluded_periods
     
     render :layout => 'content'
   end

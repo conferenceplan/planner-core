@@ -1,45 +1,239 @@
-<script type="text/template" id="registration-view-template">
-    <div id="registration-view-details">
-        {{ if (hasId) { }}
-        
-    <button class="edit-registration-button">Edit</button>
+<!--
+Use the Rails authenticity token in the forms...
 
-    {{ if (registration_number) { }}
-<div>
-    Registration Number :    
-     {{= registration_number }}
-</div>
-    {{ }; }}
-    {{ if (registration_type) { }}
-<div>
-    Registration Type :    
-     {{= registration_type }}
-</div>
-    {{ }; }}
-<div>
-    Registered :    
-     {{= registered ? 'Yes' : 'No' }}
-</div>
+<%= form_authenticity_token %>
+-->
+
+<!-- TODO - the modal template needs to be global???? -->
+<script type="text/template" id="modal-edit-template">
+<form>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">{{= title }}</h3>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn btn-primary">Save Changes</button>
+    </div>
+</form>
+</script>
+<!-- ------- -->
+
+<script type="text/template" id="registration-view-template">
+    <div class="registration-view-details">
+        {{ if (typeof id != 'undefined') { }}
+    <div class="span6 clearfix">
+    <div class="caption" class="pull-left">
+    <button class="model-edit-button btn btn-primary btn-mini pull-right">Edit</button>
+    <dl class="dl-horizontal">
+        <dt>Registration Number</dt><dd>{{= registration_number ? registration_number : "&nbsp;" }}</dd>
+        <dt>Registration Type</dt><dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
+        <dt>Registered</dt><dd>{{= registered ? 'Yes' : 'No' }}</dd>
+    </dl>
+    </div>
+    </div>
         {{ } else { }}
     <div id="registration-view-details">
     No Registration Details
-    <button class="new-registration-button">Add Details</button>
+    <button class="model-new-button">Add Details</button>
     </div>
         {{ }; }}
     </div>
 </script>
 
-<script type="text/template" id="registration-edit-template">
-        <form>
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-    <h3 id="myModalLabel">{{= title }}</h3>
-  </div>
-  <div class="modal-body" id="modal-body">
-  </div>
-  <div class="modal-footer">
-    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-    <button class="btn btn-primary">Save Changes</button>
-  </div>
-        </form>
+<script type="text/template" id="invite-view-template">
+    {{ if (typeof id != 'undefined') { }}
+    <dl class="dl-horizontal">
+        <dt>First Name</dt><dd>{{= first_name ? first_name : "&nbsp;" }}</dd>
+        <dt>Last Name</dt><dd>{{= last_name ? last_name : "&nbsp;" }}</dd>
+        <dt>Suffix</dt><dd>{{= suffix ? suffix : "&nbsp;" }}</dd>
+        <dt>Invite Status</dt><dd>{{= invite_status_name ? invite_status_name : "&nbsp;"}}</dd>
+        <dt>Acceptance Status</dt><dd>{{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</dd>
+        <dt>Invite Categrory</dt><dd>{{= invite_category_name ? invite_category_name : "&nbsp;"}}</dd>
+        <dt>Comments</dt><dd>{{= comments }}</dd>
+    </dl>
+    {{ }; }}
 </script>
+
+<script type="text/template" id="bio-view-template">
+    {{ if (typeof id != 'undefined') { }}
+    <button class="model-edit-button btn btn-primary btn-mini pull-right">Edit</button>
+    <dl class="dl-horizontal">
+          <dt>Bio</dt><dd>{{= bio ? bio : "&nbsp;" }}</dd>
+          <dt>Photo</dt><dd>{{= photourl ? photourl : "&nbsp;" }}</dd>
+          <dt>Web Site</dt><dd>{{= website ? website : "&nbsp;" }}</dd>
+          <dt>Twitter</dt><dd>{{= twitterinfo ? twitterinfo : "&nbsp;" }}</dd>
+          <dt>Facebook</dt><dd>{{= facebook ? facebook : "&nbsp;" }}</dd>
+          <dt>Other</dt><dd>{{= othersocialmedia ? othersocialmedia : "&nbsp;" }}</dd>
+    </dl>
+    {{ } else { }}
+        <button class="model-new-button btn btn-primary btn-mini pull-right">New</button>
+    {{ }; }}
+</script>
+
+<script type="text/template" id="phone-view-template">
+<li class="span5 clearfix">
+  <div class="thumbnail clearfix">
+    <div class="caption" class="pull-left">
+      <button class="model-delete-button btn btn-primary btn-mini pull-right"><i class="icon-trash"></i></button>
+      <button class="model-edit-button btn btn-primary btn-mini pull-right"><i class="icon-pencil"></i></button>
+      <small>
+      <dl class="dl-horizontal-small">
+          <dt>Number</dt><dd>{{= number ? number : "&nbsp;" }}</dd>
+          <dt>Type</dt><dd>{{= phone_type_name ? phone_type_name : "&nbsp;"}}</dd>
+      </dl>
+      </small>
+    </div>
+  </div>
+</li>
+</script>
+
+<script type="text/template" id="email-view-template">
+<li class="span5 clearfix">
+  <div class="thumbnail clearfix">
+    <div class="caption" class="pull-left">
+      <button class="model-delete-button btn btn-primary btn-mini pull-right"><i class="icon-trash"></i></button>
+      <button class="model-edit-button btn btn-primary btn-mini pull-right"><i class="icon-pencil"></i></button>
+      <small>
+      <dl class="dl-horizontal-small">
+        <dt>Email</dt><dd>{{= email ? email : "&nbsp;" }}</dd>
+        <dt>Is Default</dt><dd>{{= isdefault ? "Yes" : "No"}}</dd>
+      </dl>
+      </small>
+    </div>
+  </div>
+</li>
+</script>
+
+
+<script type="text/template" id="address-view-template">
+<li class="span5 clearfix">
+  <div class="thumbnail clearfix">
+    <div class="caption" class="pull-left">
+      <button class="model-delete-button btn btn-primary btn-mini pull-right"><i class="icon-trash"></i></button>
+      <button class="model-edit-button btn btn-primary btn-mini pull-right"><i class="icon-pencil"></i></button>
+      <small>
+      <dl class="dl-horizontal-small">
+        <dt>Line 1</dt><dd>{{= line1 ? line1 : "&nbsp;" }}</dd>
+        <dt>Line 2</dt><dd>{{= line2 ? line2 : "&nbsp;" }}</dd>
+        <dt>Line 3</dt><dd>{{= line3 ? line3 : "&nbsp;" }}</dd>
+        <dt>City</dt><dd>{{= city ? city : "&nbsp;" }}</dd>
+        <dt>State</dt><dd>{{= state ? state : "&nbsp;" }}</dd>
+        <dt>Post Code</dt><dd>{{= postcode ? postcode : "&nbsp;" }}</dd>
+        <dt>Country</dt><dd>{{= country ? country : "&nbsp;" }}</dd>
+        <dt>Is Default</dt><dd>{{= isdefault ? "Yes" : "No"}}</dd>
+      </dl>
+      </small>
+    </div>
+  </div>
+</li>
+</script>
+
+<script type="text/template" id="address-control-template">
+            POSTAL ADDRESSES
+    <button class="add-model-button">add address</button>
+</script>
+
+<script type="text/template" id="address-layout-template">
+    <section>
+        <div id="postal-control-div">
+        </div>
+        <div id="postal-region-div">
+        </div>
+    </section>
+</script>
+
+<script type="text/template" id="email-control-template">
+            EMAIL ADDRESSES
+    <button class="add-model-button">add email</button>
+</script>
+
+<script type="text/template" id="email-layout-template">
+    <section>
+        <div id="email-control-div">
+        </div>
+        <div id="email-region-div">
+        </div>
+    </section>
+</script>
+
+<script type="text/template" id="phone-control-template">
+            PHONE
+    <button class="add-model-button">add phone</button>
+</script>
+
+<script type="text/template" id="phone-layout-template">
+    <section>
+        <div id="phone-control-div">
+        </div>
+        <div id="phone-region-div">
+        </div>
+    </section>
+</script>
+
+<script type="text/template" id="exclusions-layout-template">
+    <section>
+        <div id="dates-exclusions-div">
+        </div>
+        Do not schedule against:
+        <div id="items-exclusions-div">
+        </div>
+        Do not schedule at:
+        <div id="times-exclusions-div">
+        </div>
+    </section>
+</script>
+
+<script type="text/template" id="tag-context-layout-template">
+    <div class="thumbnail clearfix">
+        <button class="model-add-tag-button btn btn-primary btn-mini pull-right" tagcontext="{{= context }}">Add</button>
+        <span class="label label">{{= context }}</span>
+        {{ _.each(tags, function(tag) { }}
+            <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + person_id + '/remove?class=Person&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
+        {{ }); }}
+    </div>
+</script>
+
+<script type="text/template" id="date-exclusion-view-template">
+    {{ if (typeof id != 'undefined') { }}
+    <div class="thumbnail clearfix">
+        <button class="model-edit-button btn btn-primary btn-mini pull-right">Edit</button>
+        <small>
+        <em>Arrival</em>: {{= moment(start_time).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="icon-arrow-right"></i> 
+        <em>Departure</em>: {{= moment(end_time).format("dddd, MMMM Do YYYY, h:mm a") }}
+        </small>
+    </div>
+    {{ }; }}
+</script>
+<script type="text/template" id="item-exclusion-view-template">
+    <div class="thumbnail clearfix">
+        <small>
+        {{= title }}
+        </small>
+    </div>
+</script>
+<script type="text/template" id="time-exclusion-view-template">
+    <div class="thumbnail clearfix">
+        <small>
+        {{= moment(start).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="icon-arrow-right"></i>  {{= moment(end).format("dddd, MMMM Do YYYY, h:mm a") }}
+        </small>
+    </div>
+</script>
+<script type="text/template" id="program-item-view-template">
+    <div>
+        {{ if (typeof id != 'undefined') { }}
+  <div class="thumbnail clearfix">
+      <small>
+      <dl class="dl-horizontal-small">
+        <dt>Title</dt><dd>{{= title ? title : "&nbsp;" }}</dd>
+        <dt>Published</dt><dd>{{= isPublished ? "Yes" : "No" }}</dd>
+        <dt>Start Time</dt><dd>{{= time_slot ? moment(time_slot.start).format("dddd, MMMM Do YYYY, h:mm a") : "&nbsp;" }}</dd>
+      </dl>
+      </small>
+    </div>
+        {{ }; }}
+    </div>
+</script>
+
+

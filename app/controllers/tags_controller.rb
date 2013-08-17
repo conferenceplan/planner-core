@@ -33,9 +33,10 @@ class TagsController < PlannerController
   def show
     # For each of the possible contexts get the tags...
     @className = params[:class]
+    @personId = params[:id]
     
     if isok(@className)
-      obj = eval(@className).find(params[:id])
+      obj = eval(@className).find(@personId)
       
       # 1. Get the set of contexts
       contexts = TagContext.all
@@ -50,10 +51,7 @@ class TagsController < PlannerController
     end
     
     # 3. Then pass this along to the view
-    respond_to do |format|
-      format.html { render :layout => 'content' } # show.html.erb
-      format.xml  
-    end
+    # render json: @allTags.to_json, :content_type => 'application/json'
   end
   
   #
@@ -103,12 +101,14 @@ class TagsController < PlannerController
       tagList = params[:tag].split(',') # allow the addition of multiple tags (comma seperated)
     
       tagList.each do |tag|
+        # TODO - capitalise?
         obj.tag_list_on(context).add(tag)
       end
       obj.save
     end
     
-    render :layout => 'content'
+    # render :layout => 'content'
+    render text: 'OK'
   end
 
   def remove
@@ -123,7 +123,8 @@ class TagsController < PlannerController
       obj.save
     end
 
-    render :layout => 'content'
+    # render :layout => 'content'
+    render text: 'OK'
   end
 
 # Create the edit form , the result will be to add a new tag(s)

@@ -2,12 +2,16 @@
  *
  */
 (function($) {
+    
+
+    
     var settings = {
         pager : '#pager',
         root_url : "/",
         baseUrl : "participants/getList.json",
         caption : "Participants",
         selectNotifyMethod : function(ids) {},
+        clearNotifyMethod : function() {},
         first_name : true,
         last_name : true,
         suffix : true,
@@ -48,7 +52,7 @@
             url += urlArgs;
             
             var colModel = [{
-                name : 'first_name',
+                name : 'person[first_name]',
                 label : 'First Name',
                 index : 'people.first_name',
                 hidden : !settings['first_name'],
@@ -65,7 +69,7 @@
                     edithidden : true
                 }
             }, {
-                name : 'last_name',
+                name : 'person[last_name]',
                 label : 'Last Name',
                 index : 'people.last_name',
                 hidden : !settings['last_name'],
@@ -81,7 +85,7 @@
                     edithidden : true
                 }
             }, {
-                name : 'suffix',
+                name : 'person[suffix]',
                 label : 'Suffix',
                 index : 'people.suffix',
                 hidden : !settings['suffix'],
@@ -98,7 +102,7 @@
                     edithidden : true
                 }
             }, {
-                name : 'invite_status',
+                name : 'person[invitestatus_id]',
                 label : 'Invite Status',
                 index : 'invitestatus_id',
                 hidden : !settings['invite_status'],
@@ -121,7 +125,7 @@
                     edithidden : true
                 }
             }, {
-                name : 'invitation_category',
+                name : 'person[invitation_category_id]',
                 label : 'Invitation<br/>Category',
                 index : 'invitation_category_id',
                 hidden : !settings['invite_category'],
@@ -144,7 +148,7 @@
                     edithidden : true
                 }
             }, {
-                name : 'acceptance_status',
+                name : 'person[acceptance_status_id]',
                 label : 'Acceptance',
                 index : 'acceptance_status_id',
                 hidden : !settings['acceptance_status'],
@@ -167,14 +171,14 @@
                     edithidden : true
                 }
             }, {
-                name : 'has_survey',
+                name : 'person[has_survey]',
                 label : 'Survey',
                 hidden : !settings['has_survey'],
                 editable : false,
                 sortable : false,
                 search : false,
             }, {
-                name : 'pseudonym.first_name',
+                name : 'person[pseudonym_attributes][first_name]',
                 label : 'Publication<br/>First Name',
                 index : 'pseudonyms.first_name',
                 hidden : !settings['pub_first_name'],
@@ -191,7 +195,7 @@
                     edithidden : true
                 }
             }, {
-                name : 'pseudonym.last_name',
+                name : 'person[pseudonym_attributes][last_name]',
                 label : 'Publication<br/>Last Name',
                 index : 'pseudonyms.last_name',
                 hidden : !settings['pub_last_name'],
@@ -208,7 +212,7 @@
                     edithidden : true
                 }
             }, {
-                name : 'pseudonym.suffix',
+                name : 'person[pseudonym_attributes][suffix]',
                 label : 'Publication<br/>Suffix',
                 index : 'pseudonyms.suffix',
                 hidden : !settings['pub_suffix'],
@@ -226,7 +230,7 @@
                     edithidden : true
                 }
             }, {
-                name : 'comments',
+                name : 'person[comments]',
                 index : 'people.comments',
                 hidden : true,
                 editable : true,
@@ -244,7 +248,7 @@
                     label : "Comments"
                 },
             }, {
-                name : 'lock_version',
+                name : 'person[lock_version]',
                 index : 'lock_version',
                 hidden : true,
                 editable : true,
@@ -258,7 +262,6 @@
 
             // ----------------------------------------------------------
             //
-            // alert(settings['colModel']);
             var grid = this.jqGrid({
                 url : url,
                 datatype : 'JSON',
@@ -289,8 +292,9 @@
                 onSelectRow : function(ids) {
                     settings['selectNotifyMethod'](ids);
                     return false;
-                }
+                },
             });
+            
 
             // ----------------------------------------------------------
             // Set up the pager menu for add, delete, and search
@@ -311,14 +315,31 @@
                 closeAfterEdit : true,
                 bottominfo : "Fields marked with (*) are required",
                 afterSubmit : function(response, postdata) {
-                    // examine return for problem - look for errorExplanation in the returned HTML
-                    var text = $(response.responseText).find(".errorExplanation");
-                    if (text.size() > 0) {
-                        text.css('font-size', '6pt');
-                        text = $("<div></div>").append(text);
-                        return [false, text.html()];
-                    }
+                    // TODO - error handler
+                    settings['clearNotifyMethod'](); 
                     return [true, "Success", ""];
+                },
+                beforeShowForm : function(form) { // change the style of the modal to make it compatible with our theme
+                    var dlgDiv = $("#editmod" + grid[0].id);
+                    // grid[0] is the div for the whole dialog box
+                    // alert(dlgDiv[0].className); // ui-widget ui-widget-content ui-corner-all ui-jqdialog
+                    // dlgDiv[0].className = "modal";
+                    // alert(dlgDiv.html()); // = "HHHH"
+//                     
+                    // var dlgHeader = $("#edithd" + grid[0].id);
+                    // dlgHeader[0].className = "modal-header";
+                    // //modal-header
+//                     
+//                     
+                    // //modal-body
+                    // var dlgContent = $("#editcnt" + grid[0].id);
+                    // dlgContent[0].className = "modal-body";
+                    
+                    
+                    //modal-footer
+                    
+                    //modal-edit-button
+                    //modal-new-button
                 },
                 mtype : 'PUT',
                 onclickSubmit : function(params, postdata) {
@@ -333,19 +354,11 @@
                 closeOnEscape : true,
                 bottominfo : "Fields marked with (*) are required",
                 afterSubmit : function(response, postdata) {
-                    // examine return for problem - look for errorExplanation in the returned HTML
-                    var text = jQuery(response.responseText).find(".errorExplanation");
-                    if (text.size() > 0) {
-                        text.css('font-size', '6pt');
-                        text = jQuery("<div></div>").append(text);
-                        return [false, text.html()];
-                    };
-
+                    // TODO - error handler
+                    
                     // get the id of the new entry and change the id of the
-                    var id = jQuery(response.responseText).find("#personid");
-
-                    return [true, "Success", id.text()];
-                    // Last param is the id of the new item
+                    var res = jQuery.parseJSON( response.responseText );
+                    return [true, "Success", res.id];
                 },
                 closeAfterAdd : true
             }, // add options
@@ -371,7 +384,7 @@
                 stringResult : true,
                 searchOnEnter : false,
             });
-
+            
             return grid;
         },
 
@@ -393,4 +406,5 @@
             $.error('Method ' + method + ' does not exist on jQuery.cpParticipantTable');
         }
     };
+
 })(jQuery);

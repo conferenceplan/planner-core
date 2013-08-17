@@ -7,6 +7,7 @@ class Participants::ParticipantListCell < Cell::Rails
   def javascript(args)
     @caption = args.has_key?(:caption) ? args[:caption] : "Participants"
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
+    @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
     @pager = args.has_key?(:pager) ? args[:pager] : '#pager'
     @root_url = args.has_key?(:root_url) ? args[:root_url] : "/"
     @baseUrl = args.has_key?(:baseUrl) ? args[:baseUrl] : "participants/getList.json"
@@ -34,7 +35,7 @@ class Participants::ParticipantListCell < Cell::Rails
     
     @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : false
     
-    @onlySurveyRespondents = args.has_key?(:onlySurveyRespondents) ? args[:onlySurveyRespondents] : true
+    @onlySurveyRespondents = args.has_key?(:onlySurveyRespondents) ? args[:onlySurveyRespondents] : false
     
     render
   end
