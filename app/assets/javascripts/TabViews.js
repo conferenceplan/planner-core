@@ -6,7 +6,7 @@ var TabUtils = (function(){
 
     var eventAggregator = new Backbone.Wreqr.EventAggregator();
     
-    GenericModel = Backbone.View.extend({
+    GenericModal = Backbone.View.extend({
         tagName: "div",
         className: "modal hide fade",
         events: {
@@ -70,7 +70,7 @@ var TabUtils = (function(){
         
     });
 
-    TabModal = GenericModel.extend({
+    TabModal = GenericModal.extend({
         renderBody : function() {
             this.form = new Backbone.Form({
                     model: this.model
@@ -94,7 +94,7 @@ var TabUtils = (function(){
         }
     });
     
-    TagModal = GenericModel.extend({
+    TagModal = GenericModal.extend({
         renderBody : function() {
             this.form = new Backbone.Form({
                 schema: {
