@@ -6,12 +6,33 @@ module DataService
   #
   #
   #
-  def self.createWhereClause(filters, integerFieldsSkipIfEmpty = [], integerFields = [])
+  def self.getFilterData(filters, key)
+    j = ActiveSupport::JSON
+    data = nil
+    
+    if (filters != nil && key != nil)
+      queryParams = j.decode(filters)
+      if (queryParams && queryParams["rules"].any?)
+        queryParams["rules"].each do |subclause|
+          if subclause['field'] == key
+            return subclause['data']
+          end 
+        end
+      end
+    end
+    
+    return data
+  end
+  
+  #
+  #
+  #
+  def self.createWhereClause(filters, integerFieldsSkipIfEmpty = [], integerFields = [], skipfield = nil)
     clause = nil
     fields = Array::new
     j = ActiveSupport::JSON
     
-    if (filters)
+    if (filters != nil)
       queryParams = j.decode(filters)
       if (queryParams && queryParams["rules"].any?)
         clausestr = ""
@@ -19,6 +40,7 @@ module DataService
           # these are the select type filters - position 0 is the empty position and means it is not selected,
           # so we are not filtering on that item
           next if (integerFieldsSkipIfEmpty.include?(subclause['field']) && subclause['data'] == '0')        
+          next if (skipfield && subclause['field'] == skipfield)
           
           if clausestr.length > 0 
             clausestr << ' ' + queryParams["groupOp"] + ' '
@@ -56,7 +78,7 @@ module DataService
   #
   #
   def self.addClause(clause, clausestr, field)
-    if clause == nil || clause.empty?
+    if (clause == nil) || clause.empty?
       clause = [clausestr, field]
     else
       isEmpty = clause[0].strip().empty?

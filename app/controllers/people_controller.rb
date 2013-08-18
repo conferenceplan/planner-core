@@ -74,6 +74,15 @@ class PeopleController < PlannerController
          end
        end
       end
+    elsif (@person.pseudonym != nil && params[:person].has_key?(:pseudonym_attributes))
+      if (params[:person][:pseudonym_attributes][:last_name] == "") 
+       if (params[:person][:pseudonym_attributes][:first_name] == "")
+         if (params[:person][:pseudonym_attributes][:suffix] == "")
+           params[:person].delete(:pseudonym_attributes)
+           @person.pseudonym.destroy
+         end
+       end
+      end
     end
 
     @person.update_attributes(params[:person])
@@ -123,7 +132,7 @@ class PeopleController < PlannerController
     extraClause = params[:extraClause]
     onlySurveyRespondents = params[:onlySurveyRespondents]
     
-    @count = PeopleService.countPeople filters, extraClause
+    @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch
     if rows.to_i > 0
       @nbr_pages = (@count / rows.to_i).floor
       @nbr_pages += 1 if @count % rows.to_i > 0
@@ -131,7 +140,7 @@ class PeopleController < PlannerController
       @nbr_pages = 1
     end
     
-    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents
+    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents, nameSearch
   end
 
   #

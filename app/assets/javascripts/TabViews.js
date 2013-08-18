@@ -331,10 +331,12 @@ var TabUtils = (function(){
                 },
                 success : function(col) {
                     viewType = TabCollectionView.extend({
+                        attributes : options.collection_attributes,
                         itemViewOptions : {
                             template : options.template,
                             newTitle  : options.newTitle,
                             editTitle : options.editTitle,
+                            attributes : options.view_attributes
                         },
                     });
                     var collectionView = new viewType({

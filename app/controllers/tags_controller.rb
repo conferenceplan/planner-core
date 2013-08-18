@@ -17,12 +17,6 @@ class TagsController < PlannerController
         end
       end
     end
-    
-    # 3. Then pass this along to the view
-    respond_to do |format|
-      format.html { render :layout => 'content' } # show.html.erb
-      format.xml
-    end
   end
 
   # GET /tags/1

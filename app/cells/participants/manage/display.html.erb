@@ -1,14 +1,5 @@
 <!--
-
-1. We need the collection of people
-2. We need the  grid
-3. Then we display it
-
 -->
-
-<!-- TODO - change so that the list is parameterised re columns and the call back for row selection 
-    Also it would be good if we had a way to put this at the top or bottom of the page
-    -->
 
 <%= render_cell "participants/participant_details", :templates %>
 
@@ -17,29 +8,21 @@
     :selectNotifyMethod => "ParticipantApp.PeopleManagement.showDetails",
     :clearNotifyMethod => "ParticipantApp.PeopleManagement.clearDetails"
     %>
-    
 <%= render_cell "participants/participant_details", :javascript %>
-    
-<script type="text/javascript">
-
-function selectRow(ids) {
-    alert("row selected " + ids);    
-};
-
-</script>    
 
 <div class="row-fluid">
-    <div class="span11">
+    <div class="span6">
         <%= render_cell "participants/participant_list", :display %>
+    </div>
+    <div class="span6 well collapse-group">
+        <a class="btn btn-primary btn-mini" data-toggle="collapse" data-target="#participant-tag-cloud">Tags</a>
+        <div id="participant-tag-cloud" class="collapse"></div>
     </div>
 </div>
 
-<!-- TODO add detail that gets filled in when a person selects a row -->
-<!-- TODO - add the tabs for the people info -->
 <div class="row-fluid">
-    <div class="span11 well">
+    <div class="span12 well">
         <div class="well well-small"><h4 id='selected-participant'></h4></div>
         <%= render_cell "participants/participant_details", :display %>
     </div>
 </div>
-

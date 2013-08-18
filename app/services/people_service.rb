@@ -63,14 +63,18 @@ module PeopleService
   def self.genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
     clause = DataService.createWhereClause(filters, 
           ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
-          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'])
+          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'], 'people.last_name')
     
     # add the name search for last of first etc
-    if nameSearch && ! nameSearch.empty?
-      clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + nameSearch + '%')
-      clause << '%' + nameSearch + '%'
-      clause << '%' + nameSearch + '%'
-      clause << '%' + nameSearch + '%'
+    if nameSearch #&& ! nameSearch.empty?
+      # TODO get the last name from the filters and use that in the clause
+      st = DataService.getFilterData( filters, 'people.last_name' )
+      if (st)
+      clause = DataService.addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + st + '%')
+      clause << '%' + st + '%'
+      clause << '%' + st + '%'
+      clause << '%' + st + '%'
+      end
     end
     
     clause = DataService.addClause( clause, extraClause['param'].to_s + ' = ?', extraClause['value'].to_s) if extraClause
@@ -83,14 +87,18 @@ module PeopleService
 
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
-    if nameSearch && ! nameSearch.empty?
+    if nameSearch #&& ! nameSearch.empty?
       args.merge!( :joins => 'LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
     else
       args.merge!( :include => [:pseudonym] )
     end
     
     if onlySurveyRespondents
-      args.merge!( :joins => 'JOIN survey_respondents ON people.id = survey_respondents.person_id' )
+      if args[:joins]
+        args[:joins] += ' JOIN survey_respondents ON people.id = survey_respondents.person_id'
+      else  
+        args.merge!( :joins => 'JOIN survey_respondents ON people.id = survey_respondents.person_id' )
+      end
     end
 
     args

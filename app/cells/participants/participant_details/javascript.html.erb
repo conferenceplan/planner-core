@@ -89,9 +89,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     
     //
     TagContext = Backbone.Model.extend({
-        // schema : {
-            // tags : { type : 'Text' }
-        // }
     });
     TagContextCollection = Backbone.Collection.extend({
         model : TagContext
@@ -306,7 +303,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             newTitle : "Create Tag",
         }) );
 
-        
         //
         // get the exclusions and show them within the layout
         //
@@ -348,8 +344,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 }
             }
         });
-        /****/
-
     };
 
     //
@@ -367,6 +361,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
 jQuery(document).ready(function() {
     ParticipantApp.start();
+    //
+    TabUtils.createTabListContent({
+        collectionType : TagContextCollection,
+        url : "/tags?class=Person",
+        template : "#tag-cloud-context-layout-template",
+        place : '#participant-tag-cloud',
+        collection_attributes : { "class" : "accordion", "id" : "participant-tag-cloud-parent" },
+        view_attributes : { "class" : "accordion-group" }
+    });
 });
 </script>
 

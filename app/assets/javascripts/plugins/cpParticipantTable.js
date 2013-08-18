@@ -52,10 +52,39 @@
             url += urlArgs;
             
             var colModel = [{
+                label : 'Name',
+                index : 'people.last_name', // TODO - we need a way to tell back end to search on name(s)
+                hidden : false,
+                editable : false,
+                formatter : function(cellvalue, options, rowObject) {
+                    var res = "";
+                    
+                    if (typeof rowObject['person[pseudonym_attributes][first_name]'] != 'undefined') {
+                        res += rowObject['person[pseudonym_attributes][first_name]'];
+                    };
+                    if (typeof rowObject['person[pseudonym_attributes][last_name]'] != 'undefined') {
+                        res += ' ';
+                        res += rowObject['person[pseudonym_attributes][last_name]'];
+                    };
+                    if (typeof rowObject['person[pseudonym_attributes][suffix]'] != 'undefined') {
+                        res += ' ';
+                        res += rowObject['person[pseudonym_attributes][suffix]'];
+                    };
+                    
+                    if (res.length > 0) {
+                        res += "<br/>(" + rowObject['person[first_name]'] + ' ' + rowObject['person[last_name]'] + ' ' + rowObject['person[suffix]'] + ")";
+                    } else {
+                        res = rowObject['person[first_name]'] + ' ' + rowObject['person[last_name]'] + ' ' + rowObject['person[suffix]'];
+                    }
+
+                    
+                    return res;
+                }
+            }, {
                 name : 'person[first_name]',
                 label : 'First Name',
-                index : 'people.first_name',
-                hidden : !settings['first_name'],
+                // index : 'people.first_name',
+                hidden : true, //!settings['first_name'],
                 width : 200,
                 editable : true,
                 editoptions : {
@@ -72,7 +101,7 @@
                 name : 'person[last_name]',
                 label : 'Last Name',
                 index : 'people.last_name',
-                hidden : !settings['last_name'],
+                hidden : true, //!settings['last_name'],
                 editable : true,
                 editoptions : {
                 },
@@ -88,7 +117,7 @@
                 name : 'person[suffix]',
                 label : 'Suffix',
                 index : 'people.suffix',
-                hidden : !settings['suffix'],
+                hidden : true, //!settings['suffix'],
                 editable : true,
                 search : false,
                 editoptions : {
@@ -110,6 +139,7 @@
                 edittype : "select",
                 search : true,
                 stype : "select",
+                width : 60,
                 searchoptions : {
                     dataUrl: settings['root_url'] + "participants/invitestatuslistwithblank"
                 },
@@ -133,6 +163,7 @@
                 edittype : "select",
                 search : true,
                 stype : "select",
+                width : 60,
                 searchoptions : {
                     dataUrl: settings['root_url'] + "invitation_categories/list"
                 },
@@ -156,6 +187,7 @@
                 edittype : "select",
                 search : true,
                 stype : "select",
+                width : 50,
                 searchoptions : {
                     dataUrl: settings['root_url'] + "participants/acceptancestatuslistwithblank"
                 },
@@ -177,11 +209,13 @@
                 editable : false,
                 sortable : false,
                 search : false,
+                align : 'center',
+                width : 40,
             }, {
                 name : 'person[pseudonym_attributes][first_name]',
                 label : 'Publication<br/>First Name',
                 index : 'pseudonyms.first_name',
-                hidden : !settings['pub_first_name'],
+                hidden : true, //!settings['pub_first_name'],
                 editable : true,
                 sortable : false,
                 editoptions : {
@@ -198,7 +232,7 @@
                 name : 'person[pseudonym_attributes][last_name]',
                 label : 'Publication<br/>Last Name',
                 index : 'pseudonyms.last_name',
-                hidden : !settings['pub_last_name'],
+                hidden : true, //!settings['pub_last_name'],
                 editable : true,
                 sortable : false,
                 editoptions : {
@@ -215,7 +249,7 @@
                 name : 'person[pseudonym_attributes][suffix]',
                 label : 'Publication<br/>Suffix',
                 index : 'pseudonyms.suffix',
-                hidden : !settings['pub_suffix'],
+                hidden : true, //!settings['pub_suffix'],
                 editable : true,
                 sortable : false,
                 search : false,
@@ -274,6 +308,7 @@
                     id : "id",
                 },
                 mtype : 'POST',
+                postData : {'namesearch' : 'true'},
                 colModel : colModel,
                 multiselect : settings['multiselect'],
                 pager : jQuery(settings['pager']),
