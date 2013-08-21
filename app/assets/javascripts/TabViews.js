@@ -132,10 +132,30 @@ var TabUtils = (function(){
             "click .model-new-button"    : "newModel",
             "click .model-delete-button" : "deleteModal",
             "click .model-add-tag-button" : "addTag",
+            "click .select-tag-button" : "selectTag",
+            "click .filter-remove-button" : "removeFilter",
         },
         
         initialize : function() {
             this.listenTo(this.model, 'change', this.render);
+        },
+        
+        removeFilter : function(event) {
+            var ctx = $(event.target).attr('tagcontext');
+            var name = $(event.target).attr('tagname');
+            this.model.destroy();
+            if (this.options.tagremove) {
+                this.options.tagremove(ctx,name);
+            }
+        },
+        
+        selectTag : function(event) {
+            var ctx = $(event.target).attr('tagcontext');
+            var name = $(event.target).attr('tagname');
+
+            if (this.options.tagselect) {
+                this.options.tagselect(ctx,name);
+            }
         },
         
         addTag : function(event) {
@@ -273,7 +293,7 @@ var TabUtils = (function(){
     tabModule.createTagListContent = function createTagListContent(options) {
         if (!options.collection) {
             collection = new options.collectionType();
-            collection.url = options.url
+            collection.url = options.url;
             collection.fetch({
                     error : function(model, response) {
                     alertMessage("Error communicating with backend");
@@ -321,10 +341,45 @@ var TabUtils = (function(){
         return collection;
     };
     
+    tabModule.createTagCloudContent = function createTagCloudContent(options) {
+        collection = new options.collectionType();
+        collection.url = options.url;
+        collection.fetch({
+            error : function(model, response) {
+                alertMessage("Error communicating with backend");
+            },
+            success : function(col) {
+                viewType = TabCollectionView.extend({
+                    attributes : options.collection_attributes,
+                    itemViewOptions : {
+                        template : options.template,
+                        newTitle  : options.newTitle,
+                        editTitle : options.editTitle,
+                        attributes : options.view_attributes,
+                        tagselect : options.tagselect,
+                        tagremove : options.tagremove
+                    },
+                });
+                var collectionView = new viewType({
+                    collection : col,
+                    view_refresh_event : options.view_refresh_event,
+                });
+                if (options.place) {
+                    collectionView.render();
+                    $(options.place).html(collectionView.el);
+                } else {
+                    options.region.show(collectionView);
+                }
+            }
+        });
+        
+        return collection;
+    };
+    
     tabModule.createTabListContent = function createTabListContent(options) {
         if (!options.collection) {
             collection = new options.collectionType();
-            collection.url = options.url
+            collection.url = options.url;
             collection.fetch({
                     error : function(model, response) {
                     alertMessage("Error communicating with backend");
@@ -336,7 +391,8 @@ var TabUtils = (function(){
                             template : options.template,
                             newTitle  : options.newTitle,
                             editTitle : options.editTitle,
-                            attributes : options.view_attributes
+                            attributes : options.view_attributes,
+                            tagremove : options.tagremove
                         },
                     });
                     var collectionView = new viewType({
@@ -354,16 +410,25 @@ var TabUtils = (function(){
         } else {
             collection = options.collection;
                 viewType = TabCollectionView.extend({
+                    attributes : options.collection_attributes,
                     itemViewOptions : {
                         template : options.template,
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
+                        attributes : options.view_attributes,
+                        tagremove : options.tagremove
                     },
                 });
                 var collectionView = new viewType({
                     collection : options.collection,
                 });
-                options.region.show(collectionView);
+                // options.region.show(collectionView);
+                if (options.place) {
+                    collectionView.render();
+                    $(options.place).html(collectionView.el);
+                } else {
+                    options.region.show(collectionView);
+                }
         };
         
         return collection;

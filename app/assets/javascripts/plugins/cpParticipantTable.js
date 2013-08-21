@@ -30,6 +30,10 @@
      *
      */
     var methods = {
+        
+        url : function() {
+            return settings['root_url'] + settings['baseUrl'];
+        },
 
         //
         init : function(options) {
@@ -426,6 +430,14 @@
         //
         destroy : function() {
             // ???
+        },
+        
+        tagQuery : function(options) {
+            var newUrl = settings['root_url'] + settings['baseUrl'] + "?" + options.tagQuery;
+            
+            this.jqGrid('setGridParam', {
+                url: newUrl
+            }).trigger("reloadGrid");
         }
     };
 

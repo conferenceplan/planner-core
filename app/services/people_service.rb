@@ -6,7 +6,7 @@ module PeopleService
   #
   #
   #
-  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, mailing_id=nil, scheduled=false, context=nil, tags = nil)
+  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, scheduled=false)
     args = genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
     tagquery = genTagSql(context, tags)
     
@@ -20,7 +20,7 @@ module PeopleService
   #
   #
   #
-  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, mailing_id=nil, scheduled=false,  context=nil, tags = nil)
+  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, scheduled=false)
     args = genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
     tagquery = genTagSql(context, tags)
     
@@ -47,10 +47,12 @@ module PeopleService
     if context
       if context.class == HashWithIndifferentAccess
         context.each do |key, ctx|
-          tagquery += ".tagged_with('" + tags[key].gsub(/'/, "\\\\'").gsub(/\(/, "\\\\(").gsub(/\)/, "\\\\)") + "', :on => '" + ctx + "', :any => true)"
+          # tagquery += ".tagged_with('" + tags[key].gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + ctx + "', :any => true)"
+          tagquery += ".tagged_with('" + tags[key] + "', :on => '" + ctx + "', :any => true)"
         end
       else
-        tagquery += ".tagged_with('" + tags.gsub(/'/, "\\\\'").gsub(/\(/, "\\\\(").gsub(/\)/, "\\\\)") + "', :on => '" + context + "', :op => true)"
+        # tagquery += ".tagged_with('" + tags.gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + context + "', :op => true)"
+        tagquery += ".tagged_with('" + tags + "', :on => '" + context + "', :op => true)"
       end
     end
     

@@ -95,6 +95,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     });
     
     //
+    TagFilter = Backbone.Model.extend({
+        // Context name & Tag name
+        // no ids cause no sync with backend (how to avoid dups? - TODO)
+    });
+    TagFilterCollection = Backbone.Collection.extend({
+        model : TagFilter
+    });
+    
+    //
     AvailabilityDateModel = Backbone.RelationalModel.extend({
         schema : {
             start_time : { type : 'DateTime', title : 'Arrival Time'},
@@ -170,6 +179,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
     var tabLists = [];
     var tabContent = [];
+    var filters = null;
 
     function clearRegDetails() {
         $('#selected-participant').text("");
@@ -345,6 +355,14 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             }
         });
     };
+    
+    /*
+     * To add parameters for the list
+     * http://sandbox.myconferenceplanning.org/participants/list?   context[0]=Texas&tags[0]=The%20Alamo,&
+     * http://sandbox.myconferenceplanning.org/participants/list?   context[0]=Texas&tags[0]=The%20Alamo,San%20Antonio,&
+     */
+    
+    var filterCol = null;
 
     //
     //
@@ -355,20 +373,98 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         },
         clearDetails : function() {
             clearRegDetails();
+        },
+        addFilter : function(context, name) {
+            // TODO - add the context and tag to the TagFilterCollection
+            // associate the collection with a view if not already
+
+            if (!filters) {
+                filters = new TagFilterCollection();
+            }
+            
+            if (!filterCol) {
+                filterCol = TabUtils.createTabListContent({
+                    collection : filters,
+                    template : "#participant-filters-template",
+                    place : "#participant-filters",
+                    collection_attributes : { "class" : "clearfix" },
+                    tagremove : function(context, name) {
+                        // alert("removed tag");
+                        // force a refresh of the table etc
+                        ParticipantApp.PeopleManagement.refreshTable();
+                    },
+                    view_attributes : { "style" : "display : inline" }, // TODO - move the style to the style-sheet
+                });
+                
+            }
+            
+            filters.add(
+                new TagFilter({
+                    context : context,
+                    name : name
+                })
+            );
+        },
+
+        getTagQuery : function() {
+            var tagQuery = "";
+            
+            // go through the filters are create the query for the tags ...
+            if (filters) {
+                // convert the filters into an associative array and then build the query...
+                var filterArray = {}
+                _.each(filters, function(el, index, list) {
+                    var ctx = filters.at(index).get('context');
+                    if (!filterArray[ctx]) {
+                        filterArray[ctx] = filters.at(index).get('name');
+                    } else {
+                        filterArray[ctx] += ',' + filters.at(index).get('name');                    
+                    };
+                });
+                var str = "";
+                var index = 0;
+                _.each(filterArray, function(val, key, list) {
+                    if (index > 0) {
+                        str += "&";
+                    };
+                    str += "context[" + index + "]=" + key + "&tags[" + index + "]=" + val;
+                    index += 1;
+                });
+                tagQuery = str;
+            }
+            
+            return tagQuery;
+        },
+        
+        refreshTable : function() {
+            // get the tags etc from the view and create the query
+            var tagQuery = ParticipantApp.PeopleManagement.getTagQuery();
+            jQuery("#participants").cpParticipantTable('tagQuery',{ 
+                tagQuery : tagQuery
+            });
         }
     };
 })(Backbone);
 
+/*
+ * 
+ */
 jQuery(document).ready(function() {
     ParticipantApp.start();
-    //
-    TabUtils.createTabListContent({
+    
+    // TODO - we want a way to keep a handle on this so that it can be refreshed when tags are added or deleted from a participant
+    // So add it to a collection or ParticipantApp ????
+    TabUtils.createTagCloudContent({
         collectionType : TagContextCollection,
         url : "/tags?class=Person",
         template : "#tag-cloud-context-layout-template",
         place : '#participant-tag-cloud',
         collection_attributes : { "class" : "accordion", "id" : "participant-tag-cloud-parent" },
-        view_attributes : { "class" : "accordion-group" }
+        view_attributes : { "class" : "accordion-group" },
+        tagselect : function(context, name) {
+            ParticipantApp.PeopleManagement.addFilter(context, name);
+            ParticipantApp.PeopleManagement.refreshTable();
+        },
     });
 });
 </script>
