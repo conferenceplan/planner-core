@@ -25,7 +25,9 @@ $(function() {
 });
 </script>
 
-
+<div class="well">
+    <div class="well well-small">Program Item - Summary</div>
+    
 <div class='chart-row'>
 <div class="chart">
 <div class="percentage" data-percent="<%= (@nbrOfScheduledItems.to_f / @nbrOfItems.to_f) * 100 %>"><%= ((@nbrOfScheduledItems.to_f / @nbrOfItems.to_f) * 100).round 1 %>%</div>
@@ -37,3 +39,5 @@ $(function() {
 </div>
 </div>
 <div><%= @nbrOfItems %> Items</div>
+
+</div>

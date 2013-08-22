@@ -29,6 +29,13 @@
  *= require_self
  */
 
+.primary-sidebar {
+    float : left;
+    position : absolute;
+    // width : 200px;
+}
+
+
 $red : #D53F40;
 $blue : #6FB3E0;
 $green : #9ABC32;

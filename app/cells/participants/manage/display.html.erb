@@ -3,7 +3,6 @@
 
 <%= render_cell "participants/participant_details", :templates %>
 
-<!-- TODO - add parameter for reloading the list with a set of parameters -->
 <%= render_cell "participants/participant_list", :javascript, 
     :caption => "Participants",
     :selectNotifyMethod => "ParticipantApp.PeopleManagement.showDetails",
@@ -18,7 +17,6 @@
     </div>
     <div class="span6 well" >
         <div class='collapse-group tag-cloud-area' style="height : 370px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
-        <!-- a class="btn btn-primary btn-mini" data-toggle="collapse" data-target="#participant-tag-cloud">Tags</a -->
         <div id="participant-tag-cloud" class="collapse in"></div>
         </div>
     </div>

@@ -1,0 +1,8 @@
+
+<!-- TODO: need a way to determine which is active -->
+<ul class="nav nav-tabs nav-stacked affix">
+    <% @menu.each do |k, v| %>
+        <li><a href="<%= v[:target] %>"><i class="icon-<%= v[:icon]%>"> </i><%= k %></a></li>
+    <% end %>
+</ul>
+

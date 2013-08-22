@@ -2,60 +2,21 @@
  *
  */
 (function($) {
-    
-
-    
     var settings = {
-        pager : '#pager',
-        root_url : "/",
-        baseUrl : "participants/getList.json",
-        caption : "Participants",
-        selectNotifyMethod : function(ids) {},
-        clearNotifyMethod : function() {},
-        first_name : true,
-        last_name : true,
-        suffix : true,
-        view : false,
-        search : false,
-        del : true,
-        edit : true,
-        add : true,
-        refresh : false,
+        baseUrl : "participants",
+        getGridData : "/getList.json",
         multiselect : false,
-        extraClause : null,
         onlySurveyRespondents : false
     };
 
-    /*
-     *
-     */
-    var methods = {
-        
-        url : function() {
-            return settings['root_url'] + settings['baseUrl'];
-        },
+    var cpTable = null;
 
-        //
-        init : function(options) {
-            settings = $.extend(settings, options);
-
-            var url = settings['root_url'] + settings['baseUrl'];
-            var urlArgs = ""
-            if (settings['extraClause'] || settings['onlySurveyRespondents']) {
-                urlArgs += '?';
-            }
-            if (settings['extraClause']) {
-                urlArgs += settings['extraClause']; 
-            }
-            if (settings['onlySurveyRespondents']) {
-                if (urlArgs.length > 0) {
-                    urlArgs += "&"
-                }
-                urlArgs += "onlySurveyRespondents=true"; 
-            }
-            url += urlArgs;
-            
-            var colModel = [{
+        /*
+         * retrieve the id of the element
+         * this is some context within the existing plugin
+         */
+        var createColModel = function(){
+            return [{
                 label : 'Name',
                 index : 'people.last_name', // TODO - we need a way to tell back end to search on name(s)
                 hidden : false,
@@ -138,17 +99,17 @@
                 name : 'person[invitestatus_id]',
                 label : 'Invite Status',
                 index : 'invitestatus_id',
-                hidden : !settings['invite_status'],
+                hidden : !cpTable.settings()['invite_status'],
                 editable : true,
                 edittype : "select",
                 search : true,
                 stype : "select",
                 width : 60,
                 searchoptions : {
-                    dataUrl: settings['root_url'] + "participants/invitestatuslistwithblank"
+                    dataUrl: cpTable.settings()['root_url'] + "participants/invitestatuslistwithblank"
                 },
                 editoptions : {
-                    dataUrl: settings['root_url'] + "participants/invitestatuslist",
+                    dataUrl: cpTable.settings()['root_url'] + "participants/invitestatuslist",
                     defaultValue : 'Not Set'
                 },
                 formoptions : {
@@ -162,17 +123,17 @@
                 name : 'person[invitation_category_id]',
                 label : 'Invitation<br/>Category',
                 index : 'invitation_category_id',
-                hidden : !settings['invite_category'],
+                hidden : !cpTable.settings()['invite_category'],
                 editable : true,
                 edittype : "select",
                 search : true,
                 stype : "select",
                 width : 60,
                 searchoptions : {
-                    dataUrl: settings['root_url'] + "invitation_categories/list"
+                    dataUrl: cpTable.settings()['root_url'] + "invitation_categories/list"
                 },
                 editoptions : {
-                    dataUrl: settings['root_url'] + "invitation_categories/list",
+                    dataUrl: cpTable.settings()['root_url'] + "invitation_categories/list",
                     defaultValue : 'Not Set'
                 },
                 formoptions : {
@@ -186,17 +147,17 @@
                 name : 'person[acceptance_status_id]',
                 label : 'Acceptance',
                 index : 'acceptance_status_id',
-                hidden : !settings['acceptance_status'],
+                hidden : !cpTable.settings()['acceptance_status'],
                 editable : true,
                 edittype : "select",
                 search : true,
                 stype : "select",
                 width : 50,
                 searchoptions : {
-                    dataUrl: settings['root_url'] + "participants/acceptancestatuslistwithblank"
+                    dataUrl: cpTable.settings()['root_url'] + "participants/acceptancestatuslistwithblank"
                 },
                 editoptions : {
-                    dataUrl: settings['root_url'] + "participants/acceptancestatuslist",
+                    dataUrl: cpTable.settings()['root_url'] + "participants/acceptancestatuslist",
                     defaultValue : 'Not Set'
                 },
                 formoptions : {
@@ -209,7 +170,7 @@
             }, {
                 name : 'person[has_survey]',
                 label : 'Survey',
-                hidden : !settings['has_survey'],
+                hidden : !cpTable.settings()['has_survey'],
                 editable : false,
                 sortable : false,
                 search : false,
@@ -297,161 +258,61 @@
                     label : "lock"
                 }
             }];
+        };
+        
+    createUrl = function (settings) {
+        var url = settings['root_url'] + settings['baseUrl'] + settings['getGridData'];
+        var urlArgs = "";
+        if (settings['extraClause'] || settings['onlySurveyRespondents']) {
+            urlArgs += '?';
+        }
+        if (settings['extraClause']) {
+            urlArgs += settings['extraClause']; 
+        }
+        if (settings['onlySurveyRespondents']) {
+            if (urlArgs.length > 0) {
+                urlArgs += "&";
+            }
+            urlArgs += "onlySurveyRespondents=true"; 
+        }
+        url += urlArgs;
+        return url;
+    };
 
-            // ----------------------------------------------------------
-            //
-            var grid = this.jqGrid({
-                url : url,
-                datatype : 'JSON',
-                jsonReader : {
-                    repeatitems : false,
-                    page : "currpage",
-                    records : "totalrecords",
-                    root : "rowdata",
-                    total : "totalpages",
-                    id : "id",
-                },
-                mtype : 'POST',
-                postData : {'namesearch' : 'true'},
-                colModel : colModel,
-                multiselect : settings['multiselect'],
-                pager : jQuery(settings['pager']),
-                rowNum : 10,
-                autowidth : true,
-                shrinkToFit : true,
-                height : "100%",
-                rowList : [10, 20, 30],
-                sortname : 'people.last_name',
-                sortorder : "asc",
-                viewrecords : true,
-                imgpath : 'stylesheets/custom-theme/images', // TODO
-                caption : settings['caption'],
-                editurl : settings['root_url'] + "participants?plain=true",
-                // postData : {"field":"acceptance_status_id","op":"eq","data":"8"},
-                onSelectRow : function(ids) {
-                    settings['selectNotifyMethod'](ids);
-                    return false;
-                },
-            });
-            
 
-            // ----------------------------------------------------------
-            // Set up the pager menu for add, delete, and search
-            this.navGrid(settings['pager'], {
-                view : settings['view'],
-                search : settings['search'],
-                del : settings['del'],
-                edit : settings['edit'],
-                add : settings['add'],
-                refresh : settings['refresh'],
-            }, //options
-            {
-                // edit options
-                width : 350,
-                reloadAfterSubmit : true,
-                jqModal : true,
-                closeOnEscape : true,
-                closeAfterEdit : true,
-                bottominfo : "Fields marked with (*) are required",
-                afterSubmit : function(response, postdata) {
-                    // TODO - error handler
-                    settings['clearNotifyMethod'](); 
-                    return [true, "Success", ""];
-                },
-                beforeShowForm : function(form) { // change the style of the modal to make it compatible with our theme
-                    var dlgDiv = $("#editmod" + grid[0].id);
-                    // grid[0] is the div for the whole dialog box
-                    // alert(dlgDiv[0].className); // ui-widget ui-widget-content ui-corner-all ui-jqdialog
-                    // dlgDiv[0].className = "modal";
-                    // alert(dlgDiv.html()); // = "HHHH"
-//                     
-                    // var dlgHeader = $("#edithd" + grid[0].id);
-                    // dlgHeader[0].className = "modal-header";
-                    // //modal-header
-//                     
-//                     
-                    // //modal-body
-                    // var dlgContent = $("#editcnt" + grid[0].id);
-                    // dlgContent[0].className = "modal-body";
-                    
-                    
-                    //modal-footer
-                    
-                    //modal-edit-button
-                    //modal-new-button
-                },
-                mtype : 'PUT',
-                onclickSubmit : function(params, postdata) {
-                    params.url = settings['root_url'] + "participants/" + postdata.participants_id;
-                },
-            }, // edit options
-            {
-                // add options
-                width : 350,
-                reloadAfterSubmit : false,
-                jqModal : true,
-                closeOnEscape : true,
-                bottominfo : "Fields marked with (*) are required",
-                afterSubmit : function(response, postdata) {
-                    // TODO - error handler
-                    
-                    // get the id of the new entry and change the id of the
-                    var res = jQuery.parseJSON( response.responseText );
-                    return [true, "Success", res.id];
-                },
-                closeAfterAdd : true
-            }, // add options
-            {
-                // del options
-                reloadAfterSubmit : false,
-                jqModal : true,
-                closeOnEscape : true,
-                mtype : 'DELETE',
-                onclickSubmit : function(params, postdata) {
-                    params.url = settings['root_url'] + "participants/" + postdata;
-                },
-            }, // del options
-            {
-                // view options
-                jqModal : true,
-                closeOnEscape : true
-            });
-
-            // ----------------------------------------------------------
-            //
-            this.jqGrid('filterToolbar', {
-                stringResult : true,
-                searchOnEnter : false,
-            });
-            
-            return grid;
-        },
-
+    var methods = {
         //
-        destroy : function() {
-            // ???
+        init : function(options) {
+            settings = $.extend(settings, options);
+            
+            // TODO - move the default specific to the participant table from cpTable settings to this module
+            cpTable = this.cpTable;
+
+            this.cpTable.createColModel = createColModel;
+            this.cpTable.createUrl = createUrl;
+            tbl = this.cpTable(settings); // create th underlying table
+            return tbl;
         },
         
         tagQuery : function(options) {
-            var newUrl = settings['root_url'] + settings['baseUrl'] + "?" + options.tagQuery;
-            
-            this.jqGrid('setGridParam', {
-                url: newUrl
-            }).trigger("reloadGrid");
+            this.cpTable('tagQuery',options);
         }
     };
 
-    /*
-     *
-     */
+    
     $.fn.cpParticipantTable = function(method) {
+        // return $.fn.cpTable(method);
         if (methods[method]) {
+            // need to pass methods to the parent...
+            // alert("gg");
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if ( typeof method === 'object' || !method) {
+            // alert("ggh");
             return methods.init.apply(this, arguments);
         } else {
             $.error('Method ' + method + ' does not exist on jQuery.cpParticipantTable');
         }
     };
+
 
 })(jQuery);

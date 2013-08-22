@@ -3,7 +3,9 @@ PlannerRc1::Application.routes.draw do
   namespace :pages do
     resources :home_dash
     match "participants_dash/:cellname" => "participants_dash#index"
-    resources :participants_dash
+    # resources :participants_dash # TODO - map back to the default participant dash or need a default can not find
+    match "items_dash/:cellname" => "items_dash#index"
+    # resources :items_dash
     resources :logistics_dash
     resources :admin_dash
     resources :publications_dash
@@ -11,7 +13,6 @@ PlannerRc1::Application.routes.draw do
     resources :mailings_dash
     resources :surveys_dash
     resources :schedule_dash
-    resources :items_dash
   end
   
   # Default routes 
