@@ -1,7 +1,104 @@
-<h1>
-  Items::ItemDetails#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/items/item_details/javascript.html.erb
-</p>
+ItemApp = new Backbone.Marionette.Application();
+
+ItemApp.ItemManagement = (function(Backbone){
+
+    /*
+     * 
+     */    
+    ProgramItem = Backbone.Model.extend({
+        schema : {
+            title       : { type : 'Text' },
+            short_title : { type : 'Text' },
+            precis : { type : 'TextArea', editorAttrs: { rows : 6, cols : 60 } },
+            notes : { type : 'TextArea', editorAttrs: { rows : 6, cols : 60 } },
+            format_id : { type : 'Select', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            print : { type : 'Checkbox'},
+            duration : { type : 'Number' },
+            minimum_people : { type : 'Number' },
+            maximum_people : { type : 'Number' },
+            room_id : { type : 'Select', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO
+            start_day : { type : 'Select', options : <%=  ([[' ','-1']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%> },
+            start_time : { type : 'Time' }, // TODO - verify that this works
+
+            pub_reference_number : { type : 'Number' },
+        },
+        urlRoot : '/programme_items' // TODO - on update event etc we need to refresh the grid and the selected details
+    });
+        
+    /*
+     * 
+     */
+    var tabLists = [];
+    var tabContent = [];
+    var filters = null;
+
+    function clearRegDetails() {
+        $('#selected-program-item').text("");
+        
+        _.invoke(tabLists, 'reset' );
+        _.invoke(tabContent, 'clear' );
+    };
+    
+    function showDetails(id) {
+        // alert(id);
+        var data = jQuery("#items").jqGrid('getRowData', id);
+        $('#selected-program-item').text(data['item[title]']);
+        
+        tabContent.push( TabUtils.createTabContent({
+            modelType : ProgramItem,
+            url : "/programme_items/" + id + '.json', // TODO
+            template : '#program-item-view-template',
+            place :'#program-item-view',
+            id : id,
+            editTitle : "Edit Item",
+            updateCallback : function(mdl) {
+                // alert('model has been updated ' + mdl.id);
+                // 1. we need to refresh the row in the table (or the current table)
+                // and make sure that the row is selected
+                // Also need to update the title above the tabs
+                $("#items").jqGrid('setGridParam', {
+                    loadComplete: function(data) {
+                        // alert("dd");
+                        $("#items").jqGrid('setSelection', id); // when load is complete the selection is called...
+                        // load complete is called every time... only want it once, so remove it after it has been used...
+                        $(this).jqGrid('setGridParam', { loadComplete: function() {} });
+                    }
+                });
+                $("#items").trigger("reloadGrid");
+            }
+        }) );
+
+    };
+    
+    return {
+        showDetails : function(id) {
+            showDetails(id);
+        },
+        clearDetails : function() {
+            // clearRegDetails();
+        },
+        
+        getTagQuery : function() {
+            var tagQuery = "";
+            // TODO - 
+            return tagQuery;
+        },
+        
+        refreshTable : function() {
+            // get the tags etc from the view and create the query
+            var tagQuery = ItemApp.ItemManagement.getTagQuery();
+            jQuery("#items").cpItemTable('tagQuery',{ 
+                tagQuery : tagQuery
+            });
+        }
+    };
+    
+})(Backbone);
+
+jQuery(document).ready(function() {
+    ItemApp.start();
+});
+
+</script>

@@ -3,6 +3,42 @@
 #
 module ProgramItemsService
   
+  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil)
+    args = genArgsForSql(nameSearch, filters, extraClause)
+    tagquery = DataService.genTagSql(context, tags)
+    
+    if tagquery.empty?
+      ProgrammeItem.count args
+    else
+      eval "ProgrammeItem#{tagquery}.count :all, " + args.inspect
+    end
+  end
+  
+  def self.findItems(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil)
+    args = genArgsForSql(nameSearch, filters, extraClause)
+    tagquery = DataService.genTagSql(context, tags)
+    
+    offset = (page - 1) * rows.to_i
+    args.merge!(:offset => offset, :limit => rows)
+    
+    if (index != nil && index != "")
+       args.merge!(:offset => offset, :limit => rows, :order => index + " " + sort_order)
+    else
+       args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc")
+    end
+
+    
+    # if index
+      # args.merge!(:order => index + " " + sort_order)
+    # end
+    
+    if tagquery.empty?
+      items = ProgrammeItem.find :all, args
+    else
+      items = eval "ProgrammeItem#{tagquery}.find :all, " + args.inspect
+    end
+  end
+  
   #
   #
   #
@@ -114,6 +150,37 @@ module ProgramItemsService
   end
   
 protected
+
+  def self.genArgsForSql(nameSearch, filters, extraClause)
+    clause = DataService.createWhereClause(filters, 
+                  ['format_id','pub_reference_number'],
+                  ['format_id','pub_reference_number'], 'programme_items.title')
+
+    # add the name search of the title
+    if nameSearch
+      st = DataService.getFilterData( filters, 'programme_items.title' )
+      if (st)
+        clause = DataService.addClause(clause,'programme_items.title like ?','%' + st + '%')
+      end
+    end
+    
+    # TODO - add these
+    # if ignoreScheduled
+      # clause = addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
+    # end
+    # if ignorePending
+      # clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
+      # clause = addClause( clause, 'programme_items.print = true', nil )
+    # end
+
+    args = { :conditions => clause }
+    
+    args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
+                           'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
+                           'LEFT JOIN pending_publication_items on pending_publication_items.programme_item_id = programme_items.id ' )
+
+    args
+  end
 
   def self.itemConflictSql(day = nil)
     query = @@CONFLICT_QUERY_PT1 

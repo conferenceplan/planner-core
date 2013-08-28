@@ -132,9 +132,7 @@ class PeopleController < PlannerController
     onlySurveyRespondents = params[:onlySurveyRespondents]
     context = params[:context]
     tags = params[:tags]
-    
-    logger.debug "****** " + (filters == nil).to_s
-    
+        
     @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags
     if rows.to_i > 0
       @nbr_pages = (@count / rows.to_i).floor

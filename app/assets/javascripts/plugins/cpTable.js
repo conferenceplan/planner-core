@@ -55,7 +55,7 @@
                 shrinkToFit : true,
                 height : "100%",
                 // rowList : [10, 20, 30],
-                sortname : 'people.last_name', // TODO
+                sortname : settings['sortname'], //'people.last_name', // TODO
                 sortorder : "asc",
                 viewrecords : true,
                 imgpath : 'stylesheets/custom-theme/images', // TODO

@@ -175,6 +175,7 @@ PlannerRc1::Application.routes.draw do
   match 'programme_items/do_assign_reference_numbers', :controller => 'programme_items', :action => 'do_assign_reference_numbers',:method => 'post'
   match 'programme_items/drop', :controller => 'programme_items', :action => 'drop', :method => 'get'
   match 'programme_items/list', :controller => 'programme_items', :action => 'list'
+  match 'programme_items/getList',:controller => 'programme_items', :action => 'getList', :method => 'post'
 
   resources :programme_items do
     resources :excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs

@@ -12,7 +12,6 @@ class Participants::ParticipantListCell < Cell::Rails
     @root_url = args.has_key?(:root_url) ? args[:root_url] : "/"
     @baseUrl = args.has_key?(:baseUrl) ? args[:baseUrl] : "participants"
     @getGridData = args.has_key?(:getGridData) ? args[:getGridData] : "/getList.json"
-    @caption = args.has_key?(:caption) ? args[:caption] : "Participants"
     
     @invite_status = args.has_key?(:invite_status) ? args[:invite_status] : true
     @invite_category = args.has_key?(:invite_category) ? args[:invite_category] : true

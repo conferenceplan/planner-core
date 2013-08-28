@@ -83,8 +83,8 @@ var TabUtils = (function(){
             var errors = this.form.commit(); // To save the values from the form back into the model
             // TODO - check for validation errors (client side???)
             
-            this.model.save(null, { 
-                wait: true,
+            this.model.save({ 
+                // wait: true,
                 error : function() {
                     alertMessage("Error saving the instance");
                 }
@@ -241,6 +241,7 @@ var TabUtils = (function(){
             detail = new options.modelType();
             detail.fetch({
                 url : options.url,
+                async:false,
                 error : function(model, response) {
                     alertMessage("Error communicating with backend");
                 },
@@ -256,6 +257,7 @@ var TabUtils = (function(){
                     $(options.place).html(tabView.el);
                 }
             });
+            detail.on("sync", options.updateCallback ); // when the modal does the update and second after the update to the server
         } else {
             detail = options.model;
             var tabView = new TabView({
@@ -271,6 +273,7 @@ var TabUtils = (function(){
             } else {
                 $(options.place).html(tabView.el);
             }
+            model.on("sync", options.updateCallback );
         }
         
         return detail;

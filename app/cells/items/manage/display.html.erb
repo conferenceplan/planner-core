@@ -7,15 +7,16 @@
 <%= render_cell "items/item_details", :templates %>
 
 <%= render_cell "items/item_list", :javascript, 
+    :caption => "Program Items", :selectNotifyMethod => "ItemApp.ItemManagement.showDetails", :clearNotifyMethod => "ItemApp.ItemManagement.clearDetails"
     %>
 <%= render_cell "items/item_details", :javascript %>
 
 <div class="row-fluid">
-    <div class="span6">
+    <div class="span10">
         <div id="item-filters"></div> <!-- TODO -->
         <%= render_cell "items/item_list", :display %>
     </div>
-    <div class="span6 well" >
+    <div class="span2 well" >
         <div class='collapse-group tag-cloud-area' style="height : 370px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
         <div id="item-tag-cloud" class="collapse in"></div>
         </div>

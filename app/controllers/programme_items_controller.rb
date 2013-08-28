@@ -32,7 +32,7 @@ class ProgrammeItemsController < PlannerController
 #   *********** TODO - check the code below ********************
   
   def show
-    plain = params[:plain]
+    plain = params[:plain] # TODO
     @programmeItem = ProgrammeItem.find(params[:id])
     @editable = params[:edit] ? params[:edit] == "true" : true
     
@@ -46,6 +46,7 @@ class ProgrammeItemsController < PlannerController
     else  
       render
     end
+    # TODO - need a JSON renderer
   end
   def create
     plain = params[:plain]
@@ -103,7 +104,7 @@ class ProgrammeItemsController < PlannerController
     @programmeItem = ProgrammeItem.find(params[:id])
     startDay = params[:start_day]
     startTime = params[:start_time]
-    roomId = params[:room]
+    roomId = params[:room_id]
     
     begin
       ProgrammeItem.transaction do
@@ -133,11 +134,6 @@ class ProgrammeItemsController < PlannerController
       raise
     end
 
-    if saved
-        redirect_to :action => 'show', :id => @programmeItem, :plain => true
-    else
-      render :action => 'edit', :layout => 'content'
-    end 
   end
   
   def destroy
@@ -155,6 +151,32 @@ class ProgrammeItemsController < PlannerController
     render :layout => 'success'
   end
   #
+  
+  def getList
+    rows = params[:rows] ? params[:rows] : 15
+    @page = params[:page] ? params[:page].to_i : 1
+    idx = params[:sidx]
+    order = params[:sord]
+    context = params[:context]
+    tags = params[:tags]
+    nameSearch = params[:namesearch]
+    filters = params[:filters]
+    extraClause = params[:extraClause]
+    
+    ignoreScheduled = params[:igs] # TODO
+    ignorePending = params[:igp]
+
+    @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags
+    logger.debug "******** " + @count.to_s
+    if rows.to_i > 0
+      @nbr_pages = (@count / rows.to_i).floor
+      @nbr_pages += 1 if @count % rows.to_i > 0
+    else
+      @nbr_pages = 1
+    end
+    
+    @items = ProgramItemsService.findItems rows, @page, idx, order, filters, extraClause, nameSearch, context, tags
+  end
   
   def list
     rows = params[:rows]

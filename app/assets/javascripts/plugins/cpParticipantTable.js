@@ -6,7 +6,8 @@
         baseUrl : "participants",
         getGridData : "/getList.json",
         multiselect : false,
-        onlySurveyRespondents : false
+        onlySurveyRespondents : false,
+        sortname : 'people.last_name'
     };
 
     var cpTable = null;

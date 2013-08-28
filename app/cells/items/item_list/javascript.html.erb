@@ -1,7 +1,25 @@
-<h1>
-  Items::ItemList#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/items/item_list/javascript.html.erb
-</p>
+jQuery(document).ready(function() {
+    jQuery("#items").cpItemTable({
+        caption : "<%= @caption %>",
+        selectNotifyMethod : <%= @selectNotifyMethod %>,
+        clearNotifyMethod : <%= @clearNotifyMethod %>,
+        root_url : "<%= @root_url %>",
+        baseUrl : "<%= @baseUrl %>",
+        getGridData : "<%= @getGridData %>",
+        
+        view : <%= @view %>,
+        search : <%= @search %>,
+        del : <%= @del %>,
+        edit : <%= @edit %>,
+        add : <%= @add %>,
+        refresh : <%= @refresh %>,
+        pager : "<%= @pager %>",
+        
+        extraClause : "<%= @extraClause %>",
+        
+    });
+});
+
+</script>
