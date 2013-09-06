@@ -48,6 +48,13 @@ ItemApp.ItemManagement = (function(Backbone){
     TagContextCollection = Backbone.Collection.extend({
         model : TagContext
     });
+    TagFilter = Backbone.Model.extend({
+        // Context name & Tag name
+        // no ids cause no sync with backend (how to avoid dups? - TODO)
+    });
+    TagFilterCollection = Backbone.Collection.extend({
+        model : TagFilter
+    });
 
     /*
      * 
@@ -139,6 +146,8 @@ ItemApp.ItemManagement = (function(Backbone){
 
     };
     
+    var filterCol = null;
+    
     return {
         showDetails : function(id) {
             showDetails(id);
@@ -146,10 +155,66 @@ ItemApp.ItemManagement = (function(Backbone){
         clearDetails : function() {
             clearDetails();
         },
-        
+
+        addFilter : function(context, name) {
+            // TODO - add the context and tag to the TagFilterCollection
+            // associate the collection with a view if not already
+
+            if (!filters) {
+                filters = new TagFilterCollection();
+            }
+            
+            if (!filterCol) {
+                filterCol = TabUtils.createTabListContent({
+                    collection : filters,
+                    template : "#item-filters-template",
+                    place : "#item-filters",
+                    collection_attributes : { "class" : "clearfix" },
+                    tagremove : function(context, name) {
+                        // alert("removed tag");
+                        // force a refresh of the table etc
+                        ItemApp.ItemManagement.refreshTable();
+                    },
+                    view_attributes : { "style" : "display : inline" }, // TODO - move the style to the style-sheet
+                });
+                
+            }
+            
+            filters.add(
+                new TagFilter({
+                    context : context,
+                    name : name
+                })
+            );
+        },
+                
         getTagQuery : function() {
             var tagQuery = "";
-            // TODO - 
+            
+            // go through the filters are create the query for the tags ...
+            if (filters) {
+                // convert the filters into an associative array and then build the query...
+                var filterArray = {}
+                _.each(filters, function(el, index, list) {
+                    var ctx = filters.at(index).get('context');
+                    if (!filterArray[ctx]) {
+                        filterArray[ctx] = filters.at(index).get('name');
+                    } else {
+                        filterArray[ctx] += ',' + filters.at(index).get('name');                    
+                    };
+                });
+                var str = "";
+                var index = 0;
+                _.each(filterArray, function(val, key, list) {
+                    if (index > 0) {
+                        str += "&";
+                    };
+                    str += "context[" + index + "]=" + key + "&tags[" + index + "]=" + val;
+                    index += 1;
+                });
+                tagQuery = str;
+            }
+            
             return tagQuery;
         },
         
@@ -187,6 +252,20 @@ ItemApp.ItemManagement = (function(Backbone){
 jQuery(document).ready(function() {
     ItemApp.start();
     ItemApp.ItemManagement.init();
+    
+    TabUtils.createTagCloudContent({
+        collectionType : TagContextCollection,
+        url : "/tags?class=ProgrammeItem",
+        template : "#tag-cloud-context-layout-template",
+        place : '#item-tag-cloud',
+        collection_attributes : { "class" : "accordion", "id" : "item-tag-cloud-parent" },
+        view_attributes : { "class" : "accordion-group" },
+        tagselect : function(context, name) {
+            ItemApp.ItemManagement.addFilter(context, name);
+            ItemApp.ItemManagement.refreshTable();
+        },
+    });
+    
 });
 
 </script>

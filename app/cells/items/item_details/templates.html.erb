@@ -136,5 +136,21 @@ Use the Rails authenticity token in the forms...
 </div>
 </script>
 
-<script type="text/template" id="XXXX-XXXX-template">
+<script type="text/template" id="tag-cloud-context-layout-template">
+<div class="accordion-heading">
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-tag-cloud-parent" href="#{{= context }}"> {{= context }} </a>
+</div>
+<div id="{{= context }}" class="accordion-body collapse">
+    <div class="accordion-inner">
+        {{ _.each(tags, function(tag) { }}
+        <span class="label label-info select-tag-button" tagcontext="{{= context}}" tagname="{{= tag.name}}">{{= tag.name }} {{= tag.count }}</span>
+        {{ }); }}
+    </div>
+</div>
 </script>
+
+<script type="text/template" id="item-filters-template">
+    <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="icon-remove"></i></span>
+</script>
+
+
