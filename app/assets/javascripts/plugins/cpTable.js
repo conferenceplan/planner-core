@@ -60,10 +60,19 @@
                 viewrecords : true,
                 imgpath : 'stylesheets/custom-theme/images', // TODO
                 caption : settings['caption'],
+                editurl: $.fn.cpTable.editUrl(settings),
                 onSelectRow : function(ids) {
                     settings['selectNotifyMethod'](ids);
                     return false;
                 },
+                loadComplete : function(data) {
+                    if (data.currentSelection) {
+                        grid.setSelection(data.currentSelection);
+                    };
+                    grid.setGridParam({
+                         postData : {page_to : null, current_selection : null},
+                    });
+                }
             });
             
 
@@ -120,7 +129,7 @@
             {
                 // add options
                 width : 350,
-                reloadAfterSubmit : false,
+                reloadAfterSubmit : true, // reload the grid, and we make sure we are on a page where the new item is
                 jqModal : true,
                 closeOnEscape : true,
                 bottominfo : "Fields marked with (*) are required",
@@ -129,6 +138,17 @@
                     
                     // get the id of the new entry and change the id of the
                     var res = jQuery.parseJSON( response.responseText );
+                    grid.setGridParam({
+                         postData : {
+                                 page_to : $.fn.cpTable.pageTo(res), // make sure that the current page contains the selected element
+                                 filters : {},
+                                 current_selection : res.id // to pass back for the selection
+                             },
+                    });
+                    grid[0].clearToolbar(); // clear the tool bar i.e make sure that there are no filters
+                    
+                    // TODO - If there is an active tag query we need to clear it as well TODO TODO
+
                     return [true, "Success", res.id];
                 },
                 closeAfterAdd : true
@@ -204,5 +224,12 @@
         return url;
     };
 
+    $.fn.cpTable.editUrl = function (settings) {
+        return "";
+    };
+    
+    $.fn.cpTable.pageTo = function (data) {
+        return "";
+    };
 
 })(jQuery);

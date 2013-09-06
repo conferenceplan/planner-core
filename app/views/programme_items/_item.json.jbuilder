@@ -13,9 +13,9 @@ json.duration               item.duration
 json.maximum_people         item.maximum_people
 json.minimum_people         item.minimum_people
 json.setup_type_id          item.setup_type_id
-json.setup_name             item.setup_type.name if item.setup_type
+json.setup_name             item.setup_type ? item.setup_type.name : "" 
 json.format_id              item.format_id
-json.format_name            item.format.name if item.format
+json.format_name            item.format ? item.format.name : ""
     
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A') : "" # we want this to be the number

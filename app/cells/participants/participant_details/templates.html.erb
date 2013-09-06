@@ -367,7 +367,7 @@ Use the Rails authenticity token in the forms...
     </button>
     <span class="label label">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
-    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + person_id + '/remove?class=Person&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
+    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=Person&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
     {{ }); }}
 </div>
 </script>
@@ -404,7 +404,7 @@ Use the Rails authenticity token in the forms...
 
 <script type="text/template" id="time-exclusion-view-template">
 <div class="thumbnail clearfix">
-    <small> {{= moment(start).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="icon-arrow-right"></i> {{= moment(end).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
+    <small> {{= moment(start).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="icon-arrow-right"></i> {{= moment(start).date() == moment(end).date() ? moment(end).format("h:mm a") : moment(end).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
 </div>
 </script>
 

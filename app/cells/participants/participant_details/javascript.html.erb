@@ -17,7 +17,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             postcode : { type : 'Text' },
             country : { type : 'Text' },
             isdefault : { type : 'Checkbox'},
-            // tt : { type : 'Time'}
         },
         urlRoot : '/postal_addresses'
     });
@@ -199,6 +198,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : '#registration-view-template',
             place :'#registration-view',
             id : id,
+            id_name : 'person_id',
             newTitle : "Create Registration",
             editTitle : "Edit Registration",
         }) );
@@ -210,6 +210,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : '#invite-view-template',
             place : '#invite-view',
             id : id,
+            id_name : 'person_id',
             newTitle : "Create Invite",
             editTitle : "Edit Invite",
         }) );
@@ -221,6 +222,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : '#bio-view-template',
             place : '#bio-view',
             id : id,
+            id_name : 'person_id',
             newTitle : "Create Bio",
             editTitle : "Edit Bio",
         }) );
@@ -253,6 +255,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#address-control-template",
             modelType : Address,
             id : id,
+            id_name : 'person_id',
             view_refresh_event : "address:refresh",
             modal_create_title : "Create Address Details",
             region : addressLayout.postalControlRegion
@@ -271,6 +274,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#phone-control-template",
             modelType : PhoneNumber,
             id : id,
+            id_name : 'person_id',
             view_refresh_event : "address:refresh",
             modal_create_title : "Create Phone Number",
             region : phoneLayout.phoneControlRegion,
@@ -289,6 +293,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#email-control-template", 
             modelType : EmailAddress,
             id : id,
+            id_name : 'person_id',
             view_refresh_event : "address:refresh",
             modal_create_title : "Create Email",
             region : emailLayout.emailControlRegion
@@ -307,7 +312,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         tabLists.push( TabUtils.createTagListContent({
             collectionType : TagContextCollection,
             url : "/tags/"+ id + "?class=Person",
-            tagUrl : "/tags/"+ id + "/add?class=Person", // TODO - need context for tag
+            tagUrl : "/tags/"+ id + "/add?class=Person",
             template : "#tag-context-layout-template",
             view_refresh_event : "address:refresh",
             place : '#tags-view',
@@ -342,6 +347,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                     availability.url = '/available_dates/' + availability.id;
                     tabContent.push( TabUtils.createTabContent({
                         id : id,
+                        id_name : 'person_id',
                         modelType : AvailabilityDateModel,
                         model : availability,
                         template : '#date-exclusion-view-template',

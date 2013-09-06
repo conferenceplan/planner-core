@@ -8,7 +8,7 @@ gem "audited-activerecord", "~> 3.0"
 gem 'acts-as-taggable-on' 
 gem 'authlogic'
 gem 'bluecloth'
-gem 'bootstrap-sass'
+gem 'bootstrap-sass', '~> 2.3.2.2'
 gem 'bootswatch-rails'
 gem 'cells'
 #gem 'cells-capture', require: 'cells_capture'

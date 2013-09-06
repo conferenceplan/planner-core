@@ -56,7 +56,7 @@ class PeopleController < PlannerController
     datasourcetmp = Datasource.find_by_name("Application")
     @person.datasource = datasourcetmp
     @person.save!
-    render json: @person.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
+    # render json: @person.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
   end
 
   def update
@@ -122,6 +122,10 @@ class PeopleController < PlannerController
     rows = params[:rows] ? params[:rows] : 15
     @page = params[:page] ? params[:page].to_i : 1
     
+    @currentId = params[:current_selection]
+    
+    page_to = params[:page_to]
+    
     idx = params[:sidx]
     order = params[:sord]
     nameSearch = params[:namesearch]
@@ -134,6 +138,15 @@ class PeopleController < PlannerController
     tags = params[:tags]
         
     @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags
+    
+    if page_to && !page_to.empty?
+      gotoNum = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, page_to
+      if gotoNum
+        @page = (gotoNum / rows.to_i).floor
+        @page += 1 if gotoNum % rows.to_i > 0
+      end
+    end
+    
     if rows.to_i > 0
       @nbr_pages = (@count / rows.to_i).floor
       @nbr_pages += 1 if @count % rows.to_i > 0

@@ -260,7 +260,15 @@
                 }
             }];
         };
-        
+    
+    editUrl = function(settings) {
+        return settings['root_url'] + "participants";
+    },
+    
+    pageTo = function(data) {
+        return data["person[last_name]"];
+    },
+     
     createUrl = function (settings) {
         var url = settings['root_url'] + settings['baseUrl'] + settings['getGridData'];
         var urlArgs = "";
@@ -286,11 +294,13 @@
         init : function(options) {
             settings = $.extend(settings, options);
             
-            // TODO - move the default specific to the participant table from cpTable settings to this module
+            // TODO - move the default specific to the participant table from cpTable settings to this module CHECK
             cpTable = this.cpTable;
 
             this.cpTable.createColModel = createColModel;
             this.cpTable.createUrl = createUrl;
+            this.cpTable.editUrl = editUrl;
+            this.cpTable.pageTo = pageTo;
             tbl = this.cpTable(settings); // create th underlying table
             return tbl;
         },

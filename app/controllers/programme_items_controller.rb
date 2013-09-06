@@ -5,7 +5,7 @@ class ProgrammeItemsController < PlannerController
     # TODO - order the items by date (if there is a start time...)
     if params[:person_id] # then we only get the items for a given person
       person = Person.find(params[:person_id])
-      @programmeItems = person.programmeItems
+      @programmeItems = person.programmeItems #:include => [:time_slot, :rooom]
     else
       @programmeItems = ProgrammeItem.find :all # Getting all the program items is probably not a good idea!!!!!
     end
@@ -48,6 +48,7 @@ class ProgrammeItemsController < PlannerController
     end
     # TODO - need a JSON renderer
   end
+  
   def create
     plain = params[:plain]
     # NOTE - name of the programmeItem passed in from form
@@ -74,16 +75,6 @@ class ProgrammeItemsController < PlannerController
       saved = false
       raise
     end
-
-    if saved
-      if plain
-        redirect_to :action => 'show', :id => @programmeItem, :plain => plain
-      else  
-        redirect_to :action => 'show', :id => @programmeItem
-      end
-    else
-      render :action => 'new'
-    end 
   end
 
   def new
@@ -162,12 +153,23 @@ class ProgrammeItemsController < PlannerController
     nameSearch = params[:namesearch]
     filters = params[:filters]
     extraClause = params[:extraClause]
+
+    @currentId = params[:current_selection]
+    page_to = params[:page_to]
     
     ignoreScheduled = params[:igs] # TODO
     ignorePending = params[:igp]
 
     @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags
-    logger.debug "******** " + @count.to_s
+
+    if page_to && !page_to.empty?
+      gotoNum = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, page_to
+      if gotoNum
+        @page = (gotoNum / rows.to_i).floor
+        @page += 1 if gotoNum % rows.to_i > 0
+      end
+    end
+    # logger.debug "******** " + @count.to_s
     if rows.to_i > 0
       @nbr_pages = (@count / rows.to_i).floor
       @nbr_pages += 1 if @count % rows.to_i > 0

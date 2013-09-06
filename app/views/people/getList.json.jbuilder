@@ -1,6 +1,7 @@
 json.totalpages @nbr_pages
 json.currpage @page
 json.totalrecords @count
+json.currentSelection @currentId if @currentId
     
 json.rowdata @people do |person|
 
@@ -23,5 +24,7 @@ json.rowdata @people do |person|
     end
     
     json.set! "person[has_survey]", SurveyService.personAnsweredSurvey( person, 'partsurvey') ? "Y" : "N"
+    
+    json.set! "default_email", person.getDefaultEmail
 
 end

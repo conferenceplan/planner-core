@@ -42,7 +42,7 @@ class Person < ActiveRecord::Base
   
   #
   has_many  :programmeItemAssignments
-  has_many  :programmeItems, :through => :programmeItemAssignments
+  has_many  :programmeItems, :through => :programmeItemAssignments, :include => [:time_slot, :room], :order => 'time_slots.start'
   
   has_many  :publishedProgrammeItemAssignments
   has_many  :published_programme_items, :through => :publishedProgrammeItemAssignments

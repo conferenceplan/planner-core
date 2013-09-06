@@ -6,8 +6,8 @@ module PeopleService
   #
   #
   #
-  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, scheduled=false)
-    args = genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
+  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, scheduled=false)
+    args = genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents, page_to)
     tagquery = DataService.genTagSql(context, tags)
     
     if tagquery.empty?
@@ -62,14 +62,14 @@ module PeopleService
   #
   #
   #
-  def self.genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
+  def self.genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil)
     clause = DataService.createWhereClause(filters, 
           ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
           ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'], 'people.last_name')
     
     # add the name search for last of first etc
     if nameSearch #&& ! nameSearch.empty?
-      # TODO get the last name from the filters and use that in the clause
+      # get the last name from the filters and use that in the clause
       st = DataService.getFilterData( filters, 'people.last_name' )
       if (st)
       clause = DataService.addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + st + '%')
@@ -82,6 +82,8 @@ module PeopleService
     clause = DataService.addClause( clause, extraClause['param'].to_s + ' = ?', extraClause['value'].to_s) if extraClause
 
     clause = DataService.addClause( clause, 'people.id not in (select person_id from person_mailing_assignments where mailing_id = ?)', mailing_id) if mailing_id && ! mailing_id.empty?
+    
+    clause = DataService.addClause( clause, 'people.last_name <= ?', page_to) if page_to
     
     # Then we want to filter for scehduled people
     # select distinct person_id from programme_item_assignments;

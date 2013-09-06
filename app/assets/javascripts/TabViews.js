@@ -15,7 +15,7 @@ var TabUtils = (function(){
         },
         
         initialize : function() {
-            this.template = _.template($('#modal-edit-template').html())
+            this.template = _.template($('#modal-edit-template').html());
         },
 
         modalOptions: {
@@ -44,14 +44,11 @@ var TabUtils = (function(){
                 e.stopPropagation();
             };
             
-            this.submitData();
-                        
-            if (e.type != "hide") this.$el.modal("hide");
+            var errors = this.submitData();
             
-            // Refresh the view if there is a refresh method
-            if (this.options.refresh) {
-                this.options.refresh(); // cause problem with templates used ???
-            };
+            if (! errors ) {
+                if (e.type != "hide") this.$el.modal("hide");
+            }
         },
         
         close: function (e) {
@@ -81,14 +78,23 @@ var TabUtils = (function(){
         submitData : function() {
             // gather the data and update the underlying model etc.
             var errors = this.form.commit(); // To save the values from the form back into the model
-            // TODO - check for validation errors (client side???)
             
-            this.model.save({ 
-                // wait: true,
-                error : function() {
-                    alertMessage("Error saving the instance");
-                }
-            }); // save the model to the server
+            if (!errors) { // save if there are no errors
+                var refreshFn = this.options.refresh;
+            
+                // accept-charset="UTF-8"
+                this.model.save(null, { 
+                    success : function(mdl) {
+                        // Refresh the view if there is a refresh method
+                        if (refreshFn) {
+                            refreshFn(mdl); // cause problem with templates used ???
+                        };
+                    },
+                    error : function() {
+                        alertMessage("Error saving the instance");
+                    }
+                }); // save the model to the server
+            }
             
             return errors; // if there are any errors
         }
@@ -178,7 +184,7 @@ var TabUtils = (function(){
         },
         
         newModel : function() {
-            this.model.set('person_id', this.options.person_id);
+            this.model.set(this.options.id_name, this.options.id);
             mdl = new TabModal({
                 model : this.model,
                 title : this.options.newTitle
@@ -212,18 +218,25 @@ var TabUtils = (function(){
         },
         
         createMdl : function() {
-            var mdl = new this.options.modelType ({ //Address({
-                person_id : this.options.person_id
-            });
+            var mdl = new this.options.modelType({});
+            if (this.options.id) {
+                mdl.set(this.options.id_name, this.options.id);
+            }
             
             var refreshEvent = this.options.view_refresh_event;
+            var callback = this.options.view_callback;
 
             var modal = new TabModal({
                 model : mdl,
                 title : this.options.modal_create_title,
                 
-                refresh : function() {
-                    eventAggregator.trigger(refreshEvent);
+                refresh : function(m) {
+                    if (refreshEvent) {
+                        eventAggregator.trigger(refreshEvent); 
+                    }
+                    if (callback) {
+                        callback(m);
+                    }
                 }
             });
             modal.render();
@@ -248,7 +261,8 @@ var TabUtils = (function(){
                 success : function(model) {
                     var tabView = new TabView({
                         template : options.template,
-                        person_id : options.id,
+                        id : options.id,
+                        id_name : options.id_name, 
                         model : model,
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
@@ -262,7 +276,8 @@ var TabUtils = (function(){
             detail = options.model;
             var tabView = new TabView({
                 template : options.template,
-                person_id : options.id,
+                id : options.id,
+                id_name : options.id_name, 
                 model : options.model,
                 newTitle  : options.newTitle,
                 editTitle : options.editTitle,
@@ -273,7 +288,7 @@ var TabUtils = (function(){
             } else {
                 $(options.place).html(tabView.el);
             }
-            model.on("sync", options.updateCallback );
+            detail.on("sync", options.updateCallback );
         }
         
         return detail;
@@ -281,14 +296,28 @@ var TabUtils = (function(){
 
     
     tabModule.createTabControl = function createTabControl(options) {
-        control = new TabUtils.TabControlView({
-            template : options.template,
-            person_id : options.id,
-            view_refresh_event : options.view_refresh_event,
-            modal_create_title : options.modal_create_title,
-            modelType : options.modelType
-        });
-        options.region.show(control);
+        if (options.place) {
+            control = new TabUtils.TabControlView({
+                template : options.template,
+                view_refresh_event : options.view_refresh_event,
+                modal_create_title : options.modal_create_title,
+                modelType : options.modelType,
+                view_callback : options.callback
+            });
+            control.render();
+            $(options.place).html(control.el);
+        } else {
+            control = new TabUtils.TabControlView({
+                template : options.template,
+                id : options.id,
+                id_name : options.id_name,
+                view_refresh_event : options.view_refresh_event,
+                modal_create_title : options.modal_create_title,
+                modelType : options.modelType,
+                view_callback : options.callback
+            });
+            options.region.show(control);
+        }
         
         return control;
     };

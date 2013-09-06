@@ -7,7 +7,7 @@ module PlannerReportHelpers
             csv << r
          end
       end
-      send_data csv_data.encode('ISO-8859-15'),
+      send_data csv_data.encode('ISO-8859-15', :invalid => :replace, :undef => :replace),
          :type => 'text/csv; charset=iso-8859-15; header=present',
          :disposition => "attachment; filename=#{filename}"
       flash[:notice] = "Export complete!"
@@ -19,7 +19,7 @@ module PlannerReportHelpers
             csv << r
          end
       end
-      send_data csv_data.encode('UTF-16'),
+      send_data csv_data.encode('UTF-16', :invalid => :replace, :undef => :replace),
          :type => 'text/csv; charset=utf-16; header=present',
          :disposition => "attachment; filename=#{filename}"
       flash[:notice] = "Export complete!"

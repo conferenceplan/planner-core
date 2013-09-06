@@ -35,6 +35,7 @@ Use the Rails authenticity token in the forms...
                 <dt>Title</dt><dd>{{= title ? title : "&nbsp;" }}</dd>
                 <dt>Ref Number</dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
                 <dt>Format</dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
+                <dt>Setup</dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
                 <dt>Short Title</dt><dd>{{= short_title ? short_title : "&nbsp;" }}</dd>
                 <dt>Description</dt><dd>{{= precis ? precis : "&nbsp;" }}</dd>
                 <dt>Notes</dt><dd>{{= notes ? notes : "&nbsp;" }}</dd>
@@ -79,14 +80,58 @@ Use the Rails authenticity token in the forms...
     {{ }; }}    
 </script>
 
+<script type="text/template" id="equipment-layout-template">
+<section>
+    <div id="equipment-control-div"></div>
+    <div id="equipment-region-div"></div>
+</section>
+</script>
+
+<script type="text/template" id="equipment-control-template">
+<div>
+    <button class="add-model-button btn-mini btn-primary pull-right ">
+        add equipment
+    </button>
+</div>
+</script>
+
+<script type="text/template" id="item-control-template">
+    <button class="add-model-button btn btn-primary btn-mini pull-left">New Item</button>
+</script>
+
+
+<script type="text/template" id="equipment-detail-template">
+<li class="span12 clearfix">
+    <div class="thumbnail clearfix">
+        <div class="caption" class="pull-left">
+            <button class="model-delete-button btn btn-primary btn-mini pull-right">
+                <i class="icon-trash"></i>
+            </button>
+            <button class="model-edit-button btn btn-primary btn-mini pull-right">
+                <i class="icon-pencil"></i>
+            </button>
+            <small>
+                <dl class="dl-horizontal-small">
+                    <dt>
+                        Desc
+                    </dt>
+                    <dd>
+                        {{= equipment_type_name ? equipment_type_name : "&nbsp;"}}
+                    </dd>
+                </dl> </small>
+        </div>
+    </div>
+</li>
+</script>
+
 <script type="text/template" id="tag-context-layout-template">
 <div class="thumbnail clearfix">
-    <button class="item-add-tag-button btn btn-primary btn-mini pull-right" tagcontext="{{= context }}">
+    <button class="model-add-tag-button btn btn-primary btn-mini pull-right" tagcontext="{{= context }}">
         Add
     </button>
     <span class="label label">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
-    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + person_id + '/remove?class=ProgrammeItem&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
+    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=ProgrammeItem&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
     {{ }); }}
 </div>
 </script>

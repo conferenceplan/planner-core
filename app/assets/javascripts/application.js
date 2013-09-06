@@ -22,7 +22,7 @@
 //= require backbone/extensions/backbone-relational
 //= require backbone/extensions/backbone.paginator
 
-//= require backbone-forms/distribution/backbone-forms.min
+//= require backbone-forms/distribution/backbone-forms
 //= require backbone-forms/distribution/editors/list.min
 //= require backbone-forms/distribution/templates/bootstrap
 

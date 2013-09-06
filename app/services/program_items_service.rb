@@ -3,9 +3,11 @@
 #
 module ProgramItemsService
   
-  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil)
-    args = genArgsForSql(nameSearch, filters, extraClause)
+  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, page_to = nil)
+    args = genArgsForSql(nameSearch, filters, extraClause, page_to)
     tagquery = DataService.genTagSql(context, tags)
+    
+    args.merge!(:order => "time_slots.start asc, programme_items.title asc")
     
     if tagquery.empty?
       ProgrammeItem.count args
@@ -14,7 +16,7 @@ module ProgramItemsService
     end
   end
   
-  def self.findItems(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil)
+  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil)
     args = genArgsForSql(nameSearch, filters, extraClause)
     tagquery = DataService.genTagSql(context, tags)
     
@@ -24,7 +26,7 @@ module ProgramItemsService
     if (index != nil && index != "")
        args.merge!(:offset => offset, :limit => rows, :order => index + " " + sort_order)
     else
-       args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc")
+       args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc, programme_items.title asc")
     end
 
     
@@ -151,7 +153,7 @@ module ProgramItemsService
   
 protected
 
-  def self.genArgsForSql(nameSearch, filters, extraClause)
+  def self.genArgsForSql(nameSearch, filters, extraClause, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['format_id','pub_reference_number'],
                   ['format_id','pub_reference_number'], 'programme_items.title')
@@ -172,6 +174,9 @@ protected
       # clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
       # clause = addClause( clause, 'programme_items.print = true', nil )
     # end
+    
+    # TODO - assumed that the new creation does not have a time slot. Need to change
+    clause = DataService.addClause( clause, 'programme_items.title <= ? AND time_slots.start is null', page_to) if page_to
 
     args = { :conditions => clause }
     
