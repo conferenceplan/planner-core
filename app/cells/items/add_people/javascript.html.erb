@@ -1,0 +1,30 @@
+<script type="text/javascript">
+ItemApp = new Backbone.Marionette.Application();
+
+ItemApp.PeopleManagement = (function(Backbone){
+    
+    function showProgrammeItem(id) {
+        alert("Item Selected " + id);
+    };
+    
+    function showPerson(id) {
+        alert("Person Selected " + id);
+    };
+    
+    return {
+        showProgrammeItem : function(id) {
+            showProgrammeItem(id);
+        },
+        showPerson : function(id) {
+            // May not need since we can get the selected from the grid???
+            showPerson(id);
+        },
+    }
+
+})(Backbone);
+
+jQuery(document).ready(function() {
+    ItemApp.start();
+});
+
+</script>

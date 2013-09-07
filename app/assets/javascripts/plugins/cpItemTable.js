@@ -2,81 +2,31 @@
  * 
  */
 (function($) {
-    // http://sandbox.myconferenceplanning.org/programme_items/list
-    var settings = {
-        baseUrl : "programme_items",
-        getGridData : "/getList.json",
-        multiselect : false,
-        onlySurveyRespondents : false,
-        // sortname : 'programme_items.title'
-    };
-    
-    var cpTable = null;
+$.widget( "cp.itemTable", $.cp.baseTable , {
 
-
-    var createColModel = function(){
-        // alert(cpTable.settings()['root_url']);
+    createColModel : function(){
         return [{
             label: 'Title',
             name: 'item[title]',
             index: 'programme_items.title',
             width: 500,
-            editable: true,
-            editoptions: {
-                size: 20
-            },
-            formoptions: {
-                rowpos: 1,
-                label: "Title",
-                elmprefix: "(*)"
-            },
-            editrules: {
-                required: true
-            }
         }, {
-            label : "Format",
             name: 'programme_item[format_name]',
+            label : "Format",
             index: 'format_id',
+            hidden: !this.options.format_name,
             width: 150,
-            editable: true,
-            edittype: "select",
             search: true,
             stype: "select",
             searchoptions: {
-                dataUrl: cpTable.settings()['root_url'] + 'formats/listwithblank'
+                dataUrl: this.options.root_url + 'formats/listwithblank'
             },
-            editoptions: {
-                dataUrl: cpTable.settings()['root_url'] + 'formats/list',
-                defaultValue: '1'
-            },
-            formoptions: {
-                rowpos: 2,
-                elmprefix: "&nbsp;&nbsp;&nbsp;&nbsp;"
-            }
-        // }, {
-            // name: 'programme_item[format_id]',
-            // index: 'format_id',
-            // width: 150,
-            // editable: true,
-            // edittype: "select",
-            // search: true,
-            // stype: "select",
-            // searchoptions: {
-                // dataUrl: '/formats/listwithblank'
-            // },
-            // editoptions: {
-                // dataUrl: '/formats/list',
-                // defaultValue: '1'
-            // },
-            // formoptions: {
-                // rowpos: 2,
-                // elmprefix: "&nbsp;&nbsp;&nbsp;&nbsp;"
-            // }
-        },        //              First you need to make sure it is on a separate row - this is done via the rowpos attribute
+        },
         {
             label : 'Duration',
             name: 'programme_item[duration]',
             index: 'duration',
+            hidden : !this.options.duration,
             width: 60,
             editable: true,
             editoptions: {
@@ -93,6 +43,7 @@
         }, {
             label : 'Room',
             name: 'room',
+            hidden : !this.options.room,
             sortable: false,
             search: false,
             width: 80,
@@ -111,6 +62,7 @@
         }, {
             label: 'Day',
             name: 'start_day',
+            hidden : !this.options.day,
             sortable: false,
             search: false,
             width: 100,
@@ -129,6 +81,7 @@
         }, {
             label : 'Time',
             name: 'start_time',
+            hidden : !this.options.time,
             sortable: false,
             search: false,
             width: 60,
@@ -147,6 +100,7 @@
             label : 'Ref',
             name: 'programme_item[pub_reference_number]',
             index: 'pub_reference_number',
+            hidden : !this.options.ref_number,
             width: 60,
             editable: false,
             formoptions: {
@@ -168,35 +122,42 @@
                 label: "lock"
             }
         }];
-    };
-    
+    },
+/***    
     var methods = {
         //
         init : function(options) {
+            var settings = {
+                baseUrl : "programme_items",
+                getGridData : "/getList.json",
+                multiselect : false,
+                onlySurveyRespondents : false,
+                // sortname : 'programme_items.title'
+            };
+
+            // cpTable = this.cpTable;
+            // settings = $.extend(settings, cpTable.settings);
             settings = $.extend(settings, options);
             
-            cpTable = this.cpTable;
-
+            // alert(settings['sortname']);
+            
             this.cpTable.createColModel = createColModel;
             // this.cpTable.createUrl = createUrl; // TODO
             tbl = this.cpTable(settings); // create th underlying table
             return tbl;
         },
         
-        tagQuery : function(options) {
-            this.cpTable('tagQuery',options);
-        }
     };
 
-    
     $.fn.cpItemTable = function(method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if ( typeof method === 'object' || !method) {
             return methods.init.apply(this, arguments);
         } else {
-            $.error('Method ' + method + ' does not exist on jQuery.cpParticipantTable');
+            $.error('Method ' + method + ' does not exist on jQuery.cpItemTable');
         }
     };
-
+***/
+});
 })(jQuery);

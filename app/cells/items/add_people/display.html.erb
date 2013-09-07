@@ -1,7 +1,53 @@
-<h1>
-  Items::AddPeople#display
-</h1>
 
-<p>
-  Find me in app/cells/items/add_people/display.html.erb
-</p>
+
+<%= render_cell "participants/participant_list", :javascript, 
+    :caption => "Participants (Confirmed)",
+    :pager => "#participants-pager",
+    :del => false,
+    :edit => false,
+    :add => false,
+    :invite_status => false,
+    :invite_category => false,
+    :acceptance_status => false,
+    :has_survey => false,
+    
+    :pub_first_name => false,
+    :pub_last_name => false,
+    :pub_suffix => false,
+    :extraClause => "extraClause[param]=acceptance_status_id&extraClause[value]=8", # Only display the people who accepted to be on the program
+    
+    :multiselect => true,
+    :selectNotifyMethod => "ItemApp.PeopleManagement.showPerson"
+%>
+    
+<%= render_cell "items/item_list", :javascript, 
+    :caption => "Program Items", 
+    :pager => "#items-pager",
+    :del => false,
+    :edit => false,
+    :add => false,
+    :format_name => false,
+    :duration => false,
+    :room => false,
+    :day => false,
+    :time => false,
+    :ref_number => false,
+    :selectNotifyMethod => "ItemApp.PeopleManagement.showProgrammeItem"
+%>
+    
+<%= render_cell "items/add_people", :javascript %>
+<%= render_cell "items/add_people", :templates %>
+
+<div class="row-fluid">
+    <div class="span3">
+        <%= render_cell "participants/participant_list", :display %>
+    </div>
+    <div class="span5 well" >
+        <div id="item-control"></div>
+
+        The item
+    </div>
+    <div class="span4" >
+        <%= render_cell "items/item_list", :display %>
+    </div>
+</div>

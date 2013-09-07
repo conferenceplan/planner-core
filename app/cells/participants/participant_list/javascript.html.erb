@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
-    jQuery("#participants").cpParticipantTable({
+    jQuery("#participants").participantTable({
         caption : "<%= @caption %>",
         selectNotifyMethod : <%= @selectNotifyMethod %>,
         clearNotifyMethod : <%= @clearNotifyMethod %>,
@@ -22,9 +22,14 @@ jQuery(document).ready(function() {
         refresh : <%= @refresh %>,
         pager : "<%= @pager %>",
         
+        multiselect : <%= @multiselect %>,
+        
         extraClause : "<%= @extraClause %>",
         
-        onlySurveyRespondents : <%= @onlySurveyRespondents %>
+        onlySurveyRespondents : <%= @onlySurveyRespondents %>,
+        
+        sortname : 'people.last_name'
+
     });
 });
 

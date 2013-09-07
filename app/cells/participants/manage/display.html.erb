@@ -5,6 +5,7 @@
 
 <%= render_cell "participants/participant_list", :javascript, 
     :caption => "Participants",
+    :pager => "#participants-pager",
     :selectNotifyMethod => "ParticipantApp.PeopleManagement.showDetails",
     :clearNotifyMethod => "ParticipantApp.PeopleManagement.clearDetails"
     %>

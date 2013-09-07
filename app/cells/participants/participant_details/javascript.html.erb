@@ -446,7 +446,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         refreshTable : function() {
             // get the tags etc from the view and create the query
             var tagQuery = ParticipantApp.PeopleManagement.getTagQuery();
-            jQuery("#participants").cpParticipantTable('tagQuery',{ 
+            jQuery("#participants").participantTable('tagQuery',{ // TODO
                 tagQuery : tagQuery
             });
         }

@@ -221,7 +221,7 @@ ItemApp.ItemManagement = (function(Backbone){
         refreshTable : function() {
             // get the tags etc from the view and create the query
             var tagQuery = ItemApp.ItemManagement.getTagQuery();
-            jQuery("#items").cpItemTable('tagQuery',{ 
+            jQuery("#items").itemTable('tagQuery',{ 
                 tagQuery : tagQuery
             });
         },

@@ -27,6 +27,8 @@ class Participants::ParticipantListCell < Cell::Rails
     
     @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : false
     
+    @multiselect = args.has_key?(:multiselect) ? args[:multiselect] : false
+    
     @onlySurveyRespondents = args.has_key?(:onlySurveyRespondents) ? args[:onlySurveyRespondents] : false
     
     render

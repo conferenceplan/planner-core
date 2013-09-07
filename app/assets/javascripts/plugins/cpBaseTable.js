@@ -1,41 +1,38 @@
 /*
- * Base table plugin ...
+ * Base table widget ...
  * 
  */
 (function($) {
+$.widget( "cp.baseTable" , {
     
-    var settings = {
+    options : {
         pager : '#pager',
         root_url : "/", // so that sub-domains can be taken care of
-        baseUrl : "", // HAS TO BE OVER-RIDDEN by the sub-component
-        getGridData : "", // for getting the data
-        caption : "My Table",
-        selectNotifyMethod : function(ids) {},
-        clearNotifyMethod : function() {},
-        view : false,
-        search : false,
-        del : true,
-        edit : true,
-        add : true,
-        refresh : false,
-        multiselect : false,
-        extraClause : null
-    };
-
-    var methods = {
+                baseUrl : "", // HAS TO BE OVER-RIDDEN by the sub-component
+                getGridData : "", // for getting the data
+                caption : "My Table",
+                selectNotifyMethod : function(ids) {},
+                clearNotifyMethod : function() {},
+                view : false,
+                search : false,
+                del : true,
+                edit : true,
+                add : true,
+                refresh : false,
+                multiselect : false,
+                extraClause : null,
+                sortname : null
+    },
+    
+    _create : function() {
+        // create the grid that is associated with the element
+        var selectMethod = this.options.selectNotifyMethod;
+        var pageToMethod = this.pageTo;
+        var clearNotifyMethod = this.options.clearNotifyMethod;
+        var base_url = this.options.root_url + this.options.baseUrl;
         
-        url : function() {
-            return settings['root_url'] + settings['baseUrl'] + settings['getGridData'];
-        },
-
-        //
-        init : function(options) {
-            settings = $.extend(settings, options);
-
-            // ----------------------------------------------------------
-            //
-            var grid = this.jqGrid({
-                url : $.fn.cpTable.createUrl(settings),
+        var grid = this.element.jqGrid({
+                url : this.createUrl(),
                 datatype : 'JSON',
                 jsonReader : {
                     repeatitems : false,
@@ -46,23 +43,23 @@
                     id : "id",
                 },
                 mtype : 'POST',
-                postData : {'namesearch' : 'true'}, // TODO - check
-                colModel : $.fn.cpTable.createColModel(settings),
-                multiselect : settings['multiselect'],
-                pager : jQuery(settings['pager']),
+                postData : {'namesearch' : 'true'},
+                colModel : this.createColModel(),
+                multiselect : this.options.multiselect,
+                pager : jQuery(this.options.pager),
                 rowNum : 10,
                 autowidth : true,
                 shrinkToFit : true,
                 height : "100%",
                 // rowList : [10, 20, 30],
-                sortname : settings['sortname'], //'people.last_name', // TODO
+                sortname : this.options.sortname,
                 sortorder : "asc",
                 viewrecords : true,
-                imgpath : 'stylesheets/custom-theme/images', // TODO
-                caption : settings['caption'],
-                editurl: $.fn.cpTable.editUrl(settings),
+                imgpath : 'stylesheets/custom-theme/images', // Check if this is needed
+                caption : this.options.caption,
+                editurl: this.editUrl(),
                 onSelectRow : function(ids) {
-                    settings['selectNotifyMethod'](ids);
+                    selectMethod(ids);
                     return false;
                 },
                 loadComplete : function(data) {
@@ -73,18 +70,14 @@
                          postData : {page_to : null, current_selection : null},
                     });
                 }
-            });
-            
-
-            // ----------------------------------------------------------
-            // Set up the pager menu for add, delete, and search
-            this.navGrid(settings['pager'], {
-                view : settings['view'],
-                search : settings['search'],
-                del : settings['del'],
-                edit : settings['edit'],
-                add : settings['add'],
-                refresh : settings['refresh'],
+        });
+        this.element.navGrid(this.options.pager, {
+                view : this.options.view,
+                search : this.options.search,
+                del : this.options.del,
+                edit : this.options.edit,
+                add : this.options.add,
+                refresh : this.options.refresh,
             }, //options
             {
                 // edit options
@@ -96,7 +89,7 @@
                 bottominfo : "Fields marked with (*) are required",
                 afterSubmit : function(response, postdata) {
                     // TODO - error handler
-                    settings['clearNotifyMethod'](); 
+                    clearNotifyMethod();  
                     return [true, "Success", ""];
                 },
                 beforeShowForm : function(form) { // change the style of the modal to make it compatible with our theme
@@ -123,7 +116,7 @@
                 },
                 mtype : 'PUT',
                 onclickSubmit : function(params, postdata) {
-                    params.url = settings['root_url'] + settings['baseUrl'] + "/" + postdata[this.id + "_id"];
+                    params.url = base_url + "/" + postdata[this.id + "_id"];
                 },
             }, // edit options
             {
@@ -140,7 +133,7 @@
                     var res = jQuery.parseJSON( response.responseText );
                     grid.setGridParam({
                          postData : {
-                                 page_to : $.fn.cpTable.pageTo(res), // make sure that the current page contains the selected element
+                                 page_to : pageToMethod(res), // make sure that the current page contains the selected element
                                  filters : {},
                                  current_selection : res.id // to pass back for the selection
                              },
@@ -160,7 +153,7 @@
                 closeOnEscape : true,
                 mtype : 'DELETE',
                 onclickSubmit : function(params, postdata) {
-                    params.url = settings['root_url'] + settings['baseUrl'] + "/" + postdata;
+                    params.url = base_url + "/" + postdata;
                 },
             }, // del options
             {
@@ -168,68 +161,47 @@
                 jqModal : true,
                 closeOnEscape : true
             });
-
-            // ----------------------------------------------------------
-            //
-            this.jqGrid('filterToolbar', {
+            
+            this.element.jqGrid('filterToolbar', {
                 stringResult : true,
                 searchOnEnter : false,
             });
-            
-            return grid;
-        },
+    },
+    
+    // Determine what the URL for the table should be
+    _url : function() {
+        return this.options.root_url + this.options.baseUrl + this.options.getGridData;
+    },
 
-        //
-        destroy : function() {
-            // ???
-        },
-        
         tagQuery : function(options) {
-            var newUrl = settings['root_url'] + settings['baseUrl'] + settings['getGridData'] + "?" + options.tagQuery;
+            var newUrl = this.options.root_url + this.options.baseUrl + this.options.getGridData + "?" + options.tagQuery;
             
-            this.jqGrid('setGridParam', {
+            this.element.jqGrid('setGridParam', {
                 url: newUrl
             }).trigger("reloadGrid");
-        }
-    };
-
-    /*
-     *
-     */
+        },
     
-    $.fn.cpTable = function(method) {
-        if (methods[method]) {
-            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if ( typeof method === 'object' || !method) {
-            return methods.init.apply(this, arguments);
-        } else {
-            $.error('Method ' + method + ' does not exist on jQuery.cpTable');
-        }
-    };
-
-    $.fn.cpTable.settings = function() {
-        return settings;
-    };
-    
-    $.fn.cpTable.createColModel = function (settings) { return null; }; // To be over-ridden
-    
-    $.fn.cpTable.createUrl = function (settings) {
-        var url = settings['root_url'] + settings['baseUrl'] + settings['getGridData'];
+    createColModel : function() {
+        
+    },
+        
+    createUrl : function () {
+        var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
-        if (settings['extraClause']) {
+        if (this.options.extraClause) {
             urlArgs += '?';
-            urlArgs += settings['extraClause']; 
+            urlArgs += this.options.extraClause; 
         }
         url += urlArgs;
         return url;
-    };
+    },
 
-    $.fn.cpTable.editUrl = function (settings) {
+    editUrl : function () {
         return "";
-    };
+    },
     
-    $.fn.cpTable.pageTo = function (data) {
+    pageTo : function (data) {
         return "";
-    };
-
+    }
+});
 })(jQuery);

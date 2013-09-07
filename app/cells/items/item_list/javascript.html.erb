@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
-    jQuery("#items").cpItemTable({
+    jQuery("#items").itemTable({
         caption : "<%= @caption %>",
         selectNotifyMethod : <%= @selectNotifyMethod %>,
         clearNotifyMethod : <%= @clearNotifyMethod %>,
@@ -17,6 +17,15 @@ jQuery(document).ready(function() {
         refresh : <%= @refresh %>,
         pager : "<%= @pager %>",
         
+        format_name : <%= @format_name %>,
+        duration : <%= @duration %>,
+        room : <%= @room %>,
+        day : <%= @day %>,
+        time : <%= @time %>,
+        ref_number : <%= @ref_number %>,
+        
+        multiselect : <%= @multiselect %>,
+
         extraClause : "<%= @extraClause %>",
         
     });

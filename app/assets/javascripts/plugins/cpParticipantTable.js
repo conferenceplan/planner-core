@@ -1,22 +1,18 @@
 /*
  *
  */
-(function($) {
-    var settings = {
-        baseUrl : "participants",
-        getGridData : "/getList.json",
-        multiselect : false,
-        onlySurveyRespondents : false,
-        sortname : 'people.last_name'
-    };
 
-    var cpTable = null;
+(function($) {    
 
-        /*
-         * retrieve the id of the element
-         * this is some context within the existing plugin
-         */
-        var createColModel = function(){
+$.widget( "cp.participantTable", $.cp.baseTable , {
+
+/*    
+        tagQuery : function(options) {
+            this._super("tagQuery", options);
+        },
+*/    
+    
+        createColModel : function(){
             return [{
                 label : 'Name',
                 index : 'people.last_name', // TODO - we need a way to tell back end to search on name(s)
@@ -100,17 +96,17 @@
                 name : 'person[invitestatus_id]',
                 label : 'Invite Status',
                 index : 'invitestatus_id',
-                hidden : !cpTable.settings()['invite_status'],
+                hidden : !this.options.invite_status,
                 editable : true,
                 edittype : "select",
                 search : true,
                 stype : "select",
                 width : 60,
                 searchoptions : {
-                    dataUrl: cpTable.settings()['root_url'] + "participants/invitestatuslistwithblank"
+                    dataUrl: this.options.root_url + "participants/invitestatuslistwithblank"
                 },
                 editoptions : {
-                    dataUrl: cpTable.settings()['root_url'] + "participants/invitestatuslist",
+                    dataUrl: this.options.root_url + "participants/invitestatuslist",
                     defaultValue : 'Not Set'
                 },
                 formoptions : {
@@ -124,17 +120,17 @@
                 name : 'person[invitation_category_id]',
                 label : 'Invitation<br/>Category',
                 index : 'invitation_category_id',
-                hidden : !cpTable.settings()['invite_category'],
+                hidden : !this.options.invite_category,
                 editable : true,
                 edittype : "select",
                 search : true,
                 stype : "select",
                 width : 60,
                 searchoptions : {
-                    dataUrl: cpTable.settings()['root_url'] + "invitation_categories/list"
+                    dataUrl: this.options.root_url + "invitation_categories/list"
                 },
                 editoptions : {
-                    dataUrl: cpTable.settings()['root_url'] + "invitation_categories/list",
+                    dataUrl: this.options.root_url + "invitation_categories/list",
                     defaultValue : 'Not Set'
                 },
                 formoptions : {
@@ -148,17 +144,17 @@
                 name : 'person[acceptance_status_id]',
                 label : 'Acceptance',
                 index : 'acceptance_status_id',
-                hidden : !cpTable.settings()['acceptance_status'],
+                hidden : !this.options.acceptance_status,
                 editable : true,
                 edittype : "select",
                 search : true,
                 stype : "select",
                 width : 50,
                 searchoptions : {
-                    dataUrl: cpTable.settings()['root_url'] + "participants/acceptancestatuslistwithblank"
+                    dataUrl: this.options.root_url + "participants/acceptancestatuslistwithblank"
                 },
                 editoptions : {
-                    dataUrl: cpTable.settings()['root_url'] + "participants/acceptancestatuslist",
+                    dataUrl: this.options.root_url + "participants/acceptancestatuslist",
                     defaultValue : 'Not Set'
                 },
                 formoptions : {
@@ -171,7 +167,7 @@
             }, {
                 name : 'person[has_survey]',
                 label : 'Survey',
-                hidden : !cpTable.settings()['has_survey'],
+                hidden : !this.options.has_survey,
                 editable : false,
                 sortable : false,
                 search : false,
@@ -259,26 +255,26 @@
                     label : "lock"
                 }
             }];
-        };
-    
-    editUrl = function(settings) {
-        return settings['root_url'] + "participants";
+        },
+        
+    editUrl : function() {
+        return this.options.root_url + "participants";
     },
     
-    pageTo = function(data) {
+    pageTo : function(data) {
         return data["person[last_name]"];
     },
-     
-    createUrl = function (settings) {
-        var url = settings['root_url'] + settings['baseUrl'] + settings['getGridData'];
+    
+    createUrl : function () {
+        var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
-        if (settings['extraClause'] || settings['onlySurveyRespondents']) {
+        if (this.options.extraClause || this.options.onlySurveyRespondents) {
             urlArgs += '?';
         }
-        if (settings['extraClause']) {
-            urlArgs += settings['extraClause']; 
+        if (this.options.extraClause) {
+            urlArgs += this.options.extraClause; 
         }
-        if (settings['onlySurveyRespondents']) {
+        if (this.options.onlySurveyRespondents) {
             if (urlArgs.length > 0) {
                 urlArgs += "&";
             }
@@ -286,44 +282,7 @@
         }
         url += urlArgs;
         return url;
-    };
+    }
 
-
-    var methods = {
-        //
-        init : function(options) {
-            settings = $.extend(settings, options);
-            
-            // TODO - move the default specific to the participant table from cpTable settings to this module CHECK
-            cpTable = this.cpTable;
-
-            this.cpTable.createColModel = createColModel;
-            this.cpTable.createUrl = createUrl;
-            this.cpTable.editUrl = editUrl;
-            this.cpTable.pageTo = pageTo;
-            tbl = this.cpTable(settings); // create th underlying table
-            return tbl;
-        },
-        
-        tagQuery : function(options) {
-            this.cpTable('tagQuery',options);
-        }
-    };
-
-    
-    $.fn.cpParticipantTable = function(method) {
-        // return $.fn.cpTable(method);
-        if (methods[method]) {
-            // need to pass methods to the parent...
-            // alert("gg");
-            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if ( typeof method === 'object' || !method) {
-            // alert("ggh");
-            return methods.init.apply(this, arguments);
-        } else {
-            $.error('Method ' + method + ' does not exist on jQuery.cpParticipantTable');
-        }
-    };
-
-
-})(jQuery);
+});
+}(jQuery));
