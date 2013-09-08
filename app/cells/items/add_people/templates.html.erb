@@ -1,0 +1,106 @@
+<script type="text/template" id="people-control-view-template">
+    <button class="btn btn-primary add-people-button pull-right">ADD</button>
+</script>
+
+<script type="text/template" id="program-item-view-template">
+    {{ if (typeof id != 'undefined') { }}
+        <div class="row-fluid">
+            <div class="span10">
+                <h5>{{= title ? title : "&nbsp;" }}</h5>
+            </div>
+            <div class="span2">
+                <button class="btn btn-primary save-button pull-right">Save</button>
+            </div>
+        </div>
+        <div class="row-fluid">
+        <div class="well span12">
+            <dl class="dl-horizontal">
+                <dt>Ref Number</dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
+                <dt>Format</dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
+                <dt>Setup</dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
+                <dt>Short Title</dt><dd>{{= short_title ? short_title : "&nbsp;" }}</dd>
+                <dt>Description</dt><dd>{{= precis ? precis : "&nbsp;" }}</dd>
+                <dt>Notes</dt><dd>{{= notes ? notes : "&nbsp;" }}</dd>
+                <dt>Duration</dt><dd>{{= duration ? duration : "&nbsp;" }}</dd>
+                <dt>For Print</dt><dd>{{= print ? "Yes" : "No" }}</dd>
+                <dt>Max People</dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
+                <dt>Min People</dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
+                <dt>Room</dt><dd>{{= room ? room : "&nbsp;" }}</dd>
+                <dt>Start Time</dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time ? start_time : "&nbsp;" }}</dd>
+            </dl>
+        </div>
+        </div>
+        <div class="row-fluid">
+        <!-- List of participants etc. -->
+        <div>Moderators</div>
+        <div class="ui-droppable well" id="moderator-area"> <!-- need an id so that we can identify this area -->
+        {{ _.each(moderators, function(person) { }}
+        <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="moderators">
+            <small>
+                {{ if (person.pseudonym) { }}
+                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else { }}
+                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                {{ } }}
+            </small>
+            <button class="btn btn-mini btn-link pull-right remove-person" src="moderators" person="{{= person.id}}"><i class="icon-remove"></i></button>
+        </div>
+        {{ }); }}
+        </div>
+        <div>Participants</div>
+        <div class="ui-droppable well" id="participant-area">
+        {{ _.each(participants, function(person) { }}
+        <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="participants">
+            <small>
+                {{ if (person.pseudonym) { }}
+                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else { }}
+                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                {{ } }}
+            </small>
+            <button class="btn btn-mini btn-link pull-right remove-person" src="participants" person="{{= person.id}}"><i class="icon-remove"></i></button>
+        </div>
+        {{ }); }}
+        </div>
+        <div>Reserved</div>
+        <div class="ui-droppable well" id="reserve-area">
+        {{ _.each(reserves, function(person) { }}
+        <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="reserves">
+            <small>
+                {{ if (person.pseudonym) { }}
+                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else { }}
+                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                {{ } }}
+            </small>
+            <button class="btn btn-mini btn-link pull-right remove-person" src="reserves" person="{{= person.id}}"><i class="icon-remove"></i></button>
+        </div>
+        {{ }); }}
+        </div>
+        <div>Invisible</div>
+        <div class="ui-droppable well" id="invisible-area">
+        {{ _.each(invisibles, function(person) { }}
+        <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="invisibles">
+            <small>
+                {{ if (person.pseudonym) { }}
+                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else { }}
+                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                {{ } }}
+            </small>
+            <button class="btn btn-mini btn-link pull-right remove-person" src="invisibles" person="{{= person.id}}"><i class="icon-remove"></i></button>
+        </div>
+        {{ }); }}
+        </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12">
+                <button class="btn btn-primary save-button pull-right">Save</button>
+            </div>
+        </div>
+    {{ }; }}    
+</script>

@@ -180,7 +180,7 @@ PlannerRc1::Application.routes.draw do
   resources :programme_items do
     resources :excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs
     member do
-      post 'updateParticipants'
+      put 'updateParticipants'
     end
   end
 

@@ -30,14 +30,30 @@ json.lock_version           item.lock_version
 
 # TODO - do we want to list the participants?
 if moderators
-    json.moderators moderators.collect { |p| p.person }
+    json.moderators do
+        json.array! moderators do |p|
+            json.partial! 'person', person: p.person
+        end
+    end
 end
 if participants
-    json.participants participants.collect { |p| p.person }
+    json.participants do
+        json.array! participants do |p|
+            json.partial! 'person', person: p.person
+        end
+    end
 end
 if reserves
-    json.reserves reserves.collect { |p| p.person }
+    json.reserves do
+        json.array! reserves do |p|
+            json.partial! 'person', person: p.person
+        end
+    end
 end
 if invisibles
-    json.invisibles invisibles.collect { |p| p.person }
+    json.invisibles do
+        json.array! invisibles do |p|
+            json.partial! 'person', person: p.person
+        end
+    end
 end

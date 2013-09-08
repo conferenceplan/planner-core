@@ -3,21 +3,172 @@ ItemApp = new Backbone.Marionette.Application();
 
 ItemApp.PeopleManagement = (function(Backbone){
     
-    function showProgrammeItem(id) {
-        alert("Item Selected " + id);
-    };
+    /*
+     * Models
+     */
+    ProgramItem = Backbone.Model.extend({
+        urlRoot : '/programme_items'
+    });
     
-    function showPerson(id) {
-        alert("Person Selected " + id);
+    /*
+     * Views
+     */
+    PeopleControlView = Marionette.ItemView.extend({
+        el : '#people-control-view',
+        template : '#people-control-view-template',
+        
+        events : {
+            "click .add-people-button" : "addPeople"
+        },
+        
+        addPeople : function(ev) {
+            // do nowt if there is no current program item
+            if (currentItem) {
+                // get the selected people from the grid
+                var selectedIds = jQuery('#participants').jqGrid('getGridParam','selarrrow');
+                // currentItem - add the names and id to the participants
+                var participants = currentItem.get('participants');
+                
+                // get the data from the rows
+                _.each(selectedIds, function(id) {
+                    var p = jQuery('#participants').participantTable('getPerson',id);
+                    participants.push(p); // make sure that it is unique i.e. not already in the list TODO
+                });
+            
+                // unselect them and re-render the view
+                jQuery('#participants').jqGrid('resetSelection');
+                progView.render();
+            }
+        }
+
+    });
+    
+    ProgramItemPeopleView = Marionette.ItemView.extend({
+        el : '#program-item-view',
+        template : '#program-item-view-template',
+        
+        onRender : function() {
+            var thisView = this;
+            this.$el.find( ".ui-draggable" ).draggable({
+                axis: "y", // constrain vertical
+                revert: true // return to origin if not dropped on droppable area
+            });
+            this.$el.find(".ui-droppable").droppable({
+                drop: function(event, ui) {
+                    thisView.render();
+                }
+            });
+        },
+
+        events : {
+            "drop #moderator-area"   : "addModerator",
+            "drop #participant-area" : "addParticipant",
+            "drop #reserve-area"     : "addReserve",
+            "drop #invisible-area"   : "addInvisible",
+            "click .remove-person"   : "removePerson",
+            "click .save-button"     : "saveItem"
+        },
+        
+        saveItem : function(event) {
+            // Update the program item - but we just want to save the people...
+            var id = this.model.id;
+            this.model.save(null, {
+                url : "/programme_items/" + id + "/updateParticipants", // TODO - we need a base URL property for the site
+                error : function() {
+                    alertMessage("Error saving the program item.");
+                }
+            });
+        },
+        
+        removePerson : function(event) {
+            // alert("remove person");
+            var personId = $(event.currentTarget).attr('person');
+            var source = $(event.currentTarget).attr('src');
+            
+            var c = this.model.get(source);
+            var p = _.find(c, function(a) {
+                return (a.id == personId);
+            });
+            var idx = _.indexOf(c, p);
+            var el = c.splice(idx,1);
+            
+            this.render();
+        },
+        
+        addModerator : function(event, src) {
+            this.movePerson(src, 'moderators');
+        },
+        
+        addParticipant : function(event, src) {
+            this.movePerson(src, 'participants');
+        },
+        
+        addReserve : function(event, src) {
+            this.movePerson(src, 'reserves');
+        },
+        
+        addInvisible : function(event, src) {
+            this.movePerson(src, 'invisibles');
+        },
+        
+        movePerson : function(src, dest) {
+            var personId = $(src.draggable).attr('id'); // get the id of the person from the dragged object
+            var source = $(src.draggable).attr('src'); // get the source area
+            
+            var p = _.find(this.model.get(source), function(a) {
+                return (a.id == personId);
+            });
+            var idx = _.indexOf(this.model.get(source), p);
+            // remove from the source
+            var c = this.model.get(source);
+            var el = c.splice(idx,1);
+            
+            // add to the destination
+            c = this.model.get(dest);
+            c.push(p); 
+        }
+
+    });
+
+    /*
+     * Other stuff
+     */
+    var tabContent = []; // TODO
+    var progView = null;
+    var currentItem = null;
+    
+    function showProgrammeItem(id) {
+            currentItem = new ProgramItem();
+            currentItem.fetch({
+                url : "/programme_items/" + id + '.json',
+                async:false,
+                error : function(model, response) {
+                    alertMessage("Error communicating with backend");
+                },
+                success : function(model) {
+                    if (progView) {
+                        progView.model = model;
+                    } else {
+                        progView = new ProgramItemPeopleView({model : model});
+                    };
+                    
+                    progView.render();
+                }
+            });        
     };
     
     return {
         showProgrammeItem : function(id) {
             showProgrammeItem(id);
+
         },
         showPerson : function(id) {
             // May not need since we can get the selected from the grid???
-            showPerson(id);
+        },
+        
+        init : function() {
+            var peopleView = new PeopleControlView();
+            peopleView.render();
         },
     }
 
@@ -25,6 +176,7 @@ ItemApp.PeopleManagement = (function(Backbone){
 
 jQuery(document).ready(function() {
     ItemApp.start();
+    ItemApp.PeopleManagement.init();
 });
 
 </script>

@@ -13,13 +13,13 @@ jQuery(document).ready(function(){
     });
     
     jQuery('#current-participant-page').change(function(){
-        // set the age to the one indicated and then do a load
+        // set the page to the one indicated and then do a load
         var np = jQuery('#current-participant-page').val();
         if ((np >= 1) && (np <= participantPageNbr)) {
             participantPage = np;
             loadParticipantWidget();
         }
-    })
+    });
     
     $("#participant-beginning").button({
         text: false,

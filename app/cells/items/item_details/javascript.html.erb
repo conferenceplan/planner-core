@@ -6,7 +6,7 @@ ItemApp.ItemManagement = (function(Backbone){
 
     /*
      * 
-     */    
+     */
     ProgramItem = Backbone.Model.extend({
         schema : {
             title       : { type : 'Text' },
@@ -25,10 +25,14 @@ ItemApp.ItemManagement = (function(Backbone){
 
             pub_reference_number : { type : 'Text' },
         },
+        // Default values used when creating a new instance
         defaults: {
-            "duration":  "",
+            "duration":  60,
+            "minimum_people": 1,
+            "maximum_people": 5,
+            "print": true
         },
-        urlRoot : '/programme_items' // TODO - on update event etc we need to refresh the grid and the selected details
+        urlRoot : '/programme_items'
     });
     
     Equipment = Backbone.Model.extend({

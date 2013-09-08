@@ -52,28 +52,56 @@ Use the Rails authenticity token in the forms...
         <ul class="nav nav-list"><li class="divider"></li></ul>
         {{ _.each(moderators, function(person) { }}
         <div class="thumbnail clearfix">
-            <small> {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}</small>
+            <small>
+                {{ if (person.pseudonym) { }}
+                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else { }}
+                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                {{ } }}
+            </small>
         </div>
         {{ }); }}
         <div>Participants</div>
         <ul class="nav nav-list"><li class="divider"></li></ul>
         {{ _.each(participants, function(person) { }}
         <div class="thumbnail clearfix">
-            <small> {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}</small>
+            <small>
+                {{ if (person.pseudonym) { }}
+                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else { }}
+                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                {{ } }}
+            </small>
         </div>
         {{ }); }}
         <div>Reserved</div>
         <ul class="nav nav-list"><li class="divider"></li></ul>
         {{ _.each(reserves, function(person) { }}
         <div class="thumbnail clearfix">
-            <small> {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}</small>
+            <small>
+                {{ if (person.pseudonym) { }}
+                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else { }}
+                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                {{ } }}
+            </small>
         </div>
         {{ }); }}
         <div>Invisible</div>
         <ul class="nav nav-list"><li class="divider"></li></ul>
         {{ _.each(invisibles, function(person) { }}
         <div class="thumbnail clearfix">
-            <small> {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}</small>
+            <small>
+                {{ if (person.pseudonym) { }}
+                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else { }}
+                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                {{ } }}
+            </small>
         </div>
         {{ }); }}
     </div>

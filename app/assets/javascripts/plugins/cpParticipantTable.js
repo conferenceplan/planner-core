@@ -265,6 +265,17 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         return data["person[last_name]"];
     },
     
+    getPerson : function(id) {
+        // get an object that represents the person from the underlying grid - just the id and names
+        return {
+            id : id,
+            first_name : this.element.jqGrid('getCell', id, 'person[first_name]'),
+            last_name : this.element.jqGrid('getCell', id, 'person[last_name]'),
+            suffix : this.element.jqGrid('getCell', id, 'person[suffix]'),
+            // TODO - put in the pseudonym
+        };
+    },
+    
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";

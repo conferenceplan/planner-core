@@ -7,7 +7,7 @@
 
 //= require bootstrap
 
-//= require jquery-ui-1.9.2.custom.min
+//= require jquery-ui-1.9.2.custom
 //= require jquery.timers-1.2
 //= require jquery.freeow
 //= require jquery.form
@@ -31,16 +31,24 @@
 //= require backgrid/extensions/moment-cell/backgrid-moment-cell
 //= require backgrid/extensions/text-cell/backgrid-text-cell
 
+// Check we still use planIt
 //= require planIt
 
-//= require_tree ./plugins
+//= require plugins/cpBaseTable
+//= require plugins/cpItemTable
+//= require plugins/cpParticipantTable
+
+// TODO - check these
+//= require plugins/cpdialog
+//= require plugins/cpDynamicArea
+//= require plugins/cpremovebutton
+//= require plugins/timeEditor
 
 //= require TabViews
 
 //= require_self
 
 jQuery(document).ready(function() {
-
     _.templateSettings = {
         interpolate : /\{\{\=(.+?)\}\}/g,
         evaluate : /\{\{(.+?)\}\}/g
@@ -48,7 +56,5 @@ jQuery(document).ready(function() {
 });
 
 function alertMessage(message) {
-    
     $('#alert-area').html("<div class=\"alert alert-block fade in\"><button class=\"close\" data-dismiss=\"alert\">×</button>"+ message +"</div>");
-    
 };
