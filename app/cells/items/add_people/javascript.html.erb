@@ -13,6 +13,61 @@ ItemApp.PeopleManagement = (function(Backbone){
     /*
      * Views
      */
+    LeavePageModal = Backbone.View.extend({
+        tagName: "div",
+        className: "modal hide fade",
+        events: {
+            "submit": "submit",
+            "hidden": "close",
+        },
+        
+        initialize : function() {
+            this.template = _.template($('#modal-confirm-template').html());
+        },
+
+        modalOptions: {
+            backdrop: false,
+        },
+
+        render: function () {
+            this.$el.html($(this.template({
+                title : "Unsaved Data"
+            })));
+
+            this.delegateEvents();
+            this.renderBody();
+            
+            // this.$el.find(".modal-body").append(this.form.el);
+            
+            this.$el.modal(this.modalOptions);
+
+            return this;
+        },
+        
+        submit : function(e) {
+            if (e && e.type == "submit") {
+                e.preventDefault();
+                e.stopPropagation();
+                this.options.loadItem();
+                this.$el.modal("hide");
+            };
+        },
+        
+        close: function (e) {
+            this.remove();
+            this.unbind();
+            this.views = [];  
+        },
+        
+        // over-ride this for the body of the form        
+        renderBody : function() {
+        },
+
+        // over-ride for the actual data submission        
+        submitData : function() {
+        }
+    });    
+    
     PeopleControlView = Marionette.ItemView.extend({
         el : '#people-control-view',
         template : '#people-control-view-template',
@@ -38,6 +93,8 @@ ItemApp.PeopleManagement = (function(Backbone){
                 // unselect them and re-render the view
                 jQuery('#participants').jqGrid('resetSelection');
                 progView.render();
+                
+                needsSaved = true;
             }
         }
 
@@ -76,11 +133,14 @@ ItemApp.PeopleManagement = (function(Backbone){
                 url : "/programme_items/" + id + "/updateParticipants", // TODO - we need a base URL property for the site
                 error : function() {
                     alertMessage("Error saving the program item.");
+                },
+                success : function() {
+                    needsSaved = false;
                 }
             });
         },
         
-        removePerson : function(event) {
+        removePerson : function(event) { 
             // alert("remove person");
             var personId = $(event.currentTarget).attr('person');
             var source = $(event.currentTarget).attr('src');
@@ -91,7 +151,8 @@ ItemApp.PeopleManagement = (function(Backbone){
             });
             var idx = _.indexOf(c, p);
             var el = c.splice(idx,1);
-            
+
+            needsSaved = true;            
             this.render();
         },
         
@@ -136,8 +197,24 @@ ItemApp.PeopleManagement = (function(Backbone){
     var tabContent = []; // TODO
     var progView = null;
     var currentItem = null;
+    var needsSaved = false;
     
     function showProgrammeItem(id) {
+        
+        // check if a save is needed
+        if (needsSaved) {
+            mdl = new LeavePageModal({
+                loadItem : function() {
+                    loadProgItem(id);
+                }
+            });
+            mdl.render();
+        } else {
+            loadProgItem(id);
+        }
+    };
+    
+    function loadProgItem(id) {
             currentItem = new ProgramItem();
             currentItem.fetch({
                 url : "/programme_items/" + id + '.json',
@@ -148,6 +225,7 @@ ItemApp.PeopleManagement = (function(Backbone){
                 success : function(model) {
                     if (progView) {
                         progView.model = model;
+                        needsSaved = false;
                     } else {
                         progView = new ProgramItemPeopleView({model : model});
                     };
@@ -158,6 +236,15 @@ ItemApp.PeopleManagement = (function(Backbone){
     };
     
     return {
+        confirmExit : function () {
+            if (needsSaved) {
+                // TODO - it would be nicer if the dialog was a bootstrap one
+                // mdl = new LeavePageModal({});
+                // mdl.render();
+
+                return "Changes to the Program Item have not been saved. Are you sure you wich to leave the page?";
+            }
+        },
         showProgrammeItem : function(id) {
             showProgrammeItem(id);
 
@@ -179,4 +266,5 @@ jQuery(document).ready(function() {
     ItemApp.PeopleManagement.init();
 });
 
+window.onbeforeunload = ItemApp.PeopleManagement.confirmExit;
 </script>

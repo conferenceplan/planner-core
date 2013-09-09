@@ -2,6 +2,26 @@
     <button class="btn btn-primary add-people-button pull-right">ADD</button>
 </script>
 
+<script type="text/template" id="modal-confirm-template">
+<form>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            ×
+        </button>
+        <h3 id="myModalLabel">{{= title }}</h3>
+    </div>
+    <div class="modal-body" id="modal-body">The Program Item was not Saved. Confirm that you abandon the changes.</div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">
+            Cancel
+        </button>
+        <button class="btn btn-primary">
+            Ok
+        </button>
+    </div>
+</form>
+</script>
+
 <script type="text/template" id="program-item-view-template">
     {{ if (typeof id != 'undefined') { }}
         <div class="row-fluid">
