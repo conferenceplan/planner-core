@@ -10,6 +10,13 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             name: 'item[title]',
             index: 'programme_items.title',
             width: 500,
+            formatter : function(cellvalue, options, rowObject) {
+                var res = "<div itemId='" + options.rowId + "'>" + cellvalue + "</div>"; // adding the item id so that drag-n-drop can use it
+                return res;
+            },
+            cellattr : function(rowId, val, rawObject) { // TODO - see if we can move out as an option
+                return 'class="ui-draggable"';
+            }
         }, {
             name: 'programme_item[format_name]',
             label : "Format",
@@ -123,41 +130,5 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             }
         }];
     },
-/***    
-    var methods = {
-        //
-        init : function(options) {
-            var settings = {
-                baseUrl : "programme_items",
-                getGridData : "/getList.json",
-                multiselect : false,
-                onlySurveyRespondents : false,
-                // sortname : 'programme_items.title'
-            };
-
-            // cpTable = this.cpTable;
-            // settings = $.extend(settings, cpTable.settings);
-            settings = $.extend(settings, options);
-            
-            // alert(settings['sortname']);
-            
-            this.cpTable.createColModel = createColModel;
-            // this.cpTable.createUrl = createUrl; // TODO
-            tbl = this.cpTable(settings); // create th underlying table
-            return tbl;
-        },
-        
-    };
-
-    $.fn.cpItemTable = function(method) {
-        if (methods[method]) {
-            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-        } else if ( typeof method === 'object' || !method) {
-            return methods.init.apply(this, arguments);
-        } else {
-            $.error('Method ' + method + ' does not exist on jQuery.cpItemTable');
-        }
-    };
-***/
 });
 })(jQuery);

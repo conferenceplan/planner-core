@@ -35,9 +35,6 @@ ItemApp.PeopleManagement = (function(Backbone){
             })));
 
             this.delegateEvents();
-            this.renderBody();
-            
-            // this.$el.find(".modal-body").append(this.form.el);
             
             this.$el.modal(this.modalOptions);
 
@@ -48,8 +45,8 @@ ItemApp.PeopleManagement = (function(Backbone){
             if (e && e.type == "submit") {
                 e.preventDefault();
                 e.stopPropagation();
-                this.options.loadItem();
                 this.$el.modal("hide");
+                this.options.continueAction();
             };
         },
         
@@ -58,14 +55,6 @@ ItemApp.PeopleManagement = (function(Backbone){
             this.unbind();
             this.views = [];  
         },
-        
-        // over-ride this for the body of the form        
-        renderBody : function() {
-        },
-
-        // over-ride for the actual data submission        
-        submitData : function() {
-        }
     });    
     
     PeopleControlView = Marionette.ItemView.extend({
@@ -87,7 +76,15 @@ ItemApp.PeopleManagement = (function(Backbone){
                 // get the data from the rows
                 _.each(selectedIds, function(id) {
                     var p = jQuery('#participants').participantTable('getPerson',id);
-                    participants.push(p); // make sure that it is unique i.e. not already in the list TODO
+                    
+                    // make sure that it is unique i.e. not already in the list
+                    var found = _.find(participants, function(a) {
+                        return (a.id == id);
+                    });
+                    
+                    if (!found) {
+                        participants.push(p); 
+                    }
                 });
             
                 // unselect them and re-render the view
@@ -135,6 +132,8 @@ ItemApp.PeopleManagement = (function(Backbone){
                     alertMessage("Error saving the program item.");
                 },
                 success : function() {
+                    // message that the save happened
+                    infoMessage("Program Item has been Saved");
                     needsSaved = false;
                 }
             });
@@ -204,7 +203,7 @@ ItemApp.PeopleManagement = (function(Backbone){
         // check if a save is needed
         if (needsSaved) {
             mdl = new LeavePageModal({
-                loadItem : function() {
+                continueAction : function() {
                     loadProgItem(id);
                 }
             });
@@ -238,10 +237,6 @@ ItemApp.PeopleManagement = (function(Backbone){
     return {
         confirmExit : function () {
             if (needsSaved) {
-                // TODO - it would be nicer if the dialog was a bootstrap one
-                // mdl = new LeavePageModal({});
-                // mdl.render();
-
                 return "Changes to the Program Item have not been saved. Are you sure you wich to leave the page?";
             }
         },

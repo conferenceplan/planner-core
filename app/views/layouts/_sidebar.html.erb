@@ -1,8 +1,10 @@
 <%= render_cell :sidebar_menu, :display, :menu => {
     "Participants" => { :target => '/pages/participants_dash/manage', :icon => "user"},
     "Program Items" => { :target => '/pages/items_dash/manage', :icon => "tasks"},
+    "Schedule" => { :target => '/pages/schedule_dash/manage', :icon => "calendar"},
     
-    "Schedule" => { :target => '/program_planner', :icon => "calendar"},
+    # "Schedule" => { :target => '/program_planner', :icon => "calendar"},
+    
     "Surveys" => { :target => '/survey_reports', :icon => "pencil"},
     "Communications" => { :target => '/mailings', :icon => "envelope"},
     "Reports" => { :target => '/planner_reports', :icon => "bar-chart"},

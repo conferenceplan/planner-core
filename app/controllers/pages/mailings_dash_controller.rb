@@ -1,4 +1,4 @@
-class Pages::MailingsDashController < ApplicationController
+class Pages::MailingsDashController < PlannerController
   def index
   end
 end

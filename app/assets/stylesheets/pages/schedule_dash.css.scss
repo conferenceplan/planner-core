@@ -1,3 +1,69 @@
 // Place all the styles related to the pages/schedule_dash controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+/****
+#grid-view {
+    height: 48em; // TODO - is this enough??? i.e. 1/2 of a day
+    overflow: auto; // TODO - either scroll or hidden (if hidden we need our own scroll mechanism, i.e. a JS scroll mechanism)
+}
+***/
+
+.pane rect {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis line,
+.axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  stroke: #000;
+}
+
+.y.axis line,
+.x.axis line {
+  stroke: #aaa;
+  stroke-opacity: .5;
+}
+
+path.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+rect.pane {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
+}
+
+.prog-item-rect {
+  fill: white;
+  border : solid;
+  stroke : black;
+  stroke-opacity: 0.9;
+  stroke-width: 1px;
+}
+
+.prog-item-text-class,
+.prog-item-text {
+  font-family : sans-serif;
+  font-size : 6pt;
+  line-height: normal;
+  fill : black;
+}
+

@@ -8,6 +8,7 @@ class Participants::ParticipantListCell < Cell::Rails
     @caption = args.has_key?(:caption) ? args[:caption] : "Participants"
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
     @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
+    @loadNotifyMethod = args.has_key?(:loadNotifyMethod) ? args[:loadNotifyMethod] : "function() {}"
     @pager = args.has_key?(:pager) ? args[:pager] : '#pager'
     @root_url = args.has_key?(:root_url) ? args[:root_url] : "/"
     @baseUrl = args.has_key?(:baseUrl) ? args[:baseUrl] : "participants"

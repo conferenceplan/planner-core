@@ -29,6 +29,11 @@
  *= require_self
  */
 
+// NOTE - this is needed if we want to be able to drag-n-drop cells from the jqgrid
+.ui-jqgrid .ui-jqgrid-bdiv {
+  overflow: visible;
+}
+
 .primary-sidebar {
     float : left;
     position : absolute;

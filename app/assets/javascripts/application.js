@@ -31,6 +31,8 @@
 //= require backgrid/extensions/moment-cell/backgrid-moment-cell
 //= require backgrid/extensions/text-cell/backgrid-text-cell
 
+//= require d3/d3.v3
+
 // Check we still use planIt
 //= require planIt
 
@@ -57,4 +59,8 @@ jQuery(document).ready(function() {
 
 function alertMessage(message) {
     $('#alert-area').html("<div class=\"alert alert-block fade in\"><button class=\"close\" data-dismiss=\"alert\">×</button>"+ message +"</div>");
+};
+
+function infoMessage(message) {
+    $('#alert-area').html("<div class=\"alert alert-success alert-block fade in\"><button class=\"close\" data-dismiss=\"alert\">×</button>"+ message +"</div>");
 };

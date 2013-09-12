@@ -30,7 +30,7 @@ class ProgrammeItemsController < PlannerController
       end
 
     end
-    # render :layout => 'content'
+
     render text: 'OK'
   end
   
@@ -166,6 +166,30 @@ class ProgrammeItemsController < PlannerController
     
     @items = ProgramItemsService.findItems rows, @page, idx, order, filters, extraClause, nameSearch, context, tags
   end
+
+  #
+  # Update the participants associated with this programme item
+  #  
+  def updateParticipants
+    programmeItem = ProgrammeItem.find(params[:id])
+
+    # 1. Clear out the current set of participants    
+    programmeItem.people.clear # remove it from the person.
+    programmeItem.updated_at_will_change! # NOTE: this will force the update date of the programme item to be changed
+    programmeItem.save
+
+    # 2. Create the new sets
+    addParticipant(programmeItem.id, params['moderators'],PersonItemRole['Moderator'])
+    addParticipant(programmeItem.id, params['participants'],PersonItemRole['Participant'])
+    addParticipant(programmeItem.id, params['reserves'],PersonItemRole['Reserved'])
+    addParticipant(programmeItem.id, params['invisibles'],PersonItemRole['Invisible'])
+    
+    @programmeItem = ProgrammeItem.find(params[:id])
+    @invisibleAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id =?',@programmeItem,PersonItemRole['Invisible']], :include => {:person => :pseudonym}
+    @moderatorAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']], :include => {:person => :pseudonym}
+    @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] , :include => {:person => :pseudonym}
+    @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] , :include => {:person => :pseudonym}
+  end
   
   ###### Redundant ?????
   def list
@@ -249,63 +273,8 @@ class ProgrammeItemsController < PlannerController
       format.xml
     end
   end
-  
-  #
-  # Update the participants associated with this programme item
-  #  
-  def updateParticipants
 
-    programmeItem = ProgrammeItem.find(params[:id])
-
-    # 1. Clear out the current set of participants    
-    programmeItem.people.clear # remove it from the person.
-    programmeItem.updated_at_will_change! # NOTE: this will force the update date of the programme item to be changed
-    programmeItem.save
-
-    # 2. Create the new set
-    moderators = params['moderators'] # this is a collection of the information about the participants to add (id and role)
-    if moderators
-      moderators.each do |personHash|
-        p = Person.find(personHash['id'])
-        assignment = ProgrammeItemAssignment.create(:programme_item_id => programmeItem.id, :person => p, :role => PersonItemRole['Moderator'])
-        assignment.save
-      end
-    end
-    
-    participants = params['participants'] # this is a collection of the information about the participants to add (id and role)
-    if participants
-      participants.each do |personHash|
-        p = Person.find(personHash['id'])
-        assignment = ProgrammeItemAssignment.create(:programme_item_id => programmeItem.id, :person => p, :role => PersonItemRole['Participant'])
-        assignment.save
-      end
-    end
-
-    participants = params['reserves'] # this is a collection of the information about the participants to add (id and role)
-    if participants
-      participants.each do |personHash|
-        p = Person.find(personHash['id'])
-        assignment = ProgrammeItemAssignment.create(:programme_item_id => programmeItem.id, :person => p, :role => PersonItemRole['Reserved'])
-        assignment.save
-      end
-    end
-
-    participants = params['invisibles'] # this is a collection of the information about the participants to add (id and role)
-    if participants
-      participants.each do |personHash|
-        p = Person.find(personHash['id'])
-        assignment = ProgrammeItemAssignment.create(:programme_item_id => programmeItem.id, :person => p, :role => PersonItemRole['Invisible'])
-        assignment.save
-      end
-    end
-    
-    @programmeItem = ProgrammeItem.find(params[:id])
-    @invisibleAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id =?',@programmeItem,PersonItemRole['Invisible']], :include => {:person => :pseudonym}
-    @moderatorAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']], :include => {:person => :pseudonym}
-    @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] , :include => {:person => :pseudonym}
-    @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] , :include => {:person => :pseudonym}
-  end
-  
+  # ---------------------------------
   # TODO - these methods to be replaced by a service  
   def assign_reference_numbers
   end
@@ -324,5 +293,21 @@ class ProgrammeItemsController < PlannerController
       end
       
   end
+  
+private
+  
+  #
+  #
+  #
+  def addParticipant(itemid, participants, role)
+    if participants
+      participants.each do |personHash|
+        p = Person.find(personHash['id'])
+        assignment = ProgrammeItemAssignment.create(:programme_item_id => itemid, :person => p, :role => role)
+        assignment.save
+      end
+    end
+  end
+  
  
 end

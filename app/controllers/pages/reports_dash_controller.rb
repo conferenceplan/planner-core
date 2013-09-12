@@ -1,4 +1,4 @@
-class Pages::ReportsDashController < ApplicationController
+class Pages::ReportsDashController < PlannerController
   def index
   end
 end

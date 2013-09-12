@@ -13,6 +13,7 @@ $.widget( "cp.baseTable" , {
                 caption : "My Table",
                 selectNotifyMethod : function(ids) {},
                 clearNotifyMethod : function() {},
+                loadNotifyMethod : function() {},
                 view : false,
                 search : false,
                 del : true,
@@ -27,6 +28,7 @@ $.widget( "cp.baseTable" , {
     _create : function() {
         // create the grid that is associated with the element
         var selectMethod = this.options.selectNotifyMethod;
+        var loadNotifyMethod = this.options.loadNotifyMethod;
         var pageToMethod = this.pageTo;
         var clearNotifyMethod = this.options.clearNotifyMethod;
         var base_url = this.options.root_url + this.options.baseUrl;
@@ -69,6 +71,10 @@ $.widget( "cp.baseTable" , {
                     grid.setGridParam({
                          postData : {page_to : null, current_selection : null},
                     });
+                },
+                gridComplete : function() {
+                    // Call back - to call when the load has been done
+                    loadNotifyMethod();
                 }
         });
         this.element.navGrid(this.options.pager, {

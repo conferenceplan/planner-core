@@ -5,6 +5,7 @@ PlannerRc1::Application.routes.draw do
     match "participants_dash/:cellname" => "participants_dash#index"
     # resources :participants_dash # TODO - map back to the default participant dash or need a default can not find
     match "items_dash/:cellname" => "items_dash#index"
+    match "schedule_dash/:cellname" => "schedule_dash#index"
     # resources :items_dash
     resources :logistics_dash
     resources :admin_dash
@@ -12,7 +13,6 @@ PlannerRc1::Application.routes.draw do
     resources :reports_dash
     resources :mailings_dash
     resources :surveys_dash
-    resources :schedule_dash
   end
   
   # Default routes 
@@ -206,6 +206,8 @@ PlannerRc1::Application.routes.draw do
 
   resources :item_planner, :only => :index # TODO - check
 
+  match 'program_planner/assignments', :controller => 'program_planner', :action => 'assignments', :method => 'get'
+  
   match 'program_planner/list', :controller => 'program_planner', :action => 'list', :method => 'post'
   match 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
   match 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :method => 'get'

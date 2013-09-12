@@ -1,0 +1,90 @@
+<script type="text/javascript">
+ScheduleApp = new Backbone.Marionette.Application();
+
+ScheduleApp.ItemManagement = (function(Backbone){
+    
+    /*
+     * 
+     */
+    GridItem = Backbone.Model.extend({
+    });
+    
+    GridItemCollection = Backbone.Collection.extend({
+        model : GridItem
+    });
+    
+    /*
+     * 
+     */
+    GridDayControlView = Marionette.ItemView.extend({
+        el : '#grid-day-control-view',
+        template : '#grid-day-control-view-template',
+    });
+    
+    /*
+     * 
+     */
+    
+    x = d3.time.scale().range([0, 200]);
+    xAxis = function(data, h) {
+        return d3.svg.axis().scale(x).orient("bottom").tickSize(-h, 0).tickPadding(6);
+    };
+    
+    GridView = Marionette.ItemView.extend({
+        el : '#grid-view',
+        template : '#grid-view-template',
+        
+        onRender : function() {
+            var thisView = this;
+            var _containerElem = this.$el.find("#program-grid")[0];
+            
+            window.Schedule.paint(_containerElem, this.collection);
+        },
+
+    });
+    
+    return {
+        init : function() {
+            var dayControl = new GridDayControlView();
+            dayControl.render();
+            
+            // get the data for the day
+            var collection = new GridItemCollection();
+            collection.url = "http://localhost:3000/program_planner/assignments.json?day=3"; // TODO - this needs to change based on the day selected by the user etc
+            collection.fetch({
+                error : function(model, response) {
+                    alertMessage("Error communicating with backend");
+                },
+                success : function(col) {
+                    var grid = new GridView({
+                        collection : col
+                    });
+                    grid.render();
+                }
+            });
+        },
+        
+        onGridLoad : function() {
+            // make the cells draggable
+            $('#items').find( ".ui-draggable" ).draggable({
+                revert : true,     // return to origin if not dropped on droppable area
+                helper : "clone"   // clone for visual effect
+            });
+            
+            // TODO - we need the grid area for dropping the program items and we make that droppable
+            // this.$el.find(".ui-droppable").droppable({
+                // drop: function(event, ui) {
+                    // thisView.render();
+                // }
+            // });
+        }
+    }
+    
+})(Backbone);
+
+jQuery(document).ready(function() {
+    ScheduleApp.start();
+    ScheduleApp.ItemManagement.init();
+});
+
+</script>

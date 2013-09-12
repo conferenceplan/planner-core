@@ -14,6 +14,17 @@ class ProgramPlannerController < PlannerController
   end
   
   #
+  #
+  #
+  def assignments
+    @day = params[:day] # Day
+    # rooms = ActiveSupport::JSON.decode params[:rooms] if params[:rooms] # the rooms that we want to show
+    # conditions = ['rooms.id in (?)', rooms] if rooms && (rooms.size > 0)
+    @roomListing = Room.all(:order => 'venues.name DESC, rooms.name ASC', :joins => :venue) #, :conditions => conditions) 
+    @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + @day.to_i.day
+  end
+  
+  #
   # Get the rooms and times for a given day
   # order by room and time
   #

@@ -1,4 +1,4 @@
-class Pages::AdminDashController < ApplicationController
+class Pages::AdminDashController < PlannerController
   def index
   end
 end
