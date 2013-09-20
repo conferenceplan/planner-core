@@ -15,6 +15,7 @@
 //= require i18n/grid.locale-en
 //= require jquery.jqGrid.min
 //= require jquery.easy-pie-chart
+//= require jquery.mousewheel
 
 //= require backbone/underscore-min
 //= require backbone/backbone

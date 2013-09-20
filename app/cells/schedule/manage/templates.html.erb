@@ -1,56 +1,11 @@
 
 <script type="text/template" id="grid-day-control-view-template">
     Day Controls
+    <button class="prev-day">PREV</button>
+    {{= currentDay }}
+    <button class="next-day">NEXT</button>
 </script>
 
 <script type="text/template" id="grid-view-template">
     <div id="program-grid"></div>
-</script>
-
-<script type="text/template" id="grid-view-template-BAK">
-        <div class='program-grid-shell'>
-            <div class="time-slider" id="time-slider-up">
-                <button id="scroll-up">up</button>
-            </div>
-            <div class='rooms-views'>
-                <div class="room-slider" id="room-slider-left">
-                    <div class='room-control'>
-                        <button id="scroll-left">left</button>
-                    </div>
-                </div>
-                <div class='time-column'>
-                    <div class="time-spacer">
-                    </div>
-                    <div id='program-grid-times' class='program-grid-times'>
-                        <div id='program-times'>
-                            <% (0..23).each do |i| %>
-                            <div class='program-time'>
-                                <%= (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + i.hours).strftime('%H:%M') %>
-                            </div>
-                            <% end %>
-                        </div>
-                    </div>
-                </div>
-                <div class='room-container'>
-                    <div id='program-grid-rooms' class='program-grid-rooms'>
-                        <div id='program-room-data' class='program-room-entry'>
-                            loading...
-                        </div>
-                    </div>
-                    <div id='program-grid' class='program-grid'>
-                        <div id='program-grid-data' class='program-grid-entry'>
-                            loading...
-                        </div>
-                    </div>
-                </div>
-                <div class="room-slider" id="room-slider-right">
-                    <div class='room-control'>
-                        <button id="scroll-right">right</button>
-                    </div>
-                </div>
-            </div>
-            <div class="time-slider" id="time-slider-down">
-                <button id="scroll-down">down</button>
-            </div>
-        </div>
 </script>

@@ -147,10 +147,10 @@ class ProgrammeItemsController < PlannerController
     ignoreScheduled = params[:igs] # TODO
     ignorePending = params[:igp]
 
-    @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags
+    @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled
 
     if page_to && !page_to.empty?
-      gotoNum = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, page_to
+      gotoNum = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled, page_to
       if gotoNum
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
@@ -164,7 +164,7 @@ class ProgrammeItemsController < PlannerController
       @nbr_pages = 1
     end
     
-    @items = ProgramItemsService.findItems rows, @page, idx, order, filters, extraClause, nameSearch, context, tags
+    @items = ProgramItemsService.findItems rows, @page, idx, order, filters, extraClause, nameSearch, context, tags, ignoreScheduled
   end
 
   #

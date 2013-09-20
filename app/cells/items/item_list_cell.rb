@@ -30,6 +30,8 @@ class Items::ItemListCell < Cell::Rails
     
     @multiselect = args.has_key?(:multiselect) ? args[:multiselect] : false
     
+    @ignoreScheduled = args.has_key?(:ignoreScheduled) ? args[:ignoreScheduled] : false
+    
     @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : false
     
     render

@@ -2,19 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-/****
-#grid-view {
-    height: 48em; // TODO - is this enough??? i.e. 1/2 of a day
-    overflow: auto; // TODO - either scroll or hidden (if hidden we need our own scroll mechanism, i.e. a JS scroll mechanism)
-}
-***/
-
-.pane rect {
-  cursor: move;
-  fill: none;
-  pointer-events: all;
-}
-
 .axis {
   shape-rendering: crispEdges;
 }
@@ -51,12 +38,46 @@ rect.pane {
   pointer-events: all;
 }
 
+.prog-item-ctl,
 .prog-item-rect {
   fill: white;
-  border : solid;
   stroke : black;
   stroke-opacity: 0.9;
-  stroke-width: 1px;
+  stroke-width: 0.5px;
+  position:relative;
+}
+
+.item-text {
+  width : 80%;
+  display : block;
+}
+
+.item-ctl-icon,
+.item-ctl-remove,
+.item-ctl-back {
+  // max-height:30%;
+}
+
+.item-ctl-remove,
+.item-ctl-back {
+  margin : 1px;
+  line-height : 0;
+}
+
+.item-ctl-remove {
+  position:absolute;
+  top:0;
+  right:0;
+}
+.item-ctl-back {
+  position:absolute;
+  bottom:0;
+  right:0;
+}
+
+.candidate {
+  stroke: red;
+  stroke-width: 3px;
 }
 
 .prog-item-text-class,

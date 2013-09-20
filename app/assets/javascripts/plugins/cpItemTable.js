@@ -130,5 +130,25 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             }
         }];
     },
+    
+    createUrl : function () {
+        var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
+        var urlArgs = "";
+        if (this.options.extraClause || this.options.onlySurveyRespondents) {
+            urlArgs += '?';
+        }
+        if (this.options.extraClause) {
+            urlArgs += this.options.extraClause; 
+        }
+        if (this.options.ignoreScheduled) {
+            if (urlArgs.length > 0) {
+                urlArgs += "&";
+            }
+            urlArgs += "igs=true"; 
+        }
+        url += urlArgs;
+        return url;
+    }
+    
 });
 })(jQuery);

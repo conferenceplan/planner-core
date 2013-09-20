@@ -1,6 +1,7 @@
 module ProgramPlannerHelper
   
   def addItemToRoomAndTime(item, room, day, time)
+    assignment = nil
     times = time.split(':') # hours and minutes
     itemStartTime = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + day.to_i.days + times[0].to_i.hours + times[1].to_i.minutes
     itemEndTime = itemStartTime + item.duration.minute
@@ -18,6 +19,8 @@ module ProgramPlannerHelper
       assignment = RoomItemAssignment.new(:room => room, :time_slot => newTimeSlot, :day => day, :programme_item => item)
       assignment.save
     end
+    
+    return assignment
   end
 
   def removeAssignment(candidate)

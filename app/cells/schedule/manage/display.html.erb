@@ -1,6 +1,8 @@
 
 <!-- Sort by name??? -->
-<%= render_cell "items/item_list", :javascript, # ui-draggable
+<!-- TODO - need to add an option so that we only get the un-scheduled items -->
+<!-- TODO: extend so that the class of the cell can be passed as an option -->
+<%= render_cell "items/item_list", :javascript,
     :caption => "Program Items", 
     :pager => "#items-pager",
     :del => false,
@@ -12,9 +14,10 @@
     :day => false,
     :time => false,
     :ref_number => false,
+    :ignoreScheduled => true,
     # :multiselect => true,
     # :selectNotifyMethod => "ItemApp.PeopleManagement.showProgrammeItem"
-    :loadNotifyMethod => "ScheduleApp.ItemManagement.onGridLoad"
+    :loadNotifyMethod => "ScheduleApp.ItemManagement.onItemLoad"
 %>
 
 <%= render_cell "schedule/manage", :javascript %>

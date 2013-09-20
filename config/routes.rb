@@ -207,13 +207,11 @@ PlannerRc1::Application.routes.draw do
   resources :item_planner, :only => :index # TODO - check
 
   match 'program_planner/assignments', :controller => 'program_planner', :action => 'assignments', :method => 'get'
-  
-  match 'program_planner/list', :controller => 'program_planner', :action => 'list', :method => 'post'
   match 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
   match 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :method => 'get'
   match 'program_planner/getConflicts', :controller => 'program_planner', :action => 'getConflicts', :method => 'get'
-  match 'program_planner/getRoomControl', :controller => 'program_planner', :action => 'getRoomControl', :method => 'get'
-  resources :program_planner, :member => {:index => :get, :edit => :get}
+  # match 'program_planner/list', :controller => 'program_planner', :action => 'list', :method => 'post'
+  # resources :program_planner, :member => {:index => :get, :edit => :get}
 
 
   match 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'

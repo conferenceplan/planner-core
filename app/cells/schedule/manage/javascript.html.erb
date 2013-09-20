@@ -1,6 +1,8 @@
 <script type="text/javascript">
+/*
+ * 
+ */
 ScheduleApp = new Backbone.Marionette.Application();
-
 ScheduleApp.ItemManagement = (function(Backbone){
     
     /*
@@ -9,8 +11,10 @@ ScheduleApp.ItemManagement = (function(Backbone){
     GridItem = Backbone.Model.extend({
     });
     
-    GridItemCollection = Backbone.Collection.extend({
-        model : GridItem
+    Day = Backbone.Model.extend({
+        defaults : {
+            'currentDay' : 0
+        }
     });
     
     /*
@@ -19,64 +23,211 @@ ScheduleApp.ItemManagement = (function(Backbone){
     GridDayControlView = Marionette.ItemView.extend({
         el : '#grid-day-control-view',
         template : '#grid-day-control-view-template',
+        
+        events : {
+            "click .prev-day"   : "prevDay",
+            "click .next-day"    : "nextDay",
+        },
+
+        prevDay : function() {
+            day = this.model.get('currentDay');
+            if (day > 0) {
+                day -= 1;
+                this.model.set('currentDay', day);
+                this.render();
+                loadGrid(day);
+            }
+        },
+        
+        nextDay : function() {
+            day = this.model.get('currentDay');
+            if (day < (<%= SITE_CONFIG[:conference][:number_of_days] %> -1)) {
+                day += 1;
+                this.model.set('currentDay', day);
+                this.render();
+                loadGrid(day);
+            }
+        }
     });
     
     /*
      * 
      */
-    
-    x = d3.time.scale().range([0, 200]);
-    xAxis = function(data, h) {
-        return d3.svg.axis().scale(x).orient("bottom").tickSize(-h, 0).tickPadding(6);
-    };
-    
     GridView = Marionette.ItemView.extend({
         el : '#grid-view',
         template : '#grid-view-template',
         
+        initialize : function() {
+        },
+        
         onRender : function() {
             var thisView = this;
             var _containerElem = this.$el.find("#program-grid")[0];
+            _day = this.options.day;
+            var assignments = this.model;
             
-            window.Schedule.paint(_containerElem, this.collection);
+            DailyGrid.paint(_containerElem, assignments);
+            
+            // when an item is droped on the grid we need to
+            // 1. create a new assignment (need the room and the time)
+            // 1.a Save the new item on the server
+            // 2. Add the item as a visual element to the grid
+            // 3. Refresh the list of items on the left (i.e. remove dropped item from list)
+            this.$el.droppable({
+                drop: function(event, ui) {
+                    console.debug("Dropped");
+                    setDropped( ui.draggable.find("div").attr('itemid') );
+                }
+            });
         },
 
     });
     
-    return {
-        init : function() {
-            var dayControl = new GridDayControlView();
-            dayControl.render();
-            
-            // get the data for the day
-            var collection = new GridItemCollection();
-            collection.url = "http://localhost:3000/program_planner/assignments.json?day=3"; // TODO - this needs to change based on the day selected by the user etc
-            collection.fetch({
+    /*
+     * 
+     */
+    var _gridView = null;
+    var _itemId = null;
+    var _day = null;
+    
+    function setDropped(itemId) {
+        _itemId = itemId;
+    };
+    
+    function getDropped() {
+        var it = _itemId;
+        _itemId = null;
+        return it;
+    };
+    
+    /*
+     * 
+     */
+    function removeAssignment(_itemid) {
+        console.debug("Remove assignment " + _itemid);
+
+        $.ajax({
+            type: 'POST',
+            url: "/program_planner/removeItem", // TODO - fix domain and sub-site
+            data: {
+                itemid : _itemid,
+            },
+            success: function(response){
+                // And we reload the list of items so that the dropped one is removed
+                $("#items").trigger("reloadGrid");
+            }
+            // TODO - deal with error
+        });
+        
+        return true;
+    };
+    
+    /*
+     * Create a new assignment on the server 
+     */
+    function addAssignment() {
+        var roomAndTime = DailyGrid.getCurrentRoomAndTime();
+        var itemId = getDropped();
+        
+        if (itemId && roomAndTime && (typeof roomAndTime[0] != 'undefined')) {
+            moveAssignment(itemId, roomAndTime[0].id, _day, roomAndTime[1], true);
+        };
+    };
+    
+    /*
+     * 
+     */
+    function moveAssignment(itemId, roomId, day, time, addDisplay) {
+        var timeStr = moment(time).format("H:mm");
+        var assignments = _gridView.model;
+        
+            $.ajax({
+                type: 'POST',
+                url: "/program_planner/addItem.json", // TODO - fix domain and sub-site
+                data: {
+                    day    : day,
+                    itemid : itemId,
+                    roomid : roomId,
+                    time   : timeStr
+                },
+                success: function(response){
+                    // Once the item is created add it to the grid ...
+                    // create the element in the grid
+                    if (addDisplay) {
+                        var idx = 0;
+                        var rooms = assignments.get('rooms');
+                                
+                        for (idx = 0; idx < rooms.length; idx++) {
+                            if (rooms[idx].id == roomId) {
+                                break;
+                            }
+                        };
+
+                        if (idx < rooms.length) {
+                            DailyGrid.createItem(response, idx);
+                        };
+                    };
+                    
+                    // And we reload the list of items so that the dropped one is removed
+                    $("#items").trigger("reloadGrid");
+                }
+                // TODO - add error handling
+            });
+    };
+    
+    /*
+     * Given the day of the conference render the grid (SVG) for that day
+     */
+    function loadGrid(day) {
+            var grid = new GridItem();
+            grid.url = "/program_planner/assignments.json?day=" + day;
+            grid.fetch({
                 error : function(model, response) {
                     alertMessage("Error communicating with backend");
                 },
-                success : function(col) {
-                    var grid = new GridView({
-                        collection : col
+                success : function(_grid) {
+                    // TODO - if there was already a grid there we need to get rid of it.... check that this is the case
+                    _gridView = new GridView({
+                        model : _grid,
+                        day : day
                     });
-                    grid.render();
+                    _gridView.render();
                 }
             });
+    };
+    
+    /*
+     * The 'public' methods
+     */
+    return {
+        init : function() {
+            var dayControl = new GridDayControlView({
+                model : new Day()
+            });
+            dayControl.render();
+            
+            // get the data for the first day
+            loadGrid(0);
         },
         
-        onGridLoad : function() {
-            // make the cells draggable
+        onItemLoad : function() {
+            // make the cells of the item list draggable
             $('#items').find( ".ui-draggable" ).draggable({
                 revert : true,     // return to origin if not dropped on droppable area
                 helper : "clone"   // clone for visual effect
             });
-            
-            // TODO - we need the grid area for dropping the program items and we make that droppable
-            // this.$el.find(".ui-droppable").droppable({
-                // drop: function(event, ui) {
-                    // thisView.render();
-                // }
-            // });
+        },
+        
+        addAssignment : function() {
+            addAssignment();
+        },
+        
+        moveAssignment : function(itemId, roomId, day, time) {
+            moveAssignment(itemId, roomId, day, time, false);
+        },
+        
+        removeAssignment : function(id) {
+            return removeAssignment(id);
         }
     }
     

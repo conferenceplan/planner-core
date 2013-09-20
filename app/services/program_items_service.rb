@@ -3,8 +3,8 @@
 #
 module ProgramItemsService
   
-  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, page_to = nil)
-    args = genArgsForSql(nameSearch, filters, extraClause, page_to)
+  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false, page_to = nil)
+    args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, page_to)
     tagquery = DataService.genTagSql(context, tags)
     
     args.merge!(:order => "time_slots.start asc, programme_items.title asc")
@@ -16,8 +16,8 @@ module ProgramItemsService
     end
   end
   
-  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil)
-    args = genArgsForSql(nameSearch, filters, extraClause)
+  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false)
+    args = genArgsForSql(nameSearch, filters, ignoreScheduled, extraClause)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
@@ -71,89 +71,85 @@ module ProgramItemsService
   end
 
   #
-  # TODO - changethe select_rows to select_all so we have column names and less dependent on positional info for the output
-  #
-  
-  #
   #
   #
   def self.getNbrItemConflicts(day = nil)
-    query = "select count(*) from (" + itemConflictSql(day) + ") res"
+    query = "select count(*) as count from (" + itemConflictSql(day) + ") res"
     
-    res = ActiveRecord::Base.connection.select_rows(query)
+    res = ActiveRecord::Base.connection.select_one(query)
     
-    res[0][0].to_i
+    res['count'].to_i
   end
   
   def self.getItemConflicts(day = nil)
     query = itemConflictSql(day) 
 
-    ActiveRecord::Base.connection.select_rows(query)
+    ActiveRecord::Base.connection.select_all(query)
   end
   
   def self.getNbrRoomConflicts(day = nil)
-    query = "select count(*) from (" + roomConflictsSql(day) + ") res"
+    query = "select count(*) as count from (" + roomConflictsSql(day) + ") res"
     
-    res = ActiveRecord::Base.connection.select_rows(query)
+    res = ActiveRecord::Base.connection.select_one(query)
     
-    res[0][0].to_i
+    res['count'].to_i
   end
   
   def self.getRoomConflicts(day = nil)
-    ActiveRecord::Base.connection.select_rows(roomConflictsSql(day))
+    ActiveRecord::Base.connection.select_all(roomConflictsSql(day))
   end
   
   def self.getNbrExcludedItemConflicts(day = nil)
-    query = "select count(*) from (" + excludedItemConflictsSql(day) + ") res"
+    query = "select count(*) as count from (" + excludedItemConflictsSql(day) + ") res"
     
-    res = ActiveRecord::Base.connection.select_rows(query)
+    res = ActiveRecord::Base.connection.select_one(query)
     
-    res[0][0].to_i
+    res['count'].to_i
   end
   
   def self.getExcludedItemConflicts(day = nil)
-    ActiveRecord::Base.connection.select_rows(excludedItemConflictsSql(day))
+    ActiveRecord::Base.connection.select_all(excludedItemConflictsSql(day))
   end
   
   def self.getNbrExcludedTimeConflicts(day = nil)
-    query = "select count(*) from (" + excludedTimeConflictsSql(day) + ") res"
+    query = "select count(*) as count from (" + excludedTimeConflictsSql(day) + ") res"
     
-    res = ActiveRecord::Base.connection.select_rows(query)
+    res = ActiveRecord::Base.connection.select_one(query)
     
-    res[0][0].to_i
+    res['count'].to_i
   end
   
   def self.getExcludedTimeConflicts(day = nil)
-    ActiveRecord::Base.connection.select_rows(excludedTimeConflictsSql(day))
+    ActiveRecord::Base.connection.select_all(excludedTimeConflictsSql(day))
   end
   
   def self.getNbrAvailabilityConficts(day = nil)
-    query = "select count(*) from (" + availabilityConfictsSql(day) + ") res"
+    query = "select count(*) as count from (" + availabilityConfictsSql(day) + ") res"
     
-    res = ActiveRecord::Base.connection.select_rows(query)
+    res = ActiveRecord::Base.connection.select_one(query)
     
-    res[0][0].to_i
+    res['count'].to_i
   end
   
   def self.getAvailabilityConficts(day = nil)
-    ActiveRecord::Base.connection.select_rows(availabilityConfictsSql(day))
+    ActiveRecord::Base.connection.select_all(availabilityConfictsSql(day))
   end
   
   def self.getNbrBackToBackConflicts(day = nil)
-    query = "select count(*) from (" + backToBackConflictsSql(day) + ") res"
+    query = "select count(*) as count from (" + backToBackConflictsSql(day) + ") res"
     
-    res = ActiveRecord::Base.connection.select_rows(query)
+    res = ActiveRecord::Base.connection.select_one(query)
     
-    res[0][0].to_i
+    res['count'].to_i
   end
   
   def self.getBackToBackConflicts(day = nil)
-    ActiveRecord::Base.connection.select_rows(backToBackConflictsSql(day))
+    ActiveRecord::Base.connection.select_all(backToBackConflictsSql(day))
   end
   
 protected
 
-  def self.genArgsForSql(nameSearch, filters, extraClause, page_to = nil)
+  def self.genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled = false, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['format_id','pub_reference_number'],
                   ['format_id','pub_reference_number'], 'programme_items.title')
@@ -166,10 +162,10 @@ protected
       end
     end
     
+    if ignoreScheduled
+      clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
+    end
     # TODO - add these
-    # if ignoreScheduled
-      # clause = addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
-    # end
     # if ignorePending
       # clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
       # clause = addClause( clause, 'programme_items.print = true', nil )
@@ -239,8 +235,8 @@ protected
 
 @@CONFLICT_QUERY_PT1 = <<"EOS"
   select 
-  R.id as id, R.name as name,
-  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  R.id as room_id, R.name as room_name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name as person_last_name, 
   S.id as item_id, S.title as item_name, Conflicts.roleA item_role,
   Conflicts.startA as item_start,
   RB.id as conflict_room_id, RB.name as conflict_room_name,
@@ -275,7 +271,7 @@ EOS
 EOS
 
 @@ITEM_CONFLICT_QUERY_PT1 = <<"EOS"
-select room.id, room.name as name, 
+select room.id as room_id, room.name as room_name, 
 S.id as item_id, S.title as item_name,
 SB.id as conflict_item_id, SB.title as conflict_item_name,
 Conflicts.startA as item_start,
@@ -305,8 +301,8 @@ EOS
   
 @@EXCLUDED_ITEM_QUERY_PT1 = <<"EOS"
   select 
-  R.id as id, R.name as name,
-  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  R.id as room_id, R.name as room_name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name as person_last_name, 
   S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
   RB.id as conflict_room_id, RB.name as conflict_room_name,
   SB.id as conflict_item_id, SB.title as conflict_item_title,
@@ -343,8 +339,8 @@ EOS
 
 @@EXCLUDED_TIME_QUERY_PT1 = <<"EOS"
  select 
-  R.id as id, R.name as name,
-  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  R.id as room_id, R.name as room_name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name as person_last_name, 
   S.id as item_id, S.title as item_name, Conflicts.startB as item_start,
   Conflicts.startA as period_start, Conflicts.endA as period_end,
   Conflicts.roleB item_role
@@ -374,8 +370,8 @@ EOS
 
 @@AVAILABLE_TIME_CONFLICT_QUERY_PT1 = <<"EOS"
 select 
-  R.id as id, R.name as name,
-  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  R.id as room_id, R.name as room_name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name as person_last_name, 
   S.id as item_id, S.title as item_name, Conflicts.startB as item_start,
   Conflicts.startA as period_start, Conflicts.endA as period_end,
   Conflicts.roleB item_role
@@ -404,8 +400,8 @@ EOS
 
 @@BACK_TO_BACK_QUERY_PT1 = <<"EOS"
   select 
-  R.id as id, R.name as name,
-  P.id as person_id, P.first_name as person_first_name, P.last_name, 
+  R.id as room_id, R.name as room_name,
+  P.id as person_id, P.first_name as person_first_name, P.last_name as person_last_name, 
   S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
   RB.id as conflict_room_id, RB.name as conflict_room_name,
   SB.id as conflict_item_id, SB.title as conflict_item_title,
