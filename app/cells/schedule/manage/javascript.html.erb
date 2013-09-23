@@ -5,16 +5,112 @@
 ScheduleApp = new Backbone.Marionette.Application();
 ScheduleApp.ItemManagement = (function(Backbone){
     
+    var eventAggregator = new Backbone.Wreqr.EventAggregator();
+    
     /*
      * 
      */
     GridItem = Backbone.Model.extend({
     });
     
+    // 
+    Conflict = Backbone.RelationalModel.extend({});
+    ConflictCollection = Backbone.Collection.extend({
+        model : Conflict
+    });
+    
+    Conflicts = Backbone.RelationalModel.extend({
+        relations : [{
+            type           : Backbone.HasMany,
+            key            : 'schedule',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'room',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'excluded_item',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'excluded_time',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'availability',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'back_to_back',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }]
+    });
+    
     Day = Backbone.Model.extend({
         defaults : {
             'currentDay' : 0
         }
+    });
+    
+    /*
+     * 
+     */
+    ConflictLayout = Backbone.Marionette.Layout.extend({
+        template: "#conflict-layout-template",
+        
+        regions : {
+            scheduleRegion     : "#schedule-region-div",
+            roomRegion         : "#room-region-div",
+            excludedItemRegion : "#excluded-item-region-div",
+            excludedTimeRegion : "#excluded-time-region-div",
+            availabilityRegion : "#availability-region-div",
+            backToBackRegion   : "#back-to-back-region-div",
+        },
+    });
+    
+    ConflictView = Marionette.ItemView.extend({
+        events: {
+            "click .conflict": "selectConflict",
+        },
+        
+        selectConflict : function(ev) {
+            console.debug(this.model.get('item_name'));
+            // TODO - scroll to the problem item
+            room_name = this.model.get('room_name');
+            time = this.model.get('item_start');
+            item_id = this.model.get('item_id'); // g id
+            
+            DailyGrid.scrollTo(room_name, time);
+        }
+    });
+    
+    ConflictCollectionView = Backbone.Marionette.CollectionView.extend({
+        itemView : ConflictView,
+        
+        // build the view using a dynamic template based on itemViewTemplate
+        buildItemView: function(item, ItemViewType, itemViewOptions){
+            var options = _.extend({
+                model    : item,
+                template : this.options.itemViewTemplate
+                }, itemViewOptions);
+            
+            var view = new ItemViewType(options);
+
+            return view;
+        },
     });
     
     /*
@@ -28,12 +124,22 @@ ScheduleApp.ItemManagement = (function(Backbone){
             "click .prev-day"   : "prevDay",
             "click .next-day"    : "nextDay",
         },
+        
+        initialize : function() {
+            eventAggregator.on("refreshConflicts", this.refreshConflicts, this);
+        },
+        
+        refreshConflicts : function() {
+            day = this.model.get('currentDay');
+            loadConflicts(day);
+        },
 
         prevDay : function() {
             day = this.model.get('currentDay');
             if (day > 0) {
                 day -= 1;
                 this.model.set('currentDay', day);
+                // this.model.set('currentDate', Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + day.days);
                 this.render();
                 loadGrid(day);
             }
@@ -115,8 +221,11 @@ ScheduleApp.ItemManagement = (function(Backbone){
             success: function(response){
                 // And we reload the list of items so that the dropped one is removed
                 $("#items").trigger("reloadGrid");
+                eventAggregator.trigger("refreshConflicts");
+            },
+            error : function(model, response) {
+                alertMessage("Error communicating with backend");
             }
-            // TODO - deal with error
         });
         
         return true;
@@ -170,8 +279,11 @@ ScheduleApp.ItemManagement = (function(Backbone){
                     
                     // And we reload the list of items so that the dropped one is removed
                     $("#items").trigger("reloadGrid");
-                }
-                // TODO - add error handling
+                    eventAggregator.trigger("refreshConflicts");
+                },
+                error : function(model, response) {
+                    alertMessage("Error communicating with backend");
+                },
             });
     };
     
@@ -186,14 +298,63 @@ ScheduleApp.ItemManagement = (function(Backbone){
                     alertMessage("Error communicating with backend");
                 },
                 success : function(_grid) {
-                    // TODO - if there was already a grid there we need to get rid of it.... check that this is the case
+                    // if there was already a grid there we need to get rid of it.... check that this is the case
+                    if (_gridView) {
+                        DailyGrid.clean();
+                    };
+                    
                     _gridView = new GridView({
                         model : _grid,
                         day : day
                     });
                     _gridView.render();
+                    
+                    loadConflicts(day);
                 }
             });
+    };
+    
+    var conflictContent = [];
+
+    function clearConflicts() {
+        _.invoke(conflictContent, 'clear' );
+    };
+
+    /*
+     * Create collection and view for the conflict(s)
+     */    
+    function createConflictCollectionView(collection, viewTemplate, region) {
+        var collectionView = new ConflictCollectionView({
+            collection : collection,
+            itemViewTemplate : viewTemplate,
+        });
+        region.show(collectionView);
+    };
+    
+    /*
+     * 
+     */
+    function loadConflicts(day) {
+        conflictLayout = new ConflictLayout();
+        conflictLayout.render();
+        $('#conflict-view').html(conflictLayout.el);
+
+        // Render the conflicts for this day
+        conflicts = new Conflicts();
+        conflicts.fetch({
+            url : "/program_planner/getConflicts.json?day=" + day, // TODO - fix domain and sub-site
+            success : function(obj) {
+                // Create the views...
+                createConflictCollectionView(obj.get('schedule'), "#schedule-view-template",conflictLayout.scheduleRegion);
+                createConflictCollectionView(obj.get('room'), "#room-view-template",conflictLayout.roomRegion);
+                createConflictCollectionView(obj.get('excluded_item'), "#excluded-item-view-template",conflictLayout.excludedItemRegion);
+                createConflictCollectionView(obj.get('excluded_time'), "#excluded-time-view-template",conflictLayout.excludedTimeRegion);
+                createConflictCollectionView(obj.get('availability'), "#availability-view-template",conflictLayout.availabilityRegion);
+                createConflictCollectionView(obj.get('back_to_back'), "#back-to-back-view-template",conflictLayout.backToBackRegion);
+                // TODO - add mechanism to colour the items in the grid based on the conflicts
+            } 
+        });
+
     };
     
     /*

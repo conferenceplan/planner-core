@@ -131,12 +131,34 @@ DailyGrid = (function() {
         }
     };
 
+    /*
+     * 
+     */
+    function scrollTo(room, time) {
+        var idx = 0;
+        for (idx = 0; idx < labels.length; idx++) {
+            if (labels[idx] == room) {
+                break;
+            }
+        };
+
+        newx = -(xScale(idx) - zoom.translate()[0]);
+        newy = -(yScale(Date.parse(time)) - zoom.translate()[1]);
+
+        zoom.translate([newx, newy]);
+        draw();
+        svg.selectAll(".prog-item").attr('transform', 'translate(' + zoom.translate() + ') scale(' + zoom.scale() + ')');
+    };
+
     // Public method used by the view to paint the schedule data data
     // window.DailyGrid.
-    paint = function(_selector, _data) {
+    function paint(_selector, _data) {
+        // TODO - get the dimensions from the containing element
         selector = _selector;
         data = _data;
         date = Date.parse(data.get('date'));
+        console.debug('PAINT');
+        console.debug(date);
         //new Date(2013, 5, 15); // 0 = Jan etc
 
         // We need to create an SVG area for the display
@@ -152,8 +174,10 @@ DailyGrid = (function() {
         // And a zoomable rectangle to handle the zoom and pan events
         gridBody = svg.append("g").attr("clip-path", "url(#clip)");
 
-        var itemDisplay = gridBody.append("rect").attr("class", "pane").attr("id", "pane").attr("width", width).attr("height", height).call(zoom);
+        var itemDisplay = gridBody.append("rect").attr("class", "pane").attr("id", "pane").attr("width", width).attr("height", height).call(zoom); //
         // make the item display "zoomable"
+        
+        var allItems = gridBody.append("g").attr("class", "all-items");
 
         // Set the ranges for the scales
         yScale.domain([date, d3.time.hour.offset(new Date(date), +24)]);
@@ -197,6 +221,8 @@ DailyGrid = (function() {
      *
      */
     function createItemGroup(items, idx) {
+        //         var allItems = gridBody.append("g").attr("class", "all-items");
+        // var group = gridBody.selectAll(".all-items")
         var group = gridBody.selectAll("rect")
             .data(items, function(d) {
                 if ( typeof d != 'undefined') {
@@ -247,7 +273,7 @@ DailyGrid = (function() {
         .attr("class", 'prog-item-text').append('xhtml:div')// DIV containing the title so we can wrap text etc.
         .attr("class", 'prog-item-text-class');
 
-        div.append('xhtml:div').attr("class", 'item-text').text(function(d) {
+        div.append('xhtml:div').attr("class", 'item-text').html(function(d) {
             return d.title;
         });
 
@@ -307,6 +333,11 @@ DailyGrid = (function() {
      *
      */
     return {
+        
+        scrollTo : function(room, time) {
+            scrollTo(room, time);
+        },
+        
         paint : function(_selector, _data) {
             return paint(_selector, _data);
         },
@@ -321,6 +352,14 @@ DailyGrid = (function() {
 
         getCurrentRoomAndTime : function() {
             return currentPosnAsRoomAndTime();
+        },
+        
+        clean : function() {
+            // clean up memory????
+            if (svg) {
+                d3.select(selector).remove();
+                svg = null;
+            }
         }
     };
 

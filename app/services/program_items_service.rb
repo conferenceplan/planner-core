@@ -233,6 +233,8 @@ protected
     query
   end
 
+# Time.zone.now.strftime('%:z') - to get the timezone in the correct form
+
 @@CONFLICT_QUERY_PT1 = <<"EOS"
   select 
   R.id as room_id, R.name as room_name,
