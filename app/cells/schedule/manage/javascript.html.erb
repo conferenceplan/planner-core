@@ -322,13 +322,34 @@ ScheduleApp.ItemManagement = (function(Backbone){
 
     /*
      * Create collection and view for the conflict(s)
-     */    
-    function createConflictCollectionView(collection, viewTemplate, region) {
+     */
+    function clearConflictHighlights(color) {
+        // Clear the conflict highlights
+        $(".conflict-item-" +color).each(function() {
+            var cl = $(this).attr('class');
+
+            cl = cl.replace('conflict-item-' + color,"");
+            
+            $(this).attr('class', cl);
+        });
+    };
+    
+    function createConflictCollectionView(collection, viewTemplate, region, color) {
         var collectionView = new ConflictCollectionView({
             collection : collection,
             itemViewTemplate : viewTemplate,
         });
         region.show(collectionView);
+        
+        
+        // Put in the conflict highlights
+        _.each(collection.models, function(vv) {
+            var id = vv.get('item_id');
+            var cl = $("#" + id + " .prog-item-rect").attr('class');
+            if (cl.indexOf("conflict-item") == -1) {
+                $("#" + id + " .prog-item-rect").attr('class', cl + " conflict-item-" + color);
+            }
+        });
     };
     
     /*
@@ -345,12 +366,15 @@ ScheduleApp.ItemManagement = (function(Backbone){
             url : "/program_planner/getConflicts.json?day=" + day, // TODO - fix domain and sub-site
             success : function(obj) {
                 // Create the views...
-                createConflictCollectionView(obj.get('schedule'), "#schedule-view-template",conflictLayout.scheduleRegion);
-                createConflictCollectionView(obj.get('room'), "#room-view-template",conflictLayout.roomRegion);
-                createConflictCollectionView(obj.get('excluded_item'), "#excluded-item-view-template",conflictLayout.excludedItemRegion);
-                createConflictCollectionView(obj.get('excluded_time'), "#excluded-time-view-template",conflictLayout.excludedTimeRegion);
-                createConflictCollectionView(obj.get('availability'), "#availability-view-template",conflictLayout.availabilityRegion);
-                createConflictCollectionView(obj.get('back_to_back'), "#back-to-back-view-template",conflictLayout.backToBackRegion);
+                clearConflictHighlights('red');
+                clearConflictHighlights('blue');
+                clearConflictHighlights('magenta');
+                createConflictCollectionView(obj.get('schedule'), "#schedule-view-template",conflictLayout.scheduleRegion, 'red');
+                createConflictCollectionView(obj.get('room'), "#room-view-template",conflictLayout.roomRegion, 'red');
+                createConflictCollectionView(obj.get('excluded_item'), "#excluded-item-view-template",conflictLayout.excludedItemRegion, 'magenta');
+                createConflictCollectionView(obj.get('excluded_time'), "#excluded-time-view-template",conflictLayout.excludedTimeRegion, 'magenta');
+                createConflictCollectionView(obj.get('availability'), "#availability-view-template",conflictLayout.availabilityRegion, 'magenta');
+                createConflictCollectionView(obj.get('back_to_back'), "#back-to-back-view-template",conflictLayout.backToBackRegion, 'blue');
                 // TODO - add mechanism to colour the items in the grid based on the conflicts
             } 
         });

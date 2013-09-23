@@ -38,10 +38,29 @@ rect.pane {
   pointer-events: all;
 }
 
+.prog-item {
+  stroke : black;
+}
+
+.conflict-item-red {
+  stroke: red;
+  stroke-width: 5px;
+}
+
+.conflict-item-blue {
+  stroke: blue;
+  stroke-width: 5px;
+}
+
+.conflict-item-magenta {
+  stroke: magenta;
+  stroke-width: 5px;
+}
+
+
 .prog-item-ctl,
 .prog-item-rect {
   fill: white;
-  stroke : black;
   stroke-opacity: 0.9;
   stroke-width: 0.5px;
   position:relative;
@@ -73,11 +92,6 @@ rect.pane {
   position:absolute;
   bottom:0;
   right:0;
-}
-
-.candidate {
-  stroke: red;
-  stroke-width: 3px;
 }
 
 .prog-item-text-class,
