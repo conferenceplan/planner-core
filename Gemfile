@@ -33,6 +33,7 @@ gem 'will_paginate'
 gem "rack", "1.4.5"
 gem 'rake', '0.8.7'
 gem 'therubyracer', :platforms => :ruby
+gem 'puma', :platforms => :ruby
 
 # Needed for the new asset pipeline
 group :assets do
