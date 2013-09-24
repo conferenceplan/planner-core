@@ -25,7 +25,12 @@ gem 'rack-jsonp-middleware', :require => 'rack/jsonp'
 gem 'rails', '~> 3.2.12'
 gem 'time_diff'
 gem 'turbolinks'
-gem 'will_paginate' 
+gem 'will_paginate'
+
+#
+# Needed for installs
+#
+#gem 'rake', '0.8.7'
 
 # Needed for the new asset pipeline
 group :assets do
