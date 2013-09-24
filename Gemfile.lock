@@ -166,6 +166,7 @@ DEPENDENCIES
   jbuilder
   jquery-rails
   mysql2
+  rack (= 1.4.5)
   rack-jsonp-middleware
   rails (~> 3.2.12)
   sass-rails (~> 3.2.3)

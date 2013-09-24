@@ -27,6 +27,7 @@ gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate'
 
+gem "rack", "1.4.5"
 #
 # Needed for installs
 #
