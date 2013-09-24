@@ -27,11 +27,11 @@ gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate'
 
-gem "rack", "1.4.5"
 #
 # Needed for installs
 #
-#gem 'rake', '0.8.7'
+gem "rack", "1.4.5"
+gem 'rake', '0.8.7'
 
 # Needed for the new asset pipeline
 group :assets do
