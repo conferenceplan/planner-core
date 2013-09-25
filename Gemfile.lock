@@ -46,6 +46,7 @@ GEM
     bootswatch-rails (0.5.0)
       railties (>= 3.1)
     builder (3.0.4)
+    capistrano-puma (0.0.1)
     cells (3.8.8)
       actionpack (>= 3.0)
       railties (>= 3.0)
@@ -162,6 +163,7 @@ DEPENDENCIES
   bluecloth
   bootstrap-sass (~> 2.3.2.2)
   bootswatch-rails
+  capistrano-puma
   cells
   coffee-rails (~> 3.2.1)
   compass-rails
