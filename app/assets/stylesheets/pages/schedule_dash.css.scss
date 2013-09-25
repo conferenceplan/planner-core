@@ -84,14 +84,16 @@ rect.pane {
 }
 
 .item-ctl-remove {
-  position:absolute;
-  top:0;
-  right:0;
+  float : right;
 }
+
 .item-ctl-back {
-  position:absolute;
-  bottom:0;
-  right:0;
+  float : left;
+  margin-right : 40%;
+}
+
+.prog-item-text-class {
+  // position: relative;
 }
 
 .prog-item-text-class,
