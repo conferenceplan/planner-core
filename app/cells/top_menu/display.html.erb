@@ -1,0 +1,10 @@
+<!-- TODO: need a way to determine which is active  set class="active" -->
+<div class="navbar" data-spy="affix" id="nav-wrap" data-offset-top="50">
+    <div class="navbar-inner">
+        <ul class="nav pull-left">
+            <% @menu.each do |k, v| %>
+                <li><a href="<%= v[:target] %>"><i class="icon-<%= v[:icon]%>"></i> <%= k %></a></li>
+            <% end %>
+        </ul>
+    </div>
+</div>

@@ -44,17 +44,24 @@ rect.pane {
 
 .conflict-item-red {
   stroke: red;
-  stroke-width: 5px;
+  stroke-width: 3px;
 }
 
 .conflict-item-blue {
   stroke: blue;
-  stroke-width: 5px;
+  stroke-width: 3px;
 }
 
 .conflict-item-magenta {
   stroke: magenta;
-  stroke-width: 5px;
+  stroke-width: 3px;
+}
+
+.toolbar-line {
+  float: left;
+  height: 1px;
+  margin: 0px 3px 0px 3px;
+  width: 95%;
 }
 
 
@@ -62,13 +69,15 @@ rect.pane {
 .prog-item-rect {
   fill: white;
   stroke-opacity: 0.9;
-  stroke-width: 0.5px;
+  // stroke-width: 0.5px;
   position:relative;
 }
 
 .item-text {
-  width : 80%;
+  // width : 80%;
+  float: left;
   display : block;
+  padding : 3px;
 }
 
 .item-ctl-icon,
@@ -89,7 +98,7 @@ rect.pane {
 
 .item-ctl-back {
   float : left;
-  margin-right : 40%;
+  // margin-right : 40%;
 }
 
 .prog-item-text-class {
@@ -102,5 +111,6 @@ rect.pane {
   font-size : 6pt;
   line-height: normal;
   fill : black;
+  cursor: pointer;
 }
 

@@ -1,11 +1,10 @@
-<div class="navbar navbar-inverse" id="main-nav-bar">
-    <nav class="navbar-inner">
-        <a class="brand" href="/"><%= @page_title or 'Convention Planner' %></a>
+<div class="navbar" data-spy="affix" id="nav-wrap" data-offset-top="50">
+    <div class="navbar-inner">
         <ul class="nav pull-right">
             <% if current_user %>
                 <li><%= link_to "Edit Profile", edit_user_path(:current) %></li>
                 <li><%= link_to "Logout", logout_path %></li>
             <% end %>
         </ul>
-    </nav>
+    </div>
 </div>

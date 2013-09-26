@@ -9,13 +9,13 @@ DailyGrid = (function() {
         right : 15,
         bottom : 15,
         left : 40
-    }, width = 600 - margin.left - margin.right, height = 680 - margin.top - margin.bottom;
+    }, width = 800 - margin.left - margin.right, height = 680 - margin.top - margin.bottom;
 
     // Globals for the data and the SVG element
     var selector = null, data = null, svg = null, gridbody = null, date = null, labels = null, base = 0, textBoxWidth = 1, ctlWidth = 0.2;
 
     // Create a liner scale for the rooms and a time scale for the day
-    var xScale = d3.scale.linear().rangeRound([0, width * 10], 0);
+    var xScale = d3.scale.linear().rangeRound([0, width * 7], 0);
     //
     var yScale = d3.time.scale().rangeRound([0, height * 2]);
 
@@ -290,6 +290,8 @@ DailyGrid = (function() {
 
             d3.event.stopPropagation();
         }).append('xhtml:i').attr("class", 'icon-remove item-ctl-icon');
+        
+        div.append('xhtml:hr').attr("class", 'toolbar-line');
 
         div.append('xhtml:div').attr("class", 'item-text').html(function(d) {
             return d.title;

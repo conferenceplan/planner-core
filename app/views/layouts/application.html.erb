@@ -29,16 +29,13 @@
   <body>
     <!-- %=render 'layouts/common_page_top' % -->
           <%= render 'layouts/navigation' %>
+<% if current_user %>
+          <%= render 'layouts/topbar' %>
+<% end %>
     <main role="main">
       <div class="container-fluid padded">
            <div class="row-fluid">
-
-<% if current_user %>
-                <div class="span2 bs-docs-sidebar">
-                      <%= render 'layouts/sidebar' %>
-                </div>
-<% end %>
-                <div class="span10">
+                <div class="span12">
                     <div id="alert-area">
                         <%= render partial: 'layouts/messages', flash: flash %>
                     </div>

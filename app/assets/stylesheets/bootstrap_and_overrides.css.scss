@@ -2,7 +2,12 @@
 
 @import "bootstrap";
 
-body { padding-top: 4em; } // For the navigation heading...
+// body { padding-top: 4em; } // For the navigation heading...
+
+#main-nav-bar {
+  margin-bottom : 0;
+}
+
 .footer {
     background-color: #F5F5F5;
     border-top: 1px solid #E5E5E5;
@@ -35,6 +40,12 @@ input, textarea, .uneditable-input {
 
 form {
     margin: 0 0 0px; // fudge because one of the css sets this to 20px...
+}
+
+#nav-wrap.affix {
+top: 0;
+width: 100%;
+z-index: 2;
 }
 
 @import "bootstrap-responsive";
