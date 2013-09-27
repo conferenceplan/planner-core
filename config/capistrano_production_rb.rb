@@ -9,22 +9,22 @@ Capistrano::Configuration.instance.load do
 
   namespace :deploy do
     
-    namespace :session do
-      task :setup, :except => { :no_release => true } do
-        sesssionfile = <<-FILE
-  ActionController::Base.session = { :key => '_#{(1..6).map { |x| (65 + rand(26)).chr }.join}_session', :secret => '#{(1..40).map { |x| (65 + rand(26)).chr }.join}' }
-FILE
-
-        run "mkdir -p #{shared_path}/config/initializers" 
-        put sesssionfile, "#{shared_path}/config/initializers/session_store.rb"
-      end
-      
-      task :symlink, :except => { :no_release => true } do
-        run "rm #{release_path}/config/initializers/session_store.rb"
-        run "ln -nfs #{shared_path}/config/initializers/session_store.rb #{release_path}/config/initializers/session_store.rb" 
-      end
-
-    end
+    # namespace :session do
+      # task :setup, :except => { :no_release => true } do
+        # sesssionfile = <<-FILE
+  # ActionController::Base.session = { :key => '_#{(1..6).map { |x| (65 + rand(26)).chr }.join}_session', :secret => '#{(1..40).map { |x| (65 + rand(26)).chr }.join}' }
+# FILE
+# 
+        # run "mkdir -p #{shared_path}/config/initializers" 
+        # put sesssionfile, "#{shared_path}/config/initializers/session_store.rb"
+      # end
+#       
+      # task :symlink, :except => { :no_release => true } do
+        # run "rm #{release_path}/config/initializers/session_store.rb"
+        # run "ln -nfs #{shared_path}/config/initializers/session_store.rb #{release_path}/config/initializers/session_store.rb" 
+      # end
+# 
+    # end
 
     namespace :mailer do
 
@@ -76,8 +76,8 @@ EOF
 
     end
 
-    after "deploy:setup",           "deploy:mailer:setup", "deploy:session:setup"   unless fetch(:skip_db_setup, false)
-    after "deploy:finalize_update", "deploy:mailer:symlink", "deploy:session:setup", "deploy:session:symlink"
+    # after "deploy:setup",           "deploy:mailer:setup" unless fetch(:skip_db_setup, false)
+    # after "deploy:finalize_update", "deploy:mailer:symlink"
 
   end
 

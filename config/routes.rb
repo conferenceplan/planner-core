@@ -13,6 +13,7 @@ PlannerRc1::Application.routes.draw do
     resources :reports_dash
     resources :mailings_dash
     resources :surveys_dash
+    resources :venues_dash
   end
   
   # Default routes 

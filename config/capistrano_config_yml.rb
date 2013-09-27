@@ -42,6 +42,7 @@ Capistrano::Configuration.instance.load do
       DESC
       task :symlink, :except => { :no_release => true } do
         run "ln -nfs #{shared_path}/config/siteconfig.yml #{release_path}/config/siteconfig.yml" 
+        run "ln -nfs #{shared_path}/config/puma.rb #{release_path}/config/puma.rb" 
       end
 
     end

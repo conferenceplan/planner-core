@@ -110,7 +110,7 @@ Capistrano::Configuration.instance.load do
 
         default_template = <<-EOF
 #{stage}:
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   reconnect: false
   pool: 5

@@ -1,28 +1,48 @@
 #
-set :stages, %w(production staging sandbox boskone lonestartest smofcon lscprog lscstage eastercon)
+# Capistrano script for RC1 version of the Planner using Rails 3.2.x
+#
+set :stages, %w(parctec) # production staging sandbox 
 set :default_stage, "staging"
-set :application, "Planner"
-#set :repository,  "https://conferenceplan.svn.sourceforge.net/svnroot/conferenceplan/PlannerPrototype"
-set :repository,  "svn://svn.code.sf.net/p/conferenceplan/code/Planner"
-set :deploy_to, "/opt/www"
+
+require "rvm/capistrano/base"
 
 require "capistrano/ext/multistage"
-require "config/capistrano_database_yml"
-require "config/capistrano_production_rb"
-require "config/capistrano_config_yml"
-require "config/capistrano_delayed_job_yml"
-
+# so that bundler is used
 require "bundler/capistrano"
+
+require "./config/capistrano_database_yml.rb"
+require "./config/capistrano_production_rb"
+require "./config/capistrano_config_yml.rb"
+#require "./config/capistrano_delayed_job_yml"
+
+
+set :application, "planner-rc1"
 
 set :scm, :subversion
 set :group, "www-data"
 set :use_sudo, false
 
+set :repository,  "svn://svn.code.sf.net/p/conferenceplan/code/branches/planner-rc1"
+set :deploy_to, "/opt/www"
+
+# For asset pipeline
+set :normalize_asset_timestamps, false
+
+# TODO - add in the code for Puma
+# require 'puma/capistrano'
+require 'capistrano-puma'
+
+# if you want to clean up old releases on each deploy uncomment this:
+# after "deploy:restart", "deploy:cleanup"
+
+# if you're still using the script/reaper helper you will need
+# these http://github.com/rails/irs_process_scripts
+
 # If you are using Passenger mod_rails uncomment this:
-namespace :deploy do
-  task :start do ; end
-  task :stop do ; end
-  task :restart, :roles => :app, :except => { :no_release => true } do
-    run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-  end
-end
+# namespace :deploy do
+#   task :start do ; end
+#   task :stop do ; end
+#   task :restart, :roles => :app, :except => { :no_release => true } do
+#     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
+#   end
+# end
