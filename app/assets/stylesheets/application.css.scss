@@ -8,12 +8,9 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
- *  require_tree .
- *
  *= require bootstrap_and_overrides 
  *  
  *= require backbone-forms/distribution/templates/bootstrap
- * 
  * 
  *= require font-awesome
  * 
@@ -24,7 +21,6 @@
  *= require jquery.timeentry
  *= require jquery.easy-pie-chart
  *= require planner
- * 
  * 
  *= require_self
  */

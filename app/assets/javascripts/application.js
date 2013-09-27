@@ -9,7 +9,6 @@
 
 //= require jquery-ui-1.9.2.custom
 //= require jquery.timers-1.2
-//= require jquery.freeow
 //= require jquery.form
 //= require jquery.timeentry.min
 //= require i18n/grid.locale-en
@@ -34,7 +33,7 @@
 
 //= require d3/d3.v3
 
-// Check we still use planIt
+// TODO - Check we still use planIt
 //= require planIt
 
 //= require plugins/cpBaseTable

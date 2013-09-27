@@ -69,21 +69,18 @@ rect.pane {
 .prog-item-rect {
   fill: white;
   stroke-opacity: 0.9;
-  // stroke-width: 0.5px;
   position:relative;
 }
 
 .item-text {
-  // width : 80%;
   float: left;
   display : block;
-  padding : 3px;
+  padding : 0 3px;
 }
 
 .item-ctl-icon,
 .item-ctl-remove,
 .item-ctl-back {
-  // max-height:30%;
 }
 
 .item-ctl-remove,
@@ -98,11 +95,9 @@ rect.pane {
 
 .item-ctl-back {
   float : left;
-  // margin-right : 40%;
 }
 
 .prog-item-text-class {
-  // position: relative;
 }
 
 .prog-item-text-class,

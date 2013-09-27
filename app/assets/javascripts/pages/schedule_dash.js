@@ -141,19 +141,33 @@ DailyGrid = (function() {
                 break;
             }
         };
-
-        newx = -(xScale(idx) - zoom.translate()[0]);
+        
+        _scrollTo(idx, time);
+// 
+        // newx = -(xScale(idx) - zoom.translate()[0]);
+        // newy = -(yScale(Date.parse(time)) - zoom.translate()[1]);
+// 
+        // zoom.translate([newx, newy]);
+        // draw();
+        // svg.selectAll(".prog-item").attr('transform', 'translate(' + zoom.translate() + ') scale(' + zoom.scale() + ')');
+    };
+    
+    function _scrollTo(roomIdx, time) {
+        newx = -(xScale(roomIdx) - zoom.translate()[0]);
         newy = -(yScale(Date.parse(time)) - zoom.translate()[1]);
 
         zoom.translate([newx, newy]);
         draw();
         svg.selectAll(".prog-item").attr('transform', 'translate(' + zoom.translate() + ') scale(' + zoom.scale() + ')');
-    };
+    }
 
     // Public method used by the view to paint the schedule data data
     // window.DailyGrid.
-    function paint(_selector, _data) {
-        // TODO - get the dimensions from the containing element
+    function paint(_selector, _data, _width) {
+        // use the width dimension from the containing element
+        width = _width - margin.left - margin.right;
+        y_Axis = d3.svg.axis().scale(yScale).orient("left").tickSize(-(width + margin.left), 0).tickPadding(6);
+
         selector = _selector;
         data = _data;
         date = Date.parse(data.get('date'));
@@ -208,6 +222,8 @@ DailyGrid = (function() {
 
         // Then draw the display
         draw();
+        
+        _scrollTo(0, d3.time.hour.offset(new Date(date), +8)); // Position at 8am of the day in question
     };
 
     /*
@@ -340,8 +356,8 @@ DailyGrid = (function() {
             scrollTo(room, time);
         },
         
-        paint : function(_selector, _data) {
-            return paint(_selector, _data);
+        paint : function(_selector, _data, _width) {
+            return paint(_selector, _data, _width);
         },
 
         createItem : function(_data, idx) {// for a specific item
