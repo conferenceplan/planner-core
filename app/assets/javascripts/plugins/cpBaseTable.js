@@ -22,7 +22,8 @@ $.widget( "cp.baseTable" , {
                 refresh : false,
                 multiselect : false,
                 extraClause : null,
-                sortname : null
+                sortname : null,
+                filtertoolbar : true
     },
     
     _create : function() {
@@ -168,10 +169,12 @@ $.widget( "cp.baseTable" , {
                 closeOnEscape : true
             });
             
-            this.element.jqGrid('filterToolbar', {
-                stringResult : true,
-                searchOnEnter : false,
-            });
+            if (this.options.filtertoolbar) {
+                this.element.jqGrid('filterToolbar', {
+                    stringResult : true,
+                    searchOnEnter : false,
+                });
+            }
     },
     
     // Determine what the URL for the table should be

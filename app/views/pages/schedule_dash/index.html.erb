@@ -1,8 +1,4 @@
-<div class="row-fluid">
-<%= render_cell :context_menu, :display, :menu => {
-    "schedule" => '/pages/schedule_dash/manage',
-} %>
-</div>
+
 <div class="row-fluid">
 <% if @cellname %>
     <%= render_cell "schedule/#{@cellname}", :display %>

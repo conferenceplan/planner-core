@@ -7,41 +7,71 @@ class RoomsController < PlannerController
     @rooms = Room.find :all
     render :layout => 'plain'
   end
+  
+  def list
+    rows = params[:rows] ? params[:rows] : 15
+    @page = params[:page] ? params[:page].to_i : 1
+    idx   = params[:sidx]
+    order = params[:sord]
+    filters = params[:filters]
+    page_to = params[:page_to]
+    @currentId = params[:current_selection]
+    venue_id = params[:venue_id]
+    
+    @count = RoomsService.countRooms filters, venue_id
+
+    if page_to && !page_to.empty?
+      gotoNum = RoomsService.countRooms filters, venue_id, page_to
+      if gotoNum
+        @page = (gotoNum / rows.to_i).floor
+        @page += 1 if gotoNum % rows.to_i > 0
+      end
+    end
+    
+    if rows.to_i > 0
+      @nbr_pages = (@count / rows.to_i).floor
+      @nbr_pages += 1 if @count % rows.to_i > 0
+    else
+      @nbr_pages = 1
+    end
+    
+    @rooms = RoomsService.findRooms rows, @page, idx, order, filters, venue_id
+  end
 
   #
-  def list
-    rows = params[:rows]
-    @page = params[:page]
-    idx = params[:sidx]
-    order = params[:sord]
-
-    clause = createWhereClause(params[:filters])
-
-    args = { :conditions => clause }
-    
-    joinSQL  = "LEFT JOIN venues ON venues.id=rooms.venue_id "
-    joinSQL += "LEFT JOIN room_setups ON room_setups.id=rooms.setup_id "
-    joinSQL += "LEFT JOIN setup_types ON setup_types.id=room_setups.setup_type_id"
-    
-    args.merge!(:joins => joinSQL)
- 
-    # First we need to know how many records there are in the database
-    # Then we get the actual data we want from the DB
-    @count = Room.count args
-    if rows.to_i > 0
-      @nbr_pages = (@count / rows.to_i).floor + 1
-    
-      off = (@page.to_i - 1) * rows.to_i
-      args.merge!(:offset => off, :limit => rows, :order => idx + " " + order)
-    end
-
-   @rooms = Room.find :all, args
-   
-    respond_to do |format|
-      format.html { render :layout => 'plain' } # list.html.erb
-      format.xml
-    end
-  end
+  # def listOLD
+    # rows = params[:rows]
+    # @page = params[:page]
+    # idx = params[:sidx]
+    # order = params[:sord]
+# 
+    # clause = createWhereClause(params[:filters])
+# 
+    # args = { :conditions => clause }
+#     
+    # joinSQL  = "LEFT JOIN venues ON venues.id=rooms.venue_id "
+    # joinSQL += "LEFT JOIN room_setups ON room_setups.id=rooms.setup_id "
+    # joinSQL += "LEFT JOIN setup_types ON setup_types.id=room_setups.setup_type_id"
+#     
+    # args.merge!(:joins => joinSQL)
+#  
+    # # First we need to know how many records there are in the database
+    # # Then we get the actual data we want from the DB
+    # @count = Room.count args
+    # if rows.to_i > 0
+      # @nbr_pages = (@count / rows.to_i).floor + 1
+#     
+      # off = (@page.to_i - 1) * rows.to_i
+      # args.merge!(:offset => off, :limit => rows, :order => idx + " " + order)
+    # end
+# 
+   # @rooms = Room.find :all, args
+#    
+    # respond_to do |format|
+      # format.html { render :layout => 'plain' } # list.html.erb
+      # format.xml
+    # end
+  # end
 
   def show
     @room = Room.find(params[:id])

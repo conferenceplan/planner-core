@@ -21,13 +21,16 @@
 //= require backbone/backbone.marionette
 //= require backbone/extensions/backbone-relational
 //= require backbone/extensions/backbone.paginator
+//= require backbone/extensions/backbone-pageable
 
 //= require backbone-forms/distribution/backbone-forms
 //= require backbone-forms/distribution/editors/list.min
 //= require backbone-forms/distribution/templates/bootstrap
 
-//= require backgrid/backgrid
 //= require moment/moment
+
+//= require backgrid/backgrid
+//= require backgrid/extensions/select-all/backgrid-select-all
 //= require backgrid/extensions/moment-cell/backgrid-moment-cell
 //= require backgrid/extensions/text-cell/backgrid-text-cell
 
@@ -39,6 +42,8 @@
 //= require plugins/cpBaseTable
 //= require plugins/cpItemTable
 //= require plugins/cpParticipantTable
+//= require plugins/cpVenueTable
+//= require plugins/cpRoomTable
 
 // TODO - check these
 //= require plugins/cpdialog

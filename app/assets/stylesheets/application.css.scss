@@ -20,6 +20,12 @@
  *= require jqModal
  *= require jquery.timeentry
  *= require jquery.easy-pie-chart
+ * 
+ *= require backgrid/backgrid
+ *= require backgrid/extensions/select-all/backgrid-select-all
+ *= require backgrid/extensions/moment-cell/backgrid-moment-cell
+ *= require backgrid/extensions/text-cell/backgrid-text-cell
+ *
  *= require planner
  * 
  *= require_self
@@ -28,6 +34,18 @@
 // NOTE - this is needed if we want to be able to drag-n-drop cells from the jqgrid
 .ui-jqgrid .ui-jqgrid-bdiv {
   overflow: visible;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th span.ui-jqgrid-resize {
+    height: 100% !important;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th div {
+    height: 100%;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th {
+    height: 100%;
 }
 
 .primary-sidebar {

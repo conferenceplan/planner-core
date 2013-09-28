@@ -1,0 +1,16 @@
+<script type="text/javascript">
+
+RoomApp = new Backbone.Marionette.Application();
+
+RoomApp.RoomManagement = (function(Backbone){
+    
+    return {
+        selectRoom : function(id) {
+            // set the URL for the rooms and get it to refresh
+            $("#rooms").roomTable("getRoomForVenue", id);
+        },
+    }
+
+})(Backbone);
+
+</script>

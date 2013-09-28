@@ -1,0 +1,31 @@
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    jQuery("#rooms").roomTable({
+        caption : "<%= @caption %>",
+        selectNotifyMethod : <%= @selectNotifyMethod %>,
+        clearNotifyMethod : <%= @clearNotifyMethod %>,
+        loadNotifyMethod : <%= @loadNotifyMethod %>,
+        root_url : "<%= @root_url %>",
+        baseUrl : "<%= @baseUrl %>",
+        getGridData : "<%= @getGridData %>",
+        
+        view : <%= @view %>,
+        search : <%= @search %>,
+        del : <%= @del %>,
+        edit : <%= @edit %>,
+        add : <%= @add %>,
+        refresh : <%= @refresh %>,
+        pager : "<%= @pager %>",
+        
+        multiselect : <%= @multiselect %>,
+        
+        extraClause : "<%= @extraClause %>",
+        
+        filtertoolbar : false,
+        
+        sortname : 'rooms.name'
+    });
+});
+
+</script>

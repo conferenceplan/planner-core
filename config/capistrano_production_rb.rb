@@ -76,8 +76,8 @@ EOF
 
     end
 
-    # after "deploy:setup",           "deploy:mailer:setup" unless fetch(:skip_db_setup, false)
-    # after "deploy:finalize_update", "deploy:mailer:symlink"
+    after "deploy:setup",           "deploy:mailer:setup" unless fetch(:skip_db_setup, false)
+    after "deploy:finalize_update", "deploy:mailer:symlink"
 
   end
 
