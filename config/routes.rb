@@ -1,5 +1,7 @@
 PlannerRc1::Application.routes.draw do
 
+  filter :locale
+
   namespace :pages do
     resources :home_dash
     match "participants_dash/:cellname" => "participants_dash#index"

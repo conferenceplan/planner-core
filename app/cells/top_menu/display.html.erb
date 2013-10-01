@@ -1,9 +1,9 @@
-<!-- TODO: need a way to determine which is active  set class="active" -->
+
 <div class="navbar" data-spy="affix" id="nav-wrap" data-offset-top="50">
     <div class="navbar-inner">
         <ul class="nav pull-left">
             <% @menu.each do |k, v| %>
-                <li class="<%= 'active' if request.fullpath == v[:target] %>"><a href="<%= v[:target] %>"><i class="icon-<%= v[:icon]%>"></i> <%= k %></a></li>
+                <li class="<%= 'active' if request.fullpath == v[:target] %>"><a href="<%= '/' + I18n.locale.to_s + v[:target] %>"><i class="icon-<%= v[:icon]%>"></i> <%= k %></a></li>
             <% end %>
         </ul>
     </div>

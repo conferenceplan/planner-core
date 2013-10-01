@@ -48,6 +48,10 @@
               <div class="container-fluid">
                   Cell is: 
                   <%= params[:cellname] %>
+                  <br/>Locale is:
+                  <%= I18n.locale %>
+                  <br/><%= t :hello %>
+                  <br/><%= I18n.available_locales %>
               </div>
       </div>
       </footer>

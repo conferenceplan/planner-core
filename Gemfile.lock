@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/svenfuchs/i18n-active_record.git
+  revision: b631b05a96d578b6c01c4751cc1a0ba8a84406af
+  specs:
+    i18n-active_record (0.0.2)
+      i18n (>= 0.5.0)
+
 GEM
   remote: https://rubygems.org/
   remote: http://rubygems.org/
@@ -72,7 +79,7 @@ GEM
       activerecord (>= 3.0, < 4.1)
       delayed_job (>= 3.0, < 4.1)
     erubis (2.7.0)
-    execjs (2.0.1)
+    execjs (2.0.2)
     fssm (0.2.10)
     hike (1.2.3)
     i18n (0.6.5)
@@ -122,7 +129,9 @@ GEM
     rdoc (3.12.2)
       json (~> 1.4)
     ref (1.0.5)
-    sass (3.2.10)
+    routing-filter (0.3.1)
+      actionpack
+    sass (3.2.11)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -172,6 +181,7 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   i18n
+  i18n-active_record!
   jbuilder
   jquery-rails
   mysql2
@@ -180,6 +190,7 @@ DEPENDENCIES
   rack-jsonp-middleware
   rails (~> 3.2.12)
   rake (= 0.8.7)
+  routing-filter
   sass-rails (~> 3.2.3)
   therubyracer
   time_diff

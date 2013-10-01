@@ -27,6 +27,13 @@ gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate'
 
+gem 'i18n-active_record',
+      :git => 'git://github.com/svenfuchs/i18n-active_record.git',
+      :require => 'i18n/active_record'
+
+# For locale in the route
+gem 'routing-filter'
+
 #
 # Needed for installs
 #

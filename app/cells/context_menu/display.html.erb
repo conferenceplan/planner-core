@@ -2,7 +2,7 @@
     <div class="navbar-inner">
         <ul class="nav">
             <% @menu.each do |k, v| %>
-                <li><a href="<%= v %>"><%= k %></a></li>
+                <li><a href="<%= '/' + I18n.locale.to_s + v %>"><%= k %></a></li>
             <% end %>
         </ul>
     </div>
