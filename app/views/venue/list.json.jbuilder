@@ -1,7 +1,6 @@
 
-json.totalpages     @total_pages
-json.currpage       @page
-json.totalrecords   @total_entries
-#json.currentSelection @currentId if @currentId
+json.array! @venues do |venue|
+
+    json.partial! 'venue', venue: venue 
     
-json.rowdata @venues
+end

@@ -138,12 +138,23 @@ var TabUtils = (function(){
             "click .model-new-button"    : "newModel",
             "click .model-delete-button" : "deleteModal",
             "click .model-add-tag-button" : "addTag",
+            "click .model-select-button" : "select",
             "click .select-tag-button" : "selectTag",
             "click .filter-remove-button" : "removeFilter",
         },
         
+        select : function(event) {
+            if (this.options.selectFn) {
+                this.options.selectFn(this.model.id);
+            }
+        },
+        
         initialize : function() {
             this.listenTo(this.model, 'change', this.render);
+
+            // syncCallback            
+            this.model.on("sync", this.options.syncCallback ); // when the modal does the update and second after the update to the server
+            
         },
         
         removeFilter : function(event) {
@@ -193,7 +204,12 @@ var TabUtils = (function(){
         },
         
         deleteModal : function() {
-            this.model.destroy();
+            this.model.destroy({
+                wait: true,
+                error : function(mdl, response) {
+                    alertMessage(response.responseText);
+                }
+            });
         }
     });
     
@@ -424,11 +440,15 @@ var TabUtils = (function(){
                             newTitle  : options.newTitle,
                             editTitle : options.editTitle,
                             attributes : options.view_attributes,
-                            tagremove : options.tagremove
+                            tagremove : options.tagremove,
+                            syncCallback : options.updateCallback,
+                            tagName : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
+                            selectFn : options.selectFn
                         },
                     });
                     var collectionView = new viewType({
                         collection : col,
+                        tagName : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div',
                         view_refresh_event : options.view_refresh_event,
                     });
                     if (options.place) {
@@ -439,6 +459,7 @@ var TabUtils = (function(){
                     }
                 }
             });
+            // collection.on("sync", options.updateCallback ); // when the modal does the update and second after the update to the server
         } else {
             collection = options.collection;
                 viewType = TabCollectionView.extend({
@@ -448,11 +469,15 @@ var TabUtils = (function(){
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
                         attributes : options.view_attributes,
-                        tagremove : options.tagremove
+                        tagremove : options.tagremove,
+                        syncCallback : options.updateCallback,
+                        tagName : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
+                        selectFn : options.selectFn
                     },
                 });
                 var collectionView = new viewType({
                     collection : options.collection,
+                    tagName : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div' 
                 });
                 // options.region.show(collectionView);
                 if (options.place) {
@@ -461,6 +486,7 @@ var TabUtils = (function(){
                 } else {
                     options.region.show(collectionView);
                 }
+            // collection.on("sync", options.updateCallback ); // when the modal does the update and second after the update to the server
         };
         
         return collection;

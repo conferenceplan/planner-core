@@ -8,4 +8,8 @@ class Venues::ManageCell < Cell::Rails
     render
   end
 
+  def templates
+    render
+  end
+
 end

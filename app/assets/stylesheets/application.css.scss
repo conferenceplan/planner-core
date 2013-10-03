@@ -31,6 +31,14 @@
  *= require_self
  */
 
+.label-big {
+    padding: 5px 10px 6px;
+}
+.label-big, .badge-big {
+    font-size: 12px;
+    font-weight: bold;
+}
+
 .translation_missing {
   // color : cyan;
   background-color : yellow;

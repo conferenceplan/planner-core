@@ -3,12 +3,103 @@
 RoomApp = new Backbone.Marionette.Application();
 
 RoomApp.RoomManagement = (function(Backbone){
+
+    RoomSetup = Backbone.Model.extend({
+        schema : {
+            setup_type_id : { type : 'Select', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            capacity : { type : 'Number' },
+            isdefault : { type : 'Checkbox', title : 'Default' }, // This needs to be calculated
+        },
+        urlRoot : '/room_setups'
+    });
+
+    RoomSetupCollection = Backbone.Collection.extend({
+        model : RoomSetup
+    });
+    
+    RoomSetupLayout = Backbone.Marionette.Layout.extend({ // TODO
+        template: "#room-setup-layout-template",
+        
+        regions : {
+            roomSetupControlRegion: "#room-setup-control-div",
+            roomSetupRegion: "#room-setup-region-div",
+        },
+    });
+    
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' );
+    };
+    
+    function showSetups(id) {
+        roomSetupLayout = new RoomSetupLayout();
+        roomSetupLayout.render();
+        $('#room-setup-view').html(roomSetupLayout.el);
+
+        TabUtils.createTabControl({
+            template : "#room-setup-control-template",
+            modelType : RoomSetup,
+            id : id, // need to pass in the name of the id field
+            id_name : 'room_id',
+            view_refresh_event : "room-setup:refresh",
+            modal_create_title : "Create Room Setup",
+            region : roomSetupLayout.roomSetupControlRegion,
+            callback : function(mdl) {
+                $("#rooms").jqGrid('setGridParam', {
+                    loadComplete: function(data) {
+                        $("#rooms").jqGrid('setSelection', id); // when load is complete the selection is called...
+                        // load complete is called every time... only want it once, so remove it after it has been used...
+                        $("#rooms").jqGrid('setGridParam', { loadComplete: function() {} });
+                    }
+                });
+                $("#rooms").trigger("reloadGrid");
+            }
+        });
+
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : RoomSetupCollection,
+            url : "/room_setups/list.json?room_id="+ id,
+            template : "#room-setup-template",
+            view_refresh_event : "room-setup:refresh",
+            region : roomSetupLayout.roomSetupRegion,
+            newTitle : "Create Setup",
+            editTitle : "Edit Setup",
+            updateCallback : function(mdl) {
+                $("#rooms").jqGrid('setGridParam', {
+                    loadComplete: function(data) {
+                        $("#rooms").jqGrid('setSelection', id); // when load is complete the selection is called...
+                        // load complete is called every time... only want it once, so remove it after it has been used...
+                        $("#rooms").jqGrid('setGridParam', { loadComplete: function() {} });
+                    }
+                });
+                $("#rooms").trigger("reloadGrid");
+            }
+        }) );
+    };
+    
+    // TODO - when a setup is created we need to refresh the table of rooms as well, do this via the event CHECK
     
     return {
+        
+        clearDetails : function() {
+            clearDetails();
+        },
+        
         selectRoom : function(id) {
+            clearDetails();
             // set the URL for the rooms and get it to refresh
             $("#rooms").roomTable("getRoomForVenue", id);
         },
+        
+        showSetups : function(id) {
+            
+            showSetups(id);
+            
+            // Show setups
+            // http://localhost:3000/room_setups/list.json?room_id=71
+            // alert("Show setups");
+        }
     }
 
 })(Backbone);

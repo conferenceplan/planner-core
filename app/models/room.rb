@@ -13,7 +13,6 @@ class Room < ActiveRecord::Base
 
   has_many :room_setups
   has_many :setup_types, :through => :room_setups
-  # has_one :setup_type #, :through => :room_setups, :source => :setup_types
   belongs_to :room_setup, foreign_key: "setup_id"
   
   has_one :publication, :foreign_key => :original_id, :as => :original
