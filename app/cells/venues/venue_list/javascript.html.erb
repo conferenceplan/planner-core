@@ -5,11 +5,9 @@ VenueApp = new Backbone.Marionette.Application();
 VenueApp.VenueManagement = (function(Backbone){
 
     Venue = Backbone.Model.extend({
-        // schema : {
-            // setup_type_id : { type : 'Select', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            // capacity : { type : 'Number' },
-            // isdefault : { type : 'Checkbox', title : 'Default' }, // This needs to be calculated
-        // },
+        schema : {
+            name : { type : 'Text' },
+        },
         urlRoot : '/venue'
     });
     
@@ -37,9 +35,18 @@ VenueApp.VenueManagement = (function(Backbone){
         venueLayout.render();
         $('#venue-region-view').html(venueLayout.el);
         
+        TabUtils.createTabControl({
+            template : "#venue-control-template",
+            modelType : Venue,
+            view_refresh_event : "venue:refresh",
+            modal_create_title : "Create Venue",
+            region : venueLayout.venueControlRegion,
+        });
+
+        
         tabLists.push( TabUtils.createTabListContent({
             collectionType : VenueCollection,
-            collection_attributes : { "class" : "nav nav-pills" },
+            collection_attributes : { "class" : "nav nav-tabs nav-stacked" },
             collection_tagName : 'ul',
             view_attributes : { "class" : "YYY" },
             url : "/venue/list.json",

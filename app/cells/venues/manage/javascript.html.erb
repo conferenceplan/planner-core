@@ -27,9 +27,11 @@ RoomApp.RoomManagement = (function(Backbone){
     });
     
     var tabLists = [];
+    var tabControls = [];
     
     function clearDetails() {
         _.invoke(tabLists, 'reset' );
+        _.invoke(tabControls, 'close' );
     };
     
     function showSetups(id) {
@@ -37,7 +39,7 @@ RoomApp.RoomManagement = (function(Backbone){
         roomSetupLayout.render();
         $('#room-setup-view').html(roomSetupLayout.el);
 
-        TabUtils.createTabControl({
+         tabControls.push( TabUtils.createTabControl({
             template : "#room-setup-control-template",
             modelType : RoomSetup,
             id : id, // need to pass in the name of the id field
@@ -55,7 +57,7 @@ RoomApp.RoomManagement = (function(Backbone){
                 });
                 $("#rooms").trigger("reloadGrid");
             }
-        });
+        }) );
 
         tabLists.push( TabUtils.createTabListContent({
             collectionType : RoomSetupCollection,
@@ -78,8 +80,6 @@ RoomApp.RoomManagement = (function(Backbone){
         }) );
     };
     
-    // TODO - when a setup is created we need to refresh the table of rooms as well, do this via the event CHECK
-    
     return {
         
         clearDetails : function() {
@@ -93,12 +93,7 @@ RoomApp.RoomManagement = (function(Backbone){
         },
         
         showSetups : function(id) {
-            
             showSetups(id);
-            
-            // Show setups
-            // http://localhost:3000/room_setups/list.json?room_id=71
-            // alert("Show setups");
         }
     }
 
