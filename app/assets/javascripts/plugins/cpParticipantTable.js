@@ -6,12 +6,7 @@
 
 $.widget( "cp.participantTable", $.cp.baseTable , {
 
-/*    
-        tagQuery : function(options) {
-            this._super("tagQuery", options);
-        },
-*/    
-    
+        // TODO - we need a way to spefiy the column labels as parameters so that the i18n translations can be used
         createColModel : function(){
             return [{
                 label : 'Name',
@@ -261,8 +256,8 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         return this.options.root_url + "participants";
     },
     
-    pageTo : function(data) {
-        return data["person[last_name]"];
+    pageTo : function(mdl) {
+        return mdl.get('last_name');
     },
     
     getPerson : function(id) {

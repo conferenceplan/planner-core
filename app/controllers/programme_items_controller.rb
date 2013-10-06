@@ -31,7 +31,7 @@ class ProgrammeItemsController < PlannerController
 
     end
 
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
   
   #
@@ -124,7 +124,8 @@ class ProgrammeItemsController < PlannerController
     end
     
     programmeItem.destroy
-    render text: 'OK'
+
+    render status: :ok, text: {}.to_json
   end
 
   #

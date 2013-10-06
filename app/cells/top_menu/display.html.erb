@@ -3,7 +3,9 @@
     <div class="navbar-inner">
         <ul class="nav pull-left">
             <% @menu.each do |k, v| %>
-                <li class="<%= 'active' if request.fullpath == v[:target] %>"><a href="<%= '/' + I18n.locale.to_s + v[:target] %>"><i class="icon-<%= v[:icon]%>"></i> <%= k %></a></li>
+                <li class="<%= 'active' if request.fullpath == v[:target] %>"><a href="<%= '/' + I18n.locale.to_s + v[:target] %>">
+                    <i class="icon-<%= v[:icon]%>"></i> <%= t k %></a>
+                </li>
             <% end %>
         </ul>
     </div>

@@ -14,7 +14,9 @@
     :ignoreScheduled => true,
     # :multiselect => true,
     # :selectNotifyMethod => "ItemApp.PeopleManagement.showProgrammeItem"
-    :loadNotifyMethod => "ScheduleApp.ItemManagement.onItemLoad"
+    :loadNotifyMethod => "ScheduleApp.ItemManagement.onItemLoad",
+    # :modelType => "ItemApp.ItemManagement.ProgramItem",
+    :showControls => true
 %>
 
 <%= render_cell "schedule/manage", :javascript %>

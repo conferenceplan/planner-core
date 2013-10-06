@@ -62,10 +62,31 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     });
     
     //
-    InviteDetails = Backbone.Model.extend({
-        urlRoot : '/inviteDetails'
+    Pseudonym = Backbone.Model.extend({
+        schema : {
+            first_name  : { type : 'Text '},
+            last_name  : { type : 'Text '},
+            suffix  : { type : 'Text '},
+        }
     });
     
+    InviteDetails = Backbone.DeepModel.extend({
+        schema : {
+            first_name : { type : 'Text' },
+            last_name : { type : 'Text' },
+            suffix : { type : 'Text' },
+            'pseudonym.first_name' : { type : 'Text' },
+            'pseudonym.last_name' : { type : 'Text' },
+            'pseudonym.suffix' : { type : 'Text' },
+            'comments' : { type : 'Text' },
+            invite_status_id : { type : 'Select', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            acceptance_status_id : { type : 'Select', options : <%= AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            invite_category_id : { type : 'Select', options : <%= InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+
+        },
+        urlRoot : '/participants'
+    });
+
     //
     BioDetails = Backbone.Model.extend({
         schema : {
@@ -203,8 +224,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             editTitle : "Edit Registration",
         }) );
 
-        tabContent.push( 
-            TabUtils.createTabContent({
+        var invite_details = TabUtils.createTabContent({
             modelType : InviteDetails,
             url : "/participants/" + id + ".json",
             template : '#invite-view-template',
@@ -213,7 +233,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id_name : 'person_id',
             newTitle : "Create Invite",
             editTitle : "Edit Invite",
-        }) );
+        });
+        
+        tabContent.push( invite_details );
         
         tabContent.push( 
             TabUtils.createTabContent({
@@ -361,6 +383,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 }
             }
         });
+        
+        return invite_details;
     };
     
     /*
@@ -375,8 +399,11 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     //    
     return {
+        
+        InviteDetails : InviteDetails,
+        
         showDetails : function(id) {
-            showRegDetails(id);
+            return showRegDetails(id);
         },
         clearDetails : function() {
             clearRegDetails();
@@ -458,6 +485,19 @@ ParticipantApp.PeopleManagement = (function(Backbone){
  */
 jQuery(document).ready(function() {
     ParticipantApp.start();
+    
+    // TODO - we need a way to add the control to the grid
+    // provide a method for doing so and pass to the table to call on intialisation
+            // TabUtils.createTabControl({
+            // template : "#equipment-control-template",
+            // modelType : Equipment,
+            // id : id, // need to pass in the name of the id field
+            // id_name : 'programme_item_id',
+            // view_refresh_event : "equipment:refresh",
+            // modal_create_title : "Create Equipment Needs",
+            // region : equipmentLayout.equipmentControlRegion
+        // });
+
     
     // TODO - we want a way to keep a handle on this so that it can be refreshed when tags are added or deleted from a participant
     // So add it to a collection or ParticipantApp ????

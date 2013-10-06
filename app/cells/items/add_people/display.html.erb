@@ -17,6 +17,7 @@
     :extraClause => "extraClause[param]=acceptance_status_id&extraClause[value]=8", # Only display the people who accepted to be on the program
     
     :multiselect => true,
+    :showControls => false,
     :selectNotifyMethod => "ItemApp.PeopleManagement.showPerson"
 %>
     
@@ -32,7 +33,8 @@
     :day => false,
     :time => false,
     :ref_number => false,
-    :selectNotifyMethod => "ItemApp.PeopleManagement.showProgrammeItem"
+    :selectNotifyMethod => "ItemApp.PeopleManagement.showProgrammeItem",
+    :showControls => false,
 %>
     
 <%= render_cell "items/add_people", :javascript %>

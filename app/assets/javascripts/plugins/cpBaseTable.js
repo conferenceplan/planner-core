@@ -3,69 +3,187 @@
  * 
  */
 (function($) {
-$.widget( "cp.baseTable" , {
     
+$.widget( "cp.baseTable" , {
+    /*
+     * 
+     */
     options : {
-        pager : '#pager',
-        root_url : "/", // so that sub-domains can be taken care of
-                baseUrl : "", // HAS TO BE OVER-RIDDEN by the sub-component
-                getGridData : "", // for getting the data
-                caption : "My Table",
-                selectNotifyMethod : function(ids) {},
-                clearNotifyMethod : function() {},
-                loadNotifyMethod : function() {},
-                view : false,
-                search : false,
-                del : true,
-                edit : true,
-                add : true,
-                refresh : false,
-                multiselect : false,
-                extraClause : null,
-                sortname : null,
-                filtertoolbar : true
+        pager               : '#pager',
+        root_url            : "/",              // so that sub-domains can be taken care of
+        baseUrl             : "",               // HAS TO BE OVER-RIDDEN by the sub-component
+        getGridData         : "",               // for getting the data (part of the URL)
+        caption             : "My Table",
+        selectNotifyMethod  : function(ids) {},
+        clearNotifyMethod   : function() {},
+        loadNotifyMethod    : function() {},
+        multiselect         : false,
+        extraClause         : null,
+        sortname            : null,
+        filtertoolbar       : true,
+        showControls        : true,
+        controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
+        modelType           : null, // Should be provided by the caller
     },
     
+    /*
+     * 
+     */
     _create : function() {
-        // create the grid that is associated with the element
         var selectMethod = this.options.selectNotifyMethod;
         var loadNotifyMethod = this.options.loadNotifyMethod;
         var pageToMethod = this.pageTo;
         var clearNotifyMethod = this.options.clearNotifyMethod;
         var base_url = this.options.root_url + this.options.baseUrl;
+        var modelType = this.options.modelType;
+        var control = null;
+        var pageTo = this.pageTo;
         
+        // TODO - move the labels to parameters of the plugin so that we can use i18n
+        var template_html = "\
+            <button class='add-model-button btn btn-primary btn-mini toolbar-button'>new</button>\
+            <button class='edit-model-button btn btn-primary btn-mini toolbar-button'>edit</button>\
+            <button class='delete-model-button btn btn-primary btn-mini toolbar-button'>delete</button>\
+        ";
+    
+        // View type for controls
+        TableControlView = Backbone.Marionette.ItemView.extend({
+
+            events : {
+                "click .add-model-button"       : "newModel",
+                "click .edit-model-button"      : "editModel",
+                "click .delete-model-button"    : "deleteModal",
+            },
+        
+            template : function(serialized_model) {
+                // var name = serialized_model.name;
+                return _.template(template_html);
+            },
+        
+            initialize : function() {
+                // this.template = _.template(this.templateStr);
+            },
+            
+            refreshGrid : function(grid, mdl) {
+                if (mdl) {
+                    var page_to = pageTo(mdl)
+                    grid.jqGrid('setGridParam', {
+                        postData : {
+                            page_to : page_to, // make sure that the current page contains the selected element
+                            filters : {},
+                            current_selection : mdl.id // to pass back for the selection
+                        },
+                    });
+                }
+                grid.trigger("reloadGrid");
+            },
+            
+            newModel : function() {
+                var mdl = new this.options.modelType({});
+                if (this.options.id) {
+                    mdl.set(this.options.id_name, this.options.id);
+                }
+            
+                // var refreshEvent = this.options.view_refresh_event;
+                // var callback = this.options.view_callback;
+                var grid = this.options.grid;
+                var refreshGridFn = this.refreshGrid;
+
+                var modal = new ModelModal({
+                    model : mdl,
+                    title : this.options.modal_create_title,
+                    refresh : function(mdl) {
+                        // if (refreshEvent) {
+                            // eventAggregator.trigger(refreshEvent); 
+                        // }
+                        // ------------------
+                        // Refresh the grid - goto the page with the new item and make that the current selection
+                        // ------------------
+                        refreshGridFn(grid, mdl);
+                    }
+                });
+                modal.render();
+            },
+        
+            editModel : function() {
+                if (this.model) {
+                    var grid = this.options.grid;
+                    var refreshGridFn = this.refreshGrid;
+                    // Put up a modal dialog to edit the reg details
+                    // This is done via the select method
+                    modal = new ModelModal({
+                        model : this.model, 
+                        title : this.options.modal_edit_title,
+                        refresh : function(mdl) {
+                            grid.jqGrid('setGridParam', {
+                            loadComplete: function(data) {
+                                    grid.jqGrid('setSelection', mdl.id); // when load is complete the selection is called...
+                                    // load complete is called every time... only want it once, so remove it after it has been used...
+                                    grid.jqGrid('setGridParam', { loadComplete: function() {} });
+                                }
+                            });
+                            grid.trigger("reloadGrid");
+                        }
+                    });
+                    modal.render();
+                };
+            },
+        
+            deleteModal : function() {
+                if (this.model) {
+                    // TODO - put in confirmation for the model delete
+                    var grid = this.options.grid;
+                    this.model.destroy({
+                        wait: true,
+                        error : function(mdl, response) {
+                            alertMessage(response.responseText);
+                        },
+                        success : function(md, response) {
+                            grid.trigger("reloadGrid");
+                            clearNotifyMethod();
+                        }
+                    });
+                    this.model = null;
+                };
+            },
+        });
+
+        // create the grid that is associated with the element
         var grid = this.element.jqGrid({
-                url : this.createUrl(),
-                datatype : 'JSON',
-                jsonReader : {
-                    repeatitems : false,
-                    page : "currpage",
-                    records : "totalrecords",
-                    root : "rowdata",
-                    total : "totalpages",
-                    id : "id",
+                url             : this.createUrl(),
+                datatype        : 'JSON',
+                jsonReader      : {
+                        repeatitems : false,
+                        page        : "currpage",
+                        records     : "totalrecords",
+                        root        : "rowdata",
+                        total       : "totalpages",
+                        id          : "id",
                 },
-                mtype : 'POST',
-                postData : {'namesearch' : 'true'},
-                colModel : this.createColModel(),
-                multiselect : this.options.multiselect,
-                pager : jQuery(this.options.pager),
-                rowNum : 10,
-                autowidth : true,
-                shrinkToFit : true,
-                height : "100%",
+                mtype           : 'POST',
+                postData        : {'namesearch' : 'true'},
+                colModel        : this.createColModel(),
+                multiselect     : this.options.multiselect,
+                pager           : jQuery(this.options.pager),
+                rowNum          : 10,
+                autowidth       : true,
+                shrinkToFit     : true,
+                height          : "100%",
                 // rowList : [10, 20, 30],
-                sortname : this.options.sortname,
-                sortorder : "asc",
-                viewrecords : true,
-                imgpath : 'stylesheets/custom-theme/images', // Check if this is needed
-                caption : this.options.caption,
-                editurl: this.editUrl(),
-                onSelectRow : function(ids) {
-                    selectMethod(ids);
+                sortname        : this.options.sortname,
+                sortorder       : "asc",
+                viewrecords     : true,
+                imgpath         : 'stylesheets/custom-theme/images', // Check if this is needed
+                caption         : this.options.caption,
+                editurl         : this.editUrl(),
+                onSelectRow     : function(ids) {
+                    var _model = selectMethod(ids); // get the current model and put it in the controller view
+                    
+                    control.model = _model;
+                    
                     return false;
                 },
-                loadComplete : function(data) {
+                loadComplete    : function(data) {
                     if (data.currentSelection) {
                         grid.setSelection(data.currentSelection);
                     };
@@ -73,127 +191,86 @@ $.widget( "cp.baseTable" , {
                          postData : {page_to : null, current_selection : null},
                     });
                 },
-                gridComplete : function() {
+                gridComplete    : function() {
                     // Call back - to call when the load has been done
                     loadNotifyMethod();
                 }
         });
-        this.element.navGrid(this.options.pager, {
-                view : this.options.view,
-                search : this.options.search,
-                del : this.options.del,
-                edit : this.options.edit,
-                add : this.options.add,
-                refresh : this.options.refresh,
-            }, //options
-            {
-                // edit options
-                width : 350,
-                reloadAfterSubmit : true,
-                jqModal : true,
-                closeOnEscape : true,
-                closeAfterEdit : true,
-                bottominfo : "Fields marked with (*) are required",
-                afterSubmit : function(response, postdata) {
-                    // TODO - error handler
-                    clearNotifyMethod();  
-                    return [true, "Success", ""];
-                },
-                beforeShowForm : function(form) { // change the style of the modal to make it compatible with our theme
-                    var dlgDiv = $("#editmod" + grid[0].id);
-                    // grid[0] is the div for the whole dialog box
-                    // alert(dlgDiv[0].className); // ui-widget ui-widget-content ui-corner-all ui-jqdialog
-                    // dlgDiv[0].className = "modal";
-                    // alert(dlgDiv.html()); // = "HHHH"
-//                     
-                    // var dlgHeader = $("#edithd" + grid[0].id);
-                    // dlgHeader[0].className = "modal-header";
-                    // //modal-header
-//                     
-//                     
-                    // //modal-body
-                    // var dlgContent = $("#editcnt" + grid[0].id);
-                    // dlgContent[0].className = "modal-body";
-                    
-                    
-                    //modal-footer
-                    
-                    //modal-edit-button
-                    //modal-new-button
-                },
-                mtype : 'PUT',
-                onclickSubmit : function(params, postdata) {
-                    params.url = base_url + "/" + postdata[this.id + "_id"];
-                },
-            }, // edit options
-            {
-                // add options
-                width : 350,
-                reloadAfterSubmit : true, // reload the grid, and we make sure we are on a page where the new item is
-                jqModal : true,
-                closeOnEscape : true,
-                bottominfo : "Fields marked with (*) are required",
-                afterSubmit : function(response, postdata) {
-                    // TODO - error handler
-                    
-                    // get the id of the new entry and change the id of the
-                    var res = jQuery.parseJSON( response.responseText );
-                    grid.setGridParam({
-                         postData : {
-                                 page_to : pageToMethod(res), // make sure that the current page contains the selected element
-                                 filters : {},
-                                 current_selection : res.id // to pass back for the selection
-                             },
-                    });
-                    grid[0].clearToolbar(); // clear the tool bar i.e make sure that there are no filters
-                    
-                    // TODO - If there is an active tag query we need to clear it as well TODO TODO
 
-                    return [true, "Success", res.id];
-                },
-                closeAfterAdd : true
-            }, // add options
-            {
-                // del options
-                reloadAfterSubmit : false,
-                jqModal : true,
-                closeOnEscape : true,
-                mtype : 'DELETE',
-                onclickSubmit : function(params, postdata) {
-                    params.url = base_url + "/" + postdata;
-                },
-            }, // del options
-            {
-                // view options
-                jqModal : true,
-                closeOnEscape : true
-            });
+        /*
+         * 
+         */
+        this.element.navGrid(this.options.pager, {
+                view    : false, //this.options.view,
+                search  : false, //this.options.search,
+                del     : false, //this.options.del,
+                edit    : false, //this.options.edit,
+                add     : false, //this.options.add,
+                refresh : false, //this.options.refresh,
+        });
             
-            if (this.options.filtertoolbar) {
-                this.element.jqGrid('filterToolbar', {
-                    stringResult : true,
-                    searchOnEnter : false,
-                });
-            }
+        /*
+         * 
+         */
+        if (this.options.filtertoolbar) {
+            this.element.jqGrid('filterToolbar', {
+                stringResult    : true,
+                searchOnEnter   : false,
+            });
+        };
+        
+        /*
+         * Put in the mechanism to add and remove elements using the Marionnette modals instead
+         */
+        this.element.navGrid(this.options.pager).navButtonAdd(
+                this.options.pager,{
+                    caption         : "<div id='" + this.options.controlDiv + "'></div>", // this should be passed into the widget
+                    buttonicon      : "hidden", 
+                    onClickButton   : null,
+                    position        : "last",
+                    title           : null,
+                    cursor          : "pointer"
+        });
+        
+        if (this.options.showControls) {
+            // TODO - Need a way to pass in parent id etc...
+            // Create the control view
+            control = new TableControlView({
+                    // id : options.id,
+                    // id_name : options.id_name,
+                    grid                : this.element,
+                    modal_create_title  : this.options.modal_create_title,
+                    modal_edit_title    : this.options.modal_edit_title,
+                    modelType           : modelType,
+                    view_callback       : this.options.callback
+            });
+            control.render();
+            $("#" + this.options.controlDiv).html(control.el);
+        }
     },
-    
-    // Determine what the URL for the table should be
+
+    /*
+     * 
+     */    
     _url : function() {
+        // Determine what the URL for the table should be
         return this.options.root_url + this.options.baseUrl + this.options.getGridData;
     },
-
-        tagQuery : function(options) {
-            var newUrl = this.options.root_url + this.options.baseUrl + this.options.getGridData + "?" + options.tagQuery;
-            
-            this.element.jqGrid('setGridParam', {
-                url: newUrl
-            }).trigger("reloadGrid");
-        },
     
-    createColModel : function() {
-        
+    /*
+     * 
+     */
+    tagQuery : function(options) {
+        var newUrl = this.options.root_url + this.options.baseUrl + this.options.getGridData + "?" + options.tagQuery;
+            
+        this.element.jqGrid('setGridParam', {
+            url: newUrl
+        }).trigger("reloadGrid");
     },
-        
+    
+    /*
+     * 
+     */
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
@@ -205,12 +282,25 @@ $.widget( "cp.baseTable" , {
         return url;
     },
 
+    /*
+     * 
+     */
     editUrl : function () {
         return "";
     },
     
+    /*
+     * 
+     */
+    createColModel : function() {
+    },
+    
+    /*
+     * 
+     */
     pageTo : function (data) {
         return "";
     }
 });
+
 })(jQuery);

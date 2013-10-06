@@ -148,7 +148,11 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         }
         url += urlArgs;
         return url;
-    }
+    },
+    
+    pageTo : function(mdl) {
+        return mdl.get('title');
+    },
     
 });
 })(jQuery);

@@ -20,6 +20,22 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  hello: "Hello"
   en   : "English"
   fr   : "French"
+  Edit Profile : "Edit Profile"
+  Logout : "Logout"
+  Convention Planner : "Convention Planner"
+  Participants : "Participants"
+  Program Items : "Program Items"
+  Schedule : "Schedule"
+  Venues : "Venues"
+  Surveys : "Surveys"
+  Communications : "Communications"
+  Reports : "Reports"
+  Operations : "Operations"
+  Publications : "Publications"
+  Admin : "Admin"
+  Moderators : "Moderators"
+  Save : "Save"
+  Edit : "Edit"

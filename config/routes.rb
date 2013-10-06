@@ -225,8 +225,8 @@ PlannerRc1::Application.routes.draw do
 
 
   match 'rooms/list.:format', :controller => 'rooms', :action => 'list'
-  match 'rooms/listwithblank', :controller => 'rooms', :action => 'listwithblank'
-  match 'rooms/picklist', :controller => 'rooms', :action => 'picklist'
+  # match 'rooms/listwithblank', :controller => 'rooms', :action => 'listwithblank'
+  # match 'rooms/picklist', :controller => 'rooms', :action => 'picklist'
   resources :rooms
 
   match 'setup_types/list.:format', :controller => 'setup_types', :action => 'list'

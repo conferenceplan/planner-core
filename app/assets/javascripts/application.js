@@ -18,6 +18,7 @@
 
 //= require backbone/underscore-min
 //= require backbone/backbone
+//= require backbone/deep-model
 //= require backbone/backbone.marionette
 //= require backbone/extensions/backbone-relational
 //= require backbone/extensions/backbone.paginator
@@ -39,6 +40,7 @@
 // TODO - Check we still use planIt
 //= require planIt
 
+//= require plugins/cpApp
 //= require plugins/cpBaseTable
 //= require plugins/cpItemTable
 //= require plugins/cpParticipantTable

@@ -91,7 +91,7 @@ ItemApp.ItemManagement = (function(Backbone){
         var data = jQuery("#items").jqGrid('getRowData', id);
         $('#selected-program-item').html(data['item[title]']);
         
-        tabContent.push( TabUtils.createTabContent({
+        var itemMdl = TabUtils.createTabContent({
             modelType : ProgramItem,
             url : "/programme_items/" + id + '.json', // TODO
             template : '#program-item-view-template',
@@ -113,7 +113,8 @@ ItemApp.ItemManagement = (function(Backbone){
                 });
                 $("#items").trigger("reloadGrid");
             }
-        }) );
+        });
+        tabContent.push( itemMdl );
         
         equipmentLayout = new EquipmentLayout();
         equipmentLayout.render();
@@ -147,14 +148,18 @@ ItemApp.ItemManagement = (function(Backbone){
             place : '#tags-view',
             newTitle : "Create Tag",
         }) );
-
+        
+        return itemMdl;
     };
     
     var filterCol = null;
     
     return {
+        
+        ProgramItem : ProgramItem,
+        
         showDetails : function(id) {
-            showDetails(id);
+            return showDetails(id);
         },
         clearDetails : function() {
             clearDetails();

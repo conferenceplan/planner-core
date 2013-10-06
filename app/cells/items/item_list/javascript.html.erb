@@ -2,22 +2,28 @@
 
 jQuery(document).ready(function() {
     jQuery("#items").itemTable({
-        caption : "<%= @caption %>",
+        caption : '<%= t @caption %>',
+        
         selectNotifyMethod : <%= @selectNotifyMethod %>,
         clearNotifyMethod : <%= @clearNotifyMethod %>,
         loadNotifyMethod : <%= @loadNotifyMethod %>,
+        
         root_url : "<%= @root_url %>",
         baseUrl : "<%= @baseUrl %>",
         getGridData : "<%= @getGridData %>",
         
-        view : <%= @view %>,
-        search : <%= @search %>,
-        del : <%= @del %>,
-        edit : <%= @edit %>,
-        add : <%= @add %>,
-        refresh : <%= @refresh %>,
         pager : "<%= @pager %>",
         
+        multiselect : <%= @multiselect %>,
+
+        extraClause : "<%= @extraClause %>",
+        
+        showControls : <%= @showControls %>,
+        modelType : <%= @modelType %>,
+
+        ignoreScheduled : <%= @ignoreScheduled %>,
+
+        // The column's to be displayed
         format_name : <%= @format_name %>,
         duration : <%= @duration %>,
         room : <%= @room %>,
@@ -25,11 +31,9 @@ jQuery(document).ready(function() {
         time : <%= @time %>,
         ref_number : <%= @ref_number %>,
         
-        multiselect : <%= @multiselect %>,
-        ignoreScheduled : <%= @ignoreScheduled %>,
-
-        extraClause : "<%= @extraClause %>",
-        
+        //
+        modal_create_title : '<%= t "Create Program Item" %>',
+        modal_edit_title : '<%= t "Edit Program Item" %>',
     });
 });
 

@@ -7,7 +7,10 @@
     :caption => "Participants",
     :pager => "#participants-pager",
     :selectNotifyMethod => "ParticipantApp.PeopleManagement.showDetails",
-    :clearNotifyMethod => "ParticipantApp.PeopleManagement.clearDetails"
+    :clearNotifyMethod => "ParticipantApp.PeopleManagement.clearDetails",
+    
+    :modelType => "ParticipantApp.PeopleManagement.InviteDetails",
+    :showControls => true
     %>
 <%= render_cell "participants/participant_details", :javascript %>
 

@@ -3,29 +3,6 @@ Use the Rails authenticity token in the forms...
 
 <%= form_authenticity_token %>
 -->
-
-<!-- TODO - the modal template needs to be global???? -->
-<script type="text/template" id="modal-edit-template">
-<form>
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-            ×
-        </button>
-        <h3 id="myModalLabel">{{= title }}</h3>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">
-            Cancel
-        </button>
-        <button class="btn btn-primary">
-            Save Changes
-        </button>
-    </div>
-</form>
-</script>
-<!-- ------- -->
-
 <script type="text/template" id="registration-view-template">
 <div class="registration-view-details">
     {{ if (typeof id != 'undefined') { }}
@@ -105,6 +82,12 @@ Use the Rails authenticity token in the forms...
     </dt>
     <dd>
         {{= invite_category_name ? invite_category_name : "&nbsp;"}}
+    </dd>
+    <dt>
+        Survey Key
+    </dt>
+    <dd>
+        {{= survey_key }}
     </dd>
     <dt>
         Comments

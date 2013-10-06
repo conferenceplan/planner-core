@@ -1,64 +1,57 @@
+#
+#
+#
 class PeopleController < PlannerController
 
+  #
+  #
+  #
   def destroy
     person = Person.find(params[:id])
     
-    person.removeAllAddresses
-    person.destroy
-    render :layout => 'success'
+    # check that the person has not been assigned to program items, if they have then return an error and do not delete
+    if person.programmeItemAssignments.length == 0
+      person.removeAllAddresses # If there are any addresses associated with the person then remove them
+      person.destroy
+
+      render status: :ok, text: {}.to_json
+    else  
+      render status: :bad_request, text: 'Con not delete a person that has been assigned to programme items'
+    end
   end
 
+  #
+  #
+  #
   def show
     @person = Person.find(params[:id])
-    comp = params[:comp]
-    if (@person.datasource.nil?)
-      @postalAddresses = nil
-    end
-    if comp
-      @postalAddresses = @person.postal_addresses
-      @emailAddresses = @person.email_addresses
-      @phoneNumbers= @person.phone_numbers
-      @availableDate = @person.available_date
-      render :comphrensive, :layout => 'content'
-    else  
-      render :layout => 'content'
-    end
   end
 
-  def edit
-    @person = Person.find(params[:id])
-    
-    render :layout => 'content'
-  end
-
-  def new
-    @person = Person.new
-    @person.mailing_number = 0
-  end
-
+  #
+  #
+  #
   def create
-    plain = params[:plain]
     # if pseudonym is empty, we don't want to insert an empty record
     # so delete attributes from input parameter list so
     # it won't get created
-    if (params[:person].has_key?(:pseudonym_attributes))
-      if (params[:person][:pseudonym_attributes][:last_name] == "") 
-       if (params[:person][:pseudonym_attributes][:first_name] == "")
-         if (params[:person][:pseudonym_attributes][:suffix] == "")
-           params[:person].delete(:pseudonym_attributes)
-         end
-       end
+    logger.debug params[:person]
+    logger.debug params[:pseudonym]
+    if (params[:pseudonym])
+      if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+           params[:person][:pseudonym_attributes] = params[:pseudonym]
       end
     end
     
     @person = Person.new(params[:person])
-    @person.lock_version = 0 # TODO - this should not be done???
-    datasourcetmp = Datasource.find_by_name("Application")
+    datasourcetmp = Datasource.find_by_name("Application") # TODO - verify
     @person.datasource = datasourcetmp
     @person.save!
-    # render json: @person.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
+
   end
 
+  #
+  #
+  #
   def update
     @person = Person.find(params[:id])
     # if pseudonym is empty, we don't want to insert an empty record
@@ -66,41 +59,24 @@ class PeopleController < PlannerController
     # it won't get created. If the pseudonym is getting zeroed
     # out (it existed before and now is not going to exist),
     # we do need to update, so we don't delete the attributes
-    if (@person.pseudonym == nil && params[:person].has_key?(:pseudonym_attributes))
-      if (params[:person][:pseudonym_attributes][:last_name] == "") 
-       if (params[:person][:pseudonym_attributes][:first_name] == "")
-         if (params[:person][:pseudonym_attributes][:suffix] == "")
-           params[:person].delete(:pseudonym_attributes)
-         end
-       end
+    if (@person.pseudonym == nil && params[:pseudonym]) #params[:person].has_key?(:pseudonym_attributes))
+      if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+           params[:person][:pseudonym_attributes] = params[:pseudonym]
       end
-    elsif (@person.pseudonym != nil && params[:person].has_key?(:pseudonym_attributes))
-      if (params[:person][:pseudonym_attributes][:last_name] == "") 
-       if (params[:person][:pseudonym_attributes][:first_name] == "")
-         if (params[:person][:pseudonym_attributes][:suffix] == "")
-           params[:person].delete(:pseudonym_attributes)
-           @person.pseudonym.destroy
-         end
-       end
+    elsif (@person.pseudonym != nil && params[:pseudonym])
+      if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+        params[:person][:pseudonym_attributes] = params[:pseudonym]
+      else
+        @person.pseudonym.destroy
       end
     end
 
     @person.update_attributes(params[:person])
-    
-    render json: @person.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
   end
 
   #
-  # All the index method does is provide formatting, the actual
-  # work for the listing of people is done by the list method
   #
-  def index
-    respond_to do |format|
-      format.html
-      format.js {render :layout => false}
-    end
-  end
-  
+  #
   def count
     rows = params[:per_page]
     page = params[:page] ? params[:page].to_i : 0
@@ -117,6 +93,9 @@ class PeopleController < PlannerController
     render :json => nbr
   end
   
+  #
+  #
+  #
   respond_to :json
   def getList
     rows = params[:rows] ? params[:rows] : 15
@@ -158,104 +137,104 @@ class PeopleController < PlannerController
   end
 
   #
-  def list
-    rows = params[:rows]
-    @page = params[:page]
-    idx = params[:sidx]
-    order = params[:sord]
-    context = params[:context]
-    nameSearch = params[:namesearch]
-    mailing_id = params[:mailing_id]
-    scheduled = params[:scheduled]
-    
-    clause = createWhereClause(params[:filters], 
-    ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'],
-    ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
-    
-    # add the name search for last of first etc
-    if nameSearch && ! nameSearch.empty?
-      clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + nameSearch + '%')
-      clause << '%' + nameSearch + '%'
-      clause << '%' + nameSearch + '%'
-      clause << '%' + nameSearch + '%'
-    end
-    
-    if mailing_id && ! mailing_id.empty? # add not in
-      clause = addClause( clause, 'people.id not in (select person_id from person_mailing_assignments where mailing_id = ?)', mailing_id)
-    end
-    
-    if scheduled && ! scheduled.empty?
-      if scheduled == "true"
-        # Then we want to filter for scehduled people
-        # select distinct person_id from programme_item_assignments;
-        clause = addClause( clause, 'people.id in (select distinct person_id from room_item_assignments ra join programme_item_assignments pa on pa.programme_item_id = ra.programme_item_id)', nil)
-      end
-    end
-
-    # if the where clause contains pseudonyms. then we need to add the join
-    args = { :conditions => clause }
-    if nameSearch && ! nameSearch.empty?
-      args.merge!( :joins => 'LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
-    else
-      # if clause != nil && clause[0].index('pseudonyms.') != nil
-        args.merge!( :include => [:pseudonym] )
-        #args.merge!( :joins => :person_mailing_assignments )
-        # args.merge!( :joins => 'LEFT OUTER JOIN person_mailing_assignments ON person_mailing_assignments.person_id = people.id' )
+  # def list
+    # rows = params[:rows]
+    # @page = params[:page]
+    # idx = params[:sidx]
+    # order = params[:sord]
+    # context = params[:context]
+    # nameSearch = params[:namesearch]
+    # mailing_id = params[:mailing_id]
+    # scheduled = params[:scheduled]
+#     
+    # clause = createWhereClause(params[:filters], 
+    # ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'],
+    # ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
+#     
+    # # add the name search for last of first etc
+    # if nameSearch && ! nameSearch.empty?
+      # clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + nameSearch + '%')
+      # clause << '%' + nameSearch + '%'
+      # clause << '%' + nameSearch + '%'
+      # clause << '%' + nameSearch + '%'
+    # end
+#     
+    # if mailing_id && ! mailing_id.empty? # add not in
+      # clause = addClause( clause, 'people.id not in (select person_id from person_mailing_assignments where mailing_id = ?)', mailing_id)
+    # end
+#     
+    # if scheduled && ! scheduled.empty?
+      # if scheduled == "true"
+        # # Then we want to filter for scehduled people
+        # # select distinct person_id from programme_item_assignments;
+        # clause = addClause( clause, 'people.id in (select distinct person_id from room_item_assignments ra join programme_item_assignments pa on pa.programme_item_id = ra.programme_item_id)', nil)
       # end
-    end
-        
-    tagquery = ""
-    if context
-      if context.class == HashWithIndifferentAccess
-        context.each do |key, ctx|
-          tagquery += ".tagged_with('" + params[:tags][key].gsub(/'/, "\\\\'").gsub(/\(/, "\\\\(").gsub(/\)/, "\\\\)") + "', :on => '" + ctx + "', :any => true)"
-        end
-      else
-        tagquery += ".tagged_with('" + params[:tags].gsub(/'/, "\\\\'").gsub(/\(/, "\\\\(").gsub(/\)/, "\\\\)") + "', :on => '" + context + "', :op => true)"
-      end
-    end
-    
-    # First we need to know how many records there are in the database
-    # Then we get the actual data we want from the DB
-    if tagquery.empty?
-      @count = Person.count args
-    else
-      @count = eval "Person#{tagquery}.count :all, " + args.inspect
-    end
-    if rows.to_i > 0
-      @nbr_pages = (@count / rows.to_i).floor
-      @nbr_pages += 1 if @count % rows.to_i > 0
-    else
-      @nbr_pages = 1
-    end
-    
-    # now we get the actual data
-    offset = (@page.to_i - 1) * rows.to_i
-    args.merge!(:offset => offset, :limit => rows)
-    if idx
-      args.merge!(:order => idx + " " + order)
-    end
-    
-    # args.merge!(:select => "DISTINCT people.id as id, last_name, first_name, suffix, language, invitestatus_id, invitation_category_id, acceptance_status_id, mailing_number, comments, people.lock_version as lock_version")
-    
-    if tagquery.empty?
-      @people = Person.find :all, args
-    else
-      @people = eval "Person#{tagquery}.find :all, " + args.inspect
-    end
-    
-    ActiveRecord::Base.include_root_in_json = false # hack for now
-
-    # We return the list of people as an XML structure which the 'table' can use
-    respond_to do |format|
-      format.html { render :layout => 'content' } # list.html.erb
-      format.xml
-      format.json {
-        # TODO - make the pseudonym inclusion a paramter from the request
-        render :json => { :data => @people, :totalRecords => @count }.to_json(:include_pseudonym => true), :callback => params[:callback] 
-      }
-    end
-  end
+    # end
+# 
+    # # if the where clause contains pseudonyms. then we need to add the join
+    # args = { :conditions => clause }
+    # if nameSearch && ! nameSearch.empty?
+      # args.merge!( :joins => 'LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
+    # else
+      # # if clause != nil && clause[0].index('pseudonyms.') != nil
+        # args.merge!( :include => [:pseudonym] )
+        # #args.merge!( :joins => :person_mailing_assignments )
+        # # args.merge!( :joins => 'LEFT OUTER JOIN person_mailing_assignments ON person_mailing_assignments.person_id = people.id' )
+      # # end
+    # end
+#         
+    # tagquery = ""
+    # if context
+      # if context.class == HashWithIndifferentAccess
+        # context.each do |key, ctx|
+          # tagquery += ".tagged_with('" + params[:tags][key].gsub(/'/, "\\\\'").gsub(/\(/, "\\\\(").gsub(/\)/, "\\\\)") + "', :on => '" + ctx + "', :any => true)"
+        # end
+      # else
+        # tagquery += ".tagged_with('" + params[:tags].gsub(/'/, "\\\\'").gsub(/\(/, "\\\\(").gsub(/\)/, "\\\\)") + "', :on => '" + context + "', :op => true)"
+      # end
+    # end
+#     
+    # # First we need to know how many records there are in the database
+    # # Then we get the actual data we want from the DB
+    # if tagquery.empty?
+      # @count = Person.count args
+    # else
+      # @count = eval "Person#{tagquery}.count :all, " + args.inspect
+    # end
+    # if rows.to_i > 0
+      # @nbr_pages = (@count / rows.to_i).floor
+      # @nbr_pages += 1 if @count % rows.to_i > 0
+    # else
+      # @nbr_pages = 1
+    # end
+#     
+    # # now we get the actual data
+    # offset = (@page.to_i - 1) * rows.to_i
+    # args.merge!(:offset => offset, :limit => rows)
+    # if idx
+      # args.merge!(:order => idx + " " + order)
+    # end
+#     
+    # # args.merge!(:select => "DISTINCT people.id as id, last_name, first_name, suffix, language, invitestatus_id, invitation_category_id, acceptance_status_id, mailing_number, comments, people.lock_version as lock_version")
+#     
+    # if tagquery.empty?
+      # @people = Person.find :all, args
+    # else
+      # @people = eval "Person#{tagquery}.find :all, " + args.inspect
+    # end
+#     
+    # ActiveRecord::Base.include_root_in_json = false # hack for now
+# 
+    # # We return the list of people as an XML structure which the 'table' can use
+    # respond_to do |format|
+      # format.html { render :layout => 'content' } # list.html.erb
+      # format.xml
+      # format.json {
+        # # TODO - make the pseudonym inclusion a paramter from the request
+        # render :json => { :data => @people, :totalRecords => @count }.to_json(:include_pseudonym => true), :callback => params[:callback] 
+      # }
+    # end
+  # end
   
   def SetInvitePendingToInvited
     
@@ -455,6 +434,9 @@ class PeopleController < PlannerController
    
   end
 
+  #
+  # The invite status etc. should be in a seperate controller. TODO
+  #
  def invitestatuslist
    @inviteStatus = InviteStatus.find :all
     render :layout => 'plain'

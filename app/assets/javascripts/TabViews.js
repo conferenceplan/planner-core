@@ -315,6 +315,8 @@ var TabUtils = (function(){
         if (options.place) {
             control = new TabUtils.TabControlView({
                 template : options.template,
+                id : options.id,
+                id_name : options.id_name,
                 view_refresh_event : options.view_refresh_event,
                 modal_create_title : options.modal_create_title,
                 modelType : options.modelType,

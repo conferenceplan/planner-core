@@ -3,52 +3,29 @@ Use the Rails authenticity token in the forms...
 
 <%= form_authenticity_token %>
 -->
-<!-- TODO - the modal template needs to be global???? -->
-<script type="text/template" id="modal-edit-template">
-<form>
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-            ×
-        </button>
-        <h3 id="myModalLabel">{{= title }}</h3>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">
-            Cancel
-        </button>
-        <button class="btn btn-primary">
-            Save Changes
-        </button>
-    </div>
-</form>
-</script>
 
 <script type="text/template" id="program-item-view-template">
     {{ if (typeof id != 'undefined') { }}
     <div class="span10 clearfix">
         <div class="caption" class="pull-left">
-            <button class="model-edit-button btn btn-primary btn-mini pull-right">
-                Edit
-            </button>
             <dl class="dl-horizontal">
-                <dt>Title</dt><dd>{{= title ? title : "&nbsp;" }}</dd>
-                <dt>Ref Number</dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
-                <dt>Format</dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
-                <dt>Setup</dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
-                <dt>Short Title</dt><dd>{{= short_title ? short_title : "&nbsp;" }}</dd>
-                <dt>Description</dt><dd>{{= precis ? precis : "&nbsp;" }}</dd>
-                <dt>Notes</dt><dd>{{= notes ? notes : "&nbsp;" }}</dd>
-                <dt>Duration</dt><dd>{{= duration ? duration : "&nbsp;" }}</dd>
-                <dt>For Print</dt><dd>{{= print ? "Yes" : "No" }}</dd>
-                <dt>Max People</dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
-                <dt>Min People</dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
-                <dt>Room</dt><dd>{{= room ? room : "&nbsp;" }}</dd>
-                <dt>Start Time</dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time ? start_time : "&nbsp;" }}</dd>
+                <dt><%= t "Title" %></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
+                <dt><%= t "Ref Number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
+                <dt><%= t "Format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
+                <dt><%= t "Setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
+                <dt><%= t "Short Title" %></dt><dd>{{= short_title ? short_title : "&nbsp;" }}</dd>
+                <dt><%= t "Description" %></dt><dd>{{= precis ? precis : "&nbsp;" }}</dd>
+                <dt><%= t "Notes" %></dt><dd>{{= notes ? notes : "&nbsp;" }}</dd>
+                <dt><%= t "Duration" %></dt><dd>{{= duration ? duration : "&nbsp;" }}</dd>
+                <dt><%= t "For Print" %></dt><dd>{{= print ? "Yes" : "No" }}</dd>
+                <dt><%= t "Max People" %></dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
+                <dt><%= t "Min People" %></dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
+                <dt><%= t "Room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
+                <dt><%= t "Start Time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time ? start_time : "&nbsp;" }}</dd>
             </dl>
         </div>
         <!-- List of participants etc. -->
-        <div>Moderators</div>
+        <div><%= t "Moderators" %></div>
         <ul class="nav nav-list"><li class="divider"></li></ul>
         {{ _.each(moderators, function(person) { }}
         <div class="thumbnail clearfix">
@@ -62,7 +39,7 @@ Use the Rails authenticity token in the forms...
             </small>
         </div>
         {{ }); }}
-        <div>Participants</div>
+        <div><%= t "Participants" %></div>
         <ul class="nav nav-list"><li class="divider"></li></ul>
         {{ _.each(participants, function(person) { }}
         <div class="thumbnail clearfix">
@@ -76,7 +53,7 @@ Use the Rails authenticity token in the forms...
             </small>
         </div>
         {{ }); }}
-        <div>Reserved</div>
+        <div><%= t "Reserved" %></div>
         <ul class="nav nav-list"><li class="divider"></li></ul>
         {{ _.each(reserves, function(person) { }}
         <div class="thumbnail clearfix">
@@ -90,7 +67,7 @@ Use the Rails authenticity token in the forms...
             </small>
         </div>
         {{ }); }}
-        <div>Invisible</div>
+        <div><%= t "Invisible" %></div>
         <ul class="nav nav-list"><li class="divider"></li></ul>
         {{ _.each(invisibles, function(person) { }}
         <div class="thumbnail clearfix">
@@ -124,7 +101,8 @@ Use the Rails authenticity token in the forms...
 </script>
 
 <script type="text/template" id="item-control-template">
-    <button class="add-model-button btn btn-primary btn-mini pull-left">New Item</button>
+    <button class="add-model-button btn btn-primary btn-mini toolbar-button">New Item</button>
+    <button class="add-model-button btn btn-primary btn-mini toolbar-button">New Item</button>
 </script>
 
 

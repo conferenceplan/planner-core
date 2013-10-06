@@ -21,6 +21,7 @@ jQuery(document).ready(function() {
         edit : <%= @edit %>,
         add : <%= @add %>,
         refresh : <%= @refresh %>,
+        controlDiv : "<%= @controlDiv %>",
         pager : "<%= @pager %>",
         
         multiselect : <%= @multiselect %>,
@@ -29,8 +30,14 @@ jQuery(document).ready(function() {
         
         onlySurveyRespondents : <%= @onlySurveyRespondents %>,
         
-        sortname : 'people.last_name'
-
+        sortname : 'people.last_name',
+        
+        modelType : <%= @modelType %>,
+        showControls : <%= @showControls %>,
+        
+        //
+        modal_create_title : '<%= t "Create Participant" %>',
+        modal_edit_title : '<%= t "Edit Participant" %>',
     });
 });
 

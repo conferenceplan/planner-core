@@ -75,7 +75,6 @@ class RoomSetupsController < ApplicationController
     else
       render status: :bad_request, text: 'Unable to delete setup as it is in use'
     end
-      
   end
   
   #
@@ -89,7 +88,7 @@ class RoomSetupsController < ApplicationController
   
   def unSetRoomDefault(_room_setup)
     room = _room_setup.room
-    if room.room_setup.id == _room_setup.id
+    if room.room_setup && (room.room_setup.id == _room_setup.id)
       room.room_setup = nil
       room.save!
     end

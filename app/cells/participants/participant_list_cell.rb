@@ -25,12 +25,16 @@ class Participants::ParticipantListCell < Cell::Rails
     @edit = args.has_key?(:edit) ? args[:edit] : true
     @add = args.has_key?(:add) ? args[:add] : true
     @refresh = args.has_key?(:refresh) ? args[:refresh] : false
+    @controlDiv = args.has_key?(:controlDiv) ? args[:controlDiv] : 'participant-control'
     
     @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : false
     
     @multiselect = args.has_key?(:multiselect) ? args[:multiselect] : false
     
     @onlySurveyRespondents = args.has_key?(:onlySurveyRespondents) ? args[:onlySurveyRespondents] : false
+    
+    @modelType = args.has_key?(:modelType) ? args[:modelType] : 'null'
+    @showControls = args.has_key?(:showControls) ? args[:showControls] : false
     
     render
   end

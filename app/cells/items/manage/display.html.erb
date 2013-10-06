@@ -10,7 +10,9 @@
     :pager => "#items-pager",
     :caption => "Program Items", 
     :selectNotifyMethod => "ItemApp.ItemManagement.showDetails", 
-    :clearNotifyMethod => "ItemApp.ItemManagement.clearDetails"
+    :clearNotifyMethod => "ItemApp.ItemManagement.clearDetails",
+    :modelType => "ItemApp.ItemManagement.ProgramItem",
+    :showControls => true
     %>
 <%= render_cell "items/item_details", :javascript %>
 
@@ -18,8 +20,6 @@
     <div class="span9">
         <div id="item-filters"></div> <!-- TODO -->
         <%= render_cell "items/item_list", :display %>
-        <!-- TODO - add and item to the list, we want to add it to the top of the current table -->
-        <div id="item-control"></div>
     </div>
     <div class="span3 well" >
         <div class='collapse-group tag-cloud-area' style="height : 370px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
