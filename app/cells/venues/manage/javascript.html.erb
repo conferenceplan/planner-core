@@ -105,25 +105,6 @@ RoomApp.RoomManagement = (function(Backbone){
             clearDetails();
             // set the URL for the rooms and get it to refresh
             $("#rooms").roomTable("getRoomForVenue", id);
-            // tabControls.push( TabUtils.createTabControl({ // TODO - the new room needs to have the venue id in the URL
-                // template : "#room-control-template",
-                // modelType : Room,
-                // id : id, // need to pass in the name of the id field
-                // id_name : 'venue_id',
-                // modal_create_title : "Create Room",
-                // place :'#room-control',
-                // callback : function(mdl) {
-                    // // Refresh the grid - goto the page with the new item and make that the current selection
-                    // jQuery("#rooms").jqGrid('setGridParam', {
-                         // postData : {
-                                 // page_to : mdl.get('name'), // make sure that the current page contains the selected element
-                                 // filters : {},
-                                 // current_selection : mdl.id // to pass back for the selection
-                             // },
-                    // });
-                    // jQuery("#rooms").trigger("reloadGrid");
-                // },
-            // }));
         },
         
         showSetups : function(id) {
