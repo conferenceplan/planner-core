@@ -2,18 +2,19 @@
 
 jQuery(document).ready(function() {
     jQuery("#participants").participantTable({
-        caption : "<%= @caption %>",
+        caption : '<%= t @caption %>',
         selectNotifyMethod : <%= @selectNotifyMethod %>,
         clearNotifyMethod : <%= @clearNotifyMethod %>,
         loadNotifyMethod : <%= @loadNotifyMethod %>,
         root_url : "<%= @root_url %>",
         baseUrl : "<%= @baseUrl %>",
         getGridData : "<%= @getGridData %>",
-        
-        invite_status : <%= @invite_status%>,
-        invite_category : <%= @invite_category%>,
-        acceptance_status : <%= @acceptance_status%>,
-        has_survey : <%= @has_survey%>,
+
+        name : [true, '<%= t "Name"%>'],       
+        invite_status : [<%= @invite_status%>, '<%= t "Invitation Status"%>' ],
+        invite_category : [<%= @invite_category%>, '<%= t "Invitation<br/>Category"%>' ],
+        acceptance_status : [<%= @acceptance_status%>, '<%= t "Acceptance"%>'],
+        has_survey : [<%= @has_survey%>, '<%= t "Survey"%>'],
         
         view : <%= @view %>,
         search : <%= @search %>,

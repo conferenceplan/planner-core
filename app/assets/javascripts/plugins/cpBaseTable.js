@@ -39,13 +39,6 @@ $.widget( "cp.baseTable" , {
         var control = null;
         var pageTo = this.pageTo;
         
-        // TODO - move the labels to parameters of the plugin so that we can use i18n
-        var template_html = "\
-            <button class='add-model-button btn btn-primary btn-mini toolbar-button'>new</button>\
-            <button class='edit-model-button btn btn-primary btn-mini toolbar-button'>edit</button>\
-            <button class='delete-model-button btn btn-primary btn-mini toolbar-button'>delete</button>\
-        ";
-    
         // View type for controls
         TableControlView = Backbone.Marionette.ItemView.extend({
 
@@ -55,13 +48,9 @@ $.widget( "cp.baseTable" , {
                 "click .delete-model-button"    : "deleteModal",
             },
         
-            template : function(serialized_model) {
-                // var name = serialized_model.name;
-                return _.template(template_html);
-            },
-        
             initialize : function() {
                 // this.template = _.template(this.templateStr);
+                this.template = _.template($('#table-control-template').html()); //_.template(_model_html); //
             },
             
             refreshGrid : function(grid, mdl) {

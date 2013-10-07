@@ -1,4 +1,11 @@
 <!--  -->
+
+<script type="text/template" id="table-control-template">
+    <button class='add-model-button btn btn-primary btn-mini toolbar-button'><%= t "New" %></button>
+    <button class='edit-model-button btn btn-primary btn-mini toolbar-button'><%= t "Edit" %></button>
+    <button class='delete-model-button btn btn-primary btn-mini toolbar-button'><%= t "Delete" %></button>
+</script>
+
 <script type="text/template" id="modal-edit-template">
 <form>
     <div class="modal-header">
@@ -19,6 +26,7 @@
 </form>
 </script>
 
+<!-- TODO - change so that the message is -->
 <script type="text/template" id="modal-confirm-template">
 <form>
     <div class="modal-header">
@@ -30,10 +38,10 @@
     <div class="modal-body" id="modal-body">The Program Item was not Saved. Confirm that you want to abandon the changes.</div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">
-            Remain on Item
+            <%= t "Remain on Item" %>
         </button>
         <button class="btn btn-primary">
-            Abandon Changes
+            <%= t "Abandon Changes" %>
         </button>
     </div>
 </form>

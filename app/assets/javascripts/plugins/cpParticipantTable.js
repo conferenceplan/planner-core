@@ -9,9 +9,10 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         // TODO - we need a way to spefiy the column labels as parameters so that the i18n translations can be used
         createColModel : function(){
             return [{
-                label : 'Name',
+                label : this.options.name[1], //'Name',
                 index : 'people.last_name', // TODO - we need a way to tell back end to search on name(s)
-                hidden : false,
+                // hidden : false,
+                hidden : !this.options.name[0],
                 editable : false,
                 formatter : function(cellvalue, options, rowObject) {
                     var res = "";
@@ -89,9 +90,9 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 }
             }, {
                 name : 'person[invitestatus_id]',
-                label : 'Invite Status',
+                label : this.options.invite_status[1], //'Invite Status',
                 index : 'invitestatus_id',
-                hidden : !this.options.invite_status,
+                hidden : !this.options.invite_status[0],
                 editable : true,
                 edittype : "select",
                 search : true,
@@ -113,9 +114,9 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 }
             }, {
                 name : 'person[invitation_category_id]',
-                label : 'Invitation<br/>Category',
+                label : this.options.invite_category[1], //'Invitation<br/>Category',
                 index : 'invitation_category_id',
-                hidden : !this.options.invite_category,
+                hidden : !this.options.invite_category[0],
                 editable : true,
                 edittype : "select",
                 search : true,
@@ -137,9 +138,9 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 }
             }, {
                 name : 'person[acceptance_status_id]',
-                label : 'Acceptance',
+                label : this.options.acceptance_status[1], //'Acceptance',
                 index : 'acceptance_status_id',
-                hidden : !this.options.acceptance_status,
+                hidden : !this.options.acceptance_status[0],
                 editable : true,
                 edittype : "select",
                 search : true,
@@ -161,8 +162,8 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 }
             }, {
                 name : 'person[has_survey]',
-                label : 'Survey',
-                hidden : !this.options.has_survey,
+                label : this.options.has_survey[1], //'Survey',
+                hidden : !this.options.has_survey[0],
                 editable : false,
                 sortable : false,
                 search : false,
