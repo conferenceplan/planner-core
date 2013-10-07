@@ -85,18 +85,18 @@
 <script type="text/template" id="schedule-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>
-            <b>{{= person_name }}</b> has a conflict <br/>
-            {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) at {{= moment(item_start).format("h:mma dddd") }} <br/>
-            with <br/>
-            {{= conflict_room_name}}: <b>{{= conflict_item_title }}</b> ({{= conflict_item_role}}) at {{= moment(conflict_start).format("h:mma dddd")}}
+            <b>{{= person_name }}</b> <%= t "has a conflict" %> <br/>
+            {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }} <br/>
+            <%=t "with" %> <br/>
+            {{= conflict_room_name}}: <b>{{= conflict_item_title }}</b> ({{= conflict_item_role}}) <%= t "at" %> {{= moment(conflict_start).format("h:mma dddd")}}
         </small>
     </div>
 </script>
 <script type="text/template" id="room-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>
-            Room <b>{{= room_name}}</b> at {{= moment(item_start).format("h:mma dddd") }} <br/>
-            <i>{{= item_title }}</i> conflicts with
+            <%= t "Room" %> <b>{{= room_name}}</b> <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }} <br/>
+            <i>{{= item_title }}</i> <%= t "conflicts with" %>
             <i>{{= conflict_item_title }}</i> 
         </small>
     </div>
@@ -104,43 +104,43 @@
 <script type="text/template" id="excluded-item-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>
-            <b>{{= person_name }}</b> ({{= item_role}}) has a conflict <br/>
-            do not schedule against: <i>{{= conflict_item_title }}</i><br/>
-            conflicts with<br/>
+            <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has a conflict" %> <br/>
+            <%= t "do not schedule against:" %> <i>{{= conflict_item_title }}</i><br/>
+            <%= t "conflicts with" %><br/>
             <i>{{= item_title }}</i> 
-            at {{= moment(item_start).format("h:mma dddd") }}
+            <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }}
         </small>
     </div>
 </script>
 <script type="text/template" id="excluded-time-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>
-            <b>{{= person_name }}</b> ({{= item_role}}) has a conflict <br/>
-            do not schedule between: <b>{{= moment(period_start).format("h:mma dddd") }}</b> to <b>{{= moment(period_end).format("h:mma dddd") }}</b><br/>
-            conflicts with<br/>
+            <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has a conflict" %> <br/>
+            <%= t "do not schedule between:" %> <b>{{= moment(period_start).format("h:mma dddd") }}</b> <%= t "to" %> <b>{{= moment(period_end).format("h:mma dddd") }}</b><br/>
+            <%= t "conflicts with" %><br/>
             <i>{{= item_title }}</i>
-            at <b>{{= moment(item_start).format("h:mma dddd") }}</b>
+            <%= t "at" %> <b>{{= moment(item_start).format("h:mma dddd") }}</b>
         </small>
     </div>
 </script>
 <script type="text/template" id="availability-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>
-            <b>{{= person_name }}</b> ({{= item_role}}) has a conflict <br/>
-            only available between: <b>{{= moment(period_start).format("h:mma dddd") }}</b> to <b>{{= moment(period_end).format("h:mma dddd") }}</b><br/>
-            conflicts with<br/>
+            <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has a conflict" %> <br/>
+            <%= t "only available between:" %> <b>{{= moment(period_start).format("h:mma dddd") }}</b> <%= t "to" %> <b>{{= moment(period_end).format("h:mma dddd") }}</b><br/>
+            <%= t "conflicts with" %><br/>
             <i>{{= item_title }}</i>
-            at <b>{{= moment(item_start).format("h:mma dddd") }}</b>
+            <%= t "at" %> <b>{{= moment(item_start).format("h:mma dddd") }}</b>
         </small>
     </div>
 </script>
 <script type="text/template" id="back-to-back-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>
-            <b>{{= person_name }}</b> has a back-to-back <br/>
-            {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) at {{= moment(item_start).format("h:mma dddd") }} <br/>
-            with <br/>
-            {{= conflict_room_name}}: <b>{{= conflict_item_title }}</b> ({{= conflict_item_role}}) at {{= moment(conflict_start).format("h:mma dddd")}}
+            <b>{{= person_name }}</b> <%= t "has a back-to-back" %> <br/>
+            {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }} <br/>
+            <%= t "with" %> <br/>
+            {{= conflict_room_name}}: <b>{{= conflict_item_title }}</b> ({{= conflict_item_role}}) <%= t "at" %> {{= moment(conflict_start).format("h:mma dddd")}}
         </small>
     </div>
 </script>

@@ -419,6 +419,8 @@ ScheduleApp.ItemManagement = (function(Backbone){
 })(Backbone);
 
 jQuery(document).ready(function() {
+    moment.lang('<%= I18n.locale %>');
+    
     ScheduleApp.start();
     ScheduleApp.ItemManagement.init();
 });

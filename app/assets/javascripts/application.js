@@ -28,7 +28,7 @@
 //= require backbone-forms/distribution/editors/list.min
 //= require backbone-forms/distribution/templates/bootstrap
 
-//= require moment/moment
+//= require moment/moment+langs
 
 //= require backgrid/backgrid
 //= require backgrid/extensions/select-all/backgrid-select-all
