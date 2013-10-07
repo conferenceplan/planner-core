@@ -6,7 +6,8 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
 
     createColModel : function(){
         return [{
-            label: 'Title',
+            label: this.options.title[1],
+            hidden : !this.options.title[0],
             name: 'item[title]',
             index: 'programme_items.title',
             width: 500,
@@ -19,9 +20,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             }
         }, {
             name: 'programme_item[format_name]',
-            label : "Format",
+            label : this.options.format_name[1], //"Format",
             index: 'format_id',
-            hidden: !this.options.format_name,
+            hidden: !this.options.format_name[0],
             width: 150,
             search: true,
             stype: "select",
@@ -30,10 +31,10 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             },
         },
         {
-            label : 'Duration',
+            label : this.options.duration[1], //'Duration',
             name: 'programme_item[duration]',
             index: 'duration',
-            hidden : !this.options.duration,
+            hidden : !this.options.duration[0],
             width: 60,
             editable: true,
             editoptions: {
@@ -48,9 +49,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 required: true
             }
         }, {
-            label : 'Room',
+            label : this.options.room[1], //'Room',
             name: 'room',
-            hidden : !this.options.room,
+            hidden : !this.options.room[0],
             sortable: false,
             search: false,
             width: 80,
@@ -67,9 +68,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 required: false
             }
         }, {
-            label: 'Day',
+            label: this.options.day[1], //'Day',
             name: 'start_day',
-            hidden : !this.options.day,
+            hidden : !this.options.day[0],
             sortable: false,
             search: false,
             width: 100,
@@ -86,9 +87,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 required: false
             }
         }, {
-            label : 'Time',
+            label : this.options.time[1], //'Time',
             name: 'start_time',
-            hidden : !this.options.time,
+            hidden : !this.options.time[0],
             sortable: false,
             search: false,
             width: 60,
@@ -104,10 +105,10 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 required: false
             }
         }, {
-            label : 'Ref',
+            label : this.options.ref_number[1], //'Ref',
             name: 'programme_item[pub_reference_number]',
             index: 'pub_reference_number',
-            hidden : !this.options.ref_number,
+            hidden : !this.options.ref_number[0],
             width: 60,
             editable: false,
             formoptions: {

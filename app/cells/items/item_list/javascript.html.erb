@@ -24,12 +24,13 @@ jQuery(document).ready(function() {
         ignoreScheduled : <%= @ignoreScheduled %>,
 
         // The column's to be displayed
-        format_name : <%= @format_name %>,
-        duration : <%= @duration %>,
-        room : <%= @room %>,
-        day : <%= @day %>,
-        time : <%= @time %>,
-        ref_number : <%= @ref_number %>,
+        title : [true, '<%= t "Title"%>'],       
+        format_name : [<%= @format_name %>, '<%= t "Format"%>'],
+        duration : [<%= @duration %>, '<%= t "Duration"%>'],
+        room : [<%= @room %>, '<%= t "Room"%>'],
+        day : [<%= @day %>, '<%= t "Day"%>'],
+        time : [<%= @time %>, '<%= t "Time"%>'],
+        ref_number : [<%= @ref_number %>, '<%= t "Ref"%>'],
         
         //
         modal_create_title : '<%= t "Create Program Item" %>',

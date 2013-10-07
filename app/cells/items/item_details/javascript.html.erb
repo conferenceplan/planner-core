@@ -236,23 +236,23 @@ ItemApp.ItemManagement = (function(Backbone){
         },
         
         init : function() {
-            TabUtils.createTabControl({
-                template : "#item-control-template",
-                modelType : ProgramItem,
-                modal_create_title : "Create Item",
-                place :'#item-control',
-                callback : function(mdl) {
-                    // Refresh the grid - goto the page with the new item and make that the current selection
-                    jQuery("#items").jqGrid('setGridParam', {
-                         postData : {
-                                 page_to : mdl.get('title'), // make sure that the current page contains the selected element
-                                 filters : {},
-                                 current_selection : mdl.id // to pass back for the selection
-                             },
-                    });
-                    jQuery("#items").trigger("reloadGrid");
-                },
-            });
+            // TabUtils.createTabControl({
+                // template : "#item-control-template",
+                // modelType : ProgramItem,
+                // modal_create_title : "Create Item",
+                // place :'#item-control',
+                // callback : function(mdl) {
+                    // // Refresh the grid - goto the page with the new item and make that the current selection
+                    // jQuery("#items").jqGrid('setGridParam', {
+                         // postData : {
+                                 // page_to : mdl.get('title'), // make sure that the current page contains the selected element
+                                 // filters : {},
+                                 // current_selection : mdl.id // to pass back for the selection
+                             // },
+                    // });
+                    // jQuery("#items").trigger("reloadGrid");
+                // },
+            // });
         },
     };
     

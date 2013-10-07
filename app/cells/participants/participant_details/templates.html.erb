@@ -9,23 +9,23 @@ Use the Rails authenticity token in the forms...
     <div class="span6 clearfix">
         <div class="caption" class="pull-left">
             <button class="model-edit-button btn btn-primary btn-mini pull-right">
-                Edit
+                <%= t "Edit" %>
             </button>
             <dl class="dl-horizontal">
                 <dt>
-                    Registration Number
+                    <%= t "Registration Number" %>
                 </dt>
                 <dd>
                     {{= registration_number ? registration_number : "&nbsp;" }}
                 </dd>
                 <dt>
-                    Registration Type
+                    <%= t "Registration Type" %>
                 </dt>
                 <dd>
                     {{= registration_type ? registration_type : "&nbsp;" }}
                 </dd>
                 <dt>
-                    Registered
+                    <%= t "Registered" %>
                 </dt>
                 <dd>
                     {{= registered ? 'Yes' : 'No' }}
@@ -35,9 +35,9 @@ Use the Rails authenticity token in the forms...
     </div>
     {{ } else { }}
     <div id="registration-view-details">
-        No Registration Details
+        <%= t "No Registration Details" %>
         <button class="model-new-button">
-            Add Details
+            <%= t "Add Details" %>
         </button>
     </div>
     {{ }; }}
@@ -48,49 +48,49 @@ Use the Rails authenticity token in the forms...
 {{ if (typeof id != 'undefined') { }}
 <dl class="dl-horizontal">
     <dt>
-        First Name
+        <%= t "First Name" %>
     </dt>
     <dd>
         {{= first_name ? first_name : "&nbsp;" }}
     </dd>
     <dt>
-        Last Name
+        <%= t "Last Name" %>
     </dt>
     <dd>
         {{= last_name ? last_name : "&nbsp;" }}
     </dd>
     <dt>
-        Suffix
+        <%= t "Suffix" %>
     </dt>
     <dd>
         {{= suffix ? suffix : "&nbsp;" }}
     </dd>
     <dt>
-        Invite Status
+        <%= t "Invite Status" %>
     </dt>
     <dd>
         {{= invite_status_name ? invite_status_name : "&nbsp;"}}
     </dd>
     <dt>
-        Acceptance Status
+        <%= t "Acceptance Status" %>
     </dt>
     <dd>
         {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}
     </dd>
     <dt>
-        Invite Categrory
+        <%= t "Invite Categrory" %>
     </dt>
     <dd>
         {{= invite_category_name ? invite_category_name : "&nbsp;"}}
     </dd>
     <dt>
-        Survey Key
+        <%= t "Survey Key" %>
     </dt>
     <dd>
         {{= survey_key }}
     </dd>
     <dt>
-        Comments
+        <%= t "Comments" %>
     </dt>
     <dd>
         {{= comments }}
@@ -102,41 +102,41 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="bio-view-template">
 {{ if (typeof id != 'undefined') { }}
 <button class="model-edit-button btn btn-primary btn-mini pull-right">
-    Edit
+    <%= t "Edit" %>
 </button>
 <dl class="dl-horizontal">
     <dt>
-        Bio
+        <%= t "Bio" %>
     </dt>
     <dd>
         {{= bio ? bio : "&nbsp;" }}
     </dd>
     <dt>
-        Photo
+        <%= t "Photo" %>
     </dt>
     <dd>
         {{= photourl ? photourl : "&nbsp;" }}
     </dd>
     <dt>
-        Web Site
+        <%= t "Web Site" %>
     </dt>
     <dd>
         {{= website ? website : "&nbsp;" }}
     </dd>
     <dt>
-        Twitter
+        <%= t "Twitter" %>
     </dt>
     <dd>
         {{= twitterinfo ? twitterinfo : "&nbsp;" }}
     </dd>
     <dt>
-        Facebook
+        <%= t "Facebook" %>
     </dt>
     <dd>
         {{= facebook ? facebook : "&nbsp;" }}
     </dd>
     <dt>
-        Other
+        <%= t "Other" %>
     </dt>
     <dd>
         {{= othersocialmedia ? othersocialmedia : "&nbsp;" }}
@@ -144,7 +144,7 @@ Use the Rails authenticity token in the forms...
 </dl>
 {{ } else { }}
 <button class="model-new-button btn btn-primary btn-mini pull-right">
-    New
+    <%= t "New" %>
 </button>
 {{ }; }}
 </script>
@@ -162,13 +162,13 @@ Use the Rails authenticity token in the forms...
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
-                        Number
+                        <%= t "Number" %>
                     </dt>
                     <dd>
                         {{= number ? number : "&nbsp;" }}
                     </dd>
                     <dt>
-                        Type
+                        <%= t "Type" %>
                     </dt>
                     <dd>
                         {{= phone_type_name ? phone_type_name : "&nbsp;"}}
@@ -192,13 +192,13 @@ Use the Rails authenticity token in the forms...
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
-                        Email
+                        <%= t "Email" %>
                     </dt>
                     <dd>
                         {{= email ? email : "&nbsp;" }}
                     </dd>
                     <dt>
-                        Is Default
+                        <%= t "Is Default" %>
                     </dt>
                     <dd>
                         {{= isdefault ? "Yes" : "No"}}
@@ -223,49 +223,49 @@ Use the Rails authenticity token in the forms...
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
-                        Line 1
+                        <%= t "Line 1" %>
                     </dt>
                     <dd>
                         {{= line1 ? line1 : "&nbsp;" }}
                     </dd>
                     <dt>
-                        Line 2
+                        <%= t "Line 2" %>
                     </dt>
                     <dd>
                         {{= line2 ? line2 : "&nbsp;" }}
                     </dd>
                     <dt>
-                        Line 3
+                        <%= t "Line 3" %>
                     </dt>
                     <dd>
                         {{= line3 ? line3 : "&nbsp;" }}
                     </dd>
                     <dt>
-                        City
+                        <%= t "City" %>
                     </dt>
                     <dd>
                         {{= city ? city : "&nbsp;" }}
                     </dd>
                     <dt>
-                        State
+                        <%= t "State" %>
                     </dt>
                     <dd>
                         {{= state ? state : "&nbsp;" }}
                     </dd>
                     <dt>
-                        Post Code
+                        <%= t "Post Code" %>
                     </dt>
                     <dd>
                         {{= postcode ? postcode : "&nbsp;" }}
                     </dd>
                     <dt>
-                        Country
+                        <%= t "Country" %>
                     </dt>
                     <dd>
                         {{= country ? country : "&nbsp;" }}
                     </dd>
                     <dt>
-                        Is Default
+                        <%= t "Is Default" %>
                     </dt>
                     <dd>
                         {{= isdefault ? "Yes" : "No"}}
@@ -279,9 +279,9 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="address-control-template">
 <div>
     <button class="add-model-button btn-mini btn-primary pull-right ">
-        add address
+        <%= t "add address" %>
     </button>
-    POSTAL ADDRESSES
+    <%= t "POSTAL ADDRESSES" %>
 </div>
 <ul class="nav nav-list">
     <li class="divider"></li>
@@ -298,9 +298,9 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="email-control-template">
 <div>
     <button class="add-model-button btn-mini btn-primary pull-right ">
-        add email
+        <%= t "add email" %>
     </button>
-    EMAIL ADDRESSES
+    <%= t "EMAIL ADDRESSES" %>
 </div>
 <ul class="nav nav-list">
     <li class="divider"></li>
@@ -317,9 +317,9 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="phone-control-template">
 <div>
     <button class="add-model-button btn-mini btn-primary pull-right ">
-        add phone
+        <%= t "add phone" %>
     </button>
-    PHONE
+    <%= t "PHONE" %>
 </div>
 <ul class="nav nav-list">
     <li class="divider"></li>
@@ -336,9 +336,9 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="exclusions-layout-template">
 <section>
     <div id="dates-exclusions-div"></div>
-    Do not schedule against:
+    <%= t "Do not schedule against:" %>
     <div id="items-exclusions-div"></div>
-    Do not schedule at:
+    <%= t "Do not schedule at:" %>
     <div id="times-exclusions-div"></div>
 </section>
 </script>
@@ -346,7 +346,7 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="tag-context-layout-template">
 <div class="thumbnail clearfix">
     <button class="model-add-tag-button btn btn-primary btn-mini pull-right" tagcontext="{{= context }}">
-        Add
+        <%= t "Add" %>
     </button>
     <span class="label label">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
@@ -372,7 +372,7 @@ Use the Rails authenticity token in the forms...
 {{ if (typeof id != 'undefined') { }}
 <div class="thumbnail clearfix">
     <button class="model-edit-button btn btn-primary btn-mini pull-right">
-        Edit
+        <%= t "Edit" %>
     </button>
     <small> <em>Arrival</em>: {{= moment(start_time).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="icon-arrow-right"></i> <em>Departure</em>: {{= moment(end_time).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
 </div>
@@ -398,19 +398,19 @@ Use the Rails authenticity token in the forms...
         <small>
             <dl class="dl-horizontal-small">
                 <dt>
-                    Title
+                    <%= t "Title" %>
                 </dt>
                 <dd>
                     {{= title ? title : "&nbsp;" }}
                 </dd>
                 <dt>
-                    Published
+                   <%= t " Published" %>
                 </dt>
                 <dd>
                     {{= isPublished ? "Yes" : "No" }}
                 </dd>
                 <dt>
-                    Start Time
+                    <%= t "Start Time" %>
                 </dt>
                 <dd>
                     {{= time_slot ? moment(time_slot.start).format("dddd, MMMM Do YYYY, h:mm a") : "&nbsp;" }}

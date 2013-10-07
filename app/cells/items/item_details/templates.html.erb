@@ -95,16 +95,10 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="equipment-control-template">
 <div>
     <button class="add-model-button btn-mini btn-primary pull-right ">
-        add equipment
+        <%= t "add equipment" %>
     </button>
 </div>
 </script>
-
-<script type="text/template" id="item-control-template">
-    <button class="add-model-button btn btn-primary btn-mini toolbar-button">New Item</button>
-    <button class="add-model-button btn btn-primary btn-mini toolbar-button">New Item</button>
-</script>
-
 
 <script type="text/template" id="equipment-detail-template">
 <li class="span12 clearfix">
@@ -119,7 +113,7 @@ Use the Rails authenticity token in the forms...
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
-                        Desc
+                        <%= t "Desc" %>
                     </dt>
                     <dd>
                         {{= equipment_type_name ? equipment_type_name : "&nbsp;"}}
@@ -133,7 +127,7 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="tag-context-layout-template">
 <div class="thumbnail clearfix">
     <button class="model-add-tag-button btn btn-primary btn-mini pull-right" tagcontext="{{= context }}">
-        Add
+        <%= t "Add" %>
     </button>
     <span class="label label">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
