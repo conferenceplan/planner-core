@@ -222,11 +222,10 @@ $.widget( "cp.baseTable" , {
         });
         
         if (this.options.showControls) {
-            // TODO - Need a way to pass in parent id etc...
             // Create the control view
             control = new TableControlView({
-                    // id : options.id,
-                    // id_name : options.id_name,
+                    id : this.options.id,
+                    id_name : this.options.id_name,
                     grid                : this.element,
                     modal_create_title  : this.options.modal_create_title,
                     modal_edit_title    : this.options.modal_edit_title,

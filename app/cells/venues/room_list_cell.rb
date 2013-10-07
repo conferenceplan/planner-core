@@ -21,9 +21,18 @@ class Venues::RoomListCell < Cell::Rails
     @add = args.has_key?(:add) ? args[:add] : false
     @refresh = args.has_key?(:refresh) ? args[:refresh] : false
     
+    @name = args.has_key?(:name) ? args[:name] : true
+    @setup = args.has_key?(:setup) ? args[:setup] : true
+    @capacity = args.has_key?(:capacity) ? args[:capacity] : true
+    @purpose = args.has_key?(:purpose) ? args[:purpose] : true
+    @comment = args.has_key?(:comment) ? args[:comment] : true
+    
     @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : false
     @multiselect = args.has_key?(:multiselect) ? args[:multiselect] : false
         
+    @modelType = args.has_key?(:modelType) ? args[:modelType] : 'null'
+    @showControls = args.has_key?(:showControls) ? args[:showControls] : false
+    
     render
   end
 

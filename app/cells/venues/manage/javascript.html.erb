@@ -6,7 +6,9 @@ RoomApp.RoomManagement = (function(Backbone){
     
     Room = Backbone.Model.extend({
         schema : {
-            name : { type : 'Text' }
+            name : { type : 'Text' },
+            purpose : { type : 'Text' },
+            comment : { type : 'Text' }
         },
         urlRoot : '/rooms'
     });
@@ -42,10 +44,13 @@ RoomApp.RoomManagement = (function(Backbone){
     };
     
     function showSetups(id) {
+        // need to get the room
+        var theRoom = new Room({ id : id});
+        theRoom.fetch({ sync : true });
+        
         roomSetupLayout = new RoomSetupLayout();
         roomSetupLayout.render();
         $('#room-setup-view').html(roomSetupLayout.el);
-
          tabControls.push( TabUtils.createTabControl({
             template : "#room-setup-control-template",
             modelType : RoomSetup,
@@ -85,9 +90,12 @@ RoomApp.RoomManagement = (function(Backbone){
                 $("#rooms").trigger("reloadGrid");
             }
         }) );
+        
+        return theRoom;
     };
     
     return {
+        Room : Room,
         
         clearDetails : function() {
             clearDetails();
@@ -97,29 +105,29 @@ RoomApp.RoomManagement = (function(Backbone){
             clearDetails();
             // set the URL for the rooms and get it to refresh
             $("#rooms").roomTable("getRoomForVenue", id);
-            tabControls.push( TabUtils.createTabControl({ // TODO - the new room needs to have the venue id in the URL
-                template : "#room-control-template",
-                modelType : Room,
-                id : id, // need to pass in the name of the id field
-                id_name : 'venue_id',
-                modal_create_title : "Create Room",
-                place :'#room-control',
-                callback : function(mdl) {
-                    // Refresh the grid - goto the page with the new item and make that the current selection
-                    jQuery("#rooms").jqGrid('setGridParam', {
-                         postData : {
-                                 page_to : mdl.get('name'), // make sure that the current page contains the selected element
-                                 filters : {},
-                                 current_selection : mdl.id // to pass back for the selection
-                             },
-                    });
-                    jQuery("#rooms").trigger("reloadGrid");
-                },
-            }));
+            // tabControls.push( TabUtils.createTabControl({ // TODO - the new room needs to have the venue id in the URL
+                // template : "#room-control-template",
+                // modelType : Room,
+                // id : id, // need to pass in the name of the id field
+                // id_name : 'venue_id',
+                // modal_create_title : "Create Room",
+                // place :'#room-control',
+                // callback : function(mdl) {
+                    // // Refresh the grid - goto the page with the new item and make that the current selection
+                    // jQuery("#rooms").jqGrid('setGridParam', {
+                         // postData : {
+                                 // page_to : mdl.get('name'), // make sure that the current page contains the selected element
+                                 // filters : {},
+                                 // current_selection : mdl.id // to pass back for the selection
+                             // },
+                    // });
+                    // jQuery("#rooms").trigger("reloadGrid");
+                // },
+            // }));
         },
         
         showSetups : function(id) {
-            showSetups(id);
+            return showSetups(id);
         }
     }
 
