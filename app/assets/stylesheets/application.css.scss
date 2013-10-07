@@ -31,6 +31,10 @@
  *= require_self
  */
 
+[class^="icon-"], [class*=" icon-"] {
+  background-image: url(/assets/glyphicons-halflings.png)
+}
+
 .toolbar-button {
   margin-right : 5px;
   // margin-bottom : 15px;
