@@ -96,7 +96,7 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25)
-    multi_json (1.8.0)
+    multi_json (1.8.1)
     mysql2 (0.3.13)
     polyglot (0.3.3)
     puma (2.6.0)
@@ -131,7 +131,7 @@ GEM
     ref (1.0.5)
     routing-filter (0.3.1)
       actionpack
-    sass (3.2.11)
+    sass (3.2.12)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
