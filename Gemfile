@@ -40,8 +40,8 @@ gem 'routing-filter'
 gem "rack", "1.4.5"
 gem 'rake', '0.8.7'
 gem 'therubyracer', :platforms => :ruby
-gem "rubysl", "~> 2.0", :platforms => :ruby
-gem "rubysl-abbrev", "~> 2.0.2", :platforms => :ruby
+# gem "rubysl", "~> 2.0", :platforms => :ruby
+# gem "rubysl-abbrev", "~> 2.0.2", :platforms => :ruby
 gem 'puma', :platforms => :ruby
 gem 'capistrano-puma', require: false
 
