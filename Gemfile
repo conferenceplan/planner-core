@@ -34,11 +34,15 @@ gem 'i18n-active_record',
 # For locale in the route
 gem 'routing-filter'
 
+gem 'capistrano', '~> 3.0', require: false, group: :development
+gem 'capistrano-rails', require: false, group: :development
+gem 'capistrano-bundler', require: false, group: :development
+
 #
 # Needed for installs
 #
 gem "rack", "1.4.5"
-gem 'rake', '0.8.7'
+gem 'rake' #, '0.8.7'
 gem 'therubyracer', :platforms => :ruby
 # gem "rubysl", "~> 2.0", :platforms => :ruby
 # gem "rubysl-abbrev", "~> 2.0.2", :platforms => :ruby
