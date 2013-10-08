@@ -6,7 +6,7 @@ VenueApp.VenueManagement = (function(Backbone){
 
     Venue = Backbone.Model.extend({
         schema : {
-            name : { type : 'Text' },
+            name : { type : 'Text', title : '<%= t "name" %>' },
         },
         urlRoot : '/venue'
     });
@@ -39,7 +39,7 @@ VenueApp.VenueManagement = (function(Backbone){
             template : "#venue-control-template",
             modelType : Venue,
             view_refresh_event : "venue:refresh",
-            modal_create_title : "Create Venue",
+            modal_create_title : '<%= t "Create Venue" %>',
             region : venueLayout.venueControlRegion,
         });
 

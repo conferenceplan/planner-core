@@ -9,6 +9,7 @@ PlannerRc1::Application.routes.draw do
     match "items_dash/:cellname" => "items_dash#index"
     match "schedule_dash/:cellname" => "schedule_dash#index"
     match "venues_dash/:cellname" => "venues_dash#index"
+    match "surveys_dash/:cellname" => "surveys_dash#index"
     # resources :items_dash
     resources :logistics_dash
     resources :admin_dash

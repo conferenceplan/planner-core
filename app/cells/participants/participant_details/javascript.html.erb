@@ -9,14 +9,14 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     Address = Backbone.Model.extend({
         schema : {
-            line1 : { type : 'Text' },
-            line2 : { type : 'Text' },
-            line3 : { type : 'Text' },
-            city : { type : 'Text' },
-            state : { type : 'Text' },
-            postcode : { type : 'Text' },
-            country : { type : 'Text' },
-            isdefault : { type : 'Checkbox'},
+            line1 : { type : 'Text', title : '<%= t "line1" %>' },
+            line2 : { type : 'Text', title : '<%= t "line2" %>' },
+            line3 : { type : 'Text', title : '<%= t "line3" %>' },
+            city : { type : 'Text', title : '<%= t "city" %>' },
+            state : { type : 'Text', title : '<%= t "state" %>' },
+            postcode : { type : 'Text', title : '<%= t "post code" %>' },
+            country : { type : 'Text', title : '<%= t "country" %>' },
+            isdefault : { type : 'Checkbox', title : '<%= t "is default" %>'},
         },
         urlRoot : '/postal_addresses'
     });
@@ -27,8 +27,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     
     EmailAddress = Backbone.Model.extend({
         schema : {
-            email : { type : 'Text'},
-            isdefault : { type : 'Checkbox'}
+            email : { type : 'Text', title : '<%= t "email" %>'},
+            isdefault : { type : 'Checkbox', title : '<%= t "is default" %>'}
         },
         urlRoot : '/email_addresses'
     });
@@ -39,8 +39,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     
     PhoneNumber = Backbone.Model.extend({
         schema : {
-            number : { type : 'Text'},
-            phone_type_id : { type : 'Select', options : <%= PhoneTypes.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            number : { type : 'Text', title : '<%= t "number" %>'},
+            phone_type_id : { type : 'Select', title : '<%= t "phone type" %>', options : <%= PhoneTypes.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
         },
         urlRoot : '/phone_numbers'
     });
@@ -54,9 +54,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     RegistrationDetail = Backbone.Model.extend({
         schema : {
-            registration_number : { type : 'Number', title : 'Registration Number' },
-            registration_type : { type : 'Text', title : "Registration Type" },
-            registered : { type : 'Checkbox', title : 'Registered' },
+            registration_number : { type : 'Number', title : '<%= t "Registration Number" %>' },
+            registration_type : { type : 'Text', title : '<%= t "Registration Type" %>' },
+            registered : { type : 'Checkbox', title : '<%= t "Registered" %>' },
         },
         urlRoot: '/registrationDetails'
     });
@@ -64,24 +64,24 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     Pseudonym = Backbone.Model.extend({
         schema : {
-            first_name  : { type : 'Text '},
-            last_name  : { type : 'Text '},
-            suffix  : { type : 'Text '},
+            first_name  : { type : 'Text', title : '<%= t "First Name" %>'},
+            last_name  : { type : 'Text', title : '<%= t "Last Name" %>'},
+            suffix  : { type : 'Text', title : '<%= t "Suffix" %>'},
         }
     });
     
     InviteDetails = Backbone.DeepModel.extend({
         schema : {
-            first_name : { type : 'Text' },
-            last_name : { type : 'Text' },
-            suffix : { type : 'Text' },
-            'pseudonym.first_name' : { type : 'Text' },
-            'pseudonym.last_name' : { type : 'Text' },
-            'pseudonym.suffix' : { type : 'Text' },
-            'comments' : { type : 'Text' },
-            invite_status_id : { type : 'Select', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            acceptance_status_id : { type : 'Select', options : <%= AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            invite_category_id : { type : 'Select', options : <%= InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            first_name : { type : 'Text', title : '<%= t "first name" %>' },
+            last_name : { type : 'Text', title : '<%= t "last name" %>' },
+            suffix : { type : 'Text', title : '<%= t "suffix" %>' },
+            'pseudonym.first_name' : { type : 'Text', title : '<%= t "publication first name" %>' },
+            'pseudonym.last_name' : { type : 'Text', title : '<%= t "publication last name" %>' },
+            'pseudonym.suffix' : { type : 'Text', title : '<%= t "publication suffix" %>' },
+            'comments' : { type : 'Text', title : '<%= t "comments" %>' },
+            invite_status_id : { type : 'Select', title : '<%= t "invitation status" %>', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            acceptance_status_id : { type : 'Select', title : '<%= t "acceptance status" %>', options : <%= AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            invite_category_id : { type : 'Select', title : '<%= t "invitation category" %>', options : <%= InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
 
         },
         urlRoot : '/participants'

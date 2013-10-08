@@ -1,17 +1,10 @@
 class SurveysController < PlannerController
   def index
     @surveys = Survey.all
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @surveys }
-    end
   end
 
   def show
     @survey = Survey.find params[:id]
-
-    render :layout => 'content'
   end
 
   def new

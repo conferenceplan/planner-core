@@ -6,18 +6,18 @@ RoomApp.RoomManagement = (function(Backbone){
     
     Room = Backbone.Model.extend({
         schema : {
-            name : { type : 'Text' },
-            purpose : { type : 'Text' },
-            comment : { type : 'Text' }
+            name : { type : 'Text', title : '<%= t "name" %>' },
+            purpose : { type : 'Text', title : '<%= t "purpose" %>' },
+            comment : { type : 'Text', title : '<%= t "comment" %>' }
         },
         urlRoot : '/rooms'
     });
 
     RoomSetup = Backbone.Model.extend({
         schema : {
-            setup_type_id : { type : 'Select', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            capacity : { type : 'Number' },
-            isdefault : { type : 'Checkbox', title : 'Default' }, // This needs to be calculated
+            setup_type_id : { type : 'Select', title : '<%= t "setup type" %>', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            capacity : { type : 'Number', title : '<%= t "capacity" %>' },
+            isdefault : { type : 'Checkbox', title : '<%= t "default" %>' }, // This needs to be calculated
         },
         urlRoot : '/room_setups'
     });
@@ -57,7 +57,7 @@ RoomApp.RoomManagement = (function(Backbone){
             id : id, // need to pass in the name of the id field
             id_name : 'room_id',
             view_refresh_event : "room-setup:refresh",
-            modal_create_title : "Create Room Setup",
+            modal_create_title : '<%= t "Create Room Setup" %>',
             region : roomSetupLayout.roomSetupControlRegion,
             callback : function(mdl) {
                 $("#rooms").jqGrid('setGridParam', {
@@ -77,8 +77,8 @@ RoomApp.RoomManagement = (function(Backbone){
             template : "#room-setup-template",
             view_refresh_event : "room-setup:refresh",
             region : roomSetupLayout.roomSetupRegion,
-            newTitle : "Create Setup",
-            editTitle : "Edit Setup",
+            newTitle : '<%= t "Create Room Setup" %>',
+            editTitle : '<%= t "Edit Room Setup" %>',
             updateCallback : function(mdl) {
                 $("#rooms").jqGrid('setGridParam', {
                     loadComplete: function(data) {

@@ -9,21 +9,21 @@ ItemApp.ItemManagement = (function(Backbone){
      */
     ProgramItem = Backbone.Model.extend({
         schema : {
-            title       : { type : 'Text' },
-            short_title : { type : 'Text' },
-            precis : { type : 'TextArea', editorAttrs: { rows : 6, cols : 60 } },
-            notes : { type : 'TextArea', editorAttrs: { rows : 6, cols : 60 } },
-            format_id : { type : 'Select', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            setup_type_id : { type : 'Select', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            print : { type : 'Checkbox'},
-            duration : { type : 'Number', validators: ['required'] },
-            minimum_people : { type : 'Number' },
-            maximum_people : { type : 'Number' },
-            room_id : { type : 'Select', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO
-            start_day : { type : 'Select', options : <%=  ([[' ','-1']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%> },
-            start_time : { type : 'Time' }, // TODO - verify that this works
+            title       : { type : 'Text', title : '<%= t "title" %>' },
+            short_title : { type : 'Text', title : '<%= t "short title" %>' },
+            precis : { type : 'TextArea', title : '<%= t "pecis" %>', editorAttrs: { rows : 6, cols : 60 } },
+            notes : { type : 'TextArea', title : '<%= t "notes" %>', editorAttrs: { rows : 6, cols : 60 } },
+            format_id : { type : 'Select', title : '<%= t "format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            setup_type_id : { type : 'Select', title : '<%= t "setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            print : { type : 'Checkbox', title : '<%= t "print" %>'},
+            duration : { type : 'Number', title : '<%= t "duration (minutes)" %>', validators: ['required'] },
+            minimum_people : { type : 'Number', title : '<%= t "min people" %>' },
+            maximum_people : { type : 'Number', title : '<%= t "max people" %>' },
+            room_id : { type : 'Select', title : '<%= t "room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO
+            start_day : { type : 'Select', title : '<%= t "start day" %>', options : <%=  ([[' ','-1']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%> },
+            start_time : { type : 'Time', title : '<%= t "start time" %>' },
 
-            pub_reference_number : { type : 'Text' },
+            pub_reference_number : { type : 'Text', title : '<%= t "publication reference" %>' },
         },
         // Default values used when creating a new instance
         defaults: {
@@ -37,7 +37,7 @@ ItemApp.ItemManagement = (function(Backbone){
     
     Equipment = Backbone.Model.extend({
         schema : {
-            equipment_type_id : { type : 'Select', options : <%= [].concat(EquipmentType.find(:all).collect {|s| {'val' => s.id, 'label' => s.description} }).to_json.html_safe %> },
+            equipment_type_id : { type : 'Select', title : '<%= t "name" %>', options : <%= [].concat(EquipmentType.find(:all).collect {|s| {'val' => s.id, 'label' => s.description} }).to_json.html_safe %> },
         },
         urlRoot : '/equipment_needs'
     });
@@ -126,7 +126,7 @@ ItemApp.ItemManagement = (function(Backbone){
             id : id, // need to pass in the name of the id field
             id_name : 'programme_item_id',
             view_refresh_event : "equipment:refresh",
-            modal_create_title : "Create Equipment Needs",
+            modal_create_title : '<%= t "Create Equipment Needs" %>',
             region : equipmentLayout.equipmentControlRegion
         });
         tabLists.push( TabUtils.createTabListContent({
@@ -146,7 +146,7 @@ ItemApp.ItemManagement = (function(Backbone){
             template : "#tag-context-layout-template",
             view_refresh_event : "address:refresh",
             place : '#tags-view',
-            newTitle : "Create Tag",
+            newTitle : '<%= t "Create Tag" %>',
         }) );
         
         return itemMdl;
