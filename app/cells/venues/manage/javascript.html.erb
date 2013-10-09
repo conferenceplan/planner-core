@@ -6,18 +6,18 @@ RoomApp.RoomManagement = (function(Backbone){
     
     Room = Backbone.Model.extend({
         schema : {
-            name : { type : 'Text', title : '<%= t "name" %>' },
-            purpose : { type : 'Text', title : '<%= t "purpose" %>' },
-            comment : { type : 'Text', title : '<%= t "comment" %>' }
+            name : { type : 'Text', title : '<%= t "Name" %>' },
+            purpose : { type : 'Text', title : '<%= t "Purpose" %>' },
+            comment : { type : 'Text', title : '<%= t "Comment" %>' }
         },
         urlRoot : '/rooms'
     });
 
     RoomSetup = Backbone.Model.extend({
         schema : {
-            setup_type_id : { type : 'Select', title : '<%= t "setup type" %>', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            capacity : { type : 'Number', title : '<%= t "capacity" %>' },
-            isdefault : { type : 'Checkbox', title : '<%= t "default" %>' }, // This needs to be calculated
+            setup_type_id : { type : 'Select', title : '<%= t "Setup Type" %>', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            capacity : { type : 'Number', title : '<%= t "Capacity" %>' },
+            isdefault : { type : 'Checkbox', title : '<%= t "Default" %>' }, // This needs to be calculated
         },
         urlRoot : '/room_setups'
     });
