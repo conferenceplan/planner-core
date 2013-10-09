@@ -37,6 +37,7 @@ gem 'routing-filter'
 #gem 'capistrano', '~> 3.0', require: false, group: :development
 #gem 'capistrano-rails', require: false, group: :development
 #gem 'capistrano-bundler', require: false, group: :development
+gem 'capistrano', '2.15.5', require: false, group: :development
 
 #
 # Needed for installs

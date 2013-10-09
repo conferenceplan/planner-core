@@ -53,6 +53,12 @@ GEM
     bootswatch-rails (0.5.0)
       railties (>= 3.1)
     builder (3.0.4)
+    capistrano (2.15.5)
+      highline
+      net-scp (>= 1.0.0)
+      net-sftp (>= 2.0.0)
+      net-ssh (>= 2.0.14)
+      net-ssh-gateway (>= 1.1.0)
     cells (3.8.8)
       actionpack (>= 3.0)
       railties (>= 3.0)
@@ -80,6 +86,7 @@ GEM
     erubis (2.7.0)
     execjs (2.0.2)
     fssm (0.2.10)
+    highline (1.6.19)
     hike (1.2.3)
     i18n (0.6.5)
     jbuilder (1.5.2)
@@ -97,6 +104,13 @@ GEM
     mime-types (1.25)
     multi_json (1.8.1)
     mysql2 (0.3.13)
+    net-scp (1.1.2)
+      net-ssh (>= 2.6.5)
+    net-sftp (2.1.2)
+      net-ssh (>= 2.6.5)
+    net-ssh (2.7.0)
+    net-ssh-gateway (1.2.0)
+      net-ssh (>= 2.6.5)
     polyglot (0.3.3)
     puma (2.6.0)
       rack (>= 1.1, < 2.0)
@@ -171,6 +185,7 @@ DEPENDENCIES
   bluecloth
   bootstrap-sass (~> 2.3.2.2)
   bootswatch-rails
+  capistrano (= 2.15.5)
   cells
   coffee-rails (~> 3.2.1)
   compass-rails
