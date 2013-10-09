@@ -2,8 +2,8 @@
 @import 'bootswatch/united/variables';
 
 // Fix for finding glyphs when using an edge cache
-// $iconSpritePath: asset-url('glyphicons-halflings.png', image);
-// $iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
+$iconSpritePath: asset-url('glyphicons-halflings.png', image);
+$iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
 
 @import "bootstrap";
 
