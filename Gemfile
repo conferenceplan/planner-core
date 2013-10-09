@@ -40,7 +40,9 @@ gem 'routing-filter'
 gem 'capistrano', '2.15.5', require: false, group: :development
 gem 'rvm-capistrano', '1.5.0', require: false, group: :development
 gem 'capistrano-puma', '0.0.1', require: false, group: :development
-gem "rubysl-resolv", "~> 2.0" #, require: false, group: :production
+# gem "rubysl-resolv", "~> 2.0", require: false, group: :production
+# gem "rubysl-singleton", "~> 2.0"
+
 #
 # Needed for installs
 #
