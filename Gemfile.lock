@@ -59,6 +59,7 @@ GEM
       net-sftp (>= 2.0.0)
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
+    capistrano-puma (0.0.1)
     cells (3.8.8)
       actionpack (>= 3.0)
       railties (>= 3.0)
@@ -144,6 +145,8 @@ GEM
     ref (1.0.5)
     routing-filter (0.3.1)
       actionpack
+    rvm-capistrano (1.5.0)
+      capistrano (>= 2.15.4)
     sass (3.2.12)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
@@ -186,6 +189,7 @@ DEPENDENCIES
   bootstrap-sass (~> 2.3.2.2)
   bootswatch-rails
   capistrano (= 2.15.5)
+  capistrano-puma (= 0.0.1)
   cells
   coffee-rails (~> 3.2.1)
   compass-rails
@@ -204,6 +208,7 @@ DEPENDENCIES
   rails (~> 3.2.12)
   rake
   routing-filter
+  rvm-capistrano (= 1.5.0)
   sass-rails (~> 3.2.3)
   therubyracer
   time_diff
