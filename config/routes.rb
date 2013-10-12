@@ -266,6 +266,7 @@ PlannerRc1::Application.routes.draw do
   resources :person_mailing_assignments, :controller => 'admin/person_mailing_assignments'
   match :mailing_configs, :controller => 'admin/mailing_configs'
 
+  match 'surveys/list', :controller => 'surveys', :action => 'list'
   resources :surveys do
     resources :response, :controller => 'surveys/response'
     resources :survey_groups, :controller => 'surveys/survey_groups' do

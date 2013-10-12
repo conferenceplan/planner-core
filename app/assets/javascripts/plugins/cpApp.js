@@ -40,6 +40,7 @@ var TabUtils = (function(){
         },
         
         submit : function(e) {
+            console.debug("submit");
             if (e && e.type == "submit") {
                 e.preventDefault();
                 e.stopPropagation();
@@ -53,9 +54,30 @@ var TabUtils = (function(){
         },
         
         close: function (e) {
-            this.remove();
-            this.unbind();
-            this.views = [];  
+            
+            // console.debug(this.form.$el);
+            console.debug(CKEDITOR.instances);
+            
+            /***/
+            this.form.$el.find('textarea').each(function() { // TODO - we need the correct seletor
+                // alert($(this)[0].id);
+                try {
+                console.debug($(this)[0].id);
+                    if(CKEDITOR.instances[$(this)[0].id] != null) {
+                        CKEDITOR.instances[$(this)[0].id].destroy(true);
+                    }
+            console.debug(CKEDITOR.instances);
+                } catch(e){
+                    console.error(e);
+                }
+            });
+/***/
+            
+            // console.debug("close");
+                // if (e.type != "hide") this.$el.modal("hide");
+            // this.remove();
+            // this.unbind();
+            // this.views = [];  
         },
         
         // over-ride this for the body of the form        
@@ -80,6 +102,7 @@ var TabUtils = (function(){
 
         // over-ride for the actual data submission        
         submitData : function() {
+            console.debug("SUBMIT");
             // gather the data and update the underlying model etc.
             var errors = this.form.commit(); // To save the values from the form back into the model
             

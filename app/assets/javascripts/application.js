@@ -8,11 +8,13 @@
 //= require bootstrap
 
 //= require jquery-ui-1.9.2.custom
+//  require jquery.form
 //= require jquery.timers-1.2
-//= require jquery.form
 //= require jquery.timeentry.min
+
 //= require i18n/grid.locale-en
 //= require jquery.jqGrid.min
+
 //= require jquery.easy-pie-chart
 //= require jquery.mousewheel
 
@@ -36,24 +38,25 @@
 //= require backgrid/extensions/text-cell/backgrid-text-cell
 
 //= require d3/d3.v3
+//= require ckeditor/ckeditor
+//= require ckeditor/adapters/jquery
 
-// TODO - Check we still use planIt
-//= require planIt
-
+// ---------------
 //= require plugins/cpApp
 //= require plugins/cpBaseTable
 //= require plugins/cpItemTable
 //= require plugins/cpParticipantTable
 //= require plugins/cpVenueTable
 //= require plugins/cpRoomTable
+//= require plugins/timeEditor
+//= require plugins/htmlEditor
+
+//= require TabViews
 
 // TODO - check these
 //= require plugins/cpdialog
 //= require plugins/cpDynamicArea
 //= require plugins/cpremovebutton
-//= require plugins/timeEditor
-
-//= require TabViews
 
 //= require_self
 

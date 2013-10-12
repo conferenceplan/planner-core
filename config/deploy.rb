@@ -4,7 +4,8 @@
 set :stages, %w(parctec) # production staging sandbox 
 set :default_stage, "staging"
 
-require "rvm/capistrano/base"
+require "rvm/capistrano"
+require "rvm/capistrano/gem_install_uninstall"
 
 require "capistrano/ext/multistage"
 # so that bundler is used
@@ -15,6 +16,9 @@ require "./config/capistrano_production_rb"
 require "./config/capistrano_config_yml.rb"
 #require "./config/capistrano_delayed_job_yml"
 
+set :rvm_type, :system
+set :bundle_dir, ''
+set :bundle_flags, '--system --quiet'
 
 set :application, "planner-rc1"
 

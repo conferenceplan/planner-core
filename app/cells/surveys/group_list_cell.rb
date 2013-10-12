@@ -1,4 +1,4 @@
-class Surveys::SurveyListCell < Cell::Rails
+class Surveys::GroupListCell < Cell::Rails
 
   def display
     render
@@ -7,7 +7,7 @@ class Surveys::SurveyListCell < Cell::Rails
   def javascript(args)
     render
   end
-  
+
   def templates
     render
   end

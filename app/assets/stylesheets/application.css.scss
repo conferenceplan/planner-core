@@ -17,6 +17,8 @@
  *= require custom-theme/jquery-ui-1.9.2.custom 
  *= require jqGrid/ui.jqgrid
  *= require jqGrid/jqGrid.overrides
+ * 
+ * CHECK
  *= require jqModal
  *= require jquery.timeentry
  *= require jquery.easy-pie-chart
@@ -26,10 +28,14 @@
  *= require backgrid/extensions/moment-cell/backgrid-moment-cell
  *= require backgrid/extensions/text-cell/backgrid-text-cell
  *
- *= require planner
+ * require planner
  * 
  *= require_self
  */
+
+.html-editor input {
+    height: 200px;
+}
 
 .toolbar-button {
   margin-right : 5px;

@@ -1,7 +1,92 @@
-<h1>
-  Surveys::SurveyList#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/surveys/survey_list/javascript.html.erb
-</p>
+SurveyApp = new Backbone.Marionette.Application();
+
+SurveyApp.SurveyManagement = (function(Backbone){
+
+    Survey = Backbone.Model.extend({
+        schema : {
+            name            : { type : 'Text', title : '<%= t "name" %>' },
+            alias           : { type : 'Text', title : '<%= t "alias" %>' },
+            welcome         : { type : 'Html', title : '<%= t "welcome message" %>' },
+            thank_you       : { type : 'Text', title : '<%= t "thank you message" %>' },
+            submit_string   : { type : 'Text', title : '<%= t "submit string" %>' },
+            header_image    : { type : 'Text', title : '<%= t "URL for header image" %>' },
+        },
+        urlRoot : '/surveys'
+    });
+
+    SurveyCollection = Backbone.Collection.extend({
+        model : Survey
+    });
+    
+    SurveyLayout = Backbone.Marionette.Layout.extend({ // TODO
+        template: "#survey-list-layout-template",
+        
+        regions : {
+            surveyControlRegion: "#survey-control-div",
+            surveyRegion: "#survey-region-div",
+        },
+    });
+    
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' ); //????
+    };
+
+    function showSurveys() {
+        surveyLayout = new SurveyLayout();
+        surveyLayout.render();
+        $('#survey-region-view').html(surveyLayout.el);
+        
+        TabUtils.createTabControl({
+            template : "#survey-control-template",
+            modelType : Survey,
+            view_refresh_event : "survey:refresh",
+            modal_create_title : '<%= t "Create Survey" %>',
+            region : surveyLayout.surveyControlRegion,
+        });
+        
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : SurveyCollection,
+            collection_attributes : { "class" : "nav nav-tabs nav-stacked" },
+            collection_tagName : 'ul',
+            view_attributes : { "class" : "YYY" },
+            url : "/surveys/list.json",
+            template : "#survey-template",
+            view_refresh_event : "survey:refresh",
+            region : surveyLayout.surveyRegion,
+            newTitle : "Create Survey",
+            editTitle : "Edit Survey",
+            tagName : 'li',
+            selectFn : selectSurvey
+        }) );
+    };
+    
+    function selectSurvey(id) {
+        <%= @selectNotifyMethod %>(id);
+    };
+
+    return {
+        init : function() {
+            // Get the list of venues and display them
+            showSurveys();
+        },
+        
+        clearDetails : function() {
+        },
+        
+        selectSurvey : function(id) {
+            <%= @selectNotifyMethod %>(id);
+        },
+    }
+
+})(Backbone);
+
+jQuery(document).ready(function() {
+    SurveyApp.start();
+    SurveyApp.SurveyManagement.init();
+});
+
+</script>

@@ -5,101 +5,7 @@ var TabUtils = (function(){
     var tabModule = {};
 
     var eventAggregator = new Backbone.Wreqr.EventAggregator();
-    
-    GenericModal = Backbone.View.extend({
-        tagName: "div",
-        className: "modal hide fade",
-        events: {
-            "submit": "submit",
-            "hidden": "close",
-        },
-        
-        initialize : function() {
-            this.template = _.template($('#modal-edit-template').html());
-        },
 
-        modalOptions: {
-            backdrop: false,
-        },
-
-        render: function () {
-            this.$el.html($(this.template({
-                title : this.options.title
-            })));
-
-            this.delegateEvents();
-            
-            this.renderBody();
-            
-            this.$el.find(".modal-body").append(this.form.el);
-            
-            this.$el.modal(this.modalOptions);
-
-            return this;
-        },
-        
-        submit : function(e) {
-            if (e && e.type == "submit") {
-                e.preventDefault();
-                e.stopPropagation();
-            };
-            
-            var errors = this.submitData();
-            
-            if (! errors ) {
-                if (e.type != "hide") this.$el.modal("hide");
-            }
-        },
-        
-        close: function (e) {
-            this.remove();
-            this.unbind();
-            this.views = [];  
-        },
-        
-        // over-ride this for the body of the form        
-        renderBody : function() {
-        },
-
-        // over-ride for the actual data submission        
-        submitData : function() {
-        }
-        
-    });
-
-    TabModal = GenericModal.extend({
-        renderBody : function() {
-            this.form = new Backbone.Form({
-                    model: this.model
-            }).render();
-        },
-
-        // over-ride for the actual data submission        
-        submitData : function() {
-            // gather the data and update the underlying model etc.
-            var errors = this.form.commit(); // To save the values from the form back into the model
-            
-            if (!errors) { // save if there are no errors
-                var refreshFn = this.options.refresh;
-            
-                // accept-charset="UTF-8"
-                this.model.save(null, { 
-                    success : function(mdl) {
-                        // Refresh the view if there is a refresh method
-                        if (refreshFn) {
-                            refreshFn(mdl); // cause problem with templates used ???
-                        };
-                    },
-                    error : function() {
-                        alertMessage("Error saving the instance");
-                    }
-                }); // save the model to the server
-            }
-            
-            return errors; // if there are any errors
-        }
-    });
-    
     TagModal = GenericModal.extend({
         renderBody : function() {
             this.form = new Backbone.Form({
@@ -187,7 +93,7 @@ var TabUtils = (function(){
         },
         editModel : function() {
             // Put up a modal dialog to edit the reg details
-            mdl = new TabModal({
+            mdl = new ModelModal({
                 model : this.model,
                 title : this.options.editTitle
             });
@@ -196,7 +102,7 @@ var TabUtils = (function(){
         
         newModel : function() {
             this.model.set(this.options.id_name, this.options.id);
-            mdl = new TabModal({
+            mdl = new ModelModal({
                 model : this.model,
                 title : this.options.newTitle
             });
@@ -242,7 +148,7 @@ var TabUtils = (function(){
             var refreshEvent = this.options.view_refresh_event;
             var callback = this.options.view_callback;
 
-            var modal = new TabModal({
+            var modal = new ModelModal({
                 model : mdl,
                 title : this.options.modal_create_title,
                 

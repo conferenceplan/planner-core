@@ -1,5 +1,10 @@
 class SurveysController < PlannerController
+  
   def index
+    @surveys = Survey.all
+  end
+  
+  def list
     @surveys = Survey.all
   end
 
@@ -7,44 +12,26 @@ class SurveysController < PlannerController
     @survey = Survey.find params[:id]
   end
 
-  def new
-    @survey = Survey.new
-    render :layout => 'content'
-  end
-
-  def edit
-    @survey = Survey.find params[:id]
-
-    render :layout => 'content'
+  def create
+    @survey = Survey.new params[:survey]
+    @survey.save!
   end
 
   def update
     @survey = Survey.find params[:id]
 
-    if @survey.update_attributes(params[:survey])
-      # Go back to the main page
-      @surveys = Survey.all
-      render :survey_list, :layout => 'plain'
-    else
-      render :action => 'edit', :status => 500, :layout => 'content'
-    end
+    @survey.update_attributes(params[:survey])
   end
 
   def destroy
-    @survey = Survey.find params[:id]
-    @survey.destroy
-    # redirect_to :action => 'index'
-      @surveys = Survey.all
-          render :survey_list, :layout => 'plain'
-  end
-
-  def create
-    @survey = Survey.new params[:survey]
-    if @survey.save
-      @surveys = Survey.all
-      render :survey_list, :layout => 'plain'
+    survey = Survey.find params[:id]
+    
+    # Test for groups etc and if survey is "published"
+    if (survey.survey_groups.length == 0) && (survey.alias != nil)
+      survey.destroy
+      render status: :ok, text: {}.to_json
     else
-      render :action => 'new'
+      render status: :bad_request, text: 'Con not delete survey that has groups or is currently published'
     end
   end
 

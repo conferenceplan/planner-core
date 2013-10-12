@@ -1,0 +1,21 @@
+
+<script type="text/template" id="survey-list-layout-template">
+<section>
+    <span class="label label-big"><%= t 'Surveys' %></span>
+    <div id="survey-region-div"></div>
+    <div id="survey-control-div"></div>
+</section>
+</script>
+
+<script type="text/template" id="survey-template">
+    <a href="#survey-tab" data-toggle="tab" class="model-select-button">
+        {{= name}}
+        <button class="model-delete-button btn btn-mini pull-right"><i class="icon-trash"></i></button>
+    </a>
+</script>
+
+<script type="text/template" id="survey-control-template">
+    <button class="add-model-button btn-mini btn-primary pull-left clearfix">
+        <%= t 'add survey' %>
+    </button>
+</script>

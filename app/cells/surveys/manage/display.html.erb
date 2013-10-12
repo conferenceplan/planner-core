@@ -1,13 +1,26 @@
-<h1>
-  Surveys::Manage#display
-</h1>
 
-<p>
-  Find me in app/cells/surveys/manage/display.html.erb
-</p>
 <%= render_cell "surveys/manage", :javascript %>
 
 <%= render_cell "surveys/survey_list", :javascript,
-    :caption => "Surveys",
+    :caption => "Surveys"
     # :selectNotifyMethod => "RoomApp.RoomManagement.selectRoom"
     %>
+    
+<%= render_cell "surveys/group_list", :javascript,
+    :caption => "Groups"
+    # :selectNotifyMethod => "RoomApp.RoomManagement.selectRoom"
+    %>
+
+<%= render_cell "surveys/survey_list", :templates %>
+<%= render_cell "surveys/group_list", :templates %>
+
+<div class="row-fluid">
+    <div class="span2" style="height : 370px; overflow : auto;">
+        <%= render_cell "surveys/survey_list", :display %>
+    </div>
+    <div class="span2" style="height : 370px; overflow : auto;">
+        <%= render_cell "surveys/group_list", :display %>
+    </div>
+    <div class="span8" >
+    </div>
+</div>
