@@ -54,30 +54,19 @@ var TabUtils = (function(){
         },
         
         close: function (e) {
-            
-            // console.debug(this.form.$el);
-            console.debug(CKEDITOR.instances);
-            
-            /***/
             this.form.$el.find('textarea').each(function() { // TODO - we need the correct seletor
-                // alert($(this)[0].id);
                 try {
-                console.debug($(this)[0].id);
                     if(CKEDITOR.instances[$(this)[0].id] != null) {
                         CKEDITOR.instances[$(this)[0].id].destroy(true);
                     }
-            console.debug(CKEDITOR.instances);
                 } catch(e){
                     console.error(e);
                 }
             });
-/***/
             
-            // console.debug("close");
-                // if (e.type != "hide") this.$el.modal("hide");
-            // this.remove();
-            // this.unbind();
-            // this.views = [];  
+            this.remove();
+            this.unbind();
+            this.views = [];  
         },
         
         // over-ride this for the body of the form        
