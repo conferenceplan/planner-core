@@ -7,8 +7,6 @@ GIT
 
 GEM
   remote: https://rubygems.org/
-  remote: http://rubygems.org/
-  remote: http://gemcutter.org/
   specs:
     actionmailer (3.2.14)
       actionpack (= 3.2.14)
