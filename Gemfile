@@ -1,6 +1,4 @@
 source "https://rubygems.org"
-source 'http://rubygems.org'
-source 'http://gemcutter.org'
 
 gem 'actionmailer' 
 gem 'activerecord' 
