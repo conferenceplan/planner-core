@@ -11,7 +11,6 @@ gem 'bluecloth'
 gem 'bootstrap-sass', '~> 2.3.2.2'
 gem 'bootswatch-rails'
 gem 'cells'
-#gem 'cells-capture', require: 'cells_capture'
 gem "declarative_authorization" 
 gem "daemons"
 gem 'delayed_job' 
@@ -40,8 +39,6 @@ gem 'routing-filter'
 gem 'capistrano', '2.15.5', require: false, group: :development
 gem 'rvm-capistrano', '1.5.0', require: false, group: :development
 gem 'capistrano-puma', '0.0.1', require: false, group: :development
-# gem "rubysl-resolv", "~> 2.0", require: false, group: :production
-# gem "rubysl-singleton", "~> 2.0"
 
 #
 # Needed for installs
@@ -49,8 +46,6 @@ gem 'capistrano-puma', '0.0.1', require: false, group: :development
 gem "rack", "1.4.5"
 gem 'rake' #, '0.8.7'
 gem 'therubyracer', :platforms => :ruby
-# gem "rubysl", "~> 2.0", :platforms => :ruby
-# gem "rubysl-abbrev", "~> 2.0.2", :platforms => :ruby
 gem 'puma', :platforms => :ruby
 #gem 'capistrano-puma', require: false
 
