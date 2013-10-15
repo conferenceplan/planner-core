@@ -52,7 +52,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
             collectionType : SurveyCollection,
             collection_attributes : { "class" : "nav nav-tabs nav-stacked" },
             collection_tagName : 'ul',
-            view_attributes : { "class" : "YYY" },
+            // view_attributes : { "class" : "YYY" },
             url : "/surveys/list.json",
             template : "#survey-template",
             view_refresh_event : "survey:refresh",
@@ -70,7 +70,6 @@ SurveyApp.SurveyManagement = (function(Backbone){
 
     return {
         init : function() {
-            // Get the list of venues and display them
             showSurveys();
         },
         
@@ -78,7 +77,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
         },
         
         selectSurvey : function(id) {
-            <%= @selectNotifyMethod %>(id);
+            selectSurvey(id);
         },
     }
 

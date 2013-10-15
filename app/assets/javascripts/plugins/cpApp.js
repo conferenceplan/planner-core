@@ -40,7 +40,7 @@ var TabUtils = (function(){
         },
         
         submit : function(e) {
-            console.debug("submit");
+            // console.debug("submit");
             if (e && e.type == "submit") {
                 e.preventDefault();
                 e.stopPropagation();
@@ -91,7 +91,7 @@ var TabUtils = (function(){
 
         // over-ride for the actual data submission        
         submitData : function() {
-            console.debug("SUBMIT");
+            // console.debug("SUBMIT");
             // gather the data and update the underlying model etc.
             var errors = this.form.commit(); // To save the values from the form back into the model
             

@@ -4,24 +4,23 @@ PlannerRc1::Application.routes.draw do
 
   namespace :pages do
     resources :home_dash
+    
     match "participants_dash/:cellname" => "participants_dash#index"
-    # resources :participants_dash # TODO - map back to the default participant dash or need a default can not find
     match "items_dash/:cellname" => "items_dash#index"
     match "schedule_dash/:cellname" => "schedule_dash#index"
     match "venues_dash/:cellname" => "venues_dash#index"
     match "surveys_dash/:cellname" => "surveys_dash#index"
-    # resources :items_dash
+    
     resources :logistics_dash
     resources :admin_dash
     resources :publications_dash
     resources :reports_dash
     resources :mailings_dash
-    resources :surveys_dash
-    # resources :venues_dash
+    # resources :items_dash
+    # resources :surveys_dash
   end
   
-  # Default routes 
-  # root :to => 'user_sessions#new'
+  # Default route 
   root :to => 'pages/home_dash#index'
   
   # The top level menu - TODO - change in redesign
@@ -56,10 +55,8 @@ PlannerRc1::Application.routes.draw do
   match 'participants/getList',:controller => 'people', :action => 'getList', :method => 'post'
   match 'participants/count', :controller => 'people', :action => 'count', :method => 'get'
 # 
-  # resources :people, :as => "participants" do
   match 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
   match 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'
-  # resources :participants, :controller => "people" do
   resources :people, :path => "participants" do
     resources :addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items
     resources :registrationDetails do
@@ -70,9 +67,6 @@ PlannerRc1::Application.routes.draw do
       get 'list'
       post 'list'
     end
-    # member do # TODO - check the member methods that we need to make sure are in place
-      # get 'show'
-    # end
   end
 
   match 'formats/list', :controller => 'formats', :action => 'list'
@@ -108,6 +102,7 @@ PlannerRc1::Application.routes.draw do
       get 'edit'
     end
   end
+  
    #, :member => {:remove => :get, :add => :post, :index => :get, :edit => :get} #,
       # :except => [:destroy, :new, :create]
 # 
@@ -209,8 +204,6 @@ PlannerRc1::Application.routes.draw do
   match 'pending_import_people/doimport', :controller => 'pending_import_people', :action => 'doimport', :method => 'post'   
   resources :pending_import_people
 
-  resources :item_planner, :only => :index # TODO - check
-
   match 'program_planner/assignments', :controller => 'program_planner', :action => 'assignments', :method => 'get'
   match 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
   match 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :method => 'get'
@@ -266,6 +259,7 @@ PlannerRc1::Application.routes.draw do
   resources :person_mailing_assignments, :controller => 'admin/person_mailing_assignments'
   match :mailing_configs, :controller => 'admin/mailing_configs'
 
+  # TODO
   match 'surveys/list', :controller => 'surveys', :action => 'list'
   resources :surveys do
     resources :response, :controller => 'surveys/response'
@@ -296,13 +290,7 @@ PlannerRc1::Application.routes.draw do
   resources :program
 
   match '/form/:page', :controller => 'surveys/response', :action => 'renderalias'
-  # #map.resources :surveys, :has_many => :survey_groups
-  # map.resources :surveys do |survey|
-    # survey.resources :survey_groups, :controller => 'surveys/survey_groups' do |group|
-      # group.resources :survey_questions, :controller => 'surveys/survey_groups/survey_questions'
-    # end
-    # survey.resources :response, :controller => 'surveys/response'
-  # end
+
 #   
 # 
 #   

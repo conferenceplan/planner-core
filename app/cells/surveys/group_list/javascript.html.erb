@@ -1,7 +1,96 @@
-<h1>
-  Surveys::GroupList#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/surveys/group_list/javascript.html.erb
-</p>
+SurveyGroupApp = new Backbone.Marionette.Application();
+
+SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
+
+    SurveyGroup = Backbone.Model.extend({
+        schema : {
+            name            : { type : 'Text', title : '<%= t "name" %>' },
+            // TODO - nested format object
+        },
+        urlRoot : '/surveys/survey_groups' // should be /surveys/[id]/survey_groups.json - TODO
+    });
+
+    SurveyGroupCollection = Backbone.Collection.extend({
+        model : SurveyGroup
+    });
+    
+    SurveyGroupLayout = Backbone.Marionette.Layout.extend({ // TODO
+        template: "#survey-group-list-layout-template",
+        
+        regions : {
+            surveyGroupControlRegion: "#survey-group-control-div",
+            surveyGroupRegion: "#survey-group-region-div",
+        },
+    });
+    
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' ); //????
+    };
+
+    function showGroups(id) {
+        surveyGroupLayout = new SurveyGroupLayout();
+        surveyGroupLayout.render();
+        $('#survey-group-region-view').html(surveyGroupLayout.el);
+        
+        TabUtils.createTabControl({
+            template : "#survey-group-control-template",
+            modelType : SurveyGroup, // TODO - fix URL
+            view_refresh_event : "survey-group:refresh",
+            modal_create_title : '<%= t "Create Group" %>',
+            region : surveyGroupLayout.surveyGroupControlRegion,
+            // id : id,
+            // id_name : 'survey_id',
+            modelURL : "/surveys/" + id + "/survey_groups" // TODO - check
+        });
+        
+        tabLists.push( TabUtils.createTabListContent({ // TODO - fix base URL for model?????
+            collectionType : SurveyGroupCollection,
+            collection_attributes : { "class" : "nav nav-tabs nav-stacked" },
+            collection_tagName : 'ul',
+            // view_attributes : { "class" : "YYY" },
+            url : "/surveys/" + id + "/survey_groups.json",
+            template : "#survey-group-template",
+            view_refresh_event : "survey-group:refresh",
+            region : surveyGroupLayout.surveyGroupRegion,
+            newTitle : "Create Group",
+            editTitle : "Edit Group",
+            tagName : 'li',
+            selectFn : selectGroup,
+            modelURL : "/surveys/" + id + "/survey_groups" // TODO - check
+        }) );
+    };
+    
+    function selectGroup(id) {
+        <%= @selectNotifyMethod %>(id);
+    };
+    
+    return {
+        init : function() {
+        },
+        
+        showGroups : function(id) {
+            // alert("Groups for " + id);
+            showGroups(id);
+        },
+        
+        clearDetails : function() {
+            clearDetails();
+        },
+        
+        selectGroup : function(id) {
+            selectGroup(id);
+        },
+    }
+
+})(Backbone);
+
+jQuery(document).ready(function() {
+    SurveyGroupApp.start();
+    SurveyGroupApp.SurveyGroupManagement.init();
+});
+
+</script>

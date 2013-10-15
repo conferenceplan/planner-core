@@ -57,8 +57,12 @@ var TabUtils = (function(){
         
         initialize : function() {
             this.listenTo(this.model, 'change', this.render);
-
+            
             // syncCallback            
+            if (this.options.url) {
+                this.model.urlRoot = this.options.url;
+            };
+
             this.model.on("sync", this.options.syncCallback ); // when the modal does the update and second after the update to the server
             
         },
@@ -144,6 +148,9 @@ var TabUtils = (function(){
             if (this.options.id) {
                 mdl.set(this.options.id_name, this.options.id);
             }
+            if (this.options.modelURL) {
+                mdl.url = this.options.modelURL;
+            }
             
             var refreshEvent = this.options.view_refresh_event;
             var callback = this.options.view_callback;
@@ -226,7 +233,8 @@ var TabUtils = (function(){
                 view_refresh_event : options.view_refresh_event,
                 modal_create_title : options.modal_create_title,
                 modelType : options.modelType,
-                view_callback : options.callback
+                view_callback : options.callback,
+                modelURL : options.modelURL
             });
             control.render();
             $(options.place).html(control.el);
@@ -238,7 +246,8 @@ var TabUtils = (function(){
                 view_refresh_event : options.view_refresh_event,
                 modal_create_title : options.modal_create_title,
                 modelType : options.modelType,
-                view_callback : options.callback
+                view_callback : options.callback,
+                modelURL : options.modelURL
             });
             options.region.show(control);
         }
@@ -332,6 +341,7 @@ var TabUtils = (function(){
         return collection;
     };
     
+    // TODO - need a way to over-ride URL for model for collection...
     tabModule.createTabListContent = function createTabListContent(options) {
         if (!options.collection) {
             collection = new options.collectionType();
@@ -351,7 +361,9 @@ var TabUtils = (function(){
                             tagremove : options.tagremove,
                             syncCallback : options.updateCallback,
                             tagName : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
-                            selectFn : options.selectFn
+                            selectFn : options.selectFn,
+                            url : options.modelURL
+                            // TODO
                         },
                     });
                     var collectionView = new viewType({
@@ -380,7 +392,9 @@ var TabUtils = (function(){
                         tagremove : options.tagremove,
                         syncCallback : options.updateCallback,
                         tagName : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
-                        selectFn : options.selectFn
+                        selectFn : options.selectFn,
+                        url : options.modelURL
+                            // TODO
                     },
                 });
                 var collectionView = new viewType({

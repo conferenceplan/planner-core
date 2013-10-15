@@ -1,7 +1,20 @@
-<h1>
-  Surveys::GroupList#templates
-</h1>
+<script type="text/template" id="survey-group-list-layout-template">
+<section>
+    <span class="label label-big"><%= t 'Groups' %></span>
+    <div id="survey-group-region-div"></div>
+    <div id="survey-group-control-div"></div>
+</section>
+</script>
 
-<p>
-  Find me in app/cells/surveys/group_list/templates.html.erb
-</p>
+<script type="text/template" id="survey-group-template">
+    <a href="#survey-group-tab" data-toggle="tab" class="model-select-button">
+        {{= name}}
+        <button class="model-delete-button btn btn-mini pull-right"><i class="icon-trash"></i></button>
+    </a>
+</script>
+
+<script type="text/template" id="survey-group-control-template">
+    <button class="add-model-button btn-mini btn-primary pull-left clearfix">
+        <%= t 'add group' %>
+    </button>
+</script>
