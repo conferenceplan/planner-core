@@ -57,10 +57,14 @@ SurveyApp.SurveyManagement = (function(Backbone){
             collection_tagName      : 'table',
             tagName                 : 'tr',
             view_refresh_event      : "survey:refresh",
+            drillDownFn             : drillDownSurvey,
             selectFn                : selectSurvey,
-            
             itemArea                : "#survey-edit-area" // TODO - we will also want the item template???
         }) );
+    };
+    
+    function drillDownSurvey(id) {
+        <%= @drillDownNotifyMethod %>(id);
     };
     
     function selectSurvey(id) {
@@ -76,7 +80,9 @@ SurveyApp.SurveyManagement = (function(Backbone){
         },
         
         selectSurvey : function(id) {
-            selectSurvey(id);
+            SurveyGroupApp.SurveyGroupManagement.clearDetails();
+            SurveyQuestionApp.SurveyQuestionManagement.clearDetails();
+            // And now put the data in the area below
         },
     }
 

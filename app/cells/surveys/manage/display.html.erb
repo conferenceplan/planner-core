@@ -3,12 +3,14 @@
 
 <%= render_cell "surveys/survey_list", :javascript,
     :caption => "Surveys",
-    :selectNotifyMethod => "SurveyGroupApp.SurveyGroupManagement.showGroups"
+    :drillDownNotifyMethod => "SurveyGroupApp.SurveyGroupManagement.showGroups",
+    :selectNotifyMethod => "SurveyApp.SurveyManagement.selectSurvey"
     %>
     
 <%= render_cell "surveys/group_list", :javascript,
     :caption => "Groups",
-    :selectNotifyMethod => "SurveyQuestionApp.SurveyQuestionManagement.showQuestions"
+    :drillDownNotifyMethod => "SurveyQuestionApp.SurveyQuestionManagement.showQuestions",
+    :selectNotifyMethod => "SurveyGroupApp.SurveyGroupManagement.selectGroup"
     %>
 
 <%= render_cell "surveys/question_list", :javascript,

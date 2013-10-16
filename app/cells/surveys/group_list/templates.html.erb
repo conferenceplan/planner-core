@@ -1,16 +1,22 @@
 <script type="text/template" id="survey-group-list-layout-template">
 <section>
-    <span class="label label-big"><%= t 'Groups' %></span>
-    <div id="survey-group-region-div"></div>
-    <div id="survey-group-control-div"></div>
+    <div class="row-fluid">
+        <div class="span1"><span class="label label-big"><%= t 'Groups' %></span></div><div id="survey-group-control-div"></div>
+    </div>
+    <div class="row-fluid">
+        <div id="survey-group-region-div"></div>
+    </div>
 </section>
 </script>
 
 <script type="text/template" id="survey-group-template">
-    <td>
+    <td class='span10'>
     <a href="#survey-group-tab" data-toggle="tab" class="model-select-button">
         {{= name}}
     </a>
+    </td>
+    <td>
+        <button class="model-drill-down-button btn btn-mini"><i class="icon-arrow-right"></i></button>
     </td>
     <td>
         <button class="model-edit-button btn btn-mini"><i class="icon-pencil"></i></button>
@@ -21,7 +27,7 @@
 </script>
 
 <script type="text/template" id="survey-group-control-template">
-    <button class="add-model-button btn-mini btn-primary pull-left clearfix">
+    <button class="add-model-button btn-mini btn-primary pull-right">
         <%= t 'add group' %>
     </button>
 </script>

@@ -6,6 +6,7 @@ class Surveys::GroupListCell < Cell::Rails
 
   def javascript(args)
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
+    @drillDownNotifyMethod = args.has_key?(:drillDownNotifyMethod) ? args[:drillDownNotifyMethod] : "function() {}"
     
     render
   end

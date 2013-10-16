@@ -7,7 +7,10 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
     SurveyGroup = Backbone.Model.extend({
         schema : {
             name            : { type : 'Text', title : '<%= t "name" %>' },
-            // TODO - nested format object
+            description            : { type : 'Text', title : '<%= t "description" %>' },
+            sort_order            : { type : 'Number', title : '<%= t "sort_order" %>' },
+            // altname            : { type : 'Text', title : '<%= t "altname" %>' },
+            // TODO - nested format object ?????
         },
     });
 
@@ -56,6 +59,9 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
             collection_tagName      : 'table',
             tagName                 : 'tr',
             view_refresh_event      : "survey-group:refresh",
+            drillDownFn             : function(gid) {
+                                            drillDownGroup(id ,gid);
+                                        },
             selectFn                : function(gid) {
                                             selectGroup(id ,gid);
                                         },
@@ -64,7 +70,11 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
         }) );
     };
     
-    function selectGroup(sid, gid) { // should be sid and gid
+    function drillDownGroup(sid, gid) { // should be sid and gid
+        <%= @drillDownNotifyMethod %>(sid, gid);
+    };
+    
+    function selectGroup(sid, gid) {
         <%= @selectNotifyMethod %>(sid, gid);
     };
     
@@ -74,6 +84,7 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
         
         showGroups : function(id) {
             // alert("Groups for " + id);
+            SurveyQuestionApp.SurveyQuestionManagement.clearDetails();
             showGroups(id);
         },
         
@@ -81,8 +92,9 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
             clearDetails();
         },
         
-        selectGroup : function(id) {
-            selectGroup(id);
+        selectGroup : function(sid, gid) {
+            // selectGroup(id);
+            SurveyQuestionApp.SurveyQuestionManagement.clearDetails();
         },
     }
 

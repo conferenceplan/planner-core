@@ -6,11 +6,19 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
 
     SurveyQuestion = Backbone.Model.extend({
         schema : {
-            question            : { type : 'Text', title : '<%= t "name" %>' },
+            question            : { type : 'Text', title : '<%= t "question" %>' },
+            title            : { type : 'Text', title : '<%= t "title" %>' },
+            sort_order            : { type : 'Number', title : '<%= t "sort_order" %>' },
+            tags_label            : { type : 'Text', title : '<%= t "tags_label" %>' },
+            // isbio            : { type : 'Boolean', title : '<%= t "isbio" %>' },
+            // mandatory            : { type : 'Boolean', title : '<%= t "mandatory" %>' },
+            question_type            : { type : 'Text', title : '<%= t "question_type" %>' },
+            answer_type            : { type : 'Text', title : '<%= t "answer_type" %>' },
             // TODO - nested format object
+            // TODO - nested answers object
         },
     });
-
+    
     SurveyQuestionCollection = Backbone.Collection.extend({
         model : SurveyQuestion
     });

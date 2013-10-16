@@ -1,13 +1,16 @@
 <script type="text/template" id="survey-question-list-layout-template">
 <section>
-    <span class="label label-big"><%= t 'Questions' %></span>
-    <div id="survey-question-region-div"></div>
-    <div id="survey-question-control-div"></div>
+    <div class="row-fluid">
+        <div class="span1"><span class="label label-big"><%= t 'Questions' %></span></div><div id="survey-question-control-div"></div>
+    </div>
+    <div class="row-fluid">
+        <div id="survey-question-region-div"></div>
+    </div>
 </section>
 </script>
 
 <script type="text/template" id="survey-question-template">
-    <td>
+    <td class='span10'>
     <a href="#survey-question-tab" data-toggle="tab" class="model-select-button">
         {{= question }}
     </a>
@@ -21,7 +24,7 @@
 </script>
 
 <script type="text/template" id="survey-question-control-template">
-    <button class="add-model-button btn-mini btn-primary pull-left clearfix">
+    <button class="add-model-button btn-mini btn-primary pull-right">
         <%= t 'add question' %>
     </button>
 </script>
