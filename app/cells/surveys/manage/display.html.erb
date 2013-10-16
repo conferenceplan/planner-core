@@ -7,20 +7,32 @@
     %>
     
 <%= render_cell "surveys/group_list", :javascript,
-    :caption => "Groups"
+    :caption => "Groups",
+    :selectNotifyMethod => "SurveyQuestionApp.SurveyQuestionManagement.showQuestions"
+    %>
+
+<%= render_cell "surveys/question_list", :javascript,
+    :caption => "Questions"
     # :selectNotifyMethod => "RoomApp.RoomManagement.selectRoom"
     %>
 
 <%= render_cell "surveys/survey_list", :templates %>
 <%= render_cell "surveys/group_list", :templates %>
+<%= render_cell "surveys/question_list", :templates %>
 
 <div class="row-fluid">
-    <div class="span2" style="height : 370px; overflow : auto;">
+    <div class="span4" style="height : 370px; overflow : auto;">
         <%= render_cell "surveys/survey_list", :display %>
     </div>
-    <div class="span2" style="height : 370px; overflow : auto;">
+    <div class="span4" style="height : 370px; overflow : auto;">
         <%= render_cell "surveys/group_list", :display %>
     </div>
-    <div class="span8" >
+    <div class="span4" style="height : 370px; overflow : auto;">
+        <%= render_cell "surveys/question_list", :display %>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span8 well" >
+        <div id="survey-edit-area"></div>
     </div>
 </div>

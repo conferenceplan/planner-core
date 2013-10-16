@@ -4,9 +4,9 @@
 var TabUtils = (function(){
     var tabModule = {};
 
-    var eventAggregator = new Backbone.Wreqr.EventAggregator();
+    var eventAggregator = AppUtils.eventAggregator;
 
-    TagModal = GenericModal.extend({
+    TagModal = AppUtils.GenericModal.extend({
         renderBody : function() {
             this.form = new Backbone.Form({
                 schema: {
@@ -97,7 +97,7 @@ var TabUtils = (function(){
         },
         editModel : function() {
             // Put up a modal dialog to edit the reg details
-            mdl = new ModelModal({
+            mdl = new AppUtils.ModelModal({
                 model : this.model,
                 title : this.options.editTitle
             });
@@ -106,7 +106,7 @@ var TabUtils = (function(){
         
         newModel : function() {
             this.model.set(this.options.id_name, this.options.id);
-            mdl = new ModelModal({
+            mdl = new AppUtils.ModelModal({
                 model : this.model,
                 title : this.options.newTitle
             });
@@ -155,7 +155,7 @@ var TabUtils = (function(){
             var refreshEvent = this.options.view_refresh_event;
             var callback = this.options.view_callback;
 
-            var modal = new ModelModal({
+            var modal = new AppUtils.ModelModal({
                 model : mdl,
                 title : this.options.modal_create_title,
                 

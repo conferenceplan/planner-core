@@ -4,7 +4,7 @@ class Surveys::QuestionListCell < Cell::Rails
     render
   end
 
-  def javascript
+  def javascript(args)
     render
   end
 

@@ -48,19 +48,18 @@ SurveyApp.SurveyManagement = (function(Backbone){
             region : surveyLayout.surveyControlRegion,
         });
         
-        tabLists.push( TabUtils.createTabListContent({
-            collectionType : SurveyCollection,
-            collection_attributes : { "class" : "nav nav-tabs nav-stacked" },
-            collection_tagName : 'ul',
-            // view_attributes : { "class" : "YYY" },
+        tabLists.push( AppUtils.createCollectionView({
             url : "/surveys/list.json",
-            template : "#survey-template",
-            view_refresh_event : "survey:refresh",
-            region : surveyLayout.surveyRegion,
-            newTitle : "Create Survey",
-            editTitle : "Edit Survey",
-            tagName : 'li',
-            selectFn : selectSurvey
+            collectionType          : SurveyCollection,
+            region                  : surveyLayout.surveyRegion,
+            template                : "#survey-template",
+            collection_attributes   : { "class" : "table table-striped table-condensed" },
+            collection_tagName      : 'table',
+            tagName                 : 'tr',
+            view_refresh_event      : "survey:refresh",
+            selectFn                : selectSurvey,
+            
+            itemArea                : "#survey-edit-area" // TODO - we will also want the item template???
         }) );
     };
     

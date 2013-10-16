@@ -1,7 +1,94 @@
-<h1>
-  Surveys::QuestionList#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/surveys/question_list/javascript.html.erb
-</p>
+SurveyQuestionApp = new Backbone.Marionette.Application();
+
+SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
+
+    SurveyQuestion = Backbone.Model.extend({
+        schema : {
+            question            : { type : 'Text', title : '<%= t "name" %>' },
+            // TODO - nested format object
+        },
+    });
+
+    SurveyQuestionCollection = Backbone.Collection.extend({
+        model : SurveyQuestion
+    });
+    
+    SurveyQuestionLayout = Backbone.Marionette.Layout.extend({
+        template: "#survey-question-list-layout-template",
+        
+        regions : {
+            surveyQuestionControlRegion: "#survey-question-control-div",
+            surveyQuestionRegion: "#survey-question-region-div",
+        },
+    });
+    
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' ); //????
+    };
+
+    function showQuestions(sid, gid) {
+        surveyQuestionLayout = new SurveyQuestionLayout();
+        surveyQuestionLayout.render();
+        $('#survey-question-region-view').html(surveyQuestionLayout.el);
+        
+        TabUtils.createTabControl({
+            template : "#survey-question-control-template",
+            modelType : SurveyQuestion, // TODO - fix URL
+            view_refresh_event : "survey-question:refresh",
+            modal_create_title : '<%= t "Create Question" %>',
+            region : surveyQuestionLayout.surveyQuestionControlRegion,
+            // id : id,
+            // id_name : 'survey_id',
+            modelURL : "/surveys/" + sid + "/survey_groups/" + gid + "/survey_questions" // TODO - check
+        });
+        
+        // /surveys/2/survey_groups/2/survey_questions.json
+        tabLists.push( AppUtils.createCollectionView({
+            url                     : "/surveys/" + sid + "/survey_groups/" + gid + "/survey_questions.json",
+            modelURL                : "/surveys/" + sid + "/survey_groups/" + gid + "/survey_questions",
+            collectionType          : SurveyQuestionCollection,
+            region                  : surveyQuestionLayout.surveyQuestionRegion,
+            template                : "#survey-question-template",
+            collection_attributes   : { "class" : "table table-striped table-condensed" },
+            collection_tagName      : 'table',
+            tagName                 : 'tr',
+            view_refresh_event      : "survey-question:refresh",
+            selectFn                : selectQuestion,
+            
+            itemArea                : "#survey-edit-area" // TODO - we will also want the item template???
+        }) );
+    };
+    
+    function selectQuestion(id) {
+        <%= @selectNotifyMethod %>(id);
+    };
+    
+    return {
+        init : function() {
+        },
+        
+        showQuestions : function(sid, gid) { // TODO - need the group and survey id's
+            showQuestions(sid, gid);
+        },
+        
+        clearDetails : function() {
+            clearDetails();
+        },
+        
+        selectQuestion : function(id) {
+            selectQuestion(id);
+        },
+    }
+
+})(Backbone);
+
+jQuery(document).ready(function() {
+    SurveyQuestionApp.start();
+    SurveyQuestionApp.SurveyQuestionManagement.init();
+});
+
+</script>

@@ -21,6 +21,8 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
                 { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
             ]
         });
+       
+        this.setValue(this.value);
 
         return this;
     },

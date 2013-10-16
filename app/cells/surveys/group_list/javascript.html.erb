@@ -9,14 +9,13 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
             name            : { type : 'Text', title : '<%= t "name" %>' },
             // TODO - nested format object
         },
-        urlRoot : '/surveys/survey_groups' // should be /surveys/[id]/survey_groups.json - TODO
     });
 
     SurveyGroupCollection = Backbone.Collection.extend({
         model : SurveyGroup
     });
     
-    SurveyGroupLayout = Backbone.Marionette.Layout.extend({ // TODO
+    SurveyGroupLayout = Backbone.Marionette.Layout.extend({
         template: "#survey-group-list-layout-template",
         
         regions : {
@@ -47,25 +46,26 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
             modelURL : "/surveys/" + id + "/survey_groups" // TODO - check
         });
         
-        tabLists.push( TabUtils.createTabListContent({ // TODO - fix base URL for model?????
-            collectionType : SurveyGroupCollection,
-            collection_attributes : { "class" : "nav nav-tabs nav-stacked" },
-            collection_tagName : 'ul',
-            // view_attributes : { "class" : "YYY" },
-            url : "/surveys/" + id + "/survey_groups.json",
-            template : "#survey-group-template",
-            view_refresh_event : "survey-group:refresh",
-            region : surveyGroupLayout.surveyGroupRegion,
-            newTitle : "Create Group",
-            editTitle : "Edit Group",
-            tagName : 'li',
-            selectFn : selectGroup,
-            modelURL : "/surveys/" + id + "/survey_groups" // TODO - check
+        tabLists.push( AppUtils.createCollectionView({
+            url                     : "/surveys/" + id + "/survey_groups.json",
+            modelURL                : "/surveys/" + id + "/survey_groups",
+            collectionType          : SurveyGroupCollection,
+            region                  : surveyGroupLayout.surveyGroupRegion,
+            template                : "#survey-group-template",
+            collection_attributes   : { "class" : "table table-striped table-condensed" },
+            collection_tagName      : 'table',
+            tagName                 : 'tr',
+            view_refresh_event      : "survey-group:refresh",
+            selectFn                : function(gid) {
+                                            selectGroup(id ,gid);
+                                        },
+            
+            itemArea                : "#survey-edit-area" // TODO - we will also want the item template???
         }) );
     };
     
-    function selectGroup(id) {
-        <%= @selectNotifyMethod %>(id);
+    function selectGroup(sid, gid) { // should be sid and gid
+        <%= @selectNotifyMethod %>(sid, gid);
     };
     
     return {

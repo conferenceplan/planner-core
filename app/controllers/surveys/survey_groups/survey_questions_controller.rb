@@ -1,10 +1,12 @@
+#
+#
+#
 class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
+  
   def index
-    @survey = Survey.find(params[:survey_id])
-    @group = @survey.survey_groups.find params[:survey_group_id]
-    @questions = @group.survey_questions
-
-    render :layout => 'plain'
+    survey = Survey.find(params[:survey_id])
+    group = survey.survey_groups.find params[:survey_group_id]
+    @questions = group.survey_questions
   end
 
   def show
