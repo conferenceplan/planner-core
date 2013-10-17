@@ -41,15 +41,15 @@ SurveyApp.SurveyManagement = (function(Backbone){
         $('#survey-region-view').html(surveyLayout.el);
         
         TabUtils.createTabControl({
-            template : "#survey-control-template",
-            modelType : Survey,
-            view_refresh_event : "survey:refresh",
-            modal_create_title : '<%= t "Create Survey" %>',
-            region : surveyLayout.surveyControlRegion,
+            template                : "#survey-control-template",
+            modelType               : Survey,
+            view_refresh_event      : "survey:refresh",
+            modal_create_title      : '<%= t "Create Survey" %>',
+            region                  : surveyLayout.surveyControlRegion,
         });
         
         tabLists.push( AppUtils.createCollectionView({
-            url : "/surveys/list.json",
+            url                     : "/surveys/list.json",
             collectionType          : SurveyCollection,
             region                  : surveyLayout.surveyRegion,
             template                : "#survey-template",
@@ -59,6 +59,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
             view_refresh_event      : "survey:refresh",
             drillDownFn             : drillDownSurvey,
             selectFn                : selectSurvey,
+            readTemplate            : '#survey-data-template',
             itemArea                : "#survey-edit-area" // TODO - we will also want the item template???
         }) );
     };
@@ -71,6 +72,9 @@ SurveyApp.SurveyManagement = (function(Backbone){
         <%= @selectNotifyMethod %>(id);
     };
 
+    /*
+     * 
+     */
     return {
         init : function() {
             showSurveys();
@@ -83,14 +87,19 @@ SurveyApp.SurveyManagement = (function(Backbone){
             SurveyGroupApp.SurveyGroupManagement.clearDetails();
             SurveyQuestionApp.SurveyQuestionManagement.clearDetails();
             // And now put the data in the area below
+            // alert("sss");
         },
     }
 
 })(Backbone);
 
+/*
+ * 
+ */
 jQuery(document).ready(function() {
     SurveyApp.start();
     SurveyApp.SurveyManagement.init();
 });
 
 </script>
+

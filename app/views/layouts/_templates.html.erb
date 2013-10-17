@@ -28,16 +28,36 @@
 
 <script type="text/template" id="item-edit-template">
 <form>
-    <div class="modal-header">
-        <button class="btn btn-primary">
+    <div class="row-fluid">
+        <div class="span12">
+        <button class="btn btn-primary model-edit-button">
+            <%= t "Edit" %>
+        </button>
+        <button class="btn btn-primary model-cancel-button">
+            <%= t "Cancel" %>
+        </button>
+        <button class="btn btn-primary model-submit-button">
             <%= t "Save Changes" %>
         </button>
+        </div>
     </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer">
-        <button class="btn btn-primary">
+    <div class="row-fluid">
+        <div class="span12">
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+        <button class="btn btn-primary model-edit-button">
+            <%= t "Edit" %>
+        </button>
+        <button class="btn btn-primary model-cancel-button">
+            <%= t "Cancel" %>
+        </button>
+        <button class="btn btn-primary model-submit-button">
             <%= t "Save Changes" %>
         </button>
+        </div>
     </div>
 </form>
 </script>

@@ -56,7 +56,7 @@ var AppUtils = (function(){
         },
         
         close: function (e) {
-            this.form.$el.find('textarea').each(function() { // TODO - we need the correct seletor
+            this.form.$el.find('textarea').each(function() { // TODO - CHECK
                 try {
                     if(CKEDITOR.instances[$(this)[0].id] != null) {
                         CKEDITOR.instances[$(this)[0].id].destroy(true);
@@ -118,25 +118,41 @@ var AppUtils = (function(){
         }
     });
     
-    // TODO - we need a new View in which we put the selected item (and it's edit info)
-    ItemDetailView = Marionette.ItemView.extend({
+    /*
+     * 
+     */
+    ItemEditView = Marionette.ItemView.extend({
         events : {
-            // "click .model-edit-button"   : "editModel", // flip to an edit view??? TODO
-            // "click .model-new-button"    : "newModel",
-            // "click .model-delete-button" : "deleteModal",
-            "submit"                     : "submit"
+            "click .model-edit-button"   : "editModel", // flip to an edit view ...
+            "click .model-cancel-button" : "cancelEdit", // flip to an edit view ...
+            "click .model-submit-button" : "submit"
+        },
+        
+        editModel : function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            // flip to the edit view
+            this.renderForm();
+        },
+        
+        cancelEdit : function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            // flip back to the read view
+            this.renderModel();
         },
         
         submit  : function(e) {
-            if (e && e.type == "submit") {
-                e.preventDefault();
-                e.stopPropagation();
-            };
-            // alert("Submitted");
+            e.preventDefault();
+            e.stopPropagation();
+
             var errors = this.submitData();
 
             // if (! errors ) {
             // }
+            
+            // flip back to the read view
+            this.renderModel();
         },
         
         submitData : function() {
@@ -159,7 +175,7 @@ var AppUtils = (function(){
                         alertMessage("Error saving the instance");
                     }
                 }); // save the model to the server
-            }
+            };
             
             return errors; // if there are any errors
         },
@@ -177,13 +193,36 @@ var AppUtils = (function(){
                 // title : this.options.title
             })));
             
-            // create the form
+            this.renderModel();
+        },
+        
+        renderModel : function() {
+            // display : none
+            this.$el.find('.model-cancel-button').addClass('hidden-button');
+            this.$el.find('.model-submit-button').addClass('hidden-button');
+            this.$el.find('.model-edit-button').removeClass('hidden-button');
+            
+            if (this.options.readTemplate) {
+                html = _.template($(this.options.readTemplate).html(), this.model.toJSON());
+                
+                // alert("we have a read template");
+                this.$el.find(".modal-body").html(html);
+            } else {
+                this.$el.find(".modal-body").html("");
+            };
+        },
+        
+        renderForm : function() {
+            this.$el.find('.model-cancel-button').removeClass('hidden-button');
+            this.$el.find('.model-submit-button').removeClass('hidden-button');
+            this.$el.find('.model-edit-button').addClass('hidden-button');
+            // display : none
             this.form = new Backbone.Form({
                     model: this.model
             }).render();
             
             // the render it in the area
-            this.$el.find(".modal-body").append(this.form.el);
+            this.$el.find(".modal-body").html(this.form.el);
         }
     });
     
@@ -217,6 +256,7 @@ var AppUtils = (function(){
                 this.$el.addClass('info');
                 this.options.selectFn(this.model.id);
             }
+            this.editModel();
         },
               
         drillDown : function(event) {
@@ -233,9 +273,9 @@ var AppUtils = (function(){
         },
         
         editModel : function() {
-            var v = new ItemDetailView({
-                model : this.model
-                // place : this.options.itemArea
+            var v = new ItemEditView({
+                model           : this.model,
+                readTemplate    : this.options.readTemplate
             });
             
             v.render();
@@ -250,10 +290,6 @@ var AppUtils = (function(){
                 }
             });
         },
-        
-        // onRender : function() {
-            // this.$el.addClass('XXXX');
-        // }
     });
 
     /*
@@ -276,8 +312,8 @@ var AppUtils = (function(){
      */
     function renderCollection(collection, options) {
         viewType = CollectionView.extend({
-                        attributes : options.collection_attributes,
-                        itemViewOptions : {
+                        attributes          : options.collection_attributes,
+                        itemViewOptions     : {
                             template        : options.template,
                             newTitle        : options.newTitle,
                             editTitle       : options.editTitle,
@@ -287,14 +323,15 @@ var AppUtils = (function(){
                             url             : options.modelURL,
                             selectFn        : options.selectFn,
                             drillDownFn     : options.drillDownFn,
-                            itemArea        : options.itemArea
+                            itemArea        : options.itemArea,
+                            readTemplate    : options.readTemplate
                         },
                     });
                     
         var collectionView = new viewType({
-                                    collection          : collection,
-                                    view_refresh_event  : options.view_refresh_event,
-                                    tagName             : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div' 
+                        collection          : collection,
+                        view_refresh_event  : options.view_refresh_event,
+                        tagName             : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div' 
                     });
 
         if (options.place) {

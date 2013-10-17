@@ -33,6 +33,9 @@
  *= require_self
  */
 
+.hidden-button {
+  display : none;
+}
 
 .rotate-text {
   -webkit-transform: rotate(-90deg);

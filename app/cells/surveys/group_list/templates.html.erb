@@ -19,9 +19,6 @@
         <button class="model-drill-down-button btn btn-mini"><i class="icon-arrow-right"></i></button>
     </td>
     <td>
-        <button class="model-edit-button btn btn-mini"><i class="icon-pencil"></i></button>
-    </td>
-    <td>
         <button class="model-delete-button btn btn-mini"><i class="icon-trash"></i></button>
     </td>
 </script>
@@ -30,4 +27,12 @@
     <button class="add-model-button btn-mini btn-primary pull-right">
         <%= t 'add group' %>
     </button>
+</script>
+
+<script type="text/template" id="group-data-template">
+    <dl class="dl-horizontal">
+        <dt><%= t "name" %></dt><dd>{{= name }}</dd>
+        <dt><%= t "description" %></dt><dd>{{= description }}</dd>
+        <dt><%= t "sort_order" %></dt><dd>{{= sort_order }}</dd>
+    </dl>
 </script>

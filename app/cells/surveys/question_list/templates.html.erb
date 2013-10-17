@@ -16,9 +16,6 @@
     </a>
     </td>
     <td>
-        <button class="model-edit-button btn btn-mini"><i class="icon-pencil"></i></button>
-    </td>
-    <td>
         <button class="model-delete-button btn btn-mini"><i class="icon-trash"></i></button>
     </td>
 </script>
@@ -27,4 +24,14 @@
     <button class="add-model-button btn-mini btn-primary pull-right">
         <%= t 'add question' %>
     </button>
+</script>
+
+<script type="text/template" id="question-data-template">
+    <dl class="dl-horizontal">
+        <dt><%= t "question" %></dt><dd>{{= question ? question : "&nbsp;" }}</dd> 
+        <dt><%= t "sort_order" %></dt><dd>{{= sort_order ? sort_order : "&nbsp;" }}</dd>
+        <dt><%= t "tags_label" %></dt><dd>{{= tags_label ? tags_label : "&nbsp;" }}</dd>
+        <dt><%= t "question_type" %></dt><dd>{{= question_type ? question_type : "&nbsp;" }}</dd>
+        <dt><%= t "answer_type" %></dt><dd>{{= answer_type ? answer_type : "&nbsp;" }}</dd>
+    </dl>
 </script>
