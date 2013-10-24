@@ -3,19 +3,42 @@
 SurveyQuestionApp = new Backbone.Marionette.Application();
 
 SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
+    
+    Backbone.Form.editors.List.Modal.ModalAdapter = Backbone.BootstrapModal;
 
-    SurveyQuestion = Backbone.Model.extend({
+    SurveyQuestion = Backbone.DeepModel.extend({
         schema : {
-            question            : { type : 'Text', title : '<%= t "question" %>' },
-            title            : { type : 'Text', title : '<%= t "title" %>' },
-            sort_order            : { type : 'Number', title : '<%= t "sort_order" %>' },
-            tags_label            : { type : 'Text', title : '<%= t "tags_label" %>' },
-            // isbio            : { type : 'Boolean', title : '<%= t "isbio" %>' },
-            // mandatory            : { type : 'Boolean', title : '<%= t "mandatory" %>' },
-            question_type            : { type : 'Text', title : '<%= t "question_type" %>' },
-            answer_type            : { type : 'Text', title : '<%= t "answer_type" %>' },
-            // TODO - nested format object
-            // TODO - nested answers object
+            question            : { type : 'Html', title : '<%= t "question" %>' },
+            title               : { type : 'Text', title : '<%= t "title" %>' },
+            sort_order          : { type : 'Number', title : '<%= t "sort_order" %>' },
+            tags_label          : { type : 'Text', title : '<%= t "tags_label" %>',
+                                    validators : [ /^[A-z0-9_]*$/ ] },
+            question_type       : { type : 'Select', title : '<%= t "question_type" %>',
+                                    options : <%= [:textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone].to_json.html_safe %>
+                                    },
+            mandatory           : { type : 'Checkbox', title : '<%= t "mandatory" %>' },
+            isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
+                                     dependsOn : 'question_type', dependentValues : ['textbox']  }, // only if the question type is text
+            'survey_format.help' : { type :'Text', title : '<%= t "Help Text" %>' }, // Just need the help text...
+            // nested answers object - only if the type is appropriate
+            answers             : { type : 'DependentList',
+                dependsOn : 'question_type', dependentValues : ['multiplechoice', 'singlechoice', 'selectionbox'],
+                itemType : 'Object',
+                subSchema : {
+                    answer : { type : 'Text' },
+                    // default ?
+                    answertype_id : { type : 'Select', 
+                                       title : '<%= t "answer type" %>',
+                                       options : <%= [[' ',' ']].concat(AnswerType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+                    start_day : { type : 'DependentSelect', title : '<%= t "start day" %>', options : <%=  ([[' ','-1']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%>,
+                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
+                    start_time : { type : 'DependentTime', title : '<%= t "start time" %>',
+                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
+                    duration : { type : 'DependentNumber', title : '<%= t "duration (minutes)" %>',
+                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] }
+                },
+            } 
+            // TODO - Need to indicate if a conflict, and info about the conflict.... DO we need default???
         },
     });
     

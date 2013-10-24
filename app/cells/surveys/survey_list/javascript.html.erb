@@ -4,7 +4,7 @@ SurveyApp = new Backbone.Marionette.Application();
 
 SurveyApp.SurveyManagement = (function(Backbone){
 
-    Survey = Backbone.Model.extend({
+    Survey = Backbone.DeepModel.extend({
         schema : {
             name            : { type : 'Text', title : '<%= t "name" %>' },
             alias           : { type : 'Text', title : '<%= t "alias" %>' },

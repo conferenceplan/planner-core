@@ -24,6 +24,6 @@ json.answer5_type   question.answer5_type
 json.question6      question.question6
 json.answer6_type   question.answer6_type
 
-# TODO - we want these to be provided by other utlities
-#json.survey_format  question.survey_format
+# TODO - we want these to be provided by other utlities ???
+json.survey_format  question.survey_format
 json.answers        question.survey_answers

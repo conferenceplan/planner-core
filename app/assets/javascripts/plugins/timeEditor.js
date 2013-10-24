@@ -60,15 +60,15 @@ Form.editors.Time = Form.editors.Base.extend({
     },
   
     getValue: function() {
-        return this.$hour.val() + ":" + this.$time.val(); // TODO
+        return this.$hour.val() + ":" + this.$time.val();
     },
 
     setValue: function(value) {
         if (value) {
             times = value.split(':');
         
-            this.$hour.val(times[0]); // TODO
-            this.$time.val(times[1]); // TODO
+            this.$hour.val(times[0]);
+            this.$time.val(times[1]);
         }
     },
     focus: function() {
@@ -81,10 +81,6 @@ Form.editors.Time = Form.editors.Base.extend({
         if (!this.hasFocus) return;
 
         this.$('select:focus').blur();
-    },
-
-    // TODO - do we need this???
-    updateHidden: function() {
     },
 
 }, {

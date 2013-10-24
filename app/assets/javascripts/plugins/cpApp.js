@@ -22,7 +22,7 @@ var AppUtils = (function(){
         },
 
         modalOptions: {
-            backdrop: false,
+            backdrop: 'static',
         },
 
         render: function () {
@@ -148,11 +148,10 @@ var AppUtils = (function(){
 
             var errors = this.submitData();
 
-            // if (! errors ) {
-            // }
-            
-            // flip back to the read view
-            this.renderModel();
+            if (! errors ) {
+                // flip back to the read view
+                this.renderModel();
+            }
         },
         
         submitData : function() {
@@ -206,9 +205,9 @@ var AppUtils = (function(){
                 html = _.template($(this.options.readTemplate).html(), this.model.toJSON());
                 
                 // alert("we have a read template");
-                this.$el.find(".modal-body").html(html);
+                this.$el.find(".model-body").html(html);
             } else {
-                this.$el.find(".modal-body").html("");
+                this.$el.find(".model-body").html("");
             };
         },
         
@@ -222,7 +221,7 @@ var AppUtils = (function(){
             }).render();
             
             // the render it in the area
-            this.$el.find(".modal-body").html(this.form.el);
+            this.$el.find(".model-body").html(this.form.el);
         }
     });
     

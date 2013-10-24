@@ -28,6 +28,7 @@
 
 //= require backbone-forms/distribution/backbone-forms
 //= require backbone-forms/distribution/editors/list.min
+//= require backbone-forms/distribution/adapters/backbone.bootstrap-modal
 //= require backbone-forms/distribution/templates/bootstrap
 
 //= require moment/moment+langs
@@ -50,6 +51,7 @@
 //= require plugins/cpRoomTable
 //= require plugins/timeEditor
 //= require plugins/htmlEditor
+//= require plugins/DependentEditors
 
 //= require TabViews
 
