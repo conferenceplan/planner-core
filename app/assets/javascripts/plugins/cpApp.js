@@ -349,6 +349,11 @@ var AppUtils = (function(){
      * 
      */
     return {
+        
+        partial : function(part, data) {
+            return _.template( $('#' + part ).html(), data);
+        },
+        
         eventAggregator : eventAggregator,
         
         GenericModal : GenericModal,

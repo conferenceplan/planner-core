@@ -41,7 +41,21 @@ _.extend(Form.Editor.prototype, {
 /*
  *
  */
-Form.editors.DependentText = Form.editors.TextArea.extend({
+Form.editors.DependentText = Form.editors.Text.extend({
+
+    render: function() {
+        this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
+       
+        this.setValue(this.value);
+
+        this.dependInit(this.form);
+
+        return this;
+    }
+
+});
+
+Form.editors.DependentTextArea = Form.editors.TextArea.extend({
 
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );

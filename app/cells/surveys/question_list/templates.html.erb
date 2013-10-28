@@ -30,9 +30,44 @@
     <dl class="dl-horizontal">
         <dt><%= t "question" %></dt><dd>{{= question ? question : "&nbsp;" }}</dd> 
         <dt><%= t "sort_order" %></dt><dd>{{= sort_order ? sort_order : "&nbsp;" }}</dd>
-        <dt><%= t "tags_label" %></dt><dd>{{= tags_label ? tags_label : "&nbsp;" }}</dd>
         <dt><%= t "question_type" %></dt><dd>{{= question_type ? question_type : "&nbsp;" }}</dd>
         <dt><%= t "mandatory" %></dt><dd>{{= mandatory ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-        <dt><%= t "is_bio" %></dt><dd>{{= isbio ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+        {{ if ( question_type == 'textfield') { }}
+            <dt><%= t "tags_label" %></dt><dd>{{= tags_label ? tags_label : "&nbsp;" }}</dd>
+        {{ } }}
+        {{ if ( question_type == 'textbox') { }}
+            <dt><%= t "is_bio" %></dt><dd>{{= isbio ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+        {{ } }}
+        {{ if ( $.inArray(question_type.toString(), ['multiplechoice', 'singlechoice', 'selectionbox']) > -1) { }}
+        <dt><%= t "survey_answers" %></dt><dd>
+            <span data-editor="">
+            <div class="bbf-list">
+                <ul class="unstyled clearfix" data-items="">
+                {{ _.each(survey_answers, function(answer) { }}
+                    <li class="clearfix">
+                        <div class="pull-left">
+                            <div class="bbf-list-modal">
+                            {{= AppUtils.partial('answer-data-template', answer) }}
+                            </div>
+                        </div>
+                    </li>
+                {{ }); }}
+                </ul>
+            </div>
+            </span>
+        </dd>
+        {{ } }}
+    </dl>
+</script>
+
+<script type="text/template" id="answer-data-template">
+    <dl class="dl-horizontal">
+        <dt><%= t "answer" %></dt><dd>{{= answer ? answer : "&nbsp;" }}</dd> 
+        <dt><%= t "answer type" %></dt><dd>{{= answertype_id ? SurveyQuestionApp.SurveyQuestionManagement.convertAnswerTypeIdToString(answertype_id) : "&nbsp;" }}</dd>
+        {{ if ( answertype_id == <%= AnswerType["TimeConflict"].id %>) { }}
+            <dt><%= t "day" %></dt><dd>{{= SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day).length > 0 ? SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day) : "&nbsp;" }}</dd> 
+            <dt><%= t "start time" %></dt><dd>{{= SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day).length > 0 ? start_time : "&nbsp;" }}</dd> 
+            <dt><%= t "duration" %></dt><dd>{{= duration >= 0 ? duration : "&nbsp;" }}</dd> 
+        {{ } }}
     </dl>
 </script>

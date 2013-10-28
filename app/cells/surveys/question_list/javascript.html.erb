@@ -8,35 +8,39 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
 
     SurveyQuestion = Backbone.DeepModel.extend({
         schema : {
-            question            : { type : 'Text', title : '<%= t "question" %>' },
-            title               : { type : 'Text', title : '<%= t "title" %>' },
+            question            : { type : 'Html', title : '<%= t "question" %>' },
+            //title               : { type : 'Text', title : '<%= t "title" %>' }, // TODO - is this used???
             sort_order          : { type : 'Number', title : '<%= t "sort_order" %>' },
-            tags_label          : { type : 'Text', title : '<%= t "tags_label" %>',
-                                    validators : [ /^[A-z0-9_]*$/ ] },
             question_type       : { type : 'Select', title : '<%= t "question_type" %>',
                                     options : <%= [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone].to_json.html_safe %>
                                     },
             mandatory           : { type : 'Checkbox', title : '<%= t "mandatory" %>' },
+            tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>',
+                                    validators : [ /^[A-z0-9_]*$/ ],
+                                    dependsOn : 'question_type', dependentValues : ['textfield'] },
             isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
                                      dependsOn : 'question_type', dependentValues : ['textbox']  }, // only if the question type is text
-            'survey_format.help' : { type :'Text', title : '<%= t "Help Text" %>' }, // Just need the help text...
+            'survey_format.help' : { type :'Html', title : '<%= t "Help Text" %>' }, // Just need the help text...
             // nested answers object - only if the type is appropriate
             'survey_answers' : { type : 'DependentList',
+                itemToString : function(item) {
+                    return _.template($('#answer-data-template').html(), item);
+                },
                 dependsOn : 'question_type', dependentValues : ['multiplechoice', 'singlechoice', 'selectionbox'],
                 itemType : 'Object',
-                // TODO - add code for the display (serialization)
+                
                 subSchema : {
                     answer : { type : 'Text' },
                     // default ?
                     answertype_id : { type : 'Select', 
                                        title : '<%= t "answer type" %>',
-                                       options : <%= [[' ',' ']].concat(AnswerType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+                                       options : <%= [].concat(AnswerType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
                     start_day : { type : 'DependentSelect', title : '<%= t "start day" %>', options : <%=  ([[' ','-1']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%>,
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
                     start_time : { type : 'DependentTime', title : '<%= t "start time" %>',
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
                     duration : { type : 'DependentNumber', title : '<%= t "duration (minutes)" %>',
-                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] }
+                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
                 }
             } 
         }
@@ -86,7 +90,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
             tagName                 : 'tr',
             view_refresh_event      : "survey-question:refresh",
             selectFn                : selectQuestion,
-            readTemplate            : '#question-data-template',
+            readTemplate            : '#question-data-template', // Add a composite view in here
             itemArea                : "#survey-edit-area"
         }) );
     };
@@ -94,6 +98,9 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
     function selectQuestion(id) {
         <%= @selectNotifyMethod %>(id);
     };
+    
+    var answerTypes = <%= Hash[AnswerType.find(:all).map { |a| [a.id.to_s, a.name.to_s] }].to_json.html_safe %>;
+    var dayStrings = <%=  Hash[[[-1,'&nbsp;']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.map{ |r| [r, (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A')]})].to_json.html_safe %>
     
     return {
         init : function() {
@@ -110,6 +117,14 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
         selectQuestion : function(id) {
             selectQuestion(id);
         },
+        
+        convertAnswerTypeIdToString : function(id) {
+            return answerTypes[id];
+        },
+        convertDayIdToString : function(id) {
+            console.debug(dayStrings);
+            return dayStrings[id];
+        }
     }
 
 })(Backbone);

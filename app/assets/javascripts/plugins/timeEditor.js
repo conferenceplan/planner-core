@@ -60,7 +60,7 @@ Form.editors.Time = Form.editors.Base.extend({
     },
   
     getValue: function() {
-        return this.$hour.val() + ":" + this.$time.val();
+        return ('0'+this.$hour.val()).slice(-2) + ":" + ('0'+this.$time.val()).slice(-2);
     },
 
     setValue: function(value) {
