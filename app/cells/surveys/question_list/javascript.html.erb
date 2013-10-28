@@ -100,7 +100,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
     };
     
     var answerTypes = <%= Hash[AnswerType.find(:all).map { |a| [a.id.to_s, a.name.to_s] }].to_json.html_safe %>;
-    var dayStrings = <%=  Hash[[[-1,'&nbsp;']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.map{ |r| [r, (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A')]})].to_json.html_safe %>
+    var dayStrings = <%=  Hash[[[-1,'&nbsp;']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.map{ |r| [r.to_s, (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A')]})].to_json.html_safe %>
     
     return {
         init : function() {
@@ -123,7 +123,11 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
         },
         convertDayIdToString : function(id) {
             console.debug(dayStrings);
-            return dayStrings[id];
+            if (dayStrings.hasOwnProperty(id)) {
+                return dayStrings[id];
+            } else {
+                return -1;
+            }
         }
     }
 

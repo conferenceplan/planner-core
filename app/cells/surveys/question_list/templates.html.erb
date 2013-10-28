@@ -65,8 +65,8 @@
         <dt><%= t "answer" %></dt><dd>{{= answer ? answer : "&nbsp;" }}</dd> 
         <dt><%= t "answer type" %></dt><dd>{{= answertype_id ? SurveyQuestionApp.SurveyQuestionManagement.convertAnswerTypeIdToString(answertype_id) : "&nbsp;" }}</dd>
         {{ if ( answertype_id == <%= AnswerType["TimeConflict"].id %>) { }}
-            <dt><%= t "day" %></dt><dd>{{= SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day).length > 0 ? SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day) : "&nbsp;" }}</dd> 
-            <dt><%= t "start time" %></dt><dd>{{= SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day).length > 0 ? start_time : "&nbsp;" }}</dd> 
+            <dt><%= t "day" %></dt><dd>{{= (SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day).length > -1) ? SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day) : "&nbsp;" }}</dd> 
+            <dt><%= t "start time" %></dt><dd>{{= start_time ? start_time : "&nbsp;" }}</dd> 
             <dt><%= t "duration" %></dt><dd>{{= duration >= 0 ? duration : "&nbsp;" }}</dd> 
         {{ } }}
     </dl>
