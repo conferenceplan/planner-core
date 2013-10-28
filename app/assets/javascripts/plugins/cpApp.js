@@ -11,7 +11,7 @@ var AppUtils = (function(){
      */
     GenericModal = Backbone.View.extend({
         tagName: "div",
-        className: "modal hide fade",
+        className: "modal hide ",
         events: {
             "submit": "submit",
             "hidden": "close",
@@ -30,14 +30,13 @@ var AppUtils = (function(){
                 title : this.options.title
             })));
 
-            this.delegateEvents();
-            
-            this.renderBody();
-            
-            this.$el.find(".modal-body").append(this.form.el);
-            
             this.$el.modal(this.modalOptions);
 
+            this.renderBody();
+            this.$el.find(".modal-body").append(this.form.el);
+            
+            this.delegateEvents();
+            
             return this;
         },
         
@@ -55,8 +54,9 @@ var AppUtils = (function(){
             }
         },
         
-        close: function (e) {
-            this.form.$el.find('textarea').each(function() { // TODO - CHECK
+        removeCK : function() {
+
+            this.form.$el.find('.cke').each(function() { // TODO - CHECK
                 try {
                     if(CKEDITOR.instances[$(this)[0].id] != null) {
                         CKEDITOR.instances[$(this)[0].id].destroy(true);
@@ -66,6 +66,10 @@ var AppUtils = (function(){
                 }
             });
             
+        },
+        
+        close: function (e) {
+            this.removeCK();
             this.remove();
             this.unbind();
             this.views = [];  

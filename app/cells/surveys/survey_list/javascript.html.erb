@@ -32,7 +32,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
     var tabLists = [];
     
     function clearDetails() {
-        _.invoke(tabLists, 'reset' ); //????
+        _.invoke(tabLists, 'reset' );
     };
 
     function showSurveys() {
@@ -60,7 +60,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
             drillDownFn             : drillDownSurvey,
             selectFn                : selectSurvey,
             readTemplate            : '#survey-data-template',
-            itemArea                : "#survey-edit-area" // TODO - we will also want the item template???
+            itemArea                : "#survey-edit-area"
         }) );
     };
     
@@ -86,8 +86,6 @@ SurveyApp.SurveyManagement = (function(Backbone){
         selectSurvey : function(id) {
             SurveyGroupApp.SurveyGroupManagement.clearDetails();
             SurveyQuestionApp.SurveyQuestionManagement.clearDetails();
-            // And now put the data in the area below
-            // alert("sss");
         },
     }
 

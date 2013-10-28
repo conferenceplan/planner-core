@@ -1,4 +1,6 @@
 class SurveyQuestion < ActiveRecord::Base
+  # audited :allow_mass_assignment => true
+  
   has_enumerated :questionmapping, :class_name => 'QuestionMapping'
 
   belongs_to  :survey_group
@@ -18,25 +20,33 @@ class SurveyQuestion < ActiveRecord::Base
     write_attribute(:question_type, value.to_s)
   end
   
-  def new_answer_attributes=(answer_attributes)
-    answer_attributes.each do |attributes|
-      survey_answers.build(attributes)
-    end
-  end
+  def update_answers(new_answers) # A collection of answers that have been passed in
+    
+    # If the answer is new then create one and add it (i.e. answer does not have an id)
+    # If the answer has an id then update the value
+    # Any left over are for deletion
+    
+    updates = Hash[new_answers.map { |a| (a[:id] ? [a[:id], a] : nil) }]
+    newAnswers = new_answers.collect { |a| (a[:id] ? nil : a) }.compact
 
-  def existing_answer_attributes=(answer_attributes)
-    survey_answers.reject(&:new_record?).each do |answer|
-      attributes = answer_attributes[answer.id.to_s]
-      if attributes && !attributes[:_destroy]
-        answer.attributes = attributes
+    survey_answers.each do |answer|
+      if updates[answer.id]
+        answer.update_attributes( updates[answer.id] )
       else
-        survey_answers.delete(answer)
+        # delete it and remove it from the collection
+        candidate = survey_answers.delete(answer)
       end
     end
+    
+    # now create the new ones
+    newAnswers.each do |answer|
+      survey_answers << SurveyAnswer.new(answer)
+    end
+    
   end
   
   def updateTimeConflict(params)
-    if params
+    if params # TODO - check this logic
       survey_answers.each do |answer|
         attr = params[answer.id.to_s]
         answer.updateTimeConflict(attr) if attr

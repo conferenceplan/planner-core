@@ -30,11 +30,11 @@
 
 <script type="text/template" id="survey-data-template">
     <dl class="dl-horizontal">
-        <dt><%= t "Name" %></dt><dd>{{= name }}</dd>
-        <dt><%= t "Alias" %></dt><dd>{{= alias }}</dd>
-        <dt><%= t "Welcome Message" %></dt><dd>{{= welcome }}</dd>
-        <dt><%= t "Thank You Message" %></dt><dd>{{= thank_you }}</dd>
-        <dt><%= t "Submit String" %></dt><dd>{{= submit_string }}</dd>
-        <dt><%= t "URL For Header Image" %></dt><dd>{{= header_image }}</dd>
+        <dt><%= t "Name" %></dt><dd>{{= name ? name : "&nbsp;" }}</dd>
+        <dt><%= t "Alias" %></dt><dd>{{= alias ? alias : "&nbsp;"}}</dd>
+        <dt><%= t "Welcome Message" %></dt><dd>{{= welcome ? welcome : "&nbsp;"}}</dd>
+        <dt><%= t "Thank You Message" %></dt><dd>{{= thank_you ? thank_you : "&nbsp;"}}</dd>
+        <dt><%= t "Submit String" %></dt><dd>{{= submit_string ? submit_string : "&nbsp;"}}</dd>
+        <dt><%= t "URL For Header Image" %></dt><dd>{{= header_image ? header_image : "&nbsp;"}}</dd>
     </dl>
 </script>

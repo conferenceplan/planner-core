@@ -4,6 +4,7 @@
  * HTML field in the form that utlises the CK editor so we have rich text editor.
  */
 Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base.extend
+    
     render: function() {
         // Add the CK editor as the field
         // TODO - add a mechanism to pass in options for the CK editor toolbar
@@ -21,7 +22,7 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
                 { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
             ]
         });
-       
+
         this.setValue(this.value);
 
         return this;

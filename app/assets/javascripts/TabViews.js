@@ -169,6 +169,8 @@ var TabUtils = (function(){
                 }
             });
             modal.render();
+            
+            return true;
         }
     });
     
