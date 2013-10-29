@@ -26,6 +26,8 @@ var AppUtils = (function(){
         },
 
         render: function () {
+            Backbone.BootstrapModal.count++;
+
             this.$el.html($(this.template({
                 title : this.options.title
             })));
@@ -72,7 +74,8 @@ var AppUtils = (function(){
             this.removeCK();
             this.remove();
             this.unbind();
-            this.views = [];  
+            this.views = [];
+            Backbone.BootstrapModal.count--;
         },
         
         // over-ride this for the body of the form        
