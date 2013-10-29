@@ -23,7 +23,7 @@ class SurveyAnswer < ActiveRecord::Base
                     
         if (nbrConflicts == 1) # if there is 1 then replace if necessary
           if (excluded_periods[0].start != startTime) || (excluded_periods[0].end != endTime)
-            excluded_periods.delete # ??? destroy ??? TODO - check
+            excluded_periods.delete
             addExcludedPeriod(answer, startTime, endTime)
             save
           end
