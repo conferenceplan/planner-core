@@ -1,5 +1,7 @@
 
 json.id             survey.id
+json.public         survey.public
+json.authenticate   survey.authenticate
 json.alias          survey.alias
 json.name           survey.name
 json.welcome        survey.welcome
