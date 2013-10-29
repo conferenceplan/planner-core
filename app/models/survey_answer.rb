@@ -32,20 +32,22 @@ class SurveyAnswer < ActiveRecord::Base
           save
         end
       else # the conflict repeats for every day
-        replace = false
+        replace = true
         startTime, endTime = startAndDuration(0, start_time, duration)
         
         if nbrConflicts > 1 # Since all the periods are the same we just need to look at the first one
           replace =  (excluded_periods[0].start != startTime) || (excluded_periods[0].end != endTime)
         end
         
-        excluded_periods.delete if replace || (nbrConflicts == 1)
-  
-        numberOfDays.times {
-          replace ? replaceExcludedPeriod(answer, startTime, endTime) : addExcludedPeriod(answer, startTime, endTime)
-          startTime, endTime = (startTime + 1.day), (endTime + 1.day)
-        }
-        save
+        if replace
+          excluded_periods.delete
+
+          numberOfDays.times {
+            addExcludedPeriod(answer, startTime, endTime)
+            startTime, endTime = (startTime + 1.day), (endTime + 1.day)
+          }
+          save
+        end
       end
     end
   end
@@ -53,9 +55,7 @@ class SurveyAnswer < ActiveRecord::Base
 private
 
   def addExcludedPeriod(answer, excludedStart, excludedEnd)
-    ts = excluded_periods.new( :start => excludedStart, :end => excludedEnd )
-    # ts.save
-    ts
+    excluded_periods.new( :start => excludedStart, :end => excludedEnd )
   end
 
   def startAndDuration(start_day, start_time, duration)
