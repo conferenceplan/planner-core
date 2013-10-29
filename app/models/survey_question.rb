@@ -7,7 +7,7 @@ class SurveyQuestion < ActiveRecord::Base
   has_one :survey_format, :as => :formatable, :dependent => :destroy
   accepts_nested_attributes_for :survey_format
   
-  has_many :survey_answers, :dependent => :delete_all
+  has_many :survey_answers, :dependent => :destroy
   accepts_nested_attributes_for :survey_answers, :allow_destroy => true
   
   validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone]
@@ -26,7 +26,7 @@ class SurveyQuestion < ActiveRecord::Base
     # If the answer has an id then update the value
     # Any left over are for deletion
     
-    updates = Hash[new_answers.map { |a| (a[:id] ? [a[:id], a] : nil) }]
+    updates = Hash[ new_answers.map { |a| (a[:id] ? [a[:id], a] : nil) }.compact ]
     newAnswers = new_answers.collect { |a| (a[:id] ? nil : a) }.compact
 
     survey_answers.each do |answer|
@@ -43,14 +43,15 @@ class SurveyQuestion < ActiveRecord::Base
       survey_answers << SurveyAnswer.new(answer)
     end
     
+    updateTimeConflicts
+    
   end
+
+private
   
-  def updateTimeConflict(params)
-    if params # TODO - check this logic
-      survey_answers.each do |answer|
-        attr = params[answer.id.to_s]
-        answer.updateTimeConflict(attr) if attr
-      end
+  def updateTimeConflicts
+    survey_answers.each do |answer|
+      answer.updateTimeConflicts
     end
   end
   
