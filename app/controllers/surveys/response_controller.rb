@@ -14,7 +14,7 @@ class Surveys::ResponseController < SurveyApplicationController
     init()
     if @survey.use_captcha
       if (!verify_recaptcha :private_key => @site_config.captcha_priv_key)
-        @errors['captcha'] = "There is a problem with you answer to the CAPTCHA!"
+        @errors['captcha'] = { "captcha" => "There is a problem with your answer to the CAPTCHA!" }
       end
     end
 
