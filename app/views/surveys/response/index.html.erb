@@ -28,6 +28,9 @@
                 <%=render :partial => 'group', :locals => {:group => group}%>
                 </div>
             <% end %>
+<% if @survey.use_captcha && @site_config %>
+    <%= recaptcha_tags :public_key => @site_config.captcha_pub_key %>
+<% end %>
         </fieldset>
         <div class="form-actions">
             <button type="submit" class="btn btn-primary"><%= @survey.submit_string %></button>
