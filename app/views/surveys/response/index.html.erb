@@ -1,27 +1,39 @@
-  <% if @survey %>
-    <% if !@survey.header_image.empty? %>
-    <div><img src="<%= @survey.header_image if @survey.header_image %>"></div>
-    <% end %>
-  <%end%>
-  <%= get_error_messages(@errors) %>
-  <% if @survey %>
-    <%= form_tag @path, :method => :post, :class => "", :'accept-charset' => "UTF-8" do -%>
-    <%= hidden_field_tag("key", @current_key) %>
-    <h2><%= @survey.name %></h2>
-    <div class="survey-welcome"><%= @survey.welcome.html_safe %></div>
-    <fieldset class="survey-set">
-    <!-- Get Biogragraphic info -->
-    <%=render :partial => 'respondent'%>
-    <% @survey.survey_groups.each do |group| %>
-        <%=render :partial => 'group', :locals => {:group => group}%>
-    <% end %>
-    </fieldset>
-    <div class="submit"><p><%= submit_tag @survey.submit_string %></p></div> 
-    <% end %>
+<% if @survey && !@survey.header_image.empty? %>
+    <div class="survey-row"><div class="full-width"><img src="<%= @survey.header_image if @survey.header_image %>"></div></div>
+<%end%>
 
-    <form class="" method="post" action="/surveys/<%=@survey.id%>/response">
-    </form>
+<% if @errors %>  
+<div class="alert alert-block alert-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= get_error_messages(@errors).html_safe %>
+</div>
+<% end %>
+
+<% if @survey %>
+    <%= form_tag @path, :method => :post do -%>
+    <%= hidden_field_tag("key", @current_key) %>
+            <div class="survey-row">
+                <h2><%= @survey.name %></h2>
+            </div>
+        <fieldset class="survey-set">
+            <div class="survey-row">
+                <div class="full-width"><%= @survey.welcome.html_safe %></div>
+            </div>
+            <!-- Get Biogragraphic info -->
+            <div class="survey-row form-horizontal">
+            <%=render :partial => 'respondent'%>
+            </div>
+            <% @survey.survey_groups.each do |group| %>
+                <div class="survey-row">
+                <%=render :partial => 'group', :locals => {:group => group}%>
+                </div>
+            <% end %>
+        </fieldset>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><%= @survey.submit_string %></button>
+        </div>
+    <% end %>
   <% else %>
     <p>No Valid Survey</p>
     <%= @survey_id%>
-  <% end %>
+<% end %>

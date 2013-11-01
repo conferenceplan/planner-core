@@ -5,8 +5,6 @@
 //= require jquery_ujs
 //= require jquery-migrate-1.1.1
 
-//= require bootstrap
-
 //= require jquery-ui-1.9.2.custom
 //  require jquery.form
 //= require jquery.timers-1.2
@@ -17,6 +15,9 @@
 
 //= require jquery.easy-pie-chart
 //= require jquery.mousewheel
+//= require jqcloud-1.0.4
+
+//= require bootstrap
 
 //= require backbone/underscore-min
 //= require backbone/backbone

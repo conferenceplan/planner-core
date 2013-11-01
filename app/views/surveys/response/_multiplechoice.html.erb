@@ -3,10 +3,12 @@
 #
 %>
 <%question.survey_answers.each do |answer|%>
-    <div class="checkbox <%=question.survey_format.answer_style%>">
-    <label>
+    <% if question.horizontal %>
+        <label class="checkbox inline">
+    <% else %>
+        <label class="checkbox">
+    <% end %>
         <%= check_box_tag "survey_response[#{question.id}][#{answer.id}]", "#{answer.answer}", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s][answer.id.to_s] : false %>
-        <%= answer.answer %>
+        <%= answer.answer.html_safe %>
     </label>
-    </div>
 <%end%>

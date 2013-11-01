@@ -1,98 +1,56 @@
 <%#
 %>
-<div class=" grid_12">
-    <div class="smerfQuestion grid_3">
-        <%= question.question %>
-        <% if question.survey_format.help && !question.survey_format.help.blank? %>
-            <a title="<%= question.survey_format.help%>"><%= image_tag("smerf_help.gif") %></a>
-        <%end%>
+<div class="survey-row">
+<div class="control-group <%='error' if @errors && @errors[question.id] %>">
+    <label class="control-label span2"><%= question.question.html_safe %></label>
+    <div class="controls">
+        <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}",
+         :size => 100, :class => 'span9' %>
         <% if @errors && @errors[question.id] %>
-        <div class="smerfQuestionError">
-            <p>
-            image_tag("smerf_error.gif", {:alt="Error"} )  
-            <%=@errors[question.id][question.question]%>
-            </p>
-        </div>
+            <span class="help-inline"><%=@errors[question.id][question.question]%></span>
         <% end %>
     </div>
-    <div class="text grid_8">
-        <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 100 %>
+</div>
+</div>
+<div class="survey-row">
+<div class="control-group <%='error' if @errors && @errors[question.id] %>">
+    <label class="control-label span2"><%= question.question1.html_safe %></label>
+    <div class="controls">
+    <%= text_field_tag "survey_response[#{ question.id }][response1]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] : ''}",
+     :size => 20, :class => 'span9' %>
+    <% if @errors && @errors[question.id] %>
+        <span class="help-inline"><%=@errors[question.id][question.question1]%></span>
+    <% end %>
     </div>
 </div>
-<div class=" grid_12">
-    <div class="smerfQuestion grid_3"> 
-        <%= question.question1 %>
-        <% if question.survey_format.help1 && !question.survey_format.help1.blank? %>
-            <a title="<%= question.survey_format.help1 %>"><%= image_tag("smerf_help.gif") %></a>
-        <%end%>
-        <% if @errors && @errors[question.id] %>
-        <div class="smerfQuestionError">
-            <p>
-            image_tag("smerf_error.gif", {:alt="Error"} )  
-            <%=@errors[question.id][question.question1]%>
-            </p>
-        </div>
-        <% end %>
-    </div>
-    <div class="text grid_4">
-        <%= text_field_tag "survey_response[#{ question.id }][response1]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] : ''}", :size => 20 %>
-    </div>
 </div>
-<div class=" grid_12">
-    <div class="smerfQuestion grid_3"> 
-        <%= question.question2 %>
-        <% if question.survey_format.help2 && !question.survey_format.help2.blank? %>
-            <a title="<%= question.survey_format.help2 %>"><%= image_tag("smerf_help.gif") %></a>
-        <%end%>
+<div class="survey-row">
+    <div class="span2">
+    <label class="control-label"><%= question.question2.html_safe %></label>
+    </div>
+    <%= text_field_tag "survey_response[#{ question.id }][response2]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : ''}",
+     :size => 20, :class => 'span9' %>
         <% if @errors && @errors[question.id] %>
-        <div class="smerfQuestionError">
-            <p>
-            image_tag("smerf_error.gif", {:alt="Error"} )  
             <%=@errors[question.id][question.question2]%>
-            </p>
-        </div>
         <% end %>
-    </div>
-    <div class="text grid_4">
-        <%= text_field_tag "survey_response[#{ question.id }][response2]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : ''}", :size => 20 %>
-    </div>
 </div>
-<div class=" grid_12">
-    <div class="smerfQuestion grid_3"> 
-        <%= question.question3 %>
-        <% if question.survey_format.help3 && !question.survey_format.help3.blank? %>
-            <a title="<%= question.survey_format.help3 %>"><%= image_tag("smerf_help.gif") %></a>
-        <%end%>
+<div class="survey-row">
+    <div class="span2">
+    <label class="control-label"><%= question.question3.html_safe %></label>
+    </div>
+    <%= text_field_tag "survey_response[#{ question.id }][response3]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'] : ''}",
+     :size => 20, :class => 'span9' %>
         <% if @errors && @errors[question.id] %>
-        <div class="smerfQuestionError">
-            <p>
-            image_tag("smerf_error.gif", {:alt="Error"} )  
             <%=@errors[question.id][question.question3]%>
-            </p>
-        </div>
         <% end %>
-    </div>
-    <div class="text grid_4">
-        <%= text_field_tag "survey_response[#{ question.id }][response3]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'] : ''}", :size => 15 %>
-    </div>
 </div>
-<div class=" grid_12">
-    <div class="smerfQuestion grid_3"> 
-        <%= question.question4 %>
-        <% if question.survey_format.help4 && !question.survey_format.help4.blank? %>
-            <a title="<%= question.survey_format.help4 %>"><%= image_tag("smerf_help.gif") %></a>
-        <%end%>
+<div class="survey-row">
+    <div class="span2">
+    <label class="control-label"><%= question.question4.html_safe %></label>
+    </div>
+    <%= text_field_tag "survey_response[#{ question.id }][response4]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : ''}",
+     :size => 20, :class => 'span9' %>
         <% if @errors && @errors[question.id] %>
-        <div class="smerfQuestionError">
-            <p>
-            image_tag("smerf_error.gif", {:alt="Error"} )  
             <%=@errors[question.id][question.question4]%>
-            </p>
-        </div>
         <% end %>
-    </div>
-    <div class="text grid_4">
-        <%= text_field_tag "survey_response[#{ question.id }][response4]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : ''}", :size => 20 %>
-    </div>
 </div>
-

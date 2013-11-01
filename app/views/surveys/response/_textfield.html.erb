@@ -1,16 +1,29 @@
 <%#
-#
+# , data-provide="typeahead", autocomplete="off"
+# .sort { |x, y| y.count <=> x.count }
 %>
-<%= content_tag :div, :class => question.survey_format.answer_style do %>
 <% if question.tags_label && !question.tags_label.empty? %>
-<div class='taggable grid_10'>
-<div id='context' style='display:none'><%= question.tags_label %></div>
-    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => question.tags_label + ' ui-autocomplete-input' %>
-<div class="cloud grid_12">
-</div>
+<div class="taggable">
+    <div class="context" style='display:none'><%= question.tags_label%></div>
+    <script type="text/javascript">
+        var <%= question.tags_label%>_array = [
+        <% SurveyRespondent.tag_counts_on(question.tags_label).sort { |x, y| x.name.downcase <=> y.name.downcase }.sort { |x, y| y.count <=> x.count }[0..40].each do |tag| %>
+            { text: "<%= tag.name%>", weight: <%= tag.count%>},
+        <% end %>
+        ];
+    </script>
+    
+    <div class="survey-row">
+        <div class="span11">
+        <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", 
+                :rows => 5, :size => question.text_size, :class => question.tags_label + '_text ui-autocomplete-input span12' %>
+        </div>
+        <div class="span1">
+            <a href='#' rel="popover" data-html=true class="cloud-popover btn btn-success" data-contentwrapper="#<%= question.tags_label%>_popup">tags</a>
+            <div id="<%= question.tags_label%>_popup" class="hidden-area"><div id="<%= question.tags_label%>_cloud" style="width: 248px; height: 250px;"></div></div>
+        </div>
+    </div>
 </div>
 <% else %>
-    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size %>
+    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => (question.text_size < 10 ? 'input-mini' : 'span12') %>
 <% end %>
-
-<%end%>

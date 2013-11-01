@@ -2,7 +2,7 @@
 # This is the fragment for capturing the availability of a person...
 %>
 
-<div class=" availabilitySection grid_12">
+<div class="availabilitySection well">
     <div class="radiobutton">
         <label id='timedisable'>
             <%if @survey_response &&  @survey_response[question.id.to_s] && @survey_response[question.id.to_s]['response'] == '1' %>
@@ -23,35 +23,35 @@
             I plan to be at the convention. 
         </label>
     </div>
-    <div class=" grid_12">
-        <div class="smerfSubquestion grid_6">I will be available to be on Program beginning:</div>
-        <div class="select grid_4 timeselect">
+    <div class="survey-row">
+        <div class="span5 offset1">I will be available to be on Program beginning:</div>
+        <div class="select span6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response1]",
                 options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'].to_i : nil) %>
         </div>
     </div>
-    <div class=" grid_12">
-        <div class="smerfSubquestion grid_6">starting from:</div>
-        <div class="select grid_4 timeselect">
+    <div class="survey-row">
+        <div class="span5 offset1">starting from:</div>
+        <div class="select span6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response2]",
                 options_for_select(['---','10am', '11am','Noon', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm'].collect{ |e| [e, e]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : nil) %>
         </div>
     </div>
-    <div class=" grid_12">
-        <div class="smerfSubquestion grid_6">I will not be available for program after:</div>
-        <div class="select grid_4 timeselect">
+    <div class="survey-row">
+        <div class="span5 offset1">I will not be available for program after:</div>
+        <div class="select span6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response3]",
                 options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}.reverse!, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'].to_i : nil) %>
         </div>
-        <div class=" grid_12">
-            <div class="smerfSubquestion grid_6">ending at:</div>
-            <div class="select grid_4 timeselect">
+    </div>
+    <div class="survey-row">
+            <div class="span5 offset1">ending at:</div>
+            <div class="select span6 timeselect">
                 <%= select_tag "survey_response[#{question.id}][response4]",
                     options_for_select(['---','10am', '11am','Noon', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm'].collect{ |e| [e, e]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : nil) %>
             </div>
-        </div>
     </div>
-    <div class=" timeselect grid_12">
+    <div class="timeselect">
         <div class="checkbox">
             <label>
                 <%= check_box_tag "survey_response[#{question.id}][response5]", "1", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response5'] == '1' : false %>

@@ -10,6 +10,8 @@ json.mandatory      question.mandatory
 json.question_type  question.question_type
 json.question       question.question
 json.answer_type    question.answer_type
+json.horizontal     question.horizontal
+
 
 #json.question1      question.question1
 #json.answer1_type   question.answer1_type

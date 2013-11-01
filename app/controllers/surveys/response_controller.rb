@@ -130,12 +130,17 @@ class Surveys::ResponseController < SurveyApplicationController
     page = params[:page] # use this to find the id of the survey from the database
 
     if page
+      
+      # TODO - check if this is preview, if so do a render (but disable the save on submit)
+      # if not a preview then check if authentication is needed, it it is then ask for authentication before rendering the form
+      
+      
       # find the survey for the page alias
       @survey = Survey.find_by_alias(page)
       if @survey
         @page_title = @survey.name
         @current_key = params[:key]
-        @path = '/surveys/' + @survey.id.to_s + '/response'
+        @path = '/surveys/' + @survey.id.to_s + '/response' # TODO - fix for language...
 
         if @respondent
           if @respondent.survey_respondent_detail
