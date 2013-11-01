@@ -24,6 +24,8 @@ gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate'
 
+gem "recaptcha", :require => "recaptcha/rails"
+
 gem 'i18n-active_record',
       :git => 'git://github.com/svenfuchs/i18n-active_record.git',
       :require => 'i18n/active_record'

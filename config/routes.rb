@@ -236,6 +236,7 @@ PlannerRc1::Application.routes.draw do
   resources :datasources
   resources :mail_configs
   resources :mail_templates
+  resources :site_configs # TODO 
 
   match 'emailreports/failed', :controller => 'emailreports', :action => 'failed', :method => 'get'  
   match 'emailreports/sent', :controller => 'emailreports', :action => 'sent', :method => 'get'  
