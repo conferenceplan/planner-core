@@ -16,7 +16,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
   has_one :published_time_slot, :through => :published_room_item_assignment, :dependent => :destroy
 
   # The relates the published programme item back to the original programme item
-  has_one :publication, :foreign_key => :published_id, :as => :published
+  has_one :publication, :foreign_key => :published_id, :as => :published, :dependent => :destroy
   has_one :original, :through => :publication,
           :source => :original,
           :source_type => 'ProgrammeItem'
@@ -54,11 +54,14 @@ class PublishedProgrammeItem < ActiveRecord::Base
       # map precis to desc
       
       res.tap { |hash|
-        hash[:mins] =  hash.delete 'duration'
+        # hash[:mins] =  hash.delete 'duration'
+        hash["id"] =  hash['id'].to_s
+        hash[:mins] =  (hash.delete 'duration').to_s
         hash[:desc] =  hash.delete 'precis'
       }
        
       res[:day] = published_time_slot.start.strftime('%A') # currentTime.strftime('%A %H:%M')
+      res[:date] = published_time_slot.start.strftime('%Y-%m-%d') # currentTime.strftime('%A %H:%M')
       res[:time] = published_time_slot.start.strftime('%H:%M')
     
       # "loc": [ "Some Room", "Some Area" ],
@@ -67,7 +70,8 @@ class PublishedProgrammeItem < ActiveRecord::Base
       # "people":[{"id":"2539","name":"Elliott Mason"},{"id":"2318","name":"Jan DiMasi"}]}
       res[:people] = people.collect{ |p|
         { 
-          :id => p.id , 
+          # :id => p.id , 
+          :id => p.id.to_s , 
           :name => p.getFullPublicationName.strip
         }
       }
@@ -75,7 +79,8 @@ class PublishedProgrammeItem < ActiveRecord::Base
       # Tags for the Primary Area
       tracks = tag_list_on('PrimaryArea')
       if tracks && !tracks.empty?
-        res[:track] = tag_list_on('PrimaryArea')
+        # res[:track] = tag_list_on('PrimaryArea')
+        res[:tags] = tag_list_on('PrimaryArea')
       end
       
         

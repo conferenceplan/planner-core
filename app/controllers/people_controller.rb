@@ -468,6 +468,40 @@ def doClearConflictsFromSurvey
   end
 end
 
+def updateConflictsItemsFromSurvey
+    excludedItemMaps = ExcludedItemsSurveyMap.find :all
+    peopleIdMap = {}
+    @peopleUpdate = []
+    excludedItemMaps.each do |excludedItemMap|
+      next if (excludedItemMap.survey_answer_id == nil)
+      @people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer)
+      @programmeItem = ProgrammeItem.find(excludedItemMap.programme_item_id)
+      @people.each do |person|
+        found = false
+        person.excluded_items.each do |personItem|
+          if (personItem.id == @programmeItem.id)
+            found = true
+          end
+        end
+        
+        person.save
+        if (found == false)
+          @excludedItem = person.excluded_items << @programmeItem
+          
+          person.save
+          @exclusion = Exclusion.find_by_person_id_and_excludable_id_and_excludable_type(person.id,@programmeItem.id,'ProgrammeItem')
+          @exclusion.source = 'survey'
+          @exclusion.save
+          if (peopleIdMap.has_key?(person.id) == false)
+            @peopleUpdate << person
+            peopleIdMap[person.id] = 1
+          end
+        end
+      end
+      # TODO: delete exclusions that are no longer selected
+  end
+end
+
 def updateConflictsFromSurvey
     excludedItemMaps = ExcludedItemsSurveyMap.find :all
     peopleIdMap = {}

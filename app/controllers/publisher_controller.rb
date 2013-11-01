@@ -23,8 +23,7 @@ class PublisherController < PlannerController
     end
 
     if (cache_configured?)
-      expire_action(:controller => 'program', :action => :participants)
-      expire_action(:controller => 'program', :action => :index)
+      # Rails.cache.clear # make sure that the mem cache is flushed
     end
         
     render :layout => 'content'

@@ -11,7 +11,7 @@ class EmailJob
     respondents.each do |respondent|
       # Send the email
       begin
-        SurveyMailer.email(respondent.email, MailUse[:Invite], { 
+        SurveyMailer.deliver_email(respondent.email, MailUse[:Invite], nil, { 
           :user => respondent,
           :key => respondent.key
            }).deliver # send out invite email

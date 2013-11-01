@@ -9,7 +9,14 @@ class Surveys::ResponseController < SurveyApplicationController
   #
   #
   def create
+    @site_config = SiteConfig.first
+
     init()
+    if @survey.use_captcha
+      if (!verify_recaptcha :private_key => @site_config.captcha_priv_key)
+        @errors['captcha'] = "There is a problem with you answer to the CAPTCHA!"
+      end
+    end
 
     if !@errors.empty?
       # render the page again with error messages
@@ -128,6 +135,7 @@ class Surveys::ResponseController < SurveyApplicationController
   #
   def renderalias
     page = params[:page] # use this to find the id of the survey from the database
+    @site_config = SiteConfig.first
 
     if page
       

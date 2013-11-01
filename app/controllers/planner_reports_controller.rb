@@ -243,51 +243,21 @@ class PlannerReportsController < PlannerController
 
       return unless params[:html] || params[:csv] 
 
-      cond_str = " time_slots.start is not NULL"
-      conditions = Array.new
-
-      cond_str << " and formats.id in ("
-      conditions.push Format.find_by_name("Panel")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Reading")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Publisher Presentation")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Talk")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Interview")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Special Interest Group")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Workshop")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Dialog")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Game Show")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Book Discussion")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Auction")
-      cond_str << "?,"
-      conditions.push Format.find_by_name("Demonstration")
-      cond_str << "?)"
-
-      conditions.unshift cond_str
-
       ord_str = "time_slots.start, time_slots.end, venues.name desc, rooms.name"
 
-      @times = TimeSlot.all(:joins => [{:rooms => :venue}, {:programme_items => :format}], :include => [{:rooms => :venue}, {:programme_items => :equipment_needs}], :conditions => conditions, :order => ord_str) 
+      @times = TimeSlot.all(:joins => [{:rooms => :venue}, {:programme_items => :format}], 
+            :include => [{:rooms => :venue}, {:programme_items => :equipment_needs}], 
+            :conditions => "time_slots.start is not NULL", 
+            :order => ord_str) 
       
       output = Array.new
-      @grouped_times = Hash.new
+      # @grouped_times = Hash.new
       @times.each do |time|
          time.programme_items.each do |panel|
-
-               needs = Array.new
-               needs = panel.equipment_needs.all(:include => :equipment_type).map! {|n| n.equipment_type.description} 
-               equip = needs.join(', ')
-      
                if params[:csv]
+                  needs = Array.new
+                  needs = panel.equipment_needs.all(:include => :equipment_type).map! {|n| n.equipment_type.description} 
+                  equip = needs.join(', ')
    
                   line = [
                           (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
@@ -299,17 +269,8 @@ class PlannerReportsController < PlannerController
                          ]
       
                   output.push line
-   
-               else
-                  panel[:equip] = needs
-                  unless @grouped_times.has_key?("#{panel.time_slot.start.strftime('%a')} #{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}")
-                     @grouped_times["#{panel.time_slot.start.strftime('%a')} #{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}"] = Array.new
-                  end
-                  @grouped_times["#{panel.time_slot.start.strftime('%a')} #{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}"] << panel
                end
          end
-
-         @times = @grouped_times.sort{|a, b| [a[1][0].time_slot.start, a[1][0].time_slot.end] <=> [b[1][0].time_slot.start, b[1][0].time_slot.end] }
       end
          
       if params[:csv]
@@ -411,6 +372,16 @@ class PlannerReportsController < PlannerController
       @displayIds = params[:prog_nbr] ? true : false
       @names_only = params[:names_only] ? true : false
       @names_city_only = params[:names_and_city] ? true : false
+      
+      @displayIds = params[:prog_nbr] ? true : false
+      @names_only = params[:names_only] ? true : false
+      @names_city_only = params[:names_and_city] ? true : false
+      @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], 
+                            (params[:incl_rsvd]? [PersonItemRole['Reserved'].id] : nil), 
+                            (params[:sched_only] ? true : false), 
+                            (params[:visible_only] ? true : false)
+      
+
       @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], 
                             (params[:incl_rsvd]? [PersonItemRole['Reserved'].id] : nil), 
                             (params[:sched_only] ? true : false), 

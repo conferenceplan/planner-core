@@ -1,6 +1,6 @@
-<h2>Panels by Timeslot</h2>
+<h2>Items by Timeslot</h2>
 
-Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Special Interest Group, Workshop, Dialog, Game Show, Book Discussion, Auction, and Demonstration only.
+Includes all item types.
 
 <%= form_tag('/planner_reports/panels_by_timeslot', :method => 'post') do %>
 <p>
@@ -13,19 +13,32 @@ Includes item types Panel, Reading, Publisher Presentation, Talk, Intrview, Spec
    <% if @times.blank? %>
       None right now.
    <% else %>
+      <% cur = TimeSlot.new %>
+      <% inlist = false %>
       <dl><% @times.each do |t| %>
-          <dt><h4><%= t[0] %></h4></dt>
-          <dd><ul><% t[1].each do |p| %>
-             <li><%= p.room.name %> (<%= p.room.venue.name unless p.room.venue.nil? %>)
-                    <%= p.title %> 
-                    <% unless p[:equip].blank? %>
-                       <br>Equipment Needed:
-                           <ul><% p[:equip].each do |n| %>
-                                  <li><%= n %></li>
-                               <% end %>
-                           </ul>
-                    <% end %></li>
-              <% end %></ul></dd>
+          <% if (t.start != cur.start) || (t.end != cur.end) %>
+              <% if inlist %>
+                </ul></dd>
+                <% inlist = false %>
+              <% end %>
+              <dt><h4><%= t.start.strftime("%A %H:%M") %> - <%= t.end.strftime("%H:%M") %></h4></dt>
+              <% cur = t %>
+              <dd><ul>
+              <% inlist = true %>
+          <% end %>
+          <% t.programme_items.each do |panel|%>
+            <li><%= panel.room.name %> (<%= panel.room.venue.name %>) <%= panel.title %>
+              <% equip = panel.equipment_needs.all(:include => :equipment_type).map! {|n| n.equipment_type.description} %>
+              <% if equip && equip.size > 0 %>
+                <br/>Equipment Needed:
+                  <ul>
+                  <% equip.each do |e| %>
+                    <li><%= e %></li>
+                  <% end %>
+                  </ul>
+              <% end %>
+            </li>
+          <% end %>
       <% end %></dl>
    <% end %>
    

@@ -6,15 +6,46 @@ class PublishJob
     modifiedItems = 0
     renmovedItems = 0
     p = PublicationDate.new
-    p.timestamp = DateTime.current
     newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
     modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
     removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
     removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
-    p.newitems = newItems
-    p.modifieditems = modifiedItems
-    p.removeditems = renmovedItems
-    p.save
+    
+    PublishedProgrammeItem.transaction do
+      sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
+      
+      p.timestamp = DateTime.current
+      p.newitems = newItems
+      p.modifieditems = modifiedItems
+      p.removeditems = renmovedItems
+      p.save
+    end
+    
+    Rails.cache.clear # make sure that the mem cache is flushed
+    
+    # update the manifest file in the mobile app for EA
+    updateManifestFile
+    
+  end
+  
+  def updateManifestFile
+    filename = SITE_CONFIG[:conference][:manifest]
+    # open the file
+    if (filename != nil) && (File.exists? filename)
+      newContent = ""
+      File.open filename , 'r' do | file | 
+        # replace the date on the second line
+        lineNo = 1
+        file.each_line do |line|
+          newContent += line if lineNo != 2
+          # # Fri Aug 23 11:19:38 CDT 2013
+          newContent += "# " +  Time.now.strftime("%a %m %e %H:%M:%S %Z %Y") + "\n" if lineNo == 2 # Fri Aug 23 11:19:38 CDT 2013"
+          lineNo += 1
+        end
+      end
+      File.open(filename, "w") {|file| file.puts newContent}
+    end
+    
   end
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
@@ -33,7 +64,7 @@ class PublishJob
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'(publications.publication_date < programme_items.updated_at) OR (publications.publication_date < room_item_assignments.updated_at) OR (publications.publication_date < programme_item_assignments.updated_at)', nil)
+    clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at)', nil)
     # check the date of the programme item compared with the published
     args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication] }
     return ProgrammeItem.find :all, args
@@ -213,9 +244,13 @@ EOS
           # find the index of the person only if the role is also different
           idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && (a.role != srcAssignment.role) }
           if idx != nil
-            dest.published_programme_item_assignments[idx].role = srcAssignment.role
-            dest.published_programme_item_assignments[idx].save
-            # TODO - if the role is changed to reserved then they should be removed...
+            if (srcAssignment.role == PersonItemRole['Reserved']) || (srcAssignment.role != PersonItemRole['Invisible'])
+              # If the role is changed to reserved or invisible then they should be removed...
+              dest.published_programme_item_assignments[idx].destroy
+            else  
+              dest.published_programme_item_assignments[idx].role = srcAssignment.role
+              dest.published_programme_item_assignments[idx].save
+            end
           end
         end
       end

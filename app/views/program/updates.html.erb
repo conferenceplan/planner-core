@@ -56,7 +56,7 @@
 <% end %>
 
 <% if peopleAdded %>
-<h2>Program Participants Added to Programme Items</h2>
+<h2>Program Participants Added to Program Items</h2>
 <% peopleAdded.each do |k, v| %>
     <%if (addedItems == nil) || !addedItems[k] %>
     <%= BlueCloth.new(k.title).to_html.html_safe %>
@@ -74,13 +74,13 @@
 
 <% peopleRemoved = @resultantChanges[:removePerson] %>
 <% if peopleRemoved %>
-<h2>Program Participants Dropped from Particular  Programme Items</h2>
+<h2>Program Participants Dropped from Program Items</h2>
 <% peopleRemoved.each do |k, v| %>
     <%= BlueCloth.new(k.title).to_html.html_safe %>
     <p>
        <%= k.published_time_slot.start.strftime("%A at %H:%M") %>. The following Program Participants have been dropped:<br/> 
     <% v.each_index do |idx| %>
-        <% if idx % 2 == 0 %>
+        <% if (idx % 2 == 0) && v[idx].instance_of?( Person )  %>
         <%= v[idx].getFullPublicationName %><br/>
         <% end %>
     <% end %>

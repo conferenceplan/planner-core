@@ -23,7 +23,7 @@ class SurveyRespondent < ActiveRecord::Base
   end
 
   def suffix
-    return person.first_name
+    return person.suffix
   end
 
   def email

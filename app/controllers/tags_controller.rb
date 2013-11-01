@@ -98,6 +98,7 @@ class TagsController < PlannerController
         # TODO - capitalise?
         obj.tag_list_on(context).add(tag)
       end
+      obj.updated_at_will_change!
       obj.save
     end
     
@@ -114,6 +115,7 @@ class TagsController < PlannerController
       tag = params[:tag]
 
       obj.tag_list_on(context).delete(tag)
+      obj.updated_at_will_change!
       obj.save
     end
 

@@ -1,0 +1,10 @@
+<br/>
+<br/>
+<p> Updated the Excluded Items</p>
+<% if @peopleUpdate %>
+  <% for person in  @peopleUpdate %>
+	<li> <%= person.first_name %> <%= person.last_name %>
+	</li>
+  <%end%>
+<% end %>
+

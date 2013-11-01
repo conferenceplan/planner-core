@@ -8,10 +8,10 @@ class ProgramController < ApplicationController
   # For now we only have the cached objects around for 10 minutes. Which means that when the publish has been done within 10 minutes folks
   # will see the new data...
   #
-  caches_action :participants, :expires_in => 10.minutes,
+  caches_action :participants, #:expires_in => 10.minutes,
                 :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }#,
 #                :unless => Proc.new { |c| c.params.has_key?('callback') }
-  caches_action :index, :expires_in => 10.minutes,
+  caches_action :index, #:expires_in => 10.minutes,
                 :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }#,
 #                :unless => Proc.new { |c| c.params.has_key?('callback') }
   
@@ -53,13 +53,13 @@ class ProgramController < ApplicationController
         end
       } # This should generate an HTML grid
       format.js {
-        render :json => @programmeItems, :callback => params[:callback]
+        render :json => "var program = " + @programmeItems.to_json(:new_format => true) + ";", :content_type => 'application/javascript' 
       }
       format.json {
         if params[:func]
-          render :json => "var "+ params[:func] +" = " + @programmeItems.to_json(:new_format => true), :callback => params[:callback] 
+          render :json => "var "+ params[:func] +" = " + @programmeItems.to_json(:new_format => true) + ";", :content_type => 'application/javascript' 
         else  
-          render :json => @programmeItems.to_json(:new_format => true), :callback => params[:callback]
+          render :json => @programmeItems.to_json(:new_format => true), :callback => params[:callback], :content_type => 'application/json'
         end
       }
     end
@@ -178,52 +178,16 @@ class ProgramController < ApplicationController
       format.html { render :layout => 'content' }
       format.js { 
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
-          jsonstr = '' 
-          @participants.each do |p|
-            if jsonstr.length > 0
-              jsonstr += ','
-            end
-            jsonstr += '{"id":"' + p[0] + '","first_name":' + p[1].to_json + ',"last_name":' + p[2].to_json + ',"suffix":' + p[3].to_json
-            jsonstr += ',"bio":' + p[4].to_json 
-            jsonstr += ',"website":' + p[5].to_json +  ',"twitterinfo":' 
-            jsonstr += p[6].to_json +  ',"facebook":' + p[7].to_json + '}'
-          end
-          jsonstr = '[' + jsonstr + ']'
-          render_json  jsonstr, :content_type => 'application/json'
-        }
+          jsonstr = participants_to_json(@participants)
+          render :json => "var participants = " + jsonstr + ";", :content_type => 'application/javascript' 
+      }
       format.json {
           @participants = ActiveRecord::Base.connection.select_rows(PARTICIPANT_QUERY)
-          jsonstr = '' 
-          @participants.each do |p|
-            if jsonstr.length > 0
-              jsonstr += ','
-            end
-            jsonstr += '{"id":"' + p[0].to_s  + '"'
-            jsonstr += ',"name": [' + p[1].to_json + ',' + p[2].to_json # first, last, prefix, suffix
-            jsonstr += ', "",' + p[3].to_json if !p[3].empty?
-            jsonstr += ']' 
-            jsonstr += ',"tags": []' # Add tags - TODO 
-            jsonstr += ',"links": {'
-            
-            linksstr = ""
-            linksstr += '"photo":' + p[8].to_json if !p[8].empty?
-            linksstr += "," if !linksstr.empty? if !p[8].empty?
-            linksstr += '"url":' + p[5].to_json if !p[5].empty?
-            linksstr += "," if !linksstr.empty? && !p[5].empty?
-            linksstr += '"twitter":' + p[6].to_json if !p[6].empty?
-            linksstr += "," if !linksstr.empty? && !p[6].empty?
-            linksstr += '"fb":' + p[7].to_json if !p[7].empty?
-            
-            jsonstr += linksstr + '}'
-            jsonstr += ',"bio":' + p[4].to_json 
-            jsonstr += ',"prog": ' + p[9].split(",").to_json  # Add progam ids if any 
-            jsonstr += '}'
-          end
-          jsonstr = '[' + jsonstr + ']'
+          jsonstr = participants_to_json(@participants)
           if params[:func]
             render :json  => "var "+ params[:func] +" = " + jsonstr, :content_type => 'application/json', :callback => params[:callback]
           else  
-            render :json  => jsonstr, :content_type => 'application/json', :callback => params[:callback]
+            render_json  jsonstr, :content_type => 'application/json', :callback => params[:callback]
           end
       }
       format.csv {
@@ -406,8 +370,6 @@ class ProgramController < ApplicationController
           jsonstr += '{"updates":' 
           
           list = list.concat @resultantChanges[:update].keys if @resultantChanges[:update]
-          list = list.concat @resultantChanges[:removePerson].keys if @resultantChanges[:removePerson]
-          list = list.concat @resultantChanges[:addPerson].keys if @resultantChanges[:addPerson]
           list = list.concat @resultantChanges[:detailUpdate].keys if @resultantChanges[:detailUpdate]
           
           jsonstr += list.uniq{|v| v[:id]}.to_json(:new_format => true) 
@@ -429,8 +391,171 @@ class ProgramController < ApplicationController
     end
   end
   
-  protected
+  def updates2
+    pubIndex = params[:pubidx]
+    @resultantChanges = {}
+    
+    # To get the updates:
+    # Get a list of all publications that have changed since the last publication date
+    if pubIndex
+      @lastPubDate = PublicationDate.find(pubIndex)
+    else
+      @lastPubDate = PublicationDate.last
+    end
+    
+    if !@lastPubDate
+      return
+    end
+    
+    @resultantChanges = PublishedProgramItemsService.getUpdatesFromPublishDate(@lastPubDate)
+    
+    ActiveRecord::Base.include_root_in_json = false # hack for now
+        newItems = []
+        updates = {}
+        if @resultantChanges[:new]
+          @resultantChanges[:new].each do |k, v|
+            if !updates[k.id]
+              updates[k.id] = {}
+            end
+            logger.debug "***** " + k.id.to_s
+            logger.debug "***** " + k.to_s
+            updates[k.id] = k
+            newItems << k.id
+          end  
+        end
+        
+        if @resultantChanges[:update]
+          @resultantChanges[:update].each do |k, v|
+            if !updates[k.id]
+              updates[k.id] = {}
+            end
+            if v[:timeMove]
+              updates[k.id].merge!( { 'date' => v[:timeMove][1].strftime('%Y-%m-%d') } ) if updates[k.id].is_a? Hash 
+              updates[k.id].merge!( { 'time' => v[:timeMove][1].strftime('%H:%M') } ) if updates[k.id].is_a? Hash 
+            end
+            if v[:roomMove]
+            logger.debug "***** " + k.id.to_s #v[:roomMove][1].name
+              updates[k.id].merge!( { 'loc' => [v[:roomMove][1].name, v[:roomMove][1].published_venue.name] } ) if updates[k.id].is_a? Hash 
+            logger.debug "******"
+            end
+          end
+        end
+        
+        # # detailUpdates = {} # Create an association to put in the update information
+        if @resultantChanges[:detailUpdate]
+          # Go through the changes and add them to an association of changes...
+          @resultantChanges[:detailUpdate].each do |k, v|
+            if v.size > 0 && v.kind_of?(Array) && !newItems.index(k.id)
+                v.each do |change|
+                  change.each do |name, vals|
+                    if vals
+                      if name != "pub_reference_number"
+                        if !updates[k.id]
+                          updates[k.id] = {}
+                        end
+                        name = 'desc' if name == 'precis'
+                        updates[k.id].merge!( { name => vals[1].to_s } )
+                      end
+                    end
+                  end
+                end
+            end
+          end
+        end
+        
+        if @resultantChanges[:removeItem]
+          @resultantChanges[:removeItem].each do |k,v|
+            if !updates[k.id]
+              updates[k.id] = {}
+            end
+            updates[k.id] = false
+          end
+        end
+        
+        # Now need to deal with add person and remove person (for item and people lists)
+        # @resultantChanges[:addPerson] @resultantChanges[:removePerson]
+        peopleChanges = {}
+        pChanges = nil
+        if (@resultantChanges[:addPerson] != nil) || (@resultantChanges[:removePerson] != nil)
+          pChanges = @resultantChanges[:removePerson] if @resultantChanges[:removePerson] != nil
+          if (@resultantChanges[:addPerson] != nil)
+            pChanges = (pChanges != nil) ? (pChanges.merge @resultantChanges[:addPerson]) : @resultantChanges[:addPerson]
+          end
+          pChanges.each do |k,v|
+            if !updates[k.id]
+              updates[k.id] = {}
+            end
+            updates[k.id] = { 'people' =>  k.people.collect{ |p| { 
+                                              :id => p.id.to_s , 
+                                              :name => p.getFullPublicationName.strip
+                                                }
+                                            }
+            }
 
+            v.each_index do |idx|
+              if (idx % 2 == 0) && v[idx].instance_of?( Person )
+                peopleChanges[v[idx].id] = v[idx]
+              end
+            end
+          end  
+        end  
+        
+        jsonstr = ""
+        jsonstr += '{'
+        jsonstr += '"program" : '
+        jsonstr += updates.to_json(:new_format => true)
+        jsonstr += ',"people" : '
+        jsonstr += peopleChanges.to_json(:terse => true)
+        jsonstr += '}'
+                
+    respond_to do |format|
+      format.js {
+        render :json => "var updates = " + jsonstr + ";", :content_type => 'application/javascript' 
+      }
+      format.json {
+        if params[:func]
+          render :json  => "var "+ params[:func] +" = [" + jsonstr + "]", :content_type => 'application/json' #  
+        else  
+          render :json  => "" + jsonstr + "", :content_type => 'application/json', :callback => params[:callback] #  
+        end
+      }
+    end
+  end
+  
+  protected
+  #
+  #
+  #
+  def participants_to_json(participants)
+          jsonstr = '' 
+          participants.each do |p|
+            if jsonstr.length > 0
+              jsonstr += ','
+            end
+            jsonstr += '{"id":"' + p[0]  + '"'
+            jsonstr += ',"name": [' + p[1].to_json + ',' + p[2].to_json # first, last, prefix, suffix
+            jsonstr += ', "",' + p[3].to_json if !p[3].empty?
+            jsonstr += ']' 
+            jsonstr += ',"tags": []' # Add tags - TODO 
+            jsonstr += ',"links": {'
+            
+            linksstr = ""
+            linksstr += '"photo":' + p[8].to_json if !p[8].empty?
+            linksstr += "," if !linksstr.empty? if !p[5].empty?
+            linksstr += '"url":' + p[5].to_json if !p[5].empty?
+            linksstr += "," if !linksstr.empty? && !p[6].empty?
+            linksstr += '"twitter":' + p[6].to_json if !p[6].empty?
+            linksstr += "," if !linksstr.empty? && !p[7].empty?
+            linksstr += '"fb":' + p[7].to_json if !p[7].empty?
+            
+            jsonstr += linksstr + '}'
+            jsonstr += ',"bio":' + p[4].to_json 
+            jsonstr += ',"prog": ' + p[9].split(",").to_json  # Add progam ids if any 
+            jsonstr += '}'
+          end
+          jsonstr = '[' + jsonstr + ']'
+  end
+  
   # Merge into the current line
   def mergeTimeLines(curLine, prevLine, time)
     nl = []
