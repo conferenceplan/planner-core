@@ -52,7 +52,7 @@ class EditedBiosController < PlannerController
     editedBio = EditedBio.find(params[:id])
     editedBio.destroy
     
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
   
   def exportbiolist

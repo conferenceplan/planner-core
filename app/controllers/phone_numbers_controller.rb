@@ -34,7 +34,7 @@ class PhoneNumbersController < PlannerController
     # destroyed if there are no other people referencing the address...
     phoneNumber = PhoneNumber.find(params[:id])
     phoneNumber.destroy
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
 
   def index

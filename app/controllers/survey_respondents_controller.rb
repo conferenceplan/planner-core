@@ -4,7 +4,7 @@
 class SurveyRespondentsController < SurveyApplicationController
   before_filter :check_for_single_access_token, :only => [:show, :edit, :update, :confirm]
 
-  # layout "dynasurvey"
+  layout "dynasurvey"
 
   def new
     @survey_respondent = SurveyRespondent.new

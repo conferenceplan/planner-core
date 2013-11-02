@@ -134,18 +134,10 @@ PlannerRc1::Application.routes.draw do
   match 'survey_respondents/tags/update', :controller => 'survey_respondents/update', :action => 'list', :method => 'post'
   # resources :survey_respondents 
   
-  #
-  match 'survey_respondents/reviews/list', :controller => 'survey_respondents/reviews', :action => 'list'
+  # TODO - restrict to show
   namespace :survey_respondents do
-    resources :reviews do
-      member do
-        get 'list'
-        get 'states'
-        post 'copySurvey'
-      end
-    end
+    resources :reviews
   end
-#     
 
   # map.resources :survey_respondents do |respondent|
     # respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 

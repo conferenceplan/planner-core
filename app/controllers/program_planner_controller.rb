@@ -35,7 +35,7 @@ class ProgramPlannerController < PlannerController
 
     removeAssignment(item.room_item_assignment)
     
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
   
   #

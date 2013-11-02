@@ -34,7 +34,7 @@ class AvailableDatesController < PlannerController
   def destroy
     availableDate = AvailableDate.find(params[:id])
     availableDate.destroy
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
 
   def index

@@ -102,8 +102,7 @@ class TagsController < PlannerController
       obj.save
     end
     
-    # render :layout => 'content'
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
 
   def remove
@@ -119,8 +118,7 @@ class TagsController < PlannerController
       obj.save
     end
 
-    # render :layout => 'content'
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
 
 # Create the edit form , the result will be to add a new tag(s)

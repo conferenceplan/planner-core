@@ -33,7 +33,7 @@ class PostalAddressesController < PlannerController
     # destroyed if there are no other people referencing the address...
     postalAddress = PostalAddress.find(params[:id])
     postalAddress.destroy
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
 
   def index

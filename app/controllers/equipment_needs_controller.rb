@@ -32,7 +32,7 @@ class EquipmentNeedsController < PlannerController
   def destroy
     equipmentNeed = EquipmentNeed.find(params[:id])
     equipmentNeed.destroy
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
 
   def index

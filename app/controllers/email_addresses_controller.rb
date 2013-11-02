@@ -32,7 +32,7 @@ class EmailAddressesController < PlannerController
     # TODO - make sure that this cleans up the relationships in the Address table
     emailAddress = EmailAddress.find(params[:id])
     emailAddress.destroy
-    render text: 'OK'
+    render status: :ok, text: {}.to_json
   end
 
   def index

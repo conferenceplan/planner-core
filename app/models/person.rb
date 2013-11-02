@@ -175,7 +175,7 @@ class Person < ActiveRecord::Base
   def emailMatch?(email)
     e = getDefaultEmail()
     
-    return e == email
+    return e.email == email
   end
 
   def updateDefaultEmail(email)
