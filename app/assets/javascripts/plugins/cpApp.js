@@ -242,8 +242,7 @@ var AppUtils = (function(){
             "click .model-drill-down-button"    : "drillDown",
             "click .model-edit-button"          : "editModel",
             "click .model-delete-button"        : "deleteModel",
-            // "click .model-new-button"    : "newModel",
-            // "submit"                     : "submit"
+            "click .model-preview-button"       : "preview",
         },
         
         initialize : function() {
@@ -264,6 +263,12 @@ var AppUtils = (function(){
             }
             this.editModel();
         },
+        
+        preview : function(event) {
+            if (this.options.previewFn) {
+                this.options.previewFn(this.model.id);
+            }
+        },
               
         drillDown : function(event) {
             if (this.options.drillDownFn) {
@@ -273,10 +278,10 @@ var AppUtils = (function(){
             }
         },
         
-        showModel : function() {
-            alert("show");
-            this.editModel();
-        },
+        // showModel : function() {
+            // alert("show");
+            // this.editModel();
+        // },
         
         editModel : function() {
             var v = new ItemEditView({
@@ -328,6 +333,7 @@ var AppUtils = (function(){
                             tagName         : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
                             url             : options.modelURL,
                             selectFn        : options.selectFn,
+                            previewFn       : options.previewFn,
                             drillDownFn     : options.drillDownFn,
                             itemArea        : options.itemArea,
                             readTemplate    : options.readTemplate

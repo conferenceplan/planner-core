@@ -62,9 +62,14 @@ SurveyApp.SurveyManagement = (function(Backbone){
             view_refresh_event      : "survey:refresh",
             drillDownFn             : drillDownSurvey,
             selectFn                : selectSurvey,
+            previewFn               : previewSurvey,
             readTemplate            : '#survey-data-template',
             itemArea                : "#survey-edit-area"
         }) );
+    };
+    
+    function previewSurvey(id) {
+        // TODO - put in mechanism to preview survey in a new window...
     };
     
     function drillDownSurvey(id) {
