@@ -11,7 +11,7 @@ ItemApp.ItemManagement = (function(Backbone){
         schema : {
             title       : { type : 'Text', title : '<%= t "title" %>' },
             short_title : { type : 'Text', title : '<%= t "short title" %>' },
-            precis : { type : 'TextArea', title : '<%= t "pecis" %>', editorAttrs: { rows : 6, cols : 60 } },
+            precis : { type : 'Html', title : '<%= t "description" %>', editorAttrs: { rows : 6, cols : 60 } },
             notes : { type : 'TextArea', title : '<%= t "notes" %>', editorAttrs: { rows : 6, cols : 60 } },
             format_id : { type : 'Select', title : '<%= t "format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             setup_type_id : { type : 'Select', title : '<%= t "setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
