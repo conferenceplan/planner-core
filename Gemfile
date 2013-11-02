@@ -14,6 +14,7 @@ gem "daemons"
 gem 'delayed_job' 
 gem 'delayed_job_active_record'
 #gem 'enumerations_mixin' # put in vendor plugin because it has to be updated to R3.2
+gem 'enumerations_mixin', :git => 'git://github.com/balen/enumerations_mixin.git'
 gem 'i18n' 
 gem 'jbuilder'
 gem 'jquery-rails'

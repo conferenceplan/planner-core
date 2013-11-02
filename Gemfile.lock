@@ -1,6 +1,13 @@
 GIT
+  remote: git://github.com/balen/enumerations_mixin.git
+  revision: d73ffc7fa257fe80d6a40a7396a0fd5f07b66ed3
+  specs:
+    enumerations_mixin (0.2.5)
+      rails (>= 3.2.0)
+
+GIT
   remote: git://github.com/svenfuchs/i18n-active_record.git
-  revision: b631b05a96d578b6c01c4751cc1a0ba8a84406af
+  revision: 22b1f766a4e4e7ced25ba05bee07d4ac558cc5f7
   specs:
     i18n-active_record (0.0.2)
       i18n (>= 0.5.0)
@@ -196,6 +203,7 @@ DEPENDENCIES
   declarative_authorization
   delayed_job
   delayed_job_active_record
+  enumerations_mixin!
   i18n
   i18n-active_record!
   jbuilder
