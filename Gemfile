@@ -2,6 +2,8 @@ source "https://rubygems.org"
 
 gem 'actionmailer' 
 gem 'activerecord' 
+gem 'enumerations_mixin', :git => 'git://github.com/balen/enumerations_mixin.git'
+
 gem "audited-activerecord", "~> 3.0"
 gem 'acts-as-taggable-on' 
 gem 'authlogic'
@@ -13,8 +15,6 @@ gem "declarative_authorization"
 gem "daemons"
 gem 'delayed_job' 
 gem 'delayed_job_active_record'
-#gem 'enumerations_mixin' # put in vendor plugin because it has to be updated to R3.2
-gem 'enumerations_mixin', :git => 'git://github.com/balen/enumerations_mixin.git'
 gem 'i18n' 
 gem 'jbuilder'
 gem 'jquery-rails'

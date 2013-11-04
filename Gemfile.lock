@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/balen/enumerations_mixin.git
-  revision: d73ffc7fa257fe80d6a40a7396a0fd5f07b66ed3
+  revision: 62d74d1380e79bed0f878553604aba9a480e2815
   specs:
     enumerations_mixin (0.2.5)
       rails (>= 3.2.0)
