@@ -1,3 +1,6 @@
+#
+#
+#
 class ApplicationController < ActionController::Base
   
   before_filter :set_locale
@@ -13,6 +16,16 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
   
   private
+    def check_for_single_access_token # TODO - change name???
+      if params[:key] && !params[:key].empty?
+        @respondent       = SurveyRespondent.find_by_single_access_token(params[:key]) 
+        @current_respondent_session = SurveyRespondentSession.create!(@respondent) 
+      end
+    end 
+    
+    #
+    #
+    #
     def current_user_session
       return @current_user_session if defined?(@current_user_session)
       @current_user_session = UserSession.find
@@ -42,6 +55,9 @@ class ApplicationController < ActionController::Base
       end
     end
     
+    #
+    #
+    #
     def store_location
       session[:return_to] = request.url
     end

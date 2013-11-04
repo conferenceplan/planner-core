@@ -1,7 +1,7 @@
 #
 #
 #
-class SurveyRespondentsController < SurveyApplicationController
+class SurveyRespondentsController < ApplicationController
   before_filter :check_for_single_access_token, :only => [:show, :edit, :update, :confirm]
 
   layout "dynasurvey"
