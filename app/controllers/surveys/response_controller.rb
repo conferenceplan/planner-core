@@ -135,6 +135,7 @@ class Surveys::ResponseController < ApplicationController
   #
   def renderalias
     page = params[:page] # use this to find the id of the survey from the database
+    @preview = params[:preview] == 'preview'
     @site_config = SiteConfig.first
 
     if page
@@ -142,15 +143,27 @@ class Surveys::ResponseController < ApplicationController
       # TODO - check if this is preview, if so do a render (but disable the save on submit)
       # if not a preview then check if authentication is needed, it it is then ask for authentication before rendering the form
       
-      
       # find the survey for the page alias
       @survey = Survey.find_by_alias(page)
-      if @survey
+      if @survey && (@survey.public || @preview)
+        
+        # return unless @survey.public || @preview
+        
+        if  !@preview && @survey.authenticate # TODO *****
+          # check to see if the use is authenticated
+          # require_user # TODO - change to test for single access token etc.
+          if !user_logged_in?
+            logger.error "NEED TO LOGIN"
+            store_location
+            redirect_to new_user_session_url
+          end
+        end
+        
         @page_title = @survey.name
         @current_key = params[:key]
         @path = '/surveys/' + @survey.id.to_s + '/response' # TODO - fix for language...
 
-        if @respondent
+        if @respondent && !preview
           if @respondent.survey_respondent_detail
             @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail, @respondent.person)
 
@@ -167,11 +180,10 @@ class Surveys::ResponseController < ApplicationController
               @survey_response = convertInitialInputArray(@survey, @respondent.person)
           end
         end
-
-        render :index
+      else
+        @survey = nil
       end
     end
-  # else we did not find the page
   end
 
   private

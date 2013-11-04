@@ -282,7 +282,7 @@ PlannerRc1::Application.routes.draw do
   match 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
   resources :program
 
-  match '/form/:page', :controller => 'surveys/response', :action => 'renderalias'
+  match '/form/:page(/:preview)', :controller => 'surveys/response', :action => 'renderalias'
 
 #   
 # 

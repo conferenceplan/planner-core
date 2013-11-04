@@ -68,8 +68,10 @@ SurveyApp.SurveyManagement = (function(Backbone){
         }) );
     };
     
-    function previewSurvey(id) {
+    function previewSurvey(mdl) {
         // TODO - put in mechanism to preview survey in a new window...
+        // alert("help");
+        window.open("/form/" + mdl.get('alias') + '/preview');
     };
     
     function drillDownSurvey(id) {

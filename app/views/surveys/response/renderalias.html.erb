@@ -1,2 +1,42 @@
-<h2>Unknown Form</h2>
-<p>Sorry we were unable to find the form that you requested<p>
+<% if @survey && !@survey.header_image.empty? %>
+    <div class="survey-row"><div class="full-width"><img src="<%= @survey.header_image if @survey.header_image %>"></div></div>
+<%end%>
+
+<% if @errors %>  
+<div class="alert alert-block alert-error">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <%= get_error_messages(@errors).html_safe %>
+</div>
+<% end %>
+
+<% if @survey %>
+    <%= form_tag @path, :method => :post do -%>
+    <%= hidden_field_tag("key", @current_key) %>
+            <div class="survey-row">
+                <h2><%= @survey.name %></h2>
+            </div>
+        <fieldset class="survey-set">
+            <div class="survey-row">
+                <div class="full-width"><%= @survey.welcome.html_safe %></div>
+            </div>
+            <!-- Get Biogragraphic info -->
+            <div class="survey-row form-horizontal">
+            <%=render :partial => 'respondent'%>
+            </div>
+            <% @survey.survey_groups.each do |group| %>
+                <div class="survey-row">
+                <%=render :partial => 'group', :locals => {:group => group}%>
+                </div>
+            <% end %>
+<% if @survey.use_captcha && @site_config %>
+    <%= recaptcha_tags :public_key => @site_config.captcha_pub_key %>
+<% end %>
+        </fieldset>
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" <%= 'disabled' if @preview %> ><%= @survey.submit_string %></button>
+        </div>
+    <% end %>
+  <% else %>
+    <p>No Valid Survey</p>
+    <%= @survey_id%>
+<% end %>

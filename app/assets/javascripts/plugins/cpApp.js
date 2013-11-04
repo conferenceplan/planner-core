@@ -266,7 +266,7 @@ var AppUtils = (function(){
         
         preview : function(event) {
             if (this.options.previewFn) {
-                this.options.previewFn(this.model.id);
+                this.options.previewFn(this.model);
             }
         },
               
