@@ -1,2 +1,0 @@
-module Mail::MailHistoryHelper
-end

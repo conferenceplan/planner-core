@@ -1,2 +1,0 @@
-module Pages::ScheduleDashHelper
-end

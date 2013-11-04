@@ -1,7 +1,7 @@
 #
 # Render the survey
 #
-class Surveys::ResponseController < SurveyApplicationController
+class Surveys::ResponseController < ApplicationController
   layout "dynasurvey"
 
   before_filter :check_for_single_access_token, :only => [:create, :show, :index, :renderalias]

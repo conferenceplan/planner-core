@@ -1,3 +1,0 @@
-module EmailAddressesHelper
-
-end
