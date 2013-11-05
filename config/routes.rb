@@ -260,6 +260,8 @@ PlannerRc1::Application.routes.draw do
       resources :survey_questions, :controller => 'surveys/survey_groups/survey_questions'
     end
   end
+  
+  match 'survey_query/list', :controller => 'survey_query', :action => 'list'
   resources :survey_query
 
   match 'survey_reports/:action', :controller => 'survey_reports' #,  :member => {:list => :get, :del => :delete }

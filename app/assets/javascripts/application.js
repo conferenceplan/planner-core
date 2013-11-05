@@ -6,7 +6,6 @@
 //= require jquery-migrate-1.1.1
 
 //= require jquery-ui-1.9.2.custom
-//  require jquery.form
 //= require jquery.timers-1.2
 //= require jquery.timeentry.min
 

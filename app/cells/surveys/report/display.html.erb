@@ -1,0 +1,26 @@
+
+<%= render_cell "surveys/report", :javascript,
+    :queryListRefreshMethod => "SurveyReportApp.SurveyQueries.refreshQueryList"
+    %>
+
+<%= render_cell "surveys/query_list", :javascript,
+    :caption => "My Queries",
+    :selectNotifyMethod => "SurveyReportApp.SurveyReport.selectQuery"
+    %>
+
+<%= render_cell "surveys/report", :templates %>
+<%= render_cell "surveys/query_list", :templates %>
+
+<div class="row-fluid">
+    <div class="span4">
+        <div class="span12">
+            <%= render_cell "surveys/query_list", :display %> <!-- TODO - change to an element that is passed into the other controls-->
+        </div>
+        <div class="span12">
+            Save Queries
+        </div>
+    </div>
+    <div class="span8">
+        <div id='query-view'></div>
+    </div>
+</div>

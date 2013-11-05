@@ -1,0 +1,95 @@
+<script type="text/javascript">
+
+// SurveyReportApp = new Backbone.Marionette.Application();
+
+SurveyReportApp.SurveyQueries = (function(Backbone){
+
+    QueryName = Backbone.Model.extend({
+        urlRoot : '/survey_query',
+        schema : {
+            name : { type : 'Text', title : '<%= t "name" %>', validators: ['required'] },
+        }
+    });
+    
+    QueryCollection = Backbone.Collection.extend({
+        model : QueryName
+    });
+
+    QueryLayout = Backbone.Marionette.Layout.extend({
+        template: "#query-list-layout-template",
+        
+        regions : {
+            queryControlRegion: "#query-control-div",
+            queryRegion: "#query-region-div",
+        },
+    });
+
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' );
+    };
+    
+    function showQueries() {
+        queryLayout = new QueryLayout();
+        queryLayout.render();
+        $('#query-list-region-view').html(queryLayout.el);
+        
+        TabUtils.createTabControl({
+            template                : "#query-control-template",
+            modelType               : Query,
+            view_refresh_event      : "query:refresh",
+            modal_create_title      : '<%= t "Create Query" %>',
+            region                  : queryLayout.queryControlRegion,
+        });
+        
+        tabLists.push( AppUtils.createCollectionView({
+            url                     : "/survey_query/list.json", // TODO
+            collectionType          : QueryCollection,
+            region                  : queryLayout.queryRegion,
+            template                : "#query-template",
+            collection_attributes   : { "class" : "table table-striped table-condensed" },
+            collection_tagName      : 'table',
+            tagName                 : 'tr',
+            view_refresh_event      : "query:refresh",
+            selectFn                : selectQuery,
+            // TODO - we want the edit to be a dialog???
+            // readTemplate            : '#query-data-template',
+            //itemArea                : "#query-edit-area"
+        }) );
+    };
+    
+    function selectQuery(id) {
+        <%= @selectNotifyMethod %>(id);
+    };
+    
+    return {
+        init : function() {
+            showQueries();
+        },
+        
+        clearDetails : function() {
+        },
+        
+        // selectQuery : function(id) {
+            // alert("QUERY SELECTED");
+            // // SurveyGroupApp.SurveyGroupManagement.clearDetails();
+            // // SurveyQuestionApp.SurveyQuestionManagement.clearDetails();
+        // },
+        
+        refreshQueryList : function() {
+            alert("REFRESH LIST"); // TODO
+        }
+    }
+
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    // SurveyReportApp.start();
+    SurveyReportApp.SurveyQueries.init();
+});
+
+</script>

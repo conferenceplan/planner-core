@@ -1,0 +1,38 @@
+<script type="text/template" id="query-layout-template">
+<section>
+    <div id="query-control-div"></div>
+    <div id="query-region-div"></div>
+</section>
+</script>
+
+<script type="text/template" id="query-view-template">
+    <div class="row-fluid">
+        <div class="span12">
+            <button class="model-edit-button btn btn-primary btn-mini pull-right">
+                <%= t "Edit" %>
+            </button>
+            <dl class="dl-horizontal">
+                <dt><%= t "name" %></dt><dd>{{= name ? name : "&nbsp;" }}</dd>
+                <dt><%= t "survey" %></dt><dd>{{= survey_id ? survey_name : "&nbsp;" }}</dd>
+                <dt><%= t "shared" %></dt><dd>{{= shared ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <b>{{= operation ? operation : "&nbsp;" }}</b> of the following:
+            <button class="query-run-button btn btn-primary pull-right">
+                <%= t "Run" %>
+            </button>
+    </div>
+    <div class="row-fluid">
+        {{ _.each(survey_query_predicates, function(predicate) { }}
+        <div class="thumbnail clearfix">
+            <small>
+                "{{= predicate.survey_question_name }}"
+                <b>{{= predicate.operation }}</b>
+                {{= predicate.value }}
+            </small>
+        </div>
+        {{ }); }}
+    </div>
+</script>
