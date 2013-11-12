@@ -261,12 +261,13 @@ PlannerRc1::Application.routes.draw do
     end
   end
   
-  match 'survey_query/list', :controller => 'survey_query', :action => 'list'
+  match 'survey_query/list.:format', :controller => 'survey_query', :action => 'list'  
+  match 'survey_query/questions', :controller => 'survey_query', :action => 'questions'  
   resources :survey_query
 
   match 'survey_reports/:action', :controller => 'survey_reports' #,  :member => {:list => :get, :del => :delete }
   match 'survey_reports/surveyQueryNames/:id', :controller => 'survey_reports', :action => 'delSurveyQuery', :method => :delete
-  resources :survey_reports
+  # resources :survey_reports
 
   match 'planner_reports/:action', :controller => 'planner_reports'
   resources :planner_reports

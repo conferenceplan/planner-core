@@ -5,10 +5,28 @@
         <div class="span1"><span class="label label-big"><%= t 'Queries' %></span></div><div id="query-control-div"></div>
     </div>
     <div class="row-fluid">
-        <div id="query-region-div"></div>
+        <div class='collapse-group' id="query-area-parent" style="height : 370px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#MyQueries">My Queries</a>
+            </div>
+            <div id="MyQueries" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div id="my-query-region-div"></div>
+                </div>
+            </div>
+            <div class="accordion-heading">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#SharedQueries">Shared Queries</a>
+            </div>
+            <div id="SharedQueries" class="accordion-body collapse">
+                <div class="accordion-inner">
+                    <div id="shared-query-region-div"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 </script>
+
 
 <script type="text/template" id="query-template">
     <td>

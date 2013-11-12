@@ -5,11 +5,26 @@ class SurveyQueryController < PlannerController
   end
   
   def list
-    # TODO - add a parameter so we can filter based on public and user queries
-    # TODO - if no user specified then return only the public queries
-    @queries = SurveyQuery.all
+    conditions = {}
+    conditions = { "user_id" => @current_user.id } if params[:subset] && (params[:subset] == 'user')
+    conditions = { "shared" => true } if params[:subset] && (params[:subset] == 'shared')
+    
+    @queries = SurveyQuery.all :conditions => conditions
   end
 
+  def questions
+    survey = SurveyQuery.find(params[:survey])
+    
+    surveyId = survey.survey_id
+    
+    # TODO - use the group and question ordering
+    questions = SurveyQuestion.all :joins => {:survey_group => :survey}, :include => :survey_answers,
+                :conditions => {:surveys => {:id => surveyId}, :question_type => ['textfield', 'textbox', 'singlechoice', 'multiplechoice', 'selectionbox', 'availability']}
+    
+    render json: questions.to_json(:only => [ :id, :name, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order, :answer ],
+                                  :include => {:survey_answers => {}}
+                                ), :content_type => 'application/json'
+  end
 
   def show
     @query = SurveyQuery.find(params[:id])

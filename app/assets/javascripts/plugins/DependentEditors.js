@@ -1,6 +1,7 @@
 /*
  * 
  */
+
 ;(function(Form) {
 
 /*
@@ -18,6 +19,19 @@ _.extend(Form.Editor.prototype, {
         } else {
             element.addClass('hidden-form-group');
         }
+    },
+    
+    getDependantValue : function(form) {
+        var intialDependantValue = '';
+        var dependsOn = this.options.schema.dependsOn;
+        
+        if ((typeof this.form.model != 'undefined') && (this.form.model != null)) {
+            intialDependantValue = this.form.model.get(dependsOn);
+        } else if ((typeof this.form.data != 'undefined') && (this.form.data != null)) {
+            intialDependantValue = this.form.data[dependsOn];
+        };
+        
+        return intialDependantValue;
     },
 
     dependInit : function(form) {
@@ -95,6 +109,80 @@ Form.editors.DependentSelect = Form.editors.Select.extend({
         return this;
     }
 
+});
+
+Form.editors.DependentValueSelect = Form.editors.Select.extend({
+
+    tagName: 'div',
+
+    render : function() {
+        if (this.isSelectField) {
+            this.setOptions(this.schema.options);
+
+            var html= this.$el.html();
+            this.$el.attr('name', '');
+            this.$el.attr('id', '');
+            this.$el.html("<select name='" + this.id + "' id='" +  this.id + "'>" + html + "</select>"); // need id and name
+            this.setValue(this.value);
+        } else {
+            this.$el.attr('name', '');
+            this.$el.attr('id', '');
+            this.$el.html("<input name='" + this.id + "' id='" +  this.id + "'></input>"); // need id and name
+            this.setValue(this.value);
+        };
+        
+        return this;
+    },
+
+    updateOptions : function(form, editor, extra) {
+        // The value for the options has changed, so re-render the selectable options
+        if (this.options.schema.altField) {
+            var v = editor.$el.find('select')[0].value;
+            if ($.inArray(v.toString(), this.options.schema.dependentValues) > -1) {
+                this.isSelectField = true;
+            } else {
+                this.isSelectField = false;
+            };
+        }
+        this.render();
+    },
+    
+    getValue: function() {
+        if (this.$el.find('select').length > 0 ) {
+            return this.$el.find('select')[0].value;
+        } else {
+            var e = this.$el.find('input');
+            return e[0].value;
+        }
+    },
+
+    setValue: function(value) {
+        if (this.$el.find('select').length > 0 ) {
+            this.$el.find('select').val(value);
+        } else {
+            var e = this.$el.find('input');
+            if (e.length > 0) {
+                e.val(value);
+            }
+        }
+    },
+
+
+    initialize: function(options) {
+        // options.template || this.constructor.template;
+        
+        // Call parent initializer
+        Backbone.Form.editors.Select.prototype.initialize.call(this, options);
+        
+        var depVal = this.getDependantValue(this.form);
+        if (this.options.schema.altField) {
+            this.isSelectField = ($.inArray(depVal.toString(), this.options.schema.dependentValues) > -1); // TODO - need to initialize properly, also need to set the value....
+        } else {
+            this.isSelectField = true;
+        }
+
+        this.form.on(options.schema.dependsOn + ':change', this.updateOptions, this );
+    },
 });
 
 Form.editors.DependentCheckboxes = Form.editors.Checkboxes.extend({

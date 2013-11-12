@@ -20,7 +20,7 @@
     </div>
     <div class="row-fluid">
         <b>{{= operation ? operation : "&nbsp;" }}</b> of the following:
-            <button class="query-run-button btn btn-primary pull-right">
+            <button class="model-select-button btn btn-primary pull-right">
                 <%= t "Run" %>
             </button>
     </div>
@@ -35,4 +35,13 @@
         </div>
         {{ }); }}
     </div>
+</script>
+
+<script type="text/template" id="predicate-data-template">
+    {{= survey_question_id }} {{= operation }} {{= value }}
+</script>
+
+<script type="text/template" id="query-results-template">
+    <table id="results-t" class="result-table"><tr><td/></tr></table>
+    <div id="result-pager"></div>
 </script>

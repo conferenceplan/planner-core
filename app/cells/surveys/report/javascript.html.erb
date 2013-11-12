@@ -4,9 +4,11 @@ SurveyReportApp = new Backbone.Marionette.Application();
 
 SurveyReportApp.SurveyReport = (function(Backbone){
     
+    Backbone.Form.editors.List.Modal.ModalAdapter = Backbone.BootstrapModal;
+    
     // TODO - we should only be able to edit the queries that belong to us....
     Query = Backbone.DeepModel.extend({
-        urlRoot : '/survey_query', // TODO - check
+        urlRoot : '/survey_query',
         schema : {
             name            : { type : 'Text',      title : '<%= t "name" %>',  validators: ['required'] },
             survey_id       : { type : 'Select',    title : '<%= t "survey" %>',
@@ -16,62 +18,194 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             operation       : { type : 'Select',    title : '<%= t "operation" %>',
                                 options : ['ALL', 'ANY']
                               },
-            // Add in predicate list
-            
+            // Predicate list
+            'survey_query_predicates' : {
+                type : 'List',
+                itemToString : function(item) {
+                    return _.template($('#predicate-data-template').html(), item);
+                },
+                itemType : 'Object',
+                subSchema : {
+                    // survey_question_type : { type : 'Hidden' },
+                    survey_question_id   : { type : 'Select',
+                                            options : function(callback, editor) { // Get a list of the questions for this survey
+                                                var res = [];
+                                                
+                                                _.each(currentQuestions.models, function(element) {
+                                                    res.push( { val : element.get('id'), label : element.get('question') } );
+                                                });
+                                                
+                                                callback( res );
+                                                // TODO - when the value changes we need to re-render the operation field...
+                                                // i.e. form.fields.foo.render() on the change event item:<event>
+                                            }
+                                },
+                    // Each question has a type... each type uses a different operation...
+                    operation            : { type : 'DependentValueSelect', 
+                                            dependsOn : 'survey_question_id',
+                                            options: function(callback, editor) { // For the question return the valid operations ...
+                                                var question_id = editor.form.fields['survey_question_id'].editor.getValue();
+                                                var ops = [""];
+                                                
+                                                // find the type an from that pick the valid options for selection
+                                                _.each(currentQuestions.models, function(element) {
+                                                    if (element.get('id') == question_id) {
+                                                        if ($.inArray(element.get('question_type'), ['singlechoice', 'multiplechoice', 'selectionbox']) > -1) {
+                                                            ops = ["", "is", "is not"]; 
+                                                        } else {
+                                                            ops = ["", "contains", "does not contain", "answered", "not answered"];
+                                                        }
+                                                    }
+                                                });
+                                                                                                
+                                                callback(ops);
+                                            }
+                                },
+                    value                : { type : 'DependentValueSelect', dependsOn : 'operation', dependentValues : ['is', 'is not'], altField : 'Text',
+                                             options : function(callback, editor) {
+                                                var question_id = editor.form.fields['survey_question_id'].editor.getValue();
+                                                var ops = [""];
+                                                 
+                                                // find the type an from that pick the valid options for selection
+                                                _.each(currentQuestions.models, function(element) {
+                                                    if (element.get('id') == question_id) {
+                                                        var answers = element.get('survey_answers');
+                                                        console.debug(answers);
+                                                        _.each(answers, function(ans) {
+                                                            ops.push(ans.answer);
+                                                        });
+                                                    }
+                                                });
+                                                
+                                                callback(ops);
+                                             }
+                                            }
+                }
+            }
         }
     });
+
+    Question = Backbone.Model.extend({});
+
+    QuestionsCollection = Backbone.Collection.extend({
+        model   : Question,
+        url     : '/survey_reports/questions'
+    });
     
-    QueryLayout = Backbone.Marionette.Layout.extend({
-        template: "#query-layout-template",
+    ResultSet = Backbone.RelationalModel.extend({
+        url : '/survey_reports/runReport',
         
-        regions : {
-            queryControlRegion: "#query-control-div",
-            queryRegion: "#query-region-div",
-        },
+        relations : [{
+            type : Backbone.HasMany,
+            key : 'rowdata',
+            relatedModel : 'ResultRow',
+            collectionType : 'ResultRowCollection',
+        }],
+
     });
 
+    ResultsView = Backbone.View.extend({
+        el : '#query-results',
 
-    // "survey_query_predicates": [
-        // {
-            // "created_at": "2013-05-05T23:34:45-04:00",
-            // "id": 3,
-            // "lock_version": 0,
-            // "operation": "answered",
-            // "survey_query_id": 3,
-            // "survey_question_id": 34,
-            // "updated_at": "2013-05-05T23:34:45-04:00",
-            // "value": ""
-        // }
-    // ]
-    
+        tagName : 'div',
+
+        render : function() {
+            var colModel = [ 
+                    {name:'First Name', jsonmap: "first_name", sortable:true, width: 20}, 
+                    {name:'Last Name', jsonmap: "last_name", sortable:true, width: 30}, 
+                    {name:'Email', jsonmap: "email", sortable:true, width: 35}, 
+                ];
+                
+            for (var key in this.resultsCollection.get('userdata')) {
+                colModel.push( {name: this.resultsCollection.get('userdata')[key]['question'], jsonmap: key, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"' } } );
+            };
+
+            this.$el.html(_.template($('#query-results-template').html()));
+            
+            this.grid = $('.result-table').jqGrid({
+                colModel : colModel,
+                datatype: 'jsonstring',
+                datastr: this.resultsCollection.toJSON(),
+                jsonReader :{
+                    repeatitems : false,
+                    page: "currpage",
+                    records: "totalrecords",
+                    root : "rowdata",
+                    total: "totalpages",
+                    id : "id",
+                },
+                viewrecords: true,
+                height: "auto",
+                autowidth: true,
+                ignoreCase: true,
+                gridview: true,
+                pager : '#result-pager',
+                caption: 'Results'
+            });
+            // this.grid.jqGrid('navGrid','#result-pager',{edit:false,add:false,del:false,search:false});
+            
+            return this;
+        },
+
+        initialize : function() {
+        },
+    });
+       
     var tabLists = [];
     var tabContent = [];
+    var resultsView = null;
+    var currentQuestions = null;
     
     function clearDetails() {
         alert("HHH");
         _.invoke(tabLists, 'reset' );
         _.invoke(tabContent, 'clear' );
     };
+    
+    function runQuery(id) {
+            resultSet = new ResultSet();
+            resultSet.fetch({
+                type : 'POST',
+                data : 'query_id=' + id,
+                error : function(model, response) {
+                  alert("ERROR: unable to get the result from the server");  
+                },
+                success : function(model) {
+                    // alert("We have a result")
+                    if (resultsView) {
+                        resultsView.resultsCollection = model;
+                    } else {
+                        resultsView = new ResultsView({});
+                        resultsView.resultsCollection = model;
+                    }
+                    resultsView.render();
+                    // $('#query-results').html(resultsView.el);
+                }
+            })
+        
+    };
 
     function showQuery(id) {
-        // alert("QUERY SELECTED ddd");
-        // queryLayout = new QueryLayout();
-        // queryLayout.render();
-        // $('#query-view').html(queryLayout.el);
+        // Get the list of possible questions ...
+        // survey_query/questions?survey=id
+        
+        currentQuestions = new QuestionsCollection();
+        currentQuestions.url = "/survey_query/questions?survey=" + id;
+        currentQuestions.fetch({ async:false });
+        console.debug(currentQuestions);
+        
         tabContent.push( TabUtils.createTabContent({
             modelType : Query,
             url : "/survey_query/" + id, // TODO - check
+            modelURL                : "/survey_query/" + id,
             template : '#query-view-template',
             place :'#query-view',
             // id : id,
             // id_name : 'person_id',
             // newTitle : "Create Registration",
             editTitle : "Edit Query",
+            selectFn  : runQuery,
         }) ); // TODO - we need a mechanism to provide a callback to the view on edit
-
-        
-        // Retreive the query from the server
-        // Display it in the query area (need a control for the edit)
     };
     
     return {

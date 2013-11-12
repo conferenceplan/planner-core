@@ -6,6 +6,31 @@
 module SurveyService
 
   #
+  #
+  #
+  def self.runReport(surveyQuery)
+    
+    selectStr = createSelectPart(surveyQuery.survey_query_predicates, surveyQuery.operation)
+    
+    query = createQuery(surveyQuery.survey_query_predicates, surveyQuery.operation)
+    count = SurveyRespondentDetail.count_by_sql('SELECT count(*) ' + query[0])
+    
+    # logger.debug resultSet
+    cols = SurveyRespondentDetail.connection.select_all("select id, question, question_type from survey_questions where id in (" + query[1].to_a.join(',') + ')')
+    
+    metadata = {}
+    if (cols.size() > 0)
+      cols.each do |c|
+        metadata['r'+ query[2][c['id'].to_i].to_s] = c
+      end
+    end
+
+    resultSet = SurveyRespondentDetail.connection.select_all(createJoinPart1(surveyQuery.survey_query_predicates, metadata, query[2]) + selectStr + query[0] + ' order by last_name' + createJoinPart2(surveyQuery.survey_query_predicates, metadata, query[2]))
+    
+    { :meta_data => metadata, :result_set => resultSet, :count => count }
+  end
+
+  #
   # Get all the people who said that they do not want to share their email with other participants
   #  
   def self.findPeopleWithDoNotShareEmail
@@ -87,6 +112,153 @@ module SurveyService
       :conditions => ["survey_questions.questionmapping_id = ? and people.id = ?", questionMapping.id, person.id]
     
     response.response if response
+  end
+
+private
+
+  def self.createJoinPart1(queryPredicates, metadata, mapping)
+    selectPart = 'select @rownum:=@rownum+1 as id, res.id as oid, res.first_name, res.last_name, res.suffix, res.email, res.survey_respondent_id'
+    questionIds = Set.new
+    
+    if (queryPredicates)
+      queryPredicates.each  do |subclause|
+        # if  metadata['r' + nbrOfResponse.to_s]
+        if !questionIds.include?(subclause["survey_question_id"].to_i)
+          selectPart += ', res.q' +  mapping[subclause["survey_question_id"]].to_s
+          
+          if ((metadata['r' + mapping[subclause["survey_question_id"]].to_s]['question_type'].include? "singlechoice"))
+            selectPart += ', IFNULL(a' + mapping[subclause["survey_question_id"]].to_s + '.answer,res.r' + mapping[subclause["survey_question_id"]].to_s + ') as r' +  mapping[subclause["survey_question_id"]].to_s
+          else  
+            selectPart += ', res.r' + mapping[subclause["survey_question_id"]].to_s + ' as r' +  mapping[subclause["survey_question_id"]].to_s
+          end
+          questionIds.add(subclause["survey_question_id"].to_i)
+        end
+      end
+    end
+    
+    return selectPart + ' from (SELECT @rownum:=0) rn, ( '
+  end
+
+  def self.createJoinPart2(queryPredicates, metadata, mapping)
+    result = ' ) res '
+    questionIds = Set.new
+
+    if (queryPredicates)
+      queryPredicates.each  do |subclause|
+        # if  metadata['r' + nbrOfResponse.to_s]
+        if !questionIds.include?(subclause["survey_question_id"].to_i)
+          if ((metadata['r' + mapping[subclause["survey_question_id"]].to_s]['question_type'].include? "singlechoice"))
+            result += ' left join survey_answers a' + mapping[subclause["survey_question_id"]].to_s + ' on a' + mapping[subclause["survey_question_id"]].to_s + '.id = res.r' + mapping[subclause["survey_question_id"]].to_s
+          end
+          questionIds.add(subclause["survey_question_id"].to_i)
+        end
+      end
+    end
+    
+    return result
+  end
+  
+  def self.createSelectPart(queryPredicates, operation)
+    selectPart = 'SELECT d.id, d.first_name, d.last_name, d.suffix, d.email, d.survey_respondent_id'
+    nbrOfResponse = 1
+    questionIds = Set.new
+
+    if (queryPredicates)
+      queryPredicates.each  do |subclause|
+        # select part
+        if !questionIds.include?(subclause["survey_question_id"])
+          selectPart += ', r' + nbrOfResponse.to_s + '.survey_question_id as q' +  nbrOfResponse.to_s 
+          selectPart += ', r' + nbrOfResponse.to_s + '.response as r' + nbrOfResponse.to_s
+          questionIds.add(subclause["survey_question_id"])
+        
+          nbrOfResponse += 1
+        end
+      end
+    end  
+    
+    return selectPart
+  end
+
+  def self.createQuery(queryPredicates, operation)
+    fromPart = ' FROM survey_respondent_details d'
+    wherePart = ' WHERE '
+    andPart = ' AND ('
+    nbrOfResponse = 1
+    questionIds = Set.new
+    mapping = {}
+
+    if (queryPredicates)
+      lastid = queryPredicates.count() 
+      queryPredicates.each  do |subclause|
+        op = mapToOperator(subclause['operation'])
+        
+        # where part
+        if !questionIds.include?(subclause["survey_question_id"].to_i)
+          # from part
+          fromPart += ', survey_responses as r' + nbrOfResponse.to_s
+          
+          wherePart += ' AND ' if nbrOfResponse > 1
+          wherePart += 'r' + nbrOfResponse.to_s + '.survey_respondent_detail_id = d.id AND r' + nbrOfResponse.to_s + ".survey_question_id = '" + subclause["survey_question_id"].to_s + "'"
+          questionIds.add(subclause["survey_question_id"].to_i)
+          
+          # andPart
+          andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
+          andPart += 'r' + nbrOfResponse.to_s + ".response " + op[0]
+          andPart += " '"
+          andPart += "%" if (op[1] == true && op[2] == false)
+          andPart += subclause["value"] if (op[1] == true)
+          andPart += "%" if (op[1] == true && op[2] == false)
+          andPart += "'"
+          
+          mapping[subclause["survey_question_id"]] = nbrOfResponse
+        
+          nbrOfResponse += 1
+        else
+          # andPart
+          andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
+          andPart += 'r' + mapping[subclause["survey_question_id"]].to_s + ".response " + op[0] 
+          andPart += " '"
+          andPart += "%" if (op[1] == true && op[2] == false)
+          andPart += subclause["value"] if (op[1] == true)
+          andPart += "%" if (op[1] == true && op[2] == false)
+          andPart += "'"
+        end
+        
+      end
+    end  
+    
+    return [fromPart + wherePart + andPart + ')', questionIds, mapping]
+  end
+ 
+  #
+  # Given a string that represents an operation, return a triple that provides more information about the op and can be used
+  # to generate the SQL
+  #
+  def self.mapToOperator(operation)
+    op = ''
+    useValue = true
+    noWildcard = false
+
+    case operation
+    when 'does not contain'
+      op = ' not like '
+    when 'answered'
+      op = " != '' "
+      useValue = false
+    when 'not answered'
+      op = " = '' "
+      useValue = false
+    when 'is not'
+      op = " != "
+      noWildcard = true
+    when 'is'
+      op = " = "
+      noWildcard = true
+    else
+      op = ' like '
+    end
+
+    return [op, useValue, noWildcard]    
   end
     
 end
