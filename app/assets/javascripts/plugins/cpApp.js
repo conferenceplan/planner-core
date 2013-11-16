@@ -294,8 +294,15 @@ var AppUtils = (function(){
         },
         
         deleteModel : function() {
+            var clearFn = this.options.clearFn;
             this.model.destroy({
                 wait  : true,
+                success : function(mdl) {
+                    //
+                    if (clearFn) {
+                        clearFn();
+                    }
+                },
                 error : function(mdl, response) {
                     alertMessage(response.responseText);
                 }
@@ -333,6 +340,7 @@ var AppUtils = (function(){
                             tagName         : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
                             url             : options.modelURL,
                             selectFn        : options.selectFn,
+                            clearFn         : options.clearFn,
                             previewFn       : options.previewFn,
                             drillDownFn     : options.drillDownFn,
                             itemArea        : options.itemArea,

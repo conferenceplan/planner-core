@@ -5,7 +5,8 @@
 
 <%= render_cell "surveys/query_list", :javascript,
     :caption => "My Queries",
-    :selectNotifyMethod => "SurveyReportApp.SurveyReport.selectQuery"
+    :selectNotifyMethod => "SurveyReportApp.SurveyReport.selectQuery",
+    :clearNotifyMethod => "SurveyReportApp.SurveyReport.clearDetails"
     %>
 
 <%= render_cell "surveys/report", :templates %>
@@ -14,7 +15,7 @@
 <div class="row-fluid">
     <div class="span4">
         <div class="span12">
-            <%= render_cell "surveys/query_list", :display %> <!-- TODO - change to an element that is passed into the other controls-->
+            <%= render_cell "surveys/query_list", :display %>
         </div>
     </div>
     <div class="span8 well">

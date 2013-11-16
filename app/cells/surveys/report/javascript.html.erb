@@ -105,8 +105,6 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     });
 
     ResultsView = Backbone.View.extend({
-        el : '#query-results',
-
         tagName : 'div',
 
         render : function() {
@@ -121,6 +119,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             };
 
             this.$el.html(_.template($('#query-results-template').html()));
+            $('#query-results').html(this.$el);
             
             this.grid = $('.result-table').jqGrid({
                 colModel : colModel,
@@ -142,7 +141,6 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                 pager : '#result-pager',
                 caption: 'Results'
             });
-            // this.grid.jqGrid('navGrid','#result-pager',{edit:false,add:false,del:false,search:false});
             
             return this;
         },
@@ -151,15 +149,16 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         },
     });
        
-    var tabLists = [];
     var tabContent = [];
     var resultsView = null;
     var currentQuestions = null;
     
     function clearDetails() {
-        alert("HHH");
-        _.invoke(tabLists, 'reset' );
-        _.invoke(tabContent, 'clear' );
+        // _.invoke(tabContent, 'clear' );
+        if (resultsView) {
+            resultsView.remove();
+            resultsView = null;
+        }
     };
     
     function runQuery(id) {
@@ -168,7 +167,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                 type : 'POST',
                 data : 'query_id=' + id,
                 error : function(model, response) {
-                  alert("ERROR: unable to get the result from the server");  
+                  alertMessage("ERROR: unable to get the result from the server");
                 },
                 success : function(model) {
                     // alert("We have a result")
@@ -179,7 +178,6 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                         resultsView.resultsCollection = model;
                     }
                     resultsView.render();
-                    // $('#query-results').html(resultsView.el);
                 }
             })
         
@@ -196,16 +194,14 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         
         tabContent.push( TabUtils.createTabContent({
             modelType : Query,
-            url : "/survey_query/" + id, // TODO - check
+            url : "/survey_query/" + id,
             modelURL                : "/survey_query/" + id,
             template : '#query-view-template',
             place :'#query-view',
-            // id : id,
-            // id_name : 'person_id',
-            // newTitle : "Create Registration",
             editTitle : "Edit Query",
             selectFn  : runQuery,
-        }) ); // TODO - we need a mechanism to provide a callback to the view on edit
+            clearFn   : clearDetails
+        }) );
     };
     
     return {
@@ -214,11 +210,12 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         },
         
         clearDetails : function() {
+            clearDetails();
         },
         
         selectQuery : function(id) {
-            // clearDetails();
             showQuery(id);
+            clearDetails();
         },
     }
 

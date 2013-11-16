@@ -41,7 +41,8 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
             collection_tagName      : 'table',
             tagName                 : 'tr',
             view_refresh_event      : "query:refresh",
-            selectFn                : selectQuery
+            selectFn                : selectQuery,
+            clearFn                 : clearDetails
         }) );
     };
     
@@ -55,15 +56,24 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
             modelType               : Query,
             view_refresh_event      : "query:refresh",
             modal_create_title      : '<%= t "Create Query" %>',
-            region                  : queryLayout.queryControlRegion,
+            region                  : queryLayout.queryControlRegion
+            // callback                : queryCreated,
         });
         
         showQueries(queryLayout.myQueryRegion, 'subset=user');
         showQueries(queryLayout.sharedRegion, 'subset=shared');
     };
     
+    function queryCreated(m) {
+        // alert(m);
+    };
+    
     function selectQuery(id) {
         <%= @selectNotifyMethod %>(id);
+    };
+    
+    function clearDetails() {
+        <%= @clearNotifyMethod %>();
     };
     
     return {
@@ -72,6 +82,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
         },
         
         clearDetails : function() {
+            clearDetails();
         },
         
         // selectQuery : function(id) {

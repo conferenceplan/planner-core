@@ -197,7 +197,8 @@ var TabUtils = (function(){
                         model : model,
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
-                        selectFn : options.selectFn
+                        selectFn : options.selectFn,
+                        clearFn         : options.clearFn
                     });
                     tabView.render();
                     $(options.place).html(tabView.el);
@@ -213,7 +214,8 @@ var TabUtils = (function(){
                 model : options.model,
                 newTitle  : options.newTitle,
                 editTitle : options.editTitle,
-                selectFn : options.selectFn
+                selectFn : options.selectFn,
+                clearFn         : options.clearFn
                 });
             tabView.render();
             if (options.region) {
