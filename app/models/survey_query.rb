@@ -1,7 +1,4 @@
 
-# SurveyQuestion contains 1 or more predicates
-# SurveyQuestionPredicate - question operation value
-
 class SurveyQuery < ActiveRecord::Base
   
   # queryPredicates
@@ -11,6 +8,27 @@ class SurveyQuery < ActiveRecord::Base
   
   belongs_to :user
   belongs_to :survey
+  
+  def update_predicates(new_predicates)
+
+    updates = Hash[ new_predicates.map { |a| (a[:id] ? [a[:id], a] : nil) }.compact ]
+    newPredicates = new_predicates.collect { |a| (a[:id] ? nil : a) }.compact
+
+    survey_query_predicates.each do |predicate|
+      if updates[predicate.id]
+        predicate.update_attributes( updates[predicate.id] )
+      else
+        # delete it and remove it from the collection
+        candidate = survey_query_predicates.delete(predicate)
+      end
+    end
+    
+    # now create the new ones
+    newPredicates.each do |predicate|
+      survey_query_predicates << SurveyQueryPredicate.new(predicate)
+    end
+    
+  end
   
   #
   #

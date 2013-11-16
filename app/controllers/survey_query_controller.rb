@@ -31,26 +31,37 @@ class SurveyQueryController < PlannerController
   end
   
   def create
-    # # TODO - make sure name is unique
-    # p = params.reject{|k, v| ['action', 'controller'].include?(k) } # remove the unwanted attributes from the parameters
-    # p['survey_query_predicates_attributes'] = p['survey_query_predicates']
-    # p.delete('survey_query_predicates')
-    # need to pass in survey_query_predicates_attributes
-    @query = SurveyQuery.new(params[:survey_query]) # and then save the query
-    @query.user = @current_user
-    @query.save
+    # TODO - make sure name is unique
+    begin
+      SurveyQuery.transaction do
+        @query = SurveyQuery.new(params[:survey_query]) # and then save the query
+        @query.user = @current_user
+        if @query.save!
+          @query.update_predicates(params[:survey_query_predicates]) if params[:survey_query_predicates]
+        end
+      end
+    rescue Exception
+      raise
+    end
   end
 
   def update
-    # get the survey
-    @query = SurveyQuery.find(params[:id])
-    
-    # # and then update it's attributes
-    # p = params.reject{|k, v| ['action', 'controller', 'updated_at', 'created_at', 'lock_version', 'id'].include?(k) }
-    # p['survey_query_predicates_attributes'] = p['survey_query_predicates']
-    # p.delete('survey_query')
-    # p.delete('survey_query_predicates')
-    @query.update_attributes(params[:survey_query])
+    begin
+      SurveyQuery.transaction do
+        # get the survey
+        @query = SurveyQuery.find(params[:id])
+
+        # and then update it's attributes
+        @query.update_attributes!(params[:survey_query])
+        if params[:survey_query_predicates]
+          @query.update_predicates(params[:survey_query_predicates])
+        else # clear out the answers
+          @query.survey_query_predicates.delete_all
+        end
+      end
+    rescue Exception
+      raise
+    end
   end
 
   def destroy

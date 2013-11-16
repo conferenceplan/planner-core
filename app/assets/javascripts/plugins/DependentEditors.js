@@ -169,8 +169,6 @@ Form.editors.DependentValueSelect = Form.editors.Select.extend({
 
 
     initialize: function(options) {
-        // options.template || this.constructor.template;
-        
         // Call parent initializer
         Backbone.Form.editors.Select.prototype.initialize.call(this, options);
         
