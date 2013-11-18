@@ -67,6 +67,10 @@ var TabUtils = (function(){
             
         },
         
+        // formChangeEvent : function(form, editor, extra) {
+            // alert('Form field has changed');
+        // },
+        
         removeFilter : function(event) {
             var ctx = $(event.target).attr('tagcontext');
             var name = $(event.target).attr('tagname');
@@ -102,6 +106,11 @@ var TabUtils = (function(){
                 title : this.options.editTitle
             });
             mdl.render();
+            
+            if (this.options.form_event) {
+                console.debug('Set event');
+                mdl.form.on(this.options.form_event, this.options.form_event_fn );
+            }
         },
         
         newModel : function() {
@@ -111,6 +120,10 @@ var TabUtils = (function(){
                 title : this.options.newTitle
             });
             mdl.render();
+            
+            if (this.options.form_event) {
+                mdl.form.on(this.options.form_event, this.options.form_event_fn );
+            }
         },
         
         deleteModal : function() {
@@ -198,7 +211,9 @@ var TabUtils = (function(){
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
                         selectFn : options.selectFn,
-                        clearFn         : options.clearFn
+                        clearFn         : options.clearFn,
+                        form_event : options.form_event,
+                        form_event_fn : options.form_event_fn
                     });
                     tabView.render();
                     $(options.place).html(tabView.el);
@@ -215,7 +230,9 @@ var TabUtils = (function(){
                 newTitle  : options.newTitle,
                 editTitle : options.editTitle,
                 selectFn : options.selectFn,
-                clearFn         : options.clearFn
+                clearFn         : options.clearFn,
+                form_event : options.form_event,
+                form_event_fn : options.form_event_fn
                 });
             tabView.render();
             if (options.region) {

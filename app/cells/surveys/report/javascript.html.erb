@@ -22,7 +22,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             'survey_query_predicates' : {
                 type : 'List',
                 itemToString : function(item) {
-                    return _.template($('#predicate-data-template').html(), item);
+                    return _.template($('#predicate-data-template').html(), { item : item, question : getQuestionById(item.survey_question_id) }); // TODO
                 },
                 itemType : 'Object',
                 subSchema : {
@@ -36,7 +36,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                                 });
                                                 
                                                 callback( res );
-                                                // TODO - when the value changes we need to re-render the operation field...
+                                                // when the value changes we need to re-render the operation field...
                                                 // i.e. form.fields.foo.render() on the change event item:<event>
                                             }
                                 },
@@ -70,7 +70,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                                 _.each(currentQuestions.models, function(element) {
                                                     if (element.get('id') == question_id) {
                                                         var answers = element.get('survey_answers');
-                                                        console.debug(answers);
+                                                        // console.debug(answers);
                                                         _.each(answers, function(ans) {
                                                             ops.push(ans.answer);
                                                         });
@@ -153,8 +153,19 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     var resultsView = null;
     var currentQuestions = null;
     
+    function getQuestionById(id) {
+        var result = '';
+        // from the current questions
+        _.each(currentQuestions.models, function(element) {
+            if (element.get('id') == id) {
+                result = element.get('question');
+            }
+        });
+        
+        return result;
+    };
+    
     function clearDetails() {
-        // _.invoke(tabContent, 'clear' );
         if (resultsView) {
             resultsView.remove();
             resultsView = null;
@@ -185,10 +196,9 @@ SurveyReportApp.SurveyReport = (function(Backbone){
 
     function showQuery(id) {
         // Get the list of possible questions ...
-        // survey_query/questions?survey=id
-        
+
         currentQuestions = new QuestionsCollection();
-        currentQuestions.url = "/survey_query/questions?survey=" + id;
+        currentQuestions.url = "/survey_query/questions?survey_query=" + id;
         currentQuestions.fetch({ async:false });
         console.debug(currentQuestions);
         
@@ -200,7 +210,18 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             place :'#query-view',
             editTitle : "Edit Query",
             selectFn  : runQuery,
-            clearFn   : clearDetails
+            clearFn   : clearDetails,
+            form_event : 'survey_id:change',
+            form_event_fn : function(form, editor, extra) {
+                // Get the current set of questions
+                currentQuestions.url = "/survey_query/questions?survey=" + editor.getValue();
+                currentQuestions.fetch({ async:false });
+                // we need to clear the predicates ...
+                _.invoke(form.fields.survey_query_predicates.editor.items, 'remove');
+                // we need to also remove the data from the editor
+                var len = form.fields.survey_query_predicates.editor.items.length;
+                form.fields.survey_query_predicates.editor.items.splice(0, len);
+            }
         }) );
     };
     

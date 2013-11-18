@@ -13,9 +13,11 @@ class SurveyQueryController < PlannerController
   end
 
   def questions
-    survey = SurveyQuery.find(params[:survey])
+    query = SurveyQuery.find(params[:survey_query]) if params[:survey_query]
+    survey = Survey.find(params[:survey]) if params[:survey]
     
-    surveyId = survey.survey_id
+    surveyId = query.survey_id if query
+    surveyId = survey.id if survey
     
     # TODO - use the group and question ordering
     questions = SurveyQuestion.all :joins => {:survey_group => :survey}, :include => :survey_answers,
@@ -54,6 +56,10 @@ class SurveyQueryController < PlannerController
         # and then update it's attributes
         @query.update_attributes!(params[:survey_query])
         if params[:survey_query_predicates]
+          params[:survey_query_predicates].each do |predicate|
+            predicate.delete(:survey_question_name) # survey_question_name, survey_question_type
+            predicate.delete(:survey_question_type) # survey_question_name, survey_question_type
+          end
           @query.update_predicates(params[:survey_query_predicates])
         else # clear out the answers
           @query.survey_query_predicates.delete_all
