@@ -68,7 +68,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
         jQuery.ajax( "/survey_query/copy/" + model.id, // + '.json',
                      {
                          error : function() {
-\                             alertMessage('<%= t "Error duplicating the Query" %>');
+                            alertMessage('<%= t "Error duplicating the Query" %>');
                          },
                          success : function() {
                             eventAggregator.trigger("query:refresh"); 
