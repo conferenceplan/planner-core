@@ -16,16 +16,11 @@ PlannerRc1::Application.routes.draw do
     resources :publications_dash
     resources :reports_dash
     resources :mailings_dash
-    # resources :items_dash
-    # resources :surveys_dash
   end
   
   # Default route 
   root :to => 'pages/home_dash#index'
   
-  # The top level menu - TODO - change in redesign
-  resources :menus
-
   #
   # The new(s) were removed so as to prevent anonymous people creating new accounts
   #
@@ -77,7 +72,7 @@ PlannerRc1::Application.routes.draw do
   match 'edited_bios/selectExportBioList', :controller => 'edited_bios',:action => 'selectExportBioList'
   resources :edited_bios do
     resources :person
-  end#, :has_one => :person
+  end
   
   resources :available_dates
 
@@ -103,9 +98,6 @@ PlannerRc1::Application.routes.draw do
     end
   end
   
-   #, :member => {:remove => :get, :add => :post, :index => :get, :edit => :get} #,
-      # :except => [:destroy, :new, :create]
-# 
   resources :tag_contexts
 
   match 'invitation_categories/list', :controller => 'invitation_categories', :action => 'list'
@@ -114,8 +106,6 @@ PlannerRc1::Application.routes.draw do
   resources :available_dates do
     resources :person
   end  
-#    , :has_one => :person
-# 
 
   # #
   # #
@@ -263,11 +253,10 @@ PlannerRc1::Application.routes.draw do
   
   match 'survey_query/list.:format', :controller => 'survey_query', :action => 'list'  
   match 'survey_query/questions', :controller => 'survey_query', :action => 'questions'  
+  match 'survey_query/copy/:id', :controller => 'survey_query', :action => 'copy'  
   resources :survey_query
 
-  match 'survey_reports/:action', :controller => 'survey_reports' #,  :member => {:list => :get, :del => :delete }
-  match 'survey_reports/surveyQueryNames/:id', :controller => 'survey_reports', :action => 'delSurveyQuery', :method => :delete
-  # resources :survey_reports
+  match 'survey_reports/:action', :controller => 'survey_reports'
 
   match 'planner_reports/:action', :controller => 'planner_reports'
   resources :planner_reports
@@ -291,7 +280,6 @@ PlannerRc1::Application.routes.draw do
 # 
 #   
 # 
-  # map.resources :survey_copy_statuses
   # map.resources :monitor, :only => :index # we only need the one method/route for this
   # map.resources :mapped_survey_questions
   # map.resource :user_session

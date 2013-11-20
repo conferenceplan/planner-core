@@ -1,8 +1,8 @@
 <script type="text/javascript">
 
-// SurveyReportApp = new Backbone.Marionette.Application();
-
 SurveyReportApp.SurveyQueries = (function(Backbone){
+    
+    var eventAggregator = AppUtils.eventAggregator;
 
     QueryName = Backbone.Model.extend({
         urlRoot : '/survey_query',
@@ -42,7 +42,8 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
             tagName                 : 'tr',
             view_refresh_event      : "query:refresh",
             selectFn                : selectQuery,
-            clearFn                 : clearDetails
+            clearFn                 : clearDetails,
+            copyFn                  : copyQuery
         }) );
     };
     
@@ -63,6 +64,19 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
         showQueries(queryLayout.sharedRegion, 'subset=shared');
     };
     
+    function copyQuery(model) {
+        jQuery.ajax( "/survey_query/copy/" + model.id, // + '.json',
+                     {
+                         error : function() {
+\                             alertMessage('<%= t "Error duplicating the Query" %>');
+                         },
+                         success : function() {
+                            eventAggregator.trigger("query:refresh"); 
+                         }
+                     });
+        
+    };
+    
     function selectQuery(id) {
         <%= @selectNotifyMethod %>(id);
     };
@@ -79,10 +93,6 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
         clearDetails : function() {
             clearDetails();
         },
-        
-        refreshQueryList : function() {
-            alert("REFRESH LIST"); // TODO ????
-        }
     }
 
 })(Backbone);
@@ -91,7 +101,6 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
  * 
  */
 jQuery(document).ready(function() {
-    // SurveyReportApp.start();
     SurveyReportApp.SurveyQueries.init();
 });
 

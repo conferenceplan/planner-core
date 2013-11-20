@@ -81,5 +81,19 @@ class SurveyQueryController < PlannerController
       render status: :bad_request, text: 'Con not delete query owned by another user'
     end
   end
+  
+  #
+  #
+  #
+  def copy
+    original = SurveyQuery.find(params[:id])
+    
+    @query = original.dup :include => :survey_query_predicates
+    @query.name += ' (Copy)'
+    @query.user = @current_user
+    @query.shared = false
+    
+    @query.save!
+  end
 
 end

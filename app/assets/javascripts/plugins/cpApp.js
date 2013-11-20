@@ -243,6 +243,7 @@ var AppUtils = (function(){
             "click .model-edit-button"          : "editModel",
             "click .model-delete-button"        : "deleteModel",
             "click .model-preview-button"       : "preview",
+            "click .model-copy-button"          : "copy"
         },
         
         initialize : function() {
@@ -262,6 +263,12 @@ var AppUtils = (function(){
                 this.options.selectFn(this.model.id);
             }
             this.editModel();
+        },
+        
+        copy : function(event) {
+            if (this.options.copyFn) {
+                this.options.copyFn(this.model);
+            }
         },
         
         preview : function(event) {
@@ -341,6 +348,7 @@ var AppUtils = (function(){
                             url             : options.modelURL,
                             selectFn        : options.selectFn,
                             clearFn         : options.clearFn,
+                            copyFn          : options.copyFn,
                             previewFn       : options.previewFn,
                             drillDownFn     : options.drillDownFn,
                             itemArea        : options.itemArea,

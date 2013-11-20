@@ -12,6 +12,7 @@ gem 'bootstrap-sass', '~> 2.3.2.2'
 gem 'bootswatch-rails'
 gem 'cells'
 gem "declarative_authorization" 
+gem 'deep_cloneable', '~> 1.6.0'
 gem "daemons"
 gem 'delayed_job' 
 gem 'delayed_job_active_record'
