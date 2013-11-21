@@ -8,11 +8,11 @@
     <title><%= @page_title or 'Convention Planner' %></title>
     
     <%= stylesheet_link_tag "application", :media => "all" %>
-    <%= stylesheet_link_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".css") %> <!-- TODO - we may not need-->
+    <%= stylesheet_link_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".css") %>
     <%= stylesheet_link_tag "cells/" + params[:cellname] if params[:cellname] && PlannerRc1::Application.assets.find_asset("cells/" + params[:cellname] + ".css") %> 
     
     <%= javascript_include_tag "application" %>
-    <%= javascript_include_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".js") %> <!-- TODO - we may not need-->
+    <%= javascript_include_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".js") %>
     <%= javascript_include_tag "cells/" + params[:cellname] if params[:cellname] && PlannerRc1::Application.assets.find_asset("cells/" + params[:cellname] + ".js") %>
     
     <%= csrf_meta_tags %>
