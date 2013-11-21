@@ -83,6 +83,7 @@ GEM
     compass-rails (1.0.3)
       compass (>= 0.12.2, < 0.14)
     daemons (1.1.9)
+    dalli (2.6.4)
     declarative_authorization (0.5.7)
     deep_cloneable (1.6.0)
       activerecord (>= 3.1.0)
@@ -202,6 +203,7 @@ DEPENDENCIES
   coffee-rails (~> 3.2.1)
   compass-rails
   daemons
+  dalli
   declarative_authorization
   deep_cloneable (~> 1.6.0)
   delayed_job

@@ -42,6 +42,8 @@ gem 'capistrano', '2.15.5', require: false, group: :development
 gem 'rvm-capistrano', '1.5.0', require: false, group: :development
 gem 'capistrano-puma', '0.0.1', require: false, group: :development
 
+gem 'dalli'
+
 #
 # Needed for installs
 #
