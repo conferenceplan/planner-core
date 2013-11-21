@@ -1,0 +1,96 @@
+<script type="text/javascript">
+
+CommunicationsApp = new Backbone.Marionette.Application();
+
+CommunicationsApp.CommunicationsManagement = (function(Backbone){
+    
+    Mailing = Backbone.DeepModel.extend({
+        urlRoot : '/communications/mailing',
+        schema : {
+            mailing_number          : { type : 'Number', title : '<%= t "Mailing Number" %>' },
+            mail_template_id        : { type : 'Select', title : '<%= t "Mail Template" %>',
+                                            options : <%= [].concat(MailTemplate.find(:all).collect {|s| {'val' => s.id, 'label' => s.title} }).to_json.html_safe %>
+                                        },
+            scheduled               : { type : 'Checkbox', title : '<%= t "Scheduled" %>' },
+            testrun                 : { type : 'Checkbox', title : '<%= t "Test Run" %>' }
+        }
+    });
+    
+    MailingCollection = Backbone.Collection.extend({
+        model : Mailing
+    });
+    
+    MailingLayout = Backbone.Marionette.Layout.extend({
+        template: "#mailing-list-layout-template",
+        
+        regions : {
+            mailingControlRegion: "#mailing-control-div",
+            mailingRegion: "#mailing-region-div",
+        },
+    });
+    
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' );
+    };
+    
+    function showMailings() {
+        mailingLayout = new MailingLayout();
+        mailingLayout.render();
+        $('#mailing-region-view').html(mailingLayout.el);
+        
+        TabUtils.createTabControl({
+            template                : "#mailing-control-template",
+            modelType               : Mailing,
+            view_refresh_event      : "mailing:refresh",
+            modal_create_title      : '<%= t "Create Mailing" %>',
+            region                  : mailingLayout.mailingControlRegion,
+        });
+        
+        tabLists.push( AppUtils.createCollectionView({
+            url                     : "/communications/mailing.json", // TODO
+            collectionType          : MailingCollection,
+            region                  : mailingLayout.mailingRegion,
+            template                : "#mailing-template",
+            collection_attributes   : { "class" : "table table-striped table-condensed" },
+            collection_tagName      : 'table',
+            tagName                 : 'tr',
+            view_refresh_event      : "mailing:refresh",
+            // drillDownFn             : drillDownMailing,
+            selectFn                : selectMailing,
+            readTemplate            : '#mailing-data-template',
+            itemArea                : "#mailing-edit-area"
+        }) );
+    };
+    
+    function selectMailing(id) {
+        // alert("Mailing selected");
+    };
+    
+    /*
+     * 
+     */
+    return {
+        init : function() {
+            showMailings();
+        },
+        
+        clearDetails : function() {
+        },
+        
+        // selectMailing : function(id) {
+        // }
+    }
+
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    CommunicationsApp.start();
+    CommunicationsApp.CommunicationsManagement.init();
+});
+
+</script>

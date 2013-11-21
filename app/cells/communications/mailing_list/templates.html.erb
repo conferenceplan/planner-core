@@ -1,0 +1,36 @@
+
+<script type="text/template" id="mailing-list-layout-template">
+<section>
+    <div class="row-fluid">
+        <div class="span1"><span class="label label-big"><%= t 'Mailings' %></span></div><div id="mailing-control-div"></div>
+    </div>
+    <div class="row-fluid">
+        <div id="mailing-region-div"></div>
+    </div>
+</section>
+</script>
+
+<script type="text/template" id="mailing-control-template">
+    <button class="add-model-button btn-mini btn-primary pull-right">
+        <%= t 'add mailing' %>
+    </button>
+</script>
+
+<script type="text/template" id="mailing-template">
+    <td>
+        <a href="#survey-tab" data-toggle="tab" class="model-select-button">{{= mailing_number }} -- {{= mail_template }} ({{= mail_use }})</a>
+    </td>
+    <td>
+        <button class="model-delete-button btn btn-mini"><i class="icon-trash"></i></button>
+    </td>
+</script>
+
+<script type="text/template" id="mailing-data-template">
+    <dl class="dl-horizontal">
+        <dt><%= t "Mailing Number" %></dt><dd>{{= mailing_number }}</dd>
+        <dt><%= t "Mail Template Title" %></dt><dd>{{= mail_template ? mail_template : "&nbsp;" }}</dd>
+        <dt><%= t "Mail Usage" %></dt><dd>{{= mail_use ? mail_use : "&nbsp;" }}</dd>
+        <dt><%= t "Scheduled" %></dt><dd>{{= scheduled ? '<%= t "Yes" %>' : '<%= t "No" %>' }}</dd>
+        <dt><%= t "Test Run" %></dt><dd>{{= testrun ? '<%= t "Yes" %>' : '<%= t "No" %>' }}</dd>
+    </dl>
+</script>

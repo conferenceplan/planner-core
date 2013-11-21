@@ -1,0 +1,2 @@
+module Communications::MailingHelper
+end

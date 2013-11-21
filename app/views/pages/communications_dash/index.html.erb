@@ -1,0 +1,13 @@
+<div class="row-fluid">
+<%= render_cell :context_menu, :display, :menu => {
+    (t "manage mailings") => '/pages/communications_dash/manage',
+    (t "mailing reports") => '/pages/communications_dash/report'
+} %>
+</div>
+<div class="row-fluid">
+<% if @cellname %>
+    <%= render_cell "communications/#{@cellname}", :display %>
+<% else %>
+    <%= render_cell "communications/communications_dash", :display %>
+<% end %>
+</div>

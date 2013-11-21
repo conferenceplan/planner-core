@@ -10,12 +10,12 @@ PlannerRc1::Application.routes.draw do
     match "schedule_dash/:cellname" => "schedule_dash#index"
     match "venues_dash/:cellname" => "venues_dash#index"
     match "surveys_dash/:cellname" => "surveys_dash#index"
+    match "communications_dash/:cellname" => "communications_dash#index"
     
     resources :logistics_dash
     resources :admin_dash
     resources :publications_dash
     resources :reports_dash
-    resources :mailings_dash
   end
   
   # Default route 
@@ -234,6 +234,11 @@ PlannerRc1::Application.routes.draw do
   match 'mailings/del', :controller => 'admin/mailings', :action => 'del', :method => 'delete'
   match 'mailings/previewEmail', :controller => 'admin/mailings', :action => 'previewEmail', :method => 'get'
   resources :mailings, :controller => 'admin/mailings'
+  
+  # match 'communications/mailing/list', :controller => 'communications/mailing', :action => 'list', :method => 'get'
+  namespace :communications do
+    resources :mailing
+  end
 
   namespace :reports do
     resources :mail_reports, :only => [:index]

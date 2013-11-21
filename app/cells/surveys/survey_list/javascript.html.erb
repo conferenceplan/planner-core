@@ -69,8 +69,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
     };
     
     function previewSurvey(mdl) {
-        // TODO - put in mechanism to preview survey in a new window...
-        // alert("help");
+        // mechanism to preview survey in a new window...
         window.open("/form/" + mdl.get('alias') + '/preview');
     };
     
@@ -96,7 +95,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
         selectSurvey : function(id) {
             SurveyGroupApp.SurveyGroupManagement.clearDetails();
             SurveyQuestionApp.SurveyQuestionManagement.clearDetails();
-        },
+        }
     }
 
 })(Backbone);
