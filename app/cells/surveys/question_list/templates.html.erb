@@ -34,6 +34,7 @@
         <dt><%= t "mandatory" %></dt><dd>{{= mandatory ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
         {{ if ( question_type == 'textfield') { }}
             <dt><%= t "tags_label" %></dt><dd>{{= tags_label ? tags_label : "&nbsp;" }}</dd>
+            <dt><%= t "text_size" %></dt><dd>{{= text_size ? text_size : "&nbsp;" }}</dd>
         {{ } }}
         {{ if ( question_type == 'textbox') { }}
             <dt><%= t "is_bio" %></dt><dd>{{= isbio ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>

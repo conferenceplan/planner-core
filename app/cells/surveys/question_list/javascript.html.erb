@@ -18,6 +18,8 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
             tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>',
                                     validators : [ /^[A-z0-9_]*$/ ],
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
+            text_size           : { type : 'Number',  title : '<%= t "length of text box" %>',
+                                    dependsOn : 'question_type', dependentValues : ['textfield'] },
             isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
                                      dependsOn : 'question_type', dependentValues : ['textbox']  }, // only if the question type is text
             horizontal          : { type : 'DependentCheckbox', title : '<%= t "horizontal layout" %>', 
