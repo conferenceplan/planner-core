@@ -2,7 +2,7 @@
 
 <%= render_cell "participants/participant_list", :javascript, 
     :caption => "Participants (Confirmed)",
-    :pager => "#participants-pager",
+    :pager => "participants-pager",
     :del => false,
     :edit => false,
     :add => false,
@@ -22,8 +22,8 @@
 %>
     
 <%= render_cell "items/item_list", :javascript, 
-    :caption => "Program Items", 
-    :pager => "#items-pager",
+    :caption => "Mailing", 
+    :pager => "items-pager",
     :del => false,
     :edit => false,
     :add => false,
@@ -42,7 +42,9 @@
 
 <div class="row-fluid">
     <div class="span3">
-        <%= render_cell "participants/participant_list", :display %>
+        <%= render_cell "participants/participant_list", :display,
+                :pager => "participants-pager"
+         %>
         <div id="people-control-view"></div>
     </div>
     <div class="span5" id="program-item-view">

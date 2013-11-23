@@ -1,15 +1,18 @@
 class Participants::ParticipantListCell < Cell::Rails
 
-  def display
+  def display(args)
+    @place = args.has_key?(:place) ? args[:place] : "participants"
+    @pager = args.has_key?(:pager) ? args[:pager] : 'pager'
     render
   end
   
   def javascript(args)
+    @place = args.has_key?(:place) ? args[:place] : "participants"
     @caption = args.has_key?(:caption) ? args[:caption] : "Participants"
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
     @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
     @loadNotifyMethod = args.has_key?(:loadNotifyMethod) ? args[:loadNotifyMethod] : "function() {}"
-    @pager = args.has_key?(:pager) ? args[:pager] : '#pager'
+    @pager = args.has_key?(:pager) ? args[:pager] : 'pager'
     @root_url = args.has_key?(:root_url) ? args[:root_url] : "/"
     @baseUrl = args.has_key?(:baseUrl) ? args[:baseUrl] : "participants"
     @getGridData = args.has_key?(:getGridData) ? args[:getGridData] : "/getList.json"

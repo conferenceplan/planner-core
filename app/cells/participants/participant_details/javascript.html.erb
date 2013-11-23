@@ -486,21 +486,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 jQuery(document).ready(function() {
     ParticipantApp.start();
     
-    // TODO - we need a way to add the control to the grid
-    // provide a method for doing so and pass to the table to call on intialisation
-            // TabUtils.createTabControl({
-            // template : "#equipment-control-template",
-            // modelType : Equipment,
-            // id : id, // need to pass in the name of the id field
-            // id_name : 'programme_item_id',
-            // view_refresh_event : "equipment:refresh",
-            // modal_create_title : "Create Equipment Needs",
-            // region : equipmentLayout.equipmentControlRegion
-        // });
-
-    
-    // TODO - we want a way to keep a handle on this so that it can be refreshed when tags are added or deleted from a participant
-    // So add it to a collection or ParticipantApp ????
     TabUtils.createTagCloudContent({
         collectionType : TagContextCollection,
         url : "/tags.json?class=Person",

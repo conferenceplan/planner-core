@@ -5,7 +5,7 @@
 
 <%= render_cell "participants/participant_list", :javascript, 
     :caption => "Participants",
-    :pager => "#participants-pager",
+    :pager => "participants-pager",
     :selectNotifyMethod => "ParticipantApp.PeopleManagement.showDetails",
     :clearNotifyMethod => "ParticipantApp.PeopleManagement.clearDetails",
     
@@ -17,7 +17,9 @@
 <div class="row-fluid">
     <div class="span9">
         <div id="participant-filters"></div> <!-- TODO -->
-        <%= render_cell "participants/participant_list", :display %>
+        <%= render_cell "participants/participant_list", :display,
+            :pager => "participants-pager"
+         %>
     </div>
     <div class="span3 well" >
         <div class='collapse-group tag-cloud-area' style="height : 370px; overflow : auto;"> <!-- TODO - move this to the style sheet -->

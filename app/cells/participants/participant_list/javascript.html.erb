@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
-    jQuery("#participants").participantTable({
+    jQuery("#<%= @place %>").participantTable({
         caption : '<%= t @caption %>',
         selectNotifyMethod : <%= @selectNotifyMethod %>,
         clearNotifyMethod : <%= @clearNotifyMethod %>,
@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
         add : <%= @add %>,
         refresh : <%= @refresh %>,
         controlDiv : "<%= @controlDiv %>",
-        pager : "<%= @pager %>",
+        pager : "#<%= @pager %>",
         
         multiselect : <%= @multiselect %>,
         

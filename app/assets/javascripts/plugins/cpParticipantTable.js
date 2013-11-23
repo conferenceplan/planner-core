@@ -289,7 +289,21 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         }
         url += urlArgs;
         return url;
-    }
+    },
+
+    /*
+     * 
+     */
+    mailingQuery : function(options) {
+        var newUrl = this.options.root_url + this.options.baseUrl + this.options.getGridData + "?" + "mailing_id=" + options.mailingId;
+        if (options.op) {
+            newUrl += '&op=' + options.op; 
+        }
+            
+        this.element.jqGrid('setGridParam', {
+            url: newUrl
+        }).trigger("reloadGrid");
+    },
 
 });
 }(jQuery));

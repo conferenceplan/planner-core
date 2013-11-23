@@ -55,7 +55,7 @@ $.widget( "cp.baseTable" , {
             
             refreshGrid : function(grid, mdl) {
                 if (mdl) {
-                    var page_to = pageTo(mdl)
+                    var page_to = pageTo(mdl);
                     grid.jqGrid('setGridParam', {
                         postData : {
                             page_to : page_to, // make sure that the current page contains the selected element

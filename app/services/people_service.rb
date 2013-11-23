@@ -6,8 +6,8 @@ module PeopleService
   #
   #
   #
-  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, scheduled=false)
-    args = genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents, page_to)
+  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false)
+    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to)
     tagquery = DataService.genTagSql(context, tags)
     
     if tagquery.empty?
@@ -20,8 +20,8 @@ module PeopleService
   #
   #
   #
-  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, scheduled=false)
-    args = genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents)
+  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, op=nil, scheduled=false)
+    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
@@ -42,27 +42,7 @@ module PeopleService
   #
   #
   #
-  # def self.genTagSql(context, tags)
-    # tagquery = ""
-    # if context
-      # if context.class == HashWithIndifferentAccess
-        # context.each do |key, ctx|
-          # # tagquery += ".tagged_with('" + tags[key].gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + ctx + "', :any => true)"
-          # tagquery += ".tagged_with('" + tags[key] + "', :on => '" + ctx + "', :any => true)"
-        # end
-      # else
-        # # tagquery += ".tagged_with('" + tags.gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + context + "', :op => true)"
-        # tagquery += ".tagged_with('" + tags + "', :on => '" + context + "', :op => true)"
-      # end
-    # end
-#     
-    # tagquery
-  # end
-  
-  #
-  #
-  #
-  def self.genArgsForSql(nameSearch, mailing_id, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil)
+  def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil)
     clause = DataService.createWhereClause(filters, 
           ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
           ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'], 'people.last_name')
@@ -81,7 +61,12 @@ module PeopleService
     
     clause = DataService.addClause( clause, extraClause['param'].to_s + ' = ?', extraClause['value'].to_s) if extraClause
 
-    clause = DataService.addClause( clause, 'people.id not in (select person_id from person_mailing_assignments where mailing_id = ?)', mailing_id) if mailing_id && ! mailing_id.empty?
+    # Find people that do not have the specified mailing id
+    # TODO - need the not in as well
+    mailingQuery = 'people.id '
+    mailingQuery += op if op
+    mailingQuery +=  ' in (select person_id from person_mailing_assignments where mailing_id = ?)'
+    clause = DataService.addClause( clause, mailingQuery, mailing_id) if mailing_id && ! mailing_id.empty?
     
     clause = DataService.addClause( clause, 'people.last_name <= ?', page_to) if page_to
     

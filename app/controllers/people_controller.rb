@@ -34,8 +34,6 @@ class PeopleController < PlannerController
     # if pseudonym is empty, we don't want to insert an empty record
     # so delete attributes from input parameter list so
     # it won't get created
-    logger.debug params[:person]
-    logger.debug params[:pseudonym]
     if (params[:pseudonym])
       if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
            params[:person][:pseudonym_attributes] = params[:pseudonym]
@@ -43,10 +41,9 @@ class PeopleController < PlannerController
     end
     
     @person = Person.new(params[:person])
-    datasourcetmp = Datasource.find_by_name("Application") # TODO - verify
+    datasourcetmp = Datasource.find_by_name("Application") # TODO - verify, we need to make sure we have the data-source Application
     @person.datasource = datasourcetmp
     @person.save!
-
   end
 
   #
@@ -77,21 +74,21 @@ class PeopleController < PlannerController
   #
   #
   #
-  def count
-    rows = params[:per_page]
-    page = params[:page] ? params[:page].to_i : 0
-    
-    idx = params[:sidx]
-    order = params[:sord]
-    context = params[:context]
-    nameSearch = params[:namesearch]
-    mailing_id = params[:mailing_id]
-    scheduled = params[:scheduled]
-    
-    nbr = PeopleService.countPeople
-
-    render :json => nbr
-  end
+  # def count
+    # rows = params[:per_page]
+    # page = params[:page] ? params[:page].to_i : 0
+#     
+    # idx = params[:sidx]
+    # order = params[:sord]
+    # context = params[:context]
+    # nameSearch = params[:namesearch]
+    # mailing_id = params[:mailing_id]
+    # scheduled = params[:scheduled]
+#     
+    # nbr = PeopleService.countPeople
+# 
+    # render :json => nbr
+  # end
   
   #
   #
@@ -108,18 +105,19 @@ class PeopleController < PlannerController
     idx = params[:sidx]
     order = params[:sord]
     nameSearch = params[:namesearch]
-    mailing_id = params[:mailing_id]
-    scheduled = params[:scheduled]
+    scheduled = params[:scheduled] ? params[:scheduled] : false
     filters = params[:filters]
     extraClause = params[:extraClause]
     onlySurveyRespondents = params[:onlySurveyRespondents]
     context = params[:context]
     tags = params[:tags]
+    mailing_id = params[:mailing_id]
+    operation = params[:op]
         
-    @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags
+    @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, nil, mailing_id, operation, scheduled
     
     if page_to && !page_to.empty?
-      gotoNum = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, page_to
+      gotoNum = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, page_to, mailing_id, operation, scheduled
       if gotoNum
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
@@ -133,109 +131,9 @@ class PeopleController < PlannerController
       @nbr_pages = 1
     end
     
-    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents, nameSearch, context, tags
+    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, mailing_id, operation, scheduled
   end
 
-  #
-  # def list
-    # rows = params[:rows]
-    # @page = params[:page]
-    # idx = params[:sidx]
-    # order = params[:sord]
-    # context = params[:context]
-    # nameSearch = params[:namesearch]
-    # mailing_id = params[:mailing_id]
-    # scheduled = params[:scheduled]
-#     
-    # clause = createWhereClause(params[:filters], 
-    # ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'],
-    # ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_number'])
-#     
-    # # add the name search for last of first etc
-    # if nameSearch && ! nameSearch.empty?
-      # clause = addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + nameSearch + '%')
-      # clause << '%' + nameSearch + '%'
-      # clause << '%' + nameSearch + '%'
-      # clause << '%' + nameSearch + '%'
-    # end
-#     
-    # if mailing_id && ! mailing_id.empty? # add not in
-      # clause = addClause( clause, 'people.id not in (select person_id from person_mailing_assignments where mailing_id = ?)', mailing_id)
-    # end
-#     
-    # if scheduled && ! scheduled.empty?
-      # if scheduled == "true"
-        # # Then we want to filter for scehduled people
-        # # select distinct person_id from programme_item_assignments;
-        # clause = addClause( clause, 'people.id in (select distinct person_id from room_item_assignments ra join programme_item_assignments pa on pa.programme_item_id = ra.programme_item_id)', nil)
-      # end
-    # end
-# 
-    # # if the where clause contains pseudonyms. then we need to add the join
-    # args = { :conditions => clause }
-    # if nameSearch && ! nameSearch.empty?
-      # args.merge!( :joins => 'LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
-    # else
-      # # if clause != nil && clause[0].index('pseudonyms.') != nil
-        # args.merge!( :include => [:pseudonym] )
-        # #args.merge!( :joins => :person_mailing_assignments )
-        # # args.merge!( :joins => 'LEFT OUTER JOIN person_mailing_assignments ON person_mailing_assignments.person_id = people.id' )
-      # # end
-    # end
-#         
-    # tagquery = ""
-    # if context
-      # if context.class == HashWithIndifferentAccess
-        # context.each do |key, ctx|
-          # tagquery += ".tagged_with('" + params[:tags][key].gsub(/'/, "\\\\'").gsub(/\(/, "\\\\(").gsub(/\)/, "\\\\)") + "', :on => '" + ctx + "', :any => true)"
-        # end
-      # else
-        # tagquery += ".tagged_with('" + params[:tags].gsub(/'/, "\\\\'").gsub(/\(/, "\\\\(").gsub(/\)/, "\\\\)") + "', :on => '" + context + "', :op => true)"
-      # end
-    # end
-#     
-    # # First we need to know how many records there are in the database
-    # # Then we get the actual data we want from the DB
-    # if tagquery.empty?
-      # @count = Person.count args
-    # else
-      # @count = eval "Person#{tagquery}.count :all, " + args.inspect
-    # end
-    # if rows.to_i > 0
-      # @nbr_pages = (@count / rows.to_i).floor
-      # @nbr_pages += 1 if @count % rows.to_i > 0
-    # else
-      # @nbr_pages = 1
-    # end
-#     
-    # # now we get the actual data
-    # offset = (@page.to_i - 1) * rows.to_i
-    # args.merge!(:offset => offset, :limit => rows)
-    # if idx
-      # args.merge!(:order => idx + " " + order)
-    # end
-#     
-    # # args.merge!(:select => "DISTINCT people.id as id, last_name, first_name, suffix, language, invitestatus_id, invitation_category_id, acceptance_status_id, mailing_number, comments, people.lock_version as lock_version")
-#     
-    # if tagquery.empty?
-      # @people = Person.find :all, args
-    # else
-      # @people = eval "Person#{tagquery}.find :all, " + args.inspect
-    # end
-#     
-    # ActiveRecord::Base.include_root_in_json = false # hack for now
-# 
-    # # We return the list of people as an XML structure which the 'table' can use
-    # respond_to do |format|
-      # format.html { render :layout => 'content' } # list.html.erb
-      # format.xml
-      # format.json {
-        # # TODO - make the pseudonym inclusion a paramter from the request
-        # render :json => { :data => @people, :totalRecords => @count }.to_json(:include_pseudonym => true), :callback => params[:callback] 
-      # }
-    # end
-  # end
-  
   def SetInvitePendingToInvited
     
   end
