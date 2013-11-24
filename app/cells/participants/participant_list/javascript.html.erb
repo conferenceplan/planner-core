@@ -9,6 +9,8 @@ jQuery(document).ready(function() {
         root_url : "<%= @root_url %>",
         baseUrl : "<%= @baseUrl %>",
         getGridData : "<%= @getGridData %>",
+        
+        delayed : <%= @delayed %>,
 
         name : [true, '<%= t "Name"%>'],       
         invite_status : [<%= @invite_status%>, '<%= t "Invitation Status"%>' ],

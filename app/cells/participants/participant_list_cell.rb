@@ -39,6 +39,8 @@ class Participants::ParticipantListCell < Cell::Rails
     @modelType = args.has_key?(:modelType) ? args[:modelType] : 'null'
     @showControls = args.has_key?(:showControls) ? args[:showControls] : false
     
+    @delayed = args.has_key?(:delayed) ? args[:delayed] : false
+    
     render
   end
 

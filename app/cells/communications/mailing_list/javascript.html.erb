@@ -65,16 +65,15 @@ CommunicationsApp.CommunicationsManagement = (function(Backbone){
     };
     
     function selectMailing(id) {
-        // alert("Mailing selected " + id);
-        // Need to add this to the query used in both of the people lists
         jQuery("#mailing-participants").participantTable('mailingQuery',{
             mailingId : id
         });
+        jQuery("#mailing-participants").participantTable('render');
         jQuery("#participants").participantTable('mailingQuery',{
             mailingId : id,
             op : 'not'
         });
-
+        jQuery("#participants").participantTable('render');
     };
     
     /*

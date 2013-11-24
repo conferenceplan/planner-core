@@ -24,12 +24,29 @@ $.widget( "cp.baseTable" , {
         showControls        : true,
         controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
         modelType           : null, // Should be provided by the caller
+        delayed             : false
+    },
+    
+    /*
+     *
+     */
+    _create : function() {
+        if (!this.options.delayed) {
+            this.createTable();
+        }
+    },
+    
+    render : function() {
+        if (this.options.delayed) {
+            this.createTable();
+            this.options.delayed = false; // because it has now been rendered
+        }
     },
     
     /*
      * 
      */
-    _create : function() {
+    createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
         var loadNotifyMethod = this.options.loadNotifyMethod;
         var pageToMethod = this.pageTo;
@@ -249,11 +266,15 @@ $.widget( "cp.baseTable" , {
      * 
      */
     tagQuery : function(options) {
-        var newUrl = this.options.root_url + this.options.baseUrl + this.options.getGridData + "?" + options.tagQuery;
-            
-        this.element.jqGrid('setGridParam', {
-            url: newUrl
-        }).trigger("reloadGrid");
+        this.options.extraClause = options.tagQuery;
+        
+        if (!this.options.delayed) {
+            var newUrl = this.options.root_url + this.options.baseUrl + this.options.getGridData + "?" + options.tagQuery;
+                
+            this.element.jqGrid('setGridParam', {
+                url: newUrl
+            }).trigger("reloadGrid");
+        }
     },
     
     /*
