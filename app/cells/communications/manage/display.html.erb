@@ -1,13 +1,9 @@
 
-<%= render_cell "communications/manage", :javascript %>
-
 <%= render_cell "communications/mailing_list", :javascript,
     :caption => "Mailings"
     %>
 
 <%= render_cell "communications/mailing_list", :templates %>
-<%= render_cell "communications/manage", :templates %>
-
 
 <%= render_cell "participants/participant_list", :javascript, 
     :caption => "Potential Participants",
@@ -65,7 +61,7 @@
          %>
     </div>
     <div class="span2">
-        Op
+        <div id="list-control-view"></div>
     </div>
     <div class="span4">
         <%= render_cell "participants/participant_list", :display,

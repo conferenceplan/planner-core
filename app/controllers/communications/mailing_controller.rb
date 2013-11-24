@@ -4,16 +4,48 @@ class Communications::MailingController < PlannerController
     @mailings = Mailing.all
   end
 
-  # Get a list of the people within a given mailing  
-  # def list
-    # # TODO - get a pageable list ???
-    # @mailings = Mailing.all
-  # end
-  
   # Add person
-  # Remove person
-  # Clear list?
-
+  def addPeople
+    people = params[:people]
+    mailingId = params[:mailing]
+    
+    begin
+      PersonMailingAssignment.transaction do
+        people.each do |pid|
+          mailingAssignment = PersonMailingAssignment.new
+        
+          mailingAssignment.person_id = pid
+          mailingAssignment.mailing_id = mailingId
+          
+          mailingAssignment.save!
+        end
+      end
+      render status: :ok, text: {}.to_json
+    rescue Exception
+      render status: :bad_request, text: 'unable to add the people to the mailing list'
+    end
+  end
+  
+  def removePeople
+    people = params[:people]
+    mailingId = params[:mailing]
+    
+    begin
+      PersonMailingAssignment.transaction do
+        people.each do |pid|
+          # find the mailing assignment
+          mailingAssignment = PersonMailingAssignment.first conditions: { person_id: pid, mailing_id: mailingId }
+          
+          # and then delete it
+          mailingAssignment.destroy
+        end
+      end
+      render status: :ok, text: {}.to_json
+    rescue Exception
+      render status: :bad_request, text: 'unable to remove the people from the mailing list'
+    end
+  end
+  
   def show
     @mailing = Mailing.find params[:id]
   end
