@@ -1,0 +1,21 @@
+
+<script type="text/template" id="mailing-data-template">
+    <dl class="dl-horizontal">
+        <dt><%= t "Mailing Number" %></dt><dd>{{= mailing_number }}</dd>
+        <dt><%= t "Mail Template Title" %></dt><dd>{{= mail_template ? mail_template : "&nbsp;" }}</dd>
+        <dt><%= t "Mail Usage" %></dt><dd>{{= mail_use ? mail_use : "&nbsp;" }}</dd>
+        <dt><%= t "Scheduled" %></dt><dd>{{= scheduled ? '<%= t "Yes" %>' : '<%= t "No" %>' }}</dd>
+        <dt><%= t "Test Run" %></dt><dd>{{= testrun ? '<%= t "Yes" %>' : '<%= t "No" %>' }}</dd>
+    </dl>
+</script>
+
+<script type="text/template" id="preview-control-view-template">
+    <button class="btn btn-primary preview-mail-button pull-left">Preview</button>
+</script>
+
+<script type="text/template" id="list-control-view-template">
+    <dl class="dl-horizontal">
+        <dt><button class="btn btn-primary add-people-button pull-left"><i class="icon-forward"></i></button></dt>
+        <dt><button class="btn btn-primary remove-people-button pull-left"><i class="icon-backward"></i></button></dt>
+    </dl>    
+</script>

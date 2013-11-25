@@ -3,7 +3,10 @@
     :caption => "Mailings"
     %>
 
+<%= render_cell "communications/manage", :javascript %>
+
 <%= render_cell "communications/mailing_list", :templates %>
+<%= render_cell "communications/manage", :templates %>
 
 <%= render_cell "participants/participant_list", :javascript, 
     :caption => "Potential Participants",
@@ -20,7 +23,6 @@
     
     :multiselect => true,
     :showControls => false
-    # :selectNotifyMethod => "CommunicationsApp.CommunicationsManagement.showMailing"
 %>
 
 <%= render_cell "participants/participant_list", :javascript, 
@@ -42,7 +44,6 @@
     
     :multiselect => true,
     :showControls => false
-    # :selectNotifyMethod => "CommunicationsApp.CommunicationsManagement.showMailingPeople"
 %>
 
 <div class="row-fluid">

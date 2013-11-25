@@ -1,0 +1,154 @@
+<script type="text/javascript">
+
+CommunicationsApp = new Backbone.Marionette.Application();
+
+CommunicationsApp.Management = (function(Backbone){
+    
+    var currentMailingId = null;
+    
+    PreviewControlView = Marionette.ItemView.extend({
+        el : '#preview-control-area',
+        template : "#preview-control-view-template",
+        
+        events : {
+            "click .preview-mail-button" : "previewMail",
+        },
+        
+        previewMail : function(ev) {
+            var selectedIds = jQuery('#mailing-participants').jqGrid('getGridParam','selarrrow'); // get ids of the selected people
+            if (selectedIds[0]) {
+                var args = { person_id : selectedIds[0],
+                             mailing : currentMailingId 
+                           };
+                
+                jQuery.ajax( "/communications/mailing/previewEmail.json",
+                         {
+                             type : 'GET',
+                             data : args,
+                             error : function() {
+                                alertMessage('<%= t "unable to preview..." %>');
+                             },
+                             success : function(data, status, jqXHR) {
+                                modal = new AppUtils.InfoModal({
+                                    content : data.content,
+                                    title : '<%= t "Mail Preview" %>'
+                                });
+                                modal.render();
+                             }
+                         });
+            } else {
+                alertMessage('<%= t "please select a person from a mailing to generate a preview" %>');
+            }
+        }
+    }),
+    
+    MailingListControlView = Marionette.ItemView.extend({
+        el : '#list-control-view',
+        template : '#list-control-view-template',
+        
+        events : {
+            "click .add-people-button" : "addPeople",
+            "click .remove-people-button" : "removePeople"
+        },
+        
+        addPeople : function(ev) {
+            // do nowt if there is no current mailing list
+            var selectedIds = jQuery('#participants').jqGrid('getGridParam','selarrrow'); // get ids of the selected people
+            var args = { people : selectedIds,
+                         mailing : currentMailingId 
+                       };
+            
+            jQuery.ajax( "/communications/mailing/addPeople.json",
+                     {
+                         type : 'PUT',
+                         data : args,
+                         error : function() {
+                            alertMessage('<%= t "unable to add people to the mailing" %>');
+                         },
+                         success : function() {
+                            // add them to the mailing list
+                            jQuery('#participants').jqGrid('resetSelection');
+                            // refresh the lists
+                            jQuery('#participants').trigger("reloadGrid");
+                            jQuery('#mailing-participants').trigger("reloadGrid");
+                         }
+                     });
+
+        },
+
+        removePeople : function(ev) {
+            // do nowt if there is no current mailing list
+            var selectedIds = jQuery('#mailing-participants').jqGrid('getGridParam','selarrrow'); // get ids of the selected people
+            var args = { people : selectedIds,
+                         mailing : currentMailingId 
+                       };
+            jQuery.ajax( "/communications/mailing/removePeople.json",
+                     {
+                         type : 'PUT',
+                         data : args,
+                         error : function() {
+                            alertMessage('<%= t "unable to remove people from the mailing" %>');
+                         },
+                         success : function() {
+                            // add them to the mailing list
+                            jQuery('#mailing-participants').jqGrid('resetSelection');
+                            // refresh the lists
+                            jQuery('#participants').trigger("reloadGrid");
+                            jQuery('#mailing-participants').trigger("reloadGrid");
+                         }
+                     });
+        }
+    });
+    
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' );
+    };
+    
+    function selectMailing(id) {
+        currentMailingId = id;
+        jQuery("#mailing-participants").participantTable('mailingQuery',{
+            mailingId : id
+        });
+        jQuery("#mailing-participants").participantTable('render');
+        jQuery("#participants").participantTable('mailingQuery',{
+            mailingId : id,
+            op : 'not'
+        });
+        jQuery("#participants").participantTable('render');
+    };
+    
+    /*
+     * 
+     */
+    return {
+        selectMailing : function(id) {
+            selectMailing(id)
+        },
+        
+        init : function(options) {
+            // showMailings();
+            var ctlView = new MailingListControlView();
+            ctlView.render();
+            var previewCtl = new PreviewControlView();
+            previewCtl.render();
+        }
+    }
+    
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    CommunicationsList.setup(CommunicationsApp);
+    CommunicationsApp.addInitializer(CommunicationsApp.Management.init);
+    CommunicationsApp.start({
+            selectFn                : CommunicationsApp.Management.selectMailing,
+            readTemplate            : '#mailing-data-template',
+            itemArea                : "#mailing-edit-area"
+    });
+});
+
+</script>
