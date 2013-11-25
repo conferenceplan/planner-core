@@ -31,6 +31,42 @@ CommunicationsApp.CommunicationsList = (function(Backbone){
         },
     });
     
+    PreviewControlView = Marionette.ItemView.extend({
+        el : '#preview-control-area',
+        template : "#preview-control-view-template",
+        
+        events : {
+            "click .preview-mail-button" : "previewMail",
+        },
+        
+        previewMail : function(ev) {
+            var selectedIds = jQuery('#mailing-participants').jqGrid('getGridParam','selarrrow'); // get ids of the selected people
+            if (selectedIds[0]) {
+                var args = { person_id : selectedIds[0],
+                             mailing : currentMailingId 
+                           };
+                
+                jQuery.ajax( "/communications/mailing/previewEmail.json",
+                         {
+                             type : 'GET',
+                             data : args,
+                             error : function() {
+                                alertMessage('<%= t "unable to preview..." %>');
+                             },
+                             success : function(data, status, jqXHR) {
+                                modal = new AppUtils.InfoModal({
+                                    content : data.content,
+                                    title : '<%= t "Mail Preview" %>'
+                                });
+                                modal.render();
+                             }
+                         });
+            } else {
+                alertMessage('<%= t "please select a person from a mailing to generate a preview" %>');
+            }
+        }
+    }),
+    
     MailingListControlView = Marionette.ItemView.extend({
         el : '#list-control-view',
         template : '#list-control-view-template',
@@ -109,7 +145,7 @@ CommunicationsApp.CommunicationsList = (function(Backbone){
         });
         
         tabLists.push( AppUtils.createCollectionView({
-            url                     : "/communications/mailing.json", // TODO
+            url                     : "/communications/mailing.json",
             collectionType          : MailingCollection,
             region                  : mailingLayout.mailingRegion,
             template                : "#mailing-template",
@@ -117,7 +153,6 @@ CommunicationsApp.CommunicationsList = (function(Backbone){
             collection_tagName      : 'table',
             tagName                 : 'tr',
             view_refresh_event      : "mailing:refresh",
-            // drillDownFn             : drillDownMailing,
             selectFn                : selectMailing,
             readTemplate            : '#mailing-data-template',
             itemArea                : "#mailing-edit-area"
@@ -145,6 +180,8 @@ CommunicationsApp.CommunicationsList = (function(Backbone){
             showMailings();
             var ctlView = new MailingListControlView();
             ctlView.render();
+            var previewCtl = new PreviewControlView();
+            previewCtl.render();
         },
         
         clearDetails : function() {

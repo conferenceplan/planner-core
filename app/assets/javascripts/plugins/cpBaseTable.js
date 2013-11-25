@@ -185,7 +185,9 @@ $.widget( "cp.baseTable" , {
                 onSelectRow     : function(ids) {
                     var _model = selectMethod(ids); // get the current model and put it in the controller view
                     
-                    control.model = _model;
+                    if (_model) {
+                        control.model = _model;
+                    }
                     
                     return false;
                 },

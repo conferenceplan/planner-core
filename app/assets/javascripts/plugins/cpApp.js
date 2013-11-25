@@ -4,7 +4,47 @@
 
 var AppUtils = (function(){
     var eventAggregator = new Backbone.Wreqr.EventAggregator(); // Event aggregator - global
+    
+   /*
+    * 
+    */
+    InfoModal = Backbone.View.extend({
+        tagName: "div",
+        className: "modal hide ",
+        
+        initialize : function() {
+            this.template = _.template($('#modal-info-template').html());
+        },
+        
+        modalOptions: {
+            backdrop: 'static',
+        },
 
+        render: function () {
+            Backbone.BootstrapModal.count++;
+
+            this.$el.html($(this.template({
+                title : this.options.title
+            })));
+
+            this.$el.modal(this.modalOptions);
+
+            if (this.options.content) {
+                this.$el.find(".modal-body").append(this.options.content);
+            }
+            
+            this.delegateEvents();
+            
+            return this;
+        },
+        
+        close: function (e) {
+            this.remove();
+            this.unbind();
+            this.views = [];
+            Backbone.BootstrapModal.count--;
+        }
+    });
 
     /*
      * 
@@ -18,7 +58,7 @@ var AppUtils = (function(){
         },
         
         initialize : function() {
-            this.template = _.template($('#modal-edit-template').html()); //_.template(_model_html); //
+            this.template = _.template($('#modal-edit-template').html());
         },
 
         modalOptions: {
@@ -380,6 +420,8 @@ var AppUtils = (function(){
         },
         
         eventAggregator : eventAggregator,
+        
+        InfoModal : InfoModal,
         
         GenericModal : GenericModal,
         
