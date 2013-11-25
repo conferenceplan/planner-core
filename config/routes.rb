@@ -230,13 +230,12 @@ PlannerRc1::Application.routes.draw do
   resources :mail_history, :controller => 'mail/mail_history', :only => [:index]
   match 'mail_history/count', :controller => 'mail/mail_history', :action => 'count', :method => 'get'
 
-  # match 'mailings/list', :controller => 'admin/mailings', :action => 'list', :method => 'get'
-  # match 'mailings/del', :controller => 'admin/mailings', :action => 'del', :method => 'delete'
-  # match 'mailings/previewEmail', :controller => 'admin/mailings', :action => 'previewEmail', :method => 'get'
-  # resources :mailings, :controller => 'admin/mailings'
-  
-  match 'communications/mailing/addPeople', :controller => 'communications/mailing', :action => 'addPeople', :method => 'put'
-  match 'communications/mailing/removePeople', :controller => 'communications/mailing', :action => 'removePeople', :method => 'put'
+  #
+  #
+  #
+  match 'communications/mailing/addPeople',     :controller => 'communications/mailing', :action => 'addPeople',    :method => 'put'
+  match 'communications/mailing/removePeople',  :controller => 'communications/mailing', :action => 'removePeople', :method => 'put'
+  match 'communications/mailing/previewEmail',  :controller => 'communications/mailing', :action => 'previewEmail', :method => 'get'
   namespace :communications do
     resources :mailing
   end

@@ -6,6 +6,24 @@
     <button class='delete-model-button btn btn-primary btn-mini toolbar-button'><%= t "Delete" %></button>
 </script>
 
+<script type="text/template" id="modal-info-template">
+<form>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            ×
+        </button>
+        <h3 id="myModalLabel">{{= title }}</h3>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">
+            <%= t "ok" %>
+        </button>
+    </div>
+</form>
+</script>
+
+
 <script type="text/template" id="modal-edit-template">
 <form>
     <div class="modal-header">

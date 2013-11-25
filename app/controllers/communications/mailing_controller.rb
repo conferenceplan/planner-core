@@ -45,6 +45,19 @@ class Communications::MailingController < PlannerController
       render status: :bad_request, text: 'unable to remove the people from the mailing list'
     end
   end
+
+  def previewEmail
+    # For person for given mailing
+    person = Person.find params[:person_id]
+    mailing = Mailing.find params[:mailing]
+    
+    content = SurveyMailer.preview(person, mailing, {
+            :person => person,
+            :assignments => ProgramItemsService.findProgramItemsForPerson(person)
+    }) 
+    
+    render :json => {:content => content}
+  end
   
   def show
     @mailing = Mailing.find params[:id]
