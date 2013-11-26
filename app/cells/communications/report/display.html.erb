@@ -1,7 +1,26 @@
-<h1>
-  Communications::Report#display
-</h1>
 
-<p>
-  Find me in app/cells/communications/report/display.html.erb
-</p>
+<%= render_cell "communications/mailing_list", :javascript,
+    :caption => "Mailings"
+    %>
+
+<%= render_cell "communications/report", :javascript %>
+
+<%= render_cell "communications/mailing_list", :templates %>
+<%= render_cell "communications/report", :templates %>
+
+
+<div class="row-fluid">
+    <div class="span4" style="height : 370px; overflow : auto;">
+        <%= render_cell "communications/mailing_list", :display %>
+    </div>
+    <div class="span8">
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span6">
+    </div>
+    <div class="span2">
+    </div>
+    <div class="span4">
+    </div>
+</div>

@@ -39,20 +39,25 @@ CommunicationsList = (function(Backbone){
         mailingLayout = new MailingLayout();
         mailingLayout.render();
         $('#mailing-region-view').html(mailingLayout.el);
+        var template = "#mailing-template";
         
-        TabUtils.createTabControl({
-            template                : "#mailing-control-template",
-            modelType               : Mailing,
-            view_refresh_event      : "mailing:refresh",
-            modal_create_title      : '<%= t "Create Mailing" %>',
-            region                  : mailingLayout.mailingControlRegion,
-        });
+        if (options.nops) {
+            template = "#mailing-template-nodelete";
+        } else {
+            TabUtils.createTabControl({
+                template                : "#mailing-control-template",
+                modelType               : Mailing,
+                view_refresh_event      : "mailing:refresh",
+                modal_create_title      : '<%= t "Create Mailing" %>',
+                region                  : mailingLayout.mailingControlRegion,
+            });
+        }
         
         tabLists.push( AppUtils.createCollectionView({
             url                     : "/communications/mailing.json",
             collectionType          : MailingCollection,
             region                  : mailingLayout.mailingRegion,
-            template                : "#mailing-template",
+            template                : template,
             collection_attributes   : { "class" : "table table-striped table-condensed" },
             collection_tagName      : 'table',
             tagName                 : 'tr',

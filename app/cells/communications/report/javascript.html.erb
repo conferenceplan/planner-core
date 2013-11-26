@@ -1,7 +1,45 @@
-<h1>
-  Communications::Report#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/communications/report/javascript.html.erb
-</p>
+CommunicationsReportApp = new Backbone.Marionette.Application();
+
+CommunicationsReportApp.Report = (function(Backbone){
+    
+    var currentMailingId = null;
+
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' );
+    };
+    
+    function selectMailing(id) {
+        currentMailingId = id;
+    };
+    
+    /*
+     * 
+     */
+    return {
+        selectMailing : function(id) {
+            selectMailing(id)
+        },
+        
+        init : function(options) {
+        }
+    }
+    
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    CommunicationsList.setup(CommunicationsReportApp);
+    CommunicationsReportApp.addInitializer(CommunicationsReportApp.Report.init);
+    CommunicationsReportApp.start({
+            nops                    : true,
+            selectFn                : CommunicationsReportApp.Report.selectMailing
+    });
+});
+
+</script>
