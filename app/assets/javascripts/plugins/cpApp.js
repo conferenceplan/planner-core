@@ -175,6 +175,9 @@ var AppUtils = (function(){
             "click .model-submit-button" : "submit"
         },
         
+        formEvents : {
+        },
+        
         editModel : function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -267,8 +270,21 @@ var AppUtils = (function(){
                     model: this.model
             }).render();
             
+            var form = this.form;
+            // iterate through the form events and add to the form
+            _.each(this.formEvents, function(value, key, list) {
+                // console.debug(key);
+                // console.debug(value);
+                form.on(key, value);
+            });
+            
             // the render it in the area
             this.$el.find(".model-body").html(this.form.el);
+        },
+        
+        onEvent : function(eventname, func) {
+            // form.on(eventname, func);
+            this.formEvents[eventname] = func;
         }
     });
     
@@ -426,6 +442,31 @@ var AppUtils = (function(){
         GenericModal : GenericModal,
         
         ModelModal : ModelModal,
+        
+        createEditItemView : function(options) {
+            var view = new ItemEditView({
+                            model           : options.model,
+                            template        : options.template,
+                            newTitle        : options.newTitle,
+                            editTitle       : options.editTitle,
+                            attributes      : options.view_attributes,
+                            syncCallback    : options.updateCallback,
+                            tagName         : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
+                            url             : options.modelURL,
+                            selectFn        : options.selectFn,
+                            clearFn         : options.clearFn,
+                            copyFn          : options.copyFn,
+                            previewFn       : options.previewFn,
+                            drillDownFn     : options.drillDownFn,
+                            itemArea        : options.itemArea,
+                            readTemplate    : options.readTemplate
+            });
+            
+            view.render();
+            $(options.itemArea).html(view.$el);
+            
+            return view;
+        },
         
         createCollectionView : function(options) {
             if (!options.collection) {

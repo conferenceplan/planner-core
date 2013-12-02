@@ -11,6 +11,7 @@ PlannerRc1::Application.routes.draw do
     match "venues_dash/:cellname" => "venues_dash#index"
     match "surveys_dash/:cellname" => "surveys_dash#index"
     match "communications_dash/:cellname" => "communications_dash#index"
+    match "mobile_dash/:cellname" => "mobile_dash#index"
     
     resources :logistics_dash
     resources :admin_dash
@@ -34,6 +35,13 @@ PlannerRc1::Application.routes.draw do
   match 'usersadmin/list' => 'users/admin#list'
   resources :usersadmin, :controller => 'users/admin'
   match 'roles/list' => 'roles#list'
+
+  #
+  #
+  #
+  namespace :mobile do
+    resources :theme
+  end
 
 # TODO - test
   match 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'

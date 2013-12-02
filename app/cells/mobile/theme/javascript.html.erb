@@ -1,0 +1,80 @@
+<script type="text/javascript">
+/*
+ * 
+ */
+ThemeApp = new Backbone.Marionette.Application();
+ThemeApp.Management = (function(Backbone){
+
+    MobileTheme = Backbone.Model.extend({
+        urlRoot : '/mobile/theme',
+        schema : {
+            main_background     :  { type : 'Text', title : '<%= t "Main Background" %>' },
+            title_background    :  { type : 'Text', title : '<%= t "Title Background" %>' },
+            primary_text        :  { type : 'Text', title : '<%= t "Primary Text" %>' },
+            secondary_text      :  { type : 'Text', title : '<%= t "Secondary Text" %>' },
+            card_background     :  { type : 'Text', title : '<%= t "Card Background" %>' },
+            updated_ribbon      :  { type : 'Text', title : '<%= t "Updated Ribbon" %>' },
+            hot_ribbon          :  { type : 'Text', title : '<%= t "Hot Ribbon" %>' },
+            favourite_on        :  { type : 'Text', title : '<%= t "Favourite On" %>' },
+            card_shadow         :  { type : 'Text', title : '<%= t "Card Shadow" %>' }
+        }
+    });
+    
+    /*
+     * 
+     */
+    PhoneView = Marionette.ItemView.extend({
+        el : '#phone-view',
+        template : '#phone-view-template',
+        
+        initialize : function() {
+        },
+        
+        onRender : function() {
+            var _containerElem = this.$el.find("#phone-display")[0];
+            
+            Phone.paint(_containerElem, {});
+        },
+
+    });
+
+    function loadPhoneDisplay() {
+        phoneView = new PhoneView({});
+        phoneView.render();
+
+        m = new MobileTheme();
+        m.fetch({
+            error : function(model, response) {
+                alertMessage("Error communicating with backend"); // TODO - change to translatable string
+            },
+            success : function(mdl) {
+                view = AppUtils.createEditItemView({
+                    model        : mdl,
+                    itemArea     : '#phone-theme-ctl',
+                    readTemplate : '#phone-theme-ctl-template'
+                });
+                
+                view.onEvent('main_background:change', function(form, editor, extra) {
+                    alert("changed");
+                });
+            }
+        });
+    };
+    
+    /*
+     * The 'public' methods
+     */
+    return {
+        init : function() {
+            loadPhoneDisplay();
+        }
+    }
+    
+})(Backbone);
+
+jQuery(document).ready(function() {
+    ThemeApp.start();
+    ThemeApp.Management.init();
+});
+
+</script>

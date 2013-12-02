@@ -1,0 +1,2 @@
+module Pages::MobileDashHelper
+end
