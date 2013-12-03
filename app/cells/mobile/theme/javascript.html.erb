@@ -5,18 +5,21 @@
 ThemeApp = new Backbone.Marionette.Application();
 ThemeApp.Management = (function(Backbone){
 
+    /*
+     * 
+     */
     MobileTheme = Backbone.Model.extend({
         urlRoot : '/mobile/theme',
         schema : {
-            main_background     :  { type : 'Text', title : '<%= t "Main Background" %>' },
-            title_background    :  { type : 'Text', title : '<%= t "Title Background" %>' },
-            primary_text        :  { type : 'Text', title : '<%= t "Primary Text" %>' },
-            secondary_text      :  { type : 'Text', title : '<%= t "Secondary Text" %>' },
-            card_background     :  { type : 'Text', title : '<%= t "Card Background" %>' },
-            updated_ribbon      :  { type : 'Text', title : '<%= t "Updated Ribbon" %>' },
-            hot_ribbon          :  { type : 'Text', title : '<%= t "Hot Ribbon" %>' },
-            favourite_on        :  { type : 'Text', title : '<%= t "Favourite On" %>' },
-            card_shadow         :  { type : 'Text', title : '<%= t "Card Shadow" %>' }
+            main_background     :  { type : 'Color', title : '<%= t "Main Background" %>' },
+            title_background    :  { type : 'Color', title : '<%= t "Title Background" %>' },
+            primary_text        :  { type : 'Color', title : '<%= t "Primary Text" %>' },
+            secondary_text      :  { type : 'Color', title : '<%= t "Secondary Text" %>' },
+            card_background     :  { type : 'Color', title : '<%= t "Card Background" %>' },
+            updated_ribbon      :  { type : 'Color', title : '<%= t "Updated Ribbon" %>' },
+            hot_ribbon          :  { type : 'Color', title : '<%= t "Hot Ribbon" %>' },
+            favourite_on        :  { type : 'Color', title : '<%= t "Favourite On" %>' },
+            card_shadow         :  { type : 'Color', title : '<%= t "Card Shadow" %>' }
         }
     });
     
@@ -37,7 +40,28 @@ ThemeApp.Management = (function(Backbone){
         },
 
     });
+    
+    /*
+     * 
+     */
+    function resetColors(view) {
+        mdl = view.model;
+        Phone.setColors({
+            '#main-background'  : mdl.get('main_background'),
+            '#title-background' : mdl.get('title_background'),
+            '#primary-text'     : mdl.get('primary_text'),
+            '#secondary-text'   : mdl.get('secondary_text'),
+            '#card-background'  : mdl.get('card_background'),
+            '#updated-ribbon'   : mdl.get('updated_ribbon'),
+            '#hot-ribbon'       : mdl.get('hot_ribbon'),
+            '#favourite-on'     : mdl.get('favourite_on'),
+            '#card-shadow'      : mdl.get('card_shadow'),
+        });
+    };
 
+    /*
+     * 
+     */
     function loadPhoneDisplay() {
         phoneView = new PhoneView({});
         phoneView.render();
@@ -51,11 +75,48 @@ ThemeApp.Management = (function(Backbone){
                 view = AppUtils.createEditItemView({
                     model        : mdl,
                     itemArea     : '#phone-theme-ctl',
-                    readTemplate : '#phone-theme-ctl-template'
+                    readTemplate : '#phone-theme-ctl-template',
+                    resetFn      : resetColors
                 });
                 
-                view.onEvent('main_background:change', function(form, editor, extra) {
-                    alert("changed");
+                Phone.setColors({
+                    '#main-background'  : mdl.get('main_background'),
+                    '#title-background' : mdl.get('title_background'),
+                    '#primary-text'     : mdl.get('primary_text'),
+                    '#secondary-text'   : mdl.get('secondary_text'),
+                    '#card-background'  : mdl.get('card_background'),
+                    '#updated-ribbon'   : mdl.get('updated_ribbon'),
+                    '#hot-ribbon'       : mdl.get('hot_ribbon'),
+                    '#favourite-on'     : mdl.get('favourite_on'),
+                    '#card-shadow'      : mdl.get('card_shadow'),
+                });
+                
+                view.onEvent('main_background:blur', function(form, editor, extra) {
+                    Phone.setColor('#main-background', editor.getValue() );
+                });
+                view.onEvent('title_background:blur', function(form, editor, extra) {
+                    Phone.setColor('#title-background', editor.getValue() );
+                });
+                view.onEvent('primary_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#primary-text', editor.getValue() );
+                });
+                view.onEvent('secondary_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#secondary-text', editor.getValue() );
+                });
+                view.onEvent('card_background:blur', function(form, editor, extra) {
+                    Phone.setColor('#card-background', editor.getValue() );
+                });
+                view.onEvent('updated_ribbon:blur', function(form, editor, extra) {
+                    Phone.setColor('#updated-ribbon', editor.getValue() );
+                });
+                view.onEvent('hot_ribbon:blur', function(form, editor, extra) {
+                    Phone.setColor('#hot-ribbon', editor.getValue() );
+                });
+                view.onEvent('favourite_on:blur', function(form, editor, extra) {
+                    Phone.setColor('#favourite-on', editor.getValue() );
+                });
+                view.onEvent('card_shadow:blur', function(form, editor, extra) {
+                    Phone.setColor('#card-shadow', editor.getValue() );
                 });
             }
         });

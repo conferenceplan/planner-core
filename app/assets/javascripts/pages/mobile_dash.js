@@ -3,6 +3,9 @@
  */
 Phone = (function() {
 
+    /*
+     * 
+     */
     function importNode(node, allChildren) {
         switch (node.nodeType) {
         case document.ELEMENT_NODE:
@@ -43,26 +46,28 @@ Phone = (function() {
     /*
      * 
      */
+    function setColor(place, color) {
+        var element = svg.select("svg").selectAll(place);
+        element.style('fill', color);
+        var subels = element.selectAll('path');
+        if (subels) {
+            subels.style('fill', color);
+        }
+    }
+    
+    /*
+     * 
+     */
     function setColors(colors) {
         
         if (colors) {
-            
+            _.each(colors, function(value, key, list) {
+                Phone.setColor(key, value);
+            });
         }
         
         // Set the colors - via fill          
         background = svg.select("svg").selectAll("#main-background");
-        // background.style('fill', '#00FFFF');
-        /*
-         * title-background
-         * main-background
-         * primary-text
-         * secondary-text
-         * card-background
-         * updated-ribbon
-         * hot-ribbon
-         * favourite-on
-         * card-shadow
-         */
     };
 
     /*
@@ -93,6 +98,10 @@ Phone = (function() {
      * 
      */
     return {
+        setColor : function(place, color) {
+            return setColor(place, color);
+        },
+        
         setColors : function(colors) {
             return setColors(colors);
         },

@@ -15,6 +15,7 @@
 //= require jquery.easy-pie-chart
 //= require jquery.mousewheel
 //= require jqcloud-1.0.4
+//= require colorpicker/jquery.colorpicker
 
 //= require bootstrap
 
@@ -51,6 +52,7 @@
 //= require plugins/cpRoomTable
 //= require plugins/timeEditor
 //= require plugins/htmlEditor
+//= require plugins/colorEditor
 //= require plugins/DependentEditors
 
 //= require TabViews

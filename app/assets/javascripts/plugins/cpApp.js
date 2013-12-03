@@ -190,6 +190,9 @@ var AppUtils = (function(){
             e.stopPropagation();
             // flip back to the read view
             this.renderModel();
+            if (this.options.resetFn) {
+                this.options.resetFn(this);
+            }
         },
         
         submit  : function(e) {
@@ -273,8 +276,6 @@ var AppUtils = (function(){
             var form = this.form;
             // iterate through the form events and add to the form
             _.each(this.formEvents, function(value, key, list) {
-                // console.debug(key);
-                // console.debug(value);
                 form.on(key, value);
             });
             
@@ -283,7 +284,6 @@ var AppUtils = (function(){
         },
         
         onEvent : function(eventname, func) {
-            // form.on(eventname, func);
             this.formEvents[eventname] = func;
         }
     });
@@ -340,11 +340,6 @@ var AppUtils = (function(){
                 this.options.drillDownFn(this.model.id);
             }
         },
-        
-        // showModel : function() {
-            // alert("show");
-            // this.editModel();
-        // },
         
         editModel : function() {
             var v = new ItemEditView({
@@ -453,11 +448,12 @@ var AppUtils = (function(){
                             syncCallback    : options.updateCallback,
                             tagName         : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
                             url             : options.modelURL,
-                            selectFn        : options.selectFn,
-                            clearFn         : options.clearFn,
-                            copyFn          : options.copyFn,
-                            previewFn       : options.previewFn,
-                            drillDownFn     : options.drillDownFn,
+                            resetFn         : options.resetFn,
+                            // selectFn        : options.selectFn,
+                            // clearFn         : options.clearFn,
+                            // copyFn          : options.copyFn,
+                            // previewFn       : options.previewFn,
+                            // drillDownFn     : options.drillDownFn,
                             itemArea        : options.itemArea,
                             readTemplate    : options.readTemplate
             });
