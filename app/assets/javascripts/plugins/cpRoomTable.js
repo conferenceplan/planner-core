@@ -7,7 +7,6 @@ $.widget( "cp.roomTable", $.cp.baseTable , {
         return [{
             label : this.options.name[1], //'Name',
             hidden : !this.options.name[0],
-            // label: 'Room Name',
             name: 'name',
             index: 'name',
             search : false,
@@ -15,7 +14,6 @@ $.widget( "cp.roomTable", $.cp.baseTable , {
         }, {
             label : this.options.setup[1], //'Name',
             hidden : !this.options.setup[0],
-            // label: 'Setup',
             name: 'setup.name',
             index: 'setup.name',
             search : false,
@@ -23,7 +21,6 @@ $.widget( "cp.roomTable", $.cp.baseTable , {
         }, {
             label : this.options.capacity[1], //'Name',
             hidden : !this.options.capacity[0],
-            // label: 'Capacity',
             name: 'room_setup.capacity',
             index: 'room_setup.capacity',
             search : false,
@@ -31,7 +28,6 @@ $.widget( "cp.roomTable", $.cp.baseTable , {
         }, {
             label : this.options.purpose[1], //'Name',
             hidden : !this.options.purpose[0],
-            // label: 'Purpose',
             name: 'purpose',
             index: 'purpose',
             search : false,
@@ -39,7 +35,6 @@ $.widget( "cp.roomTable", $.cp.baseTable , {
         }, {
             label : this.options.comment[1], //'Name',
             hidden : !this.options.comment[0],
-            // label: 'Comment',
             name: 'comment',
             index: 'comment',
             search : false,
@@ -68,12 +63,16 @@ $.widget( "cp.roomTable", $.cp.baseTable , {
             this.instantiated = true;
         } else {
             // refresh the grid with the new URL
-            $(this.element).setGridParam({url : this.createUrl() }).trigger("reloadGrid");
+            this.setControlOptions({
+                id : venueId,
+                id_name : 'venue_id'
+            });
+            $(this.element).setGridParam({
+                    page : 1,
+                    url : this.createUrl() 
+                }).trigger("reloadGrid");
         }
     }
     
-// jQuery(document).ready(function() {
-    // $('#venues').venueTable('ttt');
-// });
 });
 })(jQuery);

@@ -242,9 +242,9 @@ $.widget( "cp.baseTable" , {
         
         if (this.options.showControls) {
             // Create the control view
-            control = new TableControlView({
-                    id : this.options.id,
-                    id_name : this.options.id_name,
+            this.control = control = new TableControlView({
+                    id                  : this.options.id,
+                    id_name             : this.options.id_name,
                     grid                : this.element,
                     modal_create_title  : this.options.modal_create_title,
                     modal_edit_title    : this.options.modal_edit_title,
@@ -254,6 +254,11 @@ $.widget( "cp.baseTable" , {
             control.render();
             $("#" + this.options.controlDiv).html(control.el);
         }
+    },
+    
+    setControlOptions : function(options) {
+        this.control.options.id = options.id;
+        this.control.options.id_name = options.id_name;
     },
 
     /*
