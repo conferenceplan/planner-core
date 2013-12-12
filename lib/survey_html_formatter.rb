@@ -59,19 +59,21 @@ module SurveyHtmlFormatter
   def question_to_html(question, respondent_detail, forEmail, responses)
     content = ''
     
-    case question.question_type
-    when :availability
-      content += availabilty_to_html(question, respondent_detail, forEmail, responses)
-    when :address
-      content += address_to_html(question, respondent_detail, forEmail, responses)
-    when :phone
-      content += phone_to_html(question, respondent_detail, forEmail, responses)
-    when :singlechoice
-      content += single_choice_to_html(question, respondent_detail, forEmail, responses)
-    when :textbox
-      content += textbox_to_html(question, respondent_detail, forEmail, responses)
-    else
-      content += text_to_html(question, respondent_detail, forEmail, responses)
+    if (!question.private || (!forEmail && question.private && (controller.permitted_to? :supermanage, :surveys)))
+      case question.question_type
+      when :availability
+        content += availabilty_to_html(question, respondent_detail, forEmail, responses)
+      when :address
+        content += address_to_html(question, respondent_detail, forEmail, responses)
+      when :phone
+        content += phone_to_html(question, respondent_detail, forEmail, responses)
+      when :singlechoice
+        content += single_choice_to_html(question, respondent_detail, forEmail, responses)
+      when :textbox
+        content += textbox_to_html(question, respondent_detail, forEmail, responses)
+      else
+        content += text_to_html(question, respondent_detail, forEmail, responses)
+      end
     end
     
     return content    
