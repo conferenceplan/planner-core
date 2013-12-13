@@ -1,0 +1,6 @@
+<select> 
+<option value='0'></option>
+<% for entry in @mailings %>
+    <option value='<%= entry.id%>'><%= entry.mailing_number.to_s + ' - ' + entry.mail_template.mail_use.name%></option> 
+<%end%>
+</select>

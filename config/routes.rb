@@ -244,6 +244,7 @@ PlannerRc1::Application.routes.draw do
   match 'communications/mailing/addPeople',     :controller => 'communications/mailing', :action => 'addPeople',    :method => 'put'
   match 'communications/mailing/removePeople',  :controller => 'communications/mailing', :action => 'removePeople', :method => 'put'
   match 'communications/mailing/previewEmail',  :controller => 'communications/mailing', :action => 'previewEmail', :method => 'get'
+  match 'communications/mailing/listWithBlank',  :controller => 'communications/mailing', :action => 'listWithBlank', :method => 'get'
   namespace :communications do
     resources :mailing
   end

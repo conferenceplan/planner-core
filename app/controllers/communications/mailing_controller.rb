@@ -3,6 +3,11 @@ class Communications::MailingController < PlannerController
   def index
     @mailings = Mailing.all
   end
+  
+  def listWithBlank
+    @mailings = Mailing.all
+    render :layout => 'plain'
+  end
 
   # Add person
   def addPeople

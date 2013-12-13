@@ -14,7 +14,7 @@ require "bundler/capistrano"
 require "./config/capistrano_database_yml.rb"
 require "./config/capistrano_production_rb"
 require "./config/capistrano_config_yml.rb"
-#require "./config/capistrano_delayed_job_yml"
+require "./config/capistrano_delayed_job_yml"
 
 set :rvm_type, :system
 set :bundle_dir, ''

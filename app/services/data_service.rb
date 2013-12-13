@@ -45,7 +45,7 @@ module DataService
   #
   #
   #
-  def self.createWhereClause(filters, integerFieldsSkipIfEmpty = [], integerFields = [], skipfield = nil)
+  def self.createWhereClause(filters, integerFieldsSkipIfEmpty = [], integerFields = [], skipfields = [])
     clause = nil
     fields = Array::new
     j = ActiveSupport::JSON
@@ -58,7 +58,7 @@ module DataService
           # these are the select type filters - position 0 is the empty position and means it is not selected,
           # so we are not filtering on that item
           next if (integerFieldsSkipIfEmpty.include?(subclause['field']) && subclause['data'] == '0')        
-          next if (skipfield && subclause['field'] == skipfield)
+          next if (skipfields.include? subclause['field'])
           
           if clausestr.length > 0 
             clausestr << ' ' + queryParams["groupOp"] + ' '

@@ -152,7 +152,7 @@ protected
   def self.genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled = false, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['format_id','pub_reference_number'],
-                  ['format_id','pub_reference_number'], 'programme_items.title')
+                  ['format_id','pub_reference_number'], ['programme_items.title'])
 
     # add the name search of the title
     if nameSearch

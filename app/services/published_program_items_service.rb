@@ -48,6 +48,7 @@ module PublishedProgramItemsService
             # do nowt, kuldge to get round assigment destroys where programme item does not exist
           end
         elsif audit.auditable_type == 'PublishedRoomItemAssignment'
+          begin
           id = audit.changes['published_programme_item_id']
           room = PublishedRoom.find(audit.changes['published_room_id'])
           timeAudit = Audit.all(
@@ -55,6 +56,9 @@ module PublishedProgramItemsService
               pubDate.timestamp, 'PublishedTimeSlot%', audit.changes['published_time_slot_id']]
           )
           resultantChanges = addPinkSheetEntryWithKey(resultantChanges, id, :removeItem, :info, room, timeAudit[0].changes['start'])
+          rescue
+            # do nowt, kuldge to get round assigment destroys where programme item does not exist
+          end
         end # we are ignoring the destroys of the room item assignment and the timeslot... TODO - collect for information on the prog item
       else  
         if audit.auditable_type == "PublishedProgrammeItemAssignment" # person added or removed

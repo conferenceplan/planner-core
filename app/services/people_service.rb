@@ -6,9 +6,12 @@ module PeopleService
   #
   #
   #
-  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false)
-    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to)
+  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
+    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
     tagquery = DataService.genTagSql(context, tags)
+    if includeMailings
+      args.merge! :select => 'distinct people.id'
+    end      
     
     if tagquery.empty?
       Person.count args
@@ -20,14 +23,17 @@ module PeopleService
   #
   #
   #
-  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, op=nil, scheduled=false)
-    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents)
+  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
+    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, nil, includeMailings)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
     args.merge!(:offset => offset, :limit => rows)
     if index
       args.merge!(:order => index + " " + sort_order)
+    end
+    if includeMailings
+      args.merge! :include => :mailings, :select => 'distinct people.*'
     end
     
     if tagquery.empty?
@@ -42,10 +48,10 @@ module PeopleService
   #
   #
   #
-  def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil)
+  def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false)
     clause = DataService.createWhereClause(filters, 
           ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
-          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'], 'people.last_name')
+          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'], ['people.last_name'])
     
     # add the name search for last of first etc
     if nameSearch #&& ! nameSearch.empty?
@@ -80,6 +86,14 @@ module PeopleService
       args.merge!( :joins => 'LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
     else
       args.merge!( :include => [:pseudonym] )
+    end
+    
+    if includeMailings
+      if args[:joins]
+        args[:joins] += ' JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
+      else  
+        args.merge!( :joins => 'JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id' )
+      end
     end
     
     if onlySurveyRespondents

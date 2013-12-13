@@ -5,8 +5,12 @@
 (function($) {    
 
 $.widget( "cp.participantTable", $.cp.baseTable , {
+    
+    options : {
+        includeMailings : false,
+        // mailingClause : null // "includeMailings=true"
+    },
 
-        // TODO - we need a way to spefiy the column labels as parameters so that the i18n translations can be used
         createColModel : function(){
             return [{
                 label : this.options.name[1], //'Name',
@@ -89,6 +93,34 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     edithidden : true
                 }
             }, {
+                name : 'person[mailings]',
+                label : this.options.mailings[1], //'mailings',
+                index : 'mailing_id',
+                hidden : !this.options.mailings[0],
+                editable : false,
+                sortable : false,
+                search : true,
+                stype : "select",
+                searchoptions : {
+                    dataUrl: this.options.root_url + "communications/mailing/listWithBlank"
+                },
+                width : 100,
+                formatter : function(cellvalue, options, rowObject) {
+                    var res = "";
+                    
+                    if (typeof rowObject['person[mailings]'] != 'undefined') {
+                        for (i = 0 ; i < rowObject['person[mailings]'].length; i++) {
+                            if (i > 0) {
+                                res += ", ";
+                            }
+                            res += rowObject['person[mailings]'][i].mailing_number;
+                            res += ' - ' + rowObject['person[mailings]'][i].mail_use;
+                        }
+                    }
+                    
+                    return res;
+                }
+            }, {
                 name : 'person[invitestatus_id]',
                 label : this.options.invite_status[1], //'Invite Status',
                 index : 'invitestatus_id',
@@ -168,7 +200,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 sortable : false,
                 search : false,
                 align : 'center',
-                width : 40,
+                width : 40
             }, {
                 name : 'person[pseudonym_attributes][first_name]',
                 label : 'Publication<br/>First Name',
@@ -275,11 +307,17 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
-        if (this.options.extraClause || this.options.onlySurveyRespondents) {
+        if (this.options.extraClause || this.options.onlySurveyRespondents || this.options.includeMailings) {
             urlArgs += '?';
         }
         if (this.options.extraClause) {
             urlArgs += this.options.extraClause; 
+        }
+        if (this.options.includeMailings) {
+            if (urlArgs.length > 0) {
+                urlArgs += "&";
+            }
+            urlArgs += "includeMailings=true";
         }
         if (this.options.onlySurveyRespondents) {
             if (urlArgs.length > 0) {
@@ -290,6 +328,21 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         url += urlArgs;
         return url;
     },
+    
+    /*
+     * 
+     */
+    // includeMailing : function(options) {
+        // this.options.mailingClause = "includeMailings=true";
+// 
+        // if (!this.options.delayed) {
+            // var newUrl = this.createUrl;
+//                 
+            // this.element.jqGrid('setGridParam', {
+                // url: newUrl
+            // }).trigger("reloadGrid");
+        // }
+    // },
 
     /*
      * 

@@ -30,7 +30,8 @@ class Participants::ParticipantListCell < Cell::Rails
     @refresh = args.has_key?(:refresh) ? args[:refresh] : false
     @controlDiv = args.has_key?(:controlDiv) ? args[:controlDiv] : 'participant-control'
     
-    @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : false
+    @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : nil
+    @includeMailings = args.has_key?(:includeMailings) ? args[:includeMailings] : false
     
     @multiselect = args.has_key?(:multiselect) ? args[:multiselect] : false
     

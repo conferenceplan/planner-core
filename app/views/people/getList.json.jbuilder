@@ -23,6 +23,10 @@ json.rowdata @people do |person|
             json.set! "person[pseudonym_attributes][suffix]", person.pseudonym.suffix
     end
     
+    if @includeMailings
+        json.set! "person[mailings]", person.mailings
+    end
+    
     json.set! "person[has_survey]", SurveyService.personAnsweredSurvey( person, 'partsurvey') ? "Y" : "N"
     
     json.set! "default_email", person.getDefaultEmail
