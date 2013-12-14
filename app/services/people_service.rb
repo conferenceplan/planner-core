@@ -50,8 +50,8 @@ module PeopleService
   #
   def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false)
     clause = DataService.createWhereClause(filters, 
-          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'],
-          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id'], ['people.last_name'])
+          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_id'],
+          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_id'], ['people.last_name'])
     
     # add the name search for last of first etc
     if nameSearch #&& ! nameSearch.empty?

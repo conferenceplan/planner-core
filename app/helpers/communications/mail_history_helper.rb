@@ -1,0 +1,2 @@
+module Communications::MailHistoryHelper
+end

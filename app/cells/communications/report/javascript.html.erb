@@ -12,17 +12,17 @@ CommunicationsReportApp.Report = (function(Backbone){
         _.invoke(tabLists, 'reset' );
     };
     
-    function selectMailing(id) {
-        // alert("mailing selected");
-        currentMailingId = id;
+    function selectMailings(id) {
+        // alert("mailing selected for person " + id);
+        currentPersonId = id;
     };
     
     /*
      * 
      */
     return {
-        selectMailing : function(id) {
-            selectMailing(id)
+        selectMailings : function(id) {
+            selectMailings(id)
         },
         
         init : function(options) {
@@ -35,11 +35,11 @@ CommunicationsReportApp.Report = (function(Backbone){
  * 
  */
 jQuery(document).ready(function() {
-    CommunicationsList.setup(CommunicationsReportApp);
+    // CommunicationsList.setup(CommunicationsReportApp);
     CommunicationsReportApp.addInitializer(CommunicationsReportApp.Report.init);
     CommunicationsReportApp.start({
-            nops                    : true,
-            selectFn                : CommunicationsReportApp.Report.selectMailing
+            // nops                    : true,
+            // selectFn                : CommunicationsReportApp.Report.selectMailing
     });
 });
 

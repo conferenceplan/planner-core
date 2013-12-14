@@ -235,16 +235,18 @@ PlannerRc1::Application.routes.draw do
 
   resources :equipment_types
 
-  resources :mail_history, :controller => 'mail/mail_history', :only => [:index]
-  match 'mail_history/count', :controller => 'mail/mail_history', :action => 'count', :method => 'get'
+  # TODO
+  # resources :mail_history, :controller => 'mail/mail_history', :only => [:index]
+  # match 'mail_history/count', :controller => 'mail/mail_history', :action => 'count', :method => 'get'
 
   #
   #
   #
-  match 'communications/mailing/addPeople',     :controller => 'communications/mailing', :action => 'addPeople',    :method => 'put'
-  match 'communications/mailing/removePeople',  :controller => 'communications/mailing', :action => 'removePeople', :method => 'put'
-  match 'communications/mailing/previewEmail',  :controller => 'communications/mailing', :action => 'previewEmail', :method => 'get'
-  match 'communications/mailing/listWithBlank',  :controller => 'communications/mailing', :action => 'listWithBlank', :method => 'get'
+  match 'communications/mail_history/list',     :controller => 'communications/mail_history', :action => 'list',          :method => 'post'
+  match 'communications/mailing/addPeople',     :controller => 'communications/mailing',      :action => 'addPeople',     :method => 'put'
+  match 'communications/mailing/removePeople',  :controller => 'communications/mailing',      :action => 'removePeople',  :method => 'put'
+  match 'communications/mailing/previewEmail',  :controller => 'communications/mailing',      :action => 'previewEmail',  :method => 'get'
+  match 'communications/mailing/listWithBlank', :controller => 'communications/mailing',      :action => 'listWithBlank', :method => 'get'
   namespace :communications do
     resources :mailing
   end

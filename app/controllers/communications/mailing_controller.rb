@@ -5,7 +5,7 @@ class Communications::MailingController < PlannerController
   end
   
   def listWithBlank
-    @mailings = Mailing.all
+    @mailings = Mailing.all :order => "mailings.mailing_number asc"
     render :layout => 'plain'
   end
 

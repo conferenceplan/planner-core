@@ -1,0 +1,46 @@
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    jQuery("#<%= @place %>").mailHistoryTable({
+        caption : '<%= t @caption %>',
+        selectNotifyMethod : <%= @selectNotifyMethod %>,
+        clearNotifyMethod : <%= @clearNotifyMethod %>,
+        loadNotifyMethod : <%= @loadNotifyMethod %>,
+        root_url : "<%= @root_url %>",
+        baseUrl : "<%= @baseUrl %>",
+        getGridData : "<%= @getGridData %>",
+        
+        delayed : <%= @delayed %>,
+
+        name : [true, '<%= t "Name"%>'],       
+        mailing : [<%= @mailing%>, '<%= t "Mailing"%>' ],
+        content : [<%= @content%>, '<%= t "Content"%>' ],
+        status : [<%= @email_status%>, '<%= t "Status"%>' ],
+        date_sent : [<%= @date_sent%>, '<%= t "Date"%>' ],
+        testrun : [<%= @testrun%>, '<%= t "Test"%>' ],
+
+        view : <%= @view %>,
+        search : <%= @search %>,
+        del : <%= @del %>,
+        edit : <%= @edit %>,
+        add : <%= @add %>,
+        refresh : <%= @refresh %>,
+        controlDiv : "<%= @controlDiv %>",
+        pager : "#<%= @pager %>",
+        
+        multiselect : <%= @multiselect %>,
+        
+        extraClause : "<%= @extraClause %>",
+        
+        sortname : 'people.last_name',
+        
+        modelType : <%= @modelType %>,
+        showControls : <%= @showControls %>,
+        
+        //
+        // modal_create_title : '<%= t "Create Participant" %>',
+        // modal_edit_title : '<%= t "Edit Participant" %>',
+    });
+});
+
+</script>
