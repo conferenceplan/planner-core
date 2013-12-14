@@ -55,6 +55,12 @@ var AppUtils = (function(){
         events: {
             "submit": "submit",
             "hidden": "close",
+            "keypress" : "swallow"
+        },
+        
+        swallow : function(e) {
+            console.debug("swallow");
+                e.stopPropagation();
         },
         
         initialize : function() {
@@ -63,6 +69,7 @@ var AppUtils = (function(){
 
         modalOptions: {
             backdrop: 'static',
+            keyboard : false
         },
 
         render: function () {
@@ -83,7 +90,7 @@ var AppUtils = (function(){
         },
         
         submit : function(e) {
-            // console.debug("submit");
+            console.debug("submit");
             if (e && e.type == "submit") {
                 e.preventDefault();
                 e.stopPropagation();
@@ -134,7 +141,11 @@ var AppUtils = (function(){
     ModelModal = GenericModal.extend({
         renderBody : function() {
             this.form = new Backbone.Form({
-                    model: this.model
+                template : _.template('\
+                        <form class="form-horizontal" data-fieldsets onsubmit="return false;"></form>\
+                '),
+                
+                model: this.model
             }).render();
         },
 

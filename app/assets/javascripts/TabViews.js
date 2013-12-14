@@ -9,6 +9,10 @@ var TabUtils = (function(){
     TagModal = AppUtils.GenericModal.extend({
         renderBody : function() {
             this.form = new Backbone.Form({
+                template : _.template('\
+                        <form class="form-horizontal" data-fieldsets onsubmit="return false;"></form>\
+                '),
+                
                 schema: {
                     tags: 'Text',
                 },
