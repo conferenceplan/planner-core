@@ -12,7 +12,7 @@ jQuery(document).ready(function() {
         
         delayed : <%= @delayed %>,
 
-        name : [true, '<%= t "Name"%>'],       
+        name : [<%= @name%>, '<%= t "Name"%>'],       
         mailing : [<%= @mailing%>, '<%= t "Mailing"%>' ],
         content : [<%= @content%>, '<%= t "Content"%>' ],
         status : [<%= @email_status%>, '<%= t "Status"%>' ],

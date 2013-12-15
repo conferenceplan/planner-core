@@ -3,14 +3,14 @@
 #
 module MailReportsService
   
-  def self.countItems(filters = nil, nameSearch = nil, page_to = nil)
-    args = genArgsForSql(nameSearch, filters, page_to)
+  def self.countItems(filters = nil, nameSearch = nil, person_id = nil, page_to = nil)
+    args = genArgsForSql(nameSearch, filters, person_id, page_to)
     
     MailHistory.count args
   end
   
-  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, nameSearch = nil)
-    args = genArgsForSql(nameSearch, filters)
+  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, nameSearch = nil, person_id = nil)
+    args = genArgsForSql(nameSearch, filters, person_id)
     
     offset = (page - 1) * rows.to_i
     args.merge!(:offset => offset, :limit => rows)
@@ -101,7 +101,7 @@ module MailReportsService
   
 protected
 
-  def self.genArgsForSql(nameSearch, filters, page_to = nil)
+  def self.genArgsForSql(nameSearch, filters, person_id = nil, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['email_status_id','testrun', 'mailing_id'],
                   ['email_status_id','testrun', 'mailing_id'], ['people.last_name'])
@@ -116,6 +116,9 @@ protected
       clause << '%' + st + '%'
       end
     end
+
+    personQuery = ' people.id = ? '
+    clause = DataService.addClause( clause, personQuery, person_id) if person_id && ! person_id.empty?
 
     args = { :conditions => clause }
     if nameSearch #&& ! nameSearch.empty?

@@ -7,8 +7,7 @@
 $.widget( "cp.participantTable", $.cp.baseTable , {
     
     options : {
-        includeMailings : false,
-        // mailingClause : null // "includeMailings=true"
+        includeMailings : false
     },
 
         createColModel : function(){
@@ -299,7 +298,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
             id : id,
             first_name : this.element.jqGrid('getCell', id, 'person[first_name]'),
             last_name : this.element.jqGrid('getCell', id, 'person[last_name]'),
-            suffix : this.element.jqGrid('getCell', id, 'person[suffix]'),
+            suffix : this.element.jqGrid('getCell', id, 'person[suffix]')
             // TODO - put in the pseudonym
         };
     },
@@ -329,21 +328,6 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         return url;
     },
     
-    /*
-     * 
-     */
-    // includeMailing : function(options) {
-        // this.options.mailingClause = "includeMailings=true";
-// 
-        // if (!this.options.delayed) {
-            // var newUrl = this.createUrl;
-//                 
-            // this.element.jqGrid('setGridParam', {
-                // url: newUrl
-            // }).trigger("reloadGrid");
-        // }
-    // },
-
     /*
      * 
      */

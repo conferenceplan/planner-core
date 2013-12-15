@@ -3,15 +3,7 @@
  */
 (function($) {
 $.widget( "cp.mailHistoryTable", $.cp.baseTable , {
-    /*
-     * Name
-     * Mailing (number and use)
-     * Content
-     * Status
-     * Date Sent
-     * Test Run Flag
-     * 
-     */
+
     createColModel : function() {
         return [{
                 label : this.options.name[1], //'Name',
@@ -47,7 +39,7 @@ $.widget( "cp.mailHistoryTable", $.cp.baseTable , {
                 index : 'mailing_id',
                 hidden : !this.options.mailing[0],
                 editable : false,
-                sortable : false,
+                sortable : true,
                 search : true,
                 stype : "select",
                 searchoptions : {
@@ -78,16 +70,18 @@ $.widget( "cp.mailHistoryTable", $.cp.baseTable , {
                 width : 50
             }, {
                 name : 'item[date_sent]',
+                index : 'created_at',
                 label : this.options.date_sent[1],
                 hidden : !this.options.date_sent[0],
                 editable : false,
-                sortable : false,
+                sortable : true,
                 search : false,
-                width : 50
+                width : 70
             }, {
                 name : 'item[testrun]',
                 label : this.options.testrun[1],
                 hidden : !this.options.testrun[0],
+                align : 'center',
                 editable : false,
                 sortable : false,
                 search : false,
@@ -106,6 +100,21 @@ $.widget( "cp.mailHistoryTable", $.cp.baseTable , {
         }
         url += urlArgs;
         return url;
+    },
+    
+    personQuery : function(options) {
+        this.options.extraClause = "person_id=" + options.personId;
+        if (options.op) {
+            this.options.extraClause += '&op=' + options.op; 
+        }
+
+        if (!this.options.delayed) {
+            var newUrl = this.options.root_url + this.options.baseUrl + this.options.getGridData + "?" + this.options.extraClause;
+                
+            this.element.jqGrid('setGridParam', {
+                url: newUrl
+            }).trigger("reloadGrid");
+        }
     }
     
 });

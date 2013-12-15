@@ -13,14 +13,22 @@ CommunicationsReportApp.Report = (function(Backbone){
     };
     
     function selectMailings(id) {
-        // alert("mailing selected for person " + id);
         currentPersonId = id;
+        jQuery("#mail-history").mailHistoryTable('personQuery',{
+            personId : id
+        });
+        jQuery("#mail-history").mailHistoryTable('render');
     };
     
     /*
      * 
      */
     return {
+        showEmail : function(id) {
+            alert("Show mailing for " + id);
+            // Get the mail content from the table and display it
+        },
+        
         selectMailings : function(id) {
             selectMailings(id)
         },
@@ -35,11 +43,8 @@ CommunicationsReportApp.Report = (function(Backbone){
  * 
  */
 jQuery(document).ready(function() {
-    // CommunicationsList.setup(CommunicationsReportApp);
     CommunicationsReportApp.addInitializer(CommunicationsReportApp.Report.init);
     CommunicationsReportApp.start({
-            // nops                    : true,
-            // selectFn                : CommunicationsReportApp.Report.selectMailing
     });
 });
 

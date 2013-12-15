@@ -17,6 +17,7 @@ class Communications::HistoryCell < Cell::Rails
     @baseUrl = args.has_key?(:baseUrl) ? args[:baseUrl] : "communications/mail_history"
     @getGridData = args.has_key?(:getGridData) ? args[:getGridData] : "/list.json"
 
+    @name = args.has_key?(:name) ? args[:name] : true
     @mailing = args.has_key?(:mailing) ? args[:mailing] : true
     @content = args.has_key?(:content) ? args[:content] : true
     @email_status = args.has_key?(:email_status) ? args[:email_status] : true

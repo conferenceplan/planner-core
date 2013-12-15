@@ -7,8 +7,9 @@ json.rowdata @mailItems do |item|
     
     json.id   item.id
     json.set! "item[email_status]", item.email_status.name
-    json.set! "item[date_sent]", item.date_sent
-    json.set! "item[testrun]", item.testrun
+    json.set! "item[date_sent]", item.date_sent.strftime('%e %b %Y, %H:%M')
+    
+    json.set! "item[testrun]", item.testrun ? "Y" : "N"
     json.set! "item[content]", item.content
     
     json.set! "item[person][first_name]", item.person.first_name

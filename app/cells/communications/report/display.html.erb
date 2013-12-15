@@ -19,24 +19,25 @@
     
     %>
 
-
 <%= render_cell "communications/history", :javascript, 
     :caption => "Mailing",
 
+    :name => false,
     :mailing => true,
     :content => false,
     :email_status => true,
     :date_sent => true,
     :testrun => true,
     
-    :pager => "history-pager"
+    :delayed => true,
     
+    :pager => "history-pager",
+    
+    :selectNotifyMethod => "CommunicationsReportApp.Report.showEmail"
     %>
-
 
 <%= render_cell "communications/report", :javascript %>
 <%= render_cell "communications/report", :templates %>
-
 
 <div class="row-fluid">
     <div class="span6">

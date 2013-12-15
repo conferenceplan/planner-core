@@ -11,10 +11,12 @@ class Communications::MailHistoryController < PlannerController
     @currentId = params[:current_selection]
     page_to = params[:page_to]
     
-    @count = MailReportsService.countItems filters, nameSearch
+    person_id = params[:person_id]
+    
+    @count = MailReportsService.countItems filters, nameSearch, person_id
 
     if page_to && !page_to.empty?
-      gotoNum = MailReportsService.countItems filters, nameSearch, page_to
+      gotoNum = MailReportsService.countItems filters, nameSearch, person_id, page_to
       if gotoNum
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
@@ -28,7 +30,7 @@ class Communications::MailHistoryController < PlannerController
       @nbr_pages = 1
     end
     
-    @mailItems = MailReportsService.findItems rows, @page, idx, order, filters, nameSearch
+    @mailItems = MailReportsService.findItems rows, @page, idx, order, filters, nameSearch, person_id
   end
 
 end
