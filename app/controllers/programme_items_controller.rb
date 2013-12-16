@@ -56,8 +56,7 @@ class ProgrammeItemsController < PlannerController
     @programmeItem.lock_version = 0
     startDay = params[:start_day]
     startTime = params[:start_time]
-    roomId = params[:room]
-    saved = false
+    roomId = params[:room_id]
 
     begin
       ProgrammeItem.transaction do
@@ -66,13 +65,9 @@ class ProgrammeItemsController < PlannerController
             room = Room.find(roomId)
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           end
-          saved = true
-        else
-          saved = false
         end
       end
     rescue Exception
-      saved = false
       raise
     end
   end
