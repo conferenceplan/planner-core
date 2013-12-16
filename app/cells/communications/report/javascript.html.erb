@@ -25,8 +25,11 @@ CommunicationsReportApp.Report = (function(Backbone){
      */
     return {
         showEmail : function(id) {
-            alert("Show mailing for " + id);
             // Get the mail content from the table and display it
+            var data = jQuery("#mail-history").jqGrid('getRowData', id);
+
+            $('#current-email-person').html(data['item[name]']);
+            $('#current-email-content').html(data['item[content]']);
         },
         
         selectMailings : function(id) {

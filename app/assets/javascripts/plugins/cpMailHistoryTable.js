@@ -6,6 +6,7 @@ $.widget( "cp.mailHistoryTable", $.cp.baseTable , {
 
     createColModel : function() {
         return [{
+                name : 'item[name]',
                 label : this.options.name[1], //'Name',
                 index : 'people.last_name',
                 hidden : !this.options.name[0],
