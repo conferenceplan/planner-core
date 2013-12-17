@@ -1,5 +1,5 @@
 
-@import 'bootswatch/united/variables';
+//@import 'bootswatch/united/variables';
 
 // Fix for finding glyphs when using an edge cache
 $iconSpritePath: asset-url('glyphicons-halflings.png', image);
@@ -54,7 +54,7 @@ z-index: 2;
 
 @import "bootstrap-responsive";
 
-@import "bootswatch/united/bootswatch";
+//@import "bootswatch/united/bootswatch";
 
 @import "survey.css.scss";
 
