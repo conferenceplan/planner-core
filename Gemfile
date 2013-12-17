@@ -8,8 +8,8 @@ gem "audited-activerecord", "~> 3.0"
 gem 'acts-as-taggable-on' 
 gem 'authlogic'
 gem 'bluecloth'
-gem 'bootstrap-sass', '~> 2.3.2.2'
-gem 'bootswatch-rails'
+gem 'bootstrap-sass', '~> 3.0.3.0'
+# gem 'bootswatch-rails'
 gem 'cells'
 gem "declarative_authorization" 
 gem 'deep_cloneable', '~> 1.6.0'
@@ -30,6 +30,7 @@ gem "recaptcha", :require => "recaptcha/rails"
 
 gem 'i18n-active_record',
       :git => 'git://github.com/svenfuchs/i18n-active_record.git',
+      :tag => 'rails-3.0',
       :require => 'i18n/active_record'
 
 # For locale in the route
