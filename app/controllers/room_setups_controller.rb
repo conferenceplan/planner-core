@@ -30,12 +30,14 @@ class RoomSetupsController < ApplicationController
       RoomSetup.transaction do
         
         @room_setup = RoomSetup.new(setupData)
-        if (@room_setup.save)
+        if (@room_setup.save!)
           setRoomDefault @room_setup if defaultSetup
           unSetRoomDefault @room_setup if !defaultSetup
         end
 
       end
+    rescue ActiveRecord::RecordInvalid => e  
+      render status: :bad_request, text: 'Unable to create room setup, probably a duplicate setup type'
     rescue Exception
       raise
     end

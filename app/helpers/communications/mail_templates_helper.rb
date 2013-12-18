@@ -1,0 +1,2 @@
+module Communications::MailTemplatesHelper
+end

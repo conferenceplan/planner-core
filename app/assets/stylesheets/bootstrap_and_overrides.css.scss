@@ -8,10 +8,11 @@ $iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
 @import "bootstrap";
 
 // body { padding-top: 4em; } // For the navigation heading...
+body { padding-top: 50px; }
 
-#main-nav-bar {
-  margin-bottom : 0;
-}
+// #main-nav-bar {
+  // margin-bottom : 0;
+// }
 
 .footer {
     background-color: #F5F5F5;
@@ -38,21 +39,21 @@ $iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
     margin-left: 90px;
 }
 
-input, textarea, .uneditable-input {
-    width: 90%;
-}
+// input, textarea, .uneditable-input {
+    // width: 90%;
+// }
 
 form {
     margin: 0 0 0px; // fudge because one of the css sets this to 20px...
 }
 
-#nav-wrap.affix {
-top: 0;
-width: 100%;
-z-index: 2;
-}
+// #nav-wrap.affix {
+// top: 0;
+// width: 100%;
+// z-index: 2;
+// }
 
-@import "bootstrap-responsive";
+//@import "bootstrap-responsive";
 
 //@import "bootswatch/united/bootswatch";
 

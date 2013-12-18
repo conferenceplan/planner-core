@@ -33,20 +33,19 @@
 <% if current_user %>
           <%= render 'layouts/topbar' %>
 <% end %>
-    <main role="main">
-      <div class="container-fluid">
-           <div class="row-fluid">
-                <div class="span12">
+      <div class="container">
+           <div class="row">
                     <div id="alert-area">
                         <%= render partial: 'layouts/messages', flash: flash %>
                     </div>
+           </div>
+           <div class="row">
                     <%= content_for?(:content) ? yield(:content) : yield %>
-                </div>
            </div>
       </div>
       <footer class="footer affix-bottom">
-      <div class="container-fluid">
-              <div class="container-fluid">
+      <div class="container">
+              <div class="container">
                   Cell is: 
                   <%= params[:cellname] %>
                   <br/>Locale is:
@@ -56,6 +55,5 @@
               </div>
       </div>
       </footer>
-    </main>
   </body>
 </html>

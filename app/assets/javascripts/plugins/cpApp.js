@@ -10,7 +10,7 @@ var AppUtils = (function(){
     */
     InfoModal = Backbone.View.extend({
         tagName: "div",
-        className: "modal hide ",
+        className: "modal",
         
         initialize : function() {
             this.template = _.template($('#modal-info-template').html());
@@ -51,7 +51,7 @@ var AppUtils = (function(){
      */
     GenericModal = Backbone.View.extend({
         tagName: "div",
-        className: "modal hide ",
+        className: "modal",
         events: {
             "submit": "submit",
             "hidden": "close",
@@ -166,8 +166,8 @@ var AppUtils = (function(){
                             refreshFn(mdl); // cause problem with templates used ???
                         };
                     },
-                    error : function() {
-                        alertMessage("Error saving the instance");
+                    error : function(mdl, response) {
+                        alertMessage(response.responseText);
                     }
                 }); // save the model to the server
             }
@@ -234,8 +234,8 @@ var AppUtils = (function(){
                             refreshFn(mdl); // cause problem with templates used ???
                         };
                     },
-                    error : function() {
-                        alertMessage("Error saving the instance");
+                    error : function(mdl, response) {
+                        alertMessage(response.responseText);
                     }
                 }); // save the model to the server
             };

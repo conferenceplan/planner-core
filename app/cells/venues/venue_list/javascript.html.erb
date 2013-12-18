@@ -46,16 +46,16 @@ VenueApp.VenueManagement = (function(Backbone){
         
         tabLists.push( TabUtils.createTabListContent({
             collectionType : VenueCollection,
-            collection_attributes : { "class" : "nav nav-tabs nav-stacked" },
-            collection_tagName : 'ul',
-            view_attributes : { "class" : "YYY" },
+            collection_attributes : { "class" : "list-group" },
+            collection_tagName : 'div',
+            // view_attributes : { "class" : "list-group-item" },
             url : "/venue/list.json",
             template : "#venue-template",
             view_refresh_event : "venue:refresh",
             region : venueLayout.venueRegion,
             newTitle : "Create Venue",
             editTitle : "Edit Venue",
-            tagName : 'li',
+            // tagName : 'div',
             selectFn : selectVenue
         }) );
     };

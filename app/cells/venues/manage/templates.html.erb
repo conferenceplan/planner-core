@@ -1,8 +1,12 @@
 
 <script type="text/template" id="room-setup-layout-template">
 <section>
-    <div id="room-setup-control-div"></div>
-    <div id="room-setup-region-div"></div>
+    <div class='row'>
+        <div id="room-setup-control-div"></div>
+    </div>
+    <div class='row'>
+        <div id="room-setup-region-div"></div>
+    </div>
 </section>
 </script>
 
@@ -19,13 +23,13 @@
 </script>
 
 <script type="text/template" id="room-setup-template">
-<li class="span4 clearfix">
+<div class="col-xs-4 clearfix">
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-primary btn-mini pull-right">
+            <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="icon-trash"></i>
             </button>
-            <button class="model-edit-button btn btn-primary btn-mini pull-right">
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="icon-pencil"></i>
             </button>
             <small>
@@ -40,5 +44,5 @@
             </small>
         </div>
     </div>
-</li>
+</div>
 </script>

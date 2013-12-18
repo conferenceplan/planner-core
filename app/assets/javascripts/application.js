@@ -30,7 +30,7 @@
 //= require backbone-forms/distribution/backbone-forms
 //= require backbone-forms/distribution/editors/list.min
 //= require backbone-forms/distribution/adapters/backbone.bootstrap-modal
-//= require backbone-forms/distribution/templates/bootstrap
+//= require backbone-forms/distribution/templates/bootstrap3
 
 //= require moment/moment+langs
 
@@ -73,7 +73,7 @@ jQuery(document).ready(function() {
 });
 
 function alertMessage(message) {
-    $('#alert-area').html("<div class=\"alert alert-block fade in\"><button class=\"close\" data-dismiss=\"alert\">×</button>"+ message +"</div>");
+    $('#alert-area').html("<div class=\"alert alert-warning fade in\"><button class=\"close\" data-dismiss=\"alert\">×</button>"+ message +"</div>");
 };
 
 function infoMessage(message) {
