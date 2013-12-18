@@ -130,6 +130,7 @@
 .ui-jqgrid .ui-pg-input {
     font-size: inherit;
     width: auto;
+    height: auto;
 }
 .ui-jqgrid .ui-pg-selbox {
     display: block;
