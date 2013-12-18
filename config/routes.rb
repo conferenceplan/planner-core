@@ -249,6 +249,7 @@ PlannerRc1::Application.routes.draw do
   match 'communications/mailing/listWithBlank', :controller => 'communications/mailing',      :action => 'listWithBlank', :method => 'get'
   namespace :communications do
     resources :mailing
+    resources :mail_templates
   end
 
   namespace :reports do
