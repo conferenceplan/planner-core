@@ -1,11 +1,12 @@
 
-//@import 'bootswatch/united/variables';
+@import 'grenadine/variables';
 
 // Fix for finding glyphs when using an edge cache
 $iconSpritePath: asset-url('glyphicons-halflings.png', image);
 $iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
 
 @import "bootstrap";
+
 
 // body { padding-top: 4em; } // For the navigation heading...
 body { padding-top: 50px; }
@@ -53,10 +54,6 @@ form {
 // z-index: 2;
 // }
 
-//@import "bootstrap-responsive";
-
-//@import "bootswatch/united/bootswatch";
+@import 'grenadine/theme';
 
 @import "survey.css.scss";
-
-//@import "base";
