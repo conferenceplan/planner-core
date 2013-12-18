@@ -1,5 +1,5 @@
 /**
- * Backbone Forms v0.12.0
+ * Backbone Forms v0.14.0
  *
  * Copyright (c) 2013 Charles Davison, Pow Media Ltd
  *
@@ -70,14 +70,14 @@ var Form = Backbone.View.extend({
     })();
 
     //Store important data
-    _.extend(this, _.pick(options, 'model', 'data', 'idPrefix'));
+    _.extend(this, _.pick(options, 'model', 'data', 'idPrefix', 'templateData'));
 
     //Override defaults
     var constructor = this.constructor;
-    this.template = options.template || constructor.template;
-    this.Fieldset = options.Fieldset || constructor.Fieldset;
-    this.Field = options.Field || constructor.Field;
-    this.NestedField = options.NestedField || constructor.NestedField;
+    this.template = options.template || this.template || constructor.template;
+    this.Fieldset = options.Fieldset || this.Fieldset || constructor.Fieldset;
+    this.Field = options.Field || this.Field || constructor.Field;
+    this.NestedField = options.NestedField || this.NestedField || constructor.NestedField;
 
     //Check which fields will be included (defaults to all)
     var selectedFields = this.selectedFields = options.fields || _.keys(schema);
@@ -157,7 +157,7 @@ var Form = Backbone.View.extend({
     //Re-trigger editor events on the form
     var formEvent = editor.key+':'+event;
 
-    this.trigger.call(this, formEvent, this, editor);
+    this.trigger.call(this, formEvent, this, editor, Array.prototype.slice.call(arguments, 2));
 
     //Trigger additional events
     switch (event) {
@@ -258,11 +258,13 @@ var Form = Backbone.View.extend({
    *
    * @return {Object}       Validation errors
    */
-  validate: function() {
+  validate: function(options) {
     var self = this,
         fields = this.fields,
         model = this.model,
         errors = {};
+
+    options = options || {};
 
     //Collect errors from schema validation
     _.each(fields, function(field) {
@@ -273,7 +275,7 @@ var Form = Backbone.View.extend({
     });
 
     //Get errors from default Backbone model validator
-    if (model && model.validate) {
+    if (!options.skipModelValidate && model && model.validate) {
       var modelErrors = model.validate(this.getValue());
 
       if (modelErrors) {
@@ -318,7 +320,13 @@ var Form = Backbone.View.extend({
    */
   commit: function(options) {
     //Validate
-    var errors = this.validate();
+    options = options || {};
+
+    var validateOptions = {
+        skipModelValidate: !options.validate
+    };
+
+    var errors = this.validate(validateOptions);
     if (errors) return errors;
 
     //Commit
@@ -385,7 +393,7 @@ var Form = Backbone.View.extend({
    */
   getEditor: function(key) {
     var field = this.fields[key];
-    if (!field) throw 'Field not found: '+key;
+    if (!field) throw new Error('Field not found: '+key);
 
     return field.editor;
   },
@@ -510,6 +518,7 @@ Form.validators = (function() {
   
     options = _.extend({
       type: 'regexp',
+      match: true,
       message: this.errMessages.regexp
     }, options);
     
@@ -524,7 +533,10 @@ Form.validators = (function() {
       //Don't check empty values (add a 'required' validator for this)
       if (value === null || value === undefined || value === '') return;
 
-      if (!options.regexp.test(value)) return err;
+      //Create RegExp from string if it's valid
+      if ('string' === typeof options.regexp) options.regexp = new RegExp(options.regexp, options.flags);
+
+       if ((options.match) ? !options.regexp.test(value) : options.regexp.test(value)) return err;
     };
   };
   
@@ -1026,7 +1038,7 @@ Form.Editor = Form.editors.Base = Backbone.View.extend({
 
     //Set initial value
     if (options.model) {
-      if (!options.key) throw "Missing option: 'key'";
+      if (!options.key) throw new Error("Missing option: 'key'");
 
       this.model = options.model;
 
@@ -1091,7 +1103,7 @@ Form.Editor = Form.editors.Base = Backbone.View.extend({
    * Extend and override this method
    */
   focus: function() {
-    throw 'Not implemented';
+    throw new Error('Not implemented');
   },
   
   /**
@@ -1099,7 +1111,7 @@ Form.Editor = Form.editors.Base = Backbone.View.extend({
    * Extend and override this method
    */
   blur: function() {
-    throw 'Not implemented';
+    throw new Error('Not implemented');
   },
 
   /**
@@ -1526,7 +1538,7 @@ Form.editors.Select = Form.editors.Base.extend({
   initialize: function(options) {
     Form.editors.Base.prototype.initialize.call(this, options);
 
-    if (!this.schema || !this.schema.options) throw "Missing required 'schema.options'";
+    if (!this.schema || !this.schema.options) throw new Error("Missing required 'schema.options'");
   },
 
   render: function() {
@@ -1577,6 +1589,7 @@ Form.editors.Select = Form.editors.Base.extend({
    * @param {Mixed}   Options as a simple array e.g. ['option1', 'option2']
    *                      or as an array of objects e.g. [{val: 543, label: 'Title for object 543'}]
    *                      or as a string of <option> HTML to insert into the <select>
+   *                      or any object
    */
   renderOptions: function(options) {
     var $select = this.$el,
@@ -1610,16 +1623,20 @@ Form.editors.Select = Form.editors.Base.extend({
 
     else if (_.isFunction(options)) {
       var newOptions;
-      
+
       options(function(opts) {
         newOptions = opts;
       }, this);
-      
+
       html = this._getOptionsHtml(newOptions);
+    //Or any object
+    }else{
+      html=this._objectToHtml(options);
     }
 
     return html;
   },
+
 
   getValue: function() {
     return this.$el.val();
@@ -1658,6 +1675,27 @@ Form.editors.Select = Form.editors.Base.extend({
 
     return html;
   },
+  /**
+   * Transforms an object into HTML ready to use in the renderOptions method
+   * @param {Object}
+   * @return {String}
+   */
+  _objectToHtml: function(obj) {
+    //Convert object to array first
+    var array = [];
+    for(var key in obj){
+      if( obj.hasOwnProperty( key ) ) {
+        array.push({ val: key, label: obj[key] });
+      }
+    }
+
+    //Now convert to HTML
+    var html = this._arrayToHtml(array);
+
+    return html;
+  },
+
+
 
   /**
    * Create the <option> HTML
@@ -1790,6 +1828,8 @@ Form.editors.Checkboxes = Form.editors.Select.extend({
 
   tagName: 'ul',
 
+  groupNumber: 0,
+
   events: {
     'click input[type=checkbox]': function() {
       this.trigger('change', this);
@@ -1845,16 +1885,29 @@ Form.editors.Checkboxes = Form.editors.Select.extend({
 
     _.each(array, function(option, index) {
       var itemHtml = '<li>';
+			var close = true;
       if (_.isObject(option)) {
-        var val = (option.val || option.val === 0) ? option.val : '';
-        itemHtml += ('<input type="checkbox" name="'+self.getName()+'" value="'+val+'" id="'+self.id+'-'+index+'" />');
-        itemHtml += ('<label for="'+self.id+'-'+index+'">'+option.label+'</label>');
+        if (option.group) {
+          var originalId = self.id;
+          self.id += "-" + self.groupNumber++; 
+          itemHtml = ('<fieldset class="group"> <legend>'+option.group+'</legend>');
+          itemHtml += (self._arrayToHtml(option.options));
+          itemHtml += ('</fieldset>');
+          self.id = originalId;
+					close = false;
+        }else{
+          var val = (option.val || option.val === 0) ? option.val : '';
+          itemHtml += ('<input type="checkbox" name="'+self.getName()+'" value="'+val+'" id="'+self.id+'-'+index+'" />');
+          itemHtml += ('<label for="'+self.id+'-'+index+'">'+option.label+'</label>');
+        }
       }
       else {
         itemHtml += ('<input type="checkbox" name="'+self.getName()+'" value="'+option+'" id="'+self.id+'-'+index+'" />');
         itemHtml += ('<label for="'+self.id+'-'+index+'">'+option+'</label>');
       }
-      itemHtml += '</li>';
+			if(close){
+				itemHtml += '</li>';
+			}
       html.push(itemHtml);
     });
 
@@ -1885,7 +1938,7 @@ Form.editors.Object = Form.editors.Base.extend({
     Form.editors.Base.prototype.initialize.call(this, options);
 
     //Check required options
-    if (!this.form) throw 'Missing required option "form"';
+    if (!this.form) throw new Error('Missing required option "form"');
     if (!this.schema.subSchema) throw new Error("Missing required 'schema.subSchema' option for Object editor");
   },
 
@@ -1971,8 +2024,8 @@ Form.editors.NestedModel = Form.editors.Object.extend({
   initialize: function(options) {
     Form.editors.Base.prototype.initialize.call(this, options);
 
-    if (!this.form) throw 'Missing required option "form"';
-    if (!options.schema.model) throw 'Missing required "schema.model" option for NestedModel editor';
+    if (!this.form) throw new Error('Missing required option "form"');
+    if (!options.schema.model) throw new Error('Missing required "schema.model" option for NestedModel editor');
   },
 
   render: function() {
@@ -2385,10 +2438,11 @@ Form.editors.DateTime = Form.editors.Base.extend({
 
 
   //Metadata
-  Form.VERSION = '0.12.0';
+  Form.VERSION = '0.14.0';
 
 
   //Exports
   Backbone.Form = Form;
+  if (typeof exports !== 'undefined') exports = Form;
 
-})(this);
+})(window || global || this);
