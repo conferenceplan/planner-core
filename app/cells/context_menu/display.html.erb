@@ -1,9 +1,9 @@
-<div class="navbar">
-    <div class="navbar-inner">
-        <ul class="nav">
+<nav class="navbar navbar-default">
+    <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
             <% @menu.each do |k, v| %>
                 <li><a href="<%= '/' + I18n.locale.to_s + v %>"><%= k %></a></li>
             <% end %>
         </ul>
     </div>
-</div>
+</nav>

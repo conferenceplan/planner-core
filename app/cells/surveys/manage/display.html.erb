@@ -21,19 +21,19 @@
 <%= render_cell "surveys/group_list", :templates %>
 <%= render_cell "surveys/question_list", :templates %>
 
-<div class="row-fluid">
-    <div class="span4" style="height : 370px; overflow : auto;">
+<div class="row">
+    <div class="col-xs-4" style="height : 370px; overflow : auto;">
         <%= render_cell "surveys/survey_list", :display %>
     </div>
-    <div class="span4" style="height : 370px; overflow : auto;">
+    <div class="col-xs-4" style="height : 370px; overflow : auto;">
         <%= render_cell "surveys/group_list", :display %>
     </div>
-    <div class="span4" style="height : 370px; overflow : auto;">
+    <div class="col-xs-4" style="height : 370px; overflow : auto;">
         <%= render_cell "surveys/question_list", :display %>
     </div>
 </div>
-<div class="row-fluid">
-    <div class="span12 well" >
+<div class="row">
+    <div class="col-xs-12 well" >
         <div id="survey-edit-area"></div>
     </div>
 </div>

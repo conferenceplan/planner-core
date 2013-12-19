@@ -24,29 +24,29 @@
         </label>
     </div>
     <div class="survey-row">
-        <div class="span5 offset1">I will be available to be on Program beginning:</div>
-        <div class="select span6 timeselect">
+        <div class="col-xs-5 col-xs-offset-1">I will be available to be on Program beginning:</div>
+        <div class="select col-xs-6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response1]",
                 options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'].to_i : nil) %>
         </div>
     </div>
     <div class="survey-row">
-        <div class="span5 offset1">starting from:</div>
-        <div class="select span6 timeselect">
+        <div class="col-xs-5 col-xs-offset-1">starting from:</div>
+        <div class="select col-xs-6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response2]",
                 options_for_select(['---','10am', '11am','Noon', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm'].collect{ |e| [e, e]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : nil) %>
         </div>
     </div>
     <div class="survey-row">
-        <div class="span5 offset1">I will not be available for program after:</div>
-        <div class="select span6 timeselect">
+        <div class="col-xs-5 col-xs-offset-1">I will not be available for program after:</div>
+        <div class="select col-xs-6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response3]",
                 options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}.reverse!, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'].to_i : nil) %>
         </div>
     </div>
     <div class="survey-row">
-            <div class="span5 offset1">ending at:</div>
-            <div class="select span6 timeselect">
+            <div class="col-xs-5 col-xs-offset-1">ending at:</div>
+            <div class="select col-xs-6 timeselect">
                 <%= select_tag "survey_response[#{question.id}][response4]",
                     options_for_select(['---','10am', '11am','Noon', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm'].collect{ |e| [e, e]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : nil) %>
             </div>

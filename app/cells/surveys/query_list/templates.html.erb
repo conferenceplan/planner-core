@@ -1,10 +1,10 @@
 
 <script type="text/template" id="query-list-layout-template">
 <section>
-    <div class="row-fluid">
-        <div class="span1"><span class="label label-big"><%= t 'Queries' %></span></div><div id="query-control-div"></div>
+    <div class="row">
+        <div class="col-xs-1"><span class="label label-big"><%= t 'Queries' %></span></div><div id="query-control-div"></div>
     </div>
-    <div class="row-fluid">
+    <div class="row">
         <div class='collapse-group' id="query-area-parent" style="height : 370px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
             <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#MyQueries">My Queries</a>
@@ -33,15 +33,15 @@
         <a href="#query-tab" data-toggle="tab" class="model-select-button">{{= name}}</a>
     </td>
     <td>
-        <button class="model-copy-button btn btn-mini">Copy</button>
+        <button class="model-copy-button btn btn-xs">Copy</button>
     </td>
     <td>
-        <button class="model-delete-button btn btn-mini"><i class="icon-trash"></i></button>
+        <button class="model-delete-button btn btn-xs"><i class="icon-trash"></i></button>
     </td>
 </script>
 
 <script type="text/template" id="query-control-template">
-    <button class="add-model-button btn-mini btn-primary pull-right">
+    <button class="add-model-button btn-xs btn-primary pull-right">
         <%= t 'add query' %>
     </button>
 </script>

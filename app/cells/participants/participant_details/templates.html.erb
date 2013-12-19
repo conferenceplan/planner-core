@@ -3,9 +3,9 @@
 <script type="text/template" id="registration-view-template">
 <div class="registration-view-details">
     {{ if (typeof id != 'undefined') { }}
-    <div class="span6 clearfix">
+    <div class="col-xs-6 clearfix">
         <div class="caption" class="pull-left">
-            <button class="model-edit-button btn btn-primary btn-mini pull-right">
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <%= t "Edit" %>
             </button>
             <dl class="dl-horizontal">
@@ -98,7 +98,7 @@
 
 <script type="text/template" id="bio-view-template">
 {{ if (typeof id != 'undefined') { }}
-<button class="model-edit-button btn btn-primary btn-mini pull-right">
+<button class="model-edit-button btn btn-primary btn-xs pull-right">
     <%= t "Edit" %>
 </button>
 <dl class="dl-horizontal">
@@ -140,20 +140,20 @@
     </dd>
 </dl>
 {{ } else { }}
-<button class="model-new-button btn btn-primary btn-mini pull-right">
+<button class="model-new-button btn btn-primary btn-xs pull-right">
     <%= t "New" %>
 </button>
 {{ }; }}
 </script>
 
 <script type="text/template" id="phone-view-template">
-<li class="span4 clearfix">
+<div class="col-xs-4 clearfix">
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-primary btn-mini pull-right">
+            <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="icon-trash"></i>
             </button>
-            <button class="model-edit-button btn btn-primary btn-mini pull-right">
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="icon-pencil"></i>
             </button>
             <small>
@@ -173,17 +173,17 @@
                 </dl> </small>
         </div>
     </div>
-</li>
+</div>
 </script>
 
 <script type="text/template" id="email-view-template">
-<li class="span4 clearfix">
+<div class="col-xs-4 clearfix">
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-primary btn-mini pull-right">
+            <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="icon-trash"></i>
             </button>
-            <button class="model-edit-button btn btn-primary btn-mini pull-right">
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="icon-pencil"></i>
             </button>
             <small>
@@ -203,18 +203,18 @@
                 </dl> </small>
         </div>
     </div>
-</li>
+</div>
 </script>
 
 
 <script type="text/template" id="address-view-template">
-<li class="span4 clearfix">
+<div class="col-xs-4 clearfix">
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-primary btn-mini pull-right">
+            <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="icon-trash"></i>
             </button>
-            <button class="model-edit-button btn btn-primary btn-mini pull-right">
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="icon-pencil"></i>
             </button>
             <small>
@@ -270,63 +270,66 @@
                 </dl> </small>
         </div>
     </div>
-</li>
+</div>
 </script>
 
 <script type="text/template" id="address-control-template">
 <div>
-    <button class="add-model-button btn-mini btn-primary pull-right ">
+    <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add address" %>
     </button>
     <%= t "POSTAL ADDRESSES" %>
 </div>
-<ul class="nav nav-list">
-    <li class="divider"></li>
-</ul>
 </script>
 
 <script type="text/template" id="address-layout-template">
 <section>
-    <div id="postal-control-div"></div>
-    <div id="postal-region-div"></div>
+    <div class="row">
+        <div id="postal-control-div" class="col-xs-12"></div>
+    </div>
+    <div class="row">
+        <div id="postal-region-div" class="col-xs-12"></div>
+    </div>
 </section>
 </script>
 
 <script type="text/template" id="email-control-template">
 <div>
-    <button class="add-model-button btn-mini btn-primary pull-right ">
+    <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add email" %>
     </button>
     <%= t "EMAIL ADDRESSES" %>
 </div>
-<ul class="nav nav-list">
-    <li class="divider"></li>
-</ul>
 </script>
 
 <script type="text/template" id="email-layout-template">
 <section>
-    <div id="email-control-div"></div>
-    <div id="email-region-div"></div>
+    <div class="row">
+    <div id="email-control-div" class="col-xs-12"></div>
+    </div>
+    <div class="row">
+    <div id="email-region-div" class="col-xs-12"></div>
+    </div>
 </section>
 </script>
 
 <script type="text/template" id="phone-control-template">
 <div>
-    <button class="add-model-button btn-mini btn-primary pull-right ">
+    <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add phone" %>
     </button>
     <%= t "PHONE" %>
 </div>
-<ul class="nav nav-list">
-    <li class="divider"></li>
-</ul>
 </script>
 
 <script type="text/template" id="phone-layout-template">
 <section>
-    <div id="phone-control-div"></div>
-    <div id="phone-region-div"></div>
+    <div class="row">
+    <div id="phone-control-div" class="col-xs-12"></div>
+    </div>
+    <div class="row">
+    <div id="phone-region-div" class="col-xs-12"></div>
+    </div>
 </section>
 </script>
 
@@ -342,10 +345,10 @@
 
 <script type="text/template" id="tag-context-layout-template">
 <div class="thumbnail clearfix">
-    <button class="model-add-tag-button btn btn-primary btn-mini pull-right" tagcontext="{{= context }}">
+    <button class="model-add-tag-button btn btn-primary btn-xs pull-right" tagcontext="{{= context }}">
         <%= t "Add" %>
     </button>
-    <span class="label label">{{= context }}</span>
+    <span class="label label-default">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
     <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=Person&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
     {{ }); }}
@@ -353,14 +356,20 @@
 </script>
 
 <script type="text/template" id="tag-cloud-context-layout-template">
-<div class="accordion-heading">
-    <a class="accordion-toggle" data-toggle="collapse" data-parent="#participant-tag-cloud-parent" href="#{{= context }}"> {{= context }} </a>
-</div>
-<div id="{{= context }}" class="accordion-body collapse">
-    <div class="accordion-inner">
-        {{ _.each(tags, function(tag) { }}
-        <span class="label label-info select-tag-button" tagcontext="{{= context}}" tagname="{{= tag.name}}">{{= tag.name }} {{= tag.count }}</span> <!-- TODO - need to make this an event with the context and tag -->
-        {{ }); }}
+<div class="panel-group" id="participant-tag-cloud-parent">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#participant-tag-cloud-parent" href="#{{= context }}">{{= context }}</a>
+            </h5>
+        </div>
+        <div id="{{= context }}" class="panel-collapse collapse">
+            <div class="panel-body">
+                {{ _.each(tags, function(tag) { }}
+                <span class="label label-info select-tag-button" tagcontext="{{= context}}" tagname="{{= tag.name}}">{{= tag.name }} {{= tag.count }}</span>
+                {{ }); }}
+            </div>
+        </div>
     </div>
 </div>
 </script>
@@ -368,7 +377,7 @@
 <script type="text/template" id="date-exclusion-view-template">
 {{ if (typeof id != 'undefined') { }}
 <div class="thumbnail clearfix">
-    <button class="model-edit-button btn btn-primary btn-mini pull-right">
+    <button class="model-edit-button btn btn-primary btn-xs pull-right">
         <%= t "Edit" %>
     </button>
     <small> <em>Arrival</em>: {{= moment(start_time).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="icon-arrow-right"></i> <em>Departure</em>: {{= moment(end_time).format("dddd, MMMM Do YYYY, h:mm a") }} </small>

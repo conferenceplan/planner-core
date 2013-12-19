@@ -6,7 +6,7 @@ Use the Rails authenticity token in the forms...
 
 <script type="text/template" id="program-item-view-template">
     {{ if (typeof id != 'undefined') { }}
-    <div class="span10 clearfix">
+    <div class="col-xs-10 clearfix">
         <div class="caption" class="pull-left">
             <dl class="dl-horizontal">
                 <dt><%= t "Title" %></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
@@ -94,20 +94,20 @@ Use the Rails authenticity token in the forms...
 
 <script type="text/template" id="equipment-control-template">
 <div>
-    <button class="add-model-button btn-mini btn-primary pull-right ">
+    <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add equipment" %>
     </button>
 </div>
 </script>
 
 <script type="text/template" id="equipment-detail-template">
-<li class="span12 clearfix">
+<li class="col-xs-12 clearfix">
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-primary btn-mini pull-right">
+            <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="icon-trash"></i>
             </button>
-            <button class="model-edit-button btn btn-primary btn-mini pull-right">
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="icon-pencil"></i>
             </button>
             <small>
@@ -126,7 +126,7 @@ Use the Rails authenticity token in the forms...
 
 <script type="text/template" id="tag-context-layout-template">
 <div class="thumbnail clearfix">
-    <button class="model-add-tag-button btn btn-primary btn-mini pull-right" tagcontext="{{= context }}">
+    <button class="model-add-tag-button btn btn-primary btn-xs pull-right" tagcontext="{{= context }}">
         <%= t "Add" %>
     </button>
     <span class="label label">{{= context }}</span>

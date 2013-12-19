@@ -2,10 +2,10 @@
 %>
 <div class="survey-row">
 <div class="control-group <%='error' if @errors && @errors[question.id] %>">
-    <label class="control-label span2"><%= question.question.html_safe %></label>
+    <label class="control-label col-xs-2"><%= question.question.html_safe %></label>
     <div class="controls">
         <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}",
-         :size => 100, :class => 'span9' %>
+         :size => 100, :class => 'col-xs-9' %>
         <% if @errors && @errors[question.id] %>
             <span class="help-inline"><%=@errors[question.id][question.question]%></span>
         <% end %>
@@ -14,10 +14,10 @@
 </div>
 <div class="survey-row">
 <div class="control-group <%='error' if @errors && @errors[question.id] %>">
-    <label class="control-label span2"><%= question.question1.html_safe %></label>
+    <label class="control-label col-xs-2"><%= question.question1.html_safe %></label>
     <div class="controls">
     <%= text_field_tag "survey_response[#{ question.id }][response1]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] : ''}",
-     :size => 20, :class => 'span9' %>
+     :size => 20, :class => 'col-xs-9' %>
     <% if @errors && @errors[question.id] %>
         <span class="help-inline"><%=@errors[question.id][question.question1]%></span>
     <% end %>
@@ -25,31 +25,31 @@
 </div>
 </div>
 <div class="survey-row">
-    <div class="span2">
+    <div class="col-xs-2">
     <label class="control-label"><%= question.question2.html_safe %></label>
     </div>
     <%= text_field_tag "survey_response[#{ question.id }][response2]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : ''}",
-     :size => 20, :class => 'span9' %>
+     :size => 20, :class => 'col-xs-9' %>
         <% if @errors && @errors[question.id] %>
             <%=@errors[question.id][question.question2]%>
         <% end %>
 </div>
 <div class="survey-row">
-    <div class="span2">
+    <div class="col-xs-2">
     <label class="control-label"><%= question.question3.html_safe %></label>
     </div>
     <%= text_field_tag "survey_response[#{ question.id }][response3]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'] : ''}",
-     :size => 20, :class => 'span9' %>
+     :size => 20, :class => 'col-xs-9' %>
         <% if @errors && @errors[question.id] %>
             <%=@errors[question.id][question.question3]%>
         <% end %>
 </div>
 <div class="survey-row">
-    <div class="span2">
+    <div class="col-xs-2">
     <label class="control-label"><%= question.question4.html_safe %></label>
     </div>
     <%= text_field_tag "survey_response[#{ question.id }][response4]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : ''}",
-     :size => 20, :class => 'span9' %>
+     :size => 20, :class => 'col-xs-9' %>
         <% if @errors && @errors[question.id] %>
             <%=@errors[question.id][question.question4]%>
         <% end %>

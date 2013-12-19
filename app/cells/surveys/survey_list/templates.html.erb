@@ -1,10 +1,10 @@
 
 <script type="text/template" id="survey-list-layout-template">
 <section>
-    <div class="row-fluid">
-        <div class="span1"><span class="label label-big"><%= t 'Surveys' %></span></div><div id="survey-control-div"></div>
+    <div class="row">
+        <div class="col-xs-1"><span class="label label-big"><%= t 'Surveys' %></span></div><div id="survey-control-div"></div>
     </div>
-    <div class="row-fluid">
+    <div class="row">
         <div id="survey-region-div"></div>
     </div>
 </section>
@@ -15,18 +15,18 @@
         <a href="#survey-tab" data-toggle="tab" class="model-select-button">{{= name}}</a>
     </td>
     <td>
-        <button class="model-preview-button btn btn-mini"><i class="icon-eye-open"></i></button>
+        <button class="model-preview-button btn btn-xs"><i class="icon-eye-open"></i></button>
     </td>
     <td>
-        <button class="model-drill-down-button btn btn-mini"><i class="icon-arrow-right"></i></button>
+        <button class="model-drill-down-button btn btn-xs"><i class="icon-arrow-right"></i></button>
     </td>
     <td>
-        <button class="model-delete-button btn btn-mini"><i class="icon-trash"></i></button>
+        <button class="model-delete-button btn btn-xs"><i class="icon-trash"></i></button>
     </td>
 </script>
 
 <script type="text/template" id="survey-control-template">
-    <button class="add-model-button btn-mini btn-primary pull-right">
+    <button class="add-model-button btn-xs btn-primary pull-right">
         <%= t 'add survey' %>
     </button>
 </script>

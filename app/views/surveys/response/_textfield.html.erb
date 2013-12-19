@@ -14,16 +14,16 @@
     </script>
     
     <div class="survey-row">
-        <div class="span11">
+        <div class="col-xs-11">
         <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", 
-                :rows => 5, :size => question.text_size, :class => question.tags_label + '_text ui-autocomplete-input span12' %>
+                :rows => 5, :size => question.text_size, :class => question.tags_label + '_text ui-autocomplete-input col-xs-12' %>
         </div>
-        <div class="span1">
+        <div class="col-xs-1">
             <a href='#' rel="popover" data-html=true class="cloud-popover btn btn-success" data-contentwrapper="#<%= question.tags_label%>_popup">tags</a>
             <div id="<%= question.tags_label%>_popup" class="hidden-area"><div id="<%= question.tags_label%>_cloud" style="width: 248px; height: 250px;"></div></div>
         </div>
     </div>
 </div>
 <% else %>
-    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => ((question.text_size && question.text_size < 10) ? 'input-mini' : 'span12') %>
+    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => ((question.text_size && question.text_size < 10) ? 'input-mini' : 'col-xs-12') %>
 <% end %>

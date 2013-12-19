@@ -14,23 +14,23 @@
     %>
 <%= render_cell "participants/participant_details", :javascript %>
 
-<div class="row-fluid">
-    <div class="span9">
+<div class="row">
+    <div class="col-xs-9">
         <div id="participant-filters"></div> <!-- TODO -->
         <%= render_cell "participants/participant_list", :display,
             :pager => "participants-pager"
          %>
     </div>
-    <div class="span3 well" >
+    <div class="col-xs-3 well" >
         <div class='collapse-group tag-cloud-area' style="height : 370px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
         <div id="participant-tag-cloud" class="collapse in"></div>
         </div>
     </div>
 </div>
 
-<div class="row-fluid">
-    <div class="span12 well">
-        <div class="well well-small"><h4 id='selected-participant'></h4></div>
+<div class="row">
+    <div class="col-xs-12 well">
+        <div class="well well-sm"><h4 id='selected-participant'></h4></div>
         <%= render_cell "participants/participant_details", :display %>
     </div>
 </div>

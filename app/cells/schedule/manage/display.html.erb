@@ -21,25 +21,25 @@
 <%= render_cell "schedule/manage", :javascript %>
 <%= render_cell "schedule/manage", :templates %>
 
-<div class="row-fluid">
-    <div class="span4">
-        <div class="row-fluid">
-            <div class="span12">
+<div class="row">
+    <div class="col-xs-4">
+        <div class="row">
+            <div class="col-xs-12">
                 <%= render_cell "items/item_list", :display %>
             </div>
         </div>
-        <div class="row-fluid row-buffer">
-            <div class="span12">
+        <div class="row row-buffer">
+            <div class="col-xs-12">
                 <div id="conflict-view"></div>
             </div>
         </div>
     </div>
-    <div class="span8" id="program-item-view">
-        <div class="row-fluid">
-            <div class="span12" id="grid-day-control-view"></div>
+    <div class="col-xs-8" id="program-item-view">
+        <div class="row">
+            <div class="col-xs-12" id="grid-day-control-view"></div>
         </div>
-        <div class="row-fluid">
-            <div class="well span12" id="grid-view">
+        <div class="row">
+            <div class="well col-xs-12" id="grid-view">
             </div>
         </div>
     </div>

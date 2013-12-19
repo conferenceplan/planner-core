@@ -2,7 +2,7 @@
 %>
 
 <div class="survey-row">
-    <div class="span11 offset1">
+    <div class="col-xs-11 col-xs-offset-1">
         <div class="control-group <%='error' if @errors && @errors[question.id] %>">    
             <% if question.question && !([:address, :phone].include? question.question_type) %>
                 <label class="control-label"><%= question.question.html_safe %>
