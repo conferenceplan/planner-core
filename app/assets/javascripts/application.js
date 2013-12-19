@@ -34,11 +34,6 @@
 
 //= require moment/moment+langs
 
-//= require backgrid/backgrid
-//= require backgrid/extensions/select-all/backgrid-select-all
-//= require backgrid/extensions/moment-cell/backgrid-moment-cell
-//= require backgrid/extensions/text-cell/backgrid-text-cell
-
 //= require d3/d3.v3
 //= require ckeditor/ckeditor
 //= require ckeditor/adapters/jquery

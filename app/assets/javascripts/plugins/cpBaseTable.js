@@ -33,12 +33,14 @@ $.widget( "cp.baseTable" , {
     _create : function() {
         if (!this.options.delayed) {
             this.createTable();
+            this.element.parents('.ui-jqgrid').css("width", "auto");
         }
     },
     
     render : function() {
         if (this.options.delayed) {
             this.createTable();
+            this.element.parents('.ui-jqgrid').css("width", "auto");
             this.options.delayed = false; // because it has now been rendered
         }
     },
