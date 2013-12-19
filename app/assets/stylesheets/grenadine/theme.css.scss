@@ -1,3 +1,24 @@
 /*
  * Insert bootstrap theme over-rides here
  */
+
+#application-header {
+  background-color: white;
+  /* border-color: red white white white; */
+  /* border-width: 4px 0 0 0; */
+ }
+ #event-planner-logo-link-container {
+   padding:0 0 0 10px;
+ }
+#top-colored-line {
+  height: 4px;
+  background-color: #C01F3F;
+}
+#logo-bar {
+  margin-bottom:0;
+  border-radius: 0px;
+}
+
+#grenadine-application-menu {
+  border-radius:0px;
+}

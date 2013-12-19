@@ -1,6 +1,17 @@
 
-<nav class="navbar navbar-default navbar-static-top" role="navigation">
-    <div>
+<nav id="grenadine-application-menu" class="navbar navbar-default" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-2">
+	      <span class="sr-only">Toggle navigation</span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+	      <span class="icon-bar"></span>
+    	</button>
+        <a class="navbar-brand hidden-md hidden-lg hidden-sm" href='<%= "/" + I18n.locale.to_s %>' alt='<%= @page_title or (t 'Convention Planner') %>'>
+			<i class="icon-home">&nbsp;<%= (t "Menu") %></i>
+		</a>
+	</div>
+    <div class="collapse navbar-collapse" id="collapse-2">
         <ul class="nav navbar-nav">
             <% @menu.each do |k, v| %>
                 <li class="<%= 'active' if request.fullpath == v[:target] %>"><a href="<%= '/' + I18n.locale.to_s + v[:target] %>">

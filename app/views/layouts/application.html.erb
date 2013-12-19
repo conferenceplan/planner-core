@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Convention Planner Application" %>">
-    <title><%= @page_title or 'Convention Planner' %></title>
+    <title><%= @page_title or (t "Convention Planner") %></title>
     
     <%= stylesheet_link_tag "application", :media => "all" %>
     <%= stylesheet_link_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".css") %>
@@ -27,13 +27,22 @@
     </style>
   </head>
   <body>
-      <%= render partial: 'layouts/templates' %>
-    <!-- %=render 'layouts/common_page_top' % -->
-          <%= render 'layouts/navigation' %>
-<% if current_user %>
-          <%= render 'layouts/topbar' %>
-<% end %>
+  		<div id="top-colored-line">
+  		</div>
+  		<div id="application-header" role="navigation"> <!-- This is the top bar with the logo and login/logout buttons -->
+	  		<nav id="logo-bar" class="navbar" role="navigation"> <!-- OK -->
+	  			<%= render 'layouts/navigation' %>
+	  		</nav>      		
+    		<!-- %=render 'layouts/common_page_top' % -->
+      	</div>
+      	<div id="user-menu" role="navigation"> <!-- This is the menu with all of the application stuff that appears once a user is logged-in -->
+      		<% if current_user %>
+				<%= render 'layouts/topbar' %>
+			<% end %>
+		</div>
       <div class="container">
+      	<%= render partial: 'layouts/templates' %>
+
            <div class="row">
                     <div id="alert-area">
                         <%= render partial: 'layouts/messages', flash: flash %>
@@ -52,6 +61,7 @@
                   <%= I18n.locale %>
                   <br/><%= t :hello %>
                   <br/><%= I18n.available_locales %>
+                  <br/><%= request.fullpath %>
               </div>
       </div>
       </footer>
