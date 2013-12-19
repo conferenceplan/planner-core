@@ -1,9 +1,9 @@
 
 <script type="text/template" id="grid-day-control-view-template">
     <div class="btn-group">
-        <button class="btn prev-day"><i class="icon-chevron-left"></i></button>
-        <button class="btn day">{{= moment("<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]) %>").add('days', currentDay).format("dddd") }}</button>
-        <button class="btn next-day"><i class="icon-chevron-right"></i></button>
+        <button class="btn btn-default prev-day"><i class="icon-chevron-left"></i></button>
+        <button class="btn btn-default day">{{= moment("<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]) %>").add('days', currentDay).format("dddd") }}</button>
+        <button class="btn btn-default next-day"><i class="icon-chevron-right"></i></button>
     </div>
 </script>
 
@@ -14,70 +14,83 @@
 <script type="text/template" id="conflict-layout-template">
     <section>
 <div style="height : 370px; overflow : auto;" class="collapse-group"> <!-- TODO - move this to the style sheet -->
-    <div class="collapse in" id="conflict-list">
-        <div class="accordion" id="conflicts-parent">
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#schedule-conflicts" data-parent="#conflicts-parent" data-toggle="collapse" class="accordion-toggle"> Schedule Conflicts</a>
-                </div>
-                <div class="accordion-body collapse" id="schedule-conflicts">
-                    <div class="accordion-inner">
-                        <div id="schedule-region-div"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#room-conflicts" data-parent="#conflicts-parent" data-toggle="collapse" class="accordion-toggle"> Room Conflicts </a>
-                </div>
-                <div class="accordion-body collapse" id="room-conflicts">
-                    <div class="accordion-inner">
-                        <div id="room-region-div"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#excluded-item-conflicts" data-parent="#conflicts-parent" data-toggle="collapse" class="accordion-toggle"> Item Conflicts </a>
-                </div>
-                <div class="accordion-body collapse" id="excluded-item-conflicts">
-                    <div class="accordion-inner">
-                        <div id="excluded-item-region-div"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#excluded-time-conflicts" data-parent="#conflicts-parent" data-toggle="collapse" class="accordion-toggle"> Time Conflicts </a>
-                </div>
-                <div class="accordion-body collapse" id="excluded-time-conflicts">
-                    <div class="accordion-inner">
-                        <div id="excluded-time-region-div"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#availability-conflicts" data-parent="#conflicts-parent" data-toggle="collapse" class="accordion-toggle"> Availability Conflicts </a>
-                </div>
-                <div class="accordion-body collapse" id="availability-conflicts">
-                    <div class="accordion-inner">
-                        <div id="availability-region-div"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="accordion-group">
-                <div class="accordion-heading">
-                    <a href="#back-to-back-conflicts" data-parent="#conflicts-parent" data-toggle="collapse" class="accordion-toggle"> Back to Back </a>
-                </div>
-                <div class="accordion-body collapse" id="back-to-back-conflicts">
-                    <div class="accordion-inner">
-                        <div id="back-to-back-region-div"></div>
-                    </div>
-                </div>
+<div class="panel-group" id="conflicts-parent">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#conflicts-parent" href="#schedule-conflicts">Schedule Conflicts</a>
+            </h5>
+        </div>
+        <div class="panel-collapse collapse" id="schedule-conflicts">
+            <div class="panel-body">
+                <div id="schedule-region-div"></div>
             </div>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#conflicts-parent" href="#room-conflicts">Room Conflicts</a>
+            </h5>
+        </div>
+        <div class="panel-collapse collapse" id="room-conflicts">
+            <div class="panel-body">
+                <div id="room-region-div"></div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#conflicts-parent" href="#excluded-item-conflicts">Item Conflicts</a>
+            </h5>
+        </div>
+        <div class="panel-collapse collapse" id="excluded-item-conflicts">
+            <div class="panel-body">
+                <div id="excluded-item-region-div"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#conflicts-parent" href="#excluded-time-conflicts">Time Conflicts</a>
+            </h5>
+        </div>
+        <div class="panel-collapse collapse" id="excluded-time-conflicts">
+            <div class="panel-body">
+                <div id="excluded-time-region-div"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#conflicts-parent" href="#availability-conflicts">Availability Conflicts</a>
+            </h5>
+        </div>
+        <div class="panel-collapse collapse" id="availability-conflicts">
+            <div class="panel-body">
+                <div id="availability-region-div"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#conflicts-parent" href="#back-to-back-conflicts">Back to Back</a>
+            </h5>
+        </div>
+        <div class="panel-collapse collapse" id="back-to-back-conflicts">
+            <div class="panel-body">
+                <div id="back-to-back-region-div"></div>
+            </div>
+        </div>
+    </div>
+</div>
 </div>        
     </section>
 </script>

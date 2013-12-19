@@ -65,6 +65,10 @@ rect.pane {
 }
 
 
+.prog-item-text-class > .btn-xs, .btn-group-xs > .btn {
+  font-size: 10px;
+}
+
 .prog-item-ctl,
 .prog-item-rect {
   fill: white;

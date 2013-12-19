@@ -181,7 +181,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
             // 3. Refresh the list of items on the left (i.e. remove dropped item from list)
             this.$el.droppable({
                 drop: function(event, ui) {
-                    console.debug("Dropped");
+                    // console.debug("Dropped");
                     setDropped( ui.draggable.find("div").attr('itemid') );
                 }
             });
@@ -398,6 +398,8 @@ ScheduleApp.ItemManagement = (function(Backbone){
         onItemLoad : function() {
             // make the cells of the item list draggable
             $('#items').find( ".ui-draggable" ).draggable({
+                iframeFix: true,
+                zIndex: 200,
                 revert : true,     // return to origin if not dropped on droppable area
                 helper : "clone"   // clone for visual effect
             });

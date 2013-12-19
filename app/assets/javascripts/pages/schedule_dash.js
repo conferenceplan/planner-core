@@ -289,7 +289,7 @@ DailyGrid = (function() {
         .attr("class", 'prog-item-text').append('xhtml:div')// DIV containing the title so we can wrap text etc.
         .attr("class", 'prog-item-text-class');
 
-        div.append('xhtml:a').attr("class", 'btn btn-mini item-ctl-back').attr('href', '#').on("mousedown", function() {
+        div.append('xhtml:a').attr("class", 'btn btn-xs item-ctl-back').attr('href', '#').on("mousedown", function() {
             d3.event.stopPropagation();
         }).on("mouseup", function(d) {
             d3.event.stopPropagation();
@@ -298,7 +298,7 @@ DailyGrid = (function() {
             parent_group.parentNode.insertBefore(parent_group, sib);
         }).append('xhtml:i').attr("class", 'icon-arrow-down item-ctl-icon');
         
-        div.append('xhtml:a').attr("class", 'btn btn-mini item-ctl-remove').attr('href', '#').on("mouseup", function(d) {
+        div.append('xhtml:a').attr("class", 'btn btn-xs item-ctl-remove').attr('href', '#').on("mouseup", function(d) {
             var parent_group = d3.select(this.parentNode.parentNode.parentNode);
             if (ScheduleApp.ItemManagement.removeAssignment(d.item_id)) {
                 parent_group.remove();
