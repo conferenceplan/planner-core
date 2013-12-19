@@ -69,6 +69,10 @@ rect.pane {
   font-size: 10px;
 }
 
+.prog-item-text-class > .btn > .glyphicon {
+  position: inherit;
+}
+
 .prog-item-ctl,
 .prog-item-rect {
   fill: white;
