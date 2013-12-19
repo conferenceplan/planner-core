@@ -52,7 +52,6 @@
     </div>
     <div class="col-xs-8">
         <div id="mailing-edit-area"></div>
-        <div id="preview-control-area"></div>
     </div>
 </div>
 <div class="row">
@@ -66,9 +65,18 @@
         <div id="list-control-view"></div>
     </div>
     <div class="col-xs-4">
-        <%= render_cell "participants/participant_list", :display,
-            :pager => "mailing-people-pager",
-            :place => "mailing-participants"
-         %>
+        <div class="row">
+            <div class='col-xs-12'>
+                <div id="preview-control-area"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class='col-xs-12'>
+                <%= render_cell "participants/participant_list", :display,
+                    :pager => "mailing-people-pager",
+                    :place => "mailing-participants"
+                 %>
+            </div>
+        </div>
     </div>
 </div>
