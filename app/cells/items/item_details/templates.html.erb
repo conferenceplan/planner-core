@@ -101,10 +101,10 @@ Use the Rails authenticity token in the forms...
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="icon-trash"></i>
+                <i class="glyphicon glyphicon-trash"></i>
             </button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="icon-pencil"></i>
+                <i class="glyphicon glyphicon-pencil"></i>
             </button>
             <small>
                 <dl class="dl-horizontal-small">
@@ -127,7 +127,7 @@ Use the Rails authenticity token in the forms...
     </button>
     <span class="label label-default">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
-    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=ProgrammeItem&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
+    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=ProgrammeItem&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="glyphicon glyphicon-remove"></i></a></span>
     {{ }); }}
 </div>
 </script>
@@ -152,7 +152,7 @@ Use the Rails authenticity token in the forms...
 </script>
 
 <script type="text/template" id="item-filters-template">
-    <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="icon-remove"></i></span>
+    <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="glyphicon glyphicon-remove"></i></span>
 </script>
 
 

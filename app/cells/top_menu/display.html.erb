@@ -15,7 +15,7 @@
         <ul class="nav navbar-nav">
             <% @menu.each do |k, v| %>
                 <li class="<%= 'active' if request.fullpath == v[:target] %>"><a href="<%= '/' + I18n.locale.to_s + v[:target] %>">
-                    <i class="icon-<%= v[:icon]%>"></i> <%= t k %></a>
+                    <i class="glyphicon <%= v[:icon]%>"></i> <%= t k %></a>
                 </li>
             <% end %>
         </ul>

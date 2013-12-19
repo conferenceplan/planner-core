@@ -10,7 +10,7 @@
             size="30" type="text" class="col-xs-4" placeholder="Last Name" required>
         <input name="survey_respondent_detail[suffix]" value="<%=@survey_respondent_detail['suffix'] if @survey_respondent_detail %>" 
             size="5" type="text" class="col-xs-1" placeholder="Suffix">
-        <a class="survey-help" href="#" data-original-title="Enter your Registration name"><i class='icon-info-sign'></i></a>
+        <a class="survey-help" href="#" data-original-title="Enter your Registration name"><i class='glyphicon glyphicon-info-sign'></i></a>
         <% if @errors && @errors['first_name'] %>
             <span class="help-inline"><%=@errors['first_name']['First Name']%></span>
         <% end %>
@@ -38,7 +38,7 @@
 <% end %>    
 <div class="control-group  <%='error' if @errors && @errors['email'] %>">
     <label class="control-label"><%= t 'E-mail Address' %>
-        <a class="survey-help" href="#" data-original-title="Enter your primary e-mail address; the one you&rsquo;re most likely to monitor."><i class='icon-info-sign'></i></a>
+        <a class="survey-help" href="#" data-original-title="Enter your primary e-mail address; the one you&rsquo;re most likely to monitor."><i class='glyphicon glyphicon-info-sign'></i></a>
     </label>
     <div class="controls">
         <input name="survey_respondent_detail[email]" value="<%=@survey_respondent_detail['email'] if @survey_respondent_detail %>" 

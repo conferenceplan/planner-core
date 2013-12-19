@@ -296,7 +296,7 @@ DailyGrid = (function() {
             var parent_group = this.parentNode.parentNode.parentNode;
             var sib = $('#pane')[0].nextSibling;
             parent_group.parentNode.insertBefore(parent_group, sib);
-        }).append('xhtml:i').attr("class", 'icon-arrow-down item-ctl-icon');
+        }).append('xhtml:i').attr("class", 'glyphicon glyphicon-arrow-down item-ctl-icon');
         
         div.append('xhtml:a').attr("class", 'btn btn-xs item-ctl-remove').attr('href', '#').on("mouseup", function(d) {
             var parent_group = d3.select(this.parentNode.parentNode.parentNode);
@@ -305,7 +305,7 @@ DailyGrid = (function() {
             };
 
             d3.event.stopPropagation();
-        }).append('xhtml:i').attr("class", 'icon-remove item-ctl-icon');
+        }).append('xhtml:i').attr("class", 'glyphicon glyphicon-remove item-ctl-icon');
         
         div.append('xhtml:hr').attr("class", 'toolbar-line');
 

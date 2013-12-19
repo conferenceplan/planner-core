@@ -7,7 +7,7 @@
             <% if question.question && !([:address, :phone].include? question.question_type) %>
                 <label class="control-label"><%= question.question.html_safe %>
                     <% if question.survey_format.help && !question.survey_format.help.blank? %>
-                    <a class="survey-help" href="#" data-original-title="<%= question.survey_format.help %>"><i class='icon-info-sign'></i></a>
+                    <a class="survey-help" href="#" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
                     <% end %>
                 </label>
             <% end %>

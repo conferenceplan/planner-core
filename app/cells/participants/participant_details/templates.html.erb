@@ -151,10 +151,10 @@
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="icon-trash"></i>
+                <i class="glyphicon glyphicon-trash"></i>
             </button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="icon-pencil"></i>
+                <i class="glyphicon glyphicon-pencil"></i>
             </button>
             <small>
                 <dl class="dl-horizontal-small">
@@ -181,10 +181,10 @@
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="icon-trash"></i>
+                <i class="glyphicon glyphicon-trash"></i>
             </button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="icon-pencil"></i>
+                <i class="glyphicon glyphicon-pencil"></i>
             </button>
             <small>
                 <dl class="dl-horizontal-small">
@@ -212,10 +212,10 @@
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="icon-trash"></i>
+                <i class="glyphicon glyphicon-trash"></i>
             </button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="icon-pencil"></i>
+                <i class="glyphicon glyphicon-pencil"></i>
             </button>
             <small>
                 <dl class="dl-horizontal-small">
@@ -350,7 +350,7 @@
     </button>
     <span class="label label-default">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
-    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=Person&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
+    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=Person&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="glyphicon glyphicon-remove"></i></a></span>
     {{ }); }}
 </div>
 </script>
@@ -380,7 +380,7 @@
     <button class="model-edit-button btn btn-primary btn-xs pull-right">
         <%= t "Edit" %>
     </button>
-    <small> <em>Arrival</em>: {{= moment(start_time).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="icon-arrow-right"></i> <em>Departure</em>: {{= moment(end_time).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
+    <small> <em>Arrival</em>: {{= moment(start_time).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="glyphicon glyphicon-arrow-right"></i> <em>Departure</em>: {{= moment(end_time).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
 </div>
 {{ }; }}
 </script>
@@ -393,7 +393,7 @@
 
 <script type="text/template" id="time-exclusion-view-template">
 <div class="thumbnail clearfix">
-    <small> {{= moment(start).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="icon-arrow-right"></i> {{= moment(start).date() == moment(end).date() ? moment(end).format("h:mm a") : moment(end).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
+    <small> {{= moment(start).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="glyphicon glyphicon-arrow-right"></i> {{= moment(start).date() == moment(end).date() ? moment(end).format("h:mm a") : moment(end).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
 </div>
 </script>
 
@@ -430,7 +430,7 @@
 
 
 <script type="text/template" id="participant-filters-template">
-    <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="icon-remove"></i></span>
+    <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="glyphicon glyphicon-remove"></i></span>
 </script>
 
 
