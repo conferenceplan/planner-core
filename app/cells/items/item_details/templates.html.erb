@@ -26,61 +26,57 @@ Use the Rails authenticity token in the forms...
         </div>
         <!-- List of participants etc. -->
         <div><%= t "Moderators" %></div>
-        <ul class="nav nav-list"><li class="divider"></li></ul>
+        <ul class="list-group">
         {{ _.each(moderators, function(person) { }}
-        <div class="thumbnail clearfix">
-            <small>
+            <li class="list-group-item">
                 {{ if (person.pseudonym) { }}
                     {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                     ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
-            </small>
-        </div>
+            </li>
         {{ }); }}
+        </ul>
         <div><%= t "Participants" %></div>
-        <ul class="nav nav-list"><li class="divider"></li></ul>
+        <ul class="list-group">
         {{ _.each(participants, function(person) { }}
-        <div class="thumbnail clearfix">
-            <small>
+            <li class="list-group-item">
                 {{ if (person.pseudonym) { }}
                     {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                     ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
-            </small>
-        </div>
+            </li>
         {{ }); }}
+        </ul>
         <div><%= t "Reserved" %></div>
-        <ul class="nav nav-list"><li class="divider"></li></ul>
+        <ul class="list-group">
         {{ _.each(reserves, function(person) { }}
-        <div class="thumbnail clearfix">
-            <small>
+            <li class="list-group-item">
                 {{ if (person.pseudonym) { }}
                     {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                     ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
-            </small>
-        </div>
+            </li>
         {{ }); }}
+        </ul>
         <div><%= t "Invisible" %></div>
-        <ul class="nav nav-list"><li class="divider"></li></ul>
+        <ul class="list-group">
         {{ _.each(invisibles, function(person) { }}
-        <div class="thumbnail clearfix">
-            <small>
+            <li class="list-group-item">
                 {{ if (person.pseudonym) { }}
                     {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                     ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
-            </small>
-        </div>
+            </li>
         {{ }); }}
+        </ul>
     </div>
     {{ }; }}    
 </script>
@@ -101,7 +97,7 @@ Use the Rails authenticity token in the forms...
 </script>
 
 <script type="text/template" id="equipment-detail-template">
-<li class="col-xs-12 clearfix">
+<div class="col-xs-12 clearfix">
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
@@ -121,7 +117,7 @@ Use the Rails authenticity token in the forms...
                 </dl> </small>
         </div>
     </div>
-</li>
+</div>
 </script>
 
 <script type="text/template" id="tag-context-layout-template">
@@ -129,7 +125,7 @@ Use the Rails authenticity token in the forms...
     <button class="model-add-tag-button btn btn-primary btn-xs pull-right" tagcontext="{{= context }}">
         <%= t "Add" %>
     </button>
-    <span class="label label">{{= context }}</span>
+    <span class="label label-default">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
     <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=ProgrammeItem&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="icon-remove"></i></a></span>
     {{ }); }}
@@ -137,14 +133,20 @@ Use the Rails authenticity token in the forms...
 </script>
 
 <script type="text/template" id="tag-cloud-context-layout-template">
-<div class="accordion-heading">
-    <a class="accordion-toggle" data-toggle="collapse" data-parent="#item-tag-cloud-parent" href="#{{= context }}"> {{= context }} </a>
-</div>
-<div id="{{= context }}" class="accordion-body collapse">
-    <div class="accordion-inner">
-        {{ _.each(tags, function(tag) { }}
-        <span class="label label-info select-tag-button" tagcontext="{{= context}}" tagname="{{= tag.name}}">{{= tag.name }} {{= tag.count }}</span>
-        {{ }); }}
+<div class="panel-group" id="item-tag-cloud-parent">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5 class="panel-title">
+                <a data-toggle="collapse" data-parent="#item-tag-cloud-parent" href="#{{= context }}">{{= context }}</a>
+            </h5>
+        </div>
+        <div id="{{= context }}" class="panel-collapse collapse">
+            <div class="panel-body">
+                {{ _.each(tags, function(tag) { }}
+                <span class="label label-info select-tag-button" tagcontext="{{= context}}" tagname="{{= tag.name}}">{{= tag.name }} {{= tag.count }}</span>
+                {{ }); }}
+            </div>
+        </div>
     </div>
 </div>
 </script>
