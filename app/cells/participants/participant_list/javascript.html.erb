@@ -14,7 +14,7 @@ jQuery(document).ready(function() {
 
         name : [true, '<%= t "Name"%>'],       
         invite_status : [<%= @invite_status%>, '<%= t "Invitation Status"%>' ],
-        invite_category : [<%= @invite_category%>, '<%= raw t "Invitation<br/>Category"%>' ],
+        invite_category : [<%= @invite_category%>, '<%= t "Invitation"%><br/><%= raw t "Category"%>' ],
         acceptance_status : [<%= @acceptance_status%>, '<%= t "Acceptance"%>'],
         has_survey : [<%= @has_survey%>, '<%= t "Survey"%>'],
 
