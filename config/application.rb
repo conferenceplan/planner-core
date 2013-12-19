@@ -60,8 +60,6 @@ module PlannerRc1
     
 config.middleware.use Rack::JSONP
 
-config.assets.paths << "#{Rails.root}/app/assets/fonts"
-
 config.assets.precompile << Proc.new do |path|
   if path =~ /\.(css|js)\z/
     full_path = Rails.application.assets.resolve(path).to_path
