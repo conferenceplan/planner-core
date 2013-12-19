@@ -22,18 +22,26 @@
 <%= render_cell "surveys/question_list", :templates %>
 
 <div class="row">
-    <div class="col-xs-4" style="height : 370px; overflow : auto;">
-        <%= render_cell "surveys/survey_list", :display %>
+    <div class="col-xs-4">
+        <div  style="height : 370px; overflow : auto;">
+            <%= render_cell "surveys/survey_list", :display %>
+        </div>
     </div>
-    <div class="col-xs-4" style="height : 370px; overflow : auto;">
+    <div class="col-xs-4">
+        <div  style="height : 370px; overflow : auto;">
         <%= render_cell "surveys/group_list", :display %>
+        </div>
     </div>
-    <div class="col-xs-4" style="height : 370px; overflow : auto;">
+    <div class="col-xs-4">
+        <div  style="height : 370px; overflow : auto;">
         <%= render_cell "surveys/question_list", :display %>
+        </div>
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12 well" >
-        <div id="survey-edit-area"></div>
+    <div class="col-xs-12" >
+        <div class="well">
+            <div id="survey-edit-area"></div>
+        </div>
     </div>
 </div>
