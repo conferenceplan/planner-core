@@ -42,15 +42,12 @@
 		</div>
       <div class="container">
       	<%= render partial: 'layouts/templates' %>
-
            <div class="row">
                     <div id="alert-area">
                         <%= render partial: 'layouts/messages', flash: flash %>
                     </div>
            </div>
-           <div class="row">
-                    <%= content_for?(:content) ? yield(:content) : yield %>
-           </div>
+           <%= content_for?(:content) ? yield(:content) : yield %>
       </div>
       <footer class="footer affix-bottom">
       <div class="container">

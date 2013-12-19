@@ -1,14 +1,15 @@
 <div class="row">
-<%= render_cell :context_menu, :display, :menu => {
-    (t "manage mailings") => '/pages/communications_dash/manage',
-    (t "mailing reports") => '/pages/communications_dash/report',
-    (t "mail templates")  => '/pages/communications_dash/templates'
-} %>
+    <div class="col-xs-12">
+        <%= render_cell :context_menu, :display, :menu => {
+            (t "manage mailings") => '/pages/communications_dash/manage',
+            (t "mailing reports") => '/pages/communications_dash/report',
+            (t "mail templates")  => '/pages/communications_dash/templates'
+        } %>
+    </div>
 </div>
-<div class="row">
+
 <% if @cellname %>
     <%= render_cell "communications/#{@cellname}", :display %>
 <% else %>
     <%= render_cell "communications/communications_dash", :display %>
 <% end %>
-</div>

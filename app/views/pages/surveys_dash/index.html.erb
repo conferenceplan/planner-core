@@ -1,13 +1,14 @@
 <div class="row">
-<%= render_cell :context_menu, :display, :menu => {
-    (t "manage surveys") => '/pages/surveys_dash/manage',
-    (t "survey reports") => '/pages/surveys_dash/report'
-} %>
+    <div class="col-xs-12">
+        <%= render_cell :context_menu, :display, :menu => {
+            (t "manage surveys") => '/pages/surveys_dash/manage',
+            (t "survey reports") => '/pages/surveys_dash/report'
+        } %>
+    </div>
 </div>
-<div class="row">
+
 <% if @cellname %>
     <%= render_cell "surveys/#{@cellname}", :display %>
 <% else %>
     <%= render_cell "surveys/surveys_dash", :display %>
 <% end %>
-</div>

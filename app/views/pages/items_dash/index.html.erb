@@ -1,11 +1,12 @@
 <div class="row">
-<%= render_cell :context_menu, :display, :menu => {
-    (t "items") => '/pages/items_dash/manage',
-    (t "add people") => '/pages/items_dash/add_people',
-} %>
+    <div class="col-xs-12">
+        <%= render_cell :context_menu, :display, :menu => {
+            (t "items") => '/pages/items_dash/manage',
+            (t "add people") => '/pages/items_dash/add_people',
+        } %>
+    </div>
 </div>
-<div class="row">
+
 <% if @cellname %>
     <%= render_cell "items/#{@cellname}", :display %>
 <% end %>
-</div>
