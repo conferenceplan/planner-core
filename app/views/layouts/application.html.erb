@@ -25,6 +25,8 @@
     <style type="text/css">
         <%= yield(:styleheader) if content_for?(:styleheader) %>
     </style>
+    <link rel="icon" type="image/ico" href="https://s3.amazonaws.com/media.grenadine.co/favicon.ico"/>
+
   </head>
   <body>
   		<div id="top-colored-line">
@@ -35,12 +37,17 @@
 	  		</nav>      		
     		<!-- %=render 'layouts/common_page_top' % -->
       	</div>
+
+
       	<div id="user-menu" role="navigation"> <!-- This is the menu with all of the application stuff that appears once a user is logged-in -->
       		<% if current_user %>
 				<%= render 'layouts/topbar' %>
 			<% end %>
 		</div>
-      <div class="container">
+
+
+
+      <div id="main-screen-container" class="container">
       	<%= render partial: 'layouts/templates' %>
            <div class="row">
                     <div id="alert-area">
@@ -62,5 +69,6 @@
               </div>
       </div>
       </footer>
-  </body>
+        
+        </body>
 </html>

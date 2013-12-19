@@ -4,21 +4,57 @@
 
 #application-header {
   background-color: white;
+  height: 71px;
   /* border-color: red white white white; */
   /* border-width: 4px 0 0 0; */
+ }
+ #logo-bar {
+   top:4px;
+   width: 100%;
+   z-index:10000;
  }
  #event-planner-logo-link-container {
    padding:0 0 0 10px;
  }
+#grenadine-collapsed-button
+{
+    background-color: #F8F8F8;
+    border-color: #E7E7E7;
+}
+#grenadine-collapsed-button span.icon-bar
+{
+  background-color:#C01F3F;
+  opacity: 0.3;
+}
+#collapse-1 a {
+  color: #676767
+}
 #top-colored-line {
-  height: 4px;
-  background-color: #C01F3F;
+    background-color: #C01F3F;
+    position: fixed; 
+    height: 4px; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    z-index: 10001;
 }
 #logo-bar {
   margin-bottom:0;
   border-radius: 0px;
 }
 
+#main-screen-container {
+  width:97%;
+}
+
 #grenadine-application-menu {
   border-radius:0px;
+  z-index: 9999;
+}
+
+
+#app-menu-div.affix {
+  top: 4px;
+  z-index:9999;
+  width:100%;
 }
