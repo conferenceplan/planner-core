@@ -27,6 +27,16 @@
 
 <script type="text/template" id="mail-template-template-nodelete">
     <td>
-        <a href="#survey-tab" data-toggle="tab" class="model-select-button">{{= title }} ({{= mail_use_name }})</a>
+        <a href="#template-tab" data-toggle="tab" class="model-select-button">{{= title }} ({{= mail_use_name }})</a>
     </td>
+</script>
+
+<script type="text/template" id="mail-template-data-template">
+    <dl class="dl-horizontal">
+        <dt><%= t "Title" %></dt><dd>{{= title }}</dd> 
+        <dt><%= t "Mail Use" %></dt><dd>{{= mail_use_name }}</dd> 
+        <dt><%= t "Survey" %></dt><dd>{{= survey_id ? survey : "&nbsp;" }}</dd> 
+        <dt><%= t "Subject" %></dt><dd>{{= subject }}</dd> 
+        <dt><%= t "Content" %></dt><dd><pre>{{= content }}</pre></dd> 
+    </dl>
 </script>

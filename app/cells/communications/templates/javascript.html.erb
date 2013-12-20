@@ -6,8 +6,20 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
     
     MailTemplate = Backbone.DeepModel.extend({
         urlRoot : '/communications/mail_templates',
-        // schema : {
-        // }
+        schema : {
+            title           : { type : 'Text', title : '<%= t "title" %>' },
+
+            mail_use_id     : { type : 'Select', title : '<%= t "mail use" %>',
+                                            options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
+                                        },
+                                        
+            survey_id       : { type : 'Select', title : '<%= t "survey" %>',
+                                            options : <%= [[nil,'']].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
+                                        },
+
+            subject         : { type : 'Text', title : '<%= t "subject" %>' },
+            content         : { type : 'Html', title : '<%= t "content" %>' },
+        }
     });
     
     MailTemplateCollection = Backbone.Collection.extend({
@@ -56,22 +68,22 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
             collection_tagName      : 'table',
             tagName                 : 'tr',
             view_refresh_event      : "mailTemplate:refresh",
-            selectFn                : options.selectFn,
-            readTemplate            : options.readTemplate,
-            itemArea                : options.itemArea
+            selectFn                : selectQuery,
+            readTemplate            : '#mail-template-data-template',
+            itemArea                : "#mail-template-edit-area"
         }) );
     };
+
+
+    function selectQuery(id) {
+        // ???
+    };
+
         
     return {
         init : function(options) {
             showMailTemplates(options);
-        },
-        
-        // clearDetails : function() {
-        // },
-//         
-        // selectQuery : function(id) {
-        // }
+        }
     }
 
 })(Backbone);
