@@ -4,14 +4,16 @@
 
 #application-header {
   background-color: white;
-  height: 71px;
+  /* height: 71px; I removed this because if I fix the height the drop-down menu floats on top of the menu below it */
   /* border-color: red white white white; */
   /* border-width: 4px 0 0 0; */
+  margin-top: -1px;
+  margin-bottom: 2px;
  }
  #logo-bar {
    top:4px;
    width: 100%;
-   z-index:10000;
+   z-index:800;
  }
  #event-planner-logo-link-container {
    padding:0 0 0 10px;
@@ -36,7 +38,7 @@
     top: 0; 
     left: 0; 
     width: 100%; 
-    z-index: 10001;
+    z-index: 801;
 }
 #logo-bar {
   margin-bottom:0;
@@ -49,12 +51,29 @@
 
 #grenadine-application-menu {
   border-radius:0px;
-  z-index: 9999;
+  z-index: 799;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
 }
 
 
 #app-menu-div.affix {
   top: 4px;
-  z-index:9999;
+  z-index:799;
   width:100%;
+}
+#grenadine-footer, #grenadine-footer a:link, #grenadine-footer a:visited {
+  background-color: #32363e;
+  /* height: 53px; */
+  color:white;
+  
+}
+#grenadine-footer-left-portion {
+  text-align:left;
+}
+#grenadine-footer-right-portion {
+  text-align:right;
+}
+#debug-info {
+  padding-top: 15px;
+  color: grey;
 }
