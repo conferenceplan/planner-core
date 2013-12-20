@@ -28,7 +28,7 @@
 //= require backbone/extensions/backbone-pageable
 
 //= require backbone-forms/distribution/backbone-forms
-//= require backbone-forms/distribution/editors/list.min
+//= require backbone-forms/distribution/editors/list
 //= require backbone-forms/distribution/adapters/backbone.bootstrap-modal
 //= require backbone-forms/distribution/templates/bootstrap3
 
@@ -54,9 +54,9 @@
 //= require TabViews
 
 // TODO - check these
-//= require plugins/cpdialog
-//= require plugins/cpDynamicArea
-//= require plugins/cpremovebutton
+//  require plugins/cpdialog
+//  require plugins/cpDynamicArea
+//  require plugins/cpremovebutton
 
 //= require_self
 
