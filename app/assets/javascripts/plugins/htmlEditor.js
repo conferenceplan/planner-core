@@ -9,9 +9,16 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
         // Add the CK editor as the field
         // TODO - add a mechanism to pass in options for the CK editor toolbar
         this.$el.ckeditor({
+            // Prevent the translation of html elements (< and >) to encodings, so we can include "macros"
+            entities : false,
+            basicEntities : false,
+            entities_latin : false,
+            entities_additional : '',
+            htmlEncodeOutput : false,
             removePlugins : "elementspath,flash",
             toolbar : 'CPlan',
             toolbar_CPlan : [
+                { name: 'document', items : [ 'Source' ] },
                 { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
                 { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
                 { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
@@ -22,7 +29,7 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
                 { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
             ]
         });
-
+        
         this.setValue(this.value);
 
         return this;

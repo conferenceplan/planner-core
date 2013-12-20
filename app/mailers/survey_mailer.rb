@@ -53,7 +53,7 @@ class SurveyMailer < ActionMailer::Base
       
       # we have the mailing so get the template
       template = mailing.mail_template
-      raise "can not fine a template for the email" if !template
+      raise "can not find a template for the email" if !template
      
       content = SurveyMailer.generateEmail(template, args)
       mailHistory.content = content

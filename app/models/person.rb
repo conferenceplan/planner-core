@@ -82,34 +82,14 @@ class Person < ActiveRecord::Base
   has_one :peoplesource, :dependent => :delete
   has_one :datasource, :through => :peoplesource
 
-  def as_jsonDD(options={})
-    if options[:include_pseudonym]
-      res = super(:include => :pseudonym)
-    elsif options[:terse]
-      res = {
-        :id => id,
-        :name => getFullPublicationName,
-        :links => {
-        },
-        :bio => bio,
-        :prog => published_programme_items.collect { |p| p.id }
-      }
-    
-      if edited_bio
-        res[:links] = {
-          :photo => edited_bio.photourl,
-          :url => edited_bio.website,
-          :twitter => edited_bio.twitterinfo,
-          :fb => edited_bio.facebook
-        }
-      end
-    else  
-      res = super(options)
+  def key
+    if survey_respondent
+      return survey_respondent.key
+    else
+      return 'n/a'
     end
-
-    return res
   end
-  
+
   def bio
     edited_bio ? edited_bio.bio : ""
   end
