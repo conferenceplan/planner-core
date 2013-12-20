@@ -1,7 +1,13 @@
-<h1>
-  Communications::Templates#display
-</h1>
+<%= render_cell "communications/templates", :javascript %>
 
-<p>
-  Find me in app/cells/communications/templates/display.html.erb
-</p>
+<%= render_cell "communications/templates", :templates %>
+
+<div class="row">
+    <div class="col-xs-4" style="height : 370px; overflow : auto;">
+        <div id="mail-template-region-view"></div>
+    </div>
+    <div class="col-xs-8">
+        <div id="mail-template-edit-area"></div>
+    </div>
+</div>
+

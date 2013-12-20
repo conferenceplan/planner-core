@@ -1,7 +1,87 @@
-<h1>
-  Communications::Templates#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/communications/templates/javascript.html.erb
-</p>
+MailTemplateApp = new Backbone.Marionette.Application();
+
+MailTemplateApp.TemplateManagment = (function(Backbone){
+    
+    MailTemplate = Backbone.DeepModel.extend({
+        urlRoot : '/communications/mail_templates',
+        // schema : {
+        // }
+    });
+    
+    MailTemplateCollection = Backbone.Collection.extend({
+        model : MailTemplate
+    });
+
+    MailTemplateLayout = Backbone.Marionette.Layout.extend({
+        template: "#mail-template-list-layout-template",
+        
+        regions : {
+            mailTemplateControlRegion: "#mail-template-control-div",
+            mailTemplateRegion: "#mail-template-region-div",
+        },
+    });
+
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' );
+    };
+
+    function showMailTemplates(options) {
+        mailTemplateLayout = new MailTemplateLayout();
+        mailTemplateLayout.render();
+        $('#mail-template-region-view').html(mailTemplateLayout.el);
+        var template = "#mail-template-template";
+        
+        // if (options.nops) {
+            // template = "#mail-template-template-nodelete";
+        // } else {
+            TabUtils.createTabControl({
+                template                : "#mail-template-control-template",
+                modelType               : MailTemplate,
+                view_refresh_event      : "mailTemplate:refresh",
+                modal_create_title      : '<%= t "Create Template" %>',
+                region                  : mailTemplateLayout.mailTemplateControlRegion,
+            });
+        // }
+        
+        tabLists.push( AppUtils.createCollectionView({
+            url                     : "/communications/mail_templates.json",
+            collectionType          : MailTemplateCollection,
+            region                  : mailTemplateLayout.mailTemplateRegion,
+            template                : template,
+            collection_attributes   : { "class" : "table table-striped table-condensed" },
+            collection_tagName      : 'table',
+            tagName                 : 'tr',
+            view_refresh_event      : "mailTemplate:refresh",
+            selectFn                : options.selectFn,
+            readTemplate            : options.readTemplate,
+            itemArea                : options.itemArea
+        }) );
+    };
+        
+    return {
+        init : function(options) {
+            showMailTemplates(options);
+        },
+        
+        // clearDetails : function() {
+        // },
+//         
+        // selectQuery : function(id) {
+        // }
+    }
+
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    MailTemplateApp.start();
+    MailTemplateApp.TemplateManagment.init({});
+});
+
+</script>
