@@ -84,13 +84,6 @@ PlannerRc1::Application.routes.draw do
   
   resources :available_dates
 
-  # map.resources :people, :as => "participants", 
-    # :has_many => [:addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items],
-    # :has_one => [:registrationDetail, :edited_bio, :available_date],
-    # :collection => {:list => [:post, :get] },
-    # :member => {:show => :get}
-  # map.connect 'participants/list', :controller => 'people', :action => 'list'
-
   # map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
   match 'tags/list.:format', :controller => 'tags', :action => 'list'
   # match 'tags/:id', :controller => 'tags', :action => 'show', :via => 'get'
@@ -115,11 +108,6 @@ PlannerRc1::Application.routes.draw do
     resources :person
   end  
 
-  # #
-  # #
-  # #
-  # map.resources :survey_respondent_sessions # just for the new session...
-# 
   #
   #
   # TODO - check these routes
@@ -137,12 +125,6 @@ PlannerRc1::Application.routes.draw do
     resources :reviews
   end
 
-  # map.resources :survey_respondents do |respondent|
-    # respondent.resource :tags, :member => {:cloud => :get, :alltags => :get, :list => :get, :update => :post}, 
-      # :controller => 'survey_respondents/tags',
-      # :except => [:destroy, :new, :create, :edit, :remove]
-  # end
-# 
   resources :survey_respondents do
     resources :tags, :controller => 'survey_respondents/tags', :except => [:destroy, :new, :create, :edit, :remove] do
       member do
@@ -209,8 +191,6 @@ PlannerRc1::Application.routes.draw do
 
 
   match 'rooms/list.:format', :controller => 'rooms', :action => 'list'
-  # match 'rooms/listwithblank', :controller => 'rooms', :action => 'listwithblank'
-  # match 'rooms/picklist', :controller => 'rooms', :action => 'picklist'
   resources :rooms
 
   match 'setup_types/list.:format', :controller => 'setup_types', :action => 'list'
@@ -235,10 +215,6 @@ PlannerRc1::Application.routes.draw do
 
   resources :equipment_types
 
-  # TODO
-  # resources :mail_history, :controller => 'mail/mail_history', :only => [:index]
-  # match 'mail_history/count', :controller => 'mail/mail_history', :action => 'count', :method => 'get'
-
   #
   #
   #
@@ -250,10 +226,6 @@ PlannerRc1::Application.routes.draw do
   namespace :communications do
     resources :mailing
     resources :mail_templates
-  end
-
-  namespace :reports do
-    resources :mail_reports, :only => [:index]
   end
 
   resources :person_mailing_assignments, :controller => 'admin/person_mailing_assignments'
@@ -293,16 +265,13 @@ PlannerRc1::Application.routes.draw do
 
   match '/form/:page(/:preview)', :controller => 'surveys/response', :action => 'renderalias'
 
+  match 'api/theme.:format', :controller => 'api/theme', :action => 'show'  
+
 #   
 # 
 #   
 # 
   # map.resources :monitor, :only => :index # we only need the one method/route for this
-  # map.resources :mapped_survey_questions
-  # map.resource :user_session
-  # map.root :controller => "user_sessions", :action => "new"
-  # map.login "login", :controller => "user_sessions", :action => "new"
-  # map.logout "logout", :controller => "user_sessions", :action => "destroy"
   # map.resources :excluded_times
 # 
 #   
