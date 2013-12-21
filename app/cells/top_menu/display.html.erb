@@ -14,7 +14,7 @@
         <div class="collapse navbar-collapse" id="collapse-2">
             <ul class="nav navbar-nav">
                 <% @menu.each do |k, v| %>
-                    <li class="<%= 'active' if request.fullpath == v[:target] %>"><a href="<%= '/' + I18n.locale.to_s + v[:target] %>">
+                    <li class="<%= 'active' if request.fullpath.include? v[:target_base] %>"><a href="<%= '/' + I18n.locale.to_s + v[:target] %>">
                         <i class="glyphicon <%= v[:icon]%>"></i> <%= t k %></a>
                     </li>
                 <% end %>
