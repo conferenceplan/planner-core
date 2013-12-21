@@ -1,43 +1,37 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Convention Planner Application" %>">
-    <title><%= @page_title or (t "Convention Planner") %></title>
-    
-    <%= stylesheet_link_tag "application", :media => "all" %>
-    <%= stylesheet_link_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".css") %>
-    <%= stylesheet_link_tag "cells/" + params[:cellname] if params[:cellname] && PlannerRc1::Application.assets.find_asset("cells/" + params[:cellname] + ".css") %> 
-    
-    <%= javascript_include_tag "application" %>
-    <%= javascript_include_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".js") %>
-    <%= javascript_include_tag "cells/" + params[:cellname] if params[:cellname] && PlannerRc1::Application.assets.find_asset("cells/" + params[:cellname] + ".js") %>
-    
-    <%= csrf_meta_tags %>
-    
-    <%=render 'layouts/common_js' %>
-    
-    <%= yield(:cssheader) if content_for?(:cssheader) %>
-    <%= yield(:jsheader) if content_for?(:jsheader) %>
-    
-    <style type="text/css">
-        <%= yield(:styleheader) if content_for?(:styleheader) %>
-    </style>
-    <link rel="icon" type="image/ico" href="https://s3.amazonaws.com/media.grenadine.co/favicon.ico"/>
-
-  </head>
-  <body>
-  		<div id="top-colored-line">
-  		</div>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Convention Planner Application" %>">
+        <title><%= @page_title or (t "Convention Planner") %></title>
+        
+        <%= csrf_meta_tags %>
+        
+        <%= stylesheet_link_tag "application", :media => "all" %>
+        <%= stylesheet_link_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".css") %>
+        <%= stylesheet_link_tag "cells/" + params[:cellname] if params[:cellname] && PlannerRc1::Application.assets.find_asset("cells/" + params[:cellname] + ".css") %> 
+        <%= yield(:cssheader) if content_for?(:cssheader) %>
+        
+        <%= javascript_include_tag "application" %>
+        <%= javascript_include_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".js") %>
+        <%= javascript_include_tag "cells/" + params[:cellname] if params[:cellname] && PlannerRc1::Application.assets.find_asset("cells/" + params[:cellname] + ".js") %>
+        <%=render 'layouts/common_js' %>
+        <%= yield(:jsheader) if content_for?(:jsheader) %>
+        
+        <style type="text/css">
+            <%= yield(:styleheader) if content_for?(:styleheader) %>
+        </style>
+        <link rel="icon" type="image/ico" href="https://s3.amazonaws.com/media.grenadine.co/favicon.ico"/>
+    </head>
+    <body>
+        <div id="top-colored-line"></div>
   		<div id="application-header" role="navigation"> <!-- This is the top bar with the logo and login/logout buttons -->
-	  		<nav id="logo-bar" class="navbar" role="navigation"> <!-- OK -->
+	  		<nav id="logo-bar" class="navbar" role="navigation">
 	  			<%= render 'layouts/navigation' %>
 	  		</nav>      		
-    		<!-- %=render 'layouts/common_page_top' % -->
       	</div>
-
 
       	<div id="user-menu" role="navigation"> <!-- This is the menu with all of the application stuff that appears once a user is logged-in -->
       		<% if current_user %>
@@ -45,45 +39,12 @@
 			<% end %>
 		</div>
 
-
-
-      <div id="main-screen-container" class="container">
-      	<%= render partial: 'layouts/templates' %>
-           <div class="row">
-                    <div id="alert-area">
-                        <%= render partial: 'layouts/messages', flash: flash %>
-                    </div>
-           </div>
-           <%= content_for?(:content) ? yield(:content) : yield %>
-      </div>
-      <footer id="grenadine-footer" class="footer">
-      <div class="container">
-            <div id="grenadine-footer-left-portion" class="container col-md-6">
-              	  &copy; Copyright Grenadine Technologies Inc. / Conference Planner Project
-	           <div id="debug-info">
-	              	  	  Development information:<br/>
-		                  Cell is: <%= params[:cellname] %>
-		                  <br/>Locale is:
-		                  <%= I18n.locale %>
-		                  <br/><%= t :hello %>
-		                  <br/><%= I18n.available_locales %>
-		                  <br/><%= request.fullpath %>
-	      		</div>
-            </div>
-            <div id="grenadine-footer-right-portion" class="container col-md-6">
-            	<!-- We only need the locale for other languages besides English because in the public web site, English is the default language and set to the root domain -->
-            	<% if I18n.locale.to_s == 'en' %>
-	            	<a target="new" href="http://events.grenadine.co/support"><%= (t "Technical Support") %></a>&nbsp;&nbsp;|&nbsp;
-	            	<a target="new" href="http://events.grenadine.co/contact"><%= (t "Contact Us") %></a>
-	            <% else %>
-	            	<a target="new" href="http://events.grenadine.co<%= '/' + I18n.locale.to_s + '/' %>support"><%= (t "Technical Support") %></a>&nbsp;&nbsp;|&nbsp;
-	            	<a target="new" href="http://events.grenadine.co<%= '/' + I18n.locale.to_s + '/' %>contactez-nous"><%= (t "Contact Us") %></a>	
-	            <% end %>
-            </div>          
-      </div>
-      </footer>
+        <div id="main-screen-container" class="container">
+            <div class="row"><div id="alert-area"><%= render partial: 'layouts/messages', flash: flash %></div></div>
+            <%= content_for?(:content) ? yield(:content) : yield %>
+        </div>
       
-
-        
-        </body>
+        <%= render 'layouts/footer' %>
+        <%= render partial: 'layouts/templates' %>
+    </body>
 </html>

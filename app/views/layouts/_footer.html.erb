@@ -1,0 +1,26 @@
+      <footer id="grenadine-footer" class="footer">
+      <div class="container">
+            <div id="grenadine-footer-left-portion" class="container col-md-6">
+                  &copy; Copyright Grenadine Technologies Inc. / Conference Planner Project
+               <div id="debug-info">
+                          Development information:<br/>
+                          Cell is: <%= params[:cellname] %>
+                          <br/>Locale is:
+                          <%= I18n.locale %>
+                          <br/><%= t :hello %>
+                          <br/><%= I18n.available_locales %>
+                          <br/><%= request.fullpath %>
+                </div>
+            </div>
+            <div id="grenadine-footer-right-portion" class="container col-md-6">
+                <!-- We only need the locale for other languages besides English because in the public web site, English is the default language and set to the root domain -->
+                <% if I18n.locale.to_s == 'en' %>
+                    <a target="new" href="http://events.grenadine.co/support"><%= (t "Technical Support") %></a>&nbsp;&nbsp;|&nbsp;
+                    <a target="new" href="http://events.grenadine.co/contact"><%= (t "Contact Us") %></a>
+                <% else %>
+                    <a target="new" href="http://events.grenadine.co<%= '/' + I18n.locale.to_s + '/' %>support"><%= (t "Technical Support") %></a>&nbsp;&nbsp;|&nbsp;
+                    <a target="new" href="http://events.grenadine.co<%= '/' + I18n.locale.to_s + '/' %>contactez-nous"><%= (t "Contact Us") %></a>  
+                <% end %>
+            </div>          
+      </div>
+      </footer>

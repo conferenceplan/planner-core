@@ -1,9 +1,0 @@
-    <a href="<%= @target%>" class="btn btn-large nav-box-<%= @colour%> col-xs-<%= @width%> nav-box">
-        <div>
-            <div class="icon-large icon-<%= @icon%>"></div>
-            <%= @title%>
-        </div>
-        <div class="nav-box-content">
-            <%= render_cell @src+"_summary", :display if @src %>
-        </div>
-    </a>
