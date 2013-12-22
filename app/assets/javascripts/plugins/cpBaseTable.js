@@ -33,16 +33,33 @@ $.widget( "cp.baseTable" , {
     _create : function() {
         if (!this.options.delayed) {
             this.createTable();
-            this.element.parents('.ui-jqgrid').css("width", "auto");
+            var width = this.element.parents('.ui-jqgrid').css("width");
+            width = (parseInt(width) + 2) + "px";
+            this.element.parents('.ui-jqgrid').css("width", width);
+            this.handleResize();
         }
     },
     
     render : function() {
         if (this.options.delayed) {
             this.createTable();
-            this.element.parents('.ui-jqgrid').css("width", "auto");
+            var width = this.element.parents('.ui-jqgrid').css("width");
+            width = (parseInt(width) + 2) + "px";
+            this.element.parents('.ui-jqgrid').css("width", width);
             this.options.delayed = false; // because it has now been rendered
+            this.handleResize();
         }
+    },
+    
+    handleResize : function() {
+        var grid = this.element;
+        jQuery(window).bind('resize', function() {
+            var width = grid.parents('.ui-jqgrid').parent().width();
+            console.debug(grid.parents('.ui-jqgrid').parent());
+            console.debug(width);
+            grid.setGridWidth(width);
+            grid.parents('.ui-jqgrid').css("width", width+2);
+        }).trigger('resize');
     },
     
     /*
