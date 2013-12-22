@@ -142,6 +142,16 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                 caption: 'Results'
             });
             
+            var grid = this.grid;
+            jQuery(window).bind('resize', function() {
+                var width = grid.parents('.ui-jqgrid').parent().width();
+                // console.debug(grid.parents('.ui-jqgrid').parent());
+                // console.debug(width);
+                grid.setGridWidth(width);
+                grid.parents('.ui-jqgrid').css("width", width+2);
+            }).trigger('resize');
+
+            
             return this;
         },
 
