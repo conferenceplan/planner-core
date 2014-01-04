@@ -9,7 +9,7 @@
  */
 _.extend(Form.Editor.prototype, {
     dependsOnChanged : function(form, editor, extra) {
-        var groupElement = this.$el.parents('.control-group');
+        var groupElement = this.$el.parents('.form-group');
         this.setInitValue(groupElement, editor.getValue(), this.options.schema.dependentValues);
     },
 
@@ -46,7 +46,7 @@ _.extend(Form.Editor.prototype, {
                     cid = editor.cid;
                 };
                 
-                var groupElement = el.parents('.control-group');
+                var groupElement = el.parents('.form-group');
                 editor.setInitValue(groupElement, intialDependantValue, expectedValues);
             }, this, this.$el, this.options.schema.dependsOn, this.options.schema.dependentValues );
     }
