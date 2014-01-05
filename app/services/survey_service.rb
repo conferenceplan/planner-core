@@ -24,8 +24,20 @@ module SurveyService
         metadata['r'+ query[2][c['id'].to_i].to_s] = c
       end
     end
+    
+    if (surveyQuery.date_order)
+      # change the order by to order by the creation date
+      dateOrder = ' order by hist.filled_at desc'
+    else
+      dateOrder = ''
+    end
 
-    resultSet = SurveyRespondentDetail.connection.select_all(createJoinPart1(surveyQuery.survey_query_predicates, metadata, query[2]) + selectStr + query[0] + ' order by last_name' + createJoinPart2(surveyQuery.survey_query_predicates, metadata, query[2]))
+    resultSet = SurveyRespondentDetail.connection.select_all(createJoinPart1(surveyQuery.survey_query_predicates, metadata, query[2]) + 
+                              selectStr + query[0] +
+                              ' order by last_name'  +
+                              createJoinPart2(surveyQuery.survey_query_predicates, metadata, query[2]) + 
+                              ' left join survey_histories hist on hist.survey_id = ' + surveyQuery.id.to_s + ' and hist.survey_respondent_detail_id = res.id' + dateOrder
+                               )
     
     { :meta_data => metadata, :result_set => resultSet, :count => count }
   end
@@ -117,7 +129,12 @@ module SurveyService
 private
 
   def self.createJoinPart1(queryPredicates, metadata, mapping)
-    selectPart = 'select @rownum:=@rownum+1 as id, res.id as oid, res.first_name, res.last_name, res.suffix, res.email, res.survey_respondent_id'
+    tz_offset = Time.zone.formatted_offset # number of hours offset for the application timezone TODO - use the time zone of the convention
+
+    selectPart = 'select @rownum:=@rownum+1 as id, res.id as oid, ' +
+                  "DATE_FORMAT(CONVERT_TZ(hist.filled_at,'-00:00','"+ tz_offset + "'), '%h:%i %p, %d %M %Y')" +
+                  ' as filled_at, ' +
+                  'res.first_name, res.last_name, res.suffix, res.email, res.survey_respondent_id'
     questionIds = Set.new
     
     if (queryPredicates)

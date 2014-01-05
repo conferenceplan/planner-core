@@ -9,6 +9,7 @@ if (!(defined? terse)) || ((defined? terse) && !terse)
     json.operation      query.operation
     json.survey_id      query.survey_id
     json.survey_name    query.survey.name
+    json.date_order     query.date_order
     
     json.survey_query_predicates do
         json.array! query.survey_query_predicates do |p|

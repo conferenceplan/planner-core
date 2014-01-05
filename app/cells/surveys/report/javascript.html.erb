@@ -15,6 +15,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                 options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
                               },
             shared          : { type : 'Checkbox',  title : '<%= t "shared" %>' },
+            date_order      : { type : 'Checkbox',   title : '<%= t "order by date received" %>' },
             operation       : { type : 'Select',    title : '<%= t "operation" %>',
                                 options : ['ALL', 'ANY']
                               },
@@ -112,6 +113,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                     {name:'First Name', jsonmap: "first_name", sortable:true, width: 20}, 
                     {name:'Last Name', jsonmap: "last_name", sortable:true, width: 30}, 
                     {name:'Email', jsonmap: "email", sortable:true, width: 35}, 
+                    {name:'Date Filled', jsonmap: "filled_at", sortable:false, width: 35}, 
                 ];
                 
             for (var key in this.resultsCollection.get('userdata')) {
