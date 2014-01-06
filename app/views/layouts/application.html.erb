@@ -28,7 +28,14 @@
     <body>
         <div id="top-colored-line"></div>
   		<div id="application-header" role="navigation"> <!-- This is the top bar with the logo and login/logout buttons -->
-	  		<nav id="logo-bar" class="navbar" role="navigation">
+	  		<nav id="logo-bar" class="navbar gradient" role="navigation">
+	  			<!--[if gte IE 9]>
+					  <style type="text/css">
+					    .gradient {
+					       filter: none;
+					    }
+					  </style>
+					<![endif]-->
 	  			<%= render 'layouts/navigation' %>
 	  		</nav>      		
       	</div>
