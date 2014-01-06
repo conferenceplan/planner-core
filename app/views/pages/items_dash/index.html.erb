@@ -1,11 +1,9 @@
-<div class="row">
-    <div class="col-xs-12">
+<% content_for :submenu do %>
         <%= render_cell :context_menu, :display, :menu => {
             (t "items") => '/pages/items_dash/manage',
             (t "add people") => '/pages/items_dash/add_people',
         } %>
-    </div>
-</div>
+<% end %>
 
 <% if @cellname %>
     <%= render_cell "items/#{@cellname}", :display %>

@@ -1,12 +1,10 @@
-<div class="row">
-    <div class="col-xs-12">
+<% content_for :submenu do %>
         <%= render_cell :context_menu, :display, :menu => {
             (t "manage mailings") => '/pages/communications_dash/manage',
             (t "mailing reports") => '/pages/communications_dash/report',
             (t "mail templates")  => '/pages/communications_dash/templates'
         } %>
-    </div>
-</div>
+<% end %>
 
 <% if @cellname %>
     <%= render_cell "communications/#{@cellname}", :display %>
