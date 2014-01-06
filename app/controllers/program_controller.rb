@@ -342,7 +342,7 @@ class ProgramController < ApplicationController
     
     # To get the updates:
     # Get a list of all publications that have changed since the last publication date
-    if pubIndex
+    if pubIndex && pubIndex > 0
       pubIndex -= 1 if pubIndex > 1
       @lastPubDate = PublicationDate.find(pubIndex)
     else
