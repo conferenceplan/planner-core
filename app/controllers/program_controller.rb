@@ -346,7 +346,8 @@ class ProgramController < ApplicationController
       pubIndex -= 1 if pubIndex > 1
       @lastPubDate = PublicationDate.find(pubIndex)
     else
-      @lastPubDate = PublicationDate.last
+      lastPubDates = PublicationDate.find :all, :order => 'id desc', :limit => 2
+      @lastPubDate = lastPubDates[1]
     end
     
     if !@lastPubDate
