@@ -90,6 +90,10 @@ clip: rect(1px, 1px, 1px, 1px);
   overflow: visible;
 }
 
+.ui-jqgrid.ui-widget.ui-widget-content.ui-corner-all {
+    margin-left: -15px;
+}
+
 .ui-jqgrid .ui-jqgrid-htable th span.ui-jqgrid-resize {
     height: 100% !important;
 }
