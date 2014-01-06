@@ -4,16 +4,23 @@
 
 #application-header {
   background-color: white;
-  /* height: 71px; I removed this because if I fix the height the drop-down menu floats on top of the menu below it */
-  /* border-color: red white white white; */
-  /* border-width: 4px 0 0 0; */
-  margin-top: -1px;
-  margin-bottom: 2px;
+  margin-top: 0px;
+  margin-bottom: 3px;
+  
  }
  #logo-bar {
    top:4px;
    width: 100%;
    z-index:800;
+   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjEwMCUiIHkyPSIwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjE5JSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjA1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjI3JSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjE0Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjMDFmM2YiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+   background: -moz-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%, rgba(255,255,255,0.14) 27%, rgba(192,31,63,1) 100%);
+   background: -webkit-gradient(linear, left bottom, right top, color-stop(19%,rgba(255,255,255,0.05)), color-stop(27%,rgba(255,255,255,0.14)), color-stop(100%,rgba(192,31,63,1)));
+   background: -webkit-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
+   background: -o-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
+   background: -ms-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
+   background: linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0dffffff', endColorstr='#c01f3f',GradientType=1 );
+   border: 0px;
  }
  #event-planner-logo-link-container {
    padding:0 0 0 10px;
@@ -49,22 +56,55 @@
   width:97%;
 }
 
+#grenadine-sub-application-menu,
 #grenadine-application-menu {
   border-radius:0px;
   z-index: 799;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  border: 0px 0px 0px 0px;
+  margin-bottom: 0px;
 }
-
-
+#grenadine-sub-application-menu {
+  margin-top: -1px;
+  margin-bottom: 20px;
+}
+@media all and (min-width: 1277px)
+{
+  #user-menu {
+    height: 50px;
+  }
+  #app-sub-menu-div.affix {
+  top: 54px;
+  z-index:802;
+  width:100%;
+  
+}
+}
+@media all and (max-width: 1276px) and (min-width: 770px)
+{
+  #user-menu {
+    height: 100px;
+  }
+  #app-sub-menu-div.affix {
+  top: 104px;
+  z-index:802;
+  width:100%;
+  
+}
+}
+#user-sub-menu {
+  height: 50px;
+}
+#menu-separator-div {
+  height: 20px;
+}
 #app-menu-div.affix {
   top: 4px;
   z-index:799;
   width:100%;
+  
 }
 
-#user-menu {
-  height: 72px;
-}
 
 #grenadine-footer, #grenadine-footer a:link, #grenadine-footer a:visited {
   background-color: #32363e;
