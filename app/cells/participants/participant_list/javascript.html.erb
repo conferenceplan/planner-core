@@ -13,8 +13,8 @@ jQuery(document).ready(function() {
         delayed : <%= @delayed %>,
 
         name : [true, '<%= t "Name"%>'],       
-        invite_status : [<%= @invite_status%>, '<%= t "Invitation Status"%>' ],
-        invite_category : [<%= @invite_category%>, '<%= t "Invitation"%><br/><%= raw t "Category"%>' ],
+        invite_status : [<%= @invite_status%>, '<%= t "invitation-status"%>' ],
+        invite_category : [<%= @invite_category%>, '<%= t "invitation-category-abbreviated"%>' ],
         acceptance_status : [<%= @acceptance_status%>, '<%= t "Acceptance"%>'],
         has_survey : [<%= @has_survey%>, '<%= t "Survey"%>'],
 
@@ -41,9 +41,8 @@ jQuery(document).ready(function() {
         modelType : <%= @modelType %>,
         showControls : <%= @showControls %>,
         
-        //
-        modal_create_title : '<%= t "Create Participant" %>',
-        modal_edit_title : '<%= t "Edit Participant" %>',
+        modal_create_title : '<%= t "create-participant" %>',
+        modal_edit_title : '<%= t "edit-participant" %>',
     });
 });
 

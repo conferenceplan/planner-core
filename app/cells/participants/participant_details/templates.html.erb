@@ -10,22 +10,22 @@
             </button>
             <dl class="dl-horizontal">
                 <dt>
-                    <%= t "Registration Number" %>
+                    <%= t "reg-number" %>
                 </dt>
                 <dd>
                     {{= registration_number ? registration_number : "&nbsp;" }}
                 </dd>
                 <dt>
-                    <%= t "Registration Type" %>
+                    <%= t "reg-type" %>
                 </dt>
                 <dd>
                     {{= registration_type ? registration_type : "&nbsp;" }}
                 </dd>
                 <dt>
-                    <%= t "Registered" %>
+                    <%= t "registered" %>
                 </dt>
                 <dd>
-                    {{= registered ? 'Yes' : 'No' }}
+                    {{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}
                 </dd>
             </dl>
         </div>
@@ -57,7 +57,7 @@
         {{= last_name ? last_name : "&nbsp;" }}
     </dd>
     <dt>
-        <%= t "Suffix" %>
+        <%= t "suffix" %>
     </dt>
     <dd>
         {{= suffix ? suffix : "&nbsp;" }}
@@ -69,13 +69,13 @@
         {{= invitestatus_name ? invitestatus_name : "&nbsp;"}}
     </dd>
     <dt>
-        <%= t "Acceptance Status" %>
+        <%= t "acceptance-status" %>
     </dt>
     <dd>
         {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}
     </dd>
     <dt>
-        <%= t "Invite Categrory" %>
+        <%= t "invitation-category" %>
     </dt>
     <dd>
         {{= invitation_category_name ? invitation_category_name : "&nbsp;"}}
@@ -87,7 +87,7 @@
         {{= survey_key }}
     </dd>
     <dt>
-        <%= t "Comments" %>
+        <%= t "comments" %>
     </dt>
     <dd>
         {{= comments }}
@@ -189,16 +189,16 @@
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
-                        <%= t "Email" %>
+                        <%= t "email" %>
                     </dt>
                     <dd>
                         {{= email ? email : "&nbsp;" }}
                     </dd>
                     <dt>
-                        <%= t "Is Default" %>
+                        <%= t "is-default" %>
                     </dt>
                     <dd>
-                        {{= isdefault ? "Yes" : "No"}}
+                        {{= isdefault ? "<%= t "yes" %>" : "<%= t "no" %>"}}
                     </dd>
                 </dl> </small>
         </div>
@@ -220,52 +220,52 @@
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
-                        <%= t "Line 1" %>
+                        <%= t "line1" %>
                     </dt>
                     <dd>
                         {{= line1 ? line1 : "&nbsp;" }}
                     </dd>
                     <dt>
-                        <%= t "Line 2" %>
+                        <%= t "line2" %>
                     </dt>
                     <dd>
                         {{= line2 ? line2 : "&nbsp;" }}
                     </dd>
                     <dt>
-                        <%= t "Line 3" %>
+                        <%= t "line3" %>
                     </dt>
                     <dd>
                         {{= line3 ? line3 : "&nbsp;" }}
                     </dd>
                     <dt>
-                        <%= t "City" %>
+                        <%= t "city" %>
                     </dt>
                     <dd>
                         {{= city ? city : "&nbsp;" }}
                     </dd>
                     <dt>
-                        <%= t "State" %>
+                        <%= t "state" %>
                     </dt>
                     <dd>
                         {{= state ? state : "&nbsp;" }}
                     </dd>
                     <dt>
-                        <%= t "Post Code" %>
+                        <%= t "post code" %>
                     </dt>
                     <dd>
                         {{= postcode ? postcode : "&nbsp;" }}
                     </dd>
                     <dt>
-                        <%= t "Country" %>
+                        <%= t "country" %>
                     </dt>
                     <dd>
                         {{= country ? country : "&nbsp;" }}
                     </dd>
                     <dt>
-                        <%= t "Is Default" %>
+                        <%= t "is-default" %>
                     </dt>
                     <dd>
-                        {{= isdefault ? "Yes" : "No"}}
+                        {{= isdefault ? "<%= t "yes" %>" : "<%= t "no" %>"}}
                     </dd>
                 </dl> </small>
         </div>
@@ -413,7 +413,7 @@
                    <%= t " Published" %>
                 </dt>
                 <dd>
-                    {{= isPublished ? "Yes" : "No" }}
+                    {{= isPublished ? "<%= t "yes" %>" : "<%= t "no" %>" }}
                 </dd>
                 <dt>
                     <%= t "Start Time" %>

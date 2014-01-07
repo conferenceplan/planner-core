@@ -63,7 +63,7 @@ CommunicationsApp.Management = (function(Backbone){
                          type : 'PUT',
                          data : args,
                          error : function() {
-                            alertMessage('<%= t "unable to add people to the mailing" %>');
+                            alertMessage('<%= t "unable-add-to-mailing" %>');
                          },
                          success : function() {
                             // add them to the mailing list
@@ -87,7 +87,7 @@ CommunicationsApp.Management = (function(Backbone){
                          type : 'PUT',
                          data : args,
                          error : function() {
-                            alertMessage('<%= t "unable to remove people from the mailing" %>');
+                            alertMessage('<%= t "unable-remove-from-mailing" %>');
                          },
                          success : function() {
                             // add them to the mailing list

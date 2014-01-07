@@ -54,9 +54,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     RegistrationDetail = Backbone.Model.extend({
         schema : {
-            registration_number : { type : 'Number', title : '<%= t "Registration Number" %>' },
-            registration_type : { type : 'Text', title : '<%= t "Registration Type" %>' },
-            registered : { type : 'Checkbox', title : '<%= t "Registered" %>' },
+            registration_number : { type : 'Number', title : '<%= t "reg-number" %>' },
+            registration_type : { type : 'Text', title : '<%= t "reg-type" %>' },
+            registered : { type : 'Checkbox', title : '<%= t "registered" %>' },
         },
         urlRoot: '/registrationDetails'
     });
@@ -64,24 +64,24 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     Pseudonym = Backbone.Model.extend({
         schema : {
-            first_name  : { type : 'Text', title : '<%= t "First Name" %>'},
-            last_name  : { type : 'Text', title : '<%= t "Last Name" %>'},
-            suffix  : { type : 'Text', title : '<%= t "Suffix" %>'},
+            first_name  : { type : 'Text', title : '<%= t "first-name" %>'},
+            last_name  : { type : 'Text', title : '<%= t "last-name" %>'},
+            suffix  : { type : 'Text', title : '<%= t "suffix" %>'},
         }
     });
     
     InviteDetails = Backbone.DeepModel.extend({
         schema : {
-            first_name : { type : 'Text', title : '<%= t "first name" %>' },
-            last_name : { type : 'Text', title : '<%= t "last name" %>' },
+            first_name : { type : 'Text', title : '<%= t "first-name" %>' },
+            last_name : { type : 'Text', title : '<%= t "last-name" %>' },
             suffix : { type : 'Text', title : '<%= t "suffix" %>' },
-            'pseudonym.first_name' : { type : 'Text', title : '<%= t "publication first name" %>' },
-            'pseudonym.last_name' : { type : 'Text', title : '<%= t "publication last name" %>' },
-            'pseudonym.suffix' : { type : 'Text', title : '<%= t "publication suffix" %>' },
+            'pseudonym.first_name' : { type : 'Text', title : '<%= t "pub-first-name" %>' },
+            'pseudonym.last_name' : { type : 'Text', title : '<%= t "pub-last-name" %>' },
+            'pseudonym.suffix' : { type : 'Text', title : '<%= t "pub-suffix" %>' },
             'comments' : { type : 'Text', title : '<%= t "comments" %>' },
-            invitestatus_id : { type : 'Select', title : '<%= t "invitation status" %>', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            acceptance_status_id : { type : 'Select', title : '<%= t "acceptance status" %>', options : <%= AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            invitation_category_id : { type : 'Select', title : '<%= t "invitation category" %>', options : <%= InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            acceptance_status_id : { type : 'Select', title : '<%= t "acceptance-status" %>', options : <%= AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
 
         },
         urlRoot : '/participants'
