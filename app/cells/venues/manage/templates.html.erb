@@ -17,7 +17,7 @@
 <script type="text/template" id="room-setup-control-template">
 <div>
     <button class="add-model-button btn-xs btn-primary pull-right ">
-        <%= t 'add setup' %>
+        <%= t 'add-room-setup' %>
     </button>
 </div>
 </script>
@@ -34,9 +34,9 @@
             </button>
             <small>
                 <dl class="dl-horizontal-small">
-                    <dt><%= t :setup %></dt>
+                    <dt><%= t :Setup %></dt>
                     <dd>{{= setup_type_name ? setup_type_name : "&nbsp;" }}</dd>
-                    <dt><%= t :capacity %></dt>
+                    <dt><%= t :Capacity %></dt>
                     <dd>{{= capacity ? capacity : "&nbsp;" }}</dd>
                     <dt><%= t :isdefault %></dt>
                     <dd>{{= id == room.setup_id  }}</dd>
