@@ -17,6 +17,8 @@
 //= require jqcloud-1.0.4
 //= require colorpicker/jquery.colorpicker
 
+//= require ckeditor-jquery
+
 //= require bootstrap
 
 //= require backbone/underscore-min
@@ -35,8 +37,6 @@
 //= require moment/moment+langs
 
 //= require d3/d3.v3
-//= require ckeditor/ckeditor
-//= require ckeditor/adapters/jquery
 
 // ---------------
 //= require plugins/cpApp

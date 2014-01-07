@@ -5,19 +5,19 @@ gem 'activerecord'
 gem 'enumerations_mixin', :git => 'git://github.com/balen/enumerations_mixin.git'
 
 gem "audited-activerecord", "~> 3.0"
-gem 'acts-as-taggable-on' 
+gem 'acts-as-taggable-on', "2.4.1" 
 gem 'authlogic'
 gem 'bluecloth'
 gem 'bootstrap-sass', '~> 3.0.3.0'
-# gem 'bootswatch-rails'
 gem 'cells'
+gem 'ckeditor_rails'
 gem "declarative_authorization" 
 gem 'deep_cloneable', '~> 1.6.0'
 gem "daemons"
 gem 'delayed_job' 
 gem 'delayed_job_active_record'
 gem 'i18n' 
-gem 'jbuilder'
+gem 'jbuilder', '1.5.3'
 gem 'jquery-rails'
 gem 'mysql2' 
 gem 'rack-jsonp-middleware', :require => 'rack/jsonp'
