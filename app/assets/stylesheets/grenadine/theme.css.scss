@@ -1,6 +1,22 @@
-/*
- * Insert bootstrap theme over-rides here
- */
+
+/* These things are to remove left padding from col-xs-9 and 12 when they are the first elements on the left, because it looks funny */
+/*.col-xs-9:nth-of-type(1), .col-xs-12:nth-of-type(1), .col-xs-4:nth-of-type(1),  .col-xs-2:nth-of-type(1)
+ {
+  padding-left:0px;
+} */
+
+
+#app-menu-div.affix {
+  top: 4px;
+  z-index:799;
+  width:100%;
+  
+}
+#app-sub-menu-div.affix {
+  /* top: 4px; */
+  z-index:800;
+  width:100%;
+}
 
 #application-header {
   background-color: white;
@@ -77,10 +93,9 @@
   top: 54px;
   z-index:802;
   width:100%;
-  
+  }
 }
-}
-@media all and (max-width: 1276px) and (min-width: 770px)
+@media all and (max-width: 1276px) and (min-width: 768px)
 {
   #user-menu {
     height: 100px;
@@ -89,8 +104,22 @@
   top: 104px;
   z-index:802;
   width:100%;
-  
+  }
 }
+@media all and (max-width: 767px)
+{
+  #user-menu {
+    height: 50px;
+  }
+  #app-menu-div.affix {
+    z-index: 801;
+  }
+  #app-sub-menu-div.affix {
+  top: 54px;
+  z-index: 800;
+  width:100%;
+  }
+
 }
 #user-sub-menu {
   height: 50px;
@@ -98,12 +127,7 @@
 #menu-separator-div {
   height: 20px;
 }
-#app-menu-div.affix {
-  top: 4px;
-  z-index:799;
-  width:100%;
-  
-}
+
 
 
 #grenadine-footer, #grenadine-footer a:link, #grenadine-footer a:visited {
