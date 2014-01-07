@@ -79,9 +79,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             'pseudonym.last_name' : { type : 'Text', title : '<%= t "publication last name" %>' },
             'pseudonym.suffix' : { type : 'Text', title : '<%= t "publication suffix" %>' },
             'comments' : { type : 'Text', title : '<%= t "comments" %>' },
-            invite_status_id : { type : 'Select', title : '<%= t "invitation status" %>', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            invitestatus_id : { type : 'Select', title : '<%= t "invitation status" %>', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
             acceptance_status_id : { type : 'Select', title : '<%= t "acceptance status" %>', options : <%= AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            invite_category_id : { type : 'Select', title : '<%= t "invitation category" %>', options : <%= InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            invitation_category_id : { type : 'Select', title : '<%= t "invitation category" %>', options : <%= InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
 
         },
         urlRoot : '/participants'

@@ -11,11 +11,11 @@
         end
     end
     json.survey_key                 person.survey_respondent ?  person.survey_respondent.key : "" 
-    json.invite_status_id           person.invitestatus.id if @person.invitestatus
-    json.invite_status_name         person.invitestatus ? @person.invitestatus.name : ""
+    json.invitestatus_id            person.invitestatus.id if @person.invitestatus
+    json.invitestatus_name          person.invitestatus ? @person.invitestatus.name : ""
     json.acceptance_status_id       person.acceptance_status.id if @person.acceptance_status
     json.acceptance_status_name     person.acceptance_status ? @person.acceptance_status.name : ""
-    json.invite_category_id         person.invitation_category.id if @person.invitation_category
-    json.invite_category_name       person.invitation_category ? @person.invitation_category.name : ""
+    json.invitation_category_id     person.invitation_category.id if @person.invitation_category
+    json.invitation_category_name   person.invitation_category ? @person.invitation_category.name : ""
     json.has_survey                 SurveyService.personAnsweredSurvey( person, 'partsurvey') ? 'Y' : 'N' # TODO - this will need to change
     json.comments                   person.comments ? person.comments : ""
