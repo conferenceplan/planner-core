@@ -77,8 +77,8 @@ RoomApp.RoomManagement = (function(Backbone){
             template : "#room-setup-template",
             view_refresh_event : "room-setup:refresh",
             region : roomSetupLayout.roomSetupRegion,
-            newTitle : '<%= t "Create Room Setup" %>',
-            editTitle : '<%= t "Edit Room Setup" %>',
+            newTitle : '<%= t "create-room-setup" %>',
+            editTitle : '<%= t "edit-room-setup" %>',
             updateCallback : function(mdl) {
                 $("#rooms").jqGrid('setGridParam', {
                     loadComplete: function(data) {
