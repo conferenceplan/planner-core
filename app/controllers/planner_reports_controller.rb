@@ -11,12 +11,13 @@ class PlannerReportsController < PlannerController
   #
   #
   def panels_with_panelists
-    @fewer_than = params[:fewer_than]
-    @more_than = params[:more_than]
+    @fewer_than = params[:fewer_than].to_i
+    @more_than = params[:more_than].to_i
     modified_since = DateTime.parse params[:modified_since]
     scheduled = params[:scheduled] == "true"
     format_id = params[:format_id].to_i > 0 ? params[:format_id].to_i : nil
     sort_by = params[:sort_by]
+    
     results = PlannerReportsService.findPanelsWithPanelists sort_by, modified_since.strftime('%Y-%m-%d'), format_id, scheduled
     @panels = results[:result_set]
     @count = results[:count]
@@ -33,18 +34,25 @@ class PlannerReportsController < PlannerController
         ]
 
         @panels.each do |panel|
-           output.push [panel.pub_reference_number, panel.title, panel.minimum_people, panel.maximum_people, panel.format.name, 
-             panel.taggings.collect{|t| t.context}.uniq.join(","),
-             ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
-             ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
-             ((panel.room != nil) ? panel.room.name : ''),
-             ((panel.room != nil) ? panel.room.venue.name : ''),
-             panel.equipment_needs.collect {|e| e.equipment_type.description }.join(","),
-             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName }.join(","),
-             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName }.join(","),
-             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName }.join(","),
-             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName }.join(",")
-             ]
+
+          # if (panel.maximum_people < @fewer_than || panel.minimum_people > )
+          count = panel.programme_item_assignments.length
+          next if (@fewer_than > 0 && count > @fewer_than)
+          next if (@more_than > 0 && count < @more_than)
+          
+          output.push [panel.pub_reference_number, panel.title, panel.minimum_people, 
+            panel.maximum_people, panel.format.name, 
+            panel.taggings.collect{|t| t.context}.uniq.join(","),
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
+            ((panel.room != nil) ? panel.room.name : ''),
+            ((panel.room != nil) ? panel.room.venue.name : ''),
+            panel.equipment_needs.collect {|e| e.equipment_type.description }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName }.join(",")
+            ]
         end
         csv_out(output, outfile)
       }

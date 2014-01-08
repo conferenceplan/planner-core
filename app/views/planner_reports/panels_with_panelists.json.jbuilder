@@ -1,12 +1,14 @@
 
 json.totalpages 1
 json.currpage 1
-json.totalrecords @count.to_s
     
-json.rowdata @panels do |panel|
-
-    # TODO - put in logic to filter min and max if needed
-
+json.rowdata @panels.collect { |panel|
+    count = panel.programme_item_assignments.length
+    next if (@fewer_than > 0 && count > @fewer_than)
+    next if (@more_than > 0 && count < @more_than)
+    
+    panel
+}.compact do |panel|
     json.pub_reference_number panel.pub_reference_number
     json.title panel.title
     json.description panel.precis
@@ -26,6 +28,4 @@ json.rowdata @panels do |panel|
     json.moderators panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName }
     json.reserve panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName }
     json.invisible panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName }
-    #json.speakers panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Speaker']}.collect {|p| p.person.getFullPublicationName }
-
 end
