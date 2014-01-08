@@ -11,14 +11,13 @@ class PlannerReportsController < PlannerController
   #
   #
   def panels_with_panelists
-     # sort_by = '', mod_date = '1900-01-01', format_id = nil, equip_only = false, sched_only = false, plus_setups = false
     @fewer_than = params[:fewer_than]
     @more_than = params[:more_than]
     modified_since = DateTime.parse params[:modified_since]
-    scheduled = params[:scheduled]
+    scheduled = params[:scheduled] == "true"
     format_id = params[:format_id].to_i > 0 ? params[:format_id].to_i : nil
-# '1900-01-01'
-    results = PlannerReportsService.findPanelsWithPanelists '', modified_since.strftime('%Y-%m-%d'), format_id, scheduled
+    sort_by = params[:sort_by]
+    results = PlannerReportsService.findPanelsWithPanelists sort_by, modified_since.strftime('%Y-%m-%d'), format_id, scheduled
     @panels = results[:result_set]
     @count = results[:count]
     

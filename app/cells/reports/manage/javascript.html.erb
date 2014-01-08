@@ -23,6 +23,7 @@ ReportApp.ReportManagement = (function(Backbone){
     var PanelsWithPanelistsForm = Backbone.Form.extend({
         schema : {
             modified_since  : { type : 'Date' },
+            sort_by : { type : 'Select', options : [{ val: 'time', label: 'Date/Time' }, { val: 'room', label: 'Room' }, { val: 'title', label: 'Title' }] },
             // TODO - add sort by option
             // reserved        : { type : 'Checkbox'}, // Display reserve panelists
             // invisible       : { type : 'Checkbox'}, // Display invisible panelists
@@ -35,7 +36,8 @@ ReportApp.ReportManagement = (function(Backbone){
         },
         
         data : {
-            // modified_since : ''
+            sort_by : 'time',
+            modified_since : new Date('January 1, 2000')
         },
         
     });
