@@ -1,0 +1,214 @@
+<script type="text/javascript">
+
+ReportApp = new Backbone.Marionette.Application();
+
+ReportApp.ReportManagement = (function(Backbone){
+    
+    function arrayToString(cellvalue) {
+        return cellvalue.join(",<br/>");
+    };
+    
+    ResultSet = Backbone.RelationalModel.extend({
+        // url : '/survey_reports/runReport',
+        
+        relations : [{
+            type : Backbone.HasMany,
+            key : 'rowdata',
+            relatedModel : 'ResultRow',
+            collectionType : 'ResultRowCollection',
+        }],
+
+    });
+
+    var PanelsWithPanelistsForm = Backbone.Form.extend({
+        schema : {
+            modified_since  : { type : 'Date' },
+            // TODO - add sort by option
+            // reserved        : { type : 'Checkbox'}, // Display reserve panelists
+            // invisible       : { type : 'Checkbox'}, // Display invisible panelists
+            scheduled       : { type : 'Checkbox'}, // Include scheduled panels only
+            // description     : { type : 'Checkbox'}, // Include item descriptions
+            // equipment       : { type : 'Checkbox'}, // Include only panels with equipment needs
+            format_id       : { type : 'Select', title : '<%= t "format" %>', options : <%= [{'val' => -1, 'label' => 'All'}].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            fewer_than      : { type : 'Number'},
+            more_than       : { type : 'Number'}
+        },
+        
+        data : {
+            // modified_since : ''
+        },
+        
+    });
+    
+    ResultsView = Backbone.View.extend({
+        tagName : 'div',
+
+        render : function() {
+            var colModel = [ 
+                    {name: 'Ref', jsonmap: 'pub_reference_number', width: 100},
+                    {name:'Title', jsonmap: "title", width: 500},
+                    {name:'Venue', jsonmap: "venue_name"},
+                    {name:'Room', jsonmap: "room_name"},
+                    {name: 'Format', jsonmap: 'format'},
+                    {name: 'Area(s)', jsonmap: 'context', formatter: arrayToString},
+                    {name: 'Start Time', jsonmap: 'start_time'},
+                    {name: 'End Time', jsonmap: 'end_time'},
+                    {name: 'Min People', jsonmap: 'minimum_people'},
+                    {name: 'Max People', jsonmap: 'maximum_people'},
+                    {name: 'Equipment', jsonmap: 'equipment',width: 300, formatter: arrayToString},
+                    {name: 'Moderator(s)', jsonmap: 'moderators',width: 300, formatter: arrayToString },
+                    {name: 'Participants', jsonmap: 'participants',width: 300, formatter: arrayToString }, 
+                    {name: 'Reserve', jsonmap: 'reserve',width: 300,formatter: arrayToString},
+                    {name: 'Invisible', jsonmap: 'invisible',width: 300, formatter: arrayToString},
+                ];
+                
+            this.$el.html(_.template($('#query-results-template').html()));
+            $('#report-results-area').html(this.$el);
+            
+            this.grid = $('.result-table').jqGrid({
+                colModel : colModel,
+                cmTemplate: {sortable:false, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"' }},
+                datatype: 'jsonstring',
+                datastr: this.resultsCollection.toJSON(),
+                jsonReader :{
+                    repeatitems : false,
+                    page: "currpage",
+                    records: "totalrecords",
+                    root : "rowdata",
+                    total: "totalpages",
+                    id : "id",
+                },
+                viewrecords: true,
+                height: "auto",
+                autowidth: true,
+                ignoreCase: true,
+                gridview: true,
+                pager : '#result-pager',
+                caption: 'Results'
+            });
+            
+            var grid = this.grid;
+            jQuery(window).bind('resize', function() {
+                var width = grid.parents('.ui-jqgrid').parent().width();
+                grid.setGridWidth(width);
+                grid.parents('.ui-jqgrid').css("width", width+2);
+            }).trigger('resize');
+            
+            return this;
+        }
+
+    });
+    
+    var resultsView = null;
+    
+    var reportRegion = new Backbone.Marionette.Region({
+        el: "#report-form-area"
+    });
+
+    var ReportView = Marionette.ItemView.extend({
+        events: {
+            "click .report-submit-button" : "submit",
+            "click .report-csv-button" : "submitCSV"
+        },
+        
+        initialize : function() {
+            this.template = _.template($('#report-template').html());
+        },
+        
+        render : function() {
+            this.$el.html($(this.template()));
+            
+            this.form = new this.options.form({}).render();
+            
+            this.$el.find(".report-body").html(this.form.el);
+        },
+        
+        submitCSV : function() {
+            var data = this.form.getValue();
+            
+            $.download(this.options.endPoint + '.csv', data );
+        },
+        
+        // TODO - we want XML and CSV exports as well
+        submit : function() {
+            // Gather the data from the form and send it to the back end
+            var data = this.form.getValue();
+
+            resultSet = new ResultSet();
+            resultSet.fetch({
+                url : this.options.endPoint + '.json',
+                type : 'POST',
+                data : data,
+                error : function(model, response) {
+                  alertMessage("ERROR: unable to get the result from the server");
+                },
+                success : function(model) {
+                    if (resultsView) {
+                        resultsView.resultsCollection = model;
+                    } else {
+                        resultsView = new ResultsView({});
+                        resultsView.resultsCollection = model;
+                    }
+                    resultsView.render();
+                }
+            })
+        }
+    });
+    
+    var Workspace = Backbone.Router.extend({
+
+        routes : {
+            'panels_with_panelists' : 'panels_with_panelists',
+            'panelists_with_panels' : 'panelists_with_panels',
+            'scheduling_conflicts' : 'scheduling_conflicts',
+            'tags_by_context' : 'tags_by_context',
+            'people_by_tags' : 'people_by_tags'
+        },
+        
+        panels_with_panelists : function() {
+            reportRegion.show(new ReportView({
+                form        : PanelsWithPanelistsForm,
+                endPoint    : '/planner_reports/panels_with_panelists'
+            }));
+        },
+        
+        panelists_with_panels : function() {
+            reportRegion.close();
+        },
+        
+        scheduling_conflicts : function() {
+        },
+        
+        tags_by_context : function() {
+        },
+        
+        people_by_tags : function() {
+        }
+        
+    });
+    
+    /*
+     * 
+     */
+    return {
+        init : function(options) {
+            new Workspace();
+            Backbone.history.start();
+        }
+    }
+    
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    ReportApp.addInitializer(ReportApp.ReportManagement.init);
+    ReportApp.start({
+            // selectFn                : CommunicationsApp.Management.selectMailing,
+            // readTemplate            : '#mailing-data-template',
+            // itemArea                : "#mailing-edit-area"
+    });
+});
+
+</script>

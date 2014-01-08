@@ -4,6 +4,8 @@ gem 'actionmailer'
 gem 'activerecord' 
 gem 'enumerations_mixin', :git => 'git://github.com/balen/enumerations_mixin.git'
 
+gem 'axlsx_rails'
+
 gem "audited-activerecord", "~> 3.0"
 gem 'acts-as-taggable-on', "2.4.1" 
 gem 'authlogic'

@@ -234,9 +234,9 @@ class Person < ActiveRecord::Base
         if (name =~ /^\s*$/)
            name = [self.first_name,self.last_name,self.suffix].compact.join(' ')
         end
-        return name
+        return name.rstrip
     else
-        return [self.first_name,self.last_name,self.suffix].compact.join(' ')
+        return [self.first_name,self.last_name,self.suffix].compact.join(' ').rstrip
     end
   end
   

@@ -1,0 +1,45 @@
+
+<%= render_cell "reports/manage", :javascript %>
+<%= render_cell "reports/manage", :templates %>
+
+<div class="row">
+    <div class="col-xs-2">
+        <div class="gr-sidebar" role="complementary">
+            <ul class="gr-sidenav nav nav-pills nav-stacked">
+                <li>
+                    <a href="#panels_with_panelists"><%= t "Panels with Panelists" %></a>
+                </li>
+                <li>
+                    <a href="#panelists_with_panels"><%= t "Panelists with Panels" %></a>
+                </li>
+                <li>
+                    <a href="#scheduling_conflicts"><%= t "Scheduling Conflicts" %></a>
+                </li>
+                <li>
+                    <a href="#tags_by_context"><%= t "Tags by Context" %></a>
+                </li>
+                <li>
+                    <a href="#people_by_tags"><%= t "People by Tags" %></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-xs-10">
+        <div id='report-form-area'></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <div id='report-results-area'></div>
+    </div>
+</div>
+
+<!--
+    
+    Reports:
+    Panels with Panelists (program items, time, place, panelists, equipment) [select type, number of participants, ]
+    Panelists with Panels
+    Scheduling Conflicts
+    Admin Tags by Context (person with their tags)
+    People by Tags
+-->

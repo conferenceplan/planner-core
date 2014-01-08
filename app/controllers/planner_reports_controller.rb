@@ -1,158 +1,56 @@
 #
 #
 #
-#
 class PlannerReportsController < PlannerController
-   include PlannerReportHelpers
+  include PlannerReportHelpers
 
-   require 'time_diff'
-   require 'csv'
-  
-   def show
-   end
-  
-   def index
-   end
+  require 'time_diff'
+  require 'csv'
 
-   def panels_date_form
-   end
- 
-   def panels_with_panelists
-
-      return unless params[:html] || params[:csv] 
-
-      if params[:mod_date] == ''
-         mod_date = '1900-01-01'
-      else 
-         mod_date = params[:mod_date]
-      end
-
-      if params[:sort_by] == 'time'
-         ord_str = "time_slots.start, time_slots.end, venues.name desc, rooms.name, people.last_name"
-      elsif params[:sort_by] == 'room'
-         ord_str = "venues.name desc, rooms.name, time_slots.start, time_slots.end, people.last_name"
-      else
-         ord_str = "programme_items.title, people.last_name"
-      end
-
-      cond_str = "(programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?))"
-
-      conditions = [mod_date, mod_date, mod_date, mod_date]
-
-      if params[:sched_only]
-            cond_str << " and time_slots.start is not NULL"
-      end
-
-      if params[:equip_only]
-         if params[:plus_setups]
-            setup = Format.find_by_name('RESET')
-            cond_str << " and (equipment_needs.programme_item_id is not NULL or formats.id = ?)"
-            conditions.push setup
-         else
-            cond_str << " and equipment_needs.programme_item_id is not NULL"
-         end
-      end
-
-      if params[:type] && params[:type].to_i > 0
-         cond_str << " and formats.id = ?"
-         conditions.push params[:type]
-      end
-      
-      conditions.unshift cond_str
-
-      @panels = ProgrammeItem.all(:include => [:people, :time_slot, {:room => :venue}, :format, :equipment_needs,], :conditions => conditions, :order => ord_str) 
-      
-      reserved = PersonItemRole.find_by_name("Reserved")
-      moderator = PersonItemRole.find_by_name("Moderator")
-      invisible = PersonItemRole.find_by_name("Invisible")
-
-      min = params[:min].to_i
-      max = params[:max].to_i
-      output = Array.new
-      @panels.each do |panel|
-         names = Array.new
-         rsvd = Array.new
-         panel.people.sort {|x,y| x.pubLastName.downcase <=> y.pubLastName.downcase}.each do |p|
-         # panel.people.each do |p|
-            a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
-            if a.role_id == moderator.id
-               names.push "#{p.getFullPublicationName.strip} (M)"
-            elsif a.role_id == invisible.id
-               names.push "#{p.getFullPublicationName.strip} (I)" if params[:incl_invis]
-            elsif a.role_id == reserved.id
-               rsvd.push p.getFullPublicationName.strip if params[:incl_rsvd]
-            else
-               names.push p.getFullPublicationName.strip
-            end
-         end
-
-         needs = Array.new
-         needs = panel.equipment_needs.all(:include => :equipment_type).map! {|n| n.equipment_type.description} 
-         equip = needs.join(', ')
-      
-         context = panel.tags_on(:PrimaryArea)
-         if params[:csv]
-
-            next if (min > 0 && names.count > min)
-            next if (max > 0 && names.count < max)
-               
-            part_list = names.join(', ')
-            rsvd_list = rsvd.join(', ')
-           
-            line = [panel.title,
-		    (context.nil?) ? '' : context[0],
-                    (panel.format.nil?) ? '' : panel.format.name,
-                    (panel.room.nil?) ? '' : panel.room.name,
-                    (panel.room.nil?) ? '' : panel.room.venue.name,
-	            (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
-                    (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
-                   ]
-            line.push panel.precis if (!panel.precis.nil? && params[:incl_desc])
-            line.push equip, part_list
-
-            line.push rsvd_list if params[:incl_rsvd]
-
-            output.push line
-
-         else
-            panel[:context] = context[0]
-            panel[:names] = names
-            panel[:rsvd] = rsvd
-            panel[:equip] = needs
-         end
-      end
-         
-      if params[:csv]
-         outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-         headers = ["Panel",
-                    "Track",
-                    "Format",
-                    "Room",
-                    "Venue",
-                    "Day",
-                    "Time Slot",
-                   ]
-
-       
-         headers.push "Description" if params[:incl_desc]
-         headers.push "Equipment Needs", "Participants"
-
-         headers.push "Reserved" if params[:incl_rsvd]
- 
-         output.unshift headers
-
-         csv_out(output, outfile)
-      else
-      # we filtered them out of the CSV while building it, but I don't see a clean way to do it for the HTML except at the end
-         if min > 0
-            @panels.delete_if {|p| p.names.count > min}
-         end
-         if max > 0
-            @panels.delete_if {|p| p.names.count < max}
-         end
-      end
+  #
+  #
+  #
+  def panels_with_panelists
+     # sort_by = '', mod_date = '1900-01-01', format_id = nil, equip_only = false, sched_only = false, plus_setups = false
+    @fewer_than = params[:fewer_than]
+    @more_than = params[:more_than]
+    modified_since = DateTime.parse params[:modified_since]
+    scheduled = params[:scheduled]
+    format_id = params[:format_id].to_i > 0 ? params[:format_id].to_i : nil
+# '1900-01-01'
+    results = PlannerReportsService.findPanelsWithPanelists '', modified_since.strftime('%Y-%m-%d'), format_id, scheduled
+    @panels = results[:result_set]
+    @count = results[:count]
     
-   end
+     
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push [
+          'Ref','Title','Min People','Max People','Format','Area(s)','Start Time','End Time','Room','Venue',
+          'Equipment','Participants','Moderators','Reserve','Invisible'
+        ]
+
+        @panels.each do |panel|
+           output.push [panel.pub_reference_number, panel.title, panel.minimum_people, panel.maximum_people, panel.format.name, 
+             panel.taggings.collect{|t| t.context}.uniq.join(","),
+             ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
+             ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
+             ((panel.room != nil) ? panel.room.name : ''),
+             ((panel.room != nil) ? panel.room.venue.name : ''),
+             panel.equipment_needs.collect {|e| e.equipment_type.description }.join(","),
+             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName }.join(","),
+             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName }.join(","),
+             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName }.join(","),
+             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName }.join(",")
+             ]
+        end
+        csv_out(output, outfile)
+      }
+    end
+  end
  
 
    def panels_by_room
