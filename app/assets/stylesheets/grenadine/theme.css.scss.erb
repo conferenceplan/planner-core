@@ -1,6 +1,11 @@
 /* Variables that will set values depending on the user's language */
+/*
+ * 
+ * 
+ */
 
-$language-code: 'en';
+@import "grenadine/locale_vars";
+
 $toolbar-max-width: 1277px;
 $toolbar-min-width: 1276px;
 
@@ -186,11 +191,5 @@ $toolbar-min-width: 1276px;
 /* General styles that apply to the whole app */
 #main-screen-container {
   width:97%;
-  @media all and (min-height: 500px) { min-height: 400px; }
-  @media all and (min-height: 600px) { min-height: 500px; }
-  @media all and (min-height: 700px) { min-height: 500px; }
-  @media all and (min-height: 800px) { min-height: 550px; }
-  @media all and (min-height: 900px) { min-height: 650px; }
-  @media all and (min-height: 1000px) { min-height: 750px; }
 }
 
