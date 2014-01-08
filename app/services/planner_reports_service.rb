@@ -38,15 +38,9 @@ module PlannerReportsService
       ord_str = "programme_items.title, people.last_name"
     end
     
-    count = ProgrammeItem.count :include => [:people, :time_slot, {:room => :venue}, :format, :equipment_needs],
+    ProgrammeItem.all :include => [{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs],
                       :conditions => conditions,
                       :order => ord_str
-
-    resultSet = ProgrammeItem.all :include => [{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs],
-                      :conditions => conditions,
-                      :order => ord_str
-
-    { :result_set => resultSet, :count => count }
 
   end
 
