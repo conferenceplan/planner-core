@@ -1,9 +1,18 @@
+/* Variables that will set values depending on the user's language */
 
-/* These things are to remove left padding from col-xs-9 and 12 when they are the first elements on the left, because it looks funny */
-/*.col-xs-9:nth-of-type(1), .col-xs-12:nth-of-type(1), .col-xs-4:nth-of-type(1),  .col-xs-2:nth-of-type(1)
- {
-  padding-left:0px;
-} */
+$language-code: 'en';
+$toolbar-max-width: 1277px;
+$toolbar-min-width: 1276px;
+
+@if $language-code == 'en' {
+  $toolbar-max-width: 1277px;
+  $toolbar-min-width: 1276px;
+}
+@else {
+  $toolbar-max-width: 1350px;
+  $toolbar-min-width: 1349px;
+}
+
 /* the following are general purpose vertical spacers since Bootstrap does not offer this */
 .voffset2  { margin-top: 2px; }
 .voffset5 { margin-top: 5px; }
@@ -29,6 +38,7 @@
 .boffset100 { margin-bottom: 100px; }
 .boffset150 { margin-bottom: 150px; }
 
+/* Styles for the login form */
 #login-form {
   max-width: 430px;
   min-width: 320px;
@@ -38,8 +48,9 @@
 }
 #login-form-text-helpers {
   text-align: center;
-  
 }
+
+/* Styles for the menus and headers in the app */
 #app-menu-div.affix {
   top: 4px;
   z-index:799;
@@ -51,7 +62,6 @@
   z-index:800;
   width:100%;
 }
-
 #application-header {
   background-color: white;
   margin-top: 0px;
@@ -101,11 +111,6 @@
   margin-bottom:0;
   border-radius: 0px;
 }
-
-#main-screen-container {
-  width:97%;
-}
-
 #grenadine-sub-application-menu,
 #grenadine-application-menu {
   border-radius:0px;
@@ -118,7 +123,7 @@
   margin-top: -1px;
   margin-bottom: 20px;
 }
-@media all and (min-width: 1277px)
+@media all and (min-width: $toolbar-min-width) 
 {
   #user-menu {
     height: 50px;
@@ -129,7 +134,7 @@
   width:100%;
   }
 }
-@media all and (max-width: 1276px) and (min-width: 768px)
+@media all and (max-width: $toolbar-max-width) and (min-width: 768px) 
 {
   #user-menu {
     height: 100px;
@@ -162,13 +167,10 @@
   height: 20px;
 }
 
-
-
+/* Styles for the footer portion of the app */
 #grenadine-footer, #grenadine-footer a:link, #grenadine-footer a:visited {
   background-color: #32363e;
-  /* height: 53px; */
   color:white;
-  
 }
 #grenadine-footer-left-portion {
   text-align:left;
@@ -180,3 +182,9 @@
   padding-top: 15px;
   color: grey;
 }
+
+/* General styles that apply to the whole app */
+#main-screen-container {
+  width:97%;
+}
+
