@@ -4,8 +4,8 @@ json.currpage 1
     
 json.rowdata @panels.collect { |panel|
     count = panel.programme_item_assignments.length
-    next if (@fewer_than > 0 && count > @fewer_than)
-    next if (@more_than > 0 && count < @more_than)
+    next if (@fewer_than > 0 && count >= @fewer_than)
+    next if (@more_than > 0 && count <= @more_than)
     
     panel
 }.compact do |panel|

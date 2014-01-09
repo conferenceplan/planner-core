@@ -43,7 +43,7 @@ module PlannerReportsService
                       :order => ord_str
 
   end
-
+  
   #
   #
   #  
@@ -54,16 +54,47 @@ module PlannerReportsService
     cndStr += ' AND (programme_item_assignments.person_id in (?))' if peopleIds
     cndStr += ' AND (time_slots.start is not NULL)' if scheduledOnly
     cndStr += ' AND (programme_items.print = true)' if visibleOnly
-    cndStr += ' AND (programme_item_assignments.role_id in (?))' if additional_roles
+    cndStr += ' AND (programme_item_assignments.role_id in (?))'
 
     conditions = [cndStr, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
     conditions << peopleIds if peopleIds
-    conditions << roles if additional_roles
+    conditions << roles
     
     Person.all :conditions => conditions, 
               :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => [:time_slot, :room, :format]}},
               :order => "people.last_name, time_slots.start asc"
 
+  end
+  
+  #
+  #
+  #
+  def self.findTagsByContext(context)
+    tags = ActsAsTaggableOn::Tagging.all(:conditions => ['context = ?', context], :joins => ["join tags on taggings.tag_id = tags.id"], :select => 'distinct(name)')
+    tags.collect! {|t| t.name}
+    peopleAndTags = Array.new
+    tags.each do |tag|
+      peopleAndTags.concat Person.tagged_with(tag, :on => context)
+    end
+    peopleAndTags.uniq!
+    peopleAndTags.sort! {|x,y| x.last_name <=> y.last_name}
+    peopleAndTags.each do |n|
+      n[:details] = n.tag_list_on(context)
+    end
+    
+    peopleAndTags
+  end
+  
+  #
+  #
+  #
+  def self.findPeopleByTag
+  
+    res = ActiveRecord::Base.connection.select_all(PEOPLE_TAG_QUERY)
+    
+    res1 = res.group_by {|b| [b['context'], b['tag']] }
+    
+    res1
   end
   
   #
@@ -83,5 +114,19 @@ module PlannerReportsService
               :order => "people.last_name, published_time_slots.start asc"
 
   end
+
+protected
+
+PEOPLE_TAG_QUERY = <<"EOS"
+  select taggings.context as context, tags.name as tag, 
+  people.first_name as first_name, people.last_name as last_name, people.suffix as suffix,
+  pseudonyms.first_name as pub_first_name, pseudonyms.last_name as pub_last_name, pseudonyms.suffix as pub_suffix
+  from tags 
+  join taggings on taggings.tag_id = tags.id and taggings.taggable_type = 'Person'
+  join people on people.id = taggings.taggable_id
+  left join pseudonyms on pseudonyms.person_id = people.id
+  order by taggings.context, tags.name, people.last_name;
+EOS
+
   
 end

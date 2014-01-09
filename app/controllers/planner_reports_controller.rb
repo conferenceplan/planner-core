@@ -35,8 +35,8 @@ class PlannerReportsController < PlannerController
         @panels.each do |panel|
           
           count = panel.programme_item_assignments.length
-          next if (@fewer_than > 0 && count > @fewer_than)
-          next if (@more_than > 0 && count < @more_than)
+          next if (@fewer_than > 0 && count >= @fewer_than)
+          next if (@more_than > 0 && count <= @more_than)
 
           output.push [panel.pub_reference_number, panel.title, panel.minimum_people, 
             panel.maximum_people, 
@@ -59,7 +59,105 @@ class PlannerReportsController < PlannerController
     end
   end
  
+  #
+  #
+  #
+  def panelists_with_panels
+    # @names_only = params[:names_only] ? true : false
+    # @names_city_only = params[:names_and_city] ? true : false
+      
+    @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], 
+                            (params[:reserved] == "true" ? [PersonItemRole['Reserved'].id] : nil), 
+                            (params[:scheduled] == "true"), 
+                            (params[:forprint] == "true")
 
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push ['Name','Status','Items']
+        
+        @people.each do |person|
+          output.push [
+            person.getFullPublicationName,
+            person.acceptance_status.name,
+            person.programmeItemAssignments.collect { |pi|
+                if (pi.programmeItem)
+                    (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number.to_s + ' ' : '' ) +
+                    pi.programmeItem.title +
+                    ' (' + pi.programmeItem.format.name + ') ' +
+                    ' (' + pi.role.name + '), ' +
+                    (pi.programmeItem.time_slot ? pi.programmeItem.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.time_slot.end.strftime('%H:%M') : '') +
+                    (pi.programmeItem.room ? ', ' + pi.programmeItem.room.name : '') +
+                    (pi.programmeItem.room ? ' (' + pi.programmeItem.room.venue.name + ')': '')
+                end
+            }.reject { |c| c == nil }.join("\n")
+          ]
+        end
+        csv_out(output, outfile)
+      }
+    end
+  end
+
+  #
+  #
+  #
+  def admin_tags_by_context
+    
+    @peopleAndTags = PlannerReportsService.findTagsByContext params[:context]
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "people_and_tags_" + params[:context] + "_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push ['Name', 'Tags']
+        @peopleAndTags.each do |p|
+          output.push [
+            p.getFullPublicationName, p.details
+          ]
+        end
+        csv_out(output, outfile)
+      }
+    end
+  end
+
+  #
+  #
+  #
+  def people_by_tag
+
+    @taginfo = PlannerReportsService.findPeopleByTag
+
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "people_by_tags_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push ['Context', 'Tag', 'People']
+        @taginfo.each do |p|
+          output.push [
+            p[0][0], p[0][1],
+            p[1].collect { |t| 
+                if (t['pub_first_name'] || t['pub_last_name'])
+                    t['pub_first_name'] + ' ' + t['pub_last_name'] + ' ' + t['pub_suffix']
+                else
+                    t['first_name'] + ' ' + t['last_name'] + ' ' + t['suffix']
+                end
+              }.join("\n")
+          ]
+        end
+        csv_out(output, outfile)
+      }
+
+    end
+  end
+
+
+  #
+  
+  # For prog-ops
    def panels_by_room
 
       return unless params[:html] || params[:csv] 
@@ -144,6 +242,7 @@ class PlannerReportsController < PlannerController
     
    end
 
+  # For prog-ops
    def panels_by_timeslot
 
       return unless params[:html] || params[:csv] 
@@ -196,6 +295,7 @@ class PlannerReportsController < PlannerController
     
    end
 
+  # Publications
    def program_book_report
 
       outfile = "prog_guide_" + Time.now.strftime("%m-%d-%Y") + ".csv"
@@ -263,41 +363,6 @@ class PlannerReportsController < PlannerController
 
    end
 
-   #
-   #
-   #
-   def panelists_with_panels
-      @panelists = Person.all(:include => :pseudonym, 
-            :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?)', AcceptanceStatus['Accepted'].id,AcceptanceStatus['Probable'].id], 
-            :order => "people.last_name")
-      @panelists = @panelists.sort {|x,y| x.pubLastName.downcase <=> y.pubLastName.downcase}
-      
-      return unless params[:html] || params[:csv] 
-      
-      @displayIds = params[:prog_nbr] ? true : false
-      @names_only = params[:names_only] ? true : false
-      @names_city_only = params[:names_and_city] ? true : false
-      
-      @displayIds = params[:prog_nbr] ? true : false
-      @names_only = params[:names_only] ? true : false
-      @names_city_only = params[:names_and_city] ? true : false
-      @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], 
-                            (params[:incl_rsvd]? [PersonItemRole['Reserved'].id] : nil), 
-                            (params[:sched_only] ? true : false), 
-                            (params[:visible_only] ? true : false)
-      
-
-      @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], 
-                            (params[:incl_rsvd]? [PersonItemRole['Reserved'].id] : nil), 
-                            (params[:sched_only] ? true : false), 
-                            (params[:visible_only] ? true : false)
-      
-      if params[:csv]
-        csv_out(generatePanelistsWithPanelsArray,'panelists_' + Time.now.strftime("%m-%d-%Y") + '.csv') if !@names_only && !@names_city_only
-        csv_out(generatePanelistsNamesArray,'panelists_' + Time.now.strftime("%m-%d-%Y") + '.csv') if @names_city_only || @names_only
-      end
-        
-   end
    
    def selectBadgeLabel
       accepted = AcceptanceStatus.find_by_name("Accepted")
@@ -1011,23 +1076,6 @@ class PlannerReportsController < PlannerController
           csv_out_noconv(output,outfile)
   end
   
-   def admin_tags_by_context
-      if params[:tag_context]
-         context = params[:tag_context]
-         tags = ActsAsTaggableOn::Tagging.all(:conditions => ['context = ?', context], :joins => ["join tags on taggings.tag_id = tags.id"], :select => 'distinct(name)')
-         tags.collect! {|t| t.name}
-         @names = Array.new
-         tags.each do |tag|
-            @names.concat Person.tagged_with(tag, :on => context)
-         end
-         @names.uniq!
-         @names.sort! {|x,y| x.last_name <=> y.last_name}
-         @names.each do |n|
-            n[:details] = n.tag_list_on(context)
-         end
-      end
-   end
-
 protected
 
    ###

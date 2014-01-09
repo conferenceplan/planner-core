@@ -5,31 +5,36 @@ ReportApp = new Backbone.Marionette.Application();
 ReportApp.ReportManagement = (function(Backbone){
     
     function arrayToString(cellvalue) {
-        return cellvalue.join(",<br/>");
+        if (cellvalue) {
+            return cellvalue.join(",<br/>");
+        } else {
+            return '';
+        }
+    };
+    
+    function arrayToStringSingleLine(cellvalue) {
+        if (cellvalue) {
+            return cellvalue.join(", ");
+        } else {
+            return '';
+        }
     };
     
     ResultSet = Backbone.RelationalModel.extend({
-        // url : '/survey_reports/runReport',
-        
         relations : [{
             type : Backbone.HasMany,
             key : 'rowdata',
             relatedModel : 'ResultRow',
             collectionType : 'ResultRowCollection',
         }],
-
     });
 
     var PanelsWithPanelistsForm = Backbone.Form.extend({
         schema : {
             modified_since  : { type : 'Date' },
             sort_by : { type : 'Select', options : [{ val: 'time', label: 'Date/Time' }, { val: 'room', label: 'Room' }, { val: 'title', label: 'Title' }] },
-            // TODO - add sort by option
-            // reserved        : { type : 'Checkbox'}, // Display reserve panelists
-            // invisible       : { type : 'Checkbox'}, // Display invisible panelists
             scheduled       : { type : 'Checkbox'}, // Include scheduled panels only
             // description     : { type : 'Checkbox'}, // Include item descriptions
-            // equipment       : { type : 'Checkbox'}, // Include only panels with equipment needs
             format_id       : { type : 'Select', title : '<%= t "format" %>', options : <%= [{'val' => -1, 'label' => 'All'}].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             fewer_than      : { type : 'Number'},
             more_than       : { type : 'Number'}
@@ -38,15 +43,57 @@ ReportApp.ReportManagement = (function(Backbone){
         data : {
             sort_by : 'time',
             modified_since : new Date('January 1, 2000')
-        },
+        }
         
     });
     
-    ResultsView = Backbone.View.extend({
-        tagName : 'div',
-
-        render : function() {
-            var colModel = [ 
+    var PanelistsWithPanelsForm = Backbone.Form.extend({
+        schema : {
+            scheduled   : { type : 'Checkbox'}, // Include scheduled panelists only
+            reserved    : { type : 'Checkbox'},
+            forprint    : { type : 'Checkbox'}
+        },
+        
+        data : {
+        }
+    });
+    
+    var TagsByContextForm = Backbone.Form.extend({
+        schema : {
+            context : { type : 'Select', 
+                options : <%= TagContext.all(:order => 'name').collect {|s| {'val' => s.name, 'label' => s.name} }.to_json.html_safe %> },
+        },
+        
+        data : {
+        }
+    });
+    
+    var PeopleByTagForm = Backbone.Form.extend({
+        schema : {
+        },
+        
+        data : {
+        }
+    });
+    
+    var PeopleByTagColModel = [
+                    {name: 'context', jsonmap: "context", width: 100},
+                    {name: 'tag', jsonmap: "tag", width: 100},
+                    {name: 'people', jsonmap: "people", formatter: arrayToStringSingleLine}
+    ];
+    
+    var TagsByContextColModel = [
+                    {name: 'Name', jsonmap: "name", width: 100},
+                    {name: 'Tags', jsonmap: "tags", width: 300, formatter: arrayToStringSingleLine}
+    ];
+    
+    var PanelistsWithPanelsColModel = [
+                    {name: 'Name', jsonmap: "name", width: 130},
+                    {name: 'Status', jsonmap: "acceptance_status", width: 60},
+                    {name:'Items', jsonmap: "items", width: 500, formatter: arrayToString},
+    ];
+    
+    var PanelsWithPanelistsColModel = [ 
                     {name: 'Ref', jsonmap: 'pub_reference_number', width: 100},
                     {name:'Title', jsonmap: "title", width: 500},
                     {name:'Venue', jsonmap: "venue_name"},
@@ -63,15 +110,24 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'Reserve', jsonmap: 'reserve',width: 300,formatter: arrayToString},
                     {name: 'Invisible', jsonmap: 'invisible',width: 300, formatter: arrayToString},
                 ];
-                
-            this.$el.html(_.template($('#query-results-template').html()));
+    
+    ResultsView = Backbone.View.extend({
+        // tagName : 'div',
+
+        initialize : function() {
+            this.template = _.template($('#query-results-template').html());
+        },
+        
+        render : function() {
+            this.$el.html($(this.template()));
             $('#report-results-area').html(this.$el);
             
             this.grid = $('.result-table').jqGrid({
-                colModel : colModel,
+            // this.grid = this.$el.find('.result-table').jqGrid({
+                colModel : this.options.colModel,
                 cmTemplate: {sortable:false, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"' }},
                 datatype: 'jsonstring',
-                datastr: this.resultsCollection.toJSON(),
+                datastr: this.options.resultsCollection.toJSON(),
                 jsonReader :{
                     repeatitems : false,
                     page: "currpage",
@@ -86,9 +142,19 @@ ReportApp.ReportManagement = (function(Backbone){
                 ignoreCase: true,
                 gridview: true,
                 pager : '#result-pager',
-                caption: 'Results'
-            });
-            
+                caption: 'Results',
+                rowList:[10,20,50,100],
+                rowNum:50,
+        // grouping:true,
+        // groupingView : {
+            // groupField : ['context'],
+            // groupColumnShow : [false],
+            // groupText : ['<b>{0}</b>'],
+            // groupCollapse : true,
+            // // groupSummary : [true, true]
+        // },
+                });
+
             var grid = this.grid;
             jQuery(window).bind('resize', function() {
                 var width = grid.parents('.ui-jqgrid').parent().width();
@@ -101,10 +167,11 @@ ReportApp.ReportManagement = (function(Backbone){
 
     });
     
-    var resultsView = null;
-    
     var reportRegion = new Backbone.Marionette.Region({
         el: "#report-form-area"
+    });
+    var resultRegion = new Backbone.Marionette.Region({
+        el: "#report-results-area"
     });
 
     var ReportView = Marionette.ItemView.extend({
@@ -135,6 +202,7 @@ ReportApp.ReportManagement = (function(Backbone){
         submit : function() {
             // Gather the data from the form and send it to the back end
             var data = this.form.getValue();
+            var colModel = this.options.colModel;
 
             resultSet = new ResultSet();
             resultSet.fetch({
@@ -145,13 +213,16 @@ ReportApp.ReportManagement = (function(Backbone){
                   alertMessage("ERROR: unable to get the result from the server");
                 },
                 success : function(model) {
-                    if (resultsView) {
-                        resultsView.resultsCollection = model;
-                    } else {
-                        resultsView = new ResultsView({});
-                        resultsView.resultsCollection = model;
-                    }
-                    resultsView.render();
+                        resultsView = new ResultsView({
+                                    colModel : colModel,
+                                    resultsCollection : model
+                        });
+                        resultsView.render();
+                        
+                        // resultRegion.show(new ResultsView({
+                                    // colModel : colModel,
+                                    // resultsCollection : model
+                                // }));                                        
                 }
             })
         }
@@ -168,23 +239,48 @@ ReportApp.ReportManagement = (function(Backbone){
         },
         
         panels_with_panelists : function() {
+            reportRegion.close();
+            resultRegion.close();
             reportRegion.show(new ReportView({
                 form        : PanelsWithPanelistsForm,
-                endPoint    : '/planner_reports/panels_with_panelists'
+                endPoint    : '/planner_reports/panels_with_panelists',
+                colModel    : PanelsWithPanelistsColModel
             }));
         },
         
         panelists_with_panels : function() {
             reportRegion.close();
+            resultRegion.close();
+            reportRegion.show(new ReportView({
+                form        : PanelistsWithPanelsForm,
+                endPoint    : '/planner_reports/panelists_with_panels',
+                colModel    : PanelistsWithPanelsColModel
+            }));
         },
         
         scheduling_conflicts : function() {
+            reportRegion.close();
+            resultRegion.close();
         },
         
         tags_by_context : function() {
+            reportRegion.close();
+            resultRegion.close();
+            reportRegion.show(new ReportView({
+                form        : TagsByContextForm,
+                endPoint    : '/planner_reports/admin_tags_by_context',
+                colModel    : TagsByContextColModel
+            }));
         },
         
         people_by_tags : function() {
+            reportRegion.close();
+            resultRegion.close();
+            reportRegion.show(new ReportView({
+                form        : PeopleByTagForm,
+                endPoint    : '/planner_reports/people_by_tag',
+                colModel    : PeopleByTagColModel
+            }));
         }
         
     });
