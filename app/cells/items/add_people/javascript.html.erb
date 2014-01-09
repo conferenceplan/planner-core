@@ -129,11 +129,11 @@ ItemApp.PeopleManagement = (function(Backbone){
             this.model.save(null, {
                 url : "/programme_items/" + id + "/updateParticipants", // TODO - we need a base URL property for the site
                 error : function() {
-                    alertMessage("Error saving the program item.");
+                    alertMessage("Error saving the program item assignment");
                 },
                 success : function() {
                     // message that the save happened
-                    infoMessage("Program Item has been Saved");
+                    infoMessage("Program item assignment has been saved");
                     needsSaved = false;
                 }
             });
