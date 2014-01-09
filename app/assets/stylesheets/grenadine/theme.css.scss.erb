@@ -1,22 +1,12 @@
 /* Variables that will set values depending on the user's language */
-/*
- * 
- * 
- */
 
 @import "grenadine/locale_vars";
-
-$toolbar-max-width: 1277px;
-$toolbar-min-width: 1276px;
-
-@if $language-code == 'en' {
-  $toolbar-max-width: 1277px;
-  $toolbar-min-width: 1276px;
-}
-@else {
-  $toolbar-max-width: 1350px;
-  $toolbar-min-width: 1349px;
-}
+	
+$w2: 768px;
+$w3: 1152px; 
+$w4: 1294px;
+$w3f: 1213px;
+$w4f: 1362px;
 
 /* the following are general purpose vertical spacers since Bootstrap does not offer this */
 .voffset2  { margin-top: 2px; }
@@ -128,18 +118,20 @@ $toolbar-min-width: 1276px;
   margin-top: -1px;
   margin-bottom: 20px;
 }
-@media all and (min-width: $toolbar-min-width) 
-{
+/* This is the case when we have only enough space for the fully-collapsed menu */
   #user-menu {
     height: 50px;
   }
-  #app-sub-menu-div.affix {
-  top: 54px;
-  z-index:802;
-  width:100%;
+  #app-menu-div.affix {
+    z-index: 801;
   }
-}
-@media all and (max-width: $toolbar-max-width) and (min-width: 768px) 
+  #app-sub-menu-div.affix {
+	top: 54px;
+	z-index: 800;
+	width:100%;
+  }
+/* This is the case when we have only enough space for the medium toolbar but on 2 separate lines. In this case we can use a large font. */
+@media all and (min-width: $w2)
 {
   #user-menu {
     height: 100px;
@@ -149,21 +141,69 @@ $toolbar-min-width: 1276px;
   z-index:802;
   width:100%;
   }
+  #collapse-2 {
+  	font-size: 14px;
+  }
 }
-@media all and (max-width: 767px)
+/* This is the case when we have only enough space for the medium toolbar but on 1 single line, for English text */
+@media all and (min-width: $w3)
 {
-  #user-menu {
+  body:lang(en) #user-menu {
     height: 50px;
   }
-  #app-menu-div.affix {
-    z-index: 801;
+  body:lang(en) #app-sub-menu-div.affix {
+	  top: 54px;
+	  z-index:802;
+	  width:100%;
   }
-  #app-sub-menu-div.affix {
-  top: 54px;
-  z-index: 800;
-  width:100%;
+  body:lang(en) #collapse-2 {
+  	font-size: 12px;
   }
-
+}
+/* This is the case when we have only enough space for the medium toolbar but on 1 single line, for French text */
+@media all and (min-width: $w3f)
+{
+  body:lang(fr) #user-menu {
+    height: 50px;
+  }
+  body:lang(fr) #app-sub-menu-div.affix {
+	  top: 54px;
+	  z-index:802;
+	  width:100%;
+  }
+  body:lang(fr) #collapse-2 {
+  	font-size: 12px;
+  }
+}
+/* This is the best-case scenario, the case when we have enough space for the full-size toolbar, for English */
+@media all and (min-width: $w4) 
+{
+  body:lang(en) #user-menu {
+    height: 50px;
+  }
+  body:lang(en) #app-sub-menu-div.affix {
+	  top: 54px;
+	  z-index:802;
+	  width:100%;
+  }
+  body:lang(en) #collapse-2 {
+  	font-size: 14px;
+  }
+}
+/* This is the best-case scenario, the case when we have enough space for the full-size toolbar, for French */
+@media all and (min-width: $w4f) 
+{
+  body:lang(fr) #user-menu {
+    height: 50px;
+  }
+  body:lang(fr) #app-sub-menu-div.affix {
+	  top: 54px;
+	  z-index:802;
+	  width:100%;
+  }
+  body:lang(fr) #collapse-2 {
+  	font-size: 14px;
+  }
 }
 #user-sub-menu {
   height: 50px;
@@ -171,7 +211,14 @@ $toolbar-min-width: 1276px;
 #menu-separator-div {
   height: 20px;
 }
-
+/* #collapse-2 { 
+  padding-left:0px; padding-rignt: 0px;
+  }
+#collapse-4 { 
+	padding-left:0px; padding-rignt: 0px;
+	
+	}
+*/
 /* Styles for the footer portion of the app */
 #grenadine-footer, #grenadine-footer a:link, #grenadine-footer a:visited {
   background-color: #32363e;
@@ -191,5 +238,12 @@ $toolbar-min-width: 1276px;
 /* General styles that apply to the whole app */
 #main-screen-container {
   width:97%;
+  @media all and (min-height: 500px) { min-height: 400px; }
+  @media all and (min-height: 600px) { min-height: 500px; }
+  @media all and (min-height: 700px) { min-height: 500px; }
+  @media all and (min-height: 800px) { min-height: 550px; }
+  @media all and (min-height: 900px) { min-height: 650px; }
+  @media all and (min-height: 1000px) { min-height: 750px; }
 }
+
 
