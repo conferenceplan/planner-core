@@ -3,10 +3,10 @@
 @import "grenadine/locale_vars";
 	
 $w2: 768px;
-$w3: 1152px; 
-$w4: 1294px;
-$w3f: 1213px;
-$w4f: 1362px;
+$w3: 1132px; 
+$w4: 1274px;
+$w3f: 1193px;
+$w4f: 1342px;
 
 /* the following are general purpose vertical spacers since Bootstrap does not offer this */
 .voffset2  { margin-top: 2px; }
@@ -211,14 +211,16 @@ $w4f: 1362px;
 #menu-separator-div {
   height: 20px;
 }
-/* #collapse-2 { 
-  padding-left:0px; padding-rignt: 0px;
-  }
-#collapse-4 { 
-	padding-left:0px; padding-rignt: 0px;
-	
-	}
-*/
+@media all and (min-width: $w2)
+{
+	#collapse-2 { 
+	  padding-left:0px; padding-rignt: 0px;
+	  }
+	#collapse-4 { 
+		padding-left:0px; padding-rignt: 0px;
+		
+		}
+}
 #right-menu-navbar a {
 	color: #cccccc;
 }
