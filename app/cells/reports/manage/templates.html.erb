@@ -8,3 +8,56 @@
     <table id="results-t" class="result-table"><tr><td/></tr></table>
     <div id="result-pager"></div>
 </script>
+
+<script type="text/template" id="conflict-layout-template">
+    <section>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <%= t 'scheduling-conflicts' %>
+        </div>
+            <div class="panel-body">
+                <div id="schedule-region-div"></div>
+            </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <%= t 'room-conflicts' %>
+        </div>
+            <div class="panel-body">
+                <div id="room-region-div"></div>
+            </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <%= t 'item-conflicts' %>
+        </div>
+            <div class="panel-body">
+                <div id="excluded-item-region-div"></div>
+            </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <%= t 'time-constraints-conflicts' %>
+        </div>
+            <div class="panel-body">
+                <div id="excluded-time-region-div"></div>
+            </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <%= t 'available-time-conflicts' %>
+        </div>
+            <div class="panel-body">
+                <div id="availability-region-div"></div>
+            </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+                <%= t 'back-to-back-warnings' %>
+        </div>
+            <div class="panel-body">
+                <div id="back-to-back-region-div"></div>
+            </div>
+    </div>
+    </section>
+</script>

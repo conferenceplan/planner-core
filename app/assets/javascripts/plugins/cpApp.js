@@ -435,6 +435,97 @@ var AppUtils = (function(){
     /*
      * 
      */
+    Conflict = Backbone.RelationalModel.extend({});
+    ConflictCollection = Backbone.Collection.extend({
+        model : Conflict
+    });
+    
+    Conflicts = Backbone.RelationalModel.extend({
+        relations : [{
+            type           : Backbone.HasMany,
+            key            : 'schedule',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'room',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'excluded_item',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'excluded_time',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'availability',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'back_to_back',
+            relatedModel   : 'Conflict',
+            collectionType : 'ConflictCollection',
+            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
+        }]
+    });
+    
+    ConflictView = Marionette.ItemView.extend({
+        events: {
+            "click .conflict": "selectConflict",
+        },
+        
+        selectConflict : function(ev) {
+            // console.debug(this.model.get('item_name'));
+            // TODO - scroll to the problem item
+            room_name = this.model.get('room_name');
+            time = this.model.get('item_start');
+            item_id = this.model.get('item_id'); // g id
+            
+            DailyGrid.scrollTo(room_name, time);
+        }
+    });
+    
+    ConflictCollectionView = Backbone.Marionette.CollectionView.extend({
+        itemView : ConflictView,
+        
+        // build the view using a dynamic template based on itemViewTemplate
+        buildItemView: function(item, ItemViewType, itemViewOptions){
+            var options = _.extend({
+                model    : item,
+                template : this.options.itemViewTemplate
+                }, itemViewOptions);
+            
+            var view = new ItemViewType(options);
+
+            return view;
+        },
+    });
+    
+    ConflictLayout = Backbone.Marionette.Layout.extend({
+        regions : {
+            scheduleRegion     : "#schedule-region-div",
+            roomRegion         : "#room-region-div",
+            excludedItemRegion : "#excluded-item-region-div",
+            excludedTimeRegion : "#excluded-time-region-div",
+            availabilityRegion : "#availability-region-div",
+            backToBackRegion   : "#back-to-back-region-div",
+        },
+    });
+        
+    /*
+     * 
+     */
     return {
         
         partial : function(part, data) {
@@ -492,6 +583,34 @@ var AppUtils = (function(){
             };
 
             return collection;
+        },
+        
+        ConflictLayout : ConflictLayout,
+        Conflicts : Conflicts,
+        
+        createConflictCollectionView : function (collection, viewTemplate, region) {
+            var collectionView = new ConflictCollectionView({
+                collection : collection,
+                itemViewTemplate : viewTemplate,
+            });
+            region.show(collectionView);
+        },
+
+        arrayToString : function(cellvalue) {
+            if (cellvalue) {
+                return cellvalue.join(",<br/>");
+            } else {
+                return '';
+            }
+        },
+
+        arrayToStringSingleLine : function(cellvalue) {
+            if (cellvalue) {
+                return cellvalue.join(", ");
+            } else {
+                return '';
+            }
         }
+    
     };
 })();

@@ -14,50 +14,6 @@ ScheduleApp.ItemManagement = (function(Backbone){
     });
     
     // 
-    Conflict = Backbone.RelationalModel.extend({});
-    ConflictCollection = Backbone.Collection.extend({
-        model : Conflict
-    });
-    
-    Conflicts = Backbone.RelationalModel.extend({
-        relations : [{
-            type           : Backbone.HasMany,
-            key            : 'schedule',
-            relatedModel   : 'Conflict',
-            collectionType : 'ConflictCollection',
-            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
-        }, {
-            type           : Backbone.HasMany,
-            key            : 'room',
-            relatedModel   : 'Conflict',
-            collectionType : 'ConflictCollection',
-            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
-        }, {
-            type           : Backbone.HasMany,
-            key            : 'excluded_item',
-            relatedModel   : 'Conflict',
-            collectionType : 'ConflictCollection',
-            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
-        }, {
-            type           : Backbone.HasMany,
-            key            : 'excluded_time',
-            relatedModel   : 'Conflict',
-            collectionType : 'ConflictCollection',
-            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
-        }, {
-            type           : Backbone.HasMany,
-            key            : 'availability',
-            relatedModel   : 'Conflict',
-            collectionType : 'ConflictCollection',
-            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
-        }, {
-            type           : Backbone.HasMany,
-            key            : 'back_to_back',
-            relatedModel   : 'Conflict',
-            collectionType : 'ConflictCollection',
-            // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
-        }]
-    });
     
     Day = Backbone.Model.extend({
         defaults : {
@@ -68,50 +24,6 @@ ScheduleApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
-    ConflictLayout = Backbone.Marionette.Layout.extend({
-        template: "#conflict-layout-template",
-        
-        regions : {
-            scheduleRegion     : "#schedule-region-div",
-            roomRegion         : "#room-region-div",
-            excludedItemRegion : "#excluded-item-region-div",
-            excludedTimeRegion : "#excluded-time-region-div",
-            availabilityRegion : "#availability-region-div",
-            backToBackRegion   : "#back-to-back-region-div",
-        },
-    });
-    
-    ConflictView = Marionette.ItemView.extend({
-        events: {
-            "click .conflict": "selectConflict",
-        },
-        
-        selectConflict : function(ev) {
-            console.debug(this.model.get('item_name'));
-            // TODO - scroll to the problem item
-            room_name = this.model.get('room_name');
-            time = this.model.get('item_start');
-            item_id = this.model.get('item_id'); // g id
-            
-            DailyGrid.scrollTo(room_name, time);
-        }
-    });
-    
-    ConflictCollectionView = Backbone.Marionette.CollectionView.extend({
-        itemView : ConflictView,
-        
-        // build the view using a dynamic template based on itemViewTemplate
-        buildItemView: function(item, ItemViewType, itemViewOptions){
-            var options = _.extend({
-                model    : item,
-                template : this.options.itemViewTemplate
-                }, itemViewOptions);
-            
-            var view = new ItemViewType(options);
-
-            return view;
-        },
-    });
     
     /*
      * 
@@ -334,14 +246,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
         });
     };
     
-    function createConflictCollectionView(collection, viewTemplate, region, color) {
-        var collectionView = new ConflictCollectionView({
-            collection : collection,
-            itemViewTemplate : viewTemplate,
-        });
-        region.show(collectionView);
-        
-        
+    function highlightConflict(collection, color) {
         // Put in the conflict highlights
         _.each(collection.models, function(vv) {
             var id = vv.get('item_id');
@@ -350,18 +255,20 @@ ScheduleApp.ItemManagement = (function(Backbone){
                 $("#" + id + " .prog-item-rect").attr('class', cl + " conflict-item-" + color);
             }
         });
-    };
+    }
     
     /*
      * 
      */
     function loadConflicts(day) {
-        conflictLayout = new ConflictLayout();
+        conflictLayout = new AppUtils.ConflictLayout({
+            template : "#conflict-layout-template"
+        });
         conflictLayout.render();
         $('#conflict-view').html(conflictLayout.el);
 
         // Render the conflicts for this day
-        conflicts = new Conflicts();
+        conflicts = new AppUtils.Conflicts();
         conflicts.fetch({
             url : "/program_planner/getConflicts.json?day=" + day, // TODO - fix domain and sub-site
             success : function(obj) {
@@ -369,13 +276,20 @@ ScheduleApp.ItemManagement = (function(Backbone){
                 clearConflictHighlights('red');
                 clearConflictHighlights('blue');
                 clearConflictHighlights('magenta');
-                createConflictCollectionView(obj.get('schedule'), "#schedule-view-template",conflictLayout.scheduleRegion, 'red');
-                createConflictCollectionView(obj.get('room'), "#room-view-template",conflictLayout.roomRegion, 'red');
-                createConflictCollectionView(obj.get('excluded_item'), "#excluded-item-view-template",conflictLayout.excludedItemRegion, 'magenta');
-                createConflictCollectionView(obj.get('excluded_time'), "#excluded-time-view-template",conflictLayout.excludedTimeRegion, 'magenta');
-                createConflictCollectionView(obj.get('availability'), "#availability-view-template",conflictLayout.availabilityRegion, 'magenta');
-                createConflictCollectionView(obj.get('back_to_back'), "#back-to-back-view-template",conflictLayout.backToBackRegion, 'blue');
-                // TODO - add mechanism to colour the items in the grid based on the conflicts
+                
+                AppUtils.createConflictCollectionView(obj.get('schedule'), "#schedule-conflict-view-template",conflictLayout.scheduleRegion);
+                AppUtils.createConflictCollectionView(obj.get('room'), "#room-conflict-view-template",conflictLayout.roomRegion);
+                AppUtils.createConflictCollectionView(obj.get('excluded_item'), "#excluded-item-conflict-view-template",conflictLayout.excludedItemRegion);
+                AppUtils.createConflictCollectionView(obj.get('excluded_time'), "#excluded-time-conflict-view-template",conflictLayout.excludedTimeRegion);
+                AppUtils.createConflictCollectionView(obj.get('availability'), "#availability-conflict-view-template",conflictLayout.availabilityRegion);
+                AppUtils.createConflictCollectionView(obj.get('back_to_back'), "#back-to-back-conflict-view-template",conflictLayout.backToBackRegion);
+                
+                highlightConflict(obj.get('schedule'), 'red')
+                highlightConflict(obj.get('room'), 'red')
+                highlightConflict(obj.get('excluded_item'), 'magenta')
+                highlightConflict(obj.get('excluded_time'), 'magenta')
+                highlightConflict(obj.get('availability'), 'magenta')
+                highlightConflict(obj.get('back_to_back'), 'blue')
             } 
         });
 
