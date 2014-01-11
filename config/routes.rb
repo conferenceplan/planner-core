@@ -13,8 +13,9 @@ PlannerRc1::Application.routes.draw do
     match "communications_dash/:cellname" => "communications_dash#index"
     match "mobile_dash/:cellname" => "mobile_dash#index"
     match "reports_dash/:cellname" => "reports_dash#index"
+    match "operations_dash/:cellname" => "operations_dash#index"
     
-    resources :logistics_dash
+#    resources :logistics_dash
     resources :admin_dash
     resources :publications_dash
   end

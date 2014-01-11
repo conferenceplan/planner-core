@@ -1,0 +1,6 @@
+
+<% if @cellname %>
+    <%= render_cell "operations/#{@cellname}", :display %>
+<% else %>
+    <%= render_cell "operations/operations_dash", :display %>
+<% end %>
