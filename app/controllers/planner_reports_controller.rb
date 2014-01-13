@@ -153,97 +153,70 @@ class PlannerReportsController < PlannerController
 
     end
   end
-
+  
+  #
+  #
+  #
+  def panels_by_room
+    
+    @rooms = PlannerReportsService.findPanelsByRoom
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "panels_by_room" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push ['Room', 'Venue', 'Item', 'Day', 'Time', 'Equipment']
+        
+        @rooms.collect {|r| r.programme_items.collect {|i| { :room => r, :item => i } } }.flatten.each do |e|
+          output.push [
+            e[:room].name,
+            e[:room].venue.name,
+            e[:item].title,
+            e[:item].time_slot.start.strftime('%a'),
+            e[:item].time_slot.start.strftime('%H:%M') + ' - ' + e[:item].time_slot.end.strftime('%H:%M'),
+            e[:item].equipment_needs.collect {|eq| eq.equipment_type.description if eq.equipment_type }.join("\n")
+          ]
+        end
+        csv_out(output, outfile)
+      }
+    end
+    
+  end
 
   #
+  #
+  #
+  def panels_by_timeslot
+    
+    @times = PlannerReportsService.findPanelsByTimeslot
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "panels_by_timeslot" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push ['Day', 'Time', 'Room', 'Venue', 'Item', 'Equipment']
+        
+        @times.collect {|t| t.programme_items.collect {|i| { :time => t, :item => i } } }.flatten.each do |e|
+          output.push [
+            e[:time].start.strftime('%a'),
+            e[:time].start.strftime('%H:%M') + ' - ' + e[:time].end.strftime('%H:%M'),
+            e[:item].room.name,
+            e[:item].room.venue.name,
+            e[:item].title,
+            e[:item].equipment_needs.collect {|eq| eq.equipment_type.description if eq.equipment_type }.join("\n")
+          ]
+        end
+        csv_out(output, outfile)
+      }
+      
+    end
+    
+  end
   
   # For prog-ops
-   def panels_by_room
-
-      return unless params[:html] || params[:csv] 
-   
-      cond_str = " time_slots.start is not NULL"
-      conditions = Array.new
-
-      # cond_str << " and formats.id in ("
-      # conditions.push Format.find_by_name("Panel")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Reading")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Publisher Presentation")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Talk")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Interview")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Special Interest Group")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Workshop")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Dialog")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Game Show")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Book Discussion")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Auction")
-      # cond_str << "?,"
-      # conditions.push Format.find_by_name("Demonstration")
-      # cond_str << "?)"
-
-      conditions.unshift cond_str
-
-      ord_str = "venues.name desc, rooms.name, time_slots.start, time_slots.end"
-
-      @rooms = Room.all(:include => [:venue, {:programme_items => [:time_slot, :format, :equipment_needs,]}], :conditions => conditions, :order => ord_str) 
-      
-      output = Array.new
-      @rooms.each do |room|
-         room.programme_items.each do |panel|
-
-            needs = Array.new
-            needs = panel.equipment_needs.all(:include => :equipment_type).map! {|n| n.equipment_type.description} 
-            equip = needs.join(', ')
-      
-            if params[:csv]
-
-               line = [
-                       (panel.room.nil?) ? '' : panel.room.name,
-                       (panel.room.nil?) ? '' : panel.room.venue.name,
-                       (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
-                       (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
-	               panel.title,
-                       equip,
-                      ]
-   
-               output.push line
-
-            else
-               panel[:equip] = needs
-            end
-         end
-      end
-         
-      if params[:csv]
-         outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-         headers = [
-                    "Room",
-                    "Venue",
-                    "Day",
-                    "Time Slot",
-                    "Panel",
-                    "Equipment Needs"
-                   ]
-
-         output.unshift headers
-
-         csv_out_utf16(output, outfile)
-      end
-    
-   end
-
-  # For prog-ops
-   def panels_by_timeslot
+   def panels_by_timeslotOLD
 
       return unless params[:html] || params[:csv] 
 

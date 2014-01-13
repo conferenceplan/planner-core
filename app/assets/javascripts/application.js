@@ -51,6 +51,7 @@
 //= require plugins/htmlEditor
 //= require plugins/colorEditor
 //= require plugins/DependentEditors
+//= require plugins/cpReportBase
 
 //= require TabViews
 

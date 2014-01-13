@@ -114,7 +114,33 @@ module PlannerReportsService
               :order => "people.last_name, published_time_slots.start asc"
 
   end
+  
+  #
+  #
+  #
+  def self.findPanelsByRoom
+    
+    Room.all :include => [:venue, {:programme_items => [:time_slot, :format, :equipment_needs]}],
+            :conditions => " time_slots.start is not NULL", 
+            :order => "venues.name desc, rooms.name, time_slots.start, time_slots.end"
+                        
+  end
+  
+  #
+  #
+  #
+  def self.findPanelsByTimeslot
 
+    TimeSlot.all :joins => [{:rooms => :venue}, {:programme_items => :format}], 
+            :include => [{:rooms => :venue}, {:programme_items => :equipment_needs}], 
+            :conditions => "time_slots.start is not NULL", 
+            :order => "time_slots.start, time_slots.end, venues.name desc, rooms.name" 
+    
+  end
+
+#
+#
+#
 protected
 
 PEOPLE_TAG_QUERY = <<"EOS"

@@ -1,0 +1,11 @@
+json.totalpages 1
+json.currpage 1
+    
+json.rowdata @rooms.collect {|r| r.programme_items.collect {|i| { :room => r, :item => i } } }.flatten do |e|
+    json.room       e[:room].name
+    json.venue      e[:room].venue.name
+    json.item       e[:item].title
+    json.day        e[:item].time_slot.start.strftime('%a')
+    json.time_slot  e[:item].time_slot.start.strftime('%H:%M') + ' - ' + e[:item].time_slot.end.strftime('%H:%M')
+    json.equipment  e[:item].equipment_needs.collect {|eq| eq.equipment_type.description if eq.equipment_type }
+end
