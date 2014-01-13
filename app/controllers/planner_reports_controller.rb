@@ -214,59 +214,6 @@ class PlannerReportsController < PlannerController
     end
     
   end
-  
-  # For prog-ops
-   def panels_by_timeslotOLD
-
-      return unless params[:html] || params[:csv] 
-
-      ord_str = "time_slots.start, time_slots.end, venues.name desc, rooms.name"
-
-      @times = TimeSlot.all(:joins => [{:rooms => :venue}, {:programme_items => :format}], 
-            :include => [{:rooms => :venue}, {:programme_items => :equipment_needs}], 
-            :conditions => "time_slots.start is not NULL", 
-            :order => ord_str) 
-      
-      output = Array.new
-      # @grouped_times = Hash.new
-      @times.each do |time|
-         time.programme_items.each do |panel|
-               if params[:csv]
-                  needs = Array.new
-                  needs = panel.equipment_needs.all(:include => :equipment_type).map! {|n| n.equipment_type.description} 
-                  equip = needs.join(', ')
-   
-                  line = [
-                          (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
-                          (panel.time_slot.nil?) ? '' : "#{panel.time_slot.start.strftime('%H:%M')} - #{panel.time_slot.end.strftime('%H:%M')}",
-                          (panel.room.nil?) ? '' : panel.room.name,
-                          (panel.room.nil?) ? '' : panel.room.venue.name,
-	                  panel.title,
-                          equip,
-                         ]
-      
-                  output.push line
-               end
-         end
-      end
-         
-      if params[:csv]
-         outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-         headers = [
-                    "Day",
-                    "Time Slot",
-                    "Room",
-                    "Venue",
-                    "Panel",
-                    "Equipment Needs"
-                   ]
-
-         output.unshift headers
-
-         csv_out_utf16(output, outfile)
-      end
-    
-   end
 
   # Publications
    def program_book_report
