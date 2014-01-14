@@ -1,0 +1,45 @@
+<script type="text/javascript">
+
+PublicationsApp = new Backbone.Marionette.Application();
+
+PublicationsApp.PrintManagement = (function(Backbone){
+
+    var GenericForm = Backbone.Form.extend({
+    });
+    
+    var Workspace = Backbone.Router.extend({
+        routes : {
+            'report/:query' : 'report'
+        },
+        
+        report : function(query) {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/' + query
+            }));
+        }
+    });
+    
+    /*
+     * 
+     */
+    return {
+        init : function(options) {
+            new Workspace();
+            Backbone.history.start();
+        }
+    }
+    
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    PublicationsApp.addInitializer(PublicationsApp.PrintManagement.init);
+    PublicationsApp.start({});
+});
+
+</script>

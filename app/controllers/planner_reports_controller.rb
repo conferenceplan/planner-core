@@ -99,6 +99,11 @@ class PlannerReportsController < PlannerController
       }
     end
   end
+  
+  #
+  # Need to get participant details (status, addresses etc)
+  # TODO - add this report
+
 
   #
   #
@@ -214,75 +219,37 @@ class PlannerReportsController < PlannerController
     end
     
   end
+  
+  #
+  #
+  #
+  def program_book_report
 
-  # Publications
-   def program_book_report
+    @times = PlannerReportsService.findProgramItemsByTimeAndRoom
+    @rooms = Room.all :select => 'distinct rooms.name',
+                               :order => 'venues.name DESC, rooms.name ASC', 
+                               :include => :venue
+    
+    respond_to do |format|
+      format.xml {
+        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+      }
+      format.pdf {
+        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+      }
+      format.xlsx{
+        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+      }
+    end
 
-      outfile = "prog_guide_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-      output = Array.new
-      output.push ["sessionid",
-                   "day",
-                   "time", 
-                   "duration",
-		               "room",
-		               "track",
-		               "type",
-		               "kids category",
-		               "title",
-		               "description",
-		               "participants",
-                   "short title",
-                   "reference number",
-                   "venue",
-                  ]
-      @panels = ProgrammeItem.all(:include => [:people, :time_slot, :format,{:room => [:venue]}], :conditions => {"print" => true}, :order => "time_slots.start asc, rooms.name asc") 
-      reserved = PersonItemRole.find_by_name("Reserved")
-      moderator = PersonItemRole.find_by_name("Moderator")
-      invisible = PersonItemRole.find_by_name("Invisible")
-      
-      @panels.each do |panel|
-         next if panel.time_slot.nil?
-         names = Array.new
-         panel.people.each do |p|
-            a = ProgrammeItemAssignment.first(:conditions => {:person_id => p.id, :programme_item_id => panel.id})
-            if a.role_id == moderator.id
-               names.push "#{p.getFullPublicationName.strip} (M)"
-            elsif a.role_id != reserved.id and a.role_id != invisible.id
-               names.push p.getFullPublicationName.strip
-            end
-         end
-         context = panel.tags_on(:PrimaryArea)
-	 part_list = names.join(', ')
-         unless (panel.time_slot.nil?)
-            if (panel.duration % 60 == 0)
-               duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%H')[:diff]
-            elsif (panel.duration < 60)
-               duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%N')[:diff]
-            else
-               duration = Time.diff(panel.time_slot.end, panel.time_slot.start, '%H %N')[:diff]
-            end
-         end
-         output.push [panel.id,
-	              (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%a'),
-	              (panel.time_slot.nil?) ? '' : panel.time_slot.start.strftime('%I:%M %p'),
-	              (panel.time_slot.nil?) ? '' : duration,
-                      (panel.room.nil?) ? '' : panel.room.name,
-		      (context.nil?) ? '' : context[0],
-                      (panel.format.nil?) ? '' : panel.format.name,
-		      '',
-	              panel.title,
-	              panel.precis,
-                      part_list,
-                      panel.short_title,
-                      panel.pub_reference_number,
-                      panel.room.venue.name,
-                     ]
-      end
-      
-      csv_out_noconv(output, outfile)
+  end
+  
+  #
+  #
+  #
+  
 
-   end
-
+  #--------------------
    
    def selectBadgeLabel
       accepted = AcceptanceStatus.find_by_name("Accepted")

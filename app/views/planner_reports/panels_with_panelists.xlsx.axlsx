@@ -1,8 +1,0 @@
-wb = xlsx_package.workbook
-wb.add_worksheet(name: "Stuff") do |sheet|
-    
-    @panels.each do |panel|
-        sheet.add_row [ panel.title ]
-    end
-
-end

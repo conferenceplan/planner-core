@@ -28,6 +28,9 @@ gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate'
 
+gem 'prawn_rails'
+gem "prawn-labels"
+
 gem "recaptcha", :require => "recaptcha/rails"
 
 gem 'i18n-active_record',

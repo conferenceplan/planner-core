@@ -3,6 +3,9 @@
 #
 module ProgramItemsService
   
+  #
+  #
+  #
   def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false, page_to = nil)
     args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, page_to)
     tagquery = DataService.genTagSql(context, tags)

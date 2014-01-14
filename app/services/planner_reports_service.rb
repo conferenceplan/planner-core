@@ -137,6 +137,19 @@ module PlannerReportsService
             :order => "time_slots.start, time_slots.end, venues.name desc, rooms.name" 
     
   end
+  
+  #
+  #
+  #
+  def self.findProgramItemsByTimeAndRoom( published = false )
+    
+    TimeSlot.all :joins => [{:rooms => :venue}, {:programme_items => [:programme_item_assignments, :format, {:people => :pseudonym}]}], 
+            :include => [{:rooms => :venue}, {:programme_items => [:programme_item_assignments, :format, {:people => :pseudonym}]}], 
+            :conditions => "print = 1 and time_slots.start is not NULL",
+            :order => "time_slots.start, time_slots.end, venues.name desc, rooms.name" 
+
+    # Should be published items??? - TODO
+  end
 
 #
 #

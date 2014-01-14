@@ -139,6 +139,31 @@
 </form>
 </script>
 
+<script type="text/template" id="publication-template">
+<form>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="report-body" id="report-body"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="pull-right">
+                <button class="btn btn-primary report-xml-button">
+                    <%= t "XML" %>
+                </button>
+                <button class="btn btn-primary report-pdf-button">
+                    <%= t "PDF" %>
+                </button>
+                <button class="btn btn-primary report-xlsx-button">
+                    <%= t "XLSX" %>
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+</script>
+
 <script type="text/template" id="schedule-conflict-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>

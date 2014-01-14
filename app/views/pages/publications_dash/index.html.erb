@@ -1,2 +1,12 @@
-<h1>Pages::PublicationsDash#index</h1>
-<p>Find me in app/views/pages/publications_dash/index.html.erb</p>
+<% content_for :submenu do %>
+        <%= render_cell :context_menu, :display, :menu => {
+            (t "print") => '/pages/publications_dash/print',
+            (t "online") => '/pages/publications_dash/online'
+        } %>
+<% end %>
+
+<% if @cellname %>
+    <%= render_cell "publications/#{@cellname}", :display %>
+<% else %>
+    <%= render_cell "publications/operations_dash", :display %>
+<% end %>

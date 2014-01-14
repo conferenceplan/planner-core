@@ -3,77 +3,14 @@
  */
 var ReportBase = (function(Backbone){
 
-    return {
-        ResultSet : Backbone.RelationalModel.extend({
-            relations : [{
-                type : Backbone.HasMany,
-                key : 'rowdata',
-                relatedModel : 'ResultRow',
-                collectionType : 'ResultRowCollection',
-            }],
-        }),
-        
-        ResultsView : Backbone.View.extend({
-            initialize : function() {
-                this.template = _.template($('#query-results-template').html());
-            },
-            
-            render : function() {
-                this.$el.html($(this.template()));
-                $('#report-results-area').html(this.$el);
-                
-                this.grid = $('.result-table').jqGrid({
-                    colModel : this.options.colModel,
-                    cmTemplate: {sortable:false, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"'; }},
-                    datatype: 'jsonstring',
-                    datastr: this.options.resultsCollection.toJSON(),
-                    jsonReader :{
-                        repeatitems : false,
-                        page: "currpage",
-                        records: "totalrecords",
-                        root : "rowdata",
-                        total: "totalpages",
-                        id : "id",
-                    },
-                    viewrecords: true,
-                    height: "auto",
-                    autowidth: true,
-                    ignoreCase: true,
-                    gridview: true,
-                    pager : '#result-pager',
-                    caption: this.options.caption,
-                    rowList:[10,20,50,100],
-                    rowNum:50
-                    });
-    
-                var grid = this.grid;
-                jQuery(window).bind('resize', function() {
-                    var width = grid.parents('.ui-jqgrid').parent().width();
-                    grid.setGridWidth(width);
-                    grid.parents('.ui-jqgrid').css("width", width+2);
-                }).trigger('resize');
-                
-                return this;
-            }
-    
-        }),
-        
-        reportRegion : new Backbone.Marionette.Region({
-            el: "#report-form-area"
-        }),
-        
-        resultRegion : new Backbone.Marionette.Region({
-            el: "#report-results-area"
-        }),
-    
-        ReportView : Marionette.ItemView.extend({
+
+        var ReportViewBase = Marionette.ItemView.extend({
             events: {
                 "click .report-submit-button" : "submit",
-                "click .report-csv-button" : "submitCSV"
-            },
-            
-            initialize : function() {
-                this.template = _.template($('#report-template').html());
+                "click .report-csv-button" : "submitCSV",
+                "click .report-xml-button" : "submitXML",
+                "click .report-pdf-button" : "submitPDF",
+                "click .report-xlsx-button" : "submitXLSX"
             },
             
             render : function() {
@@ -90,7 +27,24 @@ var ReportBase = (function(Backbone){
                 $.download(this.options.endPoint + '.csv', data );
             },
             
-            // TODO - we want XML and CSV exports as well
+            submitXML : function() {
+                var data = this.form.getValue();
+                
+                $.download(this.options.endPoint + '.xml', data );
+            },
+            
+            submitXLSX : function() {
+                var data = this.form.getValue();
+                
+                $.download(this.options.endPoint + '.xlsx', data );
+            },
+            
+            submitPDF : function() {
+                var data = this.form.getValue();
+                
+                $.download(this.options.endPoint + '.pdf', data );
+            },
+            
             submit : function() {
                 // Gather the data from the form and send it to the back end
                 var data = this.form.getValue();
@@ -115,8 +69,84 @@ var ReportBase = (function(Backbone){
                     }
                 });
             }
-        })
+        });
+
+    return {
+        ResultSet : Backbone.RelationalModel.extend({
+            relations : [{
+                type : Backbone.HasMany,
+                key : 'rowdata',
+                relatedModel : 'ResultRow',
+                collectionType : 'ResultRowCollection',
+            }],
+        }),
+        
+        ResultsView : Backbone.View.extend({
+            initialize : function() {
+                this.template = _.template($('#query-results-template').html());
+            },
+            
+            render : function() {
+                this.$el.html($(this.template()));
+                $('#report-results-area').html(this.$el);
+                
+                if (this.options.colModel) {
+                    this.grid = $('.result-table').jqGrid({
+                        colModel : this.options.colModel,
+                        cmTemplate: {sortable:false, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"'; }},
+                        datatype: 'jsonstring',
+                        datastr: this.options.resultsCollection.toJSON(),
+                        jsonReader :{
+                            repeatitems : false,
+                            page: "currpage",
+                            records: "totalrecords",
+                            root : "rowdata",
+                            total: "totalpages",
+                            id : "id",
+                        },
+                        viewrecords: true,
+                        height: "auto",
+                        autowidth: true,
+                        ignoreCase: true,
+                        gridview: true,
+                        pager : '#result-pager',
+                        caption: this.options.caption,
+                        rowList:[10,20,50,100],
+                        rowNum:50
+                        });
+        
+                    var grid = this.grid;
+                    jQuery(window).bind('resize', function() {
+                        var width = grid.parents('.ui-jqgrid').parent().width();
+                        grid.setGridWidth(width);
+                        grid.parents('.ui-jqgrid').css("width", width+2);
+                    }).trigger('resize');
+                };
+                
+                return this;
+            }
     
+        }),
+        
+        reportRegion : new Backbone.Marionette.Region({
+            el: "#report-form-area"
+        }),
+        
+        resultRegion : new Backbone.Marionette.Region({
+            el: "#report-results-area"
+        }),
+    
+        ReportView : ReportViewBase.extend({
+            initialize : function() {
+                this.template = _.template($('#report-template').html());
+            }
+        }),
+        
+        PublicationView : ReportViewBase.extend({
+            initialize : function() {
+                this.template = _.template($('#publication-template').html());
+            }
+        })
     };
         
 }(Backbone));
