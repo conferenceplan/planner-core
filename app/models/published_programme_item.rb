@@ -63,6 +63,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
       res[:day] = published_time_slot.start.strftime('%A') # currentTime.strftime('%A %H:%M')
       res[:date] = published_time_slot.start.strftime('%Y-%m-%d') # currentTime.strftime('%A %H:%M')
       res[:time] = published_time_slot.start.strftime('%H:%M')
+      res[:datetime] = published_time_slot.start
     
       # "loc": [ "Some Room", "Some Area" ],
       res[:loc] = [ published_room.name, published_room.published_venue.name ]
