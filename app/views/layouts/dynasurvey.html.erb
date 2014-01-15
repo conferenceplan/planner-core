@@ -6,7 +6,7 @@
         <%= stylesheet_link_tag params[:controller] %>
         
         <%= javascript_include_tag "application" %> <!-- TODO minimize to only what is needed for surveys -->
-        <%= javascript_include_tag params[:controller] %>
+        <%= javascript_include_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".js") %>
 <!-- TODO - we may not need -->
     <!-- <%= stylesheet_link_tag 'start/jquery-ui' %>
         <%= stylesheet_link_tag 'jquery.tooltip.css' %>
