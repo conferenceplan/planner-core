@@ -7,17 +7,6 @@
         
         <%= javascript_include_tag "application" %> <!-- TODO minimize to only what is needed for surveys -->
         <%= javascript_include_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".js") %>
-<!-- TODO - we may not need -->
-    <!-- <%= stylesheet_link_tag 'start/jquery-ui' %>
-        <%= stylesheet_link_tag 'jquery.tooltip.css' %>
-        <%= stylesheet_link_tag 'reset.css' %>
-        <%= stylesheet_link_tag 'text.css' %>
-        <%= stylesheet_link_tag '960.css' %>
-        <%= stylesheet_link_tag 'survey.css' %>
-        <%= javascript_include_tag 'jquery-1.9.1.min' %>
-        <%= javascript_include_tag 'jquery-ui-1.9.2.custom.min' %>
-        <%= javascript_include_tag 'jquery-migrate-1.1.1' %>
-        <%= javascript_include_tag 'jquery.tooltip.min' %> -->
     </head>
 
   <body>
