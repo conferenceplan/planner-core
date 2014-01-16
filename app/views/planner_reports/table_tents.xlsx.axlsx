@@ -1,0 +1,31 @@
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Table Tents") do |sheet|
+    sheet.add_row [
+        'Name',
+        'Title',
+        'Description',
+        'Format',
+        'Room',
+        'Venue',
+        'Day',
+        'Time',
+        'Date',
+    ]
+    
+    @people.each do |person|
+        # should be the published items
+        person.published_programme_items.each do |item|
+            sheet.add_row [
+                person.getFullPublicationName,
+                item.title,
+                item.precis,
+                item.format.name,
+                item.published_room.name,
+                item.published_room.published_venue.name,
+                item.published_time_slot.start.strftime('%A'),
+                item.published_time_slot.start.strftime('%H:%M'),
+                item.published_time_slot.start.strftime('%y-%m-%d')
+            ]
+        end
+    end
+end

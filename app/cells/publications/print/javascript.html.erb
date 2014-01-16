@@ -3,13 +3,37 @@
 PublicationsApp = new Backbone.Marionette.Application();
 
 PublicationsApp.PrintManagement = (function(Backbone){
+    
+    var people = <%= [].concat(PeopleService.findAssignedParticipants.collect {|p| {'id' => p.id, 'text' => p.getFullPublicationName}}).to_json.html_safe %>;
 
     var GenericForm = Backbone.Form.extend({
     });
     
+    var TableTentForm = Backbone.Form.extend({
+        schema : {
+            people : { type : 'Select2', title : '<%= t "People" %>', 
+                        config : {
+                            multiple: true,
+                            maximumSelectionSize : -1,
+                            query: function (query) {
+                                var data = {
+                                    results: _.filter(people, function(x) { return x.text.toLowerCase().indexOf(query.term.toLowerCase()) != -1; })
+                                };
+                                query.callback(data);
+                            }
+                        }
+                }
+            // OR items
+        },
+        
+        data : {
+        }
+    });
+    
     var Workspace = Backbone.Router.extend({
         routes : {
-            'report/:query' : 'report'
+            'report/:query' : 'report',
+            'table_tents'   : 'table_tents'
         },
         
         report : function(query) {
@@ -18,6 +42,15 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/' + query
+            }));
+        },
+        
+        table_tents : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+                form        : TableTentForm,
+                endPoint    : '/planner_reports/table_tents'
             }));
         }
     });

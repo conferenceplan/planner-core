@@ -18,6 +18,9 @@
 //= require colorpicker/jquery.colorpicker
 //= require jQuery.download
 
+//= require select2
+//  require select2_locale_fr
+
 //= require ckeditor-jquery
 
 //= require bootstrap
@@ -50,6 +53,7 @@
 //= require plugins/timeEditor
 //= require plugins/htmlEditor
 //= require plugins/colorEditor
+//= require plugins/selectEditor
 //= require plugins/DependentEditors
 //= require plugins/cpReportBase
 

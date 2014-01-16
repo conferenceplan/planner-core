@@ -4,7 +4,7 @@
 class PlannerReportsController < PlannerController
   include PlannerReportHelpers
 
-  require 'time_diff'
+  # require 'time_diff'
   require 'csv'
 
   #
@@ -247,382 +247,223 @@ class PlannerReportsController < PlannerController
   #
   #
   #
-  
+  def table_tents
+    peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
+    
+    @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList
+    
+    respond_to do |format|
+      format.xml {
+        response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+      }
+      format.pdf {
+        response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+      }
+      format.xlsx{
+        response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+      }
+    end
+  end
+
 
   #--------------------
    
-   def selectBadgeLabel
-      accepted = AcceptanceStatus.find_by_name("Accepted")
-      probable = AcceptanceStatus.find_by_name("Probable")
-      invitestatus = InviteStatus.find_by_name("Invited")
-
-      @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
-      
-  end
-  def selectScheduleReport
-    
-      accepted = AcceptanceStatus.find_by_name("Accepted")
-      probable = AcceptanceStatus.find_by_name("Probable")
-      invitestatus = InviteStatus.find_by_name("Invited")
-
-      @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
-      
-  end
+   # def selectBadgeLabel
+      # accepted = AcceptanceStatus.find_by_name("Accepted")
+      # probable = AcceptanceStatus.find_by_name("Probable")
+      # invitestatus = InviteStatus.find_by_name("Invited")
+# 
+      # @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
+#       
+  # end
+  # def selectScheduleReport
+#     
+      # accepted = AcceptanceStatus.find_by_name("Accepted")
+      # probable = AcceptanceStatus.find_by_name("Probable")
+      # invitestatus = InviteStatus.find_by_name("Invited")
+# 
+      # @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
+#       
+  # end
 #
-  # This is a sample to do the same as the query report in less time...
-  #
-  def schedule_report_opt
-    @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
-
-    @people = Person.all(
-        :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))',
-          [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
-          [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
-        :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
-                     :equipment_types, {:room => :venue}, :time_slot]} ],
-        :order => "people.last_name asc"
-      )  
-    
-    respond_to do |format|
-      format.xml 
-    end
-  end
+  # # This is a sample to do the same as the query report in less time...
+  # #
+  # def schedule_report_opt
+    # @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
+# 
+    # @people = Person.all(
+        # :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))',
+          # [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
+          # [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
+        # :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
+                     # :equipment_types, {:room => :venue}, :time_slot]} ],
+        # :order => "people.last_name asc"
+      # )  
+#     
+    # respond_to do |format|
+      # format.xml 
+    # end
+  # end
   
-  def schedule_report_test
-    generate_schedule_csv
-    respond_to do |format|
-      format.xml 
-    end
-  end
-
 
   #
   # This is a sample to do the same as the query report in less time...
   #
-  def schedule_report
-    peopleList = nil
-    categoryList = nil
-    if (params[:schedule] != nil)
-       peopleList = params[:schedule][:person_id]
-       categoryList = params[:schedule][:invitation_category_id]
-     end
-     
-    @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
+  # def schedule_report
+    # peopleList = nil
+    # categoryList = nil
+    # if (params[:schedule] != nil)
+       # peopleList = params[:schedule][:person_id]
+       # categoryList = params[:schedule][:invitation_category_id]
+     # end
+#      
+    # @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
+# 
+      # selectConditions = ''
+      # if (peopleList != nil && peopleList.size() != 0)
+            # addOr = "AND ("
+        # peopleList.each do |p|
+          # selectConditions = selectConditions + addOr + 'people.id ='+ p
+          # addOr = " OR "
+        # end
+        # selectConditions = selectConditions + ")"
+      # end
+       # if (categoryList != nil && categoryList.size() != 0)
+            # addOr = "AND ("
+        # categoryList.each do |p|
+          # selectConditions = selectConditions + addOr + 'people.invitation_category_id ='+ p
+          # addOr = " OR "
+        # end
+        # selectConditions = selectConditions + ")"
+      # end
+    # maxquery = "select MAX(x) from (select Count(*) as x from programme_item_assignments group by person_id) l;"
+    # maxList = ActiveRecord::Base.connection.select_rows(maxquery)
+    # maxItems = maxList[0][0].to_i;
+    # maxPanelInRoom = 0
+#   
+#    
+    # @people = Person.all(
+        # :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))' + selectConditions,
+          # [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
+          # [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
+        # :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
+                     # :equipment_types, {:room => :venue}, :time_slot]} ],
+        # :order => "people.last_name asc, time_slots.start asc"
+      # )  
+    # if params[:csv]
+      # output = Array.new
+      # output = []
+      # headerList = Array.new
+      # headerList << "Name"
+      # headerList << "email"
+      # 1.upto(maxItems) do |number|
+        # numberString = number.to_s
+        # headerValue = "Title"+numberString
+        # headerList << headerValue
+        # headerValue = "Room"+numberString
+        # headerList << headerValue
+        # headerValue = "Venue"+numberString
+        # headerList << headerValue
+        # headerValue = "StrTime"+numberString
+        # headerList << headerValue
+        # headerValue = "Description"+numberString
+        # headerList << headerValue
+        # headerValue = "Participants"+numberString
+        # headerList << headerValue
+        # headerValue = "Equipment"+numberString
+        # headerList << headerValue
+      # end      
+      # output.push headerList 
+#      
+      # @people.each do |person|
+        # panellist = []
+        # defaultEmail = ''
+        # if (params[:incl_email])
+          # person.email_addresses.each do |addr|
+             # if addr.isdefault
+               # defaultEmail = addr.email
+             # end
+          # end
+        # end 
+        # person.programmeItems.each do |itm|
+          # next if itm.time_slot.nil?
+          # names = []
+          # panelinfo = {}
+          # itm.programme_item_assignments.each do |asg| #.people.each do |part|              
+             # if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']      
+               # name = asg.person.getFullPublicationName()
+               # name += " (M)" if asg.role == PersonItemRole['Moderator']  
+               # if (params[:incl_email])
+                   # asg.person.email_addresses.each do |addr|
+                     # if addr.isdefault && (!@NoShareEmailers.index(asg.person))
+                       # name += "(" + addr.email + ")"
+                     # end
+                   # end
+               # end
+               # names << name
+             # end
+          # end
+          # equipList = []
+          # if itm.equipment_types.size == 0
+             # equipList << "No Equipment Needed"
+          # end
+          # itm.equipment_types.each do |equip|
+             # equipList << equip.description
+          # end
+          # panelinfo = {}
+          # panelinfo['title'] = itm.title
+          # panelinfo['room'] = itm.room.name
+          # panelinfo['venue'] = itm.room.venue.name
+          # panelinfo['time'] = itm.time_slot.start.strftime('%Y-%m-%d %H:%M')
+          # panelinfo['strtime'] = "#{itm.time_slot.start.strftime('%a %H:%M')} - #{itm.time_slot.end.strftime('%H:%M')}"
+          # if itm.precis
+            # description = itm.precis.gsub('\n','')
+            # description = description.gsub('\r','')
+          # else
+            # description = ''  
+          # end
+          # panelinfo['description'] = description
+          # panelinfo['participants'] = names.join(', ')
+          # panelinfo['equipment'] = equipList.join(', ')                      
+          # panellist << panelinfo
+#         
+      # end
+       # panellist.sort! {|a,b| a['time'] <=> b['time']}
+# 
+      # outputlist = []
+        # outputlist << person.getFullPublicationName
+        # outputlist << defaultEmail
+        # 1.upto(maxItems) do |num|
+            # if (panellist.size() != 0 && num <= panellist.size())
+              # outputlist << panellist[num-1]['title']
+              # outputlist << panellist[num-1]['room']
+              # outputlist << panellist[num-1]['venue']
+              # outputlist << panellist[num-1]['strtime']
+              # outputlist << panellist[num-1]['description']
+              # outputlist << panellist[num-1]['participants']
+              # outputlist << panellist[num-1]['equipment']
+            # else
+              # outputlist << "";
+              # outputlist << "";
+              # outputlist << "";
+              # outputlist << "";
+              # outputlist << "";
+              # outputlist << "";
+              # outputlist << "";
+            # end
+          # end
+          # output.push outputlist
+      # end
+      # outfile = "schedule_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+# 
+      # csv_out_noconv(output, outfile)
+    # else
+      # respond_to do |format|
+        # format.xml 
+      # end
+    # end
+  # end
 
-      selectConditions = ''
-      if (peopleList != nil && peopleList.size() != 0)
-            addOr = "AND ("
-        peopleList.each do |p|
-          selectConditions = selectConditions + addOr + 'people.id ='+ p
-          addOr = " OR "
-        end
-        selectConditions = selectConditions + ")"
-      end
-       if (categoryList != nil && categoryList.size() != 0)
-            addOr = "AND ("
-        categoryList.each do |p|
-          selectConditions = selectConditions + addOr + 'people.invitation_category_id ='+ p
-          addOr = " OR "
-        end
-        selectConditions = selectConditions + ")"
-      end
-    maxquery = "select MAX(x) from (select Count(*) as x from programme_item_assignments group by person_id) l;"
-    maxList = ActiveRecord::Base.connection.select_rows(maxquery)
-    maxItems = maxList[0][0].to_i;
-    maxPanelInRoom = 0
-  
-   
-    @people = Person.all(
-        :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))' + selectConditions,
-          [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
-          [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
-        :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
-                     :equipment_types, {:room => :venue}, :time_slot]} ],
-        :order => "people.last_name asc, time_slots.start asc"
-      )  
-    if params[:csv]
-      output = Array.new
-      output = []
-      headerList = Array.new
-      headerList << "Name"
-      headerList << "email"
-      1.upto(maxItems) do |number|
-        numberString = number.to_s
-        headerValue = "Title"+numberString
-        headerList << headerValue
-        headerValue = "Room"+numberString
-        headerList << headerValue
-        headerValue = "Venue"+numberString
-        headerList << headerValue
-        headerValue = "StrTime"+numberString
-        headerList << headerValue
-        headerValue = "Description"+numberString
-        headerList << headerValue
-        headerValue = "Participants"+numberString
-        headerList << headerValue
-        headerValue = "Equipment"+numberString
-        headerList << headerValue
-      end      
-      output.push headerList 
-     
-      @people.each do |person|
-        panellist = []
-        defaultEmail = ''
-        if (params[:incl_email])
-          person.email_addresses.each do |addr|
-             if addr.isdefault
-               defaultEmail = addr.email
-             end
-          end
-        end 
-        person.programmeItems.each do |itm|
-          next if itm.time_slot.nil?
-          names = []
-          panelinfo = {}
-          itm.programme_item_assignments.each do |asg| #.people.each do |part|              
-             if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']      
-               name = asg.person.getFullPublicationName()
-               name += " (M)" if asg.role == PersonItemRole['Moderator']  
-               if (params[:incl_email])
-                   asg.person.email_addresses.each do |addr|
-                     if addr.isdefault && (!@NoShareEmailers.index(asg.person))
-                       name += "(" + addr.email + ")"
-                     end
-                   end
-               end
-               names << name
-             end
-          end
-          equipList = []
-          if itm.equipment_types.size == 0
-             equipList << "No Equipment Needed"
-          end
-          itm.equipment_types.each do |equip|
-             equipList << equip.description
-          end
-          panelinfo = {}
-          panelinfo['title'] = itm.title
-          panelinfo['room'] = itm.room.name
-          panelinfo['venue'] = itm.room.venue.name
-          panelinfo['time'] = itm.time_slot.start.strftime('%Y-%m-%d %H:%M')
-          panelinfo['strtime'] = "#{itm.time_slot.start.strftime('%a %H:%M')} - #{itm.time_slot.end.strftime('%H:%M')}"
-          if itm.precis
-            description = itm.precis.gsub('\n','')
-            description = description.gsub('\r','')
-          else
-            description = ''  
-          end
-          panelinfo['description'] = description
-          panelinfo['participants'] = names.join(', ')
-          panelinfo['equipment'] = equipList.join(', ')                      
-          panellist << panelinfo
-        
-      end
-       panellist.sort! {|a,b| a['time'] <=> b['time']}
-
-      outputlist = []
-        outputlist << person.getFullPublicationName
-        outputlist << defaultEmail
-        1.upto(maxItems) do |num|
-            if (panellist.size() != 0 && num <= panellist.size())
-              outputlist << panellist[num-1]['title']
-              outputlist << panellist[num-1]['room']
-              outputlist << panellist[num-1]['venue']
-              outputlist << panellist[num-1]['strtime']
-              outputlist << panellist[num-1]['description']
-              outputlist << panellist[num-1]['participants']
-              outputlist << panellist[num-1]['equipment']
-            else
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-              outputlist << "";
-            end
-          end
-          output.push outputlist
-      end
-      outfile = "schedule_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-
-      csv_out_noconv(output, outfile)
-    else
-      respond_to do |format|
-        format.xml 
-      end
-    end
-  end
-
-  # TODO - FIX
-  # This is a sample to do the same as the query report in less time...
-  # This report is not generating the CSV as expected - needs to be fixed
-  #
-  def schedule_report_problem
-    peopleList = nil
-    categoryList = nil
-
-    if (params[:schedule] != nil)
-      peopleList = params[:schedule][:person_id]
-      categoryList = params[:schedule][:invitation_category_id]
-    end
-
-    @NoShareEmailers = SurveyService.findPeopleWithDoNotShareEmail
-
-    selectConditions = ''
-
-    if (peopleList != nil && peopleList.size() != 0)
-      addOr = "AND ("
-      peopleList.each do |p|
-        selectConditions = selectConditions + addOr + 'people.id ='+ p
-        addOr = " OR "
-      end
-      selectConditions = selectConditions + ")"
-    end
-
-    if (categoryList != nil && categoryList.size() != 0)
-      addOr = "AND ("
-      categoryList.each do |p|
-        selectConditions = selectConditions + addOr + 'people.invitation_category_id ='+ p
-        addOr = " OR "
-      end
-      selectConditions = selectConditions + ")"
-    end
-
-    maxquery = "select MAX(x) from (select Count(*) as x from programme_item_assignments group by person_id) l;"
-    maxList = ActiveRecord::Base.connection.select_rows(maxquery)
-    maxItems = maxList[0][0].to_i;
-    maxPanelInRoom = 0
-  
-    if params[:csv]
-        csv = Array.new
-        csv << "Name"
-        csv << "email"
-        1.upto(maxItems) do |number|
-          numberString = number.to_s
-          headerValue = "Title"+numberString
-          csv << headerValue
-          headerValue = "Room"+numberString
-          csv << headerValue
-          headerValue = "Venue"+numberString
-          csv << headerValue
-          headerValue = "StrTime"+numberString
-          csv << headerValue
-          headerValue = "Description"+numberString
-          csv << headerValue
-          headerValue = "Participants"+numberString
-          csv << headerValue
-          headerValue = "Equipment"+numberString
-          csv << headerValue
-  logger.debug "before retrieval loop: #{Time.now}" 
-     
-        Person.find_each(
-          :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))' + selectConditions,
-          [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
-          [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
-          :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
-          :equipment_types, {:room => :venue}, :time_slot]} ]
-        ) do |person|
-          panellist = []
-          defaultEmail = ''
-          if (params[:incl_email])
-            person.email_addresses.each do |addr|
-              if addr.isdefault
-                defaultEmail = addr.email
-              end
-            end
-          end
-
-          person.programmeItems.each do |itm|
-            next if itm.time_slot.nil?
-            names = []
-            panelinfo = {}
-
-            itm.programme_item_assignments.each do |asg| 
-              if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']      
-                name = asg.person.getFullPublicationName()
-                name += " (M)" if asg.role == PersonItemRole['Moderator']  
-  
-                if (params[:incl_email])
-                  asg.person.email_addresses.each do |addr|
-                    if addr.isdefault && (!@NoShareEmailers.index(asg.person))
-                      name += "(" + addr.email + ")"
-                    end
-                  end
-                end
-  
-                names << name
-              end
-            end
-  
-            equipList = []
-
-            if itm.equipment_types.size == 0
-              equipList << "No Equipment Needed"
-            end
-  
-            itm.equipment_types.each do |equip|
-              equipList << equip.description
-            end
-  
-            panelinfo = {}
-            panelinfo['title'] = itm.title
-            panelinfo['room'] = itm.room.name
-            panelinfo['venue'] = itm.room.venue.name
-            panelinfo['time'] = itm.time_slot.start.strftime('%Y-%m-%d %H:%M')
-            panelinfo['strtime'] = "#{itm.time_slot.start.strftime('%a %H:%M')} - #{itm.time_slot.end.strftime('%H:%M')}"
-            description = itm.precis.gsub('\n','')
-            description = description.gsub('\r','')
-            panelinfo['description'] = description
-            panelinfo['participants'] = names.join(', ')
-            panelinfo['equipment'] = equipList.join(', ')                      
-            panellist << panelinfo
-               
-          end # person.programmeItems.each do |itm|
-          panellist.sort! {|a,b| a['time'] <=> b['time']}
-
-          csv << person.getFullPublicationName
-          csv << defaultEmail
-          1.upto(maxItems) do |num|
-            if (panellist.size() != 0 && num <= panellist.size())
-              csv << panellist[num-1]['title']
-              csv << panellist[num-1]['room']
-              csv << panellist[num-1]['venue']
-              csv << panellist[num-1]['strtime']
-              csv << panellist[num-1]['description']
-              csv << panellist[num-1]['participants']
-              csv << panellist[num-1]['equipment']
-            else
-              csv << "";
-              csv << "";
-              csv << "";
-              csv << "";
-              csv << "";
-              csv << "";
-              csv << "";
-            end
-          end
-        end # Person.find_each(
-      end #CSV.open(outfile, "w") do |csv|
-    logger.debug "after retrieval loop: #{Time.now}" 
-      outfile = "schedule_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-      csv_out_noconv(csv, outfile)
-    else  # if params[:csv]
-      @people = Person.all(
-        :conditions => ['((programme_item_assignments.person_id = people.id) AND (programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?)))' + selectConditions,
-        [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id],
-        [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]],
-        :include => [:email_addresses, {:programmeItems => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, 
-        :equipment_types, {:room => :venue}, :time_slot]} ],
-        :order => "people.last_name asc, time_slots.start asc"
-      )  
-
-      respond_to do |format|
-        format.xml 
-      end
-    end
-  end
-  
    def BackOfBadge
       accepted = AcceptanceStatus.find_by_name("Accepted")
       probable = AcceptanceStatus.find_by_name("Probable")
@@ -864,173 +705,4 @@ class PlannerReportsController < PlannerController
    
  end
  
-   def selectTableTents
-    
-      accepted = AcceptanceStatus.find_by_name("Accepted")
-      probable = AcceptanceStatus.find_by_name("Probable")
-      invitestatus = InviteStatus.find_by_name("Invited")
-
-      @people = Person.all(:include => :programmeItems, :conditions => ['(acceptance_status_id = ? or acceptance_status_id = ?) and invitestatus_id = ?',accepted.id,probable.id,invitestatus.id,], :order => "people.last_name, people.first_name")
-      @items = ProgrammeItem.all(:include => :programme_item_assignments, :conditions => 'programme_item_assignments.id IS NOT NULL AND print = true',:order => "programme_items.title")
-   end
-
-   def tableTents
-
-      accepted = AcceptanceStatus.find_by_name("Accepted")
-      probable = AcceptanceStatus.find_by_name("Probable")
-      reserved = PersonItemRole.find_by_name("Reserved")
-      moderator = PersonItemRole.find_by_name("Moderator")
-      invisible = PersonItemRole.find_by_name("Invisible")
-      peopleList = nil
-      if (params[:tableTents] != nil)
-       peopleList = params[:tableTents][:person_id]
-     end
-     itemList = nil
-     if (params[:tableTents] != nil)
-       itemList = params[:tableTents][:programme_item_id]
-     end
-     selectConditions = '(acceptance_status_id = '+ accepted.id.to_s + ' OR acceptance_status_id = ' + probable.id.to_s + ')'
-
-     if (peopleList != nil && peopleList.size() != 0)
-       addOr = ' AND ('
-       peopleList.each do |p|
-         selectConditions = selectConditions + addOr + " people.id = " + p.to_s;
-         addOr = ' OR '
-       end
-       selectConditions = selectConditions + ')'
-     end
-     
-      if (itemList != nil && itemList.size() != 0)
-       addOr = ' AND ('
-       itemList.each do |i|
-         selectConditions = selectConditions + addOr + " programme_item_id = " + i.to_s;
-         addOr = ' OR '
-       end
-       selectConditions = selectConditions + ')'
-     end
-     
-      @names = Person.all(:include => :programmeItems, :conditions => selectConditions, :order => "people.last_name, programme_items.id") 
-
-      output = Array.new
-    
-      @names.each do |name|
-         panels = Array.new
-       
-         name.programmeItems.find_each(:include => [:time_slot, :room, :format, ],:conditions => 'print = true') do |p|
-            next if p.time_slot.nil?
-            # skip if we only want certain items
-            if (itemList != nil && itemList.size() != 0)
-              found = false
-
-              itemList.each do |itm|
-                if (p.id == itm.to_i)
-                  found = true
-                end
-              end
-              next if found == false
-            end
-            
-            a = ProgrammeItemAssignment.first(:conditions => {:person_id => name.id, :programme_item_id => p.id})
-            panelstr = "#{p.title} (#{p.format.name})"
-            next if a.role_id == invisible.id || a.role_id == reserved.id                      
-            output.push [name.getFullPublicationName,
-                            p.title,
-                            p.precis,
-                            (p.format.nil?) ? '' : p.format.name,
-                            (p.room.nil?) ? '' : p.room.name,
-                            (p.room.nil?) ? '' : p.room.venue.name,
-                            (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%a')}",
-                            (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%H:%M')}",
-                            (p.time_slot.nil?) ? '' : "#{p.time_slot.start.strftime('%Y-%m-%d')}",
-                           ]
-         end       
-      end
-         outfile = "table_tents_" + Time.now.strftime("%m-%d-%Y") + ".csv"
-
-         output.unshift ["Name",
-                         "Panel Title",
-                         "Description",
-                         "Format",
-                         "Room",
-                         "Venue",
-                         "Day",
-                         "Time",
-                         "Date"
-                        ]
-                        # TODO: need to figure out how to handle utf16. Chnage this report
-#to utf16 after publication deadline
-#         csv_out_utf16(output, outfile)
-          csv_out_noconv(output,outfile)
-  end
-  
-protected
-
-   ###
-   def generatePanelistsNamesArray
-        output = Array.new
-        
-        @people.each do |person|
-          line = []
-          
-          line.concat [person.first_name, person.last_name] if @names_city_only
-          
-          line.concat [person.getFullPublicationName, person.acceptance_status.name]
-          
-          address = person.getDefaultPostalAddress if @names_city_only
-              
-          line.concat [
-            (person.invitestatus ? person.invitestatus.name : ''),
-            (person.invitation_category ? person.invitation_category.name : ''),
-            (address ? address.line1 : ''),
-            (address ? address.line2 : ''),
-            (address ? address.city : ''),
-            (address ? address.state : ''),
-            (address ? address.postcode : ''),
-            (address ? address.country : '')
-          ] if @names_city_only
-
-          output << line
-        end
-        
-        titles = ["Name", "Acceptance Status"] if !@names_city_only
-          
-        titles = ["Fisrt Name", "Last Name","Pseudonym", "Acceptance Status", "Invite Status", "Invite Category", "Line1", "Line2", "City", "State", "Post Code", "Country"] if @names_city_only
-        
-        output.unshift titles
-   end
-   
-   def generatePanelistsWithPanelsArray
-        output = Array.new
-        
-        @people.each do |person|
-          person.programmeItemAssignments.each do |pi|
-            if pi.programmeItem
-              line = [person.getFullPublicationName, person.acceptance_status.name]
-              
-              line.concat [  pi.role.name,
-                (@displayIds ? (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number : 'N/A') : pi.programmeItem.title),
-                pi.programmeItem.format.name,
-                (pi.programmeItem.room ? pi.programmeItem.room.name : ''),
-                (pi.programmeItem.room ? pi.programmeItem.room.venue.name : ''),
-                (pi.programmeItem.time_slot ? pi.programmeItem.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.time_slot.end.strftime('%H:%M') : '')
-              ] if !@names_only
-              
-              output << line
-            end
-          end
-        end
-        
-        titles = ["Name", "Acceptance Status"]
-          
-        titles .concat [ "Role",
-          (@displayIds ? "Ref. Number" : "Panel Title"),
-          "Format",
-          "Room",
-          "Venue",
-          "Time"
-        ] if !@names_only
-        
-        output.unshift titles
-   end
-   
 end

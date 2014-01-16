@@ -35,8 +35,4 @@ wb.add_worksheet(name: "Program") do |sheet|
         ]
     end
     
-#    @panels.each do |panel|
-#        sheet.add_row [ panel.title ]
-#    end
-
 end

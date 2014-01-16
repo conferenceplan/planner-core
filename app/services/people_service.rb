@@ -6,6 +6,22 @@ module PeopleService
   #
   #
   #
+  def self.findAssignedParticipants
+    
+    cndStr = '(people.acceptance_status_id in (?)) AND (programme_items.print = true)'
+
+    conditions = [cndStr, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
+
+    # TODO - should this be from the published items rather than the pre-published?
+    Person.all :conditions => conditions, 
+              :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} },
+              :order => "people.last_name"
+
+  end
+  
+  #
+  #
+  #
   def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
     args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
     tagquery = DataService.genTagSql(context, tags)
