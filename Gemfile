@@ -30,6 +30,7 @@ gem 'will_paginate'
 
 gem 'prawn_rails'
 gem "prawn-labels"
+gem "select2-rails"
 
 gem "recaptcha", :require => "recaptcha/rails"
 
@@ -70,6 +71,7 @@ end
 group :development do
   # bundler requires these gems in development
   # gem 'ruby-debug-ide'
+  gem 'seed_dump', '0.5.3'
 end
 
 group :test do
