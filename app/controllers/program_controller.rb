@@ -380,7 +380,7 @@ class ProgramController < ApplicationController
         
         # now the add and remove people
         jsonstr += ',' if @resultantChanges[:removePerson] && !jsonstr.empty? 
-        jsonstr += '{"peopleRemoved":' + @resultantChanges[:removePerson].values.collect {|x| x[0]}.uniq.to_json({:terse => true}) + "}" if @resultantChanges[:removePerson]
+        jsonstr += '{"peopleRemoved":' + @resultantChanges[:removePerson].values.collect {|x| x[0].id}.uniq.to_json({:terse => true}) + "}" if @resultantChanges[:removePerson]
         jsonstr += ',' if @resultantChanges[:addPerson] && !jsonstr.empty? 
         jsonstr += '{"peopleAdded":' + @resultantChanges[:addPerson].values.collect {|x| x[0]}.uniq.to_json({:terse => true}) + "}" if @resultantChanges[:addPerson]
         

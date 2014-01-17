@@ -81,6 +81,46 @@ class Person < ActiveRecord::Base
   
   has_one :peoplesource, :dependent => :delete
   has_one :datasource, :through => :peoplesource
+  
+  def as_json(options={})
+
+    res = super(
+        :except => [:created_at , :updated_at, :lock_version, 
+              :last_name, :first_name, :suffix, :acceptance_status_id, :comments, 
+              :invitation_category_id, :invitestatus_id, :language, :mailing_number
+              ]
+    )
+    
+      res.tap { |hash|
+        hash["id"] =  hash['id'].to_s
+      }
+          
+    fn = pseudonym ? pseudonym.first_name : first_name
+    ln = pseudonym ? pseudonym.last_name : last_name
+    sf = pseudonym ? pseudonym.suffix : suffix
+    
+    res[:name] = []
+    res[:name] << fn if fn.length > 0
+    res[:name] << ln if ln.length > 0
+    res[:name] << sf if sf.length > 0
+    
+    # TODO - add tags
+    
+    res[:links] = {}
+    if edited_bio
+      res[:links][:photo] = edited_bio.photourl if edited_bio.photourl && edited_bio.photourl.length > 0
+      res[:links][:url] = edited_bio.website if edited_bio.website && edited_bio.website.length > 0
+      res[:links][:twitter] = edited_bio.twitterinfo if edited_bio.twitterinfo && edited_bio.twitterinfo.length > 0
+      res[:links][:fb] = edited_bio.facebook if edited_bio.facebook && edited_bio.facebook.length > 0
+    end
+    
+    res[:bio] = bio
+    
+    res[:prog] = published_programme_items.collect{|p| p.id.to_s}
+                
+    return res
+    
+  end
 
   def key
     if survey_respondent

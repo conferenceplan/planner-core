@@ -112,7 +112,7 @@ module PublishedProgramItemsService
   end
 
   def self.getItemChange(auditInfo, resultantChanges, pubDate)
-    # begin
+    begin
     programmeItemAssignment = PublishedRoomItemAssignment.find(auditInfo.auditable_id) # get the associated program item assignment
     programmeItem = programmeItemAssignment.published_programme_item # from that we can get the program item
     if auditInfo.audited_changes["published_time_slot_id"] # if it is a change to the time slot then we report on that
@@ -173,8 +173,8 @@ module PublishedProgramItemsService
     end
     # TODO - if we have a move + add of the same item then it is a move not an add
     
-    # rescue
-    # end
+    rescue
+    end
     return resultantChanges
   end
   
