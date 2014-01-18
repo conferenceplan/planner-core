@@ -33,7 +33,8 @@ PublicationsApp.PrintManagement = (function(Backbone){
     var Workspace = Backbone.Router.extend({
         routes : {
             'report/:query' : 'report',
-            'table_tents'   : 'table_tents'
+            'table_tents'   : 'table_tents',
+            'badge_labels'  : 'badge_labels'
         },
         
         report : function(query) {
@@ -51,6 +52,15 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : TableTentForm,
                 endPoint    : '/planner_reports/table_tents'
+            }));
+        },
+        
+        badge_labels : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+                form        : TableTentForm,
+                endPoint    : '/planner_reports/badge_labels'
             }));
         }
     });

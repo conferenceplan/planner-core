@@ -255,6 +255,7 @@ PlannerRc1::Application.routes.draw do
   match 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
   match 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
   match 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
+  match 'program/updates2.:format', :controller => 'program', :action => 'updates2', :method => 'get'
   match 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
   match 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
   resources :program

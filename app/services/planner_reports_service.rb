@@ -69,6 +69,24 @@ module PlannerReportsService
   #
   #
   #
+  def self.findPublishedPanelistsWithPanels(peopleIds = nil, additional_roles = nil)
+    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
+    roles.concat(additional_roles) if additional_roles
+    cndStr = '(published_programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?))'
+    cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
+
+    conditions = [cndStr, roles, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
+    conditions << peopleIds if peopleIds
+    
+    Person.all :conditions => conditions, 
+              :include => {:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}},
+              :order => "people.last_name, published_time_slots.start asc"
+
+  end
+  
+  #
+  #
+  #
   def self.findTagsByContext(context)
     tags = ActsAsTaggableOn::Tagging.all(:conditions => ['context = ?', context], :joins => ["join tags on taggings.tag_id = tags.id"], :select => 'distinct(name)')
     tags.collect! {|t| t.name}
@@ -95,24 +113,6 @@ module PlannerReportsService
     res1 = res.group_by {|b| [b['context'], b['tag']] }
     
     res1
-  end
-  
-  #
-  #
-  #
-  def self.findPublishedPanelistsWithPanels(peopleIds = nil, additional_roles = nil)
-    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
-    roles.concat(additional_roles) if additional_roles
-    cndStr = '(published_programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?))'
-    cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
-
-    conditions = [cndStr, roles, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
-    conditions << peopleIds if peopleIds
-    
-    Person.all :conditions => conditions, 
-              :include => {:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}},
-              :order => "people.last_name, published_time_slots.start asc"
-
   end
   
   #

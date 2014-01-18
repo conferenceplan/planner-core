@@ -29,7 +29,6 @@ gem 'turbolinks'
 gem 'will_paginate'
 
 gem 'prawn_rails'
-gem "prawn-labels"
 gem "select2-rails"
 
 gem "recaptcha", :require => "recaptcha/rails"
