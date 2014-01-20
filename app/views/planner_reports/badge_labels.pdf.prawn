@@ -1,8 +1,9 @@
 #
 require "prawn/measurement_extensions"
 
-# :page_layout => @orientation
+bleed = 0.1
 prawn_document(:page_size => @label_dimensions.page_size,
+                :page_layout => (@label_dimensions.orientation == 'portrait' ? :portrait : :landscape),
                 :top_margin => @label_dimensions.top_margin * 1.send(@label_dimensions.unit),
                 :bottom_margin => @label_dimensions.bottom_margin * 1.send(@label_dimensions.unit),
                 :left_margin => @label_dimensions.left_margin * 1.send(@label_dimensions.unit),
@@ -27,9 +28,9 @@ prawn_document(:page_size => @label_dimensions.page_size,
         y, x = i.divmod(cols)
             pdf.grid(y,x).bounding_box do |b|
                 # use text_box so that we truncate/re-size the text
-                pdf.text_box label, :at => pdf.bounds.top_left, 
-                            :width => pdf.bounds.right, 
-                            :height => pdf.bounds.height, 
+                pdf.text_box label, :at => [(pdf.bounds.top_left[0] + bleed.in),(pdf.bounds.top_left[1] + bleed.in)], # plus blead
+                            :width => pdf.bounds.right - bleed.in, # minus blead
+                            :height => pdf.bounds.height - bleed.in, # minus blead
                             :overflow => :shrink_to_fit,
                             :inline_format => true
             end
