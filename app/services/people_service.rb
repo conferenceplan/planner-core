@@ -8,12 +8,14 @@ module PeopleService
   #
   def self.findAssignedParticipants
     
-    cndStr = '(people.acceptance_status_id in (?)) AND (programme_items.print = true)'
+    cndStr = 'programme_items.print = true'
 
-    conditions = [cndStr, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
+    conditions = [cndStr] #, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
 
     # TODO - should this be from the published items rather than the pre-published?
+    # TODO - need to test that programme item assignments actually exist
     Person.all :conditions => conditions, 
+              :joins => { :programmeItemAssignments => {} },
               :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} },
               :order => "people.last_name"
 

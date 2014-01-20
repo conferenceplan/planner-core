@@ -7,10 +7,26 @@ PublicationsApp.PrintManagement = (function(Backbone){
     var people = <%= [].concat(PeopleService.findAssignedParticipants.collect {|p| {'id' => p.id, 'text' => p.getFullPublicationName}}).to_json.html_safe %>;
 
     var GenericForm = Backbone.Form.extend({
+        schema : {
+            page_size : { type : 'Select', title : '<%= t "page-size" %>', 
+                          options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
+                },
+            orientation : { type : 'Select', title : '<%= t "orientation" %>', 
+                          options : { landscape : 'Landscape' , portrait : 'Portrait'} 
+                },
+        },
+    
+        data : {
+            page_size : 'LETTER',
+            orientation : 'portrait'
+        }    
     });
     
     var TableTentForm = Backbone.Form.extend({
         schema : {
+            page_size : { type : 'Select', title : '<%= t "page-size" %>', 
+                          options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
+                },
             people : { type : 'Select2', title : '<%= t "publications-people" %>', 
                         config : {
                             multiple: true,
@@ -23,7 +39,29 @@ PublicationsApp.PrintManagement = (function(Backbone){
                             }
                         }
                 }
-            // OR items
+        },
+        
+        data : {
+            page_size : 'LETTER'
+        }
+    });
+    
+    var BadgeForm = Backbone.Form.extend({
+        schema : {
+            label_type : { type : 'Select', title : '<%= t "label-type" %>', 
+                            options : <%= [].concat(LabelDimensions.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            people : { type : 'Select2', title : '<%= t "publications-people" %>', 
+                        config : {
+                            multiple: true,
+                            maximumSelectionSize : -1,
+                            query: function (query) {
+                                var data = {
+                                    results: _.filter(people, function(x) { return x.text.toLowerCase().indexOf(query.term.toLowerCase()) != -1; })
+                                };
+                                query.callback(data);
+                            }
+                        }
+                }
         },
         
         data : {
@@ -59,7 +97,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
-                form        : TableTentForm,
+                form        : BadgeForm,
                 endPoint    : '/planner_reports/badge_labels'
             }));
         }

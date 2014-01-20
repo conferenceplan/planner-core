@@ -223,7 +223,8 @@ class PlannerReportsController < PlannerController
   #
   #
   def program_book_report
-
+    @page_size = params[:page_size]
+    @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
     @times = PlannerReportsService.findProgramItemsByTimeAndRoom
     @rooms = Room.all :select => 'distinct rooms.name',
                                :order => 'venues.name DESC, rooms.name ASC', 
@@ -250,6 +251,7 @@ class PlannerReportsController < PlannerController
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     
     @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList
+    @page_size = params[:page_size]
     
     respond_to do |format|
       format.xml {
@@ -268,6 +270,7 @@ class PlannerReportsController < PlannerController
   #
   #
   def badge_labels
+    @label_dimensions = LabelDimensions.find(params[:label_type])
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     additional_roles = params[:additional_roles] ? PersonItemRole['Invisible'].id : nil
     for_print = params[:for_print] ? (params[:for_print] == true) : false

@@ -1,12 +1,8 @@
 require "prawn/measurement_extensions"
 
-# TODO - get the page size and layout from options passed in
-
-# 1/72 of an inch
-# page is 
-page_height = 8.5.in
-page_width = 11.in
-prawn_document(:page_layout => :landscape) do |pdf|
+prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
+    page_height = pdf.bounds.top_right[1]
+    page_width = pdf.bounds.top_right[0]
 
     first_page = true
     @people.each do |person|
@@ -14,11 +10,9 @@ prawn_document(:page_layout => :landscape) do |pdf|
         first_page = false
             
         person.published_programme_items.each do |item|
-            # Letter is 8.5 by 11
-            pdf.rotate 180, :origin => [page_width - 6.in, pdf.cursor - 40.pt] do
-                pdf.text item.title
+            pdf.rotate 180, :origin => [page_width/2, pdf.cursor - 40.pt] do
+                pdf.text item.title, :inline_format => true
                 pdf.text item.format.name
-                pdf.text item.precis
                 pdf.text item.published_room.name + ' ' + item.published_room.published_venue.name
                 pdf.text item.published_time_slot.start.strftime('%A %H:%M %y-%m-%d')
             end

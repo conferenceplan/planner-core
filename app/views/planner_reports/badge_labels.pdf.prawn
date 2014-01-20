@@ -1,10 +1,18 @@
+#
+require "prawn/measurement_extensions"
 
-# TODO - get the dimensions etc from db. i.e. encode avery label dimensions
-cols = 3
-rows = 6
-gutter = 10
-prawn_document() do |pdf|
-    pdf.define_grid(:columns => cols, :rows => rows, :gutter => gutter)
+# :page_layout => @orientation
+prawn_document(:page_size => @label_dimensions.page_size,
+                :top_margin => @label_dimensions.top_margin * 1.send(@label_dimensions.unit),
+                :bottom_margin => @label_dimensions.bottom_margin * 1.send(@label_dimensions.unit),
+                :left_margin => @label_dimensions.left_margin * 1.send(@label_dimensions.unit),
+                :right_margin => @label_dimensions.right_margin * 1.send(@label_dimensions.unit),
+    ) do |pdf|
+    cols = @label_dimensions.across
+    rows = @label_dimensions.down
+
+    pdf.define_grid(:columns => cols, :rows => rows, 
+                    :row_gutter => (@label_dimensions.vertical_spacing * 1.send(@label_dimensions.unit)), :column_gutter => (@label_dimensions.horizontal_spacing * 1.send(@label_dimensions.unit)))
     
     i = x = y = 0
     @people.each do |p|
@@ -18,10 +26,7 @@ prawn_document() do |pdf|
     
         y, x = i.divmod(cols)
             pdf.grid(y,x).bounding_box do |b|
-                # use text_box so that we truncate
-                pdf.stroke do |h|
-                    pdf.line pdf.bounds.top_right, pdf.bounds.bottom_left
-                end
+                # use text_box so that we truncate/re-size the text
                 pdf.text_box label, :at => pdf.bounds.top_left, 
                             :width => pdf.bounds.right, 
                             :height => pdf.bounds.height, 
