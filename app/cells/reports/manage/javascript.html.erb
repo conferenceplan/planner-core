@@ -6,13 +6,13 @@ ReportApp.ReportManagement = (function(Backbone){
     
     var PanelsWithPanelistsForm = Backbone.Form.extend({
         schema : {
-            modified_since  : { type : 'Date', title : '<%= t "Modified Since" %>' },
-            sort_by : { type : 'Select', title : '<%= t "Sort By" %>', options : [{ val: 'time', label: 'Date/Time' }, { val: 'room', label: 'Room' }, { val: 'title', label: 'Title' }] },
-            scheduled       : { type : 'Checkbox', title : '<%= t "Only Scheduled Items" %>'}, // Include scheduled panels only
+            modified_since  : { type : 'Date', title : '<%= t "report-selection-modified-since" %>' },
+            sort_by : { type : 'Select', title : '<%= t "report-selection-sort-by" %>', options : [{ val: 'time', label: 'Date/Time' }, { val: 'room', label: 'Room' }, { val: 'title', label: 'Title' }] },
+            scheduled       : { type : 'Checkbox', title : '<%= t "report-selection-only-scheduled-items" %>'}, // Include scheduled panels only
             // description     : { type : 'Checkbox'}, // Include item descriptions
-            format_id       : { type : 'Select', title : '<%= t "Format" %>', title : '<%= t "format" %>', options : <%= [{'val' => -1, 'label' => 'All'}].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            fewer_than      : { type : 'Number', title : '<%= t "With Fewer Than (participants)" %>'},
-            more_than       : { type : 'Number', title : '<%= t "With More Than (participants)" %>'}
+            format_id       : { type : 'Select', title : '<%= t "report-selection-item-format" %>', title : '<%= t "report-selection-item-format" %>', options : <%= [{'val' => -1, 'label' => 'All'}].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            fewer_than      : { type : 'Number', title : '<%= t "report-selection-with-fewer-than" %>'},
+            more_than       : { type : 'Number', title : '<%= t "report-selection-with-more-than" %>'}
         },
         
         data : {
@@ -24,9 +24,9 @@ ReportApp.ReportManagement = (function(Backbone){
     
     var PanelistsWithPanelsForm = Backbone.Form.extend({
         schema : {
-            scheduled   : { type : 'Checkbox', title : '<%= t "Only Scheduled Items" %>'}, // Include scheduled panelists only
-            reserved    : { type : 'Checkbox', title : '<%= t "Incuded Reserved Participants" %>'},
-            forprint    : { type : 'Checkbox', title : '<%= t "Only Items for Print" %>'}
+            scheduled   : { type : 'Checkbox', title : '<%= t "report-selection-only-scheduled-items" %>'}, // Include scheduled panelists only
+            reserved    : { type : 'Checkbox', title : '<%= t "report-selection-include-reserved-participants" %>'},
+            forprint    : { type : 'Checkbox', title : '<%= t "report-selection-only-items-for-print" %>'}
         },
         
         data : {
@@ -35,7 +35,7 @@ ReportApp.ReportManagement = (function(Backbone){
     
     var TagsByContextForm = Backbone.Form.extend({
         schema : {
-            context : { type : 'Select', title : '<%= t "For Tag Context" %>', 
+            context : { type : 'Select', title : '<%= t "report-selection-for-tag-context" %>', 
                 options : <%= TagContext.all(:order => 'name').collect {|s| {'val' => s.name, 'label' => s.name} }.to_json.html_safe %> },
         },
         
@@ -54,7 +54,7 @@ ReportApp.ReportManagement = (function(Backbone){
     var PeopleByTagColModel = [
                     {name: 'context', label : '<%= t "Tag Context" %>', jsonmap: "context", width: 100},
                     {name: 'tag', label : '<%= t "Tag(s)" %>', jsonmap: "tag", width: 100},
-                    {name: 'people', label : '<%= t "People" %>', jsonmap: "people", formatter: AppUtils.arrayToStringSingleLine}
+                    {name: 'people', label : '<%= t "reports-people" %>', jsonmap: "people", formatter: AppUtils.arrayToStringSingleLine}
     ];
     
     var TagsByContextColModel = [
@@ -103,7 +103,7 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : PanelsWithPanelistsForm,
                 endPoint    : '/planner_reports/panels_with_panelists',
                 colModel    : PanelsWithPanelistsColModel,
-                caption     : '<%= t "Panels with Panelists" %>'
+                caption     : '<%= t "report-items-with-participants" %>'
             }));
         },
         
@@ -114,7 +114,7 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : PanelistsWithPanelsForm,
                 endPoint    : '/planner_reports/panelists_with_panels',
                 colModel    : PanelistsWithPanelsColModel,
-                caption     : '<%= t "Panelists with Panels" %>'
+                caption     : '<%= t "report-participants-with-items" %>'
             }));
         },
         
@@ -149,7 +149,7 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : TagsByContextForm,
                 endPoint    : '/planner_reports/admin_tags_by_context',
                 colModel    : TagsByContextColModel,
-                caption     : '<%= t "Tags by Context" %>'
+                caption     : '<%= t "report-tags-by-context" %>'
             }));
         },
         
@@ -160,7 +160,7 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : PeopleByTagForm,
                 endPoint    : '/planner_reports/people_by_tag',
                 colModel    : PeopleByTagColModel,
-                caption     : '<%= t "People by Tag" %>'
+                caption     : '<%= t "reports-people-by-tag" %>'
             }));
         }
         
