@@ -105,6 +105,7 @@ module PublishedProgramItemsService
         else
           resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :removePerson, person)
         end
+      else 
       end
     end
 
@@ -115,17 +116,14 @@ module PublishedProgramItemsService
     begin
     programmeItemAssignment = PublishedRoomItemAssignment.find(auditInfo.auditable_id) # get the associated program item assignment
     programmeItem = programmeItemAssignment.published_programme_item # from that we can get the program item
+    oldtime = nil
     if auditInfo.audited_changes["published_time_slot_id"] # if it is a change to the time slot then we report on that
       # the time slot has changed if we have an array of changed time information and that array contains more than one value      
       movedTime = auditInfo.audited_changes["published_time_slot_id"].kind_of?(Array) && auditInfo.audited_changes["published_time_slot_id"].size > 1
       
       if movedTime # Item X has been rescheduled from time A to time B
-        if PublishedTimeSlot.exists? auditInfo.audited_changes["published_time_slot_id"][0]
-          oldtime = PublishedTimeSlot.find(auditInfo.audited_changes["published_time_slot_id"][0]) if movedTime == true
+          oldtime = PublishedTimeSlot.find(auditInfo.audited_changes["published_time_slot_id"][0]) if PublishedTimeSlot.exists? auditInfo.audited_changes["published_time_slot_id"][0]
           newtime = PublishedTimeSlot.find(auditInfo.audited_changes["published_time_slot_id"][1])
-        else
-          movedTime = false  
-        end
       else #
         if PublishedTimeSlot.exists? auditInfo.audited_changes["published_time_slot_id"]
           newtime = PublishedTimeSlot.find(auditInfo.audited_changes["published_time_slot_id"])
@@ -134,9 +132,13 @@ module PublishedProgramItemsService
         end
       end
       
-      if movedTime && newtime.start != oldtime.start # then we have move time slot
+      if movedTime #&& newtime.start != oldtime.start # then we have move time slot
         # Item X has been rescheduled from time A to time B
-        resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :timeMove, oldtime.start, newtime.start)
+        if oldtime
+          resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :timeMove, oldtime.start, newtime.start)
+        else
+          resultantChanges = addPinkSheetEntryWithKey(resultantChanges, programmeItem, :update, :timeMove, nil, newtime.start)
+        end
       else # we have moved room or added an item
         # TODO - could also be a change to one of the other attributes
         if resultantChanges[:update] && resultantChanges[:update][programmeItem]
