@@ -139,7 +139,7 @@ ReportApp.ReportManagement = (function(Backbone){
                     AppUtils.createConflictCollectionView(obj.get('back_to_back'), "#back-to-back-conflict-view-template",conflictLayout.backToBackRegion);
                 } 
             });
-            resultRegion.show(conflictLayout);
+            ReportBase.resultRegion.show(conflictLayout);
         },
         
         tags_by_context : function() {
