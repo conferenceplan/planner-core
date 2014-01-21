@@ -4,13 +4,13 @@
 		<div class="form-group">
 		  <%= f.label t 'login', class: "control-label" %>
 		  <div>
-		  	<%= f.text_field :login, class: "form-control" %>
+		  	<%= f.text_field :login, class: "form-control login-field", tabindex: "1", autofocus: "autofocus", autocorrect: "off", autocapitalize: "off" %>
 		  </div>
 		</div>
 		<div class="form-group">
 		  <%= f.label t 'password', class: "control-label" %>
 		  <div>
-		  	<%= f.password_field :password, class: "form-control" %>
+		  	<%= f.password_field :password, class: "form-control login-field" %>
 		  </div>
 		</div>
 		<div class="form-group">
