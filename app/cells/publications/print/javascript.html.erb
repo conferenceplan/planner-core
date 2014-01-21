@@ -5,6 +5,7 @@ PublicationsApp = new Backbone.Marionette.Application();
 PublicationsApp.PrintManagement = (function(Backbone){
     
     var people = <%= [].concat(PeopleService.findAssignedParticipants.collect {|p| {'id' => p.id, 'text' => p.getFullPublicationName}}).to_json.html_safe %>;
+    var rooms = <%= [].concat(RoomsService.findPublishedRooms.collect {|r| {'id' => r.id, 'text' => r.name}}).to_json.html_safe %>
 
     var GenericForm = Backbone.Form.extend({
         schema : {
@@ -48,6 +49,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
     
     var BadgeForm = Backbone.Form.extend({
         schema : {
+            additional_roles : { type : 'Checkbox', title : '<%= t "publications-include-invisible" %>'},
             label_type : { type : 'Select', title : '<%= t "label-type" %>', 
                             options : <%= [].concat(LabelDimensions.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             people : { type : 'Select2', title : '<%= t "publications-people" %>', 
@@ -68,11 +70,42 @@ PublicationsApp.PrintManagement = (function(Backbone){
         }
     });
     
+    var RoomsForm = Backbone.Form.extend({
+        schema : {
+            day : { type : 'Select', title : '<%= t "day" %>', 
+                         options : <%=  [{'label' => 'All', 'val' =>"-1"}].concat((((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}).to_json.html_safe%> },
+            page_size : { type : 'Select', title : '<%= t "page-size" %>', 
+                          options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
+                },
+            orientation : { type : 'Select', title : '<%= t "orientation" %>', 
+                          options : { landscape : 'Landscape' , portrait : 'Portrait'} 
+                },
+            rooms : { type : 'Select2', title : '<%= t "publications-rooms" %>', 
+                        config : {
+                            multiple: true,
+                            maximumSelectionSize : -1,
+                            query: function (query) {
+                                var data = {
+                                    results: _.filter(rooms, function(x) { return x.text.toLowerCase().indexOf(query.term.toLowerCase()) != -1; })
+                                };
+                                query.callback(data);
+                            }
+                        }
+                }
+        },
+        
+        data : {
+            page_size : 'LETTER',
+            orientation : 'portrait'
+        }    
+    });
+    
     var Workspace = Backbone.Router.extend({
         routes : {
             'report/:query' : 'report',
             'table_tents'   : 'table_tents',
-            'badge_labels'  : 'badge_labels'
+            'badge_labels'  : 'badge_labels',
+            'publications_room_signs' : 'publications_room_signs'
         },
         
         report : function(query) {
@@ -99,6 +132,15 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : BadgeForm,
                 endPoint    : '/planner_reports/badge_labels'
+            }));
+        },
+        
+        publications_room_signs : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+                form        : RoomsForm,
+                endPoint    : '/planner_reports/room_signs'
             }));
         }
     });

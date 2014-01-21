@@ -6,10 +6,11 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
 
     first_page = true
     @people.each do |person|
-        pdf.start_new_page if !first_page
-        first_page = false
             
         person.published_programme_items.each do |item|
+            pdf.start_new_page if !first_page
+            first_page = false
+            
             pdf.rotate 180, :origin => [page_width/2, pdf.cursor - 40.pt] do
                 pdf.text item.title, :inline_format => true
                 pdf.text item.format.name

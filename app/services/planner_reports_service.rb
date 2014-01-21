@@ -129,6 +129,25 @@ module PlannerReportsService
   #
   #
   #
+  def self.findPublishedPanelsByRoom(roomIds = nil, day = nil)
+    cndStr = " published_time_slots.start is not NULL"
+    cndStr += ' AND (published_rooms.id in (?))' if roomIds
+    cndStr += ' AND (published_room_item_assignments.day = ?)' if day
+
+    conditions = [cndStr]
+    conditions << roomIds if roomIds
+    conditions << day if day
+    
+    PublishedRoom.all :include => [:published_venue, :published_room_item_assignments, {:published_programme_items => [:published_time_slot, :published_programme_item_assignments, :format]}],
+            :joins => [:published_venue, :published_room_item_assignments, {:published_programme_items => [:published_time_slot, :published_programme_item_assignments, :format]}],
+            :conditions => conditions, 
+            :order => "published_venues.name desc, published_rooms.name, published_time_slots.start"
+                        
+  end
+  
+  #
+  #
+  #
   def self.findPanelsByTimeslot
 
     TimeSlot.all :joins => [{:rooms => :venue}, {:programme_items => :format}], 

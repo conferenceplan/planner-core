@@ -4,15 +4,18 @@ xml.badge_labels do
         xml.person do
             xml.name(person.getFullPublicationName)
             xml.items do
-                person.programmeItems.each do |item|
-                    xml.item do
-                        xml.title item.title
-                        xml.format item.format.name
-                        xml.room item.room.name
-                        xml.venue item.room.venue.name
-                        xml.day item.time_slot.start.strftime('%A')
-                        xml.time item.time_slot.start.strftime('%H:%M')
-                        xml.date item.time_slot.start.strftime('%y-%m-%d')
+                person.programmeItemAssignments.each do |assignment|
+                    if assignment.programmeItem.time_slot && (@allowed_roles.include? assignment.role)
+                        xml.item do
+                            xml.role assignment.role.name
+                            xml.title assignment.programmeItem.title
+                            xml.format assignment.programmeItem.format.name
+                            xml.room assignment.programmeItem.room.name
+                            xml.venue assignment.programmeItem.room.venue.name
+                            xml.day assignment.programmeItem.time_slot.start.strftime('%A')
+                            xml.time assignment.programmeItem.time_slot.start.strftime('%H:%M')
+                            xml.date assignment.programmeItem.time_slot.start.strftime('%y-%m-%d')
+                        end
                     end
                 end
             end

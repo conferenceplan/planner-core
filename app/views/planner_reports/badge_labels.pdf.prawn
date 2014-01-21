@@ -19,10 +19,14 @@ prawn_document(:page_size => @label_dimensions.page_size,
     @people.each do |p|
     
         label = "<b><u>" + p.getFullPublicationName + "</u></b>\n"
-        label += p.programmeItems.collect { |i|
-        if i.time_slot
-           "<b>" + i.time_slot.start.strftime('%a %H:%M') + "</b> : " + i.room.name + " (" + i.room.venue.name + ") " + i.title
-        end
+        
+        label += p.programmeItemAssignments.collect { |i|
+            if i.programmeItem.time_slot && (@allowed_roles.include? i.role)
+                "(" + i.role.name[0] +
+                ") <b>" + i.programmeItem.time_slot.start.strftime('%a %H:%M') + "</b> : " + 
+                i.programmeItem.room.name + " (" + i.programmeItem.room.venue.name + ") " + 
+                i.programmeItem.title
+            end
         }.compact.join("\n")
     
         y, x = i.divmod(cols)

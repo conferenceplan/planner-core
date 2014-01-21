@@ -6,6 +6,13 @@ module RoomsService
   #
   #
   #
+  def self.findPublishedRooms
+    PublishedRoom.find :all, :order => 'name'
+  end
+  
+  #
+  #
+  #
   def self.countRooms(filters = nil, venue_id = nil, page_to = nil)
     args = genArgsForSql(filters, venue_id, page_to)
 
