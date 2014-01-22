@@ -47,7 +47,9 @@ module PublishedProgramItemsService
             person = Person.find(audit.audited_changes["person_id"])
             if person.publishedProgrammeItemAssignments.size == 0
               role = PersonItemRole[audit.audited_changes["role_id"]]
-              resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :removePerson, person, role)
+              # resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :removePerson, person, role)
+              # TODO - need to make sure person is removed does not have any prog items
+              resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :detailUpdate, programmeItem)
             end
         elsif audit.auditable_type == 'PublishedRoomItemAssignment'
           begin
@@ -90,7 +92,7 @@ module PublishedProgramItemsService
       programmeItem = PublishedProgrammeItem.find(auditInfo.audited_changes["published_programme_item_id"])
       role = PersonItemRole[auditInfo.audited_changes["role_id"]]
       person = Person.find(auditInfo.audited_changes["person_id"])
-      resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :addPerson, person, role)
+      resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :addPerson, person, role) # TODO - change for update if not new person
       
       # TODO - the item was also changed...
       resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :detailUpdate, programmeItem)
@@ -107,7 +109,9 @@ module PublishedProgramItemsService
           oldrole = PersonItemRole[auditInfo.audited_changes["role_id"][0]]
           resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :newRole, person, oldrole, newrole)
         else
-          resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :removePerson, person)
+          # TODO - check if we actual get here
+          # resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :removePerson, person)
+          resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :detailUpdate, programmeItem)
         end
       else 
       end
