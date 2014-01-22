@@ -1,5 +1,7 @@
 PlannerRc1::Application.routes.draw do
 
+  get "conference/index"
+
   filter :locale
 
   namespace :pages do
@@ -263,6 +265,7 @@ PlannerRc1::Application.routes.draw do
   match '/form/:page(/:preview)', :controller => 'surveys/response', :action => 'renderalias'
 
   match 'api/theme.:format', :controller => 'api/theme', :action => 'show'  
+  match 'api/conference.:format', :controller => 'api/conference', :action => 'show'  
 
 #   
 # 
