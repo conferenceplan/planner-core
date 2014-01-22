@@ -91,6 +91,10 @@ module PublishedProgramItemsService
       role = PersonItemRole[auditInfo.audited_changes["role_id"]]
       person = Person.find(auditInfo.audited_changes["person_id"])
       resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :addPerson, person, role)
+      
+      # TODO - the item was also changed...
+      resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :detailUpdate, programmeItem)
+
       rescue  
       end
     else
@@ -150,7 +154,7 @@ module PublishedProgramItemsService
             auditChange = getProgrammeItemChanges(programmeItem.id, pubDate);
             if auditChange
               auditChange.each do |a|
-                resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :detailUpdate, a.changes)
+                resultantChanges = addPinkSheetEntry(resultantChanges, programmeItem, :detailUpdate, a.audited_changes)
               end
             end
           else  
