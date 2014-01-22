@@ -32,8 +32,6 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
                 
                 pdf.text itemText, :inline_format => true
             end
-            
         end
     end
-    
 end

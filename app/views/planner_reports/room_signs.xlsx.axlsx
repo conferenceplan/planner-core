@@ -1,0 +1,20 @@
+wb = xlsx_package.workbook
+
+days = @day ? [@day] : (0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a
+days.each do |day| # For each day ...
+    wb.add_worksheet(name: "Room Signs - " + (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + day.days).strftime('%A')) do |sheet|
+        row = []
+        @rooms.each do |room|
+            row << room.name + ' - ' + room.published_venue.name
+            row << (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + day.days).strftime('%A')
+            room.published_room_item_assignments.day(day).each do |assignment|
+                row << assignment.published_time_slot.start.strftime('%H:%M')
+                row << assignment.published_programme_item.title
+                row << assignment.published_programme_item.published_programme_item_assignments.collect{|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.collect{|p| p.person.getFullPublicationName}.join(',')
+                
+            end
+                
+        end
+        sheet.add_row row
+    end
+end
