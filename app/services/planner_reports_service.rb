@@ -139,7 +139,7 @@ module PlannerReportsService
     conditions << day if day
     
     PublishedRoom.all :include => [:published_venue, :published_room_item_assignments, {:published_programme_items => [:published_time_slot, :published_programme_item_assignments, :format]}],
-            :joins => [:published_venue, :published_room_item_assignments, {:published_programme_items => [:published_time_slot, :published_programme_item_assignments, :format]}],
+            :joins => [:published_venue, :published_room_item_assignments],
             :conditions => conditions, 
             :order => "published_venues.name desc, published_rooms.name, published_time_slots.start"
                         
@@ -162,7 +162,7 @@ module PlannerReportsService
   #
   def self.findProgramItemsByTimeAndRoom( published = false )
     
-    TimeSlot.all :joins => [{:rooms => :venue}, {:programme_items => [:programme_item_assignments, :format, {:people => :pseudonym}]}], 
+    TimeSlot.all :joins => [{:rooms => :venue}, :programme_items], 
             :include => [{:rooms => :venue}, {:programme_items => [:programme_item_assignments, :format, {:people => :pseudonym}]}], 
             :conditions => "print = 1 and time_slots.start is not NULL",
             :order => "time_slots.start, time_slots.end, venues.name desc, rooms.name" 
