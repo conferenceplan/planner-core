@@ -1,32 +1,25 @@
 <script type="text/javascript">
 
-PublicationsApp = new Backbone.Marionette.Application();
+OnlinePublicationsApp = new Backbone.Marionette.Application();
 
-PublicationsApp.PrintManagement = (function(Backbone){
+OnlinePublicationsApp.Management = (function(Backbone){
 
     var GenericForm = Backbone.Form.extend({
     });
 
-    var ProgramGuideColModel = [
-                    {name: 'room',      label : '<%= t "Room" %>',  jsonmap: "room", width: 50},
-    ];
-    
     var Workspace = Backbone.Router.extend({
 
         routes : {
-            'program_guide'        : 'program_guide',
-            // 'panels_by_timeslot'    : 'panels_by_timeslot'
+            'program_publish_review'    : 'program_publish_review',
+            'program_publish'           : 'program_publish'
         },
         
-        program_guide : function() {
-            ReportBase.reportRegion.close();
-            ReportBase.resultRegion.close();
-            ReportBase.reportRegion.show(new ReportBase.PublicationView({
-                form        : GenericForm,
-                endPoint    : '/XXXX',
-                colModel    : ProgramGuideColModel,
-                caption     : '<%= t "publications-program-guide" %>'
-            }));
+        program_publish_review : function() {
+            alert('Review Publish'); // /publisher/review
+        },
+        
+        program_publish : function() {
+            alert('Publish'); // /publisher
         }
         
     });
@@ -47,8 +40,8 @@ PublicationsApp.PrintManagement = (function(Backbone){
  * 
  */
 jQuery(document).ready(function() {
-    PublicationsApp.addInitializer(PublicationsApp.PrintManagement.init);
-    PublicationsApp.start({});
+    OnlinePublicationsApp.addInitializer(OnlinePublicationsApp.Management.init);
+    OnlinePublicationsApp.start({});
 });
 
 </script>
