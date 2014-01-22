@@ -30,14 +30,14 @@ prawn_document(:page_size => @label_dimensions.page_size,
         }.compact.join("\n")
     
         y, x = i.divmod(cols)
-            pdf.grid(y,x).bounding_box do |b|
-                # use text_box so that we truncate/re-size the text
-                pdf.text_box label, :at => [(pdf.bounds.top_left[0] + bleed.in),(pdf.bounds.top_left[1] + bleed.in)], # plus blead
+        pdf.grid(y,x).bounding_box do |b|
+            # use text_box so that we truncate/re-size the text
+            pdf.text_box label, :at => [(pdf.bounds.top_left[0] + bleed.in),(pdf.bounds.top_left[1] + bleed.in)], # plus blead
                             :width => pdf.bounds.right - bleed.in, # minus blead
                             :height => pdf.bounds.height - bleed.in, # minus blead
                             :overflow => :shrink_to_fit,
                             :inline_format => true
-            end
+        end
         if (y == (rows -1) && x == (cols -1))
             i = 0
             pdf.start_new_page

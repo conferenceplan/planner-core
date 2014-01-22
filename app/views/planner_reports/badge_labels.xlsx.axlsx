@@ -1,0 +1,30 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Badge Labels") do |sheet|
+
+    titles =     [
+        'Name',
+        'Number of Items'
+    ]
+    titles.concat Array.new(20) {|e| 'item' + (e+1).to_s }
+    
+    sheet.add_row titles
+    
+    @people.each do |p|
+        row = []
+        row << p.getFullPublicationName
+        
+        row <<  p.programmeItemAssignments.size
+        
+        p.programmeItemAssignments.each do |ia|
+            if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
+                row << ia.programmeItem.time_slot.start.strftime('%a %H:%M') + " : " + 
+                ia.programmeItem.room.name + " (" + ia.programmeItem.room.venue.name + ") " + 
+                ia.programmeItem.title
+            end
+        end
+        
+        sheet.add_row row
+    end
+
+end
