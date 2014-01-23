@@ -34,9 +34,9 @@
 <script type="text/template" id="mail-template-data-template">
     <dl class="dl-horizontal">
         <dt><%= t "Title" %></dt><dd>{{= title }}</dd> 
-        <dt><%= t "Mail Use" %></dt><dd>{{= mail_use_name }}</dd> 
+        <dt><%= t "mail-use" %></dt><dd>{{= mail_use_name }}</dd> 
         <dt><%= t "Survey" %></dt><dd>{{= survey_id ? survey : "&nbsp;" }}</dd> 
-        <dt><%= t "Subject" %></dt><dd>{{= subject }}</dd> 
-        <dt><%= t "Content" %></dt><dd><pre>{{= content }}</pre></dd> 
+        <dt><%= t "mail-subject-line" %></dt><dd>{{= subject }}</dd> 
+        <dt><%= t "mail-content" %></dt><dd><pre>{{= content }}</pre></dd> 
     </dl>
 </script>

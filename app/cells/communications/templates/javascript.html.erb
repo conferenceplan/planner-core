@@ -9,7 +9,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
         schema : {
             title           : { type : 'Text', title : '<%= t "title" %>' },
 
-            mail_use_id     : { type : 'Select', title : '<%= t "mail use" %>',
+            mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>',
                                             options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
                                         
@@ -17,8 +17,8 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
                                             options : <%= [[nil,'']].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
 
-            subject         : { type : 'Text', title : '<%= t "subject" %>' },
-            content         : { type : 'Html', title : '<%= t "content" %>' },
+            subject         : { type : 'Text', title : '<%= t "mail-subject-line" %>' },
+            content         : { type : 'Html', title : '<%= t "mail-content" %>' },
         }
     });
     
