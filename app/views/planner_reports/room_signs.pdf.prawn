@@ -1,6 +1,6 @@
 require "prawn/measurement_extensions"
 
-prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
+prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     page_height = pdf.bounds.top_right[1]
     page_width = pdf.bounds.top_right[0]
     
