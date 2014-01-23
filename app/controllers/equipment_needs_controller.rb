@@ -4,8 +4,6 @@ class EquipmentNeedsController < PlannerController
     @equipment = EquipmentNeed.find(params[:id])
 
     @equipment.update_attributes(params[:equipment_need])
-    
-    # render json: equipmentNeed.to_json, :content_type => 'application/json'
   end
 
   def create
@@ -38,8 +36,6 @@ class EquipmentNeedsController < PlannerController
   def index
     programme_item = ProgrammeItem.find(params[:programme_item_id])
     @equipmentNeeds = programme_item.equipment_needs;
-    
-    # render json: equipmentNeeds.to_json, :content_type => 'application/json'
   end
   
 end

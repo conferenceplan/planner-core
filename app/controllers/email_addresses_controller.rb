@@ -43,13 +43,4 @@ class EmailAddressesController < PlannerController
     render json: emailAddresses.to_json, :content_type => 'application/json'
   end
   
-protected  
-  # def correct_stale_record_version
-    # # TODO - should we not reload the form with the new values that are now in the DB?
-    # @emailAddress.reload
-# #    .attributes = params[:email_address].reject do |attrb, value|
-# #      attrb.to_sym == :lock_version
-# #    end
-  # end
 end
-

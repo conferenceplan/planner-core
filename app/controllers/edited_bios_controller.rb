@@ -1,4 +1,5 @@
 class EditedBiosController < PlannerController
+  
   def update
     editedBio = EditedBio.find(params[:id])
     
@@ -22,10 +23,10 @@ class EditedBiosController < PlannerController
   
   def show
     if (params[:person_id])
-       person = Person.find(params[:person_id])
+      person = Person.find(params[:person_id])
 
-       @editedBio = person.edited_bio
-       @surveyBio = @person.GetSurveyBio
+      @editedBio = person.edited_bio
+      @surveyBio = @person.GetSurveyBio
     else
       @editedBio = EditedBio.find(params[:id])
       @surveyBio = @editedBio.person.GetSurveyBio
@@ -33,16 +34,11 @@ class EditedBiosController < PlannerController
   end
 
   def index
-    # @editedBios = EditedBio.find :all
     if (params[:person_id])
        @person = Person.find(params[:person_id])
-       # @urlstr = '/participants/'+ params[:person_id]  + '/edited_bio/new'
-
        @editedBio = @person.edited_bio
        @surveyBio = @person.GetSurveyBio
     else
-      @urlstr = '/edited_bios/new'
-
       @editedBio = EditedBio.find(params[:id])
       @surveyBio = @editedBio.person.GetSurveyBio
     end
@@ -60,6 +56,7 @@ class EditedBiosController < PlannerController
     accepted = AcceptanceStatus.find_by_name("Accepted")        
     invitestatus = InviteStatus.find_by_name("Invited")
     
+    # TODO - these need to be checked and made more rational
     if (exportSelect == 'true')
        updatedValueYear = params[:selectExportBioList]['updated_at(1i)']
        updatedValueMon = params[:selectExportBioList]['updated_at(2i)']
@@ -76,8 +73,4 @@ class EditedBiosController < PlannerController
     render :layout => 'content'
   end
   
-  def selectExportBioList
-    
-  end
 end
-
