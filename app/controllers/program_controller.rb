@@ -36,6 +36,7 @@ class ProgramController < ApplicationController
     end
     
     respond_to do |format|
+      format.json
       format.html { 
         if layout && layout == 'line'
           render :action => :list, :layout => 'content' 
@@ -43,7 +44,6 @@ class ProgramController < ApplicationController
           render :layout => 'content' # This should generate an HTML grid
         end
       }
-      format.json # TODO - handle callback paramter
     end
   end
   
@@ -69,12 +69,12 @@ class ProgramController < ApplicationController
   #
   #
   def publicationDates
-    pubDates = PublicationDate.all
-    res = []
+    allDates = PublicationDate.all
+    @pubDates = []
     
-    if pubDates
-      pubDates.each do |v|
-        res << {
+    if allDates
+      allDates.each do |v|
+        @pubDates << {
           :date => v.created_at,
           :id => v.id,
           :new => v.newitems,
@@ -82,16 +82,6 @@ class ProgramController < ApplicationController
           :removed => v.removeditems
         }
       end
-    end
-    
-    respond_to do |format|
-      format.json {
-        if params[:func]
-          render :json => "var "+ params[:func] +" = " + res.to_json, :callback => params[:callback] 
-        else  
-          render :json => res, :content_type => 'application/json', :callback => params[:callback]
-        end
-      }
     end
   end
   
