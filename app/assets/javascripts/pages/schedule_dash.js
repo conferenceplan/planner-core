@@ -3,25 +3,22 @@
  */
 DailyGrid = (function() {
 
+    var time_zone_offset = 0;
 
-function timeFormat(formats) {
-  return function(date) {
-    // var i = formats.length - 1, f = formats[i];
-    // while (!f[1](date)) f = formats[--i];
-    var i = 0, f = formats[i];
-    while (!f[1](date)) f = formats[i++]; // TODO - if zone is changed we need to change this as well
-    
-    return d3.functor(f[0])(moment(date)); // TODO - put the correct zone offset in here [.zone("-05:00")]
-    // NOTE - we need to also change the date returned as the position
-  };
-}
+    function timeFormat(formats) {
+        return function(date) {
+            var i = 0, f = formats[i];
+            while (!f[1](date)) f = formats[i++];
+        
+            return d3.functor(f[0])(moment(date));
+        };
+    }
 
-//var customTimeFormat = d3.time.format.multi([
-var customTimeFormat = timeFormat([
-  [function(d) { return moment(d).format('HH:mm');}, function(d) { return d.getHours(); }],
-  [function(d) { return moment(d).format('ddd');}, function(d) { return d.getDay() && d.getDate() != 1; }],
-  [function(d) { return moment(d).format('HH:mm');}, function() { return true; }] // TODO - we should take into account the timezone (also for the drag and drop calculation )
-]);
+    var customTimeFormat = timeFormat([
+      [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('HH:mm');}, function(d) { return d.getHours(); }],
+      [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('ddd');}, function(d) { return d.getDay() && d.getDate() != 1; }],
+      [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('HH:mm z');}, function() { return true; }] // TODO - we should take into account the timezone (also for the drag and drop calculation )
+    ]);
 
     // The area on the screen for the grid with margins
     var margin = {
@@ -132,6 +129,9 @@ var customTimeFormat = timeFormat([
             var yy = currentPosn[1];
             // * zoom.scale() + zoom.translate()[1];
             var yTime = roundToQuaterHour(yScale.invert(yy));
+            
+            // console.debug("****** TIME");
+            // console.debug(yTime);
 
             return [xRoom, yTime];
         } else {
@@ -163,13 +163,6 @@ var customTimeFormat = timeFormat([
         };
         
         _scrollTo(idx, time);
-// 
-        // newx = -(xScale(idx) - zoom.translate()[0]);
-        // newy = -(yScale(Date.parse(time)) - zoom.translate()[1]);
-// 
-        // zoom.translate([newx, newy]);
-        // draw();
-        // svg.selectAll(".prog-item").attr('transform', 'translate(' + zoom.translate() + ') scale(' + zoom.scale() + ')');
     };
     
     function _scrollTo(roomIdx, time) {
@@ -183,10 +176,10 @@ var customTimeFormat = timeFormat([
 
     // Public method used by the view to paint the schedule data data
     // window.DailyGrid.
-    function paint(_selector, _data, _width) {
+    function paint(_selector, _data, _width, _offset) {
+        time_zone_offset = _offset; // used to correct the time display
         // use the width dimension from the containing element
         width = _width - margin.left - margin.right;
-        //y_Axis = d3.svg.axis().scale(yScale).orient("left").tickSize(-(width + margin.left), 0).tickPadding(6);
         y_Axis = d3.svg.axis().scale(yScale).orient("left").tickFormat(customTimeFormat).tickSize(-(width + margin.left), 0).tickPadding(6);
 
         selector = _selector;
@@ -331,7 +324,7 @@ var customTimeFormat = timeFormat([
         div.append('xhtml:hr').attr("class", 'toolbar-line');
 
         div.append('xhtml:div').attr("class", 'item-text').html(function(d) {
-            return d.title + ' ' + d.time;
+            return d.title;
         });
 
     };
@@ -377,8 +370,8 @@ var customTimeFormat = timeFormat([
             scrollTo(room, time);
         },
         
-        paint : function(_selector, _data, _width) {
-            return paint(_selector, _data, _width);
+        paint : function(_selector, _data, _width, _offset) {
+            return paint(_selector, _data, _width, _offset);
         },
 
         createItem : function(_data, idx) {// for a specific item

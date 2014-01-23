@@ -84,7 +84,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
             _day = this.options.day;
             var assignments = this.model;
             
-            DailyGrid.paint(_containerElem, assignments, $("#program-grid").width());
+            DailyGrid.paint(_containerElem, assignments, $("#program-grid").width(), <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]).utc_offset/(60*60) %>);
             
             // when an item is droped on the grid we need to
             // 1. create a new assignment (need the room and the time)
@@ -159,7 +159,6 @@ ScheduleApp.ItemManagement = (function(Backbone){
      * 
      */
     function moveAssignment(itemId, roomId, day, time, addDisplay) {
-        var timeStr = moment(time).format("H:mm");
         var assignments = _gridView.model;
         
             $.ajax({
@@ -169,7 +168,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
                     day    : day,
                     itemid : itemId,
                     roomid : roomId,
-                    time   : timeStr
+                    time   : time
                 },
                 success: function(response){
                     // Once the item is created add it to the grid ...
