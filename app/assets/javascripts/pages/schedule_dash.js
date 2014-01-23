@@ -3,6 +3,26 @@
  */
 DailyGrid = (function() {
 
+
+function timeFormat(formats) {
+  return function(date) {
+    // var i = formats.length - 1, f = formats[i];
+    // while (!f[1](date)) f = formats[--i];
+    var i = 0, f = formats[i];
+    while (!f[1](date)) f = formats[i++]; // TODO - if zone is changed we need to change this as well
+    
+    return d3.functor(f[0])(moment(date)); // TODO - put the correct zone offset in here [.zone("-05:00")]
+    // NOTE - we need to also change the date returned as the position
+  };
+}
+
+//var customTimeFormat = d3.time.format.multi([
+var customTimeFormat = timeFormat([
+  [function(d) { return moment(d).format('HH:mm');}, function(d) { return d.getHours(); }],
+  [function(d) { return moment(d).format('ddd');}, function(d) { return d.getDay() && d.getDate() != 1; }],
+  [function(d) { return moment(d).format('HH:mm');}, function() { return true; }] // TODO - we should take into account the timezone (also for the drag and drop calculation )
+]);
+
     // The area on the screen for the grid with margins
     var margin = {
         top : 20,
@@ -17,12 +37,12 @@ DailyGrid = (function() {
     // Create a liner scale for the rooms and a time scale for the day
     var xScale = d3.scale.linear().rangeRound([0, width * 7], 0);
     //
-    var yScale = d3.time.scale().rangeRound([0, height * 2]);
+    var yScale = d3.time.scale.utc().rangeRound([0, height * 2]);
 
     // X and Y axis - using the previous scales
     var x_Axis = d3.svg.axis().scale(xScale).orient("top").tickFormat(d3.format("d")).tickSize(-height, 0).tickPadding(6);
 
-    var y_Axis = d3.svg.axis().scale(yScale).orient("left").tickSize(-(width + margin.left), 0).tickPadding(6);
+    var y_Axis = d3.svg.axis().scale(yScale).orient("left").tickFormat(customTimeFormat).tickSize(-(width + margin.left), 0).tickPadding(6);
 
     // What we do for zooming and constraining the zoom level
     var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", draw);
@@ -166,7 +186,8 @@ DailyGrid = (function() {
     function paint(_selector, _data, _width) {
         // use the width dimension from the containing element
         width = _width - margin.left - margin.right;
-        y_Axis = d3.svg.axis().scale(yScale).orient("left").tickSize(-(width + margin.left), 0).tickPadding(6);
+        //y_Axis = d3.svg.axis().scale(yScale).orient("left").tickSize(-(width + margin.left), 0).tickPadding(6);
+        y_Axis = d3.svg.axis().scale(yScale).orient("left").tickFormat(customTimeFormat).tickSize(-(width + margin.left), 0).tickPadding(6);
 
         selector = _selector;
         data = _data;
@@ -310,7 +331,7 @@ DailyGrid = (function() {
         div.append('xhtml:hr').attr("class", 'toolbar-line');
 
         div.append('xhtml:div').attr("class", 'item-text').html(function(d) {
-            return d.title;
+            return d.title + ' ' + d.time;
         });
 
     };

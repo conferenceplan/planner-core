@@ -18,10 +18,4 @@ class PublishedRoom < ActiveRecord::Base
           :source => :original,
           :source_type => 'Room'
           
-  def as_json(options={})
-    return { 
-      :id => id,
-      :loc => [ name, published_venue.name ]
-    }
-  end
 end

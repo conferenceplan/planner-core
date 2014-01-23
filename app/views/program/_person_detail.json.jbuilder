@@ -2,6 +2,7 @@
 json.id         person.id    
 json.name       person.getFullPublicationName    
 json.bio        person.bio
+# TODO - need to add tags
 if person.edited_bio
     json.links do
         json.photo      person.edited_bio.photourl if person.edited_bio.photourl && person.edited_bio.photourl.length > 0

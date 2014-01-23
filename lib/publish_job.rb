@@ -11,6 +11,8 @@ class PublishJob
     removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
     removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
     
+    modifiedItems += publishRooms(getModifiedRooms())
+    
     PublishedProgrammeItem.transaction do
       sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
       
@@ -56,6 +58,12 @@ class PublishJob
 #    clause = addClause(clause,'programme_item_assignments.role_id != ? ', PersonItemRole['Reserved'])
     args = { :conditions => clause, :include => :room_item_assignment } #, :programme_item_assignments] }
     return ProgrammeItem.find :all, args
+  end
+
+  #  
+  def getModifiedRooms
+    rooms = Room.find :all
+    rooms.collect {|r| (r.published && (r.updated_at > r.published.updated_at)) ? r : nil}.compact
   end
   
   # Check this for modified items - i.e what happens if the time is changed?
@@ -190,6 +198,21 @@ EOS
     end
     return nbrProcessed
   end
+  
+  def publishRooms(rooms)
+    # We have a set of rooms that have name change or similar, so we need to republish them
+    nbrProcessed = 0
+    rooms.each do |srcRoom|
+      pubRoom = srcRoom.published
+      if pubRoom
+        copy(srcRoom, pubRoom)
+        pubRoom.save
+        nbrProcessed += pubRoom.published_programme_items.size
+      end
+    end
+    
+    return nbrProcessed
+  end
 
   def publishRoom(srcRoom)
     # 1. find out if the room is already published
@@ -207,6 +230,12 @@ EOS
       pubRoom.published_venue = pubVenue
       
       pubRoom.save
+    else
+      # If the room is published check to see if there is a name change/update that needs to be pushed out
+      if srcRoom.updated_at > pubRoom.updated_at
+        copy(srcRoom, pubRoom)
+        pubRoom.save
+      end
     end
     
     return pubRoom
@@ -222,6 +251,11 @@ EOS
       pubVenue.publication.user = @current_user
       
       pubVenue.save
+    else # check for update (such as name)
+      if srcVenue.updated_at > pubVenue.updated_at
+        copy(srcVenue, pubVenue)
+        pubVenue.save
+      end
     end
     
     return pubVenue
