@@ -354,44 +354,50 @@ class ProgramController < ApplicationController
       return
     end
     
-    @resultantChanges = PublishedProgramItemsService.getUpdatesFromPublishDate(@lastPubDate)
+    @changes = PublishedProgramItemsService.getUpdates @lastPubDate
     
-    ActiveRecord::Base.include_root_in_json = false # hack for now
-    respond_to do |format|
-      format.html { render :layout => 'content' }
-      format.atom # for an Atom feed (for readers)
-      format.json {
-        jsonstr = ""
-        jsonstr += '{"new":' + @resultantChanges[:new].keys.collect { |v| v }.to_json(:new_format => true) + "}" if @resultantChanges[:new]
-        jsonstr += ',' if @resultantChanges[:removeItem] && !jsonstr.empty? 
-        jsonstr += '{"removed":' + @resultantChanges[:removeItem].keys.to_json() + "}" if @resultantChanges[:removeItem]
-         
-        if (@resultantChanges[:update] || @resultantChanges[:removePerson] ||  @resultantChanges[:addPerson] || @resultantChanges[:detailUpdate])
-          list = []
-          jsonstr += ',' if !jsonstr.empty?
-          jsonstr += '{"updates":' 
-          
-          list = list.concat @resultantChanges[:update].keys if @resultantChanges[:update]
-          list = list.concat @resultantChanges[:detailUpdate].keys if @resultantChanges[:detailUpdate]
-          
-          jsonstr += list.uniq{|v| v[:id]}.to_json(:new_format => true) 
-          jsonstr += "}"
-        end
-        
-        # now the add and remove people
-        jsonstr += ',' if @resultantChanges[:removePerson] && !jsonstr.empty? 
-        jsonstr += '{"peopleRemoved":' + @resultantChanges[:removePerson].values.collect {|x| x[0].id}.uniq.to_json({:terse => true}) + "}" if @resultantChanges[:removePerson]
-        jsonstr += ',' if @resultantChanges[:addPerson] && !jsonstr.empty? 
-        jsonstr += '{"peopleAdded":' + @resultantChanges[:addPerson].values.collect {|x| x[0]}.uniq.to_json({:terse => true}) + "}" if @resultantChanges[:addPerson]
-        
-        if params[:func]
-          render :json  => "var "+ params[:func] +" = [" + jsonstr + "]", :content_type => 'application/json' #  
-        else  
-          render :json  => "[" + jsonstr + "]", :content_type => 'application/json', :callback => params[:callback] #  
-        end
-        # render :json => @resultantChanges
-      }
-    end
+    # render :json => @changes
+    
+    # @resultantChanges = PublishedProgramItemsService.getUpdatesFromPublishDate(@lastPubDate)
+#     
+    # ActiveRecord::Base.include_root_in_json = false # hack for now
+    # respond_to do |format|
+      # format.html { render :layout => 'content' }
+      # format.atom # for an Atom feed (for readers)
+      # format.json {
+        # jsonstr = ""
+        # jsonstr += '{"new":' + @resultantChanges[:new].keys.collect { |v| v }.to_json(:new_format => true) + "}" if @resultantChanges[:new]
+        # jsonstr += ',' if @resultantChanges[:removeItem] && !jsonstr.empty? 
+        # jsonstr += '{"removed":' + @resultantChanges[:removeItem].keys.to_json() + "}" if @resultantChanges[:removeItem]
+#          
+        # if (@resultantChanges[:update] || @resultantChanges[:removePerson] ||  @resultantChanges[:addPerson] || @resultantChanges[:detailUpdate])
+          # list = []
+          # jsonstr += ',' if !jsonstr.empty?
+          # jsonstr += '{"updates":' 
+#           
+          # list = list.concat @resultantChanges[:update].keys if @resultantChanges[:update]
+          # list = list.concat @resultantChanges[:detailUpdate].keys if @resultantChanges[:detailUpdate]
+#           
+          # jsonstr += list.uniq{|v| v[:id]}.to_json(:new_format => true) 
+          # jsonstr += "}"
+        # end
+#         
+        # # now the add and remove people
+        # jsonstr += ',' if @resultantChanges[:removePerson] && !jsonstr.empty? 
+        # jsonstr += '{"peopleRemoved":' + @resultantChanges[:removePerson].values.collect {|x| x[0].id}.uniq.to_json({:terse => true}) + "}" if @resultantChanges[:removePerson]
+        # jsonstr += ',' if @resultantChanges[:addPerson] && !jsonstr.empty? 
+        # jsonstr += '{"peopleAdded":' + @resultantChanges[:addPerson].values.collect {|x| x[0]}.uniq.to_json({:terse => true}) + "}" if @resultantChanges[:addPerson]
+#         
+        # # TODO - change to have a list of people modified
+#         
+        # if params[:func]
+          # render :json  => "var "+ params[:func] +" = [" + jsonstr + "]", :content_type => 'application/json' #  
+        # else  
+          # render :json  => "[" + jsonstr + "]", :content_type => 'application/json', :callback => params[:callback] #  
+        # end
+        # # render :json => @resultantChanges
+      # }
+    # end
   end
   
   def updates2

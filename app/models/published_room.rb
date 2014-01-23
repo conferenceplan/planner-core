@@ -2,6 +2,7 @@
 #
 #
 class PublishedRoom < ActiveRecord::Base
+  audited :allow_mass_assignment => true
   belongs_to  :published_venue
   has_many :published_room_item_assignments do
     def day(d) # get the room item assignments for the given day if the day parameter is used
