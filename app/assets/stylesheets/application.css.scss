@@ -11,8 +11,13 @@
  *= require bootstrap_and_overrides 
  *  
  *= require backbone-forms/distribution/templates/bootstrap3
+ *= require bootstrap-datetimepicker
  * 
- *= require custom-theme/jquery-ui-1.9.2.custom 
+ * require jquery.ui.all 
+ *= require custom-theme/jquery-ui-1.9.2.custom
+ *  
+ *  require jqgrid-jquery-rails
+ * 
  *= require jqGrid/ui.jqgrid
  *= require jqGrid/jqGrid.overrides
  *= require jqcloud 
@@ -22,8 +27,6 @@
  * CHECK
  *= require jquery.timeentry
  *= require jquery.easy-pie-chart
- * 
- * require planner
  * 
  *= require_self
  */

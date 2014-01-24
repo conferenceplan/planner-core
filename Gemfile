@@ -21,13 +21,19 @@ gem 'delayed_job_active_record'
 gem 'i18n' 
 gem 'jbuilder', '1.5.3'
 gem 'jpbuilder'
-gem 'jquery-rails'
 gem 'mysql2' 
 gem 'rack-jsonp-middleware', :require => 'rack/jsonp'
 gem 'rails', '~> 3.2.12'
 gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate'
+
+gem 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
+gem 'jquery-ui-rails', '3.0.1'
+gem 'momentjs-rails', '~> 2.5.0'
+gem 'bootstrap3-datetimepicker-rails', '~> 2.1.20'
+gem 'd3_rails'
+gem 'jqgrid-jquery-rails', '~> 4.5.200'
 
 gem 'prawn_rails'
 gem "select2-rails"
