@@ -12,15 +12,7 @@ ItemApp.ItemManagement = (function(Backbone){
             title       : { type : 'Text', title : '<%= t "item-title" %>' },
             short_title : { type : 'Text', title : '<%= t "short-title" %>' },
             precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 6, cols : 60 } },
-            notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 6, cols : 60 } },
-            format_id : { type : 'Select', title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            setup_type_id : { type : 'Select', title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            print : { type : 'Checkbox', title : '<%= t "item-print" %>'},
-            duration : { type : 'Number', title : '<%= t "item-duration" %>', validators: ['required'] },
-            minimum_people : { type : 'Number', title : '<%= t "item-min-participants" %>' },
-            maximum_people : { type : 'Number', title : '<%= t "item-max-participants" %>' },
             room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO
-            // start_day : { type : 'Select', title : '<%= t "item-start-day" %>', options : <%=  ([[' ','-1']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%> },
             start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
                     tz_offset : <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]).utc_offset/(60*60) %>,
                     picker : {
@@ -30,7 +22,13 @@ ItemApp.ItemManagement = (function(Backbone){
                         startDate : "<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]).strftime('%m/%d/%Y') %>",
                         endDate : "<%= (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + ((SITE_CONFIG[:conference][:number_of_days]).to_i-1).days).strftime('%m/%d/%Y') %>"
                 } },
-
+            notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 6, cols : 60 } },
+            format_id : { type : 'Select', title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            setup_type_id : { type : 'Select', title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            print : { type : 'Checkbox', title : '<%= t "item-print" %>'},
+            duration : { type : 'Number', title : '<%= t "item-duration" %>', validators: ['required'] },
+            minimum_people : { type : 'Number', title : '<%= t "item-min-participants" %>' },
+            maximum_people : { type : 'Number', title : '<%= t "item-max-participants" %>' },
             pub_reference_number : { type : 'Text', title : '<%= t "item-publication-reference" %>' },
         },
         // Default values used when creating a new instance

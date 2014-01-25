@@ -15,13 +15,13 @@ Use the Rails authenticity token in the forms...
                 <dt><%= t "Setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
                 <dt><%= t "short-title" %></dt><dd>{{= short_title ? short_title : "&nbsp;" }}</dd>
                 <dt><%= t "item-description" %></dt><dd>{{= precis ? precis : "&nbsp;" }}</dd>
+                <dt><%= t "Room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
+                <dt><%= t "start-day-and-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
                 <dt><%= t "Notes" %></dt><dd>{{= notes ? notes : "&nbsp;" }}</dd>
                 <dt><%= t "Duration" %></dt><dd>{{= duration ? duration : "&nbsp;" }}</dd>
                 <dt><%= t "For Print" %></dt><dd>{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
                 <dt><%= t "Max People" %></dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
                 <dt><%= t "Min People" %></dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
-                <dt><%= t "Room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
-                <dt><%= t "start-day-and-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
             </dl>
         </div>
         <!-- List of participants etc. -->
