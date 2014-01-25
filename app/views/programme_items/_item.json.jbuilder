@@ -19,7 +19,8 @@ json.format_name            item.format ? item.format.name : ""
     
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A') : "" # we want this to be the number
-json.start_time             item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
+json.start_time             item.time_slot ? item.time_slot.start : ""
+json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
 json.pub_reference_number   item.pub_reference_number
 
 # TODO - do we want just the name or do we want the actual id or entity?

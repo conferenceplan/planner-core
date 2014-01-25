@@ -54,8 +54,8 @@ class ProgrammeItemsController < PlannerController
     # NOTE - name of the programmeItem passed in from form
     @programmeItem = ProgrammeItem.new(params[:programme_item])
     @programmeItem.lock_version = 0
-    startDay = params[:start_day]
-    startTime = params[:start_time]
+    startTime = params[:start_time].to_datetime
+    startDay = (startTime - Time.zone.parse(SITE_CONFIG[:conference][:start_date]).to_datetime).to_i # NOT SET
     roomId = params[:room_id]
 
     begin
@@ -77,8 +77,8 @@ class ProgrammeItemsController < PlannerController
   #  
   def update
     @programmeItem = ProgrammeItem.find(params[:id])
-    startDay = params[:start_day]
-    startTime = params[:start_time]
+    startTime = params[:start_time].to_datetime
+    startDay = (startTime - Time.zone.parse(SITE_CONFIG[:conference][:start_date]).to_datetime).to_i # NOT SET
     roomId = params[:room_id]
     
     begin

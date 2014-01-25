@@ -21,7 +21,7 @@ class ProgramPlannerController < PlannerController
       day = params[:day]
       time = params[:time].to_time # The start time
     
-      @assignment = addItemToRoomAndTimeNN(item, room, day, time)
+      @assignment = addItemToRoomAndTime(item, room, day, time)
     end
 
     render :layout => 'content'

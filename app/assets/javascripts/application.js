@@ -56,6 +56,7 @@
 //= require plugins/selectEditor
 //= require plugins/DependentEditors
 //= require plugins/cpReportBase
+//= require plugins/dateTimeEditor
 
 //= require TabViews
 
