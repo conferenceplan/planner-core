@@ -38,7 +38,7 @@ EquipmentApp.EquipmentManagement = (function(Backbone){
             template                : "#equipment-control-template",
             modelType               : Equipment,
             view_refresh_event      : "equipment:refresh",
-            modal_create_title      : '<%= t "Create Equipment" %>',
+            modal_create_title      : '<%= t "equipment-create-equipment" %>',
             region                  : equipmentLayout.equipmentControlRegion,
         });
         
@@ -51,7 +51,7 @@ EquipmentApp.EquipmentManagement = (function(Backbone){
             collection_tagName      : 'table',
             tagName                 : 'tr',
             view_refresh_event      : "equipment:refresh",
-            modal_edit_title        : '<%= t "Edit Equipment" %>'
+            modal_edit_title        : '<%= t "equipment-edit-equipment" %>'
         }) );
     };
     
