@@ -353,13 +353,23 @@ var AppUtils = (function(){
         },
         
         editModel : function() {
-            var v = new ItemEditView({
-                model           : this.model,
-                readTemplate    : this.options.readTemplate
-            });
+            // If there is no template then we use a modal
+            if (this.options.readTemplate) {
+                var v = new ItemEditView({
+                    model           : this.model,
+                    readTemplate    : this.options.readTemplate
+                });
+                
+                v.render();
+                $(this.options.itemArea).html(v.$el);
+            } else {
+                var modal = new ModelModal({
+                    model : this.model,
+                    title : this.options.modal_edit_title
+                });
+                modal.render();
+            }
             
-            v.render();
-            $(this.options.itemArea).html(v.$el);
         },
         
         deleteModel : function() {
@@ -414,8 +424,9 @@ var AppUtils = (function(){
                             previewFn       : options.previewFn,
                             drillDownFn     : options.drillDownFn,
                             itemArea        : options.itemArea,
-                            readTemplate    : options.readTemplate
-                        },
+                            readTemplate    : options.readTemplate,
+                            modal_edit_title : options.modal_edit_title
+                        }
                     });
                     
         var collectionView = new viewType({

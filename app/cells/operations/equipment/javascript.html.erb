@@ -1,7 +1,80 @@
-<h1>
-  Operations::Equipment#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/operations/equipment/javascript.html.erb
-</p>
+EquipmentApp = new Backbone.Marionette.Application();
+
+EquipmentApp.EquipmentManagement = (function(Backbone){
+    Equipment = Backbone.Model.extend({
+        schema : {
+            description     : { type : 'Text', title : '<%= t "equipment-name" %>' }
+        },
+        urlRoot : '/equipment_types'
+    });
+    
+    EquipmentCollection = Backbone.Collection.extend({
+        model : Equipment
+    });
+    
+    EquipmentLayout = Backbone.Marionette.Layout.extend({
+        template: "#equipment-list-layout-template",
+        
+        regions : {
+            equipmentControlRegion: "#equipment-control-div",
+            equipmentRegion: "#equipment-region-div",
+        },
+    });
+    
+    var tabLists = [];
+    
+    function clearDetails() {
+        _.invoke(tabLists, 'reset' );
+    };
+
+    function showEquipment() {
+        equipmentLayout = new EquipmentLayout();
+        equipmentLayout.render();
+        $('#equipment-region-view').html(equipmentLayout.el);
+        
+        TabUtils.createTabControl({
+            template                : "#equipment-control-template",
+            modelType               : Equipment,
+            view_refresh_event      : "equipment:refresh",
+            modal_create_title      : '<%= t "Create Equipment" %>',
+            region                  : equipmentLayout.equipmentControlRegion,
+        });
+        
+        tabLists.push( AppUtils.createCollectionView({
+            url                     : "/equipment_types.json",
+            collectionType          : EquipmentCollection,
+            region                  : equipmentLayout.equipmentRegion,
+            template                : "#equipment-template",
+            collection_attributes   : { "class" : "table table-striped table-condensed" },
+            collection_tagName      : 'table',
+            tagName                 : 'tr',
+            view_refresh_event      : "equipment:refresh",
+            modal_edit_title        : '<%= t "Edit Equipment" %>'
+        }) );
+    };
+    
+    /*
+     * 
+     */
+    return {
+        init : function() {
+            showEquipment();
+        },
+        
+        clearDetails : function() {
+        },
+    }
+
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    EquipmentApp.start();
+    EquipmentApp.EquipmentManagement.init();
+});
+
+</script>
