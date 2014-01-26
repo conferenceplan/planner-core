@@ -11,7 +11,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         urlRoot : '/survey_query',
         schema : {
             name            : { type : 'Text',      title : '<%= t "survey-name" %>',  validators: ['required'] },
-            survey_id       : { type : 'Select',    title : '<%= t "survey-survey" %>',
+            survey_id       : { type : 'Select',    title : '<%= t "Survey" %>',
                                 options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
                               },
             shared          : { type : 'Checkbox',  title : '<%= t "survey-shared" %>' },
@@ -20,7 +20,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                 options : ['ALL', 'ANY']
                               },
             // Predicate list
-            'survey_query_predicates' : {
+            '<%= t "survey-query-predicates" %>' : {
                 type : 'List',
                 itemToString : function(item) {
                     return _.template($('#predicate-data-template').html(), { item : item, question : getQuestionById(item.survey_question_id) }); // TODO

@@ -9,7 +9,7 @@ ItemApp.ItemManagement = (function(Backbone){
      */
     ProgramItem = Backbone.Model.extend({
         schema : {
-            title       : { type : 'Text', title : '<%= t "item-title" %>' },
+            title       : { type : 'Text', title : '<%= t "Title" %>' },
             short_title : { type : 'Text', title : '<%= t "short-title" %>' },
             precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 6, cols : 60 } },
             room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO

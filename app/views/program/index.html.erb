@@ -47,7 +47,7 @@
         <% end %>
         <% currentColumn = idx + 2 %>
         <td class="program-grid-item">
-            <div class="program-item-title"><%= BlueCloth.new(item.title).to_html.html_safe %></div>
+            <div class="title"><%= BlueCloth.new(item.title).to_html.html_safe %></div>
             <div class="program-item-duration"><%= item.duration.to_s %> mins</div>
             <div class="program-item-room">(<%= item.published_room.name %>)</div>
             <div class="program-item-participants">

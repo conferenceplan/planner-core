@@ -31,13 +31,13 @@ CommunicationsApp.Management = (function(Backbone){
                              success : function(data, status, jqXHR) {
                                 modal = new AppUtils.InfoModal({
                                     content : data.content,
-                                    title : '<%= t "Mail Preview" %>'
+                                    title : '<%= t "comm-mail-preview" %>'
                                 });
                                 modal.render();
                              }
                          });
             } else {
-                alertMessage('<%= t "please select a person from a mailing to generate a preview" %>');
+                alertMessage('<%= t "alert-select-person-to-generate-preview" %>');
             }
         }
     }),

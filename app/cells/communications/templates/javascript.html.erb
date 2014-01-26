@@ -7,13 +7,13 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
     MailTemplate = Backbone.DeepModel.extend({
         urlRoot : '/communications/mail_templates',
         schema : {
-            title           : { type : 'Text', title : '<%= t "title" %>' },
+            title           : { type : 'Text', title : '<%= t "Title" %>' },
 
             mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>',
                                             options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
                                         
-            survey_id       : { type : 'Select', title : '<%= t "survey" %>',
+            survey_id       : { type : 'Select', title : '<%= t "Survey" %>',
                                             options : <%= [[nil,'']].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
 
@@ -54,7 +54,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
                 template                : "#mail-template-control-template",
                 modelType               : MailTemplate,
                 view_refresh_event      : "mailTemplate:refresh",
-                modal_create_title      : '<%= t "Create Template" %>',
+                modal_create_title      : '<%= t "comm-create-template" %>',
                 region                  : mailTemplateLayout.mailTemplateControlRegion,
             });
         // }
