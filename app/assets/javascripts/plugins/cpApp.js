@@ -362,7 +362,7 @@ var AppUtils = (function(){
                 
                 v.render();
                 $(this.options.itemArea).html(v.$el);
-            } else {
+            } else if (this.options.modal_edit) {
                 var modal = new ModelModal({
                     model : this.model,
                     title : this.options.modal_edit_title
@@ -425,7 +425,8 @@ var AppUtils = (function(){
                             drillDownFn     : options.drillDownFn,
                             itemArea        : options.itemArea,
                             readTemplate    : options.readTemplate,
-                            modal_edit_title : options.modal_edit_title
+                            modal_edit_title : options.modal_edit_title,
+                            modal_edit      : options.modal_edit
                         }
                     });
                     
