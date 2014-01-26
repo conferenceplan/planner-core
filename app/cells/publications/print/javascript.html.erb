@@ -12,7 +12,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
                           options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
                 },
-            orientation : { type : 'Select', title : '<%= t "orientation" %>', 
+            orientation : { type : 'Select', title : '<%= t "print-orientation" %>', 
                           options : { landscape : 'Landscape' , portrait : 'Portrait'} 
                 },
         },
@@ -77,7 +77,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
                           options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
                 },
-            orientation : { type : 'Select', title : '<%= t "orientation" %>', 
+            orientation : { type : 'Select', title : '<%= t "print-orientation" %>', 
                           options : { landscape : 'Landscape' , portrait : 'Portrait'} 
                 },
             rooms : { type : 'Select2', title : '<%= t "publications-rooms" %>', 

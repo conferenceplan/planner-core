@@ -8,17 +8,17 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
 
     SurveyQuestion = Backbone.DeepModel.extend({
         schema : {
-            question            : { type : 'Html', title : '<%= t "question" %>' },
+            question            : { type : 'Html', title : '<%= t "survey-question" %>' },
             //title               : { type : 'Text', title : '<%= t "title" %>' }, // TODO - is this used???
             sort_order          : { type : 'Number', title : '<%= t "sort_order" %>' },
-            question_type       : { type : 'Select', title : '<%= t "question_type" %>',
+            question_type       : { type : 'Select', title : '<%= t "survey-question-type" %>',
                                     options : <%= [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone].to_json.html_safe %>
                                     },
-            mandatory           : { type : 'Checkbox', title : '<%= t "mandatory" %>' },
+            mandatory           : { type : 'Checkbox', title : '<%= t "survey-mandatory" %>' },
             tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>',
                                     validators : [ /^[A-z0-9_]*$/ ],
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
-            text_size           : { type : 'Number',  title : '<%= t "length of text box" %>',
+            text_size           : { type : 'Number',  title : '<%= t "survey-length-of-textbox" %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
             isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
                                      dependsOn : 'question_type', dependentValues : ['textbox']  }, // only if the question type is text
@@ -78,7 +78,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
             template : "#survey-question-control-template",
             modelType : SurveyQuestion,
             view_refresh_event : "survey-question:refresh",
-            modal_create_title : '<%= t "Create Question" %>',
+            modal_create_title : '<%= t "survey-create-question" %>',
             region : surveyQuestionLayout.surveyQuestionControlRegion,
             modelURL : "/surveys/" + sid + "/survey_groups/" + gid + "/survey_questions"
         });

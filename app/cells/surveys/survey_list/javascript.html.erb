@@ -6,15 +6,15 @@ SurveyApp.SurveyManagement = (function(Backbone){
 
     Survey = Backbone.DeepModel.extend({
         schema : {
-            name            : { type : 'Text', title : '<%= t "name" %>' },
-            alias           : { type : 'Text', title : '<%= t "alias" %>' },
-            public          : { type : 'Checkbox', title : '<%= t "public" %>' },
-            authenticate    : { type : 'Checkbox', title : '<%= t "authenticate" %>' },
-            use_captcha     : { type : 'Checkbox', title : '<%= t "use captcha" %>' },
-            welcome         : { type : 'Html', title : '<%= t "welcome message" %>' },
-            thank_you       : { type : 'Html', title : '<%= t "thank you message" %>' },
-            submit_string   : { type : 'Text', title : '<%= t "submit string" %>' },
-            header_image    : { type : 'Text', title : '<%= t "URL for header image" %>' },
+            name            : { type : 'Text', title : '<%= t "survey-name" %>' },
+            alias           : { type : 'Text', title : '<%= t "survey-alias" %>' },
+            public          : { type : 'Checkbox', title : '<%= t "survey-public" %>' },
+            authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>' },
+            use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>' },
+            welcome         : { type : 'Html', title : '<%= t "survey-welcome-message" %>' },
+            thank_you       : { type : 'Html', title : '<%= t "survey-thank-you-message" %>' },
+            submit_string   : { type : 'Text', title : '<%= t "survey-submit-string" %>' },
+            header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>' },
         },
         urlRoot : '/surveys'
     });

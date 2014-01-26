@@ -1,5 +1,5 @@
 
-<h3><%= t 'Personal Details' %></h3>
+<h3><%= t 'survey-personal-details' %></h3>
 
 <div class="control-group <%='error' if @errors && (@errors['first_name'] || @errors['last_name']) %>"">
     <label class="control-label"><%= t 'Name' %></label>
@@ -37,7 +37,7 @@
 </div>
 <% end %>    
 <div class="control-group  <%='error' if @errors && @errors['email'] %>">
-    <label class="control-label"><%= t 'E-mail Address' %>
+    <label class="control-label"><%= t 'survey-email-address' %>
         <a class="survey-help" href="#" data-original-title="Enter your primary e-mail address; the one you&rsquo;re most likely to monitor."><i class='glyphicon glyphicon-info-sign'></i></a>
     </label>
     <div class="controls">

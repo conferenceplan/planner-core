@@ -10,13 +10,13 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     Query = Backbone.DeepModel.extend({
         urlRoot : '/survey_query',
         schema : {
-            name            : { type : 'Text',      title : '<%= t "name" %>',  validators: ['required'] },
-            survey_id       : { type : 'Select',    title : '<%= t "survey" %>',
+            name            : { type : 'Text',      title : '<%= t "survey-name" %>',  validators: ['required'] },
+            survey_id       : { type : 'Select',    title : '<%= t "survey-survey" %>',
                                 options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
                               },
-            shared          : { type : 'Checkbox',  title : '<%= t "shared" %>' },
-            date_order      : { type : 'Checkbox',   title : '<%= t "order by date received" %>' },
-            operation       : { type : 'Select',    title : '<%= t "operation" %>',
+            shared          : { type : 'Checkbox',  title : '<%= t "survey-shared" %>' },
+            date_order      : { type : 'Checkbox',   title : '<%= t "survey-order-by-date-received" %>' },
+            operation       : { type : 'Select',    title : '<%= t "survey-operation" %>',
                                 options : ['ALL', 'ANY']
                               },
             // Predicate list

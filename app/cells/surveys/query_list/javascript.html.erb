@@ -7,7 +7,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
     QueryName = Backbone.Model.extend({
         urlRoot : '/survey_query',
         schema : {
-            name : { type : 'Text', title : '<%= t "name" %>', validators: ['required'] },
+            name : { type : 'Text', title : '<%= t "survey-name" %>', validators: ['required'] },
         }
     });
     
@@ -56,7 +56,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
             template                : "#query-control-template",
             modelType               : Query,
             view_refresh_event      : "query:refresh",
-            modal_create_title      : '<%= t "Create Query" %>',
+            modal_create_title      : '<%= t "survey-create-query" %>',
             region                  : queryLayout.queryControlRegion
         });
         
