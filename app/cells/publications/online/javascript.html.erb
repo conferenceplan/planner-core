@@ -4,25 +4,127 @@ OnlinePublicationsApp = new Backbone.Marionette.Application();
 
 OnlinePublicationsApp.Management = (function(Backbone){
 
-    var GenericForm = Backbone.Form.extend({
+    Item = Backbone.RelationalModel.extend({});
+    ItemCollection = Backbone.Collection.extend({
+        model : Item
+    });
+    
+    PublishPending = Backbone.Model.extend({
+        url : '/publisher/publishPending.json'
+    });
+    
+    LastPublish = Backbone.Model.extend({
+        url : '/publisher.json'
     });
 
-    var Workspace = Backbone.Router.extend({
+    PublicationReview = Backbone.RelationalModel.extend({
+        relations : [{
+            type           : Backbone.HasMany,
+            key            : 'new_items',
+            relatedModel   : 'Item',
+            collectionType : 'ItemCollection'
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'modified_items',
+            relatedModel   : 'Item',
+            collectionType : 'ItemCollection'
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'removed_items',
+            relatedModel   : 'Item',
+            collectionType : 'ItemCollection'
+        }]
+    });
 
+    ReviewView = Marionette.ItemView.extend({
+        template : '#review-template'
+    });
+    
+    LastPubView = Marionette.ItemView.extend({
+        template : '#last-pub-template'
+    });
+    
+    PublishView = Marionette.ItemView.extend({
+        template : '#publish-template',
+        
+        events : {
+            "click .publish-button" : "publish",
+        },
+        
+        publish : function() {
+            $.ajax({
+                type: 'GET',
+                url: "/publisher/publish",
+                success: function(response) {
+                    infoMessage('<%= t "Publish scheduled" %>');
+                },
+                error: function() {
+                    alertMessage('<%= t "Problem scheduling publish" %>');
+                }
+            });
+        }
+    });
+
+    var resultRegion = new Backbone.Marionette.Region({
+                el: "#online-pub-results-area"
+            });
+    
+    var publishRegion = new Backbone.Marionette.Region({
+                el: "#online-pub-mgmt-area"
+            });
+            
+    var infoRegion = new Backbone.Marionette.Region({
+                el: "#online-pub-info-area"
+            });
+    
+    
+    var Workspace = Backbone.Router.extend({
         routes : {
             'program_publish_review'    : 'program_publish_review',
             'program_publish'           : 'program_publish'
         },
         
         program_publish_review : function() {
-            alert('Review Publish'); // /publisher/review
+            publishRegion.close();
+            // fetch the review
+            review = new PublicationReview();
+            review.fetch({
+                url : "/publisher/review.json",
+                success : function(obj) {
+                    // create the view
+                    var reviewView = new ReviewView({
+                        model : obj
+                    });
+                    resultRegion.show(reviewView);
+                }
+            });
         },
         
         program_publish : function() {
-            alert('Publish'); // /publisher
+            resultRegion.close();
+            pending = new PublishPending();
+            pending.fetch({ 
+                success : function(mdl) {
+                    pubCtl = new PublishView({
+                        model : mdl
+                    });
+                    publishRegion.show(pubCtl);
+                }
+            });
         }
-        
     });
+    
+    function createInfoArea() {
+        lastPub = new LastPublish();
+        lastPub.fetch({
+           success : function(mdl) {
+               lpView = new LastPubView({
+                   model : mdl
+               });
+               infoRegion.show(lpView);
+           } 
+        });
+    };
     
     /*
      * 
@@ -31,6 +133,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
         init : function(options) {
             new Workspace();
             Backbone.history.start();
+            createInfoArea();
         }
     }
     

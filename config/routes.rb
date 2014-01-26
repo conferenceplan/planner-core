@@ -189,8 +189,10 @@ PlannerRc1::Application.routes.draw do
 
   match 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'
   match 'publisher/review', :controller => 'publisher', :action => 'review', :method => 'get'
-  resources :publisher, :member => {:index => :get},
-      :except => [:destroy, :new, :create, :edit, :show, :update, :list]
+  match 'publisher/publishPending', :controller => 'publisher', :action => 'publishPending', :method => 'get'
+  match 'publisher', :controller => 'publisher', :action => 'index', :method => 'get'
+  # resources :publisher, :member => {:index => :get},
+      # :except => [:destroy, :new, :create, :edit, :show, :update, :list]
 
 
   match 'rooms/list.:format', :controller => 'rooms', :action => 'list'

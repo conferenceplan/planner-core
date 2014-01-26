@@ -17,6 +17,13 @@ class PublisherController < PlannerController
     render status: :ok, text: {}.to_json
   end
   
+  def publishPending
+    jobs = Delayed::Job.all
+    pending = jobs.find_index{ |j| (j.name == 'PublishJob') && !j.failed } != nil
+    
+    render json: {'pending' => pending.to_json}
+  end
+  
   def review
     pubjob = PublishJob.new
     @candidateNewItems      = pubjob.getNewProgramItems() # all unpublished programme items

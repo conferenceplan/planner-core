@@ -1,5 +1,57 @@
 
-<script type="text/template" id="query-results-template">
-    <table id="results-t" class="result-table"><tr><td/></tr></table>
-    <div id="result-pager"></div>
+<script type="text/template" id="publish-template">
+    <h3><%= t "Publish" %></h3>
+    {{ if (pending == 'true') { }}
+        <div><%= t "Publish Pending" %></div>
+    {{ } else { }}
+        <button class="publish-button btn btn-primary">
+            <%= t "Schedule Publish" %>
+        </button>
+    {{ } }}
+</script>
+
+<script type="text/template" id="review-layout-template">
+    <h3>Pending Publish</h3>
+    <div id="review-region-div"></div>
+</script>
+
+<script type="text/template" id="last-pub-template">
+    <div class="col-xs-12 well">
+        <div class="caption" class="pull-left">
+            <h4>Last Publish</h4>
+            <dl>
+                <dt><%= t "Publication Date" %></dt><dd>{{= moment(publication_date).format("D MMM YYYY, hh:mm") }}</dd>
+                <dt><%= t "New" %></dt><dd>{{= new_items }}</dd>
+                <dt><%= t "Modified" %></dt><dd>{{= modified }}</dd>
+                <dt><%= t "Removed" %></dt><dd>{{= removed }}</dd>
+            </dl>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="review-template">
+    <div>New Items</div>
+        <ul class="list-group">
+        {{ _.each(new_items, function(item) { }}
+            <li class="list-group-item">
+                {{= item.title}}
+            </li>
+        {{ }); }}
+        </ul>
+    <div>Updated Items</div>
+        <ul class="list-group">
+        {{ _.each(modified_items, function(item) { }}
+            <li class="list-group-item">
+                {{= item.title}}
+            </li>
+        {{ }); }}
+        </ul>
+    <div>Dropped Items</div>
+        <ul class="list-group">
+        {{ _.each(removed_items, function(item) { }}
+            <li class="list-group-item">
+                {{= item.title}}
+            </li>
+        {{ }); }}
+        </ul>
 </script>
