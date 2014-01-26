@@ -42,8 +42,15 @@ class EquipmentTypesController < PlannerController
   #
   #
   def destroy
-    EquipmentType.find(params[:id]).destroy
-    render status: :ok, text: {}.to_json
+    # if the equipment is being used by other program items then do not allow the delete
+    candidate = EquipmentType.find(params[:id])
+    
+    if candidate.programme_items.size > 0
+      render status: :bad_request, text: 'Con not delete equipment associated with program items'
+    else  
+      EquipmentType.find(params[:id]).destroy
+      render status: :ok, text: {}.to_json
+    end
   end
 
 end
