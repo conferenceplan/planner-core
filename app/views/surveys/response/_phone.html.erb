@@ -1,33 +1,39 @@
 <%#
 %>
-    <div class="survey-row">
-        <div class="col-xs-2">
+
+<div class="row">
+<div class="col-sm-12">
+<div class="form-group <%='error' if @errors && @errors[question.id] %>">
+
+        <div class="col-sm-2">
             <%= question.question %>
             <% if question.survey_format.help && !question.survey_format.help.blank? %>
             <a class="survey-help" href="#" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
             <% end %>
         </div>
-        <div class="col-xs-4">
+        <div class="col-sm-4">
         <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 30, :class => "col-xs-12" %>
         </div>
-        <div class="col-xs-1">
+        <div class="col-sm-1">
         <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Home', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Home' : false %>
         home
         </div>
-        <div class="col-xs-1">
+        <div class="col-sm-1">
         <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Work', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Work' : false %>
         work
         </div>
-        <div class="col-xs-1">
+        <div class="col-sm-1">
         <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Fax', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Fax' : false %>
         fax
         </div>
-        <div class="col-xs-2">
+        <div class="col-sm-2">
         <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Mobile', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Mobile' : false %>
         cell/mobile
         </div>
-    </div>
 
         <% if @errors && @errors[question.id] %>
-            <%=@errors[question.id][question.question]%>
+            <%=@errors[question.id][question.question2]%>
         <% end %>
+</div>
+</div>
+</div>

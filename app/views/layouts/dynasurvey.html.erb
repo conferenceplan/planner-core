@@ -1,23 +1,25 @@
+<!DOCTYPE html>
 <html>
     <head>
-        <title><%= @page_title or 'Survey' %></title>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title><%= @page_title or (t "Survey") %></title>
+        
+        <%= csrf_meta_tags %>
         
         <%= stylesheet_link_tag "application", :media => "all" %>
-        <%= stylesheet_link_tag params[:controller] %>
         
-        <%= javascript_include_tag "application" %> <!-- TODO minimize to only what is needed for surveys -->
+        <%= javascript_include_tag "application" %>
         <%= javascript_include_tag params[:controller] if params[:controller] && PlannerRc1::Application.assets.find_asset( params[:controller] + ".js") %>
+
+        <%=render 'layouts/common_js' %>
     </head>
 
   <body>
-    <main role="main">
-      <div class="survey-container">
-           <div class="survey-row">
-                <div class="full-width">
-                    <%= content_for?(:content) ? yield(:content) : yield %>
-                </div>
-           </div>
-      </div>
-    </main>
+    <div id="main-screen-container" class="container">
+        <%= content_for?(:content) ? yield(:content) : yield %>
+    </div>
   </body>
 </html>

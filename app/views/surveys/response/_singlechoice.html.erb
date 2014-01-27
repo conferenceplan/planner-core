@@ -4,11 +4,15 @@
 
 <%question.survey_answers.each do |answer|%>
     <% if question.horizontal %>
-        <label class="radiobutton inline">
+        <label class="radio-inline survey-radio-inline col-sm-3">
     <% else %>
-        <label class="radiobutton">
+        <div class="radio">
+        <label>
     <% end %>
         <%= radio_button_tag "survey_response[#{question.id}]", "#{answer.id}", @survey_response ? @survey_response[question.id.to_s] == answer.id.to_s : false %>
         <%= answer.answer.html_safe %>
-    </label>
+        </label>
+    <% if !question.horizontal %>
+        </div>
+    <% end %>
 <%end%>

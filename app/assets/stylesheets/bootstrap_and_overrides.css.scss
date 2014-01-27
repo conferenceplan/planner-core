@@ -7,14 +7,6 @@ $iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
 
 @import "bootstrap";
 
-
-// body { padding-top: 4em; } // For the navigation heading...
-// body { padding-top: 50px; }
-
-// #main-nav-bar {
-  // margin-bottom : 0;
-// }
-
 .footer {
     background-color: #F5F5F5;
     border-top: 1px solid #E5E5E5;
@@ -22,8 +14,8 @@ $iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
     text-align: center;
 }
 
-.row-buffer {
-  margin-top : 10px;
+.row-buffered {
+  margin-top : 20px;
 }
 
 .dl-horizontal-small dt {
@@ -40,17 +32,13 @@ $iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
     margin-left: 90px;
 }
 
-// input, textarea, .uneditable-input {
-    // width: 90%;
-// }
-
 form {
     margin: 0 0 0px; // fudge because one of the css sets this to 20px...
 }
 
-
-
-
+.survey-radio-inline + .radio-inline, .survey-checkbox-inline + .checkbox-inline {
+  margin-left: 0px;
+}
 
 
 @import 'grenadine/theme';

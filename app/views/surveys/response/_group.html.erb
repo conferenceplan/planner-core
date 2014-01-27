@@ -6,8 +6,6 @@
 <% end %>
 </p>
 
-<div class="control-group">
     <% group.survey_questions.each do |question| %>
         <%=render :partial => 'question', :locals => {:question => question}%>
     <% end %>
-</div>
