@@ -243,7 +243,7 @@ class PlannerReportsController < PlannerController
     
     @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList
     @page_size = params[:page_size]
-    @rooms = PlannerReportsService.findPublishedPanelsByRoom
+    # @rooms = PlannerReportsService.findPublishedPanelsByRoom
     
     respond_to do |format|
       format.xml {
