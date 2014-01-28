@@ -29,14 +29,18 @@ ItemApp.ItemManagement = (function(Backbone){
             duration : { type : 'Number', title : '<%= t "item-duration" %>', validators: ['required'] },
             minimum_people : { type : 'Number', title : '<%= t "item-min-participants" %>' },
             maximum_people : { type : 'Number', title : '<%= t "item-max-participants" %>' },
+            audience_size  : { type : 'Number', title : '<%= t "item-estimated-audience-size" %>' },
             pub_reference_number : { type : 'Text', title : '<%= t "item-publication-reference" %>' },
+            mobile_card_size    : { type : 'Select', title : '<%= t "mobile-card-size" %>', 
+                                options : [{ val: 1, label: '<%= (t "Small") %>' },{ val: 5, label: '<%= (t "Medium") %>' },{ val: 10, label: '<%= (t "Large") %>' }] }
         },
         // Default values used when creating a new instance
         defaults: {
             "duration":  60,
             "minimum_people": 1,
             "maximum_people": 5,
-            "print": true
+            "print": true,
+            "mobile_card_size" : 1
         },
         urlRoot : '/programme_items'
     });

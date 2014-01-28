@@ -1,7 +1,5 @@
 PlannerRc1::Application.routes.draw do
 
-  get "conference/index"
-
   filter :locale
 
   namespace :pages do
@@ -24,6 +22,9 @@ PlannerRc1::Application.routes.draw do
   
   # Default route 
   root :to => 'pages/home_dash#index'
+  
+  # get "conference/index"
+
   
   #
   # The new(s) were removed so as to prevent anonymous people creating new accounts

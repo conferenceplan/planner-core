@@ -13,3 +13,4 @@ json.loc        [item.published_room_item_assignment.published_room.name, item.p
 json.people     item.published_programme_item_assignments.each do |assignment| 
     json.partial! 'person', person: assignment.person, role: assignment.role.name if [PersonItemRole['Moderator'], PersonItemRole['Participant']].include? assignment.role
 end
+json.card_size  item.mobile_card_size

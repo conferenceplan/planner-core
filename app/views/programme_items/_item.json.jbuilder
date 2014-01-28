@@ -22,6 +22,8 @@ json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A')
 json.start_time             item.time_slot ? item.time_slot.start : ""
 json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
 json.pub_reference_number   item.pub_reference_number
+json.audience_size          item.audience_size
+json.mobile_card_size       item.mobile_card_size
 
 # TODO - do we want just the name or do we want the actual id or entity?
 json.room                   item.room ? item.room.name : ""

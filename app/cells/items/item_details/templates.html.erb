@@ -22,6 +22,8 @@ Use the Rails authenticity token in the forms...
                 <dt><%= t "For Print" %></dt><dd>{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
                 <dt><%= t "Max People" %></dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
                 <dt><%= t "Min People" %></dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
+                <dt><%= t "item-estimated-audience-size" %></dt><dd>{{= audience_size ? audience_size : "&nbsp;" }}</dd> 
+                <dt><%= t "mobile-card-size" %></dt><dd>{{= mobile_card_size ? {1:'<%= (t "Small") %>',5:'<%= (t "Medium") %>',10:'<%= (t "Large") %>'}[mobile_card_size] : "&nbsp;" }}</dd> 
             </dl>
         </div>
         <!-- List of participants etc. -->
