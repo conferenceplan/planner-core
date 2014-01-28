@@ -49,6 +49,7 @@ var TabUtils = (function(){
             "click .model-delete-button" : "deleteModal",
             "click .model-add-tag-button" : "addTag",
             "click .model-select-button" : "select",
+            "click .model-csv-button"    : "select_csv",
             "click .select-tag-button" : "selectTag",
             "click .filter-remove-button" : "removeFilter",
         },
@@ -56,6 +57,12 @@ var TabUtils = (function(){
         select : function(event) {
             if (this.options.selectFn) {
                 this.options.selectFn(this.model.id);
+            }
+        },
+        
+        select_csv : function(event) {
+            if (this.options.selectCsvFn) {
+                this.options.selectCsvFn(this.model.id);
             }
         },
         
@@ -216,6 +223,7 @@ var TabUtils = (function(){
                         editTitle : options.editTitle,
                         selectFn : options.selectFn,
                         clearFn         : options.clearFn,
+                        selectCsvFn : options.selectCsvFn,
                         form_event : options.form_event,
                         form_event_fn : options.form_event_fn
                     });

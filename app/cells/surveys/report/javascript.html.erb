@@ -184,6 +184,10 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         }
     };
     
+    function runCSVQuery(id) {
+        $.download('/survey_reports/runReport.csv', 'query_id=' + id );
+    };
+    
     function runQuery(id) {
             resultSet = new ResultSet();
             resultSet.fetch({
@@ -222,6 +226,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             place :'#query-view',
             editTitle : "Edit Query",
             selectFn  : runQuery,
+            selectCsvFn : runCSVQuery,
             clearFn   : clearDetails,
             form_event : 'survey_id:change',
             form_event_fn : function(form, editor, extra) {
