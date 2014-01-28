@@ -10,6 +10,8 @@
             json.suffix             person.pseudonym.suffix if person.pseudonym.suffix
         end
     end
+    json.company                    person.company
+    json.job_title                  person.job_title
     json.survey_key                 person.survey_respondent ?  person.survey_respondent.key : "" 
     json.invitestatus_id            person.invitestatus.id if @person.invitestatus
     json.invitestatus_name          person.invitestatus ? @person.invitestatus.name : ""

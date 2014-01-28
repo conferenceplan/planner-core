@@ -78,6 +78,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             'pseudonym.first_name' : { type : 'Text', title : '<%= t "pub-first-name" %>' },
             'pseudonym.last_name' : { type : 'Text', title : '<%= t "pub-last-name" %>' },
             'pseudonym.suffix' : { type : 'Text', title : '<%= t "pub-suffix" %>' },
+            'company' : { type : 'Text', title : '<%= t "company" %>' },
+            'job_title' : { type : 'Text', title : '<%= t "job-title" %>' },
             'comments' : { type : 'Text', title : '<%= t "comments" %>' },
             invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
             acceptance_status_id : { type : 'Select', title : '<%= t "acceptance-status" %>', options : <%= AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
