@@ -4,9 +4,13 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   audited :allow_mass_assignment => true
 
-  has_many  :published_programme_item_assignments, :dependent => :destroy #, :class_name => 'Published::ProgrammeItemAssignment'
+  has_many  :published_programme_item_assignments, :dependent => :destroy do #, :class_name => 'Published::ProgrammeItemAssignment'
+    def role(r) # get the people with the given role
+      find(:all, :conditions => ['role_id = ?', r.id])
+    end
+  end
   has_many  :people, :through => :published_programme_item_assignments
-  
+
   acts_as_taggable
 
   belongs_to :format 
