@@ -39,7 +39,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     
     PhoneNumber = Backbone.Model.extend({
         schema : {
-            number : { type : 'Text', title : '<%= t "number" %>'},
+            number : { type : 'Text', title : '<%= t "phone-number" %>'},
             phone_type_id : { type : 'Select', title : '<%= t "phone type" %>', options : <%= PhoneTypes.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
         },
         urlRoot : '/phone_numbers'
@@ -90,13 +90,13 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     BioDetails = Backbone.Model.extend({
         schema : {
-            survey_bio : { type : 'TextArea', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
-            bio : { type : 'Html', editorAttrs: { rows : 6, cols : 60 } },
-            facebook : { type : 'Text' },
-            othersocialmedia : { type : 'Text' },
-            photourl : { type : 'Text' },
-            twitterinfo : { type : 'Text' },
-            website : { type : 'Text' }
+            survey_bio : { type : 'TextArea', title : '<%= t "bio-from-survey" %>', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
+            bio : { type : 'Html', title : '<%= t "Bio" %>', editorAttrs: { rows : 6, cols : 60 } },
+            facebook : { type : 'Text', title : '<%= t "participant-facebook-url" %>' },
+            othersocialmedia : { type : 'Text', title : '<%= t "other-social-media" %>' },
+            photourl : { type : 'Text', title : '<%= t "participant-photo" %>' },
+            twitterinfo : { type : 'Text', title : '<%= t "participant-twitter-handle" %>' },
+            website : { type : 'Text', title : '<%= t "participant-url" %>' }
         },
         urlRoot : '/edited_bios'
     });
@@ -220,8 +220,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             place :'#registration-view',
             id : id,
             id_name : 'person_id',
-            newTitle : "Create Registration",
-            editTitle : "Edit Registration",
+            newTitle : '<%= t "Create Registration" %>',
+            editTitle : '<%= t "Edit Registration" %>',
         }) );
 
         var invite_details = TabUtils.createTabContent({
@@ -231,8 +231,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             place : '#invite-view',
             id : id,
             id_name : 'person_id',
-            newTitle : "Create Invite",
-            editTitle : "Edit Invite",
+            newTitle : '<%= t "Create Invite" %>',
+            editTitle : '<%= t "Edit Invite" %>',
         });
         
         tabContent.push( invite_details );
@@ -245,8 +245,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             place : '#bio-view',
             id : id,
             id_name : 'person_id',
-            newTitle : "Create Bio",
-            editTitle : "Edit Bio",
+            newTitle : '<%= t "Create Bio" %>',
+            editTitle : '<%= t "Edit Bio" %>',
         }) );
         
         
@@ -279,7 +279,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id : id,
             id_name : 'person_id',
             view_refresh_event : "address:refresh",
-            modal_create_title : "Create Address Details",
+            modal_create_title : '<%= t "Create Address Details" %>',
             region : addressLayout.postalControlRegion
         });
         tabLists.push( TabUtils.createTabListContent({
@@ -288,8 +288,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#address-view-template",
             view_refresh_event : "address:refresh",
             region : addressLayout.postalRegion,
-            newTitle : "Create Address",
-            editTitle : "Edit Address",
+            newTitle : '<%= t "Create Address" %>',
+            editTitle : '<%= t "Edit Address" %>',
         }) );
         
         TabUtils.createTabControl({
@@ -298,7 +298,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id : id,
             id_name : 'person_id',
             view_refresh_event : "address:refresh",
-            modal_create_title : "Create Phone Number",
+            modal_create_title : '<%= t "Create Phone Number" %>',
             region : phoneLayout.phoneControlRegion,
         });
         tabLists.push( TabUtils.createTabListContent({
@@ -307,8 +307,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#phone-view-template",
             view_refresh_event : "address:refresh",
             region : phoneLayout.phoneRegion,
-            newTitle : "Create Phone Number",
-            editTitle : "Edit Phone Number",
+            newTitle : '<%= t "Create Phone Number" %>',
+            editTitle : '<%= t "Edit Phone Number" %>',
         }) );
 
         TabUtils.createTabControl({
@@ -317,7 +317,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id : id,
             id_name : 'person_id',
             view_refresh_event : "address:refresh",
-            modal_create_title : "Create Email",
+            modal_create_title : '<%= t "Create Email" %>',    
             region : emailLayout.emailControlRegion
         });
         tabLists.push( TabUtils.createTabListContent({
@@ -326,8 +326,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#email-view-template",
             view_refresh_event : "address:refresh",
             region : emailLayout.emailRegion,
-            newTitle : "Create Email",
-            editTitle : "Edit Email",
+            newTitle : '<%= t "Create Email" %>',
+            editTitle : '<%= t "Edit Email" %>',
         }) );
         
         // /tags/2108/add?class=Person&context=PrimaryArea 
@@ -338,7 +338,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#tag-context-layout-template",
             view_refresh_event : "address:refresh",
             place : '#tags-view',
-            newTitle : "Create Tag",
+            newTitle : '<%= t "Create Tag" %>',
         }) );
 
         //
@@ -374,8 +374,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                         model : availability,
                         template : '#date-exclusion-view-template',
                         region : exclusionLayout.datesRegion,
-                        newTitle : "Create Availability",
-                        editTitle : "Edit Availability",
+                        newTitle : '<%= t "Create Availability" %>',
+                        editTitle : '<%= t "Edit Availability" %>',
                     }) );
                 } else {
                     /* TODO TODO TODO */

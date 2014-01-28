@@ -6,7 +6,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
 
     Survey = Backbone.DeepModel.extend({
         schema : {
-            name            : { type : 'Text', title : '<%= t "survey-name" %>' },
+            name            : { type : 'Text', title : '<%= t "Name" %>' },
             alias           : { type : 'Text', title : '<%= t "survey-alias" %>' },
             public          : { type : 'Checkbox', title : '<%= t "survey-public" %>' },
             authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>' },

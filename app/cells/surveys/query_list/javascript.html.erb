@@ -7,7 +7,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
     QueryName = Backbone.Model.extend({
         urlRoot : '/survey_query',
         schema : {
-            name : { type : 'Text', title : '<%= t "survey-name" %>', validators: ['required'] },
+            name : { type : 'Text', title : '<%= t "Name" %>', validators: ['required'] },
         }
     });
     

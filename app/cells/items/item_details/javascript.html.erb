@@ -43,7 +43,7 @@ ItemApp.ItemManagement = (function(Backbone){
     
     Equipment = Backbone.Model.extend({
         schema : {
-            equipment_type_id : { type : 'Select', title : '<%= t "name" %>', options : <%= [].concat(EquipmentType.find(:all).collect {|s| {'val' => s.id, 'label' => s.description} }).to_json.html_safe %> },
+            equipment_type_id : { type : 'Select', title : '<%= t "Name" %>', options : <%= [].concat(EquipmentType.find(:all).collect {|s| {'val' => s.id, 'label' => s.description} }).to_json.html_safe %> },
         },
         urlRoot : '/equipment_needs'
     });
@@ -141,8 +141,8 @@ ItemApp.ItemManagement = (function(Backbone){
             template : "#equipment-detail-template",
             view_refresh_event : "equipment:refresh",
             region : equipmentLayout.equipmentRegion,
-            newTitle : "Create Equipment",
-            editTitle : "equipment-edit-equipment",
+            newTitle : '<%= t "equipment-create-equipment" %>',
+            editTitle : '<%= t "equipment-edit-equipment" %>',
         }) );
         
         tabLists.push( TabUtils.createTagListContent({
