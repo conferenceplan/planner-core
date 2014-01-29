@@ -240,10 +240,10 @@ class PlannerReportsController < PlannerController
   #
   def table_tents
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
+    @itemList = (params[:items] && params[:items].length > 0) ? URI.unescape(params[:items]).split(',') : nil
     
-    @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList
+    @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList, nil, @itemList
     @page_size = params[:page_size]
-    # @rooms = PlannerReportsService.findPublishedPanelsByRoom
     
     respond_to do |format|
       format.xml {

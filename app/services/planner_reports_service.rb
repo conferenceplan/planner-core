@@ -69,16 +69,20 @@ module PlannerReportsService
   #
   #
   #
-  def self.findPublishedPanelistsWithPanels(peopleIds = nil, additional_roles = nil)
+  def self.findPublishedPanelistsWithPanels(peopleIds = nil, additional_roles = nil, itemIds = nil)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
     roles.concat(additional_roles) if additional_roles
-    cndStr = '(published_programme_item_assignments.role_id in (?)) AND (people.acceptance_status_id in (?))'
+    cndStr = '(published_programme_item_assignments.role_id in (?))'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
+    # cndStr += ' AND (published_rooms.id in(?))' if roomIds
+    cndStr += ' AND (published_programme_item_assignments.published_programme_item_id in(?))' if itemIds
 
-    conditions = [cndStr, roles, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
+    conditions = [cndStr, roles] #, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
     conditions << peopleIds if peopleIds
+    # conditions << roomIds if roomIds
+    conditions << itemIds if itemIds
     
-    Person.all :conditions => conditions, 
+    Person.all :conditions => conditions,
               :include => {:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}},
               :order => "people.last_name, published_time_slots.start asc"
 

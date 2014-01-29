@@ -39,6 +39,14 @@ module PublishedProgramItemsService
 
   end
   
+  def self.getPublishedProgramItemsThatHavePeople
+
+    PublishedProgrammeItem.all :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
+                               :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
+                               :conditions => "published_programme_item_assignments.id is not null"
+
+  end
+  
   #
   #
   #

@@ -14,7 +14,7 @@ wb.add_worksheet(name: "Table Tents") do |sheet|
     
     @people.each do |person|
         # should be the published items
-        person.published_programme_items.each do |item|
+        person.published_programme_items.collect{|i| @itemList ? (@itemList.include?(i.id.to_s) ? i : nil) : i }.compact.each do |item|
             sheet.add_row [
                 person.getFullPublicationName,
                 item.title,

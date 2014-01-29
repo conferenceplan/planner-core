@@ -90,7 +90,7 @@ var AppUtils = (function(){
         },
         
         submit : function(e) {
-            console.debug("submit");
+            // console.debug("submit");
             if (e && e.type == "submit") {
                 e.preventDefault();
                 e.stopPropagation();

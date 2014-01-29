@@ -6,6 +6,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
     
     var people = <%= [].concat(PeopleService.findAssignedParticipants.collect {|p| {'id' => p.id, 'text' => p.getFullPublicationName}}).to_json.html_safe %>;
     var rooms = <%= [].concat(RoomsService.findPublishedRooms.collect {|r| {'id' => r.id, 'text' => r.name}}).to_json.html_safe %>
+    var items = <%= [].concat(PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople.collect {|r| {'id' => r.id, 'text' => r.title}}).to_json.html_safe %>
 
     var GenericForm = Backbone.Form.extend({
         schema : {
@@ -38,7 +39,41 @@ PublicationsApp.PrintManagement = (function(Backbone){
                                 };
                                 query.callback(data);
                             }
-                        }
+                        },
+                        validators : [
+                            function checkPeople(value, formValues) {
+                                console.debug(formValues);
+                                    var err = {
+                                        type : 'people',
+                                        message : '<%= t "Only select items OR people not both" %>'
+                                    };
+                                    
+                                    if ((value.length > 0) && (formValues.items.length > 0)) return err;
+                                }
+                        ]
+                },
+            items : { type : 'Select2', title : '<%= t "publications-items" %>',
+                        config : {
+                            multiple: true,
+                            maximumSelectionSize : -1,
+                            query: function (query) {
+                                var data = {
+                                    results: _.filter(items, function(x) { return x.text.toLowerCase().indexOf(query.term.toLowerCase()) != -1; })
+                                };
+                                query.callback(data);
+                            }
+                        },
+                        validators : [
+                            function checkItems(value, formValues) {
+                                console.debug(formValues);
+                                    var err = {
+                                        type : 'items',
+                                        message : '<%= t "Only select items OR people not both" %>'
+                                    };
+                                    
+                                    if ((value.length > 0) && (formValues.people.length > 0)) return err;
+                                }
+                        ]
                 }
         },
         

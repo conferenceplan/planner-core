@@ -4,7 +4,7 @@ xml.table_tent do
         xml.person do
             xml.name(person.getFullPublicationName)
             xml.items do
-                person.published_programme_items.each do |item|
+                person.published_programme_items.collect{|i| @itemList ? (@itemList.include?(i.id.to_s) ? i : nil) : i }.compact.each do |item|
                     xml.item do
                         xml.title item.title
                         xml.description item.precis

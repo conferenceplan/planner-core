@@ -22,52 +22,84 @@ var ReportBase = (function(Backbone){
             },
             
             submitCSV : function() {
-                var data = this.form.getValue();
+                var errors = this.form.validate(); // To save the values from the form back into the model
                 
-                $.download(this.options.endPoint + '.csv', data );
+                if (!errors) { // save if there are no errors
+                    var data = this.form.getValue();
+                    
+                    $.download(this.options.endPoint + '.csv', data );
+                }
+                
+                return errors; // if there are any errors
             },
             
             submitXML : function() {
-                var data = this.form.getValue();
+                var errors = this.form.validate(); // To save the values from the form back into the model
                 
-                $.download(this.options.endPoint + '.xml', data );
+                if (!errors) { // save if there are no errors
+                    var data = this.form.getValue();
+                    
+                    $.download(this.options.endPoint + '.xml', data );
+                }
+                
+                return errors; // if there are any errors
             },
             
             submitXLSX : function() {
-                var data = this.form.getValue();
+                var errors = this.form.validate(); // To save the values from the form back into the model
                 
-                $.download(this.options.endPoint + '.xlsx', data );
+                if (!errors) { // save if there are no errors
+                    var data = this.form.getValue();
+                    
+                    $.download(this.options.endPoint + '.xlsx', data );
+                }
+                
+                return errors; // if there are any errors
             },
             
             submitPDF : function() {
-                var data = this.form.getValue();
                 
-                $.download(this.options.endPoint + '.pdf', data );
+                var errors = this.form.validate(); // To save the values from the form back into the model
+                
+                if (!errors) { // save if there are no errors
+                    var data = this.form.getValue();
+                    
+                    $.download(this.options.endPoint + '.pdf', data );
+                }
+                
+                return errors; // if there are any errors
+                
             },
             
             submit : function() {
-                // Gather the data from the form and send it to the back end
-                var data = this.form.getValue();
-                var colModel = this.options.colModel;
-                var caption = this.options.caption;
-    
-                var resultSet = new ReportBase.ResultSet();
-                resultSet.fetch({
-                    url : this.options.endPoint + '.json',
-                    type : 'POST',
-                    data : data,
-                    error : function(model, response) {
-                      alertMessage("ERROR: unable to get the result from the server");
-                    },
-                    success : function(model) {
-                            resultsView = new ReportBase.ResultsView({
-                                        colModel : colModel,
-                                        resultsCollection : model,
-                                        caption : caption
-                            });
-                            resultsView.render();
-                    }
-                });
+                var errors = this.form.validate(); // To save the values from the form back into the model
+                
+                if (!errors) { // save if there are no errors
+                    // Gather the data from the form and send it to the back end
+                    var data = this.form.getValue();
+                    var colModel = this.options.colModel;
+                    var caption = this.options.caption;
+        
+                    var resultSet = new ReportBase.ResultSet();
+                    resultSet.fetch({
+                        url : this.options.endPoint + '.json',
+                        type : 'POST',
+                        data : data,
+                        error : function(model, response) {
+                          alertMessage("ERROR: unable to get the result from the server");
+                        },
+                        success : function(model) {
+                                resultsView = new ReportBase.ResultsView({
+                                            colModel : colModel,
+                                            resultsCollection : model,
+                                            caption : caption
+                                });
+                                resultsView.render();
+                        }
+                    });
+                }
+                
+                return errors; // if there are any errors
             }
         });
 
