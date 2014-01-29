@@ -36,7 +36,7 @@ ThemeApp.Management = (function(Backbone){
         onRender : function() {
             var _containerElem = this.$el.find("#phone-display")[0];
             
-            Phone.paint(_containerElem, {});
+            Phone.paint(_containerElem, this.options.initialColors);
         },
 
     });
@@ -63,15 +63,13 @@ ThemeApp.Management = (function(Backbone){
      * 
      */
     function loadPhoneDisplay() {
-        phoneView = new PhoneView({});
-        phoneView.render();
-
         m = new MobileTheme();
         m.fetch({
             error : function(model, response) {
                 alertMessage("Error communicating with backend"); // TODO - change to translatable string
             },
             success : function(mdl) {
+                //console.debug("loaded colors");
                 view = AppUtils.createEditItemView({
                     model        : mdl,
                     itemArea     : '#phone-theme-ctl',
@@ -79,7 +77,8 @@ ThemeApp.Management = (function(Backbone){
                     resetFn      : resetColors
                 });
                 
-                Phone.setColors({
+                phoneView = new PhoneView({
+                    initialColors : {
                     '#main-background'  : mdl.get('main_background'),
                     '#title-background' : mdl.get('title_background'),
                     '#primary-text'     : mdl.get('primary_text'),
@@ -89,7 +88,10 @@ ThemeApp.Management = (function(Backbone){
                     '#hot-ribbon'       : mdl.get('hot_ribbon'),
                     '#favourite-on'     : mdl.get('favourite_on'),
                     '#card-shadow'      : mdl.get('card_shadow'),
+                }
                 });
+
+                phoneView.render();
                 
                 view.onEvent('main_background:blur', function(form, editor, extra) {
                     Phone.setColor('#main-background', editor.getValue() );

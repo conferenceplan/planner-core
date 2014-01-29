@@ -49,25 +49,20 @@ Phone = (function() {
     function setColor(place, color) {
         var element = svg.select("svg").selectAll(place);
         element.style('fill', color);
-        var subels = element.selectAll('path');
-        if (subels) {
-            subels.style('fill', color);
-        }
+        
+        // Now we need to go through all the sub-elements of the selected "group"
+        element.selectAll("*").style('fill', color);
     }
     
     /*
      * 
      */
     function setColors(colors) {
-        
         if (colors) {
             _.each(colors, function(value, key, list) {
                 Phone.setColor(key, value);
             });
         }
-        
-        // Set the colors - via fill          
-        background = svg.select("svg").selectAll("#main-background");
     };
 
     /*
