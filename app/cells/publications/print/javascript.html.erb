@@ -27,7 +27,8 @@ PublicationsApp.PrintManagement = (function(Backbone){
     var TableTentForm = Backbone.Form.extend({
         schema : {
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
-                          options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
+                          options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %>,
+                          help : '<%= t "The page size for the PDF output" %>' 
                 },
             people : { type : 'Select2', title : '<%= t "publications-people" %>', 
                         config : {
@@ -42,7 +43,6 @@ PublicationsApp.PrintManagement = (function(Backbone){
                         },
                         validators : [
                             function checkPeople(value, formValues) {
-                                console.debug(formValues);
                                     var err = {
                                         type : 'people',
                                         message : '<%= t "Only select items OR people not both" %>'
@@ -65,7 +65,6 @@ PublicationsApp.PrintManagement = (function(Backbone){
                         },
                         validators : [
                             function checkItems(value, formValues) {
-                                console.debug(formValues);
                                     var err = {
                                         type : 'items',
                                         message : '<%= t "Only select items OR people not both" %>'
@@ -86,7 +85,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
         schema : {
             additional_roles : { type : 'Checkbox', title : '<%= t "publications-include-invisible" %>'},
             label_type : { type : 'Select', title : '<%= t "label-type" %>', 
-                            options : <%= [].concat(LabelDimensions.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+                            options : <%= [].concat(LabelDimensions.find(:all).collect {|s| {'val' => s.id, 'label' => (s.manufacturer + ' - ' + s.name)} }).to_json.html_safe %> },
             people : { type : 'Select2', title : '<%= t "publications-people" %>', 
                         config : {
                             multiple: true,
@@ -156,8 +155,9 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
-                form        : TableTentForm,
-                endPoint    : '/planner_reports/table_tents'
+                form            : TableTentForm,
+                endPoint        : '/planner_reports/table_tents',
+                formTemplate    : '#table-tent-form-template'
             }));
         },
         

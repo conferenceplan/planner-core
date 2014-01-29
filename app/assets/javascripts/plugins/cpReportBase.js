@@ -16,7 +16,13 @@ var ReportBase = (function(Backbone){
             render : function() {
                 this.$el.html($(this.template()));
                 
-                this.form = new this.options.form({}).render();
+                if (this.options.formTemplate) {
+                    this.form = new this.options.form({
+                        template : _.template($(this.options.formTemplate).html())
+                    }).render();
+                } else {
+                    this.form = new this.options.form({}).render();
+                }
                 
                 this.$el.find(".report-body").html(this.form.el);
             },

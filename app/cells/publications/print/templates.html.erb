@@ -3,3 +3,18 @@
     <table id="results-t" class="result-table"><tr><td/></tr></table>
     <div id="result-pager"></div>
 </script>
+
+<script type="text/html" id="table-tent-form-template">
+    <form class="form-horizontal">
+        <fieldset>
+                <div data-fields="page_size"></div>
+                <div class="row">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <p><%= t "Select either a person or a program item" %></p>
+                </div>
+                </div>
+                <div data-fields="people"></div>
+                <div data-fields="items"></div>
+        </fieldset>
+    </form>
+</script>
