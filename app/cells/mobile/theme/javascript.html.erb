@@ -11,15 +11,31 @@ ThemeApp.Management = (function(Backbone){
     MobileTheme = Backbone.Model.extend({
         urlRoot : '/mobile/theme',
         schema : {
-            main_background     :  { type : 'Color', title : '<%= t "color-main-bg" %>' },
-            title_background    :  { type : 'Color', title : '<%= t "color-title-bg" %>' },
-            primary_text        :  { type : 'Color', title : '<%= t "color-primary-text" %>' },
-            secondary_text      :  { type : 'Color', title : '<%= t "color-secondary-text" %>' },
-            card_background     :  { type : 'Color', title : '<%= t "color-card-bg" %>' },
-            updated_ribbon      :  { type : 'Color', title : '<%= t "color-ribbon-updated" %>' },
-            hot_ribbon          :  { type : 'Color', title : '<%= t "color-ribbon-hot" %>' },
-            favourite_on        :  { type : 'Color', title : '<%= t "color-favourite" %>' },
-            card_shadow         :  { type : 'Color', title : '<%= t "color-card-shadow" %>' }
+            card_background     :  { type : 'Color', title : '<%= t "color-card-background" %>' },
+            card_shadow     :  { type : 'Color', title : '<%= t "color-card-shadow" %>' },
+            favourite_on_bg     :  { type : 'Color', title : '<%= t "color-favourite-on-bg" %>' },
+            favourite_off_bg     :  { type : 'Color', title : '<%= t "color-favourite-off-bg" %>' },
+            favourite_on     :  { type : 'Color', title : '<%= t "color-favourite-on" %>' },
+            favourite_off     :  { type : 'Color', title : '<%= t "color-favourite-off" %>' },
+            hot_ribbon     :  { type : 'Color', title : '<%= t "color-hot-ribbon" %>' },
+            hot_ribbon_text     :  { type : 'Color', title : '<%= t "color-hot-ribbon-text" %>' },
+            updated_ribbon     :  { type : 'Color', title : '<%= t "color-updated-ribbon" %>' },
+            updated_ribbon_text     :  { type : 'Color', title : '<%= t "color-updated-ribbon-text" %>' },
+            new_ribbon     :  { type : 'Color', title : '<%= t "color-new-ribbon" %>' },
+            new_ribbon_text     :  { type : 'Color', title : '<%= t "color-new-ribbon-text" %>' },
+            main_background     :  { type : 'Color', title : '<%= t "color-main-background" %>' },
+            item_format     :  { type : 'Color', title : '<%= t "color-item-format" %>' },
+            body_text     :  { type : 'Color', title : '<%= t "color-body-text" %>' },
+            body_text_secondary     :  { type : 'Color', title : '<%= t "color-body-text-secondary" %>' },
+            action_bar_bg     :  { type : 'Color', title : '<%= t "color-action-bar-bg" %>' },
+            action_bar_text     :  { type : 'Color', title : '<%= t "color-action-bar-text" %>' },
+            day_text     :  { type : 'Color', title : '<%= t "color-day-text" %>' },
+            date_text     :  { type : 'Color', title : '<%= t "color-date-text" %>' },
+            time_text     :  { type : 'Color', title : '<%= t "color-time-text" %>' },
+            page_flipper_text     :  { type : 'Color', title : '<%= t "color-page-flipper-text" %>' },
+            page_flipper_bg     :  { type : 'Color', title : '<%= t "color-page-flipper-bg" %>' },
+            page_flipper_separators     :  { type : 'Color', title : '<%= t "color-page-flipper-separators" %>' },
+            page_flipper_selection_bar     :  { type : 'Color', title : '<%= t "color-page-flipper-selection-bar" %>' },
         }
     });
     
@@ -47,15 +63,31 @@ ThemeApp.Management = (function(Backbone){
     function resetColors(view) {
         mdl = view.model;
         Phone.setColors({
-            '#main-background'  : mdl.get('main_background'),
-            '#title-background' : mdl.get('title_background'),
-            '#primary-text'     : mdl.get('primary_text'),
-            '#secondary-text'   : mdl.get('secondary_text'),
-            '#card-background'  : mdl.get('card_background'),
-            '#updated-ribbon'   : mdl.get('updated_ribbon'),
-            '#hot-ribbon'       : mdl.get('hot_ribbon'),
-            '#favourite-on'     : mdl.get('favourite_on'),
-            '#card-shadow'      : mdl.get('card_shadow'),
+            '#card-background'               : mdl.get('card_background'),
+            '#card-shadow'                   : mdl.get('card_shadow'),
+            '#favourite-on-bg'               : mdl.get('favourite_on_bg'),
+            '#favourite-off-bg'              : mdl.get('favourite_off_bg'),
+            '#favourite-on'                  : mdl.get('favourite_on'),
+            '#favourite-off'                 : mdl.get('favourite_off'),
+            '#hot-ribbon'                    : mdl.get('hot_ribbon'),
+            '#hot-ribbon-text'               : mdl.get('hot_ribbon_text'),
+            '#updated-ribbon'                : mdl.get('updated_ribbon'),
+            '#updated-ribbon-text'           : mdl.get('updated_ribbon_text'),
+            '#new-ribbon'                    : mdl.get('new_ribbon'),
+            '#new-ribbon-text'               : mdl.get('new_ribbon_text'),
+            '#main-background'               : mdl.get('main_background'),
+            '#item-format'                   : mdl.get('item_format'),
+            '#body-text'                     : mdl.get('body_text'),
+            '#body-text-secondary'           : mdl.get('body_text_secondary'),
+            '#action-bar-bg'                 : mdl.get('action_bar_bg'),
+            '#action-bar-text'               : mdl.get('action_bar_text'),
+            '#day-text'                      : mdl.get('day_text'),
+            '#date-text'                     : mdl.get('date_text'),
+            '#time-text'                     : mdl.get('time_text'),
+            '#page-flipper-text'             : mdl.get('page_flipper_text'),
+            '#page-flipper-bg'               : mdl.get('page_flipper_bg'),
+            '#page-flipper-separators'       : mdl.get('page_flipper_separators'),
+            '#page-flipper-selection-bar'    : mdl.get('page_flipper_selection_bar')
         });
     };
 
@@ -79,51 +111,116 @@ ThemeApp.Management = (function(Backbone){
                 
                 phoneView = new PhoneView({
                     initialColors : {
-                    '#main-background'  : mdl.get('main_background'),
-                    '#title-background' : mdl.get('title_background'),
-                    '#primary-text'     : mdl.get('primary_text'),
-                    '#secondary-text'   : mdl.get('secondary_text'),
-                    '#card-background'  : mdl.get('card_background'),
-                    '#updated-ribbon'   : mdl.get('updated_ribbon'),
-                    '#hot-ribbon'       : mdl.get('hot_ribbon'),
-                    '#favourite-on'     : mdl.get('favourite_on'),
-                    '#card-shadow'      : mdl.get('card_shadow'),
+                        '#card-background'               : mdl.get('card_background'),
+                        '#card-shadow'                   : mdl.get('card_shadow'),
+                        '#favourite-on-bg'               : mdl.get('favourite_on_bg'),
+                        '#favourite-off-bg'              : mdl.get('favourite_off_bg'),
+                        '#favourite-on'                  : mdl.get('favourite_on'),
+                        '#favourite-off'                 : mdl.get('favourite_off'),
+                        '#hot-ribbon'                    : mdl.get('hot_ribbon'),
+                        '#hot-ribbon-text'               : mdl.get('hot_ribbon_text'),
+                        '#updated-ribbon'                : mdl.get('updated_ribbon'),
+                        '#updated-ribbon-text'           : mdl.get('updated_ribbon_text'),
+                        '#new-ribbon'                    : mdl.get('new_ribbon'),
+                        '#new-ribbon-text'               : mdl.get('new_ribbon_text'),
+                        '#main-background'               : mdl.get('main_background'),
+                        '#item-format'                   : mdl.get('item_format'),
+                        '#body-text'                     : mdl.get('body_text'),
+                        '#body-text-secondary'           : mdl.get('body_text_secondary'),
+                        '#action-bar-bg'                 : mdl.get('action_bar_bg'),
+                        '#action-bar-text'               : mdl.get('action_bar_text'),
+                        '#day-text'                      : mdl.get('day_text'),
+                        '#date-text'                     : mdl.get('date_text'),
+                        '#time-text'                     : mdl.get('time_text'),
+                        '#page-flipper-text'             : mdl.get('page_flipper_text'),
+                        '#page-flipper-bg'               : mdl.get('page_flipper_bg'),
+                        '#page-flipper-separators'       : mdl.get('page_flipper_separators'),
+                        '#page-flipper-selection-bar'    : mdl.get('page_flipper_selection_bar')
                 }
                 });
 
                 phoneView.render();
                 
-                view.onEvent('main_background:blur', function(form, editor, extra) {
-                    Phone.setColor('#main-background', editor.getValue() );
-                });
-                view.onEvent('title_background:blur', function(form, editor, extra) {
-                    Phone.setColor('#title-background', editor.getValue() );
-                });
-                view.onEvent('primary_text:blur', function(form, editor, extra) {
-                    Phone.setColor('#primary-text', editor.getValue() );
-                });
-                view.onEvent('secondary_text:blur', function(form, editor, extra) {
-                    Phone.setColor('#secondary-text', editor.getValue() );
-                });
                 view.onEvent('card_background:blur', function(form, editor, extra) {
                     Phone.setColor('#card-background', editor.getValue() );
-                });
-                view.onEvent('updated_ribbon:blur', function(form, editor, extra) {
-                    Phone.setColor('#updated-ribbon', editor.getValue() );
-                });
-                view.onEvent('hot_ribbon:blur', function(form, editor, extra) {
-                    Phone.setColor('#hot-ribbon', editor.getValue() );
-                });
-                view.onEvent('favourite_on:blur', function(form, editor, extra) {
-                    Phone.setColor('#favourite-on', editor.getValue() );
                 });
                 view.onEvent('card_shadow:blur', function(form, editor, extra) {
                     Phone.setColor('#card-shadow', editor.getValue() );
                 });
+                view.onEvent('favourite_on_bg:blur', function(form, editor, extra) {
+                    Phone.setColor('#favourite-on-bg', editor.getValue() );
+                });
+                view.onEvent('favourite_off_bg:blur', function(form, editor, extra) {
+                    Phone.setColor('#favourite-off-bg', editor.getValue() );
+                });
+                view.onEvent('favourite_on:blur', function(form, editor, extra) {
+                    Phone.setColor('#favourite-on', editor.getValue() );
+                });
+                view.onEvent('favourite_off:blur', function(form, editor, extra) {
+                    Phone.setColor('#favourite-off', editor.getValue() );
+                });
+                view.onEvent('hot_ribbon:blur', function(form, editor, extra) {
+                    Phone.setColor('#hot-ribbon', editor.getValue() );
+                });
+                view.onEvent('hot_ribbon_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#hot-ribbon-text', editor.getValue() );
+                });
+                view.onEvent('updated_ribbon:blur', function(form, editor, extra) {
+                    Phone.setColor('#updated-ribbon', editor.getValue() );
+                });
+                view.onEvent('updated_ribbon_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#updated-ribbon-text', editor.getValue() );
+                });
+                view.onEvent('new_ribbon:blur', function(form, editor, extra) {
+                    Phone.setColor('#new-ribbon', editor.getValue() );
+                });
+                view.onEvent('new_ribbon_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#new-ribbon-text', editor.getValue() );
+                });
+                view.onEvent('main_background:blur', function(form, editor, extra) {
+                    Phone.setColor('#main-background', editor.getValue() );
+                });
+                view.onEvent('item_format:blur', function(form, editor, extra) {
+                    Phone.setColor('#item-format', editor.getValue() );
+                });
+                view.onEvent('body_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#body-text', editor.getValue() );
+                });
+                view.onEvent('body_text_secondary:blur', function(form, editor, extra) {
+                    Phone.setColor('#body-text-secondary', editor.getValue() );
+                });
+                view.onEvent('action_bar_bg:blur', function(form, editor, extra) {
+                    Phone.setColor('#action-bar-bg', editor.getValue() );
+                });
+                view.onEvent('action_bar_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#action-bar-text', editor.getValue() );
+                });
+                view.onEvent('day_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#day-text', editor.getValue() );
+                });
+                view.onEvent('date_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#date-text', editor.getValue() );
+                });
+                view.onEvent('time_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#time-text', editor.getValue() );
+                });
+                view.onEvent('page_flipper_text:blur', function(form, editor, extra) {
+                    Phone.setColor('#page-flipper-text', editor.getValue() );
+                });
+                view.onEvent('page_flipper_bg:blur', function(form, editor, extra) {
+                    Phone.setColor('#page-flipper-bg', editor.getValue() );
+                });
+                view.onEvent('page_flipper_separators:blur', function(form, editor, extra) {
+                    Phone.setColor('#page-flipper-separators', editor.getValue() );
+                });
+                view.onEvent('page_flipper_selection_bar:blur', function(form, editor, extra) {
+                    Phone.setColor('#page-flipper-selection-bar', editor.getValue() );
+                });
+
             }
         });
     };
-    
+
     /*
      * The 'public' methods
      */
