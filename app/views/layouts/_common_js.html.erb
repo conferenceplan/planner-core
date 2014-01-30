@@ -7,48 +7,4 @@
         //]]>
     </script>
 <% end %>
-        
-<% if current_user %>
-<script type='text/javascript'>
-var message_me = "<%= current_user.preference != nil ? current_user.preference : false %>" === 'true';
 
-function startMessaging() {
-    $("#alert-me").everyTime(60000, "planner-messages", function() {
-        $.ajax({
-            url: "/monitor",
-            dataType: "html",
-            success: function(response){
-                if ($.trim(response).length > 0) {
-                    $('#freeow-tr').freeow("Message", response, {
-                        classes: ["gray", "warning"]
-                    });
-                }
-            }
-        });
-
-    }, 0);
-    message_me = true;
-}
-
-$(document).ready(function(){
-    $("#alert-me-toggle").click(function() {
-        if (message_me) {
-            $("#alert-me").stopTime("planner-messages");
-            $("#alert-me-toggle").text('Start Messages');
-            message_me = false;
-        } else {
-            startMessaging();
-            $("#alert-me-toggle").text('Stop Messages');
-        };
-    });
-
-    if (message_me) {
-        startMessaging();
-    } else {
-        $("#alert-me").stopTime("planner-messages");
-        $("#alert-me-toggle").text('Start Messages');
-    }
-});
-</script>
-<% end %>
-	

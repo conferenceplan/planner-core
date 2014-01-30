@@ -47,12 +47,12 @@ Phone = (function() {
      * 
      */
     function setColor(place, color) {
-        var element = svg.select("svg").selectAll(place);
+        var element = svg.select("svg").selectAll("[id*='" + place + "']");
         element.style('fill', color);
         
         // Now we need to go through all the sub-elements of the selected "group"
-        element.selectAll("*").style('fill', color);
-        element.selectAll("*").selectAll("*").style('fill', color);
+        element.selectAll("*").style('fill', color).style('stroke', color);
+        element.selectAll("*").selectAll("*").style('fill', color).style('stroke', color);
     }
     
     /*

@@ -6,8 +6,6 @@
 //= require jquery-migrate-1.1.1
 
 //= require jquery.ui.all
-//= require jquery.timers-1.2
-//= require jquery.timeentry.min
 
 //  require i18n/grid.locale-en
 //= require jqgrid-jquery-rails
@@ -59,11 +57,6 @@
 //= require plugins/dateTimeEditor
 
 //= require TabViews
-
-// TODO - check these
-//  require plugins/cpdialog
-//  require plugins/cpDynamicArea
-//  require plugins/cpremovebutton
 
 //= require_self
 
