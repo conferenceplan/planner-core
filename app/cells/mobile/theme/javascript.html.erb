@@ -6,7 +6,6 @@ ThemeApp = new Backbone.Marionette.Application();
 ThemeApp.Management = (function(Backbone){
 
     /*
-     * 
      */
     MobileTheme = Backbone.Model.extend({
         urlRoot : '/mobile/theme',
@@ -24,6 +23,7 @@ ThemeApp.Management = (function(Backbone){
             new_ribbon     :  { type : 'Color', title : '<%= t "color-new-ribbon" %>' },
             new_ribbon_text     :  { type : 'Color', title : '<%= t "color-new-ribbon-text" %>' },
             main_background     :  { type : 'Color', title : '<%= t "color-main-background" %>' },
+            item_name     :  { type : 'Color', title : '<%= t "color-item-name" %>' },
             item_format     :  { type : 'Color', title : '<%= t "color-item-format" %>' },
             body_text     :  { type : 'Color', title : '<%= t "color-body-text" %>' },
             body_text_secondary     :  { type : 'Color', title : '<%= t "color-body-text-secondary" %>' },
@@ -76,6 +76,7 @@ ThemeApp.Management = (function(Backbone){
             'new-ribbon-bg'                 : mdl.get('new_ribbon'),
             'new-ribbon-text'               : mdl.get('new_ribbon_text'),
             'main-background'               : mdl.get('main_background'),
+            'item-name'                     : mdl.get('item_name'),
             'item-format'                   : mdl.get('item_format'),
             'body-text-fg'                  : mdl.get('body_text'),
             'body-text-secondary-fg'        : mdl.get('body_text_secondary'),
@@ -124,6 +125,7 @@ ThemeApp.Management = (function(Backbone){
                         'new-ribbon-bg'                 : mdl.get('new_ribbon'),
                         'new-ribbon-text'               : mdl.get('new_ribbon_text'),
                         'main-background'               : mdl.get('main_background'),
+                        'item-name'                     : mdl.get('item_name'),
                         'item-format'                   : mdl.get('item_format'),
                         'body-text-fg'                  : mdl.get('body_text'),
                         'body-text-secondary-fg'        : mdl.get('body_text_secondary'),
@@ -215,6 +217,9 @@ ThemeApp.Management = (function(Backbone){
                 });
                 view.onEvent('page_flipper_selection_bar:blur', function(form, editor, extra) {
                     Phone.setColor('page-flipper-selection-bar', editor.getValue() );
+                });
+                view.onEvent('item_name:blur', function(form, editor, extra) {
+                    Phone.setColor('item-name', editor.getValue() );
                 });
 
             }
