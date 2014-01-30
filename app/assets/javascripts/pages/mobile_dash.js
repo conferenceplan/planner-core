@@ -52,6 +52,7 @@ Phone = (function() {
         
         // Now we need to go through all the sub-elements of the selected "group"
         element.selectAll("*").style('fill', color);
+        element.selectAll("*").selectAll("*").style('fill', color);
     }
     
     /*

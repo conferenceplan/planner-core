@@ -149,8 +149,8 @@ var ReportBase = (function(Backbone){
                         gridview: true,
                         pager : '#result-pager',
                         caption: this.options.caption,
-                        rowList:[10,20,50,100],
-                        rowNum:50
+                        rowList:[10,20,50],
+                        rowNum:20
                         });
         
                     var grid = this.grid;
