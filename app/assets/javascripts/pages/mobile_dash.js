@@ -1,6 +1,15 @@
 /*
  * 
  */
+var altFieldTemplate = _.template('\
+<row>\
+      <label class="col-sm-8 control-label" for="<%= editorId %>"><%= title %></label>\
+      <div class="col-sm-4">\
+        <span data-editor></span>\
+      </div>\
+</row>\
+');
+
 Phone = (function() {
 
     /*
