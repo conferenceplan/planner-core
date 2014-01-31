@@ -1,41 +1,50 @@
 class InvitationCategoriesController < PlannerController
 
+  #
+  #
+  #
   def index
-    @invitationCategories = InvitationCategory.find :all
+    invitationCategories = InvitationCategory.find :all, :order => 'position asc'
+    
+    render json: invitationCategories.to_json, :content_type => 'application/json'
   end
+  
+  #
+  #
+  #
   def show
-    @invitationCategory = InvitationCategory.find(params[:id])
+    invitationCategory = InvitationCategory.find(params[:id])
+    
+    render json: invitationCategory.to_json, :content_type => 'application/json'
   end
+  
+  #
+  #
+  #
   def create
-    @invitationCategory = InvitationCategory.new(params[:invitation_category])
-    if (@invitationCategory.save)
-       redirect_to :action => 'show', :id => @invitationCategory
-    else
-      render :action => 'new'
-    end 
+    invitationCategory = InvitationCategory.new(params[:invitation_category])
+    invitationCategory.save!
+
+    render json: invitationCategory.to_json, :content_type => 'application/json'
   end
-  def new
-    @invitationCategory = InvitationCategory.new
-  end
-  
-  def edit
-    @invitationCategory = InvitationCategory.find(params[:id])
-  end
-  
+
+  #
+  #
+  #
   def update
-    @invitationCategory = InvitationCategory.find(params[:id])
-    if @invitationCategory.update_attributes(params[:invitation_category])
-      redirect_to :action => 'show', :id => @invitationCategory
-    else
-      render :action => 'edit'
-    end
+    invitationCategory = InvitationCategory.find(params[:id])
+    invitationCategory.update_attributes(params[:invitation_category])
+    
+    render json: invitationCategory.to_json, :content_type => 'application/json'
   end
   
   def destroy
-    @invitationCategory = InvitationCategory.find(params[:id])
-    @invitationCategory.destroy
-    redirect_to :action => 'index'
+    candidate = InvitationCategory.find(params[:id])
+    candidate.destroy
+    
+    render status: :ok, text: {}.to_json
   end
+  
   def list  
     # Get all the roles in the database
     @invitationCategories = InvitationCategory.find :all

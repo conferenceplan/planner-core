@@ -3,6 +3,8 @@
 ConfigApp = new Backbone.Marionette.Application();
 
 ConfigApp.ConfigManagement = (function(Backbone){
+    
+    TitleMdl =  Backbone.Model.extend({});
 
     Equipment = Backbone.Model.extend({
         schema : {
@@ -19,7 +21,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
         schema : {
             name     : { type : 'Text', title : '<%= t "format-name" %>' },
             positon  : { type : 'Number', title : '<%= t "format-position" %>' }
-            // TODO - position???
         },
         urlRoot : '/formats'
     });
@@ -28,14 +29,31 @@ ConfigApp.ConfigManagement = (function(Backbone){
         model : ItemFormat
     });
     
+    InviteCategory = Backbone.Model.extend({
+        schema : {
+            name     : { type : 'Text', title : '<%= t "invite-category-name" %>' },
+            positon  : { type : 'Number', title : '<%= t "invite-category-position" %>' }
+        },
+        urlRoot : '/invitation_categories'
+    });
+    
+    InviteCategoryCollection = Backbone.Collection.extend({
+        model : InviteCategory
+    });
+    
     
     ConfigLayout = Backbone.Marionette.Layout.extend({
         template: "#config-list-layout-template",
         
         regions : {
+            titleRegion     : "#config-title-div",
             controlRegion   : "#config-control-div",
             configRegion    : "#config-region-div",
         },
+    });
+    
+    TitleView = Backbone.Marionette.ItemView.extend({
+        template: '#config-title-template'
     });
 
     var configRegion = new Backbone.Marionette.Region({
@@ -64,6 +82,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             equipmentLayout = new ConfigLayout();
             configRegion.show(equipmentLayout);
+            equipmentLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Equipment" %>' }) }) );
             
             TabUtils.createTabControl({
                 template                : "#equipment-control-template",
@@ -92,6 +111,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             itemFormatLayout = new ConfigLayout();
             configRegion.show(itemFormatLayout);
+            itemFormatLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Item Formats" %>' }) }) );
             
             TabUtils.createTabControl({
                 template                : "#item-format-control-template",
@@ -117,6 +137,31 @@ ConfigApp.ConfigManagement = (function(Backbone){
         
         invitation_category_config : function() {
             configRegion.close();
+            
+            inviteLayout = new ConfigLayout();
+            configRegion.show(inviteLayout);
+            inviteLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Invitation Categories" %>' }) }) );
+            
+            TabUtils.createTabControl({
+                template                : "#invite-category-control-template",
+                modelType               : InviteCategory,
+                view_refresh_event      : "invite_category:refresh",
+                modal_create_title      : '<%= t "create-invitation-category" %>',
+                region                  : inviteLayout.controlRegion,
+            });
+            
+            tabLists.push( AppUtils.createCollectionView({
+                url                     : "/invitation_categories.json",
+                collectionType          : InviteCategoryCollection,
+                region                  : inviteLayout.configRegion,
+                template                : "#item-format-template",
+                collection_attributes   : { "class" : "table table-striped table-condensed" },
+                collection_tagName      : 'table',
+                tagName                 : 'tr',
+                view_refresh_event      : "invite_category:refresh",
+                modal_edit_title        : '<%= t "edit-invitation-category" %>',
+                modal_edit              : true
+            }) );
         },
         
         room_setups_config : function() {
