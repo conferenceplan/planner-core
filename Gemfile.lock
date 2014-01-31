@@ -55,6 +55,7 @@ GEM
     authlogic (3.3.0)
       activerecord (>= 3.2)
       activesupport (>= 3.2)
+    aws_cf_signer (0.1.2)
     axlsx (2.0.1)
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.4.1)
@@ -65,7 +66,7 @@ GEM
     bluecloth (2.2.0)
     bootstrap-sass (3.0.3.0)
       sass (~> 3.2)
-    bootstrap3-datetimepicker-rails (2.1.20.1)
+    bootstrap3-datetimepicker-rails (2.1.30)
       momentjs-rails (~> 2.5.0)
     builder (3.0.4)
     capistrano (2.15.5)
@@ -75,19 +76,26 @@ GEM
       net-ssh (>= 2.0.14)
       net-ssh-gateway (>= 1.1.0)
     capistrano-puma (0.0.1)
+    carrierwave (0.9.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
     cells (3.9.1)
       actionpack (>= 3.0)
       railties (>= 3.0)
     chunky_png (1.2.9)
     ckeditor_rails (4.3.1)
       railties (>= 3.0)
+    cloudinary (1.0.67)
+      aws_cf_signer
+      rest-client
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
     coffee-script (2.2.0)
       coffee-script-source
       execjs
-    coffee-script-source (1.6.3)
+    coffee-script-source (1.7.0)
     compass (0.12.2)
       chunky_png (~> 1.2)
       fssm (>= 0.2.7)
@@ -137,10 +145,10 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.25.1)
     mini_portile (0.5.2)
-    momentjs-rails (2.5.0)
+    momentjs-rails (2.5.1)
       railties (>= 3.1)
     multi_json (1.8.4)
-    mysql2 (0.3.14)
+    mysql2 (0.3.15)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-sftp (2.1.2)
@@ -195,13 +203,15 @@ GEM
       json (~> 1.4)
     recaptcha (0.3.6)
     ref (1.0.5)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
     routing-filter (0.3.1)
       actionpack
     ruby-rc4 (0.1.5)
     rubyzip (1.0.0)
     rvm-capistrano (1.5.0)
       capistrano (>= 2.15.4)
-    sass (3.2.13)
+    sass (3.2.14)
     sass-rails (3.2.6)
       railties (~> 3.2.0)
       sass (>= 3.1.10)
@@ -226,7 +236,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     ttfunk (1.0.3)
-    turbolinks (2.2.0)
+    turbolinks (2.2.1)
       coffee-rails
     tzinfo (0.3.38)
     uglifier (2.4.0)
@@ -249,8 +259,10 @@ DEPENDENCIES
   bootstrap3-datetimepicker-rails (~> 2.1.20)
   capistrano (= 2.15.5)
   capistrano-puma (= 0.0.1)
+  carrierwave
   cells
   ckeditor_rails
+  cloudinary
   coffee-rails (~> 3.2.1)
   compass-rails
   d3_rails

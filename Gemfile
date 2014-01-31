@@ -40,6 +40,9 @@ gem "select2-rails"
 
 gem "recaptcha", :require => "recaptcha/rails"
 
+gem 'carrierwave'
+gem 'cloudinary'
+
 gem 'i18n-active_record',
       :git => 'git://github.com/svenfuchs/i18n-active_record.git',
       :tag => 'rails-3.0',
