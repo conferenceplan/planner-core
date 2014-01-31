@@ -1,9 +1,11 @@
 class AvailabilitiesController < PlannerController
   def index
-    @availableDates = @person.available_date
+    @person = Person.find(params[:person_id])      
+
+    @availableDates = @person.available_date if @person
     
-    @excludedItems = @person.excluded_items
+    @excludedItems = @person.excluded_items if @person
    
-    @excludedTimesGroup = @person.excluded_periods
+    @excludedTimesGroup = @person.excluded_periods if @person
   end
 end
