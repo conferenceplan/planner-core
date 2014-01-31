@@ -1,4 +1,4 @@
-class Operations::ManageCell < Cell::Rails
+class Admin::EquipmentCell < Cell::Rails
 
   def display
     render

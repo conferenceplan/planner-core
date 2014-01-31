@@ -4,6 +4,27 @@ ReportApp = new Backbone.Marionette.Application();
 
 ReportApp.ReportManagement = (function(Backbone){
     
+    var GenericForm = Backbone.Form.extend({
+    });
+    
+    var PanelsByRoomColModel = [
+                    {name: 'room',      label : '<%= t "Room" %>',  jsonmap: "room", width: 50},
+                    {name: 'venue',     label : '<%= t "Venue" %>', jsonmap: "venue", width: 50},
+                    {name: 'day',       label : '<%= t "Time" %>',  jsonmap: "day",    width: 30},
+                    {name: 'time',      label : '<%= t "Time" %>',  jsonmap: "time_slot",    width: 30},
+                    {name: 'item',      label : '<%= t "Item" %>',  jsonmap: "item" },
+                    {name: 'equipment', label : '<%= t "Equipment" %>',  jsonmap: "equipment", width: 70, formatter: AppUtils.arrayToString},
+    ];
+    
+    var PanelsByTimeslotColModel = [
+                    {name: 'day',       label : '<%= t "Time" %>',  jsonmap: "day",    width: 30},
+                    {name: 'time',      label : '<%= t "Time" %>',  jsonmap: "time_slot",    width: 30},
+                    {name: 'room',      label : '<%= t "Room" %>',  jsonmap: "room", width: 50},
+                    {name: 'venue',     label : '<%= t "Venue" %>', jsonmap: "venue", width: 50},
+                    {name: 'item',      label : '<%= t "Item" %>',  jsonmap: "item" },
+                    {name: 'equipment', label : '<%= t "Equipment" %>',  jsonmap: "equipment", width: 70, formatter: AppUtils.arrayToString},
+    ];
+
     var PanelsWithPanelistsForm = Backbone.Form.extend({
         schema : {
             modified_since  : { type : 'Date', title : '<%= t "report-selection-modified-since" %>' },
@@ -93,9 +114,33 @@ ReportApp.ReportManagement = (function(Backbone){
             'panelists_with_panels' : 'panelists_with_panels',
             'scheduling_conflicts' : 'scheduling_conflicts',
             'tags_by_context' : 'tags_by_context',
-            'people_by_tags' : 'people_by_tags'
+            'people_by_tags' : 'people_by_tags',
+            'panels_by_room'        : 'panels_by_room',
+            'panels_by_timeslot'    : 'panels_by_timeslot'
         },
         
+        panels_by_room : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/panels_by_room',
+                colModel    : PanelsByRoomColModel,
+                caption     : '<%= t "Panels By Room" %>'
+            }));
+        },
+        
+        panels_by_timeslot : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/panels_by_timeslot',
+                colModel    : PanelsByTimeslotColModel,
+                caption     : '<%= t "Panels By Timeslot" %>'
+            }));
+        },
+                
         panels_with_panelists : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();

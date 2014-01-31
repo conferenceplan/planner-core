@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Operations::ManageCellTest < Cell::TestCase
+class Admin::EquipmentCellTest < Cell::TestCase
   test "display" do
     invoke :display
     assert_select "p"

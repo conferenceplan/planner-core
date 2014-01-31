@@ -13,18 +13,12 @@ PlannerRc1::Application.routes.draw do
     match "communications_dash/:cellname" => "communications_dash#index"
     match "mobile_dash/:cellname" => "mobile_dash#index"
     match "reports_dash/:cellname" => "reports_dash#index"
-    match "operations_dash/:cellname" => "operations_dash#index"
     match "publications_dash/:cellname" => "publications_dash#index"
-    
-#    resources :logistics_dash
-    resources :admin_dash
+    match "admin_dash/:cellname" => "admin_dash#index"
   end
   
   # Default route 
   root :to => 'pages/home_dash#index'
-  
-  # get "conference/index"
-
   
   #
   # The new(s) were removed so as to prevent anonymous people creating new accounts
