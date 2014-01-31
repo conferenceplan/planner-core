@@ -46,7 +46,7 @@ class EquipmentTypesController < PlannerController
     candidate = EquipmentType.find(params[:id])
     
     if candidate.programme_items.size > 0
-      render status: :bad_request, text: 'Con not delete equipment associated with program items'
+      render status: :bad_request, text: 'Can not delete equipment associated with program items'
     else  
       EquipmentType.find(params[:id]).destroy
       render status: :ok, text: {}.to_json

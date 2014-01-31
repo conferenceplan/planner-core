@@ -15,12 +15,26 @@ ConfigApp.ConfigManagement = (function(Backbone){
         model : Equipment
     });
     
-    EquipmentLayout = Backbone.Marionette.Layout.extend({
-        template: "#equipment-list-layout-template",
+    ItemFormat = Backbone.Model.extend({
+        schema : {
+            name     : { type : 'Text', title : '<%= t "format-name" %>' },
+            positon  : { type : 'Number', title : '<%= t "format-position" %>' }
+            // TODO - position???
+        },
+        urlRoot : '/formats'
+    });
+    
+    ItemFormatCollection = Backbone.Collection.extend({
+        model : ItemFormat
+    });
+    
+    
+    ConfigLayout = Backbone.Marionette.Layout.extend({
+        template: "#config-list-layout-template",
         
         regions : {
-            equipmentControlRegion: "#equipment-control-div",
-            equipmentRegion: "#equipment-region-div",
+            controlRegion   : "#config-control-div",
+            configRegion    : "#config-region-div",
         },
     });
 
@@ -48,33 +62,57 @@ ConfigApp.ConfigManagement = (function(Backbone){
         equipment_config : function() {
             configRegion.close();
             
-            equipmentLayout = new EquipmentLayout();
+            equipmentLayout = new ConfigLayout();
             configRegion.show(equipmentLayout);
             
             TabUtils.createTabControl({
                 template                : "#equipment-control-template",
                 modelType               : Equipment,
                 view_refresh_event      : "equipment:refresh",
-                modal_create_title      : '<%= t "equipment-create-equipment" %>',
-                region                  : equipmentLayout.equipmentControlRegion,
+                modal_create_title      : '<%= t "create-equipment" %>',
+                region                  : equipmentLayout.controlRegion,
             });
             
             tabLists.push( AppUtils.createCollectionView({
                 url                     : "/equipment_types.json",
                 collectionType          : EquipmentCollection,
-                region                  : equipmentLayout.equipmentRegion,
+                region                  : equipmentLayout.configRegion,
                 template                : "#equipment-template",
                 collection_attributes   : { "class" : "table table-striped table-condensed" },
                 collection_tagName      : 'table',
                 tagName                 : 'tr',
                 view_refresh_event      : "equipment:refresh",
-                modal_edit_title        : '<%= t "equipment-edit-equipment" %>',
+                modal_edit_title        : '<%= t "edit-equipment" %>',
                 modal_edit              : true
             }) );
         },
         
         item_format_config : function() {
             configRegion.close();
+            
+            itemFormatLayout = new ConfigLayout();
+            configRegion.show(itemFormatLayout);
+            
+            TabUtils.createTabControl({
+                template                : "#item-format-control-template",
+                modelType               : ItemFormat,
+                view_refresh_event      : "item_format:refresh",
+                modal_create_title      : '<%= t "create-item-format" %>',
+                region                  : itemFormatLayout.controlRegion,
+            });
+            
+            tabLists.push( AppUtils.createCollectionView({
+                url                     : "/formats.json",
+                collectionType          : ItemFormatCollection,
+                region                  : itemFormatLayout.configRegion,
+                template                : "#item-format-template",
+                collection_attributes   : { "class" : "table table-striped table-condensed" },
+                collection_tagName      : 'table',
+                tagName                 : 'tr',
+                view_refresh_event      : "item_format:refresh",
+                modal_edit_title        : '<%= t "edit-item-format" %>',
+                modal_edit              : true
+            }) );
         },
         
         invitation_category_config : function() {
