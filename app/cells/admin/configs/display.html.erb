@@ -1,0 +1,32 @@
+<%= render_cell "admin/configs", :javascript %>
+<%= render_cell "admin/configs", :templates %>
+
+<div class="row">
+    <div class="col-xs-2">
+        <div class="gr-sidebar" role="complementary">
+            <ul class="gr-sidenav nav nav-pills nav-stacked">
+                <li>
+                    <a href="#equipment_config"><%= t "config-equipment" %></a>
+                </li>
+                <li>
+                    <a href="#item_format_config"><%= t "config-item-formats" %></a>
+                </li>
+                <li>
+                    <a href="#invitation_category_config"><%= t "config-invitation-category" %></a>
+                </li>
+                <li>
+                    <a href="#room_setups_config"><%= t "config-room-setups" %></a>
+                </li>
+                <li>
+                    <a href="#conference_config"><%= t "config-conference" %></a>
+                </li>
+                <li>
+                    <a href="#email_config"><%= t "config-email" %></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-xs-10">
+        <div id='config-area'></div>
+    </div>
+</div>
