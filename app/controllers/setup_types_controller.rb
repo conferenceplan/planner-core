@@ -1,7 +1,61 @@
 class SetupTypesController < ApplicationController
+  
+  #
+  #
+  #
   def index
+    setup_types = SetupType.find :all
+    
+    render json: setup_types.to_json, :content_type => 'application/json'
+  end
+  
+  #
+  #
+  #
+  def show
+    setup_type = SetupType.find(params[:id])
+    
+    render json: setup_type.to_json, :content_type => 'application/json'
+  end
+  
+  #
+  #
+  #
+  def create
+    setup_type = SetupType.new(params[:setup_type])
+    setup_type.save!
+
+    render json: setup_type.to_json, :content_type => 'application/json'
   end
 
+  #
+  #
+  #
+  def update
+    setup_type = SetupType.find(params[:id])
+    setup_type.update_attributes(params[:setup_type])
+    
+    render json: setup_type.to_json, :content_type => 'application/json'
+  end
+
+  #
+  #
+  #
+  def destroy
+    candidate = SetupType.find(params[:id])
+    
+    test = RoomSetup.find_by_setup_type_id(candidate.id)
+    if test.nil?
+      candidate.destroy
+      render status: :ok, text: {}.to_json
+    else
+      render status: :bad_request, text: 'Can not delete setup associated with a room'
+    end
+  end
+
+  #
+  #
+  #
   def list
     rows = params[:rows]
     @page = params[:page]
@@ -23,40 +77,6 @@ class SetupTypesController < ApplicationController
     respond_to do |format|
       format.html { render :layout => 'plain' } # list.html.erb
       format.xml
-    end
-  end
-
-  def show
-    @setup_type = SetupType.find(params[:id])
-  end
-
-  def create
-    @setup_type = SetupType.new(params[:setup_type])
-    if (@setup_type.save)
-       render :action => 'index', :layout => 'content'
-    else
-       render :action => 'model_errors', :layout => 'content'
-    end 
-  end
-
-  def update
-    @setup_type = SetupType.find(params[:id])
-    if @setup_type.update_attributes(params[:setup_type])
-      render :action => 'index', :layout => 'content'
-    else
-       render :action => 'model_errors', :layout => 'content'
-    end
-  end
-
-  def destroy
-    @setup_type = SetupType.find(params[:id])
-    
-    test = RoomSetup.find_by_setup_type_id(@setup_type.id)
-    if test.nil?
-      @setup_type.destroy
-       render :action => 'index', :layout => 'content'
-    else
-       render :action => 'in_use', :layout => 'content'
     end
   end
 
