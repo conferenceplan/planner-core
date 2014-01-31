@@ -1,2 +1,12 @@
-<h1>Pages::AdminDash#index</h1>
-<p>Find me in app/views/pages/admin_dash/index.html.erb</p>
+<% content_for :submenu do %>
+        <%= render_cell :context_menu, :display, :menu => {
+            (t "submenu-config") => '/pages/admin_dash/configs',
+            (t "submenu-users") => '/pages/admin_dash/users'
+        } %>
+<% end %>
+
+<% if @cellname %>
+    <%= render_cell "admin/#{@cellname}", :display %>
+<% else %>
+    <%= render_cell "admin/admin_dash", :display %>
+<% end %>
