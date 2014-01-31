@@ -21,6 +21,8 @@ class Room < ActiveRecord::Base
           :source_type => 'PublishedRoom'
 
   audited :associated_with => :venue, :allow_mass_assignment => true
+  
+  has_many :equipment
 
   def removeAllTimes()
     self.room_item_assignments.each do |ts|
