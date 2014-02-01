@@ -20,7 +20,8 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                 options : ['ALL', 'ANY']
                               },
             // Predicate list
-            '<%= t "survey-query-predicates" %>' : {
+            survey_query_predicates : {
+                title : '<%= t "survey-query-predicates" %>',
                 type : 'List',
                 itemToString : function(item) {
                     return _.template($('#predicate-data-template').html(), { item : item, question : getQuestionById(item.survey_question_id) }); // TODO
@@ -29,6 +30,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                 subSchema : {
                     // survey_question_type : { type : 'Hidden' },
                     survey_question_id   : { type : 'Select',
+                                            title : '<%= t "survey-question" %>',
                                             options : function(callback, editor) { // Get a list of the questions for this survey
                                                 var res = [];
                                                 
@@ -43,6 +45,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                 },
                     // Each question has a type... each type uses a different operation...
                     operation            : { type : 'DependentValueSelect', 
+                                            title : '<%= t "operation" %>',
                                             dependsOn : 'survey_question_id',
                                             options: function(callback, editor) { // For the question return the valid operations ...
                                                 var question_id = editor.form.fields['survey_question_id'].editor.getValue();
@@ -63,6 +66,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                             }
                                 },
                     value                : { type : 'DependentValueSelect', dependsOn : 'operation', dependentValues : ['is', 'is not'], altField : 'Text',
+                                             title : '<%= t "survey-value" %>',
                                              options : function(callback, editor) {
                                                 var question_id = editor.form.fields['survey_question_id'].editor.getValue();
                                                 var ops = [""];
