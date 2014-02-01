@@ -5,6 +5,37 @@ ConfigApp = new Backbone.Marionette.Application();
 ConfigApp.ConfigManagement = (function(Backbone){
     
     TitleMdl =  Backbone.Model.extend({});
+    
+    SiteConfig = Backbone.Model.extend({
+        schema : {
+            captcha_pub_key     : { type : 'Text', title : '<%= t "captcha-public-key" %>' },
+            captcha_priv_key    : { type : 'Text', title : '<%= t "captcha-private-key" %>' },
+        },
+        urlRoot : '/site_configs'
+    });
+    
+    EmailConfig = Backbone.Model.extend({
+        schema : {
+            conference_name     : { type : 'Text', title : '<%= t "config-conference-name" %>' },
+            domain              : { type : 'Text', title : '<%= t "config-domain" %>' },
+            info                : { type : 'Text', title : '<%= t "config-info-email" %>' },
+            from                : { type : 'Text', title : '<%= t "config-from-email" %>' },
+            cc                  : { type : 'Text', title : '<%= t "config-cc-email" %>' },
+            test_email          : { type : 'Text', title : '<%= t "config-test-email" %>' }
+        },
+        urlRoot : '/mail_configs'
+    });
+
+    CloudinaryConfig = Backbone.Model.extend({
+        schema : {
+            api_key                 : { type : 'Text', title : '<%= t "config-cloudinary-api-key" %>' },
+            api_secret              : { type : 'Text', title : '<%= t "config-cloudinary-api-secret" %>' },
+            cloud_name              : { type : 'Text', title : '<%= t "config-cloudinary-cloud-name" %>' },
+            enhance_image_tag       : { type : 'Checkbox', title : '<%= t "config-cloudinary-enhance-image-tag" %>' },
+            static_image_support    : { type : 'Checkbox', title : '<%= t "config-cloudinary-static-image-support" %>' }
+        },
+        urlRoot : '/cloudinary_config'
+    });
 
     Equipment = Backbone.Model.extend({
         schema : {
@@ -66,7 +97,14 @@ ConfigApp.ConfigManagement = (function(Backbone){
     TitleView = Backbone.Marionette.ItemView.extend({
         template: '#config-title-template'
     });
-
+    
+    SiteConfigView = Marionette.ItemView.extend({
+        template : '#site-config-view-template',
+        
+        // initialize : function() {
+        // },
+    });
+    
     var configRegion = new Backbone.Marionette.Region({
         el: "#config-area"
     });
@@ -207,14 +245,66 @@ ConfigApp.ConfigManagement = (function(Backbone){
         
         conference_config : function() {
             configRegion.close();
+            
+            configLayout = new ConfigLayout();
+            configRegion.show(configLayout);
+            
+            var config = new SiteConfig();
+            config.fetch({
+                error : function(model, response) {
+                    alertMessage("Error communicating with backend");
+                },
+                success : function(mdl) {
+                    
+                    var view = AppUtils.createEditItemView({
+                        model           : mdl,
+                        itemArea        : "#config-control-div",
+                        readTemplate    : '#site-config-view-template',
+                    });
+                }
+            });
         },
         
         email_config : function() {
-            configRegion.close();
+            configRegion.close(); 
+            configLayout = new ConfigLayout();
+            configRegion.show(configLayout);
+            
+            var config = new EmailConfig();
+            config.fetch({
+                error : function(model, response) {
+                    alertMessage("Error communicating with backend");
+                },
+                success : function(mdl) {
+                    
+                    var view = AppUtils.createEditItemView({
+                        model           : mdl,
+                        itemArea        : "#config-control-div",
+                        readTemplate    : '#email-config-view-template',
+                    });
+                }
+            });
         },
         
         cloudinary_config : function() {
             configRegion.close();
+            configLayout = new ConfigLayout();
+            configRegion.show(configLayout);
+            
+            var config = new CloudinaryConfig();
+            config.fetch({
+                error : function(model, response) {
+                    alertMessage("Error communicating with backend");
+                },
+                success : function(mdl) {
+                    var view = AppUtils.createEditItemView({
+                        model           : mdl,
+                        itemArea        : "#config-control-div",
+                        readTemplate    : '#cloudinary-config-view-template'
+                    });
+                }
+            });
+
         }
     });
 

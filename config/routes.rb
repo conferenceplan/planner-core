@@ -205,10 +205,12 @@ PlannerRc1::Application.routes.draw do
 
   resources :datasources
   resources :mail_configs
+  resources :cloudinary_config
   resources :mail_templates
   resources :site_configs # TODO 
 
   resources :equipment_types
+
 
   #
   #
