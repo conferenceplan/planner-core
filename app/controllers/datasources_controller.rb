@@ -1,43 +1,47 @@
 class DatasourcesController < ApplicationController
-   def index
-      @datasources = Datasource.find :all
-   end
+  
+  #
+  #
+  #
+  def index
+    datasources = Datasource.find :all
+    
+    render json: datasources.to_json, :content_type => 'application/json'
+  end
 
-   def list
-     @datasources = Datasource.find :all
-     render :action => :list, :layout => "plain"
-   end
+  def show
+    datasource = Datasource.find params[:id]
+    
+    render json: datasource.to_json, :content_type => 'application/json'
+  end
+  
+  def create
+    datasource = Datasource.new params[:datasource]
+    datasource.save
 
-   def show
-      @datasource = Datasource.find params[:id]
-   end
-   def new
-      @datasource = Datasource.new
-   end
-   def create
-      @datasource = Datasource.new params[:datasource]
-      if @datasource.save
-         redirect_to :action => 'index'
-      else
-         render :action => 'new'
-      end
-   end
-   def edit
-      @datasource = Datasource.find params[:id]
-   end
-   def update
-      @datasource = Datasource.find params[:id]
-      if @datasource.update_attributes params[:datasource]
-         redirect_to :action => 'index'
-      else
-         render :action => 'edit'
-      end
-   end
-   def destroy
-      @peoplesources = Peoplesource.find_by_datasource_dbid(params[:id])
-      if (!@peoplesources.blank?)
-         Datasource.find(params[:id]).destroy
-      end
-      redirect_to :action => 'index'
-   end
+    render json: datasource.to_json, :content_type => 'application/json'
+  end
+  
+  def update
+    datasource = Datasource.find params[:id]
+    datasource.update_attributes params[:datasource]
+    
+    render json: datasource.to_json, :content_type => 'application/json'
+  end
+  
+  def destroy
+    peoplesources = Peoplesource.find_by_datasource_dbid(params[:id])
+    if (!peoplesources.blank?)
+      Datasource.find(params[:id]).destroy
+      render status: :ok, text: {}.to_json
+    else
+      render status: :bad_request, text: 'Can not delete datasource'
+    end
+  end
+   
+  def list
+    @datasources = Datasource.find :all
+    render :action => :list, :layout => "plain"
+  end
+
 end

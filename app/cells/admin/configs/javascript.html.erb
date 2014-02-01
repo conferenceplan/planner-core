@@ -83,6 +83,17 @@ ConfigApp.ConfigManagement = (function(Backbone){
         model : RoomSetup
     });
     
+    DataSource = Backbone.Model.extend({
+        schema : {
+            name     : { type : 'Text', title : '<%= t "data-source-name" %>' },
+            primary  : { type : 'Checkbox', title : '<%= t "primary" %>' },
+        },
+        urlRoot : '/datasources'
+    });
+    
+    DataSourceCollection = Backbone.Collection.extend({
+        model : DataSource
+    });
     
     ConfigLayout = Backbone.Marionette.Layout.extend({
         template: "#config-list-layout-template",
@@ -122,6 +133,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             'item_format_config' : 'item_format_config',
             'invitation_category_config' : 'invitation_category_config',
             'room_setups_config' : 'room_setups_config',
+            'data_sources_config' : 'data_sources_config',
             'conference_config' : 'conference_config',
             'email_config' : 'email_config',
             'cloudinary_config' : 'cloudinary_config'
@@ -239,6 +251,35 @@ ConfigApp.ConfigManagement = (function(Backbone){
                 tagName                 : 'tr',
                 view_refresh_event      : "room_setup:refresh",
                 modal_edit_title        : '<%= t "edit-room-setup" %>',
+                modal_edit              : true
+            }) );
+        },
+        
+        data_sources_config : function() {
+            configRegion.close();
+            
+            dataSourceLayout = new ConfigLayout();
+            configRegion.show(dataSourceLayout);
+            dataSourceLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Data Sources" %>' }) }) );
+            
+            TabUtils.createTabControl({
+                template                : "#data-source-control-template",
+                modelType               : DataSource,
+                view_refresh_event      : "data_source:refresh",
+                modal_create_title      : '<%= t "create-data-source" %>',
+                region                  : dataSourceLayout.controlRegion,
+            });
+            
+            tabLists.push( AppUtils.createCollectionView({
+                url                     : "/datasources.json",
+                collectionType          : DataSourceCollection,
+                region                  : dataSourceLayout.configRegion,
+                template                : "#data-source-template",
+                collection_attributes   : { "class" : "table table-striped table-condensed" },
+                collection_tagName      : 'table',
+                tagName                 : 'tr',
+                view_refresh_event      : "data_source:refresh",
+                modal_edit_title        : '<%= t "edit-data-source" %>',
                 modal_edit              : true
             }) );
         },
