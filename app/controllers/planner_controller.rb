@@ -4,6 +4,11 @@
 class PlannerController < ApplicationController
   before_filter :require_user # All controllers that inherit from this will require an authenticated user
   filter_access_to :all # All controllers that inherit from this will be controlled by the access rules
+  around_filter :application_time_zone # make sure that we use the timezone as specified in the database
+
+  def application_time_zone(&block)
+    Time.use_zone(SITE_CONFIG[:conference][:time_zone], &block)
+  end
 
   rescue_from ActiveRecord::StaleObjectError do |exception|
     respond_to do |format|

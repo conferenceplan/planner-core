@@ -466,7 +466,7 @@ def updateConflictsFromSurvey
 
    availSurveyQuestion = SurveyQuestion.find_by_question_type("availability")
    if (availSurveyQuestion != nil)
-        startOfConference = Time.zone.parse(SITE_CONFIG[:conference][:start_date])
+        startOfConference = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s)
         numberOfDays = SITE_CONFIG[:conference][:number_of_days]
 
         @people = SurveyService.findPeopleWhoAnsweredQuestion(availSurveyQuestion)

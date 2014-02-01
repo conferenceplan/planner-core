@@ -8,9 +8,22 @@ ConfigApp.ConfigManagement = (function(Backbone){
     
     SiteConfig = Backbone.Model.extend({
         schema : {
+            name                : { type : 'Text', title : '<%= t "conference-name" %>' },
+            time_zone : { type : 'Select', title : '<%= t "conference-time-zone" %>', options : <%= [].concat(ActiveSupport::TimeZone::MAPPING.values.collect {|s| {'val' => s, 'label' => s} }).to_json.html_safe %> },
+            start_date          : { type : 'Datetime', title : '<%= t "conference-start-date" %>',
+                                    tz_offset : 0,
+                                    picker : {
+                                        pickTime: false,
+                                    } },
+            number_of_days      : { type : 'Number', title : '<%= t "number-of-days" %>' },
             captcha_pub_key     : { type : 'Text', title : '<%= t "captcha-public-key" %>' },
             captcha_priv_key    : { type : 'Text', title : '<%= t "captcha-private-key" %>' },
         },
+        
+        data : {
+            start_date  : new Date()
+        },
+        
         urlRoot : '/site_configs'
     });
     

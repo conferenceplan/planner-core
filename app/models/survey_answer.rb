@@ -60,7 +60,7 @@ private
 
   def startAndDuration(start_day, start_time, duration)
     times = start_time.split(':') # hours and minutes
-    start = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + start_day.to_i.days + times[0].to_i.hours + times[1].to_i.minutes
+    start = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + start_day.to_i.days + times[0].to_i.hours + times[1].to_i.minutes
     [start, start + duration.minutes]
   end
 

@@ -27,7 +27,7 @@
         <div class="col-xs-5 col-xs-offset-1">I will be available to be on Program beginning:</div>
         <div class="select col-xs-6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response1]",
-                options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'].to_i : nil) %>
+                options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + x.day).strftime('%A, %B %e'), x]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'].to_i : nil) %>
         </div>
     </div>
     <div class="row">
@@ -41,7 +41,7 @@
         <div class="col-xs-5 col-xs-offset-1">I will not be available for program after:</div>
         <div class="select col-xs-6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response3]",
-                options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + x.day).strftime('%A, %B %e'), x]}.reverse!, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'].to_i : nil) %>
+                options_for_select((0..(SITE_CONFIG[:conference][:number_of_days].to_i-1)).collect {|x| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + x.day).strftime('%A, %B %e'), x]}.reverse!, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'].to_i : nil) %>
         </div>
     </div>
     <div class="row">

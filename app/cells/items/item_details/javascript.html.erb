@@ -14,13 +14,13 @@ ItemApp.ItemManagement = (function(Backbone){
             precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 6, cols : 60 } },
             room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO
             start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
-                    tz_offset : <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]).utc_offset/(60*60) %>,
+                    tz_offset : <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>,
                     picker : {
                         useSeconds : false,
                         minuteStepping : 15,
-                        defaultDate : "<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]).strftime('%m/%d/%Y') %>",
-                        startDate : "<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]).strftime('%m/%d/%Y') %>",
-                        endDate : "<%= (Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + ((SITE_CONFIG[:conference][:number_of_days]).to_i-1).days).strftime('%m/%d/%Y') %>"
+                        defaultDate : "<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).strftime('%m/%d/%Y') %>",
+                        startDate : "<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).strftime('%m/%d/%Y') %>",
+                        endDate : "<%= (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + ((SITE_CONFIG[:conference][:number_of_days]).to_i-1).days).strftime('%m/%d/%Y') %>"
                 } },
             notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 6, cols : 60 } },
             format_id : { type : 'Select', title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },

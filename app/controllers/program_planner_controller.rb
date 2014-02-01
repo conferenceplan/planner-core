@@ -7,7 +7,7 @@ class ProgramPlannerController < PlannerController
   def assignments
     @day = params[:day] # Day
     @roomListing = Room.all(:order => 'venues.name DESC, rooms.name ASC', :joins => :venue) #, :conditions => conditions) 
-    @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + @day.to_i.day
+    @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + @day.to_i.day
   end
   
   #

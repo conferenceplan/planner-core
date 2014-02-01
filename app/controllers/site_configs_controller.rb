@@ -3,12 +3,16 @@ class SiteConfigsController < PlannerController
     # TODO - when we have multi-tenant base this on the current convention...
     site_config = SiteConfig.find :first
     
+    site_config.start_date  = Date.today if !site_config.start_date
+    
     render json: site_config.to_json, :content_type => 'application/json'
   end
 
   def show
     site_config = SiteConfig.find(params[:id])
 
+    site_config.start_date  = Date.today if !site_config.start_date
+    
     render json: site_config.to_json, :content_type => 'application/json'
   end
 

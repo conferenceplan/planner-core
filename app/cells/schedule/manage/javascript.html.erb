@@ -84,7 +84,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
             _day = this.options.day;
             var assignments = this.model;
             
-            DailyGrid.paint(_containerElem, assignments, $("#program-grid").width(), <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date]).utc_offset/(60*60) %>);
+            DailyGrid.paint(_containerElem, assignments, $("#program-grid").width(), <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>);
             
             // when an item is droped on the grid we need to
             // 1. create a new assignment (need the room and the time)

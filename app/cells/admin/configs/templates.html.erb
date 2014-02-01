@@ -116,6 +116,10 @@
 <script type="text/template" id="site-config-view-template">
     <dl class="dl-horizontal">
         {{ if (typeof id != 'undefined') { }}
+        <dt><%= t "conference-name" %></dt><dd>{{= name }}</dd>
+        <dt><%= t "conference-time-zone" %></dt><dd>{{= time_zone }}</dd>
+        <dt><%= t "conference-start-date" %></dt><dd>{{= start_date }}</dd>
+        <dt><%= t "number-of-days" %></dt><dd>{{= number_of_days }}</dd>
         <dt><%= t "captcha-public-key" %></dt><dd>{{= captcha_pub_key }}</dd>
         <dt><%= t "captcha-private-key" %></dt><dd>{{= captcha_priv_key }}</dd>
         {{ } else{ }}

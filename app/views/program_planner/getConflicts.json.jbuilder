@@ -9,7 +9,7 @@ json.schedule @conflicts do |conflict|
     json.item_id                conflict['item_id']
     json.item_title             conflict['item_name']
     json.item_role              PersonItemRole.find(conflict['item_role'].to_i).name
-    json.item_start             Time.zone.parse( conflict['item_start'].to_s )
+    json.item_start             conflict['item_start'].to_s
     json.conflict_room_id       conflict['conflict_room_id']
     json.conflict_room_name     conflict['conflict_room_name']
     json.conflict_item_id       conflict['conflict_item_id']
