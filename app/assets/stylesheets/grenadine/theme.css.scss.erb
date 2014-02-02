@@ -51,11 +51,15 @@ $w4f: 1342px;
 }
 
 /* Styles for the menus and headers in the app */
+#app-menu-div ul {
+	width: 100%;
+	margin-left: 0;
+	margin-right: 0;
+}
 #app-menu-div.affix {
   top: 4px;
   z-index:799;
   width:100%;
-  
 }
 #app-sub-menu-div.affix {
   /* top: 4px; */
@@ -114,14 +118,17 @@ $w4f: 1342px;
 #grenadine-sub-application-menu,
 #grenadine-application-menu {
   border-radius:0px;
-  z-index: 799;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
   border: 0px 0px 0px 0px;
   margin-bottom: 0px;
 }
+#grenadine-application-menu {
+	z-index: 810;
+}
 #grenadine-sub-application-menu {
   margin-top: -1px;
   margin-bottom: 20px;
+  z-index: 799;
 }
 /* This is the case when we have only enough space for the fully-collapsed menu */
   #user-menu {
@@ -129,6 +136,7 @@ $w4f: 1342px;
   }
   #app-menu-div.affix {
     z-index: 801;
+    width: 100%;
   }
   #app-sub-menu-div.affix {
 	top: 54px;
@@ -212,6 +220,9 @@ $w4f: 1342px;
 }
 #user-sub-menu {
   height: 50px;
+  width: 100%;
+  padding-left: 0;
+  padding-right: 0;
 }
 #menu-separator-div {
   height: 20px;
