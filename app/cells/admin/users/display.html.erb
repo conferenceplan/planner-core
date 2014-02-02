@@ -1,7 +1,20 @@
-<h1>
-  Admin::Users#display
-</h1>
 
-<p>
-  Find me in app/cells/admin/users/display.html.erb
-</p>
+<%= render_cell "admin/users", :javascript %>
+
+<%= render_cell "admin/user_list", :javascript, 
+    :caption => "Users",
+    :pager => "#user-pager",
+    :selectNotifyMethod => "UserMgmtApp.UserManagement.showDetails",
+    :clearNotifyMethod => "UserMgmtApp.UserManagement.clearDetails",
+    
+    :modelType => "UserMgmtApp.UserManagement.UserMdl",
+    :showControls => true
+    %>
+
+<div class="row">
+    <div class="col-xs-12">
+        <%= render_cell "admin/user_list", :display,
+            :pager => "user-pager"
+         %>
+    </div>
+</div>

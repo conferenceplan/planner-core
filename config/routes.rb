@@ -30,8 +30,12 @@ PlannerRc1::Application.routes.draw do
   match 'logout' => 'user_sessions#destroy', :as => :logout
 
   # For user and user management
-  match 'usersadmin/list' => 'users/admin#list'
-  resources :usersadmin, :controller => 'users/admin'
+  namespace :users do
+    match "admin/list" => 'admin#list'
+    resources :admin
+  end
+  # match 'users/admin/list' => 'users/admin#list'
+  # resources :usersadmin, :controller => 'users/admin'
   match 'roles/list' => 'roles#list'
 
   #

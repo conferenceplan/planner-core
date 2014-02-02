@@ -1,80 +1,122 @@
 class Users::AdminController < PlannerController  
+
+  #
+  #
+  #
+  respond_to :json
   def list
-    rows = params[:rows]
-    @page = params[:page]
-    idx = params[:sidx]
-    order = params[:sord]
-    clause = ""
-        
-    if params['_search'] == "true"
-       clause << ' ' + params["searchField"] + ' '
-       if params["searchOper"] == "ne"
-            clause << ' not like '
-          else
-            clause << ' like '
-       end
-       clause << ' \'' + params["searchString"] + '%\''
+    rows = params[:rows] ? params[:rows] : 15
+    @page = params[:page] ? params[:page].to_i : 1
+    
+    @currentId = params[:current_selection]
+
+    page_to = params[:page_to]
+
+    idx = (params[:sidx] && params[:sidx].length > 0) ? params[:sidx] : 'login'
+    order = params[:sord] ? params[:sord] : 'asc'
+    nameSearch = params[:namesearch]
+    filters = params[:filters]
+    extraClause = params[:extraClause]
+    operation = params[:op]
+
+    @count = UserService.countUsers filters, extraClause, nameSearch, nil, operation
+
+    if page_to && !page_to.empty?
+      gotoNum = UserService.countUsers filters, extraClause, nameSearch, page_to, operation
+      if gotoNum
+        @page = (gotoNum / rows.to_i).floor
+        @page += 1 if gotoNum % rows.to_i > 0
+      end
+    end
+
+    if rows.to_i > 0
+      @nbr_pages = (@count / rows.to_i).floor
+      @nbr_pages += 1 if @count % rows.to_i > 0
+    else
+      @nbr_pages = 1
     end
     
-    # First we need to know how many records there are in the database
     # Then we get the actual data we want from the DB
-    count = User.count :conditions => clause
-    @nbr_pages = (count / rows.to_i).floor + 1
-    
-    off = (@page.to_i - 1) * rows.to_i
-    @users = User.find :all, :offset => off, :limit => rows, :order => idx + " " + order, :conditions => clause
-   
-    respond_to do |format|
-      format.xml #render xml: @users #format.xml
-    end
+    @users = UserService.findUsers rows, @page, idx, order, filters, extraClause, nameSearch, page_to, operation
   end
 
+  #
+  #
+  #
   def destroy
     user = User.find(params[:id])
     
     user.destroy
-    render :layout => 'success'
+    
+    render status: :ok, text: {}.to_json
   end
 
-  def new
-    @user = User.new
-  end
-
+  #
+  #
+  #
   def create
-    @user = User.new(params[:user])
-    # get the role and add it to the user
-    roleArray = params[:userrole]
-
-    role = Role.find(roleArray[:roles])
-    @user.roles << role
+    begin
+      User.transaction do
+        # get the role and add it to the user
+        @user = User.new #params[:user]
+        @user.login = params[:login]
+        @user.password = params[:password]
+        @user.password_confirmation = params[:password_confirmation]
+        
+        if (params[:roles])
+          roleArray = params[:roles]
+      
+          roles = Role.find(roleArray.collect{|r| r[:id]})
+          @user.roles << roles
+        end
     
-    if (@user.save)
-       redirect_to :action => 'index'
-    else
-      # TODO - report an error
-      render :content
-    end 
-  end
-
-  def update
-    @user = User.find(params[:id])
-    roleArray = params[:userrole]
-
-    role = Role.find(roleArray[:roles])
-    @user.roles.clear
-    @user.roles << role
-    
-    if @user.update_attributes(params[:user])
-      redirect_to :action => 'show',:id => @user
-    else
-      render :action => 'edit', :layout => 'content'
+        @user.save!
+      end
+    rescue Exception => err  
+      render status: :bad_request, text: err
     end
   end
 
-  def index
+  #
+  #
+  #
+  def update
+    @user = User.find params[:id]
+    
+    begin
+      User.transaction do
+        if (params[:roles])
+          roleArray = params[:roles]
+      
+          roles = Role.find(roleArray.collect{|r| r[:id]})
+          @user.roles.clear
+          @user.roles << roles
+        end
+        
+        @user.login = params[:login]
+        @user.password = params[:password]
+        @user.password_confirmation = params[:password_confirmation]
+        @user.save! 
+      end
+    rescue Exception => err  
+      # IF there is a fail ten we can to catch the exception and report the problem
+      render status: :bad_request, text: err
+    end
   end
 
+  #
+  #
+  #
+  def index
+    users = User.find :all
+    render json: users.to_json, :content_type => 'application/json'
+  end
+
+  #
+  #
+  #
   def show
+    @user = User.find params[:id]
   end
 
 end

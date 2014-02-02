@@ -1,7 +1,69 @@
-<h1>
-  Admin::Users#javascript
-</h1>
+<script type="text/javascript">
 
-<p>
-  Find me in app/cells/admin/users/javascript.html.erb
-</p>
+UserMgmtApp = new Backbone.Marionette.Application();
+
+UserMgmtApp.UserManagement = (function(Backbone){
+    
+    Backbone.Form.editors.List.Modal.ModalAdapter = Backbone.BootstrapModal;
+    var roles = <%= [].concat(Role.find(:all).collect {|p| {'val' => p.id, 'label' => p.title}}).to_json.html_safe %>;
+
+    UserMdl =  Backbone.DeepModel.extend({
+        schema : {
+            login   : { type : 'Text', title : '<%= t "user-login" %>' },
+            password : { type : 'Password', title : '<%= t "user-password" %>'},
+            password_confirmation : { type : 'Password', title : '<%= t "user-password" %>'},
+            roles : { type : 'List',
+                        title : '<%= t "user-roles" %>',
+                        itemToString : function(item) {
+                                            var r = _.find(roles, function(v) { return v.val == item.id;});
+                                            return r.label;
+                                        },
+                        itemType : 'Object',
+                        subSchema : {
+                            id : { 
+                                    title : '<%= t "user-role" %>',
+                                    type : 'Select',
+                                    options : roles 
+                            }
+                        }
+                    }
+
+        },
+        
+        urlRoot : '/users/admin'
+    });
+
+    return {
+        
+        showDetails : function(id) {
+            mdl = new UserMdl();
+            mdl.fetch({
+                url : "/users/admin/" + id + '.json', // TODO
+            });
+
+            return mdl;            
+        },
+        
+        clearDetails : function() {
+            
+        },
+        
+        UserMdl : UserMdl,
+        
+        init : function(options) {
+            // new Workspace();
+            Backbone.history.start();
+        }
+    }
+    
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    UserMgmtApp.addInitializer(UserMgmtApp.UserManagement.init);
+    UserMgmtApp.start({});
+});
+
+</script>

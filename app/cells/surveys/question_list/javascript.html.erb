@@ -26,7 +26,8 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                                     dependsOn : 'question_type', dependentValues : ['multiplechoice', 'singlechoice'] },
             'survey_format.help' : { type :'Html', title : '<%= t "Help Text" %>' }, // Just need the help text...
             // nested answers object - only if the type is appropriate
-            '<%= t "survey_answers" %>' : { type : 'DependentList',
+            survey_answers      : { type : 'DependentList',
+                title : '<%= t "survey_answers" %>',
                 itemToString : function(item) {
                     return _.template($('#answer-data-template').html(), item);
                 },

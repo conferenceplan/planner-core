@@ -1,0 +1,36 @@
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    jQuery("#<%= @place %>").userTable({
+        caption : '<%= t @caption %>',
+        
+        selectNotifyMethod : <%= @selectNotifyMethod %>,
+        clearNotifyMethod : <%= @clearNotifyMethod %>,
+        loadNotifyMethod : <%= @loadNotifyMethod %>,
+        
+        root_url : "<%= @root_url %>",
+        baseUrl : "<%= @baseUrl %>",
+        getGridData : "<%= @getGridData %>",
+        
+        pager : "<%= @pager %>",
+        
+        multiselect : <%= @multiselect %>,
+
+        extraClause : "<%= @extraClause %>",
+        
+        showControls : <%= @showControls %>,
+        modelType : <%= @modelType %>,
+
+        // The columns to be displayed
+        login : [true, '<%= t "User Name"%>'],       
+        roles : [<%= @login %>, '<%= t "Roles"%>'],
+        login_count : [<%= @roles %>, '<%= t "Login Count"%>'],
+        failed_login_count : [<%= @failed_login_count %>, '<%= t "Failed Count"%>'],
+        
+        //
+        modal_create_title : '<%= t "create-user" %>',
+        modal_edit_title : '<%= t "edit-user" %>'
+    });
+});
+
+</script>

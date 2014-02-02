@@ -48,6 +48,7 @@
 //= require plugins/cpMailHistoryTable
 //= require plugins/cpVenueTable
 //= require plugins/cpRoomTable
+//= require plugins/cpUserTable
 //= require plugins/timeEditor
 //= require plugins/htmlEditor
 //= require plugins/colorEditor

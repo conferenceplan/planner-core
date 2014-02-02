@@ -8,8 +8,4 @@ class Admin::UsersCell < Cell::Rails
     render
   end
 
-  def templates
-    render
-  end
-
 end
