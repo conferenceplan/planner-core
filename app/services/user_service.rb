@@ -24,7 +24,7 @@ module UserService
 protected
 
    def self.genArgsForSql(nameSearch, op, filters, extraClause, page_to)
-    clause = DataService.createWhereClause(filters)
+    clause = DataService.createWhereClause(filters,[],[],['login'])
 
     if nameSearch #&& ! nameSearch.empty?
       # get the last name from the filters and use that in the clause
