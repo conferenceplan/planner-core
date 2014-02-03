@@ -6,8 +6,8 @@ json.array!(@programmeItems) do |json, item|
     json.short_title item.short_title
     json.precis item.precis
     json.duration item.duration
-    json.format_id item.format.id
-    json.format_name item.format.name
+    json.format_id item.format.id if item.format
+    json.format_name item.format.name if item.format
     json.maximum_people item.maximum_people
     json.minimum_people item.minimum_people
     json.notes item.notes
