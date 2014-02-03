@@ -108,6 +108,17 @@ ConfigApp.ConfigManagement = (function(Backbone){
         model : DataSource
     });
     
+    TagContext = Backbone.Model.extend({
+        schema : {
+            name     : { type : 'Text', title : '<%= t "data-source-name" %>' }
+        },
+        urlRoot : '/tag_contexts'
+    });
+    
+    TagContextCollection = Backbone.Collection.extend({
+        model : TagContext
+    });
+    
     ConfigLayout = Backbone.Marionette.Layout.extend({
         template: "#config-list-layout-template",
         
@@ -147,6 +158,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             'invitation_category_config' : 'invitation_category_config',
             'room_setups_config' : 'room_setups_config',
             'data_sources_config' : 'data_sources_config',
+            'tag_context_config' : 'tag_context_config',
             'conference_config' : 'conference_config',
             'email_config' : 'email_config',
             'cloudinary_config' : 'cloudinary_config'
@@ -293,6 +305,35 @@ ConfigApp.ConfigManagement = (function(Backbone){
                 tagName                 : 'tr',
                 view_refresh_event      : "data_source:refresh",
                 modal_edit_title        : '<%= t "edit-data-source" %>',
+                modal_edit              : true
+            }) );
+        },
+        
+        tag_context_config : function() {
+            configRegion.close();
+            
+            tagContextLayout = new ConfigLayout();
+            configRegion.show(tagContextLayout);
+            tagContextLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Tag Contexts" %>' }) }) );
+            
+            TabUtils.createTabControl({
+                template                : "#tag-context-control-template",
+                modelType               : TagContext,
+                view_refresh_event      : "tag_context:refresh",
+                modal_create_title      : '<%= t "create-tag-context" %>',
+                region                  : tagContextLayout.controlRegion,
+            });
+            
+            tabLists.push( AppUtils.createCollectionView({
+                url                     : "/tag_contexts.json",
+                collectionType          : TagContextCollection,
+                region                  : tagContextLayout.configRegion,
+                template                : "#tag-context-template",
+                collection_attributes   : { "class" : "table table-striped table-condensed" },
+                collection_tagName      : 'table',
+                tagName                 : 'tr',
+                view_refresh_event      : "tag_context:refresh",
+                modal_edit_title        : '<%= t "edit-tag-context" %>',
                 modal_edit              : true
             }) );
         },
