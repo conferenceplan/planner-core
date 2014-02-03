@@ -22,7 +22,7 @@ jQuery(document).ready(function() {
         modelType : <%= @modelType %>,
 
         // The columns to be displayed
-        login : [true, '<%= t "User Name"%>'],       
+        login : [true, '<%= t "Name"%>'],       
         roles : [<%= @login %>, '<%= t "Roles"%>'],
         login_count : [<%= @roles %>, '<%= t "Login Count"%>'],
         failed_login_count : [<%= @failed_login_count %>, '<%= t "Failed Count"%>'],

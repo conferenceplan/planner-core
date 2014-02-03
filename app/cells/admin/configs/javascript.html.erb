@@ -29,7 +29,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
     
     EmailConfig = Backbone.Model.extend({
         schema : {
-            conference_name     : { type : 'Text', title : '<%= t "config-conference-name" %>' },
+            conference_name     : { type : 'Text', title : '<%= t "conference-name" %>' },
             domain              : { type : 'Text', title : '<%= t "config-domain" %>' },
             info                : { type : 'Text', title : '<%= t "config-info-email" %>' },
             from                : { type : 'Text', title : '<%= t "config-from-email" %>' },
@@ -175,7 +175,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
                 template                : "#equipment-control-template",
                 modelType               : Equipment,
                 view_refresh_event      : "equipment:refresh",
-                modal_create_title      : '<%= t "create-equipment" %>',
+                modal_create_title      : '<%= t "equipment-create-equipment" %>',
                 region                  : equipmentLayout.controlRegion,
             });
             
@@ -188,7 +188,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
                 collection_tagName      : 'table',
                 tagName                 : 'tr',
                 view_refresh_event      : "equipment:refresh",
-                modal_edit_title        : '<%= t "edit-equipment" %>',
+                modal_edit_title        : '<%= t "equipment-edit-equipment" %>',
                 modal_edit              : true
             }) );
         },
@@ -198,7 +198,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             itemFormatLayout = new ConfigLayout();
             configRegion.show(itemFormatLayout);
-            itemFormatLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Item Formats" %>' }) }) );
+            itemFormatLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "config-item-formats" %>' }) }) );
             
             TabUtils.createTabControl({
                 template                : "#item-format-control-template",
@@ -227,7 +227,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             inviteLayout = new ConfigLayout();
             configRegion.show(inviteLayout);
-            inviteLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Invitation Categories" %>' }) }) );
+            inviteLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "config-invitation-categories" %>' }) }) );
             
             TabUtils.createTabControl({
                 template                : "#invite-category-control-template",
@@ -256,7 +256,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             setupLayout = new ConfigLayout();
             configRegion.show(setupLayout);
-            setupLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Room Setups" %>' }) }) );
+            setupLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "config-room-setups" %>' }) }) );
             
             TabUtils.createTabControl({
                 template                : "#room-setup-control-template",
@@ -285,7 +285,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             dataSourceLayout = new ConfigLayout();
             configRegion.show(dataSourceLayout);
-            dataSourceLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Data Sources" %>' }) }) );
+            dataSourceLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "data-sources" %>' }) }) );
             
             TabUtils.createTabControl({
                 template                : "#data-source-control-template",
@@ -314,7 +314,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             tagContextLayout = new ConfigLayout();
             configRegion.show(tagContextLayout);
-            tagContextLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Tag Contexts" %>' }) }) );
+            tagContextLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "config-tag-contexts" %>' }) }) );
             
             TabUtils.createTabControl({
                 template                : "#tag-context-control-template",
