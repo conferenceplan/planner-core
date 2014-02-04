@@ -2,12 +2,34 @@
 #
 #
 class PlannerController < ApplicationController
-  before_filter :require_user # All controllers that inherit from this will require an authenticated user
+  before_filter :load_site_config, :load_cloudinary_config, :require_user # All controllers that inherit from this will require an authenticated user
   filter_access_to :all # All controllers that inherit from this will be controlled by the access rules
   around_filter :application_time_zone # make sure that we use the timezone as specified in the database
 
   def application_time_zone(&block)
     Time.use_zone(SITE_CONFIG[:conference][:time_zone], &block)
+  end
+  
+  def load_site_config
+    cfg = SiteConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    if (cfg) # TODO - temp, to be replaced in other code
+      SITE_CONFIG[:conference][:name] = cfg.name
+      SITE_CONFIG[:conference][:number_of_days] = cfg.number_of_days
+      SITE_CONFIG[:conference][:start_date] = cfg.start_date
+      SITE_CONFIG[:conference][:time_zone] = cfg.time_zone
+    end
+  end
+  
+  def load_cloudinary_config
+    cfg = CloudinaryConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    Cloudinary.config do |config|
+      config.cloud_name           = cfg ? cfg.cloud_name : ''
+      config.api_key              = cfg ? cfg.api_key : ''
+      config.api_secret           = cfg ? cfg.api_secret : ''
+      config.enhance_image_tag    = cfg ? cfg.enhance_image_tag : false
+      config.static_image_support = cfg ? cfg.static_image_support : false
+     config.cdn_subdomain = true
+    end
   end
 
   rescue_from ActiveRecord::StaleObjectError do |exception|
