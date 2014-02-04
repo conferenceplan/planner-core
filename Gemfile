@@ -4,6 +4,7 @@ platform :rbx do
   gem "racc", "1.4.9"
   gem "rubysl"
   gem "rdoc"
+  gem "test-unit"
 end
 
 gem 'actionmailer' 
