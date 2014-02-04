@@ -1,6 +1,7 @@
 source "https://rubygems.org"
 
 platform :rbx do
+  gem "racc", "1.4.9"
   gem "rubysl"
   gem "rdoc"
 end
