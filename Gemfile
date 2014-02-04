@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 platform :rbx do
   gem "rubysl"
+  gem "rdoc"
 end
 
 gem 'actionmailer' 

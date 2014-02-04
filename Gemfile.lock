@@ -491,6 +491,7 @@ DEPENDENCIES
   rack-jsonp-middleware
   rails (~> 3.2.12)
   rake
+  rdoc
   recaptcha
   routing-filter
   rubysl
