@@ -1,5 +1,9 @@
 source "https://rubygems.org"
 
+platform :rbx do
+  gem "rubysl"
+end
+
 gem 'actionmailer' 
 gem 'activerecord' 
 gem 'enumerations_mixin', :git => 'git://github.com/balen/enumerations_mixin.git'
