@@ -20,30 +20,54 @@ class ProgramController < ApplicationController
   # If the day is specified then just return the items for that day
   # Can return formatted as an Atom feed or plain HTML
   #
+  def getConditions(params)
+    day = params[:day] # Day
+    name = params[:name]
+    lastname = params[:lastname]
+    
+    conditionStr = "" if day || name || lastname
+    conditionStr += '(published_room_item_assignments.day = ?) ' if day
+    conditionStr += ' AND ' if day && (name || lastname)
+    conditionStr += '(people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ? )' if name && !lastname
+    conditionStr += '((people.last_name like ? OR pseudonyms.last_name like ?) AND (people.first_name like ? OR pseudonyms.first_name like ?))' if name && lastname
+    conditionStr += '(people.last_name like ? OR pseudonyms.last_name like ?)' if lastname && !name
+    conditions = [conditionStr] if day || name || lastname
+    conditions += [day] if day 
+    lastname = name if !lastname
+    conditions += ['%'+lastname+'%', '%'+lastname+'%', '%'+name+'%', '%'+name+'%'] if name
+    conditions += ['%'+lastname+'%', '%'+lastname+'%'] if lastname && !name
+    
+    return conditions
+  end
+  
   def index
     stream = params[:stream]
     layout = params[:layout]
     day = params[:day]
     name = params[:name]
     lastname = params[:lastname]
+
+    conditions = getConditions(params)
     
-    @rooms = PublishedProgramItemsService.getPublishedRooms day, name, lastname
+    # @rooms = PublishedProgramItemsService.getPublishedRooms day, name, lastname
     
     if stream
       @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day, name, lastname
     else
       @programmeItems = PublishedProgramItemsService.getPublishedProgramItems day, name, lastname
     end
+
+
     
     respond_to do |format|
       format.json
-      format.html { 
-        if layout && layout == 'line'
-          render :action => :list, :layout => 'content' 
-        else  
-          render :layout => 'content' # This should generate an HTML grid
-        end
-      }
+      # format.html { 
+        # if layout && layout == 'line'
+          # render :action => :list, :layout => 'content' 
+        # else  
+          # render :layout => 'content' # This should generate an HTML grid
+        # end
+      # }
     end
   end
   

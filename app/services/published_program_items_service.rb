@@ -33,8 +33,8 @@ module PublishedProgramItemsService
   #
   def self.getPublishedProgramItems(day = nil, name = nil, lastname = nil)
 
-    PublishedProgrammeItem.all :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
-                               :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
+    PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
+                              :include => [:publication, :published_time_slot, {:published_room_item_assignment => {:published_room => [:published_venue]}}, {:people => [:pseudonym, :edited_bio]} ],
                                :conditions => getConditions(day, name, lastname)
 
   end
@@ -201,18 +201,18 @@ private
 private
 
   def self.getConditions(day = nil, name = nil, lastname = nil)    
-    conditionStr = "" if day || name || lastname
+    conditionStr = "" if (day || name || lastname)
     conditionStr += '(published_room_item_assignments.day = ?) ' if day
     conditionStr += ' AND ' if day && (name || lastname)
     conditionStr += '(people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ? )' if name && !lastname
     conditionStr += '((people.last_name like ? OR pseudonyms.last_name like ?) AND (people.first_name like ? OR pseudonyms.first_name like ?))' if name && lastname
     conditionStr += '(people.last_name like ? OR pseudonyms.last_name like ?)' if lastname && !name
-    conditions = [conditionStr] if day || name || lastname
-    conditions += [day] if day 
+    conditions = [conditionStr] if (day || name || lastname)
+    conditions << day if day 
     lastname = name if !lastname
     conditions += ['%'+lastname+'%', '%'+lastname+'%', '%'+name+'%', '%'+name+'%'] if name
     conditions += ['%'+lastname+'%', '%'+lastname+'%'] if lastname && !name
+    conditions
   end
-
   
 end
