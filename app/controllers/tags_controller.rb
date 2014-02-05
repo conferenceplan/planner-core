@@ -7,11 +7,11 @@ class TagsController < PlannerController
     
     if isok(className)
       # 1. Get the set of contexts
-      contexts = getContexts(className)
+      contexts = getContexts(className).sort_by{|name| name.downcase }
       # 2. For each context get the tags for this person and add them to the results
       @allTagCounts = Hash.new
       contexts.each do |context|
-        tags = eval(className).tag_counts_on( context ).order('count desc')
+        tags = TagsService.getTagCounts(className, context)
         if tags != nil
           @allTagCounts[context] = tags
         end
