@@ -3,10 +3,34 @@
 #
 class ApplicationController < ActionController::Base
   
-  before_filter :set_locale
+  before_filter :set_locale, :load_cloudinary_config
+  around_filter :application_time_zone # make sure that we use the timezone as specified in the database
  
   def set_locale
     I18n.locale = (params[:locale] && params[:locale].size > 0)? params[:locale] : I18n.default_locale
+  end
+  
+  def application_time_zone(&block)
+    cfg = SiteConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    if (cfg) # TODO - temp, to be replaced in other code
+      SITE_CONFIG[:conference][:name] = cfg.name
+      SITE_CONFIG[:conference][:number_of_days] = cfg.number_of_days
+      SITE_CONFIG[:conference][:start_date] = cfg.start_date
+      SITE_CONFIG[:conference][:time_zone] = cfg.time_zone
+    end
+    Time.use_zone(SITE_CONFIG[:conference][:time_zone], &block)
+  end
+  
+  def load_cloudinary_config
+    cfg = CloudinaryConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    Cloudinary.config do |config|
+      config.cloud_name           = cfg ? cfg.cloud_name : ''
+      config.api_key              = cfg ? cfg.api_key : ''
+      config.api_secret           = cfg ? cfg.api_secret : ''
+      config.enhance_image_tag    = cfg ? cfg.enhance_image_tag : false
+      config.static_image_support = cfg ? cfg.static_image_support : false
+     config.cdn_subdomain = true
+    end
   end
   
   # Prevent CSRF attacks by raising an exception.

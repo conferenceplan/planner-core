@@ -1,2 +1,2 @@
 
-Rails.application.assets.logger = Logger.new($stdout)
+#Rails.application.assets.logger = Logger.new($stdout)
