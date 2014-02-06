@@ -73,6 +73,8 @@ class Person < ActiveRecord::Base
   has_one  :pseudonym
   accepts_nested_attributes_for :pseudonym
   
+  has_one :bio_image, :dependent => :delete
+  
   has_one :edited_bio, :dependent => :delete
   accepts_nested_attributes_for :edited_bio
   

@@ -16,6 +16,8 @@
 //= require colorpicker/jquery.colorpicker
 //= require jQuery.download
 
+//= require cloudinary
+
 //= require select2
 //  require select2_locale_fr
 
@@ -56,6 +58,7 @@
 //= require plugins/DependentEditors
 //= require plugins/cpReportBase
 //= require plugins/dateTimeEditor
+//= require plugins/clImageEditor
 
 //= require TabViews
 

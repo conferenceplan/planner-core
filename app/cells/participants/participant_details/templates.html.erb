@@ -108,6 +108,20 @@
 {{ }; }}
 </script>
 
+<script type="text/template" id="bio-image-template">
+    BIO IMAGE
+{{ if (typeof id != 'undefined') { }}
+<image src="{{= bio_picture ? bio_picture.standard.url : '' }}"></image>
+<button class="model-edit-button btn btn-primary btn-xs pull-right">
+    <%= t "Edit" %>
+</button>
+{{ } else { }}
+<button class="model-new-button btn btn-primary btn-xs pull-right">
+    <%= t "New" %>
+</button>
+{{ }; }}
+</script>
+
 <script type="text/template" id="bio-view-template">
 {{ if (typeof id != 'undefined') { }}
 <button class="model-edit-button btn btn-primary btn-xs pull-right">

@@ -21,3 +21,4 @@
     json.invitation_category_name   person.invitation_category ? @person.invitation_category.name : ""
     json.has_survey                 SurveyService.personAnsweredSurvey( person, 'partsurvey') ? 'Y' : 'N' # TODO - this will need to change
     json.comments                   person.comments ? person.comments : ""
+    json.bio_image                  person.bio_image if person.bio_image

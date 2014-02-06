@@ -103,6 +103,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         urlRoot : '/edited_bios'
     });
     
+    BioPicture = Backbone.Model.extend({
+        schema : {
+            bio_picture : { type : 'CLImage', title : 'Bio Pic',
+                cl_image_upload_tag : '<%= cl_image_upload_tag(:bio_picture) %>'
+            }
+        },
+        urlRoot : '/bio_images'
+    });
+    
     //
     ProgramItem = Backbone.Model.extend({
     });
@@ -251,6 +260,17 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             editTitle : '<%= t "Edit Bio" %>',
         }) );
         
+        tabContent.push( 
+            TabUtils.createTabContent({
+            modelType : BioPicture,
+            url : "/participants/" + id + "/bio_images.json",
+            template : '#bio-image-template',
+            place : '#bio-image',
+            id : id,
+            id_name : 'person_id',
+            newTitle : '<%= t "Create Bio Image" %>',
+            editTitle : '<%= t "Edit Bio Image" %>',
+        }) );
         
         tabLists.push( TabUtils.createTabListContent({
             collectionType : ProgramItemCollection,
