@@ -67,7 +67,7 @@ PlannerRc1::Application.routes.draw do
     resources :registrationDetails do
       get 'show'
     end
-    resources :edited_bios, :available_dates
+    resources :edited_bios, :available_dates, :bio_images
     collection do
       get 'list'
       post 'list'
@@ -81,6 +81,9 @@ PlannerRc1::Application.routes.draw do
   match 'edited_bios/exportbiolist.:format', :controller => 'edited_bios',:action => 'exportbiolist'
   match 'edited_bios/selectExportBioList', :controller => 'edited_bios',:action => 'selectExportBioList'
   resources :edited_bios do
+    resources :person
+  end
+  resources :bio_images do
     resources :person
   end
   
