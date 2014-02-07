@@ -16,7 +16,7 @@ class CloudinaryConfigController < ApplicationController
   end
 
   def create
-    cloud_config = CloudinaryConfig.find(params[:id])
+    cloud_config = CloudinaryConfig.new params[:cloudinary_config]
     cloud_config.save!
 
     render json: cloud_config.to_json, :content_type => 'application/json'
