@@ -4,7 +4,8 @@ class CreateExternalImages < ActiveRecord::Migration
       t.string :picture
 
       t.column :imageable_id, :integer
-      t.column :imageable_type, :string     
+      t.column :imageable_type, :string
+      t.column :use, :string     
 
       t.timestamps
       t.column :lock_version, :integer, { :default => 0 }
