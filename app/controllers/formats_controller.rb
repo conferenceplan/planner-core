@@ -4,38 +4,30 @@ class FormatsController < PlannerController
   #
   #
   def index
-    formats = Format.find :all, :order => 'position asc'
-    
-    render json: formats.to_json, :content_type => 'application/json'
+    @formats = Format.find :all, :order => 'position asc'
   end
   
   #
   #
   #
   def show
-    format = Format.find(params[:id])
-    
-    render json: format.to_json, :content_type => 'application/json'
+    @format = Format.find(params[:id])
   end
   
   #
   #
   #
   def create
-    format = Format.new(params[:format])
-    format.save!
-    
-    render json: format.to_json, :content_type => 'application/json'
+    @format = Format.new(params[:format])
+    @format.save!
   end
   
   #
   #
   #
   def update
-    format = Format.find(params[:id])
-    format.update_attributes(params[:format])
-
-    render json: format.to_json, :content_type => 'application/json'
+    @format = Format.find(params[:id])
+    @format.update_attributes(params[:format])
   end
 
   #

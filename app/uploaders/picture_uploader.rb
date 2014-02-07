@@ -4,21 +4,32 @@ class PictureUploader < CarrierWave::Uploader::Base
 
   include Cloudinary::CarrierWave   # Use cloudinary as the image store
 
-  # process :convert => 'png'         # convert all images to PNG
-  # process :tags => ['planner_pic']  # default tag for the "uploaded" image
+  #
+  #
+  #
+  def public_id
+    publicid = SITE_CONFIG[:conference][:name] + '/'
+    publicid += model.imageable_type ? model.imageable_type : ''
+    publicid += model.imageable_id ? ('_' + model.imageable_id.to_s) : ''
+    publicid += model.use ? ('_' + model.use.to_s) : ''
+    publicid.gsub(/\s+/, "")
+  end
   
   #
   # Get a thumbnail of the image
   #
   version :thumbnail do
-    resize_to_fit(50, 50)
+    transform = [{:width => 200, :crop => :scale},
+                                {:fetch_format => :png}]
+    cloudinary_transformation :transformation => transform
   end
   
   #
   #
   #
   version :standard do
-    process :resize_to_fill => [100, 150, :north] # TODO - verify that this is what we want to use
+    transform = [{:fetch_format => :png}]
+    cloudinary_transformation :transformation => transform
   end
 
 end

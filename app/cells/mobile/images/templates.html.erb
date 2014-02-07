@@ -1,0 +1,45 @@
+<script type="text/template" id="config-list-layout-template">
+    <div class="row">
+        <div class="col-xs-1">
+            <div id="config-title-div"></div>
+        </div>
+        <div class="col-xs-11">
+            <div id="config-control-div"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="config-region-div" class="col-xs-12"></div>
+    </div>
+</script>
+
+<script type="text/template" id="item-format-template">
+    <td>
+        {{= name }}
+    </td>
+    <td>
+        {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
+        {{ if (typeof image != 'undefined') { }}
+            <image src="{{= image.picture.thumbnail.url }}"></image>
+            <button class="large-image-edit-button btn btn-primary btn-xs">
+                <%= t "Edit Large Card Image" %>
+            </button>
+        {{ } else { }}
+            <button class="large-image-create-button btn btn-primary btn-xs">
+                <%= t "Add Large Card Image" %>
+            </button>
+        {{ } }}
+    </td>
+    <td>
+        {{ var image = _.find(external_images, function(im) { return im['use'] == 'mediumcard' }); }}
+        {{ if (typeof image != 'undefined') { }}
+            <image src="{{= image.picture.thumbnail.url }}"></image>
+            <button class="medium-image-edit-button btn btn-primary btn-xs">
+                <%= t "Edit Medium Card Image" %>
+            </button>
+        {{ } else { }}
+            <button class="medium-image-create-button btn btn-primary btn-xs">
+                <%= t "Add Medium Card Image" %>
+            </button>
+        {{ } }}
+    </td>
+</script>

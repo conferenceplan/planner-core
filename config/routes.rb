@@ -86,6 +86,15 @@ PlannerRc1::Application.routes.draw do
   resources :bio_images do
     resources :person
   end
+
+  #
+  # For "external" images linked to instance through the polymorphic relationship
+  #
+  match "external_images(/:cname/:cid)",            :controller => 'external_images', :via => :get,     :action => 'index'
+  match "external_images(/:cname/:cid)/:use/:id",   :controller => 'external_images', :via => :get,     :action => 'show'
+  match "external_images(/:cname/:cid)/:use",       :controller => 'external_images', :via => :post,    :action => 'create'
+  match "external_images(/:cname/:cid)(/:use)/:id", :controller => 'external_images', :via => :put,     :action => 'update'
+  match "external_images/:id",                      :controller => 'external_images', :via => :delete,  :action => 'destroy'
   
   resources :available_dates
 
