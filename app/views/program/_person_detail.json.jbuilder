@@ -13,4 +13,10 @@ if person.edited_bio
         json.fb         person.edited_bio.facebook if person.edited_bio.facebook && person.edited_bio.facebook.length > 0
     end
 end
+if person.bio_image
+    json.list_image     person.bio_image.bio_picture.list.url.partition(@partition_val)[2]
+    json.detail_image   person.bio_image.bio_picture.detail.url.partition(@partition_val)[2]
+end
 json.prog       person.published_programme_items.collect{|i| i.id}
+
+
