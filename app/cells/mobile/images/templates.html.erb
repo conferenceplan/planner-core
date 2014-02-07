@@ -19,7 +19,7 @@
     <td>
         {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
         {{ if (typeof image != 'undefined') { }}
-            <image src="{{= image.picture.thumbnail.url }}"></image>
+            <image src="{{= image.picture.large_card.url }}"></image>
             <button class="large-image-edit-button btn btn-primary btn-xs">
                 <%= t "Edit Large Card Image" %>
             </button>
@@ -32,7 +32,7 @@
     <td>
         {{ var image = _.find(external_images, function(im) { return im['use'] == 'mediumcard' }); }}
         {{ if (typeof image != 'undefined') { }}
-            <image src="{{= image.picture.thumbnail.url }}"></image>
+            <image src="{{= image.picture.medium_card.url }}"></image>
             <button class="medium-image-edit-button btn btn-primary btn-xs">
                 <%= t "Edit Medium Card Image" %>
             </button>

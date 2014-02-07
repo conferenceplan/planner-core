@@ -27,6 +27,21 @@ class PictureUploader < CarrierWave::Uploader::Base
   #
   #
   #
+  version :large_card do
+    transform = [{:width => 368, :height => 128, :crop => :fill},
+                                {:fetch_format => :png}]
+    cloudinary_transformation :transformation => transform
+  end
+  
+  version :medium_card do
+    transform = [{:width => 130, :height => 130, :crop => :fill},
+                                {:fetch_format => :png}]
+    cloudinary_transformation :transformation => transform
+  end
+  
+  #
+  #
+  #
   version :standard do
     transform = [{:fetch_format => :png}]
     cloudinary_transformation :transformation => transform

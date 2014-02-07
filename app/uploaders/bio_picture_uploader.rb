@@ -34,6 +34,21 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   #
   #
+  version :list do
+    transform = [{:height => 60, :width => 60, :crop => :fill, :gravity => :face, :radius => :max},
+                                {:fetch_format => :png}]
+    cloudinary_transformation :transformation => transform
+  end
+  
+  version :detail do
+    transform = [{:height => 100, :width => 100, :crop => :fill, :gravity => :face, :radius => :max},
+                                {:fetch_format => :png}]
+    cloudinary_transformation :transformation => transform
+  end
+  
+  #
+  #
+  #
   version :circle do
     transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face, :radius => :max},
                                 {:fetch_format => :png}]
