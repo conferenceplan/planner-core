@@ -41,7 +41,7 @@ json.set! 'mobile' do
             #json.id                 format.id
             json.format             format.name
             json.large_card         format.external_images.use(:largecard)[0].picture.large_card.url.partition(@partition_val)[2] if format.external_images.use(:largecard)[0]
-            json.medium_card        format.external_images.use(:mediumcard)[0].picture.large_card.url.partition(@partition_val)[2] if format.external_images.use(:mediumcard)[0]
+            json.medium_card        format.external_images.use(:mediumcard)[0].picture.medium_card.url.partition(@partition_val)[2] if format.external_images.use(:mediumcard)[0]
         end
     end
     

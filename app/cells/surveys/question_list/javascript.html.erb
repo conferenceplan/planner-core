@@ -15,6 +15,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                                     options : <%= [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone].to_json.html_safe %>
                                     },
             mandatory           : { type : 'Checkbox', title : '<%= t "survey-mandatory" %>' },
+            private             : { type : 'Checkbox', title : '<%= t "survey-private" %>' },
             tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>',
                                     validators : [ /^[A-z0-9_]*$/ ],
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },

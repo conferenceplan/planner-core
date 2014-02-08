@@ -64,7 +64,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
     ItemFormat = Backbone.Model.extend({
         schema : {
             name     : { type : 'Text', title : '<%= t "format-name" %>' },
-            positon  : { type : 'Number', title : '<%= t "format-position" %>' }
+            position : { type : 'Number', title : '<%= t "format-position" %>' }
         },
         urlRoot : '/formats'
     });
@@ -76,7 +76,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
     InviteCategory = Backbone.Model.extend({
         schema : {
             name     : { type : 'Text', title : '<%= t "invite-category-name" %>' },
-            positon  : { type : 'Number', title : '<%= t "invite-category-position" %>' }
+            position : { type : 'Number', title : '<%= t "invite-category-position" %>' }
         },
         urlRoot : '/invitation_categories'
     });

@@ -39,6 +39,7 @@
         <dt><%= t "sort_order" %></dt><dd>{{= sort_order ? sort_order : "&nbsp;" }}</dd>
         <dt><%= t "survey-question-type" %></dt><dd>{{= question_type ? question_type : "&nbsp;" }}</dd>
         <dt><%= t "survey-mandatory" %></dt><dd>{{= mandatory ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+        <dt><%= t "survey-private" %></dt><dd>{{= private ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
         {{ if ( question_type == 'textfield') { }}
             <dt><%= t "tags_label" %></dt><dd>{{= tags_label ? tags_label : "&nbsp;" }}</dd>
             <dt><%= t "text_size" %></dt><dd>{{= text_size ? text_size : "&nbsp;" }}</dd>

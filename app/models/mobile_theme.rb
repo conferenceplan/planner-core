@@ -7,4 +7,6 @@ class MobileTheme < ActiveRecord::Base
                   :hot_ribbon, :main_background, :updated_ribbon
 
 
+  has_one  :default_bio_image, :class_name => 'ExternalImage', :as => :imageable,  :dependent => :delete
+
 end
