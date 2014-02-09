@@ -15,7 +15,7 @@ class TagContextsController < PlannerController
   def create
     # Make sure that the context does not contain a space
     str = params[:tag_context]
-    str['name'] = str['name'].gsub(/ /,'_')
+    str['name'] = str['name'].gsub(/[^\p{Alnum}\p{Space}_]/, '').gsub(/\p{Space}/, '_')
     
     tag_context = TagContext.new(str)
     tag_context.save!
@@ -25,7 +25,9 @@ class TagContextsController < PlannerController
 
   def update
     tag_context = TagContext.find(params[:id])
-    tag_context.update_attributes(params[:tag_context])
+    str = params[:tag_context]
+    tag_context.name = str['name'].gsub(/[^\p{Alnum}\p{Space}_]/, '').gsub(/\p{Space}/, '_');
+    tag_context.save!
 
     render json: tag_context.to_json, :content_type => 'application/json'
   end
