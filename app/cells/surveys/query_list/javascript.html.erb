@@ -31,7 +31,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
         _.invoke(tabLists, 'reset' );
     };
     
-    function showQueries(region, query) {
+    function showQueries(region, query, formCallback) {
         tabLists.push( AppUtils.createCollectionView({
             url                     : "/survey_query/list.json?" + query, // TODO - make this a param...
             collectionType          : QueryCollection,
@@ -43,7 +43,13 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
             view_refresh_event      : "query:refresh",
             selectFn                : selectQuery,
             clearFn                 : clearDetails,
-            copyFn                  : copyQuery
+            copyFn                  : copyQuery,
+            form_event              : 'survey_id:change',
+            form_event_fn           : function(form, editor, extra) { // TODO - This is not used when it is a new query because we do not have a query shown
+                if (formCallback) {
+                    formCallback(form, editor, extra);
+                }
+            }
         }) );
     };
     
@@ -57,11 +63,13 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
             modelType               : Query,
             view_refresh_event      : "query:refresh",
             modal_create_title      : '<%= t "survey-create-query" %>',
-            region                  : queryLayout.queryControlRegion
+            region                  : queryLayout.queryControlRegion,
+            form_event              : 'survey_id:change',
+            form_event_fn           : <%= @formCallback %>
         });
         
-        showQueries(queryLayout.myQueryRegion, 'subset=user');
-        showQueries(queryLayout.sharedRegion, 'subset=shared');
+        showQueries(queryLayout.myQueryRegion, 'subset=user', formCallback);
+        showQueries(queryLayout.sharedRegion, 'subset=shared', formCallback);
     };
     
     function copyQuery(model) {
@@ -83,6 +91,10 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
     
     function clearDetails() {
         <%= @clearNotifyMethod %>();
+    };
+    
+    function formCallback() {
+        <%= @formCallback %>();
     };
     
     return {

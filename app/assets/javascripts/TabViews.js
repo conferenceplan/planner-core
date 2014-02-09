@@ -119,7 +119,7 @@ var TabUtils = (function(){
             mdl.render();
             
             if (this.options.form_event) {
-                console.debug('Set event');
+                // console.debug('Set event');
                 mdl.form.on(this.options.form_event, this.options.form_event_fn );
             }
         },
@@ -193,6 +193,9 @@ var TabUtils = (function(){
                 }
             });
             modal.render();
+                if (this.options.form_event_fn) {
+                    modal.form.on(this.options.form_event, this.options.form_event_fn );
+                }
             
             return true;
         }
@@ -269,7 +272,10 @@ var TabUtils = (function(){
                 modal_create_title : options.modal_create_title,
                 modelType : options.modelType,
                 view_callback : options.callback,
-                modelURL : options.modelURL
+                modelURL : options.modelURL,
+                form_event      : options.form_event,
+                form_event_fn   : options.form_event_fn
+                
             });
             control.render();
             $(options.place).html(control.el);
@@ -282,7 +288,9 @@ var TabUtils = (function(){
                 modal_create_title : options.modal_create_title,
                 modelType : options.modelType,
                 view_callback : options.callback,
-                modelURL : options.modelURL
+                modelURL : options.modelURL,
+                form_event      : options.form_event,
+                form_event_fn   : options.form_event_fn
             });
             options.region.show(control);
         }

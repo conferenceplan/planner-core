@@ -90,7 +90,9 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         }
     });
 
-    Question = Backbone.Model.extend({});
+    Question = Backbone.Model.extend({
+        survey_id : <%= Survey.find(:first).id %>
+    });
 
     QuestionsCollection = Backbone.Collection.extend({
         model   : Question,
@@ -213,14 +215,20 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             })
         
     };
+    
+    function setCurrentQuestions(id) {
+        currentQuestions.url = "/survey_query/questions?survey_query=" + id;
+        currentQuestions.fetch({ async:false });
+    };
+    
+    function setCurrentQuestionsBySurvey(id) {
+        currentQuestions.url = "/survey_query/questions?survey=" + id;
+        currentQuestions.fetch({ async:false });
+    };
 
     function showQuery(id) {
         // Get the list of possible questions ...
-
-        currentQuestions = new QuestionsCollection();
-        currentQuestions.url = "/survey_query/questions?survey_query=" + id;
-        currentQuestions.fetch({ async:false });
-        console.debug(currentQuestions);
+        setCurrentQuestions(id);
         
         tabContent.push( TabUtils.createTabContent({
             modelType : Query,
@@ -233,7 +241,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             selectCsvFn : runCSVQuery,
             clearFn   : clearDetails,
             form_event : 'survey_id:change',
-            form_event_fn : function(form, editor, extra) {
+            form_event_fn : function(form, editor, extra) { // TODO - This is not used when it is a new query because we do not have a query shown
                 // Get the current set of questions
                 currentQuestions.url = "/survey_query/questions?survey=" + editor.getValue();
                 currentQuestions.fetch({ async:false });
@@ -246,9 +254,23 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         }) );
     };
     
+    function setQuestions(form, editor, extra) {
+        currentQuestions = new QuestionsCollection(); 
+                // Get the current set of questions
+                currentQuestions.url = "/survey_query/questions?survey=" + editor.getValue();
+                currentQuestions.fetch({ async:false });
+                // we need to clear the predicates ...
+                _.invoke(form.fields.survey_query_predicates.editor.items, 'remove');
+                // we need to also remove the data from the editor
+                var len = form.fields.survey_query_predicates.editor.items.length;
+                form.fields.survey_query_predicates.editor.items.splice(0, len);
+    };
+    
     return {
         init : function() {
             // showQueries();
+            currentQuestions = new QuestionsCollection();
+            setCurrentQuestionsBySurvey(<%= Survey.find(:first).id %>);
         },
         
         clearDetails : function() {
@@ -259,6 +281,8 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             showQuery(id);
             clearDetails();
         },
+        
+        setQuestions : setQuestions
     }
 
 })(Backbone);

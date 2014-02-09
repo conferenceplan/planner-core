@@ -39,9 +39,9 @@ class DatasourcesController < ApplicationController
     end
   end
    
-  def list
-    @datasources = Datasource.find :all
-    render :action => :list, :layout => "plain"
-  end
+  # def list
+    # @datasources = Datasource.find :all
+    # render :action => :list, :layout => "plain"
+  # end
 
 end

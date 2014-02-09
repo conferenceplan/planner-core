@@ -368,6 +368,9 @@ var AppUtils = (function(){
                     title : this.options.modal_edit_title
                 });
                 modal.render();
+                if (this.options.form_event_fn) {
+                    mdl.form.on(this.options.form_event, this.options.form_event_fn );
+                }
             }
             
         },
@@ -426,7 +429,9 @@ var AppUtils = (function(){
                             itemArea        : options.itemArea,
                             readTemplate    : options.readTemplate,
                             modal_edit_title : options.modal_edit_title,
-                            modal_edit      : options.modal_edit
+                            modal_edit      : options.modal_edit,
+                            form_event      : options.form_event,
+                            form_event_fn   : options.form_event_fn
                         }
                     });
                     

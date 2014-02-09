@@ -47,26 +47,4 @@ class SurveyReportsController < PlannerController
                 :order => "people.last_name ASC"
   end
 
-  # def tags_by_context
-    # taggings = ActsAsTaggableOn::Tagging.find :all,
-                  # :select => "DISTINCT(context)",
-                  # :conditions => "taggable_type like 'Person'"
-#                   
-    # @contexts = Array.new
-# 
-    # # for each context get the set of tags (sorted), and add them to the collection for display on the page
-    # taggings.each do |tagging|
-      # @contexts << tagging.context
-    # end
-# 
-    # if params[:tag]
-      # logger.debug params[:tag][:context]
-      # @context = params[:tag][:context]
-#       
-      # @names = Person.all(:joins => "INNER JOIN taggings ON taggings.taggable_type = 'Person' AND taggings.taggable_id = people.id AND taggings.context = '" + @context +"'",
-                    # :select => "DISTINCT people.* ",
-                    # :order => "people.last_name ASC")
-    # end
-  # end
- 
 end
