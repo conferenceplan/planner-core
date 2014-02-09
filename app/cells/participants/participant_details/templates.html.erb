@@ -169,6 +169,14 @@
 <button class="model-new-button btn btn-primary btn-xs pull-right">
     <%= t "New" %>
 </button>
+<dl class="dl-horizontal">
+    <dt>
+        <%= t "Bio from Survey" %>
+    </dt>
+    <dd>
+        {{= survey_bio ? survey_bio : "&nbsp;" }}
+    </dd>
+</dl>
 {{ }; }}
 </script>
 
