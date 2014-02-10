@@ -129,6 +129,7 @@ class ProgramController < ApplicationController
   #
   #
   def updates
+    @scale = params[:scale].to_f
     pubIndex = params[:pubidx].to_i
     
     # To get the updates:
