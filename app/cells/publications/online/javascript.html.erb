@@ -56,7 +56,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
                 type: 'GET',
                 url: "/publisher/publish",
                 success: function(response) {
-                    infoMessage('<%= t "Publish scheduled" %>');
+                    infoMessage('<%= t "publish-scheduled" %>');
                 },
                 error: function() {
                     alertMessage('<%= t "Problem scheduling publish" %>');
