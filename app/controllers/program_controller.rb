@@ -86,6 +86,7 @@ class ProgramController < ApplicationController
   #
   #
   def participants
+    @scale = params[:scale].to_f
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
     @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
     @participants = PublishedProgramItemsService.findParticipants

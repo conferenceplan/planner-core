@@ -14,8 +14,10 @@ if person.edited_bio
     end
 end
 if person.bio_image
-    json.list_image     person.bio_image.bio_picture.list.url.partition(@partition_val)[2]
-    json.detail_image   person.bio_image.bio_picture.detail.url.partition(@partition_val)[2]
+    listImage = person.bio_image
+    listImage.scale = @scale
+    json.list_image     listImage.bio_picture.list.url.partition(@partition_val)[2]
+    json.detail_image   listImage.bio_picture.detail.url.partition(@partition_val)[2]
 end
 json.prog       person.published_programme_items.collect{|i| i.id}
 

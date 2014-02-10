@@ -1,5 +1,6 @@
 class BioImage < ActiveRecord::Base
   attr_accessible :bio_picture, :bio_picture_cache
+  attr_accessor :scale
 
   mount_uploader :bio_picture, BioPictureUploader # Use Carrierwave to manage image uploads and retreival (external storage with name in the db)
 

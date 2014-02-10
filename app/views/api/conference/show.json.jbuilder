@@ -38,10 +38,13 @@ json.set! 'mobile' do
 
     json.set! 'card_images' do
         json.array! @formats do |format|
-            #json.id                 format.id
             json.format             format.name
-            json.large_card         format.external_images.use(:largecard)[0].picture.url(:large_card).partition(@partition_val)[2] if format.external_images.use(:largecard)[0]
-            json.medium_card        format.external_images.use(:mediumcard)[0].picture.url(:medium_card).partition(@partition_val)[2] if format.external_images.use(:mediumcard)[0]
+            imLarge = format.external_images.use(:largecard)[0]
+            imLarge.scale = @scale if imLarge
+            json.large_card         imLarge.picture.large_card.url.partition(@partition_val)[2] if imLarge
+            imMedium = format.external_images.use(:mediumcard)[0]
+            imMedium.scale = @scale if imMedium
+            json.medium_card        imMedium.picture.medium_card.url.partition(@partition_val)[2] if imMedium
         end
     end
     

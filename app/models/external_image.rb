@@ -1,5 +1,6 @@
 class ExternalImage < ActiveRecord::Base
   attr_accessible :picture, :use
+  attr_accessor :scale
 
   mount_uploader :picture, PictureUploader # Use Carrierwave to manage image uploads and retreival (external storage with name in the db)
 

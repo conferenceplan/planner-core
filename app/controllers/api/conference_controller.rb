@@ -4,6 +4,7 @@ class Api::ConferenceController < ApplicationController
     @theme = MobileTheme.find :first
   end
   def show
+    @scale = params[:scale].to_f
     @theme = MobileTheme.find :first
     @formats = Format.find :all
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
