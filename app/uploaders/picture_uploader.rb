@@ -9,10 +9,11 @@ class PictureUploader < CarrierWave::Uploader::Base
   #
   def public_id
     publicid = SITE_CONFIG[:conference][:name] + '/'
-    publicid += model.imageable_type ? model.imageable_type : ''
-    publicid += model.imageable_id ? ('_' + model.imageable_id.to_s) : ''
-    publicid += model.use ? ('_' + model.use.to_s) : ''
-    publicid.gsub(/\s+/, "")
+    # publicid += model.imageable_type ? model.imageable_type : ''
+    # publicid += model.imageable_id ? ('_' + model.imageable_id.to_s) : ''
+    # publicid += model.use ? ('_' + model.use.to_s) : ''
+    # publicid.gsub(/\s+/, "")
+    publicid += self.my_public_id
   end
   
   #
@@ -36,14 +37,14 @@ class PictureUploader < CarrierWave::Uploader::Base
   end
   
   def largeCard
-    width = model.scale ? 368 * model.scale : 368
-    height = model.scale ? 128 * model.scale : 128
+    width = (model.scale ? 368 * model.scale : 368).to_i
+    height = (model.scale ? 128 * model.scale : 128).to_i
     return :width => width, :height => height, :crop => :fill, :fetch_format => :png
   end
   
   def mediumCard
-    width = model.scale ? 130 * model.scale : 130
-    height = model.scale ? 130 * model.scale : 130
+    width = (model.scale ? 130 * model.scale : 130).to_i
+    height = (model.scale ? 130 * model.scale : 130).to_i
     return :width => width, :height => height, :crop => :fill, :fetch_format => :png
   end
   #
@@ -58,14 +59,14 @@ class PictureUploader < CarrierWave::Uploader::Base
   end
   
   def bioList
-    width = model.scale ? 60 * model.scale : 60
-    height = model.scale ? 60 * model.scale : 60
+    width = (model.scale ? 60 * model.scale : 60).to_i
+    height = (model.scale ? 60 * model.scale : 60).to_i
     return :height => height, :width => width, :crop => :fill, :gravity => :face, :radius => :max, :fetch_format => :png
   end
   
   def bioDetail
-    width = model.scale ? 100 * model.scale : 100
-    height = model.scale ? 100 * model.scale : 100
+    width = (model.scale ? 100 * model.scale : 100).to_i
+    height = (model.scale ? 100 * model.scale : 100).to_i
     return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :png
   end
   

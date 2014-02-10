@@ -32,4 +32,11 @@ class ProgrammeItem < ActiveRecord::Base
           :source => :published,
           :source_type => 'PublishedProgrammeItem'
 
+  #
+  has_many  :external_images, :as => :imageable,  :dependent => :delete_all do
+    def use(u) # get the image for a given use (defined as a string)
+      find(:all, :conditions => ['external_images.use = ?', u])
+    end
+  end
+
 end

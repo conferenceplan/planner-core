@@ -157,4 +157,36 @@ Use the Rails authenticity token in the forms...
     <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="glyphicon glyphicon-remove"></i></span>
 </script>
 
+<script type="text/template" id="item-images-template">
+    {{ if (typeof id != 'undefined') { }}
+    <div>
+        {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
+        {{ if (typeof image != 'undefined') { }}
+            <image src="{{= image.picture.large_card.url }}"></image>
+            <button class="large-image-edit-button btn btn-primary btn-xs">
+                <%= t "Edit Large Card Image" %>
+            </button>
+        {{ } else { }}
+            <button class="large-image-create-button btn btn-primary btn-xs">
+                <%= t "Add Large Card Image" %>
+            </button>
+        {{ } }}
+    </div>
+    <div>
+        {{ var image = _.find(external_images, function(im) { return im['use'] == 'mediumcard' }); }}
+        {{ if (typeof image != 'undefined') { }}
+            <image src="{{= image.picture.medium_card.url }}"></image>
+            <button class="medium-image-edit-button btn btn-primary btn-xs">
+                <%= t "Edit Medium Card Image" %>
+            </button>
+        {{ } else { }}
+            <button class="medium-image-create-button btn btn-primary btn-xs">
+                <%= t "Add Medium Card Image" %>
+            </button>
+        {{ } }}
+    </div>
+    {{ }; }}    
+    
+</script>
+
 

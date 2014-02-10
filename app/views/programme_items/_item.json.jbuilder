@@ -25,6 +25,8 @@ json.pub_reference_number   item.pub_reference_number
 json.audience_size          item.audience_size
 json.mobile_card_size       item.mobile_card_size
 
+json.external_images    item.external_images
+
 # TODO - do we want just the name or do we want the actual id or entity?
 json.room                   item.room ? item.room.name : ""
 json.room_id                item.room ? item.room.id : ""

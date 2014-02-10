@@ -3,11 +3,24 @@
 ItemApp = new Backbone.Marionette.Application();
 
 ItemApp.ItemManagement = (function(Backbone){
+    var eventAggregator = AppUtils.eventAggregator;
+
+    Picture = Backbone.RelationalModel.extend({
+        schema : {
+            picture : { type : 'CLImage', title : 'Pic',
+                cl_image_upload_tag : '<%= cl_image_upload_tag(:picture) %>'
+            }
+        },
+        urlRoot : '/external_images/ProgrammeItem' //           pic.url = '/external_images/ProgrammeItem/' + item_id + '/' + cardtype
+    });
+    PictureCollection = Backbone.Collection.extend({
+        model : Picture
+    });
 
     /*
      * 
      */
-    ProgramItem = Backbone.Model.extend({
+    ProgramItem = Backbone.RelationalModel.extend({
         schema : {
             title       : { type : 'Text', title : '<%= t "Title" %>' },
             short_title : { type : 'Text', title : '<%= t "short-title" %>' },
@@ -42,7 +55,13 @@ ItemApp.ItemManagement = (function(Backbone){
             "print": true,
             "mobile_card_size" : 1
         },
-        urlRoot : '/programme_items'
+        urlRoot : '/programme_items',
+        relations : [{
+            type           : Backbone.HasMany,
+            key            : 'external_images',
+            relatedModel   : 'Picture',
+            collectionType : 'PictureCollection'
+        }]
     });
     
     Equipment = Backbone.Model.extend({
@@ -68,6 +87,69 @@ ItemApp.ItemManagement = (function(Backbone){
     });
     TagFilterCollection = Backbone.Collection.extend({
         model : TagFilter
+    });
+
+
+    ItemImageView = Marionette.ItemView.extend({
+        template : '#item-images-template',
+        events : {
+            "click .large-image-create-button"  : "create_large_image",
+            "click .large-image-edit-button"    : "edit_large_image",
+            "click .medium-image-create-button"  : "create_medium_image",
+            "click .medium-image-edit-button"    : "edit_medium_image",
+        },
+
+        initialize : function() {
+            this.listenTo(this.model, 'change', this.render); // also need collection change
+            // also need collection change
+            eventAggregator.on("refreshImagesList", this.render, this);
+        },
+
+        create_large_image : function(event) {
+            this.create_image("largecard","Create Large Image");
+        },
+        edit_large_image : function(event) {
+            this.edit_image("largecard","Edit Large Image");
+        },
+        
+        create_medium_image : function(event) {
+            this.create_image("mediumcard","Create Medium Image");
+        },
+        edit_medium_image : function(event) {
+            this.edit_image("mediumcard","Edit Medium Image");
+        },
+        
+        create_image : function(cardtype, title) {
+            var model = this.model;
+            var pic = new Picture();
+            var item_id = model.id;
+            pic.url = '/external_images/ProgrammeItem/' + item_id + '/' + cardtype
+            mdl = new AppUtils.ModelModal({
+                        model : pic,
+                        title : title,
+                        refresh : function(mdl) {
+                            model.set('external_images', mdl);
+                        }
+                    });
+            mdl.render();
+        },
+        
+        edit_image : function(cardtype, title) {
+            var item_id = this.model.id;
+            var model = this.model;
+            var img = _.find(this.model.get('external_images').models, function(im) { return im.get('use') == cardtype });
+            img.url = '/external_images/ProgrammeItem/' + item_id + '/' + cardtype
+            mdl = new AppUtils.ModelModal({
+                        model : img,
+                        title : title,
+                        refresh : function(mdl) {
+                            // Need to refresh the model
+                            model.fetch({async : false});
+                            // eventAggregator.trigger("refreshImagesList");
+                        }
+                    });
+            mdl.render();
+        }
     });
 
     /*
@@ -126,6 +208,19 @@ ItemApp.ItemManagement = (function(Backbone){
         });
         tabContent.push( itemMdl );
         
+                    var imageView = new ItemImageView({
+                                        // itemViewOptions     : {
+                                            // tagName         : 'tr'
+                                        // },
+                                        model          : itemMdl,
+                                        // attributes          : { "class" : "table table-striped table-condensed" },
+                                        // // view_refresh_event  : options.view_refresh_event,
+                                        // tagName             : 'table' 
+                                    });
+                    imageView.render();
+                    $('#item-images').html(imageView.el);    
+ 
+        
         equipmentLayout = new EquipmentLayout();
         equipmentLayout.render();
         $('#equipment-view').html(equipmentLayout.el);
@@ -169,6 +264,7 @@ ItemApp.ItemManagement = (function(Backbone){
         ProgramItem : ProgramItem,
         
         showDetails : function(id) {
+            clearDetails();
             return showDetails(id);
         },
         clearDetails : function() {
@@ -246,24 +342,19 @@ ItemApp.ItemManagement = (function(Backbone){
         },
         
         init : function() {
-            // TabUtils.createTabControl({
-                // template : "#item-control-template",
-                // modelType : ProgramItem,
-                // modal_create_title : "Create Item",
-                // place :'#item-control',
-                // callback : function(mdl) {
-                    // // Refresh the grid - goto the page with the new item and make that the current selection
-                    // jQuery("#items").jqGrid('setGridParam', {
-                         // postData : {
-                                 // page_to : mdl.get('title'), // make sure that the current page contains the selected element
-                                 // filters : {},
-                                 // current_selection : mdl.id // to pass back for the selection
-                             // },
-                    // });
-                    // jQuery("#items").trigger("reloadGrid");
-                // },
-            // });
-        },
+            TabUtils.createTagCloudContent({
+                collectionType : TagContextCollection,
+                url : "/tags?class=ProgrammeItem",
+                template : "#tag-cloud-context-layout-template",
+                place : '#item-tag-cloud',
+                collection_attributes : { "class" : "accordion", "id" : "item-tag-cloud-parent" },
+                view_attributes : { "class" : "accordion-group" },
+                tagselect : function(context, name) {
+                    ItemApp.ItemManagement.addFilter(context, name);
+                    ItemApp.ItemManagement.refreshTable();
+                },
+            });
+        }
     };
     
 })(Backbone);
@@ -271,20 +362,6 @@ ItemApp.ItemManagement = (function(Backbone){
 jQuery(document).ready(function() {
     ItemApp.start();
     ItemApp.ItemManagement.init();
-    
-    TabUtils.createTagCloudContent({
-        collectionType : TagContextCollection,
-        url : "/tags?class=ProgrammeItem",
-        template : "#tag-cloud-context-layout-template",
-        place : '#item-tag-cloud',
-        collection_attributes : { "class" : "accordion", "id" : "item-tag-cloud-parent" },
-        view_attributes : { "class" : "accordion-group" },
-        tagselect : function(context, name) {
-            ItemApp.ItemManagement.addFilter(context, name);
-            ItemApp.ItemManagement.refreshTable();
-        },
-    });
-    
 });
 
 </script>
