@@ -193,13 +193,18 @@ private
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'update')", pubDate.timestamp]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (PublishedProgrammeItemAssignment.exists? a.auditable_id) ? PublishedProgrammeItemAssignment.find(a.auditable_id).person_id : nil}.compact
 
+    # and if they had an image updated
+    audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'BioImage') AND (audits.action = 'create' OR audits.action = 'update')", pubDate.timestamp]
+    updateOrAdded = updateOrAdded.concat audits.collect {|a| (BioImage.exists? a.auditable_id) ? BioImage.find(a.auditable_id).person_id : nil }.compact
+    
     updateOrAdded = updateOrAdded.collect {|i| (Person.find(i).publishedProgrammeItemAssignments.size > 0) ? i : nil }.compact
 
     # People removed - we only want to know who no longer has any items assigned to them, otherwise these are updated people (i.e. removed from an item)
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'destroy')", pubDate.timestamp]
     removed = audits.collect {|a| (Person.find(a.audited_changes['person_id']).publishedProgrammeItemAssignments.size == 0) ? a.audited_changes['person_id'] : nil }.compact
-    
+
     { :updatedPeople => updateOrAdded, :removedPeople => removed }
   end
 
