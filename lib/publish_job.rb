@@ -1,7 +1,11 @@
 class PublishJob
   include TagUtils
+
   
   def perform
+    load_cloudinary_config
+    load_site_config
+    
     newItems = 0
     modifiedItems = 0
     renmovedItems = 0
@@ -72,9 +76,9 @@ class PublishJob
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at)', nil)
+    clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < external_images.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at)', nil)
     # check the date of the programme item compared with the published
-    args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication] }
+    args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication, :external_images] }
     return ProgrammeItem.find :all, args
   end
   
@@ -155,7 +159,10 @@ EOS
         # # Need to copy the tags...
         copyTags(srcItem, newItem, 'PrimaryArea')
         
+        newItem.touch #update_attribute(:updated_at,Time.now)
         newItem.save
+        
+        updateImages(srcItem, newItem)
 
         # link to the people (and their roles)
         updateAssignments(srcItem, newItem)
@@ -197,6 +204,21 @@ EOS
       end
     end
     return nbrProcessed
+  end
+  
+  def updateImages(srcItem, newItem)
+    # copy the images from srcItem to newItem
+    newItem.external_images.delete_all # delete the old image(s)
+    srcItem.external_images.each do |img|
+      
+      p = Cloudinary::Uploader.upload(img.picture.url) # copy the cloudinary remote image
+      url = p['url'].partition(Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'').sub(/http\:\/\/a[0-9]*\./,''))[2]
+      sig = p['signature']
+      finalUrl = 'image/upload' +url + '#' + sig
+
+      newimg = newItem.external_images.new :use => img.use, :picture => finalUrl
+      newimg.save
+    end
   end
   
   def publishRooms(rooms)
@@ -315,6 +337,29 @@ EOS
     end
     
     return dest
+  end
+
+  def load_cloudinary_config
+    # TODO - we also need to load the conference details from the database
+    cfg = CloudinaryConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    Cloudinary.config do |config|
+      config.cloud_name           = cfg ? cfg.cloud_name : ''
+      config.api_key              = cfg ? cfg.api_key : ''
+      config.api_secret           = cfg ? cfg.api_secret : ''
+      config.enhance_image_tag    = cfg ? cfg.enhance_image_tag : false
+      config.static_image_support = cfg ? cfg.static_image_support : false
+     config.cdn_subdomain = true
+    end
+  end
+  
+  def load_site_config
+    cfg = SiteConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    if (cfg) # TODO - temp, to be replaced in other code
+      SITE_CONFIG[:conference][:name] = cfg.name
+      SITE_CONFIG[:conference][:number_of_days] = cfg.number_of_days
+      SITE_CONFIG[:conference][:start_date] = cfg.start_date
+      SITE_CONFIG[:conference][:time_zone] = cfg.time_zone
+    end
   end
   
 end

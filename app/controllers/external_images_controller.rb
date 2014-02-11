@@ -28,12 +28,13 @@ class ExternalImagesController < ApplicationController
       
       # image = ExternalImage.new params[:external_image]
 
-      image = parent.external_images.new params[:external_image] ########
+      image = parent.external_images.new :picture => params[:picture] ########
       image.use = params[:use]
       image.save!
       parent.save!
     else
-      image = ExternalImage.new(params[:external_image])
+      image = ExternalImage.new(params[:picture])
+      image.use = params[:use]
       image.save!
     end
     

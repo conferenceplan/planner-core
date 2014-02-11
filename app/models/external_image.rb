@@ -1,7 +1,8 @@
 class ExternalImage < ActiveRecord::Base
   attr_accessible :picture, :use
   attr_accessor :scale
-
+  audited
+  
   mount_uploader :picture, PictureUploader # Use Carrierwave to manage image uploads and retreival (external storage with name in the db)
 
   belongs_to :imageable, polymorphic: true # so we can have many different model types that reference an external image

@@ -16,3 +16,10 @@ json.people     item.published_programme_item_assignments.each do |assignment|
     json.role       assignment.role.name if defined? assignment.role
 end
 json.card_size  item.mobile_card_size
+
+imLarge = item.external_images.use(:largecard)[0]
+imLarge.scale = @scale if imLarge
+json.large_card         imLarge.picture.large_card.url.partition(@partition_val)[2] if imLarge
+imMedium = item.external_images.use(:mediumcard)[0]
+imMedium.scale = @scale if imMedium
+json.medium_card        imMedium.picture.medium_card.url.partition(@partition_val)[2] if imMedium
