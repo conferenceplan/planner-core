@@ -8,6 +8,10 @@ OnlinePublicationsApp.Management = (function(Backbone){
     ItemCollection = Backbone.Collection.extend({
         model : Item
     });
+    Person = Backbone.RelationalModel.extend({});
+    PersonCollection = Backbone.Collection.extend({
+        model : Person
+    });
     
     PublishPending = Backbone.Model.extend({
         url : '/publisher/publishPending.json'
@@ -33,6 +37,16 @@ OnlinePublicationsApp.Management = (function(Backbone){
             key            : 'removed_items',
             relatedModel   : 'Item',
             collectionType : 'ItemCollection'
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'people_added_updated',
+            relatedModel   : 'Person',
+            collectionType : 'PersonCollection'
+        }, {
+            type           : Backbone.HasMany,
+            key            : 'people_removed',
+            relatedModel   : 'Person',
+            collectionType : 'PersonCollection'
         }]
     });
 

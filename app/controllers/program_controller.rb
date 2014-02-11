@@ -63,14 +63,7 @@ class ProgramController < ApplicationController
     @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
     respond_to do |format|
       format.json
-      format.js #{ render :json }
-      # format.html { 
-        # if layout && layout == 'line'
-          # render :action => :list, :layout => 'content' 
-        # else  
-          # render :layout => 'content' # This should generate an HTML grid
-        # end
-      # }
+      # format.js #{ render :json }
     end
   end
   

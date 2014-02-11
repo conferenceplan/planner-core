@@ -11,14 +11,14 @@
 </script>
 
 <script type="text/template" id="review-layout-template">
-    <h3>Pending Publish</h3>
+    <h3><%= t "Pending Publish" %></h3>
     <div id="review-region-div"></div>
 </script>
 
 <script type="text/template" id="last-pub-template">
     <div class="col-xs-12 well">
         <div class="caption" class="pull-left">
-            <h4>Last Publish</h4>
+            <h4><%= t "Last Publish" %></h4>
             <dl>
                 <dt><%= t "Publication Date" %></dt><dd>{{= moment(publication_date).format("D MMM YYYY, hh:mm") }}</dd>
                 <dt><%= t "New" %></dt><dd>{{= new_items }}</dd>
@@ -30,7 +30,7 @@
 </script>
 
 <script type="text/template" id="review-template">
-    <div>New Items</div>
+    <div><%= t "New Items" %></div>
         <ul class="list-group">
         {{ _.each(new_items, function(item) { }}
             <li class="list-group-item">
@@ -38,7 +38,7 @@
             </li>
         {{ }); }}
         </ul>
-    <div>Updated Items</div>
+    <div><%= t "Updated Items" %></div>
         <ul class="list-group">
         {{ _.each(modified_items, function(item) { }}
             <li class="list-group-item">
@@ -46,11 +46,27 @@
             </li>
         {{ }); }}
         </ul>
-    <div>Dropped Items</div>
+    <div><%= t "Dropped Items" %></div>
         <ul class="list-group">
         {{ _.each(removed_items, function(item) { }}
             <li class="list-group-item">
                 {{= item.title}}
+            </li>
+        {{ }); }}
+        </ul>
+    <div><%= t "People Added/Updated" %></div>
+        <ul class="list-group">
+        {{ _.each(people_added_updated, function(item) { }}
+            <li class="list-group-item">
+                {{= item.person_name}}
+            </li>
+        {{ }); }}
+        </ul>
+    <div><%= t "People Removed" %></div>
+        <ul class="list-group">
+        {{ _.each(people_removed, function(item) { }}
+            <li class="list-group-item">
+                {{= item.person_name}}
             </li>
         {{ }); }}
         </ul>
