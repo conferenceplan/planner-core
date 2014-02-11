@@ -7,6 +7,7 @@ json.utc_offset     Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).
 json.cloudinary_url  @cloudinaryURI #.sub(/http\:\/\/a[0-9]*\./,'') #
 
 json.set! 'mobile' do
+    
     json.set! 'colors' do
         json.partial! 'color', name: 'main_background',             color: @theme.main_background
         json.partial! 'color', name: 'action_bar_bg',               color: @theme.action_bar_bg
@@ -47,5 +48,14 @@ json.set! 'mobile' do
             json.medium_card        imMedium.picture.medium_card.url.partition(@partition_val)[2] if imMedium
         end
     end
-    
+
+    json.set! 'default_bio_images' do
+        if @theme.default_bio_image.url
+            img = @theme.default_bio_image
+            @theme.scale = @scale
+            json.list_image     img.list.url.partition(@partition_val)[2]
+            json.detail_image   img.detail.url.partition(@partition_val)[2]
+        end
+    end
+
 end

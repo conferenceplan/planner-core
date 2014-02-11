@@ -43,3 +43,18 @@
         {{ } }}
     </td>
 </script>
+
+
+<script type="text/template" id="default-image-template">
+    <%= t "default-bio-image" %>
+{{ if (default_bio_image.url) { }}
+<image src="{{= default_bio_image ? default_bio_image.standard.url : '' }}"></image>
+<button class="model-edit-button btn btn-primary btn-xs pull-right">
+    <%= t "Edit" %>
+</button>
+{{ } else { }}
+<button class="model-new-button btn btn-primary btn-xs pull-right">
+    <%= t "New" %>
+</button>
+{{ }; }}
+</script>

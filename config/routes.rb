@@ -90,7 +90,7 @@ PlannerRc1::Application.routes.draw do
   #
   # For "external" images linked to instance through the polymorphic relationship
   #
-  match "external_images(/:cname/:cid)",            :controller => 'external_images', :via => :get,     :action => 'index'
+  match "external_images(/:cname/:cid)(/:use)",     :controller => 'external_images', :via => :get,     :action => 'index'
   match "external_images(/:cname/:cid)/:use/:id",   :controller => 'external_images', :via => :get,     :action => 'show'
   match "external_images(/:cname/:cid)/:use",       :controller => 'external_images', :via => :post,    :action => 'create'
   match "external_images(/:cname/:cid)(/:use)/:id", :controller => 'external_images', :via => :put,     :action => 'update'
@@ -279,10 +279,8 @@ PlannerRc1::Application.routes.draw do
 
   match '/form/:page(/:preview)', :controller => 'surveys/response', :action => 'renderalias'
 
-  match 'api/theme.:format', :controller => 'api/theme', :action => 'show'  
   match 'api/conference.:format', :controller => 'api/conference', :action => 'show'  
 
-#   
 # 
 #   
 # 

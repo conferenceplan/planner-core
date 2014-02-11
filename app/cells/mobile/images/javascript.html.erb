@@ -4,7 +4,16 @@ MobileImageApp = new Backbone.Marionette.Application();
 
 MobileImageApp.ImageManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
-
+    
+    MobileTheme = Backbone.Model.extend({
+        urlRoot : '/mobile/theme',
+        schema : {
+            default_bio_image : { type : 'CLImage', title : 'Pic',
+                cl_image_upload_tag : '<%= cl_image_upload_tag(:default_bio_image) %>'
+            }
+        }
+    });
+    
     Picture = Backbone.RelationalModel.extend({
         schema : {
             picture : { type : 'CLImage', title : 'Pic',
@@ -16,7 +25,7 @@ MobileImageApp.ImageManagement = (function(Backbone){
     PictureCollection = Backbone.Collection.extend({
         model : Picture
     });
-    
+
     ItemFormat = Backbone.RelationalModel.extend({ // DeepModel
         urlRoot : '/formats',
         relations : [{
@@ -113,6 +122,7 @@ MobileImageApp.ImageManagement = (function(Backbone){
 
         routes : {
             'item_format_images' : 'item_format_images',
+            'people_images'      : 'people_images'
         },
         
         item_format_images : function() {
@@ -138,6 +148,17 @@ MobileImageApp.ImageManagement = (function(Backbone){
                         
                     layout.controlRegion.show(collectionView);
                 }
+            });
+        },
+        
+        people_images : function() {
+            TabUtils.createTabContent({
+                modelType : MobileTheme,
+                url : "/mobile/theme.json",
+                template : '#default-image-template',
+                place : '#images-control-area',
+                newTitle : '<%= t "Create Image" %>',
+                editTitle : '<%= t "Edit Image" %>',
             });
         }
     });

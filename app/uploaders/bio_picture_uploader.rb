@@ -8,8 +8,12 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   def public_id
     publicid = SITE_CONFIG[:conference][:name] + '/'
-    publicid += model.person.first_name ? model.person.first_name : ''
-    publicid += model.person.last_name ? model.person.last_name : ''
+    if (model.instance_of? Person)
+      publicid += model.person.first_name ? model.person.first_name : ''
+      publicid += model.person.last_name ? model.person.last_name : ''
+    else
+      publicid += 'default_bio_image'
+    end
     publicid.gsub(/\s+/, "")
   end
   
