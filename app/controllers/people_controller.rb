@@ -74,25 +74,6 @@ class PeopleController < PlannerController
   #
   #
   #
-  # def count
-    # rows = params[:per_page]
-    # page = params[:page] ? params[:page].to_i : 0
-#     
-    # idx = params[:sidx]
-    # order = params[:sord]
-    # context = params[:context]
-    # nameSearch = params[:namesearch]
-    # mailing_id = params[:mailing_id]
-    # scheduled = params[:scheduled]
-#     
-    # nbr = PeopleService.countPeople
-# 
-    # render :json => nbr
-  # end
-  
-  #
-  #
-  #
   respond_to :json
   def getList
     rows = params[:rows] ? params[:rows] : 15
@@ -134,6 +115,31 @@ class PeopleController < PlannerController
     
     @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, mailing_id, operation, scheduled, @includeMailings
   end
+  
+  #
+  # The invite status etc. should be in a seperate controller. TODO
+  #
+ def invitestatuslist
+   @inviteStatus = InviteStatus.find :all
+    render :layout => 'plain'
+ end
+
+  def invitestatuslistwithblank
+     @inviteStatus = InviteStatus.find :all
+      render :layout => 'plain'
+  end
+  
+  def acceptancestatuslist
+     @acceptanceStatus = AcceptanceStatus.find :all
+      render :layout => 'plain'
+  end
+  
+  def acceptancestatuslistwithblank
+     @acceptanceStatus = AcceptanceStatus.find :all
+      render :layout => 'plain'
+  end
+  
+  ############
 
   def SetInvitePendingToInvited
     
@@ -251,28 +257,10 @@ class PeopleController < PlannerController
    
   end
 
+  
   #
-  # The invite status etc. should be in a seperate controller. TODO
   #
- def invitestatuslist
-   @inviteStatus = InviteStatus.find :all
-    render :layout => 'plain'
- end
-
-def invitestatuslistwithblank
-   @inviteStatus = InviteStatus.find :all
-    render :layout => 'plain'
-end
-
-def acceptancestatuslist
-   @acceptanceStatus = AcceptanceStatus.find :all
-    render :layout => 'plain'
-end
-
-def acceptancestatuslistwithblank
-   @acceptanceStatus = AcceptanceStatus.find :all
-    render :layout => 'plain'
-end
+  #
 
 def clearConflictsFromSurvey
   
@@ -436,63 +424,5 @@ def updateConflictsFromSurvey
    end
   
 end
-
-private
-
-  def getEmailConditions
-    mailingSelect = params[:exportemail][:mailing_select]
-    mailingNumber = params[:exportemail][:mailing_number]
-    acceptanceSelect = params[:exportemail][:acceptance_select]
-    acceptanceStatus = params[:exportemail][:acceptance_status_id]
-    invitecategory = params[:exportemail][:invitation_category_id]
-    categorySelect = params[:exportemail][:category_select]
-    invited_index = params[:exportemail][:invitestatus_id]
-    inviteStatus = InviteStatus.find(invited_index)
-    
-    if (inviteStatus.name == "Not Set")
-       flash[:error]= "Invite status cannot be Not Set" 
-       redirect_to :action => 'exportemailxml'
-       return nil
-    end
-    
-    if (mailingSelect == nil)
-       flash[:error]= "Mailing select cannot be empty"
-       redirect_to :action => 'exportemailxml'
-       return nil
-    end
-    if (acceptanceSelect == nil)
-       flash[:error]= "Acceptance select cannot be empty"
-       redirect_to :action => 'exportemailxml'
-       return nil
-    end
-    if (categorySelect == nil)
-       flash[:error]= "Category select cannot be empty"
-       redirect_to :action => 'exportemailxml'
-       return nil
-    end
-    
-    selectConditions = {}
-    selectConditions[:invitestatus_id] = invited_index
-    
-    
-    if (categorySelect == "true")
-      # category can be empty and we may want to select people with no category
-      selectConditions[:invitation_category_id] = nil
-      if (invitecategory != "") 
-        selectConditions[:invitation_category_id] = invitecategory
-      end
-    end
-    
-    if (acceptanceSelect == "true")
-        selectConditions[:acceptance_status_id] = acceptanceStatus
-    end
-    
-    if (mailingSelect == "true")
-      selectConditions[:mailing_number] = mailingNumber
-    end
-    
-    return selectConditions
-  end
-  
 
 end
