@@ -13,7 +13,7 @@ xml.program do
                     xml.details do
                         xml.reference_number item.programme_items[0].pub_reference_number
                         xml.duration item.programme_items[0].duration
-                        xml.format item.programme_items[0].format.name
+                        xml.format item.programme_items[0].format.name if item.programme_items[0].format
                         xml.tracks do
                             item.programme_items[0].tag_list_on(:PrimaryArea).each do |track| # TODO - check to make sure we have PrimaryArea
                                 xml.track track
