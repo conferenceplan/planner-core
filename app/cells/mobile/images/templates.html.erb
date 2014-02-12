@@ -17,44 +17,67 @@
         {{= name }}
     </td>
     <td>
+        <div class="thumbnail">
         {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
         {{ if (typeof image != 'undefined') { }}
             <image src="{{= image.picture.large_card.url }}"></image>
+            <div class="caption">
             <button class="large-image-edit-button btn btn-primary btn-xs">
                 <%= t "Edit Large Card Image" %>
             </button>
+            </div>
         {{ } else { }}
+            <div class="caption">
             <button class="large-image-create-button btn btn-primary btn-xs">
                 <%= t "Add Large Card Image" %>
             </button>
+            </div>
         {{ } }}
+        </div>
     </td>
     <td>
+        <div class="thumbnail">
         {{ var image = _.find(external_images, function(im) { return im['use'] == 'mediumcard' }); }}
         {{ if (typeof image != 'undefined') { }}
             <image src="{{= image.picture.medium_card.url }}"></image>
+            <div class="caption">
             <button class="medium-image-edit-button btn btn-primary btn-xs">
                 <%= t "Edit Medium Card Image" %>
             </button>
+            </div>
         {{ } else { }}
+            <div class="caption">
             <button class="medium-image-create-button btn btn-primary btn-xs">
                 <%= t "Add Medium Card Image" %>
             </button>
+            </div>
         {{ } }}
+        </div>
     </td>
 </script>
 
 
 <script type="text/template" id="default-image-template">
-    <%= t "default-bio-image" %>
-{{ if (default_bio_image.url) { }}
-<image src="{{= default_bio_image ? default_bio_image.standard.url : '' }}"></image>
-<button class="model-edit-button btn btn-primary btn-xs pull-right">
-    <%= t "Edit" %>
-</button>
-{{ } else { }}
-<button class="model-new-button btn btn-primary btn-xs pull-right">
-    <%= t "New" %>
-</button>
-{{ }; }}
+    <div class="row">
+        <div class="col-md-6">
+        <div class="thumbnail">
+            {{ if (default_bio_image.url) { }}
+            <image src="{{= default_bio_image ? default_bio_image.standard.url : '' }}"></image>
+            <div class="caption">
+                <h3><%= t "default-bio-image" %></h3>
+                <p>
+                <button class="model-edit-button btn btn-primary btn-xs"><%= t "Edit" %></button>
+                </p>
+            </div>
+            {{ } else { }}
+            <div class="caption">
+                <h3><%= t "default-bio-image" %></h3>
+                <p>
+                <button class="model-new-button btn btn-primary btn-xs"><%= t "New" %></button>
+                </p>
+            </div>
+            {{ }; }}
+        </div>
+        </div>
+    </div>
 </script>
