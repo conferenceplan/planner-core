@@ -43,6 +43,7 @@ PlannerRc1::Application.routes.draw do
   #
   namespace :mobile do
     resources :theme
+    resources :mobile_pages
   end
 
 # TODO - test
