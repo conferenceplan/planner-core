@@ -1,4 +1,4 @@
 class MobilePage < ActiveRecord::Base
-  attr_accessible :order, :title, :url
+  attr_accessible :position, :title, :url
   audited
 end

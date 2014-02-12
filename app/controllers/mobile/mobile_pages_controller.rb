@@ -1,6 +1,6 @@
 class Mobile::MobilePagesController < ApplicationController
   def index
-    pages = MobilePages.find :all
+    pages = MobilePages.find :all, :order => 'position asc'
     
     render json: pages.to_json, :content_type => 'application/json'
   end

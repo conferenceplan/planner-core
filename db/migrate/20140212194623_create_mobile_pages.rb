@@ -1,7 +1,7 @@
 class CreateMobilePages < ActiveRecord::Migration
   def change
     create_table :mobile_pages do |t|
-      t.integer :order
+      t.integer :position
       t.string :url
       t.string :title
 
