@@ -96,21 +96,7 @@ class Surveys::ResponseController < ApplicationController
       
       # send email confirmation of survey etc., use the email address that they provided in the survey
       begin
-        if @respondent
-          SurveyMailer.email(@respondent.email, MailUse[:CompletedSurvey], @survey.id, {
-            :email => @respondent.email,
-            :user => @respondent,
-            :survey => @survey,
-            :respondentDetails => @respondent.survey_respondent_detail
-          }).deliver
-        elsif respondentDetails
-          SurveyMailer.email(respondentDetails.email, MailUse[:CompletedSurvey], @survey.id, {
-            :email => respondentDetails.email,
-            :user => respondentDetails, # TODO - check that this will work
-            :survey => @survey,
-            :respondentDetails => respondentDetails
-          }).deliver
-        end
+        MailService.sendEmail(@respondent.person, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails))
       rescue Exception => err
         logger.error "Unable to send the email to " + @respondent.email if @respondent
         logger.error "Unable to send the email to " + respondentDetails.email if !@respondent
@@ -163,7 +149,7 @@ class Surveys::ResponseController < ApplicationController
         @current_key = params[:key]
         @path = '/surveys/' + @survey.id.to_s + '/response' # TODO - fix for language...
 
-        if @respondent && !preview
+        if @respondent && !@preview
           if @respondent.survey_respondent_detail
             @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail, @respondent.person)
 

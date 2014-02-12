@@ -56,10 +56,7 @@ class Communications::MailingController < PlannerController
     person = Person.find params[:person_id]
     mailing = Mailing.find params[:mailing]
     
-    content = SurveyMailer.preview(person, mailing, {
-            :person => person,
-            :assignments => ProgramItemsService.findProgramItemsForPerson(person)
-    }) 
+    content = MailService.preview(person, mailing)
     
     render :json => {:content => content}
   end
@@ -77,6 +74,11 @@ class Communications::MailingController < PlannerController
     @mailing = Mailing.find params[:id]
 
     @mailing.update_attributes(params[:mailing])
+    
+    if @mailing.scheduled
+      mailingJob = MailingJob.new
+      Delayed::Job.enqueue mailingJob
+    end
   end
 
   def destroy

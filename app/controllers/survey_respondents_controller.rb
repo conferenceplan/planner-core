@@ -71,11 +71,8 @@ class SurveyRespondentsController < ApplicationController
             redirect_to '/smerf_forms/partsurvey?key=' + @survey_respondent.single_access_token
           end
         else
-          SurveyMailer.deliver_email(@survey_respondent.email, MailUse[:DeclinedSurvey], { 
-            :user => @survey_respondent,
-           })
-
-          redirect_to  '/nosurvey.html'
+          MailService.sendEmail(person, MailUse[:DeclinedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : nil))
+          redirect_to  '/nosurvey.html' # TODO - to be changed
         end
       else
         # there was a problem so return to the new page

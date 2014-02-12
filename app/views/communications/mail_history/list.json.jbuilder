@@ -6,7 +6,7 @@ json.currentSelection @currentId if @currentId
 json.rowdata @mailItems do |item|
     
     json.id   item.id
-    json.set! "item[email_status]", item.email_status.name
+    json.set! "item[email_status]", item.email_status ? item.email_status.name : 'unknown'
     json.set! "item[date_sent]", item.date_sent.strftime('%e %b %Y, %H:%M')
     
     json.set! "item[testrun]", item.testrun ? "Y" : "N"
