@@ -15,7 +15,7 @@
         <div class="collapse navbar-collapse" id="collapse-4">
         <ul class="nav navbar-nav">
             <% @menu.each do |k, v| %>
-                <li><a href="<%= '/' + I18n.locale.to_s + v %>"><%= k %></a></li>
+                <li class="<%= 'active' if request.fullpath.include? v %>"><a href="<%= '/' + I18n.locale.to_s + v %>"><%= t k %></a></li>
             <% end %>
         </ul>
     </div>
