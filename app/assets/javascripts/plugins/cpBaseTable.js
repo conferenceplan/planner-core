@@ -34,7 +34,7 @@ $.widget( "cp.baseTable" , {
         if (!this.options.delayed) {
             this.createTable();
             var width = this.element.parents('.ui-jqgrid').css("width");
-            width = (parseInt(width) + 2) + "px";
+            width = (parseInt(width) + 32) + "px";
             this.element.parents('.ui-jqgrid').css("width", width);
             this.handleResize();
         }
@@ -44,7 +44,7 @@ $.widget( "cp.baseTable" , {
         if (this.options.delayed) {
             this.createTable();
             var width = this.element.parents('.ui-jqgrid').css("width");
-            width = (parseInt(width) + 2) + "px";
+            width = (parseInt(width) + 32) + "px";
             this.element.parents('.ui-jqgrid').css("width", width);
             this.options.delayed = false; // because it has now been rendered
             this.handleResize();
