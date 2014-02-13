@@ -17,7 +17,7 @@ gem "audited-activerecord", "~> 3.0"
 gem 'acts-as-taggable-on', "2.4.1" 
 gem 'authlogic'
 gem 'bluecloth'
-gem 'bootstrap-sass', '~> 3.0.3.0'
+gem 'bootstrap-sass', '~> 3.1'
 gem 'cells'
 gem 'ckeditor_rails'
 gem "declarative_authorization" 
@@ -79,7 +79,7 @@ gem 'turbo-sprockets-rails3'
 
 # Needed for the new asset pipeline
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
+  gem 'sass-rails',   '>= 3.2'
   gem 'compass-rails'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'uglifier',     '>= 1.0.3'

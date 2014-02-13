@@ -10,7 +10,7 @@ var AppUtils = (function(){
     */
     InfoModal = Backbone.View.extend({
         tagName: "div",
-        className: "modal",
+        className: "modal bs-modal-lg",
         
         initialize : function() {
             this.template = _.template($('#modal-info-template').html());
@@ -51,7 +51,7 @@ var AppUtils = (function(){
      */
     GenericModal = Backbone.View.extend({
         tagName: "div",
-        className: "modal",
+        className: "modal bs-modal-lg",
         events: {
             "submit": "submit",
             "hidden": "close",

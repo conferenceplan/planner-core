@@ -35,8 +35,8 @@
 
 //= require backbone-forms/distribution/backbone-forms
 //= require backbone-forms/distribution/editors/list
-//= require backbone-forms/distribution/adapters/backbone.bootstrap-modal
-//= require backbone-forms/distribution/templates/bootstrap3
+//= require backbone-forms/planner.bootstrap-modal
+//= require backbone-forms/templates/bootstrap3
 
 //= require moment
 //= require bootstrap-datetimepicker
