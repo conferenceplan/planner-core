@@ -34,7 +34,7 @@ $.widget( "cp.baseTable" , {
         if (!this.options.delayed) {
             this.createTable();
             var width = this.element.parents('.ui-jqgrid').css("width");
-            width = (parseInt(width) + 32) + "px";
+            width = (parseInt(width) + 2) + "px";
             this.element.parents('.ui-jqgrid').css("width", width);
             this.handleResize();
         }
@@ -44,7 +44,7 @@ $.widget( "cp.baseTable" , {
         if (this.options.delayed) {
             this.createTable();
             var width = this.element.parents('.ui-jqgrid').css("width");
-            width = (parseInt(width) + 32) + "px";
+            width = (parseInt(width) + 2) + "px";
             this.element.parents('.ui-jqgrid').css("width", width);
             this.options.delayed = false; // because it has now been rendered
             this.handleResize();
@@ -55,8 +55,6 @@ $.widget( "cp.baseTable" , {
         var grid = this.element;
         jQuery(window).bind('resize', function() {
             var width = grid.parents('.ui-jqgrid').parent().width();
-            // console.debug(grid.parents('.ui-jqgrid').parent());
-            // console.debug(width);
             grid.setGridWidth(width);
             grid.parents('.ui-jqgrid').css("width", width+2);
         }).trigger('resize');
