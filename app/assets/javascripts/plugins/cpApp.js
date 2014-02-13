@@ -141,12 +141,15 @@ var AppUtils = (function(){
     ModelModal = GenericModal.extend({
         renderBody : function() {
             this.form = new Backbone.Form({
-                template : _.template('\
-                        <form class="form-horizontal" data-fieldsets onsubmit="return false;"></form>\
-                '),
-                
                 model: this.model
-            }).render();
+            });
+            
+            // TODO - we want the ability for the caller to specify an alternate template
+            if (this.options.modal_template) {
+                this.form.template = _.template($(this.options.modal_template).html());
+            };
+            
+            this.form.render();
         },
 
         // over-ride for the actual data submission        
@@ -268,7 +271,6 @@ var AppUtils = (function(){
             if (this.options.readTemplate) {
                 html = _.template($(this.options.readTemplate).html(), this.model.toJSON());
                 
-                // alert("we have a read template");
                 this.$el.find(".model-body").html(html);
             } else {
                 this.$el.find(".model-body").html("");
@@ -365,7 +367,8 @@ var AppUtils = (function(){
             } else if (this.options.modal_edit) {
                 var modal = new ModelModal({
                     model : this.model,
-                    title : this.options.modal_edit_title
+                    title : this.options.modal_edit_title,
+                    modal_template : this.options.modal_template
                 });
                 modal.render();
                 if (this.options.form_event_fn) {
@@ -429,6 +432,7 @@ var AppUtils = (function(){
                             itemArea        : options.itemArea,
                             readTemplate    : options.readTemplate,
                             modal_edit_title : options.modal_edit_title,
+                            modal_template  : options.modal_template,
                             modal_edit      : options.modal_edit,
                             form_event      : options.form_event,
                             form_event_fn   : options.form_event_fn

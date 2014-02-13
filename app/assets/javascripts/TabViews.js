@@ -78,10 +78,6 @@ var TabUtils = (function(){
             
         },
         
-        // formChangeEvent : function(form, editor, extra) {
-            // alert('Form field has changed');
-        // },
-        
         removeFilter : function(event) {
             var ctx = $(event.target).attr('tagcontext');
             var name = $(event.target).attr('tagname');
@@ -114,7 +110,8 @@ var TabUtils = (function(){
             // Put up a modal dialog to edit the reg details
             mdl = new AppUtils.ModelModal({
                 model : this.model,
-                title : this.options.editTitle
+                title : this.options.editTitle,
+                modal_template : this.options.modal_template
             });
             mdl.render();
             
@@ -128,7 +125,8 @@ var TabUtils = (function(){
             this.model.set(this.options.id_name, this.options.id);
             mdl = new AppUtils.ModelModal({
                 model : this.model,
-                title : this.options.newTitle
+                title : this.options.newTitle,
+                modal_template : this.options.modal_template
             });
             mdl.render();
             
@@ -178,10 +176,11 @@ var TabUtils = (function(){
             
             var refreshEvent = this.options.view_refresh_event;
             var callback = this.options.view_callback;
-
+            
             var modal = new AppUtils.ModelModal({
                 model : mdl,
                 title : this.options.modal_create_title,
+                modal_template : this.options.modal_template,
                 
                 refresh : function(m) {
                     if (refreshEvent) {
@@ -228,7 +227,8 @@ var TabUtils = (function(){
                         clearFn         : options.clearFn,
                         selectCsvFn : options.selectCsvFn,
                         form_event : options.form_event,
-                        form_event_fn : options.form_event_fn
+                        form_event_fn : options.form_event_fn,
+                        modal_template : options.modal_template
                     });
                     tabView.render();
                     $(options.place).html(tabView.el);
@@ -247,7 +247,8 @@ var TabUtils = (function(){
                 selectFn : options.selectFn,
                 clearFn         : options.clearFn,
                 form_event : options.form_event,
-                form_event_fn : options.form_event_fn
+                form_event_fn : options.form_event_fn,
+                modal_template : options.modal_template
                 });
             tabView.render();
             if (options.region) {
@@ -274,8 +275,8 @@ var TabUtils = (function(){
                 view_callback : options.callback,
                 modelURL : options.modelURL,
                 form_event      : options.form_event,
-                form_event_fn   : options.form_event_fn
-                
+                form_event_fn   : options.form_event_fn,
+                modal_template : options.modal_template
             });
             control.render();
             $(options.place).html(control.el);
@@ -290,7 +291,8 @@ var TabUtils = (function(){
                 view_callback : options.callback,
                 modelURL : options.modelURL,
                 form_event      : options.form_event,
-                form_event_fn   : options.form_event_fn
+                form_event_fn   : options.form_event_fn,
+                modal_template : options.modal_template
             });
             options.region.show(control);
         }
@@ -405,7 +407,8 @@ var TabUtils = (function(){
                             syncCallback : options.updateCallback,
                             tagName : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
                             selectFn : options.selectFn,
-                            url : options.modelURL
+                            url : options.modelURL,
+                            modal_template : options.modal_template
                             // TODO
                         },
                     });
@@ -424,7 +427,7 @@ var TabUtils = (function(){
             });
             // collection.on("sync", options.updateCallback ); // when the modal does the update and second after the update to the server
         } else {
-            collection = options.collection;
+            // collection = options.collection;
                 viewType = TabCollectionView.extend({
                     attributes : options.collection_attributes,
                     itemViewOptions : {
@@ -436,7 +439,8 @@ var TabUtils = (function(){
                         syncCallback : options.updateCallback,
                         tagName : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
                         selectFn : options.selectFn,
-                        url : options.modelURL
+                        url : options.modelURL,
+                        modal_template : options.modal_template
                             // TODO
                     },
                 });
