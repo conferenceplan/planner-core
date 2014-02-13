@@ -1,0 +1,85 @@
+<script type="text/javascript">
+
+MobilePagesApp = new Backbone.Marionette.Application();
+
+MobilePagesApp.PageManagement = (function(Backbone){
+    /*
+     * 
+     */
+    MobilePage = Backbone.Model.extend({
+        urlRoot : '/mobile/mobile_pages',
+        schema : {
+            title       : { type : 'Text', title : '<%= t "page-title" %>' },
+            url         : { type : 'Text', title : '<%= t "page-url" %>' },
+            position    : { type : 'Number', title : '<%= t "page-position" %>' }
+        }
+    });
+    
+    MobilePageCollection = Backbone.Collection.extend({
+        model : MobilePage
+    });
+
+    MobilePagesLayout = Backbone.Marionette.Layout.extend({
+        template: "#mobile-pages-list-template",
+        
+        regions : {
+            titleRegion     : "#mobile-pages-title-div",
+            controlRegion   : "#mobile-pages-control-div",
+            pagesRegion     : "#mobile-pages-region-div",
+        }
+    });
+
+    var mobileRegion = new Backbone.Marionette.Region({
+        el: "#mobile-pages-area"
+    });
+
+    
+    function showPages() {
+        
+        layout = new MobilePagesLayout();
+        mobileRegion.show(layout);
+
+        TabUtils.createTabControl({
+                template                : "#equipment-control-template",
+                modelType               : MobilePage,
+                view_refresh_event      : "mobilepage:refresh",
+                modal_create_title      : '<%= t "create-mobile-page" %>',
+                region                  : layout.controlRegion,
+            });
+
+        AppUtils.createCollectionView({
+                url                     : "/mobile/mobile_pages.json",
+                collectionType          : MobilePageCollection,
+                region                  : layout.pagesRegion,
+                template                : "#mobile-page-template",
+                collection_attributes   : { "class" : "table table-striped table-condensed" },
+                collection_tagName      : 'table',
+                tagName                 : 'tr',
+                view_refresh_event      : "mobilepage:refresh",
+                modal_edit_title        : '<%= t "edit-mobile-page" %>',
+                modal_edit              : true
+            });
+        
+    };
+    
+    /*
+     * 
+     */
+    return {
+        init : function(options) {
+            Backbone.history.start();
+            showPages();
+        }
+    }
+    
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    MobilePagesApp.addInitializer(MobilePagesApp.PageManagement.init);
+    MobilePagesApp.start({});
+});
+
+</script>
