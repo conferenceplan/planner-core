@@ -1,5 +1,6 @@
 class Api::ConferenceController < ApplicationController
   def index
+    @mobilePages = MobilePage.find :all, :order => 'position asc'
     @scale = params[:scale].to_f
     @theme = MobileTheme.find :first
     @formats = Format.find :all
@@ -8,6 +9,7 @@ class Api::ConferenceController < ApplicationController
   end
   
   def show
+    @mobilePages = MobilePage.find :all, :order => 'position asc'
     @scale = params[:scale].to_f
     @theme = MobileTheme.find :first
     @formats = Format.find :all

@@ -57,5 +57,13 @@ json.set! 'mobile' do
             json.detail_image   img.detail.url.partition(@partition_val)[2]
         end
     end
+    
+    json.set! 'pages' do
+        json.array! @mobilePages do |page|
+            json.title      page.title
+            json.url        page.url
+            json.position   page.position
+        end
+    end
 
 end
