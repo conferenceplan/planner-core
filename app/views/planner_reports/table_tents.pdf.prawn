@@ -13,7 +13,7 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
                 
                 pdf.rotate 180, :origin => [page_width/2, pdf.cursor - 40.pt] do
                     pdf.text item.title, :inline_format => true
-                    pdf.text item.format.name
+                    pdf.text item.format.name if item.format
                     pdf.text item.published_room.name + ' ' + item.published_room.published_venue.name
                     pdf.text item.published_time_slot.start.strftime('%A %H:%M %y-%m-%d')
                 end

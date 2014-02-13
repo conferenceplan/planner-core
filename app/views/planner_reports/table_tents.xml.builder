@@ -8,7 +8,7 @@ xml.table_tent do
                     xml.item do
                         xml.title item.title
                         xml.description item.precis
-                        xml.format item.format.name
+                        xml.format item.format.name if item.format
                         xml.room item.published_room.name
                         xml.venue item.published_room.published_venue.name
                         xml.day item.published_time_slot.start.strftime('%A')

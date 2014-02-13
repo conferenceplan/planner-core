@@ -19,7 +19,7 @@ wb.add_worksheet(name: "Table Tents") do |sheet|
                 person.getFullPublicationName,
                 item.title,
                 item.precis,
-                item.format.name,
+                (item.format ? item.format.name : ''),
                 item.published_room.name,
                 item.published_room.published_venue.name,
                 item.published_time_slot.start.strftime('%A'),
