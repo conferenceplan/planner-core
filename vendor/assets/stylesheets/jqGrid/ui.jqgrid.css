@@ -4,8 +4,10 @@
 /* caption*/
 .ui-jqgrid .ui-jqgrid-titlebar {padding: .3em .2em .2em .3em; position: relative; border-left: 0 none;border-right: 0 none; border-top: 0 none;}
 .ui-jqgrid .ui-jqgrid-title { float: left; margin: .1em 0 .2em; }
-.ui-jqgrid .ui-jqgrid-titlebar-close { position: absolute;top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height:18px;}.ui-jqgrid .ui-jqgrid-titlebar-close span { display: block; margin: 1px; }
-.ui-jqgrid .ui-jqgrid-titlebar-close:hover { padding: 0; }
+.ui-jqgrid .ui-jqgrid-titlebar-close { position: absolute;top: 50%; width: 19px; margin: -10px 0 0px 0; padding: 1px; height:18px;
+	padding-right: 30px;
+}.ui-jqgrid .ui-jqgrid-titlebar-close span { display: block; margin: 1px; }
+.ui-jqgrid .ui-jqgrid-titlebar-close:hover { padding: 0; padding-right: 30px;}
 /* header*/
 .ui-jqgrid .ui-jqgrid-hdiv {position: relative; margin: 0;padding: 0; overflow-x: hidden; border-left: 0 none !important; border-top : 0 none !important; border-right : 0 none !important;}
 .ui-jqgrid .ui-jqgrid-hbox {float: left; padding-right: 20px;}
@@ -48,7 +50,16 @@ tr.ui-search-toolbar select {margin: 1px 0 0 0}
 .ui-jqgrid tr.footrow-ltr td {text-align:left;border-right-width: 1px; border-right-color: inherit; border-right-style: solid;}
 .ui-jqgrid tr.footrow-rtl td {text-align:right;border-left-width: 1px; border-left-color: inherit; border-left-style: solid;}
 /* Pager*/
-.ui-jqgrid .ui-jqgrid-pager { border-left: 0 none !important;border-right: 0 none !important; border-bottom: 0 none !important; margin: 0 !important; padding: 0 !important; position: relative; height: 25px;white-space: nowrap;overflow: hidden;font-size:11px;}
+.ui-jqgrid .ui-jqgrid-pager { 
+		border-left: 0 none !important;
+		border-right: 0 none !important; 
+		border-bottom: 0 none !important; margin: 0 !important; 
+		position: relative; 
+		white-space: nowrap;
+		overflow: hidden;
+		font-size:11px;
+		padding: 0 15px 15px 15px;
+	}
 .ui-jqgrid .ui-pager-control {position: relative;}
 .ui-jqgrid .ui-pg-table {position: relative; padding-bottom:2px; width:auto; margin: 0;}
 .ui-jqgrid .ui-pg-table td {font-weight:normal; vertical-align:middle; padding:1px;}
