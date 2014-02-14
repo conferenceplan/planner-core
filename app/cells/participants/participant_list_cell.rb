@@ -38,6 +38,7 @@ class Participants::ParticipantListCell < Cell::Rails
     @onlySurveyRespondents = args.has_key?(:onlySurveyRespondents) ? args[:onlySurveyRespondents] : false
     
     @modelType = args.has_key?(:modelType) ? args[:modelType] : 'null'
+    @modelTemplate = args.has_key?(:modelTemplate) ? args[:modelTemplate] : ""
     @showControls = args.has_key?(:showControls) ? args[:showControls] : false
     
     @delayed = args.has_key?(:delayed) ? args[:delayed] : false

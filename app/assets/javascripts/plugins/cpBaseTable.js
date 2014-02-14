@@ -24,6 +24,7 @@ $.widget( "cp.baseTable" , {
         showControls        : true,
         controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
         modelType           : null, // Should be provided by the caller
+        modelTemplate       : null,
         delayed             : false
     },
     
@@ -70,6 +71,7 @@ $.widget( "cp.baseTable" , {
         var clearNotifyMethod = this.options.clearNotifyMethod;
         var base_url = this.options.root_url + this.options.baseUrl;
         var modelType = this.options.modelType;
+        var modelTemplate = this.options.modelTemplate;
         var control = null;
         var pageTo = this.pageTo;
         
@@ -114,6 +116,7 @@ $.widget( "cp.baseTable" , {
 
                 var modal = new ModelModal({
                     model : mdl,
+                    modal_template : modelTemplate,
                     title : this.options.modal_create_title,
                     refresh : function(mdl) {
                         // if (refreshEvent) {
@@ -136,6 +139,7 @@ $.widget( "cp.baseTable" , {
                     // This is done via the select method
                     modal = new ModelModal({
                         model : this.model, 
+                        modal_template : modelTemplate,
                         title : this.options.modal_edit_title,
                         refresh : function(mdl) {
                             grid.jqGrid('setGridParam', {
