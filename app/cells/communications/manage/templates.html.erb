@@ -1,21 +1,24 @@
 
 <script type="text/template" id="mailing-data-template">
-    <dl class="dl-horizontal">
-        <dt><%= t "mail-mailing-number" %></dt><dd>{{= mailing_number }}</dd>
-        <dt><%= t "mail-mailing-template" %></dt><dd>{{= mail_template ? mail_template : "&nbsp;" }}</dd>
-        <dt><%= t "mail-mail-usage" %></dt><dd>{{= mail_use ? mail_use : "&nbsp;" }}</dd>
-        <dt><%= t "mail-scheduled" %></dt><dd>{{= scheduled ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-        <dt><%= t "mail-test-run" %></dt><dd>{{= testrun ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-    </dl>
+	<div class="voffset10"/>
+	<div class="well">
+	    <dl class="dl-horizontal">
+	        <dt><%= t "mail-mailing-number" %></dt><dd>{{= mailing_number }}</dd>
+	        <dt><%= t "mail-mailing-template" %></dt><dd>{{= mail_template ? mail_template : "&nbsp;" }}</dd>
+	        <dt><%= t "mail-mail-usage" %></dt><dd>{{= mail_use ? mail_use : "&nbsp;" }}</dd>
+	        <dt><%= t "mail-scheduled" %></dt><dd>{{= scheduled ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+	        <dt><%= t "mail-test-run" %></dt><dd>{{= testrun ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+	    </dl>
+   </div>
+    <div class="voffset10"/>
 </script>
 
 <script type="text/template" id="preview-control-view-template">
-    <button class="btn btn-primary preview-mail-button pull-left">Preview</button>
+    <button class="btn btn-primary preview-mail-button"><%= t 'Preview' %></button>
 </script>
 
 <script type="text/template" id="list-control-view-template">
-    <dl class="dl-horizontal">
-        <dt><button class="btn btn-primary add-people-button pull-left"><i class="glyphicon glyphicon-chevron-right"></i></button></dt>
-        <dt><button class="btn btn-primary remove-people-button pull-left"><i class="glyphicon glyphicon-chevron-left"></i></button></dt>
-    </dl>    
+	<button class="btn btn-primary add-people-button"><i class="glyphicon glyphicon-chevron-right"></i></button>
+    <div class="voffset10"></div>
+    <button class="btn btn-primary remove-people-button"><i class="glyphicon glyphicon-chevron-left"></i></button>
 </script>
