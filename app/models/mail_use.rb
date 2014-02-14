@@ -1,5 +1,5 @@
 class MailUse < Enum
   acts_as_enumerated
 
-  attr_accessible :name
+  attr_accessible :name, :position
 end
