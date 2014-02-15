@@ -12,13 +12,13 @@ jQuery(document).ready(function() {
         
         delayed : <%= @delayed %>,
 
-        name : [true, '<%= t "Name"%>'],       
+        name : [true, '<%= t "name"%>'],       
         invite_status : [<%= @invite_status%>, '<%= t "invitation-status"%>' ],
         invite_category : [<%= @invite_category%>, '<%= t "invitation-category-abbreviated"%>' ],
         acceptance_status : [<%= @acceptance_status%>, '<%= t "Acceptance"%>'],
-        has_survey : [<%= @has_survey%>, '<%= t "Survey"%>'],
+        has_survey : [<%= @has_survey%>, '<%= t "survey"%>'],
 
-        mailings : [<%= @includeMailings%>, '<%= t "Mailings"%>' ],
+        mailings : [<%= @includeMailings%>, '<%= t "mailings"%>' ],
         
         view : <%= @view %>,
         search : <%= @search %>,
