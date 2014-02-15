@@ -53,9 +53,14 @@ class Surveys::SurveyGroupsController < PlannerController
   def destroy
     survey = Survey.find(params[:survey_id])
     group = survey.survey_groups.find params[:id]
-    group.destroy
-  
-    render status: :ok, text: {}.to_json
+
+    begin
+      group.destroy
+      render status: :ok, text: {}.to_json
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+
   end
 
 end

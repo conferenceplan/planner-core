@@ -2,8 +2,13 @@ class Survey < ActiveRecord::Base
 
   # Survey contains a series of groups, groups contain a series of questions
   has_many :survey_groups, :dependent => :destroy, :order => 'sort_order asc'
+  
+  has_enumerated :accept_status_id, :class_name => 'AcceptanceStatus' # the status that a person's acceptance transistions too completing syrvey
+  has_enumerated :decline_status_id, :class_name => 'AcceptanceStatus' # the status that a person's acceptance transistions too when declining the survey
 
   has_many :survey_responses
+  
+  before_destroy :check_for_use, :check_if_published
   
   def getAllQuestions
     res = Array.new
@@ -14,6 +19,20 @@ class Survey < ActiveRecord::Base
     end
     
     return res
+  end
+
+private
+
+  def check_for_use
+    if survey_responses.any?
+      raise "can not delete a survey that has responses in the system"
+    end
+  end
+  
+  def check_if_published
+    if public
+      raise "can not delete a survey that is public"
+    end
   end
   
 end

@@ -91,9 +91,13 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     group = survey.survey_groups.find params[:survey_group_id]
     question = group.survey_questions.find params[:id]
     
-    question.destroy
-    
-    render status: :ok, text: {}.to_json
+    begin
+      question.destroy
+      render status: :ok, text: {}.to_json
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+
   end
 
 end

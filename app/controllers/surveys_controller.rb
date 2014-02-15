@@ -26,13 +26,13 @@ class SurveysController < PlannerController
   def destroy
     survey = Survey.find params[:id]
     
-    # Test for groups etc and if survey is "published"
-    if (survey.survey_groups.length == 0) && (survey.alias != nil)
+    begin
       survey.destroy
       render status: :ok, text: {}.to_json
-    else
-      render status: :bad_request, text: 'Con not delete survey that has groups or is currently published'
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
+    
   end
 
 end

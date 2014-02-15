@@ -11,6 +11,8 @@ class SurveyQuestion < ActiveRecord::Base
   accepts_nested_attributes_for :survey_answers, :allow_destroy => true
   
   validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone]
+
+  before_destroy :check_for_use, :check_if_published
   
   def question_type
     read_attribute(:question_type).to_sym
@@ -52,6 +54,18 @@ private
   def updateTimeConflicts
     survey_answers.each do |answer|
       answer.updateTimeConflicts
+    end
+  end
+
+  def check_for_use
+    if survey_group.survey.survey_responses.any?
+      raise "can not delete a question for a survey that has responses in the system"
+    end
+  end
+  
+  def check_if_published
+    if survey_group.survey.public
+      raise "can not delete a question for a survey that is public"
     end
   end
   
