@@ -1,8 +1,4 @@
 class Communications::MailTemplatesController < PlannerController
-  # def list
-    # # return a list of the mail templates
-  # end
-
   def index
     @mail_templates = MailTemplate.all
   end
@@ -13,6 +9,7 @@ class Communications::MailTemplatesController < PlannerController
 
   def create
     @mail_template = MailTemplate.new(params[:mail_template])
+    @mail_template.save!
   end
 
   def update
@@ -22,7 +19,14 @@ class Communications::MailTemplatesController < PlannerController
   end
 
   def destroy
-    @mail_template = MailTemplate.find(params[:id])
-    @mail_template.destroy
+    mail_template = MailTemplate.find(params[:id])
+    
+    begin
+      mail_template.destroy
+      render status: :ok, text: {}.to_json
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+    
   end
 end
