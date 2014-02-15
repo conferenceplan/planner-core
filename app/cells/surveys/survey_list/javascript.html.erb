@@ -15,6 +15,12 @@ SurveyApp.SurveyManagement = (function(Backbone){
             thank_you       : { type : 'Html', title : '<%= t "survey-thank-you-message" %>' },
             submit_string   : { type : 'Text', title : '<%= t "survey-submit-string" %>' },
             header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>' },
+            accept_status_id : { type : 'Select', title : '<%= t "acceptance-status-on-submit-to" %>',
+                                            options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
+                                        },
+            decline_status_id : { type : 'Select', title : '<%= t "acceptance-status-on-decline-to" %>',
+                                            options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
+                                        }
         },
         urlRoot : '/surveys'
     });

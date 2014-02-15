@@ -3,8 +3,8 @@ class Survey < ActiveRecord::Base
   # Survey contains a series of groups, groups contain a series of questions
   has_many :survey_groups, :dependent => :destroy, :order => 'sort_order asc'
   
-  has_enumerated :accept_status_id, :class_name => 'AcceptanceStatus' # the status that a person's acceptance transistions too completing syrvey
-  has_enumerated :decline_status_id, :class_name => 'AcceptanceStatus' # the status that a person's acceptance transistions too when declining the survey
+  has_enumerated :accept_status, :class_name => 'AcceptanceStatus' # the status that a person's acceptance transistions too completing syrvey
+  has_enumerated :decline_status, :class_name => 'AcceptanceStatus' # the status that a person's acceptance transistions too when declining the survey
 
   has_many :survey_responses
   
