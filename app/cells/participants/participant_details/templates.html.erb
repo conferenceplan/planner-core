@@ -74,7 +74,7 @@
     <div class="col-xs-6 clearfix">
         <div class="caption" class="pull-left">
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <%= t "Edit" %>
+                <%= t "edit" %>
             </button>
             <dl class="dl-horizontal">
                 <dt>
@@ -100,9 +100,9 @@
     </div>
     {{ } else { }}
     <div id="registration-view-details">
-        <%= t "No Registration Details" %>
+        <%= t "no-registration-details" %>
         <button class="model-new-button">
-            <%= t "Add Details" %>
+            <%= t "add-details" %>
         </button>
     </div>
     {{ }; }}
@@ -113,13 +113,13 @@
 {{ if (typeof id != 'undefined') { }}
 <dl class="dl-horizontal">
     <dt>
-        <%= t "First Name" %>
+        <%= t "first-name" %>
     </dt>
     <dd>
         {{= first_name ? first_name : "&nbsp;" }}
     </dd>
     <dt>
-        <%= t "Last Name" %>
+        <%= t "last-name" %>
     </dt>
     <dd>
         {{= last_name ? last_name : "&nbsp;" }}
@@ -143,7 +143,7 @@
         {{= job_title ? job_title : "&nbsp;" }}
     </dd>
     <dt>
-        <%= t "Invite Status" %>
+        <%= t "invite-status" %>
     </dt>
     <dd>
         {{= invitestatus_name ? invitestatus_name : "&nbsp;"}}
@@ -161,7 +161,7 @@
         {{= invitation_category_name ? invitation_category_name : "&nbsp;"}}
     </dd>
     <dt>
-        <%= t "Survey Key" %>
+        <%= t "survey-key" %>
     </dt>
     <dd>
         {{= survey_key }}
@@ -186,7 +186,7 @@
                     <h3><%= t "bio-image" %></h3>
                     <p>
                         <button class="model-edit-button btn btn-primary btn-xs">
-                            <%= t "Edit" %>
+                            <%= t "edit" %>
                         </button>
                     </p>
                 </div>
@@ -195,7 +195,7 @@
                     <h3><%= t "bio-image" %></h3>
                     <p>
                         <button class="model-new-button btn btn-primary btn-xs">
-                            <%= t "New" %>
+                            <%= t "new" %>
                         </button>
                     </p>
                 </div>
@@ -208,11 +208,11 @@
 <script type="text/template" id="bio-view-template">
 {{ if (typeof id != 'undefined') { }}
 <button class="model-edit-button btn btn-primary btn-xs pull-right">
-    <%= t "Edit" %>
+    <%= t "edit" %>
 </button>
 <dl class="dl-horizontal">
     <dt>
-        <%= t "Bio" %>
+        <%= t "bio" %>
     </dt>
     <dd>
         {{= bio ? bio : "&nbsp;" }}
@@ -250,11 +250,11 @@
 </dl>
 {{ } else { }}
 <button class="model-new-button btn btn-primary btn-xs pull-right">
-    <%= t "New" %>
+    <%= t "new" %>
 </button>
 <dl class="dl-horizontal">
     <dt>
-        <%= t "Bio from Survey" %>
+        <%= t "bio-from-survey" %>
     </dt>
     <dd>
         {{= survey_bio ? survey_bio : "&nbsp;" }}
@@ -395,7 +395,7 @@
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add address" %>
     </button>
-    <%= t "POSTAL ADDRESSES" %>
+    <%= t "postal-addresses" %>
 </div>
 </script>
 
@@ -415,7 +415,7 @@
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add email" %>
     </button>
-    <%= t "EMAIL ADDRESSES" %>
+    <%= t "email-addresses" %>
 </div>
 </script>
 
@@ -435,7 +435,7 @@
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add phone" %>
     </button>
-    <%= t "PHONE" %>
+    <%= t "phone" %>
 </div>
 </script>
 
@@ -453,9 +453,9 @@
 <script type="text/template" id="exclusions-layout-template">
 <section>
     <div id="dates-exclusions-div"></div>
-    <%= t "Do not schedule against:" %>
+    <%= t "do-not-schedule-against:" %>
     <div id="items-exclusions-div"></div>
-    <%= t "Do not schedule at:" %>
+    <%= t "do-not-schedule-at:" %>
     <div id="times-exclusions-div"></div>
 </section>
 </script>
@@ -463,7 +463,7 @@
 <script type="text/template" id="tag-context-layout-template">
 <div class="thumbnail clearfix">
     <button class="model-add-tag-button btn btn-primary btn-xs pull-right" tagcontext="{{= context }}">
-        <%= t "Add" %>
+        <%= t "add" %>
     </button>
     <span class="label label-default">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
@@ -495,7 +495,7 @@
 {{ if (typeof id != 'undefined') { }}
 <div class="thumbnail clearfix">
     <button class="model-edit-button btn btn-primary btn-xs pull-right">
-        <%= t "Edit" %>
+        <%= t "edit" %>
     </button>
     <small> <em>Arrival</em>: {{= moment(start_time).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="glyphicon glyphicon-arrow-right"></i> <em>Departure</em>: {{= moment(end_time).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
 </div>
@@ -521,13 +521,13 @@
         <small>
             <dl class="dl-horizontal-small">
                 <dt>
-                    <%= t "Title" %>
+                    <%= t "title" %>
                 </dt>
                 <dd>
                     {{= title ? title : "&nbsp;" }}
                 </dd>
                 <dt>
-                   <%= t " Published" %>
+                   <%= t "published" %>
                 </dt>
                 <dd>
                     {{= isPublished ? '<%= t "yes" %>' : '<%= t "no" %>' }}

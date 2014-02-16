@@ -6,11 +6,11 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
 
     SurveyGroup = Backbone.DeepModel.extend({
         schema : {
-            name                    : { type : 'Text', title : '<%= t "Name" %>' },
+            name                    : { type : 'Text', title : '<%= t "name" %>' },
             altname                 : { type : 'Text', title : '<%= t "altname" %>' },
             description             : { type : 'Html', title : '<%= t "survey-description" %>' },
             sort_order              : { type : 'Number', title : '<%= t "sort_order" %>' },
-            'survey_format.help'    : { type :'Text', title : '<%= t "Help Text" %>' } // Just need the help text...
+            'survey_format.help'    : { type :'Text', title : '<%= t "help-text" %>' } // Just need the help text...
         },
     });
 
@@ -42,7 +42,7 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
             template : "#survey-group-control-template",
             modelType : SurveyGroup,
             view_refresh_event : "survey-group:refresh",
-            modal_create_title : '<%= t "Create Group" %>',
+            modal_create_title : '<%= t "create-group" %>',
             region : surveyGroupLayout.surveyGroupControlRegion,
             modelURL : "/surveys/" + id + "/survey_groups"
         });

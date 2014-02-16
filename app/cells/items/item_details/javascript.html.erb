@@ -22,7 +22,7 @@ ItemApp.ItemManagement = (function(Backbone){
      */
     ProgramItem = Backbone.RelationalModel.extend({
         schema : {
-            title       : { type : 'Text', title : '<%= t "Title" %>' },
+            title       : { type : 'Text', title : '<%= t "title" %>' },
             short_title : { type : 'Text', title : '<%= t "short-title" %>' },
             precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 6, cols : 60 } },
             room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO
@@ -45,7 +45,7 @@ ItemApp.ItemManagement = (function(Backbone){
             audience_size  : { type : 'Number', title : '<%= t "item-estimated-audience-size" %>' },
             pub_reference_number : { type : 'Text', title : '<%= t "item-publication-reference" %>' },
             mobile_card_size    : { type : 'Select', title : '<%= t "mobile-card-size" %>', 
-                                options : [{ val: 1, label: '<%= (t "Small-feminin") %>' },{ val: 5, label: '<%= (t "Medium-feminin") %>' },{ val: 10, label: '<%= (t "Large-feminin") %>' }] }
+                                options : [{ val: 1, label: '<%= (t "small-feminin") %>' },{ val: 5, label: '<%= (t "medium-feminin") %>' },{ val: 10, label: '<%= (t "large-feminin") %>' }] }
         },
         // Default values used when creating a new instance
         defaults: {
@@ -66,7 +66,7 @@ ItemApp.ItemManagement = (function(Backbone){
     
     Equipment = Backbone.Model.extend({
         schema : {
-            equipment_type_id : { type : 'Select', title : '<%= t "Name" %>', options : <%= [].concat(EquipmentType.find(:all).collect {|s| {'val' => s.id, 'label' => s.description} }).to_json.html_safe %> },
+            equipment_type_id : { type : 'Select', title : '<%= t "name" %>', options : <%= [].concat(EquipmentType.find(:all).collect {|s| {'val' => s.id, 'label' => s.description} }).to_json.html_safe %> },
         },
         urlRoot : '/equipment_needs'
     });
@@ -231,7 +231,7 @@ ItemApp.ItemManagement = (function(Backbone){
             id : id, // need to pass in the name of the id field
             id_name : 'programme_item_id',
             view_refresh_event : "equipment:refresh",
-            modal_create_title : '<%= t "Create Equipment Needs" %>',
+            modal_create_title : '<%= t "create-equipment-needs" %>',
             region : equipmentLayout.equipmentControlRegion
         });
         tabLists.push( TabUtils.createTabListContent({
@@ -251,7 +251,7 @@ ItemApp.ItemManagement = (function(Backbone){
             template : "#tag-context-layout-template",
             view_refresh_event : "address:refresh",
             place : '#tags-view',
-            newTitle : '<%= t "Create Tag" %>',
+            newTitle : '<%= t "create-tag" %>',
         }) );
         
         return itemMdl;

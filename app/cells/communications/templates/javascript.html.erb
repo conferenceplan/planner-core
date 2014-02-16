@@ -7,7 +7,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
     MailTemplate = Backbone.DeepModel.extend({
         urlRoot : '/communications/mail_templates',
         schema : {
-            title           : { type : 'Text', title : '<%= t "Title" %>' },
+            title           : { type : 'Text', title : '<%= t "title" %>' },
 
             mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>',
                                             options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
@@ -15,7 +15,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
             transiton_invite_status_id : { type : 'Select', title : '<%= t "transtion-person-invite-to" %>',
                                             options : <%= [''].concat(InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
-            survey_id       : { type : 'Select', title : '<%= t "Survey" %>',
+            survey_id       : { type : 'Select', title : '<%= t "survey" %>',
                                             options : <%= [[nil,'']].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
 

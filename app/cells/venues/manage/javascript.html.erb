@@ -6,8 +6,8 @@ RoomApp.RoomManagement = (function(Backbone){
     
     Room = Backbone.Model.extend({
         schema : {
-            name : { type : 'Text', title : '<%= t "Name" %>' },
-            purpose : { type : 'Text', title : '<%= t "Purpose" %>' },
+            name : { type : 'Text', title : '<%= t "name" %>' },
+            purpose : { type : 'Text', title : '<%= t "purpose" %>' },
             comment : { type : 'Text', title : '<%= t "comments" %>' }
         },
         urlRoot : '/rooms'
@@ -15,9 +15,9 @@ RoomApp.RoomManagement = (function(Backbone){
 
     RoomSetup = Backbone.Model.extend({
         schema : {
-            setup_type_id : { type : 'Select', title : '<%= t "Setup Type" %>', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            capacity : { type : 'Number', title : '<%= t "Capacity" %>' },
-            isdefault : { type : 'Checkbox', title : '<%= t "Default" %>' }, // This needs to be calculated
+            setup_type_id : { type : 'Select', title : '<%= t "setup-type" %>', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            capacity : { type : 'Number', title : '<%= t "capacity" %>' },
+            isdefault : { type : 'Checkbox', title : '<%= t "default" %>' }, // This needs to be calculated
         },
         urlRoot : '/room_setups'
     });
@@ -57,7 +57,7 @@ RoomApp.RoomManagement = (function(Backbone){
             id : id, // need to pass in the name of the id field
             id_name : 'room_id',
             view_refresh_event : "room-setup:refresh",
-            modal_create_title : '<%= t "Create Room Setup" %>',
+            modal_create_title : '<%= t "create-room-setup" %>',
             region : roomSetupLayout.roomSetupControlRegion,
             callback : function(mdl) {
                 $("#rooms").jqGrid('setGridParam', {

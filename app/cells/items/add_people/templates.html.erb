@@ -1,5 +1,5 @@
 <script type="text/template" id="people-control-view-template">
-    <button class="btn btn-primary add-people-button pull-right"><%= t "Add" %></button>
+    <button class="btn btn-primary add-people-button pull-right"><%= t "add" %></button>
 </script>
 
 <script type="text/template" id="program-item-view-template">
@@ -9,31 +9,31 @@
                 <h4>{{= title ? title : "&nbsp;" }}</h4>
             </div>
             <div class="col-xs-2" style="padding-right:0;">
-            	<button class="btn btn-primary save-button pull-right"><%= t "Save" %></button>
+            	<button class="btn btn-primary save-button pull-right"><%= t "save" %></button>
             </div>
         </div>
         <div class="voffset10"></div>
         <div class="row">
         <div class="well col-xs-12">
             <dl class="dl-horizontal">
-                <dt><%= t "Ref Number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
-                <dt><%= t "Format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
-                <dt><%= t "Setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
+                <dt><%= t "ref-Number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
+                <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
+                <dt><%= t "setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
                 <dt><%= t "short-title" %></dt><dd>{{= short_title ? short_title : "&nbsp;" }}</dd>
                 <dt><%= t "item-description" %></dt><dd>{{= precis ? precis : "&nbsp;" }}</dd>
-                <dt><%= t "Notes" %></dt><dd>{{= notes ? notes : "&nbsp;" }}</dd>
-                <dt><%= t "Duration" %></dt><dd>{{= duration ? duration : "&nbsp;" }}</dd>
-                <dt><%= t "For Print" %></dt><dd>{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-                <dt><%= t "Max People" %></dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
-                <dt><%= t "Min People" %></dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
-                <dt><%= t "Room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
+                <dt><%= t "notes" %></dt><dd>{{= notes ? notes : "&nbsp;" }}</dd>
+                <dt><%= t "duration" %></dt><dd>{{= duration ? duration : "&nbsp;" }}</dd>
+                <dt><%= t "for-print" %></dt><dd>{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+                <dt><%= t "max-people" %></dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
+                <dt><%= t "min-people" %></dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
+                <dt><%= t "room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
                 <dt><%= t "item-start-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
             </dl>
         </div>
         </div>
         <div class="row">
         <!-- List of participants etc. -->
-        <div><%= t "Moderators" %></div>
+        <div><%= t "moderators" %></div>
         <div class="ui-droppable well" id="moderator-area"> <!-- need an id so that we can identify this area -->
         {{ _.each(moderators, function(person) { }}
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="moderators">
@@ -49,7 +49,7 @@
         </div>
         {{ }); }}
         </div>
-        <div><%= t "Participants" %></div>
+        <div><%= t "participants" %></div>
         <div class="ui-droppable well" id="participant-area">
         {{ _.each(participants, function(person) { }}
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="participants">
@@ -65,7 +65,7 @@
         </div>
         {{ }); }}
         </div>
-        <div><%= t "Reserved" %></div>
+        <div><%= t "reserved" %></div>
         <div class="ui-droppable well" id="reserve-area">
         {{ _.each(reserves, function(person) { }}
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="reserves">
@@ -81,7 +81,7 @@
         </div>
         {{ }); }}
         </div>
-        <div><%= t "Invisible" %></div>
+        <div><%= t "invisible" %></div>
         <div class="ui-droppable well" id="invisible-area">
         {{ _.each(invisibles, function(person) { }}
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="invisibles">
@@ -100,7 +100,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12" style="padding-right:0;">
-                <button class="btn btn-primary save-button pull-right"><%= t "Save" %></button>
+                <button class="btn btn-primary save-button pull-right"><%= t "save" %></button>
             </div>
         </div>
         <div class="voffset10"></div>

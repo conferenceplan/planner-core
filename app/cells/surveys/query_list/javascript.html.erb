@@ -7,7 +7,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
     QueryName = Backbone.Model.extend({
         urlRoot : '/survey_query',
         schema : {
-            name : { type : 'Text', title : '<%= t "Name" %>', validators: ['required'] },
+            name : { type : 'Text', title : '<%= t "name" %>', validators: ['required'] },
         }
     });
     
@@ -76,7 +76,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
         jQuery.ajax( "/survey_query/copy/" + model.id, // + '.json',
                      {
                          error : function() {
-                            alertMessage('<%= t "Error duplicating the Query" %>');
+                            alertMessage('<%= t "error-duplicating-the-query" %>');
                          },
                          success : function() {
                             eventAggregator.trigger("query:refresh"); 

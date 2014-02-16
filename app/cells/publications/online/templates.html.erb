@@ -2,35 +2,35 @@
 <script type="text/template" id="publish-template">
     <h3><%= t "publications-publish" %></h3>
     {{ if (pending == 'true') { }}
-        <div><%= t "Publish Pending" %></div>
+        <div><%= t "publish-pending" %></div>
     {{ } else { }}
         <button class="publish-button btn btn-primary">
-            <%= t "Schedule Publish" %>
+            <%= t "schedule-publish" %>
         </button>
     {{ } }}
 </script>
 
 <script type="text/template" id="review-layout-template">
-    <h3><%= t "Pending Publish" %></h3>
+    <h3><%= t "pending-publish" %></h3>
     <div id="review-region-div"></div>
 </script>
 
 <script type="text/template" id="last-pub-template">
     <div class="col-xs-12 well">
         <div class="caption" class="pull-left">
-            <h4><%= t "Last Publish" %></h4>
+            <h4><%= t "last-publish" %></h4>
             <dl>
-                <dt><%= t "Publication Date" %></dt><dd>{{= moment(publication_date).format("D MMM YYYY, hh:mm") }}</dd>
-                <dt><%= t "New" %></dt><dd>{{= new_items }}</dd>
-                <dt><%= t "Modified" %></dt><dd>{{= modified }}</dd>
-                <dt><%= t "Removed" %></dt><dd>{{= removed }}</dd>
+                <dt><%= t "publication-date" %></dt><dd>{{= moment(publication_date).format("D MMM YYYY, hh:mm") }}</dd>
+                <dt><%= t "new" %></dt><dd>{{= new_items }}</dd>
+                <dt><%= t "modified" %></dt><dd>{{= modified }}</dd>
+                <dt><%= t "removed" %></dt><dd>{{= removed }}</dd>
             </dl>
         </div>
     </div>
 </script>
 
 <script type="text/template" id="review-template">
-    <div><%= t "New Items" %></div>
+    <div><%= t "new-items" %></div>
         <ul class="list-group">
         {{ _.each(new_items, function(item) { }}
             <li class="list-group-item">
@@ -38,7 +38,7 @@
             </li>
         {{ }); }}
         </ul>
-    <div><%= t "Updated Items" %></div>
+    <div><%= t "updated-items" %></div>
         <ul class="list-group">
         {{ _.each(modified_items, function(item) { }}
             <li class="list-group-item">
@@ -46,7 +46,7 @@
             </li>
         {{ }); }}
         </ul>
-    <div><%= t "Dropped Items" %></div>
+    <div><%= t "dropped-items" %></div>
         <ul class="list-group">
         {{ _.each(removed_items, function(item) { }}
             <li class="list-group-item">
@@ -54,7 +54,7 @@
             </li>
         {{ }); }}
         </ul>
-    <div><%= t "People Added/Updated" %></div>
+    <div><%= t "people-added/updated" %></div>
         <ul class="list-group">
         {{ _.each(people_added_updated, function(item) { }}
             <li class="list-group-item">
@@ -62,7 +62,7 @@
             </li>
         {{ }); }}
         </ul>
-    <div><%= t "People Removed" %></div>
+    <div><%= t "people-removed" %></div>
         <ul class="list-group">
         {{ _.each(people_removed, function(item) { }}
             <li class="list-group-item">

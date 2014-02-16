@@ -6,13 +6,14 @@ SurveyApp.SurveyManagement = (function(Backbone){
 
     Survey = Backbone.DeepModel.extend({
         schema : {
-            name            : { type : 'Text', title : '<%= t "Name" %>' },
+            name            : { type : 'Text', title : '<%= t "name" %>' },
             alias           : { type : 'Text', title : '<%= t "survey-alias" %>' },
             public          : { type : 'Checkbox', title : '<%= t "survey-public" %>' },
             authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>' },
             use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>' },
             welcome         : { type : 'Html', title : '<%= t "survey-welcome-message" %>' },
             thank_you       : { type : 'Html', title : '<%= t "survey-thank-you-message" %>' },
+            declined_msg    : { type : 'Html', title : '<%= t "survey-declined-message" %>' },
             submit_string   : { type : 'Text', title : '<%= t "survey-submit-string" %>' },
             header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>' },
             accept_status_id : { type : 'Select', title : '<%= t "acceptance-status-on-submit-to" %>',
@@ -53,7 +54,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
             template                : "#survey-control-template",
             modelType               : Survey,
             view_refresh_event      : "survey:refresh",
-            modal_create_title      : '<%= t "Create Survey" %>',
+            modal_create_title      : '<%= t "create-survey" %>',
             region                  : surveyLayout.surveyControlRegion,
         });
         

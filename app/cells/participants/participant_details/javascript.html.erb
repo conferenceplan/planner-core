@@ -93,7 +93,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     BioDetails = Backbone.Model.extend({
         schema : {
             survey_bio : { type : 'TextArea', title : '<%= t "bio-from-survey" %>', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
-            bio : { type : 'Html', title : '<%= t "Bio" %>', editorAttrs: { rows : 6, cols : 60 } },
+            bio : { type : 'Html', title : '<%= t "bio" %>', editorAttrs: { rows : 6, cols : 60 } },
             facebook : { type : 'Text', title : '<%= t "participant-facebook-url" %>' },
             othersocialmedia : { type : 'Text', title : '<%= t "other-social-media" %>' },
             photourl : { type : 'Text', title : '<%= t "participant-photo" %>' },
@@ -231,8 +231,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             place :'#registration-view',
             id : id,
             id_name : 'person_id',
-            newTitle : '<%= t "Create Registration" %>',
-            editTitle : '<%= t "Edit Registration" %>',
+            newTitle : '<%= t "create-registration" %>',
+            editTitle : '<%= t "edit-registration" %>',
         }) );
 
         var invite_details = TabUtils.createTabContent({
@@ -242,8 +242,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             place : '#invite-view',
             id : id,
             id_name : 'person_id',
-            newTitle : '<%= t "Create Invite" %>',
-            editTitle : '<%= t "Edit Invite" %>',
+            newTitle : '<%= t "create-invite" %>',
+            editTitle : '<%= t "edit-invite" %>',
         });
         
         tabContent.push( invite_details );
@@ -256,8 +256,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             place : '#bio-view',
             id : id,
             id_name : 'person_id',
-            newTitle : '<%= t "Create Bio" %>',
-            editTitle : '<%= t "Edit Bio" %>',
+            newTitle : '<%= t "create-bio" %>',
+            editTitle : '<%= t "edit-bio" %>',
         }) );
         
         tabContent.push( 
@@ -268,8 +268,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             place : '#bio-image',
             id : id,
             id_name : 'person_id',
-            newTitle : '<%= t "Create Bio Image" %>',
-            editTitle : '<%= t "Edit Bio Image" %>',
+            newTitle : '<%= t "create-bio-image" %>',
+            editTitle : '<%= t "edit-bio-image" %>',
         }) );
         
         tabLists.push( TabUtils.createTabListContent({
@@ -301,7 +301,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id : id,
             id_name : 'person_id',
             view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "Create Address Details" %>',
+            modal_create_title : '<%= t "create-address-details" %>',
             region : addressLayout.postalControlRegion
         });
         tabLists.push( TabUtils.createTabListContent({
@@ -310,8 +310,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#address-view-template",
             view_refresh_event : "address:refresh",
             region : addressLayout.postalRegion,
-            newTitle : '<%= t "Create Address" %>',
-            editTitle : '<%= t "Edit Address" %>',
+            newTitle : '<%= t "create-address" %>',
+            editTitle : '<%= t "edit-address" %>',
         }) );
         
         TabUtils.createTabControl({
@@ -320,7 +320,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id : id,
             id_name : 'person_id',
             view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "Create Phone Number" %>',
+            modal_create_title : '<%= t "create-phone-number" %>',
             region : phoneLayout.phoneControlRegion,
         });
         tabLists.push( TabUtils.createTabListContent({
@@ -329,8 +329,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#phone-view-template",
             view_refresh_event : "address:refresh",
             region : phoneLayout.phoneRegion,
-            newTitle : '<%= t "Create Phone Number" %>',
-            editTitle : '<%= t "Edit Phone Number" %>',
+            newTitle : '<%= t "create-phone-number" %>',
+            editTitle : '<%= t "edit-phone-number" %>',
         }) );
 
         TabUtils.createTabControl({
@@ -339,7 +339,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id : id,
             id_name : 'person_id',
             view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "Create Email" %>',    
+            modal_create_title : '<%= t "create-email" %>',    
             region : emailLayout.emailControlRegion
         });
         tabLists.push( TabUtils.createTabListContent({
@@ -348,8 +348,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#email-view-template",
             view_refresh_event : "address:refresh",
             region : emailLayout.emailRegion,
-            newTitle : '<%= t "Create Email" %>',
-            editTitle : '<%= t "Edit Email" %>',
+            newTitle : '<%= t "create-email" %>',
+            editTitle : '<%= t "edit-email" %>',
         }) );
         
         // /tags/2108/add?class=Person&context=PrimaryArea 
@@ -360,7 +360,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             template : "#tag-context-layout-template",
             view_refresh_event : "address:refresh",
             place : '#tags-view',
-            newTitle : '<%= t "Create Tag" %>',
+            newTitle : '<%= t "create-tag" %>',
         }) );
 
         //
@@ -396,8 +396,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                         model : availability,
                         template : '#date-exclusion-view-template',
                         region : exclusionLayout.datesRegion,
-                        newTitle : '<%= t "Create Availability" %>',
-                        editTitle : '<%= t "Edit Availability" %>',
+                        newTitle : '<%= t "create-availability" %>',
+                        editTitle : '<%= t "edit-availability" %>',
                     }) );
                 } else {
                     /* TODO TODO TODO */

@@ -169,7 +169,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             equipmentLayout = new ConfigLayout();
             configRegion.show(equipmentLayout);
-            equipmentLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "Equipment" %>' }) }) );
+            equipmentLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "equipment" %>' }) }) );
             
             TabUtils.createTabControl({
                 template                : "#equipment-control-template",

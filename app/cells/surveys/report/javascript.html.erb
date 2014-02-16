@@ -10,8 +10,8 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     Query = Backbone.DeepModel.extend({
         urlRoot : '/survey_query',
         schema : {
-            name            : { type : 'Text',      title : '<%= t "Name" %>',  validators: ['required'] },
-            survey_id       : { type : 'Select',    title : '<%= t "Survey" %>',
+            name            : { type : 'Text',      title : '<%= t "name" %>',  validators: ['required'] },
+            survey_id       : { type : 'Select',    title : '<%= t "survey" %>',
                                 options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
                               },
             shared          : { type : 'Checkbox',  title : '<%= t "survey-shared" %>' },

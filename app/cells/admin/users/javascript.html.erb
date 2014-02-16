@@ -13,7 +13,7 @@ UserMgmtApp.UserManagement = (function(Backbone){
             password : { type : 'Password', title : '<%= t "user-password" %>'},
             password_confirmation : { type : 'Password', title : '<%= t "user-password-again" %>'},
             roles : { type : 'List',
-                        title : '<%= t "Roles" %>',
+                        title : '<%= t "roles" %>',
                         itemToString : function(item) {
                                             var r = _.find(roles, function(v) { return v.val == item.id;});
                                             return r.label;

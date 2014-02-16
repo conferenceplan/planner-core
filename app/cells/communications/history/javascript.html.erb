@@ -12,9 +12,9 @@ jQuery(document).ready(function() {
         
         delayed : <%= @delayed %>,
 
-        name : [<%= @name%>, '<%= t "Name"%>'],       
-        mailing : [<%= @mailing%>, '<%= t "Mailing"%>' ],
-        content : [<%= @content%>, '<%= t "Content"%>' ],
+        name : [<%= @name%>, '<%= t "name"%>'],       
+        mailing : [<%= @mailing%>, '<%= t "mailing"%>' ],
+        content : [<%= @content%>, '<%= t "content"%>' ],
         status : [<%= @email_status%>, '<%= t "mail-report-status"%>' ],
         date_sent : [<%= @date_sent%>, '<%= t "mail-report-date"%>' ],
         testrun : [<%= @testrun%>, '<%= t "mail-report-test"%>' ],
@@ -38,8 +38,8 @@ jQuery(document).ready(function() {
         showControls : <%= @showControls %>,
         
         //
-        // modal_create_title : '<%= t "Create Participant" %>',
-        // modal_edit_title : '<%= t "Edit Participant" %>',
+        // modal_create_title : '<%= t "create-participant" %>',
+        // modal_edit_title : '<%= t "edit-participant" %>',
     });
 });
 

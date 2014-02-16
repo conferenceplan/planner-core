@@ -8,21 +8,21 @@ ReportApp.ReportManagement = (function(Backbone){
     });
     
     var PanelsByRoomColModel = [
-                    {name: 'room',      label : '<%= t "Room" %>',  jsonmap: "room", width: 50},
-                    {name: 'venue',     label : '<%= t "Venue" %>', jsonmap: "venue", width: 50},
-                    {name: 'day',       label : '<%= t "Time" %>',  jsonmap: "day",    width: 30},
-                    {name: 'time',      label : '<%= t "Time" %>',  jsonmap: "time_slot",    width: 30},
-                    {name: 'item',      label : '<%= t "Item" %>',  jsonmap: "item" },
-                    {name: 'equipment', label : '<%= t "Equipment" %>',  jsonmap: "equipment", width: 70, formatter: AppUtils.arrayToString},
+                    {name: 'room',      label : '<%= t "room" %>',  jsonmap: "room", width: 50},
+                    {name: 'venue',     label : '<%= t "venue" %>', jsonmap: "venue", width: 50},
+                    {name: 'day',       label : '<%= t "time" %>',  jsonmap: "day",    width: 30},
+                    {name: 'time',      label : '<%= t "time" %>',  jsonmap: "time_slot",    width: 30},
+                    {name: 'item',      label : '<%= t "item" %>',  jsonmap: "item" },
+                    {name: 'equipment', label : '<%= t "equipment" %>',  jsonmap: "equipment", width: 70, formatter: AppUtils.arrayToString},
     ];
     
     var PanelsByTimeslotColModel = [
-                    {name: 'day',       label : '<%= t "Time" %>',  jsonmap: "day",    width: 30},
-                    {name: 'time',      label : '<%= t "Time" %>',  jsonmap: "time_slot",    width: 30},
-                    {name: 'room',      label : '<%= t "Room" %>',  jsonmap: "room", width: 50},
-                    {name: 'venue',     label : '<%= t "Venue" %>', jsonmap: "venue", width: 50},
-                    {name: 'item',      label : '<%= t "Item" %>',  jsonmap: "item" },
-                    {name: 'equipment', label : '<%= t "Equipment" %>',  jsonmap: "equipment", width: 70, formatter: AppUtils.arrayToString},
+                    {name: 'day',       label : '<%= t "time" %>',  jsonmap: "day",    width: 30},
+                    {name: 'time',      label : '<%= t "time" %>',  jsonmap: "time_slot",    width: 30},
+                    {name: 'room',      label : '<%= t "room" %>',  jsonmap: "room", width: 50},
+                    {name: 'venue',     label : '<%= t "venue" %>', jsonmap: "venue", width: 50},
+                    {name: 'item',      label : '<%= t "item" %>',  jsonmap: "item" },
+                    {name: 'equipment', label : '<%= t "equipment" %>',  jsonmap: "equipment", width: 70, formatter: AppUtils.arrayToString},
     ];
 
     var PanelsWithPanelistsForm = Backbone.Form.extend({
@@ -73,38 +73,38 @@ ReportApp.ReportManagement = (function(Backbone){
     });
     
     var PeopleByTagColModel = [
-                    {name: 'context', label : '<%= t "Tag Context" %>', jsonmap: "context", width: 100},
-                    {name: 'tag', label : '<%= t "Tag(s)" %>', jsonmap: "tag", width: 100},
+                    {name: 'context', label : '<%= t "tag-context" %>', jsonmap: "context", width: 100},
+                    {name: 'tag', label : '<%= t "tag(s)" %>', jsonmap: "tag", width: 100},
                     {name: 'people', label : '<%= t "reports-people" %>', jsonmap: "people", formatter: AppUtils.arrayToStringSingleLine}
     ];
     
     var TagsByContextColModel = [
-                    {name: 'Name', label : '<%= t "Person" %>', jsonmap: "name", width: 100},
-                    {name: 'Tags', label : '<%= t "Tags" %>', jsonmap: "tags", width: 300, formatter: AppUtils.arrayToStringSingleLine}
+                    {name: 'Name', label : '<%= t "person" %>', jsonmap: "name", width: 100},
+                    {name: 'Tags', label : '<%= t "tags" %>', jsonmap: "tags", width: 300, formatter: AppUtils.arrayToStringSingleLine}
     ];
     
     var PanelistsWithPanelsColModel = [
-                    {name: 'Name', label : '<%= t "Person" %>', jsonmap: "name", width: 130},
-                    {name: 'Status', label : '<%= t "Acceptance Status" %>', jsonmap: "acceptance_status", width: 60},
-                    {name:'Items', label : '<%= t "Items" %>', jsonmap: "items", width: 500, formatter: AppUtils.arrayToString},
+                    {name: 'Name', label : '<%= t "person" %>', jsonmap: "name", width: 130},
+                    {name: 'Status', label : '<%= t "acceptance-status" %>', jsonmap: "acceptance_status", width: 60},
+                    {name:'Items', label : '<%= t "items" %>', jsonmap: "items", width: 500, formatter: AppUtils.arrayToString},
     ];
     
     var PanelsWithPanelistsColModel = [ 
-                    {name: 'Ref', label : '<%= t "Pub Ref" %>', jsonmap: 'pub_reference_number', width: 100},
-                    {name:'Title', label : '<%= t "Item Title" %>', jsonmap: "title", width: 500},
-                    {name:'Venue', label : '<%= t "Venue" %>', jsonmap: "venue_name"},
-                    {name:'Room', label : '<%= t "Room" %>', jsonmap: "room_name"},
+                    {name: 'Ref', label : '<%= t "pub-ref" %>', jsonmap: 'pub_reference_number', width: 100},
+                    {name:'Title', label : '<%= t "item-title" %>', jsonmap: "title", width: 500},
+                    {name:'Venue', label : '<%= t "venue" %>', jsonmap: "venue_name"},
+                    {name:'Room', label : '<%= t "room" %>', jsonmap: "room_name"},
                     {name: 'Format', label : '<%= t "report-selection-item-format" %>', jsonmap: 'format'},
-                    {name: 'Area(s)', label : '<%= t "Area(s)" %>', jsonmap: 'context', formatter: AppUtils.arrayToString},
+                    {name: 'Area(s)', label : '<%= t "area(s)" %>', jsonmap: 'context', formatter: AppUtils.arrayToString},
                     {name: 'item-start-time', label : '<%= t "item-start-time" %>', jsonmap: 'start_time'},
                     {name: 'End Time', label : '<%= t "item-end-time" %>', jsonmap: 'end_time'},
                     {name: 'Min People', label : '<%= t "item-min-participants" %>', jsonmap: 'minimum_people'},
                     {name: 'Max People', label : '<%= t "item-max-participants" %>', jsonmap: 'maximum_people'},
-                    {name: 'Equipment', label : '<%= t "Equipment" %>', jsonmap: 'equipment',width: 300, formatter: AppUtils.arrayToString},
-                    {name: 'Moderator(s)', label : '<%= t "Moderator(s)" %>', jsonmap: 'moderators',width: 300, formatter: AppUtils.arrayToString },
-                    {name: 'Participants', label : '<%= t "Participants" %>', jsonmap: 'participants',width: 300, formatter: AppUtils.arrayToString }, 
-                    {name: 'Reserve', label : '<%= t "Reserved" %>', jsonmap: 'reserve',width: 300,formatter: AppUtils.arrayToString},
-                    {name: 'Invisible', label : '<%= t "Invisible" %>', jsonmap: 'invisible',width: 300, formatter: AppUtils.arrayToString},
+                    {name: 'Equipment', label : '<%= t "equipment" %>', jsonmap: 'equipment',width: 300, formatter: AppUtils.arrayToString},
+                    {name: 'Moderator(s)', label : '<%= t "moderator(s)" %>', jsonmap: 'moderators',width: 300, formatter: AppUtils.arrayToString },
+                    {name: 'Participants', label : '<%= t "participants" %>', jsonmap: 'participants',width: 300, formatter: AppUtils.arrayToString }, 
+                    {name: 'Reserve', label : '<%= t "reserved" %>', jsonmap: 'reserve',width: 300,formatter: AppUtils.arrayToString},
+                    {name: 'Invisible', label : '<%= t "invisible" %>', jsonmap: 'invisible',width: 300, formatter: AppUtils.arrayToString},
                 ];
 
     var Workspace = Backbone.Router.extend({
@@ -126,7 +126,7 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : GenericForm,
                 endPoint    : '/planner_reports/panels_by_room',
                 colModel    : PanelsByRoomColModel,
-                caption     : '<%= t "Panels By Room" %>'
+                caption     : '<%= t "panels-by-room" %>'
             }));
         },
         
@@ -137,7 +137,7 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : GenericForm,
                 endPoint    : '/planner_reports/panels_by_timeslot',
                 colModel    : PanelsByTimeslotColModel,
-                caption     : '<%= t "Panels By Timeslot" %>'
+                caption     : '<%= t "panels-by-timeslot" %>'
             }));
         },
                 

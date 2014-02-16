@@ -22,10 +22,10 @@ jQuery(document).ready(function() {
         modelType : <%= @modelType %>,
 
         // The columns to be displayed
-        login : [true, '<%= t "Name"%>'],       
-        roles : [<%= @login %>, '<%= t "Roles"%>'],
-        login_count : [<%= @roles %>, '<%= t "Login Count"%>'],
-        failed_login_count : [<%= @failed_login_count %>, '<%= t "Failed Count"%>'],
+        login : [true, '<%= t "name"%>'],       
+        roles : [<%= @login %>, '<%= t "roles"%>'],
+        login_count : [<%= @roles %>, '<%= t "login-count"%>'],
+        failed_login_count : [<%= @failed_login_count %>, '<%= t "failed-count"%>'],
         
         //
         modal_create_title : '<%= t "create-user" %>',

@@ -21,11 +21,11 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
             text_size           : { type : 'Number',  title : '<%= t "survey-length-of-textbox" %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
-            isbio               : { type : 'DependentCheckbox', title : '<%= t "Isbio" %>',
+            isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
                                      dependsOn : 'question_type', dependentValues : ['textbox']  }, // only if the question type is text
             horizontal          : { type : 'DependentCheckbox', title : '<%= t "survey-horizontal-layout" %>', 
                                     dependsOn : 'question_type', dependentValues : ['multiplechoice', 'singlechoice'] },
-            'survey_format.help' : { type :'Html', title : '<%= t "Help Text" %>' }, // Just need the help text...
+            'survey_format.help' : { type :'Html', title : '<%= t "help-text" %>' }, // Just need the help text...
             // nested answers object - only if the type is appropriate
             survey_answers      : { type : 'DependentList',
                 title : '<%= t "survey_answers" %>',

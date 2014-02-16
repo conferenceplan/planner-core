@@ -71,7 +71,7 @@
 
 <script type="text/template" id="answer-data-template">
     <dl class="dl-horizontal">
-        <dt><%= t "Answer" %></dt><dd>{{= answer ? answer : "&nbsp;" }}</dd> 
+        <dt><%= t "answer" %></dt><dd>{{= answer ? answer : "&nbsp;" }}</dd> 
         <dt><%= t "survey-answer-type" %></dt><dd>{{= answertype_id ? SurveyQuestionApp.SurveyQuestionManagement.convertAnswerTypeIdToString(answertype_id) : "&nbsp;" }}</dd>
         {{ if ( answertype_id == <%= AnswerType["TimeConflict"].id %>) { }}
             <dt><%= t "item-start-day" %></dt><dd>{{= (SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day).length > -1) ? SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day) : "&nbsp;" }}</dd> 

@@ -1,8 +1,11 @@
 #
 # Render the survey
 #
+# TODO - renderalias needs to be able to use authentication where needed
+#
+#
 class Surveys::ResponseController < ApplicationController
-  layout "dynasurvey"
+  layout "dynasurvey" # TODO - check if we want to use this for the layout....
 
   before_filter :check_for_single_access_token, :only => [:create, :show, :index, :renderalias]
   #
@@ -138,10 +141,10 @@ class Surveys::ResponseController < ApplicationController
         if  !@preview && @survey.authenticate # TODO *****
           # check to see if the use is authenticated
           # require_user # TODO - change to test for single access token etc.
-          if !user_logged_in?
+          if !respondent_logged_in?
             logger.error "NEED TO LOGIN"
             store_location
-            redirect_to new_user_session_url
+            redirect_to new_survey_respondent_url #   new_user_session_url
           end
         end
         

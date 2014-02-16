@@ -1,9 +1,9 @@
 <!--  -->
 
 <script type="text/template" id="table-control-template">
-    <button class='add-model-button btn btn-primary btn-xs toolbar-button'><%= t "New" %></button>
-    <button class='edit-model-button btn btn-primary btn-xs toolbar-button'><%= t "Edit" %></button>
-    <button class='delete-model-button btn btn-primary btn-xs toolbar-button'><%= t "Delete" %></button>
+    <button class='add-model-button btn btn-primary btn-xs toolbar-button'><%= t "new" %></button>
+    <button class='edit-model-button btn btn-primary btn-xs toolbar-button'><%= t "edit" %></button>
+    <button class='delete-model-button btn btn-primary btn-xs toolbar-button'><%= t "delete" %></button>
 </script>
 
 <script type="text/template" id="modal-info-template">
@@ -41,10 +41,10 @@
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">
-            <%= t "Cancel" %>
+            <%= t "cancel" %>
         </button>
         <button class="btn btn-primary">
-            <%= t "Save Changes" %>
+            <%= t "save-changes" %>
         </button>
     </div>
 </form>
@@ -58,13 +58,13 @@
         <div class="col-xs-12">
             <div class="pull-right">
                 <button class="btn btn-primary model-edit-button">
-                    <%= t "Edit" %>
+                    <%= t "edit" %>
                 </button>
                 <button class="btn btn-primary model-cancel-button">
-                    <%= t "Cancel" %>
+                    <%= t "cancel" %>
                 </button>
                 <button class="btn btn-primary model-submit-button">
-                    <%= t "Save Changes" %>
+                    <%= t "save-changes" %>
                 </button>
             </div>
         </div>
@@ -78,13 +78,13 @@
         <div class="col-xs-12">
             <div class="pull-right">
                 <button class="btn btn-primary model-edit-button">
-                    <%= t "Edit" %>
+                    <%= t "edit" %>
                 </button>
                 <button class="btn btn-primary model-cancel-button">
-                    <%= t "Cancel" %>
+                    <%= t "cancel" %>
                 </button>
                 <button class="btn btn-primary model-submit-button">
-                    <%= t "Save Changes" %>
+                    <%= t "save-changes" %>
                 </button>
             </div>
         </div>
@@ -106,10 +106,10 @@
     <div class="modal-body" id="modal-body">The Program Item was not Saved. Confirm that you want to abandon the changes.</div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">
-            <%= t "Remain on Item" %>
+            <%= t "remain-on-item" %>
         </button>
         <button class="btn btn-primary">
-            <%= t "Abandon Changes" %>
+            <%= t "abandon-changes" %>
         </button>
     </div>
 </form>
@@ -172,7 +172,7 @@
 <script type="text/template" id="room-conflict-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>
-            <%= t "Room" %> <b>{{= room_name}}</b> <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }} <br/>
+            <%= t "room" %> <b>{{= room_name}}</b> <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }} <br/>
             <i>{{= item_title }}</i> <%= t "conflicts with" %>
             <i>{{= conflict_item_title }}</i> 
         </small>

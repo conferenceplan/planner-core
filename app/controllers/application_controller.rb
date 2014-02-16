@@ -37,15 +37,22 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery
   
-  helper_method :current_user_session, :current_user
+  helper_method :current_user_session, :current_user, :current_respondent
   
   private
     def check_for_single_access_token # TODO - change name???
       if params[:key] && !params[:key].empty?
-        @respondent       = SurveyRespondent.find_by_single_access_token(params[:key]) 
+        @respondent                 = SurveyRespondent.find_by_single_access_token(params[:key]) 
         @current_respondent_session = SurveyRespondentSession.create!(@respondent) 
       end
     end 
+    
+    #
+    #
+    #
+    def respondent_logged_in?
+      return current_respondent != nil
+    end
     
     #
     #
@@ -56,6 +63,11 @@ class ApplicationController < ActionController::Base
       else
         return false
       end
+    end
+    
+    def current_respondent
+      return @respondent if defined?(@respondent)
+      nil
     end
     
     def current_user_session
@@ -97,5 +109,9 @@ class ApplicationController < ActionController::Base
     def redirect_back_or_default(default)
       redirect_to(session[:return_to] || default)
       session[:return_to] = nil
+    end
+    
+    def survey_redirect_back(default, token)
+      redirect_to((session[:return_to] + '/?key=' + token) || default)
     end
 end
