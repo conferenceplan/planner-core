@@ -1,14 +1,8 @@
-<!--
-    :caption => "Program Items",
-    :selectNotifyMethod => "ItemApp.ItemManagement.showDetails",
-    :clearNotifyMethod => "ItemApp.ItemManagement.clearDetails"
--->
-
 <%= render_cell "items/item_details", :templates %>
 
 <%= render_cell "items/item_list", :javascript, 
     :pager => "#items-pager",
-    :caption => "Program Items", 
+    :caption => "program-items", 
     :selectNotifyMethod => "ItemApp.ItemManagement.showDetails", 
     :clearNotifyMethod => "ItemApp.ItemManagement.clearDetails",
     :modelType => "ItemApp.ItemManagement.ProgramItem",

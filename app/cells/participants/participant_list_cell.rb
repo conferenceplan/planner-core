@@ -8,7 +8,7 @@ class Participants::ParticipantListCell < Cell::Rails
   
   def javascript(args)
     @place = args.has_key?(:place) ? args[:place] : "participants"
-    @caption = args.has_key?(:caption) ? args[:caption] : "Participants"
+    @caption = args.has_key?(:caption) ? args[:caption] : "participants"
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
     @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
     @loadNotifyMethod = args.has_key?(:loadNotifyMethod) ? args[:loadNotifyMethod] : "function() {}"

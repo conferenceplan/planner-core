@@ -33,7 +33,7 @@
         </div>
         <div class="row">
         <!-- List of participants etc. -->
-        <div><%= t "moderators" %></div>
+        <div><%= t "moderator(s)" %></div>
         <div class="ui-droppable well" id="moderator-area"> <!-- need an id so that we can identify this area -->
         {{ _.each(moderators, function(person) { }}
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="moderators">

@@ -5,7 +5,7 @@ class Venues::RoomListCell < Cell::Rails
   end
 
   def javascript(args)
-    @caption = args.has_key?(:caption) ? args[:caption] : "Rooms"
+    @caption = args.has_key?(:caption) ? args[:caption] : "rooms"
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
     @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
     @loadNotifyMethod = args.has_key?(:loadNotifyMethod) ? args[:loadNotifyMethod] : "function() {}"

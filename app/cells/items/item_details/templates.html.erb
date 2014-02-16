@@ -27,7 +27,7 @@ Use the Rails authenticity token in the forms...
             </dl>
         </div>
         <!-- List of participants etc. -->
-        <div><%= t "moderators" %></div>
+        <div><%= t "moderator(s)" %></div>
         <ul class="list-group">
         {{ _.each(moderators, function(person) { }}
             <li class="list-group-item">
@@ -93,7 +93,7 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="equipment-control-template">
 <div>
     <button class="add-model-button btn-xs btn-primary pull-right ">
-        <%= t "add equipment" %>
+        <%= t "add-equipment" %>
     </button>
 </div>
 </script>
