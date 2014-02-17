@@ -12,7 +12,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
             mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>',
                                             options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
-            transiton_invite_status_id : { type : 'Select', title : '<%= t "transtion-person-invite-to" %>',
+            transiton_invite_status_id : { type : 'Select', title : '<%= t "transition-person-invite-to" %>',
                                             options : <%= [''].concat(InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
             survey_id       : { type : 'Select', title : '<%= t "survey" %>',
