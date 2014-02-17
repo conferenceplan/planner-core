@@ -115,17 +115,18 @@
 }
 
 .ui-jqgrid-btable .ui-widget-content.ui-state-highlight {
-    	background-color: #428BCA;	
-    	background-image: -ms-linear-gradient(top, #428BCA, #428BCA); 
-		background-image: -webkit-linear-gradient(top, #428BCA, #428BCA); /* Safari 5.1+, Chrome 10+ */
-		background-image: -moz-linear-gradient(top, #428BCA, #428BCA); /* Firefox 3.6 */
-		background-image: -o-linear-gradient(top, #428BCA, #428BCA); /* Opera 11.10+ */
-		background-image: linear-gradient(top, #428BCA, #428BCA); /* CSS3 Compliant */
-		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#428BCA', endColorstr='#428BCA', GradientType=0); /* IE8 */
+    	background-color: #D9EDF7;	
+    	background-image: -ms-linear-gradient(top, #D9EDF7, #D9EDF7); 
+		background-image: -webkit-linear-gradient(top, #D9EDF7, #D9EDF7); /* Safari 5.1+, Chrome 10+ */
+		background-image: -moz-linear-gradient(top, #D9EDF7, #D9EDF7); /* Firefox 3.6 */
+		background-image: -o-linear-gradient(top, #D9EDF7, #D9EDF7); /* Opera 11.10+ */
+		background-image: linear-gradient(top, #D9EDF7, #D9EDF7); /* CSS3 Compliant */
+		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#D9EDF7', endColorstr='#D9EDF7', GradientType=0); /* IE8 */
     	background-repeat: repeat-x;
-    	text-shadow: 0 0px 0 rgba(255, 255, 255, 0.5); /* I changed to 0px shadow - Phil */
+    	text-shadow: 0 1px 0 #ffffff; /* I changed to 0px shadow - Phil */
 		opacity: 1;
-		color: #ffffff;
+		color: #428BCA;
+		font-weight:bolder;
 }
 
 
