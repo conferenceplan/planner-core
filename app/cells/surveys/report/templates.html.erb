@@ -6,7 +6,7 @@
 </script>
 
 <script type="text/template" id="query-view-template">
-    <div class="row-fluid">
+    <div class="row">
         <div class="col-xs-12">
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <%= t "edit" %>
@@ -20,6 +20,7 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-xs-12">
         <b>{{= operation ? operation : "&nbsp;" }}</b> of the following:
             <div class="pull-right">
 	            <button class="model-select-button btn btn-primary">
@@ -29,9 +30,11 @@
 	                <%= t "reports-csv-button" %>
 	            </button>
             </div>
-   
+        </div>
     </div>
+    <div class="voffset10"></div>
     <div class="row">
+        <div class="col-xs-12">
         {{ _.each(survey_query_predicates, function(predicate) { }}
         <div class="thumbnail clearfix">
             <small>
@@ -41,6 +44,7 @@
             </small>
         </div>
         {{ }); }}
+        </div>
     </div>
 </script>
 
