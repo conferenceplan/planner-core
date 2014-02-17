@@ -67,6 +67,12 @@
 	/* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset; */
 	/* background-color: #F5F5F5; */
 }
+
+.ui-colorpicker-dialog {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+    background-color: #F5F5F5;
+}
+
 .ui-widget-content a { color: #404040; }
 .ui-widget-header {
   font-weight:bold;

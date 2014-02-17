@@ -8,7 +8,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   def public_id
     publicid = SITE_CONFIG[:conference][:name] + '/'
-    if (model.person)
+    if ((defined? model.person) && model.person)
       publicid += model.person.first_name ? model.person.first_name : ''
       publicid += model.person.last_name ? model.person.last_name : ''
     else
