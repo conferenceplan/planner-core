@@ -30,6 +30,16 @@ authorization do
     has_permission_on :equipment_types, :to => :read
     has_permission_on :equipment_needs, :to => :read
     has_permission_on :publisher, :to => :review
+    has_permission_on :pages_home_dash, :to => :read
+    has_permission_on :pages_venues_dash, :to => :read
+    has_permission_on :pages_participants_dash, :to => :read
+    has_permission_on :pages_items_dash, :to => :read
+    has_permission_on :pages_schedule_dash, :to => :read
+    has_permission_on :pages_surveys_dash, :to => :read
+    has_permission_on :pages_reports_dash, :to => :read
+    has_permission_on :pages_publications_dash, :to => :read
+    has_permission_on :survey_query, :to => :read
+    has_permission_on :room_setups, :to => :read
   end
 
   role :TagAdmin do
@@ -79,6 +89,8 @@ authorization do
     has_permission_on :emailreports, :to => :read
     has_permission_on :survey_query, :to => :manage
     has_permission_on :survey_reports, :to => :report
+    has_permission_on :pages_communications_dash, :to => :read
+    
   end
   
   role :SuperPlanner do
@@ -123,9 +135,9 @@ privileges do
     privilege :review, :includes => [:review]
     privilege :report, :includes => [:library_talks,:missing_bio,:moderators,:art_night,:music_night,:program_types,:free_text,:tags_by_context,:available_during,:panels_with_panelists,:panelists_with_panels,
         :admin_tags_by_context,:panels_date_form,:panelists_with_metadata,:interviewable,:panels_by_room,:panels_by_timeslot,:failed,:sent, 
-        :surveyNames, :surveyQueryNames, :show, :questions, :runReport, :create, :delSurveyQuery]
+        :surveyNames, :surveyQueryNames, :show, :questions, :runReport, :delSurveyQuery]
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
-        :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect]
+        :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants,
                                       :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:program_book_report]
     privilege :create, :includes => [:new,:import,:doimport]

@@ -1,7 +1,7 @@
 #
 #
 #
-class RoomSetupsController < ApplicationController
+class RoomSetupsController < PlannerController
 
   #
   #

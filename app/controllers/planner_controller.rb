@@ -17,7 +17,14 @@ class PlannerController < ApplicationController
   end      
 
   def permission_denied
-    render '/errors/permission_error'
+    respond_to do |format|
+      format.json {
+        render status: :bad_request, text: 'You do not have permission to perform the requested action'
+      }
+      format.html {
+        render '/errors/permission_error'
+      }
+    end
   end
 
 protected
