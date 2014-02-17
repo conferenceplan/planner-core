@@ -13,15 +13,16 @@ SurveyApp.SurveyManagement = (function(Backbone){
             use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>' },
             welcome         : { type : 'Html', title : '<%= t "survey-welcome-message" %>' },
             thank_you       : { type : 'Html', title : '<%= t "survey-thank-you-message" %>' },
-            declined_msg    : { type : 'Html', title : '<%= t "survey-declined-message" %>' },
+            declined_msg    : { type : 'DependentHtml', title : '<%= t "survey-declined-message" %>', 
+                                        dependsOn : 'authenticate', dependentValues : ['true'] },
             submit_string   : { type : 'Text', title : '<%= t "survey-submit-string" %>' },
             header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>' },
-            accept_status_id : { type : 'Select', title : '<%= t "acceptance-status-on-submit-to" %>',
-                                            options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
-                                        },
-            decline_status_id : { type : 'Select', title : '<%= t "acceptance-status-on-decline-to" %>',
-                                            options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
-                                        }
+            accept_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-submit-to" %>',
+                                            options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                                        dependsOn : 'authenticate', dependentValues : ['true'] },
+            decline_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-decline-to" %>',
+                                            options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                                        dependsOn : 'authenticate', dependentValues : ['true'] }
         },
         urlRoot : '/surveys'
     });

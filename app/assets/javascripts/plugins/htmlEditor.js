@@ -5,7 +5,7 @@
  */
 Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base.extend
     
-    render: function() {
+    createCkWidget : function() {
         // Add the CK editor as the field
         // TODO - add a mechanism to pass in options for the CK editor toolbar
         this.$el.ckeditor({
@@ -29,6 +29,11 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
                 { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
             ]
         });
+    },
+    
+    render: function() {
+        
+        this.createCkWidget();
         
         this.setValue(this.value);
 

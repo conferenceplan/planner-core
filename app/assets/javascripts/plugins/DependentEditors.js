@@ -10,6 +10,7 @@
 _.extend(Form.Editor.prototype, {
     dependsOnChanged : function(form, editor, extra) {
         var groupElement = this.$el.parents('.form-group');
+
         this.setInitValue(groupElement, editor.getValue(), this.options.schema.dependentValues);
     },
 
@@ -73,6 +74,22 @@ Form.editors.DependentTextArea = Form.editors.TextArea.extend({
 
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
+       
+        this.setValue(this.value);
+
+        this.dependInit(this.form);
+
+        return this;
+    }
+
+});
+
+Form.editors.DependentHtml = Form.editors.Html.extend({
+
+    render: function() {
+        this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
+        
+        this.createCkWidget();
        
         this.setValue(this.value);
 

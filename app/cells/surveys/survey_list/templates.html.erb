@@ -43,10 +43,14 @@
         <dt><%= t "survey-use-captcha" %></dt><dd>{{= use_captcha ? 'Yes' : 'No' }}</dd>
         <dt><%= t "survey-welcome-message" %></dt><dd>{{= welcome ? welcome : "&nbsp;"}}</dd>
         <dt><%= t "survey-thank-you-message" %></dt><dd>{{= thank_you ? thank_you : "&nbsp;"}}</dd>
+        {{ if (authenticate) { }}
         <dt><%= t "survey-declined-message" %></dt><dd>{{= declined_msg ? declined_msg : "&nbsp;"}}</dd>
+        {{ } }}
         <dt><%= t "survey-submit-string" %></dt><dd>{{= submit_string ? submit_string : "&nbsp;"}}</dd>
         <dt><%= t "survey-url-for-header-image" %></dt><dd>{{= header_image ? header_image : "&nbsp;"}}</dd>
+        {{ if (authenticate) { }}
         <dt><%= t "acceptance-status-on-submit-to" %></dt><dd>{{= accept_status_name }}</dd> 
         <dt><%= t "acceptance-status-on-decline-to" %></dt><dd>{{= decline_status_name }}</dd> 
+        {{ } }}
     </dl>
 </script>
