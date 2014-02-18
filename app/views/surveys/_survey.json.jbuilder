@@ -7,6 +7,7 @@ json.name           survey.name
 json.use_captcha    survey.use_captcha
 json.welcome        survey.welcome
 json.declined_msg        survey.declined_msg
+json.authenticate_msg survey.authenticate_msg
 json.submit_string  survey.submit_string
 json.thank_you      survey.thank_you
 json.header_image   survey.header_image

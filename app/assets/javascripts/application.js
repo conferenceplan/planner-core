@@ -69,6 +69,18 @@ jQuery(document).ready(function() {
         interpolate : /\{\{\=(.+?)\}\}/g,
         evaluate : /\{\{(.+?)\}\}/g
     };
+
+    // Over-ride the backbone sync so that the rails CSRF token is passed to the backend
+    Backbone._sync = Backbone.sync;
+    Backbone.sync = function(method, model, success, error) {
+        if (method == 'create' || method == 'update' || method == 'delete') {
+            var auth_options = {};
+            auth_options[$("meta[name='csrf-param']").attr('content')] = $("meta[name='csrf-token']").attr('content');
+            model.set(auth_options, {silent: true});
+        };
+        return Backbone._sync(method, model, success, error);
+    };
+    
 });
 
 function alertMessage(message) {

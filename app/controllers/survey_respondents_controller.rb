@@ -4,15 +4,23 @@
 class SurveyRespondentsController < ApplicationController
   before_filter :check_for_single_access_token, :only => [:show, :edit, :update, :confirm]
 
-  layout "dynasurvey" # CHECK
+  layout "dynasurvey"
 
   def new
     @survey_respondent = SurveyRespondent.new
     @page_title = "Questionnaire Start"
+    page = get_stored_page
+    @survey = Survey.find_by_alias(page)
+    config = MailConfig.first
+    if config.info
+      @ourEmail = config.info
+    else
+      @ourEmail = config.from
+    end  
   end
 
   #
-  # TODO - if no survey has been spefcified then we want to go to the participant page....  
+  # TODO - if no survey has been spefcified then we want to go to a participant home page....  
   #
   def create
     key       = params[:key]
@@ -20,22 +28,26 @@ class SurveyRespondentsController < ApplicationController
 
     # find a respondent with the key and last name
     @survey_respondent = findRespondent(key, last_name) if (key && key != '')
+
+    # We need to get the survey that is to be filled in, if we do not have page then we can get if back
+    page = get_stored_page
+    @survey = Survey.find_by_alias(page)
     
     if @survey_respondent
-      # TODO - we need to get the survey that is to be filled in
-      # @survey = Survey.find_by_alias('partsurvey')
       
       @survey_respondent.attending = params[:cancel] # Indicate whether or not the person said that they are attending
       # Redirect the person to the survey
       if @survey_respondent.save
         if params[:cancel]
-          MailService.sendEmail(@survey_respondent.person, MailUse[:DeclinedSurvey], @survey, (@survey_respondent ? @survey_respondent.survey_respondent_detail : nil))
+          begin
+            MailService.sendEmail(@survey_respondent.person, MailUse[:DeclinedSurvey], @survey, (@survey_respondent ? @survey_respondent.survey_respondent_detail : nil))
+          rescue => ex
+            logger.error "No email template. We were not able to send the email to " + @survey_respondent.person
+          end
           redirect_to  '/nosurvey.html' # TODO - to be changed
-        else  
-          # Otherwise we continue to the form
+        else # Otherwise we continue to the form
           # TODO - change the '/' to the participant page (for past surveys and managing availabilities etc.)
           survey_redirect_back '/', @survey_respondent.single_access_token
-          #       redirect_to((session[:return_to] + '/?key=' + token) || default)
         end
       else
         # there was a problem so return to the new page
@@ -43,7 +55,7 @@ class SurveyRespondentsController < ApplicationController
         render :action => :new
       end
     else
-      # there was a problem so return to the new page
+      # there was a problem so return to the 'login' page
       @survey_respondent = SurveyRespondent.new
       flash[:error] = "Unable to find a potential participant that matches the inputs."
       render :action => :new

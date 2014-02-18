@@ -11,6 +11,8 @@ SurveyApp.SurveyManagement = (function(Backbone){
             public          : { type : 'Checkbox', title : '<%= t "survey-public" %>' },
             authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>' },
             use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>' },
+            authenticate_msg : { type : 'DependentHtml', title : '<%= t "survey-authentication-intro" %>',
+                                        dependsOn : 'authenticate', dependentValues : ['true'] },
             welcome         : { type : 'Html', title : '<%= t "survey-welcome-message" %>' },
             thank_you       : { type : 'Html', title : '<%= t "survey-thank-you-message" %>' },
             declined_msg    : { type : 'DependentHtml', title : '<%= t "survey-declined-message" %>', 

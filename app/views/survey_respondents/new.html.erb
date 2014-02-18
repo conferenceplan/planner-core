@@ -1,21 +1,24 @@
-<% content_for :jsheader do %>
-  <%= stylesheet_link_tag 'jquery.tooltip.css' %>
-  <%= javascript_include_tag 'vendor/jquery.tooltip.min' %>
-  <script>
-	$(function(){
-		$('#survey-set a').tooltip();
-	});
-  </script>
+
+<% if @survey && !@survey.header_image.empty? %>
+    <div class="row"><div class="col-sm-12"><img src="<%= @survey.header_image if @survey.header_image %>" class="center-block"/></div></div>
+<%end%>
+
+<% if @survey %>
+    <div class="row">
+        <div class="col-sm-12">
+            <h2><%= @survey.name %></h2>
+        </div>
+    </div>
 <% end %>
-  <% if @survey %>
-    <% if !@survey.header_image.empty? %>
-    <div><img src="<%= @survey.header_image if @survey.header_image %>"></div>
-    <% end %>
-  <%end%>
-<div class="container_12">
-<h1 class="grid_8 push_2">Program Participant Questionnaire</h1>
+
+<% if @survey && @survey.authenticate_msg %>
+<div class="row row-buffered">
+    <div class="col-sm-12">
+        <%= @survey.authenticate_msg.html_safe %>
+    </div>
 </div>
-<div class="clear"></div>
-<%= form_for @survey_respondent, :html => {:'accept-charset' => 'UTF-8'} do |f| %>
+<% end %>
+
+<%= form_for @survey_respondent, :html => {:'accept-charset' => 'UTF-8', :class => 'form-horizontal'} do |f| %>
   <%= render :partial => "form", :locals => {:form => f, :button => "I wish to be on program"} %>
 <% end %>

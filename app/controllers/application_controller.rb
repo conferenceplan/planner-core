@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
-  protect_from_forgery
+  protect_from_forgery with: :null_session
   
   helper_method :current_user_session, :current_user, :current_respondent
   
@@ -106,6 +106,10 @@ class ApplicationController < ActionController::Base
       session[:return_to] = request.url
     end
     
+    def store_page page
+      session[:page] = page
+    end
+    
     def redirect_back_or_default(default)
       redirect_to(session[:return_to] || default)
       session[:return_to] = nil
@@ -113,5 +117,9 @@ class ApplicationController < ActionController::Base
     
     def survey_redirect_back(default, token)
       redirect_to((session[:return_to] + '/?key=' + token) || default)
+    end
+    
+    def get_stored_page
+      session[:page]
     end
 end

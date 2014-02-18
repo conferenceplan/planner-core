@@ -142,9 +142,10 @@ class Surveys::ResponseController < ApplicationController
           # check to see if the use is authenticated
           # require_user # TODO - change to test for single access token etc.
           if !respondent_logged_in?
-            logger.error "NEED TO LOGIN"
+            logger.error "NEED TO LOGIN " + new_survey_respondent_url
+            store_page page
             store_location
-            redirect_to new_survey_respondent_url #   new_user_session_url
+            redirect_to new_survey_respondent_url
           end
         end
         
