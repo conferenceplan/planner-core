@@ -44,6 +44,12 @@ class SurveyRespondentsController < ApplicationController
           rescue => ex
             logger.error "No email template. We were not able to send the email to " + @survey_respondent.person
           end
+          
+          if (@survey.decline_status && @survey_respondent.person)
+            @survey_respondent.person.acceptance_status = @survey.decline_status
+            @survey_respondent.person.save!
+          end
+          
           redirect_to  '/nosurvey.html' # TODO - to be changed
         else # Otherwise we continue to the form
           # TODO - change the '/' to the participant page (for past surveys and managing availabilities etc.)

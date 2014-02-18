@@ -1,11 +1,9 @@
 #
 # Render the survey
 #
-# TODO - renderalias needs to be able to use authentication where needed
-#
 #
 class Surveys::ResponseController < ApplicationController
-  layout "dynasurvey" # TODO - check if we want to use this for the layout....
+  layout "dynasurvey"
 
   before_filter :check_for_single_access_token, :only => [:create, :show, :index, :renderalias]
   #
@@ -50,7 +48,7 @@ class Surveys::ResponseController < ApplicationController
           # # also update the underlying person
           updatePerson(@respondent, params[:survey_respondent_detail]) if @respondent
 
-          # TODO - we need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
+          # TODO - we may need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
           # make sure that we have a name and email address
           params[:survey_response].each do |res|
           # check the type of the response and if an array then go though them
@@ -87,6 +85,12 @@ class Surveys::ResponseController < ApplicationController
               saveResponse(@respondent, @survey, res[0], res[1], respondentDetails)
             end
           end
+          
+          if (@survey.accept_status && @respondent.person)
+            @respondent.person.acceptance_status = @survey.accept_status
+            @respondent.person.save!
+          end
+          
         end
         # roll back the transaction if there is an issue
       rescue Exception => err
