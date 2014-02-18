@@ -20,7 +20,7 @@ class SurveyRespondentsController < ApplicationController
   end
 
   #
-  # TODO - if no survey has been spefcified then we want to go to a participant home page....  
+  # TODO - if no survey has been specified then we want to go to a participant home page....  
   #
   def create
     key       = params[:key]

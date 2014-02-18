@@ -54,8 +54,6 @@
                     return split(term).pop();
                 }
                 
-                $('.survey-help').tooltip();
-                
                 $('.cloud-popover').popover({
                                         html:true,
                                         placement:'left',

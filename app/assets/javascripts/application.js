@@ -81,6 +81,8 @@ jQuery(document).ready(function() {
         return Backbone._sync(method, model, success, error);
     };
     
+    $('.survey-help').tooltip();
+                
 });
 
 function alertMessage(message) {
