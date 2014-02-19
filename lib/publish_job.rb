@@ -293,7 +293,7 @@ EOS
         if (dest.people == nil) || (dest.people.index(srcAssignment.person) == nil)
           # check their role for reserved, if reserved then we do not want that person published
           if (srcAssignment.role != PersonItemRole['Reserved']  && srcAssignment.role != PersonItemRole['Invisible'] )
-            assignment = dest.published_programme_item_assignments.new(:person => srcAssignment.person, :role => srcAssignment.role)
+            assignment = dest.published_programme_item_assignments.new(:person => srcAssignment.person, :role => srcAssignment.role, :person_name => srcAssignment.person.getFullPublicationName)
             assignment.save
           end
         else # the destination has the person, but their role may have changed
