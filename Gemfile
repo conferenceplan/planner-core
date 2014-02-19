@@ -34,6 +34,7 @@ gem 'rails', '~> 3.2.12'
 gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate'
+gem 'font_assets'
 
 gem 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
 gem 'jquery-ui-rails', '3.0.1'
