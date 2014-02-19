@@ -30,8 +30,16 @@ class PublishJob
     Rails.cache.clear # make sure that the mem cache is flushed
     
     # update the manifest file in the mobile app for EA
-    updateManifestFile
+    # updateManifestFile
     
+    clearDalliCache # clear the mem cache ...
+    
+  end
+  
+  def clearDalliCache
+    Rails.cache.dalli.with do |client|
+      client.flush
+    end    
   end
   
   def updateManifestFile

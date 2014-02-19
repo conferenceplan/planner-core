@@ -5,6 +5,7 @@ platform :rbx do
   gem "rubysl"
   gem "rdoc"
   gem "test-unit"
+  gem "connection_pool"
 end
 
 gem 'actionmailer' 
