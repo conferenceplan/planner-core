@@ -5,7 +5,6 @@ platform :rbx do
   gem "rubysl"
   gem "rdoc"
   gem "test-unit"
-  gem "connection_pool"
 end
 
 gem 'actionmailer' 
@@ -68,6 +67,7 @@ gem 'rvm-capistrano', '1.5.0', require: false, group: :development
 gem 'capistrano-puma', '0.0.1', require: false, group: :development
 
 gem 'dalli'
+gem "connection_pool"
 
 #
 # Needed for installs
