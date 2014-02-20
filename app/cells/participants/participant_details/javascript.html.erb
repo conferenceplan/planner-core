@@ -219,10 +219,45 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         _.invoke(tabLists, 'reset' );
         _.invoke(tabContent, 'clear' );
     };
+    
+    function getPersonName(data) {
+        var res = "";
+
+        if (typeof data['person[pseudonym_attributes][first_name]'] != 'undefined') {
+            if (data['person[pseudonym_attributes][first_name]']) {
+                res += data['person[pseudonym_attributes][first_name]'];
+            };
+        };
+        if (typeof data['person[pseudonym_attributes][last_name]'] != 'undefined') {
+            if (data['person[pseudonym_attributes][last_name]']) {
+                if (res.length > 0) {
+                    res += ' ';
+                };
+                res += data['person[pseudonym_attributes][last_name]'];
+            };
+        };
+        if (typeof data['person[pseudonym_attributes][suffix]'] != 'undefined') {
+            if (data['person[pseudonym_attributes][suffix]']) {
+                if (res.length > 0) {
+                    res += ' ';
+                };
+                res += rowObject['person[pseudonym_attributes][suffix]'];
+            };
+        };
+                    
+        if (res.length > 0) {
+            res += " (" + data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]'] + ")";
+        } else {
+            res = data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]'];
+        };
+
+        return res;
+    };
 
     function showRegDetails(id) {
         var data = jQuery("#participants").jqGrid('getRowData', id);
-        $('#selected-participant').text(data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']);
+        
+        $('#selected-participant').text(getPersonName(data));
         
         tabContent.push( TabUtils.createTabContent({
             modelType : RegistrationDetail,

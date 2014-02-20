@@ -13,7 +13,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         createColModel : function(){
             return [{
                 label : this.options.name[1], //'Name',
-                index : 'people.last_name', // TODO - we need a way to tell back end to search on name(s)
+                index : 'people.last_name',
                 // hidden : false,
                 hidden : !this.options.name[0],
                 editable : false,
@@ -21,15 +21,25 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     var res = "";
                     
                     if (typeof rowObject['person[pseudonym_attributes][first_name]'] != 'undefined') {
-                        res += rowObject['person[pseudonym_attributes][first_name]'];
+                        if (rowObject['person[pseudonym_attributes][first_name]']) {
+                            res += rowObject['person[pseudonym_attributes][first_name]'];
+                        }
                     };
                     if (typeof rowObject['person[pseudonym_attributes][last_name]'] != 'undefined') {
-                        res += ' ';
-                        res += rowObject['person[pseudonym_attributes][last_name]'];
+                        if (rowObject['person[pseudonym_attributes][last_name]']) {
+                            if (res.length > 0) {
+                                res += ' ';
+                            }
+                            res += rowObject['person[pseudonym_attributes][last_name]'];
+                        }
                     };
                     if (typeof rowObject['person[pseudonym_attributes][suffix]'] != 'undefined') {
-                        res += ' ';
-                        res += rowObject['person[pseudonym_attributes][suffix]'];
+                        if (rowObject['person[pseudonym_attributes][suffix]']) {
+                            if (res.length > 0) {
+                                res += ' ';
+                            }
+                            res += rowObject['person[pseudonym_attributes][suffix]'];
+                        }
                     };
                     
                     if (res.length > 0) {
@@ -298,8 +308,11 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
             id : id,
             first_name : this.element.jqGrid('getCell', id, 'person[first_name]'),
             last_name : this.element.jqGrid('getCell', id, 'person[last_name]'),
-            suffix : this.element.jqGrid('getCell', id, 'person[suffix]')
+            suffix : this.element.jqGrid('getCell', id, 'person[suffix]'),
             // TODO - put in the pseudonym
+            pub_first_name : this.element.jqGrid('getCell', id, 'person[pseudonym_attributes][first_name]'),
+            pub_last_name :this.element.jqGrid('getCell', id, 'person[pseudonym_attributes][last_name]'),
+            pub_suffix :this.element.jqGrid('getCell', id, 'person[pseudonym_attributes][suffix]')
         };
     },
     
