@@ -104,8 +104,7 @@ var AppUtils = (function(){
         },
         
         removeCK : function() {
-
-            this.form.$el.find('.cke').each(function() { // TODO - CHECK
+            this.form.$el.find('.cke').each(function() {
                 try {
                     if(CKEDITOR.instances[$(this)[0].id] != null) {
                         CKEDITOR.instances[$(this)[0].id].destroy(true);
@@ -114,7 +113,6 @@ var AppUtils = (function(){
                     console.error(e);
                 }
             });
-            
         },
         
         close: function (e) {
@@ -144,7 +142,6 @@ var AppUtils = (function(){
                 model: this.model
             });
             
-            // TODO - we want the ability for the caller to specify an alternate template
             if (this.options.modal_template) {
                 this.form.template = _.template($(this.options.modal_template).html());
             };
@@ -507,7 +504,6 @@ var AppUtils = (function(){
         },
         
         selectConflict : function(ev) {
-            // console.debug(this.model.get('item_name'));
             // TODO - scroll to the problem item
             room_name = this.model.get('room_name');
             time = this.model.get('item_start');

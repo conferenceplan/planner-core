@@ -44,6 +44,7 @@
 
 // ---------------
 //= require plugins/cpApp
+//= require plugins/cpAjax
 //= require plugins/cpBaseTable
 //= require plugins/cpItemTable
 //= require plugins/cpParticipantTable

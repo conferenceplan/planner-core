@@ -386,7 +386,6 @@ var TabUtils = (function(){
         return collection;
     };
     
-    // TODO - need a way to over-ride URL for model for collection...
     tabModule.createTabListContent = function createTabListContent(options) {
         if (!options.collection) {
             collection = new options.collectionType();
@@ -409,7 +408,6 @@ var TabUtils = (function(){
                             selectFn : options.selectFn,
                             url : options.modelURL,
                             modal_template : options.modal_template
-                            // TODO
                         },
                     });
                     var collectionView = new viewType({
@@ -425,9 +423,7 @@ var TabUtils = (function(){
                     }
                 }
             });
-            // collection.on("sync", options.updateCallback ); // when the modal does the update and second after the update to the server
         } else {
-            // collection = options.collection;
                 viewType = TabCollectionView.extend({
                     attributes : options.collection_attributes,
                     itemViewOptions : {
@@ -441,21 +437,18 @@ var TabUtils = (function(){
                         selectFn : options.selectFn,
                         url : options.modelURL,
                         modal_template : options.modal_template
-                            // TODO
                     },
                 });
                 var collectionView = new viewType({
                     collection : options.collection,
                     tagName : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div' 
                 });
-                // options.region.show(collectionView);
                 if (options.place) {
                     collectionView.render();
                     $(options.place).html(collectionView.el);
                 } else {
                     options.region.show(collectionView);
                 }
-            // collection.on("sync", options.updateCallback ); // when the modal does the update and second after the update to the server
         };
         
         return collection;
