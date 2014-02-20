@@ -185,6 +185,11 @@ module MailService
             end
           end
           result += '<p>' + names.join(', ') + "</p>\n"
+          
+          if (assignment.programmeItem.participant_notes)
+            result += "<h4>Notes for Participant(s)</h4>\n"
+            result += '<p>' + assignment.programmeItem.participant_notes + "</p>\n"
+          end
         
           # 
           result += "</div></br>\n"
