@@ -35,13 +35,12 @@ class FormatsController < PlannerController
   #  
   def destroy
     format = Format.find(params[:id])
-    
-    # prevent delete of formats that are in use
-    if format.programme_items.size > 0
-      render status: :bad_request, text: 'Can not delete format associated with program items'
-    else  
+
+    begin
       format.destroy
       render status: :ok, text: {}.to_json
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 

@@ -40,9 +40,13 @@ class InvitationCategoriesController < PlannerController
   
   def destroy
     candidate = InvitationCategory.find(params[:id])
-    candidate.destroy
     
-    render status: :ok, text: {}.to_json
+    begin
+      candidate.destroy
+      render status: :ok, text: {}.to_json
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
   end
   
   def list  

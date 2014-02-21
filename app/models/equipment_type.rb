@@ -8,7 +8,7 @@ class EquipmentType < ActiveRecord::Base
 private
 
   def check_for_use
-    if EquipmentNeed.find.where( :equipment_type => id ).exists?
+    if EquipmentNeed.where( :equipment_type_id => id ).exists?
       raise "can not delete an equipment type that is being used"
     end
   end
