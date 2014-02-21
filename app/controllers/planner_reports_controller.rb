@@ -3,6 +3,37 @@
 #
 class PlannerReportsController < PlannerController
   include PlannerReportHelpers
+  
+  #
+  #
+  #
+  def edited_bios
+    @editedBios = PlannerReportsService.findEditedBios
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push [
+          'Name','Bio','Web Site','Twitter','Other Social Media','Photo URL','Facebook'
+        ]
+        
+        @editedBios.each do |e|
+          output.push [e.person.getFullPublicationName,
+              e.bio,
+              e.website ? e.website : '',
+              e.twitterinfo ? e.twitterinfo : '',
+              e.othersocialmedia ? e.othersocialmedia : '',
+              e.photourl ? e.photourl : '',
+              e.facebook ? e.facebook : ''
+          ]
+        end
+        
+        csv_out(output, outfile)
+      }
+    end
+  end
 
   #
   #

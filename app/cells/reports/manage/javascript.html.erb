@@ -72,6 +72,17 @@ ReportApp.ReportManagement = (function(Backbone){
         }
     });
     
+    var PeopleBioColModel = [
+                    {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
+                    {name: 'bio', label : '<%= t "bio" %>', jsonmap: "bio", width: 700, 
+                            cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="height: auto; white-space: normal;"' }},
+                    {name: 'website', label : '<%= t "website" %>', jsonmap: "website"},
+                    {name: 'twitterinfo', label : '<%= t "twitterinfo" %>', jsonmap: "twitterinfo"},
+                    {name: 'othersocialmedia', label : '<%= t "othersocialmedia" %>', jsonmap: "othersocialmedia"},
+                    {name: 'photourl', label : '<%= t "photourl" %>', jsonmap: "photourl"},
+                    {name: 'facebook', label : '<%= t "facebook" %>', jsonmap: "facebook"}
+    ];
+    
     var PeopleByTagColModel = [
                     {name: 'context', label : '<%= t "tag-context" %>', jsonmap: "context", width: 100},
                     {name: 'tag', label : '<%= t "tag(s)" %>', jsonmap: "tag", width: 100},
@@ -112,11 +123,12 @@ ReportApp.ReportManagement = (function(Backbone){
         routes : {
             'panels_with_panelists' : 'panels_with_panelists',
             'panelists_with_panels' : 'panelists_with_panels',
-            'scheduling_conflicts' : 'scheduling_conflicts',
-            'tags_by_context' : 'tags_by_context',
-            'people_by_tags' : 'people_by_tags',
+            'scheduling_conflicts'  : 'scheduling_conflicts',
+            'tags_by_context'       : 'tags_by_context',
+            'people_by_tags'        : 'people_by_tags',
             'panels_by_room'        : 'panels_by_room',
-            'panels_by_timeslot'    : 'panels_by_timeslot'
+            'panels_by_timeslot'    : 'panels_by_timeslot',
+            'edited_bios'           : 'edited_bios'
         },
         
         panels_by_room : function() {
@@ -206,6 +218,17 @@ ReportApp.ReportManagement = (function(Backbone){
                 endPoint    : '/planner_reports/people_by_tag',
                 colModel    : PeopleByTagColModel,
                 caption     : '<%= t "reports-people-by-tag" %>'
+            }));
+        },
+        
+        edited_bios : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/edited_bios',
+                colModel    : PeopleBioColModel,
+                caption     : '<%= t "reports-participant-bios" %>'
             }));
         }
         

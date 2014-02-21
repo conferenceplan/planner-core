@@ -2,6 +2,27 @@
 #
 #
 module PlannerReportsService
+  
+  #
+  #
+  #
+  def self.findEditedBios( acceptanceStatus = AcceptanceStatus['Accepted'], inviteStatus = InviteStatus['Invited'], since = nil )
+    cndStr = ''
+    cndStr += '(people.acceptance_status_id = ?)' if acceptanceStatus
+    cndStr += ' AND ' if !cndStr.empty? && inviteStatus
+    cndStr += '(people.invitestatus_id = ?)' if inviteStatus
+    cndStr += ' AND ' if !cndStr.empty? && since
+    cndStr += '(edited_bios.updated_at > ?)' if since
+
+    conditions = [cndStr]
+    conditions << acceptanceStatus.id if acceptanceStatus
+    conditions << inviteStatus.id if inviteStatus
+    conditions << since if since
+
+    EditedBio.find :all, :include => {:person => :pseudonym},
+                    :conditions => conditions,
+                    :order => 'people.last_name, people.first_name'
+  end
 
   #
   #

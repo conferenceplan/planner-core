@@ -4,7 +4,7 @@ xml.people do
       name = e.person.getFullPublicationName
       xml.name(name)    
       xml.bio do
-           xml.cdata! (BlueCloth.new(e.bio).to_html)
+           xml.cdata! e.bio
       end
       
       if (e.website)
