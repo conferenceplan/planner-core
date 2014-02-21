@@ -8,5 +8,15 @@ class Format < ActiveRecord::Base
     end
   end
   
+  before_destroy :check_for_use
+
+private
+
+  def check_for_use
+    if ProgrammeItem.find.where( :format => id ).exists? || PublishedProgrammeItem.find.where( :format => id ).exists?
+      raise "can not delete a format that is being used"
+    end
+  end
+  
 end
 
