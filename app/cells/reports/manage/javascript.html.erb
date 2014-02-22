@@ -118,6 +118,19 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'Invisible', label : '<%= t "invisible" %>', jsonmap: 'invisible',width: 300, formatter: AppUtils.arrayToString},
                 ];
 
+    var EquipmentNeersColModel = [ 
+                    {name: 'Ref', label : '<%= t "pub-ref" %>', jsonmap: 'pub_reference_number', width: 100},
+                    {name:'Title', label : '<%= t "item-title" %>', jsonmap: "title", width: 500},
+                    {name:'Venue', label : '<%= t "venue" %>', jsonmap: "venue_name"},
+                    {name:'Room', label : '<%= t "room" %>', jsonmap: "room_name"},
+                    {name: 'Format', label : '<%= t "report-selection-item-format" %>', jsonmap: 'format'},
+                    {name: 'item-start-time', label : '<%= t "item-start-time" %>', jsonmap: 'start_time'},
+                    {name: 'End Time', label : '<%= t "item-end-time" %>', jsonmap: 'end_time'},
+                    {name: 'Min People', label : '<%= t "item-min-participants" %>', jsonmap: 'minimum_people'},
+                    {name: 'Max People', label : '<%= t "item-max-participants" %>', jsonmap: 'maximum_people'},
+                    {name: 'Equipment', label : '<%= t "equipment" %>', jsonmap: 'equipment',width: 300, formatter: AppUtils.arrayToString}
+                ];
+
     var Workspace = Backbone.Router.extend({
 
         routes : {
@@ -128,7 +141,19 @@ ReportApp.ReportManagement = (function(Backbone){
             'people_by_tags'        : 'people_by_tags',
             'panels_by_room'        : 'panels_by_room',
             'panels_by_timeslot'    : 'panels_by_timeslot',
-            'edited_bios'           : 'edited_bios'
+            'edited_bios'           : 'edited_bios',
+            'equipment_needs'       : 'equipment_needs'
+        },
+        
+        equipment_needs : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/equipment_needs',
+                colModel    : EquipmentNeersColModel,
+                caption     : '<%= t "reports-items-with-equipment-needs" %>'
+            }));
         },
         
         panels_by_room : function() {

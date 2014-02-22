@@ -7,6 +7,44 @@ class PlannerReportsController < PlannerController
   #
   #
   #
+  def equipment_needs
+    scheduled = params[:scheduled] == "true"
+    format_id = params[:format_id].to_i > 0 ? params[:format_id].to_i : nil
+    plus_setups = false
+    @panels = PlannerReportsService.findPanelsWithPanelists('','1900-01-01', format_id, scheduled, true, plus_setups)
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "equipment_needs" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+
+        output.push [
+          'Ref','Title','Min People','Max People','Format','Start Time','End Time','Room','Venue','Equipment'
+        ]
+        
+        @panels.each do |panel|
+          
+          output.push [panel.pub_reference_number, panel.title, panel.minimum_people, 
+            panel.maximum_people, 
+            (panel.format ? panel.format.name : ''), 
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
+            ((panel.room != nil) ? panel.room.name : ''),
+            ((panel.room != nil) ? panel.room.venue.name : ''),
+            panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(","),
+          ]
+        end
+        
+        csv_out(output, outfile)
+      }
+    end
+
+  end
+  
+  #
+  #
+  #
   def edited_bios
     @editedBios = PlannerReportsService.findEditedBios
     
