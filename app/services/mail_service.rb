@@ -89,6 +89,8 @@ module MailService
     template = mailing.mail_template
     raise "can not find a template for the email" if !template
     
+    toInviteState = template.transiton_invite_status
+    
     to = mailing.testrun ? config.test_email : person.getDefaultEmail.email
     cc = mailing.testrun ? nil : config.cc
     assignments = (mailing.mail_template && mailing.mail_template.mail_use == MailUse[:Schedule]) ? ProgramItemsService.findProgramItemsForPerson(person) : nil
@@ -114,6 +116,7 @@ module MailService
         body:     content
       ).deliver
       saveMailHistory(person, mailing, content, EmailStatus[:Sent])
+      transitionPersonInviteStateAfterEmail(person, toState) if toInviteState && !mailing.testrun
     rescue => msg
       saveMailHistory(person, mailing, msg, EmailStatus[:Failed])
       # THROW ERROR - TODO
