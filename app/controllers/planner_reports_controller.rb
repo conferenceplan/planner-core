@@ -7,6 +7,40 @@ class PlannerReportsController < PlannerController
   #
   #
   #
+  def capacity_report
+    @items = PlannerReportsService.items_over_capacity
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "items_over_capacity" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+
+        output.push [
+          'Title','Format','Start Time','End Time','Room','Venue','Capacity', 'Estimated Audience'
+        ]
+        
+        @items.each do |item|
+          
+          output.push [item.title,
+            (item.format ? item.format.name : ''), 
+            ((item.time_slot != nil) ? item.time_slot.start.strftime('%a %H:%M') : ''),
+            ((item.time_slot != nil) ? item.time_slot.end.strftime('%a %H:%M') : ''),
+            ((item.room != nil) ? item.room.name : ''),
+            ((item.room != nil) ? item.room.venue.name : ''),
+            ((item.room != nil) ? item.room.room_setup.capacity : ''),
+            item.audience_size
+          ]
+        end
+        
+        csv_out(output, outfile)
+      }
+    end
+  end
+  
+  #
+  #
+  #
   def equipment_needs
     scheduled = params[:scheduled] == "true"
     format_id = params[:format_id].to_i > 0 ? params[:format_id].to_i : nil

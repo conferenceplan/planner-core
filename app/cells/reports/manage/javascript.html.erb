@@ -6,6 +6,16 @@ ReportApp.ReportManagement = (function(Backbone){
     
     var GenericForm = Backbone.Form.extend({
     });
+
+    var ItemCapacityColModel = [
+                    {name: 'title',       label : '<%= t "item" %>',  jsonmap: "day",    width: 30},
+                    {name: 'item-start-time', label : '<%= t "item-start-time" %>', jsonmap: 'start_time'},
+                    {name: 'End Time', label : '<%= t "item-end-time" %>', jsonmap: 'end_time'},
+                    {name:'Venue', label : '<%= t "venue" %>', jsonmap: "venue_name"},
+                    {name:'Room', label : '<%= t "room" %>', jsonmap: "room_name"},
+                    {name:'Capacity', label : '<%= t "capacity" %>', jsonmap: "capacity"},
+                    {name:'Audience', label : '<%= t "estimated-audience" %>', jsonmap: "audience"},
+    ];
     
     var PanelsByRoomColModel = [
                     {name: 'room',      label : '<%= t "room" %>',  jsonmap: "room", width: 50},
@@ -118,7 +128,7 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'Invisible', label : '<%= t "invisible" %>', jsonmap: 'invisible',width: 300, formatter: AppUtils.arrayToString},
                 ];
 
-    var EquipmentNeersColModel = [ 
+    var EquipmentNeedsColModel = [ 
                     {name: 'Ref', label : '<%= t "pub-ref" %>', jsonmap: 'pub_reference_number', width: 100},
                     {name:'Title', label : '<%= t "item-title" %>', jsonmap: "title", width: 500},
                     {name:'Venue', label : '<%= t "venue" %>', jsonmap: "venue_name"},
@@ -142,7 +152,19 @@ ReportApp.ReportManagement = (function(Backbone){
             'panels_by_room'        : 'panels_by_room',
             'panels_by_timeslot'    : 'panels_by_timeslot',
             'edited_bios'           : 'edited_bios',
-            'equipment_needs'       : 'equipment_needs'
+            'equipment_needs'       : 'equipment_needs',
+            'capacity_report'       : 'capacity_report'
+        },
+        
+        capacity_report : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/capacity_report',
+                colModel    : ItemCapacityColModel,
+                caption     : '<%= t "reports-items-over-capacity" %>'
+            }));
         },
         
         equipment_needs : function() {
@@ -151,7 +173,7 @@ ReportApp.ReportManagement = (function(Backbone){
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/equipment_needs',
-                colModel    : EquipmentNeersColModel,
+                colModel    : EquipmentNeedsColModel,
                 caption     : '<%= t "reports-items-with-equipment-needs" %>'
             }));
         },

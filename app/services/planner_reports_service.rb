@@ -6,6 +6,15 @@ module PlannerReportsService
   #
   #
   #
+  def self.items_over_capacity
+    ProgrammeItem.all :include => [{:room_item_assignment => {:room => [:room_setup, :venue]}}, :time_slot],
+                      :conditions => "(audience_size is not null) AND (audience_size > room_setups.capacity)",
+                      :order => "time_slots.start, venues.name desc, rooms.name"
+  end
+  
+  #
+  #
+  #
   def self.findEditedBios( acceptanceStatus = AcceptanceStatus['Accepted'], inviteStatus = InviteStatus['Invited'], since = nil )
     cndStr = ''
     cndStr += '(people.acceptance_status_id = ?)' if acceptanceStatus
