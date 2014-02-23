@@ -17,6 +17,7 @@
         {{= name }}
     </td>
     <td>
+        <% if ConfigService.hasCloudinaryConfig? %>
         <div class="thumbnail">
         {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
         {{ if (typeof image != 'undefined') { }}
@@ -34,8 +35,12 @@
             </div>
         {{ } }}
         </div>
+        <% else %>
+            <%= t 'cloudinary-not-configured' %>
+        <% end %>
     </td>
     <td>
+        <% if ConfigService.hasCloudinaryConfig? %>
         <div class="thumbnail">
         {{ var image = _.find(external_images, function(im) { return im['use'] == 'mediumcard' }); }}
         {{ if (typeof image != 'undefined') { }}
@@ -53,6 +58,9 @@
             </div>
         {{ } }}
         </div>
+        <% else %>
+            <%= t 'cloudinary-not-configured' %>
+        <% end %>
     </td>
 </script>
 
@@ -60,6 +68,7 @@
 <script type="text/template" id="default-image-template">
     <div class="row">
         <div class="col-md-6">
+        <% if ConfigService.hasCloudinaryConfig? %>
         <div class="thumbnail">
             {{ if (default_bio_image.url) { }}
             <image src="{{= default_bio_image ? default_bio_image.standard.url : '' }}"></image>
@@ -78,6 +87,9 @@
             </div>
             {{ }; }}
         </div>
+        <% else %>
+            <%= t 'cloudinary-not-configured' %>
+        <% end %>
         </div>
     </div>
 </script>

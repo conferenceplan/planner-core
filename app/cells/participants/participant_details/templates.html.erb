@@ -179,6 +179,7 @@
 <script type="text/template" id="bio-image-template">
     <div class="row">
         <div class="col-md-6">
+            <% if ConfigService.hasCloudinaryConfig? %>
             <div class="thumbnail">
                 {{ if (typeof id != 'undefined') { }}
                 <image src="{{= bio_picture ? bio_picture.standard.url : '' }}"></image>
@@ -201,6 +202,9 @@
                 </div>
                 {{ }; }}
             </div>
+            <% else %>
+            <%= t 'cloudinary-not-configured' %>
+            <% end %>
         </div>
     </div>    
 </script>

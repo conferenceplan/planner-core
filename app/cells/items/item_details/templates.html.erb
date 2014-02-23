@@ -159,6 +159,7 @@ Use the Rails authenticity token in the forms...
 </script>
 
 <script type="text/template" id="item-images-template">
+    <% if ConfigService.hasCloudinaryConfig? %>
     {{ if (typeof id != 'undefined') { }}
     <div>
         {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
@@ -187,7 +188,9 @@ Use the Rails authenticity token in the forms...
         {{ } }}
     </div>
     {{ }; }}    
-    
+    <% else %>
+        <%= t 'cloudinary-not-configured' %>
+    <% end %>
 </script>
 
 
