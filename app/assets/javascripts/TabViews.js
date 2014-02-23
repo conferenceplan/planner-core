@@ -54,7 +54,7 @@ var TabUtils = (function(){
             "click .filter-remove-button" : "removeFilter",
         },
         
-        select : function(event) {
+       select : function(event) {
             if (this.options.selectFn) {
                 this.options.selectFn(this.model.id);
             }
@@ -76,6 +76,10 @@ var TabUtils = (function(){
 
             this.model.on("sync", this.options.syncCallback ); // when the modal does the update and second after the update to the server
             
+            // Add extra events
+            if (this.options.events) {
+                $.extend(this.events, this.options.events);
+            }
         },
         
         removeFilter : function(event) {
@@ -116,7 +120,6 @@ var TabUtils = (function(){
             mdl.render();
             
             if (this.options.form_event) {
-                // console.debug('Set event');
                 mdl.form.on(this.options.form_event, this.options.form_event_fn );
             }
         },
@@ -160,9 +163,15 @@ var TabUtils = (function(){
     });
     
     tabModule.TabControlView = Backbone.Marionette.ItemView.extend({
-        // template : "#address-control-template",
         events : {
             "click .add-model-button" : "createMdl", //"createAddress",
+        },
+        
+        initialize : function() {
+            // Add extra events
+            if (this.options.events) {
+                $.extend(this.events, this.options.events);
+            }
         },
         
         createMdl : function() {
@@ -228,7 +237,8 @@ var TabUtils = (function(){
                         selectCsvFn : options.selectCsvFn,
                         form_event : options.form_event,
                         form_event_fn : options.form_event_fn,
-                        modal_template : options.modal_template
+                        modal_template : options.modal_template,
+                        events : options.events
                     });
                     tabView.render();
                     $(options.place).html(tabView.el);
@@ -248,7 +258,8 @@ var TabUtils = (function(){
                 clearFn         : options.clearFn,
                 form_event : options.form_event,
                 form_event_fn : options.form_event_fn,
-                modal_template : options.modal_template
+                modal_template : options.modal_template,
+                events : options.events
                 });
             tabView.render();
             if (options.region) {
@@ -276,7 +287,8 @@ var TabUtils = (function(){
                 modelURL : options.modelURL,
                 form_event      : options.form_event,
                 form_event_fn   : options.form_event_fn,
-                modal_template : options.modal_template
+                modal_template : options.modal_template,
+                events : options.events
             });
             control.render();
             $(options.place).html(control.el);
@@ -292,7 +304,8 @@ var TabUtils = (function(){
                 modelURL : options.modelURL,
                 form_event      : options.form_event,
                 form_event_fn   : options.form_event_fn,
-                modal_template : options.modal_template
+                modal_template : options.modal_template,
+                events : options.events
             });
             options.region.show(control);
         }

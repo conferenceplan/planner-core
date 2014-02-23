@@ -129,7 +129,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     TagFilter = Backbone.Model.extend({
         // Context name & Tag name
-        // no ids cause no sync with backend (how to avoid dups? - TODO)
+        // no ids cause no sync with backend
     });
     TagFilterCollection = Backbone.Collection.extend({
         model : TagFilter
@@ -279,6 +279,17 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id_name : 'person_id',
             newTitle : '<%= t "create-invite" %>',
             editTitle : '<%= t "edit-invite" %>',
+            events : {
+                'click .model-generate-invite-key-button' : function() {
+                    mdl = this.model;
+                    $.ajax({
+                        url : "/participants/generateInviteKey/" + id + ".json",
+                        success : function() {
+                            mdl.fetch();
+                        }
+                    })
+                }
+            }
         });
         
         tabContent.push( invite_details );
@@ -444,12 +455,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         return invite_details;
     };
     
-    /*
-     * To add parameters for the list
-     * http://sandbox.myconferenceplanning.org/participants/list?   context[0]=Texas&tags[0]=The%20Alamo,&
-     * http://sandbox.myconferenceplanning.org/participants/list?   context[0]=Texas&tags[0]=The%20Alamo,San%20Antonio,&
-     */
-    
     var filterCol = null;
 
     //
@@ -466,9 +471,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             clearRegDetails();
         },
         addFilter : function(context, name) {
-            // TODO - add the context and tag to the TagFilterCollection
-            // associate the collection with a view if not already
-
             if (!filters) {
                 filters = new TagFilterCollection();
             }
@@ -480,11 +482,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                     place : "#participant-filters",
                     collection_attributes : { "class" : "clearfix" },
                     tagremove : function(context, name) {
-                        // alert("removed tag");
                         // force a refresh of the table etc
                         ParticipantApp.PeopleManagement.refreshTable();
                     },
-                    view_attributes : { "style" : "display : inline" }, // TODO - move the style to the style-sheet
+                    view_attributes : { "style" : "display : inline" },
                 });
                 
             }
@@ -530,7 +531,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         refreshTable : function() {
             // get the tags etc from the view and create the query
             var tagQuery = ParticipantApp.PeopleManagement.getTagQuery();
-            jQuery("#participants").participantTable('tagQuery',{ // TODO
+            jQuery("#participants").participantTable('tagQuery',{
                 tagQuery : tagQuery
             });
         }

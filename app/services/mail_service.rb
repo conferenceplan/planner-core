@@ -203,8 +203,6 @@ module MailService
     return result
   end
 
-protected
-
   #
   #
   #
@@ -219,14 +217,16 @@ protected
     if (!person.survey_respondent)
       person.create_survey_respondent( :key => newKeyValue,
                                        :submitted_survey => false)
-      person.save                                       
+      person.save!                                       
     else
       person.survey_respondent.key = newKeyValue
-      person.survey_respondent.save
+      person.survey_respondent.save!
     end
     
     return newKeyValue
   end
+
+protected
 
   #
   # Given an email template and a set of argument generate the body for the email

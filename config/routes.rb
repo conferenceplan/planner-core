@@ -60,6 +60,7 @@ PlannerRc1::Application.routes.draw do
   match 'participants/doClearConflictsFromSurvey',:controller => 'people', :action => 'doClearConflictsFromSurvey', :method => 'post'
   match 'participants/getList',:controller => 'people', :action => 'getList', :method => 'post'
   match 'participants/count', :controller => 'people', :action => 'count', :method => 'get'
+  match 'participants/generateInviteKey/:id', :controller => 'people', :action => 'generateInviteKey', :method => 'get'
 # 
   match 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
   match 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'

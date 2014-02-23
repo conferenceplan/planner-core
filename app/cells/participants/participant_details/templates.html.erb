@@ -111,6 +111,9 @@
 
 <script type="text/template" id="invite-view-template">
 {{ if (typeof id != 'undefined') { }}
+<button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right">
+    <%= t "generate-invite-key" %>
+</button>
 <dl class="dl-horizontal">
     <dt>
         <%= t "first-name" %>

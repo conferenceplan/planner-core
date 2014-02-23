@@ -117,6 +117,22 @@ class PeopleController < PlannerController
   end
   
   #
+  #
+  #
+  def generateInviteKey
+    
+    begin
+      person = Person.find(params[:id])
+      key = MailService.generateSurveyKey person
+      
+      render status: :ok, text: {}.to_json
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+    
+  end
+  
+  #
   # The invite status etc. should be in a seperate controller. TODO
   #
  def invitestatuslist
