@@ -22,7 +22,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   version :thumbnail do
     transform = [{:height => 100, :width => 100, :crop => :fill, :gravity => :face},
-                                {:fetch_format => :png}]
+                                {:fetch_format => :jpg}]
     cloudinary_transformation :transformation => transform
   end
   
@@ -31,7 +31,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   version :standard do
     transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face},
-                                {:fetch_format => :png}]
+                                {:fetch_format => :jpg}]
     cloudinary_transformation :transformation => transform
   end
   
@@ -49,13 +49,13 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   def bioList
     width = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
     height = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
-    return :height => height, :width => width, :crop => :fill, :gravity => :face, :radius => :max, :fetch_format => :png
+    return :height => height, :width => width, :crop => :fill, :gravity => :face, :radius => :max, :fetch_format => :jpg
   end
   
   def bioDetail
     width = ((model.scale && model.scale > 0) ? 100 * model.scale : 100).to_i
     height = ((model.scale && model.scale > 0) ? 100 * model.scale : 100).to_i
-    return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :png
+    return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
   end
   
   #
@@ -63,7 +63,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   version :circle do
     transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face, :radius => :max},
-                                {:fetch_format => :png}]
+                                {:fetch_format => :jpg}]
     cloudinary_transformation :transformation => transform
   end
   
@@ -72,7 +72,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   version :grayscale do
     transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face}, 
-                                {:effect => :grayscale}, {:fetch_format => :png}]
+                                {:effect => :grayscale}, {:fetch_format => :jpg}]
     cloudinary_transformation :transformation => transform
   end
   
@@ -81,7 +81,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   version :grayscale_circle do
     transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face, :radius => :max}, 
-                                {:effect => :grayscale}, {:fetch_format => :png}]
+                                {:effect => :grayscale}, {:fetch_format => :jpg}]
     cloudinary_transformation :transformation => transform
   end
   

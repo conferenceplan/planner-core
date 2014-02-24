@@ -20,7 +20,7 @@ class PictureUploader < CarrierWave::Uploader::Base
   #
   version :thumbnail do
     transform = [{:width => 200, :crop => :scale},
-                                {:fetch_format => :png}]
+                                {:fetch_format => :jpg}]
     cloudinary_transformation :transformation => transform
   end
   
@@ -38,13 +38,13 @@ class PictureUploader < CarrierWave::Uploader::Base
   def largeCard
     width = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
     height = ((model.scale && model.scale > 0) ? 128 * model.scale : 128).to_i
-    return :width => width, :height => height, :crop => :fill, :fetch_format => :png
+    return :width => width, :height => height, :crop => :fill, :fetch_format => :jpg
   end
   
   def mediumCard
     width = ((model.scale && model.scale > 0) ? 130 * model.scale : 130).to_i
     height = ((model.scale && model.scale > 0) ? 130 * model.scale : 130).to_i
-    return :width => width, :height => height, :crop => :fill, :fetch_format => :png
+    return :width => width, :height => height, :crop => :fill, :fetch_format => :jpg
   end
   #
   #
@@ -60,20 +60,20 @@ class PictureUploader < CarrierWave::Uploader::Base
   def bioList
     width = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
     height = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
-    return :height => height, :width => width, :crop => :fill, :gravity => :face, :radius => :max, :fetch_format => :png
+    return :height => height, :width => width, :crop => :fill, :gravity => :face, :radius => :max, :fetch_format => :jpg
   end
   
   def bioDetail
     width = ((model.scale && model.scale > 0) ? 100 * model.scale : 100).to_i
     height = ((model.scale && model.scale > 0) ? 100 * model.scale : 100).to_i
-    return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :png
+    return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
   end
   
   #
   #
   #
   version :standard do
-    transform = [{:fetch_format => :png}]
+    transform = [{:fetch_format => :jpg}]
     cloudinary_transformation :transformation => transform
   end
 
