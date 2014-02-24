@@ -14,7 +14,7 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name:'Venue', label : '<%= t "venue" %>', jsonmap: "venue_name"},
                     {name:'Room', label : '<%= t "room" %>', jsonmap: "room_name"},
                     {name:'Capacity', label : '<%= t "capacity" %>', jsonmap: "capacity"},
-                    {name:'Audience', label : '<%= t "estimated-audience" %>', jsonmap: "audience"},
+                    {name:'Audience', label : '<%= t "item-estimated-audience-size" %>', jsonmap: "audience"},
     ];
     
     var PanelsByRoomColModel = [
@@ -86,11 +86,11 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
                     {name: 'bio', label : '<%= t "bio" %>', jsonmap: "bio", width: 700, 
                             cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="height: auto; white-space: normal;"' }},
-                    {name: 'website', label : '<%= t "website" %>', jsonmap: "website"},
-                    {name: 'twitterinfo', label : '<%= t "twitterinfo" %>', jsonmap: "twitterinfo"},
-                    {name: 'othersocialmedia', label : '<%= t "othersocialmedia" %>', jsonmap: "othersocialmedia"},
-                    {name: 'photourl', label : '<%= t "photourl" %>', jsonmap: "photourl"},
-                    {name: 'facebook', label : '<%= t "facebook" %>', jsonmap: "facebook"}
+                    {name: 'website', label : '<%= t "participant-url" %>', jsonmap: "website"},
+                    {name: 'twitterinfo', label : '<%= t "participant-twitter-handle" %>', jsonmap: "twitterinfo"},
+                    {name: 'othersocialmedia', label : '<%= t "other-social-media" %>', jsonmap: "othersocialmedia"},
+                    {name: 'photourl', label : '<%= t "participant-photo" %>', jsonmap: "photourl"},
+                    {name: 'facebook', label : '<%= t "participant-facebook-url" %>', jsonmap: "facebook"}
     ];
     
     var PeopleByTagColModel = [
