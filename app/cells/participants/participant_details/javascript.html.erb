@@ -16,7 +16,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             state : { type : 'Text', title : '<%= t "state" %>' },
             postcode : { type : 'Text', title : '<%= t "post-code" %>' },
             country : { type : 'Text', title : '<%= t "country" %>' },
-            isdefault : { type : 'Checkbox', title : '<%= t "is default" %>'},
+            isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'},
         },
         urlRoot : '/postal_addresses'
     });
@@ -28,7 +28,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     EmailAddress = Backbone.Model.extend({
         schema : {
             email : { type : 'Text', title : '<%= t "email" %>'},
-            isdefault : { type : 'Checkbox', title : '<%= t "is default" %>'}
+            isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'}
         },
         urlRoot : '/email_addresses'
     });
