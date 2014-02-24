@@ -83,7 +83,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             'comments' : { type : 'TextArea', title : '<%= t "comments" %>' },
             invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
             acceptance_status_id : { type : 'Select', title : '<%= t "acceptance-status" %>', options : <%= AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
 
         },
         urlRoot : '/participants'
@@ -241,7 +241,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 if (res.length > 0) {
                     res += ' ';
                 };
-                res += rowObject['person[pseudonym_attributes][suffix]'];
+                if (data['person[pseudonym_attributes][suffix]']) {
+                    res += data['person[pseudonym_attributes][suffix]'];
+                }
             };
         };
                     

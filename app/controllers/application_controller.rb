@@ -116,7 +116,11 @@ class ApplicationController < ActionController::Base
     end
     
     def survey_redirect_back(default, token)
-      redirect_to((session[:return_to] + '/?key=' + token) || default)
+      if session[:return_to]
+        redirect_to((session[:return_to] + '/?key=' + token) || default)
+      else
+        redirect_to(default + '/?key=' + token)
+      end      
     end
     
     def get_stored_page

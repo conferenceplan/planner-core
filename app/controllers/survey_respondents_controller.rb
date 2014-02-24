@@ -53,7 +53,7 @@ class SurveyRespondentsController < ApplicationController
           redirect_to  '/nosurvey.html' # TODO - to be changed
         else # Otherwise we continue to the form
           # TODO - change the '/' to the participant page (for past surveys and managing availabilities etc.)
-          survey_redirect_back '/', @survey_respondent.single_access_token
+          survey_redirect_back '/form/partsurvey', @survey_respondent.single_access_token
         end
       else
         # there was a problem so return to the new page
