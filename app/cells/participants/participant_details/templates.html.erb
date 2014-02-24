@@ -183,13 +183,15 @@
 
 <script type="text/template" id="bio-image-template">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <% if ConfigService.hasCloudinaryConfig? %>
             <div class="thumbnail">
                 {{ if (typeof id != 'undefined') { }}
-                <image src="{{= bio_picture ? bio_picture.standard.url : '' }}"></image>
+                <div align="left" class="voffset10 loffset10">
+                	<image src="{{= bio_picture ? bio_picture.standard.url : '' }}"></image>
+                </div>
                 <div class="caption">
-                    <h3><%= t "bio-image" %></h3>
+                    <h4><%= t "bio-image" %></h4>
                     <p>
                         <button class="model-edit-button btn btn-primary btn-xs">
                             <%= t "edit" %>
@@ -198,7 +200,7 @@
                 </div>
                 {{ } else { }}
                 <div class="caption">
-                    <h3><%= t "bio-image" %></h3>
+                    <h4><%= t "bio-image" %></h4>
                     <p>
                         <button class="model-new-button btn btn-primary btn-xs">
                             <%= t "new" %>
