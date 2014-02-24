@@ -44,7 +44,7 @@ class VenueController < PlannerController
       venue.destroy
       render status: :ok, text: {}.to_json
     else
-      render status: :bad_request, text: 'Con not delete venue that has rooms'
+      render status: :bad_request, text: 'Can not delete venue that has rooms'
     end
   end
    

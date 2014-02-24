@@ -241,16 +241,16 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 if (res.length > 0) {
                     res += ' ';
                 };
-                if (data['person[pseudonym_attributes][suffix]']) {
-                    res += data['person[pseudonym_attributes][suffix]'];
-                }
+                res += data['person[pseudonym_attributes][suffix]'];
             };
         };
+        
+        var name = (data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']).trim();
                     
         if (res.length > 0) {
-            res += " (" + data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]'] + ")";
+            res += " (" +  name + ")";
         } else {
-            res = data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]'];
+            res = name;
         };
 
         return res;

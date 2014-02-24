@@ -16,7 +16,7 @@ class PeopleController < PlannerController
 
       render status: :ok, text: {}.to_json
     else  
-      render status: :bad_request, text: 'Con not delete a person that has been assigned to programme items'
+      render status: :bad_request, text: 'Can not delete a person that has been assigned to programme items'
     end
   end
 

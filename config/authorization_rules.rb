@@ -54,6 +54,7 @@ authorization do
     has_permission_on :tags, :to => :manage
     has_permission_on :equipment_types, :to => :manage
     has_permission_on :equipment_needs, :to => :manage
+    has_permission_on :communications_mailing, :to => :read
   end
   
   role :Planner do
@@ -87,7 +88,6 @@ authorization do
     has_permission_on :survey_query, :to => :manage
     has_permission_on :survey_reports, :to => :report
     has_permission_on :pages_communications_dash, :to => :read
-    has_permission_on :communications_mailing, :to => :read
     has_permission_on :communications_mail_history, :to => :read
     has_permission_on :communications_mail_templates, :to => :read
   end

@@ -41,13 +41,13 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                             res += rowObject['person[pseudonym_attributes][suffix]'];
                         }
                     };
-                    
+                    var name = (rowObject['person[first_name]'] + ' ' + rowObject['person[last_name]'] + ' ' + rowObject['person[suffix]']).trim();
+                                
                     if (res.length > 0) {
-                        res += "<br/>(" + rowObject['person[first_name]'] + ' ' + rowObject['person[last_name]'] + ' ' + rowObject['person[suffix]'] + ")";
+                        res += "<br/>(" +  name + ")";
                     } else {
-                        res = rowObject['person[first_name]'] + ' ' + rowObject['person[last_name]'] + ' ' + rowObject['person[suffix]'];
-                    }
-
+                        res = name;
+                    };
                     
                     return res;
                 }

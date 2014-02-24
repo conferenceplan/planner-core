@@ -57,6 +57,9 @@
                 {{ if (person.pseudonym) { }}
                     {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                     ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else if (person.pub_first_name || person.pub_last_name) { }}
+                    {{= person.pub_first_name }} {{= person.pub_last_name }}  {{= person.pub_suffix }}
+                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}

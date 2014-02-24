@@ -78,7 +78,7 @@ class SurveyQueryController < PlannerController
       query.destroy
       render status: :ok, text: {}.to_json
     else
-      render status: :bad_request, text: 'Con not delete query owned by another user'
+      render status: :bad_request, text: 'Can not delete query owned by another user'
     end
   end
   
