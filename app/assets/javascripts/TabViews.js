@@ -77,8 +77,8 @@ var TabUtils = (function(){
             this.model.on("sync", this.options.syncCallback ); // when the modal does the update and second after the update to the server
             
             // Add extra events
-            if (this.options.events) {
-                $.extend(this.events, this.options.events);
+            if (this.options.extra_events) {
+                $.extend(this.events, this.options.extra_events);
             }
         },
         
@@ -169,8 +169,8 @@ var TabUtils = (function(){
         
         initialize : function() {
             // Add extra events
-            if (this.options.events) {
-                $.extend(this.events, this.options.events);
+            if (this.options.extra_events) {
+                $.extend(this.events, this.options.extra_events);
             }
         },
         
@@ -238,7 +238,7 @@ var TabUtils = (function(){
                         form_event : options.form_event,
                         form_event_fn : options.form_event_fn,
                         modal_template : options.modal_template,
-                        events : options.events
+                        extra_events : options.events
                     });
                     tabView.render();
                     $(options.place).html(tabView.el);
@@ -259,7 +259,7 @@ var TabUtils = (function(){
                 form_event : options.form_event,
                 form_event_fn : options.form_event_fn,
                 modal_template : options.modal_template,
-                events : options.events
+                extra_events : options.events
                 });
             tabView.render();
             if (options.region) {
@@ -288,7 +288,7 @@ var TabUtils = (function(){
                 form_event      : options.form_event,
                 form_event_fn   : options.form_event_fn,
                 modal_template : options.modal_template,
-                events : options.events
+                extra_events : options.events
             });
             control.render();
             $(options.place).html(control.el);
@@ -305,7 +305,7 @@ var TabUtils = (function(){
                 form_event      : options.form_event,
                 form_event_fn   : options.form_event_fn,
                 modal_template : options.modal_template,
-                events : options.events
+                extra_events : options.events
             });
             options.region.show(control);
         }
