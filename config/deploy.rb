@@ -1,7 +1,7 @@
 #
 # Capistrano script for RC1 version of the Planner using Rails 3.2.x
 #
-set :stages, %w(parctec loncontest boskonetest) # production staging sandbox 
+set :stages, %w(parctec loncontest boskonetest loncon) # production staging sandbox 
 set :default_stage, "parctec"
 
 require "rvm/capistrano"
