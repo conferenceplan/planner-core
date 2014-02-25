@@ -22,7 +22,7 @@ class Surveys::ResponseController < ApplicationController
     if !@errors.empty?
       # render the page again with error messages
       @current_key = params[:key];
-      render :index
+      render :renderalias
     else
       respondentDetails = nil
       
@@ -45,7 +45,7 @@ class Surveys::ResponseController < ApplicationController
             end
           end
           
-          # # also update the underlying person
+          # # also update the underlying person          
           updatePerson(@respondent, params[:survey_respondent_detail]) if @respondent
 
           # TODO - we may need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
@@ -505,7 +505,7 @@ class Surveys::ResponseController < ApplicationController
       res['first_name'] = person.first_name
       res['last_name'] = person.last_name
       res['suffix'] = person.suffix
-      res['email'] = person.getDefaultEmail().email
+      res['email'] = person.getDefaultEmail() ? person.getDefaultEmail().email : ''
     else  
       res['first_name'] = details.first_name  if details.first_name
       res['last_name'] = details.last_name  if details.last_name
