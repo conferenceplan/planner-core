@@ -1,3 +1,5 @@
+require 'mailing_job'
+
 class Communications::MailingController < PlannerController
   
   def index
@@ -76,10 +78,8 @@ class Communications::MailingController < PlannerController
     @mailing.update_attributes(params[:mailing])
     
     if @mailing.scheduled
-      logger.debug "ENQUE JOB"
       mailingJob = MailingJob.new
       Delayed::Job.enqueue mailingJob
-      logger.debug "ENQUE JOB"
     end
   end
 
