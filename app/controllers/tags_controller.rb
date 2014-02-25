@@ -31,10 +31,12 @@ class TagsController < PlannerController
     
     if isok(@className)
       obj = eval(@className).find(@personId)
-      
       # 1. Get the set of contexts
       # contexts = TagContext.all
-      contexts = getContexts(@className).sort_by{|name| name.downcase }
+      contexts1 = getContexts(@className)
+      contexts2 = TagContext.all.collect{|v| v.name}
+      contexts = contexts1.concat(contexts2).uniq
+      
       # 2. For each context get the tags for thie person and add them to the results
       @allTags = Hash.new
       contexts.each do |context|
@@ -44,9 +46,6 @@ class TagsController < PlannerController
         end
       end
     end
-    
-    # 3. Then pass this along to the view
-    # render json: @allTags.to_json, :content_type => 'application/json'
   end
   
   #
