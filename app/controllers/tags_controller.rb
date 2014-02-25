@@ -33,13 +33,14 @@ class TagsController < PlannerController
       obj = eval(@className).find(@personId)
       
       # 1. Get the set of contexts
-      contexts = TagContext.all
+      # contexts = TagContext.all
+      contexts = getContexts(@className).sort_by{|name| name.downcase }
       # 2. For each context get the tags for thie person and add them to the results
       @allTags = Hash.new
       contexts.each do |context|
-        tags = obj.tag_list_on( context.name )
+        tags = obj.tag_list_on( context )
         if tags != nil
-          @allTags[context.name] = tags
+          @allTags[context] = tags
         end
       end
     end
