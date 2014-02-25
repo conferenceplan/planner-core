@@ -98,7 +98,7 @@ class Surveys::ResponseController < ApplicationController
         logger.error err
         logger.error err.backtrace
         @current_key = params[:key];
-        render :index
+        render :renderalias
       end
       
       # send email confirmation of survey etc., use the email address that they provided in the survey
