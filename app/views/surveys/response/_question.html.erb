@@ -5,12 +5,12 @@
         <div class="col-sm-12 <%='error' if @errors && @errors[question.id] %>">
             <% if question.question && (question.question.size > 0) && !([:address, :phone].include? question.question_type) %>
                 <% if ([:textbox].include? question.question_type) || question.horizontal %>
-                <label class="col-sm-12">
+                    <label class="col-sm-12 <%= question.mandatory ? 'text-danger' : '' %>">
                 <% else %>
                     <% if (question.text_size && question.text_size < 10) %>
-                        <label class="col-sm-6">
+                        <label class="col-sm-6 <%= question.mandatory ? 'text-danger' : '' %>">
                     <% else %>
-                        <label class="col-sm-2">
+                        <label class="col-sm-2 <%= question.mandatory ? 'text-danger' : '' %>">
                     <% end %>
                 <% end %>
                     <%= question.question.html_safe %>
