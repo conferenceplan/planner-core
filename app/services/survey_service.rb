@@ -36,7 +36,7 @@ module SurveyService
                               selectStr + query[0] +
                               ' order by last_name'  +
                               createJoinPart2(surveyQuery.survey_query_predicates, metadata, query[2]) + 
-                              ' left join survey_histories hist on hist.survey_id = ' + surveyQuery.id.to_s + ' and hist.survey_respondent_detail_id = res.id' + dateOrder
+                              ' left join survey_histories hist on hist.survey_id = ' + surveyQuery.survey_id.to_s + ' and hist.survey_respondent_detail_id = res.id' + dateOrder
                                )
     
     { :meta_data => metadata, :result_set => resultSet, :count => count }
