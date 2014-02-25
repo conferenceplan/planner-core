@@ -92,11 +92,13 @@ $.widget( "cp.baseTable" , {
             refreshGrid : function(grid, mdl) {
                 if (mdl) {
                     var page_to = pageTo(mdl);
+                    var to_id = mdl.id;
+                    mdl.clear();
                     grid.jqGrid('setGridParam', {
                         postData : {
                             page_to : page_to, // make sure that the current page contains the selected element
                             filters : {},
-                            current_selection : mdl.id // to pass back for the selection
+                            current_selection : to_id // to pass back for the selection
                         },
                     });
                 }
