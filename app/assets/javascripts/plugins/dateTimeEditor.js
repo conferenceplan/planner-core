@@ -36,14 +36,28 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
         return this;
     },
     
+    lpad : function(orig, padString, length) {
+        var str = orig;
+        while (str.length < length)
+            str = padString + str;
+        return str;
+    },
+    
     // We need to convert to the correct timezone without changing the date and time when sending to the server
     // and convert to browser TZ on the way back
     // can we do this by overloading the get and set?
     getValue: function() {
         var offset = this.schema.tz_offset;
         var val = this.picker.data("DateTimePicker").getDate(); // date the datetime from the widget
+        var negSign = offset < 0;
         valStr = val.format('YYYY-MM-DD HH:mm'); // create a string without the timezone
-        valStr += offset.toString(); // add in the time offset for the convention i.e. " -0500";
+        if (offset < 0) {
+            valStr += ' -';
+        } else {
+            valStr += ' +';
+        }
+        valStr += this.lpad(Math.abs(offset).toString(), "0",2) + "00"; // add in the time offset for the convention i.e. " -0500";
+        console.debug(valStr);
         return valStr; // and that is what we will send to the backend
     },
 
