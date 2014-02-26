@@ -72,8 +72,18 @@ Use the Rails authenticity token in the forms...
             </div>
             <div class="form-group">
                 <span data-editor>
-                <div class="col-sm-6" data-editors="notes"></div> <!--  The form element needs a placeholder="XXXXXX" -->
-                <div class="col-sm-6" data-editors="participant_notes"></div>
+                    <div class="col-sm-6">
+                        <span>
+                        <label><%= t "item-notes" %></label>
+                        <div data-editors="notes"></div>
+                        </span>
+                    </div>
+                    <div class="col-sm-6">
+                        <span>
+                        <label><%= t "item-notes-for-participants" %></label>
+                        <div data-editors="participant_notes"></div>
+                        </span>
+                    </div>
                 </span>
             </div>
             <div class="form-group">

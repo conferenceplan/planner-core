@@ -36,8 +36,8 @@ ItemApp.ItemManagement = (function(Backbone){
                         startDate : "<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).strftime('%m/%d/%Y') %>",
                         endDate : "<%= (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + ((SITE_CONFIG[:conference][:number_of_days]).to_i).days).strftime('%m/%d/%Y') %>"
                 } },
-            notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 2, cols : 60, placeholder : '<%= t "item-notes" %>' } },
-            participant_notes : { type : 'TextArea', title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60, placeholder : '<%= t "item-notes-for-participants" %>' } },
+            notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 2, cols : 60 } },
+            participant_notes : { type : 'TextArea', title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60 } },
             format_id : { type : 'Select', title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             setup_type_id : { type : 'Select', title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             print : { type : 'Checkbox', title : '<%= t "item-print" %>'},
