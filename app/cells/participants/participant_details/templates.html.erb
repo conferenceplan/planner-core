@@ -2,7 +2,7 @@
 -->
 <script type="text/template" id="person-form-template">
     <form class="form-horizontal" role="form">
-        <div class="row">
+        <fieldset>
             <div class="form-group">
                 <label class="col-sm-2 control-label">
                    <%= t  "name" %>
@@ -13,8 +13,6 @@
                 <div class="col-sm-2" data-editors="suffix"></div>
                 </span>
             </div>
-        </div>
-        <div class="row">
             <div class="form-group">
             <label class="col-sm-2 control-label">
                 <%= t "publication-name" %>
@@ -23,8 +21,6 @@
             <div class="col-sm-4" data-editors="pseudonym.last_name"></div>
             <div class="col-sm-2" data-editors="pseudonym.suffix"></div>
             </div>
-        </div>
-        <div class="row">
             <div class="form-group">
             <label class="col-sm-2 control-label">
                 <%= t "company-info" %>
@@ -32,39 +28,31 @@
             <div class="col-sm-5" data-editors="company"></div>
             <div class="col-sm-5" data-editors="job_title"></div>
             </div>
-        </div>
-        <div class="row">
             <div class="form-group">
             <label class="col-sm-2 control-label">
                 <%= t "comments" %>
             </label>
             <div class="col-sm-10" data-editors="comments"></div>
             </div>
-        </div>
-        <div class="row">
             <div class="form-group">
             <label class="col-sm-2 control-label">
                 <%= t "invitation-status" %>
             </label>
             <div class="col-sm-4" data-editors="invitestatus_id"></div>
             </div>
-        </div>
-        <div class="row">
             <div class="form-group">
             <label class="col-sm-2 control-label">
                 <%= t "acceptance-status" %>
             </label>
             <div class="col-sm-4" data-editors="acceptance_status_id"></div>
             </div>
-        </div>
-        <div class="row">
             <div class="form-group">
             <label class="col-sm-2 control-label">
                 <%= t "invitation-category" %>
             </label>
             <div class="col-sm-4" data-editors="invitation_category_id"></div>
             </div>
-        </div>
+        </fieldset>
     </form>
 </script>
     

@@ -3,6 +3,105 @@ Use the Rails authenticity token in the forms...
 
 <%= form_authenticity_token %>
 -->
+<script type="text/template" id="item-form-template">
+    <form class="form-horizontal" role="form">
+        <fieldset>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
+                   <%= t  "title" %>
+                </label>
+                <span data-editor>
+                <div class="col-sm-10" data-editors="title"></div> <!--  The form element needs a placeholder="XXXXXX" -->
+                </span>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
+                   <%= t  "short-title" %>
+                </label>
+                <span data-editor>
+                <div class="col-sm-10" data-editors="short_title"></div> <!--  The form element needs a placeholder="XXXXXX" -->
+                </span>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">
+                   <%= t  "item-description" %>
+                </label>
+                <span data-editor>
+                <div class="col-sm-10" data-editors="precis"></div> <!--  The form element needs a placeholder="XXXXXX" -->
+                </span>
+            </div>
+        <fieldset>
+            <div class="form-group">
+                <span data-editor>
+                    <div class="col-sm-3">
+                        <label><%= t "item-duration" %></label>
+                        <div data-editors="duration"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "item-min-participants" %></label>
+                        <div data-editors="minimum_people"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "item-max-participants" %></label>
+                        <div data-editors="maximum_people"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "item-estimated-audience-size" %></label>
+                        <div data-editors="audience_size"></div>
+                    </div>
+                </span>
+            </div>
+        </fieldset>
+            <div class="form-group">
+                <span data-editor>
+                    <div class="col-sm-3">
+                        <label><%= t "item-format" %></label>
+                        <div data-editors="format_id"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "item-setup" %></label>
+                        <div data-editors="setup_type_id"></div>
+                    </div>
+                    <div class="col-sm-6">
+                        <span>
+                        <label><%= t "item-print" %></label>
+                        <div data-editors="print"></div>
+                        </span>
+                    </div>
+                </span>
+            </div>
+            <div class="form-group">
+                <span data-editor>
+                <div class="col-sm-6" data-editors="notes"></div> <!--  The form element needs a placeholder="XXXXXX" -->
+                <div class="col-sm-6" data-editors="participant_notes"></div>
+                </span>
+            </div>
+            <div class="form-group">
+                <span data-editor>
+                    <div class="col-sm-3">
+                        <label><%= t "item-room" %></label>
+                        <div data-editors="room_id"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "item-start-time" %></label>
+                        <div data-editors="start_time"></div>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-3">
+                        <label><%= t "item-publication-reference" %></label>
+                        <div data-editors="pub_reference_number"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "mobile-card-size" %></label>
+                        <div data-editors="mobile_card_size"></div>
+                    </div>
+                </span>
+            </div>
+        </fieldset>
+
+    </form>
+</script>
 
 <script type="text/template" id="program-item-view-template">
     {{ if (typeof id != 'undefined') { }}

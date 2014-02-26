@@ -16,11 +16,14 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
             entities_additional : '',
             htmlEncodeOutput : false,
             removePlugins : "elementspath,flash",
+            height : '5em',
+            enterMode : CKEDITOR.ENTER_BR,
+            shiftEnterMode: CKEDITOR.ENTER_P,
             toolbar : 'CPlan',
             toolbar_CPlan : [
                 { name: 'document', items : [ 'Source' ] },
                 { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
-                { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock','-','BidiLtr','BidiRtl' ] },
+                { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Blockquote' ] }, //'Outdent','Indent','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock',,'-','BidiLtr','BidiRtl'
                 { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
                 { name: 'insert', items : [ 'HorizontalRule', 'SpecialChar' ] }, // 'Image', 'Table',
                 // '/',

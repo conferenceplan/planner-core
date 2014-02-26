@@ -35,6 +35,7 @@ class Items::ItemListCell < Cell::Rails
     @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : false
     
     @modelType = args.has_key?(:modelType) ? args[:modelType] : 'null'
+    @modelTemplate = args.has_key?(:modelTemplate) ? args[:modelTemplate] : ""
     @showControls = args.has_key?(:showControls) ? args[:showControls] : false
     
     render

@@ -49,15 +49,16 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
     getValue: function() {
         var offset = this.schema.tz_offset;
         var val = this.picker.data("DateTimePicker").getDate(); // date the datetime from the widget
-        var negSign = offset < 0;
-        valStr = val.format('YYYY-MM-DD HH:mm'); // create a string without the timezone
-        if (offset < 0) {
-            valStr += ' -';
-        } else {
-            valStr += ' +';
+        var valStr = "";
+        if (val) {
+            valStr = val.format('YYYY-MM-DD HH:mm'); // create a string without the timezone
+            if (offset < 0) {
+                valStr += ' -';
+            } else {
+                valStr += ' +';
+            }
+            valStr += this.lpad(Math.abs(offset).toString(), "0",2) + "00"; // add in the time offset for the convention i.e. " -0500";
         }
-        valStr += this.lpad(Math.abs(offset).toString(), "0",2) + "00"; // add in the time offset for the convention i.e. " -0500";
-        console.debug(valStr);
         return valStr; // and that is what we will send to the backend
     },
 
