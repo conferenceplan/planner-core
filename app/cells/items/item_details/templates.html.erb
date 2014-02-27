@@ -62,11 +62,33 @@ Use the Rails authenticity token in the forms...
                         <label><%= t "item-setup" %></label>
                         <div data-editors="setup_type_id"></div>
                     </div>
+                <span data-editor>
+                    <div class="col-sm-3">
+                        <label><%= t "item-room" %></label>
+                        <div data-editors="room_id"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "item-start-time" %></label>
+                        <div data-editors="start_time"></div>
+                    </div>
+                </span>
+                </span>
+            </div>
+            <div class="form-group">
+                <span data-editor>
                     <div class="col-sm-6">
                         <span>
                         <label><%= t "item-print" %></label>
                         <div data-editors="print"></div>
                         </span>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "item-publication-reference" %></label>
+                        <div data-editors="pub_reference_number"></div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label><%= t "mobile-card-size" %></label>
+                        <div data-editors="mobile_card_size"></div>
                     </div>
                 </span>
             </div>
@@ -83,28 +105,6 @@ Use the Rails authenticity token in the forms...
                         <label><%= t "item-notes-for-participants" %></label>
                         <div data-editors="participant_notes"></div>
                         </span>
-                    </div>
-                </span>
-            </div>
-            <div class="form-group">
-                <span data-editor>
-                    <div class="col-sm-3">
-                        <label><%= t "item-room" %></label>
-                        <div data-editors="room_id"></div>
-                    </div>
-                    <div class="col-sm-3">
-                        <label><%= t "item-start-time" %></label>
-                        <div data-editors="start_time"></div>
-                    </div>
-                </span>
-                <span data-editor>
-                    <div class="col-sm-3">
-                        <label><%= t "item-publication-reference" %></label>
-                        <div data-editors="pub_reference_number"></div>
-                    </div>
-                    <div class="col-sm-3">
-                        <label><%= t "mobile-card-size" %></label>
-                        <div data-editors="mobile_card_size"></div>
                     </div>
                 </span>
             </div>

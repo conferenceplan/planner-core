@@ -39,6 +39,7 @@
 //= require backbone-forms/templates/bootstrap3
 
 //= require moment
+//= require moment/fr.js
 //= require bootstrap-datetimepicker
 //= require d3
 

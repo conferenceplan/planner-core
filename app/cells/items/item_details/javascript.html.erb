@@ -31,6 +31,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     picker : {
                         useSeconds : false,
                         minuteStepping : 15,
+                        orientation : 'left',
                         format : "DD MMM YYYY, HH:mm",
                         defaultDate : "<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).strftime('%m/%d/%Y') %>",
                         startDate : "<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).strftime('%m/%d/%Y') %>",
@@ -362,6 +363,7 @@ ItemApp.ItemManagement = (function(Backbone){
 })(Backbone);
 
 jQuery(document).ready(function() {
+    moment.lang("<%= I18n.locale %>");
     ItemApp.start();
     ItemApp.ItemManagement.init();
 });
