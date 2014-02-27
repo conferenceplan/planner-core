@@ -33,7 +33,7 @@ class Surveys::ResponseController < ApplicationController
             respondentDetails = @respondent.survey_respondent_detail
             respondentDetails.update_attributes(p)
             respondentDetails.save!
-            responses = @respondent.survey_respondent_detail.getResponses(@survey.id)
+            originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id) #.collect{|r| r.id}
           else
             # save the details and add to the respondent, create the respondent details and link to the responses
             respondentDetails = SurveyRespondentDetail.new(p)
@@ -42,6 +42,7 @@ class Surveys::ResponseController < ApplicationController
               # and assign the details to the respondent
               @respondent.survey_respondent_detail = respondentDetails
               @respondent.save!
+              originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id) #.collect{|r| r.id}
             end
           end
           
@@ -57,6 +58,7 @@ class Surveys::ResponseController < ApplicationController
 
                 responses = respondentDetails.getResponsesForQuestion(@survey.id, res[0])
                 responses.each do |r|
+                  originalResponses.delete(r)
                   r.delete
                 end
 
@@ -76,15 +78,20 @@ class Surveys::ResponseController < ApplicationController
                 end
               else
                 if res[1].empty?
-                  saveResponse(@respondent, @survey, res[0], '', respondentDetails)
+                  originalResponses.delete( saveResponse(@respondent, @survey, res[0], '', respondentDetails) )
                 else
-                  saveResponse(@respondent, @survey, res[0], res[1].to_s, respondentDetails)
+                  originalResponses.delete( saveResponse(@respondent, @survey, res[0], res[1].to_s, respondentDetails) )
                 end
               end
             else
-              saveResponse(@respondent, @survey, res[0], res[1], respondentDetails)
+              originalResponses.delete( saveResponse(@respondent, @survey, res[0], res[1], respondentDetails) )
             end
           end
+          
+          originalResponses.each do |r|
+            r.delete
+          end
+          
           
           if (@survey.accept_status && @respondent.person)
             @respondent.person.acceptance_status = @survey.accept_status
@@ -285,6 +292,8 @@ class Surveys::ResponseController < ApplicationController
     saveTags(surveyRespondent, responseText, surveyQuestion.tags_label) if (!surveyQuestion.tags_label.empty? && surveyQuestion.question_type == :textfield) if surveyRespondent
 
     response.save!
+    
+    response
   end
  
   #
