@@ -5,6 +5,11 @@
         window._auth_token_name = "#{request_forgery_protection_token}";
         window._auth_token = "#{form_authenticity_token}";
         //]]>
+
+        jQuery(document).ready(function() {
+            moment.lang("<%= I18n.locale %>");
+        });
+
     </script>
 <% end %>
 
