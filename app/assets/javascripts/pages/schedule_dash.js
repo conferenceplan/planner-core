@@ -26,20 +26,20 @@ DailyGrid = (function() {
         right : 15,
         bottom : 15,
         left : 40
-    }, width = 800 - margin.left - margin.right, height = 680 - margin.top - margin.bottom;
+    }, width; // = 800 - margin.left - margin.right, height = 680 - margin.top - margin.bottom;
 
     // Globals for the data and the SVG element
     var selector = null, data = null, svg = null, gridbody = null, date = null, labels = null, base = 0, textBoxWidth = 1, ctlWidth = 0.2;
 
     // Create a liner scale for the rooms and a time scale for the day
-    var xScale = d3.scale.linear().rangeRound([0, width * 7], 0);
+    var xScale;// = d3.scale.linear().rangeRound([0, width * 7], 0);
     //
-    var yScale = d3.time.scale.utc().rangeRound([0, height * 2]);
+    var yScale;// = d3.time.scale.utc().rangeRound([0, height * 2]);
 
     // X and Y axis - using the previous scales
-    var x_Axis = d3.svg.axis().scale(xScale).orient("top").tickFormat(d3.format("d")).tickSize(-height, 0).tickPadding(6);
+    var x_Axis;// = d3.svg.axis().scale(xScale).orient("top").tickFormat(d3.format("d")).tickSize(-height, 0).tickPadding(6);
 
-    var y_Axis = d3.svg.axis().scale(yScale).orient("left").tickFormat(customTimeFormat).tickSize(-(width + margin.left), 0).tickPadding(6);
+    var y_Axis;// = d3.svg.axis().scale(yScale).orient("left").tickFormat(customTimeFormat).tickSize(-(width + margin.left), 0).tickPadding(6);
 
     // What we do for zooming and constraining the zoom level
     var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", draw);
@@ -180,6 +180,13 @@ DailyGrid = (function() {
         time_zone_offset = _offset; // used to correct the time display
         // use the width dimension from the containing element
         width = _width - margin.left - margin.right;
+        height = 680 - margin.top - margin.bottom;
+        var nbrOfRooms = _data.get('rooms').length;
+        
+        xScale = d3.scale.linear().rangeRound([0, nbrOfRooms * 150], 0);
+        yScale = d3.time.scale.utc().rangeRound([0, height * 2]);
+
+        x_Axis = d3.svg.axis().scale(xScale).orient("top").tickFormat(d3.format("d")).tickSize(-height, 0).tickPadding(6);
         y_Axis = d3.svg.axis().scale(yScale).orient("left").tickFormat(customTimeFormat).tickSize(-(width + margin.left), 0).tickPadding(6);
 
         selector = _selector;
