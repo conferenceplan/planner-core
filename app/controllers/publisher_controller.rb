@@ -1,6 +1,8 @@
 #
 #
 #
+require 'publish_job'
+
 class PublisherController < PlannerController
 
   def index
