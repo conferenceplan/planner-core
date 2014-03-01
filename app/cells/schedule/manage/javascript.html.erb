@@ -24,10 +24,6 @@ ScheduleApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
-    
-    /*
-     * 
-     */
     GridDayControlView = Marionette.ItemView.extend({
         el : '#grid-day-control-view',
         template : '#grid-day-control-view-template',
@@ -96,7 +92,6 @@ ScheduleApp.ItemManagement = (function(Backbone){
             // 3. Refresh the list of items on the left (i.e. remove dropped item from list)
             this.$el.droppable({
                 drop: function(event, ui) {
-                    // console.debug("Dropped");
                     setDropped( ui.draggable.find("div").attr('itemid') );
                 }
             });
@@ -124,26 +119,38 @@ ScheduleApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
-    function removeAssignment(_itemid) {
-        console.debug("Remove assignment " + _itemid);
-
-        $.ajax({
-            type: 'POST',
-            url: "/program_planner/removeItem", // TODO - fix domain and sub-site
-            data: {
-                itemid : _itemid,
-            },
-            success: function(response){
-                // And we reload the list of items so that the dropped one is removed
-                $("#items").trigger("reloadGrid");
-                eventAggregator.trigger("refreshConflicts");
-            },
-            error : function(model, response) {
-                alertMessage("Error communicating with backend");
-            }
+    function removeAssignment(_itemid, parent_group, obj) {
+        console.debug(obj);
+        var group = parent_group;
+        // ask the user if they want to remove the item
+        modal = new AppUtils.ConfirmModel({
+                content : '<%= t "remove-item" %>' + ' ' + obj.title,
+                title : '<%= t "unschedule-item-confirmation" %>',
+                continueAction : function() {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/program_planner/removeItem", // TODO - fix domain and sub-site
+                        data: {
+                            itemid : _itemid,
+                        },
+                        success: function(response){
+                            // And we reload the list of items so that the dropped one is removed
+                            DailyGrid.remove_group(group)
+                            $("#items").trigger("reloadGrid");
+                            eventAggregator.trigger("refreshConflicts");
+                            DailyGrid.enable_actions()
+                        },
+                        error : function(model, response) {
+                            alertMessage("Error communicating with backend");
+                            DailyGrid.enable_actions()
+                        }
+                    });
+                },
+                closeAction : function() {
+                    DailyGrid.enable_actions()
+                }
         });
-        
-        return true;
+        modal.render();
     };
     
     /*
@@ -154,51 +161,72 @@ ScheduleApp.ItemManagement = (function(Backbone){
         var itemId = getDropped();
         
         if (itemId && roomAndTime && (typeof roomAndTime[0] != 'undefined')) {
-            moveAssignment(itemId, roomAndTime[0].id, _day, roomAndTime[1], true);
+            moveAssignment(itemId, roomAndTime[0].id, _day, roomAndTime[1], true, null, null);
         };
     };
     
     /*
      * 
      */
-    function moveAssignment(itemId, roomId, day, time, addDisplay) {
+    function moveAssignment(itemId, roomId, day, time, addDisplay, obj, original) {
         var assignments = _gridView.model;
         
-            $.ajax({
-                type: 'POST',
-                url: "/program_planner/addItem.json", // TODO - fix domain and sub-site
-                data: {
-                    day    : day,
-                    itemid : itemId,
-                    roomid : roomId,
-                    time   : time
-                },
-                success: function(response){
-                    // Once the item is created add it to the grid ...
-                    // create the element in the grid
-                    if (addDisplay) {
-                        var idx = 0;
-                        var rooms = assignments.get('rooms');
+        modal = new AppUtils.ConfirmModel({
+                content : '<%= t "move-item" %>' + ' ' + original.title + " " + '<%= t "to" %>' + " " + moment(time).utc().add('hour', <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>).format('HH:mm, dddd'),
+                title : '<%= t "move-item-confirmation" %>',
+                continueAction : function() {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/program_planner/addItem.json", // TODO - fix domain and sub-site
+                        data: {
+                            day    : day,
+                            itemid : itemId,
+                            roomid : roomId,
+                            time   : time
+                        },
+                        success: function(response){
+                            // Once the item is created add it to the grid ...
+                            // create the element in the grid
+                            if (addDisplay) {
+                                var idx = 0;
+                                var rooms = assignments.get('rooms');
+                                        
+                                for (idx = 0; idx < rooms.length; idx++) {
+                                    if (rooms[idx].id == roomId) {
+                                        break;
+                                    }
+                                };
+        
+                                if (idx < rooms.length) {
+                                    DailyGrid.createItem(response, idx);
+                                };
                                 
-                        for (idx = 0; idx < rooms.length; idx++) {
-                            if (rooms[idx].id == roomId) {
-                                break;
-                            }
-                        };
-
-                        if (idx < rooms.length) {
-                            DailyGrid.createItem(response, idx);
-                        };
-                    };
+                                if (obj) {
+                                    DailyGrid.remove_group(obj.group)
+                                }
+                            };
+                            
+                            // And we reload the list of items so that the dropped one is removed
+                            $("#items").trigger("reloadGrid");
+                            eventAggregator.trigger("refreshConflicts");
+                            DailyGrid.enable_actions()
+                        },
+                        error : function(model, response) {
+                            alertMessage("Error communicating with backend");
+                            DailyGrid.enable_actions()
+                        },
+                    });                    
                     
-                    // And we reload the list of items so that the dropped one is removed
-                    $("#items").trigger("reloadGrid");
-                    eventAggregator.trigger("refreshConflicts");
                 },
-                error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
-            });
+                closeAction : function() {
+                    // we need the underlying item
+                    if (obj && original) {
+                        DailyGrid.returnObject(obj, original); // room and time
+                    }
+                    DailyGrid.enable_actions();
+                }
+        });
+        modal.render();
     };
     
     /*
@@ -325,13 +353,9 @@ ScheduleApp.ItemManagement = (function(Backbone){
             addAssignment();
         },
         
-        moveAssignment : function(itemId, roomId, day, time) {
-            moveAssignment(itemId, roomId, day, time, false);
-        },
+        moveAssignment : moveAssignment,
         
-        removeAssignment : function(id) {
-            return removeAssignment(id);
-        }
+        removeAssignment : removeAssignment
     }
     
 })(Backbone);

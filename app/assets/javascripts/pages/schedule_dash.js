@@ -17,7 +17,7 @@ DailyGrid = (function() {
     var customTimeFormat = timeFormat([
       [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('HH:mm');}, function(d) { return d.getHours(); }],
       [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('ddd');}, function(d) { return d.getDay() && d.getDate() != 1; }],
-      [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('HH:mm z');}, function() { return true; }] // TODO - we should take into account the timezone (also for the drag and drop calculation )
+      [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('HH:mm z');}, function() { return true; }]
     ]);
 
     // The area on the screen for the grid with margins
@@ -32,23 +32,23 @@ DailyGrid = (function() {
     var selector = null, data = null, svg = null, gridbody = null, date = null, labels = null, base = 0, textBoxWidth = 1, ctlWidth = 0.2;
 
     // Create a liner scale for the rooms and a time scale for the day
-    var xScale;// = d3.scale.linear().rangeRound([0, width * 7], 0);
-    //
-    var yScale;// = d3.time.scale.utc().rangeRound([0, height * 2]);
-
-    // X and Y axis - using the previous scales
-    var x_Axis;// = d3.svg.axis().scale(xScale).orient("top").tickFormat(d3.format("d")).tickSize(-height, 0).tickPadding(6);
-
-    var y_Axis;// = d3.svg.axis().scale(yScale).orient("left").tickFormat(customTimeFormat).tickSize(-(width + margin.left), 0).tickPadding(6);
+    var xScale, yScale, x_Axis, y_Axis;
 
     // What we do for zooming and constraining the zoom level
     var zoom = d3.behavior.zoom().scaleExtent([1, 8]).on("zoom", draw);
+    
+    var inDeleteProcess = false, inMoveProcess = false;
 
     //////
-    var drag = d3.behavior.drag().origin(Object).on("drag", dragmove).on("dragstart", function() {
+    var drag = d3.behavior.drag().origin(Object).on("dragstart", function() {
         d3.event.sourceEvent.stopPropagation();
         // silence other listeners
-    });
+    }).on("drag", dragmove);
+    
+    function enable_actions() {
+        inDeleteProcess = false;
+        inMoveProcess = false;
+    };
 
     function moveCoordinates(x, y, dx, dy) {
         var xposn = parseInt(x);
@@ -67,8 +67,11 @@ DailyGrid = (function() {
      * Need to move the rect and "foreign"/text objects
      */
     function dragmove(d) {
-        moveObject(d3.select(this).select('.prog-item-text'), d3.event.dx, d3.event.dy);
-        moveObject(d3.select(this).select('.prog-item-rect'), d3.event.dx, d3.event.dy);
+        if (!inDeleteProcess) {
+            inMoveProcess = true;
+            moveObject(d3.select(this).select('.prog-item-text'), d3.event.dx, d3.event.dy);
+            moveObject(d3.select(this).select('.prog-item-rect'), d3.event.dx, d3.event.dy);
+        }
     };
 
     function roundToQuaterHour(aTime) {
@@ -105,13 +108,38 @@ DailyGrid = (function() {
     }
 
     function dropEvent(d) {
-        snapObject(d3.select(this).select('.prog-item-text'));
-        var rcoords = snapObject(d3.select(this).select('.prog-item-rect'));
+        var obj = {
+          text : d3.select(this).select('.prog-item-text'),
+          rect : d3.select(this).select('.prog-item-rect'),
+          group : d3.select(this)
+        };
+        snapObject(obj.text);
+        var rcoords = snapObject(obj.rect);
 
         var xRoom = data.get('rooms')[rcoords[0]];
 
         // Call back so that the save is done on the sever
-        ScheduleApp.ItemManagement.moveAssignment(d.item_id, xRoom.id, d.day, rcoords[1]);
+        ScheduleApp.ItemManagement.moveAssignment(d.item_id, xRoom.id, d.day, rcoords[1], true, obj, d);
+    };
+    
+    function returnObject(gobj, original) {
+        // return the object to the original position
+        idx = 0;
+        var rooms = data.get('rooms');
+        
+        for (idx = 0; idx < rooms.length; idx++) {
+            if (rooms[idx].id == original.room_id) {
+                break;
+            }
+        };
+
+        var x = (xScale(idx) - zoom.translate()[0]) / zoom.scale();
+        var y = (yScale(Date.parse(original.time)) - zoom.translate()[1]) / zoom.scale(); // yScale(Date.parse(d.time)) - zoom.translate()[1]) / zoom.scale()
+
+        gobj.text.attr("x", x);
+        gobj.text.attr("y", y);
+        gobj.rect.attr("x", x);
+        gobj.rect.attr("y", y);
     };
 
     var currentPosn = null;
@@ -119,7 +147,6 @@ DailyGrid = (function() {
     function currentPosnAsRoomAndTime() {
         if (currentPosn) {
             var xx = currentPosn[0];
-            // - + zoom.translate()[0]) / zoom.scale()  ;
 
             var newx = Math.round(xScale.invert(xx));
             // map x to the
@@ -130,9 +157,6 @@ DailyGrid = (function() {
             // * zoom.scale() + zoom.translate()[1];
             var yTime = roundToQuaterHour(yScale.invert(yy));
             
-            // console.debug("****** TIME");
-            // console.debug(yTime);
-
             return [xRoom, yTime];
         } else {
             return null;
@@ -192,9 +216,6 @@ DailyGrid = (function() {
         selector = _selector;
         data = _data;
         date = Date.parse(data.get('date'));
-        console.debug('PAINT');
-        console.debug(date);
-        //new Date(2013, 5, 15); // 0 = Jan etc
 
         // We need to create an SVG area for the display
         svg = d3.select(selector).append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").on("mouseover", overEvent);
@@ -320,12 +341,12 @@ DailyGrid = (function() {
         }).append('xhtml:i').attr("class", 'glyphicon glyphicon-arrow-down item-ctl-icon');
         
         div.append('xhtml:a').attr("class", 'btn btn-xs item-ctl-remove').attr('href', '#').on("mouseup", function(d) {
-            var parent_group = d3.select(this.parentNode.parentNode.parentNode);
-            if (ScheduleApp.ItemManagement.removeAssignment(d.item_id)) {
-                parent_group.remove();
-            };
-
-            d3.event.stopPropagation();
+            if (!inMoveProcess) {
+                d3.event.stopPropagation();
+                inDeleteProcess = true;
+                var parent_group = d3.select(this.parentNode.parentNode.parentNode);
+                ScheduleApp.ItemManagement.removeAssignment(d.item_id, parent_group, d);
+            }
         }).append('xhtml:i').attr("class", 'glyphicon glyphicon-remove item-ctl-icon');
         
         div.append('xhtml:hr').attr("class", 'toolbar-line');
@@ -334,6 +355,11 @@ DailyGrid = (function() {
             return d.title;
         });
 
+    };
+    
+    function remove_group(group) {
+        group.remove();
+        inDeleteProcess = false;
     };
 
     /*
@@ -372,6 +398,12 @@ DailyGrid = (function() {
      *
      */
     return {
+        
+        remove_group : remove_group,
+        
+        enable_actions : enable_actions,
+        
+        returnObject : returnObject,
         
         scrollTo : function(room, time) {
             scrollTo(room, time);

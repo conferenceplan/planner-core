@@ -31,7 +31,7 @@ ItemApp.PeopleManagement = (function(Backbone){
 
         render: function () {
             this.$el.html($(this.template({
-                title : "Unsaved Data"
+                title : '<%= t "Unsaved Data" %>'
             })));
 
             this.delegateEvents();

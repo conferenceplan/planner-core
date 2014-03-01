@@ -11,6 +11,11 @@ var AppUtils = (function(){
     InfoModal = Backbone.View.extend({
         tagName: "div",
         className: "modal bs-modal-lg",
+        events: {
+            "submit"            : "submit",
+            "hidden.bs.modal"   : "hide",
+            "keypress"          : "swallow"
+        },
         
         initialize : function() {
             this.template = _.template($('#modal-info-template').html());
@@ -38,11 +43,33 @@ var AppUtils = (function(){
             return this;
         },
         
-        close: function (e) {
-            this.remove();
-            this.unbind();
-            this.views = [];
-            Backbone.BootstrapModal.count--;
+        swallow : function(e) {
+            e.stopPropagation();
+        },
+        
+        submit : function(e) {
+            if (e && e.type == "submit") {
+                e.preventDefault();
+                e.stopPropagation();
+                this.options.continueAction();
+                this.options.closeAction = null;
+                this.$el.modal("hide");
+            };
+        },
+        
+        hide : function(e) {
+            if (this.options.closeAction) {
+                this.options.closeAction();
+            };
+        }
+    });
+    
+    /*
+     * 
+     */
+    ConfirmModel = InfoModal.extend({
+        initialize : function() {
+            this.template = _.template($('#modal-confirm-template').html());
         }
     });
 
@@ -59,8 +86,7 @@ var AppUtils = (function(){
         },
         
         swallow : function(e) {
-            console.debug("swallow");
-                e.stopPropagation();
+            e.stopPropagation();
         },
         
         initialize : function() {
@@ -90,7 +116,6 @@ var AppUtils = (function(){
         },
         
         submit : function(e) {
-            // console.debug("submit");
             if (e && e.type == "submit") {
                 e.preventDefault();
                 e.stopPropagation();
@@ -151,7 +176,6 @@ var AppUtils = (function(){
 
         // over-ride for the actual data submission        
         submitData : function() {
-            // console.debug("SUBMIT");
             // gather the data and update the underlying model etc.
             var errors = this.form.commit(); // To save the values from the form back into the model
             
@@ -219,7 +243,6 @@ var AppUtils = (function(){
         },
         
         submitData : function() {
-            // console.debug("SUBMIT");
             // gather the data and update the underlying model etc.
             var errors = this.form.commit(); // To save the values from the form back into the model
             
@@ -552,6 +575,8 @@ var AppUtils = (function(){
         eventAggregator : eventAggregator,
         
         InfoModal : InfoModal,
+        
+        ConfirmModel : ConfirmModel,
         
         GenericModal : GenericModal,
         
