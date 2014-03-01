@@ -76,10 +76,19 @@ module PeopleService
       # get the last name from the filters and use that in the clause
       st = DataService.getFilterData( filters, 'people.last_name' )
       if (st)
-      clause = DataService.addClause(clause,'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?','%' + st + '%')
-      clause << '%' + st + '%'
-      clause << '%' + st + '%'
-      clause << '%' + st + '%'
+        terms = st.split # Get all the terms seperated by space
+        str = ""
+        terms.each do |x|
+          str += " AND " if str.length > 0
+          str += '(people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?)'
+        end
+        clause = DataService.addClause(clause,str)
+        terms.each do |x|
+          clause << '%' + x + '%'
+          clause << '%' + x + '%'
+          clause << '%' + x + '%'
+          clause << '%' + x + '%'
+        end
       end
     end
     

@@ -95,7 +95,7 @@ module DataService
   #
   #
   #
-  def self.addClause(clause, clausestr, field)
+  def self.addClause(clause, clausestr, field = nil)
     if (clause == nil) || clause.empty?
       clause = [clausestr, field]
     else
