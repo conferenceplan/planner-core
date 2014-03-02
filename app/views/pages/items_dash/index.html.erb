@@ -6,5 +6,5 @@
 <% end %>
 
 <% if @cellname %>
-    <%= render_cell "items/#{@cellname}", :display %>
+    <%= render_cell "items/#{@cellname}", :display, :prog_item => @prog_item %>
 <% end %>

@@ -1,6 +1,6 @@
 class Items::ManageCell < Cell::Rails
 
-  def display
+  def display(args)
     render
   end
 

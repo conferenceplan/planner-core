@@ -1,9 +1,7 @@
-class Pages::ItemsDashController < PlannerController
+class Panels::ItemMgmtController < PlannerController
+  layout "panel"
   
   def index
     @prog_item = params.has_key?(:prog_item) ? params[:prog_item] : nil
-    
-    @cellname = params[:cellname]
   end
-  
 end

@@ -72,6 +72,37 @@ var AppUtils = (function(){
             this.template = _.template($('#modal-confirm-template').html());
         }
     });
+    
+    /*
+     * 
+     */
+    PanelModal = InfoModal.extend({
+        
+        initialize : function() {
+            this.template = _.template($('#modal-panel-template').html()
+                                        );
+        },
+        
+        render: function () {
+            var url = this.options.url;
+            Backbone.BootstrapModal.count++;
+
+            this.$el.html($(this.template({
+                url : url,
+                title : this.options.title
+            })));
+            
+            this.$el.modal(this.modalOptions);
+
+            if (this.options.content) {
+                this.$el.find(".modal-body").append(this.options.content);
+            }
+            
+            this.delegateEvents();
+            
+            return this;
+        },
+    });
 
     /*
      * 
@@ -581,6 +612,8 @@ var AppUtils = (function(){
         GenericModal : GenericModal,
         
         ModelModal : ModelModal,
+        
+        PanelModal : PanelModal,
         
         createEditItemView : function(options) {
             var view = new ItemEditView({

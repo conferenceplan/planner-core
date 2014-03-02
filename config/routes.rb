@@ -16,6 +16,13 @@ PlannerRc1::Application.routes.draw do
     match "publications_dash/:cellname" => "publications_dash#index"
     match "admin_dash/:cellname" => "admin_dash#index"
   end
+
+  # namespace :panels do
+  namespace :panels do
+    match "item_mgmt" => "item_mgmt#index"
+  end
+  # get "item_mgmt/index"
+
   
   # Default route 
   root :to => 'pages/home_dash#index'

@@ -22,7 +22,7 @@ ItemApp.PeopleManagement = (function(Backbone){
         },
         
         initialize : function() {
-            this.template = _.template($('#modal-confirm-template').html());
+            this.template = _.template($('#modal-leave-template').html());
         },
 
         modalOptions: {
@@ -259,7 +259,12 @@ ItemApp.PeopleManagement = (function(Backbone){
 jQuery(document).ready(function() {
     ItemApp.start();
     ItemApp.PeopleManagement.init();
+    var prog_item = "<%= @prog_item %>";
+    if (prog_item) {
+        ItemApp.PeopleManagement.showProgrammeItem(prog_item);
+    } else {
+        window.onbeforeunload = ItemApp.PeopleManagement.confirmExit;
+    }
 });
 
-window.onbeforeunload = ItemApp.PeopleManagement.confirmExit;
 </script>

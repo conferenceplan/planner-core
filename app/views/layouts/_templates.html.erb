@@ -51,6 +51,31 @@
 </div>    
 </script>
 
+<script type="text/template" id="modal-panel-template">
+<div class="modal-dialog modal-lg">
+<div class="modal-content">
+<form>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" class='close'>
+            ×
+        </button>
+        <h4 id="myModalLabel" class="modal-title">{{= title }}</h4>
+    </div>
+    <div class="modal-body" id="modal-body" style="height: 650px">
+            <iframe src="{{= url }}" width="100%" height="100%" frameBorder="0">
+                <p><%= t "your-browser-does-not-support-iframes" %></p>
+            </iframe>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true" class='close'>
+            <%= t "close" %>
+        </button>
+    </div>
+</form>
+</div>    
+</div>    
+</script>
+
 <script type="text/template" id="modal-edit-template">
 <div class="modal-dialog modal-lg">
 <div class="modal-content">
@@ -118,7 +143,7 @@
 </script>
 
 <!-- TODO - change so that the message is -->
-<script type="text/template" id="modal-confirm-template">
+<script type="text/template" id="modal-leave-template">
 <div class="modal-dialog modal-lg">
 <div class="modal-content">
 <form>
@@ -128,7 +153,7 @@
         </button>
         <h4 id="myModalLabel" class="modal-title">{{= title }}</h4>
     </div>
-    <div class="modal-body" id="modal-body">The Program Item was not Saved. Confirm that you want to abandon the changes.</div>
+    <div class="modal-body" id="modal-body"><%= t 'The Program Item was not Saved. Confirm that you want to abandon the changes' %></div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">
             <%= t "remain-on-item" %>

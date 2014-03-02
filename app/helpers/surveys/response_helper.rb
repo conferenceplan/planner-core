@@ -13,7 +13,7 @@ module Surveys::ResponseHelper
         content_tag(:h3, header_message) <<
           content_tag(:p, 'There were problems with the following questions:') <<
           content_tag(:ul, error_messages.html_safe ),
-        :class => "smerfFormError")
+        :class => "")
     else
       ''
     end

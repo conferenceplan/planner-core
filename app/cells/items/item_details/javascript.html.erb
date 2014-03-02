@@ -184,7 +184,9 @@ ItemApp.ItemManagement = (function(Backbone){
     function showDetails(id) {
         // alert(id);
         var data = jQuery("#items").jqGrid('getRowData', id);
-        $('#selected-program-item').html(data['item[title]']);
+        console.debug(data['item[title]']);
+        // /panels/item_mgmt?prog_item=
+        $('#selected-program-item').html(data['item[title]']); // TODO
         
         var itemMdl = TabUtils.createTabContent({
             modelType : ProgramItem,
@@ -207,22 +209,26 @@ ItemApp.ItemManagement = (function(Backbone){
                     }
                 });
                 $("#items").trigger("reloadGrid");
+            },
+            events : {
+                'click .add-people-button' : function() {
+                    model = this.model;
+                    modal = new AppUtils.PanelModal({
+                        title : "Add PEOPLE",
+                        url   : "/panels/item_mgmt?prog_item=" + model.id,
+                        closeAction : function() {
+                            model.fetch();
+                        }
+                    });
+                    modal.render();
+                }
             }
         });
         tabContent.push( itemMdl );
         
-                    var imageView = new ItemImageView({
-                                        // itemViewOptions     : {
-                                            // tagName         : 'tr'
-                                        // },
-                                        model          : itemMdl,
-                                        // attributes          : { "class" : "table table-striped table-condensed" },
-                                        // // view_refresh_event  : options.view_refresh_event,
-                                        // tagName             : 'table' 
-                                    });
-                    imageView.render();
-                    $('#item-images').html(imageView.el);    
- 
+        var imageView = new ItemImageView({model : itemMdl});
+        imageView.render();
+        $('#item-images').html(imageView.el);    
         
         equipmentLayout = new EquipmentLayout();
         equipmentLayout.render();
@@ -261,7 +267,7 @@ ItemApp.ItemManagement = (function(Backbone){
     };
     
     var filterCol = null;
-    
+
     return {
         
         ProgramItem : ProgramItem,
@@ -345,6 +351,8 @@ ItemApp.ItemManagement = (function(Backbone){
         },
         
         init : function() {
+            // new Workspace();
+            // Backbone.history.start();
             TabUtils.createTagCloudContent({
                 collectionType : TagContextCollection,
                 url : "/tags?class=ProgrammeItem",
@@ -363,9 +371,9 @@ ItemApp.ItemManagement = (function(Backbone){
 })(Backbone);
 
 jQuery(document).ready(function() {
-    moment.lang("<%= I18n.locale %>");
+    // moment.lang("<%= I18n.locale %>");
+    ItemApp.addInitializer(ItemApp.ItemManagement.init);
     ItemApp.start();
-    ItemApp.ItemManagement.init();
 });
 
 </script>
