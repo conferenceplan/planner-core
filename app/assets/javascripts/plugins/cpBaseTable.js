@@ -198,7 +198,7 @@ $.widget( "cp.baseTable" , {
                 autowidth       : true,
                 shrinkToFit     : true,
                 height          : "100%",
-                // rowList : [10, 20, 30],
+                rowList         : [10, 20, 30],
                 sortname        : this.options.sortname,
                 sortorder       : "asc",
                 viewrecords     : true,
@@ -215,6 +215,7 @@ $.widget( "cp.baseTable" , {
                     return false;
                 },
                 loadComplete    : function(data) {
+                    // $("option[value=100000000]").text('All');
                     if (data.currentSelection) {
                         grid.setSelection(data.currentSelection);
                     };

@@ -102,34 +102,6 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     edithidden : true
                 }
             }, {
-                name : 'person[mailings]',
-                label : this.options.mailings[1], //'mailings',
-                index : 'mailing_id',
-                hidden : !this.options.mailings[0],
-                editable : false,
-                sortable : false,
-                search : true,
-                stype : "select",
-                searchoptions : {
-                    dataUrl: this.options.root_url + "communications/mailing/listWithBlank"
-                },
-                width : 100,
-                formatter : function(cellvalue, options, rowObject) {
-                    var res = "";
-                    
-                    if (typeof rowObject['person[mailings]'] != 'undefined') {
-                        for (i = 0 ; i < rowObject['person[mailings]'].length; i++) {
-                            if (i > 0) {
-                                res += ", ";
-                            }
-                            res += rowObject['person[mailings]'][i].mailing_number;
-                            res += ' - ' + rowObject['person[mailings]'][i].mail_use;
-                        }
-                    }
-                    
-                    return res;
-                }
-            }, {
                 name : 'person[invitestatus_id]',
                 label : this.options.invite_status[1], //'Invite Status',
                 index : 'invitestatus_id',
@@ -200,6 +172,34 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 editrules : {
                     required : false,
                     edithidden : true
+                }
+            }, {
+                name : 'person[mailings]',
+                label : this.options.mailings[1], //'mailings',
+                index : 'mailing_id',
+                hidden : !this.options.mailings[0],
+                editable : false,
+                sortable : false,
+                search : true,
+                stype : "select",
+                searchoptions : {
+                    dataUrl: this.options.root_url + "communications/mailing/listWithBlank"
+                },
+                width : 100,
+                formatter : function(cellvalue, options, rowObject) {
+                    var res = "";
+                    
+                    if (typeof rowObject['person[mailings]'] != 'undefined') {
+                        for (i = 0 ; i < rowObject['person[mailings]'].length; i++) {
+                            if (i > 0) {
+                                res += ", ";
+                            }
+                            res += rowObject['person[mailings]'][i].mailing_number;
+                            res += ' - ' + rowObject['person[mailings]'][i].mail_use;
+                        }
+                    }
+                    
+                    return res;
                 }
             }, {
                 name : 'person[has_survey]',

@@ -149,8 +149,11 @@ var ReportBase = (function(Backbone){
                         gridview: true,
                         pager : '#result-pager',
                         caption: this.options.caption,
-                        rowList:[10,20,50],
-                        rowNum:20
+                        rowList:[10,20,50,100000000],
+                        rowNum:20,
+                        loadComplete: function() {
+                                $("option[value=100000000]").text('All');
+                            }
                         });
         
                     var grid = this.grid;
