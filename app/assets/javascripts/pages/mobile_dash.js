@@ -83,18 +83,9 @@ Phone = (function() {
         svg = d3.select(selector);
 
         d3.xml("/assets/android-template.svg", "image/svg+xml", function(xml) {
-            
-            var importedNode = null;
-            try {
-              importedNode = document.importNode(xml.documentElement, true);
-            } catch(e) {
-              importedNode = importNode(xml.documentElement, true); // for IE9
-            }
-
-            var phone = svg.node().appendChild(importedNode);
+            var phone = svg.node().appendChild(xml.documentElement);
             pic = svg.select("svg");
             pic.attr('height', height);
-            
             setColors(colors);
          });
     };
