@@ -214,7 +214,7 @@ ItemApp.ItemManagement = (function(Backbone){
                 'click .add-people-button' : function() {
                     model = this.model;
                     modal = new AppUtils.PanelModal({
-                        title : "Add PEOPLE",
+                        title : "<%= t 'add-people' %>",
                         url   : "/panels/item_mgmt?prog_item=" + model.id,
                         closeAction : function() {
                             model.fetch();
