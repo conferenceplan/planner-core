@@ -1,3 +1,7 @@
+require 'setup_type'
+require 'room'
+require 'programme_item'
+
 class LinkRoomSetups < ActiveRecord::Migration
   
   def self.up

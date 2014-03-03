@@ -1,3 +1,5 @@
+require 'survey_respondent'
+
 class FixEmails < ActiveRecord::Migration
   def self.up
     respondents = SurveyRespondent.find(:all)

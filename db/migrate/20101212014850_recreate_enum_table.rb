@@ -1,3 +1,7 @@
+require 'enum'
+require 'invite_status'
+require 'acceptance_status'
+
 class RecreateEnumTable < ActiveRecord::Migration
   def self.up
        drop_table :enumrecord

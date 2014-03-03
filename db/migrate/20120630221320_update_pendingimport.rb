@@ -1,3 +1,6 @@
+require 'enum'
+require 'pending_type'
+
 class UpdatePendingimport < ActiveRecord::Migration
   def self.up
       add_column :pending_import_people , :datasource_id, :integer

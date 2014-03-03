@@ -1,3 +1,5 @@
+require 'room_item_assignment'
+
 class RemoveFreeTimeSlots < ActiveRecord::Migration
   def self.up
     RoomItemAssignment.transaction do

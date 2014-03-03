@@ -1,3 +1,6 @@
+require 'enum'
+require 'phone_types'
+
 class AddPhonetypeEnum < ActiveRecord::Migration
   def self.up
        PhoneTypes.enumeration_model_updates_permitted = true

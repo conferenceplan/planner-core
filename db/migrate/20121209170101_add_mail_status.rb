@@ -1,3 +1,6 @@
+require 'enum'
+require 'email_status'
+
 class AddMailStatus < ActiveRecord::Migration
   def self.up
     add_column :survey_respondents, :email_status_id, :integer

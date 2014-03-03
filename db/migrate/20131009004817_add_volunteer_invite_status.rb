@@ -1,3 +1,6 @@
+require 'enum'
+require 'invite_status'
+
 class AddVolunteerInviteStatus < ActiveRecord::Migration
   def self.up
     InviteStatus.enumeration_model_updates_permitted = true

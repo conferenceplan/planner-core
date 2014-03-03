@@ -1,3 +1,4 @@
+require 'datasource'
 class CreateDatasources < ActiveRecord::Migration
  def self.up
       create_table :datasources do |t|

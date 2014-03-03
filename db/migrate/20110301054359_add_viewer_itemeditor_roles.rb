@@ -1,3 +1,5 @@
+require 'role'
+
 class AddViewerItemeditorRoles < ActiveRecord::Migration
   def self.up
       Role.create(:title => 'Viewer')

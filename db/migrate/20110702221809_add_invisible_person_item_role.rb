@@ -1,3 +1,6 @@
+require 'enum'
+require 'person_item_role'
+
 class AddInvisiblePersonItemRole < ActiveRecord::Migration
   def self.up
       PersonItemRole.enumeration_model_updates_permitted = true

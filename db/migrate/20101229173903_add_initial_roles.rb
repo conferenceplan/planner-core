@@ -1,3 +1,5 @@
+require 'role'
+
 class AddInitialRoles < ActiveRecord::Migration
   def self.up
        Role.create(:title => 'Planner')

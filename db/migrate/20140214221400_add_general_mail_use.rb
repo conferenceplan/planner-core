@@ -1,3 +1,6 @@
+require 'enum'
+require 'mail_use'
+
 class AddGeneralMailUse < ActiveRecord::Migration
   def up
     MailUse.enumeration_model_updates_permitted = true

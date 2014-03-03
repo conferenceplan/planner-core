@@ -1,4 +1,8 @@
+require 'enum'
+require 'invite_status'
+
 class AddEnum < ActiveRecord::Migration
+  
   def self.up
        create_table :enumrecord do |t|
            t.string :type

@@ -1,3 +1,6 @@
+require 'enum'
+require 'answer_type'
+
 class AddAnswerTypeEnum < ActiveRecord::Migration
   def self.up
       AnswerType.enumeration_model_updates_permitted = true

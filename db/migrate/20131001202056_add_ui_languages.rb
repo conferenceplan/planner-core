@@ -1,3 +1,5 @@
+require 'user_interface_setting'
+
 class AddUiLanguages < ActiveRecord::Migration
   def up
     

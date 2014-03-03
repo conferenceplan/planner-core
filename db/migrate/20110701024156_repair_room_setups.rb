@@ -1,3 +1,6 @@
+require 'room'
+require 'room_setup'
+
 class RepairRoomSetups < ActiveRecord::Migration
   def self.up
     add_column :rooms, :setup_id, :integer    #  Default

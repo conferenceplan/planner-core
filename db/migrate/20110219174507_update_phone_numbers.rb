@@ -1,3 +1,8 @@
+require 'person'
+require 'address'
+require 'postal_address'
+require 'phone_number'
+
 class UpdatePhoneNumbers < ActiveRecord::Migration
   def self.up
     # Go through the people and extract those that have a phone number in their address

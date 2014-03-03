@@ -1,3 +1,7 @@
+require 'survey'
+require 'survey_respondent_detail'
+require 'survey_history'
+
 class PopulateSurveyHistory < ActiveRecord::Migration
   
   # For each survey filled make sure that the survey history table has an entry (where possible)

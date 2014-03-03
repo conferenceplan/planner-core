@@ -1,3 +1,6 @@
+require 'enum'
+require 'question_mapping'
+
 class AddQuestionMappingEnum < ActiveRecord::Migration
   def self.up
       QuestionMapping.enumeration_model_updates_permitted = true
