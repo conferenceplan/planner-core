@@ -142,8 +142,8 @@ class ProgrammeItemsController < PlannerController
     @currentId = params[:current_selection]
     page_to = params[:page_to]
     
-    ignoreScheduled = params[:igs] # TODO
-    ignorePending = params[:igp]
+    ignoreScheduled = params[:igs] == 'true' # TODO
+    ignorePending = params[:igp] == 'true'
 
     @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled
 

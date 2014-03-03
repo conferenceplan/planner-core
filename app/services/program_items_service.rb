@@ -20,7 +20,7 @@ module ProgramItemsService
   end
   
   def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false)
-    args = genArgsForSql(nameSearch, filters, ignoreScheduled, extraClause)
+    args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
@@ -152,11 +152,14 @@ module ProgramItemsService
   
 protected
 
-  def self.genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled = false, page_to = nil)
+  def self.genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['format_id','pub_reference_number'],
                   ['format_id','pub_reference_number'], ['programme_items.title'])
 
+    if ignoreScheduled
+      clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
+    end
     # add the name search of the title
     if nameSearch
       st = DataService.getFilterData( filters, 'programme_items.title' )
@@ -165,9 +168,6 @@ protected
       end
     end
     
-    if ignoreScheduled
-      clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
-    end
     # TODO - add these
     # if ignorePending
       # clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
