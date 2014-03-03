@@ -117,7 +117,7 @@ module PeopleService
     
     if includeMailings
       if args[:joins]
-        args[:joins] += ' JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
+        args[:joins] += ' LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
       else  
         args.merge!( :joins => 'JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id' )
       end
