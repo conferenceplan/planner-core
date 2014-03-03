@@ -15,7 +15,7 @@ RoomApp.RoomManagement = (function(Backbone){
 
     RoomSetup = Backbone.Model.extend({
         schema : {
-            setup_type_id : { type : 'Select', title : '<%= t "setup-type" %>', options : <%= SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+            setup_type_id : { type : 'Select', title : '<%= t "setup-type" %>', options : <%= SetupType.find(:all, :order => 'name asc').collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
             capacity : { type : 'Number', title : '<%= t "capacity" %>' },
             isdefault : { type : 'Checkbox', title : '<%= t "default" %>' }, // This needs to be calculated
         },

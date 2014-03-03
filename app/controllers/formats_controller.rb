@@ -47,13 +47,13 @@ class FormatsController < PlannerController
 ########  
   def list  
     # Get all the formats in the database
-    @formats = Format.find :all
+    @formats = Format.find :all, :order => 'position asc'
     render :layout => 'plain'
   end
   
   def listwithblank
     # Get all the formats in the database
-    @formats = Format.find :all
+    @formats = Format.find :all , :order => 'position asc'
     render :layout => 'content'
   end
 end

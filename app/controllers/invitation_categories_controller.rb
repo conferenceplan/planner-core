@@ -51,7 +51,7 @@ class InvitationCategoriesController < PlannerController
   
   def list  
     # Get all the roles in the database
-    @invitationCategories = InvitationCategory.find :all
+    @invitationCategories = InvitationCategory.find :all, :order => 'position asc'
     render :layout => 'plain'
   end
 end
