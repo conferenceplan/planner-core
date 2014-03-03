@@ -60,7 +60,8 @@ module MailService
         cc:       cc,
         subject:  template.subject,
         title:    template.title,
-        body:     content
+        body:     content,
+        content_type: "text/html"
       ).deliver
       saveMailHistory(person, nil, content, EmailStatus[:Sent])
       transitionPersonInviteStateAfterEmail(person, toState) if toInviteState
@@ -113,7 +114,8 @@ module MailService
         cc:       cc,
         subject:  template.subject,
         title:    template.title,
-        body:     content
+        body:     content,
+        content_type: "text/html"
       ).deliver
       saveMailHistory(person, mailing, content, EmailStatus[:Sent])
       transitionPersonInviteStateAfterEmail(person, toState) if toInviteState && !mailing.testrun
