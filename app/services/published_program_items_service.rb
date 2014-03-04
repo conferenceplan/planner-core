@@ -117,9 +117,13 @@ module PublishedProgramItemsService
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (PublishedProgrammeItemAssignment.exists? a.auditable_id) ? PublishedProgrammeItemAssignment.find(a.auditable_id).person_id : nil}.compact
 
     # and if they had an image updated
-    audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'BioImage') AND (audits.action = 'create' OR audits.action = 'update')", pubDate.timestamp]
-    updateOrAdded = updateOrAdded.concat audits.collect {|a| (BioImage.exists? a.auditable_id) ? BioImage.find(a.auditable_id).person_id : nil }.compact
+    # audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
+      # :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'BioImage') AND (audits.action = 'create' OR audits.action = 'update')", pubDate.timestamp]
+    # updateOrAdded = updateOrAdded.concat audits.collect {|a| (BioImage.exists? a.auditable_id) ? BioImage.find(a.auditable_id).person_id : nil }.compact
+
+    # Get the image updates
+    ext_images = BioImage.find :all, :order => "updated_at asc", :conditions => ["(updated_at >= ?)", pubDate.timestamp]
+    updateOrAdded = updateOrAdded.concat ext_images.collect {|a| a.person_id }.compact
     
     # Find people that are assigned to items and have had their details updated...
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc", 
@@ -211,9 +215,13 @@ private
     updated = updated.concat audits.collect {|a| (PublishedRoom.exists? a.auditable_id) ? PublishedRoom.find(a.auditable_id).published_programme_items.collect{|i| i.id} : nil }.compact.flatten
 
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'ExternalImage') AND ((audits.action = 'update') OR (audits.action = 'create'))", pubDate.timestamp],
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'ExternalImage') AND (audits.action = 'create')", pubDate.timestamp],
       :joins => 'join external_images on external_images.id = audits.auditable_id'
     updated = updated.concat audits.collect {|a| (ExternalImage.exists? a.auditable_id) ? (ExternalImage.find(a.auditable_id).imageable_type == "PublishedProgrammeItem" ? ExternalImage.find(a.auditable_id).imageable_id : nil) : nil }.compact
+    
+    # Get the image updates
+    ext_images = ExternalImage.find :all, :order => "updated_at asc", :conditions => ["(updated_at >= ?) AND (imageable_type like 'PublishedProgrammeItem')", pubDate.timestamp]
+    updated = updated.concat ext_images.collect {|a| a.imageable_id }.compact
       
     updated.uniq.delete_if{ |i| new_items.include? i }.delete_if{ |i| deleted_items.include? i }
   end

@@ -49,7 +49,7 @@ gem "select2-rails"
 gem "recaptcha", :require => "recaptcha/rails"
 
 gem 'carrierwave'
-gem 'cloudinary', '1.0.67'
+gem 'cloudinary'
 
 gem 'i18n-active_record',
       :git => 'git://github.com/svenfuchs/i18n-active_record.git',
