@@ -170,9 +170,16 @@ ScheduleApp.ItemManagement = (function(Backbone){
      */
     function moveAssignment(itemId, roomId, day, time, addDisplay, obj, original) {
         var assignments = _gridView.model;
+        var content = "";
+        
+        if (original) {
+                content = '<%= t "move-item" %>' + ' ' + original.title + " " + '<%= t "to" %>' + " " + moment(time).utc().add('hour', <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>).format('HH:mm, dddd');
+        } else {
+                content = '<%= t "insert-item" %>' + ' ' + '<%= t "at" %>' + " " + moment(time).utc().add('hour', <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>).format('HH:mm, dddd');
+        }
         
         modal = new AppUtils.ConfirmModel({
-                content : '<%= t "move-item" %>' + ' ' + original.title + " " + '<%= t "to" %>' + " " + moment(time).utc().add('hour', <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>).format('HH:mm, dddd'),
+                content : content,
                 title : '<%= t "move-item-confirmation" %>',
                 continueAction : function() {
                     $.ajax({
