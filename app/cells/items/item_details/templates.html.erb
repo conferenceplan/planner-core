@@ -205,14 +205,14 @@ Use the Rails authenticity token in the forms...
 
 <script type="text/template" id="equipment-control-template">
 <div>
-    <button class="add-model-button btn-xs btn-primary pull-right ">
+    <button class="add-model-button btn-xs btn-primary pull-right boffset10">
         <%= t "add-equipment" %>
     </button>
 </div>
 </script>
 
 <script type="text/template" id="equipment-detail-template">
-<div class="col-xs-12 clearfix">
+<div class="col-xs-12 clearfix" style="padding-left:0px; padding-right: 0px;">
     <div class="thumbnail clearfix">
         <div class="caption" class="pull-left">
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
@@ -222,7 +222,7 @@ Use the Rails authenticity token in the forms...
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
             <small>
-                <dl class="dl-horizontal-small">
+                <dl class="dl-horizontal-small" style="margin-bottom: 0px; height:22px;">
                     <dt>
                         <%= t "desc" %>
                     </dt>
@@ -273,7 +273,7 @@ Use the Rails authenticity token in the forms...
 <script type="text/template" id="item-images-template">
     <% if ConfigService.hasCloudinaryConfig? %>
     {{ if (typeof id != 'undefined') { }}
-    <div>
+    <div class="boffset10">
         {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
         {{ if (typeof image != 'undefined') { }}
             <image src="{{= image.picture.large_card.url }}"></image>
