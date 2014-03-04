@@ -85,7 +85,7 @@ GEM
     chunky_png (1.3.0)
     ckeditor_rails (4.3.1)
       railties (>= 3.0)
-    cloudinary (1.0.69)
+    cloudinary (1.0.67)
       aws_cf_signer
       rest-client
     coffee-rails (3.2.2)
@@ -465,7 +465,7 @@ DEPENDENCIES
   carrierwave
   cells
   ckeditor_rails
-  cloudinary
+  cloudinary (= 1.0.67)
   coffee-rails (~> 3.2.1)
   compass-rails
   connection_pool
