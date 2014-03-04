@@ -6,6 +6,6 @@ class BioImage < ActiveRecord::Base
 
   belongs_to :person
   
-  audited :associated_with => :person
+  audited except: :bio_picture, :associated_with => :person
 
 end
