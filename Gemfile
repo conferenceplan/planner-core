@@ -15,7 +15,7 @@ gem 'axlsx_rails'
 
 gem "audited-activerecord", "~> 3.0"
 gem 'acts-as-taggable-on', "2.4.1" 
-gem 'authlogic'
+gem 'authlogic', "3.3.0"
 gem 'bluecloth'
 gem 'bootstrap-sass', '~> 3.1'
 gem 'cells'
