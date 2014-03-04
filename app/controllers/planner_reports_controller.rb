@@ -239,9 +239,9 @@ class PlannerReportsController < PlannerController
             p[0][0], p[0][1],
             p[1].collect { |t| 
                 if (t['pub_first_name'] || t['pub_last_name'])
-                    t['pub_first_name'] + ' ' + t['pub_last_name'] + ' ' + t['pub_suffix']
+                    t['pub_first_name'] + ' ' + t['pub_last_name'] + ' ' + (t['pub_suffix'] ? ' ' + t['pub_suffix'] : '')
                 else
-                    t['first_name'] + ' ' + t['last_name'] + ' ' + t['suffix']
+                    t['first_name'] + ' ' + t['last_name'] + ' ' + (t['suffix'] ? ' ' + t['suffix'] : '')
                 end
               }.join("\n")
           ]
