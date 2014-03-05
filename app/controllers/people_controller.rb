@@ -103,6 +103,7 @@ class PeopleController < PlannerController
       if gotoNum
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
+        @page = 1 if @page <= 0
       end
     end
     
