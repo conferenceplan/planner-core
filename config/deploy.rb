@@ -1,7 +1,7 @@
 #
 # Capistrano script for RC1 version of the Planner using Rails 3.2.x
 #
-set :stages, %w(parctec loncontest boskonetest loncon) # production staging sandbox 
+set :stages, %w(parctec loncontest sasquan loncon) # production staging sandbox 
 set :default_stage, "parctec"
 
 require "rvm/capistrano"
@@ -32,9 +32,11 @@ set :deploy_to, "/opt/www"
 # For asset pipeline
 set :normalize_asset_timestamps, false
 
+set :puma_config_file, -> {"#{fetch :shared_path}/config/puma.rb"}
+set :puma_state, -> {"#{fetch :shared_path}/sockets/puma.state"}
+
 # TODO - add in the code for Puma
-# require 'puma/capistrano'
-require 'capistrano-puma'
+require './config/capistrano_puma_rb'
 
 # if you want to clean up old releases on each deploy uncomment this:
 # after "deploy:restart", "deploy:cleanup"
