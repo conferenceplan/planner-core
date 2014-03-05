@@ -14,6 +14,7 @@ platform :rbx do
   gem "rubysl"
   gem "rdoc"
   gem "test-unit"
+  gem "newrelic_rpm"
 end
 
 gem 'actionmailer' 

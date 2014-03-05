@@ -30,8 +30,6 @@
 //= require backbone/deep-model
 //= require backbone/backbone.marionette
 //= require backbone/extensions/backbone-relational
-//= require backbone/extensions/backbone.paginator
-//= require backbone/extensions/backbone-pageable
 
 //= require backbone-forms/distribution/backbone-forms
 //= require backbone-forms/distribution/editors/list
