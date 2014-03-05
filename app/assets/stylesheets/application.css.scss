@@ -13,11 +13,8 @@
  *= require backbone-forms/distribution/templates/bootstrap3
  *= require bootstrap-datetimepicker
  * 
- * require jquery.ui.all 
  *= require custom-theme/jquery-ui-1.9.2.custom
  *  
- *  require jqgrid-jquery-rails
- * 
  *= require jqGrid/ui.jqgrid
  *= require jqGrid/jqGrid.overrides
  *= require jqcloud 
@@ -215,10 +212,3 @@ $turquiose : #009999;
   height : auto;
   padding : 0;
 }
-
-// .modal-body {
-    // max-height: 400px;
-    // overflow-y: auto;
-    // padding: 15px;
-    // position: relative;
-// }
