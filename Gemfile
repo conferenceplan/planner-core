@@ -14,7 +14,6 @@ platform :rbx do
   gem "rubysl"
   gem "rdoc"
   gem "test-unit"
-  gem "newrelic_rpm"
 end
 
 gem 'actionmailer' 
@@ -45,6 +44,10 @@ gem 'time_diff'
 gem 'turbolinks'
 gem 'will_paginate'
 gem 'font_assets'
+
+gem 'rack-mini-profiler'
+gem 'flamegraph'
+gem 'memory_profiler'
 
 gem 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
 gem 'jquery-ui-rails', '3.0.1'
@@ -96,3 +99,5 @@ end
 group :test do
   # bundler requires these gems while running tests
 end
+
+gem "newrelic_rpm", group: :rbx
