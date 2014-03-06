@@ -9,11 +9,9 @@ class ProgramController < ApplicationController
   # will see the new data...
   #
   caches_action :participants, #:expires_in => 10.minutes,
-                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }#,
-#                :unless => Proc.new { |c| c.params.has_key?('callback') }
+                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
   caches_action :index, #:expires_in => 10.minutes,
-                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }#,
-#                :unless => Proc.new { |c| c.params.has_key?('callback') }
+                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
   
   #
   # Get the full programme
@@ -52,19 +50,24 @@ class ProgramController < ApplicationController
       conditions = getConditions(params)
       
       # @rooms = PublishedProgramItemsService.getPublishedRooms day, name, lastname
-      
       if stream
         @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day, name, lastname
       else
         @programmeItems = PublishedProgramItemsService.getPublishedProgramItems day, name, lastname
       end
   
-  
       @scale = params[:scale].to_f
       @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
       @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
       respond_to do |format|
-        format.json
+        format.json #{
+          # jsonstr = ''
+          # @programmeItems.each do |item|
+            # jsonstr += '{"id":"' + item.id.to_s  + '"'
+            # jsonstr += '}'
+          # end
+          # render :json # => jsonstr, :content_type => 'application/json', :callback => params[:callback]
+        # }
         # format.js #{ render :json }
       end
     end
