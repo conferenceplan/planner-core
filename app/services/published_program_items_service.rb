@@ -7,7 +7,7 @@ module PublishedProgramItemsService
   #
   #
   def self.findProgramItemsForPerson(person)
-    uncached do
+    PublishedProgrammeItemAssignment.uncached do
       PublishedProgrammeItemAssignment.all(
           :conditions => ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
               person.id, 
@@ -23,7 +23,7 @@ module PublishedProgramItemsService
   #
   def self.getPublishedRooms(day = nil, name = nil, lastname = nil)    
     
-    uncached do
+    PublishedRoom.uncached do
       PublishedRoom.all :select => 'distinct published_rooms.name',
                       :order => 'published_venues.name DESC, published_rooms.name ASC', 
                       :include => [:published_venue, {:published_room_item_assignments => {:published_programme_item => {:people => :pseudonym}}}],
@@ -37,7 +37,7 @@ module PublishedProgramItemsService
   #
   def self.getPublishedProgramItems(day = nil, name = nil, lastname = nil)
 
-    uncached do
+    PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                               :include => [:publication, :published_time_slot, {:published_room_item_assignment => {:published_room => [:published_venue]}}, {:people => [:pseudonym, :edited_bio]} ],
                                :conditions => getConditions(day, name, lastname)
@@ -47,7 +47,7 @@ module PublishedProgramItemsService
   
   def self.getPublishedProgramItemsThatHavePeople
 
-    uncached do
+    PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.all :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
                                :order => 'published_programme_items.title ASC',
                                :conditions => "published_programme_item_assignments.id is not null"
@@ -60,7 +60,7 @@ module PublishedProgramItemsService
   #
   def self.getTaggedPublishedProgramItems(tag, day = nil, name = nil, lastname = nil)
 
-    uncached do
+    PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.tagged_with(tag, :on => 'PrimaryArea', :op => true).all(
                                         :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
                                         :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
@@ -83,7 +83,7 @@ module PublishedProgramItemsService
     conditions << roles
     
     
-    uncached do
+    Person.uncached do
       Person.all :conditions => conditions, 
               :include => {:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}},
               :order => "people.last_name, published_time_slots.start asc"
@@ -96,7 +96,7 @@ module PublishedProgramItemsService
   #
   def self.getUpdates(pubDate)
 
-    uncached do
+    audits.uncached do
       deletedItemIds  = getDeletedPublishedProgrammeItems pubDate
       newItemIds      = getNewPublishedProgrammeItems(pubDate).delete_if{ |i| deletedItemIds.include? i } # remove any new that were also deleted in the same period
       updatedItemIds  = getUpdatedPublishedProgrammeItems(pubDate, newItemIds, deletedItemIds)
