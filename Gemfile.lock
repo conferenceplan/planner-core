@@ -115,12 +115,7 @@ GEM
       delayed_job (>= 3.0, < 4.1)
     erubis (2.7.0)
     execjs (2.0.2)
-    fast_stack (0.1.0)
-      rake
-      rake-compiler
     ffi2-generators (0.1.1)
-    flamegraph (0.0.5)
-      fast_stack
     font_assets (0.1.11)
       rack
     fssm (0.2.10)
@@ -149,7 +144,6 @@ GEM
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
-    memory_profiler (0.0.4)
     mime-types (1.25.1)
     mini_portile (0.5.2)
     momentjs-rails (2.5.1)
@@ -202,8 +196,6 @@ GEM
       rdoc (~> 3.4)
       thor (>= 0.14.6, < 2.0)
     rake (10.1.1)
-    rake-compiler (0.9.2)
-      rake
     rdoc (3.12.2)
       json (~> 1.4)
     recaptcha (0.3.6)
@@ -484,7 +476,6 @@ DEPENDENCIES
   delayed_job
   delayed_job_active_record
   enumerations_mixin!
-  flamegraph
   font_assets
   i18n
   i18n-active_record!
@@ -493,7 +484,6 @@ DEPENDENCIES
   jqgrid-jquery-rails (~> 4.5.200)
   jquery-rails (= 2.2.1)
   jquery-ui-rails (= 3.0.1)
-  memory_profiler
   momentjs-rails (~> 2.5.0)
   mysql2
   newrelic_rpm

@@ -45,8 +45,8 @@ gem 'turbolinks'
 gem 'will_paginate'
 gem 'font_assets'
 
-gem 'flamegraph'
-gem 'memory_profiler'
+# gem 'flamegraph'
+# gem 'memory_profiler'
 
 gem 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
 gem 'jquery-ui-rails', '3.0.1'
