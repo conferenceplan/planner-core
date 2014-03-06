@@ -7,13 +7,15 @@ module PublishedProgramItemsService
   #
   #
   def self.findProgramItemsForPerson(person)
-    PublishedProgrammeItemAssignment.all(
-        :conditions => ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
-            person.id, 
-            [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]],
-            :include => {:published_programme_item => [{:published_programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, {:published_room => :published_venue}, :published_time_slot]},
-            :order => "published_time_slots.start asc"
-    )
+    uncached do
+      PublishedProgrammeItemAssignment.all(
+          :conditions => ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
+              person.id, 
+              [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]],
+              :include => {:published_programme_item => [{:published_programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, {:published_room => :published_venue}, :published_time_slot]},
+              :order => "published_time_slots.start asc"
+      )
+    end
   end
   
   #
@@ -21,11 +23,13 @@ module PublishedProgramItemsService
   #
   def self.getPublishedRooms(day = nil, name = nil, lastname = nil)    
     
-    PublishedRoom.all :select => 'distinct published_rooms.name',
+    uncached do
+      PublishedRoom.all :select => 'distinct published_rooms.name',
                       :order => 'published_venues.name DESC, published_rooms.name ASC', 
                       :include => [:published_venue, {:published_room_item_assignments => {:published_programme_item => {:people => :pseudonym}}}],
                       :conditions => getConditions(day, name, lastname)
-
+    end
+    
   end
   
   #
@@ -33,18 +37,22 @@ module PublishedProgramItemsService
   #
   def self.getPublishedProgramItems(day = nil, name = nil, lastname = nil)
 
-    PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
+    uncached do
+      PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                               :include => [:publication, :published_time_slot, {:published_room_item_assignment => {:published_room => [:published_venue]}}, {:people => [:pseudonym, :edited_bio]} ],
                                :conditions => getConditions(day, name, lastname)
-
+    end
+    
   end
   
   def self.getPublishedProgramItemsThatHavePeople
 
-    PublishedProgrammeItem.all :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
+    uncached do
+      PublishedProgrammeItem.all :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
                                :order => 'published_programme_items.title ASC',
                                :conditions => "published_programme_item_assignments.id is not null"
-
+    end
+    
   end
   
   #
@@ -52,10 +60,12 @@ module PublishedProgramItemsService
   #
   def self.getTaggedPublishedProgramItems(tag, day = nil, name = nil, lastname = nil)
 
-    PublishedProgrammeItem.tagged_with(tag, :on => 'PrimaryArea', :op => true).all(
+    uncached do
+      PublishedProgrammeItem.tagged_with(tag, :on => 'PrimaryArea', :op => true).all(
                                         :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
                                         :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                                         :conditions => getConditions(day, name, lastname) )
+    end
 
   end
   
@@ -72,33 +82,39 @@ module PublishedProgramItemsService
     conditions << peopleIds if peopleIds
     conditions << roles
     
-    Person.all :conditions => conditions, 
+    
+    uncached do
+      Person.all :conditions => conditions, 
               :include => {:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}},
               :order => "people.last_name, published_time_slots.start asc"
-
+    end
+    
   end
   
   #
   #
   #
   def self.getUpdates(pubDate)
-    
-    deletedItemIds  = getDeletedPublishedProgrammeItems pubDate
-    newItemIds      = getNewPublishedProgrammeItems(pubDate).delete_if{ |i| deletedItemIds.include? i } # remove any new that were also deleted in the same period
-    updatedItemIds  = getUpdatedPublishedProgrammeItems(pubDate, newItemIds, deletedItemIds)
-    
-    peopleUpdates   = getUpdatedPeople pubDate
-    
-    # TODO - we also need to get updates to people such as BIOs and URLs
-    # TODO - we also need to get updates to items when a room or venue is renamed...
-    
-    {
-      :new_items      => newItemIds,
-      :deleted_items  => deletedItemIds,
-      :updated_items  => updatedItemIds,
-      :updatedPeople  => peopleUpdates[:updatedPeople], # these are people updated or new (i.e. just added to a program item for the first time)
-      :removedPeople  => peopleUpdates[:removedPeople]
-    }
+
+    uncached do
+      deletedItemIds  = getDeletedPublishedProgrammeItems pubDate
+      newItemIds      = getNewPublishedProgrammeItems(pubDate).delete_if{ |i| deletedItemIds.include? i } # remove any new that were also deleted in the same period
+      updatedItemIds  = getUpdatedPublishedProgrammeItems(pubDate, newItemIds, deletedItemIds)
+      
+      peopleUpdates   = getUpdatedPeople pubDate
+      
+      # TODO - we also need to get updates to people such as BIOs and URLs
+      # TODO - we also need to get updates to items when a room or venue is renamed...
+      
+      {
+        :new_items      => newItemIds,
+        :deleted_items  => deletedItemIds,
+        :updated_items  => updatedItemIds,
+        :updatedPeople  => peopleUpdates[:updatedPeople], # these are people updated or new (i.e. just added to a program item for the first time)
+        :removedPeople  => peopleUpdates[:removedPeople]
+      }
+    end
+
   end
 
   # new people - PublishedProgrammeItemAssignment
