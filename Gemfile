@@ -45,7 +45,6 @@ gem 'turbolinks'
 gem 'will_paginate'
 gem 'font_assets'
 
-gem 'rack-mini-profiler'
 gem 'flamegraph'
 gem 'memory_profiler'
 
