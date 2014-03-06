@@ -47,23 +47,26 @@ class ProgramController < ApplicationController
     name = params[:name]
     lastname = params[:lastname]
 
-    conditions = getConditions(params)
-    
-    # @rooms = PublishedProgramItemsService.getPublishedRooms day, name, lastname
-    
-    if stream
-      @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day, name, lastname
-    else
-      @programmeItems = PublishedProgramItemsService.getPublishedProgramItems day, name, lastname
-    end
 
-
-    @scale = params[:scale].to_f
-    @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
-    @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
-    respond_to do |format|
-      format.json
-      # format.js #{ render :json }
+    PublishedProgrammeItem.uncached do
+      conditions = getConditions(params)
+      
+      # @rooms = PublishedProgramItemsService.getPublishedRooms day, name, lastname
+      
+      if stream
+        @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day, name, lastname
+      else
+        @programmeItems = PublishedProgramItemsService.getPublishedProgramItems day, name, lastname
+      end
+  
+  
+      @scale = params[:scale].to_f
+      @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
+      @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
+      respond_to do |format|
+        format.json
+        # format.js #{ render :json }
+      end
     end
   end
   
