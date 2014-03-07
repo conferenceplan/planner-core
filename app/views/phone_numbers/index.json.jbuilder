@@ -1,5 +1,5 @@
 
-json.array!(@phoneNumbers) do |json, phone|
+json.array!(@phoneNumbers) do |phone|
 
     json.partial! 'phone', phone: phone 
 

@@ -1,5 +1,5 @@
 
-json.array!(@equipmentNeeds) do |json, equipment|
+json.array!(@equipmentNeeds) do |equipment|
     json.id equipment.id
     json.equipment_type_id equipment.equipment_type.id
     json.equipment_type_name equipment.equipment_type.description

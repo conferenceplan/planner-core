@@ -1,5 +1,5 @@
 
-json.array!(@programmeItems) do |json, item|
+json.array!(@programmeItems) do |item|
     json.id item.id
     json.lock_version item.lock_version
     json.title item.title

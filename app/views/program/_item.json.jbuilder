@@ -2,7 +2,7 @@
 json.id         item.id    
 json.title      item.title    
 json.format     item.format.name if item.format
-json.tags       item.tag_list_on('PrimaryArea') # TODO - do we jut want the PrimaryArea or make this configrable
+#json.tags       item.tag_list_on('PrimaryArea') # TODO - do we jut want the PrimaryArea or make this configrable
 json.desc       item.precis
 json.mins       item.duration
 json.day        item.published_room_item_assignment.day
@@ -17,9 +17,9 @@ json.people     item.published_programme_item_assignments.each do |assignment|
 end
 json.card_size  item.mobile_card_size
 
-imLarge = item.external_images.use(:largecard)[0]
-imLarge.scale = @scale if imLarge
-json.large_card         imLarge.picture.large_card.url.partition(@partition_val)[2] if imLarge
-imMedium = item.external_images.use(:mediumcard)[0]
-imMedium.scale = @scale if imMedium
-json.medium_card        imMedium.picture.medium_card.url.partition(@partition_val)[2] if imMedium
+#imLarge = item.external_images.use(:largecard)[0]
+#imLarge.scale = @scale if imLarge
+#json.large_card         imLarge.picture.large_card.url.partition(@partition_val)[2] if imLarge
+#imMedium = item.external_images.use(:mediumcard)[0]
+#imMedium.scale = @scale if imMedium
+#json.medium_card        imMedium.picture.medium_card.url.partition(@partition_val)[2] if imMedium

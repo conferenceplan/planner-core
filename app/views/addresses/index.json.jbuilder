@@ -1,5 +1,5 @@
 
-json.array!(@postalAddresses) do |json, address|
+json.array!(@postalAddresses) do |address|
     json.id address.id
     json.line1 address.line1
     json.line2 address.line2

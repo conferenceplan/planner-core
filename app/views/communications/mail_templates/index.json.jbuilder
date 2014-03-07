@@ -1,5 +1,5 @@
 
-json.array!(@mail_templates) do |json, mail_template|
+json.array!(@mail_templates) do |mail_template|
 
     json.partial! 'mail_template', mail_template: mail_template 
 
