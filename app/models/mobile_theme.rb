@@ -4,7 +4,6 @@ class MobileTheme < ActiveRecord::Base
                   :page_flipper_separators, :page_flipper_text, :time_text, :updated_at, :updated_ribbon_text, :card_background, :card_shadow, :favourite_on, 
                   :hot_ribbon, :main_background, :updated_ribbon, :default_bio_image
   attr_accessor :scale
-  audited
 
   mount_uploader :default_bio_image, BioPictureUploader
 
