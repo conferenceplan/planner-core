@@ -35,7 +35,7 @@ gem "daemons"
 gem 'delayed_job' 
 gem 'delayed_job_active_record'
 gem 'i18n' 
-gem 'jbuilder', '1.5.3'
+gem 'jbuilder'
 gem 'jpbuilder'
 gem 'mysql2' 
 gem 'rack-jsonp-middleware', :require => 'rack/jsonp'

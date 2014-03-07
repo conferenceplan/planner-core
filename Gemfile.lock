@@ -123,7 +123,7 @@ GEM
     hike (1.2.3)
     htmlentities (4.3.1)
     i18n (0.6.9)
-    jbuilder (1.5.3)
+    jbuilder (2.0.4)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
     journey (1.0.4)
@@ -479,7 +479,7 @@ DEPENDENCIES
   font_assets
   i18n
   i18n-active_record!
-  jbuilder (= 1.5.3)
+  jbuilder
   jpbuilder
   jqgrid-jquery-rails (~> 4.5.200)
   jquery-rails (= 2.2.1)
