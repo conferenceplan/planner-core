@@ -28,6 +28,7 @@ class Surveys::ResponseController < ApplicationController
       
       begin
         SurveyRespondentDetail.transaction do
+          originalResponses = nil
           p = params[:survey_respondent_detail].reject {|x| ['pub_first_name', 'pub_last_name', 'pub_suffix'].include? x }
           if @respondent && @respondent.survey_respondent_detail
             respondentDetails = @respondent.survey_respondent_detail
@@ -58,7 +59,7 @@ class Surveys::ResponseController < ApplicationController
 
                 responses = respondentDetails.getResponsesForQuestion(@survey.id, res[0])
                 responses.each do |r|
-                  originalResponses.delete(r)
+                  originalResponses.delete(r) if originalResponses
                   r.delete
                 end
 
@@ -78,20 +79,24 @@ class Surveys::ResponseController < ApplicationController
                 end
               else
                 if res[1].empty?
-                  originalResponses.delete( saveResponse(@respondent, @survey, res[0], '', respondentDetails) )
+                  r = saveResponse(@respondent, @survey, res[0], '', respondentDetails)
+                  originalResponses.delete( r ) if originalResponses
                 else
-                  originalResponses.delete( saveResponse(@respondent, @survey, res[0], res[1].to_s, respondentDetails) )
+                  r = saveResponse(@respondent, @survey, res[0], res[1].to_s, respondentDetails)
+                  originalResponses.delete( r ) if originalResponses
                 end
               end
             else
-              originalResponses.delete( saveResponse(@respondent, @survey, res[0], res[1], respondentDetails) )
+              r = saveResponse(@respondent, @survey, res[0], res[1], respondentDetails)
+              originalResponses.delete( r ) if originalResponses
             end
           end
-          
-          originalResponses.each do |r|
-            r.delete
+
+          if originalResponses
+            originalResponses.each do |r|
+              r.delete
+            end
           end
-          
           
           if (@survey.accept_status && @respondent.person)
             @respondent.person.acceptance_status = @survey.accept_status
