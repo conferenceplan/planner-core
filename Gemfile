@@ -14,6 +14,7 @@ platform :rbx do
   gem "rubysl"
   gem "rdoc"
   gem "test-unit"
+  gem "newrelic_rpm"
 end
 
 gem 'actionmailer' 
@@ -98,5 +99,3 @@ end
 group :test do
   # bundler requires these gems while running tests
 end
-
-gem "newrelic_rpm", group: :rbx
