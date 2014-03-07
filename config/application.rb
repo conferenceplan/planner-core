@@ -13,7 +13,7 @@ module PlannerRc1
   class Application < Rails::Application
     
     config.before_configuration do
-      ENV['NEWRELIC_ENABLE'] = false # TODO - change to get from env yml file
+      ENV['NEWRELIC_ENABLE'] = 'false' # TODO - change to get from env yml file
     end
     
     # Settings in config/environments/* take precedence over those specified here.
