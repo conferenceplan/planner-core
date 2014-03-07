@@ -7,6 +7,6 @@ class MobileTheme < ActiveRecord::Base
 
   mount_uploader :default_bio_image, BioPictureUploader
 
-  audited except: :default_bio_image, :associated_with => :person
+  audited except: :default_bio_image
 
 end
