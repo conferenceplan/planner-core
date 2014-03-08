@@ -55,6 +55,7 @@ authorization do
     has_permission_on :equipment_types, :to => :manage
     has_permission_on :equipment_needs, :to => :manage
     has_permission_on :communications_mailing, :to => :read
+    has_permission_on :panels_item_mgmt, :to => :manage
   end
   
   role :Planner do
