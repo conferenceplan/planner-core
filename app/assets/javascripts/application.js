@@ -29,6 +29,7 @@
 //= require backbone/backbone
 //= require backbone/deep-model
 //= require backbone/backbone.marionette
+//= require backbone/extensions/backbone.poller
 //= require backbone/extensions/backbone-relational
 
 //= require backbone-forms/distribution/backbone-forms

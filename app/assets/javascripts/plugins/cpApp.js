@@ -314,10 +314,18 @@ var AppUtils = (function(){
         },
         
         renderModel : function() {
+            var disableEdit = false;
+            if (this.options.editDisableCondition) {
+                disableEdit = this.options.editDisableCondition(this.model);
+            }
             // display : none
             this.$el.find('.model-cancel-button').addClass('hidden-button');
             this.$el.find('.model-submit-button').addClass('hidden-button');
-            this.$el.find('.model-edit-button').removeClass('hidden-button');
+            if (!disableEdit) {
+                this.$el.find('.model-edit-button').removeClass('hidden-button');
+            } else {
+                this.$el.find('.model-edit-button').addClass('hidden-button');
+            }
             
             if (this.options.readTemplate) {
                 html = _.template($(this.options.readTemplate).html(), this.model.toJSON());
@@ -380,7 +388,7 @@ var AppUtils = (function(){
             if (this.options.selectFn) {
                 this.$el.parent().find('tr').removeClass('info');
                 this.$el.addClass('info');
-                this.options.selectFn(this.model.id);
+                this.options.selectFn(this.model.id, this.model);
             }
             this.editModel();
         },
@@ -410,7 +418,8 @@ var AppUtils = (function(){
             if (this.options.readTemplate) {
                 var v = new ItemEditView({
                     model           : this.model,
-                    readTemplate    : this.options.readTemplate
+                    readTemplate    : this.options.readTemplate,
+                    editDisableCondition : this.options.editDisableCondition
                 });
                 
                 v.render();
@@ -486,7 +495,8 @@ var AppUtils = (function(){
                             modal_template  : options.modal_template,
                             modal_edit      : options.modal_edit,
                             form_event      : options.form_event,
-                            form_event_fn   : options.form_event_fn
+                            form_event_fn   : options.form_event_fn,
+                            editDisableCondition : options.editDisableCondition
                         }
                     });
                     

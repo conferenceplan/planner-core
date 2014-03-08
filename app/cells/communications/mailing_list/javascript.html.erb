@@ -11,7 +11,7 @@ CommunicationsList = (function(Backbone){
             mail_template_id        : { type : 'Select', title : '<%= t "mail-mailing-template" %>',
                                             options : <%= [].concat(MailTemplate.find(:all).collect {|s| {'val' => s.id, 'label' => s.title} }).to_json.html_safe %>
                                         },
-            scheduled               : { type : 'Checkbox', title : '<%= t "mail-scheduled" %>' },
+            // scheduled               : { type : 'Checkbox', title : '<%= t "mail-scheduled" %>' },
             testrun                 : { type : 'Checkbox', title : '<%= t "mail-test-run" %>' }
         }
     });
@@ -64,9 +64,17 @@ CommunicationsList = (function(Backbone){
             view_refresh_event      : "mailing:refresh",
             selectFn                : options.selectFn,
             readTemplate            : options.readTemplate,
-            itemArea                : options.itemArea
+            itemArea                : options.itemArea,
+            editDisableCondition    : function(mdl) {
+                return  mdl.get('scheduled');
+            }
         }) );
     };
+    
+    /*
+     * We need to poll the currently selected mailing to see if it has been run and if so
+     * force a refresh and re-enable the schedule button
+     */
     
     /*
      * 

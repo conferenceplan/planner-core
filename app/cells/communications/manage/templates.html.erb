@@ -13,6 +13,14 @@
     <div class="voffset10"></div>
 </script>
 
+<script  type="text/template" id="mailing-control-layout-template">
+    <div id="mailing-control"></div>
+</script>
+
+<script type="text/template" id="mailing-control-view-template">
+    <button class="btn btn-primary schedule-mail-button pull-right" {{= scheduled ? 'disabled' : ''}}><%= t 'schedule-mailing' %></button>
+</script>
+
 <script type="text/template" id="preview-control-view-template">
     <button class="btn btn-primary preview-mail-button"><%= t 'preview' %></button>
 </script>

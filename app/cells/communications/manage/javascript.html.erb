@@ -6,6 +6,24 @@ CommunicationsApp.Management = (function(Backbone){
     
     var currentMailingId = null;
     
+    ScheduleControlView = Marionette.ItemView.extend({
+        template : "#mailing-control-view-template",
+        
+        initialize : function() {
+            this.model.on("change:scheduled", this.render);
+        },
+        
+        events : {
+            "click .schedule-mail-button" : "scheduleMailing"
+        },
+        
+        scheduleMailing : function(ev) {
+            // alert("Schedule the mailing for " + this.model.id);
+            this.model.set('scheduled', true);
+            this.model.save();
+        }
+    });
+    
     PreviewControlView = Marionette.ItemView.extend({
         el : '#preview-control-area',
         template : "#preview-control-view-template",
@@ -100,13 +118,40 @@ CommunicationsApp.Management = (function(Backbone){
         }
     });
     
-    var tabLists = [];
+    MailingControlLayout = Backbone.Marionette.Layout.extend({
+        template: "#mailing-control-layout-template",
+        
+        regions: {
+            control : "#mailing-control",
+          }
+    });
     
-    function clearDetails() {
-        _.invoke(tabLists, 'reset' );
-    };
+    var controlRegion = new Backbone.Marionette.Region({
+        el: "#mailing-control-area"
+    });
+
+    var poller = null; 
     
-    function selectMailing(id) {
+    function selectMailing(id, mdl) {
+        // TODO - replace the poller with a web-socket...
+        controlRegion.close();
+        mailingCtlLayout = new MailingControlLayout();
+        controlRegion.show(mailingCtlLayout);
+        mailingCtlLayout.control.show( new ScheduleControlView({
+            model : mdl
+        }) );
+
+        if (poller) {
+            poller.stop();
+        };
+
+        // mdl.fetch(); // refresh the underlying model
+        poller = Backbone.Poller.get(mdl, {
+            delay : 10000, // ms - every 10 seconds...
+            // Not delayed so we get a first fetch and then wait 10s
+            // delayed : true,
+        });
+
         currentMailingId = id;
         jQuery("#mailing-participants").participantTable('mailingQuery',{
             mailingId : id
@@ -117,14 +162,18 @@ CommunicationsApp.Management = (function(Backbone){
             op : 'not'
         });
         jQuery("#participants").participantTable('render');
+        
+        if (poller) {
+            poller.start();
+        };
     };
     
     /*
      * 
      */
     return {
-        selectMailing : function(id) {
-            selectMailing(id)
+        selectMailing : function(id, mdl) {
+            selectMailing(id, mdl)
         },
         
         init : function(options) {
@@ -133,6 +182,7 @@ CommunicationsApp.Management = (function(Backbone){
             ctlView.render();
             var previewCtl = new PreviewControlView();
             previewCtl.render();
+            
         }
     }
     
