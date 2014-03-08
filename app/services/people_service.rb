@@ -119,7 +119,7 @@ module PeopleService
       if args[:joins]
         args[:joins] += ' LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
       else  
-        args.merge!( :joins => 'JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id' )
+        args.merge!( :joins => 'LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id' )
       end
     end
     

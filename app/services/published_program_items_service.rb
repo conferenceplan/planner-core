@@ -150,6 +150,11 @@ module PublishedProgramItemsService
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc", 
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'EditedBio') AND (audits.action != 'destroy')", pubDate.timestamp]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (EditedBio.exists? a.auditable_id) ? EditedBio.find(a.auditable_id).person_id : nil }.compact
+    
+    # Find people with pseudonyms that have been updated
+    audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc", 
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Pseudonym') AND (audits.action != 'destroy')", pubDate.timestamp]
+    updateOrAdded = updateOrAdded.concat audits.collect {|a| (Pseudonym.exists? a.auditable_id) ? Pseudonym.find(a.auditable_id).person_id : nil }.compact
 
     updateOrAdded = updateOrAdded.collect {|i| (Person.find(i).publishedProgrammeItemAssignments.size > 0) ? i : nil }.compact.uniq
 
