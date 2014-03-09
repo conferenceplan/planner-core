@@ -65,12 +65,19 @@ OnlinePublicationsApp.Management = (function(Backbone){
             "click .publish-button" : "publish",
         },
         
+        initialize : function() {
+            this.model.on("sync", this.render ); // when the modal does the update and second after the update to the server
+        },
+        
         publish : function() {
             $.ajax({
                 type: 'GET',
                 url: "/publisher/publish",
                 success: function(response) {
                     infoMessage('<%= t "publish-scheduled" %>');
+                    if (pendingPoller) {
+                       pendingPoller.start();
+                    };
                 },
                 error: function() {
                     alertMessage('<%= t "problem-scheduling-publish" %>');
@@ -91,7 +98,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
                 el: "#online-pub-info-area"
             });
     
-    
+    var pendingPoller = null;
     var Workspace = Backbone.Router.extend({
         routes : {
             'program_publish_review'    : 'program_publish_review',
@@ -116,26 +123,44 @@ OnlinePublicationsApp.Management = (function(Backbone){
         
         program_publish : function() {
             resultRegion.close();
+            // TODO - put in mechanism to get the publish status from the server
             pending = new PublishPending();
-            pending.fetch({ 
+            pending.fetch({
                 success : function(mdl) {
                     pubCtl = new PublishView({
                         model : mdl
                     });
                     publishRegion.show(pubCtl);
+                    pendingPoller = Backbone.Poller.get(mdl, {
+                       delay : 10000, // ms - every 10 seconds...
+                       // delayed : true,
+                    });
                 }
             });
         }
     });
     
+    var lastPubPoller = null;
+    
     function createInfoArea() {
         lastPub = new LastPublish();
         lastPub.fetch({
            success : function(mdl) {
+               if (lastPubPoller) {
+                   lastPubPoller.stop();
+               };
                lpView = new LastPubView({
                    model : mdl
                });
                infoRegion.show(lpView);
+               // TODO - put in loop to update this
+               lastPubPoller = Backbone.Poller.get(mdl, {
+                   delay : 10000, // ms - every 10 seconds...
+                   delayed : true,
+               });
+               if (lastPubPoller) {
+                   lastPubPoller.start();
+               };
            } 
         });
     };
