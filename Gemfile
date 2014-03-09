@@ -9,6 +9,12 @@ gem 'therubyracer', :platforms => :ruby
 gem 'puma', :platforms => :ruby
 gem 'turbo-sprockets-rails3'
 
+# gem 'rack-fiber_pool' # event based investigation
+# gem 'eventmachine'
+# gem 'thin'
+# gem "em-synchrony"
+# gem 'websocket-rails' # for async comms with JS, needs event based server
+
 platform :rbx do
   gem "racc", "1.4.9"
   gem "rubysl"
@@ -24,7 +30,7 @@ gem 'enumerations_mixin', :git => 'git://github.com/balen/enumerations_mixin.git
 gem 'axlsx_rails'
 
 gem "audited-activerecord", "~> 3.0"
-gem 'acts-as-taggable-on', "2.4.1" 
+gem 'acts-as-taggable-on' #, "2.4.1" 
 gem 'authlogic', "3.3.0"
 gem 'bluecloth'
 gem 'bootstrap-sass', '~> 3.1'
@@ -46,9 +52,6 @@ gem 'turbolinks'
 gem 'will_paginate'
 gem 'font_assets'
 
-# gem 'flamegraph'
-# gem 'memory_profiler'
-
 gem 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
 gem 'jquery-ui-rails', '3.0.1'
 gem 'momentjs-rails', '~> 2.5.0'
@@ -58,6 +61,11 @@ gem 'jqgrid-jquery-rails', '~> 4.5.200'
 
 gem 'prawn_rails'
 gem "select2-rails"
+
+#  gem 'rack-mini-profiler'
+#  gem 'flamegraph'
+#  gem 'memory_profiler'
+
 
 gem "recaptcha", :require => "recaptcha/rails"
 
@@ -90,6 +98,7 @@ group :development do
   gem 'seed_dump', '0.5.3'
   gem 'capistrano', '2.15.5'
   gem 'rvm-capistrano', '1.5.0'
+
   #gem 'capistrano-puma', '0.0.1', require: false, group: :development
   #gem 'capistrano', '~> 3.0', require: false, group: :development
   #gem 'capistrano-rails', require: false, group: :development
