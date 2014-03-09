@@ -1,6 +1,10 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
+require 'log4r'
+require 'log4r/yamlconfigurator'
+require 'log4r/outputter/datefileoutputter'
+include Log4r
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
@@ -15,6 +19,11 @@ module PlannerRc1
     config.before_configuration do
       ENV['NEWRELIC_ENABLE'] = 'false' # TODO - change to get from env yml file
     end
+    
+    # Configuration for log4j
+    log4r_config= YAML.load_file(File.join(File.dirname(__FILE__),"log4r.yml"))
+    YamlConfigurator.decode_yaml( log4r_config['log4r_config'] )
+    config.logger = Log4r::Logger[(Rails.env == "development" ? Rails.env : 'planner')]
     
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

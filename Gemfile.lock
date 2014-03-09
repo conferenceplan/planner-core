@@ -141,6 +141,7 @@ GEM
       railties (>= 3.1.0)
     json (1.8.1)
     libv8 (3.16.14.3)
+    log4r (1.1.10)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -440,7 +441,7 @@ GEM
       sprockets (>= 2.2.0)
     turbolinks (2.2.1)
       coffee-rails
-    tzinfo (0.3.38)
+    tzinfo (0.3.39)
     uglifier (2.4.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -484,6 +485,7 @@ DEPENDENCIES
   jqgrid-jquery-rails (~> 4.5.200)
   jquery-rails (= 2.2.1)
   jquery-ui-rails (= 3.0.1)
+  log4r
   momentjs-rails (~> 2.5.0)
   mysql2
   newrelic_rpm

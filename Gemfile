@@ -52,6 +52,8 @@ gem 'turbolinks'
 gem 'will_paginate'
 gem 'font_assets'
 
+gem 'log4r'
+
 gem 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
 gem 'jquery-ui-rails', '3.0.1'
 gem 'momentjs-rails', '~> 2.5.0'
