@@ -9,7 +9,7 @@ module DataService
       if context.class == HashWithIndifferentAccess
         context.each do |key, ctx|
           # tagquery += ".tagged_with('" + tags[key].gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + ctx + "', :any => true)"
-          tagquery += ".tagged_with('" + tags[key] + "', :on => '" + ctx + "')"
+          tagquery += ".tagged_with('" + tags[key] + "', :on => '" + ctx + "', :any => true)"
         end
       else
         # tagquery += ".tagged_with('" + tags.gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + context + "', :op => true)"

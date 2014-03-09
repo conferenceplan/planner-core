@@ -28,13 +28,16 @@ module PeopleService
     args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
     tagquery = DataService.genTagSql(context, tags)
     if includeMailings
-      args.merge! :select => 'distinct people.id'
-    end      
+      args.merge! :include => :mailings
+    end
+    # if includeMailings || !tagquery.empty?
+      # args.merge! :select => 'distinct people.id'
+    # end      
     
     if tagquery.empty?
       Person.count args
     else
-      eval "Person#{tagquery}.count :all, " + args.inspect
+      eval "Person#{tagquery}.uniq.count :all, " + args.inspect
     end
   end
   
@@ -51,8 +54,11 @@ module PeopleService
       args.merge!(:order => index + " " + sort_order)
     end
     if includeMailings
-      args.merge! :include => :mailings, :select => 'distinct people.*'
+      args.merge! :include => :mailings
     end
+    if includeMailings || !tagquery.empty?
+      args.merge! :select => 'distinct people.*'
+    end      
     
     if tagquery.empty?
       people = Person.find :all, args
