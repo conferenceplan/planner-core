@@ -37,9 +37,11 @@ class PublishJob
   end
   
   def clearDalliCache
-    Rails.cache.dalli.with do |client|
-      client.flush
-    end    
+    if Rails.cache.respond_to? :dalli
+      Rails.cache.dalli.with do |client|
+        client.flush
+      end    
+    end
   end
   
   def updateManifestFile
