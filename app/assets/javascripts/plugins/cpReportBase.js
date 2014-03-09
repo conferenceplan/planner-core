@@ -81,6 +81,8 @@ var ReportBase = (function(Backbone){
                 var errors = this.form.validate(); // To save the values from the form back into the model
                 
                 if (!errors) { // save if there are no errors
+                    showSpinner('#report-results-area');
+
                     // Gather the data from the form and send it to the back end
                     var data = this.form.getValue();
                     var colModel = this.options.colModel;

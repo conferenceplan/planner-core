@@ -240,6 +240,8 @@ ScheduleApp.ItemManagement = (function(Backbone){
      * Given the day of the conference render the grid (SVG) for that day
      */
     function loadGrid(day) {
+            showSpinner('#grid-view');
+        
             var grid = new GridItem();
             grid.url = "/program_planner/assignments.json?day=" + day;
             grid.fetch({

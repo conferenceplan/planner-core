@@ -217,6 +217,8 @@ var TabUtils = (function(){
      */
     tabModule.createTabContent = function createTabContent(options) {
         if (!options.model) {
+            showSpinner(options.place);
+            
             detail = new options.modelType();
             detail.fetch({
                 url : options.url,

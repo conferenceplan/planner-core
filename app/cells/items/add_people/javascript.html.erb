@@ -214,6 +214,7 @@ ItemApp.PeopleManagement = (function(Backbone){
     };
     
     function loadProgItem(id) {
+            showSpinner('#program-item-view');
             currentItem = new ProgramItem();
             currentItem.fetch({
                 url : "/programme_items/" + id + '.json',

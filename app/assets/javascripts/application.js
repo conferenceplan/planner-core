@@ -36,6 +36,7 @@
 //= require backbone-forms/distribution/editors/list
 //= require backbone-forms/planner.bootstrap-modal
 //= require backbone-forms/templates/bootstrap3
+//= require spin
 
 //= require moment
 //= require moment/fr.js
@@ -85,6 +86,11 @@ jQuery(document).ready(function() {
     $('.survey-help').tooltip();
                 
 });
+
+function showSpinner(place) {
+    var spinner = new Spinner({ className: 'spinner center-block' }).spin();
+    $(place).html(spinner.el);
+};
 
 function alertMessage(message) {
     $('#alert-area').html("<div class=\"alert alert-warning fade in\"><button class=\"close\" data-dismiss=\"alert\">×</button>"+ message +"</div>");
