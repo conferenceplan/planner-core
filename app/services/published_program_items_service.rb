@@ -96,7 +96,7 @@ module PublishedProgramItemsService
   #
   def self.getUpdates(pubDate)
 
-    audits.uncached do
+    PublishedProgrammeItemAssignment.uncached do
       deletedItemIds  = getDeletedPublishedProgrammeItems pubDate
       newItemIds      = getNewPublishedProgrammeItems(pubDate).delete_if{ |i| deletedItemIds.include? i } # remove any new that were also deleted in the same period
       updatedItemIds  = getUpdatedPublishedProgrammeItems(pubDate, newItemIds, deletedItemIds)
