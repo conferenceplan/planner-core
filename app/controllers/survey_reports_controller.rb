@@ -17,7 +17,7 @@ class SurveyReportsController < PlannerController
     respond_to do |format|
       format.json {
         # Return the results as a JSON structure
-        render json: '{ "totalpages": 1, "currpage": 1, "totalrecords": ' + result[:count].to_s + 
+        render json: '{ "show_country" : ' + surveyQuery.show_country.to_s + ', "totalpages": 1, "currpage": 1, "totalrecords": ' + result[:count].to_s + 
                         ', "userdata": ' + result[:meta_data].to_json() + 
                         ', "rowdata": ' + result[:result_set].to_json() + 
                         '}', :content_type => 'application/json'

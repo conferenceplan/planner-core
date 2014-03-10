@@ -38,6 +38,21 @@ module SurveyService
                               createJoinPart2(surveyQuery.survey_query_predicates, metadata, query[2]) + 
                               ' left join survey_histories hist on hist.survey_id = ' + surveyQuery.survey_id.to_s + ' and hist.survey_respondent_detail_id = res.id' + dateOrder
                                )
+
+    # it would be good to also get the person's address (country) if there is a corresponding survey_respondent and person ...
+    # oid in the result set is the survey_respondent_details
+    resDetails = SurveyRespondentDetail.find_all_by_id  resultSet.collect{ |r| r['oid'] }, :include => { :survey_respondent => {:person => :postal_addresses} },
+                                                    :conditions => {"postal_addresses.isdefault" => true}
+
+    resultMap = {}
+    resDetails.map { |r| resultMap[r.id] = r}
+                                                        
+    # Now we need to append the address information to the result set !!
+    resultSet.collect { |a| 
+            a.tap { |r|
+              r['country'] = ( resultMap[r['oid']] ) ? resultMap[r['oid']].survey_respondent.person.postal_addresses[0].city + ', ' + resultMap[r['oid']].survey_respondent.person.postal_addresses[0].country : ''
+            }
+          }
     
     { :meta_data => metadata, :result_set => resultSet, :count => count }
   end

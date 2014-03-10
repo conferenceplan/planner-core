@@ -15,6 +15,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                 options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
                               },
             shared          : { type : 'Checkbox',  title : '<%= t "survey-shared" %>' },
+            show_country    : { type : 'Checkbox',  title : '<%= t "survey-show-country" %>' },
             date_order      : { type : 'Checkbox',   title : '<%= t "survey-order-by-date-received" %>' },
             operation       : { type : 'Select',    title : '<%= t "survey-operation" %>',
                                 options : ['ALL', 'ANY']
@@ -117,10 +118,16 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         render : function() {
             var colModel = [ 
                     {name:'First Name', jsonmap: "first_name", sortable:true, width: 20}, 
-                    {name:'Last Name', jsonmap: "last_name", sortable:true, width: 30}, 
+                    {name:'Last Name', jsonmap: "last_name", sortable:true, width: 30},
                     {name:'Email', jsonmap: "email", sortable:true, width: 35}, 
-                    {name:'Date Filled', jsonmap: "filled_at", sortable:false, width: 35}, 
+                    {name:'Date Filled', jsonmap: "filled_at", sortable:true, width: 35}, 
                 ];
+                
+            if (this.resultsCollection.get('show_country')) {
+                colModel.push( 
+                    {name:'Country', jsonmap: "country", sortable:true, width: 35} 
+                    );
+            };
                 
             for (var key in this.resultsCollection.get('userdata')) {
                 colModel.push( {name: this.resultsCollection.get('userdata')[key]['question'], jsonmap: key, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"' } } );
@@ -132,6 +139,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             this.grid = $('.result-table').jqGrid({
                 colModel : colModel,
                 datatype: 'jsonstring',
+                loadonce: true,
                 datastr: this.resultsCollection.toJSON(),
                 jsonReader :{
                     repeatitems : false,
@@ -141,14 +149,22 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                     total: "totalpages",
                     id : "id",
                 },
+                sortname: 'last_name',
+                sortorder: "asc",
                 viewrecords: true,
                 height: "auto",
                 autowidth: true,
                 ignoreCase: true,
                 gridview: true,
                 pager : '#result-pager',
-                caption: 'Results'
+                caption: 'Results',
+                rowList:[10,20,50,100000000],
+                loadComplete: function() {
+                    $("option[value=100000000]").text('All');
+                }
             });
+            
+            $('.result-table').jqGrid('filterToolbar',{stringResult: true, searchOnEnter : false, defaultSearch : 'cn'});
             
             var grid = this.grid;
             jQuery(window).bind('resize', function() {
