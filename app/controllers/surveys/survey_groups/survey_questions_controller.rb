@@ -36,7 +36,15 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
           @question.survey_format = SurveyFormat.new(params[:survey_format])
           @question.survey_format.save!
         end
-          
+        
+        if @question.question_type == :address
+          @question.question = "Street address"
+          @question.question1 = "City"
+          @question.question2 = "State/Province/County"
+          @question.question3 = "Zip/Postal Code"
+          @question.question4 = "Country"
+        end
+ 
         if @question.save!
           @question.update_answers(params[:survey_answers]) if params[:survey_answers]
         end
@@ -57,7 +65,7 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
         @question = group.survey_questions.find params[:id]
     
         @question.update_attributes!(params[:survey_question])
-    
+        
         if params[:survey_format]
           format = @question.survey_format
           if format
