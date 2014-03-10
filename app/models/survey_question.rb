@@ -23,13 +23,12 @@ class SurveyQuestion < ActiveRecord::Base
   end
   
   def update_answers(new_answers) # A collection of answers that have been passed in
-    
     # If the answer is new then create one and add it (i.e. answer does not have an id)
     # If the answer has an id then update the value
     # Any left over are for deletion
     
-    updates = Hash[ new_answers.map { |a| (a[:id] ? [a[:id], a] : nil) }.compact ]
-    newAnswers = new_answers.collect { |a| (a[:id] ? nil : a) }.compact
+    updates = Hash[ new_answers.map { |a| ( (a[:id] && (a[:id].to_i > 0)) ? [a[:id].to_i, a] : nil) }.compact ]
+    newAnswers = new_answers.collect { |a| ( (a[:id] && (a[:id].to_i > 0)) ? nil : a) }.compact
 
     survey_answers.each do |answer|
       if updates[answer.id]
@@ -42,6 +41,7 @@ class SurveyQuestion < ActiveRecord::Base
     
     # now create the new ones
     newAnswers.each do |answer|
+      # answer.id = nil
       survey_answers << SurveyAnswer.new(answer)
     end
     
