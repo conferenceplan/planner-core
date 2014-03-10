@@ -91,6 +91,7 @@ authorization do
     has_permission_on :pages_communications_dash, :to => :read
     has_permission_on :communications_mail_history, :to => :read
     has_permission_on :communications_mail_templates, :to => :read
+    has_permission_on :surveys, :to => :read
   end
   
   role :SuperPlanner do
