@@ -92,7 +92,6 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     });
 
     Question = Backbone.Model.extend({
-        survey_id : <%= Survey.find(:first).id %>
     });
 
     QuestionsCollection = Backbone.Collection.extend({
