@@ -8,6 +8,7 @@
             json.first_name         person.pseudonym.first_name if person.pseudonym.first_name
             json.last_name          person.pseudonym.last_name if person.pseudonym.last_name
             json.suffix             person.pseudonym.suffix if person.pseudonym.suffix
+            json.lock_version       person.pseudonym.lock_version
         end
     end
     json.company                    person.company
@@ -22,3 +23,5 @@
     json.has_survey                 SurveyService.personAnsweredSurvey( person, 'partsurvey') ? 'Y' : 'N' # TODO - this will need to change
     json.comments                   person.comments ? person.comments : ""
     json.bio_image                  person.bio_image if person.bio_image
+    json.lock_version               person.lock_version
+    
