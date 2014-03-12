@@ -92,6 +92,7 @@ authorization do
     has_permission_on :communications_mail_history, :to => :read
     has_permission_on :communications_mail_templates, :to => :read
     has_permission_on :surveys, :to => :read
+    has_permission_on :communications_mailing, :to => :manage
   end
   
   role :SuperPlanner do
@@ -140,7 +141,7 @@ privileges do
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
         :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments, :listWithBlank]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants, :copy,
-                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:program_book_report]
+                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:program_book_report, :addPeople]
     privilege :create, :includes => [:new,:import,:doimport]
     privilege :update, :includes => [:edit,:states,:copySurvey,:updateExcludedItemsFromSurveys,:updateExcludedTimesFromSurveys]
     privilege :delete, :includes => [:destroy, :removeItem]
