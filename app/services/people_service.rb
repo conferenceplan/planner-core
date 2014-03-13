@@ -30,9 +30,9 @@ module PeopleService
     if includeMailings
       args.merge! :include => :mailings
     end
-    # if includeMailings || !tagquery.empty?
-      # args.merge! :select => 'distinct people.id'
-    # end      
+    if includeMailings || !tagquery.empty?
+      args.merge! :select => 'distinct people.id'
+    end
     
     if tagquery.empty?
       Person.count args

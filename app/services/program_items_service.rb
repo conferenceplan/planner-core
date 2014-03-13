@@ -11,6 +11,10 @@ module ProgramItemsService
     tagquery = DataService.genTagSql(context, tags)
     
     args.merge!(:order => "time_slots.start asc, programme_items.title asc")
+
+    if !tagquery.empty?
+      args.merge! :select => 'distinct programme_items.*'
+    end      
     
     if tagquery.empty?
       ProgrammeItem.count args
