@@ -38,6 +38,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                 subSchema : {
                     id : { type : 'Hidden' },
                     answer : { type : 'Text' },
+                    sort_order : { type : 'Number' },
                     // default ?
                     answertype_id : { type : 'Select', 
                                        title : '<%= t "survey-answer-type" %>',

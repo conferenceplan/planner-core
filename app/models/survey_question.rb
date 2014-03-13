@@ -7,7 +7,7 @@ class SurveyQuestion < ActiveRecord::Base
   has_one :survey_format, :as => :formatable, :dependent => :destroy
   accepts_nested_attributes_for :survey_format
   
-  has_many :survey_answers, :dependent => :destroy
+  has_many :survey_answers, :dependent => :destroy, :order => 'sort_order asc'
   accepts_nested_attributes_for :survey_answers, :allow_destroy => true
   
   validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone]
