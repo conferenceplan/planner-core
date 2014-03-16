@@ -58,7 +58,7 @@ class ProgramController < ApplicationController
   
       @scale = params[:scale].to_f
       @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
-      @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
+      @partition_val = @cloudinaryURI ? @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'') : nil
       respond_to do |format|
         format.json #{
           # jsonstr = ''
@@ -88,10 +88,13 @@ class ProgramController < ApplicationController
   #
   #
   def participants
+    peopleIds = params[:people_ids] ? params[:people_ids].split(',') : nil
+    logger.debug peopleIds
+    
     @scale = params[:scale].to_f
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
-    @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
-    @participants = PublishedProgramItemsService.findParticipants
+    @partition_val = @cloudinaryURI ? @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'') : ''
+    @participants = PublishedProgramItemsService.findParticipants peopleIds #[2680,2830]
   end  
   
   #
