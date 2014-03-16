@@ -62,7 +62,7 @@ class PeopleController < PlannerController
       end
     elsif (@person.pseudonym != nil && params[:pseudonym])
       if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
-        params[:person][:pseudonym_attributes] = params[:pseudonym]
+        @person.pseudonym.update_attributes(params[:pseudonym])
       else
         @person.pseudonym.destroy
       end
