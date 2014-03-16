@@ -300,7 +300,14 @@ $.widget( "cp.baseTable" , {
         this.options.extraClause = options.tagQuery;
         
         if (!this.options.delayed) {
-            var newUrl = this.options.root_url + this.options.baseUrl + this.options.getGridData + "?" + options.tagQuery;
+            var newUrl = this.createUrl();
+            
+            if (newUrl.indexOf("?") != -1) {
+                newUrl += "&";
+            } else {
+                newUrl += "?";
+            };
+            newUrl += options.tagQuery;
                 
             this.element.jqGrid('setGridParam', {
                 url: newUrl

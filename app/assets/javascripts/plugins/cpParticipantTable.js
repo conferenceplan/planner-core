@@ -326,7 +326,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
             urlArgs += this.options.extraClause; 
         }
         if (this.options.includeMailings) {
-            if (urlArgs.length > 0) {
+            if (urlArgs.length > 1) {
                 urlArgs += "&";
             }
             urlArgs += "includeMailings=true";
@@ -340,7 +340,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         url += urlArgs;
         return url;
     },
-    
+
     /*
      * 
      */
