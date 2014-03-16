@@ -12,10 +12,6 @@ module ProgramItemsService
     
     args.merge!(:order => "time_slots.start asc, programme_items.title asc")
 
-    if !tagquery.empty?
-      args.merge! :select => 'distinct programme_items.*'
-    end      
-    
     if tagquery.empty?
       ProgrammeItem.count args
     else
@@ -36,9 +32,6 @@ module ProgramItemsService
        args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc, programme_items.title asc")
     end
 
-    if !tagquery.empty?
-      args.merge! :select => 'distinct programme_items.*'
-    end      
     # if index
       # args.merge!(:order => index + " " + sort_order)
     # end
@@ -46,7 +39,7 @@ module ProgramItemsService
     if tagquery.empty?
       items = ProgrammeItem.find :all, args
     else
-      items = eval "ProgrammeItem#{tagquery}.find :all, " + args.inspect
+      items = eval "ProgrammeItem#{tagquery}.uniq.find :all, " + args.inspect
     end
   end
   

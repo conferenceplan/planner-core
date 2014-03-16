@@ -30,9 +30,6 @@ module PeopleService
     if includeMailings
       args.merge! :include => :mailings
     end
-    if includeMailings || !tagquery.empty?
-      args.merge! :select => 'distinct people.id'
-    end
     
     if tagquery.empty?
       Person.count args
@@ -56,14 +53,11 @@ module PeopleService
     if includeMailings
       args.merge! :include => :mailings
     end
-    if includeMailings || !tagquery.empty?
-      args.merge! :select => 'distinct people.*'
-    end      
     
     if tagquery.empty?
-      people = Person.find :all, args
+      people = Person.includes(:pseudonym).find :all, args
     else
-      people = eval "Person#{tagquery}.find :all, " + args.inspect
+      people = eval "Person#{tagquery}.uniq.includes(:pseudonym).find :all, " + args.inspect
     end
   end
   
