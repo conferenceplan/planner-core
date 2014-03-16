@@ -12,15 +12,16 @@ if Role.count == 0
   ], :without_protection => true )
 end
 
-if RoleAssignment.count == 0
-  RoleAssignment.create([
-    { :user_id => 1, :role_id => 2, :created_at => nil, :updated_at => nil, :lock_version => 0 },
+if User.count == 0
+  User.create([
+    { :login => "admin", :password => "password", :password_confirmation => "password", :person_id => nil },
   ], :without_protection => true )
 end
 
-if User.count == 0
-  User.create([
-    { :login => "admin", :crypted_password => "1ea0d01072666cd19712151a957fb3053242f77b2aa93d99df0622535ff4f86e037ab01afa180a27c59697dfe01b84330c91e2dbcb4123ad1ea13ce8a36d3cc6", :password_salt => "WYnTkyAuERglxfJJdWDK", :persistence_token => "aaaf8d7c301449a62ca997a18c36186b2ee5062ab10c9fae226bd0a64432bf87bfa6a076285c5bd879b100874d8619248ba64069fab562a2f60e5ddd8cfda81e", :single_access_token => "GTAhFqyNcKXTmdhvoUQj", :perishable_token => "Pu1xV25oVVieJ6nxKNR", :login_count => 0, :failed_login_count => 0, :last_request_at => "", :current_login_at => "", :last_login_at => "", :current_login_ip => "", :last_login_ip => "", :created_at => "", :updated_at => "", :person_id => nil },
+
+if RoleAssignment.count == 0
+  RoleAssignment.create([
+    { :user_id => 1, :role_id => 2, :created_at => nil, :updated_at => nil, :lock_version => 0 },
   ], :without_protection => true )
 end
 
