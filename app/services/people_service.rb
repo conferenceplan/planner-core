@@ -114,8 +114,8 @@ module PeopleService
     else
       args.merge!( :include => [:pseudonym] )
     end
-    
-    if includeMailings
+
+    if includeMailings && (clause[0].include? "mailing_id")
       if args[:joins]
         args[:joins] += ' LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
       else  
