@@ -9,13 +9,15 @@ json.schedule @conflicts do |conflict|
     json.item_id                conflict['item_id']
     json.item_title             conflict['item_name']
     json.item_role              PersonItemRole.find(conflict['item_role'].to_i).name
-    json.item_start             conflict['item_start'].to_s
+    json.item_start             Time.zone.parse( conflict['item_start'].to_s )
     json.conflict_room_id       conflict['conflict_room_id']
     json.conflict_room_name     conflict['conflict_room_name']
     json.conflict_item_id       conflict['conflict_item_id']
     json.conflict_item_title    conflict['conflict_item_title']
     json.conflict_item_role     PersonItemRole.find(conflict['conflict_item_role'].to_i).name
     json.conflict_start         Time.zone.parse( conflict['conflict_start'].to_s )
+    json.item_start_string      Time.zone.parse( conflict['item_start'].to_s ).strftime('%H:%M')
+    json.conflict_start_string  Time.zone.parse( conflict['conflict_start'].to_s ).strftime('%H:%M')
 end
 
 json.room @roomConflicts do |conflict|
@@ -27,6 +29,8 @@ json.room @roomConflicts do |conflict|
     json.conflict_item_title    conflict['conflict_item_name']
     json.item_start             Time.zone.parse( conflict['item_start'].to_s )
     json.conflict_start         Time.zone.parse( conflict['conflict_start'].to_s )
+    json.item_start_string      Time.zone.parse( conflict['item_start'].to_s ).strftime('%H:%M')
+    json.conflict_start_string  Time.zone.parse( conflict['conflict_start'].to_s ).strftime('%H:%M')
 end
 
 json.excluded_item @excludedItemConflicts do |conflict|
@@ -45,6 +49,8 @@ json.excluded_item @excludedItemConflicts do |conflict|
     json.conflict_item_title    conflict['item_name']
     json.conflict_start         Time.zone.parse( conflict['item_start'].to_s )
     
+    json.item_start_string      Time.zone.parse( conflict['item_start'].to_s ).strftime('%H:%M')
+    json.conflict_start_string  Time.zone.parse( conflict['conflict_start'].to_s ).strftime('%H:%M')
     json.item_role              PersonItemRole.find(conflict['item_role'].to_i).name
 end
 
@@ -59,6 +65,9 @@ json.excluded_time @excludedTimeConflicts do |conflict|
     json.period_start           Time.zone.parse( conflict['period_start'].to_s )
     json.period_end             Time.zone.parse( conflict['period_end'].to_s )
     json.item_role              PersonItemRole.find(conflict['item_role'].to_i).name
+    json.item_start_string      Time.zone.parse( conflict['item_start'].to_s ).strftime('%H:%M')
+    json.period_start_string    Time.zone.parse( conflict['period_start'].to_s ).strftime('%H:%M')
+    json.period_end_string      Time.zone.parse( conflict['period_end'].to_s ).strftime('%H:%M')
 end
 
 json.availability @availableTimeConflicts do |conflict|
@@ -71,7 +80,10 @@ json.availability @availableTimeConflicts do |conflict|
     json.item_start             Time.zone.parse( conflict['item_start'].to_s )
     json.period_start           Time.zone.parse( conflict['period_start'].to_s )
     json.period_end             Time.zone.parse( conflict['period_end'].to_s )
+    json.period_start_string    Time.zone.parse( conflict['period_start'].to_s ).strftime('%H:%M')
+    json.period_end_string      Time.zone.parse( conflict['period_end'].to_s ).strftime('%H:%M')
     json.item_role              PersonItemRole.find(conflict['item_role'].to_i).name
+    json.item_start_string      Time.zone.parse( conflict['item_start'].to_s ).strftime('%H:%M')
 end
 
 json.back_to_back @backtobackConflicts do |conflict|
@@ -89,4 +101,6 @@ json.back_to_back @backtobackConflicts do |conflict|
     json.conflict_start         Time.zone.parse( conflict['conflict_start'].to_s )
     json.item_role              PersonItemRole.find(conflict['item_role'].to_i).name
     json.conflict_item_role     PersonItemRole.find(conflict['conflict_item_role'].to_i).name
+    json.item_start_string      Time.zone.parse( conflict['item_start'].to_s ).strftime('%H:%M')
+    json.conflict_start_string  Time.zone.parse( conflict['conflict_start'].to_s ).strftime('%H:%M')
 end
