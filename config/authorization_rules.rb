@@ -41,6 +41,8 @@ authorization do
     has_permission_on :pages_surveys_dash, :to => :read
     has_permission_on :pages_reports_dash, :to => :read
     has_permission_on :pages_publications_dash, :to => :read
+    has_permission_on :communications_mailing, :to => :read
+    has_permission_on :bio_images, :to => :read
   end
 
   role :TagAdmin do
@@ -54,7 +56,6 @@ authorization do
     has_permission_on :tags, :to => :manage
     has_permission_on :equipment_types, :to => :manage
     has_permission_on :equipment_needs, :to => :manage
-    has_permission_on :communications_mailing, :to => :read
     has_permission_on :panels_item_mgmt, :to => :manage
   end
   
