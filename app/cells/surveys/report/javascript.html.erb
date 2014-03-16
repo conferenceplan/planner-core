@@ -119,7 +119,10 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                     {name:'First Name', jsonmap: "first_name", sortable:true, width: 20}, 
                     {name:'Last Name', jsonmap: "last_name", sortable:true, width: 30},
                     {name:'Email', jsonmap: "email", sortable:true, width: 35}, 
-                    {name:'Date Filled', jsonmap: "filled_at", sortable:true, width: 35}, 
+                    {name:'Date Filled', jsonmap: "filled_at", sortable:true, sorttype: function(cell, obj) {
+                        var d = moment(cell);
+                        return d.valueOf();
+                    }, width: 35}, // 03:25 PM, 14 May 2013
                 ];
                 
             if (this.resultsCollection.get('show_country')) {
