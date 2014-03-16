@@ -13,7 +13,7 @@ if person.edited_bio
         json.fb         person.edited_bio.facebook if person.edited_bio.facebook && person.edited_bio.facebook.length > 0
     end
 end
-if person.bio_image
+if person.bio_image && @partition_val
     listImage = person.bio_image
     listImage.scale = @scale
     json.list_image     listImage.bio_picture.list.url.partition(@partition_val)[2]
