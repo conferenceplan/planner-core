@@ -214,15 +214,15 @@
     <div class="thumbnail clearfix">
         <small class='conflict'>
             <b>{{= person_name }}</b> <%= t "has-a-conflict" %> <br/>
-            {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }} <br/>
-            <%=t "with" %> {{= conflict_room_name}}: <b>{{= conflict_item_title }}</b> ({{= conflict_item_role}}) <%= t "at" %> {{= moment(conflict_start).format("h:mma dddd")}}
+            {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) <%= t "at" %> {{= item_start_string }} <br/>
+            <%=t "with" %> {{= conflict_room_name}}: <b>{{= conflict_item_title }}</b> ({{= conflict_item_role}}) <%= t "at" %> {{= conflict_start_string }}
         </small>
     </div>
 </script>
 <script type="text/template" id="room-conflict-view-template">
     <div class="thumbnail clearfix">
         <small class='conflict'>
-            <%= t "room" %> <b>{{= room_name}}</b> <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }} <br/>
+            <%= t "room" %> <b>{{= room_name}}</b> <%= t "at" %> {{= item_start_string }} <br/>
             <i>{{= item_title }}</i> <%= t "conflicts-with" %>
             <i>{{= conflict_item_title }}</i> 
         </small>
@@ -234,7 +234,7 @@
             <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has-a-conflict" %> <br/>
             <%= t "do-not-schedule-against" %> <i>{{= conflict_item_title }}</i><br/>
             <%= t "conflicts-with" %> <i>{{= item_title }}</i> 
-            <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }}
+            <%= t "at" %> item_start_string }}
         </small>
     </div>
 </script>
@@ -242,9 +242,9 @@
     <div class="thumbnail clearfix">
         <small class='conflict'>
             <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has-a-conflict" %> <br/>
-            <%= t "do-not-schedule-between" %> <b>{{= moment(period_start).format("h:mma dddd") }}</b> <%= t "to" %> <b>{{= moment(period_end).format("h:mma dddd") }}</b><br/>
+            <%= t "do-not-schedule-between" %> <b>{{= period_start_string }}</b> <%= t "to" %> <b>{{= period_end_string }}</b><br/>
             <%= t "conflicts-with" %> <i>{{= item_title }}</i>
-            <%= t "at" %> <b>{{= moment(item_start).format("h:mma dddd") }}</b>
+            <%= t "at" %> <b>{{= item_start_string }}</b>
         </small>
     </div>
 </script>
@@ -252,9 +252,9 @@
     <div class="thumbnail clearfix">
         <small class='conflict'>
             <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has-a-conflict" %> <br/>
-            <%= t "only-available-between:" %> <b>{{= moment(period_start).format("h:mma dddd") }}</b> <%= t "to" %> <b>{{= moment(period_end).format("h:mma dddd") }}</b><br/>
+            <%= t "only-available-between:" %> <b>{{= period_start_string }}</b> <%= t "to" %> <b>{{= period_end_string }}</b><br/>
             <%= t "conflicts-with" %> <i>{{= item_title }}</i>
-            <%= t "at" %> <b>{{= moment(item_start).format("h:mma dddd") }}</b>
+            <%= t "at" %> <b>{{= item_start_string }}</b>
         </small>
     </div>
 </script>
@@ -262,8 +262,8 @@
     <div class="thumbnail clearfix">
         <small class='conflict'>
             <b>{{= person_name }}</b> <%= t "has-a-back-to-back" %> <br/>
-            {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) <%= t "at" %> {{= moment(item_start).format("h:mma dddd") }} <%= t "precedes-conflict" %>
-             {{= conflict_room_name}}: <b>{{= conflict_item_title }}</b> ({{= conflict_item_role}}) <%= t "at" %> {{= moment(conflict_start).format("h:mma dddd")}}
+            {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) <%= t "at" %> {{= item_start_string }} <%= t "precedes-conflict" %>
+             {{= conflict_room_name}}: <b>{{= conflict_item_title }}</b> ({{= conflict_item_role}}) <%= t "at" %> {{= conflict_start_string }}
         </small>
     </div>
 </script>
