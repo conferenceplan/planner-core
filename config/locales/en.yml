@@ -20,6 +20,7 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello"
-  en   : "English"
-  fr   : "French"
+  hello : "Hello"
+  en    : "English"
+  en-GB : "English"
+  fr    : "French"
