@@ -16,6 +16,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
                                         pickTime: false,
                                     } },
             number_of_days      : { type : 'Number', title : '<%= t "number-of-days" %>' },
+            languages           : { type : 'Text', title : '<%= t "supported-languages" %>'},
             captcha_pub_key     : { type : 'Text', title : '<%= t "captcha-public-key" %>' },
             captcha_priv_key    : { type : 'Text', title : '<%= t "captcha-private-key" %>' },
         },
@@ -346,9 +347,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             var config = new SiteConfig();
             config.fetch({
-                error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
                 success : function(mdl) {
                     
                     var view = AppUtils.createEditItemView({
@@ -367,9 +365,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             var config = new EmailConfig();
             config.fetch({
-                error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
                 success : function(mdl) {
                     
                     var view = AppUtils.createEditItemView({
@@ -388,9 +383,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
             
             var config = new CloudinaryConfig();
             config.fetch({
-                error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
                 success : function(mdl) {
                     var view = AppUtils.createEditItemView({
                         model           : mdl,
