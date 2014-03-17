@@ -28,9 +28,6 @@ var TabUtils = (function(){
                 data : { 'tag' : data.tags, 'context' : this.options.tagContext },
                 success : function() {
                     eventAggregator.trigger("refreshTagList");
-                },
-                error : function() {
-                    alertMessage("Error communicating with backend");
                 }
             });
         }
@@ -140,10 +137,7 @@ var TabUtils = (function(){
         
         deleteModal : function() {
             this.model.destroy({
-                wait: true,
-                error : function(mdl, response) {
-                    alertMessage(response.responseText);
-                }
+                wait: true
             });
         }
     });
@@ -223,9 +217,6 @@ var TabUtils = (function(){
             detail.fetch({
                 url : options.url,
                 async:false,
-                error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
                 success : function(model) {
                     var tabView = new TabView({
                         template : options.template,
@@ -320,9 +311,6 @@ var TabUtils = (function(){
             collection = new options.collectionType();
             collection.url = options.url;
             collection.fetch({
-                    error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
                 success : function(col) {
                     viewType = TabCollectionView.extend({
                         initialize : function() {
@@ -370,9 +358,6 @@ var TabUtils = (function(){
         collection = new options.collectionType();
         collection.url = options.url;
         collection.fetch({
-            error : function(model, response) {
-                alertMessage("Error communicating with backend");
-            },
             success : function(col) {
                 viewType = TabCollectionView.extend({
                     attributes : options.collection_attributes,
@@ -406,9 +391,6 @@ var TabUtils = (function(){
             collection = new options.collectionType();
             collection.url = options.url;
             collection.fetch({
-                    error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
                 success : function(col) {
                     viewType = TabCollectionView.extend({
                         attributes : options.collection_attributes,

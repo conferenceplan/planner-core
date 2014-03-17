@@ -220,9 +220,6 @@ var AppUtils = (function(){
                         if (refreshFn) {
                             refreshFn(mdl); // cause problem with templates used ???
                         };
-                    },
-                    error : function(mdl, response) {
-                        alertMessage(response.responseText);
                     }
                 }); // save the model to the server
             }
@@ -287,9 +284,6 @@ var AppUtils = (function(){
                         if (refreshFn) {
                             refreshFn(mdl); // cause problem with templates used ???
                         };
-                    },
-                    error : function(mdl, response) {
-                        alertMessage(response.responseText);
                     }
                 }); // save the model to the server
             };
@@ -447,9 +441,6 @@ var AppUtils = (function(){
                     if (clearFn) {
                         clearFn();
                     }
-                },
-                error : function(mdl, response) {
-                    alertMessage(response.responseText);
                 }
             });
         },
@@ -656,9 +647,6 @@ var AppUtils = (function(){
                 collection = new options.collectionType();
                 collection.url = options.url;
                 collection.fetch({
-                    error : function(model, response) {
-                        alertMessage("Error communicating with backend"); // TODO - change to translatable string
-                    },
                     success : function(col) {
                         renderCollection(col, options);
                     }

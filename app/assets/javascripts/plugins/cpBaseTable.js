@@ -164,9 +164,9 @@ $.widget( "cp.baseTable" , {
                     var grid = this.options.grid;
                     this.model.destroy({
                         wait: true,
-                        error : function(mdl, response) {
-                            alertMessage(response.responseText);
-                        },
+                        // error : function(mdl, response) {
+                            // alertMessage(response.responseText);
+                        // },
                         success : function(md, response) {
                             grid.trigger("reloadGrid");
                             clearNotifyMethod();

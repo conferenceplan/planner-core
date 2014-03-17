@@ -20,7 +20,7 @@ var AjaxUtils = (function(){
             _.invoke(pendingAjaxCalls, 'abort' );
             // empty the array
             pendingAjaxCalls = [];
-        }
+        },
     };
 })();
 
@@ -33,11 +33,20 @@ jQuery(document).ready(function() {
         beforeSend: function( xhr ) {
             AjaxUtils.addRequest( xhr );
         },
-        
         complete : function(arg) {
             AjaxUtils.removeRequest( arg );
+        },
+        error : function(response) {
+            if (response.status > 0) {
+                if (response.responseText) {
+                    alertMessage(response.responseText);
+                } else {
+                    alertMessage("Error communicating with backend"); // TODO - change to translatable string
+                };
+            };
         }
     });
 
-    window.addEventListener('beforeunload', AjaxUtils.killRequests, false);
+    window.addEventListener('beforeunload', function() { console.debug("kill requests");
+        AjaxUtils.killRequests(); } , false);
 });

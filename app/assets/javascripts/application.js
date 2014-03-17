@@ -17,6 +17,7 @@
 //= require jQuery.download
 
 //= require cloudinary
+// require jquery-fileupload
 
 //= require select2
 //  require select2_locale_fr
@@ -61,6 +62,7 @@
 //= require plugins/cpReportBase
 //= require plugins/dateTimeEditor
 //= require plugins/clImageEditor
+//= require plugins/fileUploadEditor
 
 //= require TabViews
 
@@ -74,13 +76,23 @@ jQuery(document).ready(function() {
 
     // Over-ride the backbone sync so that the rails CSRF token is passed to the backend
     Backbone._sync = Backbone.sync;
-    Backbone.sync = function(method, model, success, error) {
+    Backbone.sync = function(method, model, options) {
         if (method == 'create' || method == 'update' || method == 'delete') {
             var auth_options = {};
             auth_options[$("meta[name='csrf-param']").attr('content')] = $("meta[name='csrf-token']").attr('content');
             model.set(auth_options, {silent: true});
         };
-        return Backbone._sync(method, model, success, error);
+        options.error = function(response) {
+            if (response.status > 0) {
+                if (response.responseText) {
+                    alertMessage(response.responseText);
+                } else {
+                    alertMessage("Error communicating with backend ..."); // TODO - change to translatable string
+                };
+            };
+        };
+        
+        return Backbone._sync(method, model, options);
     };
     
     $('.survey-help').tooltip();

@@ -93,9 +93,9 @@ var ReportBase = (function(Backbone){
                         url : this.options.endPoint + '.json',
                         type : 'POST',
                         data : data,
-                        error : function(model, response) {
-                          alertMessage("ERROR: unable to get the result from the server");
-                        },
+                        // error : function(model, response) {
+                          // alertMessage("ERROR: unable to get the result from the server");
+                        // },
                         success : function(model) {
                                 resultsView = new ReportBase.ResultsView({
                                             colModel : colModel,
