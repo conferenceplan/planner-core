@@ -128,9 +128,6 @@ ItemApp.PeopleManagement = (function(Backbone){
             var id = this.model.id;
             this.model.save(null, {
                 url : "/programme_items/" + id + "/updateParticipants", // TODO - we need a base URL property for the site
-                error : function() {
-                    alertMessage("Error saving the program item assignment");
-                },
                 success : function() {
                     // message that the save happened
                     infoMessage("Program item assignment has been saved");
@@ -219,9 +216,6 @@ ItemApp.PeopleManagement = (function(Backbone){
             currentItem.fetch({
                 url : "/programme_items/" + id + '.json',
                 async:false,
-                error : function(model, response) {
-                    alertMessage("Error communicating with backend");
-                },
                 success : function(model) {
                     if (progView) {
                         progView.model = model;
