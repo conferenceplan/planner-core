@@ -1,4 +1,4 @@
-class BioImagesController < ApplicationController
+class BioImagesController < PlannerController
   def index
     if (params[:person_id])
       person = Person.find(params[:person_id])

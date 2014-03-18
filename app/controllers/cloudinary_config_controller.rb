@@ -1,4 +1,4 @@
-class CloudinaryConfigController < ApplicationController
+class CloudinaryConfigController < PlannerController
   #
   #
   #

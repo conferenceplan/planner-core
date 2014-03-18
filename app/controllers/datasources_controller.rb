@@ -1,4 +1,4 @@
-class DatasourcesController < ApplicationController
+class DatasourcesController < PlannerController
   
   #
   #
@@ -30,18 +30,12 @@ class DatasourcesController < ApplicationController
   end
   
   def destroy
-    peoplesources = Peoplesource.find_by_datasource_dbid(params[:id])
-    if (!peoplesources.blank?)
+    peoplesources = Peoplesource.find_by_datasource_id(params[:id])
+    if (peoplesources.blank?)
       Datasource.find(params[:id]).destroy
       render status: :ok, text: {}.to_json
     else
       render status: :bad_request, text: 'Can not delete datasource'
     end
   end
-   
-  # def list
-    # @datasources = Datasource.find :all
-    # render :action => :list, :layout => "plain"
-  # end
-
 end
