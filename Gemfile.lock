@@ -61,12 +61,16 @@ GEM
     axlsx_rails (0.1.5)
       axlsx
       rails (>= 3.1)
+    best_in_place (2.1.0)
+      jquery-rails
+      rails (~> 3.1)
     bluecloth (2.2.0)
     bootstrap-sass (3.1.1.0)
       sass (~> 3.2)
     bootstrap3-datetimepicker-rails (2.1.30)
       momentjs-rails (~> 2.5.0)
     builder (3.0.4)
+    cancan (1.6.10)
     capistrano (2.15.5)
       highline
       net-scp (>= 1.0.0)
@@ -124,6 +128,15 @@ GEM
     hike (1.2.3)
     htmlentities (4.3.1)
     i18n (0.6.9)
+    interpret (1.1.2)
+      best_in_place (~> 2)
+      cancan (~> 1.6.0)
+      i18n (~> 0.6.0)
+      i18n-active_record
+      jquery-rails
+      lazyhash (>= 0.1.1)
+      rails (~> 3.1)
+      ya2yaml (>= 0.30.0)
     jbuilder (2.0.4)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
@@ -141,6 +154,7 @@ GEM
       jquery-rails
       railties (>= 3.1.0)
     json (1.8.1)
+    lazyhash (0.1.1)
     libv8 (3.16.14.3)
     log4r (1.1.10)
     mail (2.5.4)
@@ -448,6 +462,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     will_paginate (3.0.5)
+    ya2yaml (0.31)
     yui-compressor (0.12.0)
 
 PLATFORMS
@@ -482,6 +497,7 @@ DEPENDENCIES
   font_assets
   i18n
   i18n-active_record!
+  interpret
   jbuilder
   jpbuilder
   jqgrid-jquery-rails (~> 4.5.200)

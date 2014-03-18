@@ -81,6 +81,8 @@ gem 'i18n-active_record',
       :git => 'git://github.com/svenfuchs/i18n-active_record.git',
       :tag => 'rails-3.2',
       :require => 'i18n/active_record'
+gem 'interpret'
+#gem 'translation_center'
 
 # For locale in the route
 gem 'routing-filter'
