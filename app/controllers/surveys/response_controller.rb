@@ -103,6 +103,17 @@ class Surveys::ResponseController < ApplicationController
             @respondent.person.save!
           end
           
+          # Save or update the survey history
+          history = SurveyHistory.where( {:survey_respondent_detail_id => respondentDetails.id, :survey_id => @survey.id} ).first
+          if (history)
+            history.filled_at = Time.now
+            history.save!
+          else
+            history = SurveyHistory.new({:survey_respondent_detail_id => respondentDetails.id, :survey_id => @survey.id })
+            history.filled_at = Time.now
+            history.save!
+          end
+          
         end
         # roll back the transaction if there is an issue
       rescue Exception => err
