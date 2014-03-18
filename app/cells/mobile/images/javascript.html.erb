@@ -132,9 +132,6 @@ MobileImageApp.ImageManagement = (function(Backbone){
             collection = new ItemFormatCollection();
             collection.url = "/formats.json";
             collection.fetch({
-                error : function(model, response) {
-                    alertMessage("Error communicating with backend"); // TODO - change to translatable string
-                },
                 success : function(col) {
                     var collectionView = new ItemFormatCollectionView({
                                         itemViewOptions     : {
