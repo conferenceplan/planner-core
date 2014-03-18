@@ -98,9 +98,6 @@ ThemeApp.Management = (function(Backbone){
     function loadPhoneDisplay() {
         m = new MobileTheme();
         m.fetch({
-            error : function(model, response) {
-                alertMessage("Error communicating with backend"); // TODO - change to translatable string
-            },
             success : function(mdl) {
                 //console.debug("loaded colors");
                 view = AppUtils.createEditItemView({
