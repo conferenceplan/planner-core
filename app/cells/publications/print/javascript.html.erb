@@ -11,7 +11,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
     var GenericForm = Backbone.Form.extend({
         schema : {
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
-                          options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
+                          options : <%= [[' ',' ']].concat(PDF::Core::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
                 },
             orientation : { type : 'Select', title : '<%= t "print-orientation" %>', 
                           options : { landscape : 'Landscape' , portrait : 'Portrait'} 
@@ -27,7 +27,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
     var TableTentForm = Backbone.Form.extend({
         schema : {
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
-                          options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %>,
+                          options : <%= [[' ',' ']].concat(PDF::Core::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %>,
                           help : '<%= t "the-page-size-for-the-pdf-output" %>' 
                 },
             people : { type : 'Select2', title : '<%= t "publications-people" %>', 
@@ -109,7 +109,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             day : { type : 'Select', title : '<%= t "day" %>', 
                          options : <%=  [{'label' => 'All', 'val' =>"-1"}].concat((((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}).to_json.html_safe%> },
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
-                          options : <%= [[' ',' ']].concat(Prawn::Document::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
+                          options : <%= [[' ',' ']].concat(PDF::Core::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
                 },
             orientation : { type : 'Select', title : '<%= t "print-orientation" %>', 
                           options : { landscape : 'Landscape' , portrait : 'Portrait'} 
