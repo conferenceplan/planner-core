@@ -79,7 +79,7 @@ gem "connection_pool"
 
 gem 'i18n-active_record',
       :git => 'git://github.com/svenfuchs/i18n-active_record.git',
-      :tag => 'rails-3.0',
+      :tag => 'rails-3.2',
       :require => 'i18n/active_record'
 
 # For locale in the route
