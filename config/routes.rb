@@ -2,6 +2,8 @@ PlannerRc1::Application.routes.draw do
 
   filter :locale
 
+  mount Interpret::Engine => "/interpret" # cause the interpret gem has the old way of defining the engine mount
+
   namespace :pages do
     resources :home_dash
     
@@ -44,6 +46,18 @@ PlannerRc1::Application.routes.draw do
   # match 'users/admin/list' => 'users/admin#list'
   # resources :usersadmin, :controller => 'users/admin'
   match 'roles/list' => 'roles#list'
+  
+  #
+  #
+  #
+  resources :import_mappings
+  resources :file_uploads, :except => [:destroy, :index, :update, :remove]
+  # get "file_uploads/index"
+  # get "file_uploads/create"
+  # get "file_uploads/show"
+  # get "file_uploads/destroy"
+  # get "file_uploads/update"
+
 
   #
   #
