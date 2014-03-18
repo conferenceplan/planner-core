@@ -14,28 +14,36 @@ class ProgramPlannerController < PlannerController
   # Add an item to a room
   #
   def addItem
-    @assignment = nil
-    if !params[:cancel]
-      item = ProgrammeItem.find(params[:itemid])
-      room = Room.find(params[:roomid])
-      day = params[:day]
-      time = params[:time].to_time # The start time
-    
-      @assignment = addItemToRoomAndTime(item, room, day, time)
+    begin
+      @assignment = nil
+      if !params[:cancel]
+        item = ProgrammeItem.find(params[:itemid])
+        room = Room.find(params[:roomid])
+        day = params[:day]
+        time = params[:time].to_time # The start time
+      
+        @assignment = addItemToRoomAndTime(item, room, day, time)
+      end
+  
+      render :layout => 'content'
+    rescue Exception
+      raise
     end
-
-    render :layout => 'content'
   end
   
   #
   # Unschedule an item
   #
   def removeItem
-    item = ProgrammeItem.find(params[:itemid])
-
-    removeAssignment(item.room_item_assignment)
-    
-    render status: :ok, text: {}.to_json
+    begin
+      item = ProgrammeItem.find(params[:itemid])
+  
+      removeAssignment(item.room_item_assignment)
+      
+      render status: :ok, text: {}.to_json
+    rescue Exception
+      raise
+    end
   end
   
   #
