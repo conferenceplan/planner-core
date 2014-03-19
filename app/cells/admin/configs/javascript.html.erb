@@ -4,19 +4,21 @@ ConfigApp = new Backbone.Marionette.Application();
 
 ConfigApp.ConfigManagement = (function(Backbone){
     
+    var tzOffset = <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>;
+    
     TitleMdl =  Backbone.Model.extend({});
     
     SiteConfig = Backbone.Model.extend({
         schema : {
             name                : { type : 'Text', title : '<%= t "conference-name" %>' },
-            time_zone : { type : 'Select', title : '<%= t "conference-time-zone" %>', options : <%= [].concat(ActiveSupport::TimeZone::MAPPING.values.collect {|s| {'val' => s, 'label' => s} }).to_json.html_safe %> },
+            time_zone           : { type : 'Select', title : '<%= t "conference-time-zone" %>', options : <%= [].concat(ActiveSupport::TimeZone::MAPPING.values.collect {|s| {'val' => s, 'label' => s} }).to_json.html_safe %> },
             start_date          : { type : 'Datetime', title : '<%= t "conference-start-date" %>',
-                                    tz_offset : <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>,
+                                    tz_offset : function() { return tzOffset; },
                                     picker : {
                                         pickTime: false,
                                     } },
             number_of_days      : { type : 'Number', title : '<%= t "number-of-days" %>' },
-            languages           : { type : 'Text', title : '<%= t "supported-languages" %>'},
+            // languages           : { type : 'Text', title : '<%= t "supported-languages" %>'},
             captcha_pub_key     : { type : 'Text', title : '<%= t "captcha-public-key" %>' },
             captcha_priv_key    : { type : 'Text', title : '<%= t "captcha-private-key" %>' },
         },
@@ -353,6 +355,10 @@ ConfigApp.ConfigManagement = (function(Backbone){
                         model           : mdl,
                         itemArea        : "#config-control-div",
                         readTemplate    : '#site-config-view-template',
+                        updateCallback  : function(mdl) {
+                            // TODO - set the tzOffset based on the offset at the server TEST
+                            tzOffset = mdl.get('tz_offset');
+                        }
                     });
                 }
             });
