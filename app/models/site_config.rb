@@ -1,3 +1,3 @@
 class SiteConfig < ActiveRecord::Base
-  attr_accessor :languages
+  attr_accessor :tz_offset
 end
