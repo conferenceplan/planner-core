@@ -7,9 +7,9 @@ class SiteConfigsController < PlannerController
       site_config.start_date  = Date.today if !site_config.start_date
     end
     
-    site_config.languages = UISettingsService.getLanguages
+    # site_config.languages = UISettingsService.getLanguages
     
-    render json: site_config.to_json( :methods => [:languages] ), :content_type => 'application/json'
+    render json: site_config.to_json, :content_type => 'application/json'
   end
 
   def show
@@ -19,31 +19,47 @@ class SiteConfigsController < PlannerController
       site_config.start_date  = Date.today if !site_config.start_date
     end
     
-    site_config.languages = UISettingsService.getLanguages
+    # site_config.languages = UISettingsService.getLanguages
     
-    render json: site_config.to_json( :methods => [:languages] ), :content_type => 'application/json'
+    render json: site_config.to_json, :content_type => 'application/json'
   end
 
   def create
     site_config = SiteConfig.new(params[:site_config])
-    site_config.start_date = site_config.start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
-    site_config.save!
+    day = Time.zone.parse(params[:start_date]).day
+    
+    # Make sure we use the selected time-zone of the convention
+    Time.use_zone(site_config.time_zone) do 
+      site_config.start_date = site_config.start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
+      site_config.start_date = site_config.start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
+      site_config.save!
+      
+      site_config.tz_offset = site_config.start_date.utc_offset/(60*60)
+    end
 
-    UISettingsService.setLanguages params[:languages].split(',')
-    site_config.languages = UISettingsService.getLanguages
+    # UISettingsService.setLanguages params[:languages].split(',')
+    # site_config.languages = UISettingsService.getLanguages
 
-    render json: site_config.to_json( :methods => [:languages] ), :content_type => 'application/json'
+    render json: site_config.to_json(:methods => [:tz_offset]), :content_type => 'application/json'
   end
 
   def update
     site_config = SiteConfig.find(params[:id])
     site_config.update_attributes(params[:site_config])
-    site_config.start_date = site_config.start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
+    day = Time.zone.parse(params[:start_date]).day
     
-    UISettingsService.setLanguages params[:languages].split(',')
-    site_config.languages = UISettingsService.getLanguages
+    # Make sure we use the selected time-zone of the convention
+    Time.use_zone(site_config.time_zone) do 
+      site_config.start_date = site_config.start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
+      site_config.save!
+      
+      site_config.tz_offset = site_config.start_date.utc_offset/(60*60)
+    end
+    
+    # UISettingsService.setLanguages params[:languages].split(',')
+    # site_config.languages = UISettingsService.getLanguages
 
-    render json: site_config.to_json( :methods => [:languages] ), :content_type => 'application/json'
+    render json: site_config.to_json(:methods => [:tz_offset]), :content_type => 'application/json'
   end
 
   def destroy
