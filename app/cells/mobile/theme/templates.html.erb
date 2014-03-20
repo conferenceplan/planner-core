@@ -3,85 +3,399 @@
     <div id="phone-display"></div>
 </script>
 
+<script type="text/template" id="phone-theme-form-template">
+    <form class="form-horizontal" role="form" style="height : 550px; overflow : auto;">
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "card-colors" %></p>
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="card_background"></div>
+                        <label class="text-muted text-left"><small><%= t "color-card-background" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="card_shadow"></div>
+                        <label class="text-muted text-left"><small><%= t "color-card-shadow" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="main_background"></div>
+                        <label class="text-muted text-left"><small><%= t "color-main-background" %></small></label>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "item-colors" %></p>
+            <div class="form-group gr-form-group">
+                <div class="row gr-subrow">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="item_name"></div>
+                        <label class="text-muted text-left"><small><%= t "color-item-name" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="item_format"></div>
+                        <label class="text-muted text-left"><small><%= t "color-item-format" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="body_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-body-text" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="body_text_secondary"></div>
+                        <label class="text-muted text-left"><small><%= t "color-body-text-secondary" %></small></label>
+                    </div>
+                </span>
+                </div>
+                <div class="row gr-subrow">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="day_text"></div>
+                        <label class="text-muted text-left"><small><%= t "day" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="date_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-date-text" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="time_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-time-text" %></small></label>
+                    </div>
+                </span>
+                </div>
+            </div>
+        </div>
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "favourite-colors" %></p>
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="favourite_on"></div>
+                        <label class="text-muted text-left"><small><%= t "color-favourite-on" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="favourite_on_bg"></div>
+                        <label class="text-muted text-left"><small><%= t "color-favourite-on-bg" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="favourite_off"></div>
+                        <label class="text-muted text-left"><small><%= t "color-favourite-off" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="favourite_off_bg"></div>
+                        <label class="text-muted text-left"><small><%= t "color-favourite-off-bg" %></small></label>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "new-ribbon-colors" %></p>
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="new_ribbon_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-new-ribbon-text" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="new_ribbon"></div>
+                        <label class="text-muted text-left"><small><%= t "color-new-ribbon" %></small></label>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "update-ribbon-colors" %></p>
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="updated_ribbon_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-updated-ribbon-text" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="updated_ribbon"></div>
+                        <label class="text-muted text-left"><small><%= t "color-updated-ribbon" %></small></label>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "hot-colors" %></p>
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="hot_ribbon_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-hot-ribbon-text" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="hot_ribbon"></div>
+                        <label class="text-muted text-left"><small><%= t "color-hot-ribbon" %></small></label>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "action-bar-colors" %></p>
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="action_bar_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-action-bar-text" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="action_bar_bg"></div>
+                        <label class="text-muted text-left"><small><%= t "color-action-bar-bg" %></small></label>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "page-flipper-colors" %></p>
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="page_flipper_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-page-flipper-text" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="page_flipper_bg"></div>
+                        <label class="text-muted text-left"><small><%= t "color-page-flipper-bg" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="page_flipper_separators"></div>
+                        <label class="text-muted text-left"><small><%= t "color-page-flipper-separators" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="page_flipper_selection_bar"></div>
+                        <label class="text-muted text-left"><small><%= t "color-page-flipper-selection-bar" %></small></label>
+                    </div>
+                </span>
+            </div>
+        </div>
+        <div class="gr-color-choice">
+            <p class="gr-color-title"><%= t "drawer-colors" %></p>
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="menu_drawer_bg"></div>
+                        <label class="text-muted text-left"><small><%= t "color-menu-drawer-bg" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="menu_drawer_selected"></div>
+                        <label class="text-muted text-left"><small><%= t "color-menu-drawer-selected" %></small></label>
+                    </div>
+                </span>
+                <span data-editor>
+                    <div class="col-sm-2">
+                        <div data-editors="menu_drawer_text"></div>
+                        <label class="text-muted text-left"><small><%= t "color-menu-drawer-text" %></small></label>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </form>
+</script>
+
 <script type="text/template" id="phone-theme-ctl-template">
-    <dl class="dl-horizontal">
-        <dt><%= t "color-card-background" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= card_background }};">
-            </dd>
-        <dt><%= t "color-card-shadow" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= card_shadow }};">
-            </dd>
-        <dt><%= t "color-favourite-on-bg" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= favourite_on_bg }};">
-            </dd>
-        <dt><%= t "color-favourite-off-bg" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= favourite_off_bg }};">
-            </dd>
-        <dt><%= t "color-favourite-on" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= favourite_on }};">
-            </dd>
-        <dt><%= t "color-favourite-off" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= favourite_off }};">
-            </dd>
-        <dt><%= t "color-hot-ribbon" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= hot_ribbon }};">
-            </dd>
-        <dt><%= t "color-hot-ribbon-text" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= hot_ribbon_text }};">
-            </dd>
-        <dt><%= t "color-updated-ribbon" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= updated_ribbon }};">
-            </dd>
-        <dt><%= t "color-updated-ribbon-text" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= updated_ribbon_text }};">
-            </dd>
-        <dt><%= t "color-new-ribbon" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= new_ribbon }};">
-            </dd>
-        <dt><%= t "color-new-ribbon-text" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= new_ribbon_text }};">
-            </dd>
-        <dt><%= t "color-main-background" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= main_background }};">
-            </dd>
-        <dt><%= t "color-item-name" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= item_name }};">
-            </dd>
-        <dt><%= t "color-item-format" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= item_format }};">
-            </dd>
-        <dt><%= t "color-body-text" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= body_text }};">
-            </dd>
-        <dt><%= t "color-body-text-secondary" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= body_text_secondary }};">
-            </dd>
-        <dt><%= t "color-action-bar-bg" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= action_bar_bg }};">
-            </dd>
-        <dt><%= t "color-action-bar-text" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= action_bar_text }};">
-            </dd>
-        <dt><%= t "day" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= day_text }};">
-            </dd>
-        <dt><%= t "color-date-text" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= date_text }};">
-            </dd>
-        <dt><%= t "color-time-text" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= time_text }};">
-            </dd>
-        <dt><%= t "color-page-flipper-text" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= page_flipper_text }};">
-            </dd>
-        <dt><%= t "color-page-flipper-bg" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= page_flipper_bg }};">
-            </dd>
-        <dt><%= t "color-page-flipper-separators" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= page_flipper_separators }};">
-            </dd>
-        <dt><%= t "color-page-flipper-selection-bar" %></dt><dd>
-            <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= page_flipper_selection_bar }};">
-            </dd>
-    </dl>
+    <div style="height : 550px; overflow : auto;">
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "card-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= card_background }};">
+                <label class="text-muted text-left"><small><%= t "color-card-background" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= card_shadow }};">
+                <label class="text-muted text-left"><small><%= t "color-card-shadow" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= main_background }};">
+                <label class="text-muted text-left"><small><%= t "color-main-background" %></small></label>
+            </div>
+        </div>
+    </div>            
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "item-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= item_name }};">
+                <label class="text-muted text-left"><small><%= t "color-item-name" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= item_format }};">
+                <label class="text-muted text-left"><small><%= t "color-item-format" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= body_text }};">
+                <label class="text-muted text-left"><small><%= t "color-body-text" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= body_text_secondary }};">
+                <label class="text-muted text-left"><small><%= t "color-body-text-secondary" %></small></label>
+            </div>
+        </div>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= day_text }};">
+                <label class="text-muted text-left"><small><%= t "day" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= date_text }};">
+                <label class="text-muted text-left"><small><%= t "color-date-text" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= time_text }};">
+                <label class="text-muted text-left"><small><%= t "color-time-text" %></small></label>
+            </div>
+        </div>
+    </div>
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "favourite-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= favourite_on }};">
+                <label class="text-muted text-left"><small><%= t "color-favourite-on" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= favourite_on_bg }};">
+                <label class="text-muted text-left"><small><%= t "color-favourite-on-bg" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= favourite_off }};">
+                <label class="text-muted text-left"><small><%= t "color-favourite-off" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= favourite_off_bg }};">
+                <label class="text-muted text-left"><small><%= t "color-favourite-off-bg" %></small></label>
+            </div>
+        </div>
+    </div>
+
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "new-ribbon-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= new_ribbon_text }};">
+                <label class="text-muted text-left"><small><%= t "color-new-ribbon-text" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= new_ribbon }};">
+                <label class="text-muted text-left"><small><%= t "color-new-ribbon" %></small></label>
+            </div>
+        </div>
+    </div>            
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "update-ribbon-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= updated_ribbon_text }};">
+                <label class="text-muted text-left"><small><%= t "color-updated-ribbon-text" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= updated_ribbon }};">
+                <label class="text-muted text-left"><small><%= t "color-updated-ribbon" %></small></label>
+            </div>
+        </div>
+    </div>            
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "hot-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= hot_ribbon_text }};">
+                <label class="text-muted text-left"><small><%= t "color-hot-ribbon-text" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= hot_ribbon }};">
+                <label class="text-muted text-left"><small><%= t "color-hot-ribbon" %></small></label>
+            </div>
+        </div>
+    </div>            
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "action-bar-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= action_bar_text }};">
+                <label class="text-muted text-left"><small><%= t "color-action-bar-text" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= action_bar_bg }};">
+                <label class="text-muted text-left"><small><%= t "color-action-bar-bg" %></small></label>
+            </div>
+        </div>
+    </div>            
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "page-flipper-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= page_flipper_text }};">
+                <label class="text-muted text-left"><small><%= t "color-page-flipper-text" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= page_flipper_bg }};">
+                <label class="text-muted text-left"><small><%= t "color-page-flipper-bg" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= page_flipper_separators }};">
+                <label class="text-muted text-left"><small><%= t "color-page-flipper-separators" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= page_flipper_selection_bar }};">
+                <label class="text-muted text-left"><small><%= t "color-page-flipper-selection-bar" %></small></label>
+            </div>
+        </div>
+    </div>
+    <div class="gr-color-choice">
+        <p class="gr-color-title"><%= t "drawer-colors" %></p>
+        <div class="row gr-subrow">
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= menu_drawer_bg }};">
+                <label class="text-muted text-left"><small><%= t "color-menu-drawer-bg" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= menu_drawer_selected }};">
+                <label class="text-muted text-left"><small><%= t "color-menu-drawer-selected" %></small></label>
+            </div>
+            <div class="col-sm-2">
+                <img src="/assets/ui-colorpicker.png" alt="Color" title="Color" style="background-color: {{= menu_drawer_text }};">
+                <label class="text-muted text-left"><small><%= t "color-menu-drawer-text" %></small></label>
+            </div>
+        </div>
+    </div>            
+    </div>            
 </script>

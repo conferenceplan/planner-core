@@ -36,6 +36,10 @@ ThemeApp.Management = (function(Backbone){
             page_flipper_bg     :  { type : 'Color', title : '<%= t "color-page-flipper-bg" %>', template: altFieldTemplate },
             page_flipper_separators     :  { type : 'Color', title : '<%= t "color-page-flipper-separators" %>', template: altFieldTemplate },
             page_flipper_selection_bar     :  { type : 'Color', title : '<%= t "color-page-flipper-selection-bar" %>', template: altFieldTemplate },
+            
+            menu_drawer_bg     :  { type : 'Color', title : '<%= t "menu-drawer-bg" %>', template: altFieldTemplate },
+            menu_drawer_selected     :  { type : 'Color', title : '<%= t "menu-drawer-selected" %>', template: altFieldTemplate },
+            menu_drawer_text     :  { type : 'Color', title : '<%= t "menu-drawer-text" %>', template: altFieldTemplate },
         }
     });
     
@@ -88,7 +92,11 @@ ThemeApp.Management = (function(Backbone){
             'page-flipper-text'             : mdl.get('page_flipper_text'),
             'page-flipper-bg'               : mdl.get('page_flipper_bg'),
             'page-flipper-separators'       : mdl.get('page_flipper_separators'),
-            'page-flipper-selection-bar'    : mdl.get('page_flipper_selection_bar')
+            'page-flipper-selection-bar'    : mdl.get('page_flipper_selection_bar'),
+            
+            'page-flipper-selection-bar'    : mdl.get('menu_drawer_bg'),
+            'page-flipper-selection-bar'    : mdl.get('menu_drawer_selected'),
+            'page-flipper-selection-bar'    : mdl.get('menu_drawer_text')
         });
     };
 
@@ -104,7 +112,8 @@ ThemeApp.Management = (function(Backbone){
                     model        : mdl,
                     itemArea     : '#phone-theme-ctl',
                     readTemplate : '#phone-theme-ctl-template',
-                    resetFn      : resetColors
+                    resetFn      : resetColors,
+                    modal_template : "#phone-theme-form-template"
                 });
                 
                 phoneView = new PhoneView({
@@ -134,7 +143,11 @@ ThemeApp.Management = (function(Backbone){
                         'page-flipper-text'             : mdl.get('page_flipper_text'),
                         'page-flipper-bg'               : mdl.get('page_flipper_bg'),
                         'page-flipper-separators'       : mdl.get('page_flipper_separators'),
-                        'page-flipper-selection-bar'    : mdl.get('page_flipper_selection_bar')
+                        'page-flipper-selection-bar'    : mdl.get('page_flipper_selection_bar'),
+
+                        'page-flipper-selection-bar'    : mdl.get('menu_drawer_bg'),
+                        'page-flipper-selection-bar'    : mdl.get('menu_drawer_selected'),
+                        'page-flipper-selection-bar'    : mdl.get('menu_drawer_text')
                 }
                 });
 
@@ -217,6 +230,16 @@ ThemeApp.Management = (function(Backbone){
                 });
                 view.onEvent('item_name:blur', function(form, editor, extra) {
                     Phone.setColor('item-name', editor.getValue() );
+                });
+
+                view.onEvent('menu_drawer_bg:blur', function(form, editor, extra) {
+                    Phone.setColor('menu-drawer-bg', editor.getValue() );
+                });
+                view.onEvent('menu_drawer_selected:blur', function(form, editor, extra) {
+                    Phone.setColor('menu-drawer-selected', editor.getValue() );
+                });
+                view.onEvent('menu_drawer_text:blur', function(form, editor, extra) {
+                    Phone.setColor('menu-drawer-text', editor.getValue() );
                 });
 
             }
