@@ -35,6 +35,9 @@ json.set! 'mobile' do
         json.partial! 'color', name: 'page_flipper_selection_bar',  color: @theme.page_flipper_selection_bar
         json.partial! 'color', name: 'updated_ribbon_text',         color: @theme.updated_ribbon_text
         json.partial! 'color', name: 'item_format',                 color: @theme.item_format
+        json.partial! 'color', name: 'menu_drawer_bg',              color: @theme.menu_drawer_bg
+        json.partial! 'color', name: 'menu_drawer_selected',        color: @theme.menu_drawer_selected
+        json.partial! 'color', name: 'menu_drawer_text',            color: @theme.menu_drawer_text
     end
 
     json.set! 'card_images' do
