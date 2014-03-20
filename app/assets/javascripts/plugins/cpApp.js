@@ -337,7 +337,13 @@ var AppUtils = (function(){
             // display : none
             this.form = new Backbone.Form({
                     model: this.model
-            }).render();
+            });
+            
+            if (this.options.modal_template) {
+                this.form.template = _.template($(this.options.modal_template).html());
+            };
+            
+            this.form.render();
             
             var form = this.form;
             // iterate through the form events and add to the form
@@ -413,7 +419,8 @@ var AppUtils = (function(){
                 var v = new ItemEditView({
                     model           : this.model,
                     readTemplate    : this.options.readTemplate,
-                    editDisableCondition : this.options.editDisableCondition
+                    editDisableCondition : this.options.editDisableCondition,
+                    modal_template  : this.options.modal_template
                 });
                 
                 v.render();
@@ -633,7 +640,8 @@ var AppUtils = (function(){
                             // previewFn       : options.previewFn,
                             // drillDownFn     : options.drillDownFn,
                             itemArea        : options.itemArea,
-                            readTemplate    : options.readTemplate
+                            readTemplate    : options.readTemplate,
+                            modal_template  : options.modal_template
             });
             
             view.render();
