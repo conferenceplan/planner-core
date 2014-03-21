@@ -9,7 +9,7 @@ class ConferenceDirectoryController < ApplicationController
   def find_by_code
     code = params[:code]
     
-    dir = ConferenceDirectory.where( :code => code )
+    dir = ConferenceDirectory.where( :code => code ).first
     
     
     render json: dir.to_json(:except => [:created_at, :updated_at, :code]), :content_type => 'application/json'
