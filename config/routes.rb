@@ -58,6 +58,10 @@ PlannerRc1::Application.routes.draw do
   # get "file_uploads/destroy"
   # get "file_uploads/update"
 
+  match 'conference_directory/find_by_code/:code', :controller => 'conference_directory', :via => :get, :action => 'find_by_code'
+  match 'conference_directory/find_by_id/:id', :controller => 'conference_directory', :via => :get, :action => 'find_by_id'
+  resources :conference_directory
+
 
   #
   #
