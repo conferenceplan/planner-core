@@ -113,9 +113,8 @@ module PlannerReportsService
     conditions << itemIds if itemIds
     
     Person.all :conditions => conditions,
-              :include => {:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}},
+              :include => [:pseudonym, {:published_programme_items => [:format, {:published_room => :published_venue}, :published_time_slot]}],
               :order => "people.last_name, published_time_slots.start asc"
-
   end
   
   #
