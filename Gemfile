@@ -52,6 +52,8 @@ gem 'turbolinks'
 gem 'will_paginate'
 gem 'font_assets'
 
+gem 'yajl-ruby'
+
 gem 'log4r'
 
 gem 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
