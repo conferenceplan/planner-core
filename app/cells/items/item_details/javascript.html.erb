@@ -174,17 +174,23 @@ ItemApp.ItemManagement = (function(Backbone){
     var tabContent = [];
     var filters = null;
     
+    function syncModel() {
+        this.fetch({async : false});
+    };
+    
     function clearDetails() {
         $('#selected-program-item').text("");
         
         _.invoke(tabLists, 'reset' );
         _.invoke(tabContent, 'clear' );
+
+        eventAggregator.off("refreshTagList", syncModel);
     };
     
     function showDetails(id) {
         // alert(id);
         var data = jQuery("#items").jqGrid('getRowData', id);
-        console.debug(data['item[title]']);
+        // console.debug(data['item[title]']);
         // /panels/item_mgmt?prog_item=
         $('#selected-program-item').html(data['item[title]']); // TODO
         
@@ -214,7 +220,7 @@ ItemApp.ItemManagement = (function(Backbone){
                 'click .add-people-button' : function() {
                     model = this.model;
                     modal = new AppUtils.PanelModal({
-                        title : "<%= t 'add-people' %>",
+                        title : "<%= escape_javascript(t 'add-people') %>",
                         url   : "/panels/item_mgmt?prog_item=" + model.id,
                         closeAction : function() {
                             model.fetch();
@@ -261,7 +267,10 @@ ItemApp.ItemManagement = (function(Backbone){
             view_refresh_event : "address:refresh",
             place : '#tags-view',
             newTitle : '<%= t "create-tag" %>',
+            
         }) );
+        
+        eventAggregator.on("refreshTagList", syncModel, itemMdl);
         
         return itemMdl;
     };
