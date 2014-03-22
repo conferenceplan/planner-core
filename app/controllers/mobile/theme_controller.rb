@@ -6,34 +6,53 @@ class Mobile::ThemeController < PlannerController
   end
 
   def create
-    theme = MobileTheme.new(params[:theme])
-    theme.save!
-    
-    render json: theme.to_json, :content_type => 'application/json'
+    begin
+      MobileTheme.transaction do
+        theme = MobileTheme.new(params[:theme])
+        theme.save!
+
+        render json: theme.to_json, :content_type => 'application/json'
+      end
+    rescue Exception
+      raise
+    end
   end
 
   def update
-    theme = MobileTheme.find(params[:id])
-    theme.update_attributes(params[:theme])
-    
-    render json: theme.to_json, :content_type => 'application/json'
+    begin
+      MobileTheme.transaction do
+        theme = MobileTheme.find(params[:id])
+        theme.update_attributes(params[:theme])
+        render json: theme.to_json, :content_type => 'application/json'
+      end
+    rescue Exception
+      raise
+    end
   end
 
   def destroy
-    theme = MobileTheme.find(params[:id])
-    theme.destroy
+    begin
+      MobileTheme.transaction do
+        theme = MobileTheme.find(params[:id])
+        theme.destroy
+      end
+    rescue Exception
+      raise
+    end
 
     render status: :ok, text: {}.to_json
   end
 
   def index
-    theme = MobileTheme.find :first
     # if not found then create one
-    if !theme
+    if MobileTheme.count == 0
       theme = MobileTheme.new
       theme.save!
     end
     
-    render json: theme.to_json, :content_type => 'application/json'
+    themes = MobileTheme.find :all, :order => 'name'
+    
+    render json: themes.to_json, :content_type => 'application/json'
   end
+
 end
