@@ -172,11 +172,11 @@ module PlannerReportsService
     conditions << roomIds if roomIds
     conditions << day if day
     
-    PublishedRoom.all :include => [:published_venue, :published_room_item_assignments, {:published_programme_items => [:published_time_slot, :published_programme_item_assignments, :format]}],
-            :joins => [:published_venue, :published_room_item_assignments],
+    PublishedRoom.all :include => [:published_venue,
+            :published_room_item_assignments => [:published_time_slot, {:published_programme_item => [{:published_programme_item_assignments => {:person => :pseudonym}}, :format]}] ], 
             :conditions => conditions, 
             :order => "published_venues.name desc, published_rooms.name, published_time_slots.start"
-                        
+
   end
   
   #
