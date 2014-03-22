@@ -60,14 +60,7 @@ class ProgramController < ApplicationController
       @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
       @partition_val = @cloudinaryURI ? @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'') : nil
       respond_to do |format|
-        format.json #{
-          # jsonstr = ''
-          # @programmeItems.each do |item|
-            # jsonstr += '{"id":"' + item.id.to_s  + '"'
-            # jsonstr += '}'
-          # end
-          # render :json # => jsonstr, :content_type => 'application/json', :callback => params[:callback]
-        # }
+        format.json
         # format.js #{ render :json }
       end
     end
