@@ -319,21 +319,24 @@ class PlannerReportsController < PlannerController
   def program_book_report
     @page_size = params[:page_size]
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
-    @times = PlannerReportsService.findProgramItemsByTimeAndRoom
-    @rooms = Room.all :select => 'distinct rooms.name',
-                               :order => 'venues.name DESC, rooms.name ASC', 
-                               :include => :venue
-    
-    respond_to do |format|
-      format.xml {
-        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
-      }
-      format.pdf {
-        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
-      }
-      format.xlsx{
-        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
-      }
+
+    TimeSlot.uncached do
+      @times = PlannerReportsService.findProgramItemsByTimeAndRoom
+      @rooms = Room.all :select => 'distinct rooms.name',
+                                 :order => 'venues.name DESC, rooms.name ASC', 
+                                 :include => :venue
+      
+      respond_to do |format|
+        format.xml {
+          response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+        }
+        format.pdf {
+          response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+        }
+        format.xlsx{
+          response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+        }
+      end
     end
 
   end
@@ -372,21 +375,23 @@ class PlannerReportsController < PlannerController
     additional_roles = params[:additional_roles] == "true" ? [PersonItemRole['Invisible'].id] : nil
     for_print = params[:for_print] ? (params[:for_print] == true) : false
     
-    # Only use the scheduled items
-    @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, for_print
-    @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
-    @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
-    
-    respond_to do |format|
-      format.xml {
-        response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
-      }
-      format.pdf {
-        response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
-      }
-      format.xlsx{
-        response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
-      }
+    Person.uncached do
+      # Only use the scheduled items
+      @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, for_print
+      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+      @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
+      
+      respond_to do |format|
+        format.xml {
+          response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+        }
+        format.pdf {
+          response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+        }
+        format.xlsx{
+          response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+        }
+      end
     end
   end
   
