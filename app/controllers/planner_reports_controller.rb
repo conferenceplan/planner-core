@@ -397,19 +397,21 @@ class PlannerReportsController < PlannerController
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
     roomList = (params[:rooms].length > 0) ? URI.unescape(params[:rooms]).split(',') : nil
     
-    # Get the program items for the rooms for each day....
-    @rooms = PlannerReportsService.findPublishedPanelsByRoom roomList, @day
-    
-    respond_to do |format|
-      format.xml {
-        response.headers['Content-Disposition'] = 'attachment; filename="room_signs_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
-      }
-      format.pdf {
-        response.headers['Content-Disposition'] = 'attachment; filename="room_signs_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
-      }
-      format.xlsx{
-        response.headers['Content-Disposition'] = 'attachment; filename="room_signs_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
-      }
+    PublishedRoom.uncached do
+      # Get the program items for the rooms for each day....
+      @rooms = PlannerReportsService.findPublishedPanelsByRoom roomList, @day
+      
+      respond_to do |format|
+        format.xml {
+          response.headers['Content-Disposition'] = 'attachment; filename="room_signs_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+        }
+        format.pdf {
+          response.headers['Content-Disposition'] = 'attachment; filename="room_signs_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+        }
+        format.xlsx{
+          response.headers['Content-Disposition'] = 'attachment; filename="room_signs_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+        }
+      end
     end
   end
 
