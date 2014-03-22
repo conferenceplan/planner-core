@@ -348,16 +348,18 @@ class PlannerReportsController < PlannerController
     @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList, nil, @itemList
     @page_size = params[:page_size]
     
-    respond_to do |format|
-      format.xml {
-        response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
-      }
-      format.pdf {
-        response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
-      }
-      format.xlsx{
-        response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
-      }
+    Person.uncached do
+      respond_to do |format|
+        format.xml {
+          response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+        }
+        format.pdf {
+          response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+        }
+        format.xlsx{
+          response.headers['Content-Disposition'] = 'attachment; filename="table_tent_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+        }
+      end
     end
   end
   
