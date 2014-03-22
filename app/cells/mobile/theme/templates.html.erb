@@ -3,8 +3,48 @@
     <div id="phone-display"></div>
 </script>
 
+<script type="text/template" id="theme-control-layout">
+    <div id='control'></div>
+    <div id='theme'></div>
+</script>
+
+<script type="text/template" id="phone-control-template">
+    <div class="row">
+        <div class="col-sm-9">
+            <select class="form-control theme-select">
+                {{ _.each(coll.models, function(mdl) { }}
+                    <option value="{{= mdl.id }}" {{= mdl.get('isdefault') ? 'selected' : ''}}>{{= mdl.get('name') }}</option>
+                {{ }); }}
+            </select>
+        </div>
+        <div class="col-sm-3 pull-right">
+            <button class="theme-new-button"><%= t "add-theme" %></button>
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="phone-theme-form-template">
     <form class="form-horizontal" role="form" style="height : 550px; overflow : auto;">
+        <div class="gr-color-choice">
+            <div class="form-group gr-form-group">
+                <span data-editor>
+                    <label class="col-sm-2 control-label">
+                       <%= t  "name" %>
+                    </label>
+                    <div class="col-sm-6">
+                        <div data-editors="name"></div>
+                    </div>
+                </span>
+                <span data-editor>
+                    <label class="col-sm-2 control-label">
+                       <%= t  "active" %>
+                    </label>
+                    <div class="col-sm-2">
+                        <div data-editors="isdefault"></div>
+                    </div>
+                </span>
+            </div>
+        </div>
         <div class="gr-color-choice">
             <p class="gr-color-title"><%= t "card-colors" %></p>
             <div class="form-group gr-form-group">
@@ -233,6 +273,22 @@
 
 <script type="text/template" id="phone-theme-ctl-template">
     <div style="height : 550px; overflow : auto;">
+        <div class="gr-color-choice">
+            <div class="row gr-subrow">
+                    <label class="col-sm-2 control-label">
+                       <%= t  "name" %>
+                    </label>
+                    <div class="col-sm-6">
+                        {{= name }}
+                    </div>
+                    <label class="col-sm-2 control-label">
+                       <%= t  "active" %>
+                    </label>
+                    <div class="col-sm-2">
+                        {{= isdefault ? '<%= t "yes" %>' : '<%= t "no" %>' }}
+                    </div>
+            </div>
+        </div>
     <div class="gr-color-choice">
         <p class="gr-color-title"><%= t "card-colors" %></p>
         <div class="row gr-subrow">
