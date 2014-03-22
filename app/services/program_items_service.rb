@@ -179,8 +179,7 @@ protected
     args = { :conditions => clause }
     
     args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
-                           'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
-                           'LEFT JOIN pending_publication_items on pending_publication_items.programme_item_id = programme_items.id ' )
+                           'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' )
 
     args
   end
