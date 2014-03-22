@@ -91,7 +91,7 @@ module PlannerReportsService
     conditions << roles
     
     Person.all :conditions => conditions, 
-              :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => [:time_slot, :room, :format]}},
+              :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}},
               :order => "people.last_name, time_slots.start asc"
 
   end
