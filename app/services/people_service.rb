@@ -27,9 +27,7 @@ module PeopleService
   def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
     args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
     tagquery = DataService.genTagSql(context, tags)
-    if includeMailings
-      args.merge! :include => :mailings
-    end
+    args.merge! :include => [:mailings, :pseudonym, :email_addresses, :invitation_category]
     
     if tagquery.empty?
       Person.count args
@@ -50,9 +48,8 @@ module PeopleService
     if index
       args.merge!(:order => index + " " + sort_order)
     end
-    if includeMailings
-      args.merge! :include => :mailings
-    end
+    
+    args.merge! :include => [:mailings, :pseudonym, :email_addresses, :invitation_category]
     
     if tagquery.empty?
       people = Person.includes(:pseudonym).find :all, args
