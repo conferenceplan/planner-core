@@ -329,6 +329,7 @@ var TabUtils = (function(){
                         removeTag : function(event) {
                             event.preventDefault();
                             $.ajax({
+                                async : false,
                                 url : event.currentTarget,
                                 success : function() {
                                     eventAggregator.trigger("refreshTagList");
