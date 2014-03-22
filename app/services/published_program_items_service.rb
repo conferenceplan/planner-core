@@ -39,7 +39,8 @@ module PublishedProgramItemsService
 
     PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
-                              :include => [:publication, :published_time_slot, {:published_room_item_assignment => {:published_room => [:published_venue]}}, {:people => [:pseudonym, :edited_bio]} ],
+                              :include => [:publication, :published_time_slot, :format, :external_images, {:published_programme_item_assignments => {:person => [:pseudonym, :edited_bio]}}, 
+                                {:published_room_item_assignment => {:published_room => [:published_venue]}} ],
                                :conditions => getConditions(day, name, lastname)
     end
     
