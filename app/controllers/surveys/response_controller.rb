@@ -131,7 +131,7 @@ class Surveys::ResponseController < ApplicationController
         logger.error "Unable to send the email to " + @respondent.email if @respondent
         logger.error "Unable to send the email to " + respondentDetails.email if !@respondent
         logger.error err
-        logger.error err.backtrace
+        # logger.error err.backtrace
       end
       
     end
