@@ -5,7 +5,9 @@ class Room < ActiveRecord::Base
   # this is a many to many
   has_many :room_item_assignments do
     def day(d) # get the room item assignments for the given day if the day parameter is used
-      find(:all, :conditions => ['day = ?', d], :joins => :time_slot, :order => 'time_slots.start asc')
+      find(:all, 
+        :include => [:programme_item, :time_slot],
+        :conditions => ['day = ?', d], :joins => :time_slot, :order => 'time_slots.start asc')
     end
   end
   has_many :programme_items, :through => :room_item_assignments # through the room item assignment
