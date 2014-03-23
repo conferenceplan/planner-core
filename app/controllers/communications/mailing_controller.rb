@@ -28,8 +28,8 @@ class Communications::MailingController < PlannerController
         end
       end
       render status: :ok, text: {}.to_json
-    rescue Exception
-      render status: :bad_request, text: 'unable to add the people to the mailing list'
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
   
@@ -48,8 +48,8 @@ class Communications::MailingController < PlannerController
         end
       end
       render status: :ok, text: {}.to_json
-    rescue Exception
-      render status: :bad_request, text: 'unable to remove the people from the mailing list'
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 

@@ -49,8 +49,8 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
           @question.update_answers(params[:survey_answers]) if params[:survey_answers]
         end
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 
@@ -86,8 +86,8 @@ class Surveys::SurveyGroups::SurveyQuestionsController < PlannerController
     
         @question.save!
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 

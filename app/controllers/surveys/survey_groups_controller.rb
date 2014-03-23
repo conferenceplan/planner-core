@@ -21,8 +21,8 @@ class Surveys::SurveyGroupsController < PlannerController
         @group.survey_format = format
         @group.save!
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 
@@ -45,8 +45,8 @@ class Surveys::SurveyGroupsController < PlannerController
           end
         end
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 

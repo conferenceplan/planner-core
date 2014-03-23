@@ -13,8 +13,8 @@ class Mobile::ThemeController < PlannerController
 
         render json: theme.to_json, :content_type => 'application/json'
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 
@@ -25,8 +25,8 @@ class Mobile::ThemeController < PlannerController
         theme.update_attributes(params[:theme])
         render json: theme.to_json, :content_type => 'application/json'
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 
@@ -36,8 +36,8 @@ class Mobile::ThemeController < PlannerController
         theme = MobileTheme.find(params[:id])
         theme.destroy
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
 
     render status: :ok, text: {}.to_json
