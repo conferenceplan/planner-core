@@ -13,7 +13,7 @@ json.rooms @roomListing do |room|
     json.items do
         json.array! room.room_item_assignments.day(@day) do |assignment|
             json.assignment_id assignment.id
-            json.room_id assignment.room.id
+            json.room_id room.id
             json.time_id assignment.time_slot.id
             json.item_id assignment.programme_item.id
             
