@@ -38,8 +38,8 @@ class RoomSetupsController < PlannerController
       end
     rescue ActiveRecord::RecordInvalid => e  
       render status: :bad_request, text: 'Unable to create room setup, probably a duplicate setup type'
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 
@@ -60,8 +60,8 @@ class RoomSetupsController < PlannerController
         end
       
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 

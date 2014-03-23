@@ -62,8 +62,8 @@ class RoomsController < PlannerController
         # @room.setup_id = roomSetup.id
 
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 
@@ -79,8 +79,8 @@ class RoomsController < PlannerController
         @room.update_attributes(params[:room])
     
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
 
   end

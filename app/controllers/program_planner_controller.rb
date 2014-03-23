@@ -26,8 +26,8 @@ class ProgramPlannerController < PlannerController
       end
   
       render :layout => 'content'
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
   
@@ -41,8 +41,8 @@ class ProgramPlannerController < PlannerController
       removeAssignment(item.room_item_assignment)
       
       render status: :ok, text: {}.to_json
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
   

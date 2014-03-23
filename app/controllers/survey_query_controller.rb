@@ -42,8 +42,8 @@ class SurveyQueryController < PlannerController
           @query.update_predicates(params[:survey_query_predicates]) if params[:survey_query_predicates]
         end
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 
@@ -65,8 +65,8 @@ class SurveyQueryController < PlannerController
           @query.survey_query_predicates.delete_all
         end
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 

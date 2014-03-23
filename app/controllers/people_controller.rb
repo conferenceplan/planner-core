@@ -7,17 +7,18 @@ class PeopleController < PlannerController
   #
   #
   def destroy
-    person = Person.find(params[:id])
-    
-    # check that the person has not been assigned to program items, if they have then return an error and do not delete
-    if person.programmeItemAssignments.length == 0
-      person.removeAllAddresses # If there are any addresses associated with the person then remove them
-      person.destroy
-
-      render status: :ok, text: {}.to_json
-    else  
-      render status: :bad_request, text: 'Can not delete a person that has been assigned to programme items'
+    begin
+      Person.transaction do
+        person = Person.find(params[:id])
+        
+        person.removeAllAddresses # If there are any addresses associated with the person then remove them
+        person.destroy
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
+        
+    render status: :ok, text: {}.to_json
   end
 
   #
@@ -31,44 +32,56 @@ class PeopleController < PlannerController
   #
   #
   def create
-    # if pseudonym is empty, we don't want to insert an empty record
-    # so delete attributes from input parameter list so
-    # it won't get created
-    if (params[:pseudonym])
-      if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
-           params[:person][:pseudonym_attributes] = params[:pseudonym]
+    begin
+      Person.transaction do
+        # if pseudonym is empty, we don't want to insert an empty record
+        # so delete attributes from input parameter list so
+        # it won't get created
+        if (params[:pseudonym])
+          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+               params[:person][:pseudonym_attributes] = params[:pseudonym]
+          end
+        end
+        
+        @person = Person.new(params[:person])
+        datasourcetmp = Datasource.find_by_name("Application") # TODO - verify, we need to make sure we have the data-source Application
+        @person.datasource = datasourcetmp
+        @person.save!
       end
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
-    
-    @person = Person.new(params[:person])
-    datasourcetmp = Datasource.find_by_name("Application") # TODO - verify, we need to make sure we have the data-source Application
-    @person.datasource = datasourcetmp
-    @person.save!
   end
 
   #
   #
   #
   def update
-    @person = Person.find(params[:id])
-    # if pseudonym is empty, we don't want to insert an empty record
-    # so delete attributes from input parameter list so
-    # it won't get created. If the pseudonym is getting zeroed
-    # out (it existed before and now is not going to exist),
-    # we do need to update, so we don't delete the attributes
-    if (@person.pseudonym == nil && params[:pseudonym]) #params[:person].has_key?(:pseudonym_attributes))
-      if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
-           params[:person][:pseudonym_attributes] = params[:pseudonym]
+    begin
+      Person.transaction do
+        @person = Person.find(params[:id])
+        # if pseudonym is empty, we don't want to insert an empty record
+        # so delete attributes from input parameter list so
+        # it won't get created. If the pseudonym is getting zeroed
+        # out (it existed before and now is not going to exist),
+        # we do need to update, so we don't delete the attributes
+        if (@person.pseudonym == nil && params[:pseudonym]) #params[:person].has_key?(:pseudonym_attributes))
+          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+               params[:person][:pseudonym_attributes] = params[:pseudonym]
+          end
+        elsif (@person.pseudonym != nil && params[:pseudonym])
+          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+            @person.pseudonym.update_attributes(params[:pseudonym])
+          else
+            @person.pseudonym.destroy
+          end
+        end
+    
+        @person.update_attributes(params[:person])
       end
-    elsif (@person.pseudonym != nil && params[:pseudonym])
-      if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
-        @person.pseudonym.update_attributes(params[:pseudonym])
-      else
-        @person.pseudonym.destroy
-      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
-
-    @person.update_attributes(params[:person])
   end
 
   #

@@ -68,8 +68,8 @@ class ProgrammeItemsController < PlannerController
           end
         end
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 
@@ -102,8 +102,8 @@ class ProgrammeItemsController < PlannerController
           end
         end
       end
-    rescue Exception
-      raise
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
   
