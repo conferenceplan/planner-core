@@ -5,6 +5,20 @@
         <button class="btn btn-default day">{{= moment("<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).strftime('%F %T') %>").add('days', currentDay).format("dddd, D MMM YYYY") }}</button>
         <button class="btn btn-default next-day"><i class="glyphicon glyphicon-chevron-right"></i></button>
     </div>
+    <button class="btn btn-default menu-link" style="margin-bottom: 10px;"><i class="glyphicon glyphicon-filter"></i><%= t "filter-rooms" %></button>
+</script>
+
+<script type="text/template" id="room-filter-item-template">
+    <div class="col-xs-6">
+    </input><label>{{= name }}</label><input type="checkbox" value="{{= id}}" class="room-select pull-right"></input>
+    </div>
+</script>
+    
+<script type="text/template" id="room-filter-menu-template">
+    <div class="col-xs-12">
+        <button class="btn btn-default apply-filter pull-right"><%= t "apply-filter" %></button>
+    </div>
+    <div id="item-filters"></div>
 </script>
 
 <script type="text/template" id="grid-view-template"> <!-- This is the calendar view for scheduling conflicts and moving things around -->

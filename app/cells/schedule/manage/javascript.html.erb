@@ -10,6 +10,16 @@ ScheduleApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
+    Room = Backbone.Model.extend({
+    });
+    
+    RoomCollection = Backbone.Collection.extend({
+        model : Room
+    });
+    
+    /*
+     * 
+     */
     GridItem = Backbone.Model.extend({
     });
     
@@ -33,6 +43,13 @@ ScheduleApp.ItemManagement = (function(Backbone){
             "click .next-day"    : "nextDay",
         },
         
+        onRender: function() {
+            $('.menu-link').bigSlide({
+                push : '.slider',
+                menuWidth : '33%'
+            });
+        },
+        
         initialize : function() {
             eventAggregator.on("refreshConflicts", this.refreshConflicts, this);
         },
@@ -49,7 +66,8 @@ ScheduleApp.ItemManagement = (function(Backbone){
                 this.model.set('currentDay', day);
                 // this.model.set('currentDate', Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + day.days);
                 this.render();
-                loadGrid(day);
+                _currentDay = day;
+                loadGrid(day, roomList);
             }
         },
         
@@ -59,7 +77,8 @@ ScheduleApp.ItemManagement = (function(Backbone){
                 day += 1;
                 this.model.set('currentDay', day);
                 this.render();
-                loadGrid(day);
+                _currentDay = day;
+                loadGrid(day, roomList);
             }
         }
     });
@@ -81,7 +100,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
             var assignments = this.model;
             
             var nbrOfRooms = assignments.get('rooms').length;
-            var gridWidth = (nbrOfRooms > ($("#program-grid").width() / 150)) ? $("#program-grid").width() : (150 * nbrOfRooms);
+            var gridWidth = (nbrOfRooms > ($("#program-grid").width() / 150)) ? $("#program-grid").width() : ((150 * nbrOfRooms) + 40);
             
             DailyGrid.paint(_containerElem, assignments, gridWidth, <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>);
             
@@ -102,9 +121,50 @@ ScheduleApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
+    var roomList = [];
+    RoomItemView = Marionette.ItemView.extend({
+        template : '#room-filter-item-template',
+        events  : {
+            "click .room-select" : 'selectRoom'
+        },
+        
+        selectRoom : function(ev) {
+            var id = ev.currentTarget.value;
+            if (ev.currentTarget.checked) {
+                // add to list of rooms
+                roomList.push(id); 
+            } else {
+                // remove from list of rooms
+                var p = _.find(roomList, function(a) {
+                    return (a == id);
+                });
+                var idx = _.indexOf(roomList, p);
+                roomList.splice(idx,1);
+            }
+        }
+    });
+    
+    RoomFilterView = Marionette.CompositeView.extend({
+        el       : '#room-filter-menu',
+        template : "#room-filter-menu-template",
+        itemView : RoomItemView,
+        itemViewContainer : "#item-filters",
+        events   : {
+            "click .apply-filter" : "applyFilter"
+        },
+        
+        applyFilter : function(ev) {
+            loadGrid(_currentDay, roomList);
+        }
+    });
+    
+    /*
+     * 
+     */
     var _gridView = null;
     var _itemId = null;
     var _day = null;
+    var _currentDay = 0;
     
     function setDropped(itemId) {
         _itemId = itemId;
@@ -136,12 +196,8 @@ ScheduleApp.ItemManagement = (function(Backbone){
                         success: function(response){
                             // And we reload the list of items so that the dropped one is removed
                             DailyGrid.remove_group(group)
-                            $("#items").trigger("reloadGrid");
+                            // $("#items").trigger("reloadGrid");
                             eventAggregator.trigger("refreshConflicts");
-                            DailyGrid.enable_actions()
-                        },
-                        error : function(model, response) {
-                            alertMessage("Error communicating with backend");
                             DailyGrid.enable_actions()
                         }
                     });
@@ -214,7 +270,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
                             };
                             
                             // And we reload the list of items so that the dropped one is removed
-                            $("#items").trigger("reloadGrid");
+                            // $("#items").trigger("reloadGrid");
                             eventAggregator.trigger("refreshConflicts");
                             DailyGrid.enable_actions()
                         },
@@ -239,11 +295,15 @@ ScheduleApp.ItemManagement = (function(Backbone){
     /*
      * Given the day of the conference render the grid (SVG) for that day
      */
-    function loadGrid(day) {
+    function loadGrid(day, roomList) {
             showSpinner('#grid-view');
         
             var grid = new GridItem();
-            grid.url = "/program_planner/assignments.json?day=" + day;
+            if (roomList && roomList.length > 0) {
+                grid.url = "/program_planner/assignments.json?day=" + day + "&rooms=" + roomList;
+            } else {
+                grid.url = "/program_planner/assignments.json?day=" + day;
+            }
             grid.fetch({
                 error : function(model, response) {
                     alertMessage("Error communicating with backend");
@@ -290,8 +350,10 @@ ScheduleApp.ItemManagement = (function(Backbone){
         _.each(collection.models, function(vv) {
             var id = vv.get('item_id');
             var cl = $("#" + id + " .prog-item-rect").attr('class');
-            if (cl.indexOf("conflict-item") == -1) {
-                $("#" + id + " .prog-item-rect").attr('class', cl + " conflict-item-" + color);
+            if (typeof cl != 'undefined') {
+                if (cl.indexOf("conflict-item") == -1) {
+                    $("#" + id + " .prog-item-rect").attr('class', cl + " conflict-item-" + color);
+                }
             }
         });
     }
@@ -345,7 +407,21 @@ ScheduleApp.ItemManagement = (function(Backbone){
             dayControl.render();
             
             // get the data for the first day
-            loadGrid(0);
+            _currentDay = 0;
+            loadGrid(0, roomList);
+            
+            rooms = new RoomCollection();
+            
+            rooms.fetch({
+                url : '/rooms.json',
+                success : function(mdl) {
+                    var roomFilter = new RoomFilterView({
+                        collection : mdl
+                    });
+                    roomFilter.render();
+                }
+            })
+            
         },
         
         onItemLoad : function() {
@@ -371,7 +447,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
 
 jQuery(document).ready(function() {
     moment.lang('<%= I18n.locale %>');
-    
+
     ScheduleApp.start();
     ScheduleApp.ItemManagement.init();
 });
