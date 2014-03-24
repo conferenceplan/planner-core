@@ -234,7 +234,11 @@ var TabUtils = (function(){
                         extra_events : options.events
                     });
                     tabView.render();
-                    $(options.place).html(tabView.el);
+                    if (options.region) {
+                        options.region.show(tabView);
+                    } else {
+                        $(options.place).html(tabView.el);
+                    }
                 }
             });
             detail.on("sync", options.updateCallback ); // when the modal does the update and second after the update to the server
@@ -314,7 +318,7 @@ var TabUtils = (function(){
                 success : function(col) {
                     viewType = TabCollectionView.extend({
                         initialize : function() {
-                            eventAggregator.on("refreshTagList", this.refreshList, this);
+                            // eventAggregator.on("refreshTagList", this.refreshList, this);
                         },
 
                         itemViewOptions : {
