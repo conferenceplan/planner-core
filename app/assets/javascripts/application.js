@@ -15,6 +15,7 @@
 //= require jqcloud-1.0.4
 //= require colorpicker/jquery.colorpicker
 //= require jQuery.download
+//= require bigSlide
 
 //= require cloudinary
 // require jquery-fileupload
