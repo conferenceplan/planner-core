@@ -126,7 +126,9 @@ class Surveys::ResponseController < ApplicationController
       
       # send email confirmation of survey etc., use the email address that they provided in the survey
       begin
-        MailService.sendEmail(@respondent.person, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails))
+        if (@respondent)
+          MailService.sendEmail(@respondent.person, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails))
+        end
       rescue Exception => err
         logger.error "Unable to send the email to " + @respondent.email if @respondent
         logger.error "Unable to send the email to " + respondentDetails.email if !@respondent
