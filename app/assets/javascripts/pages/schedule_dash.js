@@ -23,7 +23,7 @@ DailyGrid = (function() {
     // The area on the screen for the grid with margins
     var margin = {
         top : 20,
-        right : 15,
+        right : 0,
         bottom : 15,
         left : 40
     }, width; // = 800 - margin.left - margin.right, height = 680 - margin.top - margin.bottom;
@@ -203,7 +203,7 @@ DailyGrid = (function() {
     function paint(_selector, _data, _width, _offset) {
         time_zone_offset = _offset; // used to correct the time display
         // use the width dimension from the containing element
-        width = _width - margin.left - margin.right;
+        width = _width; // - margin.left - margin.right;
         height = 680 - margin.top - margin.bottom;
         var nbrOfRooms = _data.get('rooms').length;
         
@@ -218,7 +218,7 @@ DailyGrid = (function() {
         date = Date.parse(data.get('date'));
 
         // We need to create an SVG area for the display
-        svg = d3.select(selector).append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").on("mouseover", overEvent);
+        svg = d3.select(selector).append("svg").attr("width", width ).attr("height", height + margin.top + margin.bottom).append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")").on("mouseover", overEvent);
 
         var clip = svg.append("defs").append("svg:clipPath").attr("id", "clip").append("svg:rect").attr("id", "clip-rect").attr("x", "0").attr("y", "0").attr("width", width).attr("height", height);
 
