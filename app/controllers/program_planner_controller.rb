@@ -5,8 +5,17 @@ class ProgramPlannerController < PlannerController
   #
   #
   def assignments
+    # TODO add a parameter specifying the rooms that we want to display
+    rooms = params[:rooms] ? params[:rooms].split(',').collect{|a| a.to_i} : nil
     @day = params[:day] # Day
-    @roomListing = Room.all(:order => 'venues.name DESC, rooms.name ASC', :joins => :venue) #, :conditions => conditions) 
+    if rooms
+      @roomListing = Room.all :order => 'venues.name DESC, rooms.name ASC',
+                            :conditions => ["rooms.id in (?)", rooms],
+                            :joins => :venue
+    else  
+      @roomListing = Room.all :order => 'venues.name DESC, rooms.name ASC',
+                            :joins => :venue
+    end
     @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + @day.to_i.day
   end
   
