@@ -44,6 +44,7 @@ module PeopleService
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
+    offset = 0 if offset < 0
     args.merge!(:offset => offset, :limit => rows)
     if index
       args.merge!(:order => index + " " + sort_order)
