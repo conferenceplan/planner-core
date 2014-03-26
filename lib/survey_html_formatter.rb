@@ -85,7 +85,7 @@ module SurveyHtmlFormatter
     if !responses.empty? && !responses[0].response.blank?
       content += '<div class="response_question_text"'
       content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-      content += '>' + question.question + "</div>"
+      content += '><strong>' + question.question + "</strong></div><pre>"
       responses.each do |response|
         content += '<div class="response_answer">'
         content += '<div class="response_text">' + response.response + "</div>"
@@ -93,7 +93,7 @@ module SurveyHtmlFormatter
         content += "\n" if forEmail
       end
     end
-    content += '</div>'
+    content += '</pre></div>'
     content += "\n" if forEmail
     return content
   end
@@ -104,11 +104,11 @@ module SurveyHtmlFormatter
     if !responses.empty? && !responses[0].response.blank?
       content += '<div class="response_question_text"'
       content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-      content += '>' + question.question + "</div>"
+      content += '><strong>' + question.question + "</strong></div>"
       content += "\n" if forEmail
       responses.each do |response|
         content += '<div class="response_answer">'
-        content += '<div class="response_text_box">' 
+        content += '<div class="response_text_box"><pre>' 
         content += "\n" if forEmail
         # NOTE: there is a 1000 character line limit so need to split close to 900 to be safe and insert a new line
         content += "<pre>\n" if forEmail
@@ -128,7 +128,7 @@ module SurveyHtmlFormatter
         end
         content += "\n</pre>" if forEmail
         content += "\n" if forEmail
-        content += '</div></div>'
+        content += '</pre></div></div>'
         content += "\n" if forEmail
       end
     end
@@ -143,11 +143,11 @@ module SurveyHtmlFormatter
     if !responses.empty? && !responses[0].response.blank?
       content += '<div class="response_question_text"'
       content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-      content += '>' + question.question + "</div>"
+      content += '><strong>' + question.question + "</strong></div>"
       content += "\n" if forEmail
       responses.each do |response|
         content += '<div class="response_answer">'
-        content += '<div class="response_text">' + SurveyAnswer.find(response.response.to_i).answer + "</div>"
+        content += '<div class="response_text"><pre>' + SurveyAnswer.find(response.response.to_i).answer + "</pre></div>"
         content += '</div>'
         content += "\n" if forEmail
       end
@@ -165,9 +165,9 @@ module SurveyHtmlFormatter
         content += '<div class="response_answer">'
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-        content += '>Phone</div><div class="response_answer"><div class="response_text">' + response.response 
+        content += '><strong>Phone</strong></div><div class="response_answer"><div class="response_text"><pre>' + response.response 
         content += ' (' + response.response1 + ')' if response.response1
-        content += "</div></div>"
+        content += "</pre></div></div>"
         content += '</div>'
         content += "\n" if forEmail
       end
@@ -187,23 +187,23 @@ module SurveyHtmlFormatter
         content += '<div class="response_answer">'
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-        content += '>Street Address</div><div class="response_answer"><div class="response_text">' + response.response + "</div></div>"
+        content += '><strong>Street Address</strong></div><div class="response_answer"><div class="response_text"><pre>' + response.response + "</pre></div></div>"
         content += "\n" if forEmail
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-        content += '>City</div><div class="response_answer"><div class="response_text">' + response.response1 + "</div></div>"
+        content += '><strong>City</strong></div><div class="response_answer"><div class="response_text"><pre>' + response.response1 + "</pre></div></div>"
         content += "\n" if forEmail
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-        content += '>State/County/Provence</div><div class="response_answer"><div class="response_text">' + response.response2 + "</div></div>"
+        content += '><strong>State/County/Provence</strong></div><div class="response_answer"><div class="response_text"><pre>' + response.response2 + "</pre></div></div>"
         content += "\n" if forEmail
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-        content += '>Postal Code/Zip</div><div class="response_answer"><div class="response_text">' + response.response3 + "</div></div>"
+        content += '><strong>Postal Code/Zip</strong></div><div class="response_answer"><div class="response_text"><pre>' + response.response3 + "</pre></div></div>"
         content += "\n" if forEmail
         content += '<div class="response_question_text" '
         content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
-        content += '>Country</div><div class="response_answer"><div class="response_text">' + response.response4 + "</div></div>"
+        content += '><strong>Country</strong></div><div class="response_answer"><div class="response_text"><pre>' + response.response4 + "</pre></div></div>"
         content += '</div>'
         content += "\n" if forEmail
       end
@@ -221,16 +221,16 @@ module SurveyHtmlFormatter
 
     responses.each do |response|
       if response.response && response.response == '1'
-        content += '<div class="response_answer">I am available for the complete duration of the Convention.</div>'
+        content += '<div class="response_answer"><pre>I am available for the complete duration of the Convention.</pre></div>'
       elsif response.response1
-        content += '<div class="response_answer">'
+        content += '<div class="response_answer"><pre>'
         if SITE_CONFIG[:conference]
           content += 'From: <em>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + response.response1.to_i.day).strftime('%A, %B %e') + ' at ' + response.response2 + '</em><br/>'
           content += 'To: <em>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + response.response3.to_i.day).strftime('%A, %B %e') + ' at ' + response.response4 + '</em><br/>'
         end
-          content += '</div>'
+          content += '</pre></div>'
       elsif response.response5
-        content += '<div class="response_answer">I am extremely uncertain when I will be available to be on the Program.</div>'
+        content += '<div class="response_answer"><pre>I am extremely uncertain when I will be available to be on the Program.</pre></div>'
       end
       
     end
