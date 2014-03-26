@@ -90,7 +90,14 @@ module PeopleService
       end
     end
     
-    clause = DataService.addClause( clause, extraClause['param'].to_s + ' = ?', extraClause['value'].to_s) if extraClause
+    if extraClause
+      if (extraClause['value'].include? ',')
+        vals  = extraClause['value'].split(',')
+        clause = DataService.addClause( clause, extraClause['param'].to_s + ' in (?)', vals)
+      else
+        clause = DataService.addClause( clause, extraClause['param'].to_s + ' = ?', extraClause['value'].to_s)
+      end
+    end
 
     # Find people that do not have the specified mailing id
     # TODO - need the not in as well
