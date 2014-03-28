@@ -6,7 +6,7 @@ class SurveyQueryController < PlannerController
   
   def list
     conditions = {}
-    conditions = { "user_id" => @current_user.id } if params[:subset] && (params[:subset] == 'user')
+    conditions = { "user_id" => @current_user.id, "shared" => false } if params[:subset] && (params[:subset] == 'user')
     conditions = { "shared" => true } if params[:subset] && (params[:subset] == 'shared')
     
     @queries = SurveyQuery.all :conditions => conditions
