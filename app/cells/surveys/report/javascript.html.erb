@@ -258,6 +258,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             selectFn  : runQuery,
             selectCsvFn : runCSVQuery,
             clearFn   : clearDetails,
+            view_refresh_event : "query:refresh",
             form_event : 'survey_id:change',
             form_event_fn : function(form, editor, extra) { // TODO - This is not used when it is a new query because we do not have a query shown
                 // Get the current set of questions
