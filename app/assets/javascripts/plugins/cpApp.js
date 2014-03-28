@@ -212,11 +212,15 @@ var AppUtils = (function(){
             
             if (!errors) { // save if there are no errors
                 var refreshFn = this.options.refresh;
+                var refreshEvent = this.options.view_refresh_event;
             
                 // accept-charset="UTF-8"
                 this.model.save(null, { 
                     success : function(mdl) {
                         // Refresh the view if there is a refresh method
+                        if (refreshEvent) {
+                            eventAggregator.trigger(refreshEvent); 
+                        }
                         if (refreshFn) {
                             refreshFn(mdl); // cause problem with templates used ???
                         };
