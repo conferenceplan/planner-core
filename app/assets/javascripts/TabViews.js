@@ -112,7 +112,8 @@ var TabUtils = (function(){
             mdl = new AppUtils.ModelModal({
                 model : this.model,
                 title : this.options.editTitle,
-                modal_template : this.options.modal_template
+                modal_template : this.options.modal_template,
+                view_refresh_event : this.options.view_refresh_event
             });
             mdl.render();
             
@@ -126,7 +127,8 @@ var TabUtils = (function(){
             mdl = new AppUtils.ModelModal({
                 model : this.model,
                 title : this.options.newTitle,
-                modal_template : this.options.modal_template
+                modal_template : this.options.modal_template,
+                view_refresh_event : this.options.view_refresh_event
             });
             mdl.render();
             
@@ -231,7 +233,8 @@ var TabUtils = (function(){
                         form_event : options.form_event,
                         form_event_fn : options.form_event_fn,
                         modal_template : options.modal_template,
-                        extra_events : options.events
+                        extra_events : options.events,
+                        view_refresh_event : options.view_refresh_event
                     });
                     tabView.render();
                     if (options.region) {
@@ -256,7 +259,8 @@ var TabUtils = (function(){
                 form_event : options.form_event,
                 form_event_fn : options.form_event_fn,
                 modal_template : options.modal_template,
-                extra_events : options.events
+                extra_events : options.events,
+                view_refresh_event : options.view_refresh_event
                 });
             tabView.render();
             if (options.region) {
@@ -285,7 +289,8 @@ var TabUtils = (function(){
                 form_event      : options.form_event,
                 form_event_fn   : options.form_event_fn,
                 modal_template : options.modal_template,
-                extra_events : options.events
+                extra_events : options.events,
+                view_refresh_event : options.view_refresh_event
             });
             control.render();
             $(options.place).html(control.el);
@@ -302,7 +307,8 @@ var TabUtils = (function(){
                 form_event      : options.form_event,
                 form_event_fn   : options.form_event_fn,
                 modal_template : options.modal_template,
-                extra_events : options.events
+                extra_events : options.events,
+                view_refresh_event : options.view_refresh_event
             });
             options.region.show(control);
         }
