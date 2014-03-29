@@ -111,6 +111,13 @@ SurveyReportApp.SurveyReport = (function(Backbone){
 
     });
 
+    function stripHtml(html)
+    {
+       var tmp = document.createElement("DIV");
+       tmp.innerHTML = html;
+       return tmp.textContent || tmp.innerText || "";
+    };
+
     ResultsView = Backbone.View.extend({
         tagName : 'div',
 
@@ -132,7 +139,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             };
                 
             for (var key in this.resultsCollection.get('userdata')) {
-                colModel.push( {name: this.resultsCollection.get('userdata')[key]['question'], jsonmap: key, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"' } } );
+                colModel.push( {name: stripHtml(this.resultsCollection.get('userdata')[key]['question']), jsonmap: key, cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="white-space: pre-wrap;"' } } );
             };
 
             this.$el.html(_.template($('#query-results-template').html()));
