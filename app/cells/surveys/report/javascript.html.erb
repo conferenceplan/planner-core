@@ -111,13 +111,6 @@ SurveyReportApp.SurveyReport = (function(Backbone){
 
     });
 
-    function stripHtml(html)
-    {
-       var tmp = document.createElement("DIV");
-       tmp.innerHTML = html;
-       return tmp.textContent || tmp.innerText || "";
-    };
-
     ResultsView = Backbone.View.extend({
         tagName : 'div',
 
