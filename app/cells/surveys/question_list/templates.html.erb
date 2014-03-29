@@ -19,7 +19,7 @@
 <script type="text/template" id="survey-question-template">
     <td class='col-xs-10'>
     <a href="#survey-question-tab" data-toggle="tab" class="model-select-button">
-        {{= question }}
+        {{= stripHtml( question ) }}
     </a>
     </td>
     <td>
