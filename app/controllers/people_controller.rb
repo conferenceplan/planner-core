@@ -13,12 +13,11 @@ class PeopleController < PlannerController
         
         person.removeAllAddresses # If there are any addresses associated with the person then remove them
         person.destroy
+        render status: :ok, text: {}.to_json
       end
     rescue => ex
       render status: :bad_request, text: ex.message
     end
-        
-    render status: :ok, text: {}.to_json
   end
 
   #
