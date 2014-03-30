@@ -76,6 +76,15 @@ module PlannerReportsService
   
   #
   #
+  #
+  def self.findPeopleWithoutItems
+    Person.all :conditions => ["people.acceptance_status_id in (?) AND people.id not in (select person_id from programme_item_assignments)", [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]], 
+              :include => :pseudonym,
+              :order => "people.last_name"
+  end
+  
+  #
+  #
   #  
   def self.findPanelistsWithPanels(peopleIds = nil, additional_roles = nil, scheduledOnly = false, visibleOnly = false)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
