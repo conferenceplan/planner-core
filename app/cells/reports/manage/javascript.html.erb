@@ -64,6 +64,9 @@ ReportApp.ReportManagement = (function(Backbone){
         }
     });
     
+    var PeopleWithoutPanelsForm = Backbone.Form.extend({
+    });
+    
     var TagsByContextForm = Backbone.Form.extend({
         schema : {
             context : { type : 'Select', title : '<%= t "report-selection-for-tag-context" %>', 
@@ -110,6 +113,11 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name:'Items', label : '<%= t "items" %>', jsonmap: "items", width: 500, formatter: AppUtils.arrayToString},
     ];
     
+    var PeopleWithoutPanelsColModel = [
+                    {name: 'Name', label : '<%= t "person" %>', jsonmap: "name", width: 130},
+                    {name: 'Status', label : '<%= t "acceptance-status" %>', jsonmap: "acceptance_status", width: 60}
+    ];
+    
     var PanelsWithPanelistsColModel = [ 
                     {name: 'Ref', label : '<%= t "pub-ref" %>', jsonmap: 'pub_reference_number', width: 100},
                     {name:'Title', label : '<%= t "item-title" %>', jsonmap: "title", width: 500},
@@ -146,6 +154,7 @@ ReportApp.ReportManagement = (function(Backbone){
         routes : {
             'panels_with_panelists' : 'panels_with_panelists',
             'panelists_with_panels' : 'panelists_with_panels',
+            'people_without_items'  : 'people_without_items',
             'scheduling_conflicts'  : 'scheduling_conflicts',
             'tags_by_context'       : 'tags_by_context',
             'people_by_tags'        : 'people_by_tags',
@@ -219,6 +228,17 @@ ReportApp.ReportManagement = (function(Backbone){
                 endPoint    : '/planner_reports/panelists_with_panels',
                 colModel    : PanelistsWithPanelsColModel,
                 caption     : '<%= t "report-participants-with-items" %>'
+            }));
+        },
+        
+        people_without_items : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : PeopleWithoutPanelsForm,
+                endPoint    : '/planner_reports/people_without_panels',
+                colModel    : PeopleWithoutPanelsColModel,
+                caption     : '<%= t "report-people-without-items" %>'
             }));
         },
         
