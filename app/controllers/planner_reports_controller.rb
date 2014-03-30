@@ -158,6 +158,29 @@ class PlannerReportsController < PlannerController
       }
     end
   end
+  
+  #
+  #
+  #
+  def people_without_panels
+    @people = PlannerReportsService.findPeopleWithoutItems
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "people_no_items_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push ['Name','Status']
+        @people.each do |person|
+          output.push [
+            person.getFullPublicationName,
+            person.acceptance_status.name
+          ]
+        end
+        csv_out(output, outfile)
+      }
+    end
+  end
  
   #
   #
