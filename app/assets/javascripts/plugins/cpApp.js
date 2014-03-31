@@ -36,7 +36,7 @@ var AppUtils = (function(){
 
             if (this.options.content) {
                 this.$el.find(".modal-body").append(this.options.content);
-            }
+            };
             
             this.delegateEvents();
             
@@ -59,7 +59,7 @@ var AppUtils = (function(){
         
         hide : function(e) {
             if (this.options.closeAction) {
-                this.options.closeAction();
+                this.options.closeAction(e);
             };
         }
     });
@@ -76,11 +76,92 @@ var AppUtils = (function(){
     /*
      * 
      */
-    PanelModal = InfoModal.extend({
+    LeavePageModal = Backbone.View.extend({
+        tagName: "div",
+        className: "modal bs-modal-lg fade",
+        events: {
+            "submit": "submit",
+            "hidden": "close",
+            "click .abandon" : "abandon"
+        },
         
         initialize : function() {
-            this.template = _.template($('#modal-panel-template').html()
-                                        );
+            this.template = _.template($('#modal-leave-template').html());
+        },
+
+        modalOptions: {
+            backdrop: false,
+        },
+        
+        abandon : function() {
+            if (this.options.abandonAction) {
+                this.options.abandonAction();
+            }
+        },
+
+        render: function () {
+            this.$el.html($(this.template({
+                title : '<%= t "unsaved-data" %>'
+            })));
+
+            this.delegateEvents();
+            
+            this.$el.modal(this.modalOptions);
+
+            return this;
+        },
+        
+        submit : function(e) {
+            if (e && e.type == "submit") {
+                e.preventDefault();
+                e.stopPropagation();
+                this.$el.modal("hide");
+                this.options.continueAction();
+            };
+        },
+        
+        close: function (e) {
+            this.remove();
+            this.unbind();
+            this.views = [];  
+        },
+    });
+        
+    /*
+     * 
+     */
+    PanelModal = InfoModal.extend({
+        events: {
+            "hide.bs.modal"   : "hideCheck",
+        },
+        
+        hideCheck : function(e) {
+            // Check that we are allowed to close the dialog and if so continue with the close
+            closeCheck = this.options.closeCheck;
+            if (closeCheck && !this.checked) {
+                var changed = closeCheck();
+                var panel = this;
+                
+                // console.debug(panel);
+                
+                if (changed) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    mdl = new LeavePageModal({
+                        continueAction : function() {
+                            panel.checked = true;
+                            panel.$el.modal("hide");
+                        }
+                    });
+                    mdl.render();
+                }
+            }
+        },
+        
+        initialize : function() {
+            this.template = _.template($('#modal-panel-template').html());
+            this.checked = false;
         },
         
         render: function () {
@@ -101,7 +182,7 @@ var AppUtils = (function(){
             this.delegateEvents();
             
             return this;
-        },
+        }
     });
 
     /*
