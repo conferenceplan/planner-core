@@ -15,5 +15,7 @@ json.rowdata @items do |item|
     json.set! "start_time", item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
     json.set! "programme_item[pub_reference_number]", item.pub_reference_number ? item.pub_reference_number : ""
     json.set! "programme_item[lock_version]", item.lock_version
+    
+    json.set! "programme_item[participants]", item.programme_item_assignments.collect{|m| (m.role == PersonItemRole['Participant'] || m.role == PersonItemRole['Moderator'])? m : nil}.compact.length
 
 end
