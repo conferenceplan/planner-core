@@ -38,9 +38,9 @@ module ProgramItemsService
     # end
     
     if tagquery.empty?
-      items = ProgrammeItem.find :all, args
+      items = ProgrammeItem.includes(:programme_item_assignments).find :all, args
     else
-      items = eval "ProgrammeItem#{tagquery}.uniq.find :all, " + args.inspect
+      items = eval "ProgrammeItem#{tagquery}.uniq.includes(:programme_item_assignments).find :all, " + args.inspect
     end
   end
   
