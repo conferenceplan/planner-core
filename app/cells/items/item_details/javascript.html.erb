@@ -222,6 +222,11 @@ ItemApp.ItemManagement = (function(Backbone){
                     modal = new AppUtils.PanelModal({
                         title : "<%= escape_javascript(t 'add-people') %>",
                         url   : "/panels/item_mgmt?prog_item=" + model.id,
+                        // TODO - add closeCheck
+                        // closeCheck : function() {
+                            // document.getElementById('targetFrame').contentWindow.targetFunction();
+                            // return ItemApp.PeopleManagement.needsSaved()
+                        // },
                         closeAction : function() {
                             model.fetch();
                         }
@@ -342,7 +347,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     if (index > 0) {
                         str += "&";
                     };
-                    str += "context[" + index + "]=" + key + "&tags[" + index + "]=" + val;
+                    str += "context[" + index + "]=" + key + "&tags[" + index + "]=" + escape(val);
                     index += 1;
                 });
                 tagQuery = str;
