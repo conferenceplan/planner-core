@@ -222,11 +222,10 @@ ItemApp.ItemManagement = (function(Backbone){
                     modal = new AppUtils.PanelModal({
                         title : "<%= escape_javascript(t 'add-people') %>",
                         url   : "/panels/item_mgmt?prog_item=" + model.id,
-                        // TODO - add closeCheck
-                        // closeCheck : function() {
-                            // document.getElementById('targetFrame').contentWindow.targetFunction();
-                            // return ItemApp.PeopleManagement.needsSaved()
-                        // },
+                        closeCheck : function() {
+                            var res = document.getElementById('modal-iframe').contentWindow.ItemApp.PeopleManagement.needsSaved();
+                            return res;
+                        },
                         closeAction : function() {
                             model.fetch();
                         }
