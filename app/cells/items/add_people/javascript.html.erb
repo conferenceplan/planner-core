@@ -13,50 +13,6 @@ ItemApp.PeopleManagement = (function(Backbone){
     /*
      * Views
      */
-    LeavePageModal = Backbone.View.extend({
-        tagName: "div",
-        className: "modal bs-modal-lg fade",
-        events: {
-            "submit": "submit",
-            "hidden": "close",
-        },
-        
-        initialize : function() {
-            this.template = _.template($('#modal-leave-template').html());
-        },
-
-        modalOptions: {
-            backdrop: false,
-        },
-
-        render: function () {
-            this.$el.html($(this.template({
-                title : '<%= t "unsaved-data" %>'
-            })));
-
-            this.delegateEvents();
-            
-            this.$el.modal(this.modalOptions);
-
-            return this;
-        },
-        
-        submit : function(e) {
-            if (e && e.type == "submit") {
-                e.preventDefault();
-                e.stopPropagation();
-                this.$el.modal("hide");
-                this.options.continueAction();
-            };
-        },
-        
-        close: function (e) {
-            this.remove();
-            this.unbind();
-            this.views = [];  
-        },
-    });    
-    
     PeopleControlView = Marionette.ItemView.extend({
         el : '#people-control-view',
         template : '#people-control-view-template',
@@ -230,6 +186,9 @@ ItemApp.PeopleManagement = (function(Backbone){
     };
     
     return {
+        needsSaved : function() {
+            return needsSaved;
+        },
         confirmExit : function () {
             if (needsSaved) {
                 return "Changes to the Program Item have not been saved. Are you sure you wich to leave the page?";
@@ -257,6 +216,11 @@ jQuery(document).ready(function() {
     var prog_item = "<%= @prog_item %>";
     if (prog_item) {
         ItemApp.PeopleManagement.showProgrammeItem(prog_item);
+        // TODO - can we detect a modal close event?
+        // $('.modal').on('hidden.bs.modal', function () {
+            // // do something…
+            // alert("ff");
+            // })
     } else {
         window.onbeforeunload = ItemApp.PeopleManagement.confirmExit;
     }
