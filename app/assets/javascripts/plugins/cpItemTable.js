@@ -105,6 +105,14 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 required: false
             }
         }, {
+            label : this.options.nbr_participants[1], //'Ref',
+            name: 'programme_item[participants]',
+            hidden : !this.options.nbr_participants[0],
+            sortable: false,
+            search: false,
+            editable: false,
+            width: 60,
+        }, {
             label : this.options.ref_number[1], //'Ref',
             name: 'programme_item[pub_reference_number]',
             index: 'pub_reference_number',
