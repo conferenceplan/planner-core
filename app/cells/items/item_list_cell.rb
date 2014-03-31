@@ -38,6 +38,8 @@ class Items::ItemListCell < Cell::Rails
     @modelTemplate = args.has_key?(:modelTemplate) ? args[:modelTemplate] : ""
     @showControls = args.has_key?(:showControls) ? args[:showControls] : false
     
+    @showNbrParticipants = args.has_key?(:showNbrParticipants) ? args[:showNbrParticipants] : false
+    
     render
   end
 
