@@ -14,6 +14,7 @@ json.array!(@programmeItems) do |item|
     json.print item.print
     json.pub_reference_number item.pub_reference_number
     json.isPublished item.published != nil
+    json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%A, %B %e %Y, %l:%M %P') : ""
     json.time_slot item.time_slot
     json.setup_type_id item.setup_type.id if item.setup_type
     json.setup_type_name item.setup_type.name if item.setup_type
