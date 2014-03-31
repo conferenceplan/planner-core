@@ -222,6 +222,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     modal = new AppUtils.PanelModal({
                         title : "<%= escape_javascript(t 'add-people') %>",
                         url   : "/panels/item_mgmt?prog_item=" + model.id,
+                        title : '<%= t "unsaved-data" %>',
                         closeCheck : function() {
                             var res = document.getElementById('modal-iframe').contentWindow.ItemApp.PeopleManagement.needsSaved();
                             return res;

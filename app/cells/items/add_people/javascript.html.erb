@@ -156,6 +156,7 @@ ItemApp.PeopleManagement = (function(Backbone){
         // check if a save is needed
         if (needsSaved) {
             mdl = new LeavePageModal({
+                title : '<%= t "unsaved-data" %>',
                 continueAction : function() {
                     loadProgItem(id);
                 }

@@ -101,7 +101,7 @@ var AppUtils = (function(){
 
         render: function () {
             this.$el.html($(this.template({
-                title : '<%= t "unsaved-data" %>'
+                title : this.options.title
             })));
 
             this.delegateEvents();
@@ -149,6 +149,7 @@ var AppUtils = (function(){
                     e.stopPropagation();
 
                     mdl = new LeavePageModal({
+                        title : this.options.title,
                         continueAction : function() {
                             panel.checked = true;
                             panel.$el.modal("hide");
