@@ -535,7 +535,7 @@
                     <%= t "item-start-time" %>
                 </dt>
                 <dd>
-                    {{= time_slot ? moment(time_slot.start).format("dddd, MMMM Do YYYY, h:mm a") : "&nbsp;" }}
+                    {{= time_slot ? start_time_str : "&nbsp;" }}
                 </dd>
             </dl> 
         </small>
