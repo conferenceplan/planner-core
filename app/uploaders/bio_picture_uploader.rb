@@ -21,18 +21,20 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   # Get a thumbnail of the image
   #
   version :thumbnail do
-    transform = [{:height => 100, :width => 100, :crop => :fill, :gravity => :face},
-                                {:fetch_format => :jpg}]
-    cloudinary_transformation :transformation => transform
+    # transform = [{:height => 100, :width => 100, :crop => :fill, :gravity => :face},
+                                # {:fetch_format => :jpg}]
+    # cloudinary_transformation :transformation => transform
+    process :bioDetail
   end
   
   #
   #
   #
   version :standard do
-    transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face},
-                                {:fetch_format => :jpg}]
-    cloudinary_transformation :transformation => transform
+    # transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face},
+                                # {:fetch_format => :jpg}]
+    # cloudinary_transformation :transformation => transform
+    process :standardImage
   end
   
   #
@@ -46,6 +48,9 @@ class BioPictureUploader < CarrierWave::Uploader::Base
     process :bioDetail
   end
   
+  #
+  #
+  #
   def bioList
     width = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
     height = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
@@ -58,31 +63,10 @@ class BioPictureUploader < CarrierWave::Uploader::Base
     return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
   end
   
-  #
-  #
-  #
-  version :circle do
-    transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face, :radius => :max},
-                                {:fetch_format => :jpg}]
-    cloudinary_transformation :transformation => transform
-  end
-  
-  #
-  #
-  #
-  version :grayscale do
-    transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face}, 
-                                {:effect => :grayscale}, {:fetch_format => :jpg}]
-    cloudinary_transformation :transformation => transform
-  end
-  
-  #
-  #
-  #
-  version :grayscale_circle do
-    transform = [{:height => 200, :width => 200, :crop => :fill, :gravity => :face, :radius => :max}, 
-                                {:effect => :grayscale}, {:fetch_format => :jpg}]
-    cloudinary_transformation :transformation => transform
+  def standardImage
+    width = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
+    height = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
+    return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
   end
   
 end
