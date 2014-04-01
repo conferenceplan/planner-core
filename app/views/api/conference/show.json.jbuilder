@@ -58,6 +58,7 @@ json.set! 'mobile' do
             @theme.scale = @scale
             json.list_image     img.list.url.partition(@partition_val)[2]
             json.detail_image   img.detail.url.partition(@partition_val)[2]
+            json.full_image     img.standard.url.partition(@partition_val)[2]
         end
     end
     
