@@ -50,6 +50,7 @@ PlannerRc1::Application.routes.draw do
   #
   #
   #
+  match '/import_mappings/columns' => 'import_mappings#columns'
   resources :import_mappings
   resources :file_uploads, :except => [:destroy, :index, :update, :remove]
   # get "file_uploads/index"
@@ -62,6 +63,7 @@ PlannerRc1::Application.routes.draw do
   match 'conference_directory/find_by_id/:id', :controller => 'conference_directory', :via => :get, :action => 'find_by_id'
   resources :conference_directory
 
+  match '/dash/history/items' => 'dash/history#items'
 
   #
   #
