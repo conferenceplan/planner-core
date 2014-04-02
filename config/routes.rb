@@ -68,6 +68,7 @@ PlannerRc1::Application.routes.draw do
   #
   #
   #
+  match '/mobile/theme/default' => 'mobile/theme#default'
   namespace :mobile do
     resources :theme
     resources :mobile_pages
