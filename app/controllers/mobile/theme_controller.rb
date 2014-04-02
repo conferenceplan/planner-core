@@ -54,5 +54,11 @@ class Mobile::ThemeController < PlannerController
     
     render json: themes.to_json, :content_type => 'application/json'
   end
+  
+  def default
+    theme = MobileTheme.where('isdefault = ?', true).first
+    
+    render json: theme.to_json, :content_type => 'application/json'
+  end
 
 end
