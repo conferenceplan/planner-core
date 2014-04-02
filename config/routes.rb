@@ -24,7 +24,6 @@ PlannerRc1::Application.routes.draw do
     match "item_mgmt" => "item_mgmt#index"
   end
   # get "item_mgmt/index"
-
   
   # Default route 
   root :to => 'pages/home_dash#index'
@@ -72,6 +71,7 @@ PlannerRc1::Application.routes.draw do
   namespace :mobile do
     resources :theme
     resources :mobile_pages
+    resources :default_bio_image
   end
 
 # TODO - test
