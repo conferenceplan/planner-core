@@ -3,7 +3,7 @@ PlannerRc1::Application.routes.draw do
   filter :locale
 
   mount Interpret::Engine => "/interpret" # cause the interpret gem has the old way of defining the engine mount
-
+  
   namespace :pages do
     resources :home_dash
     
