@@ -38,13 +38,19 @@
         </div>
     </div>
     <div class="col-sm-8" id="program-item-view">
-        <div class="row">
-            <div class="col-xs-12" id="grid-day-control-view"></div>
-                <div id="room-filter-view"></div>
-        </div>
-        <div class="row">
-            <div class="well col-xs-12" id="grid-view">
+        <% if @browser.ie? %>
+            <div class="jumbotron">
+                <p>The Scheduling Grid functionality will not work with Internet Explorer at the current time.</p>
             </div>
-        </div>
+        <% else %>
+            <div class="row">
+                <div class="col-xs-12" id="grid-day-control-view"></div>
+                    <div id="room-filter-view"></div>
+            </div>
+            <div class="row">
+                <div class="well col-xs-12" id="grid-view">
+                </div>
+            </div>
+        <% end %>
     </div>
 </div>
