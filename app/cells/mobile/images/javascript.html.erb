@@ -7,7 +7,7 @@ MobileImageApp.ImageManagement = (function(Backbone){
     
     // TODO
     MobileTheme = Backbone.Model.extend({
-        urlRoot : '/mobile/theme',
+        urlRoot : '/mobile/default_bio_image',
         schema : {
             default_bio_image : { type : 'CLImage', title : 'Pic',
                 cl_image_upload_tag : '<%= cl_image_upload_tag(:default_bio_image) %>'
@@ -152,7 +152,7 @@ MobileImageApp.ImageManagement = (function(Backbone){
         people_images : function() {
             TabUtils.createTabContent({
                 modelType : MobileTheme,
-                url : "/mobile/theme/default.json",
+                url : "/mobile/default_bio_image",
                 template : '#default-image-template',
                 place : '#images-control-area',
                 newTitle : '<%= t "create-image" %>',
