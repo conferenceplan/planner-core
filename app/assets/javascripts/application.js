@@ -118,3 +118,9 @@ function stripHtml(html) {
     tmp.innerHTML = html;
     return tmp.textContent || tmp.innerText || "";
 };
+
+function randomString(length, chars) {
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+    return result;
+}
