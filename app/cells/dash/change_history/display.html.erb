@@ -1,0 +1,12 @@
+<%= render_cell "dash/change_history", :templates %>
+<%= render_cell "dash/change_history", :javascript %>
+
+<div class="panel panel-default">
+    <div class="panel-heading"><%= t 'recent-item-changes' %></div>
+        <div class="panel-body">
+            <div style="height : 370px; overflow : auto;">
+                <div id="change-history"></div>
+            </div>
+        </div>
+    </div>
+</div>

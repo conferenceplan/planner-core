@@ -1,0 +1,65 @@
+<script type="text/javascript">
+
+HistoryApp = new Backbone.Marionette.Application();
+
+HistoryApp.Report = (function(Backbone){
+    
+    ItemHistory = Backbone.Model.extend({
+    });
+    
+    ItemHistoryCollection = Backbone.Collection.extend({
+        model : ItemHistory
+    });
+    
+    // TODO - make this a collection
+    ItemHistoryView = Backbone.Marionette.ItemView.extend({
+        template : '#item-history-template',
+        // tagName  : 'li',
+        className: "panel panel-default"
+    });
+
+    ItemHistoryCollectionView = Backbone.Marionette.CollectionView.extend({
+        itemView : ItemHistoryView,
+        // tagName  : 'ul'
+        //className: "list-group"
+    });
+    
+    var itemHistoryRegion = new Backbone.Marionette.Region({
+            el : '#change-history'
+        });
+    
+    function showHistory() {
+        itemHist = new ItemHistoryCollection();
+        
+        itemHist.fetch({
+            url : '/dash/history/items',
+            success : function(mdl) {
+                console.debug(mdl);
+                view = new ItemHistoryCollectionView({
+                    collection : mdl 
+                });
+                // view.render();
+                itemHistoryRegion.show(view);
+            },
+        });
+    };
+
+    return {
+        init : function(options) {
+            // new Workspace();
+            Backbone.history.start();
+            showHistory();
+        }
+    }
+    
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    HistoryApp.addInitializer(HistoryApp.Report.init);
+    HistoryApp.start({});
+});
+
+</script>
