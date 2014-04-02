@@ -5,6 +5,7 @@ MobileImageApp = new Backbone.Marionette.Application();
 MobileImageApp.ImageManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
     
+    // TODO
     MobileTheme = Backbone.Model.extend({
         urlRoot : '/mobile/theme',
         schema : {
@@ -151,7 +152,7 @@ MobileImageApp.ImageManagement = (function(Backbone){
         people_images : function() {
             TabUtils.createTabContent({
                 modelType : MobileTheme,
-                url : "/mobile/theme.json",
+                url : "/mobile/theme/default.json",
                 template : '#default-image-template',
                 place : '#images-control-area',
                 newTitle : '<%= t "create-image" %>',
