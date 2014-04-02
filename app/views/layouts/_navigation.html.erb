@@ -6,10 +6,10 @@
       			<span class="icon-bar"></span>
     		</button>
         	<a id="event-planner-logo-link-container" class="navbar-brand" href='<%= "/" + I18n.locale.to_s %>' alt='<%= @page_title or (t "convention-planner") %>'>
-				
         	</a>
         </div>
 		<div class="collapse navbar-collapse" id="collapse-1">
+            <div class="nav navbar-nav"><h2><%= SITE_CONFIG[:conference][:name] %></h2></div>
 	        <ul class="nav navbar-nav navbar-right" id="right-menu-navbar">
 	            <li class="dropdown">
 	                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
