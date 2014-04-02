@@ -53,9 +53,9 @@ json.set! 'mobile' do
     end
 
     json.set! 'default_bio_images' do
-        if @theme.default_bio_image.url
-            img = @theme.default_bio_image
-            @theme.scale = @scale
+        if @default_bio_image.image.url
+            img = @default_bio_image.image
+            @default_bio_image.scale = @scale
             json.list_image     img.list.url.partition(@partition_val)[2]
             json.detail_image   img.detail.url.partition(@partition_val)[2]
             json.full_image     img.standard.url.partition(@partition_val)[2]
