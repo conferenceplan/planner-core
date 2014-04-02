@@ -55,6 +55,7 @@ gem 'font_assets'
 gem 'yajl-ruby'
 
 gem 'log4r'
+gem "browser"
 
 gem 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
 gem 'jquery-ui-rails', '3.0.1'
@@ -66,10 +67,9 @@ gem 'jqgrid-jquery-rails', '~> 4.5.200'
 gem 'prawn_rails'
 gem "select2-rails"
 
-#  gem 'rack-mini-profiler'
-#  gem 'flamegraph'
-#  gem 'memory_profiler'
-
+# gem 'rack-mini-profiler'
+# gem 'flamegraph'
+# gem 'memory_profiler'
 
 gem "recaptcha", :require => "recaptcha/rails"
 
