@@ -1,4 +1,4 @@
-class Mobile::MobilePagesController < ApplicationController
+class Mobile::MobilePagesController < PlannerController
   def index
     pages = MobilePage.find :all, :order => 'position asc'
     
