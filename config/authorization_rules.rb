@@ -43,6 +43,9 @@ authorization do
     has_permission_on :pages_publications_dash, :to => :read
     has_permission_on :communications_mailing, :to => :read
     has_permission_on :bio_images, :to => :read
+    
+    has_permission_on :dash_history, :to => :read
+    
   end
 
   role :TagAdmin do
@@ -140,7 +143,7 @@ privileges do
         :admin_tags_by_context,:panels_date_form,:panelists_with_metadata,:interviewable,:panels_by_room,:panels_by_timeslot,:failed,:sent, 
         :surveyNames, :surveyQueryNames, :show, :questions, :runReport, :delSurveyQuery, :table_tents, :people_by_tag, :badge_labels, :room_signs]
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
-        :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments, :listWithBlank]
+        :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments, :listWithBlank, :items]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants, :copy,
                                       :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:program_book_report, :addPeople]
     privilege :create, :includes => [:new,:import,:doimport]
