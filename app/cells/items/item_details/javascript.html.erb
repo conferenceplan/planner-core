@@ -225,6 +225,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         title : '<%= t "add-people" %>',
                         closeCheck : function() {
                             var res = document.getElementById('modal-iframe').contentWindow.ItemApp.PeopleManagement.needsSaved();
+                            console.debug("close check " + res);
                             return res;
                         },
                         closeAction : function() {

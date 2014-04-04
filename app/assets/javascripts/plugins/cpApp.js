@@ -61,6 +61,9 @@ var AppUtils = (function(){
             if (this.options.closeAction) {
                 this.options.closeAction(e);
             };
+            this.remove();
+            this.unbind();
+            this.views = [];  
         }
     });
     
@@ -132,7 +135,10 @@ var AppUtils = (function(){
      */
     PanelModal = InfoModal.extend({
         events: {
+            "submit"            : "submit",
+            "keypress"          : "swallow",
             "hide.bs.modal"   : "hideCheck",
+            "hidden.bs.modal"   : "hide"
         },
         
         hideCheck : function(e) {
@@ -141,8 +147,6 @@ var AppUtils = (function(){
             if (closeCheck && !this.checked) {
                 var changed = closeCheck();
                 var panel = this;
-                
-                // console.debug(panel);
                 
                 if (changed) {
                     e.preventDefault();
@@ -157,17 +161,18 @@ var AppUtils = (function(){
                     });
                     mdl.render();
                 }
-            }
+            };
         },
         
         initialize : function() {
             this.template = _.template($('#modal-panel-template').html());
-            this.checked = false;
         },
         
         render: function () {
             var url = this.options.url;
             Backbone.BootstrapModal.count++;
+            
+            this.checked = false;
 
             this.$el.html($(this.template({
                 url : url,
