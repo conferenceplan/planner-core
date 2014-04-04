@@ -6,8 +6,6 @@ json.array!(@changes) do |change|
     json.type change.auditable_type
     json.time change.created_at.strftime('%A %H:%M, %-d %B %Y')
     
-    #json.attrs change.new_attributes
-    
     if change.action == 'destroy'
         json.title change.audited_changes["title"] if change.audited_changes["title"] # for program items .. but for assignments we need...
     elsif change.action == 'create'
@@ -21,9 +19,11 @@ json.array!(@changes) do |change|
             end
             
             if className && !(['Role', 'Format', 'SetupType'].include? className)
-                instance = eval ( className + '.find ' + v.to_s )
-                json.title   instance.title if className == 'ProgrammeItem'
-                json.person   instance.getFullPublicationName if className == 'Person'
+                if (eval ( className + '.exists? ' + v.to_s ))
+                    instance = eval ( className + '.find ' + v.to_s )
+                    json.title   instance.title if className == 'ProgrammeItem'
+                    json.person   instance.getFullPublicationName if className == 'Person'
+                end
             elsif ['Role', 'Format', 'SetupType'].include? className
                 json.set! className.downcase, (Enum.find v).name if v
             elsif v
