@@ -1,5 +1,6 @@
 
 <script type="text/template" id="item-history-template">
+    {{ if  (typeof title != 'undefined') { }}
     {{ var id = randomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');}}    
     <div class="panel-heading">
         <a data-toggle="collapse"  href="#{{= id }}">{{= typeof title != 'undefined' ? title : ''}}</a>
@@ -40,12 +41,18 @@
                 {{ if (typeof participant_notes != 'undefined') { }}
                     <dt><%= t "item-notes-for-participants" %></dt><dd>{{= participant_notes }}</dd>
                 {{ } }}
-        {{ } else { }}
-            <dt><%= t "person" %></dt><dd>{{= typeof person != 'undefined' ? person : ''}}</dd>
-            <dt><%= t "role" %></dt><dd>{{= typeof role != 'undefined' ? role : ''}}</dd>
-        {{ } }}
-{{ } }}            
+            {{ } else { }}
+                <dt><%= t "person" %></dt><dd>{{= typeof person != 'undefined' ? person : ''}}</dd>
+                <dt><%= t "role" %></dt><dd>{{= typeof role != 'undefined' ? role : ''}}</dd>
+            {{ } }}
+        {{ } }}            
     </dl>
     </small>
     </div>
+    {{ } else { }}
+        <div class="panel-heading">
+            <p>Item Assignment - Item subsequently deleted.</p>
+            <small><p>{{= action }}, {{= time}}, {{= user}}</p></small>
+        </div>
+    {{ } }}
 </script>
