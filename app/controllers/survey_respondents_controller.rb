@@ -39,7 +39,8 @@ class SurveyRespondentsController < ApplicationController
       # Redirect the person to the survey
       if @survey_respondent.save
         if params[:cancel]
-          if (@survey.decline_status && @survey_respondent.person)
+          @survey = Survey.find_by_alias("partsurvey") if !@survey
+          if (@survey.decline_status && @survey_respondent.person) # TODO hanle case of no surevy selected?????
             @survey_respondent.person.acceptance_status = @survey.decline_status
             @survey_respondent.person.save!
           end
