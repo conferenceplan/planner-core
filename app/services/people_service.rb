@@ -114,19 +114,6 @@ module PeopleService
 
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
-    # if nameSearch #&& ! nameSearch.empty?
-      # args.merge!( :joins => 'LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
-    # else
-      # args.merge!( :include => [:pseudonym] )
-    # end
-
-    if includeMailings && clause && (clause[0].include? "mailing_id")
-      if args[:joins]
-        args[:joins] += ' LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
-      else  
-        args.merge!( :joins => 'LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id' )
-      end
-    end
     
     if onlySurveyRespondents
       if args[:joins]
