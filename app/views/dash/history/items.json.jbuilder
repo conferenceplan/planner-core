@@ -2,7 +2,7 @@
 # TODO - if a programme item we need to get the title...
 json.array!(@changes) do |change|
     json.action change.action
-    json.user (User.exists? change.user_id) ? User.find(change.user_id).login : change.user_id
+    json.user change.user_id ? ((User.exists? change.user_id) ? User.find(change.user_id).login : change.user_id) : 'unknown'
     json.type change.auditable_type
     json.time change.created_at.strftime('%A %H:%M, %-d %B %Y')
     
