@@ -27,7 +27,7 @@ module PeopleService
   def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
     args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
     tagquery = DataService.genTagSql(context, tags)
-    args.merge! :include => [:mailings, :pseudonym, :email_addresses, :invitation_category]
+    args.merge! :include => [:pseudonym, :email_addresses, :invitation_category]
     
     if tagquery.empty?
       Person.count args
@@ -50,7 +50,7 @@ module PeopleService
       args.merge!(:order => index + " " + sort_order)
     end
     
-    args.merge! :include => [:mailings, :pseudonym, :email_addresses, :invitation_category]
+    args.merge! :include => [:pseudonym, :email_addresses, :invitation_category]
     
     if tagquery.empty?
       people = Person.includes(:pseudonym).find :all, args
@@ -114,6 +114,14 @@ module PeopleService
 
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
+
+    if includeMailings && clause && (clause[0].include? "mailing_id")
+      if args[:joins]
+        args[:joins] += ' LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
+      else  
+        args.merge!( :joins => 'LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id' )
+      end
+    end
     
     if onlySurveyRespondents
       if args[:joins]
