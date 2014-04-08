@@ -14,7 +14,7 @@ var ReportBase = (function(Backbone){
             },
             
             render : function() {
-                this.$el.html($(this.template()));
+                this.$el.html($(this.template({caption : this.options.caption})));
                 
                 if (this.options.formTemplate) {
                     this.form = new this.options.form({
@@ -181,7 +181,7 @@ var ReportBase = (function(Backbone){
     
         ReportView : ReportViewBase.extend({
             initialize : function() {
-                this.template = _.template($('#report-template').html());
+                this.template = _.template($('#report-template').html()); // caption
             }
         }),
         
