@@ -1,21 +1,24 @@
 
-json.array!(@programmeItems) do |item|
-    json.id item.id
-    json.lock_version item.lock_version
-    json.title item.title
-    json.short_title item.short_title
-    json.precis item.precis
-    json.duration item.duration
-    json.format_id item.format.id if item.format
-    json.format_name item.format.name if item.format
-    json.maximum_people item.maximum_people
-    json.minimum_people item.minimum_people
-    json.notes item.notes
-    json.print item.print
-    json.pub_reference_number item.pub_reference_number
-    json.isPublished item.published != nil
-    json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%A, %B %e %Y, %l:%M %P') : ""
-    json.time_slot item.time_slot
-    json.setup_type_id item.setup_type.id if item.setup_type
-    json.setup_type_name item.setup_type.name if item.setup_type
+json.array!(@assignments) do |assignment|
+    if assignment.programmeItem
+        json.id                     assignment.programmeItem.id
+        json.lock_version           assignment.programmeItem.lock_version
+        json.title                  assignment.programmeItem.title
+        json.short_title            assignment.programmeItem.short_title
+        json.precis                 assignment.programmeItem.precis
+        json.duration               assignment.programmeItem.duration
+        json.format_id              assignment.programmeItem.format.id if assignment.programmeItem.format
+        json.format_name            assignment.programmeItem.format.name if assignment.programmeItem.format
+        json.maximum_people         assignment.programmeItem.maximum_people
+        json.minimum_people         assignment.programmeItem.minimum_people
+        json.notes                  assignment.programmeItem.notes
+        json.print                  assignment.programmeItem.print
+        json.pub_reference_number   assignment.programmeItem.pub_reference_number
+        json.isPublished            assignment.programmeItem.published != nil
+        json.start_time_str         assignment.programmeItem.time_slot ? assignment.programmeItem.time_slot.start.strftime('%A, %B %e %Y, %l:%M %P') : ""
+        json.time_slot              assignment.programmeItem.time_slot
+        json.setup_type_id          assignment.programmeItem.setup_type.id if assignment.programmeItem.setup_type
+        json.setup_type_name        assignment.programmeItem.setup_type.name if assignment.programmeItem.setup_type
+        json.role                   assignment.role.name
+    end
 end
