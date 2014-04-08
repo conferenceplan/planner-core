@@ -7,9 +7,7 @@ class ProgrammeItemsController < PlannerController
   def index
     if params[:person_id] # then we only get the items for a given person
       person = Person.find(params[:person_id])
-      @programmeItems = person.programmeItems
-    else
-      @programmeItems = ProgrammeItem.find :all # Getting all the program items is probably not a good idea!!!!!
+      @assignments = person.programmeItemAssignments.includes(:programmeItem).collect{|a| (a.programmeItem != nil) ? a : nil}.compact
     end
   end
 
