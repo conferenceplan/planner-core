@@ -84,7 +84,8 @@ $.widget( "cp.baseTable" , {
                 "click .delete-model-button"    : "deleteModal",
             },
         
-            initialize : function() {
+            initialize : function(options) {
+                this.options = options || {};
                 // this.template = _.template(this.templateStr);
                 this.template = _.template($('#table-control-template').html()); //_.template(_model_html); //
             },

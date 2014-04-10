@@ -17,7 +17,8 @@ var AppUtils = (function(){
             "keypress"          : "swallow"
         },
         
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             this.template = _.template($('#modal-info-template').html());
         },
         
@@ -71,7 +72,8 @@ var AppUtils = (function(){
      * 
      */
     ConfirmModel = InfoModal.extend({
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             this.template = _.template($('#modal-confirm-template').html());
         }
     });
@@ -88,7 +90,8 @@ var AppUtils = (function(){
             "click .abandon" : "abandon"
         },
         
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             this.template = _.template($('#modal-leave-template').html());
         },
 
@@ -175,7 +178,8 @@ var AppUtils = (function(){
             };
         },
         
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             this.template = _.template($('#modal-panel-template').html());
         },
         
@@ -218,7 +222,8 @@ var AppUtils = (function(){
             e.stopPropagation();
         },
         
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             this.template = _.template($('#modal-edit-template').html());
         },
 
@@ -393,7 +398,8 @@ var AppUtils = (function(){
             return errors; // if there are any errors
         },
         
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             this.listenTo(this.model, 'change', this.render);
             
             this.template = _.template($('#item-edit-template').html()); //_.template(_model_html); //
@@ -476,7 +482,8 @@ var AppUtils = (function(){
             "click .model-copy-button"          : "copy"
         },
         
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             this.listenTo(this.model, 'change', this.render);
             
             if (this.options.url) {
@@ -561,7 +568,8 @@ var AppUtils = (function(){
     CollectionView = Backbone.Marionette.CollectionView.extend({
         itemView: ItemView,
 
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             eventAggregator.on(this.options.view_refresh_event, this.refreshList, this);
         },
         
@@ -667,6 +675,10 @@ var AppUtils = (function(){
             "click .conflict": "selectConflict",
         },
         
+        initialize : function(options) {
+            this.options = options || {};
+        },
+        
         selectConflict : function(ev) {
             // TODO - scroll to the problem item
             room_name = this.model.get('room_name');
@@ -679,6 +691,10 @@ var AppUtils = (function(){
     
     ConflictCollectionView = Backbone.Marionette.CollectionView.extend({
         itemView : ConflictView,
+        
+        initialize : function(options) {
+            this.options = options || {};
+        },
         
         // build the view using a dynamic template based on itemViewTemplate
         buildItemView: function(item, ItemViewType, itemViewOptions){

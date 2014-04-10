@@ -12,6 +12,10 @@ var ReportBase = (function(Backbone){
                 "click .report-pdf-button" : "submitPDF",
                 "click .report-xlsx-button" : "submitXLSX"
             },
+
+            initialize : function(options) {
+                this.options = options || {};
+            },
             
             render : function() {
                 this.$el.html($(this.template({caption : this.options.caption})));
@@ -122,7 +126,8 @@ var ReportBase = (function(Backbone){
         }),
         
         ResultsView : Backbone.View.extend({
-            initialize : function() {
+            initialize : function(options) {
+                this.options = options || {};
                 this.template = _.template($('#query-results-template').html());
             },
             

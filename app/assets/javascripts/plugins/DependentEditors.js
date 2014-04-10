@@ -58,6 +58,11 @@ _.extend(Form.Editor.prototype, {
  */
 Form.editors.DependentText = Form.editors.Text.extend({
 
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Text.prototype.initialize.call(this, options);
+    },
+
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
        
@@ -71,6 +76,11 @@ Form.editors.DependentText = Form.editors.Text.extend({
 });
 
 Form.editors.DependentTextArea = Form.editors.TextArea.extend({
+
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.TextArea.prototype.initialize.call(this, options);
+    },
 
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
@@ -86,7 +96,13 @@ Form.editors.DependentTextArea = Form.editors.TextArea.extend({
 
 Form.editors.DependentHtml = Form.editors.Html.extend({
 
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Html.prototype.initialize.call(this, options);
+    },
+
     render: function() {
+        console.debug(this.options);
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
         
         this.createCkWidget();
@@ -102,6 +118,11 @@ Form.editors.DependentHtml = Form.editors.Html.extend({
 
 Form.editors.DependentCheckbox = Form.editors.Checkbox.extend({
 
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Checkbox.prototype.initialize.call(this, options);
+    },
+    
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
        
@@ -116,6 +137,11 @@ Form.editors.DependentCheckbox = Form.editors.Checkbox.extend({
 
 Form.editors.DependentSelect = Form.editors.Select.extend({
 
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Select.prototype.initialize.call(this, options);
+    },
+    
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
        
@@ -186,6 +212,7 @@ Form.editors.DependentValueSelect = Form.editors.Select.extend({
 
 
     initialize: function(options) {
+        this.options = options || {};
         // Call parent initializer
         Backbone.Form.editors.Select.prototype.initialize.call(this, options);
         
@@ -202,6 +229,11 @@ Form.editors.DependentValueSelect = Form.editors.Select.extend({
 
 Form.editors.DependentCheckboxes = Form.editors.Checkboxes.extend({
 
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Checkboxes.prototype.initialize.call(this, options);
+    },
+    
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
        
@@ -216,6 +248,11 @@ Form.editors.DependentCheckboxes = Form.editors.Checkboxes.extend({
 
 Form.editors.DependentNumber = Form.editors.Number.extend({
 
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Number.prototype.initialize.call(this, options);
+    },
+    
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
        
@@ -229,6 +266,12 @@ Form.editors.DependentNumber = Form.editors.Number.extend({
 });
 
 Form.editors.DependentTime = Form.editors.Time.extend({
+
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Time.prototype.initialize.call(this, options);
+    },
+    
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
         var options = this.options,
@@ -266,6 +309,11 @@ Form.editors.DependentTime = Form.editors.Time.extend({
 
 Form.editors.DependentList = Form.editors.List.extend({
 
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.List.prototype.initialize.call(this, options);
+    },
+    
     render: function() {
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
         var self = this,
