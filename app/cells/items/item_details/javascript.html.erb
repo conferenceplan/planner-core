@@ -158,21 +158,26 @@ ItemApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
-    EquipmentLayout = Backbone.Marionette.Layout.extend({ // TODO
-        template: "#equipment-layout-template",
+    ItemTabLayout = Backbone.Marionette.Layout.extend({
+        template : "#item-tab-layout-template",
         
         regions : {
-            equipmentControlRegion: "#equipment-control-div",
-            equipmentRegion: "#equipment-region-div",
-        },
+            program_item    : "#program-item-tab",
+            equipment       : "#equipment-region-div",
+            equipment_ctl   : "#equipment-control-div",
+            tags            : "#tags-tab",
+            excluded        : "#excluded-tab",
+            images          : "#item-images-tab"
+        }
     });
-        
+    
     /*
      * 
      */
     var tabLists = [];
     var tabContent = [];
     var filters = null;
+    var itemTabLayout = null;
     
     function syncModel() {
         this.fetch({async : false});
@@ -181,24 +186,29 @@ ItemApp.ItemManagement = (function(Backbone){
     function clearDetails() {
         $('#selected-program-item').text("");
         
-        _.invoke(tabLists, 'reset' );
-        _.invoke(tabContent, 'clear' );
+        if (itemTabLayout) {
+            itemTabLayout.program_item.close();
+            itemTabLayout.equipment.close();
+            itemTabLayout.tags.close();
+            itemTabLayout.excluded.close();
+            itemTabLayout.images.close();
+        };
 
         eventAggregator.off("refreshTagList", syncModel);
+        
+        _.invoke(tabLists, 'reset' );
+        _.invoke(tabContent, 'clear' );
     };
     
     function showDetails(id) {
-        // alert(id);
         var data = jQuery("#items").jqGrid('getRowData', id);
-        // console.debug(data['item[title]']);
-        // /panels/item_mgmt?prog_item=
         $('#selected-program-item').html(data['item[title]']); // TODO
-        
+
         var itemMdl = TabUtils.createTabContent({
             modelType : ProgramItem,
             url : "/programme_items/" + id + '.json', // TODO
             template : '#program-item-view-template',
-            place :'#program-item-view',
+            region : itemTabLayout.program_item, //'#program-item-view', // LEAK - change to a region manager....
             id : id,
             id_name : 'programme_item_id',
             editTitle : "Edit Item",
@@ -238,13 +248,12 @@ ItemApp.ItemManagement = (function(Backbone){
         });
         tabContent.push( itemMdl );
         
-        var imageView = new ItemImageView({model : itemMdl});
-        imageView.render();
-        $('#item-images').html(imageView.el);    
-        
-        equipmentLayout = new EquipmentLayout();
-        equipmentLayout.render();
-        $('#equipment-view').html(equipmentLayout.el);
+        // TODO
+        // var imageView = new ItemImageView({model : itemMdl});
+        // imageView.render();
+        // $('#item-images').html(imageView.el);
+        // tabContent.push( imageView );
+        itemTabLayout.images.show(new ItemImageView({model : itemMdl}) );
 
         TabUtils.createTabControl({
             template : "#equipment-control-template",
@@ -253,31 +262,30 @@ ItemApp.ItemManagement = (function(Backbone){
             id_name : 'programme_item_id',
             view_refresh_event : "equipment:refresh",
             modal_create_title : '<%= t "create-equipment-needs" %>',
-            region : equipmentLayout.equipmentControlRegion
+            region : itemTabLayout.equipment_ctl
         });
-        tabLists.push( TabUtils.createTabListContent({
+        TabUtils.createTabListContent({
             collectionType : EquipmentCollection,
             url : "/programme_items/"+ id + "/equipment_needs.json",
             template : "#equipment-detail-template",
             view_refresh_event : "equipment:refresh",
-            region : equipmentLayout.equipmentRegion,
+            region : itemTabLayout.equipment,
             newTitle : '<%= t "equipment-create-equipment" %>',
             editTitle : '<%= t "equipment-edit-equipment" %>',
-        }) );
+        });
         
-        tabLists.push( TabUtils.createTagListContent({
+        TabUtils.createTagListContent({
             collectionType : TagContextCollection,
             url : "/tags/"+ id + "?class=ProgrammeItem",
             tagUrl : "/tags/"+ id + "/add?class=ProgrammeItem",
             template : "#tag-context-layout-template",
-            view_refresh_event : "address:refresh",
-            place : '#tags-view',
+            // view_refresh_event : "address:refresh",
+            region : itemTabLayout.tags,
             newTitle : '<%= t "create-tag" %>',
-            
-        }) );
+        });
         
         eventAggregator.on("refreshTagList", syncModel, itemMdl);
-        
+
         return itemMdl;
     };
     
@@ -310,7 +318,6 @@ ItemApp.ItemManagement = (function(Backbone){
                     place : "#item-filters",
                     collection_attributes : { "class" : "clearfix" },
                     tagremove : function(context, name) {
-                        // alert("removed tag");
                         // force a refresh of the table etc
                         ItemApp.ItemManagement.refreshTable();
                     },
@@ -366,6 +373,11 @@ ItemApp.ItemManagement = (function(Backbone){
         },
         
         init : function() {
+            // The layout manager for the tabs
+            itemTabLayout = new ItemTabLayout();
+            itemTabLayout.render();
+            $('#item-tabs').html(itemTabLayout.el);
+            
             // new Workspace();
             // Backbone.history.start();
             TabUtils.createTagCloudContent({

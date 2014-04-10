@@ -1,8 +1,25 @@
 <!--
-Use the Rails authenticity token in the forms...
-
-<%= form_authenticity_token %>
 -->
+
+<script type="text/template" id="item-tab-layout-template">
+    <div class="tab-content">
+        <div class="tab-pane active" id="program-item-tab"><div id="program-item-view"></div></div>
+        <div class="tab-pane" id="equipment-tab">
+            <section>
+                <div id="equipment-control-div"></div>
+                <div id="equipment-region-div"></div>
+            </section>
+        </div>
+        <div class="tab-pane" id="tags-tab">
+            <div id="tags-view"></div>
+        </div>
+        <div class="tab-pane" id="excluded-tab">
+            <div id="excluded-view"></div>
+        </div>
+        <div class="tab-pane" id="item-images-tab"><div id="item-images"></div></div>
+    </div>
+</script>
+
 <script type="text/template" id="item-form-template">
     <form class="form-horizontal" role="form">
         <fieldset>
@@ -194,13 +211,6 @@ Use the Rails authenticity token in the forms...
         </ul>
     </div>
     {{ }; }}    
-</script>
-
-<script type="text/template" id="equipment-layout-template">
-<section>
-    <div id="equipment-control-div"></div>
-    <div id="equipment-region-div"></div>
-</section>
 </script>
 
 <script type="text/template" id="equipment-control-template">
