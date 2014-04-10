@@ -63,7 +63,9 @@ var TabUtils = (function(){
             }
         },
         
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
+            
             this.listenTo(this.model, 'change', this.render);
             
             // syncCallback            
@@ -147,7 +149,8 @@ var TabUtils = (function(){
     TabCollectionView = Backbone.Marionette.CollectionView.extend({
         itemView: TabView,
 
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             eventAggregator.on(this.options.view_refresh_event, this.refreshList, this);
             // this.itemView.set('newTitle', options.newTitle);
             // this.itemView.set('editTitle', options.editTitle);
@@ -163,7 +166,8 @@ var TabUtils = (function(){
             "click .add-model-button" : "createMdl", //"createAddress",
         },
         
-        initialize : function() {
+        initialize : function(options) {
+            this.options = options || {};
             // Add extra events
             if (this.options.extra_events) {
                 $.extend(this.events, this.options.extra_events);
@@ -308,7 +312,8 @@ var TabUtils = (function(){
             collection.fetch({
                 success : function(col) {
                     viewType = TabCollectionView.extend({
-                        initialize : function() {
+                        initialize : function(options) {
+                            this.options = options || {};
                             // eventAggregator.on("refreshTagList", this.refreshList, this);
                         },
 
