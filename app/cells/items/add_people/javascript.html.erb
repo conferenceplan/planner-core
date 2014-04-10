@@ -217,11 +217,6 @@ jQuery(document).ready(function() {
     var prog_item = "<%= @prog_item %>";
     if (prog_item) {
         ItemApp.PeopleManagement.showProgrammeItem(prog_item);
-        // TODO - can we detect a modal close event?
-        // $('.modal').on('hidden.bs.modal', function () {
-            // // do something…
-            // alert("ff");
-            // })
     } else {
         window.onbeforeunload = ItemApp.PeopleManagement.confirmExit;
     }
