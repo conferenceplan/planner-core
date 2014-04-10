@@ -98,14 +98,17 @@ ItemApp.ItemManagement = (function(Backbone){
         events : {
             "click .large-image-create-button"  : "create_large_image",
             "click .large-image-edit-button"    : "edit_large_image",
-            "click .medium-image-create-button"  : "create_medium_image",
-            "click .medium-image-edit-button"    : "edit_medium_image",
+            "click .medium-image-create-button" : "create_medium_image",
+            "click .medium-image-edit-button"   : "edit_medium_image",
         },
 
         initialize : function() {
-            this.listenTo(this.model, 'change', this.render); // also need collection change
-            // also need collection change
+            this.listenTo(this.model, 'change', this.render);
             eventAggregator.on("refreshImagesList", this.render, this);
+        },
+        
+        onBeforeClose : function() {
+            eventAggregator.off("refreshImagesList", this.render);
         },
 
         create_large_image : function(event) {
@@ -114,7 +117,6 @@ ItemApp.ItemManagement = (function(Backbone){
         edit_large_image : function(event) {
             this.edit_image("largecard","Edit Large Image");
         },
-        
         create_medium_image : function(event) {
             this.create_image("mediumcard","Create Medium Image");
         },
@@ -131,7 +133,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         model : pic,
                         title : title,
                         refresh : function(mdl) {
-                            model.set('external_images', mdl);
+                            model.fetch({async : false});
                         }
                     });
             mdl.render();
@@ -148,7 +150,6 @@ ItemApp.ItemManagement = (function(Backbone){
                         refresh : function(mdl) {
                             // Need to refresh the model
                             model.fetch({async : false});
-                            // eventAggregator.trigger("refreshImagesList");
                         }
                     });
             mdl.render();
@@ -245,11 +246,6 @@ ItemApp.ItemManagement = (function(Backbone){
         });
         tabContent.push( itemMdl );
         
-        // TODO
-        // var imageView = new ItemImageView({model : itemMdl});
-        // imageView.render();
-        // $('#item-images').html(imageView.el);
-        // tabContent.push( imageView );
         itemTabLayout.images.show(new ItemImageView({model : itemMdl}) );
 
         TabUtils.createTabControl({
@@ -270,7 +266,6 @@ ItemApp.ItemManagement = (function(Backbone){
             newTitle : '<%= t "equipment-create-equipment" %>',
             editTitle : '<%= t "equipment-edit-equipment" %>',
         });
-        
         TabUtils.createTagListContent({
             collectionType : TagContextCollection,
             url : "/tags/"+ id + "?class=ProgrammeItem",
