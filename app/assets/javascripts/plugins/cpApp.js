@@ -84,7 +84,7 @@ var AppUtils = (function(){
         className: "modal bs-modal-lg fade",
         events: {
             "submit": "submit",
-            "hidden": "close",
+            "hidden": "hide",
             "click .abandon" : "abandon"
         },
         
@@ -123,7 +123,7 @@ var AppUtils = (function(){
             };
         },
         
-        close: function (e) {
+        hide: function (e) {
             this.remove();
             this.unbind();
             this.views = [];  
@@ -137,8 +137,19 @@ var AppUtils = (function(){
         events: {
             "submit"            : "submit",
             "keypress"          : "swallow",
-            "hide.bs.modal"   : "hideCheck",
+            "hide.bs.modal"     : "hideCheck",
             "hidden.bs.modal"   : "hide"
+        },
+        
+        hide: function (e) {
+            iframes = this.$el.children('iframe'); //find(".modal-body").append(this.options.content);
+            for (var i = 0; i < iframes.length; i++) {
+                iframes[i].parentNode.removeChild(iframes[i]);
+            };
+            
+            this.remove();
+            this.unbind();
+            this.views = [];  
         },
         
         hideCheck : function(e) {
