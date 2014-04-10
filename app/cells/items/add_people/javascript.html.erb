@@ -14,7 +14,6 @@ ItemApp.PeopleManagement = (function(Backbone){
      * Views
      */
     PeopleControlView = Marionette.ItemView.extend({
-        el : '#people-control-view',
         template : '#people-control-view-template',
         
         events : {
@@ -45,7 +44,7 @@ ItemApp.PeopleManagement = (function(Backbone){
             
                 // unselect them and re-render the view
                 jQuery('#participants').jqGrid('resetSelection');
-                progView.render();
+                // progView.render();
                 
                 needsSaved = true;
             }
@@ -54,7 +53,6 @@ ItemApp.PeopleManagement = (function(Backbone){
     });
     
     ProgramItemPeopleView = Marionette.ItemView.extend({
-        el : '#program-item-view',
         template : '#program-item-view-template',
         
         onRender : function() {
@@ -147,7 +145,6 @@ ItemApp.PeopleManagement = (function(Backbone){
      * Other stuff
      */
     var tabContent = []; // TODO
-    var progView = null;
     var currentItem = null;
     var needsSaved = false;
     
@@ -174,14 +171,8 @@ ItemApp.PeopleManagement = (function(Backbone){
                 url : "/programme_items/" + id + '.json',
                 async:false,
                 success : function(model) {
-                    if (progView) {
-                        progView.model = model;
-                        needsSaved = false;
-                    } else {
-                        progView = new ProgramItemPeopleView({model : model});
-                    };
-                    
-                    progView.render();
+	                needsSaved = false;
+                    ItemApp.getRegion("people").show(new ProgramItemPeopleView({model : model}));
                 }
             });        
     };
@@ -204,9 +195,15 @@ ItemApp.PeopleManagement = (function(Backbone){
         },
         
         init : function() {
-            var peopleView = new PeopleControlView();
-            peopleView.render();
-        },
+            // Add the regions to this app
+            ItemApp.addRegions({
+                people_ctl : "#people-control-view",
+                people     : "#program-item-view",
+            });
+
+            // Add the control for adding people to items            
+            ItemApp.getRegion("people_ctl").show(new PeopleControlView());
+        }
     }
 
 })(Backbone);
