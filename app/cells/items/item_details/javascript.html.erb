@@ -174,7 +174,6 @@ ItemApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
-    var tabLists = [];
     var tabContent = [];
     var filters = null;
     var itemTabLayout = null;
@@ -196,7 +195,6 @@ ItemApp.ItemManagement = (function(Backbone){
 
         eventAggregator.off("refreshTagList", syncModel);
         
-        _.invoke(tabLists, 'reset' );
         _.invoke(tabContent, 'clear' );
     };
     
