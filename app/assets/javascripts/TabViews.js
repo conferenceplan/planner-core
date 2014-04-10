@@ -276,7 +276,6 @@ var TabUtils = (function(){
 
     
     tabModule.createTabControl = function createTabControl(options) {
-        if (options.place) {
             control = new TabUtils.TabControlView({
                 template : options.template,
                 id : options.id,
@@ -292,24 +291,10 @@ var TabUtils = (function(){
                 extra_events : options.events,
                 view_refresh_event : options.view_refresh_event
             });
+        if (options.place) {
             control.render();
             $(options.place).html(control.el);
         } else {
-            control = new TabUtils.TabControlView({
-                template : options.template,
-                id : options.id,
-                id_name : options.id_name,
-                view_refresh_event : options.view_refresh_event,
-                modal_create_title : options.modal_create_title,
-                modelType : options.modelType,
-                view_callback : options.callback,
-                modelURL : options.modelURL,
-                form_event      : options.form_event,
-                form_event_fn   : options.form_event_fn,
-                modal_template : options.modal_template,
-                extra_events : options.events,
-                view_refresh_event : options.view_refresh_event
-            });
             options.region.show(control);
         }
         
