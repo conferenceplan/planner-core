@@ -157,7 +157,7 @@ module PublishedProgramItemsService
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Pseudonym') AND (audits.action != 'destroy')", pubDate.timestamp]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (Pseudonym.exists? a.auditable_id) ? Pseudonym.find(a.auditable_id).person_id : nil }.compact
 
-    updateOrAdded = updateOrAdded.collect {|i| (Person.find(i).publishedProgrammeItemAssignments.size > 0) ? i : nil }.compact.uniq
+    updateOrAdded = updateOrAdded.collect {|i| (Person.exists? i) ? ((Person.find(i).publishedProgrammeItemAssignments.size > 0) ? i : nil) : nil }.compact.uniq
 
     # People removed - we only want to know who no longer has any items assigned to them, otherwise these are updated people (i.e. removed from an item)
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
