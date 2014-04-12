@@ -72,7 +72,9 @@ PlannerRc1::Application.routes.draw do
     resources :theme
     resources :mobile_pages
     resources :default_bio_image
+    resources :logo_images
   end
+
 
 # TODO - test
   match 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
