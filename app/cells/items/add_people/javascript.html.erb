@@ -2,6 +2,7 @@
 ItemApp = new Backbone.Marionette.Application();
 
 ItemApp.PeopleManagement = (function(Backbone){
+    var eventAggregator = AppUtils.eventAggregator;
     
     /*
      * Models
@@ -44,16 +45,19 @@ ItemApp.PeopleManagement = (function(Backbone){
             
                 // unselect them and re-render the view
                 jQuery('#participants').jqGrid('resetSelection');
-                // progView.render();
+                eventAggregator.trigger("refreshViews");
                 
                 needsSaved = true;
             }
         }
-
     });
     
     ProgramItemPeopleView = Marionette.ItemView.extend({
         template : '#program-item-view-template',
+        
+        initialize : function() {
+            eventAggregator.on("refreshViews", this.render, this);
+        },
         
         onRender : function() {
             var thisView = this;
