@@ -53,12 +53,20 @@ json.set! 'mobile' do
     end
 
     json.set! 'default_bio_images' do
-        if @default_bio_image.image.url
+        if @default_bio_image && @default_bio_image.image.url
             img = @default_bio_image.image
             @default_bio_image.scale = @scale
             json.list_image     img.list.url.partition(@partition_val)[2]
             json.detail_image   img.detail.url.partition(@partition_val)[2]
             json.full_image     img.standard.url.partition(@partition_val)[2]
+        end
+    end
+
+    json.set! 'logo' do
+        if @logo && @logo.image.url
+            img = @logo.image
+            @logo.scale = @scale
+            json.image     img.standard.url.partition(@partition_val)[2]
         end
     end
     
