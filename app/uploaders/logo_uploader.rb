@@ -23,8 +23,8 @@ class LogoUploader < CarrierWave::Uploader::Base
   #
   #
   def standardImage
-    width = ((model.scale && model.scale > 0) ? 320 * model.scale : 320).to_i
-    height = ((model.scale && model.scale > 0) ? 130 * model.scale : 130).to_i
+    width = ((model.scale && model.scale > 0) ? 240 * model.scale : 240).to_i
+    height = ((model.scale && model.scale > 0) ? 100 * model.scale : 100).to_i
     return :height => height, :width => width, :crop => :fill, :fetch_format => :jpg
   end
   
