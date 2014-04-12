@@ -9,7 +9,7 @@ class TagsController < PlannerController
       # 1. Get the set of contexts
       contexts1 = getContexts(className).sort_by{|name| name.downcase }
       contexts2 = TagContext.all.collect{|v| v.name}
-      contexts = contexts1.concat(contexts2).uniq.sort_by{|name| name.downcase }
+      contexts = contexts1.concat(contexts2).collect{|a| a.downcase }.uniq.sort_by{|name| name.downcase }.collect{|n| n.capitalize}
       # 2. For each context get the tags for this person and add them to the results
       @allTagCounts = Hash.new
       contexts.each do |context|
@@ -35,9 +35,9 @@ class TagsController < PlannerController
       obj = eval(@className).find(@personId)
       # 1. Get the set of contexts
       # contexts = TagContext.all
-      contexts1 = getContexts(@className)
+      contexts1 = getContexts(@className).sort_by{|name| name.downcase }
       contexts2 = TagContext.all.collect{|v| v.name}
-      contexts = contexts1.concat(contexts2).uniq.sort_by{|name| name.downcase }
+      contexts = contexts1.concat(contexts2).collect{|a| a.downcase }.uniq.sort_by{|name| name.downcase }.collect{|n| n.capitalize}
       
       # 2. For each context get the tags for thie person and add them to the results
       @allTags = Hash.new
