@@ -15,6 +15,15 @@ MobileImageApp.ImageManagement = (function(Backbone){
         }
     });
     
+    LogoImage = Backbone.Model.extend({
+        urlRoot : '/mobile/logo_images',
+        schema : {
+            conference_logo : { type : 'CLImage', title : 'Pic',
+                cl_image_upload_tag : '<%= cl_image_upload_tag(:conference_logo) %>'
+            }
+        }
+    });
+    
     Picture = Backbone.RelationalModel.extend({
         schema : {
             picture : { type : 'CLImage', title : 'Pic',
@@ -123,7 +132,8 @@ MobileImageApp.ImageManagement = (function(Backbone){
 
         routes : {
             'item_format_images' : 'item_format_images',
-            'people_images'      : 'people_images'
+            'people_images'      : 'people_images',
+            'conference_logo'    : 'conference_logo'
         },
         
         item_format_images : function() {
@@ -157,6 +167,18 @@ MobileImageApp.ImageManagement = (function(Backbone){
                 place : '#images-control-area',
                 newTitle : '<%= t "create-image" %>',
                 editTitle : '<%= t "edit-image" %>',
+            });
+        },
+        
+        // LOGO?
+        conference_logo : function() {
+            TabUtils.createTabContent({
+                modelType : LogoImage,
+                url : "/mobile/logo_images",
+                template : '#logo-image-template',
+                place : '#images-control-area',
+                newTitle : '<%= t "create-logo" %>',
+                editTitle : '<%= t "edit-logo" %>',
             });
         }
     });
