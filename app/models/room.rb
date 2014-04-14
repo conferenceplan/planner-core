@@ -1,4 +1,5 @@
 class Room < ActiveRecord::Base
+  attr_accessible :name, :purpose, :comment, :lock_version
   
   belongs_to  :venue
   
