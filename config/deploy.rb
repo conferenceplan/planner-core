@@ -1,7 +1,7 @@
 #
 # Capistrano script for RC1 version of the Planner using Rails 3.2.x
 #
-set :stages, %w(parctec loncontest sasquan loncon) # production staging sandbox 
+set :stages, %w(parctec loncontest sasquan loncon bridge4events) # production staging sandbox 
 set :default_stage, "parctec"
 
 require "rvm/capistrano"
@@ -27,7 +27,9 @@ set :scm, :subversion
 set :group, "www-data"
 set :use_sudo, false
 
-set :repository,  "svn://svn.code.sf.net/p/conferenceplan/code/branches/planner-rc1"
+#set :repository,  "svn://svn.code.sf.net/p/conferenceplan/code/branches/planner-rc1"
+set :repository,  "git://git.code.sf.net/p/conferenceplan/planner-core"
+set :scm, "git"
 set :deploy_to, "/opt/www"
 
 # For asset pipeline
