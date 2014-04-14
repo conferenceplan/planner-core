@@ -74,7 +74,7 @@ module SurveyService
     
     Person.all :select => 'people.*',
       :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey}}},
-      :conditions => ["surveys.name = ?, people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = ?",
+      :conditions => ["surveys.name = ? and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = ?",
         survey_name, inviteStatus.id, acceptanceStatus.id, attending], 
       :order => 'last_name, first_name'
       
