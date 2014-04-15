@@ -54,14 +54,13 @@ module MailService
           })
 
     begin
-      PlannerMailer.send_email(
-        from:     config.from,
-        to:       to,
-        cc:       cc,
-        subject:  template.subject,
-        title:    template.title,
-        body:     content,
-        content_type: "text/html"
+      PlannerMailer.send_email({
+          from:     config.from,
+          to:       to,
+          cc:       cc,
+          subject:  template.subject,
+          title:    template.title
+        }, content
       ).deliver
       saveMailHistory(person, nil, content, EmailStatus[:Sent])
       transitionPersonInviteStateAfterEmail(person, toState) if toInviteState
@@ -108,14 +107,13 @@ module MailService
           })
 
     begin
-      PlannerMailer.send_email(
-        from:     config.from,
-        to:       to,
-        cc:       cc,
-        subject:  template.subject,
-        title:    template.title,
-        body:     content,
-        content_type: "text/html"
+      PlannerMailer.send_email({
+          from:     config.from,
+          to:       to,
+          cc:       cc,
+          subject:  template.subject,
+          title:    template.title
+        }, content
       ).deliver
       saveMailHistory(person, mailing, content, EmailStatus[:Sent])
       transitionPersonInviteStateAfterEmail(person, toState) if toInviteState && !mailing.testrun
