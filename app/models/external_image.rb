@@ -1,5 +1,5 @@
 class ExternalImage < ActiveRecord::Base
-  attr_accessible :picture, :use
+  attr_accessible :lock_version, :picture, :use, :imageable_id, :imageable_type
   attr_accessor :scale
   audited except: :picture
   

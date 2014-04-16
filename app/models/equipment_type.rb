@@ -1,4 +1,5 @@
 class EquipmentType < ActiveRecord::Base
+  attr_accessible :lock_version, :description
 
   has_many :equipment_needs
   has_many :programme_items, :through => :equipment_needs

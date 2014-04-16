@@ -1,6 +1,9 @@
 class SurveyQuestion < ActiveRecord::Base
-  # audited :allow_mass_assignment => true
-  
+  attr_accessible :lock_version, :code, :title, :question, :tags_label, :question_type, :additional, :validation, :mandatory,
+                  :text_size, :sort_order, :answer_type, :answer1_type, :question1, :answer2_type, :question2,
+                  :answer3_type, :question3, :answer4_type, :question4, :answer5_type, :question5, :answer6_type, :question6,
+                  :isbio, :horizontal, :private, :survey_group_id, :questionmapping_id
+    
   has_enumerated :questionmapping, :class_name => 'QuestionMapping'
 
   belongs_to  :survey_group

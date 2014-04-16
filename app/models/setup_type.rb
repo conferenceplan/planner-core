@@ -1,5 +1,6 @@
 class SetupType < ActiveRecord::Base
-  
+  attr_accessible :lock_version, :name, :description
+    
   THEATRE = "Theatre"
   
   has_many :programme_items

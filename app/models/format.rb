@@ -1,5 +1,6 @@
 class Format < ActiveRecord::Base
-
+  attr_accessible :lock_version, :name, :position
+  
   has_many  :programme_items
 
   has_many  :external_images, :as => :imageable,  :dependent => :delete_all do

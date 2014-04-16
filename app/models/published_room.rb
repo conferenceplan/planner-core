@@ -2,6 +2,8 @@
 #
 #
 class PublishedRoom < ActiveRecord::Base
+  attr_accessible :lock_version, :name, :published_venue_id
+  
   audited :allow_mass_assignment => true
   belongs_to  :published_venue
   has_many :published_room_item_assignments do

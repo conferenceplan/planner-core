@@ -2,6 +2,8 @@
 #
 #
 class PublishedVenue < ActiveRecord::Base
+  attr_accessible :lock_version, :name
+
   audited :allow_mass_assignment => true
   has_many  :published_rooms #, :class_name => 'Published::Room'
 

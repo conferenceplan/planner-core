@@ -1,4 +1,6 @@
 class Mailing < ActiveRecord::Base
+  attr_accessible :lock_version, :testrun, :scheduled, :mailing_number, :mail_template_id
+  
   has_many  :person_mailing_assignments
   has_many  :people, :through => :person_mailing_assignments
   

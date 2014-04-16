@@ -1,5 +1,6 @@
 
 class SurveyQuery < ActiveRecord::Base
+  attr_accessible :lock_version, :name, :operation, :shared, :date_order, :show_country, :survey_id, :user_id
   
   # queryPredicates
   has_many :survey_query_predicates, :dependent => :delete_all

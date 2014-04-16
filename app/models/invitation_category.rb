@@ -1,4 +1,6 @@
 class InvitationCategory < ActiveRecord::Base
+  attr_accessible :lock_version, :name, :position
+  
   before_destroy :check_for_use
 
 private

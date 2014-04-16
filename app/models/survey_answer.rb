@@ -1,5 +1,7 @@
 class SurveyAnswer < ActiveRecord::Base
-
+  attr_accessible :lock_version, :answer, :default, :sort_order, :help, :start_time, :start_day, :duration,
+                  :survey_question_id, :answertype_id
+  
   has_enumerated :answertype, :class_name => 'AnswerType'
   belongs_to :survey_question
 

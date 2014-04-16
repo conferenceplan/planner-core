@@ -1,4 +1,8 @@
 class PendingImportPerson < ActiveRecord::Base
+  attr_accessible :lock_version, :first_name, :last_name, :suffix, :line1, :line2, :line3, :city, :state, :postcode, :country,
+                  :phone, :email, :registration_number, :registration_type, :datasource_id, :datasource_dbid, :pendingtype_id, :alt_email
+                  # TODO - need publication name
+  
   has_enumerated :pendingtype, :class_name => 'PendingType'
   belongs_to :datasource
   

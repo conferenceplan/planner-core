@@ -1,4 +1,5 @@
 class PostalAddress < ActiveRecord::Base
+  attr_accessible :lock_version, :line1, :line2, :line3, :city, :state, :postcode, :country, :isdefault
 
   audited :allow_mass_assignment => true
 

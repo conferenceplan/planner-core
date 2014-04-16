@@ -1,4 +1,7 @@
 class User < ActiveRecord::Base
+  # TODO - validate
+  attr_accessible :login, :login_count, :failed_login_count, :current_login_ip, :last_login_ip, :person_id
+
   acts_as_authentic do |c|
     c.logged_in_timeout(2.hours) # set the session timeout
   end

@@ -1,4 +1,6 @@
 class PhoneNumber < ActiveRecord::Base
+  attr_accessible :lock_version, :number, :phone_type_id
+  
   audited :allow_mass_assignment => true
 
   has_many :addresses, :as => :addressable

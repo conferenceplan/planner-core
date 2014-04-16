@@ -1,4 +1,5 @@
 class Datasource < ActiveRecord::Base
+  attr_accessible :name, :primary
   has_many :peoplesources
   has_many :people, :through => :peoplesources
   before_destroy :check_not_in_use

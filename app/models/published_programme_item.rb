@@ -2,6 +2,10 @@
 #
 #
 class PublishedProgrammeItem < ActiveRecord::Base
+  attr_accessible :lock_version, :short_title, :title, :precis, :duration,
+                  :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
+                  :format_id
+
   audited :allow_mass_assignment => true
 
   has_many  :published_programme_item_assignments, :dependent => :destroy do #, :class_name => 'Published::ProgrammeItemAssignment'

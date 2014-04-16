@@ -1,5 +1,7 @@
 class Survey < ActiveRecord::Base
-
+  attr_accessible :lock_version, :name, :welcome, :thank_you, :alias, :submit_string, :header_image, :use_captcha, :public, :authenticate,
+                  :decline_msg, :authenticate_msg, :accept_status_id, :decline_status_id
+  
   # Survey contains a series of groups, groups contain a series of questions
   has_many :survey_groups, :dependent => :destroy, :order => 'sort_order asc'
   

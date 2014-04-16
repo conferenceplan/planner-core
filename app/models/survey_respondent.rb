@@ -1,4 +1,6 @@
 class SurveyRespondent < ActiveRecord::Base
+  attr_accessible :key, :persistence_token, :single_access_token, :attending, :submitted_survey, :email_status_id, :person_id
+
   acts_as_authentic do |c| 
     c.validate_email_field = false
   end
