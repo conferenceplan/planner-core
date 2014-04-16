@@ -145,6 +145,10 @@ var AppUtils = (function(){
         },
         
         hide: function (e) {
+            if (this.options.closeAction) {
+                this.options.closeAction(e);
+            };
+            
             iframes = this.$el.children('iframe'); //find(".modal-body").append(this.options.content);
             for (var i = 0; i < iframes.length; i++) {
                 iframes[i].parentNode.removeChild(iframes[i]);
