@@ -1,9 +1,17 @@
 class SurveyRespondents::ReviewsController < PlannerController
+  include SurveyHtmlFormatter
 
+  #
+  #
+  #
   def show
     @respondent = nil
-    if !@survey
-      @survey = Survey.find_by_alias('partsurvey') #find(params[:survey_id])
+    survey_id = params[:survey_id].to_i
+    
+    if survey_id != 0
+      @survey = Survey.find(survey_id)
+    else
+      @survey = Survey.find_by_alias('partsurvey') # a default cause the conventions used to use part survey....
     end
   
     # we need the survey and the survey respondent
@@ -14,7 +22,18 @@ class SurveyRespondents::ReviewsController < PlannerController
         :include => { :survey_respondent_detail => {:survey_responses => {}, :survey_respondent => {}} }
     end
     
-    render :layout => 'content'
+    render json: { 'survey' => survey_to_html(@survey,@respondent.survey_respondent_detail, false) }, :content_type => 'application/json'
+  end
+
+  #
+  # Return the surveys for specific person
+  #  
+  def surveys
+    person_id = params[:person_id]
+    
+    surveys = SurveyService.findSurveysForPerson person_id
+    
+    render json: surveys.to_json, :content_type => 'application/json'
   end
   
 end

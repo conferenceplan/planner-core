@@ -59,7 +59,7 @@ module SurveyHtmlFormatter
   def question_to_html(question, respondent_detail, forEmail, responses)
     content = ''
     
-    if (!question.private || (!forEmail && question.private && (controller.permitted_to? :supermanage, :surveys)))
+    if (!question.private || (!forEmail && question.private && (permitted_to? :supermanage, :surveys)))
       case question.question_type
       when :availability
         content += availabilty_to_html(question, respondent_detail, forEmail, responses)

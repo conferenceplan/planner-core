@@ -1,0 +1,104 @@
+<script type="text/javascript">
+
+SurveyReviewApp = new Backbone.Marionette.Application();
+
+SurveyReviewApp.Reviews = (function(Backbone){
+    
+    // First model is a collection of surveys
+    Response = Backbone.Model.extend({
+    });
+    Survey = Backbone.Model.extend({
+    });
+    SurveyCollection = Backbone.Collection.extend({
+        model : Survey
+    });
+        
+    //
+    SurveySelectorItemView = Marionette.ItemView.extend({
+        template : '#survey-selector-template',
+        tagName : 'tr',
+        
+        events : {
+            'click' : 'selectrow'
+        },
+        
+        selectrow : function(e) {
+            // change style of row to selected
+            this.$el.parent().find('tr').removeClass('active');
+            this.$el.addClass('active');
+            
+            // and display the selected survey
+            survey = new Response();
+            survey.fetch({
+                url : '/survey_respondents/reviews/' + current_person + '/' + this.model.id,
+                success : function(mdl) {
+                    // create the view and show the control
+                    SurveyReviewApp.getRegion("survey_display").show(
+                            new SurveyView({
+                                model : mdl
+                            })
+                        );            
+                }
+            });
+
+            
+        }
+    });
+    
+    SurveySelectorCollectionView = Marionette.CollectionView.extend({
+        itemView: SurveySelectorItemView,
+        tagName : 'table',
+        attributes : { "class" : "table table-bordered table-hover" }
+    });
+
+    //    
+    SurveyView = Marionette.ItemView.extend({
+        template : '#survey-display-template'
+    });
+    
+    var current_person = null;
+        
+    //
+    //
+    //    
+    return {
+        //
+        showSurveySelector : function(person_id) {
+            current_person = person_id;
+            SurveyReviewApp.getRegion("survey_display").close();
+            
+            surveys = new SurveyCollection();
+            
+            surveys.fetch({
+                url : '/survey_respondents/reviews/surveys/' + person_id,
+                success : function(mdl) {
+                    // create the view and show the control
+                    SurveyReviewApp.getRegion("survey_selector").show(
+                            new SurveySelectorCollectionView({
+                                collection : mdl
+                            })
+                        );
+                }
+            });
+        },
+
+        //        
+        init : function() {
+            SurveyReviewApp.addRegions({
+                survey_selector     : "#survey-selector",
+                survey_display      : "#survey-display"
+            });
+
+            Backbone.history.start();
+        }
+    };
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    SurveyReviewApp.addInitializer(SurveyReviewApp.Reviews.init);
+    SurveyReviewApp.start({});
+});
+</script>

@@ -1,5 +1,5 @@
 class SurveyRespondentDetail < ActiveRecord::Base
-  attr_accessible :lock_version, :first_name, :last_name, :suffix, :email, :survey_respondent_id
+  attr_accessible :lock_version, :first_name, :last_name, :suffix, :email, :survey_respondent_id, :survey_id
   
   has_many :survey_responses
   belongs_to  :survey_respondent 

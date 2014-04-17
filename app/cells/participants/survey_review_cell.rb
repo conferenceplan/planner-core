@@ -4,4 +4,12 @@ class Participants::SurveyReviewCell < Cell::Rails
     render
   end
 
+  def javascript
+    render
+  end
+
+  def templates
+    render
+  end
+
 end

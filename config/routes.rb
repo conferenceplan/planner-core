@@ -165,12 +165,16 @@ PlannerRc1::Application.routes.draw do
   # match 'survey_respondents/tags/list', :controller => 'survey_respondents/list', :action => 'list'
   match 'survey_respondents/tags/update', :controller => 'survey_respondents/update', :action => 'list', :method => 'post'
   # resources :survey_respondents 
-  
-  # TODO - restrict to show
-  namespace :survey_respondents do
-    resources :reviews
-  end
 
+  #
+  # Utilities to review surveys
+  #  
+  match 'survey_respondents/reviews/surveys/:person_id',  :controller => 'survey_respondents/reviews', :action => 'surveys', :method => 'get'
+  match 'survey_respondents/reviews/:id(/:survey_id)',    :controller => 'survey_respondents/reviews', :action => 'show', :method => 'get'
+
+  #
+  #
+  #
   resources :survey_respondents do
     resources :tags, :controller => 'survey_respondents/tags', :except => [:destroy, :new, :create, :edit, :remove] do
       member do

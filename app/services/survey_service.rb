@@ -58,6 +58,15 @@ module SurveyService
   end
 
   #
+  # Given the id of a person return the surveys that that person has responded to
+  #
+  def self.findSurveysForPerson(person_id)
+    
+    Survey.includes(:survey_responses => {:survey_respondent_detail => {:survey_respondent => :person}} ).where("people.id" => person_id)
+    
+  end
+
+  #
   # Get all the people who said that they do not want to share their email with other participants
   #  
   def self.findPeopleWithDoNotShareEmail
