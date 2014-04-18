@@ -139,6 +139,15 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             }
         }];
     },
+
+    getItem : function(id) {
+        // get an object that represents the person from the underlying grid - just the id and names
+        return {
+            id : id,
+            title : jQuery(this.element.jqGrid('getCell', id, 'item[title]')).text()
+        };
+    },
+
     
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;

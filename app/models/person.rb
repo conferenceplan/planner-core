@@ -273,7 +273,7 @@ class Person < ActiveRecord::Base
   end
   
   def GetSurveyBio
-    response = SurveyResponse.first :joins => {:survey_respondent_detail => {:survey_respondent => :person}}, :conditions => {:isbio => true, :people => {:id => id}}
+    response = SurveyService.getSurveyBio id
     
     if response
       return response.response

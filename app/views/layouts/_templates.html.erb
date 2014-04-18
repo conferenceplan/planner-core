@@ -153,7 +153,7 @@
         </button>
         <h4 id="myModalLabel" class="modal-title">{{= title }}</h4>
     </div>
-    <div class="modal-body" id="modal-body"><%= t 'confirm-message' %></div>
+    <div class="modal-body" id="modal-body">{{= confirm_message ? confirm_message : "<%= t 'confirm-message' %>" }}</div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">
             <%= t "remain-on-item" %>

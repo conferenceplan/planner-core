@@ -107,7 +107,8 @@ var AppUtils = (function(){
 
         render: function () {
             this.$el.html($(this.template({
-                title : this.options.title
+                title : this.options.title,
+                confirm_message : this.options.confirm_message
             })));
 
             this.delegateEvents();

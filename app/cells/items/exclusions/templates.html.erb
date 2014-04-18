@@ -1,0 +1,31 @@
+
+<script type="text/template" id="item-exclusion-template">
+    <td>{{= answer }}</td>
+</script>
+
+<script type="text/template" id="exclusion-mapping-template">
+        <div class="row">
+            <div class="col-xs-10" style="padding-left:0;">
+                <h4>{{= answer ? answer : "&nbsp;" }}</h4>
+            </div>
+            <div class="col-xs-2" style="padding-right:0;">
+                <button class="btn btn-primary save-button pull-right"><%= t "save" %></button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <ul class="list-group">
+                {{ _.each(programme_items, function(item) { }}
+                    <li class="list-group-item">
+                        {{=  item.title }}
+                        <button class="btn btn-xs btn-link pull-right remove-item" item="{{= item.id}}"><i class="glyphicon glyphicon-remove"></i></button>
+                    </li>
+                {{ }); }}
+                <ul>
+            </div>
+        </div>
+</script>
+
+<script type="text/template" id="item-control-view-template">
+    <button class="btn btn-primary add-item-button pull-left"><%= t "add" %></button>
+</script>

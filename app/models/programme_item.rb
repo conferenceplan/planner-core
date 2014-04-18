@@ -28,7 +28,7 @@ class ProgrammeItem < ActiveRecord::Base
   has_one :time_slot, :through => :room_item_assignment
 
   has_many :excluded_items_survey_maps
-  has_many :mapped_survey_questions, :through => :excluded_items_survey_maps
+  # has_many :mapped_survey_questions, :through => :excluded_items_survey_maps
   
   # The relates the published programme item back to the original programme item
   has_one :publication, :foreign_key => :original_id, :as => :original, :dependent => :destroy

@@ -1,86 +1,69 @@
 class ExcludedItemsSurveyMapsController < PlannerController
+  #
+  #
+  #
   def index
-    @programmeItem = ProgrammeItem.find(params[:programme_item_id])
+    item = ProgrammeItem.find(params[:programme_item_id])
 
-    @excludedItemsSurveyMaps = @programmeItem.excluded_items_survey_maps
-    @urlstr = '/programme_items/'+ params[:programme_item_id]  + '/excluded_items_survey_maps/new'
-    render :layout => 'content'
+    @exclusions = item.excluded_items_survey_maps
   end
   
+  #
+  #
+  #
   def show
-    if (params[:programme_item_id])
-       @programme_item = ProgrammeItem.find(params[:programme_item_id])
-       @urlstr = '/programme_items/'+ params[:programme_item_id]  + '/excluded_items_survey_maps/new'
-
-       @excludedItemsSurveyMaps = @programme_item.excluded_items_survey_maps
-       
-    else
-      @urlstr = '/excluded_items_survey_maps/new'
-
-      @excludedItemsSurveyMaps = ExcludedItemsSurveyMap.find(params[:id])
-    end
-    
-    render :layout => 'content'
+    @exclusion = ExcludedItemsSurveyMap.find(params[:id])
   end
   
+  #
+  #
+  #
   def create
-    
-     @programmeItem = ProgrammeItem.find(params[:programme_item_id])
-     @surveyAnswer = SurveyAnswer.find(params[:excluded_items_survey_map][:survey_answer_id])
-     @excludedItemsSurveyMap = ExcludedItemsSurveyMap.new(:programme_item_id => params[:programme_item_id],
-                                 :survey_answer_id => params[:excluded_items_survey_map][:survey_answer_id])
-     @programmeItem.excluded_items_survey_maps << @excludedItemsSurveyMap
-     
-   
-    if (@programmeItem.save)
-#      We want to go back to?
-       redirect_to :action => 'show', :id => @excludedItemsSurveyMap
+    item = ProgrammeItem.find(params[:programme_item_id])
+    answer = SurveyAnswer.find(params[:excluded_items_survey_map][:survey_answer_id])
 
- #         redirect_to :action => 'show', :id => @excludedItemsSurveyMap
-    else
-         render :action => 'new'
-    end
-
-end
-  
-  def new
-     if (params[:programme_item_id])
-      @urlstr = '/programme_items/' + params[:programme_item_id] + '/excluded_items_survey_maps'
-    else
-      @urlstr = '/excluded_items_survey_maps'
-    end
-    @excludedItemsSurveyMap = ExcludedItemsSurveyMap.new
-    @excludedItemsSurveyMap.programme_item_id = params[:programme_item_id]
-
-    render :layout => 'content'
-  end
-  
-  def edit
-    @excludedItemsSurveyMap = ExcludedItemsSurveyMap.find(params[:id])
-    
-    @urlstr = '/excluded_items_survey_maps/' + params[:id]
-    render :layout => 'content'
-  end
-  
-  def update
-
-    @excludedItemsSurveyMap = ExcludedItemsSurveyMap.find(params[:id])
-    if (updateParams[:survey_answer_id] == nil)
-      @excludedItemsSurveyMap.destroy
-    else
-      if @excludedItemsSurveyMap.update_attributes(updateParams)
-         redirect_to :action => 'show', :id => params[:id]
-      else  
-        render :action => 'edit'
+    begin
+      ProgrammeItem.transaction do
+        exclusion = item.excluded_items_survey_maps.new(:survey_answer_id => answer.id)
+        
+        programmeItem.save!
+        
+        @exclusions = item.excluded_items_survey_maps
       end
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
   
+  #
+  #
+  #
   def destroy
-    @excludedItemsSurveyMap = ExcludedItemsSurveyMap.find(params[:id])
-    @programItem = @excludedItemsSurveyMap.programme_item
-    @excludedItemsSurveyMap.destroy
-    gopath = "/programme_items/" + @programItem.id.to_s + "/excluded_items_survey_maps"
-    redirect_to gopath
+    exclusion = ExcludedItemsSurveyMap.find(params[:id])
+
+    begin
+      ProgrammeItem.transaction do
+        exclusion.destroy
+        
+        render status: :ok, text: {}.to_json
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
   end
+  
+  # TODO - is this used? i.e. user will do a delete and add instead
+  # def update
+    # begin
+      # ProgrammeItem.transaction do
+        # excludedItemsSurveyMap = ExcludedItemsSurveyMap.find(params[:id])
+        # excludedItemsSurveyMap.update_attributes(updateParams)
+#         
+        # render json: excludedItemsSurveyMap.to_json, :content_type => 'application/json'
+      # end
+    # rescue => ex
+      # render status: :bad_request, text: ex.message
+    # end
+  # end
+  
 end

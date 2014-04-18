@@ -4,7 +4,35 @@
 # NOTE: defined as a module so that we can not instantiate it.
 #
 module SurveyService
+  
+  #
+  #
+  #
+  def self.findAnswersForExcludedItems
+    SurveyAnswer.find :all, :include => :programme_items, :conditions => ['answertype_id = ?', AnswerType['ItemConflict'].id], :order => 'answer'
+  end
 
+  #
+  #
+  #
+  def self.findAnswersForExcludedTimes
+    SurveyAnswer.find :all,  :conditions => ['answertype_id = ?', AnswerType['TimeConflict'].id]
+  end
+  
+  #
+  #
+  #
+  def self.findQuestionForMaxItemsPerDay
+    SurveyQuestion.find :first, :conditions => ['questionmapping_id = ?', QuestionMapping['ItemsPerDay'].id] # There should only be one
+  end
+
+  #
+  #
+  #
+  def self.findQuestionForMaxItemsPerCon
+    SurveyQuestion.find :first, :conditions => ['questionmapping_id = ?', QuestionMapping['ItemsPerConference'].id] # There should only be one
+  end
+  
   #
   #
   #
@@ -79,14 +107,13 @@ module SurveyService
   #
   # Get all people who responded to survey
   #
-  def self.findPeopleWhoRespondedToSurvey(survey_name, inviteStatus = InviteStatus['Invited'], acceptanceStatus = AcceptanceStatus['Accepted'], attending = true)
-    
-    Person.all :select => 'people.*',
-      :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey}}},
-      :conditions => ["surveys.name = ? and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = ?",
-        survey_name, inviteStatus.id, acceptanceStatus.id, attending], 
-      :order => 'last_name, first_name'
-      
+  def self.findPeopleWhoRespondedToSurvey(survey_name)
+    survey = Survey.where("surveys.alias" => survey_name).first
+    respondent_detail = SurveyRespondentDetail.includes(:survey_responses).where('survey_responses.survey_id' => survey.id)
+
+    Person.all  :include => {:survey_respondent => :survey_respondent_detail},
+                :conditions => ["survey_respondent_details.id in (?)", respondent_detail],
+                :order => 'people.last_name, people.first_name'
   end
   
   #
@@ -139,7 +166,17 @@ module SurveyService
   end
   
   #
+  #
+  #
+  def self.getSurveyBio(person_id)
+
+    SurveyResponse.first :joins => {:survey_respondent_detail => {:survey_respondent => :person}}, :conditions => {:isbio => true, :people => {:id => person_id}}
+    
+  end
+  
+  #
   # For a given person find the value for the mapped question if there is an answer...
+  # TODO - we may want to restrict this to a particular survey?
   #
   def self.getValueOfMappedQuestion(person, questionMapping)
     

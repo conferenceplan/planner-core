@@ -1,0 +1,200 @@
+<script type="text/javascript">
+
+ItemExclusionsApp = new Backbone.Marionette.Application();
+
+ItemExclusionsApp.Mgmt = (function(Backbone){
+    var eventAggregator = AppUtils.eventAggregator;
+    
+    //
+    //
+    //
+    ItemExclusion = Backbone.Model.extend({
+        urlRoot : '/excluded_items',
+    });
+    ItemExclusionCollection = Backbone.Collection.extend({
+        model : ItemExclusion
+    });
+    
+    //
+    //
+    //
+    ExclusionMappingView = Marionette.ItemView.extend({
+        template : '#exclusion-mapping-template',
+        initialize : function() {
+            eventAggregator.on("refreshViews", this.render, this);
+        },
+
+        events : {
+            "click .remove-item"    : "removeItem",
+            "click .save-button"    : "saveExclusion"
+        },
+
+        removeItem : function(event) { 
+            // alert("remove person");
+            var itemId = $(event.currentTarget).attr('item');
+
+            var items = this.model.get('programme_items');
+            
+            var p = _.find(items, function(a) {
+                return (a.id == itemId);
+            });
+            var idx = _.indexOf(items, p);
+            var el = items.splice(idx,1);
+
+            needsSaved = true;            
+            this.render();
+        },
+        
+        saveExclusion : function() {
+            var id = this.model.id;
+            this.model.save(null, {
+                url : "/excluded_items/" + id + "/exclusions", // TODO - we need a base URL property for the site
+                success : function() {
+                    // message that the save happened
+                    infoMessage("Exclusions have been saved");
+                    needsSaved = false;
+                }
+            });
+        }
+
+    });
+    
+    ItemExclusionView = Marionette.ItemView.extend({
+        template : '#item-exclusion-template',
+        tagName : 'tr',
+
+        events : {
+            'click' : 'selectrow'
+        },
+        
+        selectrow : function(e) {
+            if (needsSaved) {
+                var view = this;
+                mdl = new LeavePageModal({
+                    title : '<%= t "unsaved-data" %>',
+                    confirm_message : '<%= t "confirm-exclusion-message" %>',
+                    continueAction : function() {
+                        needsSaved = false;
+                        loadAnswer(view);
+                    }
+                });
+                mdl.render();
+            } else {
+                loadAnswer(this);
+            }
+        }
+    });
+    
+    function loadAnswer(view) {
+            view.model.fetch({ async : false }); // make sure we are in sync with the server
+            
+            // change style of row to selected
+            view.$el.parent().find('tr').removeClass('active');
+            view.$el.addClass('active');
+            
+            currentExclusion = view.model;
+            
+            ItemExclusionsApp.getRegion("mapping").show(
+                new ExclusionMappingView({
+                    model : view.model
+                })
+            );
+    };
+
+    
+    ItemExclusionCollectionView = Marionette.CollectionView.extend({
+        itemView: ItemExclusionView,
+        tagName : 'table',
+        attributes : { "class" : "table table-bordered table-hover" }
+    });
+
+
+    ItemControlView = Marionette.ItemView.extend({
+        template : '#item-control-view-template',
+        
+        events : {
+            "click .add-item-button" : "addItem"
+        },
+        
+        addItem : function(ev) {
+            // alert("add item");
+            if (currentExclusion) {
+                var selectedIds = jQuery('#items').jqGrid('getGridParam','selarrrow');
+                // items = currentExclusion
+                var items = currentExclusion.get('programme_items');
+                
+                _.each(selectedIds, function(id) {
+                    var p = jQuery('#items').itemTable('getItem',id);
+                    
+                    // make sure that it is unique i.e. not already in the list
+                    var found = _.find(items, function(a) {
+                        return (a.id == id);
+                    });
+                    
+                    if (!found) {
+                        console.debug("ADDING");
+                        items.push(p); 
+                        console.debug(items);
+                    }
+                });
+            
+                // unselect them and re-render the view
+                jQuery('#items').jqGrid('resetSelection');
+                eventAggregator.trigger("refreshViews");
+                
+                needsSaved = true;
+           }
+        }
+    });
+
+    //
+    var currentExclusion = null;
+    var needsSaved = false;
+    
+    //
+    //
+    //    
+    return {
+        confirmExit : function () {
+            if (needsSaved) {
+                return "Changes to the Exclusions have not been saved. Are you sure you wich to leave the page?";
+            }
+        },
+        //        
+        init : function() {
+            ItemExclusionsApp.addRegions({
+                item_exclusions     : "#exclusion-list",
+                mapping             : "#exclusion-mapping",
+                item_control        : "#item-control"
+            });
+
+            surveys = new ItemExclusionCollection();
+            
+            surveys.fetch({
+                url : '/excluded_items',
+                success : function(mdl) {
+                    // create the view and show the control
+                    ItemExclusionsApp.getRegion("item_exclusions").show(
+                            new ItemExclusionCollectionView({
+                                collection : mdl
+                            })
+                        );
+                }
+            });
+
+            ItemExclusionsApp.getRegion("item_control").show(new ItemControlView());
+
+            Backbone.history.start();
+        }
+    };
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    ItemExclusionsApp.addInitializer(ItemExclusionsApp.Mgmt.init);
+    ItemExclusionsApp.start({});
+    window.onbeforeunload = ItemExclusionsApp.Mgmt.confirmExit;
+});
+</script>

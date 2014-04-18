@@ -49,6 +49,12 @@ PlannerRc1::Application.routes.draw do
   #
   #
   #
+  match '/excluded_items/:id/exclusions', :controller => 'excluded_items', :action => 'exclusions', :via => :put
+  resources :excluded_items
+  
+  #
+  #
+  #
   match '/import_mappings/columns' => 'import_mappings#columns'
   resources :import_mappings
   resources :file_uploads, :except => [:destroy, :index, :update, :remove]

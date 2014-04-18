@@ -1,0 +1,33 @@
+<%= render_cell "items/exclusions", :templates %>
+
+<%= render_cell "items/exclusions", :javascript %>
+
+<%= render_cell "items/item_list", :javascript, 
+    :caption => "prog-items", 
+    :pager => "#items-pager",
+    :del => false,
+    :edit => false,
+    :add => false,
+    :format_name => false,
+    :duration => false,
+    :room => false,
+    :day => false,
+    :time => false,
+    :ref_number => false,
+    :showControls => false,
+    :multiselect => true
+%>
+<!--    :selectNotifyMethod => "XXXXX", -->
+
+<div class="row">
+    <div class="col-xs-4">
+        <div id='exclusion-list'></div>
+    </div>
+    <div class="col-xs-4">
+        <div id='exclusion-mapping'></div>
+    </div>
+    <div class="col-xs-4 right-jqgrid">
+        <%= render_cell "items/item_list", :display %>
+        <div id='item-control'></div>
+    </div>
+</div>

@@ -5,6 +5,8 @@ class SurveyAnswer < ActiveRecord::Base
   has_enumerated :answertype, :class_name => 'AnswerType'
   belongs_to :survey_question
 
+  has_many  :excluded_items_survey_maps
+  has_many  :programme_items, :through => :excluded_items_survey_maps
 
   has_many  :excluded_periods_survey_maps, :dependent => :destroy
   has_many  :excluded_periods, :through => :excluded_periods_survey_maps,
