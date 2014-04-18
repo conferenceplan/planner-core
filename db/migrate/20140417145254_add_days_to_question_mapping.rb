@@ -1,3 +1,6 @@
+require 'enum'
+require 'question_mapping'
+
 class AddDaysToQuestionMapping < ActiveRecord::Migration
   def change
       QuestionMapping.enumeration_model_updates_permitted = true
