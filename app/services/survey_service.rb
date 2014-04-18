@@ -161,7 +161,7 @@ module SurveyService
     
     SurveyResponse.all :joins => {:survey_respondent_detail => {:survey_respondent => :person}},
       :conditions => ["survey_responses.survey_question_id = ? and people.id = ? and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = ?",
-        question.id, person.id, inviteStatus, acceptanceStatus, attending]
+        question.id, person.id, inviteStatus, acceptanceStatus, attending], :order => "created_at desc"
          
   end
   

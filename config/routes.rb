@@ -83,17 +83,10 @@ PlannerRc1::Application.routes.draw do
 
 
 # TODO - test
-  match 'participants/ReportInviteStatus', :controller => 'people', :action => 'ReportInviteStatus'
-  match 'participants/doReportInviteStatus', :controller => 'people', :action => 'doReportInviteStatus'
   match 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'
   match 'participants/doexportemailxml.:format', :controller => 'people', :action => 'doexportemailxml', :method => 'post'
-  match 'participants/doSetInvitePendingToInvited', :controller => 'people', :action => 'doSetInvitePendingToInvited', :method => 'post'
-  match 'participants/SetInvitePendingToInvited', :controller => 'people', :action => 'SetInvitePendingToInvited'
   match 'participants/invitestatuslist', :controller => 'people', :action => 'invitestatuslist'
   match 'participants/acceptancestatuslist', :controller => 'people', :action => 'acceptancestatuslist'
-  match 'participants/updateConflictsFromSurvey',:controller => 'people', :action => 'updateConflictsFromSurvey', :method => 'post'
-  match 'participants/clearConflictsFromSurvey',:controller => 'people', :action => 'clearConflictsFromSurvey'
-  match 'participants/doClearConflictsFromSurvey',:controller => 'people', :action => 'doClearConflictsFromSurvey', :method => 'post'
   match 'participants/getList',:controller => 'people', :action => 'getList', :method => 'post'
   match 'participants/count', :controller => 'people', :action => 'count', :method => 'get'
   match 'participants/generateInviteKey/:id', :controller => 'people', :action => 'generateInviteKey', :method => 'get'
@@ -322,6 +315,8 @@ PlannerRc1::Application.routes.draw do
   match '/form/:page(/:preview)', :controller => 'surveys/response', :action => 'renderalias'
 
   match 'api/conference.:format', :controller => 'api/conference', :action => 'show'  
+
+  match 'tasks/update_exclusions', :controller => 'tasks/update_exclusions', :action => 'index'
 
 # 
 #   

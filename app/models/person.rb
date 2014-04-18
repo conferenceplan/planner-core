@@ -29,6 +29,18 @@ class Person < ActiveRecord::Base
             :source => :relatable,
             :source_type => 'Person'
 
+  # named_scope :by_last_name, :order => "last_name ASC"
+  def by_last_name
+    order("ast_name ASC")
+  end
+  
+  has_one :person_constraints
+
+  # ----------------------------------------------------------------------------------------------
+  #
+  # TODO - conference specific data should be refactored into a seperate class
+  #
+
   has_many  :exclusions
   
   has_many  :excluded_people, :through => :exclusions, 
@@ -67,10 +79,7 @@ class Person < ActiveRecord::Base
   #
   acts_as_taggable
   
-  # named_scope :by_last_name, :order => "last_name ASC"
-  def by_last_name
-    order("ast_name ASC")
-  end
+  # ----------------------------------------------------------------------------------------------
   
   #
   has_one  :pseudonym
@@ -316,6 +325,9 @@ class Person < ActiveRecord::Base
       end
     end
   end
+
+# ---------------------------------------
+# TODO - for import process, move out
   
   def UpdateIfPendingPersonDifferent(pending_id,updateAddressFlag,updateNameFlag,newRegistrationDetail)
     
@@ -343,7 +355,7 @@ class Person < ActiveRecord::Base
            defaultAddress = matchaddress
          end
      end
-   end
+    end
    
     if (addressSame == false)
          pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleAddressUpdate")
@@ -525,29 +537,5 @@ class Person < ActiveRecord::Base
    end
    
   end
-  
-  def GetExcludedTimesGroup
-   excludedGroup = nil
-   if (self.excluded_periods)    
-     excludedTimes = self.excluded_periods
-     # we need to figure out if we have daily repeating exclusions
-     excludedGroup = {}
-     @inExcludedGroup = {}
-     self.excluded_periods.each do |excluded|
-       next if (@inExcludedGroup.has_key?( excluded))
-         
-       excludedList = [excluded]
-       excludedGroup[excluded] = excludedList
-       @inExcludedGroup[excluded] = 1
-       excludedTimes.each do |excluded1|
-           if ((excluded.start.hour == excluded1.start.hour) and (excluded.start.min == excluded1.start.min) and (excluded.start.day != excluded1.start.day))
-              excludedGroup[excluded] << excluded1
-              @inExcludedGroup[excluded1] = 1
-           end
-       end
-     end
-   end
-   return excludedGroup
- end
- 
+
 end
