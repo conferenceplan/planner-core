@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   def application_time_zone(&block)
     cfg = SiteConfig.find :first # for now we only have one convention... change when we have many (TODO)
     if (cfg) # TODO - temp, to be replaced in other code
+      SITE_CONFIG[:conference] = {}
       SITE_CONFIG[:conference][:name] = cfg.name
       SITE_CONFIG[:conference][:number_of_days] = cfg.number_of_days
       SITE_CONFIG[:conference][:start_date] = cfg.start_date
