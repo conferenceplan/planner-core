@@ -14,5 +14,8 @@ json.private        question.private
 json.horizontal     question.horizontal
 json.text_size      question.text_size
 
+json.questionmapping_name  question.questionmapping ? question.questionmapping.name : ""
+json.questionmapping_id    question.questionmapping.id if question.questionmapping
+
 json.survey_format   question.survey_format if question.survey_format
 json.survey_answers  question.survey_answers if question.survey_answers

@@ -214,7 +214,7 @@
         <%= t "bio" %>
     </dt>
     <dd>
-        {{= bio ? bio : "&nbsp;" }}
+        {{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}
     </dd>
     <dt>
         <%= t "participant-photo" %>

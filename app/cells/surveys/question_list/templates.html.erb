@@ -44,6 +44,7 @@
             <dt><%= t "tags_label" %></dt><dd>{{= tags_label ? tags_label : "&nbsp;" }}</dd>
             <dt><%= t "text_size" %></dt><dd>{{= text_size ? text_size : "&nbsp;" }}</dd>
         {{ } }}
+        <dt><%= t "question-mapping" %></dt><dd>{{= questionmapping_name ? questionmapping_name : "&nbsp;" }}</dd>
         {{ if ( question_type == 'textbox') { }}
             <dt><%= t "is-bio" %></dt><dd>{{= isbio ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
         {{ } }}

@@ -21,6 +21,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
             text_size           : { type : 'Number',  title : '<%= t "survey-length-of-textbox" %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
+            questionmapping_id  : { type : 'Select', title : '<%= t "question-mapping" %>', options : <%= [[' ',' ']].concat(QuestionMapping.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
                                      dependsOn : 'question_type', dependentValues : ['textbox']  }, // only if the question type is text
             horizontal          : { type : 'DependentCheckbox', title : '<%= t "survey-horizontal-layout" %>', 

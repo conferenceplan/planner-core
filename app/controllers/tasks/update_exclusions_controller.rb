@@ -1,9 +1,9 @@
 #
-require 'exclusion_job'
+require 'update_from_survey_job'
 
 class Tasks::UpdateExclusionsController < ApplicationController
   def index
-    job = ExclusionJob.new
+    job = UpdateFromSurveyJob.new
     
     # Create a job that will be run seperately
     Delayed::Job.enqueue job

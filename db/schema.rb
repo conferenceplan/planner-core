@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140417180407) do
+ActiveRecord::Schema.define(:version => 20140419154915) do
 
   create_table "addresses", :force => true do |t|
     t.integer  "addressable_id"
@@ -279,6 +279,13 @@ ActiveRecord::Schema.define(:version => 20140417180407) do
     t.integer  "lock_version", :default => 0
   end
 
+  create_table "job_infos", :force => true do |t|
+    t.datetime "last_run"
+    t.string   "job_name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "label_dimensions", :force => true do |t|
     t.string   "name"
     t.string   "manufacturer"
@@ -478,6 +485,15 @@ ActiveRecord::Schema.define(:version => 20140417180407) do
     t.integer  "datasource_dbid"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "person_constraints", :force => true do |t|
+    t.integer  "max_items_per_day"
+    t.integer  "max_items_per_con"
+    t.integer  "person_id"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+    t.integer  "lock_version",      :default => 0
   end
 
   create_table "person_mailing_assignments", :force => true do |t|

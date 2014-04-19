@@ -4,6 +4,60 @@
 # NOTE: defined as a module so that we can not instantiate it.
 #
 module SurveyService
+
+
+  #
+  #
+  #
+  def self.updateBioTextFromSurvey(sinceDate = nil)
+    bioQuestion = SurveyQuestion.where(:isbio => true).order("created_at desc").first
+
+    Person.transaction do
+      people = SurveyService.findPeopleWhoAnsweredBio(sinceDate)
+      
+      people.each do |person|
+        person.edited_bio = EditedBio.new(:person_id => person.id) if !person.edited_bio
+        surveyResponse = SurveyService.findResponseToQuestionForPerson(bioQuestion,person,sinceDate)[0]
+                
+        person.edited_bio.bio = surveyResponse.response
+        person.edited_bio.save!
+      end
+    end
+  end
+  
+  #
+  # Update twitter etc from the survey... need to be able to check against the bio info so as to not overwrite edits
+  #
+  def self.updatePersonBioFromSurvey(sinceDate = nil)
+    Person.transaction do
+      # Get the response from the survey
+      # If the response is newer that the info in the Bio then update the Bio
+      websiteQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['WebSite']).order("created_at desc").first
+      twitterQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Twitter']).order("created_at desc").first
+      otherQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['OtherSocialMedia']).order("created_at desc").first
+      photoQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Photo']).order("created_at desc").first
+      faceQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Facebook']).order("created_at desc").first
+
+      setResponse('website', websiteQuestion,sinceDate)
+      setResponse('twitterinfo', twitterQuestion,sinceDate)
+      setResponse('othersocialmedia', otherQuestion,sinceDate)
+      setResponse('photourl', photoQuestion,sinceDate)
+      setResponse('facebook', faceQuestion,sinceDate)
+    end
+  end
+  
+  def self.setResponse(mapping, question, sinceDate)
+    people = SurveyService.findPeopleWhoAnsweredQuestion(question, sinceDate)
+    people.each do |person|
+      response = SurveyService.findResponseToQuestionForPerson(question,person,sinceDate)[0]
+
+      if (response && !response.response.empty?)
+          person.edited_bio = EditedBio.new(:person_id => person.id) if !person.edited_bio
+          person.edited_bio.send("#{mapping}=", response.response)
+          person.edited_bio.save!
+      end
+    end
+  end
   
   #
   #
@@ -129,13 +183,18 @@ module SurveyService
   #
   #
   #
-  def self.findPeopleWhoGaveAnswer(answer, inviteStatus = InviteStatus['Invited'], acceptanceStatus = AcceptanceStatus['Accepted'], attending = true)
+  def self.findPeopleWhoGaveAnswer(answer, sinceDate = nil)
+    
+    conditions = ["survey_responses.survey_question_id = ? and lower(survey_responses.response) like lower(?)", answer.survey_question_id, answer.answer]
+    if (sinceDate)
+      conditions[0] += " AND survey_responses.updated_at > ?"
+      conditions << sinceDate
+    end
     
     # Put in the :select so as to over-ride the active record "read only true when a :join is used"
     Person.all :select => 'people.*',
       :joins => {:survey_respondent => {:survey_respondent_detail => :survey_responses}},
-      :conditions => ["survey_responses.survey_question_id = ? and lower(survey_responses.response) like lower(?) and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = ?",
-        answer.survey_question_id, answer.answer, inviteStatus.id, acceptanceStatus.id, attending], 
+      :conditions => conditions, 
       :order => 'last_name, first_name'
       
   end
@@ -143,25 +202,54 @@ module SurveyService
   #
   #
   #
-  def self.findPeopleWhoAnsweredQuestion(question, inviteStatus = InviteStatus['Invited'], acceptanceStatus = AcceptanceStatus['Accepted'], attending = true)
+  def self.findPeopleWhoAnsweredQuestion(question, sinceDate = nil)
+    
+    conditions = ["survey_responses.survey_question_id = ?", question.id]
+    if (sinceDate)
+      conditions[0] += " AND survey_responses.updated_at > ?"
+      conditions << sinceDate
+    end
     
     # Put in the :select so as to over-ride the active record "read only true when a :join is used"
     Person.all :select => 'people.*',
       :joins => {:survey_respondent => {:survey_respondent_detail => :survey_responses}},
-      :conditions => ["survey_responses.survey_question_id = ? and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = ?",
-        question.id, inviteStatus.id, acceptanceStatus.id, attending], 
+      :conditions => conditions, 
       :order => 'last_name, first_name'
-
+      
   end
   
   #
   #
   #
-  def self.findResponseToQuestionForPerson(question, person, inviteStatus = InviteStatus['Invited'], acceptanceStatus = AcceptanceStatus['Accepted'], attending = true)
+  def self.findPeopleWhoAnsweredBio(sinceDate = nil)
+    
+    conditions = ["survey_questions.isbio = 1"]
+    if (sinceDate)
+      conditions[0] += " AND survey_responses.updated_at > ?"
+      conditions << sinceDate
+    end
+    
+    # Put in the :select so as to over-ride the active record "read only true when a :join is used"
+    Person.all :select => 'people.*',
+      :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}},
+      :conditions => conditions, 
+      :order => 'last_name, first_name'
+      
+  end
+  
+  #
+  #
+  #
+  def self.findResponseToQuestionForPerson(question, person, sinceDate = nil)
+    
+    conditions = ["survey_responses.survey_question_id = ? and people.id = ? ", question.id, person.id]
+    if (sinceDate)
+      conditions[0] += " AND survey_responses.updated_at > ?"
+      conditions << sinceDate
+    end
     
     SurveyResponse.all :joins => {:survey_respondent_detail => {:survey_respondent => :person}},
-      :conditions => ["survey_responses.survey_question_id = ? and people.id = ? and people.invitestatus_id = ? and people.acceptance_status_id = ? and survey_respondents.attending = ?",
-        question.id, person.id, inviteStatus, acceptanceStatus, attending], :order => "created_at desc"
+      :conditions => conditions, :order => "created_at desc"
          
   end
   

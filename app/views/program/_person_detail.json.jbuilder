@@ -1,7 +1,7 @@
 
 json.id         person.id    
 json.name       person.getFullPublicationName    
-json.bio        person.bio
+json.bio        person.bio ? person.bio : ''
 json.company    person.company
 json.job_title  person.job_title
 # TODO - need to add tags

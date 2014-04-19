@@ -45,15 +45,27 @@ class Person < ActiveRecord::Base
   
   has_many  :excluded_people, :through => :exclusions, 
             :source => :excludable,
-            :source_type => 'Person'
+            :source_type => 'Person' do
+              def find_by_source(s)
+                find(:all, :conditions => ['source = ?', s])
+              end
+            end
   
   has_many  :excluded_periods, :through => :exclusions,
             :source => :excludable,
-            :source_type => 'TimeSlot'
+            :source_type => 'TimeSlot' do
+              def find_by_source(s)
+                find(:all, :conditions => ['source = ?', s])
+              end
+            end
   
   has_many  :excluded_items, :through => :exclusions,
             :source => :excludable,
-            :source_type => "ProgrammeItem" 
+            :source_type => "ProgrammeItem" do
+              def find_by_source(s)
+                find(:all, :conditions => ['source = ?', s])
+              end
+            end
   
   #
   has_many  :programmeItemAssignments

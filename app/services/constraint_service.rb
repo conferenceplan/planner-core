@@ -4,19 +4,51 @@
 module ConstraintService
   
   #
+  #
+  #
+  def self.updateNbrItemConstraints(sinceDate = nil)
+    Person.transaction do
+      itemsPerDayQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['ItemsPerDay']).order("created_at desc").first
+      itemsPerConQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['ItemsPerConference']).order("created_at desc").first
+      
+      people = SurveyService.findPeopleWhoAnsweredQuestion(itemsPerDayQuestion,sinceDate)
+      people.each do |person|
+        surveyResponse = SurveyService.findResponseToQuestionForPerson(itemsPerDayQuestion,person,sinceDate)[0]
+        
+        itemsPerDay = surveyResponse.response.to_i
+        
+        person.person_constraints = PersonConstraints.new(:person_id => person.id) if !person.person_constraints
+        person.person_constraints.max_items_per_day = itemsPerDay
+        person.person_constraints.save!
+      end
+      
+      people = SurveyService.findPeopleWhoAnsweredQuestion(itemsPerConQuestion,sinceDate)
+      people.each do |person|
+        surveyResponse = SurveyService.findResponseToQuestionForPerson(itemsPerConQuestion,person,sinceDate)[0]
+        
+        itemsPerCon = surveyResponse.response.to_i
+        
+        person.person_constraints = PersonConstraints.new(:person_id => person.id) if !person.person_constraints
+        person.person_constraints.max_items_per_con = itemsPerCon
+        person.person_constraints.save!
+      end
+    end
+  end
+  
+  #
   # Update People with the availability information from the Survey(s)
   #
-  def self.updateAvailability
+  def self.updateAvailability(sinceDate = nil)
     Person.transaction do
       # If there is more than one we want to take the latest as that will have the most current information for the participant
       availSurveyQuestion = SurveyQuestion.where(:question_type => :availability).order("created_at desc").first
       if (availSurveyQuestion != nil)
-        people = SurveyService.findPeopleWhoAnsweredQuestion(availSurveyQuestion)
+        people = SurveyService.findPeopleWhoAnsweredQuestion(availSurveyQuestion,sinceDate)
         startOfConference = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s)
         numberOfDays = SITE_CONFIG[:conference][:number_of_days]
         
         people.each do |person|
-          surveyResponse = SurveyService.findResponseToQuestionForPerson(availSurveyQuestion,person)[0]
+          surveyResponse = SurveyService.findResponseToQuestionForPerson(availSurveyQuestion,person,sinceDate)[0]
           # NOTE - if a planner has updated the information for the person then we do not want to make a change
           next if ((person.available_date != nil) && (person.available_date.updated_at > surveyResponse.updated_at))
 
@@ -61,13 +93,13 @@ module ConstraintService
   #
   # Update People with Excluded Times
   #
-  def self.updateExcludedTimes
+  def self.updateExcludedTimes(sinceDate = nil)
     Person.transaction do
       excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
       
       peopleWithConstraints = []
       excludedTimesMaps.each do |excludedTimesMap|
-        people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer)
+        people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer,sinceDate)
         peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
         
         people.each do |person|
@@ -89,7 +121,7 @@ module ConstraintService
       # Now we also want to remove exclusions that are no longer relevent
       exclusion_ids = excludedTimesMaps.collect{|i| i.period_id}.uniq
       peopleWithConstraints.each do |person|
-        candidate_ids = person.excluded_periods.collect{|i| i.id}.uniq - exclusion_ids
+        candidate_ids = person.excluded_periods.find_by_source('survey').collect{|i| i.id}.uniq - exclusion_ids
         if candidate_ids.size > 0
           candidates = candidate_ids.collect{|i| Period.find(i) }
           person.excluded_periods.delete candidates
@@ -101,13 +133,13 @@ module ConstraintService
   #
   # Update People with Excluded Items
   #
-  def self.updateExcludedItems
+  def self.updateExcludedItems(sinceDate = nil)
     Person.transaction do
       excludedItemMaps = ExcludedItemsSurveyMap.find :all # Get the map of exclusion from the survey, based on date that this was last run
   
       peopleWithConstraints = []
       excludedItemMaps.each do |excludedItemMap|
-        people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer)
+        people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer,sinceDate)
         peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
         
         people.each do |person|
@@ -129,7 +161,7 @@ module ConstraintService
       # Now we also want to remove exclusions that are no longer relevent
       exclusion_ids = excludedItemMaps.collect{|i| i.programme_item_id}.uniq
       peopleWithConstraints.each do |person|
-        candidate_ids = person.excluded_items.collect{|i| i.id}.uniq - exclusion_ids
+        candidate_ids = person.excluded_items.find_by_source('survey').collect{|i| i.id}.uniq - exclusion_ids
         if candidate_ids.size > 0
           candidates = candidate_ids.collect{|i| ProgrammeItem.find(i) }
           person.excluded_items.delete candidates
