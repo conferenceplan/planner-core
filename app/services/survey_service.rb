@@ -38,11 +38,11 @@ module SurveyService
       photoQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Photo']).order("created_at desc").first
       faceQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Facebook']).order("created_at desc").first
 
-      setResponse('website', websiteQuestion,sinceDate)
-      setResponse('twitterinfo', twitterQuestion,sinceDate)
-      setResponse('othersocialmedia', otherQuestion,sinceDate)
-      setResponse('photourl', photoQuestion,sinceDate)
-      setResponse('facebook', faceQuestion,sinceDate)
+      setResponse('website', websiteQuestion,sinceDate) if websiteQuestion
+      setResponse('twitterinfo', twitterQuestion,sinceDate) if twitterQuestion
+      setResponse('othersocialmedia', otherQuestion,sinceDate) if otherQuestion
+      setResponse('photourl', photoQuestion,sinceDate) if photoQuestion
+      setResponse('facebook', faceQuestion,sinceDate) if faceQuestion
     end
   end
   
@@ -187,13 +187,14 @@ module SurveyService
     
     conditions = ["survey_responses.survey_question_id = ? and lower(survey_responses.response) like lower(?)", answer.survey_question_id, answer.answer]
     if (sinceDate)
-      conditions[0] += " AND survey_responses.updated_at > ?"
+      conditions[0] += " AND (survey_responses.updated_at > ? OR survey_answers.updated_at > ?)"
+      conditions << sinceDate
       conditions << sinceDate
     end
     
     # Put in the :select so as to over-ride the active record "read only true when a :join is used"
     Person.all :select => 'people.*',
-      :joins => {:survey_respondent => {:survey_respondent_detail => :survey_responses}},
+      :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}},
       :conditions => conditions, 
       :order => 'last_name, first_name'
       
@@ -206,13 +207,14 @@ module SurveyService
     
     conditions = ["survey_responses.survey_question_id = ?", question.id]
     if (sinceDate)
-      conditions[0] += " AND survey_responses.updated_at > ?"
+      conditions[0] += " AND (survey_responses.updated_at > ? OR survey_questions.updated_at > ?)"
+      conditions << sinceDate
       conditions << sinceDate
     end
     
     # Put in the :select so as to over-ride the active record "read only true when a :join is used"
     Person.all :select => 'people.*',
-      :joins => {:survey_respondent => {:survey_respondent_detail => :survey_responses}},
+      :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}},
       :conditions => conditions, 
       :order => 'last_name, first_name'
       
@@ -225,7 +227,8 @@ module SurveyService
     
     conditions = ["survey_questions.isbio = 1"]
     if (sinceDate)
-      conditions[0] += " AND survey_responses.updated_at > ?"
+      conditions[0] += " AND (survey_responses.updated_at > ? OR survey_questions.updated_at > ?)"
+      conditions << sinceDate
       conditions << sinceDate
     end
     
@@ -244,11 +247,12 @@ module SurveyService
     
     conditions = ["survey_responses.survey_question_id = ? and people.id = ? ", question.id, person.id]
     if (sinceDate)
-      conditions[0] += " AND survey_responses.updated_at > ?"
+      conditions[0] += " AND (survey_responses.updated_at > ? OR survey_questions.updated_at > ?)"
+      conditions << sinceDate
       conditions << sinceDate
     end
     
-    SurveyResponse.all :joins => {:survey_respondent_detail => {:survey_respondent => :person}},
+    SurveyResponse.all :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
       :conditions => conditions, :order => "created_at desc"
          
   end

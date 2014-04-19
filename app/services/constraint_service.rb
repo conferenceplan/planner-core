@@ -11,26 +11,30 @@ module ConstraintService
       itemsPerDayQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['ItemsPerDay']).order("created_at desc").first
       itemsPerConQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['ItemsPerConference']).order("created_at desc").first
       
-      people = SurveyService.findPeopleWhoAnsweredQuestion(itemsPerDayQuestion,sinceDate)
-      people.each do |person|
-        surveyResponse = SurveyService.findResponseToQuestionForPerson(itemsPerDayQuestion,person,sinceDate)[0]
-        
-        itemsPerDay = surveyResponse.response.to_i
-        
-        person.person_constraints = PersonConstraints.new(:person_id => person.id) if !person.person_constraints
-        person.person_constraints.max_items_per_day = itemsPerDay
-        person.person_constraints.save!
+      if itemsPerDayQuestion
+        people = SurveyService.findPeopleWhoAnsweredQuestion(itemsPerDayQuestion,sinceDate)
+        people.each do |person|
+          surveyResponse = SurveyService.findResponseToQuestionForPerson(itemsPerDayQuestion,person,sinceDate)[0]
+          
+          itemsPerDay = surveyResponse.response.to_i
+          
+          person.person_constraints = PersonConstraints.new(:person_id => person.id) if !person.person_constraints
+          person.person_constraints.max_items_per_day = itemsPerDay
+          person.person_constraints.save!
+        end
       end
       
-      people = SurveyService.findPeopleWhoAnsweredQuestion(itemsPerConQuestion,sinceDate)
-      people.each do |person|
-        surveyResponse = SurveyService.findResponseToQuestionForPerson(itemsPerConQuestion,person,sinceDate)[0]
-        
-        itemsPerCon = surveyResponse.response.to_i
-        
-        person.person_constraints = PersonConstraints.new(:person_id => person.id) if !person.person_constraints
-        person.person_constraints.max_items_per_con = itemsPerCon
-        person.person_constraints.save!
+      if itemsPerConQuestion
+        people = SurveyService.findPeopleWhoAnsweredQuestion(itemsPerConQuestion,sinceDate)
+        people.each do |person|
+          surveyResponse = SurveyService.findResponseToQuestionForPerson(itemsPerConQuestion,person,sinceDate)[0]
+          
+          itemsPerCon = surveyResponse.response.to_i
+          
+          person.person_constraints = PersonConstraints.new(:person_id => person.id) if !person.person_constraints
+          person.person_constraints.max_items_per_con = itemsPerCon
+          person.person_constraints.save!
+        end
       end
     end
   end
@@ -139,7 +143,8 @@ module ConstraintService
   
       peopleWithConstraints = []
       excludedItemMaps.each do |excludedItemMap|
-        people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer,sinceDate)
+        since = (excludedItemMap.updated_at < sinceDate) ? sinceDate : nil # if there is a new mapping since the last time we ran then ignore the last run date
+        people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer,since)
         peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
         
         people.each do |person|

@@ -760,35 +760,13 @@ ActiveRecord::Schema.define(:version => 20140419154915) do
   create_table "site_configs", :force => true do |t|
     t.string   "captcha_pub_key",  :default => ""
     t.string   "captcha_priv_key", :default => ""
-    t.datetime "created_at",                                                 :null => false
-    t.datetime "updated_at",                                                 :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "lock_version",     :default => 0
     t.string   "name",             :default => ""
     t.string   "time_zone",        :default => "Eastern Time (US & Canada)"
     t.datetime "start_date"
     t.integer  "number_of_days",   :default => 1
-  end
-
-  create_table "smerf_forms", :force => true do |t|
-    t.string   "name",                           :null => false
-    t.string   "code",                           :null => false
-    t.integer  "active",                         :null => false
-    t.text     "cache",      :limit => 16777215
-    t.datetime "cache_date"
-  end
-
-  add_index "smerf_forms", ["code"], :name => "index_smerf_forms_on_code", :unique => true
-
-  create_table "smerf_forms_surveyrespondents", :force => true do |t|
-    t.integer "surveyrespondent_id", :null => false
-    t.integer "smerf_form_id",       :null => false
-    t.text    "responses",           :null => false
-  end
-
-  create_table "smerf_responses", :force => true do |t|
-    t.integer "smerf_forms_surveyrespondent_id", :null => false
-    t.string  "question_code",                   :null => false
-    t.text    "response",                        :null => false
   end
 
   create_table "survey_answers", :force => true do |t|
@@ -923,8 +901,8 @@ ActiveRecord::Schema.define(:version => 20140419154915) do
     t.text     "question6"
     t.boolean  "isbio"
     t.integer  "questionmapping_id"
-    t.boolean  "horizontal",         :default => false
     t.boolean  "private",            :default => false
+    t.boolean  "horizontal",         :default => false
   end
 
   create_table "survey_respondent_details", :force => true do |t|
