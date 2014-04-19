@@ -496,7 +496,7 @@
     <button class="model-edit-button btn btn-primary btn-xs pull-right">
         <%= t "edit" %>
     </button>
-    <small> <em>Arrival</em>: {{= moment(start_time).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="glyphicon glyphicon-arrow-right"></i> <em>Departure</em>: {{= moment(end_time).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
+    <small> <em>Arrival</em>: {{= start_time_str }} <i class="glyphicon glyphicon-arrow-right"></i> <em>Departure</em>: {{= end_time_str }} </small>
 </div>
 {{ }; }}
 </script>
@@ -509,7 +509,7 @@
 
 <script type="text/template" id="time-exclusion-view-template">
 <div class="thumbnail clearfix">
-    <small> {{= moment(start).format("dddd, MMMM Do YYYY, h:mm a") }} <i class="glyphicon glyphicon-arrow-right"></i> {{= moment(start).date() == moment(end).date() ? moment(end).format("h:mm a") : moment(end).format("dddd, MMMM Do YYYY, h:mm a") }} </small>
+    <small> {{= start_str }} <i class="glyphicon glyphicon-arrow-right"></i> {{= end_str }} </small>
 </div>
 </script>
 

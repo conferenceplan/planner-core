@@ -44,11 +44,12 @@ module ConstraintService
   #
   def self.updateAvailability(sinceDate = nil)
     Person.transaction do
+      Time.use_zone(SITE_CONFIG[:conference][:time_zone]) do
       # If there is more than one we want to take the latest as that will have the most current information for the participant
       availSurveyQuestion = SurveyQuestion.where(:question_type => :availability).order("created_at desc").first
       if (availSurveyQuestion != nil)
         people = SurveyService.findPeopleWhoAnsweredQuestion(availSurveyQuestion,sinceDate)
-        startOfConference = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s)
+        startOfConference = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).beginning_of_day
         numberOfDays = SITE_CONFIG[:conference][:number_of_days]
         
         people.each do |person|
@@ -62,7 +63,7 @@ module ConstraintService
                 if (surveyResponse.response2.downcase == 'noon')
                    startTime = startOfConference + (12.hour) + (surveyResponse.response1.to_i).day
                 else
-                   startTime = startOfConference + (Time.parse(surveyResponse.response2) - Time.now.beginning_of_day) + (surveyResponse.response1.to_i).day
+                   startTime = startOfConference + (Time.zone.parse(surveyResponse.response2) - Time.zone.now.beginning_of_day) + (surveyResponse.response1.to_i).day
                 end
               else
                 startTime = startOfConference + 8.hour + (surveyResponse.response1.to_i).day
@@ -72,7 +73,7 @@ module ConstraintService
                 if (surveyResponse.response4.downcase == 'noon')
                     endTime = startOfConference + 12.hour + (surveyResponse.response3.to_i).day
                 else
-                    endTime = startOfConference + (Time.parse(surveyResponse.response4) - Time.now.beginning_of_day) + (surveyResponse.response3.to_i).day
+                    endTime = startOfConference + (Time.zone.parse(surveyResponse.response4) - Time.zone.now.beginning_of_day) + (surveyResponse.response3.to_i).day
                 end
               else
                endTime = startOfConference + 21.hour + (surveyResponse.response3.to_i).day
@@ -91,6 +92,7 @@ module ConstraintService
           end
         end
       end
+      end
     end
   end
   
@@ -99,6 +101,7 @@ module ConstraintService
   #
   def self.updateExcludedTimes(sinceDate = nil)
     Person.transaction do
+      Time.use_zone(SITE_CONFIG[:conference][:time_zone]) do
       excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
       
       peopleWithConstraints = []
@@ -131,6 +134,7 @@ module ConstraintService
           person.excluded_periods.delete candidates
         end
       end
+    end
     end
   end
   

@@ -1,6 +1,6 @@
 class SurveyAnswer < ActiveRecord::Base
   attr_accessible :lock_version, :answer, :default, :sort_order, :help, :start_time, :start_day, :duration,
-                  :survey_question_id, :answertype_id
+                  :survey_question_id, :answertype_id, :created_at, :id, :updated_at
   
   has_enumerated :answertype, :class_name => 'AnswerType'
   belongs_to :survey_question
@@ -64,7 +64,7 @@ private
 
   def startAndDuration(start_day, start_time, duration)
     times = start_time.split(':') # hours and minutes
-    start = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + start_day.to_i.days + times[0].to_i.hours + times[1].to_i.minutes
+    start = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).beginning_of_day + start_day.to_i.days + times[0].to_i.hours + times[1].to_i.minutes
     [start, start + duration.minutes]
   end
 
