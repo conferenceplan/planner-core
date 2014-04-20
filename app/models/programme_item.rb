@@ -13,21 +13,21 @@ class ProgrammeItem < ActiveRecord::Base
   
   # TODO - add expected audience size
   
-  has_many  :programme_item_assignments
+  has_many  :programme_item_assignments, :dependent => :delete_all
   has_many  :people, :through => :programme_item_assignments
   
-  has_many :equipment_needs
+  has_many :equipment_needs, :dependent => :delete_all
   has_many :equipment_types, :through => :equipment_needs
   
   belongs_to :setup_type
  
-  belongs_to   :format 
+  belongs_to :format 
   
-  has_one :room_item_assignment # really we only use one anyway...
+  has_one :room_item_assignment, :dependent => :delete # really we only use one anyway...
   has_one :room, :through => :room_item_assignment #
   has_one :time_slot, :through => :room_item_assignment
 
-  has_many :excluded_items_survey_maps
+  has_many :excluded_items_survey_maps, :dependent => :delete_all
   # has_many :mapped_survey_questions, :through => :excluded_items_survey_maps
   
   # The relates the published programme item back to the original programme item

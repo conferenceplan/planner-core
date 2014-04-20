@@ -8,7 +8,7 @@ class Person < ActiveRecord::Base
   # Put in audit for people
   audited :allow_mass_assignment => true
 
-  has_many  :addresses
+  has_many  :addresses, :dependent => :delete_all
   
   has_many  :postal_addresses, :through => :addresses,
             :source => :addressable, 
@@ -24,8 +24,8 @@ class Person < ActiveRecord::Base
 
   accepts_nested_attributes_for :postal_addresses, :email_addresses, :phone_numbers
 
-  has_many  :relationships
-  
+  has_many  :relationships, :dependent => :delete_all
+
   has_many  :related_people, :through => :relationships,
             :source => :relatable,
             :source_type => 'Person'
@@ -35,14 +35,14 @@ class Person < ActiveRecord::Base
     order("ast_name ASC")
   end
   
-  has_one :person_constraints
+  has_one :person_constraints, :dependent => :delete
 
   # ----------------------------------------------------------------------------------------------
   #
   # TODO - conference specific data should be refactored into a seperate class
   #
 
-  has_many  :exclusions
+  has_many  :exclusions, :dependent => :delete_all
   
   has_many  :excluded_people, :through => :exclusions, 
             :source => :excludable,
@@ -69,17 +69,15 @@ class Person < ActiveRecord::Base
             end
   
   #
-  has_many  :programmeItemAssignments
+  has_many  :programmeItemAssignments, :dependent => :delete_all
   has_many  :programmeItems, :through => :programmeItemAssignments
   
-  has_many  :publishedProgrammeItemAssignments
+  has_many  :publishedProgrammeItemAssignments, :dependent => :delete_all
   has_many  :published_programme_items, :through => :publishedProgrammeItemAssignments
 
   has_one   :registrationDetail, :dependent => :delete
   has_one   :survey_respondent
   has_enumerated :invitestatus, :class_name => 'InviteStatus'
-
-  has_one   :survey_copy_status
 
   belongs_to  :invitation_category
   has_enumerated :acceptance_status, :class_name => 'AcceptanceStatus'
