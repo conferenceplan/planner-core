@@ -25,5 +25,5 @@
     </div>
 </div>
 <% else %>
-    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => ((question.text_size && question.text_size < 10) ? 'col-xs-1' : 'col-xs-12'), :required => question.mandatory %>
+    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => ((question.text_size && question.text_size < 10) ? 'col-xs-2' : 'col-xs-12'), :required => question.mandatory %>
 <% end %>
