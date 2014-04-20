@@ -139,7 +139,7 @@ module PlannerReportsService
     peopleAndTags.uniq!
     peopleAndTags.sort! {|x,y| x.last_name <=> y.last_name}
     peopleAndTags.each do |n|
-      n[:details] = n.tag_list_on(context)
+      n.details = n.tag_list_on(context)
     end
     
     peopleAndTags
