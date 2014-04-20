@@ -7,6 +7,42 @@ class PlannerReportsController < PlannerController
   #
   #
   #
+  def people_nbr_items
+    
+    @assignments = PlannerReportsService.findPersonAndItemConstraints
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "people_nbr_items" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+
+        output.push [
+          'Person','Day','Nbr of Items','Max per Day','Max per Con','Items'
+        ]
+        
+        @assignments.each do |assignment|
+          
+          output.push [
+                assignment.person.getFullPublicationName,
+                (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + assignment.day.day).strftime('%A'),
+                assignment.nbr_items,
+                (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
+                (assignment.max_items_per_con ? assignment.max_items_per_day : ''),
+                assignment.person.programmeItemAssignments.collect { |pi|
+                        pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && pi.programmeItem.room_item_assignment.day == assignment.day
+                    }.reject { |c| c == nil }.join("\n")
+          ]
+        end
+        
+        csv_out(output, outfile)
+      }
+    end
+  end
+  
+  #
+  #
+  #
   def capacity_report
     @items = PlannerReportsService.items_over_capacity
     

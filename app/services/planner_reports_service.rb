@@ -211,6 +211,22 @@ module PlannerReportsService
 
     # Should be published items??? - TODO
   end
+  
+  #
+  #
+  #
+  def self.findPersonAndItemConstraints
+    
+    ProgrammeItemAssignment.select("people.last_name, programme_item_assignments.person_id, room_item_assignments.day, count(programme_item_assignments.person_id) as nbr_items, person_constraints.max_items_per_day, person_constraints.max_items_per_con").
+        joins("right join room_item_assignments on room_item_assignments.programme_item_id = programme_item_assignments.programme_item_id").
+        joins("left join person_constraints on person_constraints.person_id = programme_item_assignments.person_id").
+        joins(:person).
+        includes({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
+        where("programme_item_assignments.person_id is not null").
+        group("programme_item_assignments.person_id, room_item_assignments.day").
+        order("people.last_name, people.first_name, room_item_assignments.day")
+    
+  end
 
 #
 #

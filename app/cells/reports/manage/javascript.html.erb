@@ -6,6 +6,15 @@ ReportApp.ReportManagement = (function(Backbone){
     
     var GenericForm = Backbone.Form.extend({
     });
+    
+    var PeopleAllocationColModel = [
+                    {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
+                    {name: 'day', label : '<%= t "day" %>', jsonmap: "day_str"},
+                    {name: 'num_of_items', label : '<%= t "number-of-items" %>', jsonmap: "nbr_items"},
+                    {name: 'max_per_day', label : '<%= t "max-number-per-day" %>', jsonmap: "max_items_per_day"},
+                    {name: 'max_per_con', label : '<%= t "max-number-per-con" %>', jsonmap: "max_items_per_con"},
+                    {name:'Items', label : '<%= t "items" %>', jsonmap: "items", width: 500, formatter: AppUtils.arrayToString}
+    ];
 
     var ItemCapacityColModel = [
                     {name: 'title',       label : '<%= t "item" %>',  jsonmap: "title",    width: 300},
@@ -162,7 +171,19 @@ ReportApp.ReportManagement = (function(Backbone){
             'panels_by_timeslot'    : 'panels_by_timeslot',
             'edited_bios'           : 'edited_bios',
             'equipment_needs'       : 'equipment_needs',
-            'capacity_report'       : 'capacity_report'
+            'capacity_report'       : 'capacity_report',
+            'people_item_allocation' : 'people_item_allocation'
+        },
+        
+        people_item_allocation : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/people_nbr_items',
+                colModel    : PeopleAllocationColModel,
+                caption     : '<%= t "report-people-item-allocation" %>'
+            }));
         },
         
         capacity_report : function() {
