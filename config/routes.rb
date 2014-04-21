@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  filter :locale
-
   mount Interpret::Engine => "/interpret" # cause the interpret gem has the old way of defining the engine mount
   
   namespace :pages do
@@ -13,7 +11,6 @@ Rails.application.routes.draw do
     match "venues_dash/:cellname" => "venues_dash#index"
     match "surveys_dash/:cellname" => "surveys_dash#index"
     match "communications_dash/:cellname" => "communications_dash#index"
-    match "mobile_dash/:cellname" => "mobile_dash#index"
     match "reports_dash/:cellname" => "reports_dash#index"
     match "publications_dash/:cellname" => "publications_dash#index"
     match "admin_dash/:cellname" => "admin_dash#index"
@@ -69,18 +66,6 @@ Rails.application.routes.draw do
   resources :conference_directory
 
   match '/dash/history/items' => 'dash/history#items'
-
-  #
-  #
-  #
-  match '/mobile/theme/default' => 'mobile/theme#default'
-  namespace :mobile do
-    resources :theme
-    resources :mobile_pages
-    resources :default_bio_image
-    resources :logo_images
-  end
-
 
 # TODO - test
   match 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'

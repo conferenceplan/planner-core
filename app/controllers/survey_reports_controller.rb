@@ -1,6 +1,8 @@
 #
 #
 #
+require 'planner_report_helpers'
+
 class SurveyReportsController < PlannerController
   include PlannerReportHelpers
   
