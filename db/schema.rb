@@ -792,21 +792,6 @@ ActiveRecord::Schema.define(:version => 20140419154915) do
     t.integer  "survey_response_id"
   end
 
-  create_table "survey_copy_statuses", :force => true do |t|
-    t.integer  "person_id"
-    t.integer  "survey_respondent_id"
-    t.boolean  "nameCopied",           :default => false
-    t.boolean  "pseudonymCopied",      :default => false
-    t.boolean  "addressCopied",        :default => false
-    t.boolean  "phoneCopied",          :default => false
-    t.boolean  "emailCopied",          :default => false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "lock_version",         :default => 0
-    t.boolean  "tagsCopied",           :default => false
-    t.boolean  "availableDatesCopied", :default => false
-  end
-
   create_table "survey_formats", :force => true do |t|
     t.text     "help"
     t.string   "style",             :default => ""

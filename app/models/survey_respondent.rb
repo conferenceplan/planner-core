@@ -6,7 +6,6 @@ class SurveyRespondent < ActiveRecord::Base
   end
 
   belongs_to  :person 
-  has_one   :survey_copy_status
   has_enumerated :email_status, :class_name => 'EmailStatus'
   
   has_one :survey_respondent_detail
