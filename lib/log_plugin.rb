@@ -7,7 +7,7 @@ class LogPlugin < Delayed::Plugin
     callbacks do |lifecycle|
         lifecycle.around(:invoke_job) do |job, *args, &block|
             begin
-                PlannerRc1::Application.config.logger = ActiveRecord::Base.logger = Logger.new(File.join(Rails.root, 'log', 'jobs.log'))
+                PlannerCore::Application.config.logger = ActiveRecord::Base.logger = Logger.new(File.join(Rails.root, 'log', 'jobs.log'))
                 # Forward the call to the next callback in the callback chain
                 block.call(job, *args)
             rescue Exception => error
