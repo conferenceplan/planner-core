@@ -13,7 +13,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                 pdf.start_new_page if !first_page
                 first_page = false
                 current_day = assignment.day
-                pdf.text  '<b>' + room.name + ' - ' + room.published_venue.name + ' <b>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + assignment.day.days).strftime('%A') + '</b>', :size => 30, :inline_format => true, :align => :center
+                pdf.text  '<b>' + room.name + ' - ' + room.published_venue.name + ' <b>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.days).strftime('%A') + '</b>', :size => 30, :inline_format => true, :align => :center
                 pdf.move_down 1.in
                 pdf.font_size 16
             end

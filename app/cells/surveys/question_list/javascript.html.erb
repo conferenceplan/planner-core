@@ -44,7 +44,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                     answertype_id : { type : 'Select', 
                                        title : '<%= t "survey-answer-type" %>',
                                        options : <%= [].concat(AnswerType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-                    start_day : { type : 'DependentSelect', title : '<%= t "start day" %>', options : <%=  ([[' ','-1']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%>,
+                    start_day : { type : 'DependentSelect', title : '<%= t "start day" %>', options : <%=  ([[' ','-1']].concat((0..((SiteConfig.first.number_of_days]).to_i-1)).to_a.collect{ |r| [(SiteConfig.first.start_date.to_s) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%>,
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
                     start_time : { type : 'DependentTime', title : '<%= t "item-start-time" %>',
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
@@ -109,7 +109,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
     };
     
     var answerTypes = <%= Hash[AnswerType.find(:all).map { |a| [a.id.to_s, a.name.to_s] }].to_json.html_safe %>;
-    var dayStrings = <%=  Hash[[[-1,'&nbsp;']].concat((0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a.map{ |r| [r.to_s, (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + r.days).strftime('%A')]})].to_json.html_safe %>
+    var dayStrings = <%=  Hash[[[-1,'&nbsp;']].concat((0..((SiteConfig.first.number_of_days]).to_i-1)).to_a.map{ |r| [r.to_s, (Time.zone.parse(SiteConfig.first.start_date.to_s) + r.days).strftime('%A')]})].to_json.html_safe %>
     
     return {
         init : function() {

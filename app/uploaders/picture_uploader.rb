@@ -8,7 +8,7 @@ class PictureUploader < CarrierWave::Uploader::Base
   #
   #
   def public_id
-    publicid = SITE_CONFIG[:conference][:name] + '/'
+    publicid = SiteConfig.first.name + '/'
     publicid += model.imageable_type ? model.imageable_type : ''
     publicid += model.imageable_id ? ('_' + model.imageable_id.to_s) : ''
     publicid += model.use ? ('_' + model.use.to_s) : ''

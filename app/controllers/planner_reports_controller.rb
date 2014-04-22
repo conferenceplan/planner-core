@@ -27,7 +27,7 @@ class PlannerReportsController < PlannerController
           
           output.push [
                 assignment.person.getFullPublicationName,
-                (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + assignment.day.day).strftime('%A'),
+                (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A'),
                 assignment.nbr_items,
                 (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
                 (assignment.max_items_per_con ? assignment.max_items_per_day : ''),

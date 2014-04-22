@@ -64,7 +64,6 @@ ScheduleApp.ItemManagement = (function(Backbone){
             if (day > 0) {
                 day -= 1;
                 this.model.set('currentDay', day);
-                // this.model.set('currentDate', Time.zone.parse(SITE_CONFIG[:conference][:start_date]) + day.days);
                 this.render();
                 _currentDay = day;
                 loadGrid(day, roomList);
@@ -73,7 +72,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
         
         nextDay : function() {
             day = this.model.get('currentDay');
-            if (day < (<%= SITE_CONFIG[:conference][:number_of_days] %> -1)) {
+            if (day < (<%= SiteConfig.first.number_of_days %> -1)) {
                 day += 1;
                 this.model.set('currentDay', day);
                 this.render();
@@ -102,7 +101,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
             var nbrOfRooms = assignments.get('rooms').length;
             var gridWidth = (nbrOfRooms > ($("#program-grid").width() / 150)) ? $("#program-grid").width() : ((150 * nbrOfRooms) + 40);
             
-            DailyGrid.paint(_containerElem, assignments, gridWidth, <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>);
+            DailyGrid.paint(_containerElem, assignments, gridWidth, <%= Time.zone.parse(SiteConfig.first.start_date.to_s).utc_offset/(60*60) %>);
             
             // when an item is droped on the grid we need to
             // 1. create a new assignment (need the room and the time)
@@ -229,9 +228,9 @@ ScheduleApp.ItemManagement = (function(Backbone){
         var content = "";
         
         if (original) {
-                content = '<%= t "move-item" %>' + ' ' + original.title + " " + '<%= t "to" %>' + " " + moment(time).utc().add('hour', <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>).format('HH:mm, dddd');
+                content = '<%= t "move-item" %>' + ' ' + original.title + " " + '<%= t "to" %>' + " " + moment(time).utc().add('hour', <%= Time.zone.parse(SiteConfig.first.start_date.to_s).utc_offset/(60*60) %>).format('HH:mm, dddd');
         } else {
-                content = '<%= t "insert-item" %>' + ' ' + '<%= t "at" %>' + " " + moment(time).utc().add('hour', <%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).utc_offset/(60*60) %>).format('HH:mm, dddd');
+                content = '<%= t "insert-item" %>' + ' ' + '<%= t "at" %>' + " " + moment(time).utc().add('hour', <%= Time.zone.parse(SiteConfig.first.start_date.to_s).utc_offset/(60*60) %>).format('HH:mm, dddd');
         }
         
         modal = new AppUtils.ConfirmModel({

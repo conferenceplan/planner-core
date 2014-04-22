@@ -12,14 +12,8 @@ class ApplicationController < ActionController::Base
   
   def application_time_zone(&block)
     cfg = SiteConfig.find :first # for now we only have one convention... change when we have many (TODO)
-    if (cfg) # TODO - temp, to be replaced in other code
-      SITE_CONFIG[:conference] = {}
-      SITE_CONFIG[:conference][:name] = cfg.name
-      SITE_CONFIG[:conference][:number_of_days] = cfg.number_of_days
-      SITE_CONFIG[:conference][:start_date] = cfg.start_date
-      SITE_CONFIG[:conference][:time_zone] = cfg.time_zone
-    end
-    Time.use_zone(SITE_CONFIG[:conference][:time_zone], &block)
+    zone = cfg ? cfg.time_zone : Time.zone
+    Time.use_zone(zone, &block)
   end
   
   def load_cloudinary_config

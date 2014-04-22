@@ -44,13 +44,13 @@ module ConstraintService
   #
   def self.updateAvailability(sinceDate = nil)
     Person.transaction do
-      Time.use_zone(SITE_CONFIG[:conference][:time_zone]) do
+      Time.use_zone(SiteConfig.first.time_zone) do
       # If there is more than one we want to take the latest as that will have the most current information for the participant
       availSurveyQuestion = SurveyQuestion.where(:question_type => :availability).order("created_at desc").first
       if (availSurveyQuestion != nil)
         people = SurveyService.findPeopleWhoAnsweredQuestion(availSurveyQuestion,sinceDate)
-        startOfConference = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).beginning_of_day
-        numberOfDays = SITE_CONFIG[:conference][:number_of_days]
+        startOfConference = Time.zone.parse(SiteConfig.first.start_date.to_s).beginning_of_day
+        numberOfDays = SiteConfig.first.number_of_days
         
         people.each do |person|
           surveyResponse = SurveyService.findResponseToQuestionForPerson(availSurveyQuestion,person,sinceDate)[0]
@@ -101,7 +101,7 @@ module ConstraintService
   #
   def self.updateExcludedTimes(sinceDate = nil)
     Person.transaction do
-      Time.use_zone(SITE_CONFIG[:conference][:time_zone]) do
+      Time.use_zone(SiteConfig.first.time_zone) do
       excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
       
       peopleWithConstraints = []

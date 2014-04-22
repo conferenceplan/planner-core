@@ -54,7 +54,7 @@ class ProgrammeItemsController < PlannerController
     @programmeItem.lock_version = 0
     startTime = params[:start_time].to_datetime
     startDay = -1
-    startDay = (startTime - Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).to_datetime).to_i if startTime
+    startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
 
     begin
@@ -78,7 +78,7 @@ class ProgrammeItemsController < PlannerController
     @programmeItem = ProgrammeItem.find(params[:id])
     startTime = params[:start_time].to_datetime
     startDay = -1
-    startDay = (startTime - Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).to_datetime).to_i if startTime
+    startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
     
     begin

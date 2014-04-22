@@ -2,7 +2,7 @@
 <script type="text/template" id="grid-day-control-view-template">
     <div class="btn-group" style="margin-left: -15px; margin-bottom: 10px;">
         <button class="btn btn-default prev-day"><i class="glyphicon glyphicon-chevron-left"></i></button>
-        <button class="btn btn-default day">{{= moment("<%= Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).strftime('%F %T') %>").add('days', currentDay).format("dddd, D MMM YYYY") }}</button>
+        <button class="btn btn-default day">{{= moment("<%= Time.zone.parse(SiteConfig.first.start_date.to_s).strftime('%F %T') %>").add('days', currentDay).format("dddd, D MMM YYYY") }}</button>
         <button class="btn btn-default next-day"><i class="glyphicon glyphicon-chevron-right"></i></button>
     </div>
     <button class="btn btn-default menu-link" style="margin-bottom: 10px;"><i class="glyphicon glyphicon-filter"></i><%= t "filter-rooms" %></button>

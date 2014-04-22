@@ -5,7 +5,7 @@ json.rowdata @assignments do |assignment|
 
     json.name               assignment.person.getFullPublicationName
     json.day                assignment.day
-    json.day_str            (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + assignment.day.day).strftime('%A')
+    json.day_str            (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A')
     json.nbr_items          assignment.nbr_items
     json.max_items_per_day  assignment.max_items_per_day ? assignment.max_items_per_day : ''
     json.max_items_per_con  assignment.max_items_per_con ? assignment.max_items_per_day : ''

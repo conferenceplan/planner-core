@@ -16,7 +16,7 @@ class ProgramPlannerController < PlannerController
       @roomListing = Room.all :order => 'venues.name DESC, rooms.name ASC',
                             :joins => :venue
     end
-    @currentDate = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + @day.to_i.day
+    @currentDate = Time.zone.parse(SiteConfig.first.start_date.to_s) + @day.to_i.day
   end
   
   #

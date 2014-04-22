@@ -18,7 +18,7 @@ class SurveyAnswer < ActiveRecord::Base
   #
   def updateTimeConflicts
     if answertype == AnswerType['TimeConflict']
-      numberOfDays = SITE_CONFIG[:conference][:number_of_days]
+      numberOfDays = SiteConfig.first.number_of_days
       nbrConflicts = excluded_periods.size
       
       if (start_day > -1) && (start_day < numberOfDays) # the conflict is for a specific time
@@ -64,7 +64,7 @@ private
 
   def startAndDuration(start_day, start_time, duration)
     times = start_time.split(':') # hours and minutes
-    start = Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s).beginning_of_day + start_day.to_i.days + times[0].to_i.hours + times[1].to_i.minutes
+    start = Time.zone.parse(SiteConfig.first.start_date.to_s).beginning_of_day + start_day.to_i.days + times[0].to_i.hours + times[1].to_i.minutes
     [start, start + duration.minutes]
   end
 

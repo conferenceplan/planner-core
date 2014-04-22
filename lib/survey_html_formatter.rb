@@ -224,9 +224,9 @@ module SurveyHtmlFormatter
         content += '<div class="response_answer"><pre>I am available for the complete duration of the Convention.</pre></div>'
       elsif response.response1
         content += '<div class="response_answer"><pre>'
-        if SITE_CONFIG[:conference]
-          content += 'From: <em>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + response.response1.to_i.day).strftime('%A, %B %e') + ' at ' + response.response2 + '</em><br/>'
-          content += 'To: <em>' + (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + response.response3.to_i.day).strftime('%A, %B %e') + ' at ' + response.response4 + '</em><br/>'
+        if SiteConfig.first
+          content += 'From: <em>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + response.response1.to_i.day).strftime('%A, %B %e') + ' at ' + response.response2 + '</em><br/>'
+          content += 'To: <em>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + response.response3.to_i.day).strftime('%A, %B %e') + ' at ' + response.response4 + '</em><br/>'
         end
           content += '</pre></div>'
       elsif response.response5

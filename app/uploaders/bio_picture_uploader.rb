@@ -7,7 +7,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   # Use a combination of the person's name for the id of the image
   #
   def public_id
-    publicid = SITE_CONFIG[:conference][:name] + '/'
+    publicid = SiteConfig.first.name + '/'
     if ((defined? model.person) && model.person)
       publicid += model.person.first_name ? model.person.first_name : ''
       publicid += model.person.last_name ? model.person.last_name : ''

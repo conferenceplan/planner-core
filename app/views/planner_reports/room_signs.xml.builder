@@ -2,13 +2,13 @@
 #
 #
 xml.room_signs do
-    days = @day ? [@day] : (0..((SITE_CONFIG[:conference][:number_of_days]).to_i-1)).to_a
+    days = @day ? [@day] : (0..((SiteConfig.first.number_of_days).to_i-1)).to_a
     days.each do |day| # For each day ...
         @rooms.each do |room|
             xml.room do
                 xml.room_name room.name
                 xml.venue room.published_venue.name if room.published_venue
-                xml.day (Time.zone.parse(SITE_CONFIG[:conference][:start_date].to_s) + day.days).strftime('%A')
+                xml.day (Time.zone.parse(SiteConfig.first.start_date.to_s) + day.days).strftime('%A')
                 xml.items do
                     room.published_room_item_assignments.day(day).each do |assignment|
                         xml.item do
