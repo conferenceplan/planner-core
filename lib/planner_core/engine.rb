@@ -1,18 +1,17 @@
 #
 #
 #
-# require 'actionmailer' 
-# require 'activerecord' 
 require 'active_support/all'
 require 'axlsx_rails'
 require "audited-activerecord"
 require 'acts-as-taggable-on'
-require 'authlogic'
+require 'devise'
 require 'bluecloth'
 require 'bootstrap-sass'
 require 'cells'
 require 'ckeditor_rails'
-require "declarative_authorization" 
+#require "authority" 
+require 'declarative_authorization'
 require 'deep_cloneable'
 require 'delayed_job' 
 require 'delayed_job_active_record'
@@ -20,13 +19,10 @@ require 'i18n'
 require 'jbuilder'
 require 'jpbuilder'
 require 'mysql2' 
-#require 'rack-jsonp'
-#require 'rack-jsonp-middleware' #, :require => 'rack/jsonp'
 require 'time_diff'
 require 'turbolinks'
 require 'will_paginate'
 require 'font_assets'
-#require 'yajl-ruby'
 require 'log4r'
 require "browser"
 require 'jquery-rails'
@@ -44,6 +40,12 @@ require 'cloudinary'
 require 'dalli'
 require "connection_pool"
 require "routing-filter"
+# require 'actionmailer' # CHECK
+# require 'activerecord' 
+
+#require 'rack-jsonp'
+#require 'rack-jsonp-middleware' #, :require => 'rack/jsonp'
+#require 'yajl-ruby'
 
 module PlannerCore
   class Engine < ::Rails::Engine

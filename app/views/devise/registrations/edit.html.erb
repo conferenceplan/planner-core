@@ -1,0 +1,45 @@
+<div class='row'>
+    <div class='col-md-12'>
+        <h2 class="text-center">Edit <%= resource_name.to_s.humanize %></h2>
+    </div>
+</div>
+<div class='row'>
+    <div id="login-form">
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+          <%= devise_error_messages! %>
+            <div class="form-group">
+                <%= f.label t 'email', class: "control-label" %>
+                <div>
+                    <%= f.text_field :email, class: "form-control", tabindex: "1", autofocus: "autofocus", autocorrect: "off", autocapitalize: "off" %>
+                </div>
+            </div>
+            <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+                <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+            <% end %>
+            <div class="form-group">
+                <%= f.label :password, class: "control-label" %>
+                <div>
+                    <%= f.password_field :password, class: "form-control", tabindex: "2", autocomplete: "off", autocorrect: "off", autocapitalize: "off" %>
+                </div>
+            </div>
+            <div class="form-group">
+                <%= f.label :password_confirmation, class: "control-label" %>
+                <div>
+                    <%= f.password_field :password_confirmation, class: "form-control", tabindex: "3", autocomplete: "off", autocorrect: "off", autocapitalize: "off" %>
+                </div>
+            </div>
+            <div class="form-group">
+                <%= f.label :current_password, class: "control-label" %><i>(we need your current password to confirm your changes)</i>
+                <div>
+                    <%= f.password_field :current_password, class: "form-control", tabindex: "4", autocomplete: "off", autocorrect: "off", autocapitalize: "off" %>
+                </div>
+            </div>
+            <div class="form-group">
+                <%= f.submit "Update", class: "btn btn-primary", tabindex: "5" %>
+            </div>
+            <div class="voffset20 boffset80" id="login-form-text-helpers">
+                <%= link_to "Back", :back %>
+            </div>
+        <% end %>
+    </div>
+</div>

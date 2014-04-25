@@ -3,7 +3,7 @@
 #
 class ApplicationController < ActionController::Base
   
-  before_filter :set_locale, :load_cloudinary_config
+  before_filter :set_locale, :load_configs
   around_filter :application_time_zone # make sure that we use the timezone as specified in the database
  
   def set_locale
@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
     Time.use_zone(zone, &block)
   end
   
-  def load_cloudinary_config
+  def load_configs
     cfg = CloudinaryConfig.find :first # for now we only have one convention... change when we have many (TODO)
     Cloudinary.config do |config|
       config.cloud_name           = cfg ? cfg.cloud_name : ''
@@ -25,6 +25,13 @@ class ApplicationController < ActionController::Base
       config.enhance_image_tag    = cfg ? cfg.enhance_image_tag : false
       config.static_image_support = cfg ? cfg.static_image_support : false
      config.cdn_subdomain = true
+    end
+    
+    mail_cfg = MailConfig.find :first
+    if mail_cfg
+      Devise.setup do |config|
+        config.mailer_sender = mail_cfg.from
+      end
     end
   end
   
@@ -38,7 +45,6 @@ class ApplicationController < ActionController::Base
     def check_for_single_access_token # TODO - change name???
       if params[:key] && !params[:key].empty?
         @respondent                 = SurveyRespondent.find_by_single_access_token(params[:key]) 
-        @current_respondent_session = SurveyRespondentSession.create!(@respondent) 
       end
     end 
     
@@ -53,11 +59,12 @@ class ApplicationController < ActionController::Base
     #
     #
     def user_logged_in?
-      if current_user
-        return true
-      else
-        return false
-      end
+      user_signed_in?
+      # if current_user
+        # return true
+      # else
+        # return false
+      # end
     end
     
     def current_respondent
@@ -66,14 +73,16 @@ class ApplicationController < ActionController::Base
     end
     
     def current_user_session
-      return @current_user_session if defined?(@current_user_session)
-      @current_user_session = UserSession.find
+      user_session
+      # return @current_user_session if defined?(@current_user_session)
+      # @current_user_session = UserSession.find
     end
 
-    def current_user
-      return @current_user if defined?(@current_user)
-      @current_user = current_user_session && current_user_session.user
-    end
+    # def current_user
+      # current_user
+      # # return @current_user if defined?(@current_user)
+      # # @current_user = current_user_session && current_user_session.user
+    # end
   
     def require_user
       unless current_user

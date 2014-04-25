@@ -1,5 +1,5 @@
 class PublishJob
-  include TagUtils
+  require 'tag_utils' # TODO - check if this is ok
 
   
   def perform

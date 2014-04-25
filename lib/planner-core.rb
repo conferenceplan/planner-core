@@ -1,4 +1,4 @@
-require "planner-core/engine"
+require "planner_core/engine"
 
 module PlannerCore
 end

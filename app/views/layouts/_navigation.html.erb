@@ -25,8 +25,8 @@
 	                </ul>
 	            </li>
 	            <% if current_user %>
-	                <li><%= link_to (t "edit-profile"), main_app.edit_user_path(:current) %></li>
-	                <li><%= link_to (t "logout"), main_app.logout_path %></li>
+	                <li><%= link_to (t "edit-profile"), main_app.edit_user_registration_path %></li>
+	                <li><%= link_to (t "logout"), main_app.destroy_user_session_path, :method => :delete %></li>
 	            <% end %>
 	        </ul>			
 		</div>

@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  mount Interpret::Engine => "/interpret" # cause the interpret gem has the old way of defining the engine mount
-  
   namespace :pages do
     resources :home_dash
     
@@ -20,19 +18,21 @@ Rails.application.routes.draw do
   namespace :panels do
     match "item_mgmt" => "item_mgmt#index"
   end
-  # get "item_mgmt/index"
-  
-  # Default route 
-  root :to => 'pages/home_dash#index'
   
   #
   # The new(s) were removed so as to prevent anonymous people creating new accounts
   #
-  resources :users, :except => [:new, :index]
-  resource :user, :as => 'account', :except => [:new, :index]  # convenience route
-  resource :user_session
-  match 'login' => 'user_sessions#new', :as => :login
-  match 'logout' => 'user_sessions#destroy', :as => :logout
+  devise_for :users #, skip: :sessions
+  
+  # Default route 
+  root :to => 'pages/home_dash#index'
+  # match '' => '', :as => 'user_root'
+  
+  # resources :users, :except => [:new, :index]
+  # resource :user, :as => 'account', :except => [:new, :index]  # convenience route
+  # resource :user_session
+  # match 'login' => 'user_sessions#new', :as => :login
+  # match 'logout' => 'user_sessions#destroy', :as => :logout
 
   # For user and user management
   namespace :users do

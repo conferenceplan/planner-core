@@ -1,9 +1,9 @@
 class SurveyRespondent < ActiveRecord::Base
   attr_accessible :key, :persistence_token, :single_access_token, :attending, :submitted_survey, :email_status_id, :person_id
 
-  acts_as_authentic do |c| 
-    c.validate_email_field = false
-  end
+  # acts_as_authentic do |c| 
+    # c.validate_email_field = false
+  # end
 
   belongs_to  :person 
   has_enumerated :email_status, :class_name => 'EmailStatus'

@@ -60,8 +60,9 @@ class Users::AdminController < PlannerController
         # get the role and add it to the user
         @user = User.new #params[:user]
         @user.login = params[:login]
-        @user.password = params[:password]
-        @user.password_confirmation = params[:password_confirmation]
+        @user.email = params[:email]
+        @user.password = params[:password] if params[:password]
+        @user.password_confirmation = params[:password_confirmation] if params[:password_confirmation]
         
         if (params[:roles])
           roleArray = params[:roles]
@@ -87,16 +88,23 @@ class Users::AdminController < PlannerController
       User.transaction do
         if (params[:roles])
           roleArray = params[:roles]
-      
-          roles = Role.find(roleArray.collect{|r| r[:id]})
+          
           @user.roles.clear
-          @user.roles << roles
+          
+          Role.find(roleArray.collect{|r| r[:id]}).each do |role|
+            assignment = RoleAssignment.new(:user => @user, :role => role)
+            assignment.save!
+          end
         end
         
-        @user.login = params[:login]
-        @user.password = params[:password]
-        @user.password_confirmation = params[:password_confirmation]
-        @user.save! 
+        @user.email = params[:email]
+        
+        if (params[:password].length > 0) 
+          @user.login = params[:login]
+          @user.password = params[:password]
+          @user.password_confirmation = params[:password_confirmation]
+          @user.save! 
+        end
       end
     rescue Exception => err  
       # IF there is a fail ten we can to catch the exception and report the problem

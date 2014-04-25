@@ -10,6 +10,7 @@ UserMgmtApp.UserManagement = (function(Backbone){
     UserMdl =  Backbone.DeepModel.extend({
         schema : {
             login   : { type : 'Text', title : '<%= t "user-login" %>' },
+            email   : { type : 'Text', title : '<%= t "email" %>' },
             password : { type : 'Password', title : '<%= t "user-password" %>'},
             password_confirmation : { type : 'Password', title : '<%= t "user-password-again" %>'},
             roles : { type : 'List',

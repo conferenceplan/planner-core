@@ -1,0 +1,25 @@
+<div class='row'>
+    <div id="login-form">
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div class="form-group">
+              <%= f.label t 'login', class: "control-label" %>
+              <div>
+                <%= f.text_field :login, class: "form-control login-field", tabindex: "1", autofocus: "autofocus", autocorrect: "off", autocapitalize: "off" %>
+              </div>
+              <%= f.label t 'password', class: "control-label" %>
+              <div>
+                <%= f.password_field :password, class: "form-control login-field", tabindex: "2" %>
+              </div>
+            </div>
+            <div class="form-group">
+                <%= f.label t 'remember-me', class: "control-label" %> <%= f.check_box :remember_me, tabindex: "3" %>
+            </div>
+            <div class="form-group">
+                <%= f.submit "login", class: "btn btn-primary btn-lg", tabindex: "4" %>
+            </div>
+            <div class="voffset20 boffset80" id="login-form-text-helpers">
+                <%= link_to "Forgot your password?", new_password_path(resource_name) %>
+            </div>
+        <% end %>
+    </div>
+</div>
