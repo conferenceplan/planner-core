@@ -50,6 +50,19 @@ require "routing-filter"
 module PlannerCore
   class Engine < ::Rails::Engine
 
+    # Add the assets in the engine to those to be precompiled
+    initializer :assets do |app|
+      app.config.assets.precompile += %W(
+        pages/*.js
+        pages/*.css
+        panels/*.js
+        panels/*.css
+        survey_respondents/*.js
+        survey_respondents/*.css
+        users/*.js
+      )
+    end
+
     # RAILS 3 mechanism so parent app use the migrations in this engine
     # see http://pivotallabs.com/leave-your-migrations-in-your-rails-engines/
     initializer :append_migrations do |app|
@@ -57,16 +70,6 @@ module PlannerCore
         app.config.paths["db/migrate"] += config.paths["db/migrate"].expanded
       end
     end
-
-    initializer :assets do |config|
-      Rails.application.config.assets.precompile += %w( pages/* surveys/* users/* )
-
-      # Rails.application.config.assets.precompile += %w{ schedule_dash.css.scss }
-      # # Rails.application.config.assets.precompile += %w{ bookmarklet.js }
-      # Rails.application.config.assets.paths << root.join("app", "assets", "stylesheets", "pages" ) #, "panels", "survey_respondents")
-    end
-
-    # # Add the assets in the engine to those to be precompiled
 
   end
 end
