@@ -59,7 +59,7 @@ module PlannerCore
     end
 
     initializer :assets do |config|
-      config.assets.precompile += %w( pages/* surveys/* users/* )
+      Rails.application.config.assets.precompile += %w( pages/* surveys/* users/* )
 
       # Rails.application.config.assets.precompile += %w{ schedule_dash.css.scss }
       # # Rails.application.config.assets.precompile += %w{ bookmarklet.js }
