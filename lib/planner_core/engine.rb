@@ -59,25 +59,11 @@ module PlannerCore
     end
 
     initializer :assets do |config|
-      Rails.application.config.assets.precompile += %w{ schedule_dash.css.scss }
-      # Rails.application.config.assets.precompile += %w{ bookmarklet.js }
-      Rails.application.config.assets.paths << root.join("app", "assets", "stylesheets", "pages" ) #, "panels", "survey_respondents")
-      
-      # Rails.application.config.assets.precompile << Proc.new do |path|
-        # if path =~ /\.(css|js)\z/
-          # full_path = Rails.application.assets.resolve(path).to_path
-          # app_assets_path = Rails.root.join('app', 'assets').to_path
-          # if full_path.starts_with? app_assets_path
-            # puts "including asset: " + full_path
-            # true
-          # else
-            # puts "excluding asset: " + full_path
-            # false
-          # end
-        # else
-          # false
-        # end
-      # end
+      config.assets.precompile += %w( pages/* surveys/* users/* )
+
+      # Rails.application.config.assets.precompile += %w{ schedule_dash.css.scss }
+      # # Rails.application.config.assets.precompile += %w{ bookmarklet.js }
+      # Rails.application.config.assets.paths << root.join("app", "assets", "stylesheets", "pages" ) #, "panels", "survey_respondents")
     end
 
     # # Add the assets in the engine to those to be precompiled
