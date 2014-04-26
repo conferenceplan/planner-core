@@ -1,6 +1,4 @@
 class PublishJob
-  require 'tag_utils' # TODO - check if this is ok
-
   
   def perform
     load_cloudinary_config
@@ -366,4 +364,12 @@ EOS
     cfg = SiteConfig.find :first # for now we only have one convention... change when we have many (TODO)
   end
   
+  def copyTags(from, to, context)
+    tags = from.tag_list_on(context)
+    tagstr = tags * ","
+    if tags
+      to.set_tag_list_on(context, tagstr)
+    end
+  end
+
 end
