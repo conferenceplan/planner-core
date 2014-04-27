@@ -7,14 +7,16 @@ require "planner_core/version"
 Gem::Specification.new do |s|
   s.name        = "planner-core"
   s.version     = PlannerCore::VERSION
-  s.authors     = ["Henry Balen"]
+  s.authors     = ["Henry Balen", "Ruth Leibig", "Ian Stockdale", "Cathy Mullican", "Janice Gelb", "Terry Fong"]
   s.email       = ["info@grenadine.co"]
-  s.homepage    = "http://events.grenadine.co"
+  s.licenses    = ["Apache"]
+  s.homepage    = "http://www.myconferenceplanning.org"
   s.summary     = "Core for the planning system."
   s.description = "Core of the planning system."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["Rakefile"]
-  s.test_files = Dir["test/**/*"]
+  s.files       = Dir["{app,config,db,lib}/**/*"] + %w(LICENSE Rakefile)
+  s.platform    = Gem::Platform::RUBY
+  s.test_files  = Dir["test/**/*"]
 
   #
   #
@@ -65,7 +67,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'dalli'
   s.add_dependency "connection_pool"
   s.add_dependency 'routing-filter'
-  # These I needed to define in the parent application!
+  # These need to be define in the parent application!
   # s.add_dependency 'rack-jsonp'
   # s.add_dependency 'rack-jsonp-middleware' #, :require => 'rack/jsonp'
 end
