@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   #
   # The new(s) were removed so as to prevent anonymous people creating new accounts
   #
-  devise_for :users #, skip: :sessions
+  devise_for :users, :controllers => { :registrations => "registrations" } #, skip: :sessions
   
   # Default route 
   root :to => 'pages/home_dash#index'
