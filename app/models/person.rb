@@ -1,6 +1,6 @@
 class Person < ActiveRecord::Base
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :language, :comments, :company, :job_title,
-                  :invitestatus_id, :invitation_category_id, :acceptance_status_id
+                  :invitestatus_id, :invitation_category_id, :acceptance_status_id, :pseudonym_attributes
   attr_accessor :details
 
   validates_numericality_of :mailing_number, :allow_nil => true # TODO - set the deafilt to 0 in DB, or move to a separate table containing the mailing information
