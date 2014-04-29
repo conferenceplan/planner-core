@@ -246,6 +246,7 @@ var TabUtils = (function(){
                     } else {
                         $(options.place).html(tabView.el);
                     }
+                    // model.on("sync", options.updateCallback );
                 }
             });
             detail.on("sync", options.updateCallback ); // when the modal does the update and second after the update to the server
@@ -260,6 +261,7 @@ var TabUtils = (function(){
                 editTitle : options.editTitle,
                 selectFn : options.selectFn,
                 clearFn         : options.clearFn,
+                selectCsvFn : options.selectCsvFn,
                 form_event : options.form_event,
                 form_event_fn : options.form_event_fn,
                 modal_template : options.modal_template,

@@ -498,6 +498,10 @@
     </button>
     <small> <em>Arrival</em>: {{= start_time_str }} <i class="glyphicon glyphicon-arrow-right"></i> <em>Departure</em>: {{= end_time_str }} </small>
 </div>
+{{ } else { }}
+    <button class="model-new-button btn btn-primary btn-xs pull-right">
+        <%= t "new" %>
+    </button>
 {{ }; }}
 </script>
 

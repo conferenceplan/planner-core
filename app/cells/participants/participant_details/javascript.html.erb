@@ -139,8 +139,28 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     AvailabilityDateModel = Backbone.RelationalModel.extend({
         schema : {
-            start_time : { type : 'DateTime', title : 'Arrival Time'},
-            end_time : { type : 'DateTime', title : 'Departure Time'}
+            start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
+                    tz_offset : <%= Time.zone.parse(SiteConfig.first.start_date.to_s).utc_offset/(60*60) %>,
+                    picker : {
+                        useSeconds : false,
+                        minuteStepping : 15,
+                        orientation : 'left',
+                        format : "DD MMM YYYY, HH:mm",
+                        defaultDate : "<%= Time.zone.parse(SiteConfig.first.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        startDate : "<%= Time.zone.parse(SiteConfig.first.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        endDate : "<%= (Time.zone.parse(SiteConfig.first.start_date.to_s) + ((SiteConfig.first.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
+                } },
+            end_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
+                    tz_offset : <%= Time.zone.parse(SiteConfig.first.start_date.to_s).utc_offset/(60*60) %>,
+                    picker : {
+                        useSeconds : false,
+                        minuteStepping : 15,
+                        orientation : 'left',
+                        format : "DD MMM YYYY, HH:mm",
+                        defaultDate : "<%= Time.zone.parse(SiteConfig.first.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        startDate : "<%= Time.zone.parse(SiteConfig.first.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        endDate : "<%= (Time.zone.parse(SiteConfig.first.start_date.to_s) + ((SiteConfig.first.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
+                } }
         },
         urlRoot : '/available_dates'
     });
@@ -148,7 +168,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     ExcludedItemCollection = Backbone.Collection.extend({
         model : ExcludedItemModel
     });
-    ExcludedTimesModel = Backbone.RelationalModel.extend({});
+    ExcludedTimesModel = Backbone.RelationalModel.extend({
+    });
     ExcludedTimesCollection = Backbone.Collection.extend({
         model : ExcludedTimesModel
     });
@@ -451,9 +472,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
                 var availability = obj.get('dates');
                 if (availability) {
-                    //alert(availability.id);
-                    availability.url = '/available_dates/' + availability.id;
-                    tabContent.push( TabUtils.createTabContent({
+                    availability.url = "/participants/" + id + '/available_dates/' + availability.id;
+                }
+                tabContent.push( TabUtils.createTabContent({
+                        url : "/participants/" + id + '/available_dates.json',
                         id : id,
                         id_name : 'person_id',
                         modelType : AvailabilityDateModel,
@@ -462,11 +484,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                         region : exclusionLayout.datesRegion,
                         newTitle : '<%= t "create-availability" %>',
                         editTitle : '<%= t "edit-availability" %>',
-                    }) );
-                } else {
-                    /* TODO TODO TODO */
-                    // TODO - need a control area to create a new instance
-                }
+                        view_refresh_event : "address:refresh",
+                }) );
             }
         });
 
