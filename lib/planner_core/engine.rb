@@ -46,6 +46,7 @@ require "routing-filter"
 #require 'rack-jsonp'
 #require 'rack-jsonp-middleware' #, :require => 'rack/jsonp'
 #require 'yajl-ruby'
+#require 'planner/controller_additions'
 
 module PlannerCore
   class Engine < ::Rails::Engine
@@ -59,6 +60,8 @@ module PlannerCore
         panels/*.css
         survey_respondents/*.js
         survey_respondents/*.css
+        surveys/*.js
+        surveys/*.css
         users/*.js
       )
     end
@@ -77,5 +80,6 @@ module PlannerCore
         require_dependency(c)
       end
     end
+    
   end
 end
