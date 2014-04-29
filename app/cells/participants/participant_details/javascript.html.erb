@@ -184,17 +184,45 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             key: 'times',
             relatedModel: 'ExcludedTimesModel',
             collectionType : 'ExcludedTimesCollection',
-        }, {
-            type: Backbone.HasOne,
-            key: 'dates',
-            relatedModel: 'AvailabilityDateModel',
         }
         ]
+    });
+    /******************************************************
+     * 
+     */
+    PersonTabLayout = Backbone.Marionette.Layout.extend({
+        template : "#person-tab-layout-template",
+        
+        regions : {
+            registration    : "#registration-tab",
+            contacts        : "#contacts-tab",
+            invite          : "#invite-tab",
+            bio             : "#bio-tab",
+            bio_image       : "#bio-image",
+            tags            : "#tags-tab",
+            availability    : "#availability-div",
+            exclusion_items : "#exclusion-items-div",
+            exclusion_times : "#exclusion-times-div",
+            items           : "#items-tab"
+        }
+    });    
+
+    AddressLayout = Backbone.Marionette.Layout.extend({
+        template: "#address-layout-template",
+        
+        regions : {
+            postalControlRegion: "#postal-control-div",
+            postalRegion: "#postal-region-div",
+            emailControlRegion: "#email-control-div",
+            emailRegion: "#email-region-div",
+            phoneControlRegion: "#phone-control-div",
+            phoneRegion: "#phone-region-div",
+        },
     });
 
     /******************************************************
      * 
-     */
+     *
     AddressLayout = Backbone.Marionette.Layout.extend({
         template: "#address-layout-template",
         
@@ -230,18 +258,43 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             timesRegion: "#times-exclusions-div",
         },
     });
+    ********/
 
     var tabLists = [];
     var tabContent = [];
     var filters = null;
+    var personTabLayout = null;
+    // var addressLayout = null;
 
     function clearRegDetails() {
         $('#selected-participant').text("");
         
-        // _.invoke(tabLists, 'reset' );
-        // _.invoke(tabContent, 'clear' );
+        if (personTabLayout) {
+            personTabLayout.registration.close();
+            personTabLayout.contacts.close();
+            personTabLayout.invite.close();
+            personTabLayout.bio.close();
+            personTabLayout.bio_image.close();
+            personTabLayout.tags.close();
+            personTabLayout.availability.close();
+            personTabLayout.exclusion_items.close();
+            personTabLayout.exclusion_times.close();
+            personTabLayout.items.close();
+        };
+        
+        // if (addressLayout) {
+            // addressLayout.postalControlRegion.close();
+            // addressLayout.postalRegion.close();
+            // addressLayout.emailControlRegion.close();
+            // addressLayout.emailRegion.close();
+            // addressLayout.phoneControlRegion.close();
+            // addressLayoutphoneRegion.close();
+        // };
         
         eventAggregator.off("refreshTagList", syncModel);
+        
+        // _.invoke(tabLists, 'reset' );
+        _.invoke(tabContent, 'clear' );
     };
 
     function syncModel() {
@@ -286,25 +339,24 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
     function showRegDetails(id) {
         var data = jQuery("#participants").jqGrid('getRowData', id);
-        
         $('#selected-participant').text(getPersonName(data));
-        
-        tabContent.push( TabUtils.createTabContent({
+
+        TabUtils.createTabContent({
             modelType : RegistrationDetail,
             url : "/participants/" + id + "/registrationDetails.json",
             template : '#registration-view-template',
-            place :'#registration-view',
+            region : personTabLayout.registration,
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-registration" %>',
             editTitle : '<%= t "edit-registration" %>',
-        }) );
+        }) 
 
         var invite_details = TabUtils.createTabContent({
             modelType : InviteDetails,
             url : "/participants/" + id + ".json",
             template : '#invite-view-template',
-            place : '#invite-view',
+            region : personTabLayout.invite,
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-invite" %>',
@@ -330,55 +382,80 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 }
             }
         });
-        
         tabContent.push( invite_details );
         
-        tabContent.push( 
-            TabUtils.createTabContent({
+        tabContent.push( TabUtils.createTabContent({
             modelType : BioDetails,
             url : "/participants/" + id + "/edited_bios.json",
             template : '#bio-view-template',
-            place : '#bio-view',
+            region : personTabLayout.bio,
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-bio" %>',
             editTitle : '<%= t "edit-bio" %>',
         }) );
         
-        tabContent.push( 
-            TabUtils.createTabContent({
+        tabContent.push( TabUtils.createTabContent({
             modelType : BioPicture,
             url : "/participants/" + id + "/bio_images.json",
             template : '#bio-image-template',
-            place : '#bio-image',
+            region : personTabLayout.bio_image,
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-bio-image" %>',
             editTitle : '<%= t "edit-bio-image" %>',
         }) );
         
-        tabLists.push( TabUtils.createTabListContent({
+        TabUtils.createTabListContent({
             collectionType : ProgramItemCollection,
             url : "/participants/"+ id + "/programme_items.json",
             template : "#program-item-view-template",
-            view_refresh_event : "address:refresh",
-            place : '#items-view',
+            region : personTabLayout.items,
+        });
+
+        TabUtils.createTagListContent({
+            collectionType : TagContextCollection,
+            url : "/tags/"+ id + ".json?class=Person",
+            tagUrl : "/tags/"+ id + "/add?class=Person",
+            template : "#tag-context-layout-template",
+            region : personTabLayout.tags,
+            newTitle : '<%= t "create-tag" %>',
+        });
+
+        //
+        // get the exclusions and show them within the layout
+        //
+        tabContent.push( TabUtils.createTabContent({
+            modelType : AvailabilityDateModel,
+            url : "/participants/" + id + '/available_dates.json',
+            template : '#date-exclusion-view-template',
+            region : personTabLayout.availability,
+            id : id,
+            id_name : 'person_id',
+            newTitle : '<%= t "create-availability" %>',
+            editTitle : '<%= t "edit-availability" %>'
         }) );
 
         
-        // ------
-        addressLayout = new AddressLayout();
-        addressLayout.render();
-        $('#contacts-view').html(addressLayout.el);
+        exclusions = new Exclusions();
+        exclusions.fetch({
+            url : "/participants/" + id + "/availabilities.json",
+            success : function(obj) {
+                TabUtils.createTabListContent({
+                    collection : obj.get('items'),
+                    template : "#item-exclusion-view-template",
+                    region : personTabLayout.exclusion_items 
+                });
+                TabUtils.createTabListContent({
+                    collection : obj.get('times'),
+                    template : "#time-exclusion-view-template",
+                    region : personTabLayout.exclusion_times 
+                });
+            }
+        });
         
-        phoneLayout = new PhoneLayout();
-        phoneLayout.render();
-        $('#phone-view').html(phoneLayout.el);
-
-        emailLayout = new EmailLayout();
-        emailLayout.render();
-        $('#email-view').html(emailLayout.el);
-
+        addressLayout = new AddressLayout();
+        personTabLayout.contacts.show(addressLayout);
 
         TabUtils.createTabControl({
             template : "#address-control-template",
@@ -398,6 +475,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             newTitle : '<%= t "create-address" %>',
             editTitle : '<%= t "edit-address" %>',
         }) );
+
         
         TabUtils.createTabControl({
             template : "#phone-control-template",
@@ -406,14 +484,14 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id_name : 'person_id',
             view_refresh_event : "address:refresh",
             modal_create_title : '<%= t "create-phone-number" %>',
-            region : phoneLayout.phoneControlRegion,
+            region : addressLayout.phoneControlRegion,
         });
         tabLists.push( TabUtils.createTabListContent({
             collectionType : PhoneCollection,
             url : "/participants/"+ id + "/phoneNumbers.json",
             template : "#phone-view-template",
             view_refresh_event : "address:refresh",
-            region : phoneLayout.phoneRegion,
+            region : addressLayout.phoneRegion,
             newTitle : '<%= t "create-phone-number" %>',
             editTitle : '<%= t "edit-phone-number" %>',
         }) );
@@ -425,70 +503,18 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id_name : 'person_id',
             view_refresh_event : "address:refresh",
             modal_create_title : '<%= t "create-email" %>',    
-            region : emailLayout.emailControlRegion
+            region : addressLayout.emailControlRegion
         });
         tabLists.push( TabUtils.createTabListContent({
             collectionType : EmailCollection,
             url : "/participants/"+ id + "/emailAddresses.json",
             template : "#email-view-template",
             view_refresh_event : "address:refresh",
-            region : emailLayout.emailRegion,
+            region : addressLayout.emailRegion,
             newTitle : '<%= t "create-email" %>',
             editTitle : '<%= t "edit-email" %>',
         }) );
         
-        // /tags/2108/add?class=Person&context=PrimaryArea 
-        tabLists.push( TabUtils.createTagListContent({
-            collectionType : TagContextCollection,
-            url : "/tags/"+ id + ".json?class=Person",
-            tagUrl : "/tags/"+ id + "/add?class=Person",
-            template : "#tag-context-layout-template",
-            view_refresh_event : "address:refresh",
-            place : '#tags-view',
-            newTitle : '<%= t "create-tag" %>',
-        }) );
-
-        //
-        // get the exclusions and show them within the layout
-        //
-        exclusionLayout = new ExclusionsLayout();
-        exclusionLayout.render();
-        $('#availability-view').html(exclusionLayout.el);
-        
-        exclusions = new Exclusions();
-        exclusions.fetch({
-            url : "/participants/" + id + "/availabilities.json",
-            success : function(obj) {
-                tabLists.push( TabUtils.createTabListContent({
-                    collection : obj.get('items'),
-                    template : "#item-exclusion-view-template",
-                    region : exclusionLayout.itemsRegion 
-                }) );
-                tabLists.push( TabUtils.createTabListContent({
-                    collection : obj.get('times'),
-                    template : "#time-exclusion-view-template",
-                    region : exclusionLayout.timesRegion 
-                }) );
-
-                var availability = obj.get('dates');
-                if (availability) {
-                    availability.url = "/participants/" + id + '/available_dates/' + availability.id;
-                }
-                tabContent.push( TabUtils.createTabContent({
-                        url : "/participants/" + id + '/available_dates.json',
-                        id : id,
-                        id_name : 'person_id',
-                        modelType : AvailabilityDateModel,
-                        model : availability,
-                        template : '#date-exclusion-view-template',
-                        region : exclusionLayout.datesRegion,
-                        newTitle : '<%= t "create-availability" %>',
-                        editTitle : '<%= t "edit-availability" %>',
-                        view_refresh_event : "address:refresh",
-                }) );
-            }
-        });
-
         eventAggregator.on("refreshTagList", syncModel, invite_details);
         
         return invite_details;
@@ -500,6 +526,25 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     //    
     return {
+        
+        init : function() {
+            personTabLayout = new PersonTabLayout();
+            personTabLayout.render();
+            $('#item-tabs').html(personTabLayout.el);
+
+            TabUtils.createTagCloudContent({
+                collectionType : TagContextCollection,
+                url : "/tags.json?class=Person",
+                template : "#tag-cloud-context-layout-template",
+                place : '#participant-tag-cloud',
+                collection_attributes : { "class" : "accordion", "id" : "participant-tag-cloud-parent" },
+                view_attributes : { "class" : "accordion-group" },
+                tagselect : function(context, name) {
+                    ParticipantApp.PeopleManagement.addFilter(context, name);
+                    ParticipantApp.PeopleManagement.refreshTable();
+                },
+            });
+        },
         
         InviteDetails : InviteDetails,
         
@@ -582,20 +627,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
  * 
  */
 jQuery(document).ready(function() {
+    ParticipantApp.addInitializer(ParticipantApp.PeopleManagement.init);
     ParticipantApp.start();
-    
-    TabUtils.createTagCloudContent({
-        collectionType : TagContextCollection,
-        url : "/tags.json?class=Person",
-        template : "#tag-cloud-context-layout-template",
-        place : '#participant-tag-cloud',
-        collection_attributes : { "class" : "accordion", "id" : "participant-tag-cloud-parent" },
-        view_attributes : { "class" : "accordion-group" },
-        tagselect : function(context, name) {
-            ParticipantApp.PeopleManagement.addFilter(context, name);
-            ParticipantApp.PeopleManagement.refreshTable();
-        },
-    });
 });
 </script>
 

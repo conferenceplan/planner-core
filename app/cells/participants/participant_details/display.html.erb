@@ -1,4 +1,3 @@
-<div>
 <ul class="nav nav-pills" id="myTab">
     <li class="active"><a href="#registration-tab" data-toggle="tab"><%= t 'reg-detais' %></a></li>
     <li><a href="#contacts-tab" data-toggle="tab"><%= t 'contact-info' %></a></li>
@@ -9,28 +8,5 @@
     <li><a href="#availability-tab" data-toggle="tab"><%= t 'availability' %></a></li>
     <li><a href="#items-tab" data-toggle="tab"><%= t 'items' %></a></li>
 </ul>
-<div class="voffset10"></div>
- 
-<div class="tab-content">
-    <div class="tab-pane active" id="registration-tab"><div id="registration-view"></div></div>
-    <div class="tab-pane" id="contacts-tab">
-        <div class="tab-pane">
-            <div class="thumbnails" id="contacts-view"></div>
-        </div>
-        <div class="tab-pane">
-            <div class="thumbnails" id="email-view"></div>
-        </div>
-        <div class="tab-pane">
-            <div class="thumbnails" id="phone-view"></div>
-        </div>
-    </div>
-    <div class="tab-pane" id="invite-tab"><div id="invite-view"></div></div>
-    <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
-    <div class="tab-pane" id="bio-image"><div id="bio-image"></div></div>
-    <div class="tab-pane" id="tags-tab">
-        <div id="tags-view"></div> <!-- TODO - multiple tag contexts ... -->
-    </div>
-    <div class="tab-pane" id="availability-tab"><div id="availability-view"></div></div>
-    <div class="tab-pane" id="items-tab"><div id="items-view"></div></div>
-</div>
-</div>
+
+<div id="item-tabs"></div>

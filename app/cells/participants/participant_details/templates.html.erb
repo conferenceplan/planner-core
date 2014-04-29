@@ -1,5 +1,83 @@
 <!--
 -->
+<script type="text/template" id="person-tab-layout-template">
+    <div class="tab-content">
+        <div class="tab-pane active" id="registration-tab"><div id="registration-view"></div></div>
+        <div class="tab-pane" id="contacts-tab">
+            <div id="contacts-view"></div>
+        </div>
+        <div class="tab-pane" id="invite-tab"><div id="invite-view"></div></div>
+        <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
+        <div class="tab-pane" id="bio-image"><div id="bio-image-view"></div></div>
+        <div class="tab-pane" id="tags-tab">
+            <div id="tags-view"></div>
+        </div>
+        <div class="tab-pane" id="availability-tab">
+            <section>
+                <div id="availability-div"></div>
+                <div id="exclusion-items-div"></div>
+                <div id="exclusion-times-div"></div>
+            </section>
+        </div>
+        <div class="tab-pane" id="items-tab"><div id="items-view"></div></div>
+    </div>
+</script>
+
+<script type="text/template" id="address-layout-template">
+    <section>
+        <div class="row">
+            <div id="postal-control-div" class="col-xs-12"></div>
+        </div>
+        <div class="row">
+            <div id="postal-region-div" class="col-xs-12"></div>
+        </div>
+    </section>
+    <section>
+        <div class="row">
+        <div id="email-control-div" class="col-xs-12"></div>
+        </div>
+        <div class="row">
+        <div id="email-region-div" class="col-xs-12"></div>
+        </div>
+    </section>
+    <section>
+        <div class="row">
+        <div id="phone-control-div" class="col-xs-12"></div>
+        </div>
+        <div class="row">
+        <div id="phone-region-div" class="col-xs-12"></div>
+        </div>
+    </section>
+</script>
+
+
+<script type="text/template" id="address-control-template">
+<div>
+    <button class="add-model-button btn-xs btn-primary pull-right ">
+        <%= t "add-address" %>
+    </button>
+    <%= t "postal-addresses" %>
+</div>
+</script>
+
+<script type="text/template" id="email-control-template">
+<div>
+    <button class="add-model-button btn-xs btn-primary pull-right ">
+        <%= t "add-email" %>
+    </button>
+    <%= t "email-addresses" %>
+</div>
+</script>
+
+<script type="text/template" id="phone-control-template">
+<div>
+    <button class="add-model-button btn-xs btn-primary pull-right ">
+        <%= t "add-phone" %>
+    </button>
+    <%= t "phone" %>
+</div>
+</script>
+
 <script type="text/template" id="person-form-template">
     <form class="form-horizontal" role="form">
         <fieldset>
@@ -387,66 +465,6 @@
         </div>
     </div>
 </div>
-</script>
-
-<script type="text/template" id="address-control-template">
-<div>
-    <button class="add-model-button btn-xs btn-primary pull-right ">
-        <%= t "add-address" %>
-    </button>
-    <%= t "postal-addresses" %>
-</div>
-</script>
-
-<script type="text/template" id="address-layout-template">
-<section>
-    <div class="row">
-        <div id="postal-control-div" class="col-xs-12"></div>
-    </div>
-    <div class="row">
-        <div id="postal-region-div" class="col-xs-12"></div>
-    </div>
-</section>
-</script>
-
-<script type="text/template" id="email-control-template">
-<div>
-    <button class="add-model-button btn-xs btn-primary pull-right ">
-        <%= t "add-email" %>
-    </button>
-    <%= t "email-addresses" %>
-</div>
-</script>
-
-<script type="text/template" id="email-layout-template">
-<section>
-    <div class="row">
-    <div id="email-control-div" class="col-xs-12"></div>
-    </div>
-    <div class="row">
-    <div id="email-region-div" class="col-xs-12"></div>
-    </div>
-</section>
-</script>
-
-<script type="text/template" id="phone-control-template">
-<div>
-    <button class="add-model-button btn-xs btn-primary pull-right ">
-        <%= t "add-phone" %>
-    </button>
-    <%= t "phone" %>
-</div>
-</script>
-
-<script type="text/template" id="phone-layout-template">
-<section>
-    <div class="row">
-    <div id="phone-control-div" class="col-xs-12"></div>
-    </div>
-    <div class="row">
-    <div id="phone-region-div" class="col-xs-12"></div>
-    </div>
-</section>
 </script>
 
 <script type="text/template" id="exclusions-layout-template">

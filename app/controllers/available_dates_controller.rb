@@ -1,34 +1,29 @@
 class AvailableDatesController < PlannerController
   
   def update
-    availableDate = AvailableDate.find(params[:id])
-    availableDate.update_attributes(params[:available_date])
-    render json: availableDate.to_json, :content_type => 'application/json'
+    @availableDate = AvailableDate.find(params[:id])
+    @availableDate.update_attributes(params[:available_date])
   end
   
   def create
     if (params[:person_id])
       person = Person.find(params[:person_id])
-      availableDate = person.create_available_date();
-      availableDate.update_attributes(params[:available_date])
+      @availableDate = person.create_available_date();
+      @availableDate.update_attributes(params[:available_date])
     else
-      availableDate = AvailableDates.new(params[:available_date])
+      @availableDate = AvailableDates.new(params[:available_date])
     end
     
-    availableDate.save
-    
-    render json: availableDate.to_json, :content_type => 'application/json'
+    @availableDate.save
   end
 
   def show
     if (params[:person_id])
        person = Person.find(params[:person_id])
-       availableDate = person.available_date
+       @availableDate = person.available_date
     else
-      availableDate = AvailableDate.find(params[:id])
+      @availableDate = AvailableDate.find(params[:id])
     end
-    
-    render json: availableDate.to_json, :content_type => 'application/json'
   end
 
   def destroy
@@ -42,13 +37,10 @@ class AvailableDatesController < PlannerController
     # availableDates = AvailableDate.find :all
     if (params[:person_id])
        person = Person.find(params[:person_id])
-       availableDate = person.available_date
+       @availableDate = person.available_date
     else
-      availableDate = AvailableDate.find(params[:id])
+      @availableDate = AvailableDate.find(params[:id])
     end
-
-
-    render json: availableDate.to_json, :content_type => 'application/json'
   end
 
 end

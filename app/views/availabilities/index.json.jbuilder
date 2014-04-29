@@ -9,7 +9,7 @@ json.dates do
     json.start_time     @availableDates.start_time
 
     json.start_time_str @availableDates.start_time.strftime('%A, %B %e %C,%l:%M %p')
-    json.end_time_str   @availableDates.end_time.strftime('%A, %B %e %C,%l:%M %p')
+    json.end_time_str   (@availableDates.end_time ? @availableDates.end_time.strftime('%A, %B %e %C,%l:%M %p') : nil);
 end
 end
     
