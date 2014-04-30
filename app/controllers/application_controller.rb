@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   private
     def check_for_single_access_token # TODO - change name???
       if params[:key] && !params[:key].empty?
-        @respondent                 = SurveyRespondent.find_by_single_access_token(params[:key]) 
+        @respondent                 = SurveyRespondent.where({:single_access_token => params[:key]}).first
       end
     end 
     
