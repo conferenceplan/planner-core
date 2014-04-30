@@ -33,6 +33,6 @@ json.array!(@changes) do |change|
     else
         # change to collection of attributes
         change.audited_changes.each {|k,v| json.set! k, v[1].to_s } #.encode("iso-8859-1").force_encoding("utf-8")
-        json.title ProgrammeItem.find( change.auditable_id ).title
+        json.title ProgrammeItem.find( change.auditable_id ).title if ProgrammeItem.exists? change.auditable_id
     end
 end
