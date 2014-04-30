@@ -150,7 +150,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                         startDate : "<%= Time.zone.parse(SiteConfig.first.start_date.to_s).strftime('%m/%d/%Y') %>",
                         endDate : "<%= (Time.zone.parse(SiteConfig.first.start_date.to_s) + ((SiteConfig.first.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
                 } },
-            end_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
+            end_time : { type : 'Datetime', title : '<%= t "item-end-time" %>',
                     tz_offset : <%= Time.zone.parse(SiteConfig.first.start_date.to_s).utc_offset/(60*60) %>,
                     picker : {
                         useSeconds : false,
