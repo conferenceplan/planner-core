@@ -14,7 +14,7 @@ end
 
 if User.count == 0
   User.create([
-    { :login => "admin", :password => "password", :password_confirmation => "password", :person_id => nil },
+    { :login => "admin", :password => "password", :password_confirmation => "password", :person_id => nil, :email => 'test@test.com' },
   ], :without_protection => true )
 end
 

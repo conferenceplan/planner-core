@@ -1,17 +1,2 @@
 
-	<%= render_cell :top_menu, :display, :menu => {
-	    # 
-	    "venues" => { :target => '/pages/venues_dash/manage', :icon => "glyphicon-th-list", :target_base => '/pages/venues_dash'},
-	    "participants" => { :target => '/pages/participants_dash/manage', :icon => "glyphicon-user", :target_base => '/pages/participants_dash'},
-	    "program-items" => { :target => '/pages/items_dash/manage', :icon => "glyphicon-tasks", :target_base => '/pages/items_dash'},
-	    
-	    #
-	    "schedule" => { :target => '/pages/schedule_dash/manage', :icon => "glyphicon-calendar", :target_base => '/pages/schedule_dash'},
-	    "surveys" => { :target => '/pages/surveys_dash/report', :icon => "glyphicon-pencil", :target_base => '/pages/surveys_dash'},
-	    "communications" => { :target => '/pages//communications_dash/manage', :icon => "glyphicon-envelope", :target_base => '/pages/communications_dash'},
-	    
-	    "reports" => { :target => '/pages/reports_dash/manage', :icon => "glyphicon-stats", :target_base => '/pages/reports_dash'},
-	    "publications" => { :target => '/pages/publications_dash/print', :icon => "glyphicon-print", :target_base => '/pages/publications_dash'},
-        
-        "admin" => { :target => '/pages/admin_dash/users', :icon => "glyphicon-wrench", :target_base => '/pages/admin_dash'}
-	} %>
+<%= render_cell :top_menu, :display, :menu => top_menu %>

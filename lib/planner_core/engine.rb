@@ -46,7 +46,7 @@ require "routing-filter"
 #require 'rack-jsonp'
 #require 'rack-jsonp-middleware' #, :require => 'rack/jsonp'
 #require 'yajl-ruby'
-#require 'planner/controller_additions'
+require 'planner/controller_additions'
 
 module PlannerCore
   class Engine < ::Rails::Engine

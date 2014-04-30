@@ -24,6 +24,13 @@ class User < ActiveRecord::Base
   has_many  :roles, :through => :roleAssignments
   has_one   :preference
   
+  #
+  #
+  #
+  def admin?
+    return role_strings.include? 'Admin'
+  end
+  
   def role_symbols
    (roles || []).map {|r| r.title.to_sym }
   end

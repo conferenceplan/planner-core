@@ -1,5 +1,19 @@
 Rails.application.routes.draw do
 
+  #
+  # The new(s) were removed so as to prevent anonymous people creating new accounts
+  #
+  devise_for :users, :controllers => { :registrations => "registrations" } #, skip: :sessions
+  
+  # Default routes
+  authenticated :user do
+    root :to => 'pages/home_dash#index', :as => :authenticated_root
+  end
+  root :to => redirect('/users/sign_in') # if not authenticated then take the user to the sign in page
+  
+  #
+  # The 'landing' pages for the various parts of the application
+  #
   namespace :pages do
     resources :home_dash
     
@@ -14,34 +28,60 @@ Rails.application.routes.draw do
     match "admin_dash/:cellname" => "admin_dash#index"
   end
 
-  # namespace :panels do
+  #
+  # Panels are 'pages' that can appear within a dialog
+  #
   namespace :panels do
     match "item_mgmt" => "item_mgmt#index"
   end
   
   #
-  # The new(s) were removed so as to prevent anonymous people creating new accounts
-  #
-  devise_for :users, :controllers => { :registrations => "registrations" } #, skip: :sessions
-  
-  # Default route 
-  root :to => 'pages/home_dash#index'
-  # match '' => '', :as => 'user_root'
-  
-  # resources :users, :except => [:new, :index]
-  # resource :user, :as => 'account', :except => [:new, :index]  # convenience route
-  # resource :user_session
-  # match 'login' => 'user_sessions#new', :as => :login
-  # match 'logout' => 'user_sessions#destroy', :as => :logout
-
   # For user and user management
+  #
   namespace :users do
     match "admin/list" => 'admin#list'
     resources :admin
   end
-  # match 'users/admin/list' => 'users/admin#list'
-  # resources :usersadmin, :controller => 'users/admin'
   match 'roles/list' => 'roles#list'
+
+  #
+  # Participant/Attendee management
+  #
+  match 'participants/getList',                       :controller => 'people', :action => 'getList',            :method => 'post'
+  match 'participants/count',                         :controller => 'people', :action => 'count',              :method => 'get'
+  match 'participants/generateInviteKey/:id',         :controller => 'people', :action => 'generateInviteKey',  :method => 'get'
+  match 'participants/invitestatuslist',              :controller => 'people', :action => 'invitestatuslist'
+  match 'participants/acceptancestatuslist',          :controller => 'people', :action => 'acceptancestatuslist'
+  match 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
+  match 'participants/invitestatuslistwithblank',     :controller => 'people', :action => 'invitestatuslistwithblank'
+  resources :people, :path => "participants" do
+    resources :addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items
+    resources :registrationDetails do
+      get 'show'
+    end
+    resources :edited_bios, :available_dates, :bio_images
+    collection do
+      get 'list'
+      post 'list'
+    end
+  end
+
+  #
+  # Programme Items
+  #
+  match 'programme_items/drop',                         :controller => 'programme_items', :action => 'drop',                        :method => 'get'
+  match 'programme_items/list',                         :controller => 'programme_items', :action => 'list'
+  match 'programme_items/getList',                      :controller => 'programme_items', :action => 'getList',                     :method => 'post'
+  # TOOD - need a cleaner mechanism to assign the publication reference number and change to match the new mechanisms
+  # match 'programme_items/assign_reference_numbers',     :controller => 'programme_items', :action => 'assign_reference_numbers'
+  # match 'programme_items/do_assign_reference_numbers',  :controller => 'programme_items', :action => 'do_assign_reference_numbers', :method => 'post'
+
+  resources :programme_items do
+    resources :excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs
+    member do
+      put 'updateParticipants'
+    end
+  end
   
   #
   #
@@ -55,40 +95,12 @@ Rails.application.routes.draw do
   match '/import_mappings/columns' => 'import_mappings#columns'
   resources :import_mappings
   resources :file_uploads, :except => [:destroy, :index, :update, :remove]
-  # get "file_uploads/index"
-  # get "file_uploads/create"
-  # get "file_uploads/show"
-  # get "file_uploads/destroy"
-  # get "file_uploads/update"
 
   match 'conference_directory/find_by_code/:code', :controller => 'conference_directory', :via => :get, :action => 'find_by_code'
   match 'conference_directory/find_by_id/:id', :controller => 'conference_directory', :via => :get, :action => 'find_by_id'
   resources :conference_directory
 
   match '/dash/history/items' => 'dash/history#items'
-
-# TODO - test
-  match 'participants/exportemailxml', :controller => 'people', :action => 'exportemailxml'
-  match 'participants/doexportemailxml.:format', :controller => 'people', :action => 'doexportemailxml', :method => 'post'
-  match 'participants/invitestatuslist', :controller => 'people', :action => 'invitestatuslist'
-  match 'participants/acceptancestatuslist', :controller => 'people', :action => 'acceptancestatuslist'
-  match 'participants/getList',:controller => 'people', :action => 'getList', :method => 'post'
-  match 'participants/count', :controller => 'people', :action => 'count', :method => 'get'
-  match 'participants/generateInviteKey/:id', :controller => 'people', :action => 'generateInviteKey', :method => 'get'
-# 
-  match 'participants/acceptancestatuslistwithblank', :controller => 'people', :action => 'acceptancestatuslistwithblank'
-  match 'participants/invitestatuslistwithblank', :controller => 'people', :action => 'invitestatuslistwithblank'
-  resources :people, :path => "participants" do
-    resources :addresses, :postalAddresses, :emailAddresses, :phoneNumbers, :availabilities, :programme_items
-    resources :registrationDetails do
-      get 'show'
-    end
-    resources :edited_bios, :available_dates, :bio_images
-    collection do
-      get 'list'
-      post 'list'
-    end
-  end
 
   match 'formats/list', :controller => 'formats', :action => 'list'
   match 'formats/listwithblank', :controller => 'formats', :action => 'listwithblank'
@@ -144,11 +156,10 @@ Rails.application.routes.draw do
   match 'survey_respondents/tags_admin', :controller => 'survey_respondents/tags_admin', :action => 'index'
   match 'survey_respondents/tags_admin/update', :controller => 'survey_respondents/tags_admin', :action => 'update', :via => :post
   match 'survey_respondents/tags_admin/fix', :controller => 'survey_respondents/tags_admin', :action => 'fix'
+  
   match 'survey_respondents/tags/cloud', :controller => 'survey_respondents/tags', :action => 'cloud'
   match 'survey_respondents/tags/alltags', :controller => 'survey_respondents/tags', :action => 'alltags'
-  # match 'survey_respondents/tags/list', :controller => 'survey_respondents/list', :action => 'list'
   match 'survey_respondents/tags/update', :controller => 'survey_respondents/update', :action => 'list', :method => 'post'
-  # resources :survey_respondents 
 
   #
   # Utilities to review surveys
@@ -175,19 +186,6 @@ Rails.application.routes.draw do
 
   resources :equipment_needs do
     resources :programme_items
-  end
-
-  match 'programme_items/assign_reference_numbers', :controller => 'programme_items', :action => 'assign_reference_numbers'
-  match 'programme_items/do_assign_reference_numbers', :controller => 'programme_items', :action => 'do_assign_reference_numbers',:method => 'post'
-  match 'programme_items/drop', :controller => 'programme_items', :action => 'drop', :method => 'get'
-  match 'programme_items/list', :controller => 'programme_items', :action => 'list'
-  match 'programme_items/getList',:controller => 'programme_items', :action => 'getList', :method => 'post'
-
-  resources :programme_items do
-    resources :excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs
-    member do
-      put 'updateParticipants'
-    end
   end
 
   resources :excluded_items_survey_maps do 
@@ -292,7 +290,7 @@ Rails.application.routes.draw do
   match 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
   match 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
   match 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
-  match 'program/updates2.:format', :controller => 'program', :action => 'updates2', :method => 'get'
+  # match 'program/updates2.:format', :controller => 'program', :action => 'updates2', :method => 'get'
   match 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
   match 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
   resources :program
@@ -302,13 +300,5 @@ Rails.application.routes.draw do
   match 'api/conference.:format', :controller => 'api/conference', :action => 'show'  
 
   match 'tasks/update_exclusions', :controller => 'tasks/update_exclusions', :action => 'index'
-
-# 
-#   
-# 
-  # map.resources :monitor, :only => :index # we only need the one method/route for this
-  # map.resources :excluded_times
-# 
-#   
 
 end
