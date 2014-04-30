@@ -54,6 +54,8 @@ class SurveyRespondentsController < ApplicationController
           redirect_to  '/nosurvey.html' # TODO - to be changed
         else # Otherwise we continue to the form
           # TODO - change the '/' to the participant page (for past surveys and managing availabilities etc.)
+          @survey_respondent.single_access_token = (0...25).map { ('a'..'z').to_a[rand(26)] }.join # generate random key for access
+          @survey_respondent.save
           survey_redirect_back '/form/partsurvey', @survey_respondent.single_access_token
         end
       else
