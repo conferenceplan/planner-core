@@ -78,10 +78,12 @@ module PeopleService
         str = ""
         terms.each do |x|
           str += " AND " if str.length > 0
-          str += '(people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ?)'
+          str += '(people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ? OR people.suffix like ? OR pseudonyms.suffix like ?)'
         end
         clause = DataService.addClause(clause,str)
         terms.each do |x|
+          clause << '%' + x + '%'
+          clause << '%' + x + '%'
           clause << '%' + x + '%'
           clause << '%' + x + '%'
           clause << '%' + x + '%'
