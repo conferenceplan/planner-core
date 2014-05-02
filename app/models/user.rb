@@ -9,13 +9,15 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-
+         
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me, 
                   :failed_attempts, :sign_in_count, :login, :reset_password_token,
                   :reset_password_sent_at, :confirmed_at, :confirmed_sent_at, :confirmation_token,
                   :last_request_at, :current_sign_in_at, :last_sign_in_at, :current_sign_in_ip, :last_sign_in_ip,
                   :person_id, :remember_token, :remember_created_at, :unlock_token, :locked_at
+
+  validates_uniqueness_of :login         
 
   #
   # TODO - change the role and access control mechanism

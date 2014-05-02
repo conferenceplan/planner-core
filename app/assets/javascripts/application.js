@@ -86,7 +86,11 @@ jQuery(document).ready(function() {
         options.error = function(response) {
             if (response.status > 0) {
                 if (response.responseText) {
-                    alertMessage(response.responseText);
+                    if (options.handle_error) {
+                        options.handle_error(response);
+                    } else {
+                        alertMessage(response.responseText);
+                    }
                 } else {
                     alertMessage("Error communicating with backend ..."); // TODO - change to translatable string
                 };
