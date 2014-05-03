@@ -20,6 +20,9 @@ jQuery.download = function(url, data, method){
                         var pair = this.split('=');
                         inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
                 });
+                
+                inputs+='<input type="hidden" name="'+ $("meta[name='csrf-param']").attr('content') +'" value="'+ $("meta[name='csrf-token']").attr('content') +'" />';
+                
                 //send request
                 jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
                 .appendTo('body').submit().remove();
