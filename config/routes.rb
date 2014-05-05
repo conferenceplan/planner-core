@@ -9,7 +9,9 @@ Rails.application.routes.draw do
   authenticated :user do
     root :to => 'pages/home_dash#index', :as => :authenticated_root
   end
-  root :to => redirect('/users/sign_in') # if not authenticated then take the user to the sign in page
+  unauthenticated do
+    root :to => redirect('/users/sign_in') , :as => :unauthenticated_root # if not authenticated then take the user to the sign in page
+  end
   
   #
   # The 'landing' pages for the various parts of the application
