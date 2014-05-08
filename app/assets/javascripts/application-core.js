@@ -67,6 +67,8 @@
 
 //= require TabViews
 
+//= require twitter/typeahead.min
+
 //= require_self
 
 jQuery(document).ready(function() {
