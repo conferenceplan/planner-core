@@ -11,6 +11,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
     if ((defined? model.person) && model.person)
       publicid += model.person.first_name ? model.person.first_name : ''
       publicid += model.person.last_name ? model.person.last_name : ''
+      publicid.gsub(/[?!&\s+]/, '')
     else
       publicid += 'default_bio_image'
     end

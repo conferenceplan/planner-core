@@ -12,7 +12,7 @@ class PictureUploader < CarrierWave::Uploader::Base
     publicid += model.imageable_type ? model.imageable_type : ''
     publicid += model.imageable_id ? ('_' + model.imageable_id.to_s) : ''
     publicid += model.use ? ('_' + model.use.to_s) : ''
-    publicid.gsub(/\s+/, "")
+    publicid.gsub(/[?!&\s+]/, '')
   end
   
   #
