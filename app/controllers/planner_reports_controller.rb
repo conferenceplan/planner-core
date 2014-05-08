@@ -32,7 +32,9 @@ class PlannerReportsController < PlannerController
                 (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
                 (assignment.max_items_per_con ? assignment.max_items_per_day : ''),
                 assignment.person.programmeItemAssignments.collect { |pi|
-                        pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && pi.programmeItem.room_item_assignment.day == assignment.day
+                        pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 
+                                                  pi.programmeItem.room_item_assignment.day == assignment.day &&
+                                                  ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
                     }.reject { |c| c == nil }.join("\n")
           ]
         end

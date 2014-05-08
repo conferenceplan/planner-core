@@ -12,7 +12,9 @@ json.rowdata @assignments do |assignment|
 
     # List the items that the person is on for the day in question
     json.items assignment.person.programmeItemAssignments.collect { |pi|
-        pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && pi.programmeItem.room_item_assignment.day == assignment.day
+        pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 
+                                  pi.programmeItem.room_item_assignment.day == assignment.day && 
+                                  ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
     }.reject { |c| c == nil }
 
 end
