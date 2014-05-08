@@ -47,6 +47,42 @@ class PlannerReportsController < PlannerController
   #
   #
   #
+  def people_items_over_max
+    
+    @assignments = PlannerReportsService.findPeopleOverMaxItems
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "people_items_over_max" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+
+        output.push [
+          'Person','Nbr of Items','Max per Day','Max per Con','Items'
+        ]
+        
+        @assignments.each do |assignment|
+          
+          output.push [
+                assignment.person.getFullPublicationName,
+                assignment.nbr_items,
+                (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
+                (assignment.max_items_per_con ? assignment.max_items_per_day : ''),
+                assignment.person.programmeItemAssignments.collect { |pi|
+                        pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 
+                                                  ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
+                    }.reject { |c| c == nil }.join("\n")
+          ]
+        end
+        
+        csv_out(output, outfile)
+      }
+    end
+  end
+  
+  #
+  #
+  #
   def capacity_report
     @items = PlannerReportsService.items_over_capacity
     

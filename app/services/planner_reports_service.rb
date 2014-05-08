@@ -226,8 +226,22 @@ module PlannerReportsService
         group("programme_item_assignments.person_id, room_item_assignments.day").
         order("people.last_name, people.first_name, room_item_assignments.day")
 
-    # PersonItemRole['Moderator'].id, PersonItemRole['Participant'].id
+  end
+  
+  #
+  #
+  #
+  def self.findPeopleOverMaxItems
     
+    (ProgrammeItemAssignment.select("people.last_name, programme_item_assignments.person_id, count(programme_item_assignments.person_id) as nbr_items, person_constraints.max_items_per_day, person_constraints.max_items_per_con").
+            joins("right join room_item_assignments on room_item_assignments.programme_item_id = programme_item_assignments.programme_item_id").
+            joins("left join person_constraints on person_constraints.person_id = programme_item_assignments.person_id").
+            joins(:person).
+            includes({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
+            where("programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s + "," + PersonItemRole['Participant'].id.to_s + ")").
+            group("programme_item_assignments.person_id").
+            order("people.last_name, people.first_name")).select!{|i| i.nbr_items.to_i > i.max_items_per_con.to_i }
+        
   end
 
 #

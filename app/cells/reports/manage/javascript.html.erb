@@ -7,6 +7,14 @@ ReportApp.ReportManagement = (function(Backbone){
     var GenericForm = Backbone.Form.extend({
     });
     
+    var OverusedPeopleAllocationColModel = [
+                    {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
+                    {name: 'num_of_items', label : '<%= t "number-of-items" %>', jsonmap: "nbr_items"},
+                    {name: 'max_per_day', label : '<%= t "max-number-per-day" %>', jsonmap: "max_items_per_day"},
+                    {name: 'max_per_con', label : '<%= t "max-number-per-con" %>', jsonmap: "max_items_per_con"},
+                    {name:'Items', label : '<%= t "items" %>', jsonmap: "items", width: 500, formatter: AppUtils.arrayToString}
+    ];
+    
     var PeopleAllocationColModel = [
                     {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
                     {name: 'day', label : '<%= t "day" %>', jsonmap: "day_str"},
@@ -172,7 +180,19 @@ ReportApp.ReportManagement = (function(Backbone){
             'edited_bios'           : 'edited_bios',
             'equipment_needs'       : 'equipment_needs',
             'capacity_report'       : 'capacity_report',
-            'people_item_allocation' : 'people_item_allocation'
+            'people_item_allocation' : 'people_item_allocation',
+            'people_with_too_many_items' : 'people_with_too_many_items'
+        },
+        
+        people_with_too_many_items : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/people_items_over_max',
+                colModel    : OverusedPeopleAllocationColModel,
+                caption     : '<%= t "report-people-overused" %>'
+            }));
         },
         
         people_item_allocation : function() {

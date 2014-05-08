@@ -40,6 +40,8 @@ require 'cloudinary'
 require 'dalli'
 require "connection_pool"
 require "routing-filter"
+require "twitter-typeahead-rails"
+
 # require 'actionmailer' # CHECK
 # require 'activerecord' 
 
