@@ -254,6 +254,18 @@ module PlannerReportsService
             order("people.last_name, people.first_name")
         
   end
+  
+  #
+  #
+  #
+  def self.findItemsWithOneParticipant
+    
+    ProgrammeItemAssignment.where("programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s + "," + PersonItemRole['Participant'].id.to_s + ")").
+            includes([{:person => :pseudonym}, {:programmeItem => {:people => :programmeItems}}]).
+            group("programme_item_assignments.programme_item_id").having("count(programme_item_assignments.programme_item_id) = 1").
+            sort!{|a,b| a.person.last_name <=> b.person.last_name }
+    
+  end
 
 #
 #

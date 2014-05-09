@@ -47,6 +47,40 @@ class PlannerReportsController < PlannerController
   #
   #
   #
+  def items_with_one_person
+    
+    @assignments = PlannerReportsService.findItemsWithOneParticipant
+    
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "items_with_one_person" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+
+        output.push [
+          'Title','Person','Items for Person'
+        ]
+
+        @assignments.each do |assignment|
+          output.push [
+              assignment.programmeItem.title,
+              assignment.person.getFullPublicationName,
+              assignment.person.programmeItemAssignments.collect { |pi|
+                pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 
+                                  ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
+              }.reject { |c| c == nil }.join("\n")
+          ]
+        end  
+
+        csv_out(output, outfile)
+      }
+    end
+      
+  end
+  
+  #
+  #
+  #
   def people_items_over_max
     
     @assignments = PlannerReportsService.findPeopleOverMaxItems

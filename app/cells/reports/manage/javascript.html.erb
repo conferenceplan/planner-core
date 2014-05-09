@@ -7,6 +7,12 @@ ReportApp.ReportManagement = (function(Backbone){
     var GenericForm = Backbone.Form.extend({
     });
     
+    var PanelsWithOnePersonColModel= [
+                    {name: 'title',       label : '<%= t "item" %>',  jsonmap: "title",    width: 300},
+                    {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
+                    {name:'Items', label : '<%= t "items" %>', jsonmap: "items", width: 500, formatter: AppUtils.arrayToString}
+    ];
+    
     var OverusedPeopleAllocationColModel = [
                     {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
                     {name: 'num_of_items', label : '<%= t "number-of-items" %>', jsonmap: "nbr_items"},
@@ -181,7 +187,19 @@ ReportApp.ReportManagement = (function(Backbone){
             'equipment_needs'       : 'equipment_needs',
             'capacity_report'       : 'capacity_report',
             'people_item_allocation' : 'people_item_allocation',
-            'people_with_too_many_items' : 'people_with_too_many_items'
+            'people_with_too_many_items' : 'people_with_too_many_items',
+            'panels_with_one_person' : 'panels_with_one_person'
+        },
+        
+        panels_with_one_person : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/items_with_one_person',
+                colModel    : PanelsWithOnePersonColModel,
+                caption     : '<%= t "report-items-with-one-person" %>'
+            }));
         },
         
         people_with_too_many_items : function() {
