@@ -33,15 +33,22 @@ module PlannerReportsService
                     :order => 'people.last_name, people.first_name'
   end
 
-  #
-  #
-  #
+  def self.findEmptyPanels
+    
+    ProgrammeItem.joins('left outer JOIN programme_item_assignments ON programme_item_assignments.programme_item_id = programme_items.id').
+                  includes(:time_slot).
+                  where("programme_item_assignments.id is null").
+                  order("time_slots.start")
+
+  end  
+
   def self.findPanelsWithPanelists(sort_by = '', mod_date = '1900-01-01', format_id = nil, sched_only = false, equip_only = false, plus_setups = false)
 
     cond_str = "(programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?))"
     cond_str << " and time_slots.start is not NULL" if sched_only
+    cond_str << " and programme_item_assignments.role_id in (?)"
 
-    conditions = [mod_date, mod_date, mod_date, mod_date]
+    conditions = [mod_date, mod_date, mod_date, mod_date, [PersonItemRole['Moderator'].id, PersonItemRole['Participant'].id]]
 
     if equip_only
       if plus_setups
@@ -99,11 +106,15 @@ module PlannerReportsService
     conditions << peopleIds if peopleIds
     conditions << roles
     
-    Person.all :conditions => conditions, 
+    Person.all( :conditions => conditions, 
               :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}},
-              :order => "people.last_name, time_slots.start asc"
+              :order => "people.last_name, time_slots.start asc")
 
   end
+  # find people with items that have only one person...?
+#    Person.all( :conditions => conditions, :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}},:order => "people.last_name, time_slots.start asc")
+# Need a find panelists with panels that have only one person
+
   
   #
   #
@@ -233,14 +244,14 @@ module PlannerReportsService
   #
   def self.findPeopleOverMaxItems
     
-    (ProgrammeItemAssignment.select("people.last_name, programme_item_assignments.person_id, count(programme_item_assignments.person_id) as nbr_items, person_constraints.max_items_per_day, person_constraints.max_items_per_con").
+    ProgrammeItemAssignment.select("people.last_name, programme_item_assignments.person_id, count(programme_item_assignments.person_id) as nbr_items, person_constraints.max_items_per_day, person_constraints.max_items_per_con").
             joins("right join room_item_assignments on room_item_assignments.programme_item_id = programme_item_assignments.programme_item_id").
             joins("left join person_constraints on person_constraints.person_id = programme_item_assignments.person_id").
             joins(:person).
             includes({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
             where("programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s + "," + PersonItemRole['Participant'].id.to_s + ")").
-            group("programme_item_assignments.person_id").
-            order("people.last_name, people.first_name")).select!{|i| i.nbr_items.to_i > i.max_items_per_con.to_i }
+            group("programme_item_assignments.person_id").having("nbr_items > max_items_per_con").
+            order("people.last_name, people.first_name")
         
   end
 
