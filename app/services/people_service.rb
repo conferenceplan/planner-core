@@ -32,7 +32,7 @@ module PeopleService
     if tagquery.empty?
       Person.count args
     else
-      eval "Person#{tagquery}.uniq.count :all, " + args.inspect
+      eval "Person#{tagquery}.uniq.count( :all, " + args.inspect + ").count"
     end
   end
   
