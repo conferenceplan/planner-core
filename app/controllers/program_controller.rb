@@ -67,6 +67,17 @@ class ProgramController < ApplicationController
   end
   
   #
+  #
+  #
+  def confirmed_participants
+    @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
+    @partition_val = @cloudinaryURI ? @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'') : ''
+    
+    @people = PeopleService.findConfirmedPeople
+    
+  end
+  
+  #
   # Return a list of rooms - use the same parameters as for the grid
   #
   def rooms

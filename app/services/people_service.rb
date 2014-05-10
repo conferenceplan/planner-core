@@ -4,6 +4,18 @@
 module PeopleService
   
   #
+  # Get people who have been invited and have accepted
+  # along with their Bios
+  #
+  def self.findConfirmedPeople
+    
+    Person.where({:acceptance_status_id => AcceptanceStatus['Accepted'], :invitestatus_id => InviteStatus['Invited']}).
+          includes([:pseudonym, :bio_image, :edited_bio]).
+          order("people.last_name")
+    
+  end
+  
+  #
   #
   #
   def self.findAssignedParticipants

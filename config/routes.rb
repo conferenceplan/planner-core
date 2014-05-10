@@ -98,10 +98,6 @@ Rails.application.routes.draw do
   resources :import_mappings
   resources :file_uploads, :except => [:destroy, :index, :update, :remove]
 
-  match 'conference_directory/find_by_code/:code', :controller => 'conference_directory', :via => :get, :action => 'find_by_code'
-  match 'conference_directory/find_by_id/:id', :controller => 'conference_directory', :via => :get, :action => 'find_by_id'
-  resources :conference_directory
-
   match '/dash/history/items' => 'dash/history#items'
 
   match 'formats/list', :controller => 'formats', :action => 'list'
@@ -284,17 +280,18 @@ Rails.application.routes.draw do
   resources :planner_reports
 
   match 'program/publicationDates.:format', :controller => 'program', :action => 'publicationDates', :method => 'get'
-  match 'program/updateSelect', :controller => 'program', :action => 'updateSelect', :method => 'get'
+  # match 'program/updateSelect', :controller => 'program', :action => 'updateSelect', :method => 'get'
   
-  match 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
-  match 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
-  match 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
-  match 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
-  match 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
-  match 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
-  # match 'program/updates2.:format', :controller => 'program', :action => 'updates2', :method => 'get'
-  match 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
   match 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
+  match 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
+  match 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
+  match 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
+  match 'program/confirmed_participants.:format', :controller => 'program', :action => 'confirmed_participants', :method => 'get'
+#  match 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
+#  match 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
+#  match 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
+  # match 'program/updates2.:format', :controller => 'program', :action => 'updates2', :method => 'get'
+#  match 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
   resources :program
 
   match '/form/:page(/:preview)', :controller => 'surveys/response', :action => 'renderalias'
