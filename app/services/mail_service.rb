@@ -63,7 +63,7 @@ module MailService
         }, content
       ).deliver
       saveMailHistory(person, nil, content, EmailStatus[:Sent])
-      transitionPersonInviteStateAfterEmail(person, toState) if toInviteState
+      transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
     rescue => msg
       saveMailHistory(person, nil, msg, EmailStatus[:Failed])
       # THROW ERROR - TODO
@@ -116,7 +116,7 @@ module MailService
         }, content
       ).deliver
       saveMailHistory(person, mailing, content, EmailStatus[:Sent])
-      transitionPersonInviteStateAfterEmail(person, toState) if toInviteState && !mailing.testrun
+      transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState && !mailing.testrun
     rescue => msg
       saveMailHistory(person, mailing, msg, EmailStatus[:Failed])
       # THROW ERROR - TODO
