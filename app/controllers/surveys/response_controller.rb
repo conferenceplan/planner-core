@@ -437,10 +437,7 @@ class Surveys::ResponseController < ApplicationController
           res[response.survey_question_id.to_s] = {}
         end
         idx = response.survey_question.survey_answers.index{|x| x.answer == response.response }
-        # if !res[response.survey_question_id.to_s]
-          # res[response.survey_question_id.to_s] = {}
-        # end
-        res[response.survey_question_id.to_s][response.survey_question.survey_answers[idx].id.to_s] = response.response.to_s
+        res[response.survey_question_id.to_s][response.survey_question.survey_answers[idx].id.to_s] = response.response.to_s if idx
       elsif response.survey_question && response.survey_question.question_type == :availability
         if !res[response.survey_question_id.to_s]
           res[response.survey_question_id.to_s] = {}

@@ -29,7 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activerecord' 
   s.add_dependency 'axlsx_rails'
   s.add_dependency "audited-activerecord", "~> 3.0"
-  s.add_dependency 'acts-as-taggable-on'
+  s.add_dependency 'acts-as-taggable-on', "3.1.1"
   s.add_dependency 'devise'
   s.add_dependency 'scrypt'
   s.add_dependency 'bcrypt'
