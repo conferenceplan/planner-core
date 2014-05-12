@@ -15,7 +15,7 @@ module ProgramItemsService
     if tagquery.empty?
       ProgrammeItem.count args
     else
-      eval "ProgrammeItem#{tagquery}.uniq.count( :all, " + args.inspect + ").count"
+      eval "ProgrammeItem#{tagquery}.uniq.count( :all, " + args.inspect + ")"
     end
   end
   
