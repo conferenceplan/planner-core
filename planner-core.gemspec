@@ -7,7 +7,7 @@ require "planner_core/version"
 Gem::Specification.new do |s|
   s.name        = "planner-core"
   s.version     = PlannerCore::VERSION
-  s.authors     = ["Henry Balen", "Ruth Leibig", "Ian Stockdale", "Cathy Mullican", "Janice Gelb", "Terry Fong"]
+  s.authors     = ["Henry Balen", "Ruth Leibig", "Ian Stockdale", "Cathy Mullican", "Janice Gelb", "Terry Fong", "Philippe Hache"]
   s.email       = ["info@grenadine.co"]
   s.licenses    = ["Apache"]
   s.homepage    = "http://www.myconferenceplanning.org"
