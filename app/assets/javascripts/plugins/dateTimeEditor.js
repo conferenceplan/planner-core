@@ -47,7 +47,7 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
     // and convert to browser TZ on the way back
     // can we do this by overloading the get and set?
     getValue: function() {
-        var offset = this.schema.tz_offset;
+        var offset = (typeof this.schema.tz_offset != 'undefined') ? this.schema.tz_offset : 0;
         var val = this.picker.data("DateTimePicker").getDate(); // date the datetime from the widget
         var valStr = "";
         if (val) {
