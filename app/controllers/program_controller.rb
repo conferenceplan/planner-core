@@ -70,11 +70,11 @@ class ProgramController < ApplicationController
   #
   #
   def confirmed_participants
+    peopleIds = params[:people_ids] ? params[:people_ids].split(',') : nil
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
     @partition_val = @cloudinaryURI ? @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'') : ''
     
-    @people = PeopleService.findConfirmedPeople
-    
+    @people = PeopleService.findConfirmedPeople peopleIds    
   end
   
   #
