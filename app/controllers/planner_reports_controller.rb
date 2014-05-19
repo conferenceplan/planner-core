@@ -30,7 +30,7 @@ class PlannerReportsController < PlannerController
                 (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A'),
                 assignment.nbr_items,
                 (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
-                (assignment.max_items_per_con ? assignment.max_items_per_day : ''),
+                (assignment.max_items_per_con ? assignment.max_items_per_con : ''),
                 assignment.person.programmeItemAssignments.collect { |pi|
                         pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 
                                                   pi.programmeItem.room_item_assignment.day == assignment.day &&
@@ -101,7 +101,7 @@ class PlannerReportsController < PlannerController
                 assignment.person.getFullPublicationName,
                 assignment.nbr_items,
                 (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
-                (assignment.max_items_per_con ? assignment.max_items_per_day : ''),
+                (assignment.max_items_per_con ? assignment.max_items_per_con : ''),
                 assignment.person.programmeItemAssignments.collect { |pi|
                         pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 
                                                   ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
