@@ -7,7 +7,7 @@ class ProgrammeItemsController < PlannerController
   def index
     if params[:person_id] # then we only get the items for a given person
       person = Person.find(params[:person_id])
-      @assignments = person.programmeItemAssignments.includes(:programmeItem).collect{|a| (a.programmeItem != nil) ? a : nil}.compact
+      @assignments = person.programmeItemAssignments.includes({:programmeItem => :time_slot}).order('time_slots.start asc').collect{|a| (a.programmeItem != nil) ? a : nil}.compact
     end
   end
 
@@ -38,10 +38,11 @@ class ProgrammeItemsController < PlannerController
   def show
     @programmeItem = ProgrammeItem.find(params[:id])
     
-    @invisibleAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id =?',@programmeItem,PersonItemRole['Invisible']], :include => {:person => :pseudonym}
-    @moderatorAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']], :include => {:person => :pseudonym}
-    @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] , :include => {:person => :pseudonym}
-    @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] , :include => {:person => :pseudonym}
+    # Order these by last name
+    @invisibleAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id =?',@programmeItem,PersonItemRole['Invisible']], :include => {:person => :pseudonym}, :order => "people.last_name"
+    @moderatorAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']], :include => {:person => :pseudonym}, :order => "people.last_name"
+    @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] , :include => {:person => :pseudonym}, :order => "people.last_name"
+    @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] , :include => {:person => :pseudonym}, :order => "people.last_name"
   end
 
   #
