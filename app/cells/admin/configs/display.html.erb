@@ -29,9 +29,11 @@
                 <li>
                     <a href="#email_config"><%= t "email-addresses" %></a>
                 </li>
+                <% if allowed? :manage_system_config %>
                 <li>
                     <a href="#cloudinary_config"><%= t "config-cloudinary" %></a>
                 </li>
+                <% end %>
             </ul>
         </div>
     </div>
