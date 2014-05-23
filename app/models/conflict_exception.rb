@@ -1,3 +1,5 @@
+require 'planner_utils'
+
 class ConflictException < ActiveRecord::Base
   attr_accessible :conflict_type, :affected, :src1, :src2, :idx, :lock_version
 
