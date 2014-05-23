@@ -678,6 +678,7 @@ var AppUtils = (function(){
     ConflictView = Marionette.ItemView.extend({
         events: {
             "click .conflict": "selectConflict",
+            "click .exclude": "excludeConflict"
         },
         
         initialize : function(options) {
@@ -685,12 +686,72 @@ var AppUtils = (function(){
         },
         
         selectConflict : function(ev) {
-            // TODO - scroll to the problem item
+            // scroll to the problem item
             room_name = this.model.get('room_name');
             time = this.model.get('item_start');
             item_id = this.model.get('item_id'); // g id
             
             DailyGrid.scrollTo(room_name, time);
+        },
+        
+        excludeConflict : function(ev) {
+            var model = this.model;
+            modal = new AppUtils.ConfirmModel({
+                title : '<%= I18n.t "remove-exclusion-confirmation" %> ',
+                content : '<%= I18n.t "remove-exclusion" %> '  + (model.get('person_name') ? model.get('person_name') : model.get('room_name')) ,
+                continueAction : function() {
+                    data = { conflict_exception : {
+                            conflict_type : model.get('type')
+                        } };
+                        
+                    switch (model.get('type')) {
+                        case 'schedule' :
+                            data['conflict_exception']['affected'] = model.get('person_id');
+                            data['conflict_exception']['src1'] = model.get('item_id');
+                            data['conflict_exception']['src2'] = model.get('conflict_item_id');
+                            break;
+                        case 'room' :
+                            data['conflict_exception']['affected'] = model.get('room_id');
+                            data['conflict_exception']['src1'] = model.get('item_id');
+                            data['conflict_exception']['src2'] = model.get('conflict_item_id');
+                            break;
+                        case 'item' :
+                            data['conflict_exception']['affected'] = model.get('person_id');
+                            data['conflict_exception']['src1'] = model.get('item_id');
+                            data['conflict_exception']['src2'] = model.get('conflict_item_id');
+                            break;
+                        case 'time' :
+                            data['conflict_exception']['affected'] = model.get('person_id');
+                            data['conflict_exception']['src1'] = model.get('item_id');
+                            data['conflict_exception']['src2'] = model.get('period_id');
+                            break;
+                        case 'avail' :
+                            data['conflict_exception']['affected'] = model.get('person_id');
+                            data['conflict_exception']['src1'] = model.get('item_id');
+                            data['conflict_exception']['src2'] = model.get('period_id');
+                            break;
+                        case 'back2back' :
+                            data['conflict_exception']['affected'] = model.get('person_id');
+                            data['conflict_exception']['src1'] = model.get('item_id');
+                            data['conflict_exception']['src2'] = model.get('conflict_item_id');
+                            break;
+                    };
+                        
+                    $.ajax({
+                        url : "/items/confict_exceptions",
+                        type : 'POST',
+                        data : data,
+                        success : function() {
+                            // and refresh the conflict list
+                            eventAggregator.trigger("refreshConflicts");
+                        }
+                    });
+                },
+                closeAction : function() {
+                }
+            });
+            modal.render();
+            
         }
     });
     
@@ -711,7 +772,7 @@ var AppUtils = (function(){
             var view = new ItemViewType(options);
 
             return view;
-        },
+        }
     });
     
     ConflictLayout = Backbone.Marionette.Layout.extend({

@@ -5,7 +5,7 @@
 ScheduleApp = new Backbone.Marionette.Application();
 ScheduleApp.ItemManagement = (function(Backbone){
     
-    var eventAggregator = new Backbone.Wreqr.EventAggregator();
+    var eventAggregator = AppUtils.eventAggregator;
     
     /*
      * 

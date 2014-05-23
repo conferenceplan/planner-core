@@ -94,6 +94,13 @@ Rails.application.routes.draw do
   #
   #
   #
+  namespace :items do
+    resources :confict_exceptions
+  end
+  
+  #
+  #
+  #
   match '/import_mappings/columns' => 'import_mappings#columns'
   resources :import_mappings
   resources :file_uploads, :except => [:destroy, :index, :update, :remove]

@@ -1,8 +1,9 @@
 #
 #
-#
+#schedule, room, item, time, avail, back2back
 json.schedule @conflicts do |conflict|
     json.room_id                conflict['room_id']
+    json.type                   :schedule
     json.room_name              conflict['room_name']
     json.person_id              conflict['person_id']
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
@@ -24,6 +25,7 @@ end
 
 json.room @roomConflicts do |conflict|
     json.room_id                conflict['room_id']
+    json.type                   :room
     json.room_name              conflict['room_name']
     json.item_id                conflict['item_id']
     json.item_title             conflict['item_name']
@@ -39,6 +41,7 @@ end
 
 json.excluded_item @excludedItemConflicts do |conflict|
     json.person_id              conflict['person_id']
+    json.type                   :item
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
     
     json.room_id                conflict['conflict_room_id']
@@ -62,12 +65,14 @@ end
 
 json.excluded_time @excludedTimeConflicts do |conflict|
     json.room_id                conflict['room_id']
+    json.type                   :time
     json.room_name              conflict['room_name']
     json.person_id              conflict['person_id']
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
     json.item_id                conflict['item_id']
     json.item_title             conflict['item_name']
     json.item_start             Time.zone.parse( conflict['item_start'].to_s )
+    json.period_id              conflict['period_id']
     json.period_start           Time.zone.parse( conflict['period_start'].to_s )
     json.period_end             Time.zone.parse( conflict['period_end'].to_s )
     json.item_role              PersonItemRole.find(conflict['item_role'].to_i).name
@@ -79,12 +84,14 @@ end
 
 json.availability @availableTimeConflicts do |conflict|
     json.room_id                conflict['room_id']
+    json.type                   :avail
     json.room_name              conflict['room_name']
     json.person_id              conflict['person_id']
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
     json.item_id                conflict['item_id']
     json.item_title             conflict['item_name']
     json.item_start             Time.zone.parse( conflict['item_start'].to_s )
+    json.period_id              conflict['period_id']
     json.period_start           Time.zone.parse( conflict['period_start'].to_s )
     json.period_end             Time.zone.parse( conflict['period_end'].to_s )
     json.period_start_string    Time.zone.parse( conflict['period_start'].to_s ).strftime('%A %H:%M')
@@ -96,6 +103,7 @@ end
 
 json.back_to_back @backtobackConflicts do |conflict|
     json.room_id                conflict['room_id']
+    json.type                   :back2back
     json.room_name              conflict['room_name']
     json.person_id              conflict['person_id']
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']

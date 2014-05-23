@@ -5,7 +5,6 @@ class ProgramPlannerController < PlannerController
   #
   #
   def assignments
-    # TODO add a parameter specifying the rooms that we want to display
     rooms = params[:rooms] ? params[:rooms].split(',').collect{|a| a.to_i} : nil
     @day = params[:day] # Day
     if rooms

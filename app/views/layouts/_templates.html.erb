@@ -217,6 +217,7 @@
 
 <script type="text/template" id="schedule-conflict-view-template">
     <div class="thumbnail clearfix">
+        <button type="button" class="close exclude" aria-hidden="true">×</button>
         <small class='conflict'>
             <b>{{= person_name }}</b> <%= t "has-a-conflict" %> <br/>
             {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) <%= t "at" %> {{= item_day_string }} {{= item_start_string }} <br/>
@@ -226,6 +227,7 @@
 </script>
 <script type="text/template" id="room-conflict-view-template">
     <div class="thumbnail clearfix">
+        <button type="button" class="close exclude" aria-hidden="true">×</button>
         <small class='conflict'>
             <%= t "room" %> <b>{{= room_name}}</b> <%= t "at" %> {{= item_day_string }} {{= item_start_string }} <br/>
             <i>{{= item_title }}</i> <%= t "conflicts-with" %>
@@ -235,6 +237,7 @@
 </script>
 <script type="text/template" id="excluded-item-conflict-view-template">
     <div class="thumbnail clearfix">
+        <button type="button" class="close exclude" aria-hidden="true">×</button>
         <small class='conflict'>
             <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has-a-conflict" %> <br/>
             <%= t "do-not-schedule-against" %> <i>{{= conflict_item_title }}</i><br/>
@@ -245,6 +248,7 @@
 </script>
 <script type="text/template" id="excluded-time-conflict-view-template">
     <div class="thumbnail clearfix">
+        <button type="button" class="close exclude" aria-hidden="true">×</button>
         <small class='conflict'>
             <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has-a-conflict" %> <br/>
             <%= t "do-not-schedule-between" %> <b>{{= period_start_string }}</b> <%= t "to" %> <b>{{= period_end_string }}</b><br/>
@@ -255,6 +259,7 @@
 </script>
 <script type="text/template" id="availability-conflict-view-template">
     <div class="thumbnail clearfix">
+        <button type="button" class="close exclude" aria-hidden="true">×</button>
         <small class='conflict'>
             <b>{{= person_name }}</b> ({{= item_role}}) <%= t "has-a-conflict" %> <br/>
             <%= t "only-available-between:" %> <b>{{= period_start_string }}</b> <%= t "to" %> <b>{{= period_end_string }}</b><br/>
@@ -265,6 +270,7 @@
 </script>
 <script type="text/template" id="back-to-back-conflict-view-template">
     <div class="thumbnail clearfix">
+        <button type="button" class="close exclude" aria-hidden="true">×</button>
         <small class='conflict'>
             <b>{{= person_name }}</b> <%= t "has-a-back-to-back" %> <br/>
             {{= room_name}}: <b>{{= item_title }}</b> ({{= item_role}}) <%= t "at" %>{{= item_day_string }} {{= item_start_string }} <%= t "precedes-conflict" %>

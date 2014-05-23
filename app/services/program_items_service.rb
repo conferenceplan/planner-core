@@ -69,6 +69,7 @@ module ProgramItemsService
   end
   
   def self.getNumberOfConflicts(day = nil)
+    # TODO - how to subtract the exceptions?
     return getNbrItemConflicts(day) + getNbrRoomConflicts(day) + getNbrExcludedItemConflicts(day) + 
               getNbrExcludedTimeConflicts(day) + getNbrAvailabilityConficts(day) + getNbrBackToBackConflicts(day)
   end
@@ -265,7 +266,12 @@ EOS
   
 @@CONFLICT_QUERY_PT2 = <<"EOS"
   ) as Conflicts
+left join conflict_exceptions 
+on conflict_exceptions.affected = Conflicts.pidA AND
+conflict_exceptions.src1 = Conflicts.progA AND
+conflict_exceptions.src2 = Conflicts.progB
   where
+conflict_exceptions.id is null AND
   R.id = Conflicts.roomA AND
   P.id = Conflicts.pidA AND
   S.id = Conflicts.progA AND
@@ -298,8 +304,13 @@ EOS
 
 @@ITEM_CONFLICT_QUERY_PT2 = <<"EOS"
 ) as Conflicts
-where room.id = Conflicts.roomA
-AND S.id = progA
+left join conflict_exceptions 
+on conflict_exceptions.affected = Conflicts.roomA AND
+conflict_exceptions.src1 = Conflicts.progA AND
+conflict_exceptions.src2 = Conflicts.progB
+where 
+conflict_exceptions.id is null AND
+room.id = Conflicts.roomA AND S.id = progA
 AND SB.id = progB
 EOS
   
@@ -329,10 +340,15 @@ EOS
   AND exA.excludable_id <> progB.programme_item_id
   AND exA.person_id = progB.person_id
 EOS
-  
+
 @@EXCLUDED_ITEM_QUERY_PT2 = <<"EOS"
   ) as Conflicts
-  where
+left join conflict_exceptions 
+on conflict_exceptions.affected = Conflicts.pidA AND
+conflict_exceptions.src1 = Conflicts.progB AND
+conflict_exceptions.src2 = Conflicts.progA
+where 
+conflict_exceptions.id is null AND
   R.id = Conflicts.roomA AND
   P.id = Conflicts.pidA AND
   S.id = Conflicts.progA AND
@@ -346,11 +362,11 @@ EOS
   R.id as room_id, R.name as room_name,
   P.id as person_id, P.first_name as person_first_name, P.last_name as person_last_name, 
   S.id as item_id, S.title as item_name, Conflicts.startB as item_start,
-  Conflicts.startA as period_start, Conflicts.endA as period_end,
+  Conflicts.startA as period_start, Conflicts.endA as period_end, Conflicts.period_id as period_id,
   Conflicts.roleB item_role
   from people P, rooms R, programme_items S,
    (select exA.person_id as pidA, progB.person_id as pidB, 
-   tsA.start as startA, tsA.end as endA,
+   tsA.start as startA, tsA.end as endA, tsA.id as period_id,
    roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB,
    progB.role_id as roleB
    from exclusions exA, time_slots tsA,
@@ -365,7 +381,12 @@ EOS
 
 @@EXCLUDED_TIME_QUERY_PT2 = <<"EOS"
 ) as Conflicts
-  where
+left join conflict_exceptions 
+on conflict_exceptions.affected = Conflicts.pidA AND
+conflict_exceptions.src1 = Conflicts.progB AND
+conflict_exceptions.src2 = Conflicts.period_id
+where 
+conflict_exceptions.id is null AND
   R.id = Conflicts.roomB AND
   S.id = Conflicts.progB AND
   P.id = Conflicts.pidA
@@ -377,11 +398,11 @@ select
   R.id as room_id, R.name as room_name,
   P.id as person_id, P.first_name as person_first_name, P.last_name as person_last_name, 
   S.id as item_id, S.title as item_name, Conflicts.startB as item_start,
-  Conflicts.startA as period_start, Conflicts.endA as period_end,
+  Conflicts.startA as period_start, Conflicts.endA as period_end, Conflicts.availId as period_id,
   Conflicts.roleB item_role
   from people P, rooms R, programme_items S,
    (select availA.person_id as pidA, progB.person_id as pidB, 
-   availA.start_time as startA, availA.end_time as endA,
+   availA.start_time as startA, availA.end_time as endA, availA.id as availId,
    roomB.room_id as roomB, progB.programme_item_id as progB, tsB.start as startB, tsB.end as endB,
    progB.role_id as roleB
    from available_dates availA, 
@@ -395,7 +416,12 @@ EOS
 
 @@AVAILABLE_TIME_CONFLICTS_QUERY_PT2 = <<"EOS"
 ) as Conflicts
-  where
+left join conflict_exceptions 
+on conflict_exceptions.affected = Conflicts.pidA AND
+conflict_exceptions.src1 = Conflicts.progB AND
+conflict_exceptions.src2 = Conflicts.availId
+where 
+conflict_exceptions.id is null AND
   R.id = Conflicts.roomB AND
   S.id = Conflicts.progB AND
   P.id = Conflicts.pidA
@@ -427,10 +453,15 @@ EOS
   AND progA.programme_item_id <> progB.programme_item_id
   AND progA.person_id = progB.person_id
 EOS
-  
+ 
 @@BACK_TO_BACK_QUERY_PT2 = <<"EOS"
   ) as Conflicts
-  where
+left join conflict_exceptions 
+on conflict_exceptions.affected = Conflicts.pidA AND
+conflict_exceptions.src1 = Conflicts.progA AND
+conflict_exceptions.src2 = Conflicts.progB
+where 
+conflict_exceptions.id is null AND
   R.id = Conflicts.roomA AND
   P.id = Conflicts.pidA AND
   S.id = Conflicts.progA AND

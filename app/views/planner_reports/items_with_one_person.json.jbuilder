@@ -3,7 +3,7 @@ json.currpage 1
     
 json.rowdata @assignments do |assignment|
 
-    json.title              assignment.programmeItem.title
+    json.title              assignment.programmeItem ? assignment.programmeItem.title : ''
     json.name               assignment.person.getFullPublicationName
 
     # List the items that the person is on for the day in question

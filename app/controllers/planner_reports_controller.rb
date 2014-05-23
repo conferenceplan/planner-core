@@ -63,7 +63,7 @@ class PlannerReportsController < PlannerController
 
         @assignments.each do |assignment|
           output.push [
-              assignment.programmeItem.title,
+              assignment.programmeItem ? assignment.programmeItem.title : '',
               assignment.person.getFullPublicationName,
               assignment.person.programmeItemAssignments.collect { |pi|
                 pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 

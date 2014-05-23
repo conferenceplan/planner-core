@@ -161,19 +161,26 @@ $.widget( "cp.baseTable" , {
         
             deleteModal : function() {
                 if (this.model) {
-                    // TODO - put in confirmation for the model delete
+                    var model = this.model;
                     var grid = this.options.grid;
-                    this.model.destroy({
-                        wait: true,
-                        // error : function(mdl, response) {
-                            // alertMessage(response.responseText);
-                        // },
-                        success : function(md, response) {
-                            grid.trigger("reloadGrid");
-                            clearNotifyMethod();
-                        }
+                    // confirmation for the model delete
+                    modal = new AppUtils.ConfirmModel({
+                            content : '<%= I18n.t "delete-selected-data" %>',
+                            title : '<%= I18n.t "delete-confirmation" %>',
+                            continueAction : function() {
+                                model.destroy({
+                                    wait: true,
+                                    success : function(md, response) {
+                                        grid.trigger("reloadGrid");
+                                        clearNotifyMethod();
+                                    }
+                                });
+                                model = null;
+                            },
+                            closeAction : function() {
+                            }
                     });
-                    this.model = null;
+                    modal.render();
                 };
             },
         });
