@@ -25,7 +25,9 @@ $.widget( "cp.baseTable" , {
         controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
         modelType           : null, // Should be provided by the caller
         modelTemplate       : null,
-        delayed             : false
+        delayed             : false,
+        confirm_content     : "Are you sure you want to delete the selected data?",
+        confirm_title       : "Confirm Deletion"
     },
     
     /*
@@ -163,10 +165,11 @@ $.widget( "cp.baseTable" , {
                 if (this.model) {
                     var model = this.model;
                     var grid = this.options.grid;
+                    var confirm_content = this.options.confirm_content;
                     // confirmation for the model delete
                     modal = new AppUtils.ConfirmModel({
-                            content : '<%= I18n.t "delete-selected-data" %>',
-                            title : '<%= I18n.t "delete-confirmation" %>',
+                            content : confirm_content,
+                            title : this.options.confirm_title,
                             continueAction : function() {
                                 model.destroy({
                                     wait: true,
@@ -280,6 +283,8 @@ $.widget( "cp.baseTable" , {
                     grid                : this.element,
                     modal_create_title  : this.options.modal_create_title,
                     modal_edit_title    : this.options.modal_edit_title,
+                    confirm_content     : this.options.confirm_content,
+                    confirm_title       : this.options.confirm_title,
                     modelType           : modelType,
                     view_callback       : this.options.callback
             });
