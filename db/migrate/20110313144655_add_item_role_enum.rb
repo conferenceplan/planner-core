@@ -8,7 +8,6 @@ class AddItemRoleEnum < ActiveRecord::Migration
        PersonItemRole.create(:name => 'Moderator',:position => 2)
        PersonItemRole.create(:name => 'Speaker',:position => 3)
        PersonItemRole.create(:name => 'Reserved',:position => 4)
-       PersonItemRole.create(:name => 'Other',:position => 5)
   end
 
   def self.down
