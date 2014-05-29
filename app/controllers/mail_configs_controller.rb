@@ -17,7 +17,7 @@ class MailConfigsController < PlannerController
   end
 
   def create
-    mail_config = MailConfig.find(params[:id])
+    mail_config = MailConfig.create(params[:mail_config])
     mail_config.save!
 
     render json: mail_config.to_json, :content_type => 'application/json'
