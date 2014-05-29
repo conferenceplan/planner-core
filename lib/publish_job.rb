@@ -26,12 +26,9 @@ class PublishJob
     end
     
     Rails.cache.clear # make sure that the mem cache is flushed
-    
-    # update the manifest file in the mobile app for EA
-    # updateManifestFile
-    
     clearDalliCache # clear the mem cache ...
     
+    # TODO - add in hook to remote manifest
   end
   
   def clearDalliCache
@@ -40,26 +37,6 @@ class PublishJob
         client.flush
       end    
     end
-  end
-  
-  def updateManifestFile
-    filename = SITE_CONFIG[:conference][:manifest]
-    # open the file
-    if (filename != nil) && (File.exists? filename)
-      newContent = ""
-      File.open filename , 'r' do | file | 
-        # replace the date on the second line
-        lineNo = 1
-        file.each_line do |line|
-          newContent += line if lineNo != 2
-          # # Fri Aug 23 11:19:38 CDT 2013
-          newContent += "# " +  Time.now.strftime("%a %m %e %H:%M:%S %Z %Y") + "\n" if lineNo == 2 # Fri Aug 23 11:19:38 CDT 2013"
-          lineNo += 1
-        end
-      end
-      File.open(filename, "w") {|file| file.puts newContent}
-    end
-    
   end
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
@@ -145,10 +122,12 @@ EOS
   
   def unPublish(pubItems)
     nbrProcessed = 0
-    PublishedProgrammeItem.transaction do
-      pubItems.each do |item|
-        item.destroy
-        nbrProcessed += 1
+    PublishedProgrammeItem.uncached do
+      PublishedProgrammeItem.transaction do
+        pubItems.each do |item|
+          item.destroy
+          nbrProcessed += 1
+        end
       end
     end
     return nbrProcessed
@@ -156,59 +135,61 @@ EOS
   
   def copyProgrammeItems(srcItems)
     nbrProcessed = 0
-    PublishedProgrammeItem.transaction do
-      srcItems.each do |srcItem|
-        # check for existence of already published item and if it is there then use that
-        newItem = (srcItem.published == nil) ? PublishedProgrammeItem.new : srcItem.published
-        
-        # # copy the details from the unpublished item to the new
-        newItem = copy(srcItem, newItem)
-        newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
-        # # Need to copy the tags...
-        copyTags(srcItem, newItem, 'PrimaryArea')
-        
-        newItem.touch #update_attribute(:updated_at,Time.now)
-        newItem.save
-        
-        updateImages(srcItem, newItem)
-
-        # link to the people (and their roles)
-        updateAssignments(srcItem, newItem)
-        
-        newRoom = publishRoom(srcItem.room)
-        if newItem.published_room_item_assignment
-          newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
+    PublishedProgrammeItem.uncached do
+      PublishedProgrammeItem.transaction do
+        srcItems.each do |srcItem|
+          # check for existence of already published item and if it is there then use that
+          newItem = (srcItem.published == nil) ? PublishedProgrammeItem.new : srcItem.published
           
-          # Only need to copy time if the new time slot is more recent than the published
-          if newItem.published_time_slot != nil
-            if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
-              newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
-              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
-              newTimeSlot.save
-              newItem.published_time_slot = newTimeSlot
-              newItem.save
-#              logger.info "Moved item times"
+          # # copy the details from the unpublished item to the new
+          newItem = copy(srcItem, newItem)
+          newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
+          # # Need to copy the tags...
+          copyTags(srcItem, newItem, 'PrimaryArea')
+          
+          newItem.touch #update_attribute(:updated_at,Time.now)
+          newItem.save
+          
+          updateImages(srcItem, newItem)
+  
+          # link to the people (and their roles)
+          updateAssignments(srcItem, newItem)
+          
+          newRoom = publishRoom(srcItem.room)
+          if newItem.published_room_item_assignment
+            newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
+            
+            # Only need to copy time if the new time slot is more recent than the published
+            if newItem.published_time_slot != nil
+              if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
+                newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
+                newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+                newTimeSlot.save
+                newItem.published_time_slot = newTimeSlot
+                newItem.save
+  #              logger.info "Moved item times"
+              end
+            else
+                newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+                newTimeSlot.save
+                newItem.published_time_slot = newTimeSlot
+                newItem.save
             end
           else
-              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
-              newTimeSlot.save
-              newItem.published_time_slot = newTimeSlot
-              newItem.save
+            newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
+            assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
+                    :published_time_slot => newTimeSlot, 
+                    :day => srcItem.room_item_assignment.day, 
+                    :published_programme_item => newItem)
+            assignment.save
           end
-        else
-          newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
-          assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
-                  :published_time_slot => newTimeSlot, 
-                  :day => srcItem.room_item_assignment.day, 
-                  :published_programme_item => newItem)
-          assignment.save
+  
+          # Put the date and the person who did the publish into the association (Publication)
+          newItem.publication.publication_date = DateTime.current
+          newItem.publication.user = @current_user
+          newItem.publication.save
+          nbrProcessed += 1
         end
-
-        # Put the date and the person who did the publish into the association (Publication)
-        newItem.publication.publication_date = DateTime.current
-        newItem.publication.user = @current_user
-        newItem.publication.save
-        nbrProcessed += 1
       end
     end
     return nbrProcessed
@@ -232,12 +213,14 @@ EOS
   def publishRooms(rooms)
     # We have a set of rooms that have name change or similar, so we need to republish them
     nbrProcessed = 0
-    rooms.each do |srcRoom|
-      pubRoom = srcRoom.published
-      if pubRoom
-        copy(srcRoom, pubRoom)
-        pubRoom.save
-        nbrProcessed += pubRoom.published_programme_items.size
+    rooms.uncached do
+      rooms.each do |srcRoom|
+        pubRoom = srcRoom.published
+        if pubRoom
+          copy(srcRoom, pubRoom)
+          pubRoom.save
+          nbrProcessed += pubRoom.published_programme_items.size
+        end
       end
     end
     
@@ -348,8 +331,7 @@ EOS
   end
 
   def load_cloudinary_config
-    # TODO - we also need to load the conference details from the database
-    cfg = CloudinaryConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    cfg = CloudinaryConfig.find :first
     Cloudinary.config do |config|
       config.cloud_name           = cfg ? cfg.cloud_name : ''
       config.api_key              = cfg ? cfg.api_key : ''
@@ -361,7 +343,7 @@ EOS
   end
   
   def load_site_config
-    cfg = SiteConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    cfg = SiteConfig.find :first # TODO - test with sidekiq
   end
   
   def copyTags(from, to, context)
