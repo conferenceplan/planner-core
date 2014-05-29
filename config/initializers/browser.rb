@@ -1,3 +1,4 @@
 Rails.configuration.middleware.use Browser::Middleware do
-  redirect_to "/upgrade.html" unless browser.modern?
+  # NewRelicPinger
+  redirect_to "/upgrade.html" unless browser.modern? || browser.user_agent.include?('NewRelicPinger')
 end
