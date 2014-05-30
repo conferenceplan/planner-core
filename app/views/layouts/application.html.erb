@@ -56,17 +56,15 @@
 				<%= render 'layouts/topbar' %>
 			<% end %>
 		</div>
-        
-        	
+		
             	<%= yield(:submenu) if content_for?(:submenu) %>
-            
         
         <div id="menu-separator-div">
         </div>
         <div id="main-screen-container" class="container">
+            <%= render 'layouts/page_help' rescue nil %> <!-- Plugin for the help system -->
             <div class="row">
                 <div id="alert-area"><%= render partial: 'layouts/messages', flash: flash %></div>
-                <%= render 'layouts/page_help' rescue nil %> <!-- Plugin for the help system -->
             </div>
             <%= content_for?(:content) ? yield(:content) : yield %>
         </div>
