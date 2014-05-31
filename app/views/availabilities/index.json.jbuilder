@@ -8,8 +8,8 @@ json.dates do
     json.end_time       @availableDates.end_time
     json.start_time     @availableDates.start_time
 
-    json.start_time_str @availableDates.start_time.strftime('%A, %B %e %C,%l:%M %p')
-    json.end_time_str   (@availableDates.end_time ? @availableDates.end_time.strftime('%A, %B %e %C,%l:%M %p') : nil);
+    json.start_time_str @availableDates.start_time.strftime('%A, %B %e %Y,%l:%M %p')
+    json.end_time_str   (@availableDates.end_time ? @availableDates.end_time.strftime('%A, %B %e %Y,%l:%M %p') : nil);
 end
 end
     
@@ -20,6 +20,6 @@ json.times @excludedTimesGroup.each do |time|
     json.lock_version   time.lock_version
     json.start          time.start
     json.end            time.end
-    json.start_str      time.start.strftime('%A, %B %e %C,%l:%M %p')
-    json.end_str        time.end.strftime('%A, %B %e %C,%l:%M %p')
+    json.start_str      time.start.strftime('%A, %B %e %Y,%l:%M %p')
+    json.end_str        time.end.strftime('%A, %B %e %Y,%l:%M %p')
 end
