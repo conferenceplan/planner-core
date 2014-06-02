@@ -323,7 +323,8 @@ $.widget( "cp.baseTable" , {
             newUrl += options.tagQuery;
                 
             this.element.jqGrid('setGridParam', {
-                url: newUrl
+                url: newUrl,
+                contentType : 'application/x-www-form-urlencoded; charset=UTF-8'
             }).trigger("reloadGrid");
         }
     },
