@@ -280,10 +280,11 @@ class PlannerReportsController < PlannerController
       format.csv {
         outfile = "people_no_items_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
-        output.push ['Name','Status']
+        output.push ['Name','Invite Status','Acceptance Status']
         @people.each do |person|
           output.push [
             person.getFullPublicationName,
+            person.invitestatus.name,
             person.acceptance_status.name
           ]
         end
