@@ -25,7 +25,7 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
             entities_additional : '',
             htmlEncodeOutput : false,
             removePlugins : "elementspath,flash",
-            height : '5em',
+            height : '40em',
             enterMode : CKEDITOR.ENTER_BR,
             shiftEnterMode: CKEDITOR.ENTER_P,
             toolbar : 'CPlan',
