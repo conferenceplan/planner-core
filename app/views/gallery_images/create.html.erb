@@ -1,0 +1,9 @@
+<script type="text/javascript">
+function select_image() {
+    window.parent.CKEDITOR.tools.callFunction( <%= @CKEditorFuncNum %>, '<%= @url %>', '<%= @error %>' );
+    self.close();
+}
+</script>
+
+<a href="javascript:select_image();">Insert Image</a>
+<img src="<%= @url %>" style="height:90%;"/>

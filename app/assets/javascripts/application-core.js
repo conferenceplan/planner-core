@@ -57,6 +57,7 @@
 //= require plugins/cpUserTable
 //= require plugins/timeEditor
 //= require plugins/htmlEditor
+//= require plugins/htmlExtEditor
 //= require plugins/colorEditor
 //= require plugins/selectEditor
 //= require plugins/DependentEditors

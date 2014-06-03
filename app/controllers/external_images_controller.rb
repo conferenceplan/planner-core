@@ -1,4 +1,4 @@
-class ExternalImagesController < ApplicationController
+class ExternalImagesController < PlannerController
   def index
     if (params[:cid]) # the type of the 'parent' and it's id are passed in via cname nd cid
       className = params[:cname]

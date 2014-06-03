@@ -1,0 +1,12 @@
+<script type="text/javascript">
+function select_image(url) {
+    window.opener.CKEDITOR.tools.callFunction( <%= @CKEditorFuncNum %>, url, '' );
+    self.close();
+}
+</script>
+
+<% @images.each do |image| %>
+    <a href='javascript:select_image("<%= image.picture.thumbnail.url %>");'>
+        <img src="<%= image.picture.thumbnail.url %>"/> 
+    </a>
+<% end %>

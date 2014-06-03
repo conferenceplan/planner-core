@@ -128,7 +128,16 @@ Rails.application.routes.draw do
   match "external_images(/:cname/:cid)/:use",       :controller => 'external_images', :via => :post,    :action => 'create'
   match "external_images(/:cname/:cid)(/:use)/:id", :controller => 'external_images', :via => :put,     :action => 'update'
   match "external_images/:id",                      :controller => 'external_images', :via => :delete,  :action => 'destroy'
-  
+
+  #
+  #
+  #
+  match "gallery_images/:type/:gallery",    :controller => 'gallery_images', :via => :get,     :action => 'index'
+  match "gallery_images/:id",               :controller => 'gallery_images', :via => :get,     :action => 'show'
+  match "gallery_images/:type/:gallery",    :controller => 'gallery_images', :via => :post,    :action => 'create'
+  match "gallery_images/:id",               :controller => 'gallery_images', :via => :delete,  :action => 'destroy'
+
+  #
   resources :available_dates
 
   # map.connect 'tags/list.:format', :controller => 'tags', :action => 'list'
