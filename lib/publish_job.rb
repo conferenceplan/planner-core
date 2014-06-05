@@ -213,7 +213,7 @@ EOS
   def publishRooms(rooms)
     # We have a set of rooms that have name change or similar, so we need to republish them
     nbrProcessed = 0
-    rooms.uncached do
+    Room.uncached do
       rooms.each do |srcRoom|
         pubRoom = srcRoom.published
         if pubRoom
