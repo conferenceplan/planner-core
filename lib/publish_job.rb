@@ -26,6 +26,11 @@ class PublishJob
         p.removeditems = renmovedItems
         p.save
       end
+
+      pstatus = PublicationStatus.first
+      pstatus = PublicationStatus.new if pstatus == nil
+      pstatus.status = :completed
+      pstatus.save!
       
       Rails.cache.clear # make sure that the mem cache is flushed
       clearDalliCache # clear the mem cache ...
@@ -125,20 +130,20 @@ EOS
   
   def unPublish(pubItems)
     nbrProcessed = 0
-    PublishedProgrammeItem.uncached do
+#    PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.transaction do
         pubItems.each do |item|
           item.destroy
           nbrProcessed += 1
         end
       end
-    end
+#    end
     return nbrProcessed
   end
   
   def copyProgrammeItems(srcItems)
     nbrProcessed = 0
-    PublishedProgrammeItem.uncached do
+#    PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.transaction do
         srcItems.each do |srcItem|
           # check for existence of already published item and if it is there then use that
@@ -194,7 +199,7 @@ EOS
           nbrProcessed += 1
         end
       end
-    end
+#    end
     return nbrProcessed
   end
   
@@ -221,6 +226,7 @@ EOS
         pubRoom = srcRoom.published
         if pubRoom
           copy(srcRoom, pubRoom)
+          pubRoom.touch
           pubRoom.save
           nbrProcessed += pubRoom.published_programme_items.size
         end

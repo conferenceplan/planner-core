@@ -11,6 +11,11 @@ class PublisherController < PlannerController
   
   # publish the selected program items
   def publish
+    pstatus = PublicationStatus.first
+    pstatus = PublicationStatus.new if pstatus == nil
+    pstatus.status = :inprogress
+    pstatus.save!
+    
     pubjob = PublishJob.new
     
     # Create a job that will be run seperately
@@ -20,8 +25,10 @@ class PublisherController < PlannerController
   end
   
   def publishPending
-    jobs = Delayed::Job.all
-    pending = jobs.find_index{ |j| (j.name == 'PublishJob') && !j.failed } != nil
+    # if we are using sidekiq then we need to check that...
+    pstatus = PublicationStatus.first
+    
+    pending = (pstatus != nil) && (pstatus.status == :inprogress)
     
     render json: {'pending' => pending.to_json}
   end
