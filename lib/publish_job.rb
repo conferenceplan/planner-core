@@ -1,32 +1,35 @@
 class PublishJob
   
   def perform
-    load_cloudinary_config
-    load_site_config
-    
-    newItems = 0
-    modifiedItems = 0
-    renmovedItems = 0
-    p = PublicationDate.new
-    newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
-    modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
-    removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
-    removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
-    
-    modifiedItems += publishRooms(getModifiedRooms())
-    
+
     PublishedProgrammeItem.transaction do
-      sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
+      load_cloudinary_config
+      load_site_config
       
-      p.timestamp = DateTime.current
-      p.newitems = newItems
-      p.modifieditems = modifiedItems
-      p.removeditems = renmovedItems
-      p.save
+      newItems = 0
+      modifiedItems = 0
+      renmovedItems = 0
+      p = PublicationDate.new
+      newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
+      modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
+      removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
+      removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
+      
+      modifiedItems += publishRooms(getModifiedRooms())
+      
+      PublishedProgrammeItem.transaction do
+        sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
+        
+        p.timestamp = DateTime.current
+        p.newitems = newItems
+        p.modifieditems = modifiedItems
+        p.removeditems = renmovedItems
+        p.save
+      end
+      
+      Rails.cache.clear # make sure that the mem cache is flushed
+      clearDalliCache # clear the mem cache ...
     end
-    
-    Rails.cache.clear # make sure that the mem cache is flushed
-    clearDalliCache # clear the mem cache ...
     
     # TODO - add in hook to remote manifest
   end
@@ -213,7 +216,7 @@ EOS
   def publishRooms(rooms)
     # We have a set of rooms that have name change or similar, so we need to republish them
     nbrProcessed = 0
-    Room.uncached do
+    # Room.uncached do
       rooms.each do |srcRoom|
         pubRoom = srcRoom.published
         if pubRoom
@@ -222,7 +225,7 @@ EOS
           nbrProcessed += pubRoom.published_programme_items.size
         end
       end
-    end
+    # end
     
     return nbrProcessed
   end
