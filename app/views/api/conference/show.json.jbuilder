@@ -73,7 +73,11 @@ json.set! 'mobile' do
     json.set! 'pages' do
         json.array! @mobilePages do |page|
             json.title      page.title
-            json.url        page.url
+            if page.use_url
+                json.url        page.url
+            else
+                json.url        request.protocol + request.host + (request.port ? ':' + request.port.to_s : '') + '/planner_mobile/mobile/mobile_pages/display/' + page.id.to_s
+            end
             json.position   page.position
         end
     end
