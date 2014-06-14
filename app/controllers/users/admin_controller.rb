@@ -103,8 +103,9 @@ class Users::AdminController < PlannerController
           @user.login = params[:login]
           @user.password = params[:password]
           @user.password_confirmation = params[:password_confirmation]
-          @user.save! 
         end
+        
+        @user.save! 
       end
     rescue Exception => err  
       # IF there is a fail ten we can to catch the exception and report the problem

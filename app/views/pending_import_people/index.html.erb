@@ -1,8 +1,0 @@
-<br/>
-<br/>
-<% for pendingImportPerson in  @pendingImportPeople %>
-	<li> <%= pendingImportPerson.registration_number %> <%= pendingImportPerson.first_name %> <%= pendingImportPerson.last_name %> -- <%= pendingImportPerson.email%> -- <% if pendingImportPerson.pendingtype != nil %> <%= pendingImportPerson.pendingtype.name %> <%end%>
-        <%=  link_to "edit", :action => 'edit', :id => pendingImportPerson %>
-		<%=  link_to "remove", pendingImportPerson, :method => :delete,:confirm => "Are you Sure?" %>
-	</li>
-<%end%>

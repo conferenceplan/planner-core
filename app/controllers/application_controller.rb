@@ -3,9 +3,13 @@
 #
 class ApplicationController < ActionController::Base
   
-  before_filter :set_locale, :load_configs
+  before_filter :set_locale, :load_configs, :set_mailer_host
   around_filter :application_time_zone # make sure that we use the timezone as specified in the database
- 
+
+  def set_mailer_host
+    ActionMailer::Base.default_url_options[:host] = request.host_with_port
+  end
+   
   def set_locale
     I18n.locale = (params[:locale] && params[:locale].size > 0)? params[:locale] : I18n.default_locale
   end
