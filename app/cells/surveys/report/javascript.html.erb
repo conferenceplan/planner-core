@@ -70,15 +70,14 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                              title : '<%= t "survey-value" %>',
                                              options : function(callback, editor) {
                                                 var question_id = editor.form.fields['survey_question_id'].editor.getValue();
-                                                var ops = [""];
+                                                var ops = [{val : "", label :""}];
                                                  
                                                 // find the type an from that pick the valid options for selection
                                                 _.each(currentQuestions.models, function(element) {
                                                     if (element.get('id') == question_id) {
                                                         var answers = element.get('survey_answers');
-                                                        // console.debug(answers);
                                                         _.each(answers, function(ans) {
-                                                            ops.push(ans.answer);
+                                                            ops.push({val : _.escape(ans.answer), label : ans.answer});
                                                         });
                                                     }
                                                 });
