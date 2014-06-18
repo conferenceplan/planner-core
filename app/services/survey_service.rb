@@ -235,8 +235,7 @@ module SurveyService
     # Put in the :select so as to over-ride the active record "read only true when a :join is used"
     Person.all :select => 'people.*',
       :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}},
-      :conditions => conditions, 
-      :order => 'last_name, first_name'
+      :conditions => conditions #, :order => 'last_name, first_name'
       
   end
   
