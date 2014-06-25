@@ -7,15 +7,16 @@ module PeopleService
   # Get people who have been invited and have accepted
   # along with their Bios
   #
-  def self.findConfirmedPeople(peopleIds = nil)
-    if peopleIds
-      Person.where({:acceptance_status_id => AcceptanceStatus['Accepted'], :invitestatus_id => InviteStatus['Invited'], :id => peopleIds }).
-            includes([:pseudonym, :bio_image, :edited_bio]).
-            order("people.last_name")
+  def self.findConfirmedPeople(peopleIds = nil, tag = nil)
+    whereClause = {:acceptance_status_id => AcceptanceStatus['Accepted'], :invitestatus_id => InviteStatus['Invited'] }
+    whereClause[:id] = peopleIds if peopleIds
+    
+    if (tag)
+      Person.tagged_with(tag, :on => 'PrimaryArea', :op => true).where(whereClause).includes([:pseudonym, :bio_image, :edited_bio]).
+              order("people.last_name")
     else  
-      Person.where({:acceptance_status_id => AcceptanceStatus['Accepted'], :invitestatus_id => InviteStatus['Invited']}).
-            includes([:pseudonym, :bio_image, :edited_bio]).
-            order("people.last_name")
+      Person.where(whereClause).includes([:pseudonym, :bio_image, :edited_bio]).
+              order("people.last_name")
     end
   end
   
