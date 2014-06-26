@@ -453,6 +453,7 @@ class PlannerReportsController < PlannerController
   def program_book_report
     @page_size = params[:page_size]
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
+    @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false
 
     TimeSlot.uncached do
       @times = PlannerReportsService.findProgramItemsByTimeAndRoom
