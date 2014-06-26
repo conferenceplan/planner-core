@@ -4,6 +4,8 @@ class Datasource < ActiveRecord::Base
   has_many :people, :through => :peoplesources
   before_destroy :check_not_in_use
   
+  has_one :import_mapping
+  
   def check_not_in_use  
     if (self.name == 'Application')
         self.errors.add(:base,"Cannot delete Application datasource")
