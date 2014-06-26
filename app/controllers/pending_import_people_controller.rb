@@ -52,7 +52,7 @@ class PendingImportPeopleController < PlannerController
       file = "/tmp/" + params[:file] # "/tmp/" + file
       datasource_id = params[:datasource_id]
       # we also want a flag to indicate whether we want to skip the first line
-      ignore_first_line = false
+      ignore_first_line = params[:ignore_first] ? params[:ignore_first] : false
   
       mapping = ImportMapping.where(datasource_id: datasource_id).first # how the CSV is mapped to columns
       

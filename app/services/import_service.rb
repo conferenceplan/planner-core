@@ -12,12 +12,12 @@ module ImportService
       mapping.attributes.collect{|name,val| fields[val] = name if (["lock_version", "created_at", "updated_at", "id", "datasource_id"].index(name) == nil) && val != nil }
   
       # TODO - we need to take into account the different types of line endings \r \n and \r\n
-      # TODO - add the ability to skip the first line...
       eolChar = '\\n'
       query = "load data infile '" + 
               filename + 
               "' replace into table pending_import_people FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\\\\' " +
               " LINES TERMINATED BY '" + eolChar + "' STARTING BY '' " +
+              (ignore_first_line ? "IGNORE 1 LINES" : "") +
               "(" + 
               fields.collect{|f| f ? f : '@dummy' }.join(",") + 
               ") SET datasource_id = " + datasource_id.to_s + 
@@ -43,7 +43,7 @@ module ImportService
   def self.processPendingImports(datasource_id)
     Person.transaction do
       
-      datasource = Datasource.find(datasource_id) # TODO - verify, we need to make sure we have the data-source Application
+      datasource = Datasource.find(datasource_id)
 
 
       # If the name and regid is not found then this is a new entry INSERT
