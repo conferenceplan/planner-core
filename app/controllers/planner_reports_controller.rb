@@ -9,6 +9,30 @@ class PlannerReportsController < PlannerController
   #
   #
   #
+  def participants_with_no_bios
+    @people = PlannerReportsService.findParticipantsWithNoBios
+
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "participants_no_bios_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push ['Name','Invite Status','Acceptance Status']
+        @people.each do |person|
+          output.push [
+            person.getFullPublicationName,
+            person.invitestatus.name,
+            person.acceptance_status.name
+          ]
+        end
+        csv_out(output, outfile)
+      }
+    end
+  end
+  
+  #
+  #
+  #
   def people_nbr_items
     
     @assignments = PlannerReportsService.findPersonAndItemConstraints

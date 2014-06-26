@@ -189,7 +189,19 @@ ReportApp.ReportManagement = (function(Backbone){
             'capacity_report'       : 'capacity_report',
             'people_item_allocation' : 'people_item_allocation',
             'people_with_too_many_items' : 'people_with_too_many_items',
-            'panels_with_one_person' : 'panels_with_one_person'
+            'panels_with_one_person' : 'panels_with_one_person',
+            'panelists_without_bios' : 'panelists_without_bios'
+        },
+        
+        panelists_without_bios : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : PeopleWithoutPanelsForm,
+                endPoint    : '/planner_reports/participants_with_no_bios',
+                colModel    : PeopleWithoutPanelsColModel,
+                caption     : '<%= t "report-participants-with-no-bios" %>'
+            }));
         },
         
         panels_with_one_person : function() {

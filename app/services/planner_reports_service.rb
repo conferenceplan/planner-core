@@ -13,6 +13,20 @@ module PlannerReportsService
   end
   
   #
+  # Find people participating in the programme that do not have a bio
+  #
+  def self.findParticipantsWithNoBios
+    # Person must be assigned to a programme item (and be visible to the members)
+    conditions = ["(programme_item_assignments.role_id in (?)) AND (programme_items.print = true) AND (edited_bios.id is null OR edited_bios.bio is null OR edited_bios.bio = '')",
+                     [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] ]
+    
+    Person.all( :conditions => conditions,
+              :include => [:pseudonym, {:programmeItemAssignments => :programmeItem}],
+              :joins => "left outer join edited_bios on edited_bios.person_id = people.id",
+              :order => "people.last_name")
+  end
+
+  #
   #
   #
   def self.findEditedBios( acceptanceStatus = AcceptanceStatus['Accepted'], inviteStatus = InviteStatus['Invited'], since = nil )
