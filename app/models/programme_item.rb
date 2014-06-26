@@ -1,7 +1,7 @@
 class ProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :notes, :print,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :setup_type_id, :format_id
+                  :setup_type_id, :format_id, :short_precis
 
   audited :allow_mass_assignment => true
   acts_as_taggable
