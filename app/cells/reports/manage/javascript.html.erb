@@ -87,6 +87,22 @@ ReportApp.ReportManagement = (function(Backbone){
         }
     });
     
+    var ItemWordCountsForm = Backbone.Form.extend({
+        schema : {
+            title_size   : { type : 'Number', title : '<%= t "report-title-word-count" %>'},
+            short_title_size    : { type : 'Number', title : '<%= t "report-short-title-word-count" %>'},
+            precis_size    : { type : 'Number', title : '<%= t "report-description-word-count" %>'},
+            short_precis_size    : { type : 'Number', title : '<%= t "report-short-description-word-count" %>'}
+        },
+        
+        data : {
+            title_size : 100,
+            short_title_size : 100,
+            precis_size : 150,
+            short_precis_size : 150,
+        }
+    });
+    
     var PeopleWithoutPanelsForm = Backbone.Form.extend({
     });
     
@@ -173,6 +189,17 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'Equipment', label : '<%= t "equipment" %>', jsonmap: 'equipment',width: 300, formatter: AppUtils.arrayToString}
                 ];
 
+    var ItemWordCountsColModel = [
+                    {name: 'Title', label : '<%= t "item-title" %>', jsonmap: 'title', width: 100},
+                    {name: 'Title Words', label : '<%= t "item-title-words" %>', jsonmap: 'title_words'},
+                    {name: 'Short Title', label : '<%= t "item-short-title" %>', jsonmap: 'short_title'},
+                    {name: 'Short Title Words', label : '<%= t "item-short-title-words" %>', jsonmap: 'short_title_words'},
+                    // {name: 'Description', label : '<%= t "item-description" %>', jsonmap: 'precis'},
+                    {name: 'Description Words', label : '<%= t "item-description-words" %>', jsonmap: 'precis_words'},
+                    // {name: 'Short Description', label : '<%= t "item-short-description" %>', jsonmap: 'short_precis'},
+                    {name: 'Shor Description Words', label : '<%= t "item-short-description-words" %>', jsonmap: 'short_precis_words'}
+                ];
+
     var Workspace = Backbone.Router.extend({
 
         routes : {
@@ -190,7 +217,19 @@ ReportApp.ReportManagement = (function(Backbone){
             'people_item_allocation' : 'people_item_allocation',
             'people_with_too_many_items' : 'people_with_too_many_items',
             'panels_with_one_person' : 'panels_with_one_person',
-            'panelists_without_bios' : 'panelists_without_bios'
+            'panelists_without_bios' : 'panelists_without_bios',
+            'item_word_counts'      : 'item_word_counts'
+        },
+        
+        item_word_counts : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : ItemWordCountsForm,
+                endPoint    : '/planner_reports/report_word_counts',
+                colModel    : ItemWordCountsColModel,
+                caption     : '<%= t "reports-item-word-counts" %>'
+            }));
         },
         
         panelists_without_bios : function() {

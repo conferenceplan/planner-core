@@ -3,8 +3,11 @@
 #
 module PlannerReportsService
   
-  #
-  #
+  # Search the programme items and report back on the sizes
+  def self.word_counts(title_size = 0, short_title_size = 0, precis_size = 0, short_precis_size = 0)
+    ActiveRecord::Base.connection.select_all( ITEM_WORDS_SQL % [title_size,short_title_size,precis_size,short_precis_size] )
+  end
+  
   #
   def self.items_over_capacity
     ProgrammeItem.all :include => [{:room_item_assignment => {:room => [:room_setup, :venue]}}, :time_slot],
@@ -285,6 +288,20 @@ module PlannerReportsService
 #
 #
 protected
+
+ITEM_WORDS_SQL = <<"EOS"
+  SELECT programme_items.id, programme_items.title as title, programme_items.short_title as short_title, programme_items.precis as precis, programme_items.short_precis as short_precis,
+  IF(LENGTH(title) > 0, (LENGTH(title) - LENGTH(REPLACE(title, ' ', ''))+1), 0) title_words,
+  IF(LENGTH(short_title) > 0, (LENGTH(short_title) - LENGTH(REPLACE(short_title, ' ', ''))+1), 0) short_title_words,
+  IF(LENGTH(precis) > 0, (LENGTH(precis) - LENGTH(REPLACE(precis, ' ', ''))+1), 0) precis_words,
+  IF(LENGTH(short_precis) > 0, (LENGTH(short_precis) - LENGTH(REPLACE(short_precis, ' ', ''))+1), 0) short_precis_words 
+  FROM programme_items
+  where
+  IF(LENGTH(title) > 0, (LENGTH(title) - LENGTH(REPLACE(title, ' ', ''))+1), 0) > %d OR
+  IF(LENGTH(short_title) > 0, (LENGTH(short_title) - LENGTH(REPLACE(short_title, ' ', ''))+1), 0) > %d OR
+  IF(LENGTH(precis) > 0, (LENGTH(precis) - LENGTH(REPLACE(precis, ' ', ''))+1), 0) > %d OR
+  IF(LENGTH(short_precis) > 0, (LENGTH(short_precis) - LENGTH(REPLACE(short_precis, ' ', ''))+1), 0) > %d;
+EOS
 
 PEOPLE_TAG_QUERY = <<"EOS"
   select taggings.context as context, tags.name as tag, 

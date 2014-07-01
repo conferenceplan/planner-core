@@ -9,6 +9,40 @@ class PlannerReportsController < PlannerController
   #
   #
   #
+  def report_word_counts
+    title_size = params[:title_size] ? params[:title_size].to_i : 0
+    short_title_size = params[:short_title_size] ? params[:short_title_size].to_i : 0
+    precis_size = params[:precis_size] ? params[:precis_size].to_i : 0
+    short_precis_size = params[:short_precis_size] ? params[:short_precis_size].to_i : 0
+    
+    @res = PlannerReportsService.word_counts(title_size, short_title_size, precis_size, short_precis_size)
+
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "report_word_counts_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push ['Title','Title Words','Short Title', 'Short Title Words', 'Description', 'Description Words', 'Short Description', 'Short Description Words']
+        @res.each do |r|
+          output.push [
+            r['title'],
+            r['title_words'],
+            r['short_title'],
+            r['short_title_words'],
+            r['precis'],
+            r['precis_words'],
+            r['short_precis'],
+            r['short_precis_words'],
+          ]
+        end
+        csv_out(output, outfile)
+      }
+    end
+  end
+  
+  #
+  #
+  #
   def participants_with_no_bios
     @people = PlannerReportsService.findParticipantsWithNoBios
 
