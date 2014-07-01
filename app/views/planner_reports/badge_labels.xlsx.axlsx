@@ -20,7 +20,7 @@ wb.add_worksheet(name: "Badge Labels") do |sheet|
             if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
                 row << ia.programmeItem.time_slot.start.strftime('%a %H:%M') + " : " + 
                 ia.programmeItem.room.name + " (" + ia.programmeItem.room.venue.name + ") " + 
-                ia.programmeItem.title
+                (ia.programmeItem.short_title ? ia.programmeItem.short_title : ia.programmeItem.title)
             end
         end
         
