@@ -76,7 +76,7 @@ class ProgramController < ApplicationController
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
     @partition_val = @cloudinaryURI ? @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'') : ''
     
-    @people = PeopleService.findConfirmedPeople peopleIds, tag    
+    @people = PeopleService.findConfirmedPeople(peopleIds, tag).sort_by{ |a| a.pubLastName }
   end
   
   #
