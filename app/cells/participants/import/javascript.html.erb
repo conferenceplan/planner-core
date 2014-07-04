@@ -95,7 +95,6 @@ ParticipantApp.PeopleImport = (function(Backbone){
         
         gotoNextStep : function() {
             if (stepToView[currentStep].event) {
-                // console.debug("Trigger " + stepToView[currentStep].event);
                 AppUtils.eventAggregator.trigger(stepToView[currentStep].event);
             };
             if (currentStep < 5) {
@@ -147,14 +146,11 @@ ParticipantApp.PeopleImport = (function(Backbone){
         
         remove_mapping : function(ev) {
             var element_name = ev.currentTarget.getAttribute('mapping');
-            console.debug(element_name);
-            // alert("remove mapping");
             this.model.set(element_name, null);
             AppUtils.eventAggregator.trigger('update_mapping');
         },
         
         render : function() {
-            // console.debug(this.model.toJSON());
             var m = this.model.toJSON();
             m['src'] = this.options.source;
             this.$el.html(_.template($('#step-3').html(), m));
@@ -201,8 +197,6 @@ ParticipantApp.PeopleImport = (function(Backbone){
         },
         
         itemViewOptions: function(model, index) {
-            // console.debug("aaaa");
-            // console.debug(this.options.mapping);
             return { 
                     mapping : this.options.mapping
                 }
