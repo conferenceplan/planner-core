@@ -1,0 +1,32 @@
+
+<div class="row">
+    <div class="col-xs-3">
+        <ul class="list-group">
+            <li class="list-group-item" id="step-1-indicator"><b>Step 1:</b> Select Source <span class="glyphicon glyphicon-inbox pull-right"></span></li>
+            <li class="list-group-item" id="step-2-indicator"><b>Step 2:</b> Upload CSV <span class="glyphicon glyphicon-cloud-upload pull-right"></span></li>
+            <li class="list-group-item" id="step-3-indicator"><b>Step 3:</b> Map Fields <span class="glyphicon glyphicon-list-alt pull-right"></span></li>
+            <li class="list-group-item" id="step-4-indicator"><b>Step 4:</b> Import <span class="glyphicon glyphicon-play pull-right"></span></li>
+            <li class="list-group-item" id="step-5-indicator"><b>Step 5:</b> Results <span class="glyphicon glyphicon-folder-open pull-right"></span></li>
+        </ul>
+    </div>
+    <div class="col-xs-9" >
+        <div id="step-region"></div>
+    </div>
+</div>
+
+<%= render_cell "participants/import", :templates %>
+<%= render_cell "participants/import", :javascript %>
+
+<!--
+    
+    Have steps in a Menu on the left hand side, i.e., do this as a wizard
+    
+    Select and upload a file
+    Select "source"
+    View the columns in display
+    Map columns to expected inputs (use SVG and allow person to connect the columns OR table with moveable slots?) - save mapping for future and associate with the source
+    Run the import
+    Report the results
+    Show the mis-match (ask what to do) - This should be a seperate menu/area?
+    
+    -->

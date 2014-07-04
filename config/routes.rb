@@ -218,8 +218,7 @@ Rails.application.routes.draw do
     resources :people
   end
 
-  match 'pending_import_people/import', :controller => 'pending_import_people', :action => 'import'
-  match 'pending_import_people/doimport', :controller => 'pending_import_people', :action => 'doimport', :method => 'post'   
+  match 'pending_import_people/import_file', :controller => 'pending_import_people', :action => 'import_file'
   resources :pending_import_people
 
   match 'program_planner/assignments', :controller => 'program_planner', :action => 'assignments', :method => 'get'

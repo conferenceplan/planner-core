@@ -87,6 +87,7 @@ module ImportService
       # Report on what has been done and what is left to the user
       {
         :created => nbr_created,
+        :updates => 0,
         :possible_matches => PendingImportPerson.where(:pendingtype_id => PendingType['PossibleMatchExisting'].id).count,
         :registration_in_use => PendingImportPerson.where(:pendingtype_id => PendingType['RegistrationInUse'].id).count,
         :possible_name_updates => PendingImportPerson.where(:pendingtype_id => PendingType['PossibleNameUpdate'].id).count

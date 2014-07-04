@@ -1,0 +1,361 @@
+<script type="text/javascript">
+
+ParticipantApp = new Backbone.Marionette.Application();
+
+ParticipantApp.PeopleImport = (function(Backbone){
+    
+    //
+    //
+    //
+    DataSource = Backbone.Model.extend({
+        schema : {
+             datasource_id : { type : 'Select', title : '<%= t "data-source" %>', options : <%= Datasource.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+        }
+    });
+    
+    CSVUpload = Backbone.Model.extend({
+        schema : {
+            file_upload  : { type : 'FileUpload', title : 'CSV for Import', handler : '/file_uploads' },
+        }
+    });
+    
+    ImportMapping = Backbone.Model.extend({
+        schema : {
+        },
+        urlRoot : '/import_mappings',
+        
+        defaults : {
+            'first_name' : null,
+            'last_name' : null,
+            'suffix' : null,
+            'pub_first_name' : null,
+            'pub_last_name' : null,
+            'pub_suffix' : null,
+            'line1' : null,
+            'line2' : null,
+            'city' : null,
+            'postcode' : null,
+            'state' : null,
+            'country' : null,
+            'phone' : null,
+            'email' : null,
+            'registration_number' : null,
+            'registration_type' : null,
+            'datasource_dbid' : null
+        }
+    });
+    
+    CSVColumn = Backbone.Model.extend({
+    });
+    CSVColumns = Backbone.Collection.extend({
+        model : CSVColumn
+    });
+    
+    ImportParams = Backbone.Model.extend({
+        schema : {
+            datasource_id : { type : 'Hidden' },
+            file : { type : 'Hidden' },
+            ignore_first : { type : 'Checkbox', title : 'Ignore First Line' }
+        },
+        urlRoot : '/pending_import_people/import_file'
+    });
+    
+    
+    //
+    // Layout for steps
+    //
+    ImportStepsLayout = Backbone.Marionette.Layout.extend({
+        template : '#step-layout',
+        
+        regions : {
+            control : "#control",
+            current_step : "#current-step"
+        }
+    });
+    
+    
+    //
+    // View(s) for step(s)
+    //
+    ControlView = Backbone.Marionette.ItemView.extend({
+        template : '#step-control',
+        
+        events : {
+            'click .next-step' : 'gotoNextStep',
+            'click .back-step' : 'gotoBackStep'
+        },
+        
+        gotoBackStep : function() {
+            currentStep = currentStep > 1 ? currentStep - 1 : 1;
+            importLayout.current_step.show(stepToView[currentStep].view); //new stepToView[currentStep].view({ model : stepToView[currentStep].model}) );
+            if (stepToView[currentStep].start_func) {
+                stepToView[currentStep].start_func(stepToView[currentStep].view);
+            }
+        },
+        
+        gotoNextStep : function() {
+            if (stepToView[currentStep].event) {
+                // console.debug("Trigger " + stepToView[currentStep].event);
+                AppUtils.eventAggregator.trigger(stepToView[currentStep].event);
+            };
+            if (currentStep < 5) {
+                currentStep = currentStep < 5 ? currentStep + 1 : 5;
+                if (stepToView[currentStep].start_func) {
+                    stepToView[currentStep].start_func(stepToView[currentStep].view);
+                }
+                importLayout.current_step.show(stepToView[currentStep].view);
+                if (currentStep == 5) { // if we have completed the process then we do not allow the user to go back
+                    importLayout.control.close();
+                }
+            }
+        }
+    });
+    
+    MappingLayout = Backbone.Marionette.Layout.extend({
+        template : '#mapping-layout',
+        
+        regions : {
+            mapping : "#mapping",
+            source  : "#source"
+        }
+    });
+    
+    ResultLayout = Backbone.Marionette.Layout.extend({
+        template : '#result-layout',
+        
+        regions : {
+            result : "#result",
+        }
+    });
+    
+    ResultView = Backbone.Marionette.ItemView.extend({
+        template : "#result-template"
+    });
+    
+    MappingView = Backbone.Marionette.ItemView.extend({
+        template : "#step-3",
+
+        initialize : function() {
+            AppUtils.eventAggregator.on('STEP3', this.moveon, this);
+            AppUtils.eventAggregator.on('update_mapping', this.render, this);
+        },
+
+        events : {
+            "click .remove-mapping" : "remove_mapping",
+            "drop"   : "drop"
+        },
+        
+        remove_mapping : function(ev) {
+            var element_name = ev.currentTarget.getAttribute('mapping');
+            console.debug(element_name);
+            // alert("remove mapping");
+            this.model.set(element_name, null);
+            AppUtils.eventAggregator.trigger('update_mapping');
+        },
+        
+        render : function() {
+            // console.debug(this.model.toJSON());
+            var m = this.model.toJSON();
+            m['src'] = this.options.source;
+            this.$el.html(_.template($('#step-3').html(), m));
+            
+            var thisView = this;
+            this.$el.find(".ui-droppable").droppable();
+        },
+
+        drop : function(event, src) {
+            var colId = $(src.draggable).parent().find('.column').attr('id'); // get the id of the dragged object
+            var targetId = $(event.target).attr("id");
+            this.model.set(targetId, colId);
+            this.render();
+        },
+        
+        moveon : function() {
+            // Save the model ...
+            this.model.save();
+        }
+        
+    });
+    
+    SourceItemView = Backbone.Marionette.ItemView.extend({
+        template : "#csv-source",
+        tagName : 'li',
+        className: "list-group-item",
+        
+        render : function() {
+            // alert(this.options.mapping);
+            var x = this.options.mapping;
+            var m = this.model.toJSON();
+            m['mapping'] = this.options.mapping;
+            this.$el.html(_.template($("#csv-source").html(), m));
+        }
+    });
+    
+    SourceView = Backbone.Marionette.CollectionView.extend({
+        events : {
+            "stop"   : "stopdrag"
+        },
+        
+        initialize : function() {
+            AppUtils.eventAggregator.on('update_mapping', this.render, this); // need to reset the daggables...
+        },
+        
+        itemViewOptions: function(model, index) {
+            // console.debug("aaaa");
+            // console.debug(this.options.mapping);
+            return { 
+                    mapping : this.options.mapping
+                }
+        },
+
+        itemView : SourceItemView,
+        tagName : 'ul',
+        onRender : function() {
+            var thisView = this;
+            this.$el.find( ".ui-draggable" ).draggable({
+                 revert: true, // return to origin if not dropped on droppable area
+                 stop : function() {
+                    // TODO - need to mark the item as mapped
+                    thisView.render();
+                 }
+            });
+        }
+    });
+
+    StepView = Backbone.Marionette.ItemView.extend({
+        initialize : function() {
+            this.template = this.options.template;
+            AppUtils.eventAggregator.on(this.options.eventName, this.process, this);
+        },
+        
+        process : function(eventName) {
+            // Need to validate the form on the next step choice and make sure the values are recorded
+            if (this.form) {
+                var errors = this.form.commit();
+            };
+        },
+        
+        // Display the model in the view
+        onShow : function() {
+            if (this.model) {
+                this.form = new Backbone.Form({
+                        model: this.model
+                }).render();
+                this.$el.find("#form").html(this.form.el);
+            };
+        }
+    });
+
+    var importLayout = null;
+    var currentStep = 1;
+    var stepToView = {
+        1 : {
+            // Select the data source for the import
+            view : new StepView({ template: '#step-1', model : new DataSource(), eventName : 'STEP1'}),
+            event : 'STEP1',
+            start_func : function(layout) {
+                $("[id$=indicator]").css('background-color', 'white');
+                $('#step-1-indicator').css('background-color', 'lightgray');
+            }
+        },
+        2 : {
+            // Upload the file
+            view : new StepView({ template: '#step-2', model : new CSVUpload(), eventName : 'STEP2'}),
+            event : 'STEP2',
+            start_func : function(layout) {
+                $("[id$=indicator]").css('background-color', 'white');
+                $('#step-2-indicator').css('background-color', 'lightgray');
+            }
+        },
+        3 : {
+            // Need to get the CSV columns (first row) from the file and display a form for the mapping
+            view    : new MappingLayout(),
+            event   : 'STEP3',
+            start_func : function(layout) {
+                $("[id$=indicator]").css('background-color', 'white');
+                $('#step-3-indicator').css('background-color', 'lightgray');
+                // Get the current import mapping for the selected datasource
+                var datasource = stepToView[1].view.model.get('datasource_id');
+                
+                // Get the name of the file containing the data to be uploaded
+                var uploadFilename = stepToView[2].view.model.get('file_upload');
+                csvColumns = new CSVColumns();
+                csvColumns.fetch({
+                    url : '/import_mappings/columns?file=' + uploadFilename,
+                    success : function(mdl) {
+                        mapping = new ImportMapping();
+                        mapping.fetch({
+                            url : '/import_mappings?datasource_id=' + datasource,
+                            success : function(model) {
+                                model.set('datasource_id',datasource);
+                                layout.mapping.show(new MappingView({ model : model, source : mdl }));
+                                // TODO - we also want to be able to show the mapping using the current file once it is loaded and there is an existing mapping
+                                layout.source.show(new SourceView({ collection : mdl, mapping : model }));
+                            }
+                        });
+                
+                    }
+                });
+            }
+        },
+        4 : {
+            // Perform the import
+            view : new StepView({ template: '#step-4', model : new ImportParams(), eventName : 'STEP4'}),
+            event : 'STEP4',
+            start_func : function(layout) { // This is called after the form render ?
+                $("[id$=indicator]").css('background-color', 'white');
+                $('#step-4-indicator').css('background-color', 'lightgray');
+                var datasource = stepToView[1].view.model.get('datasource_id');
+                var uploadFilename = stepToView[2].view.model.get('file_upload');
+                stepToView[4].view.model.set('datasource_id',datasource);
+                stepToView[4].view.model.set('file',uploadFilename);
+            }
+        },
+        5 : {
+            // Review the results
+            view : new ResultLayout(), //StepView({ template: '#step-5', model : null, eventName : 'STEP5'}),
+            event : 'STEP5',
+            start_func : function(layout) {
+                $("[id$=indicator]").css('background-color', 'white');
+                $('#step-5-indicator').css('background-color', 'lightgray');
+                // This will trigger the execution of the actual import
+                stepToView[4].view.model.save({}, {
+                    success : function(mdl) {
+                        layout.result.show( new ResultView({model : mdl }) );
+                    }
+                });
+            }
+        }
+    };
+    
+    //
+    //
+    //    
+    return {
+        init : function(options) {
+            Backbone.history.start();
+            
+            importStepsRegion = new Backbone.Marionette.Region({
+                el: "#step-region"
+            });
+            
+            importLayout = new ImportStepsLayout();
+            importStepsRegion.show(importLayout);
+            
+            importLayout.control.show(new ControlView());
+                if (stepToView[currentStep].start_func) {
+                    stepToView[currentStep].start_func(stepToView[currentStep].view);
+                }
+            importLayout.current_step.show(stepToView[currentStep].view);
+        }
+    };
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    ParticipantApp.addInitializer(ParticipantApp.PeopleImport.init);
+    ParticipantApp.start({});
+});
+</script>
