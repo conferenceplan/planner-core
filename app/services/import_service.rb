@@ -11,7 +11,13 @@ module ImportService
       fields = []
       mapping.attributes.collect{|name,val| fields[val] = name if (["lock_version", "created_at", "updated_at", "id", "datasource_id"].index(name) == nil) && val != nil }
   
-      # TODO - we need to take into account the different types of line endings \r \n and \r\n
+      # we need to take into account the different types of line endings \r \n and \r\n
+      # so make sure all the files are the same for eol
+      text = File.read(filename)
+      replace = text.gsub(/\r\n?/, "\n")
+      File.open(filename, "w") {|file| file.puts replace}
+
+      # and now do the conversion      
       eolChar = '\\n'
       query = "load data infile '" + 
               filename + 
