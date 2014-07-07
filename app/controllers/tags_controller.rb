@@ -49,6 +49,8 @@ class TagsController < PlannerController
       end
     end
   end
+
+# t = ActsAsTaggableOn::Tag.includes(:taggings).where("taggings.context != 'admin' AND taggings.taggable_type like 'Pub%' ").select("DISTINCT tags.*")
   
   #
   # Get a set of the instances with the given tag
@@ -100,7 +102,7 @@ class TagsController < PlannerController
         # TODO - capitalise?
         obj.tag_list_on(context).add(tag)
       end
-      obj.updated_at_will_change!
+      obj.id_will_change!
       obj.save
     end
     
@@ -116,7 +118,7 @@ class TagsController < PlannerController
       tag = params[:tag]
 
       obj.tag_list_on(context).delete(tag)
-      obj.updated_at_will_change!
+      obj.id_will_change!
       obj.save
     end
 

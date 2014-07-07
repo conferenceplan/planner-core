@@ -23,7 +23,7 @@ class ProgrammeItemsController < PlannerController
         progitem = assign.programmeItem
         assign.destroy
         
-        progitem.updated_at_will_change! # NOTE: this will force the update date of the programme item to be changed
+        progitem.id_will_change! # NOTE: this will force the update date of the programme item to be changed
         progitem.save
       end
 
@@ -172,7 +172,7 @@ class ProgrammeItemsController < PlannerController
 
     # 1. Clear out the current set of participants    
     programmeItem.people.clear # remove it from the person.
-    programmeItem.updated_at_will_change! # NOTE: this will force the update date of the programme item to be changed
+    programmeItem.id_will_change! # NOTE: this will force the update date of the programme item to be changed
     programmeItem.save
 
     # 2. Create the new sets
