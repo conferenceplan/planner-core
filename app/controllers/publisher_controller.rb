@@ -11,12 +11,14 @@ class PublisherController < PlannerController
   
   # publish the selected program items
   def publish
+    ref_numbers = params[:ref_numbers] ? params[:ref_numbers] == 'true' : false
+    
     pstatus = PublicationStatus.first
     pstatus = PublicationStatus.new if pstatus == nil
     pstatus.status = :inprogress
     pstatus.save!
     
-    pubjob = PublishJob.new
+    pubjob = PublishJob.new(ref_numbers)
     
     # Create a job that will be run seperately
     Delayed::Job.enqueue pubjob
@@ -34,7 +36,7 @@ class PublisherController < PlannerController
   end
   
   def review
-    pubjob = PublishJob.new
+    pubjob = PublishJob.new(false)
     @candidateNewItems      = pubjob.getNewProgramItems() # all unpublished programme items
     @candidateModifiedItems = pubjob.getModifiedProgramItems() # all programme items that have changes made (room assignment, added person, details etc)
     @candidateRemovedItems  = []

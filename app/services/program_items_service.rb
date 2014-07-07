@@ -3,6 +3,28 @@
 #
 module ProgramItemsService
   
+  def self.assign_reference_numbers(increment = 3)
+      items = ProgrammeItem.all(:include => [:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ],
+                                                 :order => 'time_slots.start ASC, venues.name DESC, rooms.name ASC',
+                                                 :conditions => 'programme_items.print = true')
+                                                 
+      itemNumber = increment
+      base = 1000
+      current_day = 0
+      items.each do |item|
+        if (item.room_item_assignment != nil)
+          if item.room_item_assignment.day != current_day
+            current_day = item.room_item_assignment.day
+            base = 1000 * (current_day + 1)
+            itemNumber = increment
+          end
+          item.pub_reference_number = base + itemNumber
+          item.save
+          itemNumber = itemNumber+increment
+        end
+      end
+  end
+  
   #
   #
   #

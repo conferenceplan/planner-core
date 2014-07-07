@@ -1,10 +1,16 @@
 class PublishJob
   
+  def initialize(ref_numbers)
+    @ref_numbers = ref_numbers
+  end
+  
   def perform
 
     PublishedProgrammeItem.transaction do
       load_cloudinary_config
       load_site_config
+      
+      ProgramItemsService.assign_reference_numbers if @ref_numbers #
       
       newItems = 0
       modifiedItems = 0
@@ -36,7 +42,6 @@ class PublishJob
       clearDalliCache # clear the mem cache ...
     end
     
-    # TODO - add in hook to remote manifest
   end
   
   def clearDalliCache
@@ -153,6 +158,8 @@ EOS
           newItem = copy(srcItem, newItem)
           newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
           # # Need to copy the tags...
+          # TODO - we need all the tag areas now ....
+          # and once fixed we need to 'touch' all the items
           copyTags(srcItem, newItem, 'PrimaryArea')
           
           newItem.touch #update_attribute(:updated_at,Time.now)

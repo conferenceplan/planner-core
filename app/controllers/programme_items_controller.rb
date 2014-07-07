@@ -189,22 +189,10 @@ class ProgrammeItemsController < PlannerController
   end
   
   # ---------------------------------
-  # TODO - these methods to be replaced by a service  
+  # TODO - we may want to move this so it is done auto-matically with publish?
   def assign_reference_numbers
-  end
-  
-  def do_assign_reference_numbers
-      @programmeItems = ProgrammeItem.all(:include => [:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ],
-                                                 :order => 'time_slots.start ASC, venues.name DESC, rooms.name ASC',
-                                                 :conditions => 'programme_items.print = true')
-      itemNumber = 5
-      @programmeItems.each do |item|
-        if (item.room_item_assignment != nil)
-          item.pub_reference_number = itemNumber
-          item.save       
-          itemNumber = itemNumber+5
-        end
-      end
+    
+    ProgramItemsService.assign_reference_numbers
       
   end
   

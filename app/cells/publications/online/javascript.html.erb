@@ -14,7 +14,10 @@ OnlinePublicationsApp.Management = (function(Backbone){
     });
     
     PublishPending = Backbone.Model.extend({
-        url : '/publisher/publishPending.json'
+        url : '/publisher/publishPending.json',
+        data : {
+            ref_numbers : false
+        }    
     });
     
     LastPublish = Backbone.Model.extend({
@@ -63,6 +66,13 @@ OnlinePublicationsApp.Management = (function(Backbone){
         
         events : {
             "click .publish-button" : "publish",
+            "click #ref-numbers"    : "set_ref_generate"
+        },
+        
+        
+        set_ref_generate : function(ev) {
+            var v = ev.currentTarget.checked;
+            this.model.set({ref_numbers : v });
         },
         
         initialize : function() {
@@ -71,8 +81,11 @@ OnlinePublicationsApp.Management = (function(Backbone){
         
         publish : function() {
             $.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: "/publisher/publish",
+                data : {
+                    ref_numbers : this.model.get('ref_numbers')
+                },
                 success: function(response) {
                     infoMessage('<%= t "publish-scheduled" %>');
                     if (pendingPoller) {

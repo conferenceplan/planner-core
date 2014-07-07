@@ -75,8 +75,7 @@ Rails.application.routes.draw do
   match 'programme_items/list',                         :controller => 'programme_items', :action => 'list'
   match 'programme_items/getList',                      :controller => 'programme_items', :action => 'getList',                     :method => 'post'
   # TOOD - need a cleaner mechanism to assign the publication reference number and change to match the new mechanisms
-  # match 'programme_items/assign_reference_numbers',     :controller => 'programme_items', :action => 'assign_reference_numbers'
-  # match 'programme_items/do_assign_reference_numbers',  :controller => 'programme_items', :action => 'do_assign_reference_numbers', :method => 'post'
+  match 'programme_items/assign_reference_numbers',     :controller => 'programme_items', :action => 'assign_reference_numbers'
 
   resources :programme_items do
     resources :excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs
@@ -229,7 +228,7 @@ Rails.application.routes.draw do
   # resources :program_planner, :member => {:index => :get, :edit => :get}
 
 
-  match 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'get'
+  match 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'post'
   match 'publisher/review', :controller => 'publisher', :action => 'review', :method => 'get'
   match 'publisher/publishPending', :controller => 'publisher', :action => 'publishPending', :method => 'get'
   match 'publisher', :controller => 'publisher', :action => 'index', :method => 'get'

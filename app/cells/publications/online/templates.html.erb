@@ -4,6 +4,14 @@
     {{ if (pending == 'true') { }}
         <div><%= t "publish-pending" %></div>
     {{ } else { }}
+        <div class="row">
+            <label class="col-sm-4 control-label"><%= t "publications-generate-ref-numbers" %></label>
+            <div class="col-sm-1">
+                <span>
+                    <input type="checkbox" id="ref-numbers" class="form-control" name="ref-numbers">
+                </span>
+            </div>
+        </div>
         <button class="publish-button btn btn-primary">
             <%= t "schedule-publish" %>
         </button>
