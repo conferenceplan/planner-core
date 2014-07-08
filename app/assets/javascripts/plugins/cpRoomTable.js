@@ -14,15 +14,15 @@ $.widget( "cp.roomTable", $.cp.baseTable , {
         }, {
             label : this.options.setup[1], //'Name',
             hidden : !this.options.setup[0],
-            name: 'room_setups.name',
-            index: 'room_setups.name',
+            name: 'setup.name',
+            index: 'setup.name',
             search : false,
             sort : false,
         }, {
             label : this.options.capacity[1], //'Name',
             hidden : !this.options.capacity[0],
-            name: 'room_setups.capacity',
-            index: 'room_setups.capacity',
+            name: 'room_setup.capacity',
+            index: 'room_setup.capacity',
             search : false,
             sort : false,
         }, {
