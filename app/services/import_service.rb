@@ -19,7 +19,7 @@ module ImportService
 
       # and now do the conversion      
       eolChar = '\\n'
-      query = "load data infile '" + 
+      query = "load data LOCAL infile '" + 
               filename + 
               "' replace into table pending_import_people FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\\\\' " +
               " LINES TERMINATED BY '" + eolChar + "' STARTING BY '' " +
