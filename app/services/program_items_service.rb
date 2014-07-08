@@ -19,7 +19,7 @@ module ProgramItemsService
             itemNumber = increment
           end
           item.pub_reference_number = base + itemNumber
-          item.save
+          item.save!
           itemNumber = itemNumber+increment
         end
       end

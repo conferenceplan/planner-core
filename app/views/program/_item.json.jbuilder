@@ -3,7 +3,7 @@ json.id         item.id
 json.lock_version         item.lock_version    
 json.title      item.title    
 json.format     item.format.name if item.format
-json.tags       item.tag_list_on('PrimaryArea') # TODO - do we jut want the PrimaryArea or make this configrable
+json.tags       item.base_tags.collect{|t| t.name} #tag_list_on('PrimaryArea') # TODO - do we jut want the PrimaryArea or make this configrable
 json.desc       item.precis
 json.mins       item.duration
 json.day        item.published_room_item_assignment.day

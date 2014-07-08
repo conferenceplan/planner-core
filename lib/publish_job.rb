@@ -157,10 +157,8 @@ EOS
           # # copy the details from the unpublished item to the new
           newItem = copy(srcItem, newItem)
           newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
-          # # Need to copy the tags...
-          # TODO - we need all the tag areas now ....
           # and once fixed we need to 'touch' all the items
-          copyTags(srcItem, newItem, 'PrimaryArea')
+          copyTags(srcItem, newItem)
           
           newItem.touch #update_attribute(:updated_at,Time.now)
           newItem.save
@@ -359,14 +357,21 @@ EOS
   end
   
   def load_site_config
-    cfg = SiteConfig.find :first # TODO - test with sidekiq
+    cfg = SiteConfig.find :first #
   end
   
-  def copyTags(from, to, context)
-    tags = from.tag_list_on(context)
-    tagstr = tags * ","
-    if tags
-      to.set_tag_list_on(context, tagstr)
+  def copyTags(from, to)
+    # need to get all tags except admin
+    taggings = ActsAsTaggableOn::Tagging.find :all,
+                  :select => "DISTINCT(context)",
+                  :conditions => "taggable_type like '" + from.class.name + "' AND context != 'Admin'"
+    
+    taggings.each do |tagging|
+      tags = from.tag_list_on(tagging.context)
+      tagstr = tags * ","
+      if tags
+        to.set_tag_list_on(tagging.context, tagstr)
+      end
     end
   end
 

@@ -50,8 +50,6 @@ class TagsController < PlannerController
     end
   end
 
-# t = ActsAsTaggableOn::Tag.includes(:taggings).where("taggings.context != 'admin' AND taggings.taggable_type like 'Pub%' ").select("DISTINCT tags.*")
-  
   #
   # Get a set of the instances with the given tag
   #

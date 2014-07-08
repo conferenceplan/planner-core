@@ -153,5 +153,5 @@ privileges do
     privilege :delete, :includes => [:destroy, :removeItem]
     privilege :communicate, :includes => [:doexportemailxml,:exportbiolist, :selectExportBioList, :schedule_report, :BackOfBadge, :selectBadgeLabel, :selectScheduleReport,:RoomSign,:selectRoomSign, :tableTents,:selectTableTents]
     privilege :schedule, :includes => [:manage, :publish]
-    privilege :supermanage, :includes => [:manage, :drop, :exportemailxml]
+    privilege :supermanage, :includes => [:manage, :drop, :exportemailxml, :assign_reference_numbers]
 end
