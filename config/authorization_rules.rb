@@ -45,6 +45,10 @@ authorization do
     has_permission_on :bio_images, :to => :read
     
     has_permission_on :dash_history, :to => :read
+    has_permission_on :planner_mobile_pages_mobile_dash, :to => :read
+    has_permission_on :planner_mobile_mobile_theme, :to => :read
+    has_permission_on :planner_mobile_mobile_default_bio_image, :to => :read
+    has_permission_on :planner_mobile_mobile_logo_images, :to => :read
     
   end
 
@@ -97,6 +101,9 @@ authorization do
     has_permission_on :communications_mail_templates, :to => :read
     has_permission_on :surveys, :to => :read
     has_permission_on :communications_mailing, :to => :manage
+    has_permission_on :items_confict_exceptions, :to => :manage
+    has_permission_on :external_images, :to => :manage
+    has_permission_on :bio_images, :to => :manage
   end
   
   role :SuperPlanner do
@@ -141,17 +148,15 @@ privileges do
     privilege :review, :includes => [:review]
     privilege :report, :includes => [:library_talks,:missing_bio,:moderators,:art_night,:music_night,:program_types,:free_text,:tags_by_context,:available_during,:panels_with_panelists,:panelists_with_panels,
         :people_without_panels, :admin_tags_by_context,:panels_date_form,:panelists_with_metadata,:interviewable,:panels_by_room,:panels_by_timeslot,:failed,:sent, 
-        :surveyNames, :surveyQueryNames, :show, :questions, :runReport, :delSurveyQuery, :table_tents, :people_by_tag, :badge_labels, :room_signs, :people_items_over_max, :participants_with_no_bios]
+        :surveyNames, :surveyQueryNames, :show, :questions, :runReport, :delSurveyQuery, :table_tents, :people_by_tag, :badge_labels, :room_signs, :people_nbr_items, :people_items_over_max, :participants_with_no_bios, :program_book_report]
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
-        :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments, :listWithBlank, :items,
-        :surveys]
+        :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments, :listWithBlank, :items, :surveys]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants, :copy,
-                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:program_book_report, :addPeople,
-                                      :removePeople, :addPeople]
+                                      :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:program_book_report, :addPeople, :removePeople]
     privilege :create, :includes => [:new,:import,:doimport]
     privilege :update, :includes => [:edit,:states,:copySurvey,:updateExcludedItemsFromSurveys,:updateExcludedTimesFromSurveys]
     privilege :delete, :includes => [:destroy, :removeItem]
     privilege :communicate, :includes => [:doexportemailxml,:exportbiolist, :selectExportBioList, :schedule_report, :BackOfBadge, :selectBadgeLabel, :selectScheduleReport,:RoomSign,:selectRoomSign, :tableTents,:selectTableTents]
     privilege :schedule, :includes => [:manage, :publish]
-    privilege :supermanage, :includes => [:manage, :drop, :exportemailxml, :assign_reference_numbers]
+    privilege :supermanage, :includes => [:manage, :drop, :exportemailxml]
 end
