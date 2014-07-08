@@ -85,7 +85,7 @@
 </script>
 
 <script type="text/template" id="csv-source">
-    <div class="column {{if (typeof _.find(_.values(mapping.attributes), function(n) { return n == posn }) == 'undefined') {  }} ui-draggable {{ } else { }} mapping-assigned {{ } }}" id="{{= posn}}">
+    <div class="column {{if (typeof _.find(_.reject(_.pairs(mapping.attributes), function(n) { return n[0] == "datasource_id" }), function(v) {return v[1] == posn}) == 'undefined') {  }} ui-draggable {{ } else { }} mapping-assigned {{ } }}" id="{{= posn}}">
         {{= name ? name : '<i>?</i>' }} 
     </div>
 </script>
