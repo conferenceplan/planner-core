@@ -366,7 +366,7 @@ class PlannerReportsController < PlannerController
       format.csv {
         outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
-        output.push ['Name','Status','Items']
+        output.push ['Name','Status','Items', 'Pub Ref Nbr']
         
         @people.each do |person|
           output.push [
@@ -382,7 +382,12 @@ class PlannerReportsController < PlannerController
                     (pi.programmeItem.room ? ', ' + pi.programmeItem.room.name : '') +
                     (pi.programmeItem.room ? ' (' + pi.programmeItem.room.venue.name + ')': '')
                 end
-            }.reject { |c| c == nil }.join("\n")
+            }.reject { |c| c == nil }.join("\n"),
+            person.programmeItemAssignments.collect { |pi|
+                if (pi.programmeItem)
+                    (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number.to_s + ' ' : '' )
+                end
+            }.reject { |c| c == nil }.join(",")
           ]
         end
         csv_out(output, outfile)
