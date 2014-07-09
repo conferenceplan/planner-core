@@ -19,6 +19,11 @@ xml.program do
                                 xml.track track
                             end
                         end
+                        xml.tags do
+                           item.programme_items[0].base_tags.each do |tag|
+                                xml.tag tag.name
+                           end
+                        end
                         xml.title item.programme_items[0].title
                         xml.short_title item.programme_items[0].short_title
                         xml.description ((@short_desc && item.programme_items[0].short_precis) ? item.programme_items[0].short_precis : item.programme_items[0].precis)
