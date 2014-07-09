@@ -46,7 +46,7 @@ class PublisherController < PlannerController
     # Get a list of the people that have change since the past pub date
     lastPubDate = PublicationDate.find :first, :order => 'id desc'
     if (lastPubDate)
-      @peopleChanged = PublishedProgramItemsService.getUpdatedPeople lastPubDate
+      @peopleChanged = PublishedProgramItemsService.getUpdatedPeople lastPubDate.timestamp
     end
     
   end

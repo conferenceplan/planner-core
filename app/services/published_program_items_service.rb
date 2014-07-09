@@ -6,6 +6,23 @@ module PublishedProgramItemsService
   #
   #
   #
+  def self.determineChangeDate(pubIndex)
+    case PublicationDate.count
+    when 0
+      since_date = Time.now - 1.year 
+    when 1
+      since_date = ((PublicationDate.order('id asc').first).timestamp - 1.year) 
+    else
+      selected = PublicationDate.order('id desc').where(['id < ?', pubIndex]).first
+      since_date = selected ? selected.timestamp : (pubIndex == 1) ? ((PublicationDate.order('id asc').first).timestamp - 1.year) : PublicationDate.order('id desc').limit(2)[1].timestamp
+    end
+    
+    since_date
+  end
+  
+  #
+  #
+  #
   def self.findProgramItemsForPerson(person)
     PublishedProgrammeItemAssignment.uncached do
       PublishedProgrammeItemAssignment.all(
@@ -126,43 +143,43 @@ module PublishedProgramItemsService
   def self.getUpdatedPeople(pubDate)
     # People added or updated
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'create')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'create')", pubDate]
     updateOrAdded = audits.collect {|a| a.audited_changes['person_id'] }
       
     # People role changed, could be from reserved to participant or vice-versa
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'update')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'update')", pubDate]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (PublishedProgrammeItemAssignment.exists? a.auditable_id) ? PublishedProgrammeItemAssignment.find(a.auditable_id).person_id : nil}.compact
 
     # and if they had an image updated
     # audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      # :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'BioImage') AND (audits.action = 'create' OR audits.action = 'update')", pubDate.timestamp]
+      # :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'BioImage') AND (audits.action = 'create' OR audits.action = 'update')", pubDate]
     # updateOrAdded = updateOrAdded.concat audits.collect {|a| (BioImage.exists? a.auditable_id) ? BioImage.find(a.auditable_id).person_id : nil }.compact
 
     # Get the image updates
-    ext_images = BioImage.find :all, :order => "updated_at asc", :conditions => ["(updated_at >= ?)", pubDate.timestamp]
+    ext_images = BioImage.find :all, :order => "updated_at asc", :conditions => ["(updated_at >= ?)", pubDate]
     updateOrAdded = updateOrAdded.concat ext_images.collect {|a| a.person_id }.compact
     
     # Find people that are assigned to items and have had their details updated...
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc", 
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Person') AND (audits.action != 'destroy')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Person') AND (audits.action != 'destroy')", pubDate]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (Person.exists? a.auditable_id) ? a.auditable_id : nil }.compact
     
     # Find people with edited bios that have been updated that also are assigned to programme items
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc", 
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'EditedBio') AND (audits.action != 'destroy')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'EditedBio') AND (audits.action != 'destroy')", pubDate]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (EditedBio.exists? a.auditable_id) ? EditedBio.find(a.auditable_id).person_id : nil }.compact
     
     # Find people with pseudonyms that have been updated
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc", 
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Pseudonym') AND (audits.action != 'destroy')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Pseudonym') AND (audits.action != 'destroy')", pubDate]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (Pseudonym.exists? a.auditable_id) ? Pseudonym.find(a.auditable_id).person_id : nil }.compact
 
     updateOrAdded = updateOrAdded.collect {|i| (Person.exists? i) ? ((Person.find(i).publishedProgrammeItemAssignments.size > 0) ? i : nil) : nil }.compact.uniq
 
     # People removed - we only want to know who no longer has any items assigned to them, otherwise these are updated people (i.e. removed from an item)
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'destroy')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'destroy')", pubDate]
     removed = audits.collect {|a| (Person.find(a.audited_changes['person_id']).publishedProgrammeItemAssignments.size == 0) ? a.audited_changes['person_id'] : nil }.compact.uniq
     
     { :updatedPeople => updateOrAdded, :removedPeople => removed }
@@ -173,7 +190,7 @@ private
   def self.getNewPublishedProgrammeItems(pubDate)
     
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItem') AND (audits.action = 'create')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItem') AND (audits.action = 'create')", pubDate]
       
     audits.collect { |a| a.auditable_id } # do by id?
     
@@ -182,7 +199,7 @@ private
   def self.getDeletedPublishedProgrammeItems(pubDate)
     
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItem') AND (audits.action = 'destroy')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItem') AND (audits.action = 'destroy')", pubDate]
       
     # audits.collect { |a| PublishedProgrammeItem.find(a.auditable_id) }
     audits.collect { |a| a.auditable_id } # do by id?
@@ -197,53 +214,53 @@ private
   def self.getUpdatedPublishedProgrammeItems(pubDate, new_items = [], deleted_items = [])
     
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItem') AND (audits.action = 'update')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItem') AND (audits.action = 'update')", pubDate]
       
     updated = audits.collect { |a| a.auditable_id }
     
     # removed from room and time (check to see if the item is still published)
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedRoomItemAssignment') AND (audits.action = 'destroy')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedRoomItemAssignment') AND (audits.action = 'destroy')", pubDate]
     updated = updated.concat audits.collect {|a| a.audited_changes['published_programme_item_id'] } # also get a list of the roomitemassignment ids and use that to filter the subsequent collections
     
     # assigned to a room and time
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedRoomItemAssignment') AND (audits.action = 'create')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedRoomItemAssignment') AND (audits.action = 'create')", pubDate]
     updated = updated.concat audits.collect {|a| a.audited_changes['published_programme_item_id'] }
 
     # room and/or time changed
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedRoomItemAssignment') AND (audits.action = 'update')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedRoomItemAssignment') AND (audits.action = 'update')", pubDate]
       # go through the assigment to get to the actual item ... and make sure they were not subsequentally deleted
     updated = updated.concat audits.collect {|a| (PublishedRoomItemAssignment.exists? a.auditable_id) ? PublishedRoomItemAssignment.find(a.auditable_id).published_programme_item_id : nil }.compact
       
     # People added
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'create')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'create')", pubDate]
     updated = updated.concat audits.collect {|a| a.audited_changes['published_programme_item_id'] }
       
     # People removed
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'destroy')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'destroy')", pubDate]
     updated = updated.concat audits.collect {|a| a.audited_changes['published_programme_item_id'] }
     
     # People role changed
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'update')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'update')", pubDate]
     updated = updated.concat audits.collect {|a| (PublishedProgrammeItemAssignment.exists? a.auditable_id) ? PublishedProgrammeItemAssignment.find(a.auditable_id).published_programme_item_id : nil }.compact
     
     # Now find the items associated with rooms (and venues) that have changed
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedRoom') AND (audits.action = 'update')", pubDate.timestamp]
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedRoom') AND (audits.action = 'update')", pubDate]
     updated = updated.concat audits.collect {|a| (PublishedRoom.exists? a.auditable_id) ? PublishedRoom.find(a.auditable_id).published_programme_items.collect{|i| i.id} : nil }.compact.flatten
 
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
-      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'ExternalImage') AND (audits.action = 'create')", pubDate.timestamp],
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'ExternalImage') AND (audits.action = 'create')", pubDate],
       :joins => 'join external_images on external_images.id = audits.auditable_id'
     updated = updated.concat audits.collect {|a| (ExternalImage.exists? a.auditable_id) ? (ExternalImage.find(a.auditable_id).imageable_type == "PublishedProgrammeItem" ? ExternalImage.find(a.auditable_id).imageable_id : nil) : nil }.compact
     
     # Get the image updates
-    ext_images = ExternalImage.find :all, :order => "updated_at asc", :conditions => ["(updated_at >= ?) AND (imageable_type like 'PublishedProgrammeItem')", pubDate.timestamp]
+    ext_images = ExternalImage.find :all, :order => "updated_at asc", :conditions => ["(updated_at >= ?) AND (imageable_type like 'PublishedProgrammeItem')", pubDate]
     updated = updated.concat ext_images.collect {|a| a.imageable_id }.compact
       
     updated.uniq.delete_if{ |i| new_items.include? i }.delete_if{ |i| deleted_items.include? i }

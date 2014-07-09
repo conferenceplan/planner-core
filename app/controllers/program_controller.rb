@@ -141,25 +141,11 @@ class ProgramController < ApplicationController
   #
   def updates
     @scale = params[:scale].to_f
-    pubIndex = params[:pubidx].to_i
-    
-    # To get the updates:
-    # Get a list of all publications that have changed since the last publication date
-    if pubIndex && pubIndex > 0
-      pubIndex -= 1 if pubIndex > 1
-      lastPubDate = PublicationDate.find(pubIndex)
-    else
-      lastPubDates = PublicationDate.find :all, :order => 'id desc', :limit => 2
-      lastPubDate = lastPubDates[1]
-    end
-    
-    if !lastPubDate
-      return
-    end
+    pubIndex = params[:pubidx] ? params[:pubidx].to_i : 0
     
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
     @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
-    @changes = PublishedProgramItemsService.getUpdates lastPubDate
+    @changes = PublishedProgramItemsService.getUpdates(PublishedProgramItemsService(pubIndex))
   end
   
 end
