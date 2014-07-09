@@ -58,7 +58,7 @@ module PlannerReportsService
                   order("time_slots.start")
 
   end  
-
+  
   def self.findPanelsWithPanelists(sort_by = '', mod_date = '1900-01-01', format_id = nil, sched_only = false, equip_only = false, plus_setups = false)
 
     cond_str = "(programme_items.updated_at >= ? or programme_item_assignments.updated_at >= ? or (programme_items.updated_at is NULL and programme_items.created_at >= ?) or (programme_item_assignments.updated_at is NULL and programme_item_assignments.created_at >= ?))"
@@ -282,6 +282,22 @@ module PlannerReportsService
             group("programme_item_assignments.programme_item_id").having("count(programme_item_assignments.programme_item_id) = 1").
             sort!{|a,b| a.person.last_name <=> b.person.last_name }
     
+  end
+
+  #
+  #
+  #
+  def self.findPanelsWithoutModerators
+
+    ids = ProgrammeItemAssignment.where("programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s  + ")").
+            group("programme_item_assignments.programme_item_id").
+            having("count(programme_item_assignments.programme_item_id) >= 1").
+            pluck(:programme_item_id)
+
+    ProgrammeItem.all :include => [:programme_item_assignments, :time_slot, {:room => :venue}, :format],
+      :conditions => ["(time_slots.start is not NULL) AND (programme_items.minimum_people > 1 OR programme_items.maximum_people > 1) AND (programme_items.id not in (?))", ids],
+      :order => "time_slots.start, time_slots.end, venues.name desc, rooms.name"
+
   end
 
 #

@@ -203,6 +203,7 @@ ReportApp.ReportManagement = (function(Backbone){
     var Workspace = Backbone.Router.extend({
 
         routes : {
+            'panels_with_no_moderator' : 'panels_with_no_moderator',
             'panels_with_panelists' : 'panels_with_panelists',
             'panelists_with_panels' : 'panelists_with_panels',
             'people_without_items'  : 'people_without_items',
@@ -317,6 +318,17 @@ ReportApp.ReportManagement = (function(Backbone){
                 endPoint    : '/planner_reports/panels_by_timeslot',
                 colModel    : PanelsByTimeslotColModel,
                 caption     : '<%= t "panels-by-timeslot" %>'
+            }));
+        },
+        
+        panels_with_no_moderator : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : '/planner_reports/panels_without_moderator',
+                colModel    : PanelsWithPanelistsColModel,
+                caption     : '<%= t "report-items-without-moderator" %>'
             }));
         },
                 

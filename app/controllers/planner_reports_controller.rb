@@ -274,6 +274,48 @@ class PlannerReportsController < PlannerController
       }
     end
   end
+  
+  #
+  #
+  #
+  def panels_without_moderator
+    
+    @panels = PlannerReportsService.findPanelsWithoutModerators
+     
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "panels_without_moderator_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+        output.push [
+          'Ref','Title','Min People','Max People','Format','Area(s)','Start Time','End Time','Room','Venue',
+          'Equipment','Participants','Moderators','Reserve','Invisible'
+        ]
+        
+        @panels.each do |panel|
+          
+          count = panel.programme_item_assignments.length
+
+          output.push [panel.pub_reference_number, panel.title, panel.minimum_people, 
+            panel.maximum_people, 
+            (panel.format ? panel.format.name : ''), 
+            panel.taggings.collect{|t| t.context}.uniq.join(","),
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
+            ((panel.room != nil) ? panel.room.name : ''),
+            ((panel.room != nil) ? panel.room.venue.name : ''),
+            panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName }.join(",")
+          ]
+          
+        end
+        csv_out(output, outfile)
+      }
+    end    
+  end
 
   #
   #
@@ -619,5 +661,31 @@ class PlannerReportsController < PlannerController
       end
     end
   end
+  
+  #
+  #
+  #
+  def change_sheet
+    pubIndex = params[:since] ? params[:since].to_i : 0 # id of the publication - need to get previous date
+    
+    @changes = PublishedProgramItemsService.getUpdates(PublishedProgramItemsService(pubIndex))
+    
+    # TODO - we need to determine the following
+    # - if it is an item update, what was updated, i.e. a person added, a title or description changed, a room or time change
+    # All others are fine as is?
+    
+    respond_to do |format|
+      format.xml {
+        response.headers['Content-Disposition'] = 'attachment; filename="change_sheet_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+      }
+      format.pdf {
+        response.headers['Content-Disposition'] = 'attachment; filename="change_sheet_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+      }
+      format.xlsx{
+        response.headers['Content-Disposition'] = 'attachment; filename="change_sheet_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+      }
+    end
+  end
+  
 
 end
