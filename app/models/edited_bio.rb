@@ -5,11 +5,11 @@ class EditedBio < ActiveRecord::Base
   audited :associated_with => :person, :allow_mass_assignment => true
   
   def twitterid
-    /[^\/|^@]+$/.match(twitterinfo)
+    /[^\/|^@]+$/.match(twitterinfo).to_s
   end
   
   def facebookid
-    /[^\/|^@]+$/.match(facebook)
+    /[^\/|^@]+$/.match(facebook).to_s
   end
 
 end
