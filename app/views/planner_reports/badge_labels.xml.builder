@@ -8,7 +8,7 @@ xml.badge_labels do
                     if assignment.programmeItem.time_slot && (@allowed_roles.include? assignment.role)
                         xml.item do
                             xml.role assignment.role.name
-                            xml.title assignment.programmeItem.short_title ? assignment.programmeItem.short_title : assignment.programmeItem.title
+                            xml.title assignment.programmeItem.short_title.blank? ? assignment.programmeItem.title : assignment.programmeItem.short_title
                             xml.format assignment.programmeItem.format.name
                             xml.room assignment.programmeItem.room.name
                             xml.venue assignment.programmeItem.room.venue.name

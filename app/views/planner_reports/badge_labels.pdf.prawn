@@ -25,7 +25,7 @@ prawn_document(:page_size => @label_dimensions.page_size,
                 "(" + i.role.name[0] +
                 ") <b>" + i.programmeItem.time_slot.start.strftime('%a %H:%M') + "</b> : " + 
                 i.programmeItem.room.name + " (" + i.programmeItem.room.venue.name + ") " + 
-                (i.programmeItem.short_title ? i.programmeItem.short_title : i.programmeItem.title)
+                (i.programmeItem.short_title.blank? ? i.programmeItem.title : i.programmeItem.short_title)
             end
         }.compact.join("\n")
     
