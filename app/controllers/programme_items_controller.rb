@@ -189,11 +189,10 @@ class ProgrammeItemsController < PlannerController
   end
   
   # ---------------------------------
-  # TODO - we may want to move this so it is done auto-matically with publish?
   def assign_reference_numbers
-    
-    ProgramItemsService.assign_reference_numbers
-      
+    ProgrammeItem.transaction do
+      ProgramItemsService.assign_reference_numbers
+    end
   end
   
 private
