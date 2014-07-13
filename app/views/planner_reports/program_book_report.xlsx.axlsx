@@ -26,7 +26,7 @@ wb.add_worksheet(name: "Program") do |sheet|
             time.programme_items[0].tag_list_on(:PrimaryArea).join(","),
             (time.programme_items[0].format ? time.programme_items[0].format.name : ""),
             time.programme_items[0].title,
-            ((@short_desc && time.programme_items[0].short_precis) ? time.programme_items[0].short_precis : time.programme_items[0].precis),
+            ((@short_desc && !time.programme_items[0].short_precis.blank?) ? time.programme_items[0].short_precis : time.programme_items[0].precis),
             time.programme_items[0].programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
                 p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","),
             time.programme_items[0].short_title,

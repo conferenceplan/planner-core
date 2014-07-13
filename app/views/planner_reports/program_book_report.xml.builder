@@ -26,7 +26,7 @@ xml.program do
                         end
                         xml.title item.programme_items[0].title
                         xml.short_title item.programme_items[0].short_title
-                        xml.description ((@short_desc && item.programme_items[0].short_precis) ? item.programme_items[0].short_precis : item.programme_items[0].precis)
+                        xml.description ((@short_desc && !item.programme_items[0].short_precis.blank?) ? item.programme_items[0].short_precis : item.programme_items[0].precis)
                         xml.people do # we want the moderators and then participants
                             item.programme_items[0].programme_item_assignments.find_all {|x| x.role == PersonItemRole['Moderator'] }.each do |p|
                                 xml.moderator p.person.getFullPublicationName
