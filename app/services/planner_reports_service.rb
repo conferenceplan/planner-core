@@ -113,15 +113,13 @@ module PlannerReportsService
   def self.findPanelistsWithPanels(peopleIds = nil, additional_roles = nil, scheduledOnly = false, visibleOnly = false)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     roles.concat(additional_roles) if additional_roles
-    cndStr = '(people.acceptance_status_id in (?))'
+    cndStr = '(programme_item_assignments.role_id in (?))'
     cndStr += ' AND (programme_item_assignments.person_id in (?))' if peopleIds
     cndStr += ' AND (time_slots.start is not NULL)' if scheduledOnly
     cndStr += ' AND (programme_items.print = true)' if visibleOnly
-    cndStr += ' AND (programme_item_assignments.role_id in (?))'
 
-    conditions = [cndStr, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
+    conditions = [cndStr, roles]
     conditions << peopleIds if peopleIds
-    conditions << roles
     
     Person.all( :conditions => conditions, 
               :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}},
