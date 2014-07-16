@@ -140,11 +140,12 @@ class ProgramController < ApplicationController
   #
   def updates
     @scale = params[:scale].to_f
-    pubIndex = params[:pubidx] ? params[:pubidx].to_i : 0
+    pubIndex = params[:pubidx] ? params[:pubidx].to_i : (PublicationDate.find :first, :order => 'id desc').id
+    since_date = PublishedProgramItemsService.determineChangeDate(pubIndex)
     
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
     @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
-    @changes = PublishedProgramItemsService.getUpdates(PublishedProgramItemsService(pubIndex))
+    @changes = PublishedProgramItemsService.getUpdates(PublishedProgramItemsService(since_date))
   end
   
 end
