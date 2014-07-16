@@ -5,10 +5,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     page_height = pdf.bounds.top_right[1]
     page_width = pdf.bounds.top_right[0]
 
-    pdf.text  "#{pdf.font.inspect}"
-    
     pdf.text  '<b>Item Changes</b>', :size => 20, :inline_format => true
-    
     
     @item_changes.each do |k, v|
         if v[:item]
@@ -17,7 +14,6 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
             str += ' ' + v[:item].title + '</b>'
             pdf.pad(5) { pdf.text str, :inline_format => true }
 
-            # Changes to programme items
             if v[:changed]
                 v[:changed].each do |k, v|
                     if (!v.blank? && (k.to_s != 'created_at'))
@@ -29,7 +25,6 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                  end
             end
 
-            # Room and time changes
             if v[:time]
                 str = v[:time][:time].start.strftime('%Y-%m-%d')
                 str += ' ' + v[:time][:time].start.strftime('%H:%M')
@@ -42,7 +37,6 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                 pdf.pad(5) { pdf.text str }
             end
                     
-            # people added and/or dropped
             start = true
             if v[:people]
                 str = ''
@@ -56,4 +50,31 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
         end
     end    
     
+    pdf.text  '<b>Deleted Items</b>', :size => 20, :inline_format => true
+    
+    @item_changes.keep_if{|k,v| v[:item] == nil}.each do |k, v|
+        pdf.text   v[:deleted][:title]
+    end
+    
+    pdf.text  '<b>New Items</b>', :size => 20, :inline_format => true
+
+    @changes[:new_items].each do |item_id|
+        item = PublishedProgrammeItem.find(item_id)
+
+        pdf.text  item.pub_reference_number.to_s + ' <b>' + item.title + '</b>', :inline_format => true
+        pdf.text  item.published_room.name + ' ' + item.published_room.published_venue.name
+        pdf.text  item.published_time_slot.start.strftime('%A') + ' ' + item.published_time_slot.start.strftime('%H:%M')
+        pdf.text  item.duration.to_s + ' minutes, ' + (item.format ? item.format.name : '')
+        pdf.text  item.precis , :inline_format => true
+        pdf.text item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
+                p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join("\n")  
+        pdf.pad_bottom(5) {pdf.text ' ' }
+    end
+    
+    pdf.text  '<b>Removed People</b>', :size => 20, :inline_format => true
+    
+    @changes[:removedPeople].each do |person_id|
+        person = Person.find person_id
+        pdf.pad_bottom(5) {pdf.text  person.getFullPublicationName }
+    end
 end
