@@ -135,12 +135,32 @@ PublicationsApp.PrintManagement = (function(Backbone){
         }    
     });
     
+    var ChangeSheetsForm = Backbone.Form.extend({
+        schema : {
+            page_size : { type : 'Select', title : '<%= t "page-size" %>', 
+                          options : <%= [[' ',' ']].concat(PDF::Core::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
+                },
+            orientation : { type : 'Select', title : '<%= t "print-orientation" %>', 
+                          options : { landscape : 'Landscape' , portrait : 'Portrait'} 
+                },
+            since : { type : 'Select', title : '<%= t "published-date" %>', 
+                          options : <%= [].concat((PublicationDate.find :all, :order => 'id desc').collect {|d| {'val' => d.id, 'label' => d.timestamp.strftime("%H:%M, %Y-%m-%d")} }).to_json.html_safe %> 
+                }
+        },
+        
+        data : {
+            page_size : 'LETTER',
+            orientation : 'portrait'
+        }    
+    });
+    
     var Workspace = Backbone.Router.extend({
         routes : {
             'report/:query' : 'report',
             'table_tents'   : 'table_tents',
             'badge_labels'  : 'badge_labels',
-            'publications_room_signs' : 'publications_room_signs'
+            'publications_room_signs' : 'publications_room_signs',
+            'publications_change_sheets' : 'publications_change_sheets'
         },
         
         report : function(query) {
@@ -177,6 +197,16 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : RoomsForm,
                 endPoint    : '/planner_reports/room_signs'
+            }));
+        },
+        
+        publications_change_sheets : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            // TODO
+            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+                form        : ChangeSheetsForm,
+                endPoint    : '/planner_reports/change_sheet'
             }));
         }
     });

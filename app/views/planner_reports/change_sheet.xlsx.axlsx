@@ -1,0 +1,125 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Updated Items") do |sheet|
+    mapping = {
+        'title' => 2,
+        'desc' => 4
+    }
+
+    sheet.add_row [
+        'Pub Ref Nbr',
+        'Title',
+        'Old Title',
+        'New Title',
+        'Old Description',
+        'New Description',
+        'New Day',
+        'New Start Time',
+        'Duration',
+        'New Room',
+        'New Venue',
+        'People Added',
+        'People Removed'
+    ]
+
+    
+    @item_changes.each do |k, v|
+        if v[:item]
+            row = Array.new(14){|i| ''}
+
+            row[0] = v[:item].pub_reference_number
+            row[1] = v[:item].title
+
+                    # Changes to programme items
+                    if v[:changed]
+                        v[:changed].each do |k, v|
+                            if (!v.blank? && (k.to_s != 'created_at'))
+                                # k.to_s - is what has changed
+                                row[mapping[k.to_s]] << v[0]
+                                row[mapping[k.to_s] + 1] << v[1]
+                            end
+                        end
+                    end
+                    
+                    # Room and time changes
+                    if v[:time]
+                        row[6] = v[:time][:time].start.strftime('%Y-%m-%d')
+                        row[7] = v[:time][:time].start.strftime('%H:%M')
+                        row[8] = (v[:time][:time].end - v[:time][:time].start) / 60
+                    end
+                    if v[:room]
+                            row[9] = v[:room][:room].name
+                            row[10] = v[:room][:room].published_venue.name
+                    end
+                    
+                    # people added and/or dropped
+                    if v[:people]
+                            v[:people].each do |person|
+                                if person[1][:action] == 'add'
+                                    row[11] += person[1][:person_name] + ' (' + person[1][:role] + ")\n"
+                                else
+                                    row[12] += person[1][:person_name] + ' (' + person[1][:role] + ")\n"
+                                end
+                            end
+                    end
+        
+            sheet.add_row row
+        end
+    end
+end
+
+wb.add_worksheet(name: "Deleted Items") do |sheet|
+    sheet.add_row [
+        'Title',
+        ]
+
+    @item_changes.keep_if{|k,v| v[:item] == nil}.each do |k, v|
+        sheet.add_row [v[:deleted][:title]]
+    end
+end
+
+wb.add_worksheet(name: "New Items") do |sheet|
+
+    sheet.add_row [
+        'Room',
+        'Venue',
+        'Pub Ref Nbr',
+        'Duration',
+        'Format',
+        'Title',
+        'Description',
+        'Participants',
+        'Day',
+        'Time'
+    ]
+
+
+    @changes[:new_items].each do |item_id|
+        item = PublishedProgrammeItem.find(item_id)
+
+        sheet.add_row [
+            item.published_room.name,
+            item.published_room.published_venue.name,
+            item.pub_reference_number,
+            item.duration,
+            item.format ? item.format.name : '',
+            item.title,
+            item.precis,
+            item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
+                p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join("\n"),        
+            item.published_time_slot.start.strftime('%A'),
+            item.published_time_slot.start.strftime('%H:%M'),
+        ]
+    end
+end
+
+wb.add_worksheet(name: "Removed People") do |sheet|
+    sheet.add_row [
+        'Name',
+        ]
+
+    @changes[:removedPeople].each do |person_id|
+        person = Person.find person_id
+        sheet.add_row [person.getFullPublicationName]
+    end
+end

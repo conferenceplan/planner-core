@@ -666,13 +666,13 @@ class PlannerReportsController < PlannerController
   #
   #
   def change_sheet
+    @page_size = params[:page_size]
+    @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
     pubIndex = params[:since] ? params[:since].to_i : 0 # id of the publication - need to get previous date
     
-    @changes = PublishedProgramItemsService.getUpdates(PublishedProgramItemsService(pubIndex))
-    
-    # TODO - we need to determine the following
-    # - if it is an item update, what was updated, i.e. a person added, a title or description changed, a room or time change
-    # All others are fine as is?
+    @since_date = PublishedProgramItemsService.determineChangeDate(pubIndex)
+    @changes = PublishedProgramItemsService.getUpdates(@since_date)
+    @item_changes = PublishedProgramItemsService.getPublishedProgrammeItemsChanges(@since_date)
     
     respond_to do |format|
       format.xml {
