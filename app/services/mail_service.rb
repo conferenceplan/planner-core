@@ -167,7 +167,9 @@ module MailService
           # title
           result += '<h2>' + assignment.programmeItem.title  + "</h2>\n" if assignment.programmeItem
           # time
-          result += '<p>' + assignment.programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + assignment.programmeItem.time_slot.end.strftime('%H:%M') + "</p>\n"
+          result += '<p>' + assignment.programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + assignment.programmeItem.time_slot.end.strftime('%H:%M') 
+          result += ', ' + assignment.programmeItem.room.name + ' (' + assignment.programmeItem.room.venue.name + ')' if assignment.programmeItem.room
+          result += "</p>\n"
           # description
           result += '<p>' + assignment.programmeItem.precis + "</p>\n" if assignment.programmeItem.precis
           # participants (name + email)
