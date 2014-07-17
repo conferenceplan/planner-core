@@ -222,7 +222,7 @@ class PlannerReportsController < PlannerController
         output = Array.new
 
         output.push [
-          'Ref','Title','Min People','Max People','Format','Start Time','End Time','Room','Venue','Equipment'
+          'Ref','Title','Min People','Max People','Format','Day', 'Start Time','End Time','Room','Venue','Equipment'
         ]
         
         @panels.each do |panel|
@@ -230,8 +230,9 @@ class PlannerReportsController < PlannerController
           output.push [panel.pub_reference_number, panel.title, panel.minimum_people, 
             panel.maximum_people, 
             (panel.format ? panel.format.name : ''), 
-            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
-            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%H:%M') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%H:%M') : ''),
             ((panel.room != nil) ? panel.room.name : ''),
             ((panel.room != nil) ? panel.room.venue.name : ''),
             panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(","),
