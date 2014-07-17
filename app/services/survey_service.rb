@@ -263,7 +263,7 @@ module SurveyService
   #
   def self.getSurveyBio(person_id)
 
-    SurveyResponse.first :joins => {:survey_respondent_detail => {:survey_respondent => :person}}, :conditions => {:isbio => true, :people => {:id => person_id}}
+    SurveyResponse.first :joins => {:survey_respondent_detail => {:survey_respondent => :person}}, :conditions => {:isbio => true, :people => {:id => person_id}}, :order => "created_at desc"
     
   end
   
