@@ -8,9 +8,11 @@ class ProgramController < ApplicationController
   # For now we only have the cached objects around for 10 minutes. Which means that when the publish has been done within 10 minutes folks
   # will see the new data...
   #
-  caches_action :participants, #:expires_in => 10.minutes,
+  caches_action :updates,
                 :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
-  caches_action :index, #:expires_in => 10.minutes,
+  caches_action :participants,
+                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
+  caches_action :index,
                 :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} }
   
   #
