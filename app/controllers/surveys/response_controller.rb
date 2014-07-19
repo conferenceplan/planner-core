@@ -98,7 +98,7 @@ class Surveys::ResponseController < ApplicationController
             end
           end
           
-          if (@survey.accept_status && @respondent.person)
+          if (@respondent && @survey.accept_status && @respondent.person)
             @respondent.person.acceptance_status = @survey.accept_status
             @respondent.person.save!
           end
