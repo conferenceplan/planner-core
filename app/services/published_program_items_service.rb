@@ -158,10 +158,12 @@ module PublishedProgramItemsService
       
     audits.each do |a|
       if a.audited_changes['title'] || a.audited_changes['precis']
-        item = PublishedProgrammeItem.includes(:published_room_item_assignment).find(a.auditable_id)
-        # if multiple changes we want the most recent one to win
-        if item && ((!res[a.auditable_id]) || (res[a.auditable_id] && (a.created_at > res[a.auditable_id][:changed][:created_at])))
-          res[a.auditable_id] = { :item => item, :changed => { :title => a.audited_changes['title'], :desc => a.audited_changes['precis'], :created_at => a.created_at} }
+        if PublishedProgrammeItem.exists? a.auditable_id
+          item = PublishedProgrammeItem.includes(:published_room_item_assignment).find(a.auditable_id)
+          # if multiple changes we want the most recent one to win
+          if item && ((!res[a.auditable_id]) || (res[a.auditable_id] && (a.created_at > res[a.auditable_id][:changed][:created_at])))
+            res[a.auditable_id] = { :item => item, :changed => { :title => a.audited_changes['title'], :desc => a.audited_changes['precis'], :created_at => a.created_at} }
+          end
         end
       end
     end
