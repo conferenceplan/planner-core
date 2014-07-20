@@ -45,7 +45,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'i18n' 
   s.add_dependency 'jbuilder'
   s.add_dependency 'jpbuilder'
-  s.add_dependency 'mysql2' 
   s.add_dependency 'time_diff'
   s.add_dependency 'turbolinks'
   s.add_dependency 'will_paginate'
