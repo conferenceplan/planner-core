@@ -6,7 +6,7 @@ require 'axlsx_rails'
 require "audited-activerecord"
 require 'acts-as-taggable-on'
 require 'devise'
-require 'bluecloth'
+#require 'bluecloth'
 require 'bootstrap-sass'
 require 'cells'
 require 'ckeditor_rails'

@@ -141,6 +141,7 @@ class Surveys::ResponseController < ApplicationController
   
   # This needs to be done via the respondent id (cookie or other if the person is logged in)
   def index
+    @site_config = SiteConfig.first
     if !@survey
       @survey = Survey.find(params[:survey_id])
       @page_title = @survey.name

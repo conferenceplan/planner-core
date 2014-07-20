@@ -108,7 +108,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
     var RoomsForm = Backbone.Form.extend({
         schema : {
             day : { type : 'Select', title : '<%= t "day" %>', 
-                         options : <%=  [{'label' => 'All', 'val' =>"-1"}].concat((((0..((SiteConfig.first.number_of_days).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(SiteConfig.first.start_date.to_s) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}).to_json.html_safe%> },
+                         options : <%=  [{'label' => 'All', 'val' =>"-1"}].concat((((0..((@start_date.number_of_days).to_i-1)).to_a.collect{ |r| [(Time.zone.parse(@start_date.start_date.to_s) + r.days).strftime('%A'), r]})).collect {|i,l| {'val' => l, 'label' => i}}).to_json.html_safe%> },
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
                           options : <%= [[' ',' ']].concat(PDF::Core::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
                 },

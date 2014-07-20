@@ -7,6 +7,7 @@ class SurveyRespondentsController < ApplicationController
   layout "dynasurvey"
 
   def new
+    @site_config = SiteConfig.first
     @survey_respondent = SurveyRespondent.new
     @page_title = "Questionnaire Start"
     page = get_stored_page
@@ -27,6 +28,7 @@ class SurveyRespondentsController < ApplicationController
     last_name = params[:last_name]
 
     # find a respondent with the key and last name
+    @site_config = SiteConfig.first
     @survey_respondent = findRespondent(key, last_name) if (key && key != '')
 
     # We need to get the survey that is to be filled in, if we do not have page then we can get if back
@@ -73,15 +75,18 @@ class SurveyRespondentsController < ApplicationController
 
   # For now the update does the same as the create
   def update
+    @site_config = SiteConfig.first
     create
   end
 
   # show and index does not really make that much sense.... just redirect to the 'new' action
   def show
+    @site_config = SiteConfig.first
     redirect_to '/survey_respondents/new'
   end
   
   def index
+    @site_config = SiteConfig.first
     redirect_to '/survey_respondents/new'
   end
 

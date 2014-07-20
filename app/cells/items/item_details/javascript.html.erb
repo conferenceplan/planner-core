@@ -28,15 +28,15 @@ ItemApp.ItemManagement = (function(Backbone){
             short_precis : { type : 'Html', title : '<%= t "short-item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
             room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO
             start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
-                    tz_offset : <%= Time.zone.parse(SiteConfig.first.start_date.to_s).utc_offset/(60*60) %>,
+                    tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/(60*60) %>,
                     picker : {
                         useSeconds : false,
                         minuteStepping : 15,
                         orientation : 'left',
                         format : "DD MMM YYYY, HH:mm",
-                        defaultDate : "<%= Time.zone.parse(SiteConfig.first.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        startDate : "<%= Time.zone.parse(SiteConfig.first.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        endDate : "<%= (Time.zone.parse(SiteConfig.first.start_date.to_s) + ((SiteConfig.first.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
+                        defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        startDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        endDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
                 } },
             notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 2, cols : 60 } },
             participant_notes : { type : 'TextArea', title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60 } },

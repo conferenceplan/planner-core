@@ -11,10 +11,12 @@ class Schedule::ManageCell < Cell::Rails
   end
   
   def javascript
+    @start_date = SiteConfig.first
     render
   end
 
   def templates
+    @start_date = SiteConfig.first
     render
   end
 

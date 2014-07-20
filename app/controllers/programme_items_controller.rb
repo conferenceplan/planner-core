@@ -77,7 +77,7 @@ class ProgrammeItemsController < PlannerController
   #  
   def update
     @programmeItem = ProgrammeItem.find(params[:id])
-    startTime = params[:start_time].to_datetime
+    startTime = params[:start_time] ? params[:start_time].to_datetime : nil
     startDay = -1
     startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]

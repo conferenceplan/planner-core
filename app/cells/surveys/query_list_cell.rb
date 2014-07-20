@@ -5,6 +5,7 @@ class Surveys::QueryListCell < Cell::Rails
   end
 
   def javascript(args)
+    @start_date = SiteConfig.first
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
     @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
     @formCallback = args.has_key?(:formCallback) ? args[:formCallback] : "function() {}"

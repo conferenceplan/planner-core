@@ -33,7 +33,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'devise'
   s.add_dependency 'scrypt'
   s.add_dependency 'bcrypt'
-  s.add_dependency 'bluecloth'
+#  s.add_dependency 'bluecloth'
   s.add_dependency 'bootstrap-sass', '~> 3.1'
   s.add_dependency 'cells'
   s.add_dependency 'ckeditor_rails'
