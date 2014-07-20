@@ -120,7 +120,10 @@ module SurveyService
                               selectStr + query[0] +
                               ' order by last_name'  +
                               createJoinPart2(surveyQuery.survey_query_predicates, metadata, query[2]) + 
-                              ' left join survey_histories hist on hist.survey_id = ' + surveyQuery.survey_id.to_s + ' and hist.survey_respondent_detail_id = res.id' + dateOrder
+                              ' left join survey_histories hist on hist.survey_id = ' + surveyQuery.survey_id.to_s + 
+                              ' and hist.survey_respondent_detail_id = res.id' + 
+                              createWherePart(surveyQuery.survey_query_predicates, metadata, query[2]) +
+                              dateOrder
                                )
 
     # it would be good to also get the person's address (country) if there is a corresponding survey_respondent and person ...
@@ -309,6 +312,24 @@ private
     
     return selectPart + ' from (SELECT @rownum:=0) rn, ( '
   end
+  
+  def self.createWherePart(queryPredicates, metadata, mapping)
+    res = ''
+
+    if (queryPredicates.size > 0)
+      i = 0
+      queryPredicates.each  do |subclause|
+        if ( [:singlechoice, :multiplechoice].include? subclause.survey_question.question_type )
+          res += ' where ' if i == 0
+          res += ' AND ' if i > 0
+          res += '(a' + mapping[subclause["survey_question_id"]].to_s + '.answer is not null)'
+          i += 1
+        end
+      end
+    end
+    
+    res
+  end
 
   def self.createJoinPart2(queryPredicates, metadata, mapping)
     result = ' ) res '
@@ -320,6 +341,10 @@ private
         if !questionIds.include?(subclause["survey_question_id"].to_i)
           if ((metadata['r' + mapping[subclause["survey_question_id"]].to_s]['question_type'].include? "singlechoice"))
             result += ' left join survey_answers a' + mapping[subclause["survey_question_id"]].to_s + ' on a' + mapping[subclause["survey_question_id"]].to_s + '.id = res.r' + mapping[subclause["survey_question_id"]].to_s
+            #
+            if ( [:singlechoice, :multiplechoice].include? subclause.survey_question.question_type )
+              result += ' AND a' + mapping[subclause["survey_question_id"]].to_s + '.answer = "' + subclause["value"] + '" '
+            end  
           end
           questionIds.add(subclause["survey_question_id"].to_i)
         end
@@ -374,12 +399,17 @@ private
           
           # andPart
           andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
-          andPart += 'r' + nbrOfResponse.to_s + ".response " + op[0]
-          andPart += " '"
-          andPart += "%" if (op[1] == true && op[2] == false)
-          andPart += subclause["value"] if (op[1] == true)
-          andPart += "%" if (op[1] == true && op[2] == false)
-          andPart += "'"
+          
+          if ( [:singlechoice, :multiplechoice].include? subclause.survey_question.question_type )
+            andPart += 'r' + nbrOfResponse.to_s + ".response is not null"
+          else  
+            andPart += 'r' + nbrOfResponse.to_s + ".response " + op[0]
+            andPart += " '"
+            andPart += "%" if (op[1] == true && op[2] == false)
+            andPart += subclause["value"] if (op[1] == true)
+            andPart += "%" if (op[1] == true && op[2] == false)
+            andPart += "'"
+          end
           
           mapping[subclause["survey_question_id"]] = nbrOfResponse
         

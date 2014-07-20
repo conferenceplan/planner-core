@@ -5,6 +5,7 @@ class Surveys::QuestionListCell < Cell::Rails
   end
 
   def javascript(args)
+    @start_date = SiteConfig.first
     render
   end
 
