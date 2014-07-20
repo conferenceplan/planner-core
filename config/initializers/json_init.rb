@@ -1,2 +1,2 @@
-require 'multi_json'
-MultiJson.use :yajl
+#require 'multi_json'
+#MultiJson.use :yajl

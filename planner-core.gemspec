@@ -49,7 +49,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'turbolinks'
   s.add_dependency 'will_paginate'
   s.add_dependency 'font_assets'
-  s.add_dependency 'yajl-ruby'
+#  s.add_dependency 'yajl-ruby'
   s.add_dependency 'log4r'
   s.add_dependency "browser"
   s.add_dependency 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
