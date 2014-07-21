@@ -1,7 +1,7 @@
 #
 #
 #
-require 'active_support/all'
+#require 'active_support/all'
 require 'axlsx_rails'
 require "audited-activerecord"
 require 'acts-as-taggable-on'
