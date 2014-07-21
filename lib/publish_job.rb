@@ -5,43 +5,45 @@ class PublishJob
   end
   
   def perform
-
-    PublishedProgrammeItem.transaction do
-      load_cloudinary_config
-      load_site_config
-      
-      ProgramItemsService.assign_reference_numbers if @ref_numbers #
-      
-      newItems = 0
-      modifiedItems = 0
-      renmovedItems = 0
-      p = PublicationDate.new
-      newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
-      modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
-      removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
-      removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
-      
-      modifiedItems += publishRooms(getModifiedRooms())
-      
+    cfg = SiteConfig.find :first
+    zone = cfg ? cfg.time_zone : Time.zone
+    Time.use_zone(zone) do
       PublishedProgrammeItem.transaction do
-        sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
+        load_cloudinary_config
+        load_site_config
         
-        p.timestamp = DateTime.current
-        p.newitems = newItems
-        p.modifieditems = modifiedItems
-        p.removeditems = renmovedItems
-        p.save
+        ProgramItemsService.assign_reference_numbers if @ref_numbers #
+        
+        newItems = 0
+        modifiedItems = 0
+        renmovedItems = 0
+        p = PublicationDate.new
+        newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
+        modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
+        removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
+        removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
+        
+        modifiedItems += publishRooms(getModifiedRooms())
+        
+        PublishedProgrammeItem.transaction do
+          sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
+          
+          p.timestamp = DateTime.current
+          p.newitems = newItems
+          p.modifieditems = modifiedItems
+          p.removeditems = renmovedItems
+          p.save
+        end
+  
+        pstatus = PublicationStatus.first
+        pstatus = PublicationStatus.new if pstatus == nil
+        pstatus.status = :completed
+        pstatus.save!
+        
+        Rails.cache.clear # make sure that the mem cache is flushed
+        clearDalliCache # clear the mem cache ...
       end
-
-      pstatus = PublicationStatus.first
-      pstatus = PublicationStatus.new if pstatus == nil
-      pstatus.status = :completed
-      pstatus.save!
-      
-      Rails.cache.clear # make sure that the mem cache is flushed
-      clearDalliCache # clear the mem cache ...
     end
-    
   end
   
   def clearDalliCache
