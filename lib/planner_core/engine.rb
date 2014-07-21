@@ -1,7 +1,7 @@
 #
 #
 #
-#require 'active_support/all'
+require 'active_support/all'
 require 'axlsx_rails'
 require "audited-activerecord"
 require 'acts-as-taggable-on'
@@ -18,7 +18,7 @@ require 'delayed_job_active_record'
 require 'i18n' 
 require 'jbuilder'
 require 'jpbuilder'
-#require 'mysql2' 
+require 'mysql2' 
 require 'time_diff'
 require 'turbolinks'
 require 'will_paginate'
