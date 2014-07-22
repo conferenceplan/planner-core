@@ -399,21 +399,24 @@ class PlannerReportsController < PlannerController
   #
   def panelists_with_panels
       
-    @people = PlannerReportsService.findPanelistsWithPanels params[:specific_panelists], 
+    @people = PlannerReportsService.findPanelistsWithPanels( params[:specific_panelists], 
                             (params[:reserved] == "true" ? [PersonItemRole['Reserved'].id] : nil), 
                             (params[:scheduled] == "true"), 
-                            (params[:forprint] == "true")
+                            (params[:forprint] == "true") ).sort_by{ |a| a.pubLastName.mb_chars.normalize(:kd).gsub(/[^-x00-\x7F]/n, '').downcase.to_s }
 
     respond_to do |format|
       format.json
       format.csv {
         outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
-        output.push ['Name','Status','Items', 'Pub Ref Nbr']
+        output.push ['Fisrt Name','Last Name','Status','Items', 'Pub Ref Nbr']
+        
+        # TODO - want to sort by the last name
         
         @people.each do |person|
           output.push [
-            person.getFullPublicationName,
+            person.pubFirstName,
+            person.pubLastName,
             person.acceptance_status.name,
             person.programmeItemAssignments.collect { |pi|
                 if (pi.programmeItem)
