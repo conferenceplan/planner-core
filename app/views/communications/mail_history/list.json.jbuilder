@@ -22,7 +22,7 @@ json.rowdata @mailItems do |item|
         json.set! "item[person][pseudonym_attributes][suffix]", item.person.pseudonym.suffix
     end
 
-    json.set! "item[mailing][mail_use]", item.mailing.mail_template ? item.mailing.mail_template.mail_use.name : ''
-    json.set! "item[mailing][mailing_number]", item.mailing.mailing_number
+    json.set! "item[mailing][mail_use]", item.mailing ? item.mailing.mail_template.mail_use.name : ''
+    json.set! "item[mailing][mailing_number]", item.mailing ? item.mailing.mailing_number : ''
 
 end
