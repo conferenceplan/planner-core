@@ -174,6 +174,13 @@ $.widget( "cp.baseTable" , {
                                 model.destroy({
                                     wait: true,
                                     success : function(md, response) {
+                                        // TODO - we need a method to call to ensure that selected is nilled out before the grid reload etc
+                                        grid.jqGrid('setGridParam', {
+                                        loadComplete: function(data) {
+                                                grid.jqGrid('resetSelection');
+                                                grid.jqGrid('setGridParam', { loadComplete: function() {} });
+                                            }
+                                        });
                                         grid.trigger("reloadGrid");
                                         clearNotifyMethod();
                                     }
