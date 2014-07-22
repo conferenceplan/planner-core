@@ -10,6 +10,7 @@ class Surveys::ResponseController < ApplicationController
   #
   #
   def create
+    @survey = Survey.find(params[:survey_id])
     @site_config = SiteConfig.first
 
     init()
