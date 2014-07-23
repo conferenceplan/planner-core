@@ -627,13 +627,13 @@ class PlannerReportsController < PlannerController
       
       respond_to do |format|
         format.xml {
-          response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+          response.headers['Content-Disposition'] = 'attachment; filename="schedules_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
         }
         format.pdf {
-          response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+          response.headers['Content-Disposition'] = 'attachment; filename="schedules_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
         }
         format.xlsx{
-          response.headers['Content-Disposition'] = 'attachment; filename="badge_labels_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+          response.headers['Content-Disposition'] = 'attachment; filename="schedules_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
         }
       end
     end
