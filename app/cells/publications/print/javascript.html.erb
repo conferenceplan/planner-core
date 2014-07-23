@@ -82,6 +82,32 @@ PublicationsApp.PrintManagement = (function(Backbone){
         }
     });
     
+    var PartScheduleForm = Backbone.Form.extend({
+        schema : {
+            page_size : { type : 'Select', title : '<%= t "page-size" %>', 
+                          options : <%= [[' ',' ']].concat(PDF::Core::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %>,
+                          help : '<%= t "the-page-size-for-the-pdf-output" %>' 
+                },
+            additional_roles : { type : 'Checkbox', title : '<%= t "publications-include-invisible" %>'},
+            people : { type : 'Select2', title : '<%= t "publications-people" %>', 
+                        config : {
+                            multiple: true,
+                            maximumSelectionSize : -1,
+                            query: function (query) {
+                                var data = {
+                                    results: _.filter(people, function(x) { return x.text.toLowerCase().indexOf(query.term.toLowerCase()) != -1; })
+                                };
+                                query.callback(data);
+                            }
+                        }
+                }
+        },
+        
+        data : {
+            page_size : 'LETTER'
+        }
+    });
+    
     var BadgeForm = Backbone.Form.extend({
         schema : {
             additional_roles : { type : 'Checkbox', title : '<%= t "publications-include-invisible" %>'},
@@ -159,6 +185,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             'report/:query' : 'report',
             'table_tents'   : 'table_tents',
             'badge_labels'  : 'badge_labels',
+            'part_schedule' : 'part_schedule',
             'publications_room_signs' : 'publications_room_signs',
             'publications_change_sheets' : 'publications_change_sheets'
         },
@@ -188,6 +215,15 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : BadgeForm,
                 endPoint    : '/planner_reports/badge_labels'
+            }));
+        },
+        
+        part_schedule : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+                form        : PartScheduleForm,
+                endPoint    : '/planner_reports/part_schedule'
             }));
         },
         
