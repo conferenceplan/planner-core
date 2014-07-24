@@ -15,7 +15,8 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                 str = '<b>' + assignment.programmeItem.title + "</b>,  "
                 str += assignment.programmeItem.time_slot.start.strftime('%A') + ' ' + assignment.programmeItem.time_slot.start.strftime('%H:%M') + "\n"
                 str += ' ' + assignment.role.name + "\n"
-                str += assignment.programmeItem.format.name + ', ' + assignment.programmeItem.room.name + ' (' + assignment.programmeItem.room.venue.name + ")\n"
+                str += (assignment.programmeItem.format ? assignment.programmeItem.format.name + ', ' : '')
+                str += (assignment.programmeItem.room ? assignment.programmeItem.room.name + ' (' + assignment.programmeItem.room.venue.name + ")\n" : '')
             
                 pdf.pad(5) { pdf.text str, :inline_format => true }
                 pdf.pad_bottom(10) { pdf.text assignment.programmeItem.participant_notes, :inline_format => true }
