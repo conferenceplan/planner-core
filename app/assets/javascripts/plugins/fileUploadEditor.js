@@ -39,7 +39,7 @@ Form.editors.FileUpload = Form.editors.Text.extend({
             },
             done: function (e, data) {
                 $.each(data.files, function (index, file) {
-                    element.find('#' + field_name + '_preview').text(file.name); //.appendTo(file);
+                    element.find('#' + field_name + '_preview').text(file.name.split('\\').pop()); //.appendTo(file);
                 });
             }
         });
