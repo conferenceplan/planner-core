@@ -25,6 +25,8 @@ class PublishJob
         
         modifiedItems += publishRooms(getModifiedRooms())
         
+        updateAssignmentNames()
+        
         PublishedProgrammeItem.transaction do
           sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
           
@@ -51,6 +53,19 @@ class PublishJob
       Rails.cache.dalli.with do |client|
         client.flush
       end    
+    end
+  end
+
+  #
+  #
+  #
+  def updateAssignmentNames
+    assignments = PublishedProgrammeItemAssignment.where('published_programme_item_assignments.updated_at < people.updated_at' ).joins(:person)
+    assignments.each do |assignment|
+      a = PublishedProgrammeItemAssignment.find assignment.id
+      a.person_name = assignment.person.getFullPublicationName
+      a.touch
+      a.save
     end
   end
   
