@@ -272,7 +272,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
                 var datasource = stepToView[1].view.model.get('datasource_id');
                 
                 // Get the name of the file containing the data to be uploaded
-                var uploadFilename = stepToView[2].view.model.get('file_upload');
+                var uploadFilename = stepToView[2].view.model.get('file_upload').split('\\').pop();
                 csvColumns = new CSVColumns();
                 csvColumns.fetch({
                     url : '/import_mappings/columns?file=' + uploadFilename,
