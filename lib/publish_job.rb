@@ -44,8 +44,13 @@ class PublishJob
         
         Rails.cache.clear # make sure that the mem cache is flushed
         clearDalliCache # clear the mem cache ...
+        post_process
       end
     end
+  end
+  
+  def post_process
+    
   end
   
   def clearDalliCache
