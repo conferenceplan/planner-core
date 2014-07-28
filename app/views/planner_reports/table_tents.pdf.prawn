@@ -28,7 +28,7 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
                     pdf.text item.format.name if item.format
                     pdf.text item.published_room.name + ' ' + item.published_room.published_venue.name
                     pdf.text item.published_time_slot.start.strftime('%A %H:%M %y-%m-%d')
-                    pdf.text "<b>Participants:</b> " + item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(",")
+                    pdf.text "<b>Participants:</b> " + item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","), :inline_format => true
                     pdf.text "<b>Description:</b> " + item.precis, :inline_format => true
             end
     end
