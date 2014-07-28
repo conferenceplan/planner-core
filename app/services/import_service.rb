@@ -168,7 +168,7 @@ protected
       if !pendingPerson.phoneNil?
         postal = person.phone_numbers.new(
             :number => pendingPerson.phone, 
-            :phone_type_id => PhoneTypes['Home'] # Assumption!!!
+            :phone_type_id => PhoneTypes['Home'].id # Assumption!!!
           );
         person.save!
       end
