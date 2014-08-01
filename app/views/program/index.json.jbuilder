@@ -11,7 +11,11 @@ json.array! @programmeItems.each do |item|
     json.date       item.published_time_slot.start.strftime('%Y-%m-%d')
     json.time       item.published_time_slot.start.strftime('%H:%M')
     json.datetime   item.published_time_slot.start
-    json.loc        [item.published_room_item_assignment.published_room.name, item.published_room_item_assignment.published_room.published_venue.name]
+    
+    loc = [item.published_room_item_assignment.published_room.name]
+    loc = loc << item.published_room_item_assignment.published_room.published_venue.name if !@singleVenue
+    
+    json.loc        loc
     json.people     item.published_programme_item_assignments.each do |assignment| 
         json.id         assignment.person_id
         json.name       (assignment.person_name ? assignment.person_name : assignment.person.getFullPublicationName)
