@@ -327,7 +327,7 @@ EOS
           # find the index of the person only if the role is also different
           idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && (a.role != srcAssignment.role) }
           if idx != nil
-            if (srcAssignment.role == PersonItemRole['Reserved']) || (srcAssignment.role != PersonItemRole['Invisible'])
+            if (srcAssignment.role == PersonItemRole['Reserved']) || (srcAssignment.role == PersonItemRole['Invisible'])
               # If the role is changed to reserved or invisible then they should be removed...
               dest.published_programme_item_assignments[idx].destroy
             else  
