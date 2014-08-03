@@ -67,9 +67,12 @@ module PublishedProgramItemsService
   def self.getPublishedProgramItemsThatHavePeople
 
     PublishedProgrammeItem.uncached do
-      PublishedProgrammeItem.all :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
-                               :order => 'published_programme_items.title ASC',
-                               :conditions => "published_programme_item_assignments.id is not null"
+      PublishedProgrammeItem.all :include => [:publication, :published_time_slot, :published_room_item_assignment, :format,
+                                              {:published_programme_item_assignments => {:person => [:pseudonym, :email_addresses]}},
+                                              {:published_room => [:published_venue]} ],
+                               :conditions => "published_programme_item_assignments.id is not null",
+                               :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC'
+                               # :order => 'published_programme_items.title ASC'
     end
     
   end

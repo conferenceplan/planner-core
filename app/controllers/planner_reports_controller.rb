@@ -592,9 +592,14 @@ class PlannerReportsController < PlannerController
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     @itemList = (params[:items] && params[:items].length > 0) ? URI.unescape(params[:items]).split(',') : nil
     @single = (!params[:single].blank?) ? params[:single] == "true" : false
-    
-    @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList, nil, @itemList
     @page_size = params[:page_size]
+    @by_time = (@itemList == nil) && (peopleList == nil) && !@single
+
+    if (@itemList == nil) && (peopleList == nil) && !@single
+      @items = PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople
+    else
+      @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList, nil, @itemList
+    end
     
     Person.uncached do
       respond_to do |format|
