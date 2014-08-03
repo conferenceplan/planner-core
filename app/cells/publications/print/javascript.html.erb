@@ -124,10 +124,12 @@ PublicationsApp.PrintManagement = (function(Backbone){
                                 query.callback(data);
                             }
                         }
-                }
+            },
+            exclude_items : { type : 'Checkbox', title : '<%= t "publications-exclude-items" %>' }
         },
         
         data : {
+            exclude_items : false
         }
     });
     

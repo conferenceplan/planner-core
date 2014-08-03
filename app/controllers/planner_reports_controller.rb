@@ -644,6 +644,7 @@ class PlannerReportsController < PlannerController
   #
   def badge_labels
     @label_dimensions = LabelDimensions.find(params[:label_type])
+    @exclude_items = params[:exclude_items] == "true"
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     additional_roles = params[:additional_roles] == "true" ? [PersonItemRole['Invisible'].id] : nil
     for_print = params[:for_print] ? (params[:for_print] == true) : false

@@ -18,16 +18,19 @@ prawn_document(:page_size => @label_dimensions.page_size,
     i = x = y = 0
     @people.each do |p|
     
-        label = "<b><u>" + p.getFullPublicationName + "</u></b>\n"
+        label = "<b><u>" + p.getFullPublicationName + "</u></b>\n" if !@exclude_items
+        label = "<b>" + p.getFullPublicationName + "</b>\n" if @exclude_items
         
-        label += p.programmeItemAssignments.collect { |i|
-            if i.programmeItem.time_slot && (@allowed_roles.include? i.role)
-                "(" + i.role.name[0] +
-                ") <b>" + i.programmeItem.time_slot.start.strftime('%a %H:%M') + "</b> : " + 
-                i.programmeItem.room.name + " " +
-                (i.programmeItem.short_title.blank? ? i.programmeItem.title : i.programmeItem.short_title)
-            end
-        }.compact.join("\n")
+        if (@exclude_items == false)
+            label += p.programmeItemAssignments.collect { |i|
+                if i.programmeItem.time_slot && (@allowed_roles.include? i.role)
+                    "(" + i.role.name[0] +
+                    ") <b>" + i.programmeItem.time_slot.start.strftime('%a %H:%M') + "</b> : " + 
+                    i.programmeItem.room.name + " " +
+                    (i.programmeItem.short_title.blank? ? i.programmeItem.title : i.programmeItem.short_title)
+                end
+            }.compact.join("\n")
+        end
     
         y, x = i.divmod(cols)
         pdf.grid(y,x).bounding_box do |b|
