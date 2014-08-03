@@ -74,11 +74,14 @@ PublicationsApp.PrintManagement = (function(Backbone){
                                     if ((value.length > 0) && (formValues.people.length > 0)) return err;
                                 }
                         ]
-                }
+                },
+            single : { type : 'Checkbox', title : '<%= t "publications-one-per-person-only" %>' }
+
         },
         
         data : {
-            page_size : 'LETTER'
+            page_size : 'LETTER',
+            single : false
         }
     });
     

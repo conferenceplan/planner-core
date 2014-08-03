@@ -591,6 +591,7 @@ class PlannerReportsController < PlannerController
   def table_tents
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     @itemList = (params[:items] && params[:items].length > 0) ? URI.unescape(params[:items]).split(',') : nil
+    @single = (!params[:single].blank?) ? params[:single] == "true" : false
     
     @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList, nil, @itemList
     @page_size = params[:page_size]
