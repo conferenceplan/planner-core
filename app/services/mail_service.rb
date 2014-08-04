@@ -56,6 +56,7 @@ module MailService
     begin
       PlannerMailer.send_email({
           from:     config.from,
+          reply_to: config.reply_to,
           to:       to,
           cc:       cc,
           subject:  template.subject,
@@ -109,6 +110,7 @@ module MailService
     begin
       PlannerMailer.send_email({
           from:     config.from,
+          reply_to: config.reply_to,
           to:       to,
           cc:       cc,
           subject:  template.subject,

@@ -14,6 +14,7 @@ json.array! @programmeItems.each do |item|
     
     loc = [item.published_room_item_assignment.published_room.name]
     loc = loc << item.published_room_item_assignment.published_room.published_venue.name if !@singleVenue
+    loc = loc << "" if @singleVenue
     
     json.loc        loc
     json.people     item.published_programme_item_assignments.each do |assignment| 
