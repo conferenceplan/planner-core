@@ -42,10 +42,10 @@ class PublishJob
         pstatus.status = :completed
         pstatus.save!
         
-        Rails.cache.clear # make sure that the mem cache is flushed
-        clearDalliCache # clear the mem cache ...
-        post_process
       end
+      Rails.cache.clear # make sure that the mem cache is flushed
+      clearDalliCache # clear the mem cache ...
+      post_process
     end
   end
   
