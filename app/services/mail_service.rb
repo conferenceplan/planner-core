@@ -31,6 +31,44 @@ module MailService
   #
   #
   #
+  def self.sendGeneralEmail(email, mail_use, survey = nil, respondentDetails = nil)
+    config = MailConfig.first # it will be the first mail config anyway
+    raise "there is no mail configuration" if !config
+
+    if (survey)
+      template = MailTemplate.first(:conditions => ["mail_use_id = ? and survey_id = ?",mail_use.id, survey.id])
+    else  
+      template = MailTemplate.first(:conditions => ["mail_use_id = ?",mail_use.id])
+    end
+    raise "can not find a template for the email" if !template
+    
+    toInviteState = template.transiton_invite_status
+
+    content = generateEmailContent(template, {
+            :person             => nil,
+            :survey             => survey,
+            :respondentDetails  => respondentDetails
+          })
+
+    begin
+      PlannerMailer.send_email({
+          from:     config.from,
+          reply_to: config.reply_to,
+          to:       email,
+          cc:       config.cc,
+          subject:  template.subject,
+          title:    template.title
+        }, content
+      ).deliver
+      transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
+    rescue => msg
+      # THROW ERROR - TODO
+    end    
+  end
+  
+  #
+  #
+  #
   def self.sendEmail(person, mail_use, survey = nil, respondentDetails = nil)
     config = MailConfig.first # it will be the first mail config anyway
     raise "there is no mail configuration" if !config

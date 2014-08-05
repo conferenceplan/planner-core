@@ -129,6 +129,8 @@ class Surveys::ResponseController < ApplicationController
       begin
         if (@respondent)
           MailService.sendEmail(@respondent.person, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails))
+        else
+          MailService.sendGeneralEmail(respondentDetails.email, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails)) if respondentDetails.email
         end
       rescue Exception => err
         logger.error "Unable to send the email to " + @respondent.email if @respondent
