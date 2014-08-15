@@ -13,7 +13,8 @@ prawn_document(:page_size => @label_dimensions.page_size,
     rows = @label_dimensions.down
 
     pdf.define_grid(:columns => cols, :rows => rows, 
-                    :row_gutter => (@label_dimensions.vertical_spacing * 1.send(@label_dimensions.unit)), :column_gutter => (@label_dimensions.horizontal_spacing * 1.send(@label_dimensions.unit)))
+                    :row_gutter => (@label_dimensions.vertical_spacing * 1.send(@label_dimensions.unit)), 
+                    :column_gutter => (@label_dimensions.horizontal_spacing * 1.send(@label_dimensions.unit)))
     
     i = x = y = 0
     @people.each do |p|
@@ -34,8 +35,9 @@ prawn_document(:page_size => @label_dimensions.page_size,
     
         y, x = i.divmod(cols)
         pdf.grid(y,x).bounding_box do |b|
+            pdf.transparent(0.5) { pdf.dash(1); pdf.stroke_bounds; pdf.undash }
             # use text_box so that we truncate/re-size the text
-            pdf.text_box label, :at => [(pdf.bounds.top_left[0] + bleed.in),(pdf.bounds.top_left[1] + bleed.in)], # plus blead
+            pdf.text_box label, :at => [(pdf.bounds.top_left[0] + bleed.in),(pdf.bounds.top_left[1] - bleed.in)], # plus blead
                             :width => pdf.bounds.right - bleed.in, # minus blead
                             :height => pdf.bounds.height - bleed.in, # minus blead
                             :overflow => :shrink_to_fit,

@@ -210,6 +210,8 @@ EOS
                 newItem.published_time_slot = newTimeSlot
                 newItem.save
             end
+            newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
+            newItem.published_room_item_assignment.save
           else
             newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
             assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
