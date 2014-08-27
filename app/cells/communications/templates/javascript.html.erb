@@ -20,7 +20,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
                                         },
 
             subject         : { type : 'Text', title : '<%= t "mail-subject-line" %>' },
-            content         : { type : 'Html', title : '<%= t "mail-content" %>' }
+            content         : { type : 'HtmlExt', title : '<%= t "mail-content" %>', imagetype : 'PlannerMobile::MobileContentImage', gallery : 'mails', editorAttrs : {rows : 40} }
         }
     });
     
