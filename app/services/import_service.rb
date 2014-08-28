@@ -17,15 +17,24 @@ module ImportService
       replace = text.gsub(/\r\n?/, "\n")
       File.open(filename, "w") {|file| file.puts replace}
 
+      # get the number of columns in the file      
+      nbr_of_cols = 0
+      CSV.foreach(filename) do |row|
+        nbr_of_cols = row.size
+        break
+      end
+
       # and now do the conversion      
       eolChar = '\\n'
+      extras = Array.new(nbr_of_cols - fields.size, '@dummy')
+      extra_cols = extras.join(",")
       query = "load data LOCAL infile '" + 
               filename + 
               "' replace into table pending_import_people FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\\\\' " +
               " LINES TERMINATED BY '" + eolChar + "' STARTING BY '' " +
               (ignore_first_line ? "IGNORE 1 LINES" : "") +
               "(" + 
-              fields.collect{|f| f ? f : '@dummy' }.join(",") + 
+              fields.collect{|f| f ? f : '@dummy' }.join(",") + (extra_cols.blank? ? "" : "," + extra_cols) +
               ") SET datasource_id = " + datasource_id.to_s + 
               ", updated_at = NOW(), created_at = NOW();"
       
