@@ -122,7 +122,7 @@ module SurveyService
                               createJoinPart2(surveyQuery.survey_query_predicates, metadata, query[2]) + 
                               ' left join survey_histories hist on hist.survey_id = ' + surveyQuery.survey_id.to_s + 
                               ' and hist.survey_respondent_detail_id = res.id' + 
-                              createWherePart(surveyQuery.survey_query_predicates, metadata, query[2]) +
+                              #createWherePart(surveyQuery.survey_query_predicates, metadata, query[2]) +
                               dateOrder
                                )
 
@@ -389,7 +389,7 @@ private
         op = mapToOperator(subclause['operation'])
         
         # where part
-        if !questionIds.include?(subclause["survey_question_id"].to_i)
+        if !questionIds.include?(subclause["survey_question_id"].to_i) # because it is a set we do not deal with the same predicate used twice in the query !!! TODO
           # from part
           fromPart += ', survey_responses as r' + nbrOfResponse.to_s
           
@@ -402,6 +402,13 @@ private
           
           if ( [:singlechoice, :multiplechoice].include? subclause.survey_question.question_type )
             andPart += 'r' + nbrOfResponse.to_s + ".response is not null"
+            andPart += ' AND '
+            andPart += 'r' + nbrOfResponse.to_s + ".response " + op[0]
+            andPart += " '"
+            andPart += "%" if (op[1] == true && op[2] == false)
+            andPart += subclause["value"] if (op[1] == true)
+            andPart += "%" if (op[1] == true && op[2] == false)
+            andPart += "'"
           else  
             andPart += 'r' + nbrOfResponse.to_s + ".response " + op[0]
             andPart += " '"
@@ -417,12 +424,13 @@ private
         else
           # andPart
           andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
-          andPart += 'r' + mapping[subclause["survey_question_id"]].to_s + ".response " + op[0] 
-          andPart += " '"
-          andPart += "%" if (op[1] == true && op[2] == false)
-          andPart += subclause["value"] if (op[1] == true)
-          andPart += "%" if (op[1] == true && op[2] == false)
-          andPart += "'"
+            andPart += 'r' + mapping[subclause["survey_question_id"]].to_s + ".response " + op[0] 
+            andPart += " '"
+            andPart += "%" if (op[1] == true && op[2] == false)
+            andPart += subclause["value"] if (op[1] == true)
+            andPart += "%" if (op[1] == true && op[2] == false)
+            andPart += "'"
+          # end
         end
         
       end
