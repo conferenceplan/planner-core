@@ -300,7 +300,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
                 $("[id$=indicator]").css('background-color', 'white');
                 $('#step-4-indicator').css('background-color', 'lightgray');
                 var datasource = stepToView[1].view.model.get('datasource_id');
-                var uploadFilename = stepToView[2].view.model.get('file_upload');
+                var uploadFilename = stepToView[2].view.model.get('file_upload').split('\\').pop().split("/").pop();
                 stepToView[4].view.model.set('datasource_id',datasource);
                 stepToView[4].view.model.set('file',uploadFilename);
             }
