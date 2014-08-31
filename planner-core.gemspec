@@ -69,6 +69,9 @@ Gem::Specification.new do |s|
   # These need to be define in the parent application!
   # s.add_dependency 'rack-jsonp'
   # s.add_dependency 'rack-jsonp-middleware' #, :require => 'rack/jsonp'
-  s.add_dependency  'twitter-typeahead-rails'
+  s.add_dependency 'twitter-typeahead-rails'
+  
+  #
+  s.add_dependency 'encoding_sampler'
 
 end

@@ -41,6 +41,7 @@ require 'dalli'
 require "connection_pool"
 require "routing-filter"
 require "twitter-typeahead-rails"
+require "encoding_sampler"
 
 # require 'actionmailer' # CHECK
 # require 'activerecord' 

@@ -11,12 +11,25 @@ module ImportService
       fields = []
       mapping.attributes.collect{|name,val| fields[val] = name if (["lock_version", "created_at", "updated_at", "id", "datasource_id"].index(name) == nil) && val != nil }
   
+      sampler = EncodingSampler::Sampler.new(filename, ['ASCII-8BIT', 'UTF-8', 'ISO-8859-1', 'ISO-8859-2', 'ISO-8859-15'])
+      
+      # logger.debug sampler.valid_encodings
+      
+      if ! sampler.valid_encodings.include?('UTF-8')
+        # then convert the file
+        # string.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
+        text = File.read(filename)
+        replace = text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
+        File.open(filename, "w") {|file| file.puts replace}
+      end
+
       # we need to take into account the different types of line endings \r \n and \r\n
       # so make sure all the files are the same for eol
       text = File.read(filename)
       replace = text.gsub(/\r\n?/, "\n")
       File.open(filename, "w") {|file| file.puts replace}
-
+      
+      # Examine the file to figure out its character encoding
       # get the number of columns in the file      
       nbr_of_cols = 0
       CSV.foreach(filename) do |row|
