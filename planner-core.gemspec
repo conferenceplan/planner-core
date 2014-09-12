@@ -70,6 +70,7 @@ Gem::Specification.new do |s|
   # s.add_dependency 'rack-jsonp'
   # s.add_dependency 'rack-jsonp-middleware' #, :require => 'rack/jsonp'
   s.add_dependency 'twitter-typeahead-rails'
+  s.add_dependency 'figaro'
   
   #
   s.add_dependency 'encoding_sampler'

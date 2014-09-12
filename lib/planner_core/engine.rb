@@ -42,6 +42,7 @@ require "connection_pool"
 require "routing-filter"
 require "twitter-typeahead-rails"
 require "encoding_sampler"
+require "figaro"
 
 # require 'actionmailer' # CHECK
 # require 'activerecord' 
