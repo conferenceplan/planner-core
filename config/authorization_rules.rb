@@ -100,6 +100,8 @@ authorization do
     has_permission_on :communications_mail_history, :to => :read
     has_permission_on :communications_mail_templates, :to => :read
     has_permission_on :surveys, :to => :read
+    has_permission_on :surveys_survey_groups, :to => :read
+    has_permission_on :surveys_survey_groups_survey_questions, :to => :read
     has_permission_on :communications_mailing, :to => :manage
     has_permission_on :items_confict_exceptions, :to => :manage
     has_permission_on :external_images, :to => :manage
@@ -135,6 +137,8 @@ authorization do
      has_permission_on :equipment_types, :to => :supermanage
      has_permission_on :equipment_needs, :to => :supermanage
      has_permission_on :surveys, :to => :supermanage
+    has_permission_on :surveys_survey_groups, :to => :supermanage
+    has_permission_on :surveys_survey_groups_survey_questions, :to => :supermanage
      has_permission_on :survey_respondents_tags_admin, :to => :manage
   end
 
@@ -149,7 +153,7 @@ privileges do
     privilege :report, :includes => [:library_talks,:missing_bio,:moderators,:art_night,:music_night,:program_types,:free_text,:tags_by_context,:available_during,:panels_with_panelists,:panelists_with_panels,
         :people_without_panels, :admin_tags_by_context,:panels_date_form,:panelists_with_metadata,:interviewable,:panels_by_room,:panels_by_timeslot,:failed,:sent, 
         :surveyNames, :surveyQueryNames, :show, :questions, :runReport, :delSurveyQuery, :table_tents, :people_by_tag, :badge_labels, :room_signs, :people_nbr_items, :people_items_over_max, :participants_with_no_bios, :program_book_report,
-        :panels_without_moderator, :edited_bios, :report_word_counts, :items_with_one_person, :capacity_report, :equipment_needs, :change_sheet]
+        :panels_without_moderator, :edited_bios, :report_word_counts, :items_with_one_person, :capacity_report, :equipment_needs, :change_sheet, :part_schedule]
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
         :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments, :listWithBlank, :items, :surveys]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :updateParticipants, :copy,
