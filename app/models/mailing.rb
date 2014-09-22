@@ -11,7 +11,7 @@ class Mailing < ActiveRecord::Base
   def as_json(options={})
     res = super()
 
-    res['mail_use'] = mail_template.mail_use.name  
+    res['mail_use'] = mail_template ? mail_template.mail_use.name : ''
         
     return res
   end
