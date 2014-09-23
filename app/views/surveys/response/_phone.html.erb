@@ -5,12 +5,12 @@
 <div class="col-sm-12">
 <div class="form-group <%='error' if @errors && @errors[question.id] %>">
 
-        <div class="col-sm-2">
+        <label class="control-label col-sm-2">
             <%= question.question %>
             <% if question.survey_format.help && !question.survey_format.help.blank? %>
             <a class="survey-help" href="#" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
             <% end %>
-        </div>
+        </label>
         <div class="col-sm-4">
         <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 30, :class => "col-xs-12" %>
         </div>
