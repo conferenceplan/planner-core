@@ -79,6 +79,7 @@ class Communications::MailingController < PlannerController
     
     if @mailing.scheduled
       mailingJob = MailingJob.new
+      mailingJob.mailing_id = @mailing.id
       Delayed::Job.enqueue mailingJob
     end
   end
