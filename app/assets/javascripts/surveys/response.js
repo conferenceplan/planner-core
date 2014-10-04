@@ -88,6 +88,11 @@
                             
                             // and then use this array with the autocomplete functionality
                             element.autocomplete({
+                                open: function(){
+                                        $(this).autocomplete('widget').css('z-index', 10);
+                                        $(this).autocomplete('widget').css('background-color', 'white');
+                                        return false;
+                                },
                                 source: function(request, response){
                                     var re = $.ui.autocomplete.escapeRegex(extractLast(request.term));
                                     var matcher = new RegExp("^" + re, "i");

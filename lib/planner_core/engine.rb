@@ -32,6 +32,7 @@ require 'bootstrap3-datetimepicker-rails'
 require 'd3_rails'
 require 'jqgrid-jquery-rails'
 require 'prawn_rails'
+require 'prawn/table'
 require "select2-rails"
 require "recaptcha/rails" # ????
 require "recaptcha" #, 
