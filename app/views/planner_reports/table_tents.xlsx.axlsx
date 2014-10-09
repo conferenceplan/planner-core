@@ -12,20 +12,22 @@ wb.add_worksheet(name: "Table Tents") do |sheet|
         'Date',
     ]
     
-    @people.each do |person|
-        # should be the published items
-        person.published_programme_items.collect{|i| @itemList ? (@itemList.include?(i.id.to_s) ? i : nil) : i }.compact.each do |item|
-            sheet.add_row [
-                person.getFullPublicationName,
-                item.title,
-                item.precis,
-                (item.format ? item.format.name : ''),
-                item.published_room.name,
-                item.published_room.published_venue.name,
-                item.published_time_slot.start.strftime('%A'),
-                item.published_time_slot.start.strftime('%H:%M'),
-                item.published_time_slot.start.strftime('%y-%m-%d')
-            ]
+    if @people
+        @people.each do |person|
+            # should be the published items
+            person.published_programme_items.collect{|i| @itemList ? (@itemList.include?(i.id.to_s) ? i : nil) : i }.compact.each do |item|
+                sheet.add_row [
+                    person.getFullPublicationName,
+                    item.title,
+                    item.precis,
+                    (item.format ? item.format.name : ''),
+                    item.published_room.name,
+                    item.published_room.published_venue.name,
+                    item.published_time_slot.start.strftime('%A'),
+                    item.published_time_slot.start.strftime('%H:%M'),
+                    item.published_time_slot.start.strftime('%y-%m-%d')
+                ]
+            end
         end
     end
 end

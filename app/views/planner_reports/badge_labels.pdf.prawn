@@ -9,6 +9,8 @@ prawn_document(:page_size => @label_dimensions.page_size,
                 :left_margin => @label_dimensions.left_margin * 1.send(@label_dimensions.unit),
                 :right_margin => @label_dimensions.right_margin * 1.send(@label_dimensions.unit),
     ) do |pdf|
+    render "font_setup", :pdf => pdf
+    
     cols = @label_dimensions.across
     rows = @label_dimensions.down
 
@@ -41,7 +43,8 @@ prawn_document(:page_size => @label_dimensions.page_size,
                             :width => pdf.bounds.right - bleed.in, # minus blead
                             :height => pdf.bounds.height - bleed.in, # minus blead
                             :overflow => :shrink_to_fit,
-                            :inline_format => true
+                            :inline_format => true,
+                            :fallback_fonts => fallback_fonts
         end
         if (y == (rows -1) && x == (cols -1))
             i = 0
