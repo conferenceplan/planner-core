@@ -3,7 +3,6 @@ class Person < ActiveRecord::Base
                   :invitestatus_id, :invitation_category_id, :acceptance_status_id, :pseudonym_attributes
   attr_accessor :details
 
-  accepts_nested_attributes_for :postal_addresses, :email_addresses, :phone_numbers, :pseudonym, :edited_bio, :available_date
 
   acts_as_taggable
   
@@ -24,6 +23,8 @@ class Person < ActiveRecord::Base
             :source => :addressable,
             :source_type => 'PhoneNumber'
 
+  accepts_nested_attributes_for :postal_addresses, :email_addresses, :phone_numbers
+
   has_many  :relationships, :dependent => :delete_all
 
   has_many  :related_people, :through => :relationships,
@@ -38,6 +39,8 @@ class Person < ActiveRecord::Base
   has_one :datasource, :through => :peoplesource
 
   before_destroy :check_if_assigned
+
+  accepts_nested_attributes_for :pseudonym, :edited_bio
 
   # named_scope :by_last_name, :order => "last_name ASC"
   def by_last_name
