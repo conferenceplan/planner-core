@@ -10,7 +10,7 @@ json.rowdata @result.collect do |result|
     json.last_name  result.last_name
     json.suffix     result.suffix
     json.email      result.email
-    if result.survey_respondent
+    if result.survey_respondent && result.survey_respondent.person && result.survey_respondent.person.postal_addresses[0]
         json.country    (result.survey_respondent.person.postal_addresses[0].city ? result.survey_respondent.person.postal_addresses[0].city + ', ' : '')  + result.survey_respondent.person.postal_addresses[0].country
     else
         json.country ''

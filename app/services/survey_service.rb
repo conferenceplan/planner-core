@@ -100,7 +100,7 @@ module SurveyService
                             includes([:survey_histories, :survey_responses, {:survey_respondent => {:person => :postal_addresses}}]).
                             where(query).
                             where("survey_histories.survey_id = ?", surveyQuery.survey_id).
-                            order(:last_name, :first_name)
+                            order("survey_respondent_details.last_name, survey_respondent_details.first_name")
     
   end
   
