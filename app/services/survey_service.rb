@@ -96,7 +96,12 @@ module SurveyService
     
     # TODO - We need to deal with the ALL option
     
-    SurveyRespondentDetail.joins(:survey_responses).includes(:survey_responses).where(query)
+    SurveyRespondentDetail.joins(:survey_responses, :survey_histories).
+                            includes([:survey_histories, :survey_responses, {:survey_respondent => {:person => :postal_addresses}}]).
+                            where(query).
+                            where("survey_histories.survey_id = ?", surveyQuery.survey_id).
+                            order(:last_name, :first_name)
+    
   end
   
   #

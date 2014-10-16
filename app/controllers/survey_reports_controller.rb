@@ -15,8 +15,8 @@ class SurveyReportsController < PlannerController
     
     @meta_data = {}
     @show_country = surveyQuery.show_country
+    @site_config = SiteConfig.first
     
-    # TODO - we want to have the uniq ids for the questions?
     surveyQuery.survey_query_predicates.each do |p|
       @meta_data[p.survey_question.id] = {:question_type => p.survey_question.question_type, :question => p.survey_question.question, :id =>p.survey_question.id }
     end

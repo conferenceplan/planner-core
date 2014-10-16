@@ -3,6 +3,7 @@ class SurveyRespondentDetail < ActiveRecord::Base
   
   has_many :survey_responses
   belongs_to  :survey_respondent 
+  has_many :survey_histories
 
   # Get the responses for a particular survey
   def getResponses(surveyId)
