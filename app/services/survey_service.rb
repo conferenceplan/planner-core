@@ -5,7 +5,6 @@
 #
 module SurveyService
 
-
   #
   #
   #
@@ -88,62 +87,18 @@ module SurveyService
   def self.findQuestionForMaxItemsPerCon
     SurveyQuestion.find :first, :conditions => ['questionmapping_id = ?', QuestionMapping['ItemsPerConference'].id] # There should only be one
   end
-  
+
   #
   #
-  #
-  def self.runReport(surveyQuery)
+  #  
+  def self.executeReport(surveyQuery)
+    query = constructQuery(surveyQuery.survey_query_predicates, surveyQuery.operation)
     
-    selectStr = createSelectPart(surveyQuery.survey_query_predicates, surveyQuery.operation)
+    # TODO - We need to deal with the ALL option
     
-    query = createQuery(surveyQuery.survey_query_predicates, surveyQuery.operation)
-    count = SurveyRespondentDetail.count_by_sql('SELECT count(*) ' + query[0])
-    
-    # logger.debug resultSet
-    cols = SurveyRespondentDetail.connection.select_all("select id, question, question_type from survey_questions where id in (" + query[1].to_a.join(',') + ')')
-    
-    metadata = {}
-    if (cols.size() > 0)
-      cols.each do |c|
-        metadata['r'+ query[2][c['id'].to_i].to_s] = c
-      end
-    end
-    
-    if (surveyQuery.date_order)
-      # change the order by to order by the creation date
-      dateOrder = ' order by hist.filled_at desc'
-    else
-      dateOrder = ''
-    end
-
-    resultSet = SurveyRespondentDetail.connection.select_all(createJoinPart1(surveyQuery.survey_query_predicates, metadata, query[2]) + 
-                              selectStr + query[0] +
-                              ' order by last_name'  +
-                              createJoinPart2(surveyQuery.survey_query_predicates, metadata, query[2]) + 
-                              ' left join survey_histories hist on hist.survey_id = ' + surveyQuery.survey_id.to_s + 
-                              ' and hist.survey_respondent_detail_id = res.id' + 
-                              #createWherePart(surveyQuery.survey_query_predicates, metadata, query[2]) +
-                              dateOrder
-                               )
-
-    # it would be good to also get the person's address (country) if there is a corresponding survey_respondent and person ...
-    # oid in the result set is the survey_respondent_details
-    resDetails = SurveyRespondentDetail.find_all_by_id  resultSet.collect{ |r| r['oid'] }, :include => { :survey_respondent => {:person => :postal_addresses} },
-                                                    :conditions => {"postal_addresses.isdefault" => true}
-
-    resultMap = {}
-    resDetails.map { |r| resultMap[r.id] = r}
-                                                        
-    # Now we need to append the address information to the result set !!
-    resultSet.collect { |a| 
-            a.tap { |r|
-              r['country'] = ( resultMap[r['oid']] ) ? resultMap[r['oid']].survey_respondent.person.postal_addresses[0].city + ', ' + resultMap[r['oid']].survey_respondent.person.postal_addresses[0].country : ''
-            }
-          }
-    
-    { :meta_data => metadata, :result_set => resultSet, :count => count }
+    SurveyRespondentDetail.joins(:survey_responses).includes(:survey_responses).where(query)
   end
-
+  
   #
   # Given the id of a person return the surveys that that person has responded to
   #
@@ -282,192 +237,48 @@ module SurveyService
     
     response.response if response
   end
+  
 
 private
-
-  def self.createJoinPart1(queryPredicates, metadata, mapping)
-    tz_offset = Time.zone.formatted_offset # number of hours offset for the application timezone TODO - use the time zone of the convention
-
-    selectPart = 'select @rownum:=@rownum+1 as id, res.id as oid, ' +
-                  "DATE_FORMAT(CONVERT_TZ(hist.filled_at,'-00:00','"+ tz_offset + "'), '%h:%i %p, %d %M %Y')" +
-                  ' as filled_at, ' +
-                  'res.first_name, res.last_name, res.suffix, res.email, res.survey_respondent_id'
-    questionIds = Set.new
+  #
+  # Use AREL to construct a query based on the predicates
+  #
+  def self.constructQuery(queryPredicates, operation)
+    responseTable = Arel::Table.new(:survey_responses)
+    query = nil
     
-    if (queryPredicates)
-      queryPredicates.each  do |subclause|
-        # if  metadata['r' + nbrOfResponse.to_s]
-        if !questionIds.include?(subclause["survey_question_id"].to_i)
-          selectPart += ', res.q' +  mapping[subclause["survey_question_id"]].to_s
-          
-          if ((metadata['r' + mapping[subclause["survey_question_id"]].to_s]['question_type'].include? "singlechoice"))
-            selectPart += ', IFNULL(a' + mapping[subclause["survey_question_id"]].to_s + '.answer,res.r' + mapping[subclause["survey_question_id"]].to_s + ') as r' +  mapping[subclause["survey_question_id"]].to_s
-          else  
-            selectPart += ', res.r' + mapping[subclause["survey_question_id"]].to_s + ' as r' +  mapping[subclause["survey_question_id"]].to_s
-          end
-          questionIds.add(subclause["survey_question_id"].to_i)
-        end
+    if queryPredicates
+      queryPredicates.each do |predicate|
+        opAndValue = getOpAndValue(predicate["operation"], predicate["value"])
+        q = responseTable[:response].send(opAndValue[0],opAndValue[1]).
+                      and(responseTable[:survey_question_id].eq(predicate["survey_question_id"]))
+        query = query ? query.or(q) : q
       end
     end
     
-    return selectPart + ' from (SELECT @rownum:=0) rn, ( '
+    query
   end
   
-  def self.createWherePart(queryPredicates, metadata, mapping)
-    res = ''
-
-    if (queryPredicates.size > 0)
-      i = 0
-      queryPredicates.each  do |subclause|
-        if ( [:singlechoice, :multiplechoice].include? subclause.survey_question.question_type )
-          res += ' where ' if i == 0
-          res += ' AND ' if i > 0
-          res += '(a' + mapping[subclause["survey_question_id"]].to_s + '.answer is not null)'
-          i += 1
-        end
-      end
-    end
-    
-    res
-  end
-
-  def self.createJoinPart2(queryPredicates, metadata, mapping)
-    result = ' ) res '
-    questionIds = Set.new
-
-    if (queryPredicates)
-      queryPredicates.each  do |subclause|
-        # if  metadata['r' + nbrOfResponse.to_s]
-        if !questionIds.include?(subclause["survey_question_id"].to_i)
-          if ((metadata['r' + mapping[subclause["survey_question_id"]].to_s]['question_type'].include? "singlechoice"))
-            result += ' left join survey_answers a' + mapping[subclause["survey_question_id"]].to_s + ' on a' + mapping[subclause["survey_question_id"]].to_s + '.id = res.r' + mapping[subclause["survey_question_id"]].to_s
-            #
-            if ( [:singlechoice, :multiplechoice].include? subclause.survey_question.question_type )
-              result += ' AND a' + mapping[subclause["survey_question_id"]].to_s + '.answer = "' + subclause["value"] + '" '
-            end  
-          end
-          questionIds.add(subclause["survey_question_id"].to_i)
-        end
-      end
-    end
-    
-    return result
-  end
-  
-  def self.createSelectPart(queryPredicates, operation)
-    selectPart = 'SELECT d.id, d.first_name, d.last_name, d.suffix, d.email, d.survey_respondent_id'
-    nbrOfResponse = 1
-    questionIds = Set.new
-
-    if (queryPredicates)
-      queryPredicates.each  do |subclause|
-        # select part
-        if !questionIds.include?(subclause["survey_question_id"])
-          selectPart += ', r' + nbrOfResponse.to_s + '.survey_question_id as q' +  nbrOfResponse.to_s 
-          selectPart += ', r' + nbrOfResponse.to_s + '.response as r' + nbrOfResponse.to_s
-          questionIds.add(subclause["survey_question_id"])
-        
-          nbrOfResponse += 1
-        end
-      end
-    end  
-    
-    return selectPart
-  end
-
-  def self.createQuery(queryPredicates, operation)
-    fromPart = ' FROM survey_respondent_details d'
-    wherePart = ' WHERE '
-    andPart = ' AND ('
-    nbrOfResponse = 1
-    questionIds = Set.new
-    mapping = {}
-
-    if (queryPredicates)
-      lastid = queryPredicates.count() 
-      queryPredicates.each  do |subclause|
-        op = mapToOperator(subclause['operation'])
-        
-        # where part
-        if !questionIds.include?(subclause["survey_question_id"].to_i) # because it is a set we do not deal with the same predicate used twice in the query !!! TODO
-          # from part
-          fromPart += ', survey_responses as r' + nbrOfResponse.to_s
-          
-          wherePart += ' AND ' if nbrOfResponse > 1
-          wherePart += 'r' + nbrOfResponse.to_s + '.survey_respondent_detail_id = d.id AND r' + nbrOfResponse.to_s + ".survey_question_id = '" + subclause["survey_question_id"].to_s + "'"
-          questionIds.add(subclause["survey_question_id"].to_i)
-          
-          # andPart
-          andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
-          
-          if ( [:singlechoice, :multiplechoice].include? subclause.survey_question.question_type )
-            andPart += 'r' + nbrOfResponse.to_s + ".response is not null"
-            andPart += ' AND '
-            andPart += 'r' + nbrOfResponse.to_s + ".response " + op[0]
-            andPart += " '"
-            andPart += "%" if (op[1] == true && op[2] == false)
-            andPart += subclause["value"] if (op[1] == true)
-            andPart += "%" if (op[1] == true && op[2] == false)
-            andPart += "'"
-          else  
-            andPart += 'r' + nbrOfResponse.to_s + ".response " + op[0]
-            andPart += " '"
-            andPart += "%" if (op[1] == true && op[2] == false)
-            andPart += subclause["value"] if (op[1] == true)
-            andPart += "%" if (op[1] == true && op[2] == false)
-            andPart += "'"
-          end
-          
-          mapping[subclause["survey_question_id"]] = nbrOfResponse
-        
-          nbrOfResponse += 1
-        else
-          # andPart
-          andPart += (operation == 'ALL') ? ' AND ' : ' OR ' if nbrOfResponse > 1
-            andPart += 'r' + mapping[subclause["survey_question_id"]].to_s + ".response " + op[0] 
-            andPart += " '"
-            andPart += "%" if (op[1] == true && op[2] == false)
-            andPart += subclause["value"] if (op[1] == true)
-            andPart += "%" if (op[1] == true && op[2] == false)
-            andPart += "'"
-          # end
-        end
-        
-      end
-    end  
-    
-    return [fromPart + wherePart + andPart + ')', questionIds, mapping]
-  end
- 
   #
-  # Given a string that represents an operation, return a triple that provides more information about the op and can be used
-  # to generate the SQL
+  # Get the operation and value based on what was picked by the user
   #
-  def self.mapToOperator(operation)
-    op = ''
-    useValue = true
-    noWildcard = false
-
+  def self.getOpAndValue(operation, value)
     case operation
     when 'does not contain'
-      op = ' not like '
+      ['does_not_match', '%' + value + '%']
     when 'answered'
-      op = " != '' "
-      useValue = false
+      # not null and not blank
+      ["not_eq_all", ['', nil]]
     when 'not answered'
-      op = " = '' "
-      useValue = false
+      # is null or blank
+      ["eq_any", ['', nil]]
     when 'is not'
-      op = " != "
-      noWildcard = true
+      ["not_eq", value]
     when 'is'
-      op = " = "
-      noWildcard = true
+      ["eq", value]
     else
-      op = ' like '
+      ['matches', '%' + value + '%']
     end
-
-    return [op, useValue, noWildcard]    
   end
     
 end
