@@ -3,8 +3,10 @@ class Person < ActiveRecord::Base
                   :invitestatus_id, :invitation_category_id, :acceptance_status_id, :pseudonym_attributes
   attr_accessor :details
 
-  validates_numericality_of :mailing_number, :allow_nil => true # TODO - set the deafilt to 0 in DB, or move to a separate table containing the mailing information
+  accepts_nested_attributes_for :postal_addresses, :email_addresses, :phone_numbers, :pseudonym, :edited_bio, :available_date
 
+  acts_as_taggable
+  
   # Put in audit for people
   audited :allow_mass_assignment => true
 
@@ -22,25 +24,34 @@ class Person < ActiveRecord::Base
             :source => :addressable,
             :source_type => 'PhoneNumber'
 
-  accepts_nested_attributes_for :postal_addresses, :email_addresses, :phone_numbers
-
   has_many  :relationships, :dependent => :delete_all
 
   has_many  :related_people, :through => :relationships,
             :source => :relatable,
             :source_type => 'Person'
 
+  has_one :pseudonym
+  has_one :bio_image, :dependent => :delete
+  has_one :edited_bio, :dependent => :delete
+  
+  has_one :peoplesource, :dependent => :delete
+  has_one :datasource, :through => :peoplesource
+
+  before_destroy :check_if_assigned
+
   # named_scope :by_last_name, :order => "last_name ASC"
   def by_last_name
     order("ast_name ASC")
   end
   
-  has_one :person_constraints, :dependent => :delete
-
   # ----------------------------------------------------------------------------------------------
   #
-  # TODO - conference specific data should be refactored into a seperate class
+  # TODO - conference specific data - need to change so that the access is scoped by conference id
   #
+  has_one :available_date, :dependent => :delete
+  accepts_nested_attributes_for :available_date
+
+  has_one :person_constraints, :dependent => :delete # THis is the max items per day & conference
 
   has_many  :exclusions, :dependent => :delete_all
   
@@ -68,7 +79,6 @@ class Person < ActiveRecord::Base
               end
             end
   
-  #
   has_many  :programmeItemAssignments, :dependent => :delete_all
   has_many  :programmeItems, :through => :programmeItemAssignments
   
@@ -77,41 +87,25 @@ class Person < ActiveRecord::Base
 
   has_one   :registrationDetail, :dependent => :delete
   has_one   :survey_respondent
-  has_enumerated :invitestatus, :class_name => 'InviteStatus'
 
-  belongs_to  :invitation_category
-  has_enumerated :acceptance_status, :class_name => 'AcceptanceStatus'
-  
-  #
   has_many  :person_mailing_assignments
   has_many  :mailings, :through => :person_mailing_assignments
   has_many  :mail_histories, :through => :person_mailing_assignments
   
-  #
-  acts_as_taggable
+  # TODO - MOVE FOR MUTLI-CONFERENCE to seperate table ... ?????
+  belongs_to      :invitation_category
+  has_enumerated  :acceptance_status, :class_name => 'AcceptanceStatus'
+  has_enumerated  :invitestatus, :class_name => 'InviteStatus'
   
   # ----------------------------------------------------------------------------------------------
   
-  #
-  has_one  :pseudonym
-  accepts_nested_attributes_for :pseudonym
+  def getFullName()
+    [self.first_name,self.last_name,self.suffix].compact.join(' ')
+  end
   
-  has_one :bio_image, :dependent => :delete
-  
-  has_one :edited_bio, :dependent => :delete
-  accepts_nested_attributes_for :edited_bio
-  
-  has_one :available_date, :dependent => :delete
-  accepts_nested_attributes_for :available_date
-  
-  has_one :peoplesource, :dependent => :delete
-  has_one :datasource, :through => :peoplesource
-
-  before_destroy :check_if_assigned
-
   # check that the person has not been assigned to program items, if they have then return an error and do not delete
   def check_if_assigned
-    if programmeItemAssignments.size > 0
+    if programmeItemAssignments.size > 0 # TODO - scope for conference
       raise 'Can not delete a person that has been assigned to programme items'
     end
   end
@@ -124,6 +118,7 @@ class Person < ActiveRecord::Base
     end
   end
 
+  # TODO - scope for conference
   def bio
     edited_bio ? edited_bio.bio : ""
   end
@@ -138,10 +133,6 @@ class Person < ActiveRecord::Base
 
   def facebook
     edited_bio ? edited_bio.facebook : ""
-  end
-  
-  def getFullName()
-    [self.first_name,self.last_name,self.suffix].compact.join(' ')
   end
   
   def updatePhone(new_phone, phonetype)
@@ -293,7 +284,7 @@ class Person < ActiveRecord::Base
   end
   
   def GetSurveyBio
-    response = SurveyService.getSurveyBio id
+    response = SurveyService.getSurveyBio id # TODO - there can be more than one survey with a BIO
     
     if response
       return response.response
@@ -303,7 +294,6 @@ class Person < ActiveRecord::Base
   end
   
   def removePostalAddress(address)
-    # TODO - change to handle any address type
      postal_addresses.delete(address) # remove it from the person
      # and then make sure that it is not used by another person
      if (! addresses.find(:all, :conditions =>  ["addressable_id = ? and person_id != ?", address, @id] ) )
@@ -312,7 +302,6 @@ class Person < ActiveRecord::Base
   end
   
   def removeEmailAddress(address)
-    # TODO - change to handle any address type
      email_addresses.delete(address) # remove it from the person
      # and then make sure that it is not used by another person
      if (! addresses.find(:all, :conditions =>  ["addressable_id = ? and person_id != ?", address, @id] ) )
@@ -335,218 +324,6 @@ class Person < ActiveRecord::Base
         self.removeEmailAddress(eaddress)
       end
     end
-  end
-
-# ---------------------------------------
-# TODO - for import process, move out
-  
-  def UpdateIfPendingPersonDifferent(pending_id,updateAddressFlag,updateNameFlag,newRegistrationDetail)
-    
-    pendingImportPerson = PendingImportPerson.find(pending_id)
-    postalAddresses = self.postal_addresses
-    emailAddresses = self.email_addresses 
-    
-    myRegistrationDetail = self.registrationDetail
-    
-    
-    savePendingStatus = nil
-    # figure out if anything different first
-
-    # see if need address update
-    addressSame = false
-    defaultAddress = nil
-    if ((pendingImportPerson.addressNil? == true) && (self.postal_addresses.length() == 0))
-      addressSame = true
-    else
-       self.postal_addresses.each do |matchaddress|
-         if (pendingImportPerson.addressMatch?(matchaddress))
-            addressSame = true
-         end
-         if (matchaddress.isdefault = true)
-           defaultAddress = matchaddress
-         end
-     end
-    end
-   
-    if (addressSame == false)
-         pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleAddressUpdate")
-    end
-   
-    #see if need email update
-    emailSame = false
-    defaultEmail = nil
-    if ((pendingImportPerson.emailNil? == true) && (self.email_addresses.length() == 0))
-         emailSame = true
-    else
-      self.email_addresses.each do |matchaddress|
-          if (pendingImportPerson.email == matchaddress.email)
-             emailSame = true
-          end #if
-          if (matchaddress.isdefault == true)
-            defaultEmail = matchaddress
-          end
-      end #each person
-    end
-    
-    if (emailSame == false)
-       pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleAddressUpdate")
-    end
-    
-    # check if name is same
-    nameSame = false    
-    if (self.last_name == pendingImportPerson.last_name && self.first_name == pendingImportPerson.first_name && self.suffix == pendingImportPerson.suffix)
-      nameSame = true
-    end
-    
-    if (nameSame == false)
-      pendingImportPerson.pendingtype = PendingType.find_by_name("PossibleNameUpdate")
-    end
-    
-    newRegistration = false
-    if ((myRegistrationDetail == nil) && (newRegistrationDetail != nil))
-      newRegistration = true
-    end
-
-    # see if we can update or just want to save in pending - return false if
-    # saving in pending
-    forceSaveAsPending = false
-    if (nameSame == false)
-      # don't update if the name does not match and an address doesn't match
-      # could be an input file problem
-      if (emailSame == false || addressSame == false)
-        savePendingStatus = pendingImportPerson.pendingtype
-        return savePendingStatus
-        # if name is different, but we are not auto updating names, just return false to
-        # save in pending
-      elsif (updateNameFlag == 'review')
-        savePendingStatus = pendingImportPerson.pendingtype
-        return savePendingStatus
-      end
-    else
-      # don't need to update, can just delete pending since it is the same as 
-      # what we have
-      if (emailSame == true && addressSame == true && newRegistration == false)
-        return nil
-      else
-        if (emailSame == false || addressSame == false)
-          # don't update if we are reviewing address and no reg change - save to pending
-          if (updateAddressFlag == 'review')
-             if (newRegistration == false)
-               savePendingStatus = pendingImportPerson.pendingtype
-               return savePendingStatus          
-             else
-               # force save to pending if reg change and address change
-               forceSaveAsPending = true
-             end
-          end
-        end
-      end
-    end
-
-    # if we get here, there is something to update, but we only do record updates
-    # from the primary datasource - there is too much complexity to manage
-    # updates from multiple sources.Generally, the primary source is registration
-    # and since ultimately, everyone should be in registration, we should not
-    # need other updates.Other sources are for acquiring contact info before
-    # people are registered and should not need updating
-    if (pendingImportPerson.datasource.primary == false)
-      savePendingStatus = pendingImportPerson.pendingtype
-      return savePendingStatus
-    end
-    
-    # check if new address, and if so, figure out if want to save
-    # it as alternate or default
-    newPostalAddress = false
-    setAddressDefault = false
-    if (addressSame == false)
-        if (updateAddressFlag == 'auto')
-          # update default address
-          newPostalAddress = true
-          setAddressDefault = true
-        elsif (updateAddressFlag == 'alternate')
-          #add alternate Address if already have default
-          newPostalAddress = true
-          # no default, go ahead and use this as default
-          if (defaultAddress == nil)
-            setAddressDefault = true
-          end
-        end
-    end
-    
-      
-    # check if new address, and if so, figure out if want to save
-    # it as alternate or default
-    newEmailAddress = false
-    setEmailDefault = false
-    if (emailSame == false)
-      if (pendingImportPerson.datasource.primary == true)
-        if (updateAddressFlag == 'auto')
-          # update default address
-          newEmailAddress = true
-          setEmailDefault = true
-        elsif (updateAddressFlag == 'alternate')
-          #add alternate Address
-          newEmailAddress = true
-          # if no default, go ahead and use this a default
-          if (defaultEmail == nil)
-            setEmailDefault = true
-          end
-        end
-      end
-    end
-    
- 
-   # we have a new postal address, so create one
-   if (newPostalAddress == true)
-       self.postal_addresses.new(:line1 => pendingImportPerson.line1,
-                                 :line2 => pendingImportPerson.line2,
-                                 :city  => pendingImportPerson.city,
-                                 :postcode => pendingImportPerson.postcode,
-                                 :state => pendingImportPerson.state,
-                                 :country => pendingImportPerson.country,
-                                 :phone => pendingImportPerson.phone,
-                                 :isdefault => setAddressDefault)
-      if ((defaultAddress != nil) && (setAddressDefault == true))
-          defaultAddress.isdefault = false
-          defaultAddress.save
-      end
-   end
-      
-   # the person may have previously not had a registration number
-   newRegistration = false
-   if ((myRegistrationDetail == nil) && (newRegistrationDetail != nil))
-   
-      self.registrationDetail = newRegistrationDetail
-      newRegistration = true
-   end
-   
-   # we have a new email address, so create one
-   if (newEmailAddress == true)
-      self.email_addresses.new(:email => pendingImportPerson.email,
-                                 :isdefault => setEmailDefault)
-      if ((defaultEmail != nil) && (setEmailDefault == true))
-          defaultEmail.isdefault = false
-          defaultEmail.save
-      end
-   end
-      
-   # save new addresses
-   if (forceSaveAsPending == false)
-     if (pendingImportPerson.datasource.primary == true)
-        if (newEmailAddress == true || newPostalAddress == true || newRegistration )
-          self.save
-        end
-     end
-   end
-      
-   # update successful
-   if (forceSaveAsPending == true)
-     savePendingStatus = pendingImportPerson.pendingtype
-     return savePendingStatus
-   else
-     return nil
-   end
-   
   end
 
 end

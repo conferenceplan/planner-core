@@ -94,8 +94,6 @@ module SurveyService
   def self.executeReport(surveyQuery)
     query = constructQuery(surveyQuery.survey_query_predicates, surveyQuery.operation)
     
-    # TODO - We need to deal with the ALL option
-    
     SurveyRespondentDetail.joins(:survey_responses, :survey_histories).
                             includes([:survey_histories, :survey_responses, {:survey_respondent => {:person => :postal_addresses}}]).
                             where(query).
