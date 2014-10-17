@@ -8,14 +8,16 @@ module PeopleService
   # along with their Bios
   #
   def self.findConfirmedPeople(peopleIds = nil, tag = nil)
-    whereClause = {:acceptance_status_id => AcceptanceStatus['Accepted'], :invitestatus_id => InviteStatus['Invited'] }
+    whereClause = {'person_con_states.acceptance_status_id' => AcceptanceStatus['Accepted'], 'person_con_states.invitestatus_id' => InviteStatus['Invited'] }
     whereClause[:id] = peopleIds if peopleIds
     
     if (tag)
       Person.tagged_with(tag, :on => 'PrimaryArea', :op => true).where(whereClause).includes([:pseudonym, :bio_image, :edited_bio]).
+              joins(:person_con_state).
               order("people.last_name")
     else  
       Person.where(whereClause).includes([:pseudonym, :bio_image, :edited_bio]).
+              joins(:person_con_state).
               order("people.last_name")
     end
   end
@@ -83,8 +85,8 @@ module PeopleService
   #
   def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false)
     clause = DataService.createWhereClause(filters, 
-          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_id'],
-          ['invitestatus_id', 'invitation_category_id', 'acceptance_status_id', 'mailing_id'], ['people.last_name'])
+          ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
+          ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'], ['people.last_name'])
     
     # add the name search for last of first etc
     if nameSearch #&& ! nameSearch.empty?
@@ -133,6 +135,12 @@ module PeopleService
 
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
+
+    if args[:joins]
+      args[:joins] += ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
+    else  
+      args.merge!( :joins => 'LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id' )
+    end
 
     if includeMailings && clause && (clause[0].include? "mailing_id")
       if args[:joins]

@@ -34,9 +34,9 @@ module PlannerReportsService
   #
   def self.findEditedBios( acceptanceStatus = AcceptanceStatus['Accepted'], inviteStatus = InviteStatus['Invited'], since = nil )
     cndStr = ''
-    cndStr += '(people.acceptance_status_id = ?)' if acceptanceStatus
+    cndStr += '(person_con_states.acceptance_status_id = ?)' if acceptanceStatus
     cndStr += ' AND ' if !cndStr.empty? && inviteStatus
-    cndStr += '(people.invitestatus_id = ?)' if inviteStatus
+    cndStr += '(person_con_states.invitestatus_id = ?)' if inviteStatus
     cndStr += ' AND ' if !cndStr.empty? && since
     cndStr += '(edited_bios.updated_at > ?)' if since
 
@@ -46,6 +46,7 @@ module PlannerReportsService
     conditions << since if since
 
     EditedBio.find :all, :include => {:person => :pseudonym},
+                    :joins => {:person => :person_con_state},
                     :conditions => conditions,
                     :order => 'people.last_name, people.first_name'
   end
@@ -102,7 +103,8 @@ module PlannerReportsService
   #
   #
   def self.findPeopleWithoutItems
-    Person.all :conditions => ["people.acceptance_status_id in (?) AND people.id not in (select person_id from programme_item_assignments)", [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]], 
+    Person.all :conditions => ["person_con_states.acceptance_status_id in (?) AND people.id not in (select person_id from programme_item_assignments)", [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]], 
+              :joins => :person_con_state,
               :include => :pseudonym,
               :order => "people.last_name"
   end

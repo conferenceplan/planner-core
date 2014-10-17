@@ -104,7 +104,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
             }, {
                 name : 'person[invitestatus_id]',
                 label : this.options.invite_status[1], //'Invite Status',
-                index : 'invitestatus_id',
+                index : 'person_con_states.invitestatus_id',
                 hidden : !this.options.invite_status[0],
                 editable : true,
                 edittype : "select",
@@ -152,7 +152,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
             }, {
                 name : 'person[acceptance_status_id]',
                 label : this.options.acceptance_status[1], //'Acceptance',
-                index : 'acceptance_status_id',
+                index : 'person_con_states.acceptance_status_id',
                 hidden : !this.options.acceptance_status[0],
                 editable : true,
                 edittype : "select",

@@ -148,10 +148,10 @@ class PeopleController < PlannerController
   #
   # The invite status etc. should be in a seperate controller. TODO
   #
- def invitestatuslist
-   @inviteStatus = InviteStatus.find :all
+  def invitestatuslist
+    @inviteStatus = InviteStatus.find :all
     render :layout => 'plain'
- end
+  end
 
   def invitestatuslistwithblank
      @inviteStatus = InviteStatus.find :all
@@ -172,7 +172,11 @@ class PeopleController < PlannerController
   def exportbiolist
     accepted = AcceptanceStatus.find_by_name("Accepted")        
     invitestatus = InviteStatus.find_by_name("Invited")
-    @people = Person.find :all,  :conditions => ['acceptance_status_id = ? and invitestatus_id = ?', accepted.id, invitestatus.id], :order => 'last_name, first_name'
+    # TODO  - need to join
+    @people = Person.find :all,
+                  :joins => :person_con_state,
+                  :conditions => ['person_con_states.acceptance_status_id = ? and person_con_states.invitestatus_id = ?', accepted.id, invitestatus.id], 
+                  :order => 'last_name, first_name'
     render :layout => 'content'
   end
   

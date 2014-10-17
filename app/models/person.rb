@@ -1,8 +1,7 @@
 class Person < ActiveRecord::Base
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :language, :comments, :company, :job_title,
-                  :invitestatus_id, :invitation_category_id, :acceptance_status_id, :pseudonym_attributes
+                  :invitation_category_id, :pseudonym_attributes, :acceptance_status_id, :invitestatus_id
   attr_accessor :details
-
 
   acts_as_taggable
   
@@ -95,12 +94,39 @@ class Person < ActiveRecord::Base
   has_many  :mailings, :through => :person_mailing_assignments
   has_many  :mail_histories, :through => :person_mailing_assignments
   
-  # TODO - MOVE FOR MUTLI-CONFERENCE to seperate table ... ?????
-  belongs_to      :invitation_category
-  has_enumerated  :acceptance_status, :class_name => 'AcceptanceStatus'
-  has_enumerated  :invitestatus, :class_name => 'InviteStatus'
+  belongs_to      :invitation_category # TODO - SCOPE
+  
+  has_one      :person_con_state # TODO - SCOPE
   
   # ----------------------------------------------------------------------------------------------
+  def acceptance_status_id=(arg)
+    person_con_state.acceptance_status_id = arg
+    person_con_state.save!
+  end
+  
+  def invitestatus_id=(arg)
+    person_con_state.invitestatus_id = arg
+    person_con_state.save!
+  end
+  
+  
+  def acceptance_status
+    person_con_state.acceptance_status
+  end  
+  
+  def acceptance_status=(arg)
+    person_con_state.acceptance_status = arg
+    person_con_state.save!
+  end
+
+  def invitestatus
+    person_con_state.invitestatus
+  end  
+  
+  def invitestatus=(arg)
+    person_con_state.invitestatus = arg
+    person_con_state.save!
+  end  
   
   def getFullName()
     [self.first_name,self.last_name,self.suffix].compact.join(' ')
