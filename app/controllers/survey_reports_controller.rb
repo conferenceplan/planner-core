@@ -32,9 +32,36 @@ class SurveyReportsController < PlannerController
         outfile = "survey_report_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         # TODO -
         output = Array.new
-        output.push ['First Name', 'Last Name', 'Email', 'Date Filled'].concat @meta_data.collect{ |cn| cn[1][:question] }
+        output.push ['First Name', 'Last Name', 'Suffix', 'Email', 'Date Filled'].concat @meta_data.collect{ |cn| cn[1][:question] }
 
-          # output.push [ res['first_name'], res['last_name'], res['email'], res['filled_at'] ].concat result[:meta_data].collect{ |cn| res[cn[0]] }
+        @result.each do |result|
+          answers = {}
+          result.survey_responses.each do |res|
+              if (@meta_data[res.survey_question_id][:question_type] == :multiplechoice) && answers[res.survey_question_id.to_s]
+                  answers[res.survey_question_id.to_s] += '; ' + res.response
+              elsif (@meta_data[res.survey_question_id][:question_type] == :availability)
+                  if res.response5
+                      answers[res.survey_question_id.to_s] = "I am extremely uncertain when I will be available to be on the Program"
+                  else
+                      answers[res.survey_question_id.to_s] = res.response == '1' ? 'I am available for Program for the complete duration of the convention' : 'I plan to be at the convention.'
+                      if res.response == '2'
+                          answers[res.survey_question_id.to_s] += ": " + (Time.zone.parse(@site_config.start_date.to_s) + res.response1.to_i.day).strftime('%A, %B %e') + ", " + res.response2
+                          answers[res.survey_question_id.to_s] += " => " + (Time.zone.parse(@site_config.start_date.to_s) + res.response3.to_i.day).strftime('%A, %B %e') + ", " + res.response4
+                      end
+                  end
+              else
+                  answers[res.survey_question_id.to_s] = res.response
+              end
+          end
+
+          output.push [
+            result.first_name,
+            result.last_name,
+            result.suffix,
+            result.email,
+            result.survey_histories.first.filled_at.strftime('%I:%M %p, %d %B %Y')
+          ].concat @meta_data.collect{ |cn| answers[cn[0].to_s] }
+        end
         
         csv_out(output, outfile)
       }

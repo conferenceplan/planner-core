@@ -18,7 +18,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             show_country    : { type : 'Checkbox',  title : '<%= t "survey-show-country" %>' },
             date_order      : { type : 'Checkbox',   title : '<%= t "survey-order-by-date-received" %>' },
             operation       : { type : 'Select',    title : '<%= t "survey-operation" %>',
-                                options : ['ALL', 'ANY']
+                                options : ['ANY'] //, 'ALL']
                               },
             // Predicate list
             survey_query_predicates : {
