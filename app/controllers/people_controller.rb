@@ -46,6 +46,7 @@ class PeopleController < PlannerController
         datasourcetmp = Datasource.find_by_name("Application") # TODO - verify, we need to make sure we have the data-source Application
         @person.datasource = datasourcetmp
         @person.save!
+        @person.person_con_state.save!
       end
     rescue => ex
       render status: :bad_request, text: ex.message

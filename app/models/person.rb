@@ -100,13 +100,15 @@ class Person < ActiveRecord::Base
   
   # ----------------------------------------------------------------------------------------------
   def acceptance_status_id=(arg)
-    person_con_state.acceptance_status_id = arg
-    person_con_state.save!
+    self.person_con_state = PersonConState.new if !self.person_con_state
+    self.person_con_state.acceptance_status_id = arg
+    self.person_con_state.save! if self.id && self.id > 0
   end
   
   def invitestatus_id=(arg)
-    person_con_state.invitestatus_id = arg
-    person_con_state.save!
+    self.person_con_state = PersonConState.new if !self.person_con_state
+    self.person_con_state.invitestatus_id = arg
+    self.person_con_state.save! if self.id && self.id > 0
   end
   
   
@@ -115,8 +117,9 @@ class Person < ActiveRecord::Base
   end  
   
   def acceptance_status=(arg)
-    person_con_state.acceptance_status = arg
-    person_con_state.save!
+    self.person_con_state = PersonConState.new if !self.person_con_state
+    self.person_con_state.acceptance_status = arg
+    self.person_con_state.save! if self.id && self.id > 0
   end
 
   def invitestatus
@@ -124,8 +127,9 @@ class Person < ActiveRecord::Base
   end  
   
   def invitestatus=(arg)
-    person_con_state.invitestatus = arg
-    person_con_state.save!
+    self.person_con_state = PersonConState.new if !self.person_con_state
+    self.person_con_state.invitestatus = arg
+    self.person_con_state.save! if self.id && self.id > 0
   end  
   
   def getFullName()
