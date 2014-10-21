@@ -11,7 +11,9 @@ json.rowdata @result.collect do |result|
     json.suffix     result.suffix
     json.email      result.email
     if result.survey_respondent && result.survey_respondent.person && result.survey_respondent.person.postal_addresses[0]
-        json.country    (result.survey_respondent.person.postal_addresses[0].city ? result.survey_respondent.person.postal_addresses[0].city + ', ' : '')  + result.survey_respondent.person.postal_addresses[0].country
+        address = city = result.survey_respondent.person.postal_addresses[0].city ? result.survey_respondent.person.postal_addresses[0].city : ''
+        address = city + ', ' + result.survey_respondent.person.postal_addresses[0].country if result.survey_respondent.person.postal_addresses[0].country
+        json.country address
     else
         json.country ''
     end
