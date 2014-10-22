@@ -225,6 +225,7 @@ ReportApp.ReportManagement = (function(Backbone){
         item_word_counts : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : ItemWordCountsForm,
                 endPoint    : '/planner_reports/report_word_counts',
@@ -236,6 +237,7 @@ ReportApp.ReportManagement = (function(Backbone){
         panelists_without_bios : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PeopleWithoutPanelsForm,
                 endPoint    : '/planner_reports/participants_with_no_bios',
@@ -247,6 +249,7 @@ ReportApp.ReportManagement = (function(Backbone){
         panels_with_one_person : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/items_with_one_person',
@@ -258,6 +261,7 @@ ReportApp.ReportManagement = (function(Backbone){
         people_with_too_many_items : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/people_items_over_max',
@@ -269,6 +273,7 @@ ReportApp.ReportManagement = (function(Backbone){
         people_item_allocation : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/people_nbr_items',
@@ -280,6 +285,7 @@ ReportApp.ReportManagement = (function(Backbone){
         capacity_report : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/capacity_report',
@@ -291,6 +297,7 @@ ReportApp.ReportManagement = (function(Backbone){
         equipment_needs : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/equipment_needs',
@@ -302,6 +309,7 @@ ReportApp.ReportManagement = (function(Backbone){
         panels_by_room : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/panels_by_room',
@@ -313,6 +321,7 @@ ReportApp.ReportManagement = (function(Backbone){
         panels_by_timeslot : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/panels_by_timeslot',
@@ -324,6 +333,7 @@ ReportApp.ReportManagement = (function(Backbone){
         panels_with_no_moderator : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/panels_without_moderator',
@@ -335,6 +345,7 @@ ReportApp.ReportManagement = (function(Backbone){
         panels_with_panelists : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PanelsWithPanelistsForm,
                 endPoint    : '/planner_reports/panels_with_panelists',
@@ -346,6 +357,7 @@ ReportApp.ReportManagement = (function(Backbone){
         panelists_with_panels : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PanelistsWithPanelsForm,
                 endPoint    : '/planner_reports/panelists_with_panels',
@@ -357,6 +369,7 @@ ReportApp.ReportManagement = (function(Backbone){
         people_without_items : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PeopleWithoutPanelsForm,
                 endPoint    : '/planner_reports/people_without_panels',
@@ -368,6 +381,7 @@ ReportApp.ReportManagement = (function(Backbone){
         scheduling_conflicts : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
             
             showSpinner('#report-results-area');
             
@@ -394,6 +408,8 @@ ReportApp.ReportManagement = (function(Backbone){
         tags_by_context : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
+
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : TagsByContextForm,
                 endPoint    : '/planner_reports/admin_tags_by_context',
@@ -405,6 +421,8 @@ ReportApp.ReportManagement = (function(Backbone){
         people_by_tags : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
+            
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PeopleByTagForm,
                 endPoint    : '/planner_reports/people_by_tag',
@@ -416,6 +434,8 @@ ReportApp.ReportManagement = (function(Backbone){
         edited_bios : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
+            
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
                 endPoint    : '/planner_reports/edited_bios',
