@@ -6,7 +6,6 @@ require 'axlsx_rails'
 require "audited-activerecord"
 require 'acts-as-taggable-on'
 require 'devise'
-#require 'bluecloth'
 require 'bootstrap-sass'
 require 'cells'
 require 'ckeditor_rails'
@@ -35,7 +34,7 @@ require 'prawn_rails'
 require 'prawn/table'
 require "select2-rails"
 require "recaptcha/rails" # ????
-require "recaptcha" #, 
+require "recaptcha" 
 require 'carrierwave'
 require 'cloudinary'
 require 'dalli'
@@ -45,12 +44,7 @@ require "twitter-typeahead-rails"
 require "encoding_sampler"
 require "figaro"
 
-# require 'actionmailer' # CHECK
-# require 'activerecord' 
-
-#require 'rack-jsonp'
-#require 'rack-jsonp-middleware' #, :require => 'rack/jsonp'
-#require 'yajl-ruby'
+# This require causes issues for the rake tasks within the engine
 require 'planner/controller_additions'
 
 module PlannerCore

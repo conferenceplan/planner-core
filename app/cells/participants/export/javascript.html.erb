@@ -1,0 +1,47 @@
+<script type="text/javascript">
+
+ParticipantApp = new Backbone.Marionette.Application();
+
+ParticipantApp.PeopleExport = (function(Backbone){
+    
+    //
+    //
+    //
+    var PeopleExportForm = Backbone.Form.extend({
+        schema : {
+            //:invitestatus_id
+            //:invitation_category_id
+            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= [[' ',' ']].concat(InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
+        },
+        
+        data : {
+        }
+    });
+
+    
+    //
+    //
+    //
+    return {
+        init : function(options) {
+            Backbone.history.start();
+
+            ReportBase.reportRegion.show(new ReportBase.ExportView({
+                form        : PeopleExportForm,
+                endPoint    : '/tools/people_exporter/export',
+                caption     : '<%= t "export-participants" %>'
+            }));
+
+        }
+    };
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    ParticipantApp.addInitializer(ParticipantApp.PeopleExport.init);
+    ParticipantApp.start({});
+});
+</script>

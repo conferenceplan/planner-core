@@ -314,4 +314,7 @@ Rails.application.routes.draw do
 
   match 'tasks/update_exclusions', :controller => 'tasks/update_exclusions', :action => 'index'
 
+  # match "tools/people_exporter", :controller => 'tools/people_exporter', :action => 'index'
+  match "tools/people_exporter/export", :controller => 'tools/people_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
+
 end

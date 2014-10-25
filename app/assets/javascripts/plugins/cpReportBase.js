@@ -194,6 +194,12 @@ var ReportBase = (function(Backbone){
             initialize : function() {
                 this.template = _.template($('#publication-template').html());
             }
+        }),
+        
+        ExportView : ReportViewBase.extend({
+            initialize : function() {
+                this.template = _.template($('#export-template').html());
+            }
         })
     };
         

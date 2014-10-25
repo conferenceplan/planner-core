@@ -56,6 +56,31 @@ module PeopleService
   end
   
   #
+  # need invitation_status, invitation_category
+  #
+  def self.findAllPeople(invitestatus = nil, invite_category = nil)
+    stateTable = Arel::Table.new(:person_con_states)
+    peopleTable = Arel::Table.new(:people)
+    query = nil
+    
+    query = stateTable[:invitestatus_id].eq(invitestatus) if invitestatus
+    
+    if invite_category
+      if query
+        query = query.and(peopleTable[:invitation_category_id].eq(invite_category))
+      else
+        query = peopleTable[:invitation_category_id].eq(invite_category)
+      end
+    end
+    
+    Person.joins(:person_con_state).
+                            includes([:pseudonym, :email_addresses, :postal_addresses, :person_con_state, :invitation_category, {:programmeItemAssignments => {:programmeItem => [:time_slot, :format]}}]).
+                            where(query).
+                            order("people.last_name")
+    
+  end
+  
+  #
   #
   #
   def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)

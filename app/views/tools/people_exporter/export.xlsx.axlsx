@@ -1,0 +1,59 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "People") do |sheet|
+
+
+    titles =     [
+        'First Name',
+        'Last Name',
+        'Suffix',
+        'Pub First Name',
+        'Pub Last Name',
+        'Pub Suffix',
+        "Invite Category",
+        "Invite Status",
+        "Acceptance Status",
+        "Email",
+        "Company Name",
+        "Address Line 1",
+        "Address Line 2",
+        "City",
+        "Postal Code",
+        "State",
+        "Country"
+    ]
+    
+    sheet.add_row titles
+
+    @people.each do |person|
+        row = [
+                person.first_name,
+                person.last_name,
+                person.suffix,
+                ((person.pseudonym != nil) && !(person.pseudonym.first_name.empty?) ? person.pseudonym.first_name : ''),
+                ((person.pseudonym != nil) && !(person.pseudonym.last_name.empty?) ? person.pseudonym.last_name : ''),
+                ((person.pseudonym != nil) && !(person.pseudonym.suffix.empty?) ? person.pseudonym.suffix : ''),
+                (person.invitation_category ? person.invitation_category.name : ''),
+                (person.invitestatus ? person.invitestatus.name : ''),
+                (person.acceptance_status ? person.acceptance_status.name : ''),
+                (person.getDefaultEmail ? person.getDefaultEmail.email : '')
+            ]
+            
+        address = person.getDefaultPostalAddress
+            
+        if address
+            row.concat([
+                address.company_name,
+                address.line1,
+                address.line2,
+                address.city,
+                address.postcode,
+                address.state,
+                address.country
+            ])
+        end
+        
+        sheet.add_row row
+    end
+
+end
