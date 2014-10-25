@@ -18,7 +18,6 @@
 //= require bigSlide
 
 //= require cloudinary
-// require jquery-fileupload
 
 //= require select2
 //  require select2_locale_fr
