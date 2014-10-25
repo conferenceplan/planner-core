@@ -1,0 +1,39 @@
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Items") do |sheet|
+
+
+    titles =     [
+        'Title',
+        'Description',
+        'Short Title',
+        'Format',
+        'Duration',
+        'Day',
+        'Time',
+        'Room',
+        'Venue',
+        'Tracks',
+        'Participants'
+    ]
+    
+    sheet.add_row titles
+
+    @items.each do |item|
+        sheet.add_row [
+            item.title,
+            item.precis,
+            item.short_title,
+            item.format ? item.format.name : "",
+            item.duration,
+            (item.room_item_assignment ? item.room_item_assignment.time_slot.start.strftime('%A') : ""),
+            (item.room_item_assignment ? item.room_item_assignment.time_slot.start.strftime('%H:%M') : ""),
+            (item.room_item_assignment ? item.room_item_assignment.room.name : ""),
+            (item.room_item_assignment ? item.room_item_assignment.room.venue.name : ""),
+            item.tag_list_on(:PrimaryArea).join(","),
+            item.programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
+                p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(",")
+        ]
+    end
+
+end

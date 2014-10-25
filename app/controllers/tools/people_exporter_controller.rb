@@ -7,7 +7,7 @@ class Tools::PeopleExporterController < PlannerController
     # Get the people (batch), filter by invite status and category
     @people = PeopleService.findAllPeople invitestatus_id, invitation_category_id
   
-    # output as an Excel file - TODO
+    # output as an Excel file
     response.headers['Content-Disposition'] = 'attachment; filename="people_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
   end
   

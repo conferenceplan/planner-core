@@ -1,0 +1,38 @@
+<script type="text/javascript">
+
+ItemsApp = new Backbone.Marionette.Application();
+
+ItemsApp.ItemExport = (function(Backbone){
+    
+    //
+    //
+    //
+    var ItemExportForm = Backbone.Form.extend({
+    });
+
+    
+    //
+    //
+    //
+    return {
+        init : function(options) {
+            Backbone.history.start();
+
+            ReportBase.reportRegion.show(new ReportBase.ExportView({
+                form        : ItemExportForm,
+                endPoint    : '/tools/item_exporter/export',
+                caption     : '<%= t "export-items" %>'
+            }));
+
+        }
+    };
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    ItemsApp.addInitializer(ItemsApp.ItemExport.init);
+    ItemsApp.start({});
+});
+</script>

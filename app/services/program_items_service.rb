@@ -3,6 +3,13 @@
 #
 module ProgramItemsService
   
+  def self.findAllItems
+
+    ProgrammeItem.includes([:time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
+                            order("time_slots.start ASC, programme_items.title")
+    
+  end
+  
   def self.assign_reference_numbers(increment = 3)
       items = ProgrammeItem.all(:include => [:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ],
                                                  :order => 'time_slots.start ASC, venues.name DESC, rooms.name ASC',
