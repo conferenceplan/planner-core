@@ -1,3 +1,4 @@
+xlsx_package.use_shared_strings = true
 wb = xlsx_package.workbook
 
 wb.add_worksheet(name: "People") do |sheet|
