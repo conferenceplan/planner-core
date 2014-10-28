@@ -1,2 +1,0 @@
-module Panels::ItemMgmtHelper
-end

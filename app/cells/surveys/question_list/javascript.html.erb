@@ -85,12 +85,12 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
             view_refresh_event : "survey-question:refresh",
             modal_create_title : '<%= t "survey-create-question" %>',
             region : surveyQuestionLayout.surveyQuestionControlRegion,
-            modelURL : "/surveys/" + sid + "/survey_groups/" + gid + "/survey_questions"
+            modelURL : "<%= baseUri + '/surveys/' %>" + sid + "/survey_groups/" + gid + "/survey_questions"
         });
         
         tabLists.push( AppUtils.createCollectionView({
-            url                     : "/surveys/" + sid + "/survey_groups/" + gid + "/survey_questions.json",
-            modelURL                : "/surveys/" + sid + "/survey_groups/" + gid + "/survey_questions",
+            url                     : "<%= baseUri + '/surveys/' %>" + sid + "/survey_groups/" + gid + "/survey_questions.json",
+            modelURL                : "<%= baseUri + '/surveys/' %>" + sid + "/survey_groups/" + gid + "/survey_questions",
             collectionType          : SurveyQuestionCollection,
             region                  : surveyQuestionLayout.surveyQuestionRegion,
             template                : "#survey-question-template",

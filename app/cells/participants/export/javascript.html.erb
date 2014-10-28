@@ -29,7 +29,7 @@ ParticipantApp.PeopleExport = (function(Backbone){
 
             ReportBase.reportRegion.show(new ReportBase.ExportView({
                 form        : PeopleExportForm,
-                endPoint    : '/tools/people_exporter/export',
+                endPoint    : "<%= baseUri + '/tools/people_exporter/export' %>",
                 caption     : '<%= t "export-participants" %>'
             }));
 

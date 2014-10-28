@@ -2,6 +2,7 @@
 #
 #
 class ApplicationController < ActionController::Base
+  helper PlannerHelper
   
   before_filter :set_locale, :load_configs, :set_mailer_host
   around_filter :application_time_zone # make sure that we use the timezone as specified in the database

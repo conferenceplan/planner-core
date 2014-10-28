@@ -188,7 +188,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
                 continueAction : function() {
                     $.ajax({
                         type: 'POST',
-                        url: "/program_planner/removeItem", // TODO - fix domain and sub-site
+                        url: "<%= baseUri + '/program_planner/removeItem' %>",
                         data: {
                             itemid : _itemid,
                         },
@@ -239,7 +239,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
                 continueAction : function() {
                     $.ajax({
                         type: 'POST',
-                        url: "/program_planner/addItem.json", // TODO - fix domain and sub-site
+                        url: "<%= baseUri + '/program_planner/addItem.json' %>",
                         data: {
                             day    : day,
                             itemid : itemId,
@@ -299,9 +299,9 @@ ScheduleApp.ItemManagement = (function(Backbone){
         
             var grid = new GridItem();
             if (roomList && roomList.length > 0) {
-                grid.url = "/program_planner/assignments.json?day=" + day + "&rooms=" + roomList;
+                grid.url = "<%= baseUri + '/program_planner/assignments.json?day=' %>" + day + "&rooms=" + roomList;
             } else {
-                grid.url = "/program_planner/assignments.json?day=" + day;
+                grid.url = "<%= baseUri + '/program_planner/assignments.json?day=' %>" + day;
             }
             grid.fetch({
                 error : function(model, response) {
@@ -370,7 +370,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
         // Render the conflicts for this day
         conflicts = new AppUtils.Conflicts();
         conflicts.fetch({
-            url : "/program_planner/getConflicts.json?day=" + day, // TODO - fix domain and sub-site
+            url : "<%= baseUri + '/program_planner/getConflicts.json?day=' %>" + day,
             success : function(obj) {
                 // Create the views...
                 clearConflictHighlights('red');
@@ -412,7 +412,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
             rooms = new RoomCollection();
             
             rooms.fetch({
-                url : '/rooms.json',
+                url : "<%= baseUri + '/rooms.json' %>",
                 success : function(mdl) {
                     var roomFilter = new RoomFilterView({
                         collection : mdl

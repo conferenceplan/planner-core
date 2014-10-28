@@ -10,7 +10,7 @@ RoomApp.RoomManagement = (function(Backbone){
             purpose : { type : 'Text', title : '<%= t "purpose" %>' },
             comment : { type : 'Text', title : '<%= t "comments" %>' }
         },
-        urlRoot : '/rooms'
+        urlRoot : "<%= baseUri + '/rooms' %>"
     });
 
     RoomSetup = Backbone.Model.extend({
@@ -19,7 +19,7 @@ RoomApp.RoomManagement = (function(Backbone){
             capacity : { type : 'Number', title : '<%= t "capacity" %>' },
             isdefault : { type : 'Checkbox', title : '<%= t "default" %>' }, // This needs to be calculated
         },
-        urlRoot : '/room_setups'
+        urlRoot : "<%= baseUri + '/room_setups' %>"
     });
 
     RoomSetupCollection = Backbone.Collection.extend({
@@ -73,7 +73,7 @@ RoomApp.RoomManagement = (function(Backbone){
         
         tabLists.push( TabUtils.createTabListContent({
             collectionType : RoomSetupCollection,
-            url : "/room_setups/list.json?room_id="+ id,
+            url : "<%= baseUri + '/room_setups/list.json?room_id=' %>"+ id,
             template : "#room-setup-template",
             view_refresh_event : "room-setup:refresh",
             region : roomSetupLayout.roomSetupRegion,

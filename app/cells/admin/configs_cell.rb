@@ -1,5 +1,5 @@
 class Admin::ConfigsCell < Cell::Rails
-
+  
   def display
     render
   end

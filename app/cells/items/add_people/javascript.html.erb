@@ -8,7 +8,7 @@ ItemApp.PeopleManagement = (function(Backbone){
      * Models
      */
     ProgramItem = Backbone.Model.extend({
-        urlRoot : '/programme_items'
+        urlRoot : "<%= baseUri + '/programme_items' %>"
     });
     
     /*
@@ -85,7 +85,7 @@ ItemApp.PeopleManagement = (function(Backbone){
             // Update the program item - but we just want to save the people...
             var id = this.model.id;
             this.model.save(null, {
-                url : "/programme_items/" + id + "/updateParticipants", // TODO - we need a base URL property for the site
+                url : "<%= baseUri + '/programme_items/' %>" + id + "/updateParticipants",
                 success : function() {
                     // message that the save happened
                     infoMessage("Program item assignment has been saved");
@@ -172,7 +172,7 @@ ItemApp.PeopleManagement = (function(Backbone){
             showSpinner('#program-item-view');
             currentItem = new ProgramItem();
             currentItem.fetch({
-                url : "/programme_items/" + id + '.json',
+                url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
                 async:false,
                 success : function(model) {
 	                needsSaved = false;

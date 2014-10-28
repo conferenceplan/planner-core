@@ -16,7 +16,7 @@
 	</div>
 	<div class="grid_4">
 		Action
-		<%= form_tag('/survey_respondents/tags_admin/update', :id => 'tagForm') do %>
+		<%= form_tag(baseUri + '/survey_respondents/tags_admin/update', :id => 'tagForm') do %>
 			<div class="grid_3">
 				<%= select 'tag', 'operation', ['edit', 'delete', 'move'], {:include_blank => true}  %>
 			</div>

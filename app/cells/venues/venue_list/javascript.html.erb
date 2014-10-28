@@ -8,7 +8,7 @@ VenueApp.VenueManagement = (function(Backbone){
         schema : {
             name : { type : 'Text', title : '<%= t "name" %>' },
         },
-        urlRoot : '/venue'
+        urlRoot : "<%= baseUri + '/venue' %>"
     });
     
     VenueCollection = Backbone.Collection.extend({
@@ -49,7 +49,7 @@ VenueApp.VenueManagement = (function(Backbone){
             collection_attributes : { "class" : "list-group" },
             collection_tagName : 'div',
             // view_attributes : { "class" : "list-group-item" },
-            url : "/venue/list.json",
+            url : "<%= baseUri + '/venue/list.json' %>",
             template : "#venue-template",
             view_refresh_event : "venue:refresh",
             region : venueLayout.venueRegion,

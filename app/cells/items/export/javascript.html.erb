@@ -20,7 +20,7 @@ ItemsApp.ItemExport = (function(Backbone){
 
             ReportBase.reportRegion.show(new ReportBase.ExportView({
                 form        : ItemExportForm,
-                endPoint    : '/tools/item_exporter/export',
+                endPoint    : "<%= baseUri + '/tools/item_exporter/export' %>",
                 caption     : '<%= t "export-items" %>'
             }));
 

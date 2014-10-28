@@ -9,7 +9,7 @@ ItemExclusionsApp.Mgmt = (function(Backbone){
     //
     //
     ItemExclusion = Backbone.Model.extend({
-        urlRoot : '/excluded_items',
+        urlRoot : "<%= baseUri + '/excluded_items' %>",
     });
     ItemExclusionCollection = Backbone.Collection.extend({
         model : ItemExclusion
@@ -48,7 +48,7 @@ ItemExclusionsApp.Mgmt = (function(Backbone){
         saveExclusion : function() {
             var id = this.model.id;
             this.model.save(null, {
-                url : "/excluded_items/" + id + "/exclusions", // TODO - we need a base URL property for the site
+                url : "<%= baseUri + '/excluded_items/' %>" + id + "/exclusions",
                 success : function() {
                     // message that the save happened
                     infoMessage("Exclusions have been saved");
@@ -171,7 +171,7 @@ ItemExclusionsApp.Mgmt = (function(Backbone){
             surveys = new ItemExclusionCollection();
             
             surveys.fetch({
-                url : '/excluded_items',
+                url : "<%= baseUri + '/excluded_items' %>",
                 success : function(mdl) {
                     // create the view and show the control
                     ItemExclusionsApp.getRegion("item_exclusions").show(

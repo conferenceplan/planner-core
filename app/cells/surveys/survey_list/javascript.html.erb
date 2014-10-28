@@ -26,7 +26,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
                                             options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                         dependsOn : 'authenticate', dependentValues : ['true'] }
         },
-        urlRoot : '/surveys'
+        urlRoot : "<%= baseUri + '/surveys' %>"
     });
 
     SurveyCollection = Backbone.Collection.extend({
@@ -62,7 +62,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
         });
         
         tabLists.push( AppUtils.createCollectionView({
-            url                     : "/surveys/list.json",
+            url                     : "<%= baseUri + '/surveys/list.json' %>",
             collectionType          : SurveyCollection,
             region                  : surveyLayout.surveyRegion,
             template                : "#survey-template",

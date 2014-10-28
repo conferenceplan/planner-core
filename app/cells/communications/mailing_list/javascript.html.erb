@@ -5,7 +5,7 @@ CommunicationsList = (function(Backbone){
     var currentMailingId = null;
     
     Mailing = Backbone.DeepModel.extend({
-        urlRoot : '/communications/mailing',
+        urlRoot : "<%= baseUri + '/communications/mailing' %>",
         schema : {
             mailing_number          : { type : 'Number', title : '<%= t "mail-mailing-number" %>' },
             mail_template_id        : { type : 'Select', title : '<%= t "mail-mailing-template" %>',
@@ -54,7 +54,7 @@ CommunicationsList = (function(Backbone){
         }
         
         tabLists.push( AppUtils.createCollectionView({
-            url                     : "/communications/mailing.json",
+            url                     : "<%= baseUri + '/communications/mailing.json' %>",
             collectionType          : MailingCollection,
             region                  : mailingLayout.mailingRegion,
             template                : template,

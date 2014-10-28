@@ -32,7 +32,7 @@ HistoryApp.Report = (function(Backbone){
         itemHist = new ItemHistoryCollection();
         
         itemHist.fetch({
-            url : '/dash/history/items',
+            url : "<%= baseUri + '/dash/history/items' %>",
             success : function(mdl) {
                 console.debug(mdl);
                 view = new ItemHistoryCollectionView({

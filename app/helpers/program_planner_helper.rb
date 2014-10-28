@@ -1,5 +1,5 @@
 module ProgramPlannerHelper
-
+  
   #
   def addItemToRoomAndTime(item, room, day, time)
     assignment = nil

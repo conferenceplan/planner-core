@@ -14,14 +14,14 @@ OnlinePublicationsApp.Management = (function(Backbone){
     });
     
     PublishPending = Backbone.Model.extend({
-        url : '/publisher/publishPending.json',
+        url : "<%= baseUri + '/publisher/publishPending.json' %>",
         data : {
             ref_numbers : false
         }    
     });
     
     LastPublish = Backbone.Model.extend({
-        url : '/publisher.json'
+        url : "<%= baseUri + '/publisher.json' %>"
     });
 
     PublicationReview = Backbone.RelationalModel.extend({
@@ -82,7 +82,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
         publish : function() {
             $.ajax({
                 type: 'POST',
-                url: "/publisher/publish",
+                url: "<%= baseUri + '/publisher/publish' %>",
                 data : {
                     ref_numbers : this.model.get('ref_numbers')
                 },
@@ -123,7 +123,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
             // fetch the review
             review = new PublicationReview();
             review.fetch({
-                url : "/publisher/review.json",
+                url : "<%= baseUri + '/publisher/review.json' %>",
                 success : function(obj) {
                     // create the view
                     var reviewView = new ReviewView({

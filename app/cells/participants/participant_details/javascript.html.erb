@@ -19,7 +19,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             country : { type : 'Text', title : '<%= t "country" %>' },
             isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'},
         },
-        urlRoot : '/postal_addresses'
+        urlRoot : "<%= baseUri + '/postal_addresses' %>"
     });
     
     AddressCollection = Backbone.Collection.extend({
@@ -31,7 +31,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             email : { type : 'Text', title : '<%= t "email" %>'},
             isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'}
         },
-        urlRoot : '/email_addresses'
+        urlRoot : "<%= baseUri + '/email_addresses' %>"
     });
     
     EmailCollection = Backbone.Collection.extend({
@@ -43,7 +43,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             number : { type : 'Text', title : '<%= t "phone-number" %>'},
             phone_type_id : { type : 'Select', title : '<%= t "phone type" %>', options : <%= PhoneTypes.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
         },
-        urlRoot : '/phone_numbers'
+        urlRoot : "<%= baseUri + '/phone_numbers' %>"
     });
     
     PhoneCollection = Backbone.Collection.extend({
@@ -59,7 +59,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             registration_type : { type : 'Text', title : '<%= t "reg-type" %>' },
             registered : { type : 'Checkbox', title : '<%= t "registered" %>' },
         },
-        urlRoot: '/registrationDetails'
+        urlRoot: "<%= baseUri + '/registrationDetails' %>"
     });
     
     //
@@ -87,7 +87,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
 
         },
-        urlRoot : '/participants'
+        urlRoot : "<%= baseUri + '/participants' %>"
     });
 
     //
@@ -101,7 +101,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             twitterinfo : { type : 'Text', title : '<%= t "participant-twitter-handle" %>' },
             website : { type : 'Text', title : '<%= t "participant-url" %>' }
         },
-        urlRoot : '/edited_bios'
+        urlRoot : "<%= baseUri + '/edited_bios' %>"
     });
     
     BioPicture = Backbone.Model.extend({
@@ -110,7 +110,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 cl_image_upload_tag : '<%= cl_image_upload_tag(:bio_picture) %>'
             }
         },
-        urlRoot : '/bio_images'
+        urlRoot : "<%= baseUri + '/bio_images' %>"
     });
     
     //
@@ -162,7 +162,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                         endDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
                 } }
         },
-        urlRoot : '/available_dates'
+        urlRoot : "<%= baseUri + '/available_dates' %>"
     });
     ExcludedItemModel = Backbone.RelationalModel.extend({});
     ExcludedItemCollection = Backbone.Collection.extend({
@@ -220,51 +220,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         },
     });
 
-    /******************************************************
-     * 
-     *
-    AddressLayout = Backbone.Marionette.Layout.extend({
-        template: "#address-layout-template",
-        
-        regions : {
-            postalControlRegion: "#postal-control-div",
-            postalRegion: "#postal-region-div",
-        },
-    });
-
-    PhoneLayout = Backbone.Marionette.Layout.extend({
-        template: "#phone-layout-template",
-        
-        regions : {
-            phoneControlRegion: "#phone-control-div",
-            phoneRegion: "#phone-region-div",
-        },
-    });
-    EmailLayout = Backbone.Marionette.Layout.extend({
-        template: "#email-layout-template",
-        
-        regions : {
-            emailControlRegion: "#email-control-div",
-            emailRegion: "#email-region-div",
-        },
-    });
-    
-    ExclusionsLayout = Backbone.Marionette.Layout.extend({
-        template: "#exclusions-layout-template",
-        
-        regions : {
-            datesRegion: "#dates-exclusions-div",
-            itemsRegion: "#items-exclusions-div",
-            timesRegion: "#times-exclusions-div",
-        },
-    });
-    ********/
-
     var tabLists = [];
     var tabContent = [];
     var filters = null;
     var personTabLayout = null;
-    // var addressLayout = null;
 
     function clearRegDetails() {
         $('#selected-participant').text("");
@@ -282,18 +241,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             personTabLayout.items.close();
         };
         
-        // if (addressLayout) {
-            // addressLayout.postalControlRegion.close();
-            // addressLayout.postalRegion.close();
-            // addressLayout.emailControlRegion.close();
-            // addressLayout.emailRegion.close();
-            // addressLayout.phoneControlRegion.close();
-            // addressLayoutphoneRegion.close();
-        // };
-        
         eventAggregator.off("refreshTagList", syncModel);
         
-        // _.invoke(tabLists, 'reset' );
         _.invoke(tabContent, 'clear' );
     };
 
@@ -343,7 +292,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
         TabUtils.createTabContent({
             modelType : RegistrationDetail,
-            url : "/participants/" + id + "/registrationDetails.json",
+            url : "<%= baseUri + '/participants/' %>" + id + "/registrationDetails.json",
             template : '#registration-view-template',
             region : personTabLayout.registration,
             id : id,
@@ -354,7 +303,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
         var invite_details = TabUtils.createTabContent({
             modelType : InviteDetails,
-            url : "/participants/" + id + ".json",
+            url : "<%= baseUri + '/participants/' %>" + id + ".json",
             template : '#invite-view-template',
             region : personTabLayout.invite,
             id : id,
@@ -374,7 +323,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 'click .model-generate-invite-key-button' : function() {
                     mdl = this.model;
                     $.ajax({
-                        url : "/participants/generateInviteKey/" + id + ".json",
+                        url : "<%= baseUri + '/participants/generateInviteKey/' %>" + id + ".json",
                         success : function() {
                             mdl.fetch();
                         }
@@ -386,7 +335,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         
         tabContent.push( TabUtils.createTabContent({
             modelType : BioDetails,
-            url : "/participants/" + id + "/edited_bios.json",
+            url : "<%= baseUri + '/participants/' %>" + id + "/edited_bios.json",
             template : '#bio-view-template',
             region : personTabLayout.bio,
             id : id,
@@ -397,7 +346,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         
         tabContent.push( TabUtils.createTabContent({
             modelType : BioPicture,
-            url : "/participants/" + id + "/bio_images.json",
+            url : "<%= baseUri + '/participants/' %>" + id + "/bio_images.json",
             template : '#bio-image-template',
             region : personTabLayout.bio_image,
             id : id,
@@ -408,15 +357,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         
         TabUtils.createTabListContent({
             collectionType : ProgramItemCollection,
-            url : "/participants/"+ id + "/programme_items.json",
+            url : "<%= baseUri + '/participants/' %>" + id + "/programme_items.json",
             template : "#program-item-view-template",
             region : personTabLayout.items,
         });
 
         TabUtils.createTagListContent({
             collectionType : TagContextCollection,
-            url : "/tags/"+ id + ".json?class=Person",
-            tagUrl : "/tags/"+ id + "/add?class=Person",
+            url : "<%= baseUri + '/tags/' %>" + id + ".json?class=Person",
+            tagUrl : "<%= baseUri + '/tags/' %>" + id + "/add?class=Person",
             template : "#tag-context-layout-template",
             region : personTabLayout.tags,
             newTitle : '<%= t "create-tag" %>',
@@ -427,7 +376,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         //
         tabContent.push( TabUtils.createTabContent({
             modelType : AvailabilityDateModel,
-            url : "/participants/" + id + '/available_dates.json',
+            url : "<%= baseUri + '/participants/' %>" + id + '/available_dates.json',
             template : '#date-exclusion-view-template',
             region : personTabLayout.availability,
             id : id,
@@ -439,7 +388,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         
         exclusions = new Exclusions();
         exclusions.fetch({
-            url : "/participants/" + id + "/availabilities.json",
+            url : "<%= baseUri + '/participants/' %>" + id + "/availabilities.json",
             success : function(obj) {
                 TabUtils.createTabListContent({
                     collection : obj.get('items'),
@@ -468,7 +417,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         });
         tabLists.push( TabUtils.createTabListContent({
             collectionType : AddressCollection,
-            url : "/participants/"+ id + "/postalAddresses.json",
+            url : "<%= baseUri + '/participants/' %>" + id + "/postalAddresses.json",
             template : "#address-view-template",
             view_refresh_event : "address:refresh",
             region : addressLayout.postalRegion,
@@ -488,7 +437,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         });
         tabLists.push( TabUtils.createTabListContent({
             collectionType : PhoneCollection,
-            url : "/participants/"+ id + "/phoneNumbers.json",
+            url : "<%= baseUri + '/participants/' %>" + id + "/phoneNumbers.json",
             template : "#phone-view-template",
             view_refresh_event : "address:refresh",
             region : addressLayout.phoneRegion,
@@ -507,7 +456,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         });
         tabLists.push( TabUtils.createTabListContent({
             collectionType : EmailCollection,
-            url : "/participants/"+ id + "/emailAddresses.json",
+            url : "<%= baseUri + '/participants/' %>" + id + "/emailAddresses.json",
             template : "#email-view-template",
             view_refresh_event : "address:refresh",
             region : addressLayout.emailRegion,
@@ -534,7 +483,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
             TabUtils.createTagCloudContent({
                 collectionType : TagContextCollection,
-                url : "/tags.json?class=Person",
+                url : "<%= baseUri + '/tags.json?class=Person' %>",
                 template : "#tag-cloud-context-layout-template",
                 place : '#participant-tag-cloud',
                 collection_attributes : { "class" : "accordion", "id" : "participant-tag-cloud-parent" },

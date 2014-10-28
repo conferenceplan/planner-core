@@ -11,7 +11,7 @@ ItemApp.ItemManagement = (function(Backbone){
                 cl_image_upload_tag : '<%= cl_image_upload_tag(:picture) %>'
             }
         },
-        urlRoot : '/external_images/ProgrammeItem' //           pic.url = '/external_images/ProgrammeItem/' + item_id + '/' + cardtype
+        urlRoot : "<%= baseUri + '/external_images/ProgrammeItem' %>" //           pic.url = '/external_images/ProgrammeItem/' + item_id + '/' + cardtype
     });
     PictureCollection = Backbone.Collection.extend({
         model : Picture
@@ -59,7 +59,7 @@ ItemApp.ItemManagement = (function(Backbone){
             "print": true,
             "mobile_card_size" : 1
         },
-        urlRoot : '/programme_items',
+        urlRoot : "<%= baseUri + '/programme_items' %>",
         relations : [{
             type           : Backbone.HasMany,
             key            : 'external_images',
@@ -72,7 +72,7 @@ ItemApp.ItemManagement = (function(Backbone){
         schema : {
             equipment_type_id : { type : 'Select', title : '<%= t "name" %>', options : <%= [].concat(EquipmentType.find(:all).collect {|s| {'val' => s.id, 'label' => s.description} }).to_json.html_safe %> },
         },
-        urlRoot : '/equipment_needs'
+        urlRoot : "<%= baseUri + '/equipment_needs' %>"
     });
     
     EquipmentCollection = Backbone.Collection.extend({
@@ -129,7 +129,7 @@ ItemApp.ItemManagement = (function(Backbone){
             var model = this.model;
             var pic = new Picture();
             var item_id = model.id;
-            pic.url = '/external_images/ProgrammeItem/' + item_id + '/' + cardtype
+            pic.url = "<%= baseUri + '/external_images/ProgrammeItem/' %>" + item_id + '/' + cardtype
             mdl = new AppUtils.ModelModal({
                         model : pic,
                         title : title,
@@ -144,7 +144,7 @@ ItemApp.ItemManagement = (function(Backbone){
             var item_id = this.model.id;
             var model = this.model;
             var img = _.find(this.model.get('external_images').models, function(im) { return im.get('use') == cardtype });
-            img.url = '/external_images/ProgrammeItem/' + item_id + '/' + cardtype
+            img.url = "<%= baseUri + '/external_images/ProgrammeItem/' %>" + item_id + '/' + cardtype
             mdl = new AppUtils.ModelModal({
                         model : img,
                         title : title,
@@ -200,13 +200,13 @@ ItemApp.ItemManagement = (function(Backbone){
     
     function showDetails(id) {
         var data = jQuery("#items").jqGrid('getRowData', id);
-        $('#selected-program-item').html(data['item[title]']); // TODO
+        $('#selected-program-item').html(data['item[title]']);
 
         var itemMdl = TabUtils.createTabContent({
             modelType : ProgramItem,
-            url : "/programme_items/" + id + '.json', // TODO
+            url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
             template : '#program-item-view-template',
-            region : itemTabLayout.program_item, //'#program-item-view', // LEAK - change to a region manager....
+            region : itemTabLayout.program_item,
             id : id,
             id_name : 'programme_item_id',
             editTitle : "Edit Item",
@@ -229,7 +229,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     model = this.model;
                     modal = new AppUtils.PanelModal({
                         title : "<%= escape_javascript(t 'add-people') %>",
-                        url   : "/panels/item_mgmt?prog_item=" + model.id,
+                        url   : "<%= baseUri + '/panels/item_mgmt?prog_item=' %>" + model.id,
                         title : '<%= t "add-people" %>',
                         closeCheck : function() {
                             var res = document.getElementById('modal-iframe').contentWindow.ItemApp.PeopleManagement.needsSaved();
@@ -258,7 +258,7 @@ ItemApp.ItemManagement = (function(Backbone){
         });
         TabUtils.createTabListContent({
             collectionType : EquipmentCollection,
-            url : "/programme_items/"+ id + "/equipment_needs.json",
+            url : "<%= baseUri + '/programme_items/' %>" + id + "/equipment_needs.json",
             template : "#equipment-detail-template",
             view_refresh_event : "equipment:refresh",
             region : itemTabLayout.equipment,
@@ -267,7 +267,7 @@ ItemApp.ItemManagement = (function(Backbone){
         });
         TabUtils.createTagListContent({
             collectionType : TagContextCollection,
-            url : "/tags/"+ id + "?class=ProgrammeItem",
+            url : "<%= baseUri + '/tags/' %>" + id + "?class=ProgrammeItem",
             tagUrl : "/tags/"+ id + "/add?class=ProgrammeItem",
             template : "#tag-context-layout-template",
             // view_refresh_event : "address:refresh",
@@ -373,7 +373,7 @@ ItemApp.ItemManagement = (function(Backbone){
             // Backbone.history.start();
             TabUtils.createTagCloudContent({
                 collectionType : TagContextCollection,
-                url : "/tags?class=ProgrammeItem",
+                url : "<%= baseUri + '/tags?class=ProgrammeItem' %>",
                 template : "#tag-cloud-context-layout-template",
                 place : '#item-tag-cloud',
                 collection_attributes : { "class" : "accordion", "id" : "item-tag-cloud-parent" },

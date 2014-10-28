@@ -5,7 +5,7 @@ MailTemplateApp = new Backbone.Marionette.Application();
 MailTemplateApp.TemplateManagment = (function(Backbone){
     
     MailTemplate = Backbone.DeepModel.extend({
-        urlRoot : '/communications/mail_templates',
+        urlRoot : "<%= baseUri + '/communications/mail_templates' %>",
         schema : {
             title           : { type : 'Text', title : '<%= t "title" %>' },
 
@@ -62,7 +62,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
         // }
         
         tabLists.push( AppUtils.createCollectionView({
-            url                     : "/communications/mail_templates.json",
+            url                     : "<%= baseUri + '/communications/mail_templates.json' %>",
             collectionType          : MailTemplateCollection,
             region                  : mailTemplateLayout.mailTemplateRegion,
             template                : template,

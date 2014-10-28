@@ -30,7 +30,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             start_date  : new Date()
         },
         
-        urlRoot : '/site_configs'
+        urlRoot : "<%= baseUri + '/site_configs' %>"
     });
     
     EmailConfig = Backbone.Model.extend({
@@ -41,7 +41,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             cc                  : { type : 'Text', title : '<%= t "config-cc-email" %>' },
             test_email          : { type : 'Text', title : '<%= t "config-test-email" %>' }
         },
-        urlRoot : '/mail_configs'
+        urlRoot : "<%= baseUri + '/mail_configs' %>"
     });
 
     CloudinaryConfig = Backbone.Model.extend({
@@ -52,14 +52,14 @@ ConfigApp.ConfigManagement = (function(Backbone){
             enhance_image_tag       : { type : 'Checkbox', title : '<%= t "config-cloudinary-enhance-image-tag" %>' },
             static_image_support    : { type : 'Checkbox', title : '<%= t "config-cloudinary-static-image-support" %>' }
         },
-        urlRoot : '/cloudinary_config'
+        urlRoot : "<%= baseUri + '/cloudinary_config' %>"
     });
 
     Equipment = Backbone.Model.extend({
         schema : {
             description     : { type : 'Text', title : '<%= t "equipment-name" %>' }
         },
-        urlRoot : '/equipment_types'
+        urlRoot : "<%= baseUri + '/equipment_types' %>"
     });
     
     EquipmentCollection = Backbone.Collection.extend({
@@ -71,7 +71,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             name     : { type : 'Text', title : '<%= t "format-name" %>' },
             position : { type : 'Number', title : '<%= t "format-position" %>' }
         },
-        urlRoot : '/formats'
+        urlRoot : "<%= baseUri + '/formats' %>"
     });
     
     ItemFormatCollection = Backbone.Collection.extend({
@@ -83,7 +83,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             name     : { type : 'Text', title : '<%= t "invite-category-name" %>' },
             position : { type : 'Number', title : '<%= t "invite-category-position" %>' }
         },
-        urlRoot : '/invitation_categories'
+        urlRoot : "<%= baseUri + '/invitation_categories' %>"
     });
     
     InviteCategoryCollection = Backbone.Collection.extend({
@@ -94,7 +94,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
         schema : {
             name     : { type : 'Text', title : '<%= t "room-setup-name" %>' },
         },
-        urlRoot : '/setup_types'
+        urlRoot : "<%= baseUri + '/setup_types' %>"
     });
     
     RoomSetupCollection = Backbone.Collection.extend({
@@ -106,7 +106,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             name     : { type : 'Text', title : '<%= t "data-source-name" %>' },
             primary  : { type : 'Checkbox', title : '<%= t "primary" %>' },
         },
-        urlRoot : '/datasources'
+        urlRoot : "<%= baseUri + '/datasources' %>"
     });
     
     DataSourceCollection = Backbone.Collection.extend({
@@ -117,7 +117,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
         schema : {
             name     : { type : 'Text', title : '<%= t "data-source-name" %>' }
         },
-        urlRoot : '/tag_contexts'
+        urlRoot : "<%= baseUri + '/tag_contexts' %>"
     });
     
     TagContextCollection = Backbone.Collection.extend({
@@ -185,7 +185,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             });
             
             tabLists.push( AppUtils.createCollectionView({
-                url                     : "/equipment_types.json",
+                url                     : "<%= baseUri + '/equipment_types.json' %>",
                 collectionType          : EquipmentCollection,
                 region                  : equipmentLayout.configRegion,
                 template                : "#equipment-template",
@@ -214,7 +214,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             });
             
             tabLists.push( AppUtils.createCollectionView({
-                url                     : "/formats.json",
+                url                     : "<%= baseUri + '/formats.json' %>",
                 collectionType          : ItemFormatCollection,
                 region                  : itemFormatLayout.configRegion,
                 template                : "#item-format-template",
@@ -243,7 +243,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             });
             
             tabLists.push( AppUtils.createCollectionView({
-                url                     : "/invitation_categories.json",
+                url                     : "<%= baseUri + '/invitation_categories.json' %>",
                 collectionType          : InviteCategoryCollection,
                 region                  : inviteLayout.configRegion,
                 template                : "#item-format-template",
@@ -272,7 +272,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             });
             
             tabLists.push( AppUtils.createCollectionView({
-                url                     : "/setup_types.json",
+                url                     : "<%= baseUri + '/setup_types.json' %>",
                 collectionType          : RoomSetupCollection,
                 region                  : setupLayout.configRegion,
                 template                : "#room-setup-template",
@@ -301,7 +301,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             });
             
             tabLists.push( AppUtils.createCollectionView({
-                url                     : "/datasources.json",
+                url                     : "<%= baseUri + '/datasources.json' %>",
                 collectionType          : DataSourceCollection,
                 region                  : dataSourceLayout.configRegion,
                 template                : "#data-source-template",
@@ -330,7 +330,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             });
             
             tabLists.push( AppUtils.createCollectionView({
-                url                     : "/tag_contexts.json",
+                url                     : "<%= baseUri + '/tag_contexts.json' %>",
                 collectionType          : TagContextCollection,
                 region                  : tagContextLayout.configRegion,
                 template                : "#tag-context-template",

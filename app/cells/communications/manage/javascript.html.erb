@@ -39,7 +39,7 @@ CommunicationsApp.Management = (function(Backbone){
                              mailing : currentMailingId 
                            };
                 
-                jQuery.ajax( "/communications/mailing/previewEmail.json",
+                jQuery.ajax( "<%= baseUri + '/communications/mailing/previewEmail.json' %>",
                          {
                              type : 'GET',
                              data : args,
@@ -76,7 +76,7 @@ CommunicationsApp.Management = (function(Backbone){
                          mailing : currentMailingId 
                        };
             
-            jQuery.ajax( "/communications/mailing/addPeople.json",
+            jQuery.ajax( "<%= baseUri + '/communications/mailing/addPeople.json' %>",
                      {
                          type : 'PUT',
                          data : args,
@@ -100,7 +100,7 @@ CommunicationsApp.Management = (function(Backbone){
             var args = { people : selectedIds,
                          mailing : currentMailingId 
                        };
-            jQuery.ajax( "/communications/mailing/removePeople.json",
+            jQuery.ajax( "<%= baseUri + '/communications/mailing/removePeople.json' %>",
                      {
                          type : 'PUT',
                          data : args,

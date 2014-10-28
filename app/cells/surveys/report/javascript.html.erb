@@ -8,7 +8,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     
     // TODO - we should only be able to edit the queries that belong to us....
     Query = Backbone.DeepModel.extend({
-        urlRoot : '/survey_query',
+        urlRoot : "<%= baseUri + '/survey_query' %>",
         schema : {
             name            : { type : 'Text',      title : '<%= t "name" %>',  validators: ['required'] },
             survey_id       : { type : 'Select',    title : '<%= t "survey" %>',
@@ -95,11 +95,11 @@ SurveyReportApp.SurveyReport = (function(Backbone){
 
     QuestionsCollection = Backbone.Collection.extend({
         model   : Question,
-        url     : '/survey_reports/questions'
+        url     : "<%= baseUri + '/survey_reports/questions' %>"
     });
     
     ResultSet = Backbone.RelationalModel.extend({
-        url : '/survey_reports/runReport',
+        url : "<%= baseUri + '/survey_reports/runReport' %>",
         
         relations : [{
             type : Backbone.HasMany,
@@ -208,7 +208,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     };
     
     function runCSVQuery(id) {
-        $.download('/survey_reports/runReport.csv', 'query_id=' + id );
+        $.download("<%= baseUri + '/survey_reports/runReport.csv' %>", 'query_id=' + id );
     };
     
     function runQuery(id) {
@@ -234,12 +234,12 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     };
     
     function setCurrentQuestions(id) {
-        currentQuestions.url = "/survey_query/questions?survey_query=" + id;
+        currentQuestions.url = "<%= baseUri + '/survey_query/questions?survey_query=' %>" + id;
         currentQuestions.fetch({ async:false });
     };
     
     function setCurrentQuestionsBySurvey(id) {
-        currentQuestions.url = "/survey_query/questions?survey=" + id;
+        currentQuestions.url = "<%= baseUri + '/survey_query/questions?survey=' %>" + id;
         currentQuestions.fetch({ async:false });
     };
 
@@ -249,8 +249,8 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         
         tabContent.push( TabUtils.createTabContent({
             modelType : Query,
-            url : "/survey_query/" + id,
-            modelURL                : "/survey_query/" + id,
+            url : "<%= baseUri + '/survey_query/' %>" + id,
+            modelURL                : "<%= baseUri + '/survey_query/' %>" + id,
             template : '#query-view-template',
             place :'#query-view',
             editTitle : "Edit Query",
@@ -261,7 +261,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             form_event : 'survey_id:change',
             form_event_fn : function(form, editor, extra) { // TODO - This is not used when it is a new query because we do not have a query shown
                 // Get the current set of questions
-                currentQuestions.url = "/survey_query/questions?survey=" + editor.getValue();
+                currentQuestions.url = "<%= baseUri + '/survey_query/questions?survey=' %>" + editor.getValue();
                 currentQuestions.fetch({ async:false });
                 // we need to clear the predicates ...
                 _.invoke(form.fields.survey_query_predicates.editor.items, 'remove');
@@ -275,7 +275,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     function setQuestions(form, editor, extra) {
         currentQuestions = new QuestionsCollection(); 
                 // Get the current set of questions
-                currentQuestions.url = "/survey_query/questions?survey=" + editor.getValue();
+                currentQuestions.url = "<%= baseUri + '/survey_query/questions?survey=' %>" + editor.getValue();
                 currentQuestions.fetch({ async:false });
                 // we need to clear the predicates ...
                 _.invoke(form.fields.survey_query_predicates.editor.items, 'remove');

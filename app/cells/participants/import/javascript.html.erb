@@ -22,7 +22,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
     ImportMapping = Backbone.Model.extend({
         schema : {
         },
-        urlRoot : '/import_mappings',
+        urlRoot : "<%= baseUri + '/import_mappings' %>",
         
         defaults : {
             'first_name' : null,
@@ -57,7 +57,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
             file : { type : 'Hidden' },
             ignore_first : { type : 'Checkbox', title : 'Ignore First Line' }
         },
-        urlRoot : '/pending_import_people/import_file'
+        urlRoot : "<%= baseUri + '/pending_import_people/import_file' %>"
     });
     
     
@@ -275,11 +275,11 @@ ParticipantApp.PeopleImport = (function(Backbone){
                 var uploadFilename = stepToView[2].view.model.get('file_upload').split('\\').pop();
                 csvColumns = new CSVColumns();
                 csvColumns.fetch({
-                    url : '/import_mappings/columns?file=' + uploadFilename,
+                    url : "<%= baseUri + '/import_mappings/columns?file=' %>" + uploadFilename,
                     success : function(mdl) {
                         mapping = new ImportMapping();
                         mapping.fetch({
-                            url : '/import_mappings?datasource_id=' + datasource,
+                            url : "<%= baseUri + '/import_mappings?datasource_id=' %>" + datasource,
                             success : function(model) {
                                 model.set('datasource_id',datasource);
                                 layout.mapping.show(new MappingView({ model : model, source : mdl }));

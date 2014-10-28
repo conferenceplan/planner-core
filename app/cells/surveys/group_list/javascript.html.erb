@@ -44,12 +44,12 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
             view_refresh_event : "survey-group:refresh",
             modal_create_title : '<%= t "create-group" %>',
             region : surveyGroupLayout.surveyGroupControlRegion,
-            modelURL : "/surveys/" + id + "/survey_groups"
+            modelURL : "<%= baseUri + '/surveys/' %>" + id + "/survey_groups"
         });
         
         tabLists.push( AppUtils.createCollectionView({
-            url                     : "/surveys/" + id + "/survey_groups.json",
-            modelURL                : "/surveys/" + id + "/survey_groups",
+            url                     : "<%= baseUri + '/surveys/' %>" + id + "/survey_groups.json",
+            modelURL                : "<%= baseUri + '/surveys/' %>" + id + "/survey_groups",
             collectionType          : SurveyGroupCollection,
             region                  : surveyGroupLayout.surveyGroupRegion,
             template                : "#survey-group-template",

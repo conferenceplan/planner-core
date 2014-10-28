@@ -200,7 +200,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.resultRegion.close();
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/' + query
+                endPoint    : "<%= baseUri + '/planner_reports/' %>" + query
             }));
         },
         
@@ -209,7 +209,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.resultRegion.close();
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form            : TableTentForm,
-                endPoint        : '/planner_reports/table_tents',
+                endPoint        : "<%= baseUri + '/planner_reports/table_tents' %>",
                 formTemplate    : '#table-tent-form-template'
             }));
         },
@@ -219,7 +219,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.resultRegion.close();
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : BadgeForm,
-                endPoint    : '/planner_reports/badge_labels'
+                endPoint    : "<%= baseUri + '/planner_reports/badge_labels' %>"
             }));
         },
         
@@ -228,7 +228,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.resultRegion.close();
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : PartScheduleForm,
-                endPoint    : '/planner_reports/part_schedule'
+                endPoint    : "<%= baseUri + '/planner_reports/part_schedule' %>"
             }));
         },
         
@@ -237,7 +237,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.resultRegion.close();
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : RoomsForm,
-                endPoint    : '/planner_reports/room_signs'
+                endPoint    : "<%= baseUri + '/planner_reports/room_signs' %>"
             }));
         },
         
@@ -247,7 +247,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             // TODO
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : ChangeSheetsForm,
-                endPoint    : '/planner_reports/change_sheet'
+                endPoint    : "<%= baseUri + '/planner_reports/change_sheet' %>"
             }));
         }
     });

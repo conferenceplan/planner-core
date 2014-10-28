@@ -31,7 +31,7 @@ UserMgmtApp.UserManagement = (function(Backbone){
 
         },
         
-        urlRoot : '/users/admin'
+        urlRoot : "<%= baseUri + '/users/admin' %>"
     });
 
     return {
@@ -39,7 +39,7 @@ UserMgmtApp.UserManagement = (function(Backbone){
         showDetails : function(id) {
             mdl = new UserMdl();
             mdl.fetch({
-                url : "/users/admin/" + id + '.json', // TODO
+                url : "<%= baseUri + '/users/admin/' %>" + id + '.json',
             });
 
             return mdl;            

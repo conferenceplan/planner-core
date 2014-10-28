@@ -65,6 +65,12 @@ module PlannerCore
       )
     end
 
+    config.to_prepare do
+      Dir.glob(PlannerCore::Engine.config.paths["lib"].expanded[0] + "/decorators/**/*_decorator*.rb").each do |c|
+        require_dependency(c)
+      end
+    end
+
     # RAILS 3 mechanism so parent app use the migrations in this engine
     # see http://pivotallabs.com/leave-your-migrations-in-your-rails-engines/
     initializer :append_migrations do |app|

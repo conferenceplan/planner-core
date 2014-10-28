@@ -13,7 +13,7 @@ class Admin::UserListCell < Cell::Rails
     @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
     @loadNotifyMethod = args.has_key?(:loadNotifyMethod) ? args[:loadNotifyMethod] : "function() {}"
     @pager = args.has_key?(:pager) ? args[:pager] : 'pager'
-    @root_url = args.has_key?(:root_url) ? args[:root_url] : "/"
+    @root_url = baseUri + (args.has_key?(:root_url) ? args[:root_url] : "/")
     @baseUrl = args.has_key?(:baseUrl) ? args[:baseUrl] : "users/admin"
     @getGridData = args.has_key?(:getGridData) ? args[:getGridData] : "/list.json"
     

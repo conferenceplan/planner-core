@@ -30,7 +30,7 @@ SurveyReviewApp.Reviews = (function(Backbone){
             // and display the selected survey
             survey = new Response();
             survey.fetch({
-                url : '/survey_respondents/reviews/' + current_person + '/' + this.model.id,
+                url : "<%= baseUri + '/survey_respondents/reviews/' %>" + current_person + '/' + this.model.id,
                 success : function(mdl) {
                     // create the view and show the control
                     SurveyReviewApp.getRegion("survey_display").show(
@@ -70,7 +70,7 @@ SurveyReviewApp.Reviews = (function(Backbone){
             surveys = new SurveyCollection();
             
             surveys.fetch({
-                url : '/survey_respondents/reviews/surveys/' + person_id,
+                url : "<%= baseUri + '/survey_respondents/reviews/surveys/' %>" + person_id,
                 success : function(mdl) {
                     // create the view and show the control
                     SurveyReviewApp.getRegion("survey_selector").show(

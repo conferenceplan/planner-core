@@ -228,7 +228,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : ItemWordCountsForm,
-                endPoint    : '/planner_reports/report_word_counts',
+                endPoint    : "<%= baseUri + '/planner_reports/report_word_counts' %>",
                 colModel    : ItemWordCountsColModel,
                 caption     : '<%= t "reports-item-word-counts" %>'
             }));
@@ -240,7 +240,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PeopleWithoutPanelsForm,
-                endPoint    : '/planner_reports/participants_with_no_bios',
+                endPoint    : "<%= baseUri + '/planner_reports/participants_with_no_bios' %>",
                 colModel    : PeopleWithoutPanelsColModel,
                 caption     : '<%= t "report-participants-with-no-bios" %>'
             }));
@@ -252,7 +252,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/items_with_one_person',
+                endPoint    : "<%= baseUri + '/planner_reports/items_with_one_person' %>",
                 colModel    : PanelsWithOnePersonColModel,
                 caption     : '<%= t "report-items-with-one-person" %>'
             }));
@@ -264,7 +264,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/people_items_over_max',
+                endPoint    : "<%= baseUri + '/planner_reports/people_items_over_max' %>",
                 colModel    : OverusedPeopleAllocationColModel,
                 caption     : '<%= t "report-people-overused" %>'
             }));
@@ -276,7 +276,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/people_nbr_items',
+                endPoint    : "<%= baseUri + '/planner_reports/people_nbr_items' %>",
                 colModel    : PeopleAllocationColModel,
                 caption     : '<%= t "report-people-item-allocation" %>'
             }));
@@ -288,7 +288,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/capacity_report',
+                endPoint    : "<%= baseUri + '/planner_reports/capacity_report' %>",
                 colModel    : ItemCapacityColModel,
                 caption     : '<%= t "reports-items-over-capacity" %>'
             }));
@@ -300,7 +300,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/equipment_needs',
+                endPoint    : "<%= baseUri + '/planner_reports/equipment_needs' %>",
                 colModel    : EquipmentNeedsColModel,
                 caption     : '<%= t "reports-items-with-equipment-needs" %>'
             }));
@@ -312,7 +312,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/panels_by_room',
+                endPoint    : "<%= baseUri + '/planner_reports/panels_by_room' %>",
                 colModel    : PanelsByRoomColModel,
                 caption     : '<%= t "panels-by-room" %>'
             }));
@@ -324,7 +324,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/panels_by_timeslot',
+                endPoint    : "<%= baseUri + '/planner_reports/panels_by_timeslot' %>",
                 colModel    : PanelsByTimeslotColModel,
                 caption     : '<%= t "panels-by-timeslot" %>'
             }));
@@ -336,7 +336,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/panels_without_moderator',
+                endPoint    : "<%= baseUri + '/planner_reports/panels_without_moderator' %>",
                 colModel    : PanelsWithPanelistsColModel,
                 caption     : '<%= t "report-items-without-moderator" %>'
             }));
@@ -348,7 +348,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PanelsWithPanelistsForm,
-                endPoint    : '/planner_reports/panels_with_panelists',
+                endPoint    : "<%= baseUri + '/planner_reports/panels_with_panelists' %>",
                 colModel    : PanelsWithPanelistsColModel,
                 caption     : '<%= t "report-items-with-participants" %>'
             }));
@@ -360,7 +360,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PanelistsWithPanelsForm,
-                endPoint    : '/planner_reports/panelists_with_panels',
+                endPoint    : "<%= baseUri + '/planner_reports/panelists_with_panels' %>",
                 colModel    : PanelistsWithPanelsColModel,
                 caption     : '<%= t "report-participants-with-items" %>'
             }));
@@ -372,7 +372,7 @@ ReportApp.ReportManagement = (function(Backbone){
             $('#report-results-area').html('');
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PeopleWithoutPanelsForm,
-                endPoint    : '/planner_reports/people_without_panels',
+                endPoint    : "<%= baseUri + '/planner_reports/people_without_panels' %>",
                 colModel    : PeopleWithoutPanelsColModel,
                 caption     : '<%= t "report-people-without-items" %>'
             }));
@@ -392,7 +392,7 @@ ReportApp.ReportManagement = (function(Backbone){
             // Render the conflicts for this day
             conflicts = new AppUtils.Conflicts();
             conflicts.fetch({
-                url : "/program_planner/getConflicts.json", // TODO - fix domain and sub-site
+                url : "<%= baseUri + '/program_planner/getConflicts.json' %>",
                 success : function(obj) {
                     ReportBase.resultRegion.show(conflictLayout);
                     AppUtils.createConflictCollectionView(obj.get('schedule'), "#schedule-conflict-view-template",conflictLayout.scheduleRegion);
@@ -412,7 +412,7 @@ ReportApp.ReportManagement = (function(Backbone){
 
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : TagsByContextForm,
-                endPoint    : '/planner_reports/admin_tags_by_context',
+                endPoint    : "<%= baseUri + '/planner_reports/admin_tags_by_context' %>",
                 colModel    : TagsByContextColModel,
                 caption     : '<%= t "report-tags-by-context" %>'
             }));
@@ -425,7 +425,7 @@ ReportApp.ReportManagement = (function(Backbone){
             
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : PeopleByTagForm,
-                endPoint    : '/planner_reports/people_by_tag',
+                endPoint    : "<%= baseUri + '/planner_reports/people_by_tag' %>",
                 colModel    : PeopleByTagColModel,
                 caption     : '<%= t "reports-people-by-tag" %>'
             }));
@@ -438,7 +438,7 @@ ReportApp.ReportManagement = (function(Backbone){
             
             ReportBase.reportRegion.show(new ReportBase.ReportView({
                 form        : GenericForm,
-                endPoint    : '/planner_reports/edited_bios',
+                endPoint    : "<%= baseUri + '/planner_reports/edited_bios' %>",
                 colModel    : PeopleBioColModel,
                 caption     : '<%= t "reports-participant-bios" %>'
             }));

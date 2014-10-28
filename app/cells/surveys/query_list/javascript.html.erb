@@ -5,7 +5,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
 
     QueryName = Backbone.Model.extend({
-        urlRoot : '/survey_query',
+        urlRoot : "<%= baseUri + '/survey_query' %>",
         schema : {
             name : { type : 'Text', title : '<%= t "name" %>', validators: ['required'] },
         }
@@ -33,7 +33,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
     
     function showQueries(region, query, formCallback) {
         tabLists.push( AppUtils.createCollectionView({
-            url                     : "/survey_query/list.json?" + query, // TODO - make this a param...
+            url                     : "<%= baseUri + '/survey_query/list.json?' %>" + query, // TODO - make this a param...
             collectionType          : QueryCollection,
             region                  : region,
             template                : "#query-template", 
@@ -73,7 +73,7 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
     };
     
     function copyQuery(model) {
-        jQuery.ajax( "/survey_query/copy/" + model.id, // + '.json',
+        jQuery.ajax( "<%= baseUri + '/survey_query/copy/' %>" + model.id,
                      {
                          error : function() {
                             alertMessage('<%= t "error-duplicating-the-query" %>');
