@@ -137,10 +137,6 @@
         <dt><%= t "conference-time-zone" %></dt><dd>{{= time_zone }}</dd>
         <dt><%= t "conference-start-date" %></dt><dd>{{= start_date }}</dd>
         <dt><%= t "number-of-days" %></dt><dd>{{= number_of_days }}</dd>
-        <% if allowed? :manage_system_config %>
-        <dt><%= t "captcha-public-key" %></dt><dd>{{= captcha_pub_key }}</dd>
-        <dt><%= t "captcha-private-key" %></dt><dd>{{= captcha_priv_key }}</dd>
-        <% end %>
         {{ } else{ }}
         NO CONFIG
         {{ } }}

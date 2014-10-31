@@ -12,10 +12,11 @@ class Surveys::ResponseController < ApplicationController
   def create
     @survey = Survey.find(params[:survey_id])
     @site_config = SiteConfig.first
+    @captcha_config = CaptchaConfig.first
 
     init()
     if @survey.use_captcha
-      if (!verify_recaptcha :private_key => @site_config.captcha_priv_key)
+      if (!verify_recaptcha :private_key => @captcha_config.captcha_priv_key)
         @errors['captcha'] = { "captcha" => "There is a problem with your answer to the CAPTCHA!" }
       end
     end
@@ -53,43 +54,45 @@ class Surveys::ResponseController < ApplicationController
 
           # TODO - we may need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
           # make sure that we have a name and email address
-          params[:survey_response].each do |res|
-          # check the type of the response and if an array then go though them
-            if res[1].respond_to?('each')
-              if res[1].is_a?(Hash)
-
-                responses = respondentDetails.getResponsesForQuestion(@survey.id, res[0])
-                responses.each do |r|
-                  originalResponses.delete(r) if originalResponses
-                  r.delete
-                end
-
-                surveyQuestion = SurveyQuestion.find(res[0])
-                if surveyQuestion.question_type == :address
-                  saveAddress(res[1], @survey, res[0], respondentDetails)
-                elsif surveyQuestion.question_type == :availability
-                  saveAvailability(res[1], @survey, res[0], respondentDetails)
-                elsif surveyQuestion.question_type == :phone
-                  savePhone(res[1], @survey, res[0], respondentDetails)
-                else  
-                  res[1].each do |r, v|
-                    response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => v, :survey_respondent_detail => respondentDetails
-                    response.isbio = surveyQuestion.isbio
-                    response.save!
+          if params[:survey_response]
+            params[:survey_response].each do |res|
+            # check the type of the response and if an array then go though them
+              if res[1].respond_to?('each')
+                if res[1].is_a?(Hash)
+  
+                  responses = respondentDetails.getResponsesForQuestion(@survey.id, res[0])
+                  responses.each do |r|
+                    originalResponses.delete(r) if originalResponses
+                    r.delete
+                  end
+  
+                  surveyQuestion = SurveyQuestion.find(res[0])
+                  if surveyQuestion.question_type == :address
+                    saveAddress(res[1], @survey, res[0], respondentDetails)
+                  elsif surveyQuestion.question_type == :availability
+                    saveAvailability(res[1], @survey, res[0], respondentDetails)
+                  elsif surveyQuestion.question_type == :phone
+                    savePhone(res[1], @survey, res[0], respondentDetails)
+                  else  
+                    res[1].each do |r, v|
+                      response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => v, :survey_respondent_detail => respondentDetails
+                      response.isbio = surveyQuestion.isbio
+                      response.save!
+                    end
+                  end
+                else
+                  if res[1].empty?
+                    r = saveResponse(@respondent, @survey, res[0], '', respondentDetails)
+                    originalResponses.delete( r ) if originalResponses
+                  else
+                    r = saveResponse(@respondent, @survey, res[0], res[1].to_s, respondentDetails)
+                    originalResponses.delete( r ) if originalResponses
                   end
                 end
               else
-                if res[1].empty?
-                  r = saveResponse(@respondent, @survey, res[0], '', respondentDetails)
-                  originalResponses.delete( r ) if originalResponses
-                else
-                  r = saveResponse(@respondent, @survey, res[0], res[1].to_s, respondentDetails)
-                  originalResponses.delete( r ) if originalResponses
-                end
+                r = saveResponse(@respondent, @survey, res[0], res[1], respondentDetails)
+                originalResponses.delete( r ) if originalResponses
               end
-            else
-              r = saveResponse(@respondent, @survey, res[0], res[1], respondentDetails)
-              originalResponses.delete( r ) if originalResponses
             end
           end
 
@@ -159,6 +162,7 @@ class Surveys::ResponseController < ApplicationController
     page = params[:page] # use this to find the id of the survey from the database
     @preview = params[:preview] == 'preview'
     @site_config = SiteConfig.first
+    @captcha_config = CaptchaConfig.first
 
     if page
       

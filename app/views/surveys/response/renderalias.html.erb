@@ -41,10 +41,10 @@
                     </div>
                 </div>
             <% end %>
-            <% if @survey.use_captcha && @site_config %>
+            <% if @survey.use_captcha && @captcha_config %>
                 <div class="row">
                     <div class="col-sm-12">
-                        <%= recaptcha_tags :public_key => @site_config.captcha_pub_key %>
+                        <%= recaptcha_tags :public_key => @captcha_config.captcha_pub_key %>
                     </div>
                 </div>
             <% end %>
