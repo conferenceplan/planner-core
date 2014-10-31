@@ -20,10 +20,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
                                     } },
             number_of_days      : { type : 'Number', title : '<%= t "number-of-days" %>' },
             // languages           : { type : 'Text', title : '<%= t "supported-languages" %>'},
-            <% if allowed? :manage_system_config %>
-            captcha_pub_key     : { type : 'Text', title : '<%= t "captcha-public-key" %>' },
-            captcha_priv_key    : { type : 'Text', title : '<%= t "captcha-private-key" %>' },
-            <% end %>
         },
         
         data : {
