@@ -1,8 +1,11 @@
 module PlannerHelper
 
   def baseUri
-    # TODO - put in locale etc
-    '/' + I18n.locale.to_s #+ '/'
+    '/' + I18n.locale.to_s
+  end
+
+  def baseUri_no_lang
+    ''
   end
 
 end

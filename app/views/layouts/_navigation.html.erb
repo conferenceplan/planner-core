@@ -5,7 +5,7 @@
       			<span class="icon-bar"></span>
       			<span class="icon-bar"></span>
     		</button>
-        	<a id="event-planner-logo-link-container" class="navbar-brand" href='<%= "/" + I18n.locale.to_s + "/" %>' alt='<%= @page_title or (t "convention-planner") %>'>
+        	<a id="event-planner-logo-link-container" class="navbar-brand" href='<%= "/" + I18n.locale.to_s + baseUri_no_lang + "/" %>' alt='<%= @page_title or (t "convention-planner") %>'>
         	</a>
         </div>
 		<div class="collapse navbar-collapse" id="collapse-1">
@@ -19,7 +19,7 @@
 	                <ul class="dropdown-menu">
 	                    <% UISettingsService.getLanguages.each do |lang| %>
 	                        <% if lang != I18n.locale.to_s %>
-	                            <li><a href="<%= '/' + lang + request.fullpath %>"><%= t lang %></a></li>
+	                            <li><a href="<%= '/' + lang + baseUri_no_lang + request.fullpath %>"><%= t lang %></a></li>
 	                        <% end %>
 	                    <% end %>
 	                </ul>
