@@ -4,8 +4,12 @@
 class ApplicationController < ActionController::Base
   helper PlannerHelper
   
-  before_filter :set_locale, :load_configs, :set_mailer_host
+  before_filter :first_filter, :set_locale, :load_configs, :set_mailer_host
   around_filter :application_time_zone # make sure that we use the timezone as specified in the database
+  
+  def first_filter
+    # do nowt
+  end
 
   def set_mailer_host
     ActionMailer::Base.default_url_options[:host] = request.host_with_port
