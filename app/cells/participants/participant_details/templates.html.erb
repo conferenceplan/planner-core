@@ -1,10 +1,10 @@
-<!--
--->
+
 <script type="text/template" id="person-tab-layout-template">
     <div class="tab-content">
         <div class="tab-pane active" id="contacts-tab">
             <div id="contacts-view"></div>
         </div>
+        <div class="tab-pane" id="published-info"><div id="published-info-view"></div></div>
         <div class="tab-pane" id="bio-image"><div id="bio-image-view"></div></div>
         <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
         <div class="tab-pane" id="tags-tab">
@@ -244,18 +244,17 @@
 
 <script type="text/template" id="bio-image-template">
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-3">
             <% if ConfigService.hasCloudinaryConfig? %>
-            <div class="thumbnail">
+            <div>
                 {{ if (typeof id != 'undefined') { }}
-                <div align="left" class="voffset10 loffset10">
-                	<image src="{{= bio_picture ? bio_picture.standard.url : '' }}"></image>
+                <div align="left" class="voffset10">
+                	<image src="{{= bio_picture ? bio_picture.standard.url : '' }}" class="img-responsive img-rounded"></image>
                 </div>
-                <div class="caption">
-                    <h4><%= t "bio-image" %></h4>
-                    <p>
-                        <button class="model-edit-button btn btn-primary btn-xs">
-                            <%= t "edit" %>
+                <div class="caption voffset5">
+                    <p><%= t "bio-image" %>
+                        <button class="model-edit-button btn btn-primary btn-xs pull-right">
+                            <i class="glyphicon glyphicon-pencil"></i>
                         </button>
                     </p>
                 </div>
@@ -517,7 +516,7 @@
 <script type="text/template" id="program-item-view-template">
 <div>
     {{ if (typeof id != 'undefined') { }}
-    <div class="thumbnail clearfix">
+    <div>
         <small>
             <dl class="dl-horizontal-small">
                 <dt>
