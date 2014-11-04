@@ -1,5 +1,5 @@
 class Venue < ActiveRecord::Base
-  attr_accessible :lock_version, :name
+  attr_accessible :lock_version, :name, :sort_order
 
   has_many  :rooms
   validates_presence_of :name

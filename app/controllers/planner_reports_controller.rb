@@ -468,8 +468,7 @@ class PlannerReportsController < PlannerController
   #
   #
   def people_by_tag
-
-    @taginfo = PlannerReportsService.findPeopleByTag
+    @taginfo = PlannerReportsService.findPeopleByTag params[:tags]
 
     respond_to do |format|
       format.json

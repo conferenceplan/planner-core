@@ -176,9 +176,15 @@ module PlannerReportsService
   #
   #
   #
-  def self.findPeopleByTag
-  
-    res = ActiveRecord::Base.connection.select_all(PEOPLE_TAG_QUERY)
+  def self.findPeopleByTag(tags = nil)
+    
+    # Check that the tags are comma seperated ???
+    # where tags.name in (%s)
+    ts = tags.split(',').collect{|t| '"' + t.strip + '"' }.join(',') if !tags.blank?
+    
+    tagStr = tags.blank? ? '' : ("where tags.name in (%s)" % ts)
+
+    res = ActiveRecord::Base.connection.select_all(PEOPLE_TAG_QUERY % tagStr)
     
     res1 = res.group_by {|b| [b['context'], b['tag']] }
     
@@ -327,6 +333,7 @@ PEOPLE_TAG_QUERY = <<"EOS"
   join taggings on taggings.tag_id = tags.id and taggings.taggable_type = 'Person'
   join people on people.id = taggings.taggable_id
   left join pseudonyms on pseudonyms.person_id = people.id
+  %s
   order by taggings.context, tags.name, people.last_name;
 EOS
 

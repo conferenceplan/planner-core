@@ -8,7 +8,8 @@ RoomApp.RoomManagement = (function(Backbone){
         schema : {
             name : { type : 'Text', title : '<%= t "name" %>' },
             purpose : { type : 'Text', title : '<%= t "purpose" %>' },
-            comment : { type : 'Text', title : '<%= t "comments" %>' }
+            comment : { type : 'Text', title : '<%= t "comments" %>' },
+            sort_order : { type : 'Number', title : '<%= t "sort-order" %>' }
         },
         urlRoot : "<%= baseUri + '/rooms' %>"
     });

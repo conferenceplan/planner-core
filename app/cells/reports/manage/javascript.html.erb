@@ -118,6 +118,7 @@ ReportApp.ReportManagement = (function(Backbone){
     
     var PeopleByTagForm = Backbone.Form.extend({
         schema : {
+            tags  : { type : 'Text', title : '<%= t "tags" %>' },
         },
         
         data : {

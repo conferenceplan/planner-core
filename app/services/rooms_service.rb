@@ -22,7 +22,7 @@ module RoomsService
   #
   #
   #
-  def self.findRooms(rows=15, page=1, index='name', sort_order='asc', filters = nil, venue_id = nil)
+  def self.findRooms(rows=15, page=1, index='sort_order', sort_order='asc', filters = nil, venue_id = nil)
     args = genArgsForSql(filters, venue_id)
 
     offset = (page - 1) * rows.to_i

@@ -7,7 +7,7 @@ class VenueController < PlannerController
   #
   #
   def list
-    @venues = Venue.find :all
+    @venues = Venue.find :all, :order => 'sort_order, name asc'
   end
 
   #
