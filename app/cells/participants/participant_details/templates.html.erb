@@ -1,7 +1,8 @@
 
 <script type="text/template" id="person-tab-layout-template">
     <div class="tab-content">
-        <div class="tab-pane active" id="contacts-tab">
+        <div class="tab-pane  active" id="invite-tab"><div id="invite-view"></div></div>
+        <div class="tab-pane" id="contacts-tab">
             <div id="contacts-view"></div>
         </div>
         <div class="tab-pane" id="published-info"><div id="published-info-view"></div></div>
@@ -12,8 +13,6 @@
         </div>
         <div class="tab-pane " id="surveys-tab"><div id="survey-view"></div></div>
         <div class="tab-pane " id="registration-tab"><div id="registration-view"></div></div>
-        <div class="tab-pane" id="invite-tab"><div id="invite-view"></div></div>
-
         <div class="tab-pane" id="availability-tab">
             <section>
                 <div id="availability-div"></div>
@@ -171,74 +170,68 @@
 </script>
 
 <script type="text/template" id="invite-view-template">
-{{ if (typeof id != 'undefined') { }}
-{{ if (!survey_key) { }}
-<button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right">
-    <%= t "generate-invite-key" %>
-</button>
-{{ } }}
-<dl class="dl-horizontal">
-    <dt>
-        <%= t "first-name" %>
-    </dt>
-    <dd>
-        {{= first_name ? first_name : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "last-name" %>
-    </dt>
-    <dd>
-        {{= last_name ? last_name : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "suffix" %>
-    </dt>
-    <dd>
-        {{= suffix ? suffix : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "company" %>
-    </dt>
-    <dd>
-        {{= company ? company : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "job-title" %>
-    </dt>
-    <dd>
-        {{= job_title ? job_title : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "invite-status" %>
-    </dt>
-    <dd>
-        {{= invitestatus_name ? invitestatus_name : "&nbsp;"}}
-    </dd>
-    <dt>
-        <%= t "acceptance-status" %>
-    </dt>
-    <dd>
-        {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}
-    </dd>
-    <dt>
-        <%= t "invitation-category" %>
-    </dt>
-    <dd>
-        {{= invitation_category_name ? invitation_category_name : "&nbsp;"}}
-    </dd>
-    <dt>
-        <%= t "survey-key" %>
-    </dt>
-    <dd>
-        {{= survey_key }}
-    </dd>
-    <dt>
-        <%= t "comments" %>
-    </dt>
-    <dd>
-        {{= comments }}
-    </dd>
-</dl>
+
+<div class="col-md-6">
+    <table>
+        <tr>
+            <td width="35%">
+                <img class="img-responsive img-rounded" src="http://upload.wikimedia.org/wikipedia/en/2/28/Deep_Fried_Man_portrait_-_real_name_Daniel_Friedman_-_South_African_Comedian.jpg">
+            </td>
+            <td valign="top" style="padding-left: 10px;">
+                <p><strong>{{= first_name ? first_name : "&nbsp;" }} {{= last_name ? last_name : "&nbsp;" }} {{= suffix ? suffix : "&nbsp;" }}</strong>
+                    <br>
+                    {{= job_title ? job_title : "<span class='minor-text'>(no job title specified)</span>" }}
+                    <br>
+                    {{= company ? company : "<span class='minor-text'>(no company specified)</span>" }}
+                    <br>
+                    <a href="#items-tab">13 items</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="col-md-6">
+    <h5><%= t "Invitation & Registration Status"%></h5>
+    {{ if (typeof id != 'undefined') { }}
+    {{ if (!survey_key) { }}
+    <p><button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right">
+        <%= t "generate-invite-key" %>
+    </button>
+    </p>
+    {{ } }}
+    <dl class="dl-horizontal-small">
+        <dt>
+            <%= t "invite-status" %>
+        </dt>
+        <dd>
+            <span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {{= invitestatus_name ? invitestatus_name : "&nbsp;"}}</span>
+        </dd>
+        <dt>
+            <%= t "acceptance-status" %>
+        </dt>
+        <dd>
+            {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}
+        </dd>
+        <dt>
+            <%= t "invitation-category" %>
+        </dt>
+        <dd>
+            {{= invitation_category_name ? invitation_category_name : "&nbsp;"}}
+        </dd>
+        <dt>
+            <%= t "survey-key" %>
+        </dt>
+        <dd>
+            {{= survey_key }}
+        </dd>
+        <dt>
+            <%= t "comments" %>
+        </dt>
+        <dd>
+            {{= comments }}
+        </dd>
+    </dl>
+</div>
 {{ }; }}
 </script>
 
@@ -469,7 +462,7 @@
 
 <script type="text/template" id="tag-cloud-context-layout-template">
 <div class="panel-group" id="participant-tag-cloud-parent">
-    <div class="panel panel-default">
+    <div class="">
         <div class="panel-heading">
             <h5 class="panel-title">
                 <a data-toggle="collapse" data-parent="#participant-tag-cloud-parent" href="#{{= context }}">{{= context }}</a>
