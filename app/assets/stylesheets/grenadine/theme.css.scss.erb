@@ -309,12 +309,24 @@ screen and (min-device-pixel-ratio: 1.5) {
 	color: #222222;
 }
 /* Styles for the footer portion of the app */
+
+.footer {
+    height: 35px;
+}
+
 #grenadine-footer, #grenadine-footer a:link, #grenadine-footer a:visited {
   background-color: #32363e;
-  color:white;
+  color:#CCC;
+  font-size: 12px;
+  margin-top: 0px;
+  padding-top: 9px;
+  padding-bottom: 10px;
 }
 #grenadine-footer-left-portion {
   text-align:left;
+}
+#grenadine-footer a:hover {
+    color: white;
 }
 #grenadine-footer-right-portion {
   text-align:right;
@@ -463,3 +475,51 @@ input[type="checkbox"] {
 input[type="file"] {
     display: block;
 }
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    font-weight: bold;
+}
+.panel-body {
+    border-left: #ddd 1px solid;
+    border-right: #ddd 1px solid;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.right-bar-action-group h5 {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 17px;
+}
+.right-bar-action-group h5:first-child {
+    margin-top: 0px;
+}
+.right-bar-action-group span.glyphicon {
+    color: #BBB;
+    font-size: 12px;
+    margin-right: +3px;
+}
+.tab-pane.active h5 {
+    line-height: 1.5;
+    font-weight: bold;
+    color: #555;
+    //top: 10px;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ccc;
+}
+
+.contact-details-div {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.contact-details-div .label {
+    height: 22px;
+    margin-right: 5px;
+    padding-top: 4px;
+}
+.default-label {
+    color: #5cb85c;
+    font-size: 11px;
+    padding-top: 3px;
+    margin-right: 8px;
+}
+

@@ -2,16 +2,18 @@
 -->
 <script type="text/template" id="person-tab-layout-template">
     <div class="tab-content">
-        <div class="tab-pane active" id="registration-tab"><div id="registration-view"></div></div>
-        <div class="tab-pane" id="contacts-tab">
+        <div class="tab-pane active" id="contacts-tab">
             <div id="contacts-view"></div>
         </div>
-        <div class="tab-pane" id="invite-tab"><div id="invite-view"></div></div>
-        <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
         <div class="tab-pane" id="bio-image"><div id="bio-image-view"></div></div>
+        <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
         <div class="tab-pane" id="tags-tab">
             <div id="tags-view"></div>
         </div>
+        <div class="tab-pane " id="surveys-tab"><div id="survey-view"></div></div>
+        <div class="tab-pane " id="registration-tab"><div id="registration-view"></div></div>
+        <div class="tab-pane" id="invite-tab"><div id="invite-view"></div></div>
+
         <div class="tab-pane" id="availability-tab">
             <section>
                 <div id="availability-div"></div>
@@ -22,44 +24,35 @@
             </section>
         </div>
         <div class="tab-pane" id="items-tab"><div id="items-view"></div></div>
+        <div class="tab-pane" id="emails-tab"><div id="emails-view"></div></div>
     </div>
 </script>
 
 <script type="text/template" id="address-layout-template">
     <section>
         <div class="row">
-            <div id="postal-control-div" class="col-xs-12"></div>
-        </div>
-        <div class="row">
-            <div id="postal-region-div" class="col-xs-12"></div>
-        </div>
-    </section>
-    <section>
-        <div class="row">
-        <div id="email-control-div" class="col-xs-12"></div>
-        </div>
-        <div class="row">
-        <div id="email-region-div" class="col-xs-12"></div>
-        </div>
-    </section>
-    <section>
-        <div class="row">
-        <div id="phone-control-div" class="col-xs-12"></div>
-        </div>
-        <div class="row">
-        <div id="phone-region-div" class="col-xs-12"></div>
+            <div class="col-md-5 col-xs-12">
+                <div id="postal-control-div"></div>
+                <div id="postal-region-div"></div>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <div id="email-control-div"></div>
+                <div id="email-region-div"></div>
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <div id="phone-control-div"></div>
+                <div id="phone-region-div"></div>
+            </div>    
         </div>
     </section>
 </script>
 
 
 <script type="text/template" id="address-control-template">
-<div>
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add-address" %>
     </button>
-    <%= t "postal-addresses" %>
-</div>
+    <h5><%= t "postal-addresses" %></h5>
 </script>
 
 <script type="text/template" id="email-control-template">
@@ -67,7 +60,7 @@
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add-email" %>
     </button>
-    <%= t "email-addresses" %>
+    <h5><%= t "email-addresses" %></h5>
 </div>
 </script>
 
@@ -76,7 +69,7 @@
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add-phone" %>
     </button>
-    <%= t "phone" %>
+    <h5><%= t "phone" %></h5>
 </div>
 </script>
 
@@ -343,8 +336,8 @@
 </script>
 
 <script type="text/template" id="phone-view-template">
-<div class="col-xs-4 clearfix">
-    <div class="thumbnail clearfix">
+<div>
+    <div  class="contact-details-div">
         <div class="caption" class="pull-left">
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-trash"></i>
@@ -355,16 +348,10 @@
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
-                        <%= t "phone-number" %>
-                    </dt>
-                    <dd>
-                        {{= number ? number : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "phone-number-type" %>
-                    </dt>
-                    <dd>
                         {{= phone_type_name ? phone_type_name : "&nbsp;"}}
+                    </dt>
+                    <dd>
+                        {{= number ? "<a href='tel:" + number + "'>" + number + "</a>" : "&nbsp;" }}
                     </dd>
                 </dl> </small>
         </div>
@@ -373,46 +360,38 @@
 </script>
 
 <script type="text/template" id="email-view-template">
-<div class="col-xs-4 clearfix">
-    <div class="thumbnail clearfix">
-        <div class="caption" class="pull-left">
+<div>
+    <div class="contact-details-div">
+        
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
+            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
             <small>
                 <dl class="dl-horizontal-small">
-                    <dt>
-                        <%= t "email" %>
-                    </dt>
                     <dd>
-                        {{= email ? email : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "is-default" %>
-                    </dt>
-                    <dd>
-                        {{= isdefault ? '<%= t "yes" %>' : '<%= t "no" %>'}}
+                        {{= email ? "<a href='mailto:" + email + "'>" + email + "</a>" : "&nbsp;" }}
                     </dd>
                 </dl> </small>
-        </div>
+        
     </div>
 </div>
 </script>
 
 
 <script type="text/template" id="address-view-template">
-<div class="col-xs-4 clearfix">
-    <div class="thumbnail clearfix">
-        <div class="caption" class="pull-left">
+    <div class="contact-details-div">
+            
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
+            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
@@ -421,18 +400,22 @@
                     <dd>
                         {{= line1 ? line1 : "&nbsp;" }}
                     </dd>
-                    <dt>
-                        <%= t "line2" %>
-                    </dt>
-                    <dd>
-                        {{= line2 ? line2 : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "line3" %>
-                    </dt>
-                    <dd>
-                        {{= line3 ? line3 : "&nbsp;" }}
-                    </dd>
+                    {{ if (line2) { }}                    
+                        <dt>
+                            <%= t "line2" %>
+                        </dt>
+                        <dd>
+                            {{= line2 ? line2 : "&nbsp;" }}
+                        </dd>
+                    {{ } }}    
+                    {{ if (line3) { }}
+                        <dt>
+                            <%= t "line3" %>
+                        </dt>
+                        <dd>
+                            {{= line3 ? line3 : "&nbsp;" }}
+                        </dd>
+                    {{ } }}
                     <dt>
                         <%= t "city" %>
                     </dt>
@@ -457,16 +440,10 @@
                     <dd>
                         {{= country ? country : "&nbsp;" }}
                     </dd>
-                    <dt>
-                        <%= t "is-default" %>
-                    </dt>
-                    <dd>
-                        {{= isdefault ? '<%= t "yes" %>' : '<%= t "no" %>'}}
-                    </dd>
-                </dl> </small>
-        </div>
+                </dl> 
+            </small>
+        
     </div>
-</div>
 </script>
 
 <script type="text/template" id="exclusions-layout-template">

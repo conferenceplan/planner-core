@@ -22,14 +22,18 @@ $iconWhiteSpritePath: asset-url('glyphicons-halflings-white.png', image);
     clear: left;
     float: left;
     overflow: hidden;
-    text-align: right;
+    text-align: left;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 80px;
+    width: 30%;
+    color: gray;
+    padding-right: 15px;
+    font-weight: normal;
 }
 
 .dl-horizontal-small dd {
-    margin-left: 90px;
+    //margin-left: +10px;
+    
 }
 
 form {
