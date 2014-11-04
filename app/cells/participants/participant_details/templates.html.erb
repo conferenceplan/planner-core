@@ -518,32 +518,8 @@
     {{ if (typeof id != 'undefined') { }}
     <div>
         <small>
-            <dl class="dl-horizontal-small">
-                <dt>
-                    <%= t "title" %>
-                </dt>
-                <dd>
-                    {{= title ? title : "&nbsp;" }}
-                </dd>
-                <dt>
-                    <%= t "role" %>
-                </dt>
-                <dd>
-                    {{= role ? role : "&nbsp;" }}
-                </dd>
-                <dt>
-                   <%= t "published" %>
-                </dt>
-                <dd>
-                    {{= isPublished ? '<%= t "yes" %>' : '<%= t "no" %>' }}
-                </dd>
-                <dt>
-                    <%= t "item-start-time" %>
-                </dt>
-                <dd>
-                    {{= time_slot ? start_time_str : "&nbsp;" }}
-                </dd>
-            </dl> 
+            {{= time_slot ? start_time_str : '<%= t "(no time-date specified yet)"%>' }}: <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})
+            {{= isPublished ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}
         </small>
     </div>
     {{ }; }}
