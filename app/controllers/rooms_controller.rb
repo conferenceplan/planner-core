@@ -7,7 +7,7 @@ class RoomsController < PlannerController
   #
   #
   def index
-    rooms = Room.find :all, :order => 'name asc'
+    rooms = Room.find :all, :order => 'sort_order, name asc'
     
     render json: rooms.to_json, :content_type => 'application/json'
   end

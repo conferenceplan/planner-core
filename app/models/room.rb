@@ -1,5 +1,5 @@
 class Room < ActiveRecord::Base
-  attr_accessible :name, :purpose, :comment, :venue_id, :lock_version
+  attr_accessible :name, :purpose, :comment, :venue_id, :lock_version, :sort_order
   
   belongs_to  :venue
   
