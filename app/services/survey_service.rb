@@ -146,6 +146,16 @@ module SurveyService
   #
   #
   #
+  def self.personHasSurveys(person)
+    nbr = SurveyResponse.count :joins => [{:survey_question => {:survey_group => :survey}}, {:survey_respondent_detail => {:survey_respondent => :person}}],
+      :conditions => ["people.id = ?", person.id]
+      
+    nbr > 0
+  end
+  
+  #
+  #
+  #
   def self.findPeopleWhoGaveAnswer(answer, sinceDate = nil)
     
     conditions = ["survey_responses.survey_question_id = ? and lower(survey_responses.response) like lower(?)", answer.survey_question_id, answer.answer]
