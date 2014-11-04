@@ -23,7 +23,7 @@
             :pager => "participants-pager"
          %>
     </div>
-    <div class="col-xs-3 well" >
+    <div class="col-xs-3" >
         <div class='collapse-group tag-cloud-area' style="height : 325px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
         <div id="participant-tag-cloud" class="collapse in"></div>
         </div>
@@ -31,8 +31,8 @@
 </div>
 
 <div class="row">
-    <div class="col-xs-12 well">
-        <h4 id='selected-participant' style="margin-top: 0px; padding-top: 0px;"></h4>
-        <%= render_cell "participants/participant_details", :display %>
+    <div>
+    <h3 id="selected-participant"></h3>
+    <%= render_cell "participants/participant_details", :display %>
     </div>
 </div>
