@@ -7,7 +7,6 @@
     :selectNotifyMethod => "ParticipantApp.PeopleManagement.showDetails",
     :clearNotifyMethod => "ParticipantApp.PeopleManagement.clearDetails",
     :includeMailings => true,
-    
     :modelType => "ParticipantApp.PeopleManagement.InviteDetails",
     :modelTemplate => "#person-form-template",
     :showControls => true
@@ -16,7 +15,7 @@
 
 <div class="row">
     <div class="col-md-9 left-jqgrid" style="margin-bottom: 35px;">
-        <div id="participant-filters"></div> <!-- TODO -->
+        <div id="participant-filters"></div>
         <%= render_cell "participants/participant_list", :display,
             :pager => "participants-pager"
          %>
@@ -28,7 +27,6 @@
             <h5>Import and export</h5>
             <span class="glyphicon glyphicon-import"></span> <a href="/pages/participants_dash/import">Import Participants / Attendees</a><br>
             <span class="glyphicon glyphicon-export"></span> <a href="/pages/participants_dash/export">Export Participants / Attendees</a>
-            </ul>
             <h5>Surveys</h5>
             <span class="glyphicon glyphicon-comment"></span> <a href="/pages/participants_dash/survey_review">Review Surveys</a>            
             <h5>Filter by tag</h5>

@@ -13,20 +13,23 @@
 <%= render_cell "items/item_details", :javascript %>
 
 <div class="row">
-    <div class="col-xs-9 left-jqgrid">
-        <div id="item-filters"></div> <!-- TODO -->
+    <div class="col-md-9 left-jqgrid">
+        <div id="item-filters"></div>
         <%= render_cell "items/item_list", :display %>
-    </div>
-    <div class="col-xs-3 well" >
-        <div class='collapse-group tag-cloud-area' style="height : 333px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
-            <div id="item-tag-cloud" class="collapse in"></div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-xs-12 well">
-        <h4 id='selected-program-item'></h4>
+        <h3 id='selected-program-item'></h3>
         <%= render_cell "items/item_details", :display %>
+    </div>
+    <div class="col-md-3 hidden-sm hidden-xs" >
+        <div class="right-bar-action-group">
+            <h5>Import and export</h5>
+            <span class="glyphicon glyphicon-export"></span> <a href="/pages/items_dash/export">Export Schedule Items</a>     
+            <h5>Assignments</h5>
+            <span class="glyphicon glyphicon-chevron-right"></span> <a href="/pages/items_dash/add_people">Assign Participants</a><br>
+            <span class="glyphicon glyphicon-chevron-right"></span> <a href="/pages/items_dash/exclusions">Assignment Exclusions</a>         
+            <h5>Filter by tag</h5>
+            <div class='collapse-group tag-cloud-area' style="overflow : auto;"> <!-- TODO - move this to the style sheet -->
+                <div id="item-tag-cloud" class="collapse in"></div>
+            </div>
+        </div>
     </div>
 </div>

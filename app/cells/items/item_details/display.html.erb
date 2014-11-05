@@ -1,9 +1,10 @@
 
-<ul class="nav nav-pills boffset10 id="myTab">
-    <li class="active"><a href="#program-item-tab" data-toggle="tab"><%= t "details" %></a></li>
+<ul class="nav nav-tabs id="myTab">
+    <li class="active"><a href="#program-item-tab" data-toggle="tab"><%= t "Summary" %></a></li>
+    <li><a href="#item-participants-tab" data-toggle="tab"><%= t "participants" %>&nbsp;&nbsp;<span class="badge">5</span></a></li>
     <li><a href="#equipment-tab" data-toggle="tab"><%= t "equipment" %></a></li>
+    <li><a href="#item-images-tab" data-toggle="tab"><%= t "published images" %></a></li>
     <li><a href="#tags-tab" data-toggle="tab"><%= t "tags" %></a></li>
-    <li><a href="#item-images-tab" data-toggle="tab"><%= t "images" %></a></li>
+    <li><a href="#item-documents-tab" data-toggle="tab"><%= t "documents" %>&nbsp;&nbsp;<span class="badge">2</span></a></li>
 </ul>
-
-<div id="item-tabs"></div>
+<div id="item-tabs" class="panel-body"></div>
