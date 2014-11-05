@@ -3,7 +3,8 @@
 
 <script type="text/template" id="item-tab-layout-template">
     <div class="tab-content">
-        <div class="tab-pane active" id="program-item-tab"><div id="program-item-view"></div></div>
+        <div class="tab-pane active" id="program-item-tab"></div>
+        <div class="tab-pane active" id="item-participants-tab"></div>
         <div class="tab-pane" id="equipment-tab">
             <section>
                 <div id="equipment-control-div"></div>
@@ -136,12 +137,6 @@
 </script>
 
 <script type="text/template" id="program-item-view-template">
-    {{ if (typeof id != 'undefined') { }}
-    <div class="clearfix">
-        <div class="caption" class="pull-left">
-            <button class="add-people-button btn btn-primary btn-xs pull-right">
-                <%= t 'add-people' %>
-            </button>
             <dl class="dl-horizontal">
                 <dt><%= t "title" %></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
                 <dt><%= t "ref-number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
@@ -161,6 +156,15 @@
                 <dt><%= t "item-estimated-audience-size" %></dt><dd>{{= audience_size ? audience_size : "&nbsp;" }}</dd> 
                 <dt><%= t "mobile-card-size" %></dt><dd>{{= mobile_card_size ? {1:'<%= (t "small-feminin") %>',5:'<%= (t "medium-feminin") %>',10:'<%= (t "large-feminin") %>'}[mobile_card_size] : "&nbsp;" }}</dd> 
             </dl>
+</script>
+
+<script type="text/template" id="program-participants-view-template">
+    {{ if (typeof id != 'undefined') { }}
+    <div class="clearfix">
+        <div class="caption" class="pull-left">
+            <button class="add-people-button btn btn-primary btn-xs pull-right">
+                <%= t 'add-people' %>
+            </button>
         </div>
         <!-- List of participants etc. -->
         <div><%= t "moderator(s)" %></div>
