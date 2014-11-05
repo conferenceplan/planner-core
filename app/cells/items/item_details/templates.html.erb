@@ -4,7 +4,7 @@
 <script type="text/template" id="item-tab-layout-template">
     <div class="tab-content">
         <div class="tab-pane active" id="program-item-tab"></div>
-        <div class="tab-pane active" id="item-participants-tab"></div>
+        <div class="tab-pane" id="item-participants-tab"></div>
         <div class="tab-pane" id="equipment-tab">
             <section>
                 <div id="equipment-control-div"></div>
@@ -136,7 +136,7 @@
     </form>
 </script>
 
-<script type="text/template" id="program-item-view-template">
+<script type="text/template" id="program-item-summary-view-template">
             <dl class="dl-horizontal">
                 <dt><%= t "title" %></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
                 <dt><%= t "ref-number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>

@@ -250,7 +250,7 @@ ItemApp.ItemManagement = (function(Backbone){
         tabContent.push( TabUtils.createTabContent({
             model : itemMdl,
             url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
-            template : '#program-item-view-template',
+            template : '#program-item-summary-view-template',
             region : itemTabLayout.program_item,
             id : id,
             id_name : 'programme_item_id',
