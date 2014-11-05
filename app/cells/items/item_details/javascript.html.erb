@@ -165,6 +165,7 @@ ItemApp.ItemManagement = (function(Backbone){
         
         regions : {
             program_item    : "#program-item-tab",
+            participants    : "#item-participants-tab",
             equipment       : "#equipment-region-div",
             equipment_ctl   : "#equipment-control-div",
             tags            : "#tags-tab",
@@ -188,6 +189,7 @@ ItemApp.ItemManagement = (function(Backbone){
         
         if (itemTabLayout) {
             itemTabLayout.program_item.close();
+            itemTabLayout.participants.close();
             itemTabLayout.equipment.close();
             itemTabLayout.tags.close();
             itemTabLayout.images.close();
@@ -205,8 +207,8 @@ ItemApp.ItemManagement = (function(Backbone){
         var itemMdl = TabUtils.createTabContent({
             modelType : ProgramItem,
             url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
-            template : '#program-item-view-template',
-            region : itemTabLayout.program_item,
+            template : '#program-participants-view-template',
+            region : itemTabLayout.participants,
             id : id,
             id_name : 'programme_item_id',
             editTitle : "Edit Item",
@@ -245,6 +247,15 @@ ItemApp.ItemManagement = (function(Backbone){
         });
         tabContent.push( itemMdl );
         
+        tabContent.push( TabUtils.createTabContent({
+            model : itemMdl,
+            url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
+            template : '#program-item-summary-view-template',
+            region : itemTabLayout.program_item,
+            id : id,
+            id_name : 'programme_item_id',
+        }) );
+
         itemTabLayout.images.show(new ItemImageView({model : itemMdl}) );
 
         TabUtils.createTabControl({
