@@ -5,14 +5,11 @@
         <div class="tab-pane" id="contacts-tab">
             <div id="contacts-view"></div>
         </div>
-        <div class="tab-pane" id="published-info"><div id="published-info-view"></div></div>
-        <div class="tab-pane" id="bio-image"><div id="bio-image-view"></div></div>
-        <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
+        <div class="tab-pane" id="published-info-tab"><div id="published-info-view"></div></div>
         <div class="tab-pane" id="tags-tab">
             <div id="tags-view"></div>
         </div>
         <div class="tab-pane " id="surveys-tab"><div id="survey-view"></div></div>
-        <div class="tab-pane " id="registration-tab"><div id="registration-view"></div></div>
         <div class="tab-pane" id="availability-tab">
             <section>
                 <div id="availability-div"></div>
@@ -127,140 +124,80 @@
         </fieldset>
     </form>
 </script>
-    
+
+<script type="text/template" id="summary-layout-template">
+    <section>
+        <div id="id-region-div"></div>
+        <div id="reg-region-div"></div>
+    </section>
+</script>
+
 <script type="text/template" id="registration-view-template">
-<div class="registration-view-details">
-    {{ if (typeof id != 'undefined') { }}
-    <div class="col-xs-6 clearfix">
-        <div class="caption" class="pull-left">
-            <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <%= t "edit" %>
-            </button>
-            <dl class="dl-horizontal">
-                <dt>
-                    <%= t "reg-number" %>
-                </dt>
-                <dd>
-                    {{= registration_number ? registration_number : "&nbsp;" }}
-                </dd>
-                <dt>
-                    <%= t "reg-type" %>
-                </dt>
-                <dd>
-                    {{= registration_type ? registration_type : "&nbsp;" }}
-                </dd>
-                <dt>
-                    <%= t "registered" %>
-                </dt>
-                <dd>
-                    {{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}
-                </dd>
-            </dl>
-        </div>
+    <div class="col-md-4" id="registration-view-details">    
+        {{ if (typeof id != 'undefined') { }}
+            <h5><%= t "registration"%></h5>
+            <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
+            <dl class="dl-horizontal-small">
+                <dt><%= t "reg-number" %></dt>
+                <dd>{{= registration_number ? registration_number : "&nbsp;" }}</dd>
+                <dt><%= t "reg-type" %></dt>
+                <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
+                <dt><%= t "registered" %></dt>
+                <dd>{{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+            </dl>       
+        {{ } else { }}
+            <%= t "no-registration-details" %>
+            <button class="model-new-button"><%= t "add-details" %></button>
+        {{ }; }}
     </div>
-    {{ } else { }}
-    <div id="registration-view-details">
-        <%= t "no-registration-details" %>
-        <button class="model-new-button">
-            <%= t "add-details" %>
-        </button>
-    </div>
-    {{ }; }}
-</div>
 </script>
 
 <script type="text/template" id="invite-view-template">
     <div class="col-md-3">
         <h5>Identification</h5>
-        
-        <button class="model-edit-button btn btn-primary btn-xs pull-right">
-            <i class="glyphicon glyphicon-pencil"></i>
-        </button>
-        <p><strong>{{= first_name ? first_name : "&nbsp;" }} {{= last_name ? last_name : "&nbsp;" }} {{= suffix ? suffix : "&nbsp;" }}</strong>
-                    <br>
-                    {{= job_title ? job_title : "<span class='minor-text'>(no job title specified)</span>" }}
-                    <br>
-                    {{= company ? company : "<span class='minor-text'>(no company specified)</span>" }}
-                </p>
-                <p><span class="label label-default">Participant</span></p>
+        <button class="model-edit-button btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-pencil"></i></button>
+        <p>
+            <strong>{{= first_name ? first_name : "&nbsp;" }} {{= last_name ? last_name : "&nbsp;" }} {{= suffix ? suffix : "&nbsp;" }}</strong><br>
+            {{= job_title ? job_title : "<span class='minor-text'>(no job title specified)</span>" }}<br>
+            {{= company ? company : "<span class='minor-text'>(no company specified)</span>" }}
+        </p>
+        <p><span class="label label-default">Participant</span></p>
     </div>
-</div>
-<div class="col-md-5">
-    <h5><%= t "Invitation Status"%></h5>
-    <button class="model-edit-button btn btn-primary btn-xs pull-right">
-        <i class="glyphicon glyphicon-pencil"></i>
-    </button>
-    {{ if (typeof id != 'undefined') { }}
-    {{ if (!survey_key) { }}
-    <p><button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right">
-        <%= t "generate-invite-key" %>
-    </button>
-    </p>
-    {{ } }}
-    <dl class="dl-horizontal-small">
-        <dt>
-            <%= t "invite-status" %>
-        </dt>
-        <dd>
-            {{= invitestatus_name ? invitestatus_name : "&nbsp;"}}
-        </dd>
-        <dt>
-            <%= t "acceptance-status" %>
-        </dt>
-        <dd>
-            <span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span>
-        </dd>
-        <dt>
-            <%= t "invitation-category" %>
-        </dt>
-        <dd>
-            {{= invitation_category_name ? invitation_category_name : "&nbsp;"}}
-        </dd>
-        <dt>
-            <%= t "survey-key" %>
-        </dt>
-        <dd>
-            {{= survey_key }}
-        </dd>
 
-         <dt>
-            <%= t "comments" %>
-        </dt>
-        <dd>
-            {{= comments }}
-        </dd>        
+    <div class="col-md-5">
+        <h5><%= t "Invitation Status"%></h5>
+        <button class="model-edit-button btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-pencil"></i></button>
+        {{ if (typeof id != 'undefined') { }}
+            {{ if (!survey_key) { }}
+            <p>
+                <button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right"><%= t "generate-invite-key" %></button>
+            </p>
+            {{ } }}
+            <dl class="dl-horizontal-small">
+                <dt><%= t "invite-status" %></dt>
+                <dd>{{= invitestatus_name ? invitestatus_name : "&nbsp;"}}</dd>
+                <dt><%= t "acceptance-status" %></dt>
+                <dd><span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span></dd>
+                <dt><%= t "invitation-category" %></dt>
+                <dd>{{= invitation_category_name ? invitation_category_name : "&nbsp;"}}</dd>
+                <dt><%= t "survey-key" %></dt>
+                <dd>{{= survey_key }}</dd>
+                <dt><%= t "comments" %></dt>
+                <dd>{{= comments }}</dd>
+            </dl>
+        {{ }; }}
+    </div>
+</script>
 
-    </dl>
-</div>
-<div class="col-md-4">    
-    <h5><%= t "registration"%></h5>
-    <dl class="dl-horizontal-small">
-           <dt>
-            <%= t "reg-number" %>
-        </dt>
-                <dd>
-                    TODO: Reg number
-                </dd>
-                <dt>
-                    <%= t "reg-type" %>
-                </dt>
-                <dd>
-                    TODO: Reg type
-                </dd>
-                <dt>
-                    <%= t "registered" %>
-                </dt>
-                <dd>
-                    TODO: Registered or not
-                </dd>
-         </dl>       
-</div>
-{{ }; }}
+<script type="text/template" id="published-info-layout-template">
+    <section>
+        <div id="picture-region-div"></div>
+        <div id="bio-region-div"></div>
+    </section>
 </script>
 
 <script type="text/template" id="bio-image-template">
-    <div class="row">
-        <div class="col-md-3">
+    <div class="col-md-6">
             <% if ConfigService.hasCloudinaryConfig? %>
             <div>
                 {{ if (typeof id != 'undefined') { }}
@@ -291,66 +228,35 @@
             <% else %>
                 <%= t 'cloudinary-not-configured' %>
             <% end %>
-        </div>
     </div>    
 </script>
 
 <script type="text/template" id="bio-view-template">
-{{ if (typeof id != 'undefined') { }}
-<button class="model-edit-button btn btn-primary btn-xs pull-right">
-    <%= t "edit" %>
-</button>
-<dl class="dl-horizontal">
-    <dt>
-        <%= t "bio" %>
-    </dt>
-    <dd>
-        {{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}
-    </dd>
-    <dt>
-        <%= t "participant-photo" %>
-    </dt>
-    <dd>
-        {{= photourl ? photourl : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "participant-url" %>
-    </dt>
-    <dd>
-        {{= website ? website : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "participant-twitter-handle" %>
-    </dt>
-    <dd>
-        {{= twitterinfo ? twitterinfo : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "participant-facebook-url" %>
-    </dt>
-    <dd>
-        {{= facebook ? facebook : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "participant-other-url" %>
-    </dt>
-    <dd>
-        {{= othersocialmedia ? othersocialmedia : "&nbsp;" }}
-    </dd>
-</dl>
-{{ } else { }}
-<button class="model-new-button btn btn-primary btn-xs pull-right">
-    <%= t "new" %>
-</button>
-<dl class="dl-horizontal">
-    <dt>
-        <%= t "bio-from-survey" %>
-    </dt>
-    <dd>
-        {{= survey_bio ? survey_bio : "&nbsp;" }}
-    </dd>
-</dl>
-{{ }; }}
+    <div class="col-md-6">
+        {{ if (typeof id != 'undefined') { }}
+        <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
+        <dl class="dl-horizontal">
+            <dt><%= t "bio" %></dt>
+            <dd>{{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}</dd>
+            <dt><%= t "participant-photo" %></dt>
+            <dd>{{= photourl ? photourl : "&nbsp;" }}</dd>
+            <dt><%= t "participant-url" %></dt>
+            <dd>{{= website ? website : "&nbsp;" }}</dd>
+            <dt><%= t "participant-twitter-handle" %></dt>
+            <dd>{{= twitterinfo ? twitterinfo : "&nbsp;" }}</dd>
+            <dt><%= t "participant-facebook-url" %></dt>
+            <dd>{{= facebook ? facebook : "&nbsp;" }}</dd>
+            <dt><%= t "participant-other-url" %></dt>
+            <dd>{{= othersocialmedia ? othersocialmedia : "&nbsp;" }}</dd>
+        </dl>
+        {{ } else { }}
+        <button class="model-new-button btn btn-primary btn-xs pull-right"><%= t "new" %></button>
+        <dl class="dl-horizontal">
+            <dt><%= t "bio-from-survey" %></dt>
+            <dd>{{= survey_bio ? survey_bio : "&nbsp;" }}</dd>
+        </dl>
+        {{ }; }}
+    </div>
 </script>
 
 <script type="text/template" id="phone-view-template">

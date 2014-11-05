@@ -196,6 +196,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         regions : {
             registration    : "#registration-tab",
             contacts        : "#contacts-tab",
+            published_info  : "#published-info-tab",
             invite          : "#invite-tab",
             bio             : "#bio-tab",
             bio_image       : "#bio-image",
@@ -205,7 +206,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             exclusion_times : "#exclusion-times-div",
             items           : "#items-tab"
         }
-    });    
+    });
 
     AddressLayout = Backbone.Marionette.Layout.extend({
         template: "#address-layout-template",
@@ -217,6 +218,24 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             emailRegion: "#email-region-div",
             phoneControlRegion: "#phone-control-div",
             phoneRegion: "#phone-region-div",
+        },
+    });
+    
+    SummaryLayout = Backbone.Marionette.Layout.extend({
+        template: "#summary-layout-template",
+        
+        regions : {
+            identity    : "#id-region-div",
+            registration: "#reg-region-div"
+        },
+    });
+    
+    PublishedInfoLayout = Backbone.Marionette.Layout.extend({
+        template: "#published-info-layout-template",
+        
+        regions : {
+            picture : "#picture-region-div",
+            bio     : "#bio-region-div"
         },
     });
 
@@ -231,6 +250,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         if (personTabLayout) {
             personTabLayout.registration.close();
             personTabLayout.contacts.close();
+            personTabLayout.published_info.close();
             personTabLayout.invite.close();
             personTabLayout.bio.close();
             personTabLayout.bio_image.close();
@@ -290,22 +310,25 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         var data = jQuery("#participants").jqGrid('getRowData', id);
         $('#selected-participant').text(getPersonName(data));
 
+        summaryLayout = new SummaryLayout();
+        personTabLayout.invite.show(summaryLayout);
+
         TabUtils.createTabContent({
             modelType : RegistrationDetail,
             url : "<%= baseUri + '/participants/' %>" + id + "/registrationDetails.json",
             template : '#registration-view-template',
-            region : personTabLayout.registration,
+            region : summaryLayout.registration,
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-registration" %>',
             editTitle : '<%= t "edit-registration" %>',
-        }) 
-
+        });
+        
         var invite_details = TabUtils.createTabContent({
             modelType : InviteDetails,
             url : "<%= baseUri + '/participants/' %>" + id + ".json",
             template : '#invite-view-template',
-            region : personTabLayout.invite,
+            region : summaryLayout.identity,
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-invite" %>',
@@ -332,12 +355,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             }
         });
         tabContent.push( invite_details );
+
+        publishedInfoLayout = new PublishedInfoLayout();
+        personTabLayout.published_info.show(publishedInfoLayout);
         
         tabContent.push( TabUtils.createTabContent({
             modelType : BioDetails,
             url : "<%= baseUri + '/participants/' %>" + id + "/edited_bios.json",
             template : '#bio-view-template',
-            region : personTabLayout.bio,
+            region : publishedInfoLayout.bio,
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-bio" %>',
@@ -348,7 +374,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             modelType : BioPicture,
             url : "<%= baseUri + '/participants/' %>" + id + "/bio_images.json",
             template : '#bio-image-template',
-            region : personTabLayout.bio_image,
+            region : publishedInfoLayout.picture,
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-bio-image" %>',
@@ -402,7 +428,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 });
             }
         });
-        
+
         addressLayout = new AddressLayout();
         personTabLayout.contacts.show(addressLayout);
 
