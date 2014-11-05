@@ -530,7 +530,7 @@ input[type="file"] {
     
 }
 .minor-text {
-    color: gray;
+    color: #ddd;
     font-style: italic;
 }
 
@@ -545,10 +545,27 @@ input[type="file"] {
     margin-bottom: 5px;
     
 }
-#item-tag-cloud .panel-heading {
+#item-tag-cloud .panel-heading, #participant-tag-cloud .panel-heading {
     padding: 6px 10px 6px 10px;
 }
 h5.tag-panel-title {
     text-transform: none;
     font-weight: normal;
+}
+#item-tag-cloud .panel-body, #participant-tag-cloud .panel-body {
+    min-height: 0;
+    padding: 10px 10px 10px 10px;
+}
+
+.dl-horizontal-small.dt10 dt { width: 10%; }
+.dl-horizontal-small.dt20 dt { width: 20%; }
+.dl-horizontal-small.dt30 dt { width: 30%; }
+.dl-horizontal-small.dt35 dt { width: 35%; }
+.dl-horizontal-small.dt40 dt { width: 40%; }
+.dl-horizontal-small.dt50 dt { width: 50%; }
+.dl-horizontal-small.dt60 dt { width: 60%; }
+.dl-horizontal-small.dt70 dt { width: 70%; } 
+
+.dl-airy dd {
+    margin-bottom: 15px;
 }

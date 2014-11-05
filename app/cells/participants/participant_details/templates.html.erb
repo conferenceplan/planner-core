@@ -135,7 +135,7 @@
         {{ if (typeof id != 'undefined') { }}
             <h5><%= t "registration"%></h5>
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
-            <dl class="dl-horizontal-small">
+            <dl class="dl-horizontal-small dt50">
                 <dt><%= t "reg-number" %></dt>
                 <dd>{{= registration_number ? registration_number : "&nbsp;" }}</dd>
                 <dt><%= t "reg-type" %></dt>
@@ -171,7 +171,7 @@
                 <button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right"><%= t "generate-invite-key" %></button>
             </p>
             {{ } }}
-            <dl class="dl-horizontal-small">
+            <dl class="dl-horizontal-small dt35">
                 <dt><%= t "invite-status" %></dt>
                 <dd>{{= invitestatus_name ? invitestatus_name : "&nbsp;"}}</dd>
                 <dt><%= t "acceptance-status" %></dt>
@@ -189,13 +189,13 @@
 
 <script type="text/template" id="published-info-layout-template">
     <section>
-        <div id="picture-region-div"></div>
-        <div id="bio-region-div"></div>
+        <div id="picture-region-div" class="col-md-3"></div>
+        <div id="bio-region-div" class="col-md-9"></div>
     </section>
 </script>
 
 <script type="text/template" id="bio-image-template">
-    <div class="col-md-6">
+            <h5>Published picture</h5>
             <% if ConfigService.hasCloudinaryConfig? %>
             <div>
                 {{ if (typeof id != 'undefined') { }}
@@ -214,10 +214,10 @@
                 </div>
                 {{ } else { }}
                 <div class="caption">
-                    <h4><%= t "bio-image" %></h4>
                     <p>
-                        <button class="model-new-button btn btn-primary btn-xs">
-                            <%= t "new" %>
+                        <%= t "bio-image" %>
+                        <button class="model-new-button btn btn-primary btn-xs pull-right">
+                            <i class="glyphicon glyphicon-pencil"></i>
                         </button>
                     </p>
                 </div>
@@ -226,35 +226,35 @@
             <% else %>
                 <%= t 'cloudinary-not-configured' %>
             <% end %>
-    </div>    
+   
 </script>
 
 <script type="text/template" id="bio-view-template">
-    <div class="col-md-6">
+        <h5>Biography</h5>
         {{ if (typeof id != 'undefined') { }}
-        <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
-        <dl class="dl-horizontal">
-            <dt><%= t "bio" %></dt>
-            <dd>{{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}</dd>
-            <dt><%= t "participant-photo" %></dt>
-            <dd>{{= photourl ? photourl : "&nbsp;" }}</dd>
-            <dt><%= t "participant-url" %></dt>
-            <dd>{{= website ? website : "&nbsp;" }}</dd>
-            <dt><%= t "participant-twitter-handle" %></dt>
-            <dd>{{= twitterinfo ? twitterinfo : "&nbsp;" }}</dd>
-            <dt><%= t "participant-facebook-url" %></dt>
-            <dd>{{= facebook ? facebook : "&nbsp;" }}</dd>
-            <dt><%= t "participant-other-url" %></dt>
-            <dd>{{= othersocialmedia ? othersocialmedia : "&nbsp;" }}</dd>
-        </dl>
+            <button class="model-edit-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
+            <dl class="dl-airy">
+                <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text">(edited)</span>' : (survey_bio ? ' <span class="minor-text">(as filled out by person on survey)</span>' : '&nbsp;') }}</dt>
+                <dd>{{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}</dd>
+                <dt><%= t "participant-photo" %></dt>
+                <dd>{{= photourl ? photourl : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dt><%= t "participant-url" %></dt>
+                <dd>{{= website ? website : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dt><%= t "participant-twitter-handle" %></dt>
+                <dd>{{= twitterinfo ? twitterinfo : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dt><%= t "participant-facebook-url" %></dt>
+                <dd>{{= facebook ? facebook : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dt><%= t "participant-other-url" %></dt>
+                <dd>{{= othersocialmedia ? othersocialmedia : "<span class='minor-text'>(none provided)</span>" }}</dd>
+            </dl>
         {{ } else { }}
-        <button class="model-new-button btn btn-primary btn-xs pull-right"><%= t "new" %></button>
-        <dl class="dl-horizontal">
-            <dt><%= t "bio-from-survey" %></dt>
-            <dd>{{= survey_bio ? survey_bio : "&nbsp;" }}</dd>
-        </dl>
+            <button class="model-new-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
+            <dl class="dl-airy">
+                <dt><%= t "bio" %></dt>
+                <dd>{{= survey_bio ? survey_bio : "&nbsp;" }}</dd>
+            </dl>
         {{ }; }}
-    </div>
+
 </script>
 
 <script type="text/template" id="phone-view-template">
