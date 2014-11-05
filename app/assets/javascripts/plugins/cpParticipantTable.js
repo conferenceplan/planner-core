@@ -43,8 +43,9 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     };
                     var name = (rowObject['person[first_name]'] + ' ' + rowObject['person[last_name]'] + ' ' + rowObject['person[suffix]']).trim();
                                 
+                    
                     if (res.length > 0) {
-                        res += "<br/>(" +  name + ")";
+                        res += " (" +  name + ")";
                     } else {
                         res = name;
                     };

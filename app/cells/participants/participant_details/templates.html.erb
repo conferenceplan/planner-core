@@ -1,17 +1,18 @@
-<!--
--->
+
 <script type="text/template" id="person-tab-layout-template">
     <div class="tab-content">
-        <div class="tab-pane active" id="registration-tab"><div id="registration-view"></div></div>
+        <div class="tab-pane  active" id="invite-tab"><div id="invite-view"></div></div>
         <div class="tab-pane" id="contacts-tab">
             <div id="contacts-view"></div>
         </div>
-        <div class="tab-pane" id="invite-tab"><div id="invite-view"></div></div>
-        <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
+        <div class="tab-pane" id="published-info"><div id="published-info-view"></div></div>
         <div class="tab-pane" id="bio-image"><div id="bio-image-view"></div></div>
+        <div class="tab-pane" id="bio-tab"><div id="bio-view"></div></div>
         <div class="tab-pane" id="tags-tab">
             <div id="tags-view"></div>
         </div>
+        <div class="tab-pane " id="surveys-tab"><div id="survey-view"></div></div>
+        <div class="tab-pane " id="registration-tab"><div id="registration-view"></div></div>
         <div class="tab-pane" id="availability-tab">
             <section>
                 <div id="availability-div"></div>
@@ -22,44 +23,35 @@
             </section>
         </div>
         <div class="tab-pane" id="items-tab"><div id="items-view"></div></div>
+        <div class="tab-pane" id="emails-tab"><div id="emails-view"></div></div>
     </div>
 </script>
 
 <script type="text/template" id="address-layout-template">
     <section>
         <div class="row">
-            <div id="postal-control-div" class="col-xs-12"></div>
-        </div>
-        <div class="row">
-            <div id="postal-region-div" class="col-xs-12"></div>
-        </div>
-    </section>
-    <section>
-        <div class="row">
-        <div id="email-control-div" class="col-xs-12"></div>
-        </div>
-        <div class="row">
-        <div id="email-region-div" class="col-xs-12"></div>
-        </div>
-    </section>
-    <section>
-        <div class="row">
-        <div id="phone-control-div" class="col-xs-12"></div>
-        </div>
-        <div class="row">
-        <div id="phone-region-div" class="col-xs-12"></div>
+            <div class="col-md-5 col-xs-12">
+                <div id="postal-control-div"></div>
+                <div id="postal-region-div"></div>
+            </div>
+            <div class="col-md-4 col-xs-12">
+                <div id="email-control-div"></div>
+                <div id="email-region-div"></div>
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <div id="phone-control-div"></div>
+                <div id="phone-region-div"></div>
+            </div>    
         </div>
     </section>
 </script>
 
 
 <script type="text/template" id="address-control-template">
-<div>
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add-address" %>
     </button>
-    <%= t "postal-addresses" %>
-</div>
+    <h5><%= t "postal-addresses" %></h5>
 </script>
 
 <script type="text/template" id="email-control-template">
@@ -67,7 +59,7 @@
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add-email" %>
     </button>
-    <%= t "email-addresses" %>
+    <h5><%= t "email-addresses" %></h5>
 </div>
 </script>
 
@@ -76,7 +68,7 @@
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t "add-phone" %>
     </button>
-    <%= t "phone" %>
+    <h5><%= t "phone" %></h5>
 </div>
 </script>
 
@@ -178,91 +170,110 @@
 </script>
 
 <script type="text/template" id="invite-view-template">
-{{ if (typeof id != 'undefined') { }}
-{{ if (!survey_key) { }}
-<button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right">
-    <%= t "generate-invite-key" %>
-</button>
-{{ } }}
-<dl class="dl-horizontal">
-    <dt>
-        <%= t "first-name" %>
-    </dt>
-    <dd>
-        {{= first_name ? first_name : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "last-name" %>
-    </dt>
-    <dd>
-        {{= last_name ? last_name : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "suffix" %>
-    </dt>
-    <dd>
-        {{= suffix ? suffix : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "company" %>
-    </dt>
-    <dd>
-        {{= company ? company : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "job-title" %>
-    </dt>
-    <dd>
-        {{= job_title ? job_title : "&nbsp;" }}
-    </dd>
-    <dt>
-        <%= t "invite-status" %>
-    </dt>
-    <dd>
-        {{= invitestatus_name ? invitestatus_name : "&nbsp;"}}
-    </dd>
-    <dt>
-        <%= t "acceptance-status" %>
-    </dt>
-    <dd>
-        {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}
-    </dd>
-    <dt>
-        <%= t "invitation-category" %>
-    </dt>
-    <dd>
-        {{= invitation_category_name ? invitation_category_name : "&nbsp;"}}
-    </dd>
-    <dt>
-        <%= t "survey-key" %>
-    </dt>
-    <dd>
-        {{= survey_key }}
-    </dd>
-    <dt>
-        <%= t "comments" %>
-    </dt>
-    <dd>
-        {{= comments }}
-    </dd>
-</dl>
+    <div class="col-md-3">
+        <h5>Identification</h5>
+        
+        <button class="model-edit-button btn btn-primary btn-xs pull-right">
+            <i class="glyphicon glyphicon-pencil"></i>
+        </button>
+        <p><strong>{{= first_name ? first_name : "&nbsp;" }} {{= last_name ? last_name : "&nbsp;" }} {{= suffix ? suffix : "&nbsp;" }}</strong>
+                    <br>
+                    {{= job_title ? job_title : "<span class='minor-text'>(no job title specified)</span>" }}
+                    <br>
+                    {{= company ? company : "<span class='minor-text'>(no company specified)</span>" }}
+                </p>
+                <p><span class="label label-default">Participant</span></p>
+    </div>
+</div>
+<div class="col-md-5">
+    <h5><%= t "Invitation Status"%></h5>
+    <button class="model-edit-button btn btn-primary btn-xs pull-right">
+        <i class="glyphicon glyphicon-pencil"></i>
+    </button>
+    {{ if (typeof id != 'undefined') { }}
+    {{ if (!survey_key) { }}
+    <p><button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right">
+        <%= t "generate-invite-key" %>
+    </button>
+    </p>
+    {{ } }}
+    <dl class="dl-horizontal-small">
+        <dt>
+            <%= t "invite-status" %>
+        </dt>
+        <dd>
+            {{= invitestatus_name ? invitestatus_name : "&nbsp;"}}
+        </dd>
+        <dt>
+            <%= t "acceptance-status" %>
+        </dt>
+        <dd>
+            <span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span>
+        </dd>
+        <dt>
+            <%= t "invitation-category" %>
+        </dt>
+        <dd>
+            {{= invitation_category_name ? invitation_category_name : "&nbsp;"}}
+        </dd>
+        <dt>
+            <%= t "survey-key" %>
+        </dt>
+        <dd>
+            {{= survey_key }}
+        </dd>
+
+         <dt>
+            <%= t "comments" %>
+        </dt>
+        <dd>
+            {{= comments }}
+        </dd>        
+
+    </dl>
+</div>
+<div class="col-md-4">    
+    <h5><%= t "registration"%></h5>
+    <dl class="dl-horizontal-small">
+           <dt>
+            <%= t "reg-number" %>
+        </dt>
+                <dd>
+                    TODO: Reg number
+                </dd>
+                <dt>
+                    <%= t "reg-type" %>
+                </dt>
+                <dd>
+                    TODO: Reg type
+                </dd>
+                <dt>
+                    <%= t "registered" %>
+                </dt>
+                <dd>
+                    TODO: Registered or not
+                </dd>
+         </dl>       
+</div>
 {{ }; }}
 </script>
 
 <script type="text/template" id="bio-image-template">
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-3">
             <% if ConfigService.hasCloudinaryConfig? %>
-            <div class="thumbnail">
+            <div>
                 {{ if (typeof id != 'undefined') { }}
-                <div align="left" class="voffset10 loffset10">
-                	<image src="{{= bio_picture ? bio_picture.standard.url : '' }}"></image>
+                <div align="left" class="voffset10">
+                	<image src="{{= bio_picture ? bio_picture.standard.url : '' }}" class="img-responsive img-rounded"></image>
                 </div>
-                <div class="caption">
-                    <h4><%= t "bio-image" %></h4>
-                    <p>
-                        <button class="model-edit-button btn btn-primary btn-xs">
-                            <%= t "edit" %>
+                <div class="caption voffset5">
+                    <p><%= t "bio-image" %>
+                        <button class="model-delete-button btn btn-primary btn-xs pull-right">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </button>
+                        <button class="model-edit-button btn btn-primary btn-xs pull-right">
+                            <i class="glyphicon glyphicon-pencil"></i>
                         </button>
                     </p>
                 </div>
@@ -278,7 +289,7 @@
                 {{ }; }}
             </div>
             <% else %>
-            <%= t 'cloudinary-not-configured' %>
+                <%= t 'cloudinary-not-configured' %>
             <% end %>
         </div>
     </div>    
@@ -343,8 +354,8 @@
 </script>
 
 <script type="text/template" id="phone-view-template">
-<div class="col-xs-4 clearfix">
-    <div class="thumbnail clearfix">
+<div>
+    <div  class="contact-details-div">
         <div class="caption" class="pull-left">
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-trash"></i>
@@ -355,16 +366,10 @@
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
-                        <%= t "phone-number" %>
-                    </dt>
-                    <dd>
-                        {{= number ? number : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "phone-number-type" %>
-                    </dt>
-                    <dd>
                         {{= phone_type_name ? phone_type_name : "&nbsp;"}}
+                    </dt>
+                    <dd>
+                        {{= number ? "<a href='tel:" + number + "'>" + number + "</a>" : "&nbsp;" }}
                     </dd>
                 </dl> </small>
         </div>
@@ -373,46 +378,38 @@
 </script>
 
 <script type="text/template" id="email-view-template">
-<div class="col-xs-4 clearfix">
-    <div class="thumbnail clearfix">
-        <div class="caption" class="pull-left">
+<div>
+    <div class="contact-details-div">
+        
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
+            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
             <small>
                 <dl class="dl-horizontal-small">
-                    <dt>
-                        <%= t "email" %>
-                    </dt>
                     <dd>
-                        {{= email ? email : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "is-default" %>
-                    </dt>
-                    <dd>
-                        {{= isdefault ? '<%= t "yes" %>' : '<%= t "no" %>'}}
+                        {{= email ? "<a href='mailto:" + email + "'>" + email + "</a>" : "&nbsp;" }}
                     </dd>
                 </dl> </small>
-        </div>
+        
     </div>
 </div>
 </script>
 
 
 <script type="text/template" id="address-view-template">
-<div class="col-xs-4 clearfix">
-    <div class="thumbnail clearfix">
-        <div class="caption" class="pull-left">
+    <div class="contact-details-div">
+            
             <button class="model-delete-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-trash"></i>
             </button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
+            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>
@@ -421,18 +418,22 @@
                     <dd>
                         {{= line1 ? line1 : "&nbsp;" }}
                     </dd>
-                    <dt>
-                        <%= t "line2" %>
-                    </dt>
-                    <dd>
-                        {{= line2 ? line2 : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "line3" %>
-                    </dt>
-                    <dd>
-                        {{= line3 ? line3 : "&nbsp;" }}
-                    </dd>
+                    {{ if (line2) { }}                    
+                        <dt>
+                            <%= t "line2" %>
+                        </dt>
+                        <dd>
+                            {{= line2 ? line2 : "&nbsp;" }}
+                        </dd>
+                    {{ } }}    
+                    {{ if (line3) { }}
+                        <dt>
+                            <%= t "line3" %>
+                        </dt>
+                        <dd>
+                            {{= line3 ? line3 : "&nbsp;" }}
+                        </dd>
+                    {{ } }}
                     <dt>
                         <%= t "city" %>
                     </dt>
@@ -457,16 +458,10 @@
                     <dd>
                         {{= country ? country : "&nbsp;" }}
                     </dd>
-                    <dt>
-                        <%= t "is-default" %>
-                    </dt>
-                    <dd>
-                        {{= isdefault ? '<%= t "yes" %>' : '<%= t "no" %>'}}
-                    </dd>
-                </dl> </small>
-        </div>
+                </dl> 
+            </small>
+        
     </div>
-</div>
 </script>
 
 <script type="text/template" id="exclusions-layout-template">
@@ -493,7 +488,7 @@
 
 <script type="text/template" id="tag-cloud-context-layout-template">
 <div class="panel-group" id="participant-tag-cloud-parent">
-    <div class="panel panel-default">
+    <div class="">
         <div class="panel-heading">
             <h5 class="panel-title">
                 <a data-toggle="collapse" data-parent="#participant-tag-cloud-parent" href="#{{= context }}">{{= context }}</a>
@@ -540,34 +535,10 @@
 <script type="text/template" id="program-item-view-template">
 <div>
     {{ if (typeof id != 'undefined') { }}
-    <div class="thumbnail clearfix">
+    <div>
         <small>
-            <dl class="dl-horizontal-small">
-                <dt>
-                    <%= t "title" %>
-                </dt>
-                <dd>
-                    {{= title ? title : "&nbsp;" }}
-                </dd>
-                <dt>
-                    <%= t "role" %>
-                </dt>
-                <dd>
-                    {{= role ? role : "&nbsp;" }}
-                </dd>
-                <dt>
-                   <%= t "published" %>
-                </dt>
-                <dd>
-                    {{= isPublished ? '<%= t "yes" %>' : '<%= t "no" %>' }}
-                </dd>
-                <dt>
-                    <%= t "item-start-time" %>
-                </dt>
-                <dd>
-                    {{= time_slot ? start_time_str : "&nbsp;" }}
-                </dd>
-            </dl> 
+            {{= time_slot ? start_time_str : '<%= t "(no time-date specified yet)"%>' }}: <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})
+            {{= isPublished ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}
         </small>
     </div>
     {{ }; }}

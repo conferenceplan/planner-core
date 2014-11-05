@@ -1,5 +1,3 @@
-<!--
--->
 
 <%= render_cell "participants/participant_details", :templates %>
 
@@ -17,22 +15,28 @@
 <%= render_cell "participants/participant_details", :javascript %>
 
 <div class="row">
-    <div class="col-xs-9 left-jqgrid">
+    <div class="col-md-9 left-jqgrid" style="margin-bottom: 35px;">
         <div id="participant-filters"></div> <!-- TODO -->
         <%= render_cell "participants/participant_list", :display,
             :pager => "participants-pager"
          %>
+         <h3 id="selected-participant"></h3>
+         <%= render_cell "participants/participant_details", :display %>
     </div>
-    <div class="col-xs-3 well" >
-        <div class='collapse-group tag-cloud-area' style="height : 325px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
-        <div id="participant-tag-cloud" class="collapse in"></div>
+    <div class="col-md-3 hidden-sm hidden-xs" >
+        <div class="right-bar-action-group">
+            <h5>Import and export</h5>
+            <span class="glyphicon glyphicon-import"></span> <a href="/pages/participants_dash/import">Import Participants / Attendees</a><br>
+            <span class="glyphicon glyphicon-export"></span> <a href="/pages/participants_dash/export">Export Participants / Attendees</a>
+            </ul>
+            <h5>Surveys</h5>
+            <span class="glyphicon glyphicon-comment"></span> <a href="/pages/participants_dash/survey_review">Review Surveys</a>            
+            <h5>Filter by tag</h5>
+            <div class='collapse-group tag-cloud-area' style="height : 325px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
+                <div id="participant-tag-cloud" class="collapse in"></div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-xs-12 well">
-        <h4 id='selected-participant' style="margin-top: 0px; padding-top: 0px;"></h4>
-        <%= render_cell "participants/participant_details", :display %>
-    </div>
-</div>
+
