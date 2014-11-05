@@ -170,28 +170,26 @@
 </script>
 
 <script type="text/template" id="invite-view-template">
-
-<div class="col-md-2">
-    
-        <img class="img-responsive img-rounded" src="http://upload.wikimedia.org/wikipedia/en/2/28/Deep_Fried_Man_portrait_-_real_name_Daniel_Friedman_-_South_African_Comedian.jpg">
-        <span class="label label-default">Participant</span>
-    
-</div>
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <h5>Identification</h5>
         
+        <button class="model-edit-button btn btn-primary btn-xs pull-right">
+            <i class="glyphicon glyphicon-pencil"></i>
+        </button>
         <p><strong>{{= first_name ? first_name : "&nbsp;" }} {{= last_name ? last_name : "&nbsp;" }} {{= suffix ? suffix : "&nbsp;" }}</strong>
                     <br>
                     {{= job_title ? job_title : "<span class='minor-text'>(no job title specified)</span>" }}
                     <br>
                     {{= company ? company : "<span class='minor-text'>(no company specified)</span>" }}
-                    <br>
-                    <%= t "Participates in"%> <a href="#items-tab">13 items</a>
                 </p>
-                
+                <p><span class="label label-default">Participant</span></p>
     </div>
 </div>
-<div class="col-md-6">
-    <h5><%= t "Invitation & Registration Status"%></h5>
+<div class="col-md-5">
+    <h5><%= t "Invitation Status"%></h5>
+    <button class="model-edit-button btn btn-primary btn-xs pull-right">
+        <i class="glyphicon glyphicon-pencil"></i>
+    </button>
     {{ if (typeof id != 'undefined') { }}
     {{ if (!survey_key) { }}
     <p><button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right">
@@ -224,13 +222,20 @@
         <dd>
             {{= survey_key }}
         </dd>
-        <dt>
+
+         <dt>
             <%= t "comments" %>
         </dt>
         <dd>
             {{= comments }}
-        </dd>
-        <dt>
+        </dd>        
+
+    </dl>
+</div>
+<div class="col-md-4">    
+    <h5><%= t "registration"%></h5>
+    <dl class="dl-horizontal-small">
+           <dt>
             <%= t "reg-number" %>
         </dt>
                 <dd>
@@ -248,7 +253,7 @@
                 <dd>
                     TODO: Registered or not
                 </dd>
-    </dl>
+         </dl>       
 </div>
 {{ }; }}
 </script>
@@ -264,6 +269,9 @@
                 </div>
                 <div class="caption voffset5">
                     <p><%= t "bio-image" %>
+                        <button class="model-delete-button btn btn-primary btn-xs pull-right">
+                            <i class="glyphicon glyphicon-trash"></i>
+                        </button>
                         <button class="model-edit-button btn btn-primary btn-xs pull-right">
                             <i class="glyphicon glyphicon-pencil"></i>
                         </button>
@@ -281,7 +289,7 @@
                 {{ }; }}
             </div>
             <% else %>
-            <%= t 'cloudinary-not-configured' %>
+                <%= t 'cloudinary-not-configured' %>
             <% end %>
         </div>
     </div>    
