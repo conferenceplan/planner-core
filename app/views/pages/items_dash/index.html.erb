@@ -1,12 +1,15 @@
-<% content_for :submenu do %>
-        <%= render_cell :context_menu, :display, :menu => {
-            "items" => '/pages/items_dash/manage',
-            "add-people" => '/pages/items_dash/add_people',
-            "exclusions" => '/pages/items_dash/exclusions',
-            "items-export" => '/pages/items_dash/export'
-        } %>
-<% end %>
-
+<!-- comment out block -->
+    <% if false %>
+        <% content_for :submenu do %>
+                <%= render_cell :context_menu, :display, :menu => {
+                    "items" => '/pages/items_dash/manage',
+                    "add-people" => '/pages/items_dash/add_people',
+                    "exclusions" => '/pages/items_dash/exclusions',
+                    "items-export" => '/pages/items_dash/export'
+                } %>
+        <% end %>
+    <% end %>
+<!-- end comment block -->
 <% if @cellname %>
     <%= render_cell "items/#{@cellname}", :display, :prog_item => @prog_item %>
 <% end %>
