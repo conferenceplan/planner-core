@@ -519,6 +519,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                     ParticipantApp.PeopleManagement.refreshTable();
                 },
             });
+            
+            $('#participant-tabs').tabdrop({
+                text : "..."
+            });
         },
         
         InviteDetails : InviteDetails,
