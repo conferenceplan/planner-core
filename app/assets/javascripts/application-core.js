@@ -26,6 +26,8 @@
 
 //= require bootstrap
 
+//= require bootstrap-tabdrop
+
 //= require backbone/underscore-min
 //= require backbone/backbone
 //= require backbone/deep-model

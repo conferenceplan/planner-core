@@ -1,103 +1,13 @@
-<script>
-    window.onresize = function(event) {
-        CheckTabSize();
-    };
-
-    $('.nav-tabs li').click(function() {
-        setTimeout(SetActiveTabsYourself, 10);
-    });
-
-    var ShownTabs = '.nav-tabs .tab[style!="display: none;"]';
-    var HiddenTabs = '.nav-tabs .tab[style*="display: none;"]';
-    function CheckTabSize() {
-        //Get Tab Area
-        var buttonWidth = $('#nav-buttons').width();
-        var tabAreaWidth = $('.nav-tabs').width() - buttonWidth;
-        var tabWidths = 0;
-        var firstHidden;
-      
-        //Add Up the Tabs' Widths
-        $.each($(ShownTabs), function(idx, obj){
-          tabWidths += $(obj).outerWidth(); //padding
-        });
-      
-        //Find out which ones to hide
-        while(tabWidths > tabAreaWidth) {
-          var hider = $(ShownTabs).last();
-          tabWidths -= $(hider).outerWidth();
-          $(hider).hide();
-        }
-      
-        //See if we can show any
-        firstHidden = $(HiddenTabs).first();
-        while(firstHidden.length > 0 && (tabWidths + firstHidden.width()) < tabAreaWidth) {
-          tabWidths += $(firstHidden).outerWidth();
-          $(firstHidden).show();
-          firstHidden = $(HiddenTabs).first();
-        }
-      
-        //Affect drop-down button
-        if ($(HiddenTabs).length === 0) {
-          $('#tabDrop').hide();
-        } else {
-          $('#tabDrop').show();
-        }
-      
-        //Hide drop-down tabs as necessary
-        var shown = $(ShownTabs);
-      
-        $.each($('#tabDropdown li'), function(idx, obj){
-            var isInShown = $.grep(shown, function(el){ return $(el).find('a').data('target') == $(obj).find('a').data('target'); }).length > 0;
-            if (isInShown) {
-                $(obj).hide();
-            } else {
-                $(obj).show();
-            }
-        });
-    }
-    function SetActiveTabsYourself() {    
-        $('.nav-tabs li').removeClass('active');
-        var activeTab = $('.tab-pane.active');
-        if (activeTab.length > 0) {
-            var activeID = $(activeTab[0]).attr('id');
-            $('.nav-tabs li a[data-target=#' + activeID + ']').parent().addClass('active');
-        }
-    }
-    
-    setTimeout(CheckTabSize, 100);
-    setTimeout(SetActiveTabsYourself, 100);
-    
-</script>
-<ul class="nav nav-tabs" id="myTab">
-    <li class="tab active"><a href="#invite-tab" data-toggle="tab"><%= t 'Summary' %></a></li>
-    <li class="tab"><a href="#contacts-tab" data-target= "#contacts-tab" data-toggle="tab"><%= t 'contact-info' %></a></li>
-    <li class="tab"><a href="#published-info-tab" data-target= "#published-info-tab" data-toggle="tab"><%= t 'published info' %></a></li>
-    <li class="tab"><a href="#tags-tab" data-target= "#tags-tab" data-toggle="tab"><%= t 'tags' %></a></li>
-    <li class="tab"><a href="#surveys-tab" data-target= "#surveys-tab" data-toggle="tab"><%= t 'surveys' %></a></li>
-    <li class="tab"><a href="#availability-tab" data-target= "#availability-tab" data-toggle="tab"><%= t 'availability' %></a></li>
-    <li class="tab"><a href="#items-tab" data-target= "#items-tab" data-toggle="tab"><%= t 'program-items' %>&nbsp;&nbsp;<span class="badge">13</span></a></li>
-    <li class="tab"><a href="#emails-tab" data-target= "#emails-tab" data-toggle="tab"><%= t 'emails' %>&nbsp;&nbsp;<span class="badge">2</span></a></li>
-    <li class="tab"><a href="#tasks-tab" data-target= "#tasks-tab" data-toggle="tab"><%= t 'tasks' %>&nbsp;&nbsp;<span class="badge">1</span></a></li>
-    <li class="tab"><a href="#documents-tab" data-target= "#documents-tab" data-toggle="tab"><%= t 'documents' %>&nbsp;&nbsp;<span class="badge">4</span></a></li>
-    <div id="nav-buttons" class="pull-right">
-        <div id="tabDropdown" class="btn-group btn-group-sm">
-            <div id="tabDrop" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown">
-                >>
-            </div>    
-            <ul class="dropdown-menu">
-                <li><a href="#invite-tab" data-toggle="tab"><%= t 'Summary' %></a></li>
-                <li><a href="#contacts-tab" data-target= "#contacts-tab" data-toggle="tab"><%= t 'contact-info' %></a></li>
-                <li><a href="#published-info-tab" data-target= "#published-info-tab" data-toggle="tab"><%= t 'published info' %></a></li>
-                <li><a href="#tags-tab" data-target= "#tags-tab" data-toggle="tab"><%= t 'tags' %></a></li>
-                <li><a href="#surveys-tab" data-target= "#surveys-tab" data-toggle="tab"><%= t 'surveys' %></a></li>
-                <li><a href="#availability-tab" data-target= "#availability-tab" data-toggle="tab"><%= t 'availability' %></a></li>
-                <li><a href="#items-tab" data-target= "#items-tab" data-toggle="tab"><%= t 'program-items' %>&nbsp;&nbsp;<span class="badge">13</span></a></li>
-                <li><a href="#emails-tab" data-target= "#emails-tab" data-toggle="tab"><%= t 'emails' %>&nbsp;&nbsp;<span class="badge">2</span></a></li>
-                <li><a href="#tasks-tab" data-target= "#tasks-tab" data-toggle="tab"><%= t 'tasks' %>&nbsp;&nbsp;<span class="badge">1</span></a></li>
-                <li><a href="#documents-tab" data-target= "#documents-tab" data-toggle="tab"><%= t 'documents' %>&nbsp;&nbsp;<span class="badge">4</span></a></li>
-            </ul>
-        </div>            
-    </div>    
-    
+<ul class="nav nav-tabs" id="participant-tabs">
+    <li class="active"><a href="#invite-tab" data-toggle="tab"><%= t 'Summary' %></a></li>
+    <li><a href="#contacts-tab" data-toggle="tab"><%= t 'contact-info' %></a></li>
+    <li><a href="#published-info-tab" data-toggle="tab"><%= t 'published info' %></a></li>
+    <li><a href="#tags-tab" data-toggle="tab"><%= t 'tags' %></a></li>
+    <li><a href="#surveys-tab" data-toggle="tab"><%= t 'surveys' %></a></li>
+    <li><a href="#availability-tab" data-toggle="tab"><%= t 'availability' %></a></li>
+    <li><a href="#items-tab" data-toggle="tab"><%= t 'program-items' %>&nbsp;&nbsp;<span class="badge">13</span></a></li>
+    <li><a href="#emails-tab" data-toggle="tab"><%= t 'emails' %>&nbsp;&nbsp;<span class="badge">2</span></a></li>
+    <li><a href="#tasks-tab" data-toggle="tab"><%= t 'tasks' %>&nbsp;&nbsp;<span class="badge">1</span></a></li>
+    <li><a href="#documents-tab" data-toggle="tab"><%= t 'documents' %>&nbsp;&nbsp;<span class="badge">4</span></a></li>
 </ul>
 <div id="item-tabs" class="panel-body"></div>
