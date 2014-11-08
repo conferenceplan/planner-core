@@ -12,8 +12,6 @@ require 'ckeditor_rails'
 #require "authority" 
 require 'declarative_authorization'
 require 'deep_cloneable'
-require 'delayed_job' 
-require 'delayed_job_active_record'
 require 'i18n' 
 require 'jbuilder'
 require 'jpbuilder'
