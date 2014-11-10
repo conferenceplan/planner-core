@@ -143,6 +143,9 @@ protected
           
       peoplesource = Peoplesource.new({ :person_id => person.id, :datasource_id => datasource.id, :datasource_dbid => pendingPerson.datasource_dbid })
       peoplesource.save!
+      
+      person.person_con_state = PersonConState.new
+      person.person_con_state.save!
 
       # Create the reg info
       if pendingPerson.registration_number && pendingPerson.registration_type
