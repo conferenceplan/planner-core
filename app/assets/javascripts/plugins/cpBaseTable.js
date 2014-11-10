@@ -54,6 +54,13 @@ $.widget( "cp.baseTable" , {
         }
     },
     
+    resize_grid : function() {
+        var grid = this.element;
+        var width = grid.parents('.ui-jqgrid').parent().width();
+        grid.setGridWidth(width);
+        grid.parents('.ui-jqgrid').css("width", width+2);
+    },
+    
     handleResize : function() {
         var grid = this.element;
         jQuery(window).bind('resize', function() {
