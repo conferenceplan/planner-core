@@ -231,7 +231,8 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : ItemWordCountsForm,
                 endPoint    : "<%= baseUri + '/planner_reports/report_word_counts' %>",
                 colModel    : ItemWordCountsColModel,
-                caption     : '<%= t "reports-item-word-counts" %>'
+                caption     : '<%= t "reports-item-word-counts" %>',
+                formTemplate : '#report-form-template'
             }));
         },
         
@@ -351,7 +352,8 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : PanelsWithPanelistsForm,
                 endPoint    : "<%= baseUri + '/planner_reports/panels_with_panelists' %>",
                 colModel    : PanelsWithPanelistsColModel,
-                caption     : '<%= t "report-items-with-participants" %>'
+                caption     : '<%= t "report-items-with-participants" %>',
+                formTemplate : '#report-form-template'
             }));
         },
         
@@ -363,7 +365,8 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : PanelistsWithPanelsForm,
                 endPoint    : "<%= baseUri + '/planner_reports/panelists_with_panels' %>",
                 colModel    : PanelistsWithPanelsColModel,
-                caption     : '<%= t "report-participants-with-items" %>'
+                caption     : '<%= t "report-participants-with-items" %>',
+                formTemplate : '#report-form-template'
             }));
         },
         
@@ -415,7 +418,8 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : TagsByContextForm,
                 endPoint    : "<%= baseUri + '/planner_reports/admin_tags_by_context' %>",
                 colModel    : TagsByContextColModel,
-                caption     : '<%= t "report-tags-by-context" %>'
+                caption     : '<%= t "report-tags-by-context" %>',
+                formTemplate : '#report-form-template'
             }));
         },
         
@@ -428,7 +432,8 @@ ReportApp.ReportManagement = (function(Backbone){
                 form        : PeopleByTagForm,
                 endPoint    : "<%= baseUri + '/planner_reports/people_by_tag' %>",
                 colModel    : PeopleByTagColModel,
-                caption     : '<%= t "reports-people-by-tag" %>'
+                caption     : '<%= t "reports-people-by-tag" %>',
+                formTemplate : '#report-form-template'
             }));
         },
         
