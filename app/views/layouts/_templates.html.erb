@@ -169,18 +169,10 @@
 
 <script type="text/template" id="report-template">
     <div class="row">
-        <div class="col-xs-12">
-            <div class="report-title pull-right"><h2>{{= caption }}</h2></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="report-body" id="report-body"></div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="pull-right">
+        <div class="col-md-6">
+            <div class="report-title"><h4>{{= caption }}</h4></div>
+            <div class="report-body well" id="report-body"></div>
+            <div id="report-buttons">
                 <button class="btn btn-primary report-submit-button">
                     <%= t "reports-run-report-button" %>
                 </button>
@@ -190,6 +182,7 @@
             </div>
         </div>
     </div>
+
 </script>
 
 <script type="text/template" id="export-template">
