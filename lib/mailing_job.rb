@@ -20,7 +20,7 @@ class MailingJob
           begin
             MailService.sendEmailForMailing(person, mailing)
           rescue => msg
-            Delayed::Worker.logger.add(Logger::ERROR, msg) if Delayed::Worker.logger
+            # Delayed::Worker.logger.add(Logger::ERROR, msg) if Delayed::Worker.logger
             Sidekiq::Logging.logger.error msg if Sidekiq::Logging.logger
           end
           sleep 20 # For 20 seconds

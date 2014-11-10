@@ -20,13 +20,13 @@ class ApplicationController < ActionController::Base
   end
   
   def application_time_zone(&block)
-    cfg = SiteConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    cfg = SiteConfig.find :first # for now we only have one convention... change when we have many
     zone = cfg ? cfg.time_zone : Time.zone
     Time.use_zone(zone, &block)
   end
   
   def load_configs
-    cfg = CloudinaryConfig.find :first # for now we only have one convention... change when we have many (TODO)
+    cfg = CloudinaryConfig.find :first # for now we only have one convention... change when we have many
     Cloudinary.config do |config|
       config.cloud_name           = cfg ? cfg.cloud_name : ''
       config.api_key              = cfg ? cfg.api_key : ''
@@ -69,11 +69,6 @@ class ApplicationController < ActionController::Base
     #
     def user_logged_in?
       user_signed_in?
-      # if current_user
-        # return true
-      # else
-        # return false
-      # end
     end
     
     def current_respondent
@@ -83,16 +78,8 @@ class ApplicationController < ActionController::Base
     
     def current_user_session
       user_session
-      # return @current_user_session if defined?(@current_user_session)
-      # @current_user_session = UserSession.find
     end
 
-    # def current_user
-      # current_user
-      # # return @current_user if defined?(@current_user)
-      # # @current_user = current_user_session && current_user_session.user
-    # end
-  
     def require_user
       unless current_user
         # Rack::MiniProfiler.authorize_request        
