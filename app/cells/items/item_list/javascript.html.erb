@@ -34,13 +34,32 @@ jQuery(document).ready(function() {
         ref_number : [<%= @ref_number %>, '<%= t "ref"%>'],
         nbr_participants : [<%= @showNbrParticipants %>, '<%= t "participants"%>'],
         
-        //
+        // 
         modal_create_title : '<%= t "create-program-item" %>',
         modal_edit_title : '<%= t "edit-program-item" %>',
         
         confirm_content     : '<%= t "delete-selected-data" %>',
         confirm_title       : '<%= t "delete-confirmation" %>'
     });
+    
+    $('#collapseButton').click(function(ev) {
+        $('#right-panel-action-group').attr('class','col-fixed-small'); 
+        $('#right-bar-action-group').css('display','none'); 
+        $('#item-detail-div').attr('class','col-md-12 col-right-offset-small left-jqgrid'); 
+        $('#items').itemTable('resize_grid'); 
+        $('#expandButton').css('display','block');
+        $('#collapseButton').css('display','none');        
+    });
+    
+    $('#expandButton').click(function(ev) {
+        $('#right-panel-action-group').attr('class','col-fixed-large hidden-sm hidden-xs'); 
+        $('#right-bar-action-group').css('display','block'); 
+        $('#item-detail-div').attr('class','col-md-12 col-right-offset-large left-jqgrid'); 
+        $('#items').itemTable('resize_grid'); 
+        $('#expandButton').css('display','none');
+        $('#collapseButton').css('display','block');        
+    });
+    
 });
 
 </script>

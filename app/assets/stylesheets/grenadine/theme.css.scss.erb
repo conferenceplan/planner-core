@@ -510,9 +510,10 @@ input[type="file"] {
     font-size: 12px;
     margin-top: 17px;
 }
-.right-bar-action-group h5:first-child {
+.right-bar-action-group h5:first-of-type {
     margin-top: 0px;
 }
+
 .right-bar-action-group span.glyphicon {
     color: #BBB;
     font-size: 12px;
@@ -600,3 +601,53 @@ h5.tag-panel-title {
     padding-bottom: 10px;
     border-bottom: solid 1px #ccc;
 }
+
+@media (min-width: $screen-md-min) {
+    
+    .col-fixed-large {
+        display: none;
+    }
+    
+    .col-fixed-small {
+        display: none;
+    }    
+    
+    .col-right-offset-large {
+       
+    }
+
+    .col-right-offset-small {
+        
+    }
+    
+}
+
+@media (min-width: $screen-md-min) {
+
+    .col-fixed-large {
+        display: block;
+        width: 250px;
+        position: fixed;
+        right: 25px;
+        height: 100%;
+    }
+    
+    .col-fixed-small {
+        display: block;
+        width: 75px;
+        position: fixed;
+        right: 25px;
+        height: 100%;
+    }
+    
+    .col-right-offset-large {
+       padding-right: 275px;
+    }
+
+    .col-right-offset-small {
+        padding-right: 60px;
+    }
+
+}
+
+
