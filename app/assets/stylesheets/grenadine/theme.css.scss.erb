@@ -310,8 +310,25 @@ screen and (min-device-pixel-ratio: 1.5) {
 }
 /* Styles for the footer portion of the app */
 
-.footer {
-    height: 35px;
+    body  {
+        margin-bottom: 55px;
+    }
+
+
+
+    .footer {
+        height: 35px;
+    }
+    #grenadine-footer-left-portion {
+        display: none;
+    }
+
+@media (min-width: $screen-md-min) {
+
+    #grenadine-footer-left-portion {
+        display: block;
+    }
+    
 }
 
 #grenadine-footer, #grenadine-footer a:link, #grenadine-footer a:visited {
@@ -334,6 +351,7 @@ screen and (min-device-pixel-ratio: 1.5) {
 #debug-info {
   padding-top: 15px;
   color: grey;
+  display: none;
 }
 
 /* General styles that apply to the whole app */

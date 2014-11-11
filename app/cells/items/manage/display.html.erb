@@ -14,14 +14,17 @@
 <%= render_cell "items/item_details", :javascript %>
 
 <div class="row">
-    <div class="col-md-9 left-jqgrid" style="margin-bottom: 35px;">
+    <div class="col-md-9 left-jqgrid" id="item-detail-div" style="margin-bottom: 35px;">
         <div id="item-filters" class="top-tag-filters"></div>
         <%= render_cell "items/item_list", :display %>
         <h3 id='selected-program-item'></h3>
         <%= render_cell "items/item_details", :display %>
     </div>
-    <div class="col-md-3 hidden-sm hidden-xs" >
+    <div class="col-md-3 hidden-sm hidden-xs">
         <div class="right-bar-action-group">
+            <button type="button" class="btn btn-default btn-sm pull-right" onClick="$(this).parent().hide(); $('#item-detail-div').attr('class','col-md-12 left-jqgrid'); $('#item-detail-div').redraw();">
+                <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>    
             <h5>Import and export</h5>
             <span class="glyphicon glyphicon-export"></span> <a href="<%= baseUri + '/pages/items_dash/export' %>">Export Schedule Items</a>     
             <h5>Assignments</h5>
