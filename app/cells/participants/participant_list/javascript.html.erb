@@ -49,6 +49,26 @@ jQuery(document).ready(function() {
         confirm_content     : '<%= t "delete-selected-data" %>',
         confirm_title       : '<%= t "delete-confirmation" %>'
 
+
+
+    });
+    
+        $('#collapseButton').click(function(ev) {
+        $('#right-panel-action-group').attr('class','col-fixed-small'); 
+        $('#right-bar-action-group').css('display','none'); 
+        $('#participant-detail-div').attr('class','col-md-12 col-right-offset-small left-jqgrid'); 
+        $('#participants').participantTable('resize_grid'); 
+        $('#expandButton').css('display','block');
+        $('#collapseButton').css('display','none');        
+    });
+    
+    $('#expandButton').click(function(ev) {
+        $('#right-panel-action-group').attr('class','col-fixed-large hidden-sm hidden-xs'); 
+        $('#right-bar-action-group').css('display','block'); 
+        $('#participant-detail-div').attr('class','col-md-12 col-right-offset-large left-jqgrid'); 
+        $('#participants').participantTable('resize_grid'); 
+        $('#expandButton').css('display','none');
+        $('#collapseButton').css('display','block');        
     });
 });
 

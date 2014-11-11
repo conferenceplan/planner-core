@@ -14,7 +14,7 @@
 <%= render_cell "participants/participant_details", :javascript %>
 
 <div class="row">
-    <div class="col-md-9 left-jqgrid" style="margin-bottom: 35px;">
+    <div class="col-md-12 col-right-offset-large left-jqgrid" id="participant-detail-div"  style="margin-bottom: 35px;">
         <div id="participant-filters" class="top-tag-filters"></div>
         <%= render_cell "participants/participant_list", :display,
             :pager => "participants-pager"
@@ -22,11 +22,17 @@
          <h3 id="selected-participant"></h3>
          <%= render_cell "participants/participant_details", :display %>
     </div>
-    <div class="col-md-3 hidden-sm hidden-xs" >
-        <div class="right-bar-action-group">
+    <div id="right-panel-action-group" class="col-fixed-large hidden-sm hidden-xs" >
+        <button type="button" id="collapseButton" class="btn btn-default btn-sm pull-right">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+        <button type="button" id="expandButton" style="display: none;" class="btn btn-default btn-sm pull-right" onClick="expandSideBar();">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>          
+        <div id="right-bar-action-group" class="right-bar-action-group">
             <h5>Import and export</h5>
-            <span class="glyphicon glyphicon-import"></span> <a href="<%= baseUri + '/pages/participants_dash/import' %>">Import Participants / Attendees</a><br>
-            <span class="glyphicon glyphicon-export"></span> <a href="<%= baseUri + '/pages/participants_dash/export' %>">Export Participants / Attendees</a>
+            <span class="glyphicon glyphicon-import"></span> <a href="<%= baseUri + '/pages/participants_dash/import' %>">Import People</a><br>
+            <span class="glyphicon glyphicon-export"></span> <a href="<%= baseUri + '/pages/participants_dash/export' %>">Export People</a>
             <h5>Surveys</h5>
             <span class="glyphicon glyphicon-comment"></span> <a href="<%= baseUri + '/pages/participants_dash/survey_review' %>">Review Surveys</a>            
             <h5>Filter by tag</h5>
