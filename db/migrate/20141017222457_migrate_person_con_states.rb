@@ -2,7 +2,7 @@ require 'person'
 require 'person_con_state'
 
 class MigratePersonConStates < ActiveRecord::Migration
-  def change
+  def up
     # Migrate the state data for people to the new table (note we keep the old data for now)
     people = Person.all
     people.each do |person|
