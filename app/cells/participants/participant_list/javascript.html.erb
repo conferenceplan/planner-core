@@ -53,13 +53,15 @@ jQuery(document).ready(function() {
 
     });
     
-        $('#collapseButton').click(function(ev) {
+    $('#collapseButton').click(function(ev) {
         $('#right-panel-action-group').attr('class','col-fixed-small'); 
         $('#right-bar-action-group').css('display','none'); 
         $('#participant-detail-div').attr('class','col-md-12 col-right-offset-small left-jqgrid'); 
         $('#participants').participantTable('resize_grid'); 
         $('#expandButton').css('display','block');
-        $('#collapseButton').css('display','none');        
+        $('#collapseButton').css('display','none');
+        $('#participant-tabs').tabdrop('layout');  
+              
     });
     
     $('#expandButton').click(function(ev) {
@@ -69,6 +71,7 @@ jQuery(document).ready(function() {
         $('#participants').participantTable('resize_grid'); 
         $('#expandButton').css('display','none');
         $('#collapseButton').css('display','block');        
+        $('#participant-tabs').tabdrop('layout');
     });
 });
 
