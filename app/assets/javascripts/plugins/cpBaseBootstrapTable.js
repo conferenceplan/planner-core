@@ -95,11 +95,11 @@ $.widget( "cp.baseBootstrapTable" , {
                 striped: true,
                 sidePagination: 'server',
                 pagination: true,
-                pageSize: this.pageSize,
-                pageList: this.pageList,
-                search: this.search,
-                showRefresh: this.showRefresh,
-                cardView: this.cardView,
+                pageSize: this.options.pageSize,
+                pageList: this.options.pageList,
+                search: this.options.search,
+                showRefresh: this.options.showRefresh,
+                cardView: this.options.cardView,
                 columns: this.createColModel(),
                 searchAlign: 'left'
         });
