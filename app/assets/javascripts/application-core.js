@@ -27,6 +27,7 @@
 //= require bootstrap
 
 //= require bootstrap-tabdrop
+//= require bootstrap-table/bootstrap-table.min
 
 //= require backbone/underscore-min
 //= require backbone/backbone
@@ -50,6 +51,7 @@
 //= require plugins/cpApp
 //= require plugins/cpAjax
 //= require plugins/cpBaseTable
+//= require plugins/cpBaseBootstrapTable
 //= require plugins/cpItemTable
 //= require plugins/cpParticipantTable
 //= require plugins/cpMailHistoryTable
