@@ -52,7 +52,8 @@ class ResourceController < PlannerController
     end
 
     def model_class
-      "#{controller_name.classify}".constantize
+      self.class.name.sub('Controller', '').singularize.constantize
+      # "#{controller_name.classify}".constantize
     end
 
     def object_name

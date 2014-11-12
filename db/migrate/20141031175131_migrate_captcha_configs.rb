@@ -2,7 +2,7 @@ require 'site_config'
 require 'captcha_config'
 
 class MigrateCaptchaConfigs < ActiveRecord::Migration
-  def change
+  def up
     # move the captcha info into the new captcha config
     cfgs = SiteConfig.all
     cfgs.each do |cfg|
