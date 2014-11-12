@@ -9,13 +9,20 @@ $.widget( "cp.baseBootstrapTable" , {
      * 
      */
     options : {
-        // pager               : '#pager',
         root_url            : "/",              // so that sub-domains can be taken care of
         baseUrl             : "",               // HAS TO BE OVER-RIDDEN by the sub-component
         getGridData         : "",               // for getting the data (part of the URL)
         caption             : "My Table",
+        delayed             : false,
+        selectNotifyMethod  : function(row) {},
         extraClause         : null,
-        selectNotifyMethod  : function(row) { alert("selected"); },
+        cardView            : false,
+        showRefresh         : false,
+        search              : true,
+        pageSize            : 10,
+        pageList            : [10, 25, 50, 100, 200]
+        
+        // pager               : '#pager',
         // clearNotifyMethod   : function() {},
         // loadNotifyMethod    : function() {},
         // multiselect         : false,
@@ -25,7 +32,6 @@ $.widget( "cp.baseBootstrapTable" , {
         // controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
         // modelType           : null, // Should be provided by the caller
         // modelTemplate       : null,
-        delayed             : false,
         // confirm_content     : "Are you sure you want to delete the selected data?",
         // confirm_title       : "Confirm Deletion"
     },
@@ -50,51 +56,52 @@ $.widget( "cp.baseBootstrapTable" , {
      */    
     _url : function() {
         // Determine what the URL for the table should be
-        return this.options.root_url + this.options.baseUrl; // + this.options.getGridData;
+        return this.options.root_url + this.options.baseUrl + this.options.getGridData;
     },
     
     /*
      * 
      */
     createUrl : function () {
-        var url = this.options.root_url + this.options.baseUrl ;//+ this.options.getGridData;
-        // var urlArgs = "";
-        // if (this.options.extraClause) {
-            // urlArgs += '?';
-            // urlArgs += this.options.extraClause; 
-        // };
-        // url += urlArgs;
+        var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
+        var urlArgs = "";
+        if (this.options.extraClause) {
+            urlArgs += '?';
+            urlArgs += this.options.extraClause; 
+        };
+        url += urlArgs;
         return url;
     },
     
     /*
      * 
      */
-    createColModel : function() {
-    },
+    createColModel : function() {},
     
     /*
      * 
      */
     createTable : function() {
+        var selectMethod = this.options.selectNotifyMethod;
         var grid = this.element.bootstrapTable({
                 url: this.createUrl(),
-                onClickRow : function(row) { alert("row"); },   //this.selectNotifyMethod,
+                onClickRow : function(row, element) {
+                        $(element).parent().find('tr').removeClass('success');
+                        $(element).addClass('success');
+                        selectMethod(row);
+                    },
                 method: 'get',
                 cache: false,
-                // height: 400, // TODO ?????
                 striped: true,
-                pagination: true,
-                pageSize: 10,
-                pageList: [10, 25, 50, 100, 200],
-                search: true,
-                searchAlign: 'left',
-                showColumns: true,
-                showRefresh: true,
                 sidePagination: 'server',
-                clickToSelect: true, // true for checkbox for select, i.e., for multi-select
-                minimumCountColumns: 2,
-                columns: this.createColModel()
+                pagination: true,
+                pageSize: this.pageSize,
+                pageList: this.pageList,
+                search: this.search,
+                showRefresh: this.showRefresh,
+                cardView: this.cardView,
+                columns: this.createColModel(),
+                searchAlign: 'left'
         });
     }
 });
