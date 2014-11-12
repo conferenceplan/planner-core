@@ -20,7 +20,8 @@ $.widget( "cp.baseBootstrapTable" , {
         showRefresh         : false,
         search              : true,
         pageSize            : 10,
-        pageList            : [10, 25, 50, 100, 200]
+        pageList            : [10, 25, 50, 100, 200],
+        toolbar             : null
         
         // pager               : '#pager',
         // clearNotifyMethod   : function() {},
@@ -101,7 +102,8 @@ $.widget( "cp.baseBootstrapTable" , {
                 showRefresh: this.options.showRefresh,
                 cardView: this.options.cardView,
                 columns: this.createColModel(),
-                searchAlign: 'left'
+                searchAlign: 'left',
+                toolbar: this.options.toolbar
         });
     }
 });
