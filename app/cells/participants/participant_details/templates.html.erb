@@ -179,7 +179,15 @@
                 <dt><%= t "invite-status" %></dt>
                 <dd>{{= invitestatus_name ? invitestatus_name : "&nbsp;"}}</dd>
                 <dt><%= t "acceptance-status" %></dt>
-                <dd><span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span></dd>
+                {{ if (acceptance_status_name == 'Accepted') { }}
+                    <dd><span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span></dd>
+                    {{ } else if (acceptance_status_name == 'Declined')  { }}
+                    <dd><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span></dd>
+                    {{ } else if ((acceptance_status_name == 'Unknown') || (acceptance_status_name == 'Probable'))  { }}
+                    <dd><span class="label label-warning"> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span></dd>                    
+                    {{ } else { }}
+                    <dd>{{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</dd>
+                {{ } }}    
                 <dt><%= t "invitation-category" %></dt>
                 <dd>{{= invitation_category_name ? invitation_category_name : "&nbsp;"}}</dd>
                 <dt><%= t "survey-key" %></dt>

@@ -1,12 +1,8 @@
 
 <script type="text/template" id="room-setup-layout-template">
 <section>
-    <div class='row'>
-        <div id="room-setup-control-div"></div>
-    </div>
-    <div class='row'>
-        <div id="room-setup-region-div"></div>
-    </div>
+    <div id="room-setup-control-div"></div>
+    <div id="room-setup-region-div"></div>
 </section>
 </script>
 
@@ -15,34 +11,38 @@
 </script>
 
 <script type="text/template" id="room-setup-control-template">
-<div>
+    <h5 class="venues"><%= t "Room setups"%>
     <button class="add-model-button btn-xs btn-primary pull-right ">
         <%= t 'add-room-setup' %>
     </button>
-</div>
+    </h5>
 </script>
 
 <script type="text/template" id="room-setup-template">
-<div class="col-xs-4 clearfix">
-    <div class="thumbnail clearfix">
-        <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-            <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-pencil"></i>
-            </button>
-            <small>
-                <dl class="dl-horizontal-small">
-                    <dt><%= t 'setup' %></dt>
-                    <dd>{{= setup_type_name ? setup_type_name : "&nbsp;" }}</dd>
-                    <dt><%= t 'capacity' %></dt>
-                    <dd>{{= capacity ? capacity : "&nbsp;" }}</dd>
-                    <dt><%= t 'isdefault' %></dt>
-                    <dd>{{= id == room.setup_id  }}</dd>
-                </dl>
-            </small>
+    <div class="row">
+        <div class="clearfix col-md-8">
+            <div class="caption" class="pull-left">
+                <button class="model-delete-button btn btn-primary btn-xs pull-right">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </button>
+                <button class="model-edit-button btn btn-primary btn-xs pull-right">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                </button>
+                <small>
+                    <dl class="dl-horizontal-small">
+                        
+                        {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
+                        <dt><%= t 'setup' %></dt>
+                        <dd>{{= setup_type_name ? setup_type_name : "&nbsp;" }}</dd>
+                        <dt><%= t 'capacity' %></dt>
+                        <dd>{{= capacity ? capacity : "&nbsp;" }}</dd>
+                        <!--
+                        <dt><%= t 'isdefault' %></dt>
+                        <dd>{{= id == room.setup_id  }}</dd>
+                        -->
+                    </dl>
+                </small>
+            </div>
         </div>
     </div>
-</div>
 </script>

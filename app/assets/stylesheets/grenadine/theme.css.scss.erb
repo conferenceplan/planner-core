@@ -528,6 +528,14 @@ input[type="file"] {
     border-bottom: solid 1px #ccc;
 }
 
+h5.venues {
+    line-height: 1.5;
+    font-weight: bold;
+    color: #555;
+    padding-bottom: 10px;
+    border-bottom: solid 1px #ccc;
+}
+
 .contact-details-div {
     padding-top: 0px;
     padding-bottom: 0px;
@@ -602,7 +610,7 @@ h5.tag-panel-title {
     border-bottom: solid 1px #ccc;
 }
 
-@media (min-width: $screen-md-min) {
+@media (min-width: $screen-sm-min) {
     
     .col-fixed-large {
         display: none;
@@ -612,13 +620,11 @@ h5.tag-panel-title {
         display: none;
     }    
     
-    .col-right-offset-large {
-       
-    }
+    .col-right-offset-large { }
 
-    .col-right-offset-small {
-        
-    }
+    .col-right-offset-small { }
+    
+    #right-panel-action-group { display: none; }    
     
 }
 
@@ -647,6 +653,8 @@ h5.tag-panel-title {
     .col-right-offset-small {
         padding-right: 60px;
     }
+    
+    #right-panel-action-group { display: block; }
 
 }
 
