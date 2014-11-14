@@ -27,7 +27,7 @@
 //= require bootstrap
 
 //= require bootstrap-tabdrop
-//= require bootstrap-table/bootstrap-table.min
+//= require bootstrap-table/bootstrap-table
 
 //= require backbone/underscore-min
 //= require backbone/backbone

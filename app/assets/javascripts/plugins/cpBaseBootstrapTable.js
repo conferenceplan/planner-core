@@ -12,29 +12,31 @@ $.widget( "cp.baseBootstrapTable" , {
         root_url            : "/",              // so that sub-domains can be taken care of
         baseUrl             : "",               // HAS TO BE OVER-RIDDEN by the sub-component
         getGridData         : "",               // for getting the data (part of the URL)
-        caption             : "My Table",
         delayed             : false,
-        selectNotifyMethod  : function(row) {},
+        selectNotifyMethod  : function(row) { return null; },
         extraClause         : null,
         cardView            : false,
         showRefresh         : false,
         search              : true,
         pageSize            : 10,
         pageList            : [10, 25, 50, 100, 200],
-        toolbar             : null
+        toolbar             : null,
+        modelType           : null,
+        modelTemplate       : null,
+        showControls        : true,
+        controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
         
+        modal_create_title  : "Create",
+        modal_edit_title    : "Edit",
+        confirm_content     : "Are you sure you want to delete the selected data?",
+        confirm_title       : "Confirm Deletion"
+
         // pager               : '#pager',
         // clearNotifyMethod   : function() {},
         // loadNotifyMethod    : function() {},
         // multiselect         : false,
         // sortname            : null,
         // filtertoolbar       : true,
-        // showControls        : true,
-        // controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
-        // modelType           : null, // Should be provided by the caller
-        // modelTemplate       : null,
-        // confirm_content     : "Are you sure you want to delete the selected data?",
-        // confirm_title       : "Confirm Deletion"
     },
     
     /*
@@ -42,6 +44,7 @@ $.widget( "cp.baseBootstrapTable" , {
      */
     _create : function() {
         if (!this.options.delayed) {
+            this.selected = this.model = null;
             this.createTable();
         }
     },
@@ -50,6 +53,10 @@ $.widget( "cp.baseBootstrapTable" , {
         if (this.options.delayed) {
             this.createTable();
         }
+    },
+    
+    getSelected : function() {
+        return this.selected;
     },
     
     /*
@@ -84,13 +91,129 @@ $.widget( "cp.baseBootstrapTable" , {
      */
     createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
+        var modelType = this.options.modelType;
+        var modelTemplate = this.options.modelTemplate;
+        var that = this;
+        var el = this.element;
+
+        TableControlView = Backbone.Marionette.ItemView.extend({
+
+            events : {
+                "click .add-model-button"       : "newModel",
+                "click .edit-model-button"      : "editModel",
+                "click .delete-model-button"    : "deleteModal",
+            },
+        
+            initialize : function(options) {
+                this.options = options || {};
+                // this.template = _.template(this.templateStr);
+                this.template = _.template($('#table-control-template').html()); // TODO: CHECK
+            },
+            
+            // TODO - we need a way to go to the page that the new item is on...
+            // refreshGrid : function(grid, mdl) {
+                // if (mdl) {
+                    // // var page_to = pageTo(mdl);
+                    // // var to_id = mdl.id;
+                    // // mdl.clear();
+                // }
+            // },
+            
+            newModel : function() {
+                var mdl = new this.options.modelType({});
+                // if (this.options.id) {
+                    // mdl.set(this.options.id_name, this.options.id);
+                // }
+            
+                var grid = this.options.grid;
+
+                var modal = new ModelModal({
+                    model : mdl,
+                    modal_template : modelTemplate,
+                    title : this.options.modal_create_title,
+                    refresh : function(mdl) {
+                        grid.bootstrapTable('refresh');
+                        that.model = null;
+                        that.selected = null;
+                        that.selected_element = null;
+                    }
+                });
+                modal.render();
+            },
+        
+            editModel : function() {
+                var grid = this.options.grid;
+                if (that.model) {
+                    // Put up a modal dialog to edit the reg details
+                    // This is done via the select method
+                    modal = new ModelModal({
+                        model : that.model, 
+                        modal_template : modelTemplate,
+                        title : this.options.modal_edit_title,
+                        refresh : function(mdl) {
+                            grid.bootstrapTable('refresh');
+                        }
+                    });
+                    modal.render();
+                };
+            },
+        
+            deleteModal : function() {
+                if (that.model) {
+                    var model = that.model;
+                    var grid = this.options.grid;
+                    var confirm_content = this.options.confirm_content;
+                    // confirmation for the model delete
+                    modal = new AppUtils.ConfirmModel({
+                            content : confirm_content,
+                            title : this.options.confirm_title,
+                            continueAction : function() {
+                                model.destroy({
+                                    wait: true,
+                                    success : function(md, response) {
+                                        that.selected = null;
+                                        that.selected_element = null;
+                                        grid.bootstrapTable('refresh');
+                                    }
+                                });
+                                that.model = null;
+                            },
+                            closeAction : function() {
+                            }
+                    });
+                    modal.render();
+                };
+            },
+        });
+
         var grid = this.element.bootstrapTable({
                 url: this.createUrl(),
                 onClickRow : function(row, element) {
                         $(element).parent().find('tr').removeClass('success');
                         $(element).addClass('success');
-                        selectMethod(row);
+                        that.selected = row;
+                        that.selected_element = element.attr('data-index');
+                        that.model = selectMethod(row.id); // NOTE - we may want to change to pass the whole row
                     },
+                // onAll : function(name, args) {
+                    // console.debug(name);
+                    // return false;
+                // },
+                onPageChange : function(number, size) {
+                    // console.debug("page change");
+                    that.selected = null;
+                    that.selected_element = null;
+                    that.model = null;
+                    return false;
+                },
+                onLoadSuccess : function(data) {
+                    if (that.selected) {
+                        if (that.selected_element) {
+                            var selector = "[data-index='" + that.selected_element + "']";
+                            jQuery(el).find(selector).addClass('success');
+                        };
+                    };
+                },
                 method: 'get',
                 cache: false,
                 striped: true,
@@ -102,9 +225,28 @@ $.widget( "cp.baseBootstrapTable" , {
                 showRefresh: this.options.showRefresh,
                 cardView: this.options.cardView,
                 columns: this.createColModel(),
-                searchAlign: 'left',
+                searchAlign: 'right',
+                // maintainSelected : true,
                 toolbar: this.options.toolbar
         });
+
+        if (this.options.showControls) {
+            // Create the control view
+            this.control = control = new TableControlView({
+                    id                  : this.options.id,
+                    id_name             : this.options.id_name,
+                    grid                : this.element,
+                    modal_create_title  : this.options.modal_create_title,
+                    modal_edit_title    : this.options.modal_edit_title,
+                    confirm_content     : this.options.confirm_content,
+                    confirm_title       : this.options.confirm_title,
+                    modelType           : modelType,
+                    view_callback       : this.options.callback
+            });
+            control.render();
+            $("#" + this.options.controlDiv).html(control.el);
+        };
+
     }
 });
 
