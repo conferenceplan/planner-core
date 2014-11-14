@@ -30,8 +30,6 @@ class SiteConfigsController < PlannerController
     
     # Make sure we use the selected time-zone of the convention
     Time.use_zone(site_config.time_zone) do 
-      site_config.start_date = site_config.start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
-      site_config.start_date = site_config.start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
       site_config.save!
       
       site_config.tz_offset = site_config.start_date.utc_offset/(60*60)
@@ -50,7 +48,6 @@ class SiteConfigsController < PlannerController
     
     # Make sure we use the selected time-zone of the convention
     Time.use_zone(site_config.time_zone) do 
-      site_config.start_date = site_config.start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
       site_config.save!
       
       site_config.tz_offset = site_config.start_date.utc_offset/(60*60)
