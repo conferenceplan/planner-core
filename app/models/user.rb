@@ -24,7 +24,6 @@ class User < ActiveRecord::Base
   #  
   has_many  :roleAssignments
   has_many  :roles, :through => :roleAssignments
-  has_one   :preference
   
   #
   #
