@@ -195,7 +195,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
                         success: function(response){
                             // And we reload the list of items so that the dropped one is removed
                             DailyGrid.remove_group(group)
-                            // $("#items").trigger("reloadGrid");
+                            $("#items").trigger("reloadGrid");
                             eventAggregator.trigger("refreshConflicts");
                             DailyGrid.enable_actions()
                         }
@@ -269,7 +269,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
                             };
                             
                             // And we reload the list of items so that the dropped one is removed
-                            // $("#items").trigger("reloadGrid");
+                            $("#items").trigger("reloadGrid");
                             eventAggregator.trigger("refreshConflicts");
                             DailyGrid.enable_actions()
                         },
