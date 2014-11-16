@@ -171,13 +171,11 @@ class PeopleController < PlannerController
   
   ############
   def exportbiolist
-    accepted = AcceptanceStatus.find_by_name("Accepted")        
+    accepted = AcceptanceStatus.find_by_name("Accepted")
     invitestatus = InviteStatus.find_by_name("Invited")
-    # TODO  - need to join
-    @people = Person.find :all,
-                  :joins => :person_con_state,
-                  :conditions => ['person_con_states.acceptance_status_id = ? and person_con_states.invitestatus_id = ?', accepted.id, invitestatus.id], 
-                  :order => 'last_name, first_name'
+    
+    @people = findAllPeopleByInviteAndAcceptance(invitestatus.id, accepted.id)
+    
     render :layout => 'content'
   end
   

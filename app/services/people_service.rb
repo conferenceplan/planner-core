@@ -13,10 +13,12 @@ module PeopleService
     
     if (tag)
       Person.tagged_with(tag, :on => 'PrimaryArea', :op => true).where(whereClause).includes([:pseudonym, :bio_image, :edited_bio]).
+              where(self.constraints()).
               joins(:person_con_state).
               order("people.last_name")
     else  
       Person.where(whereClause).includes([:pseudonym, :bio_image, :edited_bio]).
+              where(self.constraints()).
               joins(:person_con_state).
               order("people.last_name")
     end
@@ -33,7 +35,7 @@ module PeopleService
 
     # TODO - should this be from the published items rather than the pre-published?
     # TODO - need to test that programme item assignments actually exist
-    Person.all :conditions => conditions, 
+    Person.where(self.constraints()).all :conditions => conditions, 
               :joins => { :programmeItemAssignments => {} },
               :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} },
               :order => "people.last_name"
@@ -43,16 +45,27 @@ module PeopleService
   #
   #
   #
-  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
-    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
-    tagquery = DataService.genTagSql(context, tags)
-    args.merge! :include => [:pseudonym, :email_addresses, :invitation_category]
+  def self.findAllPeopleByInviteAndAcceptance(invitestatus = nil, acceptance = nil)
+    stateTable = Arel::Table.new(:person_con_states)
+    peopleTable = Arel::Table.new(:people)
+    query = nil
     
-    if tagquery.empty?
-      Person.count args
-    else
-      eval "Person#{tagquery}.uniq.count( :all, " + args.inspect + ")"
+    query = stateTable[:invitestatus_id].eq(invitestatus) if invitestatus
+    
+    if acceptance
+      if query
+        query = query.and(stateTable[:acceptance_status_id].eq(acceptance))
+      else
+        query = stateTable[:acceptance_status_id].eq(acceptance)
+      end
     end
+    
+    Person.joins(:person_con_state).
+                            includes([:pseudonym, :email_addresses, :postal_addresses, :person_con_state, :invitation_category, {:programmeItemAssignments => {:programmeItem => [:time_slot, :format]}}]).
+                            where(query).
+                            where(self.constraints()).
+                            order("people.last_name, people.first_name")
+    
   end
   
   #
@@ -76,10 +89,26 @@ module PeopleService
     Person.joins(:person_con_state).
                             includes([:pseudonym, :email_addresses, :postal_addresses, :person_con_state, :invitation_category, {:programmeItemAssignments => {:programmeItem => [:time_slot, :format]}}]).
                             where(query).
+                            where(self.constraints()).
                             order("people.last_name")
     
   end
-  
+
+  #
+  #
+  #
+  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
+    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
+    tagquery = DataService.genTagSql(context, tags)
+    args.merge! :include => [:pseudonym, :email_addresses, :invitation_category]
+
+    if tagquery.empty?
+      Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents)).count args
+    else
+      eval "Person#{tagquery}.where(self.constraints(#{includeMailings}, #{mailing_id}, #{onlySurveyRespondents})).uniq.count( :all, " + args.inspect + ")"
+    end
+  end
+ 
   #
   #
   #
@@ -97,9 +126,9 @@ module PeopleService
     args.merge! :include => [:pseudonym, :email_addresses, :invitation_category]
     
     if tagquery.empty?
-      people = Person.includes(:pseudonym).find :all, args
+      people = Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents)).includes(:pseudonym).all args
     else
-      people = eval "Person#{tagquery}.uniq.includes(:pseudonym).find :all, " + args.inspect
+      people = eval "Person#{tagquery}.uniq.where(self.constraints(#{includeMailings}, #{mailing_id}, #{onlySurveyRespondents})).includes(:pseudonym)..find :all, " + args.inspect
     end
   end
   
@@ -184,6 +213,10 @@ module PeopleService
     end
 
     args
+  end
+  
+  def self.constraints(*args)
+    ''
   end
   
 end
