@@ -113,7 +113,11 @@ class Person < ActiveRecord::Base
   
   
   def acceptance_status
-    person_con_state.acceptance_status
+    if person_con_state
+      person_con_state.acceptance_status
+    else
+      nil
+    end
   end  
   
   def acceptance_status=(arg)
@@ -123,7 +127,11 @@ class Person < ActiveRecord::Base
   end
 
   def invitestatus
-    person_con_state.invitestatus
+    if person_con_state
+      person_con_state.invitestatus
+    else
+      nil
+    end
   end  
   
   def invitestatus=(arg)
