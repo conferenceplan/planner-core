@@ -33,7 +33,9 @@ module DataService
       if (queryParams && queryParams["rules"].any?)
         queryParams["rules"].each do |subclause|
           if subclause['field'] == key
-            return subclause['data']
+            isInteger = Integer(subclause['data']) rescue nil
+            useData = isInteger ? Integer(subclause['data']) > 0 : false
+            return subclause['data'] if useData && !subclause['data'].empty?
           end 
         end
       end

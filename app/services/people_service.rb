@@ -100,12 +100,15 @@ module PeopleService
   def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
     args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
     tagquery = DataService.genTagSql(context, tags)
-    args.merge! :include => [:pseudonym, :email_addresses, :invitation_category]
+
+    includes = [:pseudonym, :email_addresses]
+    includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
+    args.merge! :include => includes
 
     if tagquery.empty?
-      Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents)).count args
+      Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters)).count args
     else
-      eval "Person#{tagquery}.where(self.constraints(#{includeMailings}, #{mailing_id}, #{onlySurveyRespondents})).uniq.count( :all, " + args.inspect + ")"
+      eval "Person#{tagquery}.where(self.constraints(#{includeMailings}, #{mailing_id}, #{onlySurveyRespondents}, #{filters})).uniq.count( :all, " + args.inspect + ")"
     end
   end
  
@@ -123,12 +126,14 @@ module PeopleService
       args.merge!(:order => index + " " + sort_order)
     end
     
-    args.merge! :include => [:pseudonym, :email_addresses, :invitation_category]
+    includes = [:pseudonym, :email_addresses]
+    includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
+    args.merge! :include => includes
     
     if tagquery.empty?
-      people = Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents)).includes(:pseudonym).all args
+      people = Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters)).includes(:pseudonym).all args
     else
-      people = eval "Person#{tagquery}.uniq.where(self.constraints(#{includeMailings}, #{mailing_id}, #{onlySurveyRespondents})).includes(:pseudonym)..find :all, " + args.inspect
+      people = eval "Person#{tagquery}.uniq.where(self.constraints(#{includeMailings}, #{mailing_id}, #{onlySurveyRespondents}, #{filters})).includes(:pseudonym).find :all, " + args.inspect
     end
   end
   
@@ -141,7 +146,7 @@ module PeopleService
     clause = DataService.createWhereClause(filters, 
           ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
           ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'], ['people.last_name'])
-    
+
     # add the name search for last of first etc
     if nameSearch #&& ! nameSearch.empty?
       # get the last name from the filters and use that in the clause
@@ -190,10 +195,12 @@ module PeopleService
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
 
-    if args[:joins]
-      args[:joins] += ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
-    else  
-      args.merge!( :joins => 'LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id' )
+    if DataService.getFilterData( filters, 'person_con_states.invitestatus_id' ) || DataService.getFilterData( filters, 'person_con_states.acceptance_status_id' )
+      if args[:joins]
+        args[:joins] += ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
+      else  
+        args.merge!( :joins => 'LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id' )
+      end
     end
 
     if includeMailings && clause && (clause[0].include? "mailing_id")
