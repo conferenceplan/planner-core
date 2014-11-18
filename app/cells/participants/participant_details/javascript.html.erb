@@ -326,6 +326,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         
         var invite_details = TabUtils.createTabContent({
             modelType : InviteDetails,
+            modal_template : "#person-form-template",
             url : "<%= baseUri + '/participants/' %>" + id + ".json",
             template : '#invite-view-template',
             region : summaryLayout.identity,
