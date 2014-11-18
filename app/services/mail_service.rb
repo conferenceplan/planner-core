@@ -58,7 +58,7 @@ module MailService
           cc:       config.cc,
           subject:  template.subject,
           title:    template.title,
-          return_path: config.reply_to
+          return_path: config.from
         }, content
       ).deliver
       transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
@@ -100,7 +100,7 @@ module MailService
           cc:       cc,
           subject:  template.subject,
           title:    template.title,
-          return_path: config.reply_to
+          return_path: config.from
         }, content
       ).deliver
       saveMailHistory(person, nil, content, EmailStatus[:Sent])
