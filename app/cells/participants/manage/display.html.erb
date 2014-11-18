@@ -13,8 +13,8 @@
     %>
 <%= render_cell "participants/participant_details", :javascript %>
 
-<div class="row">
-    <div class="col-md-12 col-right-offset-large left-jqgrid" id="participant-detail-div"  style="margin-bottom: 35px;">
+<div class="row" id="top-participants-row">
+    <div class="col-md-9 left-jqgrid" id="participant-detail-div"  style="margin-bottom: 35px;">
         <div id="participant-filters" class="top-tag-filters"></div>
         <%= render_cell "participants/participant_list", :display,
             :pager => "participants-pager"
@@ -22,7 +22,7 @@
          <h3 id="selected-participant"></h3>
          <%= render_cell "participants/participant_details", :display %>
     </div>
-    <div id="right-panel-action-group" class="col-fixed-large hidden-sm hidden-xs" >
+    <div id="right-panel-action-group" class="col-md-3 col-fixed-large hidden-sm hidden-xs" >    
         <button type="button" id="collapseButton" class="btn btn-default btn-sm pull-right">
             <span class="glyphicon glyphicon-chevron-right"></span>
         </button>
@@ -42,15 +42,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    
-    $(window).scroll(function() {
-        
-        //$('#v-position-div').text($(window).scrollTop());
-        //$('#participants-table-v-position-div').text($('#my-element').offset().top);
-        console.log('current y position of participants table: ' + $('#gbox_participants').position().top);
-        $('#right-panel-action-group').css('top',(140 - $(window).scrollTop()));
-
-    });
-</script>

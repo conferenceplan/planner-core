@@ -65,14 +65,28 @@ jQuery(document).ready(function() {
     });
     
     $('#expandButton').click(function(ev) {
-        $('#right-panel-action-group').attr('class','col-fixed-large hidden-sm hidden-xs'); 
+        $('#right-panel-action-group').attr('class','col-md-3 col-fixed-large hidden-sm hidden-xs'); 
         $('#right-bar-action-group').css('display','block'); 
-        $('#participant-detail-div').attr('class','col-md-12 col-right-offset-large left-jqgrid'); 
+        $('#participant-detail-div').attr('class','col-md-9 left-jqgrid'); 
         $('#participants').participantTable('resize_grid'); 
         $('#expandButton').css('display','none');
         $('#collapseButton').css('display','block');        
         $('#participant-tabs').tabdrop('layout');
     });
 });
+
+    function resizeSideBar () {
+        var bottomBarHeight = $('#grenadine-footer').height();
+        var logoBarHeight = $('#logo-bar').height();
+        var menuBarHeight = $('#app-menu-div').height();
+        var browserViewport = $( window ).height();
+        var menuSeparatorDIV = $('#menu-separator-div').height();
+        var desiredHeight = browserViewport - logoBarHeight - menuBarHeight - bottomBarHeight;
+        $("#right-panel-action-group").css('height',desiredHeight);
+    };
+    
+    $( window ).resize(function() {
+        resizeSideBar();
+    });
 
 </script>
