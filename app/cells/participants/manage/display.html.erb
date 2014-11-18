@@ -36,11 +36,21 @@
             <h5>Surveys</h5>
             <span class="glyphicon glyphicon-comment"></span> <a href="<%= baseUri + '/pages/participants_dash/survey_review' %>">Review Surveys</a>            
             <h5>Filter by tag</h5>
-            <div class='collapse-group tag-cloud-area' style="overflow : auto;">
+            <div class='collapse-group tag-cloud-area' id='tag-cloud-area'>
                 <div id="participant-tag-cloud" class="collapse in"></div>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+    
+    $(window).scroll(function() {
+        
+        //$('#v-position-div').text($(window).scrollTop());
+        //$('#participants-table-v-position-div').text($('#my-element').offset().top);
+        console.log('current y position of participants table: ' + $('#gbox_participants').position().top);
+        $('#right-panel-action-group').css('top',(140 - $(window).scrollTop()));
 
+    });
+</script>
