@@ -10,7 +10,6 @@ class ResourceController < PlannerController
   def create
     begin
       @object.save!
-      # update_attributes
       render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :create, params[:controller]
     rescue => ex
       render status: :bad_request, text: ex.message
@@ -23,7 +22,7 @@ class ResourceController < PlannerController
     
   def update
     begin
-      @object.update_attributes params[object_name] #"#{model_name}"]
+      @object.update_attributes params[object_name]
       render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :update, params[:controller]
     rescue => ex
       render status: :bad_request, text: ex.message

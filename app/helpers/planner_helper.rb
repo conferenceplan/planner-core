@@ -12,4 +12,12 @@ module PlannerHelper
     ''
   end
 
+  def extra_participant_tabs
+    ''
+  end
+
+  def extra_item_tabs
+    ''
+  end
+
 end
