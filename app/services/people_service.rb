@@ -108,7 +108,7 @@ module PeopleService
     if tagquery.empty?
       Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters)).count args
     else
-      eval "Person#{tagquery}.where(self.constraints(#{includeMailings}, #{mailing_id}, #{onlySurveyRespondents}, #{filters})).uniq.count( :all, " + args.inspect + ")"
+      eval "Person#{tagquery}.where(self.constraints(#{includeMailings}, #{mailing_id ? mailing_id : 'nil'}, #{onlySurveyRespondents ? onlySurveyRespondents : 'nil'}, #{filters ? filters : 'nil'})).uniq.count( :all, " + args.inspect + ")"
     end
   end
  
@@ -133,7 +133,7 @@ module PeopleService
     if tagquery.empty?
       people = Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters)).includes(:pseudonym).all args
     else
-      people = eval "Person#{tagquery}.uniq.where(self.constraints(#{includeMailings}, #{mailing_id}, #{onlySurveyRespondents}, #{filters})).includes(:pseudonym).find :all, " + args.inspect
+      people = eval "Person#{tagquery}.uniq.where(self.constraints(#{includeMailings}, #{mailing_id ? mailing_id : 'nil'}, #{onlySurveyRespondents ? onlySurveyRespondents : 'nil'}, #{filters ? filters : 'nil'})).includes(:pseudonym).find :all, " + args.inspect
     end
   end
   
