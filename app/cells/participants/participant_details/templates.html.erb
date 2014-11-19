@@ -160,14 +160,14 @@
         <button class="model-edit-button btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-pencil"></i></button>
         <p>
             <strong>{{= first_name ? first_name : "&nbsp;" }} {{= last_name ? last_name : "&nbsp;" }} {{= suffix ? suffix : "&nbsp;" }}</strong><br>
-            {{= job_title ? job_title : "<span class='minor-text'>(no job title specified)</span>" }}<br>
-            {{= company ? company : "<span class='minor-text'>(no company specified)</span>" }}
+            {{= job_title ? job_title : "<span class='minor-text'><%= t "no-job-title-specified" %></span>" }}<br>
+            {{= company ? company : "<span class='minor-text'><%= t "no-company-specified" %></span>" }}
         </p>
         <p><span class="label label-default">Participant</span></p>
     </div>
 
     <div class="col-md-5">
-        <h5><%= t "Invitation Status"%></h5>
+        <h5><%= t "invitation-status"%></h5>
         <button class="model-edit-button btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-pencil"></i></button>
         {{ if (typeof id != 'undefined') { }}
             {{ if (!survey_key) { }}
@@ -207,7 +207,7 @@
 </script>
 
 <script type="text/template" id="bio-image-template">
-            <h5>Published picture</h5>
+            <h5><%= t "published-picture" %></h5>
             <% if ConfigService.hasCloudinaryConfig? %>
             <div>
                 {{ if (typeof id != 'undefined') { }}
@@ -242,7 +242,7 @@
 </script>
 
 <script type="text/template" id="bio-view-template">
-        <h5>Biography</h5>
+        <h5><%= t 'biography' %></h5>
         {{ if (typeof id != 'undefined') { }}
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
             <dl class="dl-airy">
@@ -453,7 +453,7 @@
     {{ if (typeof id != 'undefined') { }}
     <div>
         <small>
-            {{= time_slot ? start_time_str : '<%= t "(no time-date specified yet)"%>' }}: <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})
+            {{= time_slot ? start_time_str : '<%= t "no-date-and-time-specified"%>' }}: <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})
             {{= isPublished ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}
         </small>
     </div>

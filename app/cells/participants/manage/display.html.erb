@@ -30,12 +30,12 @@
             <span class="glyphicon glyphicon-chevron-left"></span>
         </button>          
         <div id="right-bar-action-group" class="right-bar-action-group">
-            <h5>Import and export</h5>
-            <span class="glyphicon glyphicon-import"></span> <a href="<%= baseUri + '/pages/participants_dash/import' %>">Import People</a><br>
-            <span class="glyphicon glyphicon-export"></span> <a href="<%= baseUri + '/pages/participants_dash/export' %>">Export People</a>
-            <h5>Surveys</h5>
-            <span class="glyphicon glyphicon-comment"></span> <a href="<%= baseUri + '/pages/participants_dash/survey_review' %>">Review Surveys</a>            
-            <h5>Filter by tag</h5>
+            <h5><%= t "import-and-export" %></h5>
+            <span class="glyphicon glyphicon-import"></span> <a href="<%= baseUri + '/pages/participants_dash/import' %>"><%= t "import-people" %></a><br>
+            <span class="glyphicon glyphicon-export"></span> <a href="<%= baseUri + '/pages/participants_dash/export' %>"><%= t "export-people" %></a>
+            <h5><%= t "surveys" %></h5>
+            <span class="glyphicon glyphicon-comment"></span> <a href="<%= baseUri + '/pages/participants_dash/survey_review' %>"><%= t "review-surveys" %></a>            
+            <h5><%= t "filter-by-tag" %></h5>
             <div class='collapse-group tag-cloud-area' id='tag-cloud-area'>
                 <div id="participant-tag-cloud" class="collapse in"></div>
             </div>
