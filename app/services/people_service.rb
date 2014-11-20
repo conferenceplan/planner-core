@@ -143,6 +143,7 @@ module PeopleService
   #
   #
   def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false)
+    includeConState = false
     clause = DataService.createWhereClause(filters, 
           ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
           ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'], ['people.last_name'])
@@ -177,6 +178,7 @@ module PeopleService
       else
         clause = DataService.addClause( clause, extraClause['param'].to_s + ' = ?', extraClause['value'].to_s)
       end
+      includeConState = extraClause['param'].to_s.include?('person_con_states')
     end
 
     # Find people that do not have the specified mailing id
@@ -195,7 +197,8 @@ module PeopleService
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
 
-    if DataService.getFilterData( filters, 'person_con_states.invitestatus_id' ) || DataService.getFilterData( filters, 'person_con_states.acceptance_status_id' ) || onlySurveyRespondents
+    if includeConState || DataService.getFilterData( filters, 'person_con_states.invitestatus_id' ) || DataService.getFilterData( filters, 'person_con_states.acceptance_status_id' ) || onlySurveyRespondents
+    # if (filters && filters.contains?('person_con_states')) || onlySurveyRespondents
       if args[:joins]
         args[:joins] += ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
       else  
