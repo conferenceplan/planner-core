@@ -195,7 +195,7 @@ module PeopleService
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
 
-    if DataService.getFilterData( filters, 'person_con_states.invitestatus_id' ) || DataService.getFilterData( filters, 'person_con_states.acceptance_status_id' )
+    if DataService.getFilterData( filters, 'person_con_states.invitestatus_id' ) || DataService.getFilterData( filters, 'person_con_states.acceptance_status_id' ) || onlySurveyRespondents
       if args[:joins]
         args[:joins] += ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
       else  
