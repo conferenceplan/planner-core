@@ -279,7 +279,7 @@ ItemApp.ItemManagement = (function(Backbone){
         TabUtils.createTagListContent({
             collectionType : TagContextCollection,
             url : "<%= baseUri + '/tags/' %>" + id + "?class=ProgrammeItem",
-            tagUrl : "/tags/"+ id + "/add?class=ProgrammeItem",
+            tagUrl : "<%= baseUri + '/tags/' %>"+ id + "/add?class=ProgrammeItem",
             template : "#tag-context-layout-template",
             // view_refresh_event : "address:refresh",
             region : itemTabLayout.tags,
