@@ -198,7 +198,6 @@ module PeopleService
     args = { :conditions => clause }
 
     if includeConState || DataService.getFilterData( filters, 'person_con_states.invitestatus_id' ) || DataService.getFilterData( filters, 'person_con_states.acceptance_status_id' ) || onlySurveyRespondents
-    # if (filters && filters.contains?('person_con_states')) || onlySurveyRespondents
       if args[:joins]
         args[:joins] += ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
       else  
