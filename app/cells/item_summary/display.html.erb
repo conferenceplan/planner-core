@@ -26,21 +26,24 @@ $(function() {
     });
 });
 </script>
-<div class="col-md-6">
-	<div class="well">
-		<div class="well well-sm"><%= t 'prog-items' %></div>
-		<div class='chart-row'>
-		<div class="chart">
-			<div class="percentage" data-percent="<%= (@nbrOfScheduledItems.to_f / @nbrOfItems.to_f) * 100 %>"><%= ((@nbrOfScheduledItems.to_f / @nbrOfItems.to_f) * 100).round 1 %>%</div>
-			<div class="chart-label"><%= t 'prog-items-scheduled' %></div>
-		</div>
-		&nbsp;
-		<div class="chart">
-		<div class="percentage-inv" data-percent="<%= (@nbrOfConflicts.to_f / @nbrOfItems.to_f) * 100 %>"><%= ((@nbrOfConflicts.to_f / @nbrOfItems.to_f) * 100).round 1 %>%</div>
-		<div class="chart-label"><%= t 'prog-items-conflicts' %></div>
-		</div>
-		</div>
-		<div><%= @nbrOfItems %> items</div>
-        <div><%= @nbrOfConflicts %> conflicts</div>
-	</div>
+<div class="col-md-4">
+    <div class="panel panel-default">
+        <div class="panel-heading"><%= t 'prog-items' %></div>
+            <div class="panel-body">
+        		<div class='chart-row'>
+            		<div class="chart">
+            			<div class="percentage" data-percent="<%= (@nbrOfScheduledItems.to_f / @nbrOfItems.to_f) * 100 %>"><%= ((@nbrOfScheduledItems.to_f / @nbrOfItems.to_f) * 100).round 1 %>%</div>
+            			<div class="chart-label"><%= t 'prog-items-scheduled' %></div>
+            		</div>
+            		&nbsp;
+            		<div class="chart">
+                		<div class="percentage-inv" data-percent="<%= (@nbrOfConflicts.to_f / @nbrOfItems.to_f) * 100 %>"><%= ((@nbrOfConflicts.to_f / @nbrOfItems.to_f) * 100).round 1 %>%</div>
+                		<div class="chart-label"><%= t 'prog-items-conflicts' %></div>
+            		</div>
+        		</div>
+        		<div><%= @nbrOfItems %> <a href="<%= baseUri + '/pages/items_dash/manage' %>">items</a></div>
+                <div><%= @nbrOfConflicts %> <a href="<%= baseUri + '/pages/schedule_dash/manage' %>"><%= t "schedule-conflicts" %></a></div>
+            </div>
+     </div>
 </div>
+
