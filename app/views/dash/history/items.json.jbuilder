@@ -12,22 +12,24 @@ json.array!(@changes) do |change|
         json.title change.audited_changes["title"] if change.audited_changes["title"] # for program items .. but for assignments we need...
 
         change.audited_changes.each do |k, v|
-            idx = k.index('_id')
-            className = nil
-            if idx
-                className = k.slice(0, idx).capitalize.gsub(/_[a-z]/){ |s| s[1].capitalize }
-            end
-            
-            if className && !(['Role', 'Format', 'SetupType'].include? className)
-                if (eval ( className + '.exists? ' + v.to_s ))
-                    instance = eval ( className + '.find ' + v.to_s )
-                    json.title   instance.title if className == 'ProgrammeItem'
-                    json.person   instance.getFullPublicationName if className == 'Person'
+            if k != 'conference_id'
+                idx = k.index('_id')
+                className = nil
+                if idx
+                    className = k.slice(0, idx).capitalize.gsub(/_[a-z]/){ |s| s[1].capitalize }
                 end
-            elsif ['Role', 'Format', 'SetupType'].include? className
-                json.set! className.downcase, (Enum.find v).name if v
-            elsif v
-                json.set! k,  v if v && v != ""
+                
+                if className && !(['Role', 'Format', 'SetupType'].include? className)
+                    if (eval ( className + '.exists? ' + v.to_s ))
+                        instance = eval ( className + '.find ' + v.to_s )
+                        json.title   instance.title if className == 'ProgrammeItem'
+                        json.person   instance.getFullPublicationName if className == 'Person'
+                    end
+                elsif ['Role', 'Format', 'SetupType'].include? className
+                    json.set! className.downcase, (Enum.find v).name if v
+                elsif v
+                    json.set! k,  v if v && v != ""
+                end
             end
         end
     else
