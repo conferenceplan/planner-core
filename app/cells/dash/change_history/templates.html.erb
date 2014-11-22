@@ -3,56 +3,64 @@
     {{ if  (typeof title != 'undefined') { }}
     {{ var id = randomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');}}    
     <div class="panel-heading">
-        <a data-toggle="collapse"  href="#{{= id }}">{{= typeof title != 'undefined' ? title : ''}}</a>
-        <small><p>{{= action }}, {{= time}}, {{= user}}</p></small>
+        <a data-toggle="collapse"  href="#{{= id }}">{{= typeof title != 'undefined' ? title : ''}}</a> 
+        {{ if (action == 'create') { }}
+            <span class="label label-success pull-right">{{= action }}</span>
+        {{ } else { }}
+            <span class="label label-default pull-right">{{= action }}</span>
+        {{ } }}           
+        <br>
+        <small><%= t "by" %> {{= user}}, {{= action }}, {{= time}}</small>
     </div>
     <div class="panel-collapse collapse" id="{{= id }}">
-    <small>
-    <dl class="dl-horizontal">
-        {{ if (action != "destroy") { }}
-            {{ if (type == 'ProgrammeItem') { }}
-                {{ if (typeof short_title != 'undefined') { }}
-                    <dt><%= t  "short-title" %></dt><dd>{{= short_title }}</dd>
+        <small>
+        <dl class="dl-horizontal">
+            {{ if (action != "destroy") { }}
+                {{ if (type == 'ProgrammeItem') { }}
+                    {{ if (typeof short_title != 'undefined') { }}
+                        <dt><%= t  "short-title" %></dt><dd>{{= short_title }}</dd>
+                    {{ } }}
+                    {{ if (typeof precis != 'undefined') { }}
+                        <dt><%= t  "item-description" %></dt><dd>{{= precis }}</dd>
+                    {{ } }}
+                    {{ if (typeof duration != 'undefined') { }}
+                        <dt><%= t "item-duration" %></dt><dd>{{= duration }}</dd>
+                    {{ } }}
+                    {{ if (typeof minimum_people != 'undefined') { }}
+                        <dt><%= t "item-min-participants" %></dt><dd>{{= minimum_people }}</dd>
+                    {{ } }}
+                    {{ if (typeof maximum_people != 'undefined') { }}
+                        <dt><%= t "item-max-participants" %></dt><dd>{{= maximum_people }}</dd>
+                    {{ } }}
+                    {{ if (typeof notes != 'undefined') { }}
+                        <dt><%= t "item-notes" %></dt><dd>{{= notes }}</dd>
+                    {{ } }}
+                    {{ if (typeof print == 'boolean') { }}
+                        <dt><%= t "item-print" %></dt><dd>{{= print }}</dd>
+                    {{ } }}
+                    {{ if (typeof mobile_card_size != 'undefined') { }}
+                        <dt><%= t "mobile-card-size" %></dt><dd>{{= mobile_card_size }}</dd>
+                    {{ } }}
+                    {{ if (typeof audience_size != 'undefined') { }}
+                        <dt><%= t "item-estimated-audience-size" %></dt><dd>{{= audience_size }}</dd>
+                    {{ } }}
+                    {{ if (typeof participant_notes != 'undefined') { }}
+                        <dt><%= t "item-notes-for-participants" %></dt><dd>{{= participant_notes }}</dd>
+                    {{ } }}
+                {{ } else { }}
+                    <dt><%= t "person" %></dt><dd>{{= typeof person != 'undefined' ? person : ''}}</dd>
+                    <dt><%= t "role" %></dt><dd>{{= typeof role != 'undefined' ? role : ''}}</dd>
                 {{ } }}
-                {{ if (typeof precis != 'undefined') { }}
-                    <dt><%= t  "item-description" %></dt><dd>{{= precis }}</dd>
-                {{ } }}
-                {{ if (typeof duration != 'undefined') { }}
-                    <dt><%= t "item-duration" %></dt><dd>{{= duration }}</dd>
-                {{ } }}
-                {{ if (typeof minimum_people != 'undefined') { }}
-                    <dt><%= t "item-min-participants" %></dt><dd>{{= minimum_people }}</dd>
-                {{ } }}
-                {{ if (typeof maximum_people != 'undefined') { }}
-                    <dt><%= t "item-max-participants" %></dt><dd>{{= maximum_people }}</dd>
-                {{ } }}
-                {{ if (typeof notes != 'undefined') { }}
-                    <dt><%= t "item-notes" %></dt><dd>{{= notes }}</dd>
-                {{ } }}
-                {{ if (typeof print == 'boolean') { }}
-                    <dt><%= t "item-print" %></dt><dd>{{= print }}</dd>
-                {{ } }}
-                {{ if (typeof mobile_card_size != 'undefined') { }}
-                    <dt><%= t "mobile-card-size" %></dt><dd>{{= mobile_card_size }}</dd>
-                {{ } }}
-                {{ if (typeof audience_size != 'undefined') { }}
-                    <dt><%= t "item-estimated-audience-size" %></dt><dd>{{= audience_size }}</dd>
-                {{ } }}
-                {{ if (typeof participant_notes != 'undefined') { }}
-                    <dt><%= t "item-notes-for-participants" %></dt><dd>{{= participant_notes }}</dd>
-                {{ } }}
-            {{ } else { }}
-                <dt><%= t "person" %></dt><dd>{{= typeof person != 'undefined' ? person : ''}}</dd>
-                <dt><%= t "role" %></dt><dd>{{= typeof role != 'undefined' ? role : ''}}</dd>
-            {{ } }}
-        {{ } }}            
-    </dl>
-    </small>
+            {{ } }}            
+        </dl>
+        </small>
     </div>
     {{ } else { }}
         <div class="panel-heading">
-            <p>Item Assignment - Item subsequently deleted.</p>
-            <small><p>{{= action }}, {{= time}}, {{= user}}</p></small>
+            Item Assignment
+            <span class="label label-default pull-right">assignment</span>
+            <br>
+            <small>Item subsequently deleted. {{= action }}, {{= time}}, {{= user}}</small>
         </div>
     {{ } }}
 </script>

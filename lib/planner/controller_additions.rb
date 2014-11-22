@@ -20,6 +20,7 @@ module Planner
     def top_menu
       #  return the hash for the top menu
       return {
+        "home"             => ({ :target => '/',                                   :icon => "glyphicon-home",      :target_base => '/'} if allowed? :dash),
         "venues"           => ({ :target => '/pages/venues_dash/manage',           :icon => "glyphicon-th-list",   :target_base => '/pages/venues_dash'} if allowed? :venues),
         "participants"     => ({ :target => '/pages/participants_dash/manage',     :icon => "glyphicon-user",      :target_base => '/pages/participants_dash'} if allowed? :participants),
         "program-items"    => ({ :target => '/pages/items_dash/manage',            :icon => "glyphicon-tasks",     :target_base => '/pages/items_dash'} if allowed? :items),
