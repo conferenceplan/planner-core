@@ -9,7 +9,8 @@
         {{ } else { }}
             <span class="label label-default pull-right">{{= action }}</span>
         {{ } }}           
-        <br><%= t "by" %> {{= user}}, {{= action }}, {{= time}}
+        <br>
+        <small><%= t "by" %> {{= user}}, {{= action }}, {{= time}}</small>
     </div>
     <div class="panel-collapse collapse" id="{{= id }}">
         <small>
