@@ -57,7 +57,10 @@
     </div>
     {{ } else { }}
         <div class="panel-heading">
-            Item Assignment - Item subsequently deleted. {{= action }}, {{= time}}, {{= user}}
+            Item Assignment
+            <span class="label label-default pull-right">assignment</span>
+            <br>
+            <small>Item subsequently deleted. {{= action }}, {{= time}}, {{= user}}</small>
         </div>
     {{ } }}
 </script>
