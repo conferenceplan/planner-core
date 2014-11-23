@@ -31,11 +31,47 @@ $(function() {
     <div id="overview" class="panel panel-default">
         <div class="panel-heading"><%= t 'overview' %></div>
         <div class="panel-body">
-            <p><a href="<%= baseUri + '/pages/venues_dash/manage' %>">Venues</a></p>
-            <p><a href="<%= baseUri + '/pages/participants_dash/manage' %>">Participants</a></p>
-            <p><a href="<%= baseUri + '/pages/items_dash/manage' %>">Program Items</a></p>
-            <p><a href="<%= baseUri + '/pages/surveys_dash/manage' %>">Surveys</a></p>
-            <p><a href="<%= baseUri + '/pages/communications_dash/manage' %>">Communications</a></p>
+            <div class="row   overview-detail">
+                <div class="col-md-5">
+                    <a href="<%= baseUri + '/pages/venues_dash/manage' %>">Venues</a>
+                </div>    
+                <div class="col-md-7 text-right ">
+                    5 venues, 45 rooms
+                </div>
+            </div>
+            <div class="row overview-detail">
+                <div class="col-md-5  ">
+                    <a href="<%= baseUri + '/pages/participants_dash/manage' %>">Participants</a>
+                </div>    
+                <div class="col-md-7 text-right ">
+                    1200 attendees, 154 speakers
+                </div>
+            </div>
+            <div class="row   overview-detail">
+                <div class="col-md-5 ">
+                    <a href="<%= baseUri + '/pages/items_dash/manage' %>">Program items</a>
+                </div>    
+                <div class="col-md-7 text-right">
+                    255 scheduled items
+                </div>
+            </div>
+            <div class="row   overview-detail">
+                <div class="col-md-5  ">
+                    <a href="<%= baseUri + '/pages/surveys_dash/manage' %>">Surveys</a>
+                </div>    
+                <div class="col-md-7 text-right ">
+                    None sent
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-5">
+                    <a href="<%= baseUri + '/pages/communications_dash/manage' %>">Communications</a>
+                </div>    
+                <div class="col-md-7 text-right">
+                    3 mailings
+                </div>
+            </div>
+            
             <!-- TODO Split into multi
             <p><a href="#">Documents</a></p>
             <p><a href="#">Tasks</a></p>
