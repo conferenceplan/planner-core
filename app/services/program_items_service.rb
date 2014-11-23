@@ -461,7 +461,7 @@ protected
                           join(programme_items).on(programme_items[:id].eq(room_assignments[:programme_item_id])).
                           where(people[:id].eq(exclusions[:person_id]))
 
-    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+    query = query.where(room_assignments[:day].eq(day.to_s)) if day
 
     query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
                                                   on(conflict_exceptions[:affected].eq(people[:id]).
@@ -514,7 +514,7 @@ protected
                             or(available_dates[:end_time].lt(time_slots[:start]).or(available_dates[:end_time].lt(time_slots[:end])))
                           )
 
-    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+    query = query.where(room_assignments[:day].eq(day.to_s)) if day
 
     query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
                                                   on(conflict_exceptions[:affected].eq(people[:id]).
