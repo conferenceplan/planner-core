@@ -10,7 +10,7 @@
             <span class="label label-default pull-right">{{= action }}</span>
         {{ } }}           
         <br>
-        <small><%= t "by" %> {{= user}}, {{= action }}, {{= time}}</small>
+        <small><%= t "by" %> {{= user}}, {{= action }}, {{= moment(time).fromNow() }}</small>
     </div>
     <div class="panel-collapse collapse" id="{{= id }}">
         <small>
