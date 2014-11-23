@@ -58,6 +58,7 @@ HistoryApp.Report = (function(Backbone){
  * 
  */
 jQuery(document).ready(function() {
+    moment.lang('<%= I18n.locale %>');
     HistoryApp.addInitializer(HistoryApp.Report.init);
     HistoryApp.start({});
 });
