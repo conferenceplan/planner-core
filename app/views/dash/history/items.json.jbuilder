@@ -4,7 +4,7 @@ json.array!(@changes) do |change|
     json.action change.action
     json.user change.user_id ? ((User.exists? change.user_id) ? User.find(change.user_id).login : change.user_id) : 'unknown'
     json.type change.auditable_type
-    json.time change.created_at.strftime('%A %H:%M, %-d %B %Y')
+    json.time change.created_at
     
     if change.action == 'destroy'
         json.title change.audited_changes["title"] if change.audited_changes["title"] # for program items .. but for assignments we need...
