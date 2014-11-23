@@ -26,8 +26,24 @@ $(function() {
     });
 });
 </script>
+
 <div class="col-md-4">
-    <div class="panel panel-default">
+    <div id="overview" class="panel panel-default">
+        <div class="panel-heading"><%= t 'overview' %></div>
+        <div class="panel-body">
+            <p><a href="<%= baseUri + '/pages/venues_dash/manage' %>">Venues</a></p>
+            <p><a href="<%= baseUri + '/pages/participants_dash/manage' %>">Participants</a></p>
+            <p><a href="<%= baseUri + '/pages/items_dash/manage' %>">Program Items</a></p>
+            <p><a href="<%= baseUri + '/pages/surveys_dash/manage' %>">Surveys</a></p>
+            <p><a href="<%= baseUri + '/pages/communications_dash/manage' %>">Communications</a></p>
+            <!-- TODO Split into multi
+            <p><a href="#">Documents</a></p>
+            <p><a href="#">Tasks</a></p>
+            <p><a href="#">Costs</a></p>
+            -->
+        </div>
+    </div>
+    <div id="program-items-charts" class="panel panel-default">
         <div class="panel-heading"><%= t 'prog-items' %></div>
             <div class="panel-body">
         		<div class='chart-row'>

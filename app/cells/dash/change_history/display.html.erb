@@ -1,11 +1,36 @@
 <%= render_cell "dash/change_history", :templates %>
 <%= render_cell "dash/change_history", :javascript %>
 
-<div class="panel panel-default">
-    <div class="panel-heading"><%= t 'recent-item-changes' %></div>
+<!-- to split into planner multi 
+    
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading"><%= t 'overdue-tasks' %></div>
         <div class="panel-body">
             <div>
-                <div id="change-history"></div>
+                <div id="overdue-tasks">
+                    <ul>
+                        <li><a href="#">Task 1</a></li>
+                        <li><a href="#">Task 2</a></li>
+                        <li><a href="#">Task 3</a></li>
+                        <li><a href="#">Task 4</a></li>
+                        <li><a href="#">Task 5</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+-->
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading"><%= t 'recent-item-changes' %></div>
+            <div class="panel-body">
+                <div>
+                    <div id="change-history"></div>
+                </div>
             </div>
         </div>
     </div>
