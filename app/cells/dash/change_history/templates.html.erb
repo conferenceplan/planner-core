@@ -1,16 +1,29 @@
 
+
 <script type="text/template" id="item-history-template">
     {{ if  (typeof title != 'undefined') { }}
     {{ var id = randomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');}}    
+    
     <div class="panel-heading">
         <a data-toggle="collapse"  href="#{{= id }}">{{= typeof title != 'undefined' ? title : ''}}</a> 
         {{ if (action == 'create') { }}
-            <span class="label label-success pull-right">{{= action }}</span>
+            <span class="label label-success pull-right"><span class="glyphicon glyphicon-ok"></span> {{= action }}</span>
+        {{ } else if (action == 'destroy') { }}
+            <span class="label label-danger pull-right"><span class="glyphicon glyphicon-remove"></span> {{= action }}</span>
+        {{ } else if (action == 'assignment') { }}
+            <span class="label label-info pull-right"><span class="glyphicon glyphicon-user"></span> {{= action }}</span>
         {{ } else { }}
             <span class="label label-default pull-right">{{= action }}</span>
         {{ } }}           
         <br>
-        <small><%= t "by" %> {{= user}}, {{= action }}, {{= time}}</small>
+        <div class="row">
+            <div class="col-md-6">
+                <small><%= t "by" %> {{= user}}</small>
+            </div>
+            <div class="col-md-6 text-right">
+                <small>{{= moment(time).fromNow() }}</small><br>
+            </div>
+        </div>
     </div>
     <div class="panel-collapse collapse" id="{{= id }}">
         <small>
