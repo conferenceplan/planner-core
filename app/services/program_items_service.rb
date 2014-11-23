@@ -244,7 +244,7 @@ protected
       assignments_alias[:role_id].as('conflict_item_role'), time_slots_alias[:start].as('conflict_start')
       ]
 
-    assignment_query = assignments.project(*assignment_attrs).
+    query = assignments.project(*assignment_attrs).
                                       join(room_assignments).on(room_assignments[:programme_item_id].eq(assignments[:programme_item_id])).
                                       join(time_slots).on(room_assignments[:time_slot_id].eq(time_slots[:id])).
                                       join(assignments_alias).on(assignments[:id].lt(assignments_alias[:id])).
@@ -259,9 +259,9 @@ protected
                                           and(assignments[:role_id].not_eq(PersonItemRole['Reserved'].id).and(assignments_alias[:role_id].not_eq(PersonItemRole['Reserved'].id)))
                                       )
 
-    assignment_query = assignment_query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
   
-    assignment_query = assignment_query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
+    query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
                                                   on(conflict_exceptions[:affected].eq(assignments[:person_id]).
                                                       and(conflict_exceptions[:src1].eq(assignments[:programme_item_id])).
                                                       and(conflict_exceptions[:src2].eq(assignments_alias[:programme_item_id]))
@@ -269,7 +269,7 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     )
 
-    assignment_query = assignment_query.
+    query = query.
                                 join(rooms).on(rooms[:id].eq(room_assignments[:room_id])).
                                 join(people).on(people[:id].eq(assignments[:person_id])).
                                 join(items).on(items[:id].eq(assignments[:programme_item_id])).
@@ -277,7 +277,9 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
-    assignment_query.to_sql
+    query = query.where(self.constraints())
+    
+    query.to_sql
   end
     
   def self.roomConflictsSql(day = nil)
@@ -304,39 +306,40 @@ protected
       time_slots_alias[:start].as('conflict_start')
       ]
 
-    assignment_query = room_assignments.project(*assignment_attrs).
-                          join(room_assignments_alias).on(room_assignments[:room_id].eq(room_assignments_alias[:room_id])).
-                          join(time_slots).on(room_assignments[:time_slot_id].eq(time_slots[:id])).
-                          join(time_slots_alias).on(room_assignments_alias[:time_slot_id].eq(time_slots_alias[:id])).
-                          where(
-                            time_slots[:start].lt(time_slots_alias[:start]).or(
-                              time_slots[:start].eq(time_slots_alias[:start]).and(
-                                room_assignments[:programme_item_id].lt(room_assignments_alias[:programme_item_id])
-                              )
-                            ).and(
-                              time_slots[:end].gt(time_slots_alias[:start])
-                            ).and(
-                              room_assignments[:programme_item_id].not_eq(room_assignments_alias[:programme_item_id])
-                            )
-                          )
+    query = room_assignments.project(*assignment_attrs).
+                join(room_assignments_alias).on(room_assignments[:room_id].eq(room_assignments_alias[:room_id])).
+                join(time_slots).on(room_assignments[:time_slot_id].eq(time_slots[:id])).
+                join(time_slots_alias).on(room_assignments_alias[:time_slot_id].eq(time_slots_alias[:id])).
+                where(
+                  time_slots[:start].lt(time_slots_alias[:start]).or(
+                    time_slots[:start].eq(time_slots_alias[:start]).and(
+                      room_assignments[:programme_item_id].lt(room_assignments_alias[:programme_item_id])
+                    )
+                  ).and(
+                    time_slots[:end].gt(time_slots_alias[:start])
+                  ).and(
+                    room_assignments[:programme_item_id].not_eq(room_assignments_alias[:programme_item_id])
+                  )
+                )
                           
-    assignment_query = assignment_query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
-    assignment_query = assignment_query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
-                                                  on(conflict_exceptions[:affected].eq(room_assignments[:id]).
-                                                      and(conflict_exceptions[:src1].eq(room_assignments[:programme_item_id])).
-                                                      and(conflict_exceptions[:src2].eq(room_assignments_alias[:programme_item_id]))
-                                                    ).where(
-                                                      conflict_exceptions[:id].eq(nil)
-                                                    )
+    query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
+                  on(conflict_exceptions[:affected].eq(room_assignments[:id]).
+                      and(conflict_exceptions[:src1].eq(room_assignments[:programme_item_id])).
+                      and(conflict_exceptions[:src2].eq(room_assignments_alias[:programme_item_id]))
+                    ).where(
+                      conflict_exceptions[:id].eq(nil)
+                    )
 
-    assignment_query = assignment_query.
-                                join(rooms).on(rooms[:id].eq(room_assignments[:room_id])).
-                                join(items).on(items[:id].eq(room_assignments[:programme_item_id])).
-                                join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
-                                join(items_alias).on(items_alias[:id].eq(room_assignments_alias[:programme_item_id]))
+    query = query.join(rooms).on(rooms[:id].eq(room_assignments[:room_id])).
+                  join(items).on(items[:id].eq(room_assignments[:programme_item_id])).
+                  join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
+                  join(items_alias).on(items_alias[:id].eq(room_assignments_alias[:programme_item_id]))
 
-    assignment_query.to_sql
+    query = query.where(self.constraints())
+
+    query.to_sql
   end
 
   def self.excludedItemConflictsSql(day = nil)
@@ -372,7 +375,7 @@ protected
       assignments_alias[:role_id].as('item_role'), time_slots_alias[:start].as('conflict_start')
       ]
 
-    assignment_query = people.project(*assignment_attrs).
+    query = people.project(*assignment_attrs).
                           join(exclusions).on(exclusions[:person_id].eq(people[:id]).
                             and(exclusions[:excludable_type].eq('ProgrammeItem'))
                           ).
@@ -395,9 +398,9 @@ protected
                             )
                           )
 
-    assignment_query = assignment_query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
-    assignment_query = assignment_query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
+    query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
                                                   on(conflict_exceptions[:affected].eq(people[:id]).
                                                       and(conflict_exceptions[:src1].eq(room_assignments_alias[:programme_item_id])).
                                                       and(conflict_exceptions[:src2].eq(room_assignments[:programme_item_id]))
@@ -405,7 +408,9 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     )
 
-    assignment_query.to_sql
+    query = query.where(self.constraints())
+
+    query.to_sql
   end
 
   def self.excludedTimeConflictsSql(day = nil)
@@ -435,7 +440,7 @@ protected
       assignments[:role_id].as('item_role')
     ]
 
-    assignment_query = time_slots.project(*assignment_attrs).
+    query = time_slots.project(*assignment_attrs).
                           join(exclusions).on(exclusions[:excludable_id].eq(time_slots[:id]).
                             and(exclusions[:excludable_type].eq('TimeSlot'))
                           ).join(time_slots_alias).on(
@@ -456,9 +461,9 @@ protected
                           join(programme_items).on(programme_items[:id].eq(room_assignments[:programme_item_id])).
                           where(people[:id].eq(exclusions[:person_id]))
 
-    assignment_query = assignment_query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
-    assignment_query = assignment_query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
+    query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
                                                   on(conflict_exceptions[:affected].eq(people[:id]).
                                                       and(conflict_exceptions[:src1].eq(room_assignments[:programme_item_id])).
                                                       and(conflict_exceptions[:src2].eq(time_slots[:id]))
@@ -466,7 +471,9 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    assignment_query.to_sql
+    query = query.where(self.constraints())
+
+    query.to_sql
   end
 
   def self.availabilityConfictsSql(day = nil)
@@ -493,7 +500,7 @@ protected
       assignments[:role_id].as('item_role')
     ]
 
-    assignment_query = available_dates.project(*assignment_attrs).
+    query = available_dates.project(*assignment_attrs).
                           join(people).on(available_dates[:person_id].eq(people[:id])).
                           join(assignments).on(assignments[:person_id].eq(people[:id]).and(
                             assignments[:role_id].not_eq(PersonItemRole['Reserved'].id)
@@ -507,9 +514,9 @@ protected
                             or(available_dates[:end_time].lt(time_slots[:start]).or(available_dates[:end_time].lt(time_slots[:end])))
                           )
 
-    assignment_query = assignment_query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
-    assignment_query = assignment_query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
+    query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
                                                   on(conflict_exceptions[:affected].eq(people[:id]).
                                                       and(conflict_exceptions[:src1].eq(assignments[:programme_item_id])).
                                                       and(conflict_exceptions[:src2].eq(available_dates[:id]))
@@ -517,7 +524,9 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    assignment_query.to_sql
+    query = query.where(self.constraints())
+
+    query.to_sql
   end
   
   def self.backToBackConflictsSql(day = nil)
@@ -543,17 +552,6 @@ protected
     items_alias = items.alias
     programme_items_alias = programme_items.alias
 
-  # R.id as room_id, R.name as room_name,
-  # P.id as person_id, P.first_name as person_first_name, P.last_name as person_last_name, 
-  # S.id as item_id, S.title as item_name, Conflicts.startA as item_start,
-  # RB.id as conflict_room_id, RB.name as conflict_room_name,
-  # SB.id as conflict_item_id, SB.title as conflict_item_title,
-  # Conflicts.startB as conflict_start,
-  # Conflicts.roleA item_role,
-  # Conflicts.roleB conflict_item_role
-  # from people P, rooms R, programme_items S,
-  # rooms RB, programme_items SB, 
-
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
@@ -566,7 +564,7 @@ protected
       assignments_alias[:role_id].as('conflict_item_role')
       ]
     
-    assignment_query = room_assignments.project(*assignment_attrs).
+    query = room_assignments.project(*assignment_attrs).
                           join(assignments).on(assignments[:programme_item_id].eq(room_assignments[:programme_item_id])).
                           join(time_slots).on(time_slots[:id].eq(room_assignments[:time_slot_id])).
                           join(people).on(people[:id].eq(assignments[:person_id])).
@@ -583,9 +581,9 @@ protected
                             and( assignments[:person_id].eq(assignments_alias[:person_id]) )
                           )
 
-    assignment_query = assignment_query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
-    assignment_query = assignment_query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
+    query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
                                                   on(conflict_exceptions[:affected].eq(people[:id]).
                                                       and(conflict_exceptions[:src1].eq(assignments[:programme_item_id])).
                                                       and(conflict_exceptions[:src2].eq(assignments_alias[:programme_item_id]))
@@ -593,7 +591,13 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    assignment_query.to_sql
+    query = query.where(self.constraints())
+
+    query.to_sql
+  end
+
+  def self.constraints(*args)
+    true
   end
 
 end
