@@ -80,7 +80,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
     
     function previewSurvey(mdl) {
         // mechanism to preview survey in a new window...
-        window.open("/form/" + mdl.get('alias') + '/preview');
+        window.open("<%= baseUri %>/form/" + mdl.get('alias') + '/preview');
     };
     
     function drillDownSurvey(id) {

@@ -3,6 +3,8 @@
 #
 #
 class Surveys::ResponseController < ApplicationController
+  include PlannerHelper
+  
   layout "dynasurvey"
 
   before_filter :check_for_single_access_token, :only => [:create, :show, :index, :renderalias]
@@ -182,13 +184,14 @@ class Surveys::ResponseController < ApplicationController
             logger.error "NEED TO LOGIN " + new_survey_respondent_url
             store_page page
             store_location
+            # redirect_to baseUri + '/survey_respondents/new' #new_survey_respondent_url # TODO - add baseUri +
             redirect_to new_survey_respondent_url
           end
         end
         
         @page_title = @survey.name
         @current_key = params[:key]
-        @path = '/surveys/' + @survey.id.to_s + '/response' # TODO - fix for language...
+        @path = baseUri + '/surveys/' + @survey.id.to_s + '/response' # TODO - fix for language...
 
         if @respondent && !@preview
           if @respondent.survey_respondent_detail
@@ -468,11 +471,11 @@ class Surveys::ResponseController < ApplicationController
         end
         if person
           address = person.getDefaultPostalAddress()
-          res[response.survey_question_id.to_s]['response'] = address.line1
-          res[response.survey_question_id.to_s]['response1'] = address.city
-          res[response.survey_question_id.to_s]['response2'] = address.state
-          res[response.survey_question_id.to_s]['response3'] = address.postcode
-          res[response.survey_question_id.to_s]['response4'] = address.country
+          res[response.survey_question_id.to_s]['response'] = address ? address.line1 : ''
+          res[response.survey_question_id.to_s]['response1'] = address ? address.city : ''
+          res[response.survey_question_id.to_s]['response2'] = address ? address.state : ''
+          res[response.survey_question_id.to_s]['response3'] = address ? address.postcode : ''
+          res[response.survey_question_id.to_s]['response4'] = address ? address.country : ''
         else  
           res[response.survey_question_id.to_s]['response'] = response.response
           res[response.survey_question_id.to_s]['response1'] = response.response1
