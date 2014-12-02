@@ -1,7 +1,11 @@
 #
 #
 #
+require 'job_utils'
+
 class MailingJob
+
+  include JobUtils
   
   attr_accessor :mailing_id
 
@@ -9,7 +13,7 @@ class MailingJob
   #
   #  
   def perform
-    cfg = SiteConfig.find :first
+    cfg = getSiteConfig
     zone = cfg ? cfg.time_zone : Time.zone
     Time.use_zone(zone) do
       # find all the mailings that have been scheduled

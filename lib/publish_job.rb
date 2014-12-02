@@ -1,16 +1,19 @@
+require 'job_utils'
+
 class PublishJob
+
+  include JobUtils
   
   def initialize(ref_numbers)
     @ref_numbers = ref_numbers
   end
   
   def perform
-    cfg = SiteConfig.find :first
+    cfg = getSiteConfig
     zone = cfg ? cfg.time_zone : Time.zone
     Time.use_zone(zone) do
       PublishedProgrammeItem.transaction do
         load_cloudinary_config
-        load_site_config
         
         ProgramItemsService.assign_reference_numbers if @ref_numbers #
         
@@ -101,18 +104,17 @@ class PublishJob
     args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication, :external_images] }
     return ProgrammeItem.find :all, args
   end
-  
+
   def getRemovedProgramItems
-    # publications with no original or that the published flag is no longer true
-    clause = [REMOVE_CLAUSE, 'PublishedProgrammeItem', 'PublishedProgrammeItem']
-    args = { :conditions => clause, :include => [:publication] }
-    return PublishedProgrammeItem.find :all, args
+    PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
+      joins("LEFT OUTER JOIN room_item_assignments on publications.original_id = room_item_assignments.programme_item_id").
+      where("room_item_assignments.id is null OR publications.id is null")
   end
-  
+
   def getUnpublishedItems
-    clause = [UNPUBLISH_CLAUSE, 'ProgrammeItem', false]
-    args = { :conditions => clause }
-    return PublishedProgrammeItem.find :all, args
+    PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
+      joins("join programme_items on programme_items.id = publications.original_id and publications.original_type = 'ProgrammeItem'").
+      where("programme_items.print = 0 AND publications.published_id is not null")
   end
 
   private
@@ -134,23 +136,6 @@ class PublishJob
     return clause
   end
   
-REMOVE_CLAUSE = <<"EOS"
-  published_programme_items.id in (
-  select publications.published_id from publications 
-  LEFT OUTER JOIN room_item_assignments on publications.original_id = room_item_assignments.programme_item_id 
-  WHERE publications.published_type like ? AND room_item_assignments.id is null)
-  OR
-  published_programme_items.id not in (
-  select published_id from publications where publications.published_type =  ?)
-EOS
-
-UNPUBLISH_CLAUSE = <<"EOS"
-  published_programme_items.id in (select publications.published_id from programme_items 
-  left join publications on publications.original_id = programme_items.id and publications.original_type = ?
-  where print = ? 
-  and publications.published_id is not null)
-EOS
-    
   def getRemovedParticipants
     # Select from publications and programme item assignments where published_id is not in the programme item assignments
   end
@@ -378,10 +363,6 @@ EOS
       config.static_image_support = cfg ? cfg.static_image_support : false
      config.cdn_subdomain = true
     end
-  end
-  
-  def load_site_config
-    cfg = SiteConfig.find :first #
   end
   
   def copyTags(from, to)
