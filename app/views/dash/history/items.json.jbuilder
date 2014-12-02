@@ -20,10 +20,12 @@ json.array!(@changes) do |change|
                 end
                 
                 if className && !(['Role', 'Format', 'SetupType'].include? className)
-                    if (eval ( className + '.exists? ' + v.to_s ))
-                        instance = eval ( className + '.find ' + v.to_s )
-                        json.title   instance.title if className == 'ProgrammeItem'
-                        json.person   instance.getFullPublicationName if className == 'Person'
+                    if Object.const_defined?(className)
+                        if (eval ( className + '.exists? ' + v.to_s ))
+                            instance = eval ( className + '.find ' + v.to_s )
+                            json.title   instance.title if className == 'ProgrammeItem'
+                            json.person   instance.getFullPublicationName if className == 'Person'
+                        end
                     end
                 elsif ['Role', 'Format', 'SetupType'].include? className
                     json.set! className.downcase, (Enum.find v).name if v
