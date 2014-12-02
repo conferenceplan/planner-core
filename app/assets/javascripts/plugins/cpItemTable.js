@@ -11,6 +11,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             name: 'item[title]',
             index: 'programme_items.title',
             width: 500,
+            searchoptions : {
+                clearSearch : false
+            },
             formatter : function(cellvalue, options, rowObject) {
                 var res = "<div itemId='" + options.rowId + "'>" + cellvalue + "</div>"; // adding the item id so that drag-n-drop can use it
                 return res;
@@ -27,7 +30,8 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             search: true,
             stype: "select",
             searchoptions: {
-                dataUrl: this.options.root_url + 'formats/listwithblank'
+                dataUrl: this.options.root_url + 'formats/listwithblank',
+                clearSearch : false
             },
         },
         {
@@ -36,6 +40,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             index: 'duration',
             hidden : !this.options.duration[0],
             width: 60,
+            searchoptions: {
+                clearSearch : false
+            },
             editable: true,
             editoptions: {
                 size: 20
@@ -119,6 +126,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             hidden : !this.options.ref_number[0],
             width: 60,
             editable: false,
+            searchoptions: {
+                clearSearch : false
+            },
             formoptions: {
                 rowpos: 7,
                 label: "Ref Number",

@@ -17,6 +17,10 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 // hidden : false,
                 hidden : !this.options.name[0],
                 editable : false,
+                clearSearch : false,
+                searchoptions : {
+                    clearSearch : false
+                },
                 formatter : function(cellvalue, options, rowObject) {
                     var res = "";
                     
@@ -113,7 +117,8 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 stype : "select",
                 width : 60,
                 searchoptions : {
-                    dataUrl: this.options.root_url + "participants/invitestatuslistwithblank"
+                    dataUrl: this.options.root_url + "participants/invitestatuslistwithblank",
+                    clearSearch : false
                 },
                 editoptions : {
                     dataUrl: this.options.root_url + "participants/invitestatuslist",
@@ -137,7 +142,8 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 stype : "select",
                 width : 60,
                 searchoptions : {
-                    dataUrl: this.options.root_url + "invitation_categories/list"
+                    dataUrl: this.options.root_url + "invitation_categories/list",
+                    clearSearch : false
                 },
                 editoptions : {
                     dataUrl: this.options.root_url + "invitation_categories/list",
@@ -161,7 +167,8 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 stype : "select",
                 width : 50,
                 searchoptions : {
-                    dataUrl: this.options.root_url + "participants/acceptancestatuslistwithblank"
+                    dataUrl: this.options.root_url + "participants/acceptancestatuslistwithblank",
+                    clearSearch : false
                 },
                 editoptions : {
                     dataUrl: this.options.root_url + "participants/acceptancestatuslist",
@@ -184,7 +191,8 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 search : true,
                 stype : "select",
                 searchoptions : {
-                    dataUrl: this.options.root_url + "communications/mailing/listWithBlank"
+                    dataUrl: this.options.root_url + "communications/mailing/listWithBlank",
+                    clearSearch : false
                 },
                 width : 100,
                 formatter : function(cellvalue, options, rowObject) {
