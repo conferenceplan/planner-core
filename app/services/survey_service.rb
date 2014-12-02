@@ -116,9 +116,13 @@ module SurveyService
   #  
   def self.findPeopleWithDoNotShareEmail
     
-    Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}},
-            :conditions => ["survey_answers.answertype_id = ? AND survey_answers.answer = survey_responses.response", AnswerType['DoNotShareEmail'].id]
-    
+    # Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}},
+            # :conditions => ["survey_answers.answertype_id = ? AND survey_answers.answer = survey_responses.response", AnswerType['DoNotShareEmail'].id]
+            
+    Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}}).
+            where(["survey_answers.answertype_id = ? AND survey_answers.answer = survey_responses.response", AnswerType['DoNotShareEmail'].id]).
+            where(self.constraints())
+
   end
 
   #
@@ -128,9 +132,15 @@ module SurveyService
     survey = Survey.where("surveys.alias" => survey_name).first
     respondent_detail = SurveyRespondentDetail.includes(:survey_responses).where('survey_responses.survey_id' => survey.id)
 
-    Person.all  :include => {:survey_respondent => :survey_respondent_detail},
-                :conditions => ["survey_respondent_details.id in (?)", respondent_detail],
-                :order => 'people.last_name, people.first_name'
+    # Person.all  :include => {:survey_respondent => :survey_respondent_detail},
+                # :conditions => ["survey_respondent_details.id in (?)", respondent_detail],
+                # :order => 'people.last_name, people.first_name'
+    
+    Person.where(["survey_respondent_details.id in (?)", respondent_detail]).
+            include({:survey_respondent => :survey_respondent_detail}).
+            where(self.constraints()).
+            order('people.last_name, people.first_name')
+
   end
   
   #
@@ -165,12 +175,10 @@ module SurveyService
       conditions << sinceDate
     end
     
-    # Put in the :select so as to over-ride the active record "read only true when a :join is used"
-    Person.all :select => 'people.*',
-      :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}},
-      :conditions => conditions, 
-      :order => 'last_name, first_name'
-      
+    Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}}).
+          where(conditions).
+          where(self.constraints()).
+          order('last_name, first_name')
   end
   
   #
@@ -185,11 +193,10 @@ module SurveyService
       conditions << sinceDate
     end
     
-    # Put in the :select so as to over-ride the active record "read only true when a :join is used"
-    Person.all :select => 'people.*',
-      :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}},
-      :conditions => conditions, 
-      :order => 'last_name, first_name'
+    Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}).
+            where(conditions).
+            where(self.constraints()).
+            order('last_name, first_name')
       
   end
   
@@ -205,10 +212,9 @@ module SurveyService
       conditions << sinceDate
     end
     
-    # Put in the :select so as to over-ride the active record "read only true when a :join is used"
-    Person.all :select => 'people.*',
-      :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}},
-      :conditions => conditions #, :order => 'last_name, first_name'
+    Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}).
+            where(conditions).
+            where(self.constraints())
       
   end
   
@@ -217,15 +223,19 @@ module SurveyService
   #
   def self.findResponseToQuestionForPerson(question, person, sinceDate = nil)
     
-    conditions = ["survey_responses.survey_question_id = ? and people.id = ? ", question.id, person.id]
-    if (sinceDate)
-      conditions[0] += " AND (survey_responses.updated_at > ? OR survey_questions.updated_at > ?)"
-      conditions << sinceDate
-      conditions << sinceDate
+    if question
+      conditions = ["survey_responses.survey_question_id = ? and people.id = ? ", question.id, person.id]
+      if (sinceDate)
+        conditions[0] += " AND (survey_responses.updated_at > ? OR survey_questions.updated_at > ?)"
+        conditions << sinceDate
+        conditions << sinceDate
+      end
+      
+      SurveyResponse.all :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
+        :conditions => conditions, :order => "created_at desc"
+    else
+      [nil] 
     end
-    
-    SurveyResponse.all :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
-      :conditions => conditions, :order => "created_at desc"
          
   end
   
@@ -245,9 +255,10 @@ module SurveyService
   def self.getValueOfMappedQuestion(person, questionMapping)
     
     # Get the first value that maps to the question...
-    response = SurveyResponse.first :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
-      :conditions => ["survey_questions.questionmapping_id = ? and people.id = ?", questionMapping.id, person.id]
-    
+    response = SurveyResponse.joins([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}]).
+                where(["survey_questions.questionmapping_id = ? and people.id = ?", questionMapping.id, person.id]).
+                where(self.constraints()).first
+
     response.response if response
   end
   
@@ -292,6 +303,10 @@ private
     else
       ['matches', '%' + value + '%']
     end
+  end
+
+  def self.constraints(*args)
+    ''
   end
     
 end
