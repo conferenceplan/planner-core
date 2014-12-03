@@ -42,9 +42,6 @@ require "twitter-typeahead-rails"
 require "encoding_sampler"
 require "figaro"
 
-# This require causes issues for the rake tasks within the engine
-require 'planner/controller_additions'
-
 module PlannerCore
   class Engine < ::Rails::Engine
 
@@ -67,6 +64,9 @@ module PlannerCore
       Dir.glob(PlannerCore::Engine.config.paths["lib"].expanded[0] + "/decorators/**/*_decorator*.rb").each do |c|
         require_dependency(c)
       end
+      Dir.glob(PlannerCore::Engine.config.paths["lib"].expanded[0] + "/planner/controller_additions.rb").each do |c|
+        require_dependency(c)
+      end
     end
 
     # RAILS 3 mechanism so parent app use the migrations in this engine
@@ -87,6 +87,10 @@ module PlannerCore
     
     #
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
-    
+
+    initializer :before_initialize do
+      ActionController::Base.send(:include, Planner::ControllerAdditions)
+      Cell::Rails.send(:include, Planner::ControllerAdditions)
+    end    
   end
 end

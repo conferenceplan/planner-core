@@ -34,13 +34,3 @@ module Planner
       
   end
 end
-
-if defined? ActionController::Base
-  ActionController::Base.class_eval do
-    include Planner::ControllerAdditions
-  end
-  
-  Cell::Rails.class_eval do
-    include Planner::ControllerAdditions
-  end
-end
