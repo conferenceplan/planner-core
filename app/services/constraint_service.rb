@@ -147,7 +147,8 @@ module ConstraintService
   
       peopleWithConstraints = []
       excludedItemMaps.each do |excludedItemMap|
-        since = (excludedItemMap.updated_at < sinceDate) ? sinceDate : nil # if there is a new mapping since the last time we ran then ignore the last run date
+        since = nil
+        since = ((excludedItemMap.updated_at < sinceDate) ? sinceDate : nil) if sinceDate# if there is a new mapping since the last time we ran then ignore the last run date
         people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer,since)
         peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
         

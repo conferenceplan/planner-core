@@ -696,6 +696,7 @@ var AppUtils = (function(){
         
         excludeConflict : function(ev) {
             var model = this.model;
+            var baseUri = this.options.baseUri ? this.options.baseUri : '';
             modal = new AppUtils.ConfirmModel({
                 title : '<%= I18n.t "remove-exclusion-confirmation" %> ',
                 content : '<%= I18n.t "remove-exclusion" %> '  + (model.get('person_name') ? model.get('person_name') : model.get('room_name')) ,
@@ -738,7 +739,7 @@ var AppUtils = (function(){
                     };
                         
                     $.ajax({
-                        url : "/items/confict_exceptions",
+                        url : baseUri + "/items/confict_exceptions",
                         type : 'POST',
                         data : data,
                         success : function() {
@@ -766,7 +767,8 @@ var AppUtils = (function(){
         buildItemView: function(item, ItemViewType, itemViewOptions){
             var options = _.extend({
                 model    : item,
-                template : this.options.itemViewTemplate
+                template : this.options.itemViewTemplate,
+                baseUri  : this.options.baseUri
                 }, itemViewOptions);
             
             var view = new ItemViewType(options);
@@ -853,10 +855,11 @@ var AppUtils = (function(){
         ConflictLayout : ConflictLayout,
         Conflicts : Conflicts,
         
-        createConflictCollectionView : function (collection, viewTemplate, region) {
+        createConflictCollectionView : function (collection, viewTemplate, region, baseUri) {
             var collectionView = new ConflictCollectionView({
                 collection : collection,
                 itemViewTemplate : viewTemplate,
+                baseUri : baseUri
             });
             region.show(collectionView);
         },

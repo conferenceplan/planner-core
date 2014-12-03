@@ -3,7 +3,7 @@ json.currpage 1
     
 json.rowdata @people do |person|
     json.name               person.getFullPublicationName
-    json.acceptance_status  person.acceptance_status.name
+    json.acceptance_status  person.acceptance_status.name if person.acceptance_status
     json.items              person.programmeItemAssignments.collect { |pi|
         if (pi.programmeItem)
             (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number.to_s + ' ' : '' ) +

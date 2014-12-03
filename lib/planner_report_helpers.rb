@@ -2,7 +2,7 @@ module PlannerReportHelpers
    require 'csv'
  
    def csv_out(data, filename)
-      csv_data = CSV.generate encoding: 'ISO-8859-15' do |csv|
+      csv_data = CSV.generate do |csv|
          data.each do |r|
             csv << r
          end

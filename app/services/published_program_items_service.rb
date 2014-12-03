@@ -106,9 +106,10 @@ module PublishedProgramItemsService
     
     
     Person.uncached do
-      Person.all :conditions => conditions, 
-              :include => {:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}},
-              :order => "people.last_name, published_time_slots.start asc"
+      Person.where(conditions).
+              include({:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}}).
+              where(self.constraints()).
+              order("people.last_name, published_time_slots.start asc")
     end
     
   end

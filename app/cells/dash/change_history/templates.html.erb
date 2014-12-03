@@ -21,7 +21,7 @@
                 <small><%= t "by" %> {{= user}}</small>
             </div>
             <div class="col-md-6 text-right">
-                <small>{{= moment(time).fromNow() }}</small><br>
+                <small>{{= moment(time).format("dddd, MMMM Do YYYY, h:mm:ss a") }}</small><br>
             </div>
         </div>
     </div>

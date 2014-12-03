@@ -1,13 +1,17 @@
 #
 # Used to regenerate the exclusions from the surveys for the participants
 #
+require 'job_utils'
+
 class UpdateFromSurveyJob
+
+  include JobUtils
 
   #
   #  
   #
   def perform
-    cfg = SiteConfig.find :first
+    cfg = getSiteConfig
     zone = cfg ? cfg.time_zone : Time.zone
     Time.use_zone(zone) do
       JobInfo.transaction do

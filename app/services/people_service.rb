@@ -106,9 +106,9 @@ module PeopleService
     args.merge! :include => includes
 
     if tagquery.empty?
-      Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters)).count args
+      Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters, extraClause)).count args
     else
-      eval %Q[Person#{tagquery}.where(#{self.constraints(includeMailings,mailing_id,onlySurveyRespondents,filters)}).uniq.count( :all, ] + args.inspect + ")"
+      eval %Q[Person#{tagquery}.where(#{self.constraints(includeMailings,mailing_id,onlySurveyRespondents,filters,extraClause)}).uniq.count( :all, ] + args.inspect + ")"
     end
   end
 
@@ -131,9 +131,9 @@ module PeopleService
     args.merge! :include => includes
     
     if tagquery.empty?
-      people = Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters)).includes(:pseudonym).all args
+      people = Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters, extraClause)).includes(:pseudonym).all args
     else
-      people = eval %Q[Person#{tagquery}.uniq.where(#{self.constraints(includeMailings,mailing_id,onlySurveyRespondents,filters)}).includes(:pseudonym).find :all, ] + args.inspect
+      people = eval %Q[Person#{tagquery}.uniq.where(#{self.constraints(includeMailings,mailing_id,onlySurveyRespondents,filters,extraClause)}).includes(:pseudonym).find :all, ] + args.inspect
     end
   end
   
