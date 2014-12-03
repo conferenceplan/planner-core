@@ -312,6 +312,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
         summaryLayout = new SummaryLayout();
         personTabLayout.invite.show(summaryLayout);
+        
+        SurveyReviewApp.Reviews.showSurveySelector(id)
 
         TabUtils.createTabContent({
             modelType : RegistrationDetail,

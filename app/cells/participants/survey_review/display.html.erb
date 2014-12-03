@@ -22,8 +22,6 @@
     :selectNotifyMethod => "SurveyReviewApp.Reviews.showSurveySelector"
     %>
 
-<%= render_cell "participants/survey_render", :javascript %>
-
 <div class="row">
     <div class="col-xs-4">
         <%= render_cell "participants/participant_list", :display,
@@ -37,7 +35,6 @@
             </div>
             <div class="col-xs-12">
                 <div id="survey-display"></div>
-                <%= render_cell "participants/survey_render", :display %>
             </div>
         </div>
     </div>

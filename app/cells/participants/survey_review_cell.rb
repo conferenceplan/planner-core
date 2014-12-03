@@ -4,6 +4,10 @@ class Participants::SurveyReviewCell < Cell::Rails
     render
   end
 
+  def tab_display
+    render
+  end
+
   def javascript
     render
   end

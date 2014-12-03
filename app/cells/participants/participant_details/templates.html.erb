@@ -9,7 +9,9 @@
         <div class="tab-pane" id="tags-tab">
             <div id="tags-view"></div>
         </div>
-        <div class="tab-pane " id="surveys-tab"><div id="survey-view"></div></div>
+        <div class="tab-pane " id="surveys-tab">
+            <%= render_cell "participants/survey_review", :tab_display %>            
+        </div>
         <div class="tab-pane" id="availability-tab">
             <section>
                 <div id="availability-div"></div>

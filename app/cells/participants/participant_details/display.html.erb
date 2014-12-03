@@ -1,3 +1,4 @@
+
 <ul class="nav nav-tabs" id="participant-tabs">
     <li class="active"><a href="#invite-tab" data-toggle="tab"><%= t 'summary' %></a></li>
     <li><a href="#contacts-tab" data-toggle="tab"><%= t 'contact-info' %></a></li>
@@ -10,3 +11,6 @@
     <%= extra_participant_tabs.html_safe %>
 </ul>
 <div id="item-tabs" class="panel-body"></div>
+
+<%= render_cell "participants/survey_review", :templates %>
+<%= render_cell "participants/survey_review", :javascript %>
