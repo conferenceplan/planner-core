@@ -7,7 +7,7 @@ $.widget( "cp.mailHistoryBootstrapTable", $.cp.baseBootstrapTable , {
     createColModel : function(){
         return [{
             field: 'Mailing',
-            title: this.options.mail_use,
+            title: this.options.mailing,
             align: 'left',
             valign: 'middle',
             sortable: false,
