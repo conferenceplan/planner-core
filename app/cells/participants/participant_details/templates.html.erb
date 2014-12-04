@@ -22,7 +22,9 @@
             </section>
         </div>
         <div class="tab-pane" id="items-tab"><div id="items-view"></div></div>
-        <div class="tab-pane" id="emails-tab"><div id="emails-view"></div></div>
+        <div class="tab-pane" id="emails-tab">
+            <%= render_cell "communications/mail_history", :display %>
+        </div>
     </div>
 </script>
 

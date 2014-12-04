@@ -313,7 +313,11 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         summaryLayout = new SummaryLayout();
         personTabLayout.invite.show(summaryLayout);
         
-        SurveyReviewApp.Reviews.showSurveySelector(id)
+        SurveyReviewApp.Reviews.showSurveySelector(id);
+
+        jQuery("#mail-history").mailHistoryBootstrapTable('personHistory',{
+            person_id : id
+        });
 
         TabUtils.createTabContent({
             modelType : RegistrationDetail,
@@ -601,6 +605,14 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             jQuery("#participants").participantTable('tagQuery',{
                 tagQuery : tagQuery
             });
+        },
+        
+        showEmail : function(row, data) {
+            modal = new AppUtils.InfoModal({
+                            content : data.content,
+                            title : '<%= t "email" %>'
+                    });
+            modal.render();
         }
     };
 })(Backbone);

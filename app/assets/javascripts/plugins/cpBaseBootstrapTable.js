@@ -13,7 +13,7 @@ $.widget( "cp.baseBootstrapTable" , {
         baseUrl             : "",               // HAS TO BE OVER-RIDDEN by the sub-component
         getGridData         : "",               // for getting the data (part of the URL)
         delayed             : false,
-        selectNotifyMethod  : function(row) { return null; },
+        selectNotifyMethod  : function(row, data) { return null; },
         extraClause         : null,
         cardView            : false,
         showRefresh         : false,
@@ -52,7 +52,13 @@ $.widget( "cp.baseBootstrapTable" , {
     render : function() {
         if (this.options.delayed) {
             this.createTable();
+            this.options.delayed = false; // because it has now been rendered
         }
+    },
+
+    refresh : function() {
+        var newUrl = this.createUrl();
+        this.element.bootstrapTable('refresh', { url : newUrl});
     },
     
     getSelected : function() {
@@ -193,7 +199,7 @@ $.widget( "cp.baseBootstrapTable" , {
                         $(element).addClass('success');
                         that.selected = row;
                         that.selected_element = element.attr('data-index');
-                        that.model = selectMethod(row.id); // NOTE - we may want to change to pass the whole row
+                        that.model = selectMethod(row.id, row); // NOTE - we may want to change to pass the whole row
                     },
                 // onAll : function(name, args) {
                     // console.debug(name);

@@ -1,4 +1,18 @@
 class Communications::MailHistoryController < PlannerController
+
+  respond_to :json
+
+  def index
+    limit = params[:limit] ? params[:limit].to_i : nil
+    offset = params[:offset] ? params[:offset].to_i : nil
+    person_id = params[:person_id] ? params[:person_id] : nil
+
+    conditions = {:person_id => person_id, :testrun => false} if person_id
+
+    # TODO - check to see if we need constraint
+    @total = MailHistory.includes([ :person , {:mailing => :mail_template} ]).where(conditions).count
+    @mail_history = MailHistory.where(conditions).includes([ {:person => :pseudonym} , {:mailing => :mail_template} ]).offset(offset).limit(limit).order('date_sent asc')
+  end
   
   def list
     rows = params[:rows] ? params[:rows] : 15

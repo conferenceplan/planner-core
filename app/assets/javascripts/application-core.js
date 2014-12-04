@@ -52,6 +52,7 @@
 //= require plugins/cpAjax
 //= require plugins/cpBaseTable
 //= require plugins/cpBaseBootstrapTable
+//= require plugins/cpMailHistoryBootstrapTable
 //= require plugins/cpItemTable
 //= require plugins/cpParticipantTable
 //= require plugins/cpMailHistoryTable

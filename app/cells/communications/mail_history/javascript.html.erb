@@ -1,0 +1,41 @@
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    
+    jQuery("#<%= @place %>").mailHistoryBootstrapTable({
+        
+        selectNotifyMethod : <%= @selectNotifyMethod %>,
+        root_url : "<%= @root_url %>",
+        baseUrl : "<%= @baseUrl %>",
+        getGridData : "<%= @getGridData %>",
+        
+        delayed : <%= @delayed %>,
+        
+        pageSize : <%= @pageSize %>,
+        pageList : <%= @pageList %>,
+        search : <%= @search %>,
+        showRefresh : <%= @showRefresh %>,
+        cardView : <%= @cardView %>,
+        
+        toolbar : "<%= @toolbar %>",
+        
+        extraClause : "<%= @extraClause %>",
+        
+        modelType : <%= @modelType %>,
+        modelTemplate : "<%= @modelTemplate %>",
+
+        modal_create_title : '<%= t "create-event" %>',
+        modal_edit_title : '<%= t "edit-event" %>',
+        confirm_content     : '<%= (t "delete-selected-event").html_safe %>',
+        confirm_title       : '<%= t "delete-confirmation" %>',
+        
+        name    : '<%= t "name" %>',
+        mailing    : '<%= t "mailing" %>',
+        mail_use    : '<%= t "mail-use" %>',
+        date_sent    : '<%= t "date-sent" %>',
+        email_status    : '<%= t "email-status" %>'
+        
+    });
+});
+
+</script>

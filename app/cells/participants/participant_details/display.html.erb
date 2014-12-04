@@ -14,3 +14,9 @@
 
 <%= render_cell "participants/survey_review", :templates %>
 <%= render_cell "participants/survey_review", :javascript %>
+<%= render_cell "communications/mail_history", :javascript, 
+                :pageSize => 5,
+                :pageList => '[5, 10, 15]',
+                :delayed => true,
+                :selectNotifyMethod => 'ParticipantApp.PeopleManagement.showEmail'
+%>

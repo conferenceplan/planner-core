@@ -261,6 +261,7 @@ Rails.application.routes.draw do
   #
   #
   #
+  match 'communications/mail_history',          :controller => 'communications/mail_history', :action => 'index',         :method => 'get'
   match 'communications/mail_history/list',     :controller => 'communications/mail_history', :action => 'list',          :method => 'post'
   match 'communications/mailing/addPeople',     :controller => 'communications/mailing',      :action => 'addPeople',     :method => 'put'
   match 'communications/mailing/removePeople',  :controller => 'communications/mailing',      :action => 'removePeople',  :method => 'put'
