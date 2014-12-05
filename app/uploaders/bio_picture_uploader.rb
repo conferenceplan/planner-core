@@ -2,12 +2,13 @@
 
 class BioPictureUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave   # Use cloudinary as the image store
+  include UploaderHelper
 
   #
   # Use a combination of the person's name for the id of the image
   #
   def public_id
-    publicid = SiteConfig.first.name + '/'
+    publicid = common_root_path + '/'
     if ((defined? model.person) && model.person)
       publicid += model.person.first_name ? model.person.first_name : ''
       publicid += model.person.last_name ? model.person.last_name : ''

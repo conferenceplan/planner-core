@@ -1,14 +1,14 @@
 # encoding: utf-8
 
 class PictureUploader < CarrierWave::Uploader::Base
-
   include Cloudinary::CarrierWave   # Use cloudinary as the image store
+  include UploaderHelper
 
   #
   #
   #
   def public_id
-    publicid = SiteConfig.first.name + '/'
+    publicid = root_path + '/'
     publicid += model.imageable_type ? model.imageable_type : ''
     publicid += model.imageable_id ? ('_' + model.imageable_id.to_s) : ''
     publicid += model.use ? ('_' + model.use.to_s) : ''
