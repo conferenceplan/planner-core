@@ -1,0 +1,6 @@
+#
+#
+#
+class SupportUser < User
+
+end

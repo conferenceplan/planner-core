@@ -2,13 +2,13 @@
 #
 #
 class ApplicationController < ActionController::Base
-  helper PlannerHelper
-  
   before_filter :first_filter, :set_locale, :load_configs, :set_mailer_host
   around_filter :application_time_zone # make sure that we use the timezone as specified in the database
   
   def first_filter
     # do nowt
+    logger.debug 'ACTION: ' + params[:action]
+    logger.debug 'PARMS: ' + params.to_s
   end
 
   def set_mailer_host
@@ -48,7 +48,15 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
   
-  helper_method :current_user_session, :current_user, :current_respondent
+  helper_method :current_user_session, :current_respondent
+  
+  def current_user
+    if support_user_signed_in?
+      current_support_user
+    else
+      @current_user ||= warden.authenticate(scope: :user)
+    end
+  end
   
   private
     def check_for_single_access_token # TODO - change name???
@@ -68,7 +76,7 @@ class ApplicationController < ActionController::Base
     #
     #
     def user_logged_in?
-      user_signed_in?
+      user_signed_in? or support_user_signed_in?
     end
     
     def current_respondent
@@ -77,11 +85,12 @@ class ApplicationController < ActionController::Base
     end
     
     def current_user_session
-      user_session
+      user_session if user_signed_in?
+      support_user_session if support_user_signed_in?
     end
 
     def require_user
-      unless current_user
+      unless current_user || current_support_user
         # Rack::MiniProfiler.authorize_request        
         store_location
         flash[:notice] = "You must be logged in to access this page"
@@ -92,7 +101,7 @@ class ApplicationController < ActionController::Base
 
 # TODO - FIX
     def require_no_user
-      if current_user
+      if current_user || current_support_user
         store_location
         #flash[:notice] = "You must be logged out to access this page"
         redirect_to account_url

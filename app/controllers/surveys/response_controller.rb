@@ -3,8 +3,6 @@
 #
 #
 class Surveys::ResponseController < ApplicationController
-  include PlannerHelper
-  
   layout "dynasurvey"
 
   before_filter :check_for_single_access_token, :only => [:create, :show, :index, :renderalias]

@@ -1,16 +1,36 @@
 module Planner
   module ControllerAdditions
     
-    module ClassMethods
-    end
+    # module ClassMethods
+    # end
     
     def self.included(base)
       base.extend ClassMethods
-      base.helper_method :allowed?, :top_menu
+      base.helper_method :allowed?, :top_menu, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs
     end
     
     def allowed?(item) # take target as the name
       return true
+    end
+
+    def baseUri
+      '/' + I18n.locale.to_s
+    end
+  
+    def baseUri_no_lang
+      ''
+    end
+    
+    def extra_navigation
+      ''
+    end
+  
+    def extra_participant_tabs
+      ''
+    end
+  
+    def extra_item_tabs
+      ''
     end
     
     def top_menu_additions
@@ -28,7 +48,7 @@ module Planner
         "communications"   => ({ :target => '/pages//communications_dash/manage',  :icon => "glyphicon-envelope",  :target_base => '/pages/communications_dash'} if allowed? :communications),
         "reports"          => ({ :target => '/pages/reports_dash/manage',          :icon => "glyphicon-stats",     :target_base => '/pages/reports_dash'} if allowed? :reports),
         "publications"     => ({ :target => '/pages/publications_dash/print',      :icon => "glyphicon-print",     :target_base => '/pages/publications_dash'} if allowed? :publications),
-        "admin"            => ({ :target => '/pages/admin_dash/users',             :icon => "glyphicon-wrench",    :target_base => '/pages/admin_dash'} if allowed? :admin)
+        "admin"            => ({ :target => '/pages/admin_dash/configs',           :icon => "glyphicon-wrench",    :target_base => '/pages/admin_dash'} if allowed? :admin)
       }.keep_if{|k,v| v}.merge!(top_menu_additions)
     end
       

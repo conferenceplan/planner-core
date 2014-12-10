@@ -4,14 +4,20 @@ Rails.application.routes.draw do
   # The new(s) were removed so as to prevent anonymous people creating new accounts
   #
   devise_for :users, :controllers => { :registrations => "registrations" } #, skip: :sessions
+  devise_for :support_users, :controllers => { :registrations => "registrations" } #, skip: :sessions
   
   # Default routes
   authenticated :user do
     root :to => 'pages/home_dash#index', :as => :authenticated_root
   end
+  authenticated :support_user do
+    root :to => 'pages/home_dash#index', :as => :authenticated_root
+  end
   unauthenticated do
     root :to => redirect('/users/sign_in') , :as => :unauthenticated_root # if not authenticated then take the user to the sign in page
   end
+
+  get "support/index"
   
   #
   # The 'landing' pages for the various parts of the application

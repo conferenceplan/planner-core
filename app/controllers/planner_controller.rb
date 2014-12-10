@@ -3,7 +3,8 @@
 #
 class PlannerController < ApplicationController
   
-  before_filter :authenticate_user!
+  before_filter :check_authenticated
+
   #ensure_authorization_performed :unless => :devise_controller?
   #ensure_authorization_performed :except => [:index, :search], :if => :auditing_security?, :unless => :devise_controller?
   
@@ -38,6 +39,10 @@ protected
     flash.now[:error] = "Another user has made a change to that record "+
          "since you accessed the edit form."
     render :edit, :status => :conflict, :layout => 'content'
+  end
+  
+  def check_authenticated
+    redirect_to root_path unless user_signed_in? or support_user_signed_in? 
   end
 
 end

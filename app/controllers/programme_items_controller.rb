@@ -1,6 +1,4 @@
 class ProgrammeItemsController < PlannerController
-  include ProgramPlannerHelper
-
   #
   # Get the all the program items for a given person
   #
