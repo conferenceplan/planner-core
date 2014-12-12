@@ -17,7 +17,8 @@ Rails.application.routes.draw do
     root :to => redirect('/users/sign_in') , :as => :unauthenticated_root # if not authenticated then take the user to the sign in page
   end
 
-  get "support/index"
+  # get "support/index"
+  match 'support',                       :controller => 'support', :action => 'index'
   
   #
   # The 'landing' pages for the various parts of the application
