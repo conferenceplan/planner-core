@@ -31,7 +31,7 @@ protected
   end
 
   def self.constraints(*args)
-    ''
+    true
   end
 
 end

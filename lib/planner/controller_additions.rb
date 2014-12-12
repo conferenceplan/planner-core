@@ -5,7 +5,7 @@ module Planner
     # end
     
     def self.included(base)
-      base.extend ClassMethods
+      # base.extend ClassMethods
       base.helper_method :allowed?, :top_menu, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs
     end
     
