@@ -63,4 +63,24 @@ jQuery(document).ready(function() {
     HistoryApp.start({});
 });
 
+
+ function resizeRecentActivityList () {
+        var bottomBarHeight = $('#grenadine-footer').height();
+        var logoBarHeight = $('#logo-bar').height();
+        var menuBarHeight = $('#app-menu-div').height();
+        var browserViewport = $( window ).height();
+        var menuSeparatorDIV = $('#menu-separator-div').height();
+        var desiredHeight = browserViewport - logoBarHeight - menuBarHeight - bottomBarHeight - 130;
+        //$("#recent-activity-panel").css('height',desiredHeight);
+        $("#recent-activity-panel-inside").css('height',desiredHeight);
+    };
+    
+    $( window ).resize(function() {
+        resizeRecentActivityList();
+    });
+    
+    $( window ).ready(function() {
+        resizeRecentActivityList();
+    });
+
 </script>

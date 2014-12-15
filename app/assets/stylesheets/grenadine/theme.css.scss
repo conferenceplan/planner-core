@@ -715,11 +715,11 @@ h3:first-child {
         
     }
     
-    .col-fixed-large::-webkit-scrollbar {
+    .col-fixed-large::-webkit-scrollbar, #recent-activity-panel-inside::-webkit-scrollbar {
         width: 14px;
         height: 18px;
     }
-    .col-fixed-large::-webkit-scrollbar-thumb {
+    .col-fixed-large::-webkit-scrollbar-thumb, #recent-activity-panel-inside::-webkit-scrollbar-thumb {
         height: 6px;
         border: 4px solid rgba(0, 0, 0, 0);
         background-clip: padding-box;
@@ -727,12 +727,12 @@ h3:first-child {
         background-color: rgba(0, 0, 0, 0.15);
         -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
     }
-    .col-fixed-large::-webkit-scrollbar-button {
+    .col-fixed-large::-webkit-scrollbar-button, #recent-activity-panel-inside::-webkit-scrollbar-button {
         width: 0;
         height: 0;
         display: none;
     }
-    .col-fixed-large::-webkit-scrollbar-corner {
+    .col-fixed-large::-webkit-scrollbar-corner, #recent-activity-panel-inside::-webkit-scrollbar-corner {
         background-color: transparent;
     }
     
@@ -776,8 +776,6 @@ input[type="number"] {
 p.help-block {
     font-size: 12px;
 }
-
-/* Participants - Item tab */
 
 
 
