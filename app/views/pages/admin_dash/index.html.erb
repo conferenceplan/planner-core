@@ -1,7 +1,7 @@
 <% content_for :submenu do %>
         <%= render_cell :context_menu, :display, :menu => {
-            "submenu-users" => ('/pages/admin_dash/users' if allowed? :manage_users),
-            "submenu-config" => ('/pages/admin_dash/configs' if allowed? :manage_config)
+            "submenu-users" => (allowed?( :manage_users) ? '/pages/admin_dash/users' : nil ),
+            "submenu-config" => '/pages/admin_dash/configs'
         }.keep_if{|k,v| v} %>
 <% end %>
 

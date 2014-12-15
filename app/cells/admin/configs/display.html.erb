@@ -6,35 +6,37 @@
         <div class="gr-sidebar" role="complementary">
             <ul class="gr-sidenav nav nav-pills nav-stacked">
                 <% if allowed? :manage_conf_config %>
-                <li>
-                    <a href="#equipment_config"><%= t "equipment" %></a>
-                </li>
-                <li>
-                    <a href="#item_format_config"><%= t "config-item-formats" %></a>
-                </li>
-                <li>
-                    <a href="#invitation_category_config"><%= t "config-invitation-categories" %></a>
-                </li>
-                <li>
-                    <a href="#room_setups_config"><%= t "config-room-setups" %></a>
-                </li>
-                <li>
-                    <a href="#data_sources_config"><%= t "data-sources" %></a>
-                </li>
+                    <li>
+                        <a href="#equipment_config"><%= t "equipment" %></a>
+                    </li>
+                    <li>
+                        <a href="#item_format_config"><%= t "config-item-formats" %></a>
+                    </li>
+                    <li>
+                        <a href="#invitation_category_config"><%= t "config-invitation-categories" %></a>
+                    </li>
+                    <li>
+                        <a href="#room_setups_config"><%= t "config-room-setups" %></a>
+                    </li>
+                    <li>
+                        <a href="#data_sources_config"><%= t "data-sources" %></a>
+                    </li>
                 <% end %>
-                <li>
-                    <a href="#tag_context_config"><%= t "config-tag-contexts" %></a>
-                </li>
-                <li>
-                    <a href="#conference_config"><%= t "config-conference" %></a>
-                </li>
-                <li>
-                    <a href="#email_config"><%= t "email-addresses" %></a>
-                </li>
-                <% if allowed? :manage_system_config %>
-                <li>
-                    <a href="#cloudinary_config"><%= t "config-cloudinary" %></a>
-                </li>
+                <% if allowed? :manage_config %>
+                    <li>
+                        <a href="#tag_context_config"><%= t "config-tag-contexts" %></a>
+                    </li>
+                    <li>
+                        <a href="#conference_config"><%= t "config-conference" %></a>
+                    </li>
+                    <li>
+                        <a href="#email_config"><%= t "email-addresses" %></a>
+                    </li>
+                    <% end %>
+                    <% if allowed? :manage_system_config %>
+                    <li>
+                        <a href="#cloudinary_config"><%= t "config-cloudinary" %></a>
+                    </li>
                 <% end %>
             </ul>
         </div>
