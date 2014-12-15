@@ -454,10 +454,13 @@
 
 <script type="text/template" id="program-item-view-template">
     {{ if (typeof id != 'undefined') { }}
-        <small>
-            {{= time_slot ? start_time_str : '<%= t "no-date-and-time-specified"%>' }}: <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})
-            {{= isPublished ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}
-        </small>
+            <td>
+                {{= time_slot ? start_time_str : '<span class="minor-text"><%= t "no-date-and-time-specified" %></span>' }}<br>
+                <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})
+            </td>
+            <td align="right">
+                <nobr>{{= isPublished ? '<div class="default-label"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}</nobr>
+            </td>
     {{ }; }}
 </script>
 

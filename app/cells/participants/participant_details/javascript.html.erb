@@ -392,6 +392,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             collectionType : ProgramItemCollection,
             url : "<%= baseUri + '/participants/' %>" + id + "/programme_items.json",
             template : "#program-item-view-template",
+            collection_tagName : 'table class="table table-hover"',
+            tagName : 'tr',
             region : personTabLayout.items,
         });
 
