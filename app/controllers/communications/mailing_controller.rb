@@ -87,8 +87,12 @@ class Communications::MailingController < PlannerController
   def destroy
     mailing = Mailing.find params[:id]
     
-    mailing.destroy
-    render status: :ok, text: {}.to_json
+    if mailing.scheduled
+      render :bad_request, text: "Can not remove a mailing that is scheduled"
+    else  
+      mailing.destroy
+      render status: :ok, text: {}.to_json
+    end
   end
   
 end
