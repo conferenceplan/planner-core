@@ -32,6 +32,12 @@ class User < ActiveRecord::Base
     return role_strings.include? 'Admin'
   end
   
+  #
+  # Use by declarative authorization to determine the permissions
+  #
+  # TODO - change to make use of the permission system i.e. map to roel for dec auth from role in db
+  # i.e. user -> role -> role_authorization -> decl_auth
+  #
   def role_symbols
    (roles || []).map {|r| r.title.to_sym }
   end
