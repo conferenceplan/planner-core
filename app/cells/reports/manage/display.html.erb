@@ -6,14 +6,14 @@
     <div class="col-md-6">
 
 <ul class="nav nav-tabs" id="report-tabs">
-    <li class="active"><a href="#R1-tab" data-toggle="tab"><%= t 'People Reports' %></a></li>
-    <li><a href="#R2-tab" data-toggle="tab"><%= t 'Item Reports' %></a></li>
-    <li><a href="#R3-tab" data-toggle="tab"><%= t 'Capacity & Equipment Reports' %></a></li>
-    <li><a href="#R4-tab" data-toggle="tab"><%= t 'Scheduling Reports' %></a></li>
+    <li class="active"><a href="#people-reports-tab" data-toggle="tab"><%= t 'people-reports' %></a></li>
+    <li><a href="#item-reports-tab" data-toggle="tab"><%= t 'item-reports' %></a></li>
+    <li><a href="#capacity-and-equipment-reports-tab" data-toggle="tab"><%= t 'capacity-and-equipment-reports' %></a></li>
+    <li><a href="#scheduling-reports-tab" data-toggle="tab"><%= t 'scheduling-reports' %></a></li>
 </ul>
 
 <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="R1-tab">
+    <div role="tabpanel" class="tab-pane active" id="people-reports-tab">
               <ul>
                     <li>
                         <a href="#panelists_with_panels"><%= t "report-participants-with-items" %></a> <!-- TODO: CHANGE THE NAME -->
@@ -32,7 +32,7 @@
                     </li>  
               </ul>
     </div>
-    <div role="tabpanel" class="tab-pane" id="R2-tab">
+    <div role="tabpanel" class="tab-pane" id="item-reports-tab">
               <ul>
                     <li>
                         <a href="#item_word_counts"><%= t "reports-item-word-counts" %></a>
@@ -42,7 +42,7 @@
                     </li>
               </ul>
     </div>
-    <div role="tabpanel" class="tab-pane" id="R3-tab">
+    <div role="tabpanel" class="tab-pane" id="capacity-and-equipment-reports-tab">
               <ul>
                     <li>
                         <a href="#capacity_report"><%= t "reports-items-over-capacity" %></a>
@@ -55,7 +55,7 @@
                     </li>                
               </ul>
     </div>
-    <div role="tabpanel" class="tab-pane" id="R4-tab">
+    <div role="tabpanel" class="tab-pane" id="scheduling-reports-tab">
               <ul>
                     <li>
                         <a href="#scheduling_conflicts"><%= t "report-scheduling-conflicts" %></a>
