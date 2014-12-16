@@ -324,7 +324,7 @@ module PlannerReportsService
             joins("left join person_constraints on person_constraints.person_id = programme_item_assignments.person_id").
             joins(:person).
             includes({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
-            where("programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s + "," + PersonItemRole['Participant'].id.to_s + ")").
+            where("max_items_per_con > 0 AND programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s + "," + PersonItemRole['Participant'].id.to_s + ")").
             group("programme_item_assignments.person_id").having("nbr_items > max_items_per_con").
             order("people.last_name, people.first_name")
         
