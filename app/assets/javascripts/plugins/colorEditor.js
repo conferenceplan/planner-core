@@ -34,8 +34,10 @@ Form.editors.Color = Form.editors.Text.extend({
             alpha           : true,
             altAlpha        : true,
             colorFormat     : 'RGBA',
-            buttonImage     : '/assets/ui-colorpicker.png',
+            buttonImage     : null,
+            buttonText      : ' ',
             showOn          : 'both',
+            buttonClass     : "color-control",
             buttonColorize  : true,
             showNoneButton  : true,
             select: function(event, color) {

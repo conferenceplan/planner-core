@@ -451,14 +451,14 @@ input[type="checkbox"] {
 .row .gr-color-choice button {
     height: 45px;
     width: 45px;
-    padding: 5px 7px 5px 7px;
+    padding: 0;
     margin-right: 10px;
     border-radius: 4px;
     border: 1px solid #ccc;
     vertical-align: middle;
 }
 .row .gr-color-choice button:before {
-    content:url('/assets/ui-colorpicker.png');
+    // content:url('/assets/ui-colorpicker.png');
     position: absolute;
 }
 .gr-subrow {
@@ -836,4 +836,10 @@ p.help-block {
 }
 .bs-callout-info h4 {
     color: #5bc0de;
+}
+
+.color-control {
+  display: block;
+  height: 100%;
+  width: 100%;  
 }
