@@ -4,8 +4,8 @@ class ProgrammeItemsController < PlannerController
   #
   def index
     if params[:person_id] # then we only get the items for a given person
-      person = Person.find(params[:person_id])
-      @assignments = person.programmeItemAssignments.includes({:programmeItem => :time_slot}).order('time_slots.start asc').collect{|a| (a.programmeItem != nil) ? a : nil}.compact
+      @person = Person.find(params[:person_id])
+      @assignments = @person.programmeItemAssignments.includes({:programmeItem => [:time_slot, :people]}).order('time_slots.start asc').collect{|a| (a.programmeItem != nil) ? a : nil}.compact
     end
   end
 
