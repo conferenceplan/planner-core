@@ -456,7 +456,8 @@
     {{ if (typeof id != 'undefined') { }}
             <td>
                 {{= time_slot ? start_time_str : '<span class="minor-text"><%= t "no-date-and-time-specified" %></span>' }}<br>
-                <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})
+                <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})<br>
+                <strong><%= t "with"%> </strong><em>{{= other_participants.join(", ") }}</em>
             </td>
             <td align="right">
                 <nobr>{{= isPublished ? '<div class="default-label"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}</nobr>

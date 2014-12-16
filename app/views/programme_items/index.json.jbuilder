@@ -20,5 +20,6 @@ json.array!(@assignments) do |assignment|
         json.setup_type_id          assignment.programmeItem.setup_type.id if assignment.programmeItem.setup_type
         json.setup_type_name        assignment.programmeItem.setup_type.name if assignment.programmeItem.setup_type
         json.role                   assignment.role.name
+        json.other_participants     assignment.programmeItem.people.collect{|p| p != @person ? p.getFullPublicationName : nil }.compact
     end
 end
