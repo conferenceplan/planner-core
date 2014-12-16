@@ -168,21 +168,16 @@
 </script>
 
 <script type="text/template" id="report-template">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="report-title"><h4>{{= caption }}</h4></div>
-            <div class="report-body" id="report-body"></div>
-            <div id="report-buttons">
-                <button class="btn btn-primary report-submit-button">
-                    <%= t "reports-run-report-button" %>
-                </button>
-                <button class="btn btn-primary report-csv-button">
-                    <%= t "reports-csv-button" %>
-                </button>
-            </div>
-        </div>
+    <div class="report-title"><h4>{{= caption }}</h4></div>
+    <div class="report-body" id="report-body"></div>
+    <div id="report-buttons">
+        <button class="btn btn-primary report-submit-button">
+            <%= t "reports-run-report-button" %>
+        </button>
+        <button class="btn btn-primary report-csv-button">
+            <%= t "reports-csv-button" %>
+        </button>
     </div>
-
 </script>
 
 <script type="text/template" id="export-template">
