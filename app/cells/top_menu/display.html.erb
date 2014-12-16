@@ -15,9 +15,15 @@
             <ul class="nav navbar-nav">
                 <% @menu.each do |k, v| %>
                     <% if v %>
-                        <li class="<%= 'active' if request.fullpath.include? v[:target_base] %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + v[:target] %>">
-                            <i class="glyphicon <%= v[:icon]%>"></i> <%= t k %></a>
-                        </li>
+                        <% if v[:target_base].length == 1 %>
+                            <li class="<%= 'active' if request.fullpath.eql? v[:target_base] %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + v[:target] %>">
+                                <i class="glyphicon <%= v[:icon]%>"></i> <%= k.empty? ? '' : (t k) %></a>
+                            </li>
+                        <% else %>
+                            <li class="<%= 'active' if request.fullpath.include? v[:target_base] %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + v[:target] %>">
+                                <i class="glyphicon <%= v[:icon]%>"></i> <%= k.empty? ? '' : (t k) %></a>
+                            </li>
+                        <% end %>
                     <% end %>
                 <% end %>
             </ul>

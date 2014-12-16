@@ -104,13 +104,10 @@ module PublishedProgramItemsService
     conditions << peopleIds if peopleIds
     conditions << roles
     
-    
-    Person.uncached do
-      Person.where(conditions).
-              include({:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}}).
-              where(self.constraints()).
-              order("people.last_name, published_time_slots.start asc")
-    end
+    Person.where(conditions).
+            includes({:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}}).
+            where(self.constraints()).
+            order("people.last_name, published_time_slots.start asc")
     
   end
   
