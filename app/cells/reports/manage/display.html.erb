@@ -4,58 +4,60 @@
 
 <div class="row">
     <div class="col-md-6">
+        
+        <h3><%= t "reports" %></h3>
 
-<ul class="nav nav-tabs" id="report-tabs">
-    <li class="active"><a href="#people-reports-tab" data-toggle="tab"><%= t 'people-reports' %></a></li>
-    <li><a href="#item-reports-tab" data-toggle="tab"><%= t 'item-reports' %></a></li>
-    <li><a href="#capacity-and-equipment-reports-tab" data-toggle="tab"><%= t 'capacity-and-equipment-reports' %></a></li>
-    <li><a href="#scheduling-reports-tab" data-toggle="tab"><%= t 'scheduling-reports' %></a></li>
-</ul>
+        <ul class="nav nav-tabs" id="report-tabs">
+            <li class="active"><a href="#people-reports-tab" data-toggle="tab"><%= t 'people-reports' %></a></li>
+            <li><a href="#item-reports-tab" data-toggle="tab"><%= t 'item-reports' %></a></li>
+            <li><a href="#capacity-and-equipment-reports-tab" data-toggle="tab"><%= t 'capacity-and-equipment' %></a></li>
+            <li><a href="#scheduling-reports-tab" data-toggle="tab"><%= t 'scheduling-reports' %></a></li>
+        </ul>
 
-<div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="people-reports-tab">
+        <div id="report-panel-body" class="tab-content panel-body">
+            <div role="tabpanel" class="tab-pane active" id="people-reports-tab">
               <ul>
-                    <li>
-                        <a href="#panelists_with_panels"><%= t "report-participants-with-items" %></a> <!-- TODO: CHANGE THE NAME -->
-                    </li>
-                    <li>
-                        <a href="#edited_bios"><%= t "reports-participant-bios" %></a>
-                    </li>
-                    <li>
-                        <a href="#panelists_without_bios"><%= t "report-participants-with-no-bios" %></a> 
-                    </li>
-                    <li>
-                        <a href="#people_without_items"><%= t "report-people-without-items" %></a>
-                    </li>                
-                    <li>
-                        <a href="#people_by_tags"><%= t "report-people-by-tags" %></a>
-                    </li>  
+                <li>
+                    <a href="#panelists_with_panels"><%= t "report-participants-with-items" %></a> <!-- TODO: CHANGE THE NAME -->
+                </li>
+                <li>
+                    <a href="#edited_bios"><%= t "reports-participant-bios" %></a>
+                </li>
+                <li>
+                    <a href="#panelists_without_bios"><%= t "report-participants-with-no-bios" %></a> 
+                </li>
+                <li>
+                    <a href="#people_without_items"><%= t "report-people-without-items" %></a>
+                </li>                
+                <li>
+                    <a href="#people_by_tags"><%= t "report-people-by-tags" %></a>
+                </li>  
               </ul>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="item-reports-tab">
+            </div>
+            <div role="tabpanel" class="tab-pane" id="item-reports-tab">
               <ul>
-                    <li>
-                        <a href="#item_word_counts"><%= t "reports-item-word-counts" %></a>
-                    </li>
-                    <li>
-                        <a href="#tags_by_context"><%= t "report-tags-by-context" %></a>
-                    </li>
+                <li>
+                    <a href="#item_word_counts"><%= t "reports-item-word-counts" %></a>
+                </li>
+                <li>
+                    <a href="#tags_by_context"><%= t "report-tags-by-context" %></a>
+                </li>
               </ul>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="capacity-and-equipment-reports-tab">
+            </div>
+            <div role="tabpanel" class="tab-pane" id="capacity-and-equipment-reports-tab">
               <ul>
-                    <li>
-                        <a href="#capacity_report"><%= t "reports-items-over-capacity" %></a>
-                    </li>
-                    <li>
-                        <a href="#equipment_needs"><%= t "reports-items-with-equipment-needs" %></a>
-                    </li>
-                    <li>
-                        <a href="#people_item_allocation"><%= t "report-people-item-allocation" %></a>
-                    </li>                
+                <li>
+                    <a href="#capacity_report"><%= t "reports-items-over-capacity" %></a>
+                </li>
+                <li>
+                    <a href="#equipment_needs"><%= t "reports-items-with-equipment-needs" %></a>
+                </li>
+                <li>
+                    <a href="#people_item_allocation"><%= t "report-people-item-allocation" %></a>
+                </li>                
               </ul>
-    </div>
-    <div role="tabpanel" class="tab-pane" id="scheduling-reports-tab">
+            </div>
+            <div role="tabpanel" class="tab-pane" id="scheduling-reports-tab">
               <ul>
                     <li>
                         <a href="#scheduling_conflicts"><%= t "report-scheduling-conflicts" %></a>
@@ -79,8 +81,8 @@
                         <a href="#people_with_too_many_items"><%= t "report-people-overused" %></a>
                     </li>
               </ul>
-    </div>
-</div>
+            </div>
+        </div>
 
 </div>
 
@@ -90,7 +92,7 @@
 
 </div>
 
-<div class="row">
+<div class="row voffset20">
     <div class="col-md-12">
         <div id='report-results-area'></div>
     </div>

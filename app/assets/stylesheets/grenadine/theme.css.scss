@@ -553,8 +553,10 @@ input[type="checkbox"] {
 .nav-tabs > li a:hover {
     border-top: 3px solid rgb(238, 238, 238);
 }
-
-#item-tabs.panel-body {
+.spinner {
+    margin-top: 50px;
+}
+#item-tabs.panel-body, #report-panel-body.panel-body {
     border-left: #ddd 1px solid;
     border-right: #ddd 1px solid;
     border-bottom: #ddd 1px solid;
@@ -562,6 +564,28 @@ input[type="checkbox"] {
     padding-right: 15px;
     min-height: 100px;
 }
+#report-panel-body ul {
+    margin-left: 10px;
+    padding-left: 0px;
+    list-style-type: none;
+    
+}
+#report-panel-body ul li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 35px;
+    background-image: url('/assets/icons/report-icon.png');
+    background-repeat: no-repeat;
+    background-position: 0px center; 
+    
+}
+#report-panel-body ul li::before {
+    
+}
+.report-title h4 {
+    font-size: 24px;
+}
+
 .right-bar-action-group h5 {
     text-transform: uppercase;
     font-weight: bold;
