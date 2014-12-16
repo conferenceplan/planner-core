@@ -459,6 +459,10 @@ ReportApp.ReportManagement = (function(Backbone){
         init : function(options) {
             new Workspace();
             Backbone.history.start();
+            
+            $('#report-tabs').tabdrop({
+                text : "..."
+            });
         }
     }
     
