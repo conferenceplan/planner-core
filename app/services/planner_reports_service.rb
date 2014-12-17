@@ -377,4 +377,8 @@ protected
     ''
   end
   
+  def self.arel_constraints(*args)
+    true
+  end
+  
 end
