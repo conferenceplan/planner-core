@@ -223,7 +223,7 @@ class PublishJob
     srcItem.external_images.each do |img|
       
       p = Cloudinary::Uploader.upload(img.picture.url) # copy the cloudinary remote image
-      url = p['url'].partition(Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'').sub(/http\:\/\/a[0-9]*\./,''))[2]
+      url = p['url'].partition(/upload/)[2]
       sig = p['signature']
       finalUrl = 'image/upload' +url + '#' + sig
 

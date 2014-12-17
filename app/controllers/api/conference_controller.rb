@@ -8,7 +8,7 @@ class Api::ConferenceController < ApplicationController
     @formats = Format.find :all
     @default_bio_image = DefaultBioImage.find :first
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
-    @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
+    @partition_val = /upload/
   end
   
   def show
@@ -20,6 +20,6 @@ class Api::ConferenceController < ApplicationController
     @default_bio_image = DefaultBioImage.find :first
     @formats = Format.find :all
     @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
-    @partition_val = @cloudinaryURI.sub(/http\:\/\/a[0-9]*\./,'')
+    @partition_val = /upload/
   end
 end

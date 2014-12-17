@@ -1,4 +1,5 @@
 class ProgramPlannerController < PlannerController
+  include ProgramPlannerHelper
   #
   #
   #

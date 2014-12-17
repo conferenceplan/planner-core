@@ -29,7 +29,11 @@ json.array! @programmeItems.each do |item|
         if (im.use == :largecard)
             json.large_card         im.picture.large_card.url.partition(@partition_val)[2]
         elsif (im.use == :mediumcard)
-            json.medium_card        im.picture.medium_card.url.partition(@partition_val)[2]
+            if im.picture.medium_card.url
+                json.medium_card        im.picture.medium_card.url.partition(@partition_val)[2]
+            else
+                json.medium_card        "PROBLEM"
+            end
         end
     end
 
