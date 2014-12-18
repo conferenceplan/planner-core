@@ -2,16 +2,18 @@
 <script type="text/template" id="mail-template-list-layout-template">
 <section>
     <div class="row">
-        <div class="col-xs-1"><span class="label label-default"><%= t 'mail-templates' %></span></div><div id="mail-template-control-div"></div>
+        <h3 class="h3-underlined"><%= t 'mail-templates' %></h3>
+        <div id="mail-template-control-div"></div>
     </div>
-    <div class="row">
+    <div class="row voffset10">
+        
         <div id="mail-template-region-div"></div>
     </div>
 </section>
 </script>
 
 <script type="text/template" id="mail-template-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
+    <button class="add-model-button btn-primary pull-right">
         <%= t 'add-template' %>
     </button>
 </script>
@@ -20,8 +22,8 @@
     <td>
         <a href="#" data-toggle="tab" class="model-select-button">{{= title }} ({{= mail_use_name }})</a>
     </td>
-    <td>
-        <button class="model-delete-button btn btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
+    <td align="right">
+        <button class="model-delete-button btn btn-primary btn-xs"><small><i class="glyphicon glyphicon-trash"></i></small></button>
     </td>
 </script>
 
@@ -32,7 +34,7 @@
 </script>
 
 <script type="text/template" id="mail-template-data-template">
-    <dl class="dl-horizontal">
+    <dl class="dl-airy">
         <dt><%= t "title" %></dt><dd>{{= title }}</dd> 
         <dt><%= t "mail-use" %></dt><dd>{{= mail_use_name }}</dd> 
         <dt><%= t "transition-person-invite-to" %></dt><dd>{{= transiton_invite_status_name }}</dd> 
