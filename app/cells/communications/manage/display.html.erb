@@ -47,35 +47,39 @@
 %>
 
 <div class="row">
-    <div class="col-xs-5" style="height : 370px; overflow : auto;">
+    
+    <div class="col-md-4" style="height : 370px; overflow : auto;">
         <%= render_cell "communications/mailing_list", :display %>
     </div>
-    <div class="col-xs-7">
+    <div class="col-md-8">
+        <h3 class="h3-underlined"><%= t 'mailing-details' %></h3>
         <div id="mailing-edit-area"></div>
         <div id="mailing-control-area"></div>
     </div>
 </div>
-<div class="row">
-    <div class="col-xs-6 left-jqgrid right-jqgrid">
+<div class="row voffset20">
+    <div class="col-xs-5 left-jqgrid right-jqgrid">
         <%= render_cell "participants/participant_list", :display,
             :pager => "participants-pager",
             :place => "participants"
          %>
     </div>
-    <div class="col-xs-1">
-       	<div id="list-control-view"></div>
+    <div class="col-xs-2" style="padding-top: 50px;">
+        <center>
+       	    <div id="list-control-view"></div>
+       	</center>
     </div>
-    <div class="col-xs-5">
-            <div class='right-jqgrid'>
-                <%= render_cell "participants/participant_list", :display,
-                    :pager => "mailing-people-pager",
-                    :place => "mailing-participants"
-                 %>
-            </div>
-            <div class="voffset10"></div>
-            <div>
-                <div id="preview-control-area"></div>
-            </div>
+    <div class="col-xs-5" style="padding-left: 0;">
+        <div class='right-jqgrid'>
+            <%= render_cell "participants/participant_list", :display,
+                :pager => "mailing-people-pager",
+                :place => "mailing-participants"
+             %>
+        </div>
+        <div class="voffset10"></div>
+        <div>
+            <div id="preview-control-area"></div>
+        </div>
 	</div>
 </div>
 <div class="voffset20"></div>

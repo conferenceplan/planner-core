@@ -868,3 +868,17 @@ p.help-block {
   height: 100%;
   width: 100%;  
 }
+
+/* Selected row in a table */
+tbody tr.info {
+    border-left: 3px #d52348 solid;
+    
+}
+tbody tr.info td {
+    
+}
+tbody tr.info td a {
+    text-decoration: none;
+    padding-left: 5px;
+    
+}
