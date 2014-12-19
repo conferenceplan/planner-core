@@ -7,6 +7,14 @@ class ResourceController < PlannerController
 
   respond_to :json
   
+  def index
+    begin
+      render json: @collection.to_json, :content_type => 'application/json' if !lookup_context.exists? :index, params[:controller]
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+  end
+  
   def create
     begin
       @object.save!
