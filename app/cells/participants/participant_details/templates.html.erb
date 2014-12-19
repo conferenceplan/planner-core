@@ -211,7 +211,7 @@
 </script>
 
 <script type="text/template" id="bio-image-template">
-            <h5><%= t "published-picture" %></h5>
+            <h5><%= t "published-picture" %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-published-picture' %></span></a></h5>
             <% if ConfigService.hasCloudinaryConfig? %>
             <div>
                 {{ if (typeof id != 'undefined') { }}
@@ -246,7 +246,7 @@
 </script>
 
 <script type="text/template" id="bio-view-template">
-        <h5><%= t 'biography' %></h5>
+        <h5><%= t 'biography' %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-published-bio' %></span></a></h5>
         {{ if (typeof id != 'undefined') { }}
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
             <dl class="dl-airy">

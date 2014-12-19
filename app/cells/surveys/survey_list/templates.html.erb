@@ -1,13 +1,8 @@
 
 <script type="text/template" id="survey-list-layout-template">
-    <div class="row">
-        <div class="col-xs-1">
-            <span class="label label-default"><%= t 'surveys' %></span>
-        </div>
-        <div class="col-xs-11">
-            <div id="survey-control-div"></div>
-        </div>
-    </div>
+    <h3 class="h3-underlined"><%= t 'surveys' %></h3>
+    <div id="survey-control-div"></div>
+    <div class="voffset10"></div>
     <div class="row">
         <div id="survey-region-div" class="col-xs-12"></div>
     </div>
@@ -29,9 +24,14 @@
 </script>
 
 <script type="text/template" id="survey-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
-        <%= t 'add-survey' %>
-    </button>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="add-model-button btn btn-primary pull-right">
+            <%= t 'add-survey' %>
+            </button> 
+        </div>
+    </div>
+
 </script>
 
 <script type="text/template" id="survey-data-template">
