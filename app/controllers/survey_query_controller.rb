@@ -6,7 +6,7 @@ class SurveyQueryController < PlannerController
   
   def list
     conditions = {}
-    conditions = { "user_id" => @current_user.id, "shared" => false } if params[:subset] && (params[:subset] == 'user')
+    conditions = { "user_id" => @current_user.id, "shared" => false } if params[:subset] && (params[:subset] == 'user' && !support_user_signed_in?)
     conditions = { "shared" => true } if params[:subset] && (params[:subset] == 'shared')
     
     @queries = SurveyQuery.all :conditions => conditions
@@ -36,6 +36,7 @@ class SurveyQueryController < PlannerController
     # TODO - make sure name is unique
     begin
       SurveyQuery.transaction do
+        raise "can not create query as a support user" if support_user_signed_in?
         @query = SurveyQuery.new(params[:survey_query]) # and then save the query
         @query.user = @current_user
         if @query.save!
@@ -50,6 +51,7 @@ class SurveyQueryController < PlannerController
   def update
     begin
       SurveyQuery.transaction do
+        raise "can not edit query as a support user" if support_user_signed_in?
         # get the survey
         @query = SurveyQuery.find(params[:id])
 
@@ -74,7 +76,7 @@ class SurveyQueryController < PlannerController
     query = SurveyQuery.find(params[:id])
     
     # Test to make sure that the person requesting the delete owns the query
-    if (query.user == @current_user)
+    if (query.user == @current_user && !support_user_signed_in?)
       query.destroy
       render status: :ok, text: {}.to_json
     else
@@ -86,14 +88,23 @@ class SurveyQueryController < PlannerController
   #
   #
   def copy
-    original = SurveyQuery.find(params[:id])
     
-    @query = original.dup :include => :survey_query_predicates
-    @query.name += ' (Copy)'
-    @query.user = @current_user
-    @query.shared = false
-    
-    @query.save!
+    begin
+      SurveyQuery.transaction do
+        raise "can not copy query as a support user" if support_user_signed_in?
+        original = SurveyQuery.find(params[:id])
+        
+        @query = original.dup :include => :survey_query_predicates
+        @query.name += ' (Copy)'
+        @query.user = @current_user
+        @query.shared = false
+        
+        @query.save!
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+
   end
 
 end
