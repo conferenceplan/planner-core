@@ -31,7 +31,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
     
     EmailConfig = Backbone.Model.extend({
         schema : {
-            conference_name     : { type : 'Text', title : '<%= t "conference-name" %>' },
             info                : { type : 'Text', title : '<%= t "config-info-email" %>' },
             reply_to            : { type : 'Text', title : '<%= t "config-reply-to-email" %>' },
             cc                  : { type : 'Text', title : '<%= t "config-cc-email" %>' },
