@@ -886,12 +886,9 @@ tbody tr.info td a {
 
 /* Tooltips */
 
-a.mtooltip {outline:none; font-size: 13px; }
+a.mtooltip {outline:none; font-size: 13px; padding-left: 5px; }
 a.mtooltip::before {
-    content: " ";
-}
-a.mtooltip span::before {
-    content: "   ";
+    content: "  ";
 }
 a.mtooltip strong {line-height:30px;}
 a.mtooltip:hover {text-decoration:none;} 
@@ -901,6 +898,10 @@ a.mtooltip span {
     width:300px; line-height:16px;
     font-size: 13px;
     font-weight: normal;
+    text-align: left;
+}
+a.mtooltip i {
+    color: #CCC;
 }
 a.mtooltip:hover span{
     display:inline; position:absolute; color:#111;
