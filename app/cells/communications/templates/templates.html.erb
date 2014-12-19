@@ -34,12 +34,14 @@
 </script>
 
 <script type="text/template" id="mail-template-data-template">
-    <dl class="dl-airy">
-        <dt><%= t "title" %></dt><dd>{{= title }}</dd> 
+    <dl class="dl-horizontal">
+        <dt class=""><%= t "title" %></dt><dd>{{= title }}</dd> 
         <dt><%= t "mail-use" %></dt><dd>{{= mail_use_name }}</dd> 
         <dt><%= t "transition-person-invite-to" %></dt><dd>{{= transiton_invite_status_name }}</dd> 
         <dt><%= t "survey" %></dt><dd>{{= survey_id ? survey : "&nbsp;" }}</dd> 
         <dt><%= t "mail-subject-line" %></dt><dd>{{= subject }}</dd> 
+    </dl>
+    <dl class="dl-airy">
         <dt><%= t "mail-content" %></dt><dd><pre>{{= content }}</pre></dd> 
     </dl>
 </script>
