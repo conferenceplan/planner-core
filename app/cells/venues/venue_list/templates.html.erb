@@ -9,18 +9,16 @@
 </script>
 
 <script type="text/template" id="venue-template">
-    
-            <a href="#venue-tab" class="list-group-item model-select-button">
-                {{= name}}
-                <button class="model-delete-button btn btn-primary btn-xs pull-right"><small><i class="glyphicon glyphicon-trash"></i></small></button>
-            </a>
-
+    <a href="#venue-tab" class="list-group-item model-select-button">
+        {{= name}}
+        <button class="model-delete-button btn btn-primary btn-xs pull-right"><small><i class="glyphicon glyphicon-trash"></i></small></button>
+    </a>
 </script>
 
 <script type="text/template" id="venue-control-template">
     <div class="row">
         <div class="col-md-12">
-            <button class="add-model-button btn-primary pull-right clearfix">
+            <button class="add-model-button btn btn-primary pull-right clearfix">
                 <%= t 'add-venue' %>
             </button>
         </div>

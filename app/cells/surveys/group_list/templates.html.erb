@@ -1,15 +1,14 @@
 <script type="text/template" id="survey-group-list-layout-template">
 <section>
     <div class="row">
-        <div class="col-xs-1">
-            <span class="label label-default"><%= t 'survey-groups' %></span>
-        </div>
-        <div class="col-xs-11">
+        <div class="col-md-12">
+            <h3 class="h3-underlined"><%= t 'survey-question-groups' %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-question-groups' %></span></a></h3>
             <div id="survey-group-control-div"></div>
+             <div class="voffset10"></div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-12">
+    <div class="row" style="height : 370px; overflow : auto; overflow-x:hidden;">
+        <div class="col-xs-12" >
         <div id="survey-group-region-div"></div>
         </div>
     </div>
@@ -31,9 +30,13 @@
 </script>
 
 <script type="text/template" id="survey-group-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
-        <%= t 'survey-add-group' %>
-    </button>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="add-model-button btn btn-primary pull-right">
+                <%= t 'survey-add-question-group' %>
+            </button>            
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="group-data-template">

@@ -1,15 +1,14 @@
 <script type="text/template" id="survey-question-list-layout-template">
 <section>
     <div class="row">
-        <div class="col-xs-1">
-            <span class="label label-default"><%= t 'questions' %></span>
-        </div>
-        <div class="col-xs-11">
+        <div class="col-md-12">
+            <h3 class="h3-underlined"><%= t 'questions' %></h3>
             <div id="survey-question-control-div"></div>
+            <div class="voffset10"></div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-xs-12">
+    <div class="row" style="height : 370px; overflow : auto; overflow-x:hidden;">
+        <div class="col-xs-12" >
         <div id="survey-question-region-div"></div>
         </div>
     </div>
@@ -22,15 +21,19 @@
         {{= stripHtml( question ) }}
     </a>
     </td>
-    <td>
+    <td align="right">
         <button class="model-delete-button btn btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
     </td>
 </script>
 
 <script type="text/template" id="survey-question-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
-        <%= t 'survey-add-question' %>
-    </button>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="add-model-button btn btn-primary pull-right">
+                <%= t 'survey-add-question' %>
+            </button>            
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="question-data-template">
