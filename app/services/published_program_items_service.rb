@@ -104,6 +104,7 @@ module PublishedProgramItemsService
     conditions << peopleIds if peopleIds
     conditions << roles
     
+    
     Person.where(conditions).
             includes({:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}}).
             where(self.constraints()).
@@ -376,6 +377,10 @@ private
     conditions += ['%'+lastname+'%', '%'+lastname+'%', '%'+name+'%', '%'+name+'%'] if name
     conditions += ['%'+lastname+'%', '%'+lastname+'%'] if lastname && !name
     conditions
+  end
+
+  def self.constraints(*args)
+    ''
   end
   
 end
