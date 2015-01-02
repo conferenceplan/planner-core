@@ -51,8 +51,11 @@ $.widget( "cp.baseBootstrapTable" , {
     
     render : function() {
         if (this.options.delayed) {
+            this.selected = this.model = null;
             this.createTable();
             this.options.delayed = false; // because it has now been rendered
+        } else {
+            this.refresh();
         }
     },
 
@@ -91,6 +94,14 @@ $.widget( "cp.baseBootstrapTable" , {
      * 
      */
     createColModel : function() {},
+
+    /*
+     * 
+     */
+    setControlOptions : function(options) {
+        this.control.options.id = options.id;
+        this.control.options.id_name = options.id_name;
+    },
     
     /*
      * 
@@ -127,9 +138,9 @@ $.widget( "cp.baseBootstrapTable" , {
             
             newModel : function() {
                 var mdl = new this.options.modelType({});
-                // if (this.options.id) {
-                    // mdl.set(this.options.id_name, this.options.id);
-                // }
+                if (this.options.id) {
+                    mdl.set(this.options.id_name, this.options.id);
+                }
             
                 var grid = this.options.grid;
 
