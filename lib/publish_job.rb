@@ -142,78 +142,73 @@ class PublishJob
   
   def unPublish(pubItems)
     nbrProcessed = 0
-#    PublishedProgrammeItem.uncached do
-      PublishedProgrammeItem.transaction do
-        pubItems.each do |item|
-          item.destroy
-          nbrProcessed += 1
-        end
+    PublishedProgrammeItem.transaction do
+      pubItems.each do |item|
+        item.destroy
+        nbrProcessed += 1
       end
-#    end
+    end
     return nbrProcessed
   end
   
   def copyProgrammeItems(srcItems)
     nbrProcessed = 0
-#    PublishedProgrammeItem.uncached do
-      PublishedProgrammeItem.transaction do
-        srcItems.each do |srcItem|
-          # check for existence of already published item and if it is there then use that
-          newItem = (srcItem.published == nil) ? PublishedProgrammeItem.new : srcItem.published
+    PublishedProgrammeItem.transaction do
+      srcItems.each do |srcItem|
+        # check for existence of already published item and if it is there then use that
+        newItem = (srcItem.published == nil) ? PublishedProgrammeItem.new : srcItem.published
+        
+        # # copy the details from the unpublished item to the new
+        newItem = copy(srcItem, newItem)
+        newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
+        # and once fixed we need to 'touch' all the items
+        copyTags(srcItem, newItem)
+        
+        newItem.touch #update_attribute(:updated_at,Time.now)
+        newItem.save
+        
+        updateImages(srcItem, newItem)
+
+        # link to the people (and their roles)
+        updateAssignments(srcItem, newItem)
+        
+        newRoom = publishRoom(srcItem.room)
+        if newItem.published_room_item_assignment
+          newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
           
-          # # copy the details from the unpublished item to the new
-          newItem = copy(srcItem, newItem)
-          newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
-          # and once fixed we need to 'touch' all the items
-          copyTags(srcItem, newItem)
-          
-          newItem.touch #update_attribute(:updated_at,Time.now)
-          newItem.save
-          
-          updateImages(srcItem, newItem)
-  
-          # link to the people (and their roles)
-          updateAssignments(srcItem, newItem)
-          
-          newRoom = publishRoom(srcItem.room)
-          if newItem.published_room_item_assignment
-            newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
-            
-            # Only need to copy time if the new time slot is more recent than the published
-            if newItem.published_time_slot != nil
-              if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
-                newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
-                newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
-                newTimeSlot.save
-                newItem.published_time_slot = newTimeSlot
-                newItem.save
-  #              logger.info "Moved item times"
-              end
-            else
-                newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
-                newTimeSlot.save
-                newItem.published_time_slot = newTimeSlot
-                newItem.save
+          # Only need to copy time if the new time slot is more recent than the published
+          if newItem.published_time_slot != nil
+            if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
+              newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
+              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+              newTimeSlot.save
+              newItem.published_time_slot = newTimeSlot
+              newItem.save
             end
-            newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
-            newItem.published_room_item_assignment.save
           else
-            newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
-            assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
-                    :published_time_slot => newTimeSlot, 
-                    :day => srcItem.room_item_assignment.day, 
-                    :published_programme_item => newItem)
-            assignment.save
+              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+              newTimeSlot.save
+              newItem.published_time_slot = newTimeSlot
+              newItem.save
           end
-  
-          # Put the date and the person who did the publish into the association (Publication)
-          newItem.publication.publication_date = DateTime.current
-          newItem.publication.user = @current_user
-          newItem.publication.save
-          nbrProcessed += 1
+          newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
+          newItem.published_room_item_assignment.save
+        else
+          newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
+          assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
+                  :published_time_slot => newTimeSlot, 
+                  :day => srcItem.room_item_assignment.day, 
+                  :published_programme_item => newItem)
+          assignment.save
         end
+
+        # Put the date and the person who did the publish into the association (Publication)
+        newItem.publication.publication_date = DateTime.current
+        newItem.publication.user = @current_user
+        newItem.publication.save
+        nbrProcessed += 1
       end
-#    end
+    end
     return nbrProcessed
   end
   
@@ -239,7 +234,9 @@ class PublishJob
       rooms.each do |srcRoom|
         pubRoom = srcRoom.published
         if pubRoom
-          copy(srcRoom, pubRoom)
+          pubRoom.name = srcRoom.name
+          pubRoom.sort_order = srcRoom.sort_order
+
           pubRoom.touch
           pubRoom.save
           nbrProcessed += pubRoom.published_programme_items.size
@@ -256,7 +253,9 @@ class PublishJob
     
     # 2. if not then publish it
     if ! pubRoom
-      pubRoom = copy(srcRoom, PublishedRoom.new)
+      pubRoom = PublishedRoom.new
+      pubRoom.name = srcRoom.name
+      pubRoom.sort_order = srcRoom.sort_order
       pubRoom.original = srcRoom
       pubRoom.publication.publication_date = DateTime.current
       pubRoom.publication.user = @current_user
@@ -269,7 +268,8 @@ class PublishJob
     else
       # If the room is published check to see if there is a name change/update that needs to be pushed out
       if srcRoom.updated_at > pubRoom.updated_at
-        copy(srcRoom, pubRoom)
+        pubRoom.name = srcRoom.name
+        pubRoom.sort_order = srcRoom.sort_order
         pubRoom.save
       end
     end
@@ -281,7 +281,9 @@ class PublishJob
     pubVenue = srcVenue.published
     
     if !pubVenue
-      pubVenue = copy(srcVenue, PublishedVenue.new)
+      pubVenue = PublishedVenue.new
+      pubVenue.name = srcVenue.name
+      pubVenue.sort_order = srcVenue.sort_order
       pubVenue.original = srcVenue
       pubVenue.publication.publication_date = DateTime.current
       pubVenue.publication.user = @current_user
@@ -289,7 +291,8 @@ class PublishJob
       pubVenue.save
     else # check for update (such as name)
       if srcVenue.updated_at > pubVenue.updated_at
-        copy(srcVenue, pubVenue)
+        pubVenue.name = srcVenue.name
+        pubVenue.sort_order = srcVenue.sort_order
         pubVenue.save
       end
     end
