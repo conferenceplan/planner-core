@@ -6,6 +6,18 @@ class VenueController < PlannerController
   #
   #
   #
+  def index
+    limit = params[:limit] ? params[:limit].to_i : nil
+    offset = params[:offset] ? params[:offset].to_i : nil
+    
+    @total = Venue.count
+    
+    @venues = Venue.offset(offset).limit(limit).order('sort_order asc')
+  end
+  
+  #
+  #
+  #
   def list
     @venues = Venue.find :all, :order => 'sort_order, name asc'
   end

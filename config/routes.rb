@@ -243,8 +243,9 @@ Rails.application.routes.draw do
       # :except => [:destroy, :new, :create, :edit, :show, :update, :list]
 
 
-  match 'rooms/list.:format', :controller => 'rooms', :action => 'list'
-  resources :rooms
+  match 'rooms/list.:format', :controller => 'rooms', :action => 'list' #, :defaults => { :format => 'json' }
+  match 'rooms/simple_list', :controller => 'rooms', :action => 'simple_list', :defaults => { :format => 'json' }
+  resources :rooms, :defaults => { :format => 'json' }
 
   match 'setup_types/list.:format', :controller => 'setup_types', :action => 'list'
   match 'setup_types/picklist', :controller => 'setup_types', :action => 'picklist'
@@ -253,8 +254,8 @@ Rails.application.routes.draw do
   match 'room_setups/list', :controller => 'room_setups', :action => 'list'
   resources :room_setups
 
-  match 'venue/list', :controller => 'venue', :action => 'list'
-  resources :venue
+  match 'venue/list', :controller => 'venue', :action => 'list', :defaults => { :format => 'json' }
+  resources :venue, :defaults => { :format => 'json' }
 
   resources :datasources
   resources :mail_configs
