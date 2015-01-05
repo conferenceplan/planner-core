@@ -18,10 +18,11 @@ class RoomsController < PlannerController
   def simple_list
     limit = params[:limit] ? params[:limit].to_i : nil
     offset = params[:offset] ? params[:offset].to_i : nil
+    venue = params[:venue] ? params[:venue].to_i : nil
     
-    @total = Room.count
+    @total = Room.where({venue_id: venue}).count
     
-    @rooms = Room.offset(offset).limit(limit).order('sort_order asc')
+    @rooms = Room.where({venue_id: venue}).offset(offset).limit(limit).order('sort_order asc')
   end
 
   #

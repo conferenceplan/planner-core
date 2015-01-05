@@ -300,6 +300,50 @@ var AppUtils = (function(){
     /*
      * 
      */
+    FormModal = GenericModal.extend({
+        renderBody : function() {
+            this.form = this.options.form;
+            
+            if (this.options.modal_template) {
+                this.form.template = _.template($(this.options.modal_template).html());
+            };
+            
+            this.form.render();
+        },
+        
+        // over-ride for the actual data submission        
+        submitData : function() {
+            // gather the data and update the underlying model etc.
+            var errors = this.options.form.validate();
+            
+            if (!errors) { // save if there are no errors
+                var refreshFn = this.options.refresh;
+                var refreshEvent = this.options.view_refresh_event;
+                var data = this.form.getValue();
+                var endPoint = this.options.endPoint;
+            
+                $.ajax({
+                    url : endPoint,
+                    type : 'POST',
+                    data : data,
+                    success : function() {
+                        if (refreshEvent) {
+                            eventAggregator.trigger(refreshEvent); 
+                        };
+                        if (refreshFn) {
+                            refreshFn(); // cause problem with templates used ???
+                        };
+                    }
+                });
+            };
+            
+            return errors; // if there are any errors
+        }
+    });
+    
+    /*
+     * 
+     */
     ModelModal = GenericModal.extend({
         renderBody : function() {
             this.form = new Backbone.Form({
@@ -804,6 +848,8 @@ var AppUtils = (function(){
         ConfirmModel : ConfirmModel,
         
         GenericModal : GenericModal,
+        
+        FormModal : FormModal,
         
         ModelModal : ModelModal,
         

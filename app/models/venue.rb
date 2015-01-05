@@ -1,7 +1,7 @@
 class Venue < ActiveRecord::Base
   attr_accessible :lock_version, :name, :sort_order
 
-  has_many  :rooms
+  has_many  :rooms, :dependent => :delete_all
   validates_presence_of :name
 
   audited :allow_mass_assignment => true
