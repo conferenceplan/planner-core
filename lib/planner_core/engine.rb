@@ -41,6 +41,7 @@ require "routing-filter"
 require "twitter-typeahead-rails"
 require "encoding_sampler"
 require "figaro"
+require "ranked-model"
 
 module PlannerCore
   class Engine < ::Rails::Engine

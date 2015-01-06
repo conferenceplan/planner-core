@@ -2,7 +2,25 @@
 #
 #
 class RoomsController < PlannerController
-  
+
+  #
+  #
+  #
+  def update_row_order
+    begin
+      Room.transaction do
+
+        room = Room.find(params[:room_id])
+        room.sort_order_position = params[:room_order_position]
+        room.save
+    
+        render status: :ok, text: {}.to_json
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+  end
+
   #
   #
   #
@@ -22,7 +40,11 @@ class RoomsController < PlannerController
     
     @total = Room.where({venue_id: venue}).count
     
-    @rooms = Room.where({venue_id: venue}).offset(offset).limit(limit).order('sort_order asc')
+    if limit > 0
+      @rooms = Room.where({venue_id: venue}).offset(offset).limit(limit).order('sort_order asc')
+    else  
+      @rooms = Room.where({venue_id: venue}).order('sort_order asc')
+    end
   end
 
   #

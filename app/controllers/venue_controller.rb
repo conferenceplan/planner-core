@@ -2,7 +2,25 @@
 #
 #
 class VenueController < PlannerController
-  
+
+  #
+  #
+  #
+  def update_row_order
+    begin
+      Venue.transaction do
+
+        venue = Venue.find(params[:venue_id])
+        venue.sort_order_position = params[:venue_order_position]
+        venue.save
+    
+        render status: :ok, text: {}.to_json
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+  end
+    
   #
   #
   #

@@ -245,7 +245,9 @@ Rails.application.routes.draw do
 
   match 'rooms/list.:format', :controller => 'rooms', :action => 'list' #, :defaults => { :format => 'json' }
   match 'rooms/simple_list', :controller => 'rooms', :action => 'simple_list', :defaults => { :format => 'json' }
-  resources :rooms, :defaults => { :format => 'json' }
+  resources :rooms, :defaults => { :format => 'json' } do
+    post :update_row_order, on: :collection
+  end
 
   match 'setup_types/list.:format', :controller => 'setup_types', :action => 'list'
   match 'setup_types/picklist', :controller => 'setup_types', :action => 'picklist'
@@ -255,7 +257,9 @@ Rails.application.routes.draw do
   resources :room_setups
 
   match 'venue/list', :controller => 'venue', :action => 'list', :defaults => { :format => 'json' }
-  resources :venue, :defaults => { :format => 'json' }
+  resources :venue, :defaults => { :format => 'json' } do
+    post :update_row_order, on: :collection
+  end
 
   resources :datasources
   resources :mail_configs

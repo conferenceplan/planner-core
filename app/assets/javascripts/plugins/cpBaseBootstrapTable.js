@@ -18,6 +18,7 @@ $.widget( "cp.baseBootstrapTable" , {
         cardView            : false,
         showRefresh         : false,
         search              : true,
+        pagination          : true,
         pageSize            : 10,
         pageList            : [10, 25, 50, 100, 200],
         toolbar             : null,
@@ -25,11 +26,14 @@ $.widget( "cp.baseBootstrapTable" , {
         modelTemplate       : null,
         showControls        : true,
         controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
+        // rowStyle            : function(row, idx) { return 'item'; },
         
         modal_create_title  : "Create",
         modal_edit_title    : "Edit",
         confirm_content     : "Are you sure you want to delete the selected data?",
         confirm_title       : "Confirm Deletion"
+        
+        // data-item-id=<%= "#{thing.id}"
 
         // pager               : '#pager',
         // clearNotifyMethod   : function() {},
@@ -55,13 +59,21 @@ $.widget( "cp.baseBootstrapTable" , {
             this.createTable();
             this.options.delayed = false; // because it has now been rendered
         } else {
-            this.refresh();
+            this.reset();
         }
     },
 
-    refresh : function() {
+    reset : function() {
         var newUrl = this.createUrl();
         this.element.bootstrapTable('refresh', { url : newUrl});
+    },
+
+    refresh : function() {
+        this.element.bootstrapTable('refresh');
+    },
+    
+    pageFrom : function() {
+        this.element.bootstrapTable('pageFrom');
     },
     
     getSelected : function() {
@@ -235,7 +247,7 @@ $.widget( "cp.baseBootstrapTable" , {
                 cache: false,
                 striped: true,
                 sidePagination: 'server',
-                pagination: true,
+                pagination: this.options.pagination,
                 pageSize: this.options.pageSize,
                 pageList: this.options.pageList,
                 search: this.options.search,
@@ -244,7 +256,18 @@ $.widget( "cp.baseBootstrapTable" , {
                 columns: this.createColModel(),
                 searchAlign: 'right',
                 // maintainSelected : true,
-                toolbar: this.options.toolbar
+                toolbar: this.options.toolbar,
+                rowAttributes       : function(row, idx) {
+                                            return {
+                                                'data-item-id' : row.id,
+                                                'data-item-base' : (this.pageNumber -1) * this.pageSize
+                                            };
+                                        },
+                rowStyle            : function(row, idx) { 
+                                            return {
+                                                    classes: 'item'
+                                                };
+                                        }
         });
 
         if (this.options.showControls) {
