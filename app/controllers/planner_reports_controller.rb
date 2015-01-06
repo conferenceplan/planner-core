@@ -681,6 +681,8 @@ class PlannerReportsController < PlannerController
     @page_size = params[:page_size]
     @day = (params[:day] && (params[:day].to_i > -1)) ? params[:day].to_i : nil
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
+    @one_per_page = params[:one_per_page] ? (params[:one_per_page] == "true") : false
+    @include_desc = params[:include_desc] ? (params[:include_desc] == "true") : false
     roomList = (params[:rooms].length > 0) ? URI.unescape(params[:rooms]).split(',') : nil
     
     PublishedRoom.uncached do

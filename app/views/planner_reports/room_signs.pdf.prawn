@@ -11,7 +11,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     @rooms.each do |room|
         current_day = -1
         room.published_room_item_assignments.each do |assignment|
-            if current_day != assignment.day
+            if current_day != assignment.day || @one_per_page
                 pdf.start_new_page if !first_page
                 first_page = false
                 current_day = assignment.day
@@ -40,6 +40,14 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
 
                 
             pdf.text itemText, :inline_format => true, :fallback_fonts => fallback_fonts
+
+            if ! assignment.published_programme_item.precis.blank?
+                pdf.font_size 14
+                pdf.move_down 0.1.in
+                pdf.text assignment.published_programme_item.precis, :inline_format => true, :fallback_fonts => fallback_fonts if @include_desc
+                pdf.move_down 0.1.in
+                pdf.font_size 16
+            end
             
         end
         title = ''

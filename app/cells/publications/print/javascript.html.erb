@@ -146,6 +146,8 @@ PublicationsApp.PrintManagement = (function(Backbone){
             orientation : { type : 'Select', title : '<%= t "print-orientation" %>', 
                           options : { landscape : 'Landscape' , portrait : 'Portrait'} 
                 },
+            one_per_page : { type : 'Checkbox', title : '<%= t "one-item-per-page" %>' },
+            include_desc : { type : 'Checkbox', title : '<%= t "include-description" %>' },
             rooms : { type : 'Select2', title : '<%= t "publications-rooms" %>', 
                         config : {
                             multiple: true,
