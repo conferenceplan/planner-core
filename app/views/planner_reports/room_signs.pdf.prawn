@@ -15,36 +15,40 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                 pdf.start_new_page if !first_page
                 first_page = false
                 current_day = assignment.day
-                pdf.text  '<b>' + room.name + ' - ' + room.published_venue.name + ' <b>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.days).strftime('%A') + '</b>', :size => 30, :inline_format => true, :align => :center, :fallback_fonts => fallback_fonts
+                pdf.text  '<b>' + room.name + ' - ' + room.published_venue.name + '<br>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.days).strftime('%A') + '</b>', :size => 30, :inline_format => true, :align => :center, :fallback_fonts => fallback_fonts
                 pdf.move_down 1.in
                 pdf.font_size 16
             end
 
-            itemText = assignment.published_time_slot.start.strftime('%H:%M') + ' - ' + assignment.published_time_slot.end.strftime('%H:%M')
-            itemText +=  " <b>" + assignment.published_programme_item.title + "</b>" 
-            if assignment.published_programme_item.format
-                itemText += ' (<i>'
-                itemText += assignment.published_programme_item.format.name  if assignment.published_programme_item.format
-                itemText += '</i>) '
-            end
-
-                first_person = true
-                assignment.published_programme_item.published_programme_item_assignments.collect {|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.each do |p|
-                    if !first_person
-                        itemText += ', '
-                    end
-                    first_person = false
-                    itemText += p.person.getFullPublicationName 
-                    itemText += '(' + p.role.name[0] + ')' if p.role == PersonItemRole['Moderator']
+            if assignment.published_programme_item
+                itemText = assignment.published_time_slot.start.strftime('%H:%M') + ' - ' + assignment.published_time_slot.end.strftime('%H:%M')
+                itemText +=  "<br><b>" + assignment.published_programme_item.title + "</b>"
+                if assignment.published_programme_item.format
+                    itemText += ' (<i>'
+                    itemText += assignment.published_programme_item.format.name  if assignment.published_programme_item.format
+                    itemText += '</i>) '
                 end
-
-                
-            pdf.text itemText, :inline_format => true, :fallback_fonts => fallback_fonts
-
-            if ! assignment.published_programme_item.precis.blank?
-                pdf.font_size 14
-                pdf.move_down 0.1.in
-                pdf.text assignment.published_programme_item.precis, :inline_format => true, :fallback_fonts => fallback_fonts if @include_desc
+    
+                    first_person = true
+                    assignment.published_programme_item.published_programme_item_assignments.collect {|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.each do |p|
+                        if !first_person
+                            itemText += ', '
+                        else
+                            itemText += '<br>'
+                        end
+                        first_person = false
+                        itemText += p.person.getFullPublicationName 
+                        itemText += '(' + p.role.name[0] + ')' if p.role == PersonItemRole['Moderator']
+                    end
+    
+                    
+                pdf.text itemText, :inline_format => true, :fallback_fonts => fallback_fonts
+    
+                if ! assignment.published_programme_item.precis.blank? && @include_desc
+                    pdf.font_size 14
+                    pdf.move_down 0.1.in
+                    pdf.text assignment.published_programme_item.precis, :inline_format => true, :fallback_fonts => fallback_fonts
+                end
                 pdf.move_down 0.1.in
                 pdf.font_size 16
             end
