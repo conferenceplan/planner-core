@@ -21,8 +21,10 @@ class EditedBio < ActiveRecord::Base
     res = url.strip # remove trailing and preceding whitespace
     
     # Add the protocol if not alreay present
-    unless res[/\Ahttp:\/\//] || res[/\Ahttps:\/\//]
-      res = "http://#{res}"
+    if !res.blank?
+      unless res[/\Ahttp:\/\//] || res[/\Ahttps:\/\//]
+        res = "http://#{res}"
+      end
     end
     
     res
