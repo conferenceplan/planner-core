@@ -11,5 +11,21 @@ class EditedBio < ActiveRecord::Base
   def facebookid
     /[^\/|^@]+$/.match(facebook).to_s
   end
+  
+  def website_url
+    fix_url(website)
+  end
+
+  protected
+  def fix_url(url)
+    res = url.strip # remove trailing and preceding whitespace
+    
+    # Add the protocol if not alreay present
+    unless res[/\Ahttp:\/\//] || res[/\Ahttps:\/\//]
+      res = "http://#{res}"
+    end
+    
+    res
+  end
 
 end
