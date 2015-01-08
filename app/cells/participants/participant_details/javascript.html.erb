@@ -298,7 +298,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         var name = (data['person[first_name]'] + ' ' + data['person[last_name]'] + ' ' + data['person[suffix]']).trim();
                     
         if (res.length > 0) {
-            res += " (" +  name + ")";
+            if (name.length > 0) {
+                res += " (" +  name + ")";
+            }
         } else {
             res = name;
         };

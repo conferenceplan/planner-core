@@ -163,7 +163,17 @@
         <h5>Identification</h5>
         <button class="model-edit-button btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-pencil"></i></button>
         <p>
-            <strong>{{= first_name ? first_name : "&nbsp;" }} {{= last_name ? last_name : "&nbsp;" }} {{= suffix ? suffix : "&nbsp;" }}</strong><br>
+            {{ if (first_name || last_name) { }}
+                <strong>{{= first_name ? first_name : "" }} {{= last_name ? last_name : "" }} {{= suffix ? suffix : "" }}</strong>
+                <br>
+            {{ } }}  
+            {{ if (typeof pseudonym != 'undefined') { }}  
+                {{ if (pseudonym.first_name || pseudonym.last_name) { }}
+                    <strong>{{= pseudonym.first_name ? pseudonym.first_name : "" }} {{= pseudonym.last_name ? pseudonym.last_name : "" }} {{= pseudonym.suffix ? pseudonym.suffix : "" }}</strong>
+                    <span class="minor-text">(<%= t "published-name" %>)</span>
+                    <br>
+                {{ } }}    
+            {{ } }}    
             {{= job_title ? job_title : '<span class="minor-text"><%= t "no-job-title-specified" %></span>' }}<br>
             {{= company ? company : '<span class="minor-text"><%= t "no-company-specified" %></span>' }}
         </p>
