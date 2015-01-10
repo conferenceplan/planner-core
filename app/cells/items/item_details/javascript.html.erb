@@ -4,6 +4,7 @@ ItemApp = new Backbone.Marionette.Application();
 
 ItemApp.ItemManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
+    var selectCallbacks = $.Callbacks();
 
     Picture = Backbone.RelationalModel.extend({
         schema : {
@@ -288,6 +289,11 @@ ItemApp.ItemManagement = (function(Backbone){
         
         eventAggregator.on("refreshTagList", syncModel, itemMdl);
 
+        selectCallbacks.fire({
+            id : id,
+            model : itemMdl
+        });
+
         return itemMdl;
     };
     
@@ -296,6 +302,10 @@ ItemApp.ItemManagement = (function(Backbone){
     return {
         
         ProgramItem : ProgramItem,
+        
+        addSelectCallback : function(func) {
+            selectCallbacks.add(func);
+        },
         
         showDetails : function(id) {
             clearDetails();
@@ -411,3 +421,7 @@ jQuery(document).ready(function() {
 });
 
 </script>
+
+<% @extra_javascript.each do |extra| %>
+    <%= render extra %>
+<% end %>

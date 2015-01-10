@@ -1,5 +1,8 @@
 <!--
 -->
+<% @extra_template.each do |extra| %>
+    <%= render extra %>
+<% end %>
 
 <script type="text/template" id="item-tab-layout-template">
     <div class="tab-content">
@@ -15,6 +18,9 @@
             <div id="tags-view"></div>
         </div>
         <div class="tab-pane" id="item-images-tab"><div id="item-images"></div></div>
+        <% @extra_tab_template.each do |extra| %>
+            <%= render extra %>
+        <% end %>
     </div>
 </script>
 
