@@ -32,7 +32,6 @@ $.widget( "cp.baseBootstrapTable" , {
         modal_edit_title    : "Edit",
         confirm_content     : "Are you sure you want to delete the selected data?",
         confirm_title       : "Confirm Deletion"
-        
         // data-item-id=<%= "#{thing.id}"
 
         // pager               : '#pager',
@@ -153,6 +152,11 @@ $.widget( "cp.baseBootstrapTable" , {
                 if (this.options.id) {
                     mdl.set(this.options.id_name, this.options.id);
                 }
+                
+                // iterate though extra_model_params
+                _.each(this.options.extra_model_params, function(val,key) {
+                    mdl.set(key, val);
+                });
             
                 var grid = this.options.grid;
 
@@ -275,6 +279,7 @@ $.widget( "cp.baseBootstrapTable" , {
             this.control = control = new TableControlView({
                     id                  : this.options.id,
                     id_name             : this.options.id_name,
+                    extra_model_params  : this.options.extra_model_params,
                     grid                : this.element,
                     modal_create_title  : this.options.modal_create_title,
                     modal_edit_title    : this.options.modal_edit_title,
