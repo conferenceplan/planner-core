@@ -14,9 +14,9 @@ end
 if person.bio_image && @partition_val
     listImage = person.bio_image
     listImage.scale = @scale
-    json.list_image     listImage.bio_picture.list.url.partition(@partition_val)[2]
-    json.detail_image   listImage.bio_picture.detail.url.partition(@partition_val)[2]
-    json.full_image     listImage.bio_picture.standard.url.partition(@partition_val)[2]
+    json.list_image     listImage.bio_picture.list.url.partition(@partition_val)[2] if listImage.bio_picture.list.url
+    json.detail_image   listImage.bio_picture.detail.url.partition(@partition_val)[2] if listImage.bio_picture.detail.url
+    json.full_image     listImage.bio_picture.standard.url.partition(@partition_val)[2] if listImage.bio_picture.standard.url
 end
 json.prog       person.published_programme_items.collect{|i| i.id}
 
