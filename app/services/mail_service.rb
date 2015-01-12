@@ -158,7 +158,7 @@ module MailService
         }, content
       ).deliver
       saveMailHistory(person, mailing, content, EmailStatus[:Sent])
-      transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState && !mailing.testrun
+      transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
     rescue => msg
       saveMailHistory(person, mailing, msg, EmailStatus[:Failed])
       # THROW ERROR - TODO
