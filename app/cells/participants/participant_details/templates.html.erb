@@ -1,3 +1,6 @@
+<% @extra_template.each do |extra| %>
+    <%= render extra %>
+<% end %>
 
 <script type="text/template" id="person-tab-layout-template">
     <div class="tab-content">
@@ -25,6 +28,9 @@
         <div class="tab-pane" id="emails-tab">
             <%= render_cell "communications/mail_history", :display %>
         </div>
+        <% @extra_tab_template.each do |extra| %>
+            <%= render extra %>
+        <% end %>
     </div>
 </script>
 

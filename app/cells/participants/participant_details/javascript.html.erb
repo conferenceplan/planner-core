@@ -4,6 +4,7 @@ ParticipantApp = new Backbone.Marionette.Application();
 
 ParticipantApp.PeopleManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
+    var selectCallbacks = $.Callbacks();
 
     //
     //
@@ -502,6 +503,11 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         }) );
         
         eventAggregator.on("refreshTagList", syncModel, invite_details);
+
+        selectCallbacks.fire({
+            id : id,
+            model : invite_details
+        });
         
         return invite_details;
     };
@@ -512,6 +518,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     //    
     return {
+        addSelectCallback : function(func) {
+            selectCallbacks.add(func);
+        },
         
         init : function() {
             personTabLayout = new PersonTabLayout();
@@ -629,4 +638,9 @@ jQuery(document).ready(function() {
     ParticipantApp.start();
 });
 </script>
+
+
+<% @extra_javascript.each do |extra| %>
+    <%= render extra %>
+<% end %>
 

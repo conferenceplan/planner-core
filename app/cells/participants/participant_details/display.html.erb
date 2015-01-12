@@ -8,7 +8,9 @@
     <li><a href="#availability-tab" data-toggle="tab"><%= t 'availability' %></a></li>
     <li><a href="#items-tab" data-toggle="tab"><%= t 'program-items' %></a></li>
     <li><a href="#emails-tab" data-toggle="tab"><%= t 'emails' %></a></li>
-    <%= extra_participant_tabs.html_safe %>
+    <% @extra_tab_display.each do |extra| %>
+        <%= render extra %>
+    <% end %>
 </ul>
 <div id="item-tabs" class="panel-body"></div>
 
