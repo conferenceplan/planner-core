@@ -18,16 +18,20 @@ class EditedBio < ActiveRecord::Base
 
   protected
   def fix_url(url)
-    res = url.strip # remove trailing and preceding whitespace
-    
-    # Add the protocol if not alreay present
-    if !res.blank?
-      unless res[/\Ahttp:\/\//] || res[/\Ahttps:\/\//]
-        res = "http://#{res}"
+    if url
+      res = url.strip # remove trailing and preceding whitespace
+      
+      # Add the protocol if not alreay present
+      if !res.blank?
+        unless res[/\Ahttp:\/\//] || res[/\Ahttps:\/\//]
+          res = "http://#{res}"
+        end
       end
+      
+      res
+    else
+      url
     end
-    
-    res
   end
 
 end
