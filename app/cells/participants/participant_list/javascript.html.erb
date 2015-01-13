@@ -19,6 +19,7 @@ jQuery(document).ready(function() {
         has_survey : [<%= @has_survey%>, '<%= t "survey"%>'],
 
         mailings : [<%= @includeMailings%>, '<%= t "mailings"%>' ],
+        mail_history : [<%= @includeMailHistory%>, '<%= t "mail history"%>' ],
         
         view : <%= @view %>,
         search : <%= @search %>,
@@ -34,6 +35,7 @@ jQuery(document).ready(function() {
         
         extraClause : "<%= @extraClause %>",
         includeMailings : <%= @includeMailings %>,
+        includeMailHistory : <%= @includeMailHistory %>,
         
         onlySurveyRespondents : <%= @onlySurveyRespondents %>,
         

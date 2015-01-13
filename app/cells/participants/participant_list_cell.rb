@@ -32,6 +32,7 @@ class Participants::ParticipantListCell < Cell::Rails
     
     @extraClause = args.has_key?(:extraClause) ? args[:extraClause] : nil
     @includeMailings = args.has_key?(:includeMailings) ? args[:includeMailings] : false
+    @includeMailHistory = args.has_key?(:includeMailHistory) ? args[:includeMailHistory] : false
     
     @multiselect = args.has_key?(:multiselect) ? args[:multiselect] : false
     
