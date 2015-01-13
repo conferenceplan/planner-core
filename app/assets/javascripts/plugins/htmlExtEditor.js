@@ -27,7 +27,7 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
             allowedContent : {
                 $1: {
                         // Use the ability to specify elements as an object.
-                        elements: CKEDITOR.dtd,
+                        elements: true,
                         attributes: true,
                         styles: true,
                         classes: true
