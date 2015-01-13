@@ -68,7 +68,8 @@ $.widget( "cp.baseBootstrapTable" , {
     },
 
     refresh : function() {
-        this.element.bootstrapTable('refresh');
+        var newUrl = this.createUrl();
+        this.element.bootstrapTable('refresh', { url : newUrl});
     },
     
     pageFrom : function() {
