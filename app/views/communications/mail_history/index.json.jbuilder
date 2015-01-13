@@ -27,6 +27,7 @@ json.rows @mail_history do |history|
     
     json.mailing do
         json.mail_use history.mailing ? history.mailing.mail_template.mail_use.name : ''
+        json.title history.mailing ? history.mailing.mail_template.title : ''
         json.mailing_number history.mailing ? history.mailing.mailing_number : ''
     end
 

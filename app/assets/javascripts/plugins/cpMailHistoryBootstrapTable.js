@@ -15,7 +15,7 @@ $.widget( "cp.mailHistoryBootstrapTable", $.cp.baseBootstrapTable , {
                 if (typeof row.mailing.mail_use === 'undefined') {
                     return "";
                 } else {
-                    return '<a href="#"><b>' + row.mailing.mail_use + ' ' + row.mailing.mailing_number + '</b></a>';
+                    return '<a href="#"><b>' + row.mailing.mailing_number + ' - ' + row.mailing.title + '</b></a>';
                 }
             }
         },

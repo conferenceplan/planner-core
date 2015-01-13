@@ -26,6 +26,10 @@ json.rowdata @people do |person|
     if @includeMailings
         json.set! "person[mailings]", person.mailings
     end
+
+    if @includeMailHistory
+        json.set! "person[mail_history]", person.mail_histories.collect{|h| h.testrun ? nil : h.mailing.mailing_number.to_s + ' - ' + h.mailing.mail_template.title }.compact
+    end
     
     json.set! "person[has_survey]", SurveyService.personHasSurveys( person) ? "Y" : "N"
     

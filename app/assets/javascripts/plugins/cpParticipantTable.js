@@ -211,6 +211,34 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     return res;
                 }
             }, {
+                name : 'person[mail_history]',
+                label : this.options.mail_history[1], //'mailings',
+                index : 'mailing_id',
+                hidden : !this.options.mail_history[0],
+                editable : false,
+                sortable : false,
+                search : true,
+                stype : "select",
+                searchoptions : {
+                    dataUrl: this.options.root_url + "communications/mailing/listWithBlank",
+                    clearSearch : false
+                },
+                width : 100,
+                formatter : function(cellvalue, options, rowObject) {
+                    var res = "";
+                    
+                    if (typeof rowObject['person[mail_history]'] != 'undefined') {
+                        for (i = 0 ; i < rowObject['person[mail_history]'].length; i++) {
+                            if (i > 0) {
+                                res += ",<br>";
+                            }
+                            res += rowObject['person[mail_history]'][i];
+                        }
+                    }
+                    
+                    return res;
+                }
+            }, {
                 name : 'person[has_survey]',
                 label : this.options.has_survey[1], //'Survey',
                 hidden : !this.options.has_survey[0],
@@ -328,7 +356,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
-        if (this.options.extraClause || this.options.onlySurveyRespondents || this.options.includeMailings) {
+        if (this.options.extraClause || this.options.onlySurveyRespondents || this.options.includeMailings || this.options.includeMailHistory) {
             urlArgs += '?';
         }
         if (this.options.extraClause) {
@@ -339,6 +367,12 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 urlArgs += "&";
             }
             urlArgs += "includeMailings=true";
+        }
+        if (this.options.includeMailHistory) {
+            if (urlArgs.length > 1) {
+                urlArgs += "&";
+            }
+            urlArgs += "includeMailHistory=true";
         }
         if (this.options.onlySurveyRespondents) {
             if (urlArgs.length > 0) {

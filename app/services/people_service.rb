@@ -97,8 +97,8 @@ module PeopleService
   #
   #
   #
-  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
-    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings)
+  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false, includeMailHistory=false)
+    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings, includeMailHistory)
     tagquery = DataService.genTagSql(context, tags)
 
     includes = [:pseudonym, :email_addresses]
@@ -106,17 +106,17 @@ module PeopleService
     args.merge! :include => includes
 
     if tagquery.empty?
-      Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters, extraClause)).count args
+      Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).uniq.count args
     else
-      eval %Q[Person#{tagquery}.where(#{self.constraints(includeMailings,mailing_id,onlySurveyRespondents,filters,extraClause)}).uniq.count( :all, ] + args.inspect + ")"
+      eval %Q[Person#{tagquery}.where(#{self.constraints(includeMailings,includeMailHistory,mailing_id,onlySurveyRespondents,filters,extraClause)}).uniq.count( :all, ] + args.inspect + ")"
     end
   end
 
   #
   #
   #
-  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false)
-    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, nil, includeMailings)
+  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, op=nil, scheduled=false, includeMailings=false, includeMailHistory=false)
+    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, nil, includeMailings, includeMailHistory)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
@@ -131,9 +131,9 @@ module PeopleService
     args.merge! :include => includes
     
     if tagquery.empty?
-      people = Person.where(self.constraints(includeMailings, mailing_id, onlySurveyRespondents, filters, extraClause)).includes(:pseudonym).all args
+      people = Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).includes(:pseudonym).uniq.all args
     else
-      people = eval %Q[Person#{tagquery}.uniq.where(#{self.constraints(includeMailings,mailing_id,onlySurveyRespondents,filters,extraClause)}).includes(:pseudonym).find :all, ] + args.inspect
+      people = eval %Q[Person#{tagquery}.uniq.where(#{self.constraints(includeMailings,includeMailHistory,mailing_id,onlySurveyRespondents,filters,extraClause)}).includes(:pseudonym).uniq.find :all, ] + args.inspect
     end
   end
   
@@ -142,7 +142,7 @@ module PeopleService
   #
   #
   #
-  def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false)
+  def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false, includeMailHistory=false)
     includeConState = false
     clause = DataService.createWhereClause(filters, 
           ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
@@ -210,6 +210,14 @@ module PeopleService
         args[:joins] += ' LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
       else  
         args.merge!( :joins => 'LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id' )
+      end
+    end
+
+    if includeMailHistory && clause && (clause[0].include? "mailing_id")
+      if args[:joins]
+        args[:joins] += ' LEFT JOIN mail_histories on people.id = mail_histories.person_id and mail_histories.testrun = 0'
+      else  
+        args.merge!( :joins => 'LEFT JOIN mail_histories on people.id = mail_histories.person_id and mail_histories.testrun = 0' )
       end
     end
     
