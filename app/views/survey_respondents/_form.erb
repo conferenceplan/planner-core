@@ -36,7 +36,7 @@
                     <a class="survey-help" href="#" data-original-title="Select this button if you plan to attend <%= @site_config.name%> and want to participate on the Program. Selecting the button will take you to the next page in the form."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
                 <div class="col-sm-3">
-                    <%= submit_tag "I do not wish to be on program", :name => "cancel", :confirm => "Are you sure?", :class => 'btn btn-primary' %>
+                    <%= submit_tag "Refuse Invitation", :name => "cancel", :confirm => "Are you sure?", :class => 'btn btn-primary' %>
                     <a class="survey-help" href="#" data-original-title="Select this button if you do not plan to attend <%= @site_config.name%>, or if you are attending and do not want to be on the Program."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
             </div>
@@ -46,7 +46,7 @@
                     <p>
                     The small blue <a class="survey-help" href="#"><i class='glyphicon glyphicon-info-sign'></i></a> icon provides a link to informational help text.
                     If you're unsure what to do, hover over the help icon.
-                    If you read the help text and are still uncertain what to do, write to <a href='mailto:<%= @ourEmail %>'>program at <%= @site_config.name%></a>
+                    If you read the help text and are still uncertain what to do, write to our <a href='mailto:<%= @ourEmail %>'>organiser(s) at <%= @site_config.name%></a>
                     </p>
                 </div>
             </div>
