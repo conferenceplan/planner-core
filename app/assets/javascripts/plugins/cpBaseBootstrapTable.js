@@ -79,7 +79,14 @@ $.widget( "cp.baseBootstrapTable" , {
     getSelected : function() {
         return this.selected;
     },
-    
+
+    setExtraModelParams : function(arg) {
+        this.options.extra_model_params = arg;
+        if (this.control) {
+            this.control.options.extra_model_params = arg;
+        };
+    },
+
     /*
      * 
      */    
