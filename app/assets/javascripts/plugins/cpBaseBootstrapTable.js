@@ -118,6 +118,16 @@ $.widget( "cp.baseBootstrapTable" , {
     /*
      * 
      */
+    setExtraModelParams : function(arg) {
+        this.options.extra_model_params = arg;
+        if (this.control) {
+            this.control.options.extra_model_params = arg;   
+        };
+    },
+    
+    /*
+     * 
+     */
     createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
         var modelType = this.options.modelType;
