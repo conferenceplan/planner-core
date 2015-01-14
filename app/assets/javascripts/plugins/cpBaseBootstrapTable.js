@@ -26,8 +26,11 @@ $.widget( "cp.baseBootstrapTable" , {
         modelTemplate       : null,
         showControls        : true,
         controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
-        // rowStyle            : function(row, idx) { return 'item'; },
-        
+        rowStyle            : function(row, idx) {
+                                            return {
+                                                    classes: 'item'
+                                                };
+                                        },
         modal_create_title  : "Create",
         modal_edit_title    : "Edit",
         confirm_content     : "Are you sure you want to delete the selected data?",
@@ -145,8 +148,7 @@ $.widget( "cp.baseBootstrapTable" , {
         
             initialize : function(options) {
                 this.options = options || {};
-                // this.template = _.template(this.templateStr);
-                this.template = _.template($('#table-control-template').html()); // TODO: CHECK
+                this.template = _.template($('#table-control-template').html());
             },
             
             // TODO - we need a way to go to the page that the new item is on...
@@ -278,11 +280,7 @@ $.widget( "cp.baseBootstrapTable" , {
                                                 'data-item-base' : (this.pageNumber -1) * this.pageSize
                                             };
                                         },
-                rowStyle            : function(row, idx) { 
-                                            return {
-                                                    classes: 'item'
-                                                };
-                                        }
+                rowStyle            : this.options.rowStyle
         });
 
         if (this.options.showControls) {
