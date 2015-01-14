@@ -92,7 +92,7 @@ class Person < ActiveRecord::Base
 
   has_many  :person_mailing_assignments
   has_many  :mailings, :through => :person_mailing_assignments
-  has_many  :mail_histories, :through => :person_mailing_assignments
+  has_many  :mail_histories #, :through => :person_mailing_assignments
   
   belongs_to      :invitation_category # TODO - SCOPE
   
