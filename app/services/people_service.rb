@@ -197,12 +197,10 @@ module PeopleService
     # if the where clause contains pseudonyms. then we need to add the join
     args = { :conditions => clause }
 
-    if includeConState || DataService.getFilterData( filters, 'person_con_states.invitestatus_id' ) || DataService.getFilterData( filters, 'person_con_states.acceptance_status_id' ) || onlySurveyRespondents
-      if args[:joins]
-        args[:joins] += ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
-      else  
-        args.merge!( :joins => 'LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id' )
-      end
+    if args[:joins]
+      args[:joins] += conStateJoinString
+    else  
+      args.merge!( :joins => conStateJoinString )
     end
 
     if includeMailings && clause && (clause[0].include? "mailing_id")
@@ -230,6 +228,10 @@ module PeopleService
     end
 
     args
+  end
+  
+  def self.conStateJoinString
+    ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
   end
   
   def self.constraints(*args)
