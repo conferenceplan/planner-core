@@ -18,6 +18,7 @@ $.widget( "cp.baseBootstrapTable" , {
         cardView            : false,
         showRefresh         : false,
         search              : true,
+        pagination          : true,
         pageSize            : 10,
         pageList            : [10, 25, 50, 100, 200],
         toolbar             : null,
@@ -25,11 +26,16 @@ $.widget( "cp.baseBootstrapTable" , {
         modelTemplate       : null,
         showControls        : true,
         controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
-        
+        rowStyle            : function(row, idx) {
+                                            return {
+                                                    classes: 'item'
+                                                };
+                                        },
         modal_create_title  : "Create",
         modal_edit_title    : "Edit",
         confirm_content     : "Are you sure you want to delete the selected data?",
         confirm_title       : "Confirm Deletion"
+        // data-item-id=<%= "#{thing.id}"
 
         // pager               : '#pager',
         // clearNotifyMethod   : function() {},
@@ -51,9 +57,17 @@ $.widget( "cp.baseBootstrapTable" , {
     
     render : function() {
         if (this.options.delayed) {
+            this.selected = this.model = null;
             this.createTable();
             this.options.delayed = false; // because it has now been rendered
+        } else {
+            this.reset();
         }
+    },
+
+    reset : function() {
+        var newUrl = this.createUrl();
+        this.element.bootstrapTable('refresh', { url : newUrl});
     },
 
     refresh : function() {
@@ -61,15 +75,12 @@ $.widget( "cp.baseBootstrapTable" , {
         this.element.bootstrapTable('refresh', { url : newUrl});
     },
     
+    pageFrom : function() {
+        this.element.bootstrapTable('pageFrom');
+    },
+    
     getSelected : function() {
         return this.selected;
-    },
-
-    setExtraModelParams : function(arg) {
-        this.options.extra_model_params = arg;
-        if (this.control) {
-            this.control.options.extra_model_params = arg;
-        };
     },
 
     /*
@@ -98,6 +109,24 @@ $.widget( "cp.baseBootstrapTable" , {
      * 
      */
     createColModel : function() {},
+
+    /*
+     * 
+     */
+    setControlOptions : function(options) {
+        this.control.options.id = options.id;
+        this.control.options.id_name = options.id_name;
+    },
+    
+    /*
+     * 
+     */
+    setExtraModelParams : function(arg) {
+        this.options.extra_model_params = arg;
+        if (this.control) {
+            this.control.options.extra_model_params = arg;   
+        };
+    },
     
     /*
      * 
@@ -119,8 +148,7 @@ $.widget( "cp.baseBootstrapTable" , {
         
             initialize : function(options) {
                 this.options = options || {};
-                // this.template = _.template(this.templateStr);
-                this.template = _.template($('#table-control-template').html()); // TODO: CHECK
+                this.template = _.template($('#table-control-template').html());
             },
             
             // TODO - we need a way to go to the page that the new item is on...
@@ -134,9 +162,14 @@ $.widget( "cp.baseBootstrapTable" , {
             
             newModel : function() {
                 var mdl = new this.options.modelType({});
-                // if (this.options.id) {
-                    // mdl.set(this.options.id_name, this.options.id);
-                // }
+                if (this.options.id) {
+                    mdl.set(this.options.id_name, this.options.id);
+                }
+                
+                // iterate though extra_model_params
+                _.each(this.options.extra_model_params, function(val,key) {
+                    mdl.set(key, val);
+                });
             
                 var grid = this.options.grid;
 
@@ -231,7 +264,7 @@ $.widget( "cp.baseBootstrapTable" , {
                 cache: false,
                 striped: true,
                 sidePagination: 'server',
-                pagination: true,
+                pagination: this.options.pagination,
                 pageSize: this.options.pageSize,
                 pageList: this.options.pageList,
                 search: this.options.search,
@@ -240,7 +273,14 @@ $.widget( "cp.baseBootstrapTable" , {
                 columns: this.createColModel(),
                 searchAlign: 'right',
                 // maintainSelected : true,
-                toolbar: this.options.toolbar
+                toolbar: this.options.toolbar,
+                rowAttributes       : function(row, idx) {
+                                            return {
+                                                'data-item-id' : row.id,
+                                                'data-item-base' : (this.pageNumber -1) * this.pageSize
+                                            };
+                                        },
+                rowStyle            : this.options.rowStyle
         });
 
         if (this.options.showControls) {
@@ -248,6 +288,7 @@ $.widget( "cp.baseBootstrapTable" , {
             this.control = control = new TableControlView({
                     id                  : this.options.id,
                     id_name             : this.options.id_name,
+                    extra_model_params  : this.options.extra_model_params,
                     grid                : this.element,
                     modal_create_title  : this.options.modal_create_title,
                     modal_edit_title    : this.options.modal_edit_title,
