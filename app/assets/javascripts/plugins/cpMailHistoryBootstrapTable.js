@@ -57,7 +57,7 @@ $.widget( "cp.mailHistoryBootstrapTable", $.cp.baseBootstrapTable , {
         this.options.extraClause = "person_id=" + options.person_id;
 
         if (!this.options.delayed) {
-            this.refresh();
+            this.reset();
         } else {
             this.render();
         }

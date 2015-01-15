@@ -65,7 +65,7 @@ module PlannerCore
       Dir.glob(PlannerCore::Engine.config.paths["lib"].expanded[0] + "/decorators/**/*_decorator*.rb").each do |c|
         require_dependency(c)
       end
-      Dir.glob(PlannerCore::Engine.config.paths["lib"].expanded[0] + "/planner/controller_additions.rb").each do |c|
+      Dir.glob(PlannerCore::Engine.config.paths["lib"].expanded[0] + "/planner/**/*.rb").each do |c|
         require_dependency(c)
       end
     end
@@ -92,6 +92,7 @@ module PlannerCore
     initializer :before_initialize do
       ActionController::Base.send(:include, Planner::ControllerAdditions)
       Cell::Rails.send(:include, Planner::ControllerAdditions)
+      ActiveRecord::Base.send(:include, Planner::Linkable)
     end    
   end
 end

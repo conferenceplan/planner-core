@@ -4,8 +4,8 @@ class CreateLinks < ActiveRecord::Migration
       t.integer :linkedto_id
       t.string  :linkedto_type
 
-      t.integer :linkedfrom_id
-      t.string  :linkedfrom_type
+      # t.integer :linkedfrom_id
+      # t.string  :linkedfrom_type
 
       t.timestamps
       t.column :lock_version, :integer, { :default => 0 }
@@ -13,8 +13,8 @@ class CreateLinks < ActiveRecord::Migration
 
     add_index :links, :linkedto_id
     add_index :links, [:linkedto_id, :linkedto_type]
-    add_index :links, :linkedfrom_id
-    add_index :links, [:linkedfrom_id, :linkedfrom_type]
+    # add_index :links, :linkedfrom_id
+    # add_index :links, [:linkedfrom_id, :linkedfrom_type]
 
   end
 end
