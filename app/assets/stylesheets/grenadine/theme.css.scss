@@ -915,3 +915,20 @@ a.mtooltip span
     border-radius:4px;
     box-shadow: 5px 5px 8px #CCC;
 }
+/* TASKS */
+.item.task-completed td {
+    text-decoration: line-through;
+    color: #CCC;
+}
+.task-priority-high {
+    color: red;
+}
+.task-state-completed {
+    background-color: green;
+    border-color: green;
+    padding: 2px 6px 2px 6px;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;  
+    font-size: small;
+}
