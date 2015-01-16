@@ -3,6 +3,17 @@
 #
 class LinkedResourceController < ResourceController
 
+  def collection
+    linkedto_type = params[:linkedto_type] ? params[:linkedto_type] : nil
+    linkedto_id = params[:linkedto_id] ? params[:linkedto_id].to_i : nil
+    
+    if linkedto_type
+      super.joins(:links).where({'links.linkedto_type' => linkedto_type, 'links.linkedto_id' => linkedto_id})
+    else
+      super  
+    end
+  end
+
   def create
     begin
       @object.save!

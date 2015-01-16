@@ -92,7 +92,11 @@ module PlannerCore
     initializer :before_initialize do
       ActionController::Base.send(:include, Planner::ControllerAdditions)
       Cell::Rails.send(:include, Planner::ControllerAdditions)
-      ActiveRecord::Base.send(:include, Planner::Linkable)
     end    
+
+    initializer :after_initialize do
+      ActiveRecord::Base.send(:include, Planner::Linkable)
+      Planner::Linkable.setup
+    end
   end
 end

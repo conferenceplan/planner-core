@@ -8,8 +8,6 @@ class Person < ActiveRecord::Base
   # Put in audit for people
   audited :allow_mass_assignment => true
   
-  linked
-
   has_many  :addresses, :dependent => :delete_all
   
   has_many  :postal_addresses, :through => :addresses,
