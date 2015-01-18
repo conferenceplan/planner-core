@@ -7,7 +7,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
     MailTemplate = Backbone.DeepModel.extend({
         urlRoot : "<%= baseUri + '/communications/mail_templates' %>",
         schema : {
-            title           : { type : 'Text', title : '<%= t "title" %>' },
+            title           : { type : 'Text', title : '<%= t "template-name" %>' },
 
             mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>',
                                             options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
@@ -20,7 +20,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
                                         },
 
             subject         : { type : 'Text', title : '<%= t "mail-subject-line" %>' },
-            content         : { type : 'HtmlExt', title : '<%= t "mail-content" %>', imagetype : 'PlannerMobile::MobileContentImage', gallery : 'mails', editorAttrs : {rows : 40} }
+            content         : { type : 'HtmlExt', title : '<%= t "mail-content" %>', imagetype : 'PlannerMobile::MobileContentImage', gallery : 'mails', editorAttrs : {rows : 50} }
         }
     });
     

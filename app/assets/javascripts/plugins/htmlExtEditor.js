@@ -16,6 +16,7 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
         var imagetype = this.options.schema.imagetype;
         var gallery = this.options.schema.gallery;
         this.$el.ckeditor({
+            
             filebrowserUploadUrl : '/gallery_images/' + imagetype + '/' + gallery, // This is the URL for uploading images ...
             filebrowserBrowseUrl : '/gallery_images/' + imagetype + '/' + gallery, // The URL for browsing images
             // Prevent the translation of html elements (< and >) to encodings, so we can include "macros"
@@ -24,6 +25,7 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
             entities_latin : false,
             entities_additional : '',
             htmlEncodeOutput : false,
+            /* 
             allowedContent : {
                 $1: {
                         // Use the ability to specify elements as an object.
@@ -33,10 +35,15 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
                         classes: true
                     }
                 },
+            */    
+            extraAllowedContent : 'style[id]',
+            allowedContent: true,
             disallowedContent : 'script; *[on*]',
             removePlugins : "elementspath,flash",
             height : '40em',
             enterMode : CKEDITOR.ENTER_P,
+            extraPlugins: 'templates',
+            template_files: '/assets/ckeditor/plugins/templates/templates/default.js',
             shiftEnterMode: CKEDITOR.ENTER_BR,
             toolbar : 'CPlan',
             toolbar_CPlan : [
@@ -48,9 +55,14 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
                 // '/',
                 { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
                 { name: 'colors', items : [ 'TextColor','BGColor' ] },
-                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] },
+                { name: 'grenadine-templates', items : ['Templates' ] }
             ]
+            
+            
         });
+        
+        
     },
     
     render: function() {

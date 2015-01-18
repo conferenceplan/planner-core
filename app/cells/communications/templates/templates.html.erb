@@ -6,7 +6,6 @@
         <div id="mail-template-control-div"></div>
     </div>
     <div class="row voffset10">
-        
         <div id="mail-template-region-div"></div>
     </div>
 </section>
@@ -34,14 +33,14 @@
 </script>
 
 <script type="text/template" id="mail-template-data-template">
-    <dl class="dl-horizontal">
-        <dt class=""><%= t "title" %></dt><dd>{{= title }}</dd> 
+    <dl class="dl-horizontal dl-horizontal-small dt30">
+        <dt class=""><%= t "template-name" %></dt><dd>{{= title }}</dd> 
         <dt><%= t "mail-use" %></dt><dd>{{= mail_use_name }}</dd> 
         <dt><%= t "transition-person-invite-to" %></dt><dd>{{= transiton_invite_status_name }}</dd> 
-        <dt><%= t "survey" %></dt><dd>{{= survey_id ? survey : "&nbsp;" }}</dd> 
+        <dt><%= t "survey" %></dt><dd>{{= survey_id ? survey : "<span class='minor-text'>("}}<%= t 'none' %>){{="</span>" }}</dd> 
         <dt><%= t "mail-subject-line" %></dt><dd>{{= subject }}</dd> 
     </dl>
-    <dl class="dl-airy">
-        <dt><%= t "mail-content" %></dt><dd><pre>{{= content }}</pre></dd> 
-    </dl>
+    <!--<h2><%= t "mail-content" %></h2>-->
+    <div id="email-template-preview-area">{{= content }}</div>
+    <div class="voffset10"></div>
 </script>
