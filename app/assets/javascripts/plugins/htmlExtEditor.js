@@ -42,8 +42,9 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
             removePlugins : "elementspath,flash",
             height : '40em',
             enterMode : CKEDITOR.ENTER_P,
-            extraPlugins: 'templates',
+            extraPlugins: 'templates,htmlbuttons',
             template_files: '/assets/ckeditor/plugins/templates/templates/default.js',
+            contentsCss : '/assets/grenadine/ckeditor-edit.css',
             shiftEnterMode: CKEDITOR.ENTER_BR,
             toolbar : 'CPlan',
             toolbar_CPlan : [

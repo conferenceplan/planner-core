@@ -19,7 +19,17 @@
 
 <script type="text/template" id="mail-template-template">
     <td>
-        <a href="#" data-toggle="tab" class="model-select-button">{{= title }} ({{= mail_use_name }})</a>
+        <table>
+            <tr>
+                <td>
+                    <img src="/assets/icons/email-template-icon.png" width="40">
+                </td>
+                <td style="padding-left: 10px;">
+                    <a href="#" data-toggle="tab" class="model-select-button">{{= title }}</a>
+                    <br><span class='minor-text'>({{= mail_use_name }})</span>
+                </td>
+            </tr>
+        </table>
     </td>
     <td align="right">
         <button class="model-delete-button btn btn-primary btn-xs"><small><i class="glyphicon glyphicon-trash"></i></small></button>
@@ -34,13 +44,27 @@
 
 <script type="text/template" id="mail-template-data-template">
     <dl class="dl-horizontal dl-horizontal-small dt30">
-        <dt class=""><%= t "template-name" %></dt><dd>{{= title }}</dd> 
+        <dt class=""><%= t "template-name" %></dt><dd><strong>{{= title }}</strong></dd> 
         <dt><%= t "mail-use" %></dt><dd>{{= mail_use_name }}</dd> 
-        <dt><%= t "transition-person-invite-to" %></dt><dd>{{= transiton_invite_status_name }}</dd> 
-        <dt><%= t "survey" %></dt><dd>{{= survey_id ? survey : "<span class='minor-text'>("}}<%= t 'none' %>){{="</span>" }}</dd> 
+        <dt><%= t "transition-person-invite-to" %></dt>
+            <dd>
+                {{ if (transiton_invite_status_name) { }}
+                    {{= transiton_invite_status_name }}
+                {{ } else { }}
+                    <span class='minor-text'>(<%= t 'dont-change-status' %>)</span>
+                {{ }; }}
+            </dd>
+        <dt><%= t "survey" %></dt>
+            <dd>
+                {{ if (survey_id) { }}
+                    {{= survey }}
+                {{ } else { }}
+                    <span class='minor-text'>(<%= t 'none' %>)</span>
+                {{ }; }}
+            </dd> 
         <dt><%= t "mail-subject-line" %></dt><dd>{{= subject }}</dd> 
     </dl>
-    <!--<h2><%= t "mail-content" %></h2>-->
+    <h3 class="h3-underlined"><%= t "mail-template-contents" %></h3>
     <div id="email-template-preview-area">{{= content }}</div>
     <div class="voffset10"></div>
 </script>
