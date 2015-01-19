@@ -24,16 +24,17 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
             entities_latin : false,
             entities_additional : '',
             htmlEncodeOutput : false,
-            allowedContent : {
-                $1: {
-                        // Use the ability to specify elements as an object.
-                        elements: true,
-                        attributes: true,
-                        styles: true,
-                        classes: true
-                    }
-                },
-            disallowedContent : 'script; *[on*]',
+            // allowedContent : {
+                // $1: {
+                        // // Use the ability to specify elements as an object.
+                        // elements: CKEDITOR.dtd,
+                        // attributes: true,
+                        // styles: true,
+                        // classes: true
+                    // }
+                // },
+            allowedContent : true,
+            extraAllowedContent : 'style[id]',
             removePlugins : "elementspath,flash",
             height : '40em',
             enterMode : CKEDITOR.ENTER_P,
