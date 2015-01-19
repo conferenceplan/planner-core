@@ -22,8 +22,8 @@ private
   # we  want to check that this has not been used by a mailing
   def check_for_mailings
     if mailings.any?
-      # errors.add :base, "can not delete a template that is being used in a mailing"
-      raise "can not delete a template that is being used in a mailing"
+      # errors.add :base, "Sorry, you can't delete a template that's being used in a mailing."
+      raise "Sorry, you can't delete a template that's being used in a mailing."
     end
   end
 

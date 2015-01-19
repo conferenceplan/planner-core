@@ -932,3 +932,19 @@ a.mtooltip span
     text-decoration: none;  
     font-size: small;
 }
+
+/* for CKEditor */
+.cke_button_label.cke_button__templates_label{
+   display: inline;
+   color: red;
+   font-weight: bold;
+}
+/* This style identifies visually the editable areas in the mail templates */
+.grenadine-editable, a span.grenadine-editable {
+    border: 1px blue dashed;
+    padding: 3px;
+}
+.grenadine-editable, a span.grenadine-editable {
+    border: none;
+}
+

@@ -24,20 +24,15 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
             entities_latin : false,
             entities_additional : '',
             htmlEncodeOutput : false,
-            // allowedContent : {
-                // $1: {
-                        // // Use the ability to specify elements as an object.
-                        // elements: CKEDITOR.dtd,
-                        // attributes: true,
-                        // styles: true,
-                        // classes: true
-                    // }
-                // },
             allowedContent : true,
             extraAllowedContent : 'style[id]',
+            disallowedContent : 'script; *[on*]',
             removePlugins : "elementspath,flash",
             height : '40em',
             enterMode : CKEDITOR.ENTER_P,
+            extraPlugins: 'templates,htmlbuttons',
+            template_files: '/assets/ckeditor/plugins/templates/templates/default.js',
+            contentsCss : '/assets/grenadine/ckeditor-edit.css',
             shiftEnterMode: CKEDITOR.ENTER_BR,
             toolbar : 'CPlan',
             toolbar_CPlan : [
@@ -49,9 +44,14 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
                 // '/',
                 { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
                 { name: 'colors', items : [ 'TextColor','BGColor' ] },
-                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] },
+                { name: 'grenadine-templates', items : ['Templates' ] }
             ]
+            
+            
         });
+        
+        
     },
     
     render: function() {
