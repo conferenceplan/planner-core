@@ -79,6 +79,10 @@ $.widget( "cp.baseBootstrapTable" , {
         this.element.bootstrapTable('pageFrom');
     },
     
+    pageFrom : function() {
+        this.element.bootstrapTable('pageFrom');
+    },
+    
     getSelected : function() {
         return this.selected;
     },
