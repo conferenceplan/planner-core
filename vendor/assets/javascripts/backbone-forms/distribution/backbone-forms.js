@@ -539,6 +539,16 @@ Form.validators = (function() {
        if ((options.match) ? !options.regexp.test(value) : options.regexp.test(value)) return err;
     };
   };
+
+    validators.number = function(options) {
+        options = _.extend({
+            type: 'number',
+            message: this.errMessages.number,
+            regexp: /^[0-9]*\.?[0-9]*?$/
+        }, options);
+        
+        return validators.regexp(options);
+    };
   
   validators.email = function(options) {
     options = _.extend({

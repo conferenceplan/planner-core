@@ -402,6 +402,9 @@ ConfigApp.ConfigManagement = (function(Backbone){
      * 
      */
     return {
+        configRegion : configRegion,
+        ConfigLayout : ConfigLayout,
+         
         init : function(options) {
             new Workspace();
             Backbone.history.start();
@@ -419,3 +422,7 @@ jQuery(document).ready(function() {
 });
 
 </script>
+
+<% @extra_javascript.each do |extra| %>
+    <%= render extra %>
+<% end %>

@@ -24,6 +24,9 @@
                     <li>
                         <a href="#email_config"><%= t "email-addresses" %></a>
                     </li>
+                    <% @extra_conf_config_menu.each do |extra| %>
+                        <%= render extra %>
+                    <% end %>
                 <% end %>
                 <% if allowed? :manage_config %>
                     <li>
