@@ -28,7 +28,7 @@
       var schema = this.schema;
       if (!schema) throw new Error("Missing required option 'schema'");
 
-      this.template = options.template || this.constructor.template;
+      this.template = options.schema.listTemplate || options.template || this.constructor.template;
 
       //Determine the editor to use
       this.Editor = (function() {
@@ -248,7 +248,7 @@
 
     //STATICS
     template: _.template('\
-      <div>\
+      <div>hh\
         <div data-items></div>\
         <button type="button" data-action="add">Add</button>\
       </div>\
