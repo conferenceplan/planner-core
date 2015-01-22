@@ -281,7 +281,7 @@ module PublishedProgramItemsService
     # People removed - we only want to know who no longer has any items assigned to them, otherwise these are updated people (i.e. removed from an item)
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PublishedProgrammeItemAssignment') AND (audits.action = 'destroy')", pubDate]
-    removed = audits.collect {|a| (Person.find(a.audited_changes['person_id']).publishedProgrammeItemAssignments.size == 0) ? a.audited_changes['person_id'] : nil }.compact.uniq
+    removed = audits.collect {|a| (Person.exists? a.audited_changes['person_id']) ? (Person.find(a.audited_changes['person_id']).publishedProgrammeItemAssignments.size == 0) ? a.audited_changes['person_id'] : nil : a.audited_changes['person_id'] }.compact.uniq
     
     { :updatedPeople => updateOrAdded, :removedPeople => removed }
   end
