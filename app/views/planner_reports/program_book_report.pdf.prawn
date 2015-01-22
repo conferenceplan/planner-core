@@ -5,7 +5,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     
     page_height = pdf.bounds.top_right[1]
     page_width = pdf.bounds.top_right[0]
-    nbrColumns = page_width / 110
+    nbrColumns = (page_width / 110).to_i
 
     allRooms = @rooms.collect {|r| r.name}
     nbrTables = (allRooms.length / nbrColumns) + 1
