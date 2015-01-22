@@ -135,6 +135,15 @@ $.widget( "cp.baseBootstrapTable" , {
     /*
      * 
      */
+    unSelect : function() {
+        that.model = null;
+        that.selected = null;
+        that.selected_element = null;
+    },
+    
+    /*
+     * 
+     */
     createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
         var modelType = this.options.modelType;
