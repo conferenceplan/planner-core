@@ -74,7 +74,7 @@ module Planner
       #
       #
       def linkable(options = {})
-        has_many  :links, :dependent => :delete_all
+        has_many  :links #, :dependent => :delete_all
 
         Planner::Linkable.config.linkable_types.each do |linkable_type|
           has_many  linkable_type.name.pluralize.downcase.to_sym, :through => :links,
