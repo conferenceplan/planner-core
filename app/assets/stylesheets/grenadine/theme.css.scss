@@ -955,3 +955,8 @@ a.mtooltip span
 .currency {
     color: #888;
 }
+
+.table tbody tr td, .table thead tr th {
+    border-left: none;
+    border-right: none;
+}
