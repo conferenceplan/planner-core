@@ -407,7 +407,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
          
         init : function(options) {
             new Workspace();
-            Backbone.history.start();
         }
     }
     
@@ -421,6 +420,9 @@ jQuery(document).ready(function() {
     ConfigApp.start({});
 });
 
+$( window ).load(function() {
+   Backbone.history.start();
+});
 </script>
 
 <% @extra_javascript.each do |extra| %>
