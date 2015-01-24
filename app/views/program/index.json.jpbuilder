@@ -1,3 +1,4 @@
+json.cache! [request.host, request.path, params[:scale]] do
 json.array! @programmeItems.each do |item|
 
     json.id         item.id    
@@ -37,4 +38,5 @@ json.array! @programmeItems.each do |item|
         end
     end
 
+end
 end
