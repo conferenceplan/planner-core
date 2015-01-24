@@ -13,9 +13,9 @@ class ProgramController < ApplicationController
   caches_action :participants,
                 :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} },
                 :unless => Proc.new { |c| !c.params[:callback].blank? }
-  caches_action :index,
-                :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} },
-                :unless => Proc.new { |c| !c.params[:callback].blank? }
+  # caches_action :index,
+                # :cache_path => Proc.new { |c| c.params.delete_if { |k,v| k.starts_with?('sort')  || k.starts_with?('_dc') || k.starts_with?('undefined')} },
+                # :unless => Proc.new { |c| !c.params[:callback].blank? }
   
   #
   # Get the full programme
@@ -41,7 +41,15 @@ class ProgramController < ApplicationController
     
     return conditions
   end
-  
+
+  def json_fragment_exist?(key, options = nil)
+    return unless cache_configured?
+    key = ::ActiveSupport::Cache.expand_cache_key(key, :jbuilder)
+    instrument_fragment_cache :exist_fragment?, key do
+      cache_store.exist?(key, options)
+    end
+  end
+
   def index
     stream = params[:stream]
     layout = params[:layout]
@@ -50,11 +58,9 @@ class ProgramController < ApplicationController
     lastname = params[:lastname]
     @singleVenue = Venue.count == 1
 
-
-    PublishedProgrammeItem.uncached do
+    if !json_fragment_exist?( [request.host, request.path, params[:scale]] )
       conditions = getConditions(params)
       
-      # @rooms = PublishedProgramItemsService.getPublishedRooms day, name, lastname
       if stream
         @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day, name, lastname
       else
@@ -69,6 +75,7 @@ class ProgramController < ApplicationController
         # format.js #{ render :json }
       end
     end
+
   end
   
   #
