@@ -33,11 +33,11 @@
             <div class="row row-buffered">
                 <div class="col-sm-3 col-sm-offset-2">
                     <%= form.submit button, :class => 'btn btn-primary' %>
-                    <a class="survey-help" href="#" data-original-title="Select this button if you plan to attend <%= @site_config.name%> and want to participate on the Program. Selecting the button will take you to the next page in the form."><i class='glyphicon glyphicon-info-sign'></i></a>
+                    <a class="survey-help" href="#" data-original-title="Select this button if you accept the invitation from <%= @site_config.name%>. Selecting the button will take you to the next page in the form."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
                 <div class="col-sm-3">
-                    <%= submit_tag "Refuse Invitation", :name => "cancel", :confirm => "Are you sure?", :class => 'btn btn-primary' %>
-                    <a class="survey-help" href="#" data-original-title="Select this button if you do not plan to attend <%= @site_config.name%>, or if you are attending and do not want to be on the Program."><i class='glyphicon glyphicon-info-sign'></i></a>
+                    <%= submit_tag "I decline the invitation", :name => "cancel", :confirm => "Are you sure?", :class => 'btn btn-primary' %>
+                    <a class="survey-help" href="#" data-original-title="Select this button if you do not accept the invitation for <%= @site_config.name%>."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
             </div>
         </fieldset>

@@ -76,7 +76,9 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     pdf.text  '<b>Removed People</b>', :size => 20, :inline_format => true, :fallback_fonts => fallback_fonts
     
     @changes[:removedPeople].each do |person_id|
-        person = Person.find person_id
-        pdf.pad_bottom(5) {pdf.text  person.getFullPublicationName, :fallback_fonts => fallback_fonts }
+        if Person.exists? person_id
+            person = Person.find person_id
+            pdf.pad_bottom(5) {pdf.text  person.getFullPublicationName, :fallback_fonts => fallback_fonts }
+        end
     end
 end
