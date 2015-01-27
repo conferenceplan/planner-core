@@ -120,7 +120,9 @@ wb.add_worksheet(name: "Removed People") do |sheet|
         ]
 
     @changes[:removedPeople].each do |person_id|
-        person = Person.find person_id
-        sheet.add_row [person.getFullPublicationName]
+        if Person.exists? person_id
+            person = Person.find person_id
+            sheet.add_row [person.getFullPublicationName]
+        end
     end
 end

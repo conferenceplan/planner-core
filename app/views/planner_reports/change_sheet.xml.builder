@@ -89,9 +89,11 @@ xml.changes do
 
     xml.removed_people do
         @changes[:removedPeople].each do |person_id|
-            person = Person.find person_id
-            xml.person do
-                xml.name person.getFullPublicationName
+            if Person.exists? person_id
+                person = Person.find person_id
+                xml.person do
+                    xml.name person.getFullPublicationName
+                end
             end
         end
     end
