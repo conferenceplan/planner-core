@@ -14,6 +14,7 @@ $.widget( "cp.baseBootstrapTable" , {
         getGridData         : "",               // for getting the data (part of the URL)
         delayed             : false,
         selectNotifyMethod  : function(row, data) { return null; },
+        onloadMethod        : function() { return null; },
         extraClause         : null,
         cardView            : false,
         showRefresh         : false,
@@ -146,6 +147,7 @@ $.widget( "cp.baseBootstrapTable" , {
      */
     createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
+        var onloadMethod = this.options.onloadMethod;
         var modelType = this.options.modelType;
         var modelTemplate = this.options.modelTemplate;
         var that = this;
@@ -272,6 +274,7 @@ $.widget( "cp.baseBootstrapTable" , {
                             jQuery(el).find(selector).addClass('success');
                         };
                     };
+                    onloadMethod();
                 },
                 method: 'get',
                 cache: false,
