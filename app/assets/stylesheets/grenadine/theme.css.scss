@@ -961,4 +961,10 @@ a.mtooltip span
     border-left: none;
     border-right: none;
 }
-
+.table tbody tr td.table-finance-cell {
+    border-left: 1px solid #DDD;
+    border-right: 1px solid #DDD;
+}
+.modal-content {
+    border: 3px #CCC solid;
+}
