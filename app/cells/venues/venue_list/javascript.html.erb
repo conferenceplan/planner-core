@@ -1,90 +1,41 @@
 <script type="text/javascript">
 
-VenueApp = new Backbone.Marionette.Application();
-
-VenueApp.VenueManagement = (function(Backbone){
-
-    Venue = Backbone.Model.extend({
-        schema : {
-            name : { type : 'Text', title : '<%= t "name" %>' },
-            sort_order : { type : 'Number', title : '<%= t "sort-order" %>' }
-        },
-        urlRoot : "<%= baseUri + '/venue' %>"
-    });
-    
-    VenueCollection = Backbone.Collection.extend({
-        model : Venue
-    });
-    
-    VenueLayout = Backbone.Marionette.Layout.extend({ // TODO
-        template: "#venue-layout-template",
-        
-        regions : {
-            venueControlRegion: "#venue-control-div",
-            venueRegion: "#venue-region-div",
-        },
-    });
-    
-    var tabLists = [];
-    
-    function clearDetails() {
-        _.invoke(tabLists, 'reset' );
-    };
-    
-    function showVenues() {
-        venueLayout = new VenueLayout();
-        venueLayout.render();
-        $('#venue-region-view').html(venueLayout.el);
-        
-        TabUtils.createTabControl({
-            template : "#venue-control-template",
-            modelType : Venue,
-            view_refresh_event : "venue:refresh",
-            modal_create_title : '<%= t "create-venue" %>',
-            region : venueLayout.venueControlRegion,
-        });
-
-        
-        tabLists.push( TabUtils.createTabListContent({
-            collectionType : VenueCollection,
-            collection_attributes : { "class" : "list-group" },
-            collection_tagName : 'div',
-            // view_attributes : { "class" : "list-group-item" },
-            url : "<%= baseUri + '/venue/list.json' %>",
-            template : "#venue-template",
-            view_refresh_event : "venue:refresh",
-            region : venueLayout.venueRegion,
-            newTitle : "Create Venue",
-            editTitle : "Edit Venue",
-            // tagName : 'div',
-            selectFn : selectVenue
-        }) );
-    };
-    
-    function selectVenue(id) {
-        <%= @selectNotifyMethod %>(id);
-    };
-    
-    return {
-        init : function() {
-            // Get the list of venues and display them
-            showVenues();
-        },
-        
-        clearDetails : function() {
-        },
-        
-        selectVenue : function(id) {
-            <%= @selectNotifyMethod %>(id);
-        },
-    }
-
-
-})(Backbone);
-
 jQuery(document).ready(function() {
-    VenueApp.start();
-    VenueApp.VenueManagement.init();
+    
+    jQuery("#<%= @place %>").venuesTable({
+        
+        selectNotifyMethod : <%= @selectNotifyMethod %>,
+        root_url : "<%= @root_url %>",
+        baseUrl : "<%= @baseUrl %>",
+        getGridData : "<%= @getGridData %>",
+        
+        delayed : <%= @delayed %>,
+        
+        pageSize : <%= @pageSize %>,
+        pageList : <%= @pageList %>,
+        search : <%= @search %>,
+        showRefresh : <%= @showRefresh %>,
+        cardView : <%= @cardView %>,
+        
+        toolbar : "<%= @toolbar %>",
+        controlDiv : "<%= @controlDiv %>",
+        
+        extraClause : "<%= @extraClause %>",
+        
+        modelType : <%= @modelType %>,
+        modelTemplate : "<%= @modelTemplate %>",
+
+        modal_create_title  : '<%= t "create-venue" %>',
+        modal_edit_title    : '<%= t "edit-venue" %>',
+        confirm_content     : '<%= (t "delete-selected-venue").html_safe %>',
+        confirm_title       : '<%= t "delete-confirmation" %>',
+        
+        name                : '<%= t "name" %>',
+        sort_order          : '<%= t "sort-order" %>',
+        
+        showControls       : <%= @showControls %>
+        
+    });
 });
 
 </script>

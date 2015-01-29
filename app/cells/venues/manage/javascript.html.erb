@@ -1,15 +1,27 @@
 <script type="text/javascript">
 
-RoomApp = new Backbone.Marionette.Application();
+VenueApp = new Backbone.Marionette.Application();
 
-RoomApp.RoomManagement = (function(Backbone){
-    
+VenueApp.VenueManagement = (function(Backbone){
+    // var selectCallbacks = $.Callbacks();
+    // var selectVenueCallbacks = $.Callbacks();
+
+    var current_room_id = current_venue_id = 0;
+
+    Venue = Backbone.Model.extend({
+        schema : {
+            name : { type : 'Text', title : '<%= t "name" %>' },
+            sort_order : { type : 'Number', title : '<%= t "sort-order" %>' }
+        },
+        urlRoot : "<%= baseUri + '/venue' %>"
+    });
+
     Room = Backbone.Model.extend({
         schema : {
             name : { type : 'Text', title : '<%= t "name" %>' },
             purpose : { type : 'Text', title : '<%= t "purpose" %>' },
             comment : { type : 'Text', title : '<%= t "comments" %>' },
-            sort_order : { type : 'Number', title : '<%= t "sort-order" %>' }
+            sort_order : { type : 'Number', title : '<%= t "sort-order" %>' },
         },
         urlRoot : "<%= baseUri + '/rooms' %>"
     });
@@ -35,7 +47,41 @@ RoomApp.RoomManagement = (function(Backbone){
             roomSetupRegion: "#room-setup-region-div",
         },
     });
+
+
+    ListControlView = Backbone.Marionette.ItemView.extend({
+        events : {
+            "click .add-button"       : "addItem",
+            "click .remove-button"    : "removeItem",
+        },
     
+        initialize : function(options) {
+            this.options = options || {};
+            this.template = _.template($('#controls-template').html());
+        },
+        
+        addItem : function() {
+            if (this.options.form) {
+                form = this.options.form;
+                endPoint = this.options.endPoint
+                refreshFn = this.options.refresh
+                var modal = new AppUtils.FormModal({
+                    form: form,
+                    endPoint: endPoint,
+                    refresh : refreshFn
+                });
+                modal.render();
+            }
+        },
+    
+        removeItem : function() {
+            if (this.options.removeFn) {
+                this.options.removeFn();
+            }
+        }
+    });
+
+
     var tabLists = [];
     var tabControls = [];
     
@@ -44,6 +90,7 @@ RoomApp.RoomManagement = (function(Backbone){
         _.invoke(tabControls, 'close' );
     };
     
+    var roomSetupLayout = null;
     function showSetups(id) {
         // need to get the room
         var theRoom = new Room({ id : id});
@@ -61,14 +108,8 @@ RoomApp.RoomManagement = (function(Backbone){
             modal_create_title : '<%= t "create-room-setup" %>',
             region : roomSetupLayout.roomSetupControlRegion,
             callback : function(mdl) {
-                $("#rooms").jqGrid('setGridParam', {
-                    loadComplete: function(data) {
-                        $("#rooms").jqGrid('setSelection', id); // when load is complete the selection is called...
-                        // load complete is called every time... only want it once, so remove it after it has been used...
-                        $("#rooms").jqGrid('setGridParam', { loadComplete: function() {} });
-                    }
-                });
-                $("#rooms").trigger("reloadGrid");
+                showSetups(id);
+                $("#room-list").roomsTable("render");
             }
         }) );
         
@@ -81,22 +122,70 @@ RoomApp.RoomManagement = (function(Backbone){
             newTitle : '<%= t "create-room-setup" %>',
             editTitle : '<%= t "edit-room-setup" %>',
             updateCallback : function(mdl) {
-                $("#rooms").jqGrid('setGridParam', {
-                    loadComplete: function(data) {
-                        $("#rooms").jqGrid('setSelection', id); // when load is complete the selection is called...
-                        // load complete is called every time... only want it once, so remove it after it has been used...
-                        $("#rooms").jqGrid('setGridParam', { loadComplete: function() {} });
-                    }
-                });
-                $("#rooms").trigger("reloadGrid");
+                showSetups(id);
+                $("#room-list").roomsTable("render");
             }
         }) );
+
+        // selectCallbacks.fire({
+            // id : id,
+            // model : theRoom
+        // });
         
         return theRoom;
     };
-    
+
+    /*
+     * 
+     */
+    function make_sortable (the_table, callback) {
+        $(the_table).sortable({
+            items: '.item',
+            cursor: 'move',
+            axis: 'y',
+            update : function(e, ui) {
+                item_id = ui.item.data('item-id');
+                position = ui.item.index();
+                base = ui.item.data('item-base');
+                callback(item_id, position, base);
+            }
+        });
+    };
+
     return {
+        Venue : Venue,
         Room : Room,
+        
+        // addSelectCallback : function(func) {
+            // selectCallbacks.add(func);
+        // },
+// 
+        // addSelectVenueCallback : function(func) {
+            // selectVenueCallbacks.add(func);
+        // },
+        
+        init : function() {
+            make_sortable('#venue-list', function(item_id, position, base) {
+                posn = position + base;
+                $.ajax({
+                    url : "<%= baseUri %>/venue/update_row_order",
+                    type : 'POST',
+                    data : {
+                        venue_id : item_id,
+                        venue_order_position : posn
+                    },
+                    success : function() {
+                        $("#venue-list").roomsTable("unSelect");
+                        $("#venue-list").roomsTable("refresh");
+                        //$("#venue-list").venuesTable("render");
+                     }
+                });
+            });
+        },
+
+        showSetups : function(id) {
+            return showSetups(id);
+        },
         
         clearDetails : function() {
             clearDetails();
@@ -104,15 +193,73 @@ RoomApp.RoomManagement = (function(Backbone){
         
         selectRoom : function(id) {
             clearDetails();
-            // set the URL for the rooms and get it to refresh
-            $("#rooms").roomTable("getRoomForVenue", id);
+
+            mdl = new Room({ id: id });
+            mdl.fetch({
+               async:false
+            });
+            current_room_id = id;
+            
+            showSetups(id);
+
+            return mdl;
         },
         
-        showSetups : function(id) {
-            return showSetups(id);
+        selectVenue : function(id) {
+            mdl = new Venue({ id: id });
+            mdl.fetch({
+               async:false,
+            });
+            
+            current_venue_id = id;
+
+            $("#room-list").roomsTable({ extraClause : "venue="+id });
+            $("#room-list").roomsTable("render");
+            $("#room-list").roomsTable("setControlOptions", {
+                id : id,
+                id_name : 'venue_id'
+            });
+            make_sortable('#room-list', function(item_id, position, base) {
+                posn = position + base;
+                $.ajax({
+                    url : "<%= baseUri %>/rooms/update_row_order",
+                    type : 'POST',
+                    data : {
+                        room_id : item_id,
+                        room_order_position : posn // TODO
+                    },
+                    success : function() {
+                        $("#room-list").roomsTable("unSelect");
+                        $("#room-list").roomsTable("refresh");
+                     }
+                });
+            });
+
+            if (roomSetupLayout) {
+                roomSetupLayout.roomSetupControlRegion.close();
+                roomSetupLayout.roomSetupRegion.close();
+            }
+
+            // selectVenueCallbacks.fire({
+                // id : id,
+                // model : mdl
+            // });
+
+            return mdl;
         }
     }
 
 })(Backbone);
+
+jQuery(document).ready(function() {
+    VenueApp.addInitializer(VenueApp.VenueManagement.init);
+    VenueApp.start();
+});
+
+<% if @extra_javascript %>
+<% @extra_javascript.each do |extra| %>
+    <%= render extra %>
+<% end %>
+<% end %>
 
 </script>

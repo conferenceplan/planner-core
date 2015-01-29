@@ -2,15 +2,19 @@
  * 
  */
 (function($) {
-$.widget( "cp.venueTable", $.cp.baseTable , {
+$.widget( "cp.venuesTable", $.cp.baseBootstrapTable , {
+
     createColModel : function(){
         return [{
-            label: 'Venue',
-            name: 'name',
-            index: 'name',
-                search : false,
-            // width: 500,
-        }];
+            field: 'name',
+            title: this.options.name,
+            align: 'left',
+            valign: 'middle',
+            sortable: false,
+        }
+        ];
     }
+
 });
+
 })(jQuery);

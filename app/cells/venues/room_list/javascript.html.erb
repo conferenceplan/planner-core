@@ -1,45 +1,45 @@
 <script type="text/javascript">
 
 jQuery(document).ready(function() {
-    jQuery("#rooms").roomTable({
-        caption : '<%= t @caption %>',
+    
+    jQuery("#<%= @place %>").roomsTable({
+        
         selectNotifyMethod : <%= @selectNotifyMethod %>,
-        clearNotifyMethod : <%= @clearNotifyMethod %>,
-        loadNotifyMethod : <%= @loadNotifyMethod %>,
         root_url : "<%= @root_url %>",
         baseUrl : "<%= @baseUrl %>",
         getGridData : "<%= @getGridData %>",
         
-        view : <%= @view %>,
+        delayed : <%= @delayed %>,
+        
+        pageSize : <%= @pageSize %>,
+        pageList : <%= @pageList %>,
         search : <%= @search %>,
-        del : <%= @del %>,
-        edit : <%= @edit %>,
-        add : <%= @add %>,
-        refresh : <%= @refresh %>,
-        pager : "<%= @pager %>",
+        showRefresh : <%= @showRefresh %>,
+        cardView : <%= @cardView %>,
         
-        name : [<%= @name %>, '<%= t "name"%>' ],
-        setup : [<%= @setup %>, '<%= t "default_room_setup"%>' ],
-        capacity : [<%= @capacity %>, '<%= t "capacity"%>' ],
-        purpose : [<%= @purpose %>, '<%= t "purpose"%>' ],
-        comment : [<%= @comment %>, '<%= t "comments"%>' ],
-        
-        multiselect : <%= @multiselect %>,
+        toolbar : "<%= @toolbar %>",
+        controlDiv : "<%= @controlDiv %>",
         
         extraClause : "<%= @extraClause %>",
         
-        filtertoolbar : false,
-        
         modelType : <%= @modelType %>,
-        showControls : <%= @showControls %>,
-        
-        modal_create_title : '<%= t "create-room" %>',
-        modal_edit_title : '<%= t "edit-room" %>',
-        
-        confirm_content     : '<%= t "delete-selected-data" %>',
+        modelTemplate : "<%= @modelTemplate %>",
+
+        modal_create_title  : '<%= t "create-room" %>',
+        modal_edit_title    : '<%= t "edit-room" %>',
+        confirm_content     : '<%= (t "delete-selected-room").html_safe %>',
         confirm_title       : '<%= t "delete-confirmation" %>',
         
-        sortname : 'rooms.sort_order'
+        name                : '<%= t "name" %>',
+        purpose             : '<%= t "purpose" %>',
+        comment             : '<%= t "comments" %>',
+        sort_order          : '<%= t "sort-order" %>',
+        
+        showControls        : <%= @showControls %>,
+        default_setup       : '<%= t "default_room_setup" %>',
+        capacity            : '<%= t "capacity" %>',
+        show_setup          : <%= @showSetup %>
+
     });
 });
 

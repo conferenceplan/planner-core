@@ -1,34 +1,66 @@
 
-<%= render_cell "venues/manage", :javascript %>
-
-<%= render_cell "venues/venue_list", :javascript,
-    :caption => "venues",
-    :selectNotifyMethod => "RoomApp.RoomManagement.selectRoom"
-    %>
-
-<%= render_cell "venues/room_list", :javascript,
-    :caption => "rooms",
-    :selectNotifyMethod => "RoomApp.RoomManagement.showSetups",
-    :modelType => "RoomApp.RoomManagement.Room",
-    :showControls => true
-    %>
-    
-<%= render_cell "venues/manage", :templates %>
-<%= render_cell "venues/venue_list", :templates %>
-
-<!--
-    On Select we want to change the URL for the room grid so that only the rooms for that venue are shown
-    When the room grid is first displayed we do not want to display any rooms unless a venue is selected
-    -->    
-
 <div class="row" id="venues-management-main-row">
     <div class="col-md-3" style="overflow : auto; padding-left:0;" >
-        <%= render_cell "venues/venue_list", :display %>
+        <h3 class="h3-underlined"><%= t "venues" %></h3>
+        <div id="custom-venue-toolbar">
+            <div id="venue-control-area"></div>
+        </div>
+        <%= render_cell "venues/venue_list", :display, :place => 'venue-list' %>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9" style="overflow : auto; padding-left:0;" >
         <h3 class="h3-underlined"><%= t "rooms" %></h3>
-        <%= render_cell "venues/room_list", :display %>
-        <div id="room-control"></div>
-        <div id="room-setup-view"></div>
+        <div id="custom-room-toolbar">
+            <div id="room-control-area"></div> <!-- controlDiv -->
+        </div>
+        <%= render_cell "venues/room_list", :display, :place => 'room-list' %>
+
+        <ul class="nav nav-tabs" id="room-tabs">
+            <li class="active"><a href="#room-setups-tab" data-toggle="tab"><%= t 'config-room-setups' %></a></li>
+            <% if @extra_tab_display %>
+            <% @extra_tab_display.each do |extra| %>
+                <%= render extra %>
+            <% end %>
+            <% end %>
+        </ul>
+        <div id="room-panel-body" class="tab-content panel-body">
+            <div role="tabpanel" class="tab-pane active" id="room-setups-tab">
+                <div id="room-setup-view"></div>
+            </div>
+            <% if @extra_tab_content_display %>
+            <% @extra_tab_content_display.each do |extra| %>
+                <%= render extra %>
+            <% end %>
+            <% end %>
+        </div>
+
+
     </div>
 </div>
+
+<%= render_cell "venues/venue_list", :javascript, 
+    :selectNotifyMethod => 'VenueApp.VenueManagement.selectVenue',
+    :pageSize => 5,
+    :pageList => '[5, 10, 15, 100]',
+    :toolbar => '#custom-venue-toolbar',
+    :place => 'venue-list',
+    :modelType => "VenueApp.VenueManagement.Venue",
+    :controlDiv => 'venue-control-area'
+    %>
+
+<%= render_cell "venues/room_list", :javascript, 
+    :pageSize => 5,
+    :pageList => '[5, 10, 15, 100]',
+    :toolbar => '#custom-room-toolbar',
+    :delayed => true,
+    :place => 'room-list',
+    :baseUrl => 'rooms/simple_list',
+    :selectNotifyMethod => 'VenueApp.VenueManagement.selectRoom',
+    :modelType => "VenueApp.VenueManagement.Room",
+    :controlDiv => 'room-control-area',
+    :showSetup => 'true'
+    %>
+
+
+<%= render_cell "venues/manage", :javascript %>
+<%= render_cell "venues/manage", :templates %>
+

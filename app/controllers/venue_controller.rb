@@ -37,7 +37,18 @@ class VenueController < PlannerController
   #
   #
   def list
-    @venues = Venue.find :all, :order => 'sort_order, name asc'
+    limit = params[:limit] ? params[:limit].to_i : nil
+    offset = params[:offset] ? params[:offset].to_i : nil
+    
+    @total = Venue.count
+    
+    if limit > 0
+      @venues = Venue.scoped.offset(offset).limit(limit).order('sort_order asc')
+    else  
+      @venues = Venue.all.order('sort_order asc')
+    end
+
+
   end
 
   #
