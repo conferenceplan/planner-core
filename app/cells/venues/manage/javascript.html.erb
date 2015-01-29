@@ -3,8 +3,8 @@
 VenueApp = new Backbone.Marionette.Application();
 
 VenueApp.VenueManagement = (function(Backbone){
-    // var selectCallbacks = $.Callbacks();
-    // var selectVenueCallbacks = $.Callbacks();
+    var selectCallbacks = $.Callbacks();
+    var selectVenueCallbacks = $.Callbacks();
 
     var current_room_id = current_venue_id = 0;
 
@@ -127,10 +127,10 @@ VenueApp.VenueManagement = (function(Backbone){
             }
         }) );
 
-        // selectCallbacks.fire({
-            // id : id,
-            // model : theRoom
-        // });
+        selectCallbacks.fire({
+            id : id,
+            model : theRoom
+        });
         
         return theRoom;
     };
@@ -156,13 +156,13 @@ VenueApp.VenueManagement = (function(Backbone){
         Venue : Venue,
         Room : Room,
         
-        // addSelectCallback : function(func) {
-            // selectCallbacks.add(func);
-        // },
-// 
-        // addSelectVenueCallback : function(func) {
-            // selectVenueCallbacks.add(func);
-        // },
+        addSelectCallback : function(func) {
+            selectCallbacks.add(func);
+        },
+
+        addSelectVenueCallback : function(func) {
+            selectVenueCallbacks.add(func);
+        },
         
         init : function() {
             make_sortable('#venue-list', function(item_id, position, base) {
@@ -240,10 +240,10 @@ VenueApp.VenueManagement = (function(Backbone){
                 roomSetupLayout.roomSetupRegion.close();
             }
 
-            // selectVenueCallbacks.fire({
-                // id : id,
-                // model : mdl
-            // });
+            selectVenueCallbacks.fire({
+                id : id,
+                model : mdl
+            });
 
             return mdl;
         }
@@ -256,10 +256,11 @@ jQuery(document).ready(function() {
     VenueApp.start();
 });
 
+</script>
+
 <% if @extra_javascript %>
 <% @extra_javascript.each do |extra| %>
     <%= render extra %>
 <% end %>
 <% end %>
 
-</script>
