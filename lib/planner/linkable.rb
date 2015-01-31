@@ -62,10 +62,11 @@ module Planner
       #
       #
       def linked(options = {})
-        has_many  :links, :as => :linkedto, :dependent => :delete_all
+        has_many  :linked, :as => :linkedto, :dependent => :delete_all, :class_name => 'Link'
 
         Planner::Linkable.config.linkedto_types.each do |linkedto_type|
-          has_many linkedto_type.name.demodulize.pluralize.downcase.to_sym, :through => :links, :class_name => linkedto_type.name
+          # has_many ('linked_' + linkedto_type.name.demodulize.pluralize.downcase).to_sym, :through => :linked, :class_name => linkedto_type.name
+          has_many linkedto_type.name.demodulize.pluralize.downcase.to_sym, :through => :linked, :class_name => linkedto_type.name
         end
 
       end
@@ -74,10 +75,10 @@ module Planner
       #
       #
       def linkable(options = {})
-        has_many  :links
+        has_many  :links, :dependent => :delete_all
 
         Planner::Linkable.config.linkable_types.each do |linkable_type|
-          has_many  linkable_type.name.pluralize.downcase.to_sym, :through => :links,
+          has_many  linkable_type.name.demodulize.pluralize.downcase.to_sym, :through => :links,
                     :source => :linkedto,
                     :source_type => linkable_type.name
         end

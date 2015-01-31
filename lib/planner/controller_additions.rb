@@ -1,11 +1,7 @@
 module Planner
   module ControllerAdditions
     
-    # module ClassMethods
-    # end
-    
     def self.included(base)
-      # base.extend ClassMethods
       base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs
     end
     

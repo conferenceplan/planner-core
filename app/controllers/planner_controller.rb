@@ -3,12 +3,11 @@
 #
 class PlannerController < ApplicationController
   
-  before_filter :check_authenticated
+  before_filter :authenticate_user!
 
   #ensure_authorization_performed :unless => :devise_controller?
   #ensure_authorization_performed :except => [:index, :search], :if => :auditing_security?, :unless => :devise_controller?
   
-  # before_filter :require_user # All controllers that inherit from this will require an authenticated user
   filter_access_to :all # All controllers that inherit from this will be controlled by the access rules
 
   rescue_from ActiveRecord::StaleObjectError do |exception|
@@ -41,8 +40,4 @@ protected
     render :edit, :status => :conflict, :layout => 'content'
   end
   
-  def check_authenticated
-    redirect_to root_path unless user_signed_in? or support_user_signed_in? 
-  end
-
 end

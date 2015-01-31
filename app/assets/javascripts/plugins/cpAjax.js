@@ -33,15 +33,18 @@ jQuery(document).ready(function() {
         beforeSend: function( xhr ) {
             AjaxUtils.addRequest( xhr );
         },
-        complete : function(arg) {
+        complete : function(arg, status) {
             AjaxUtils.removeRequest( arg );
+            // if (status == 'error') {
+                // window.location.replace("/");
+            // };
         },
         error : function(response) {
             if (response.status > 0) {
                 if (response.responseText) {
                     alertMessage(response.responseText);
                 } else {
-                    alertMessage("Error communicating with backend"); // TODO - change to translatable string
+                    alertMessage("Error communicating with backend");
                 };
             };
         }
