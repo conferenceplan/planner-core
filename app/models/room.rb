@@ -4,6 +4,8 @@ class Room < ActiveRecord::Base
   include RankedModel
   ranks :sort_order
   
+  default_scope order('sort_order asc, name asc')
+  
   belongs_to  :venue
   
   # this is a many to many

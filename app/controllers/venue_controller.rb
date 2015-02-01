@@ -30,7 +30,7 @@ class VenueController < PlannerController
     
     @total = Venue.count
     
-    @venues = Venue.offset(offset).limit(limit).order('sort_order asc')
+    @venues = Venue.offset(offset).limit(limit)
   end
   
   #
@@ -43,9 +43,9 @@ class VenueController < PlannerController
     @total = Venue.count
     
     if limit > 0
-      @venues = Venue.scoped.offset(offset).limit(limit).order('sort_order asc')
+      @venues = Venue.scoped.offset(offset).limit(limit)
     else  
-      @venues = Venue.all.order('sort_order asc')
+      @venues = Venue.all
     end
 
 

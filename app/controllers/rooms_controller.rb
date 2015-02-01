@@ -25,7 +25,7 @@ class RoomsController < PlannerController
   #
   #
   def index
-    rooms = Room.find :all, :order => 'sort_order, name asc'
+    rooms = Room.find :all
     
     render json: rooms.to_json, :content_type => 'application/json'
   end
@@ -41,9 +41,9 @@ class RoomsController < PlannerController
     @total = Room.where({venue_id: venue}).count
     
     if limit > 0
-      @rooms = Room.where({venue_id: venue}).offset(offset).limit(limit).order('sort_order asc')
+      @rooms = Room.where({venue_id: venue}).offset(offset).limit(limit)
     else  
-      @rooms = Room.where({venue_id: venue}).order('sort_order asc')
+      @rooms = Room.where({venue_id: venue})
     end
   end
 
