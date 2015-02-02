@@ -7,7 +7,7 @@ class Api::ConferenceController < ApplicationController
     @logo = ConferenceLogo.find :first
     @formats = Format.find :all
     @default_bio_image = DefaultBioImage.find :first
-    @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
+    @cloudinaryURI = get_base_image_url
     @partition_val = /upload/
   end
   
@@ -19,7 +19,7 @@ class Api::ConferenceController < ApplicationController
     @logo = ConferenceLogo.find :first
     @default_bio_image = DefaultBioImage.find :first
     @formats = Format.find :all
-    @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
+    @cloudinaryURI = get_base_image_url
     @partition_val = /upload/
   end
 end

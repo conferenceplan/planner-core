@@ -68,7 +68,7 @@ class ProgramController < ApplicationController
       end
   
       @scale = params[:scale].to_f
-      @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
+      @cloudinaryURI = get_base_image_url
       @partition_val = /upload/
       respond_to do |format|
         format.json
@@ -84,7 +84,7 @@ class ProgramController < ApplicationController
   def confirmed_participants
     tag = params[:tag] ? params[:tag] : nil
     @peopleIds = params[:people_ids] ? params[:people_ids].split(',') : nil
-    @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
+    @cloudinaryURI = get_base_image_url
     @partition_val = /upload/
     
     @people = PeopleService.findConfirmedPeople(@peopleIds, tag).sort_by{ |a| a.pubLastName.mb_chars.normalize(:kd).gsub(/[^-x00-\x7F]/n, '').downcase.to_s }
@@ -109,7 +109,7 @@ class ProgramController < ApplicationController
     logger.debug peopleIds
     
     @scale = params[:scale].to_f
-    @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
+    @cloudinaryURI = get_base_image_url
     @partition_val = /upload/
     @participants = PublishedProgramItemsService.findParticipants peopleIds #[2680,2830]
   end  
@@ -155,7 +155,7 @@ class ProgramController < ApplicationController
     pubIndex = params[:pubidx] ? params[:pubidx].to_i : (PublicationDate.find :first, :order => 'id desc').id
     since_date = PublishedProgramItemsService.determineChangeDate(pubIndex)
     
-    @cloudinaryURI = Cloudinary::Utils.cloudinary_url('A').sub(/\/A/,'')
+    @cloudinaryURI = get_base_image_url
     @partition_val = /upload/
     @changes = PublishedProgramItemsService.getUpdates(since_date)
   end
