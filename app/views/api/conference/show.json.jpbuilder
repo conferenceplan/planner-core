@@ -76,7 +76,7 @@ json.set! 'mobile' do
             if page.use_url
                 json.url        page.url
             else
-                json.url        request.protocol + request.host + (request.port ? ':' + request.port.to_s : '') + '/planner_mobile/mobile/mobile_pages/display/' + page.id.to_s
+                json.url        request.protocol + request.host + (request.port ? ':' + request.port.to_s : '') + baseUri + '/planner_mobile/mobile/mobile_pages/display/' + page.id.to_s
             end
             json.position   page.position
         end
