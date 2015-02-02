@@ -4,6 +4,10 @@
 class ApplicationController < ActionController::Base
   before_filter :first_filter, :set_locale, :load_configs, :set_mailer_host
   around_filter :application_time_zone # make sure that we use the timezone as specified in the database
+
+  def get_base_image_url
+    eval(ENV[:base_image_url.to_s])
+  end
   
   def first_filter
     # do nowt
