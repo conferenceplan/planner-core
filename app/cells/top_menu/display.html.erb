@@ -13,15 +13,15 @@
         </div>
         <div class="collapse navbar-collapse" id="collapse-2">
             <ul class="nav navbar-nav">
-                <% @menu.each do |k, v| %>
-                    <% if v %>
-                        <% if v[:target_base].length == 1 %>
-                            <li class="<%= 'active' if request.fullpath.eql? v[:target_base] %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + v[:target] %>">
-                                <i class="glyphicon <%= v[:icon]%>"></i> <%= k.empty? ? '' : (t k) %></a>
+                <% @menu.each do |entry| %>
+                    <% if entry %>
+                        <% if entry[:target_base].length == 1 %>
+                            <li class="<%= 'active' if request.fullpath.eql? entry[:target_base] %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + entry[:target] %>">
+                                <i class="glyphicon <%= entry[:icon]%>"></i> <%= entry[:title].empty? ? '' : (t entry[:title]) %></a>
                             </li>
                         <% else %>
-                            <li class="<%= 'active' if request.fullpath.include? v[:target_base] %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + v[:target] %>">
-                                <i class="glyphicon <%= v[:icon]%>"></i> <%= k.empty? ? '' : (t k) %></a>
+                            <li class="<%= 'active' if request.fullpath.include? entry[:target_base] %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + entry[:target] %>">
+                                <i class="glyphicon <%= entry[:icon]%>"></i> <%= entry[:title].empty? ? '' : (t entry[:title]) %></a>
                             </li>
                         <% end %>
                     <% end %>
