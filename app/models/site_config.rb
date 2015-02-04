@@ -1,5 +1,5 @@
 class SiteConfig < ActiveRecord::Base
-  attr_accessible :lock_version, :name, :time_zone, :start_date, :number_of_days  
+  attr_accessible :lock_version, :name, :time_zone, :start_date, :number_of_days, :print_time_format
   attr_accessor :tz_offset
 
   before_save :adjust_timezone

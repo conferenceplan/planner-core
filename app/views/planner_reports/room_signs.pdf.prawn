@@ -21,7 +21,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
             end
 
             if assignment.published_programme_item
-                itemText = assignment.published_time_slot.start.strftime('%H:%M') + ' - ' + assignment.published_time_slot.end.strftime('%H:%M') + '<br>'
+                itemText = assignment.published_time_slot.start.strftime(@plain_time_format) + ' - ' + assignment.published_time_slot.end.strftime(@plain_time_format) + '<br>'
                 pdf.text itemText, :size => 20, :inline_format => true, :fallback_fonts => fallback_fonts
                 itemText =  "<b>" + assignment.published_programme_item.title + "</b>"
                 pdf.text itemText, :size => 26, :inline_format => true, :fallback_fonts => fallback_fonts

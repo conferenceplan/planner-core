@@ -19,6 +19,8 @@ ConfigApp.ConfigManagement = (function(Backbone){
                                         pickTime: false,
                                     } },
             number_of_days      : { type : 'Number', title : '<%= t "number-of-days" %>' },
+            print_time_format   : { type : 'Select', title : '<%= t "time-format-for-publications" %>',
+                                    options : [{val: '24', label: '24 hour'},{val: '12', label: '12 hour'}] }
             // languages           : { type : 'Text', title : '<%= t "supported-languages" %>'},
         },
         

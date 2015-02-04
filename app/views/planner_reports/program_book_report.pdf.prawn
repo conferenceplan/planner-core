@@ -16,7 +16,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
         table = [['Time'].concat(rooms)]
         @times.chunk { |n| n.start }.collect {|items|
             row = Array.new(nbrColumns+1)
-            row[0] = items[0].strftime('%A %H:%M')
+            row[0] = items[0].strftime(@time_format)
 
             items[1].each do |item|
                 idx = @rooms.index{|x| x.id == item.rooms[0].id }
