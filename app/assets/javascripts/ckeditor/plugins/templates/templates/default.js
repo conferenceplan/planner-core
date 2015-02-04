@@ -108,6 +108,20 @@ CKEDITOR.addTemplates( 'default',
                             '<div contenteditable="true" class="grenadine-editable">Write the contents of your page here.</div>' + 
                         '</div>'+                                     
                       mobilePageTemplateBottom        
+            },
+            {
+                title: 'Mobile Page With Title Image',
+                image: 'template1.gif',
+                description: 'A mobile page with a title image and contents',
+                html: mobilePageTemplateStyles + 
+                      mobilePageTemplateTop +
+                        '<style type="text/css">.mobile-div-class { padding: 0px; }</style>' +
+                        '<img src="/assets/mobile-template-dummy-image.jpg" width="100%"></img>' +
+                        '<h1 contenteditable="true" class="grenadine-editable">An Optional Page Title</h1>' +
+                        '<div contenteditable="false">' +
+                            '<div contenteditable="true" class="grenadine-editable">Write the contents of your page here.</div>' + 
+                        '</div>'+                                     
+                      mobilePageTemplateBottom        
             }
         ]
 });
