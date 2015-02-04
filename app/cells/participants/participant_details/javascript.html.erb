@@ -75,7 +75,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     InviteDetails = Backbone.DeepModel.extend({
         schema : {
             first_name : { type : 'Text', title : '<%= t "first-name" %>', editorAttrs : { placeholder : '<%= t "first-name" %>' } },
-            last_name : { type : 'Text', title : '<%= t "last-name" %>', editorAttrs : { placeholder : '<%= t "last-name" %>' } },
+            last_name : { type : 'Text', title : '<%= t "last-name" %>', editorAttrs : { placeholder : '<%= t "last-name" %>' }, validators: ['required'] },
             suffix : { type : 'Text', title : '<%= t "suffix" %>', editorAttrs : { placeholder : '<%= t "suffix" %>' } },
             'pseudonym.first_name' : { type : 'Text', title : '<%= t "pub-first-name" %>', editorAttrs : { placeholder : '<%= t "pub-first-name" %>' } },
             'pseudonym.last_name' : { type : 'Text', title : '<%= t "pub-last-name" %>', editorAttrs : { placeholder : '<%= t "pub-last-name" %>' } },

@@ -599,15 +599,27 @@ var AppUtils = (function(){
         
         deleteModel : function() {
             var clearFn = this.options.clearFn;
-            this.model.destroy({
-                wait  : true,
-                success : function(mdl) {
-                    //
-                    if (clearFn) {
-                        clearFn();
-                    }
+            
+            var thatModel = this.model;
+
+            modal = new AppUtils.ConfirmModel({
+                title : '<%= I18n.t "delete-confirmation" %> ',
+                content : '<%= I18n.t "confirm-that-you-really-want-to-delete" %>',
+                continueAction : function() {
+                    thatModel.destroy({
+                        wait  : true,
+                        success : function(mdl) {
+                            if (clearFn) {
+                                clearFn();
+                            }
+                        }
+                    });
+                },
+                closeAction : function() {
                 }
             });
+            modal.render();
+            
         },
     });
 

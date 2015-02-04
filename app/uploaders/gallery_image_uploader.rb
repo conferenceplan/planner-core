@@ -25,8 +25,7 @@ class GalleryImageUploader < CarrierWave::Uploader::Base
   # Get a thumbnail of the image
   #
   version :thumbnail do
-    transform = [{:width => 200, :crop => :scale},
-                                {:fetch_format => :jpg}]
+    transform = [{:fetch_format => :jpg}]
     cloudinary_transformation :transformation => transform
   end
 
