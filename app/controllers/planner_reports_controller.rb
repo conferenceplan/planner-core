@@ -5,6 +5,14 @@ require "planner_report_helpers"
 
 class PlannerReportsController < PlannerController
   include PlannerReportHelpers
+
+  before_filter :get_print_options
+  def get_print_options
+    @site_config = SiteConfig.first
+    @plain_time_format = (@site_config.print_time_format == '24') ? '%H:%M' : '%I:%M %p'
+    @time_format = (@site_config.print_time_format == '24') ? '%a %H:%M' : '%a %I:%M %p'
+    @day_and_time_format = (@site_config.print_time_format == '24') ? '%A %H:%M %y-%m-%d': '%A %I:%M %p %y-%m-%d'
+  end
   
   #
   #

@@ -29,7 +29,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
 
             if v[:time]
                 str = v[:time][:time].start.strftime('%Y-%m-%d')
-                str += ' ' + v[:time][:time].start.strftime('%H:%M')
+                str += ' ' + v[:time][:time].start.strftime(@plain_time_format)
                 str += ' ' + ((v[:time][:time].end - v[:time][:time].start) / 60).to_s
                 pdf.pad(5) { pdf.text str, :fallback_fonts => fallback_fonts }
             end
@@ -65,7 +65,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
 
         pdf.text  item.pub_reference_number.to_s + ' <b>' + item.title + '</b>', :inline_format => true, :fallback_fonts => fallback_fonts
         pdf.text  item.published_room.name + ' ' + item.published_room.published_venue.name, :fallback_fonts => fallback_fonts
-        pdf.text  item.published_time_slot.start.strftime('%A') + ' ' + item.published_time_slot.start.strftime('%H:%M'), :fallback_fonts => fallback_fonts
+        pdf.text  item.published_time_slot.start.strftime('%A') + ' ' + item.published_time_slot.start.strftime(@plain_time_format), :fallback_fonts => fallback_fonts
         pdf.text  item.duration.to_s + ' minutes, ' + (item.format ? item.format.name : ''), :fallback_fonts => fallback_fonts
         pdf.text  item.precis , :inline_format => true, :fallback_fonts => fallback_fonts
         pdf.text item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 

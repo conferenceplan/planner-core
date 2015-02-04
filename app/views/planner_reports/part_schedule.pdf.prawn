@@ -15,7 +15,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
         p.programmeItemAssignments.each do |assignment|
             if assignment.programmeItem.time_slot && (@allowed_roles.include? assignment.role)
                 str = '<b>' + assignment.programmeItem.title + "</b>,  "
-                str += assignment.programmeItem.time_slot.start.strftime('%A') + ' ' + assignment.programmeItem.time_slot.start.strftime('%H:%M') + "\n"
+                str += assignment.programmeItem.time_slot.start.strftime('%A') + ' ' + assignment.programmeItem.time_slot.start.strftime(@plain_time_format) + "\n"
                 str += ' ' + assignment.role.name + "\n"
                 str += (assignment.programmeItem.format ? assignment.programmeItem.format.name + ', ' : '')
                 str += (assignment.programmeItem.room ? assignment.programmeItem.room.name + ' (' + assignment.programmeItem.room.venue.name + ")\n" : '')
