@@ -25,7 +25,7 @@ class RoomsController < PlannerController
   #
   #
   def index
-    rooms = Room.find :all
+    rooms = Room.unscoped.includes(:venue).order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
     
     render json: rooms.to_json, :content_type => 'application/json'
   end

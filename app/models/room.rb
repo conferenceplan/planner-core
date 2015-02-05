@@ -2,7 +2,7 @@ class Room < ActiveRecord::Base
   attr_accessible :name, :purpose, :comment, :venue_id, :lock_version, :sort_order
 
   include RankedModel
-  ranks :sort_order
+  ranks :sort_order, :with_same => :venue_id 
   
   default_scope order('rooms.sort_order asc, rooms.name asc')
   

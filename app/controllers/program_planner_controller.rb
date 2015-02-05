@@ -7,11 +7,11 @@ class ProgramPlannerController < PlannerController
     rooms = params[:rooms] ? params[:rooms].split(',').collect{|a| a.to_i} : nil
     @day = params[:day] # Day
     if rooms
-      @roomListing = Room.all :order => 'venues.name DESC, rooms.name ASC',
+      @roomListing = Room.unscoped.all :order => 'venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc',
                             :conditions => ["rooms.id in (?)", rooms],
                             :joins => :venue
     else  
-      @roomListing = Room.all :order => 'venues.name DESC, rooms.name ASC',
+      @roomListing = Room.unscoped.all :order => 'venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc',
                             :joins => :venue
     end
     site_config = SiteConfig.first
