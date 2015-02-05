@@ -35,7 +35,8 @@ $.widget( "cp.baseBootstrapTable" , {
         modal_create_title  : "Create",
         modal_edit_title    : "Edit",
         confirm_content     : "Are you sure you want to delete the selected data?",
-        confirm_title       : "Confirm Deletion"
+        confirm_title       : "Confirm Deletion",
+        translations        : {}
         // data-item-id=<%= "#{thing.id}"
 
         // pager               : '#pager',
@@ -44,6 +45,13 @@ $.widget( "cp.baseBootstrapTable" , {
         // multiselect         : false,
         // sortname            : null,
         // filtertoolbar       : true,
+    },
+    
+    /*
+     * 
+     */
+    translate : function(str) {
+        return this.options.translations[str] ? this.options.translations[str] : str;
     },
     
     /*
