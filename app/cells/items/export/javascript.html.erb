@@ -16,8 +16,6 @@ ItemsApp.ItemExport = (function(Backbone){
     //
     return {
         init : function(options) {
-            Backbone.history.start();
-
             ReportBase.reportRegion.show(new ReportBase.ExportView({
                 form        : ItemExportForm,
                 endPoint    : "<%= baseUri + '/tools/item_exporter/export' %>",

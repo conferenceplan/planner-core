@@ -327,8 +327,6 @@ ParticipantApp.PeopleImport = (function(Backbone){
     //    
     return {
         init : function(options) {
-            Backbone.history.start();
-            
             importStepsRegion = new Backbone.Marionette.Region({
                 el: "#step-region"
             });

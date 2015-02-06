@@ -50,6 +50,9 @@ jQuery(document).ready(function() {
         }
     });
 
-    window.addEventListener('beforeunload', function() { console.debug("kill requests");
-        AjaxUtils.killRequests(); } , false);
+    window.addEventListener('beforeunload', function() { AjaxUtils.killRequests(); } , false);
+});
+
+$( window ).load(function() {
+   Backbone.history.start();
 });

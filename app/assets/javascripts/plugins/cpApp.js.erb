@@ -214,6 +214,84 @@ var AppUtils = (function(){
     /*
      * 
      */
+    PlainPanelModal = InfoModal.extend({
+        events: {
+            "submit"            : "submit",
+            "keypress"          : "swallow",
+            "hide.bs.modal"     : "hideCheck",
+            "hidden.bs.modal"   : "hide"
+        },
+        
+        hide: function (e) {
+            if (this.options.closeAction) {
+                this.options.closeAction(e);
+            };
+            
+            this.remove();
+            this.unbind();
+            this.views = [];  
+        },
+        
+        hideCheck : function(e) {
+            // Check that we are allowed to close the dialog and if so continue with the close
+            closeCheck = this.options.closeCheck;
+            if (closeCheck && !this.checked) {
+                var changed = closeCheck();
+                var panel = this;
+                
+                if (changed) {
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    mdl = new LeavePageModal({
+                        title : this.options.title,
+                        continueAction : function() {
+                            panel.checked = true;
+                            panel.$el.modal("hide");
+                        }
+                    });
+                    mdl.render();
+                }
+            };
+        },
+        
+        initialize : function(options) {
+            this.options = options || {};
+            this.template = _.template($('#modal-plain-panel-template').html());
+        },
+        
+        render: function () {
+            var url = this.options.url;
+            var that = this;
+            Backbone.BootstrapModal.count++;
+            
+            this.checked = false;
+
+            $.ajax({
+                url : url,
+                success : function(data) {
+                    that.$el.html($(that.template({
+                        content : data,
+                        title : that.options.title
+                    })));
+                }
+            });
+            
+            this.$el.modal(this.modalOptions);
+
+            if (this.options.content) {
+                this.$el.find(".modal-body").append(this.options.content);
+            }
+            
+            this.delegateEvents();
+            
+            return this;
+        }
+    });
+
+    /*
+     * 
+     */
     GenericModal = Backbone.View.extend({
         tagName: "div",
         className: "modal bs-modal-lg",
@@ -866,6 +944,8 @@ var AppUtils = (function(){
         ModelModal : ModelModal,
         
         PanelModal : PanelModal,
+        
+        PlainPanelModal : PlainPanelModal,
         
         createEditItemView : function(options) {
             var view = new ItemEditView({

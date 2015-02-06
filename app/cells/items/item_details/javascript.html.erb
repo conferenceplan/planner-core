@@ -390,8 +390,6 @@ ItemApp.ItemManagement = (function(Backbone){
             itemTabLayout.render();
             $('#item-tabs').html(itemTabLayout.el);
             
-            // new Workspace();
-            // Backbone.history.start();
             TabUtils.createTagCloudContent({
                 collectionType : TagContextCollection,
                 url : "<%= baseUri + '/tags?class=ProgrammeItem' %>",
