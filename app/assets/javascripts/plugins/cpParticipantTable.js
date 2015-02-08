@@ -197,9 +197,11 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 width : 100,
                 formatter : function(cellvalue, options, rowObject) {
                     var res = "";
+                    var numberOfEmailsSent = 0;
                     
                     if (typeof rowObject['person[mailings]'] != 'undefined') {
                         for (i = 0 ; i < rowObject['person[mailings]'].length; i++) {
+                            numberOfEmailsSent +=1;
                             if (i > 0) {
                                 res += ", ";
                             }
@@ -208,7 +210,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                         }
                     }
                     
-                    return res;
+                   return res;
                 }
             }, {
                 name : 'person[mail_history]',
@@ -226,7 +228,9 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 width : 100,
                 formatter : function(cellvalue, options, rowObject) {
                     var res = "";
-                    
+                    var nbEmails = 0;
+                    var emailDescString = "";
+                    /*
                     if (typeof rowObject['person[mail_history]'] != 'undefined') {
                         for (i = 0 ; i < rowObject['person[mail_history]'].length; i++) {
                             if (i > 0) {
@@ -235,8 +239,21 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                             res += rowObject['person[mail_history]'][i];
                         }
                     }
-                    
-                    return res;
+                    */
+                   if (typeof rowObject['person[mail_history]'] != 'undefined') {
+                        nbEmails = rowObject['person[mail_history]'].length;
+                        if (nbEmails < 1) {
+                            res = '';
+                        } else if (nbEmails == 1) {
+                            res = rowObject['person[mail_history]'][0];   
+                        } else if (nbEmails > 1) {
+                            emailDescString = rowObject['person[mail_history]'][nbEmails - 1]; // only display the most recent one sent
+                            if (emailDescString.length > 25) { emailDescString = emailDescString.substr(0,25) + "..."; };
+                            res = emailDescString + ' + ' + (nbEmails - 1) + ' more';  
+                        }
+                   }
+                   
+                   return res;
                 }
             }, {
                 name : 'person[has_survey]',
