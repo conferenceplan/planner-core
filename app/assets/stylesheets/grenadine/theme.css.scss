@@ -968,3 +968,24 @@ a.mtooltip span
 .modal-content {
     border: 3px #CCC solid;
 }
+
+/* NOTES */
+textarea.form-control.notes-text-area {
+    padding: 10px;
+    height: 300px;
+    background-color: #ffc;
+    /* Firefox */
+    -moz-box-shadow:3px 3px 5px rgba(150,150,150,1);
+    /* Safari+Chrome */
+    -webkit-box-shadow: 3px 3px 5px rgba(150,150,150,.7);
+    /* Opera */
+    box-shadow: 3px 3px 5px rgba(150,150,150,.7);
+    border: 1px solid #EEE;
+    border-radius: 0;
+    
+
+
+}
+textarea.form-control.notes-text-area {
+    
+}
