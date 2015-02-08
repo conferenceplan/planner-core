@@ -123,9 +123,10 @@
 		background-image: linear-gradient(top, #D9EDF7, #D9EDF7); /* CSS3 Compliant */
 		filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#D9EDF7', endColorstr='#D9EDF7', GradientType=0); /* IE8 */
     	background-repeat: repeat-x;
-    	text-shadow: 0 1px 0 #ffffff; /* I changed to 0px shadow - Phil */
+    	//text-shadow: 0 1px 0 #ffffff; /* I changed to 0px shadow - Phil */
+    	text-shadow: none;
 		opacity: 1;
-		color: #428BCA;
+		//color: #428BCA;
 		font-weight:bolder;
 }
 

@@ -130,7 +130,19 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 editrules : {
                     required : false,
                     edithidden : true
-                }
+                },
+                formatter : function(cellvalue, options, rowObject) {
+                    res = "";
+                    if (typeof rowObject['person[invitestatus_id]'] != 'undefined') {
+                        if (rowObject['person[invitestatus_id]'] == 'Not Set') {
+                            res = "<span class='minor-text'>not set</span>";
+                        } else {
+                            
+                            res =  rowObject['person[invitestatus_id]'];    
+                        }
+                    }
+                    return res;
+                }                
             }, {
                 name : 'person[invitation_category_id]',
                 label : this.options.invite_category[1], //'Invitation<br/>Category',
@@ -180,6 +192,24 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 editrules : {
                     required : false,
                     edithidden : true
+                },
+                formatter : function(cellvalue, options, rowObject) {
+                    res = "";
+                    if (typeof rowObject['person[acceptance_status_id]'] != 'undefined') {
+                        if (rowObject['person[acceptance_status_id]'] == 'Unknown') {
+                            res = "<span class='minor-text'>unknown</span>";
+                        } else if (rowObject['person[acceptance_status_id]'] == 'Accepted') {
+                            res = "<span class='label label-success'><span class='glyphicon glyphicon-ok'></span> Accepted</span>";
+                        } else if (rowObject['person[acceptance_status_id]'] == 'Declined') {
+                            res = "<span class='label label-danger'><span class='glyphicon glyphicon-remove'></span> Declined</span>";
+                        } else if (rowObject['person[acceptance_status_id]'] == 'Probable') {
+                            res = "<span class='label label-warning'>Probable</span>";
+                        }
+                        else {
+                            res =  rowObject['person[acceptance_status_id]'];    
+                        }
+                    }
+                    return res;
                 }
             }, {
                 name : 'person[mailings]',
@@ -263,7 +293,18 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 sortable : false,
                 search : false,
                 align : 'center',
-                width : 40
+                width : 28,
+                formatter : function(cellvalue, options, rowObject) {
+                    if (typeof rowObject['person[has_survey]'] != 'undefined') {
+                        if (rowObject['person[has_survey]'] == 'Y') {
+                            res = "<span class='glyphicon glyphicon-ok'></span>";    
+                        } else {
+                            res = "";
+                        }
+                        
+                    }
+                    return res;
+                }
             }, {
                 name : 'person[pseudonym_attributes][first_name]',
                 label : 'Publication<br/>First Name',
