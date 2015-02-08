@@ -120,6 +120,15 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             search: false,
             editable: false,
             width: 60,
+            formatter : function(cellvalue, options, rowObject) {
+                if (typeof rowObject['programme_item[participants]'] != 'undefined') {
+                    if (rowObject['programme_item[participants]'] > 0) {
+                        return rowObject['programme_item[participants]'];
+                    } else {
+                        return "<span class='minor-text'>none</span>";
+                    }
+                }
+            }     
         },
         /*
          {
