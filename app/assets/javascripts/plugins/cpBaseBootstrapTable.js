@@ -95,6 +95,13 @@ $.widget( "cp.baseBootstrapTable" , {
     getSelected : function() {
         return this.selected;
     },
+    
+    /*
+     * 
+     */
+    root_url : function() {
+        return this.options.root_url;
+    },
 
     /*
      * 

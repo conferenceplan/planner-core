@@ -34,10 +34,22 @@ class LinkedResourceController < ResourceController
   protected
     def build_resource
       @linkedto_id = params[:linkedto_id] ? params[:linkedto_id].to_i : nil
-      params[object_name].delete('linkedto_id')
+      params[object_name].delete('linkedto_id') if params[object_name]
       @linkedto_type = params[:linkedto_type] ? params[:linkedto_type] : ''
-      params[object_name].delete('linkedto_type')
-      model_class.new params[object_name] #"#{model_name}"]
+      params[object_name].delete('linkedto_type') if params[object_name]
+      if params[object_name]
+        model_class.new params[object_name] #"#{model_name}"]
+      else
+        p = params.clone
+        p.delete('linkedto_id')
+        p.delete('linkedto_type')
+        p.delete('tenant')
+        p.delete('locale')
+        p.delete('format')
+        p.delete('controller')
+        p.delete('action')
+        model_class.new p
+      end
     end
 
 
