@@ -916,9 +916,13 @@ a.mtooltip span
     box-shadow: 5px 5px 8px #CCC;
 }
 /* TASKS */
-.item.task-completed td {
+.item.task-completed td, .item.task-completed td a {
     text-decoration: line-through;
     color: #CCC;
+}
+.item.task-completed td a.btn.btn-info.btn-sm  {
+    background-color: #EEE;
+    border-color: #DDD;
 }
 .task-priority-high {
     
