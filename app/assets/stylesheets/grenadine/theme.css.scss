@@ -164,6 +164,60 @@ screen and (min-device-pixel-ratio: 1.5) {
     border-bottom: solid 3px #428bca;
     margin-bottom: -3px;
 }
+
+/*---------2nd level menu ------- */
+#grenadine-sub-application-menu li:after {
+    content: '';
+    border-right: 1px solid #DDD;
+    position: absolute;
+    height: 50%;
+    right: 0;
+    top: 25%;
+}
+#grenadine-sub-application-menu li:last-of-type:after {
+    content: '';
+    border-right: none;
+}
+#grenadine-sub-application-menu li:last-of-type {
+    border-right: none;
+}
+#grenadine-sub-application-menu, #grenadine-sub-application-menu a, #grenadine-sub-application-menu.navbar-default .navbar-nav {
+    background-color: white;
+    //margin-bottom: 0px;
+}
+#grenadine-sub-application-menu.active a {
+    background-color: white;
+    margin-bottom: 0px;
+}
+#grenadine-sub-application-menu.navbar-default .navbar-nav > .active > a:after {
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 7px solid #428bca;
+    content: " ";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    left: calc(50% - 7px);
+}
+#grenadine-sub-application-menu .navbar-nav {
+    margin: 0 auto;
+    display: table;
+    table-layout: fixed;
+    float:none;
+}
+#grenadine-sub-application-menu .navbar-nav li a {
+    //width: 100px;
+    //height: 100px;
+    font-size: 12px;
+    text-align: center;
+}
+#grenadine-sub-application-menu .navbar-nav li.active {
+    font-weight: bold;
+}
+
+/*----- End 2nd level menu ----*/
 #right-menu-navbar ul.dropdown-menu li a, #right-menu-navbar li.dropdown.open a {
     color: black;
 }

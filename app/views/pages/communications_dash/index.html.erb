@@ -1,7 +1,7 @@
 <% content_for :submenu do %>
         <%= render_cell :context_menu, :display, :menu => {
             "manage-mailings" => ('/pages/communications_dash/manage' if allowed? :manage_mailings),
-            "mailing-reports" => ('/pages/communications_dash/report' if allowed? :mailing_reports),
+            #"mailing-reports" => ('/pages/communications_dash/report' if allowed? :mailing_reports),
             "mail-templates"  => ('/pages/communications_dash/templates' if allowed? :mailing_templates)
         }.keep_if{|k,v| v} %>
 <% end %>

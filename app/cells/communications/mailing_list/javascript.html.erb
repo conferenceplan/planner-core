@@ -7,12 +7,12 @@ CommunicationsList = (function(Backbone){
     Mailing = Backbone.DeepModel.extend({
         urlRoot : "<%= baseUri + '/communications/mailing' %>",
         schema : {
-            mailing_number          : { type : 'Number', title : '<%= t "mail-mailing-number" %>' },
-            mail_template_id        : { type : 'Select', title : '<%= t "mail-mailing-template" %>',
+            mailing_number          : { type : 'Number', title : '<%= t "mail-mailing-number" %>', help: '<%= t "mail-mailing-number-hint" %>' },
+            mail_template_id        : { type : 'Select', title : '<%= t "mail-mailing-template" %>',help: '<%= t "mail-mailing-template-hint" %>',
                                             options : <%= [].concat(MailTemplate.find(:all).collect {|s| {'val' => s.id, 'label' => s.title} }).to_json.html_safe %>
                                         },
             // scheduled               : { type : 'Checkbox', title : '<%= t "mail-scheduled" %>' },
-            testrun                 : { type : 'Checkbox', title : '<%= t "mail-test-run" %>' }
+            testrun                 : { type : 'Checkbox', title : '<%= t "mail-test-run" %>', help: '<%= t "mail-mailing-test-run-hint" %>' }
         }
     });
     
