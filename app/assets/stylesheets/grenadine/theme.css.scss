@@ -1049,7 +1049,13 @@ textarea.form-control.notes-text-area {
   background-image: -moz-linear-gradient(top,#f5f5b0 0%,#ffc 35%,#ffc 100%);
   background-image: -o-linear-gradient(top,#f5f5b0 0%,#ffc 35%,#ffc 100%);
   background-image: linear-gradient(top,#f5f5b0 0%,#ffc 35%,#ffc 100%);
-   
+}
 
-
+/* ------ DOCUMENTS ----------*/
+.minor-edit-icons {
+    visibility: hidden;
+}
+.table-hover  tr:hover td span.minor-edit-icons a {
+    visibility: visible;
+    color: #CCC;
 }
