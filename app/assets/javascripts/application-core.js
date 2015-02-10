@@ -32,6 +32,7 @@
 //= require backbone/underscore-min
 //= require backbone/backbone
 //= require backbone/deep-model
+//= require backbone-model-file-upload.js
 //= require backbone/backbone.marionette
 //= require backbone/extensions/backbone.poller
 //= require backbone/extensions/backbone-relational

@@ -1,5 +1,50 @@
 ;(function(Form) {
 
+Form.editors.File = Form.editors.Text.extend({
+
+    uploadFile: function(ev,dd) {
+        var i = 0, files = this.files,
+        len = files.length;
+        ev.data.$the_file = files[0];
+    }, 
+
+    initialize: function(options) {
+        options = options || {};
+        
+        Form.editors.Base.prototype.initialize.call(this, options);
+        
+        this.schema = _.extend({}, options.schema || {});
+        
+        this.template = options.template || this.constructor.template;
+    },
+
+    render: function() {
+        var $el = $($.trim(this.template({
+                field_name : this.key//,
+            })));
+        this.setElement($el);
+
+        $el.on('change input[type=file]', this, this.uploadFile);
+
+        this.$the_file = '';
+
+        return this;
+    },
+
+    getValue: function() {
+        var val = this.$the_file;
+        return val;
+    },
+
+}, {
+    // TODO - theme
+    // Also may be good to add progress bar
+    template: _.template('\
+            <input class="col-sm-10" type="file" id="<%= field_name %>" name="files[]"/>\
+        ', null, Form.templateSettings),
+});
+
+
 /*
  * An image field for Cloudinary.
  */
