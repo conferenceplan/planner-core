@@ -65,4 +65,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'figaro'
   s.add_dependency 'encoding_sampler'
   s.add_dependency 'ranked-model'
+  s.add_dependency 'font-awesome-rails'
 end
