@@ -16,6 +16,7 @@
         <%= javascript_include_tag params[:controller] if params[:controller] && Rails.application.assets.find_asset( params[:controller] + ".js") %>
 
         <%=render 'layouts/common_js' %>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <link rel="icon" type="image/ico" href="/event-planner-ico.ico"/>
     </head>
     <body>
