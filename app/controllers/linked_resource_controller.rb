@@ -41,16 +41,19 @@ class LinkedResourceController < ResourceController
         model_class.new params[object_name] #"#{model_name}"]
       else
         p = params.clone
-        p.delete('linkedto_id')
-        p.delete('linkedto_type')
-        p.delete('tenant')
-        p.delete('locale')
-        p.delete('format')
-        p.delete('controller')
-        p.delete('action')
+        p = sanitize_params(p)
         model_class.new p
       end
     end
-
+    
+    def sanitize_params(p)
+        ['linkedto_id', 'linkedto_type', 'tenant', 'locale', 'format', 'controller', 'action', 'id', 'conference_id'].each do |arg|
+          p.delete(arg)
+        end
+        params.each do |x,v|
+          p.delete(x) if x.start_with?('file.')
+        end
+        p
+    end
 
 end
