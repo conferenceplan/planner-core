@@ -46,7 +46,12 @@ Form.editors.File = Form.editors.Text.extend({
                 <span>Select file ...</span>\
                 <input class="col-sm-10" type="file" id="<%= field_name %>" name="files[]"/>\
             </span>\
-            <span class="status"></span>\
+                    <div class="status-area">\
+                        <span class="status"></span>\
+                        <div class="upload_progress">\
+                            <div class="progress progress-success active progress-bar-striped"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>\
+                        </div>\
+                    </div>\
             <div id="file_preview"></div>\
             </span>\
         ', null, Form.templateSettings),
@@ -75,7 +80,6 @@ Form.editors.FileUpload = Form.editors.Text.extend({
                 handler : this.schema.handler
             })));
         this.setElement($el);
-        // this.setValue(this.value);
         
         var element = this.$el;
         var field_name = this.key;
@@ -85,12 +89,12 @@ Form.editors.FileUpload = Form.editors.Text.extend({
             dataType: 'json',
             replaceFileInput : false,
             add : function(e, data) {
-                data.context = element.find('#' + field_name + '_preview').text('Uploading...'); //.appendTo(document.body);
+                data.context = element.find('#' + field_name + '_preview').text('Uploading...');
                 data.submit();
             },
             done: function (e, data) {
                 $.each(data.files, function (index, file) {
-                    element.find('#' + field_name + '_preview').text(file.name.split('\\').pop().split("/").pop()); //.appendTo(file);
+                    element.find('#' + field_name + '_preview').text(file.name.split('\\').pop().split("/").pop());
                 });
             }
         });

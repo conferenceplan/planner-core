@@ -104,8 +104,8 @@
           var xhr = $.ajaxSettings.xhr();
           xhr.upload.addEventListener('progress', that._progressHandler.bind(that), false);
           return xhr;
-        }
-      }
+        };
+      };
 
       // Resume back to original state
       if (attrs && options.wait) this.attributes = attributes;

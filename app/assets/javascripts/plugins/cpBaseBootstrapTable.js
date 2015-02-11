@@ -36,7 +36,8 @@ $.widget( "cp.baseBootstrapTable" , {
         modal_edit_title    : "Edit",
         confirm_content     : "Are you sure you want to delete the selected data?",
         confirm_title       : "Confirm Deletion",
-        translations        : {}
+        translations        : {},
+        modalType           : ModelModal
         // data-item-id=<%= "#{thing.id}"
 
         // pager               : '#pager',
@@ -203,7 +204,7 @@ $.widget( "cp.baseBootstrapTable" , {
             
                 var grid = this.options.grid;
 
-                var modal = new ModelModal({
+                var modal = new this.options.modalType({
                     model : mdl,
                     modal_template : modelTemplate,
                     title : this.options.modal_create_title,
@@ -326,6 +327,7 @@ $.widget( "cp.baseBootstrapTable" , {
                     confirm_content     : this.options.confirm_content,
                     confirm_title       : this.options.confirm_title,
                     modelType           : modelType,
+                    modalType           : this.options.modalType,
                     view_callback       : this.options.callback
             });
             control.render();
