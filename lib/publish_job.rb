@@ -8,6 +8,14 @@ class PublishJob
     @ref_numbers = ref_numbers
   end
   
+  def before(job)
+    Planner::Linkable.configure do |config|
+      config.addLinkable [Person, ProgrammeItem, PublishedProgrammeItem, Venue, Room]
+    end
+    ActiveRecord::Base.send(:include, Planner::Linkable)
+    Planner::Linkable.setup
+  end
+  
   def perform
     cfg = getSiteConfig
     zone = cfg ? cfg.time_zone : Time.zone
@@ -99,9 +107,9 @@ class PublishJob
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < external_images.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at)', nil)
+    clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < external_images.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < links.updated_at)', nil)
     # check the date of the programme item compared with the published
-    args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication, :external_images] }
+    args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication, :external_images, :linked] }
     return ProgrammeItem.find :all, args
   end
 
@@ -168,6 +176,7 @@ class PublishJob
         newItem.save
         
         updateImages(srcItem, newItem)
+        updateLinks(srcItem, newItem)
 
         # link to the people (and their roles)
         updateAssignments(srcItem, newItem)
@@ -224,6 +233,16 @@ class PublishJob
 
       newimg = newItem.external_images.new :use => img.use, :picture => finalUrl
       newimg.save
+    end
+  end
+  
+  def updateLinks(srcItem, newItem)
+    # copy the links from the src to the new itme
+    newItem.linked.delete_all # delete the old image(s) TODO - make sure it does not destroy the original
+    srcItem.linked.each do |link|
+      new_link = newItem.linked.new
+      copy(link, new_link) # copy the variables (except linked to etc)
+      new_link.save
     end
   end
   
@@ -347,7 +366,7 @@ class PublishJob
   def copy(src, dest)
     src.attributes.each do |name, val|
       # but do not copy any of the variables needed for the optimistic locking, the id, etc
-      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id"].index(name) == nil)
+      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id", "linkedto_id", "linkedto_type"].index(name) == nil)
         # Only copy values that have changed?
         dest.send("#{name}=",val) if (dest.attributes[name] == nil) || (dest.attributes[name] != val) || (val != nil)
       end
