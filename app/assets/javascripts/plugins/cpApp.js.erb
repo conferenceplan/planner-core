@@ -473,7 +473,7 @@ var AppUtils = (function(){
                 e.stopPropagation();
             };
 
-            this.$el.find('.progress_bar .completed').css('width', '0%');
+            this.$el.find('.progress_bar').css('width', '0%');
             this.model.on("progress", this.progress, this);
             
             this.submitData();

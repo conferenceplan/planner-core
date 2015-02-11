@@ -41,19 +41,15 @@ Form.editors.File = Form.editors.Text.extend({
 }, {
     // Also may be good to add progress bar
     template: _.template('\
-            <span>\
-            <span class="btn btn-success fileinput-button">\
-                <span>Select file ...</span>\
-                <input class="col-sm-10" type="file" id="<%= field_name %>" name="files[]"/>\
-            </span>\
-                    <div class="status-area">\
-                        <span class="status"></span>\
-                        <div class="upload_progress">\
-                            <div class="progress progress-success active progress-bar-striped"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>\
-                        </div>\
-                    </div>\
-            <div id="file_preview"></div>\
-            </span>\
+            <div>\
+                <span class="btn btn-success fileinput-button">\
+                    <span>Select file ...</span>\
+                    <input class="col-sm-10" type="file" id="<%= field_name %>" name="files[]"/>\
+                </span>\
+                <div class="progress progress-striped active">\
+                    <div class="progress-bar progress-bar-success" role="progressbar" style="width:0%;"></div>\
+                 </div>\
+            </div>\
         ', null, Form.templateSettings),
 });
 
