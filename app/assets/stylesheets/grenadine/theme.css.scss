@@ -2,11 +2,13 @@
 
 /* Variables that will set values depending on the user's language */
 
-$w2: 768px; // under this width, we collapse to a pull-down menu instead of a regular menu
-$w3: 1167px; // small toolbar width in English
-$w4: 1296px; // medium toolbar width in English 
-$w3f: 1229px;  // small toolbar width in French
-$w4f: 1368px; // medium toolbar width in French
+$w2: 786px; // under this width, we collapse to a pull-down menu instead of a regular menu
+
+$w3: 1367px; // small toolbar width in English
+$w4: 1509px; // medium toolbar width in English 
+
+$w3f: 1448px;  // small toolbar width in French
+$w4f: 1604px; // medium toolbar width in French
 
 /* Bootstrap overide */
 .dl-horizontal dt {
