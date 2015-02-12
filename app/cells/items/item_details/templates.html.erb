@@ -126,7 +126,7 @@
                     <div class="col-sm-6">
                         <span>
                         <label><%= t "item-notes" %></label>
-                        <div data-editors="notes"></div>
+                        <div data-editors="item_notes"></div>
                         </span>
                     </div>
                     <div class="col-sm-6">
@@ -170,7 +170,7 @@
     <div class="col-md-4">
         <h5>Notes</h5>
         <dl class="dl-airy">
-            <dt><%= t "item-notes-for-organizers" %></dt><dd>{{= notes ? notes : '<span class="minor-text"><%= t "no-notes-provided" %></span>' }}</dd>
+            <dt><%= t "item-notes-for-organizers" %></dt><dd>{{= item_notes ? item_notes : '<span class="minor-text"><%= t "no-notes-provided" %></span>' }}</dd>
             <dt><%= t "item-notes-for-participants" %></dt><dd>{{= participant_notes ? participant_notes : '<span class="minor-text"><%= t "no-notes-provided" %></span>' }}</dd>
         </dl>
     </div>    

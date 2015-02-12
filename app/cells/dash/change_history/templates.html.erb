@@ -47,8 +47,8 @@
                     {{ if (typeof maximum_people != 'undefined') { }}
                         <dt><%= t "item-max-participants" %></dt><dd>{{= maximum_people }}</dd>
                     {{ } }}
-                    {{ if (typeof notes != 'undefined') { }}
-                        <dt><%= t "item-notes" %></dt><dd>{{= notes }}</dd>
+                    {{ if (typeof item_notes != 'undefined') { }}
+                        <dt><%= t "item-notes" %></dt><dd>{{= item_notes }}</dd>
                     {{ } }}
                     {{ if (typeof print == 'boolean') { }}
                         <dt><%= t "item-print" %></dt><dd>{{= print }}</dd>

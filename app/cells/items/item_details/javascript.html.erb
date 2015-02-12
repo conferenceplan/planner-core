@@ -39,7 +39,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         startDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
                         endDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
                 } },
-            notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 2, cols : 60 } },
+            item_notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 2, cols : 60 } },
             participant_notes : { type : 'TextArea', title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60 } },
             format_id : { type : 'Select',  editorAttrs : {tabindex : "-1"} , title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             setup_type_id : { type : 'Select',  editorAttrs : {tabindex : "-1"} , title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },

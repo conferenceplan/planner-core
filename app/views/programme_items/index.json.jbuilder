@@ -11,7 +11,7 @@ json.array!(@assignments) do |assignment|
         json.format_name            assignment.programmeItem.format.name if assignment.programmeItem.format
         json.maximum_people         assignment.programmeItem.maximum_people
         json.minimum_people         assignment.programmeItem.minimum_people
-        json.notes                  assignment.programmeItem.notes
+        json.item_notes             assignment.programmeItem.item_notes
         json.print                  assignment.programmeItem.print
         json.pub_reference_number   assignment.programmeItem.pub_reference_number
         json.isPublished            assignment.programmeItem.published != nil
