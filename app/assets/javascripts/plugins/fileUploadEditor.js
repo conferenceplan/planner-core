@@ -6,7 +6,6 @@ Form.editors.File = Form.editors.Text.extend({
         var i = 0, files = this.files,
         len = files.length;
         ev.data.$the_file = files[0];
-        console.debug(ev.data.$the_file);
         ev.data.$el.find('#file_preview').text(ev.data.$the_file.name);
     }, 
 

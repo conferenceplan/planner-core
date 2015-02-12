@@ -436,7 +436,7 @@ var AppUtils = (function(){
         },
 
         // over-ride for the actual data submission        
-        submitData : function() {
+        submitData : function(callback) {
             // gather the data and update the underlying model etc.
             var errors = this.form.commit(
             ); // To save the values from the form back into the model
@@ -454,6 +454,9 @@ var AppUtils = (function(){
                         }
                         if (refreshFn) {
                             refreshFn(mdl); // cause problem with templates used ???
+                        };
+                        if (callback) {
+                            callback();
                         };
                     }
                 }); // save the model to the server
@@ -476,15 +479,16 @@ var AppUtils = (function(){
             this.$el.find('.progress_bar').css('width', '0%');
             this.model.on("progress", this.progress, this);
             
-            this.submitData();
+            var that = this;
+            this.submitData(function() {
+                that.$el.modal("hide");
+            });
         },
 
         progress : function(e, ctx) {
             var percent = Math.round(e * 100.0);
+            console.debug(percent);
             this.$el.find('.progress-bar').css('width', percent + '%');
-            if (e == 1) {
-                this.$el.modal("hide");
-            };
         }
     });
     
