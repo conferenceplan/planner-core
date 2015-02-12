@@ -192,6 +192,10 @@ screen and (min-device-pixel-ratio: 1.5) {
     background-color: white;
     margin-bottom: 0px;
 }
+#grenadine-sub-application-menu.navbar, #grenadine-sub-application-menu nav.navbar.navbar-default, #app-sub-menu-div {
+    height: 40px;
+    min-height: 40px;
+}
 #grenadine-sub-application-menu.navbar-default .navbar-nav > .active > a:after {
     width: 0;
     height: 0;
@@ -209,12 +213,15 @@ screen and (min-device-pixel-ratio: 1.5) {
     //display: table;
     //table-layout: fixed;
     //float:none;
+    height: 40px;
 }
 #grenadine-sub-application-menu .navbar-nav li a {
     //width: 100px;
     //height: 100px;
+    height: 40px;
     font-size: 12px;
     text-align: center;
+    padding-top: 10px;
 }
 #grenadine-sub-application-menu .navbar-nav li.active {
     font-weight: bold;
@@ -259,8 +266,8 @@ screen and (min-device-pixel-ratio: 1.5) {
 	}	
 }
 #grenadine-sub-application-menu {
-  margin-top: -1px;
-  margin-bottom: 20px;
+  //margin-top: -1px;
+  //margin-bottom: 50px;
 }
 /* This is the case when we have only enough space for the fully-collapsed menu */
   #user-menu {
@@ -351,7 +358,7 @@ screen and (min-device-pixel-ratio: 1.5) {
   }
 }
 #user-sub-menu {
-  height: 50px;
+  height: 40px;
   width: 100%;
   padding-left: 0;
   padding-right: 0;
