@@ -242,6 +242,8 @@ class PublishJob
     srcItem.linked.each do |link|
       new_link = Link.new
       obj = copy(link, new_link) # copy the variables (except linked to etc)
+      obj.linkedto_type = newItem.class.name
+      obj.linkedto_id = newItem.id
       obj.save
     end
   end
@@ -366,7 +368,7 @@ class PublishJob
   def copy(src, dest)
     src.attributes.each do |name, val|
       # but do not copy any of the variables needed for the optimistic locking, the id, etc
-      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id"].index(name) == nil)
+      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id", "linkedto_type", "linkedto_id"].index(name) == nil)
         # Only copy values that have changed?
         dest.send("#{name}=",val) if (dest.attributes[name] == nil) || (dest.attributes[name] != val) || (val != nil)
       end
