@@ -240,9 +240,9 @@ class PublishJob
     # copy the links from the src to the new itme
     newItem.linked.delete_all # delete the old image(s) TODO - make sure it does not destroy the original
     srcItem.linked.each do |link|
-      new_link = newItem.linked.new
-      copy(link, new_link) # copy the variables (except linked to etc)
-      new_link.save
+      new_link = Link.new
+      obj = copy(link, new_link) # copy the variables (except linked to etc)
+      obj.save
     end
   end
   
@@ -366,7 +366,7 @@ class PublishJob
   def copy(src, dest)
     src.attributes.each do |name, val|
       # but do not copy any of the variables needed for the optimistic locking, the id, etc
-      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id", "linkedto_id", "linkedto_type"].index(name) == nil)
+      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id"].index(name) == nil)
         # Only copy values that have changed?
         dest.send("#{name}=",val) if (dest.attributes[name] == nil) || (dest.attributes[name] != val) || (val != nil)
       end
