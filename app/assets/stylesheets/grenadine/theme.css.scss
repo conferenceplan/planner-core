@@ -184,8 +184,7 @@ screen and (min-device-pixel-ratio: 1.5) {
     border-right: none;
 }
 #grenadine-sub-application-menu, #grenadine-sub-application-menu a, #grenadine-sub-application-menu.navbar-default .navbar-nav {
-    background-color: white;
-    //margin-bottom: 0px;
+    background-color: #e7e7e7;
 }
 #grenadine-sub-application-menu.active a {
     background-color: white;
@@ -204,10 +203,10 @@ screen and (min-device-pixel-ratio: 1.5) {
     left: calc(50% - 7px);
 }
 #grenadine-sub-application-menu .navbar-nav {
-    margin: 0 auto;
-    display: table;
-    table-layout: fixed;
-    float:none;
+    //margin: 0 auto;
+    //display: table;
+    //table-layout: fixed;
+    //float:none;
 }
 #grenadine-sub-application-menu .navbar-nav li a {
     //width: 100px;
