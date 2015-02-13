@@ -1,0 +1,5 @@
+/* this style is loaded while ckeditor through htmlExtEditor.js is in Edit mode */
+.grenadine-editable, a span.grenadine-editable {
+    border: 1px blue dashed;
+    padding: 3px;
+}

@@ -1,0 +1,220 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require bootstrap_and_overrides 
+ *  
+ *= require backbone-forms/distribution/templates/bootstrap3
+ *= require bootstrap-datetimepicker
+ *= require bootstrap-table/bootstrap-table.min
+ * 
+ *= require custom-theme/jquery-ui-1.9.2.custom
+ *  
+ *= require jqGrid/ui.jqgrid
+ *= require jqGrid/jqGrid.overrides
+ *= require jqcloud 
+ *= require colorpicker/jquery.colorpicker
+ *= require select2 
+ *= require tabdrop
+ * 
+ * CHECK - also check for asset/fonts
+ *= require jquery.easy-pie-chart
+ * 
+ *= require_self
+ */
+
+.bbf-list-modal {
+  width: 308px;
+}
+
+.hidden-form-group {
+  display : none;
+}
+
+.hidden-button {
+  display : none;
+}
+
+.hidden-area {
+position: absolute !important;
+// clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+clip: rect(1px, 1px, 1px, 1px);
+}
+
+.rotate-text {
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+
+  /* also accepts left, right, top, bottom coordinates; not required, but a good idea for styling */
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+
+  /* Should be unset in IE9+ I think. */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+
+.html-editor input {
+    height: 200px;
+}
+
+.toolbar-button {
+  margin-right : 5px;
+  // margin-bottom : 15px;
+}
+
+.label-big {
+    padding: 5px 10px 6px;
+}
+.label-big, .badge-big {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.translation_missing {
+  background-color : #f3f3f3;
+}
+
+// NOTE - this is needed if we want to be able to drag-n-drop cells from the jqgrid
+.ui-jqgrid .ui-jqgrid-bdiv {
+  overflow: visible;
+}
+
+// .ui-jqgrid.ui-widget.ui-widget-content.ui-corner-all {
+    // margin-left: -15px;
+// }
+
+.ui-jqgrid .ui-jqgrid-htable th span.ui-jqgrid-resize {
+    height: 100% !important;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th div {
+    height: 100%;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th {
+    height: 100%;
+}
+
+// .primary-sidebar {
+    // float : left;
+    // position : absolute;
+    // // width : 200px;
+// }
+
+
+$red : #D53F40;
+$blue : #6FB3E0;
+$green : #9ABC32;
+$purple : #3366CC;
+$orange : #FF9900;
+$turquiose : #009999;
+
+// .ui-jqgrid .ui-search-toolbar input[type="text"] {
+    // border: 1px solid #CCCCCC;
+    // border-radius: 4px 4px 4px 4px;
+    // font-size: 12px;
+// }
+.nav-box-red {
+  background-color : $red;
+  background-image: none;
+}
+
+.nav-box-blue {
+  background-color : $blue;
+  background-image: none;
+}
+
+.nav-box-green {
+  background-color : $green;
+  background-image: none;
+}
+
+.nav-box-purple {
+  background-color : $purple;
+  background-image: none;
+}
+
+.nav-box-turquiose {
+  background-color : $turquiose;
+  background-image: none;
+}
+
+.nav-box-orange {
+  background-color : $orange;
+  background-image: none;
+}
+
+.planner-top-nav [class*="span"]:first-child {
+  margin-top : 2px;
+  min-height : 10em;
+}
+
+.planner-top-nav a + [class*="span"] {
+  margin-left : 2px;
+  margin-top : 2px;
+  min-height : 10em;
+}
+
+.planner-top-nav .span3 {
+  width : 24.7%;
+}
+
+.planner-top-nav .span2 {
+  width : 16.4%;
+}
+
+.nav-box {
+  text-align : left;
+  border-radius : 0 0 0 0;
+}
+
+.nav-box-content {
+  font : {
+    size : 80%;
+  }
+}
+
+.chart-label {
+    text-align: center;
+}
+
+.chart-row {
+  // border: 1px dashed;
+  padding: 10px;
+  display: table;
+  margin: auto;
+}
+
+.chart-row .chart {
+    display: inline-block;
+}
+
+.chart .chart-label,
+.chart [class*="percentage"] {
+}
+
+.chart {
+  border: 0px solid;
+}
+
+.bbf-list .form-control {
+  height : auto;
+  padding : 0;
+}
+
+.tooltip-inner {
+    max-width: 300px;
+    width: 300px; 
+}
