@@ -15,9 +15,10 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
         // /gallery_images/<type>/<gallery>
         var imagetype = this.options.schema.imagetype;
         var gallery = this.options.schema.gallery;
+        var baseUri = this.options.schema.baseUri ? this.options.schema.baseUri : ''; 
         this.$el.ckeditor({
-            filebrowserUploadUrl : '/gallery_images/' + imagetype + '/' + gallery, // This is the URL for uploading images ...
-            filebrowserBrowseUrl : '/gallery_images/' + imagetype + '/' + gallery, // The URL for browsing images
+            filebrowserUploadUrl : baseUri + '/gallery_images/' + imagetype + '/' + gallery, // This is the URL for uploading images ...
+            filebrowserBrowseUrl : baseUri + '/gallery_images/' + imagetype + '/' + gallery, // The URL for browsing images
             // Prevent the translation of html elements (< and >) to encodings, so we can include "macros"
             entities : false,
             basicEntities : false,
