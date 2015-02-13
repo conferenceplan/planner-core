@@ -58,7 +58,7 @@ module PlannerCore
         surveys/*.js
         surveys/*.css
         users/*.js
-        grenadine/*.css
+        grenadine/ckeditor-edit.css
       )
     end
 
