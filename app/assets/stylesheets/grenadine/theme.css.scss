@@ -114,6 +114,7 @@ screen and (min-device-pixel-ratio: 1.5) {
 }
 
 /* Styles for the menus and headers in the app */
+
 #app-menu-div ul {
 	width: 100%;
 	margin-left: 0;
@@ -167,9 +168,17 @@ screen and (min-device-pixel-ratio: 1.5) {
     color: black;
     border-bottom: solid 3px #428bca;
     margin-bottom: -3px;
+    
+}
+#grenadine-application-menu.navbar-default, #grenadine-sub-application-menu.navbar-default {
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.2);
+}
+#grenadine-application-menu.navbar {
+    border-right: none;
+    border-left: none;
 }
 
-/*---------2nd level menu ------- */
+/*---------2nd level menu -------------------------------------------------------------------------- */
 #grenadine-sub-application-menu li:after {
     content: '';
     border-right: 1px solid #DDD;
@@ -185,7 +194,7 @@ screen and (min-device-pixel-ratio: 1.5) {
 #grenadine-sub-application-menu li:last-of-type {
     border-right: none;
 }
-#grenadine-sub-application-menu, #grenadine-sub-application-menu a, #grenadine-sub-application-menu.navbar-default .navbar-nav {
+#grenadine-sub-application-menu {
     background-color: #e7e7e7;
 }
 #grenadine-sub-application-menu.active a {
@@ -225,9 +234,11 @@ screen and (min-device-pixel-ratio: 1.5) {
 }
 #grenadine-sub-application-menu .navbar-nav li.active {
     font-weight: bold;
+    
 }
 
-/*----- End 2nd level menu ----*/
+/*----- End 2nd level menu --------------------------------------------------------------------------*/
+
 #right-menu-navbar ul.dropdown-menu li a, #right-menu-navbar li.dropdown.open a {
     color: black;
 }
@@ -251,7 +262,7 @@ screen and (min-device-pixel-ratio: 1.5) {
 #grenadine-sub-application-menu,
 #grenadine-application-menu {
   border-radius:0px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+  
   border: 0px 0px 0px 0px;
   margin-bottom: 0px;
   
