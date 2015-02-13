@@ -25,9 +25,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
 
             subject         : { type : 'Text', title : '<%= t "mail-subject-line" %>' , 
                                         help: '<%= t "template-email-subject-hint" %>'},
-            content         : { type : 'HtmlExt', title : '<%= t "mail-content" %>', imagetype : 'PlannerMobile::MobileContentImage', 
-                                baseUri : "<%= baseUri %>",
-                                gallery : 'mails', editorAttrs : {rows : 50} }
+            content         : { type : 'HtmlExt', title : '<%= t "mail-content" %>', imagetype : 'PlannerMobile::MobileContentImage', gallery : 'mails', editorAttrs : {rows : 50} }
         }
     });
     

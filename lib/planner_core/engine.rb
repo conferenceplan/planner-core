@@ -58,7 +58,6 @@ module PlannerCore
         surveys/*.js
         surveys/*.css
         users/*.js
-        grenadine/*.css
       )
     end
 
