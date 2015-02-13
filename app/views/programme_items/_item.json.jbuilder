@@ -7,7 +7,7 @@ json.title                  item.title
 json.short_title            item.short_title
 json.precis                 item.precis
 json.short_precis           item.short_precis
-json.notes                  item.notes
+json.item_notes             item.item_notes
 json.participant_notes      item.participant_notes
 json.pub_reference_number   item.pub_reference_number
 json.print                  item.print

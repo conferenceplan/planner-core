@@ -48,7 +48,8 @@ Form.editors.File = Form.editors.Text.extend({
                 <div class="progress progress-striped active">\
                     <div class="progress-bar progress-bar-success" role="progressbar" style="width:0%;"></div>\
                  </div>\
-            </div>\
+                 <div class="file-upload-name" id="file_preview"></div>\
+         </div>\
         ', null, Form.templateSettings),
 });
 

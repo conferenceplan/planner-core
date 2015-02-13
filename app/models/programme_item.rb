@@ -1,5 +1,5 @@
 class ProgrammeItem < ActiveRecord::Base
-  attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :notes, :print,
+  attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :item_notes, :print,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
                   :setup_type_id, :format_id, :short_precis
 
