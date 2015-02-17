@@ -12,6 +12,9 @@
                     <li>
                         <a href="#conference_config"><%= t "config-conference" %></a>
                     </li>
+                    <% @extra_config_menu.each do |extra| %>
+                        <%= render extra %>
+                    <% end %>
                 <% end %>
             </ul>
         </div>
