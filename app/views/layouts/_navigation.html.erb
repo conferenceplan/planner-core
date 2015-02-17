@@ -25,6 +25,7 @@
                 <% end %>
             </ul>
         </li>
+        <% if settings_menu.size > 0 %>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <%= t 'settings' %>
@@ -36,6 +37,7 @@
                 <% end %>
             </ul>
         </li>
+        <% end %>
         <% if current_user %>
             <li><%= link_to (t "logout"), main_app.destroy_user_session_path, :method => :delete %></li>
         <% end %>
