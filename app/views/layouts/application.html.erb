@@ -53,15 +53,12 @@
 	  		</nav>      		
       	</div>
 
-      	<div id="user-menu" role="navigation"> <!-- This is the menu with all of the application stuff that appears once a user is logged-in -->
       		<% if current_user %>
 				<%= render 'layouts/topbar' %>
 			<% end %>
-		</div>
 		
-            	<%= yield(:submenu) if content_for?(:submenu) %>
+        	<%= yield(:submenu) if content_for?(:submenu) %>
         
-        <div id="menu-separator-div">
         </div>
         <div id="main-screen-container" class="container">
             <%= render 'layouts/page_help' rescue nil %> <!-- Plugin for the help system -->

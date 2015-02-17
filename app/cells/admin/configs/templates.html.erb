@@ -20,98 +20,8 @@
     </div>
 </script>
 
-<script type="text/template" id="equipment-template">
-    <td>
-        <a href="#equipment-tab" data-toggle="tab" class="model-select-button">{{= description }}</a>
-    </td>
-    <td>
-        <button class="model-edit-button btn btn-xs"><i class="glyphicon glyphicon-pencil"></i></button>
-    </td>
-    <td>
-        <button class="model-delete-button btn btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
-    </td>
-</script>
-
-<script type="text/template" id="equipment-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
-        <%= t 'equipment-add-equipment-type' %>
-    </button>
-</script>
-
-<script type="text/template" id="item-format-template">
-    <td>
-        <a href="#item-format-tab" data-toggle="tab" class="model-select-button">{{= name }}</a>
-    </td>
-    <td>
-        {{= position}}
-    </td>
-    <td>
-        <button class="model-edit-button btn btn-xs"><i class="glyphicon glyphicon-pencil"></i></button>
-    </td>
-    <td>
-        <button class="model-delete-button btn btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
-    </td>
-</script>
-
-<script type="text/template" id="item-format-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
-        <%= t 'add-item-format' %>
-    </button>
-</script>
-
-<script type="text/template" id="invite-category-template">
-    <td>
-        <a href="#item-format-tab" data-toggle="tab" class="model-select-button">{{= name }}</a>
-    </td>
-    <td>
-        {{= position}}
-    </td>
-    <td>
-        <button class="model-edit-button btn btn-xs"><i class="glyphicon glyphicon-pencil"></i></button>
-    </td>
-    <td>
-        <button class="model-delete-button btn btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
-    </td>
-</script>
-
-<script type="text/template" id="invite-category-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
-        <%= t 'add-invitation-category' %>
-    </button>
-</script>
-
-<script type="text/template" id="room-setup-template">
-    <td>
-        <a href="#item-format-tab" data-toggle="tab" class="model-select-button">{{= name }}</a>
-    </td>
-    <td>
-        <button class="model-edit-button btn btn-xs"><i class="glyphicon glyphicon-pencil"></i></button>
-    </td>
-    <td>
-        <button class="model-delete-button btn btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
-    </td>
-</script>
-
-<script type="text/template" id="room-setup-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
-        <%= t 'add-room-setup' %>
-    </button>
-</script>
-
-<script type="text/template" id="data-source-template">
-    <td>
-        <a href="#item-format-tab" data-toggle="tab" class="model-select-button">{{= name }}</a>
-    </td>
-    <td>
-        <button class="model-edit-button btn btn-xs"><i class="glyphicon glyphicon-pencil"></i></button>
-    </td>
-    <td>
-        <button class="model-delete-button btn btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
-    </td>
-</script>
-
 <script type="text/template" id="tag-context-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
+    <button class="add-model-button btn btn-sm btn-primary pull-right">
         <%= t 'add-tag-context' %>
     </button>
 </script>
@@ -128,12 +38,6 @@
     </td>
 </script>
 
-<script type="text/template" id="data-source-control-template">
-    <button class="add-model-button btn-xs btn-primary pull-right">
-        <%= t 'add-data-source' %>
-    </button>
-</script>
-
 <script type="text/template" id="site-config-view-template">
     <dl class="dl-horizontal">
         {{ if (typeof id != 'undefined') { }}
@@ -142,34 +46,6 @@
         <dt><%= t "conference-start-date" %></dt><dd>{{= start_date }}</dd>
         <dt><%= t "number-of-days" %></dt><dd>{{= number_of_days }}</dd>
         <dt><%= t "time-format-for-publications" %></dt><dd>{{= print_time_format }}</dd>
-        {{ } else{ }}
-        NO CONFIG
-        {{ } }}
-    </dl>
-</script>
-
-<script type="text/template" id="email-config-view-template">
-    <dl class="dl-horizontal">
-        {{ if (typeof id != 'undefined') { }}
-        <dt><%= t "config-info-email" %></dt><dd>{{= info }}</dd>
-        <dt><%= t "config-from-email" %></dt><dd>{{= from }}</dd>
-        <dt><%= t "config-reply-to-email" %></dt><dd>{{= reply_to ? reply_to : '' }}</dd>
-        <dt><%= t "config-cc-email" %></dt><dd>{{= cc }}</dd>
-        <dt><%= t "config-test-email" %></dt><dd>{{= test_email }}</dd>
-        {{ } else{ }}
-        NO CONFIG
-        {{ } }}
-    </dl>
-</script>
-
-<script type="text/template" id="cloudinary-config-view-template">
-    <dl class="dl-horizontal">
-        {{ if (typeof id != 'undefined') { }}
-        <dt><%= t "config-cloudinary-api-key" %></dt><dd>{{= api_key }}</dd>
-        <dt><%= t "config-cloudinary-api-secret" %></dt><dd>{{= api_secret }}</dd>
-        <dt><%= t "config-cloudinary-cloud-name" %></dt><dd>{{= cloud_name }}</dd>
-        <dt><%= t "config-cloudinary-enhance-image-tag" %></dt><dd>{{= enhance_image_tag ? 'Yes' : 'No' }}</dd>
-        <dt><%= t "config-cloudinary-static-image-support" %></dt><dd>{{= static_image_support ? 'Yes' : 'No' }}</dd>
         {{ } else{ }}
         NO CONFIG
         {{ } }}

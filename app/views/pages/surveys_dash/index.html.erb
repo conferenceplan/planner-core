@@ -1,12 +1,3 @@
-<% content_for :submenu do %>
-        <%= render_cell :context_menu, :display, :menu => {
-            "survey-reports" => '/pages/surveys_dash/report',
-            "manage-surveys" => '/pages/surveys_dash/manage'
-        } %>
-<% end %>
-
 <% if @cellname %>
     <%= render_cell "surveys/#{@cellname}", :display %>
-<% else %>
-    <%= render_cell "surveys/surveys_dash", :display %>
 <% end %>

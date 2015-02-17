@@ -1,12 +1,3 @@
-<% content_for :submenu do %>
-        <%= render_cell :context_menu, :display, :menu => {
-            "submenu-users" => (allowed?( :manage_users) ? '/pages/admin_dash/users' : nil ),
-            "submenu-config" => '/pages/admin_dash/configs'
-        }.keep_if{|k,v| v} %>
-<% end %>
-
 <% if @cellname %>
     <%= render_cell "admin/#{@cellname}", :display %>
-<% else %>
-    <%= render_cell "admin/admin_dash", :display %>
 <% end %>

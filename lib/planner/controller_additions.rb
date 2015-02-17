@@ -2,7 +2,7 @@ module Planner
   module ControllerAdditions
     
     def self.included(base)
-      base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs
+      base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu
     end
     
     def allowed?(item) # take target as the name
@@ -32,22 +32,60 @@ module Planner
     def extra_item_tabs
       ''
     end
-    
+
     def top_menu
       #  return the hash for the top menu
       menu = []
       
-      menu << { :title => '',               :target => '/',                                   :icon => "glyphicon-home",      :target_base => '/'}
-      menu << { :title => 'venues',         :target => '/pages/venues_dash/manage',           :icon => "glyphicon-th-list",   :target_base => '/pages/venues_dash'} if allowed? :venues
-      menu << { :title => 'participants',   :target => '/pages/participants_dash/manage',     :icon => "glyphicon-user",      :target_base => '/pages/participants_dash'} if allowed? :participants
-      menu << { :title => 'program-items',  :target => '/pages/items_dash/manage',            :icon => "glyphicon-tasks",     :target_base => '/pages/items_dash'} if allowed? :items
-      menu << { :title => 'schedule',       :target => '/pages/schedule_dash/manage',         :icon => "glyphicon-calendar",  :target_base => '/pages/schedule_dash'} if allowed? :schedule
-      menu << { :title => 'surveys',        :target => '/pages/surveys_dash/report',          :icon => "glyphicon-pencil",    :target_base => '/pages/surveys_dash'} if allowed? :surveys
-      menu << { :title => 'communications', :target => '/pages//communications_dash/manage',  :icon => "glyphicon-envelope",  :target_base => '/pages/communications_dash'} if allowed? :communications
-      menu << { :title => 'reports',        :target => '/pages/reports_dash/manage',          :icon => "glyphicon-stats",     :target_base => '/pages/reports_dash'} if allowed? :reports
-      menu << { :title => 'publications',   :target => '/pages/publications_dash/print',      :icon => "glyphicon-print",     :target_base => '/pages/publications_dash'} if allowed? :publications
-      menu << { :title => 'admin',          :target => '/pages/admin_dash/configs',           :icon => "glyphicon-wrench",    :target_base => '/pages/admin_dash'} if allowed? :admin
+      menu << { :title => '',               :target => '/', :icon => "glyphicon-home" }
+      menu << { :title => 'venues',         :target => '/pages/venues_dash/manage', :icon => "glyphicon-th-list" } if allowed? :venues
+      menu << { :title => 'participants',   :target => '/pages/participants_dash/manage', :icon => "glyphicon-user",      :target_base => '/pages/participants_dash'} if allowed? :participants
+      menu << { :title => 'program-items',  :target => '/pages/items_dash/manage', :icon => "glyphicon-tasks",     :target_base => '/pages/items_dash',
+                :sub_menu => [
+                  { :title => 'items',      :target => '/pages/items_dash/manage', :display => allowed?(:items) },
+                  { :title => 'schedule',   :target => '/pages/schedule_dash/manage', :display => allowed?(:schedule)  }
+                  # conflicts ?
+                ]
+              } if allowed? :items
+      menu << { :title => 'surveys',          :target => '/pages/surveys_dash/report', :icon => "glyphicon-pencil",  :target_base => '/pages/surveys_dash',
+                :sub_menu => [
+                  { :title => 'survey-reports', :target => '/pages/surveys_dash/report', :display => allowed?(:survey_reports) },
+                  { :title => 'manage-surveys', :target => '/pages/surveys_dash/manage', :display => allowed?(:manage_surveys) }
+                ]
+              } if allowed? :surveys
+      menu << { :title => 'communications',   :target => '/pages//communications_dash/manage', :icon => "glyphicon-envelope",  :target_base => '/pages/communications_dash',
+                :sub_menu => [
+                  { :title => 'manage-mailings', :target => '/pages/communications_dash/manage', :display => allowed?(:manage_mailings) },
+                  { :title => 'mail-templates', :target => '/pages/communications_dash/templates', :display => allowed?(:mailing_templates) }
+                ]
+              } if allowed? :communications
+      menu << { :title => 'reports',        :target => '/pages/reports_dash/manage', :icon => "glyphicon-stats",     :target_base => '/pages/reports_dash'} if allowed? :reports
+      menu << { :title => 'publications',   :target => '/pages/publications_dash/print', :icon => "glyphicon-print",     :target_base => '/pages/publications_dash',
+                :sub_menu => [
+                  {:title => 'print', :target => '/pages/publications_dash/print', :display => allowed?(:print) },
+                  {:title => 'publish', :target => '/pages/publications_dash/online', :display => allowed?(:publish) }
+                ]} if allowed? :publications
 
+      menu
+    end
+    
+    # get a menu item by name
+    def get_menu_index(menu, name)
+      menu.find_index{|item| item[:title] == name }
+    end
+    
+    # insert a new item at the given position
+    def insert_menu_item(menu, item, idx)
+      menu.insert(idx, item)
+    end
+    
+    def settings_menu
+      menu = []
+      
+      menu << { :title => 'my-profile', :target =>  baseUri + '/users/edit' } if current_user
+      menu << { :title => 'event-setup', :target => baseUri + '/pages/admin_dash/configs' } if allowed? :event_setup
+      menu << { :title => 'system-settings', :target => '/pages/admin_dash/system_configs'} if allowed? :system_settings
+      
       menu
     end
       
