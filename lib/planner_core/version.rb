@@ -1,3 +1,3 @@
 module PlannerCore
-  VERSION = "0.5.70"
+  VERSION = "0.5.71"
 end
