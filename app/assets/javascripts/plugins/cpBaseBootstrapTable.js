@@ -191,7 +191,10 @@ $.widget( "cp.baseBootstrapTable" , {
                 // }
             // },
             
-            newModel : function() {
+            newModel : function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+
                 var mdl = new this.options.modelType({});
                 if (this.options.id) {
                     mdl.set(this.options.id_name, this.options.id);
@@ -218,7 +221,10 @@ $.widget( "cp.baseBootstrapTable" , {
                 modal.render();
             },
         
-            editModel : function() {
+            editModel : function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+
                 var grid = this.options.grid;
                 if (that.model) {
                     // Put up a modal dialog to edit the reg details
@@ -235,7 +241,10 @@ $.widget( "cp.baseBootstrapTable" , {
                 };
             },
         
-            deleteModal : function() {
+            deleteModal : function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+
                 if (that.model) {
                     var model = that.model;
                     var grid = this.options.grid;
