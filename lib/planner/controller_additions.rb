@@ -60,10 +60,10 @@ module Planner
                 ]
               } if allowed? :communications
       menu << { :title => 'reports',        :target => '/pages/reports_dash/manage', :icon => "glyphicon-stats",     :target_base => '/pages/reports_dash'} if allowed? :reports
-      menu << { :title => 'publications',   :target => '/pages/publications_dash/print', :icon => "glyphicon-print",     :target_base => '/pages/publications_dash',
+      menu << { :title => 'menu-publications',   :target => '/pages/publications_dash/print', :icon => "glyphicon-print",     :target_base => '/pages/publications_dash',
                 :sub_menu => [
-                  {:title => 'print', :target => '/pages/publications_dash/print', :display => allowed?(:print) },
-                  {:title => 'publish', :target => '/pages/publications_dash/online', :display => allowed?(:publish) }
+                  {:title => 'publish', :target => '/pages/publications_dash/online', :display => allowed?(:publish) },
+                  {:title => 'print', :target => '/pages/publications_dash/print', :display => allowed?(:print) }
                 ]} if allowed? :publications
 
       menu

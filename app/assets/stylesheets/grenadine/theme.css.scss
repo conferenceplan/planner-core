@@ -150,6 +150,7 @@ screen and (min-device-pixel-ratio: 1.5) {
    background: linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0dffffff', endColorstr='#c01f40',GradientType=1 );
    border:0px;
+   //margin-bottom: 25px;
  }
  #event-planner-logo-link-container {
    padding:0 0 0 10px;
@@ -373,9 +374,11 @@ screen and (min-device-pixel-ratio: 1.5) {
   width: 100%;
   padding-left: 0;
   padding-right: 0;
+  margin-top: -1px;
 }
 #menu-separator-div {
-  height: 20px;
+  height: 60px;
+  
 }
 @media all and (min-width: $w2)
 {
@@ -446,12 +449,15 @@ screen and (min-device-pixel-ratio: 1.5) {
 /* General styles that apply to the whole app */
 #main-screen-container {
   width:97%;
+  //margin-top: 40px;
+  /*
   @media all and (min-height: 500px) { min-height: 400px; }
   @media all and (min-height: 600px) { min-height: 500px; }
   @media all and (min-height: 700px) { min-height: 500px; }
   @media all and (min-height: 800px) { min-height: 550px; }
   @media all and (min-height: 900px) { min-height: 650px; }
   @media all and (min-height: 1000px) { min-height: 750px; }
+  */
 }
 
 .select2-container-multi {
