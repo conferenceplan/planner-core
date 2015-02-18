@@ -976,7 +976,9 @@ a.mtooltip::before {
 a.mtooltip strong {line-height:30px;}
 a.mtooltip:hover {text-decoration:none;} 
 a.mtooltip span {
-    z-index:10;display:none; padding:14px 20px;
+    z-index:10;
+    display:none; 
+    padding:14px 20px;
     margin-top:-30px; margin-left:28px;
     width:300px; line-height:16px;
     font-size: 13px;
@@ -987,8 +989,12 @@ a.mtooltip i {
     color: #CCC;
 }
 a.mtooltip:hover span{
-    display:inline; position:absolute; color:#111;
-    border:1px solid #DCA; background:#fffAF0;}
+    display:inline; 
+    position:absolute; 
+    color:#111;
+    border:1px solid #DCA; 
+    background:#fffAF0;
+}
     
 .callout {z-index:20;position:absolute;top:30px;border:0;left:-12px;}
     

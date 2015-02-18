@@ -16,10 +16,11 @@
 </script>
 
 <script type="text/template" id="mailing-control-view-template">
-    <button class="btn btn-primary schedule-mail-button pull-right" {{= scheduled ? 'disabled' : ''}}><%= t 'schedule-mailing' %></button>
+    <button class="btn btn-success btn-lg schedule-mail-button pull-right" {{= scheduled ? 'disabled' : ''}}><span class="glyphicon glyphicon-send"></span>&nbsp;&nbsp;<%= t 'send-mailing-now' %></button>
 </script>
 
 <script type="text/template" id="preview-control-view-template">
+    <p><%= t 'preview-email' %></p>
     <button class="btn btn-primary preview-mail-button"><%= t 'preview' %></button>
 </script>
 
