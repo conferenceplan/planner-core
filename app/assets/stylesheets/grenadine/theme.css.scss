@@ -1035,6 +1035,9 @@ a.mtooltip span
    color: red;
    font-weight: bold;
 }
+.cke_button_label.cke_button__insert-grenadine-custom-fields_label { 
+    display: inline; 
+}
 /* This style identifies visually the editable areas in the mail templates */
 .grenadine-editable, a span.grenadine-editable {
     border: 1px blue dashed;
