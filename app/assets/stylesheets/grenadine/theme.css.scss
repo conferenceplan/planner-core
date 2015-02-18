@@ -151,6 +151,7 @@ screen and (min-device-pixel-ratio: 1.5) {
    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0dffffff', endColorstr='#c01f40',GradientType=1 );
    border:0px;
    //margin-bottom: 25px;
+   border-bottom: 1px solid #E7E7E7;
  }
  #event-planner-logo-link-container {
    padding:0 0 0 10px;
@@ -259,6 +260,7 @@ screen and (min-device-pixel-ratio: 1.5) {
 #logo-bar {
   margin-bottom:0;
   border-radius: 0px;
+  
 }
 #grenadine-sub-application-menu,
 #grenadine-application-menu {
