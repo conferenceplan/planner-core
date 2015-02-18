@@ -8,7 +8,7 @@ module Planner
     def request_path
       basepath = request.fullpath 
       if basepath.include? baseUri
-        basepath = path.slice(baseUri.length(), basepath.length())
+        basepath = basepath.slice(baseUri.length(), basepath.length())
       end
       basepath
     end
