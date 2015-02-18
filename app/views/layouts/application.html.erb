@@ -52,18 +52,17 @@
 	  			<%= render 'layouts/navigation' %>
 	  		</nav>      		
       	</div>
-
-      		<% if current_user %>
-				<%= render 'layouts/topbar' %>
-			<% end %>
-		
-        	<%= yield(:submenu) if content_for?(:submenu) %>
-        
-        </div>
+  		<% if current_user %>
+			<%= render 'layouts/topbar' %> <!-- This is the menu and sub-menu section -->
+		<% end %>
+    	<%= yield(:submenu) if content_for?(:submenu) %>
+        <div id="menu-separator-div"></div> 
         <div id="main-screen-container" class="container">
             <%= render 'layouts/page_help' rescue nil %> <!-- Plugin for the help system -->
             <div class="row">
-                <div id="alert-area"><%= render partial: 'layouts/messages', flash: flash %></div>
+                <div class="col-md-12 col-xs-12">
+                    <div id="alert-area"><%= render partial: 'layouts/messages', flash: flash %></div>
+                </div>
             </div>
             <%= content_for?(:content) ? yield(:content) : yield %>
         </div>
