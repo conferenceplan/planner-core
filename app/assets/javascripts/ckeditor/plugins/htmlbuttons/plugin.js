@@ -154,40 +154,40 @@ CKEDITOR.plugins.add( 'htmlbuttons', {
 
 CKEDITOR.config.htmlbuttons =	[
 	{
-		name:'button1',
-		icon:'icon1.png',
-		html:'<a href="http://www.google.com"> </a>',
-		title:'A link to Google'
-	},
-	{
-		name:'button2',
-		icon:'icon2.png',
-		html:'<table style="min-width:200px"><tr><td> </td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td></tr></table>',
-		title:'A simple table'
-	},
-	{
-		name:'button3',
-		icon:'icon3.png',
-		html:'<ol><li>Item 1 <ol><li>Sub item 1</li><li>Sub item 2</li></ol></li></ol>',
-		title:'A nested list'
-	},
-	{
-		name:'divs',
-		icon:'puzzle.png',
-		title:'Insert items',
+		name:'insert-grenadine-custom-fields',
+		icon:'grenadine-icon.png',
+		title:'Insert Grenadine email merge field',
 		items : [
 			{
-				name:'button4',
-				icon:'icon1.png',
-				html:'<div class="wrapper"><ol><li>Item 1</li></ol></div>',
-				title:'A div with a list inside'
+				name:'first-name',
+				//icon:'icon1.png',
+				html:'&lt;%= args[:person].first_name %&gt;',
+				title:'Person\'s first name'
+			},
+			{    
+				name:'last-name',
+				//icon:'icon2.png',
+				html:'&lt;%= args[:person].last_name %&gt;',
+				title:'Person\'s last name'
 			},
 			{
-				name:'button5',
-				icon:'icon2.png',
-				html:'<p class="heading"> </p>',
-				title:'A paragraph with a class'
-			}
+                name:'survey-key',
+                //icon:'icon2.png',
+                html:'&lt;%= args[:user].key %&gt;',
+                title:'Person\s Personal Survey Key'
+            },
+            {
+                name:'schedule-assignments',
+                //icon:'icon2.png',
+                html:'&lt;%= assignments_to_html(args[:assignments]) %&gt;',
+                title:'Person\s Participant Assignments'
+            },
+            {
+                name:'survey-responses',
+                //icon:'icon2.png',
+                html:'&lt;%= survey_to_html(args[:survey],args[:respondentDetails]) %&gt;',
+                title:'List of Person\s Survey Responses'
+            }
 
 		]
 	}

@@ -46,7 +46,12 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
                 { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
                 { name: 'colors', items : [ 'TextColor','BGColor' ] },
                 { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] },
-                { name: 'grenadine-templates', items : ['Templates' ] }
+                { name: 'grenadine-templates', items : ['Templates' ] },
+                { name: 'htmlbuttons', items : [
+                            {
+                                name:'insert-grenadine-custom-fields'
+                            }
+                        ] }
             ]
             
             
