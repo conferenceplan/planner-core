@@ -1,59 +1,60 @@
 <% if @menu && @menu.size > 0 %>
-<div id="user-menu" role="navigation"> <!-- This is the menu with all of the application stuff that appears once a user is logged-in -->
-<div id="app-menu-div" data-spy="affix" data-offset-top="66" data-offset-bottom="0">
-    <nav id="grenadine-application-menu" class="navbar navbar-default" role="navigation" >
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-2">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand hidden-md hidden-lg hidden-sm" href='<%= "/" + I18n.locale.to_s + baseUri_no_lang %>' alt='<%= @page_title or (t 'convention-planner') %>'>
-                <i class="icon-home">&nbsp;<%= (t "menu") %></i>
-            </a>
+    <div id="user-menu" role="navigation"> <!-- This is the menu with all of the application stuff that appears once a user is logged-in -->
+        <div id="app-menu-div" data-spy="affix" data-offset-top="66" data-offset-bottom="0">
+            <nav id="grenadine-application-menu" class="navbar navbar-default" role="navigation" >
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-2">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand hidden-md hidden-lg hidden-sm" href='<%= "/" + I18n.locale.to_s + baseUri_no_lang %>' alt='<%= @page_title or (t 'convention-planner') %>'>
+                        <i class="icon-home">&nbsp;<%= (t "menu") %></i>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="collapse-2">
+                    <ul class="nav navbar-nav">
+                        <% @menu.each do |entry| %>
+                            <% if entry %>
+                                <li class="<%= 'active' if entry[:title].eql? @active_top_menu %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + entry[:target] %>">
+                                    <i class="glyphicon <%= entry[:icon]%>"></i> <%= entry[:title].empty? ? '' : (t entry[:title]) %></a>
+                                </li>
+                            <% end %>
+                        <% end %>
+                    </ul>
+                </div>
+            </nav>
         </div>
-        <div class="collapse navbar-collapse" id="collapse-2">
-            <ul class="nav navbar-nav">
-                <% @menu.each do |entry| %>
-                    <% if entry %>
-                        <li class="<%= 'active' if entry[:title].eql? @active_top_menu %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + entry[:target] %>">
-                            <i class="glyphicon <%= entry[:icon]%>"></i> <%= entry[:title].empty? ? '' : (t entry[:title]) %></a>
-                        </li>
-                    <% end %>
-                <% end %>
-            </ul>
+    <% if @submenu %>
+        <div id="user-sub-menu" role="navigation">
+            <div id="app-sub-menu-div" data-spy="affix" data-offset-top="66" data-offset-bottom="0">
+                <nav id="grenadine-sub-application-menu" class="navbar navbar-default">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-4">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand hidden-md hidden-lg hidden-sm" href='<%= "/" + I18n.locale.to_s %>' alt='<%= @page_title or (t 'convention-planner') %>'>
+                            <i class="icon-home">&nbsp;<%= (t "application-sub-menu") %></i>
+                        </a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="collapse-4">
+                        <ul class="nav navbar-nav">
+                            <% @submenu.each do |entry| %>
+                                <% if entry[:display] %>
+                                    <li class="<%= 'active' if entry[:title].eql? @active_sub_menu %>"><a href="<%= baseUri + '/' + entry[:target] %>"><%= t entry[:title] %></a></li>
+                                <% end %>
+                            <% end %>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
         </div>
-    </nav>
-</div>
-<% if @submenu %>
-<div id="user-sub-menu" role="navigation">
-    <div id="app-sub-menu-div" data-spy="affix" data-offset-top="66" data-offset-bottom="0">
-        <nav id="grenadine-sub-application-menu" class="navbar navbar-default">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-4">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand hidden-md hidden-lg hidden-sm" href='<%= "/" + I18n.locale.to_s %>' alt='<%= @page_title or (t 'convention-planner') %>'>
-                    <i class="icon-home">&nbsp;<%= (t "application-sub-menu") %></i>
-                </a>
-            </div>
-            <div class="collapse navbar-collapse" id="collapse-4">
-            <ul class="nav navbar-nav">
-                <% @submenu.each do |entry| %>
-                    <% if entry[:display] %>
-                        <li class="<%= 'active' if entry[:title].eql? @active_sub_menu %>"><a href="<%= baseUri + '/' + entry[:target] %>"><%= t entry[:title] %></a></li>
-                    <% end %>
-                <% end %>
-            </ul>
-            </div>
-        </nav>
+    <% end %>
+    
     </div>
-</div>
-<% end %>
-</div>
-<div id="menu-separator-div">
+       
 <% end %>
