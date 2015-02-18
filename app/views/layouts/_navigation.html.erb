@@ -20,7 +20,7 @@
             <ul class="dropdown-menu">
                 <% UISettingsService.getLanguages.each do |lang| %>
                     <% if lang != I18n.locale.to_s %>
-                        <li><a href="<%= '/' + lang + baseUri_no_lang + request.fullpath %>"><%= t lang %></a></li>
+                        <li><a href="<%= '/' + lang + baseUri_no_lang + request_path %>"><%= t lang %></a></li>
                     <% end %>
                 <% end %>
             </ul>

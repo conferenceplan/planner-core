@@ -2,7 +2,15 @@ module Planner
   module ControllerAdditions
     
     def self.included(base)
-      base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu
+      base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu, :request_path
+    end
+    
+    def request_path
+      basepath = request.fullpath 
+      if basepath.include? baseUri
+        basepath = path.slice(baseUri.length(), basepath.length())
+      end
+      basepath
     end
     
     def allowed?(item) # take target as the name

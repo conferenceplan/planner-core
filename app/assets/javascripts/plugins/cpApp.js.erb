@@ -52,7 +52,9 @@ var AppUtils = (function(){
             if (e && e.type == "submit") {
                 e.preventDefault();
                 e.stopPropagation();
-                this.options.continueAction();
+                if (this.options.continueAction) {
+                    this.options.continueAction();
+                }
                 this.options.closeAction = null;
                 this.$el.modal("hide");
             };
