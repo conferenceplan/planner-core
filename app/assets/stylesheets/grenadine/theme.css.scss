@@ -377,8 +377,8 @@ screen and (min-device-pixel-ratio: 1.5) {
   margin-top: -1px;
 }
 #menu-separator-div {
-  height: 60px;
-  
+  height: 20px;
+  clear: left;
 }
 @media all and (min-width: $w2)
 {
