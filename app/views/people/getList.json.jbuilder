@@ -12,8 +12,8 @@ json.rowdata @people do |person|
     json.set! "person[suffix]", person.suffix
     json.set! "person[comments]", person.comments if person.comments
     
-    json.set! "person[acceptance_status_id]", person.acceptance_status ? person.acceptance_status.name : ''
-    json.set! "person[invitestatus_id]", person.invitestatus ? person.invitestatus.name : ''
+    json.set! "person[acceptance_status_id]", person.acceptance_status ? person.acceptance_status.name : AcceptanceStatus[:Unknown].name
+    json.set! "person[invitestatus_id]", person.invitestatus ? person.invitestatus.name : InviteStatus['Not Set'].name
     json.set! "person[invitation_category_id]", person.invitation_category ? person.invitation_category.name : ''
     json.set! "person[lock_version]", person.lock_version
     
