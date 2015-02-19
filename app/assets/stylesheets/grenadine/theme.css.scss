@@ -2,13 +2,15 @@
 
 /* Variables that will set values depending on the user's language */
 
-$w2: 786px; // under this width, we collapse to a pull-down menu instead of a regular menu
+$w2: 650px; // under this width, we collapse to a pull-down menu instead of a regular menu
 
-$w3: 1109px; // small toolbar width in English
-$w4: 1248px; // medium toolbar width in English 
+$w3: 1007px; // small toolbar width in English
+$w4: 1115px; // medium toolbar width in English 
 
-$w3f: 1180px;  // small toolbar width in French
-$w4f: 1333px; // medium toolbar width in French
+$w3f: 1077px;  // small toolbar width in French
+$w4f: 1202px; // medium toolbar width in French
+
+$iPadScreenWidth: 1024px;
 
 /* Bootstrap overide */
 .dl-horizontal dt {
@@ -812,7 +814,7 @@ h3:first-child {
     #right-panel-action-group { display: none; }    
     
 }
-
+//display the right panels only if screen is larger than iPad landscape (1024px)
 @media (min-width: $screen-md-min) {
 
     .col-fixed-large {
