@@ -26,7 +26,7 @@
 <script type="text/template" id="last-pub-template">
     <div class="col-xs-12 well">
         <div class="caption" class="pull-left">
-            <h4><%= t "last-publish" %></h4>
+            <h4><%= t "last-publish" %></h3>
             <dl>
                 <dt><%= t "publication-date" %></dt><dd>{{= moment(publication_date).format("D MMM YYYY, hh:mm") }}</dd>
                 <dt><%= t "new" %></dt><dd>{{= new_items }}</dd>
@@ -38,7 +38,11 @@
 </script>
 
 <script type="text/template" id="review-template">
-    <div><%= t "new-items" %></div>
+    <div id="review-items-before-publishing">
+        <h3 class="h3-underlined"><%= t "review-items-before-publishing" %></h3>
+        <p><%= (t "review-items-before-publishing-text").html_safe %></p>
+    </div>
+    <div class="voffset30"><h5><%= t "new-items" %></h5>
         <ul class="list-group">
         {{ _.each(new_items, function(item) { }}
             <li class="list-group-item">
@@ -46,7 +50,8 @@
             </li>
         {{ }); }}
         </ul>
-    <div><%= t "updated-items" %></div>
+    </div>
+    <div><h5><%= t "updated-items" %></h5>
         <ul class="list-group">
         {{ _.each(modified_items, function(item) { }}
             <li class="list-group-item">
@@ -54,7 +59,8 @@
             </li>
         {{ }); }}
         </ul>
-    <div><%= t "dropped-items" %></div>
+    </div>
+    <div><h5><%= t "dropped-items" %></h5>
         <ul class="list-group">
         {{ _.each(removed_items, function(item) { }}
             <li class="list-group-item">
@@ -62,7 +68,8 @@
             </li>
         {{ }); }}
         </ul>
-    <div><%= t "people-added/updated" %></div>
+    </div>
+    <div><h5><%= t "people-added/updated" %></h5>
         <ul class="list-group">
         {{ _.each(people_added_updated, function(item) { }}
             <li class="list-group-item">
@@ -70,7 +77,8 @@
             </li>
         {{ }); }}
         </ul>
-    <div><%= t "people-removed" %></div>
+    </div>
+    <div><h5><%= t "people-removed" %></h5>
         <ul class="list-group">
         {{ _.each(people_removed, function(item) { }}
             <li class="list-group-item">
@@ -78,4 +86,5 @@
             </li>
         {{ }); }}
         </ul>
+    </div>
 </script>
