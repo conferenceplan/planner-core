@@ -174,19 +174,19 @@ CKEDITOR.config.htmlbuttons =	[
                 name:'survey-key',
                 //icon:'icon2.png',
                 html:'&lt;%= args[:user].key %&gt;',
-                title:'Person\s Personal Survey Key'
+                title:'Person\'s Personal Survey Key'
             },
             {
                 name:'schedule-assignments',
                 //icon:'icon2.png',
                 html:'&lt;%= assignments_to_html(args[:assignments]) %&gt;',
-                title:'Person\s Participant Assignments'
+                title:'Person\'s Participant Assignments'
             },
             {
                 name:'survey-responses',
                 //icon:'icon2.png',
                 html:'&lt;%= survey_to_html(args[:survey],args[:respondentDetails]) %&gt;',
-                title:'List of Person\s Survey Responses'
+                title:'List of Person\'s Survey Responses'
             }
 
 		]

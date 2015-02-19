@@ -57,8 +57,8 @@ module Planner
               } if allowed? :items
       menu << { :title => 'surveys',          :target => '/pages/surveys_dash/report', :icon => "glyphicon-pencil",  :target_base => '/pages/surveys_dash',
                 :sub_menu => [
-                  { :title => 'survey-reports', :target => '/pages/surveys_dash/report', :display => allowed?(:survey_reports) },
-                  { :title => 'manage-surveys', :target => '/pages/surveys_dash/manage', :display => allowed?(:manage_surveys) }
+                  { :title => 'manage-surveys', :target => '/pages/surveys_dash/manage', :display => allowed?(:manage_surveys) },
+                  { :title => 'survey-reports', :target => '/pages/surveys_dash/report', :display => allowed?(:survey_reports) }
                 ]
               } if allowed? :surveys
       menu << { :title => 'communications',   :target => '/pages//communications_dash/manage', :icon => "glyphicon-envelope",  :target_base => '/pages/communications_dash',
