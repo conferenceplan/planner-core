@@ -10,7 +10,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
             title           : { type : 'Text', title : '<%= t "template-name" %>', 
                                 help: '<%= t "template-name-hint" %>' },
 
-            mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>',
+            mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>', help: '<%= t "template-mail-use-hint" %>',
                                             options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
             transiton_invite_status_id : { type : 'Select', title : '<%= t "transition-person-invite-to" %>',
