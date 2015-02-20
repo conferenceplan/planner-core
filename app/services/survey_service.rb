@@ -157,9 +157,9 @@ module SurveyService
   #
   #
   def self.personHasSurveys(person)
-    nbr = SurveyResponse.count :joins => [{:survey_question => {:survey_group => :survey}}, {:survey_respondent_detail => {:survey_respondent => :person}}],
-      :conditions => ["people.id = ?", person.id]
-      
+    nbr = SurveyResponse.joins([{:survey_question => {:survey_group => :survey}}, {:survey_respondent_detail => {:survey_respondent => :person}}]).
+            where(["people.id = ?", person.id]).
+            where(self.constraints()).count
     nbr > 0
   end
   

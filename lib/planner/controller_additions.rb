@@ -93,7 +93,7 @@ module Planner
       if current_user
         menu << { :title => 'my-profile', :target =>  baseUri + '/users/edit' } if current_user
         menu << { :title => 'event-setup', :target => baseUri + '/pages/admin_dash/configs' } if allowed? :event_setup
-        menu << { :title => 'system-settings', :target => '/pages/admin_dash/system_configs'} if allowed? :system_settings
+        menu << { :title => 'system-settings', :target => basePlainUri + '/pages/admin_dash/system_configs'} if allowed? :system_settings
       end
       
       menu
