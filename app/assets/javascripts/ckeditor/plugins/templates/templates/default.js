@@ -22,7 +22,11 @@ var emailTemplateTop = '<div id="grenadine-email-template-div">' +
                         '<table width="600" border="0" cellspacing="0" cellpadding="0" align="center">' +
                             '<tr>' +
                                 '<td style="padding: 0px 15px 0px 15px; font-size: 16px; font-family: Arial, Helvetica, sans-serif;">' +
-                                    '<center><h1 class="grenadine-editable" contenteditable="true"><strong>Your Event Name</strong></h1></center>' +                                    
+                                    '<div contenteditable="false">' +
+                                        '<center>' +
+                                            '<h1 contenteditable="false"><span class="grenadine-editable" contenteditable="true">Your Event Name</span></h1>' +
+                                        '</center>' +  
+                                    '</div>' +                                 
                                 '</td>' +
                             '</tr>' +
                         '</table>' +
@@ -36,7 +40,7 @@ var emailTemplateBottom =            '</td>' +
                         '<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: white; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; background-color: #CCC;">' +
                             '<tr>' +
                                 '<td align="left" style="padding: 15px;">' +
-                                    'Sent to you by <strong><a href=""><span contenteditable="true" class="grenadine-editable">YOUR EVENT NAME</span></a></strong><br>' +
+                                    'Sent to you by <strong><span contenteditable="true" class="grenadine-editable">YOUR EVENT NAME</span></strong><br>' +
                                     'using the <strong>Grenadine Event Planner</strong>.<br>' +
                                     '420 Beaubien West suite 203, Montreal QC Canada H2V 4S6<br>' +
                                     'http://events.grenadine.co' +
@@ -77,11 +81,11 @@ CKEDITOR.addTemplates( 'default',
                 description: 'A simple invitation to your event',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
-                        '<h1 class="grenadine-editable" contenteditable="true">You\'re invited to our event!</h1>' +
-                        '<p contenteditable="true"><span class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<p contenteditable="true" class="grenadine-editable">You\'re invited to our event, which will be held on this date at this place. Please add your text here.</p>' +
-                        '<p contenteditable="false"><a href="" class="grenadine-button"><span contenteditable="true">Accept or Decline</span></a></p>' +
-                        '<p contenteditable="false">Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:user].key %></strong></p>' +                                    
+                        '<h1><span class="grenadine-editable" contenteditable="true">You\'re invited to our event!</span></h1>' +
+                        '<p><span contenteditable="true" class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<p><span contenteditable="true" class="grenadine-editable">You\'re invited to our event, which will be held on this date at this place. Please add your text here.</span></p>' +
+                        '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button">Accept or Decline</a></span></p>' +
+                        '<p><span contenteditable="true" class="grenadine-editable">Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:user].key %></strong></span></p>' +                                    
                       emailTemplateBottom        
             },
             {
