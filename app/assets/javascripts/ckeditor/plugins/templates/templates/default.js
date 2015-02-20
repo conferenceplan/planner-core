@@ -66,7 +66,7 @@ var mobilePageTemplateTop =  '' +
 var mobilePageTemplateBottom =  '' +
                     '</div>';
                     
-CKEDITOR.timeStamp = '123456768'; // change this string to whatever every time you want 
+CKEDITOR.timeStamp = '1234567689'; // change this string to whatever every time you want 
                                // CKEditor to force reload of this JS instead of super aggressively using cache as it always annoyingly does!
                                
 CKEDITOR.addTemplates( 'default',
@@ -85,9 +85,9 @@ CKEDITOR.addTemplates( 'default',
                       emailTemplateTop +
                         '<h1><span class="grenadine-editable" contenteditable="true">You\'re invited to attend!</span></h1>' +
                         '<p><span contenteditable="true" class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<p contenteditable="true" class="grenadine-editable">You\'re invited to our event, which will be held on this date at this place. Please add your text here.</p>' +
+                        '<div contenteditable="true" class="grenadine-editable"><p>We would love to get your feed-back. Please take a few moments to fill out the following survey:</p></div>' +
                         '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button">Accept or Decline</a></span></p>' +
-                        '<p contenteditable="true" class="grenadine-editable">Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:user].key %></strong></p>' +                                    
+                        '<div contenteditable="true" class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:user].key %></strong></p></div>' +                                        
                       emailTemplateBottom        
             },
             {
@@ -98,9 +98,9 @@ CKEDITOR.addTemplates( 'default',
                       emailTemplateTop +
                         '<h1><span class="grenadine-editable" contenteditable="true">Please give us your opinion</span></h1>' +
                         '<p><span contenteditable="true" class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<p contenteditable="true" class="grenadine-editable">We would love to get your feed-back. Please take a few moments to fill out the following survey:</p>' +
+                        '<div contenteditable="true" class="grenadine-editable"><p>We would love to get your feed-back. Please take a few moments to fill out the following survey:</p></div>' +
                         '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button">Link To Survey</a></span></p>' +
-                        '<p contenteditable="true" class="grenadine-editable">Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:user].key %></strong></p>' +                                    
+                        '<div contenteditable="true" class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:user].key %></strong></p></div>' +                                    
                       emailTemplateBottom        
             },
             {

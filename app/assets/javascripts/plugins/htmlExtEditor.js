@@ -32,7 +32,7 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
             height : '40em',
             enterMode : CKEDITOR.ENTER_P,
             extraPlugins: 'templates,htmlbuttons,entities',
-            protectedSource: '/<%=[\s\S]*%>/g' ,
+            //protectedSource: [/<%=[\s\S]*%>/g],
             template_files: '/assets/ckeditor/plugins/templates/templates/default.js',
             contentsCss : '/assets/grenadine/ckeditor-edit.css',
             shiftEnterMode: CKEDITOR.ENTER_BR,
