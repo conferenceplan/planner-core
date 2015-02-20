@@ -18,7 +18,7 @@ var emailTemplateStyles = '' +
                         '}' +
                     '</style>'; 
 var emailTemplateTop = '<div id="grenadine-email-template-div">' +
-                    '<div contenteditable="false" width="100%" style="background-color: #EEE; padding: 50px; padding-top: 30px;">' +
+                    '<div width="100%" style="background-color: #EEE; padding: 50px; padding-top: 30px;">' +
                         '<table width="600" border="0" cellspacing="0" cellpadding="0" align="center">' +
                             '<tr>' +
                                 '<td style="padding: 0px 15px 0px 15px; font-size: 16px; font-family: Arial, Helvetica, sans-serif;">' +
@@ -66,7 +66,7 @@ var mobilePageTemplateTop =  '' +
 var mobilePageTemplateBottom =  '' +
                     '</div>';
                     
-CKEDITOR.timeStamp = '1234567689'; // change this string to whatever every time you want 
+CKEDITOR.timeStamp = '1234567d689'; // change this string to whatever every time you want 
                                // CKEditor to force reload of this JS instead of super aggressively using cache as it always annoyingly does!
                                
 CKEDITOR.addTemplates( 'default',
