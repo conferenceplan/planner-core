@@ -8,7 +8,7 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
         urlRoot : "<%= baseUri + '/communications/mail_templates' %>",
         schema : {
             title           : { type : 'Text', title : '<%= t "template-name" %>', 
-                                help: '<%= t "template-name-hint" %>' },
+                                help: '<%= t "template-name-hint" %>', validators: ['required'] },
 
             mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>', help: '<%= t "template-mail-use-hint" %>',
                                             options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
