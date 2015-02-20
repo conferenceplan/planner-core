@@ -27,32 +27,31 @@
         </nav>
     </div>
 </div>
-<% if @submenu %>
-<div id="user-sub-menu" role="navigation">
-    <div id="app-sub-menu-div" data-spy="affix" data-offset-top="67" data-offset-bottom="0">
-        <nav id="grenadine-sub-application-menu" class="navbar navbar-default">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-4">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand hidden-md hidden-lg hidden-sm" href='<%= "/" + I18n.locale.to_s %>' alt='<%= @page_title or (t 'convention-planner') %>'>
-                    <i class="icon-home">&nbsp;<%= (t "application-sub-menu") %></i>
-                </a>
-            </div>
-            <div class="collapse navbar-collapse" id="collapse-4">
-                <ul class="nav navbar-nav">
-                    <% @submenu.each do |entry| %>
-                        <% if entry[:display] %>
-                            <li class="<%= 'active' if entry[:title].eql? @active_sub_menu %>"><a href="<%= baseUri + '/' + entry[:target] %>"><%= t entry[:title] %></a></li>
+    <% if @submenu %>
+    <div id="user-sub-menu" role="navigation">
+        <div id="app-sub-menu-div" data-spy="affix" data-offset-top="67" data-offset-bottom="0">
+            <nav id="grenadine-sub-application-menu" class="navbar navbar-default">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapse-4">
+                      <span class="sr-only">Toggle navigation</span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                      <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand hidden-md hidden-lg hidden-sm" href='<%= "/" + I18n.locale.to_s %>' alt='<%= @page_title or (t 'convention-planner') %>'>
+                        <i class="icon-home">&nbsp;<%= (t "application-sub-menu") %></i>
+                    </a>
+                </div>
+                <div class="collapse navbar-collapse" id="collapse-4">
+                    <ul class="nav navbar-nav">
+                        <% @submenu.each do |entry| %>
+                            <% if entry[:display] %>
+                                <li class="<%= 'active' if entry[:title].eql? @active_sub_menu %>"><a href="<%= baseUri + '/' + entry[:target] %>"><%= t entry[:title] %></a></li>
+                            <% end %>
                         <% end %>
-                    <% end %>
-                </ul>
-            </div>
+                    </ul>
+                </div>
+        </div>
     </div>
     <% end %>
-</div>
-       
 <% end %>
