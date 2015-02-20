@@ -2,6 +2,27 @@
     <%= render extra %>
 <% end %>
 
+<script type="text/template" id="invite-category-template">
+    <td>
+        <a href="#item-format-tab" data-toggle="tab" class="model-select-button">{{= name }}</a>
+    </td>
+    <td>
+        {{= position}}
+    </td>
+    <td>
+        <button class="model-edit-button btn btn-small"><i class="glyphicon glyphicon-pencil"></i></button>
+    </td>
+    <td>
+        <button class="model-delete-button btn btn-small"><i class="glyphicon glyphicon-trash"></i></button>
+    </td>
+</script>
+
+<script type="text/template" id="invite-category-control-template">
+    <button class="add-model-button btn btn-small btn-primary pull-right">
+        <%= t 'add-invitation-category' %>
+    </button>
+</script>
+
 <script type="text/template" id="config-title-template">
     <span class="label label-default">{{= title }}</span>
 </script>
@@ -50,4 +71,25 @@
         NO CONFIG
         {{ } }}
     </dl>
+</script>
+
+<script type="text/template" id="item-format-template">
+    <td>
+        <a href="#item-format-tab" data-toggle="tab" class="model-select-button">{{= name }}</a>
+    </td>
+    <td>
+        {{= position}}
+    </td>
+    <td>
+        <button class="model-edit-button btn btn-sm"><i class="glyphicon glyphicon-pencil"></i></button>
+    </td>
+    <td>
+        <button class="model-delete-button btn btn-sm"><i class="glyphicon glyphicon-trash"></i></button>
+    </td>
+</script>
+
+<script type="text/template" id="item-format-control-template">
+    <button class="add-model-button btn btn-sm btn-primary pull-right">
+        <%= t 'add-item-format' %>
+    </button>
 </script>
