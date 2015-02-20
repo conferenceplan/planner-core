@@ -66,7 +66,7 @@ var mobilePageTemplateTop =  '' +
 var mobilePageTemplateBottom =  '' +
                     '</div>';
                     
-CKEDITOR.timeStamp = '1234567d689'; // change this string to whatever every time you want 
+CKEDITOR.timeStamp = '1234s567d689'; // change this string to whatever every time you want 
                                // CKEditor to force reload of this JS instead of super aggressively using cache as it always annoyingly does!
                                
 CKEDITOR.addTemplates( 'default',
@@ -78,9 +78,20 @@ CKEDITOR.addTemplates( 'default',
     templates :
         [
             {
+                title: 'Generic Email',
+                image: 'general-purpose-template.png',
+                description: 'General-purpose email template. Send informational messages, thank you notes, etc.',
+                html: emailTemplateStyles + 
+                      emailTemplateTop +
+                        '<h1><span class="grenadine-editable" contenteditable="true">My Email Subject</span></h1>' +
+                        '<p><span contenteditable="true" class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div contenteditable="true" class="grenadine-editable"><p>We have a message for you and I\'m going to write it here.</p></div>' +                                    
+                      emailTemplateBottom        
+            },   
+            {
                 title: 'Invitation to Attend',
-                image: 'template1.gif',
-                description: 'A simple invitation to your event',
+                image: 'invitation-template.png',
+                description: 'A simple email invitation to your event, includes a button where you can put a link',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
                         '<h1><span class="grenadine-editable" contenteditable="true">You\'re invited to attend!</span></h1>' +
@@ -92,8 +103,8 @@ CKEDITOR.addTemplates( 'default',
             },
             {
                 title: 'Invitation to Fill out a Survey',
-                image: 'template1.gif',
-                description: 'An invitation to fill out a survey',
+                image: 'survey-template.png',
+                description: 'An email invitation to fill out a survey, includes a button where you can link the survey',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
                         '<h1><span class="grenadine-editable" contenteditable="true">Please give us your opinion</span></h1>' +
@@ -105,7 +116,7 @@ CKEDITOR.addTemplates( 'default',
             },
             {
                 title: 'Typical Mobile Content Page',
-                image: 'template1.gif',
+                image: 'mobile-template.png',
                 description: 'A typical mobile page that has text contents',
                 html: mobilePageTemplateStyles + 
                       mobilePageTemplateTop +
@@ -117,7 +128,7 @@ CKEDITOR.addTemplates( 'default',
             },
             {
                 title: 'Mobile Page With Title Image',
-                image: 'template1.gif',
+                image: 'mobile-plus-image-template.png',
                 description: 'A mobile page with a title image and contents',
                 html: mobilePageTemplateStyles + 
                       mobilePageTemplateTop +
