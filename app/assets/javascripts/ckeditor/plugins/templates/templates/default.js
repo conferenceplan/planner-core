@@ -66,13 +66,7 @@ var mobilePageTemplateTop =  '' +
 var mobilePageTemplateBottom =  '' +
                     '</div>';
                     
-CKEDITOR.config.entities_additional = 
-    '#60',
-    '#62',
-    'gt',
-    'lt';    
-
-CKEDITOR.timeStamp = '12345678'; // change this string to whatever every time you want 
+CKEDITOR.timeStamp = '123456768'; // change this string to whatever every time you want 
                                // CKEditor to force reload of this JS instead of super aggressively using cache as it always annoyingly does!
                                
 CKEDITOR.addTemplates( 'default',

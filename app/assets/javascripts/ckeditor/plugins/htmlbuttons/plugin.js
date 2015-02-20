@@ -161,31 +161,31 @@ CKEDITOR.config.htmlbuttons =	[
 			{
 				name:'first-name',
 				//icon:'icon1.png',
-				html:'&lt;%= args[:person].first_name %&gt;',
+				html:'<%= args[:person].first_name %>',
 				title:'Person\'s first name'
 			},
 			{    
 				name:'last-name',
 				//icon:'icon2.png',
-				html:'&lt;%= args[:person].last_name %&gt;',
+				html:'<%= args[:person].last_name %>',
 				title:'Person\'s last name'
 			},
 			{
                 name:'survey-key',
                 //icon:'icon2.png',
-                html:'&lt;%= args[:user].key %&gt;',
+                html:'<%= args[:user].key %>',
                 title:'Person\'s Personal Survey Key'
             },
             {
                 name:'schedule-assignments',
                 //icon:'icon2.png',
-                html:'&lt;%= assignments_to_html(args[:assignments]) %&gt;',
+                html:'<%= assignments_to_html(args[:assignments]) %>',
                 title:'Person\'s Participant Assignments'
             },
             {
                 name:'survey-responses',
                 //icon:'icon2.png',
-                html:'&lt;%= survey_to_html(args[:survey],args[:respondentDetails]) %&gt;',
+                html:'<%= survey_to_html(args[:survey],args[:respondentDetails]) %>',
                 title:'List of Person\'s Survey Responses'
             }
 
