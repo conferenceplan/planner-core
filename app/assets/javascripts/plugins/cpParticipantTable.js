@@ -136,10 +136,9 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     res = "";
                     if (typeof rowObject['person[invitestatus_id]'] != 'undefined') {
                         if (rowObject['person[invitestatus_id]'] == 'Not Set') {
-                            res = "<span class='minor-text'>" + that.translate("participant_status_not_set") + "</span>";
+                            res = "<span class='minor-text'>" + that.translate("invite_not_set") + "</span>";
                         } else {
-                            
-                            res =  rowObject['person[invitestatus_id]'];    
+                            res =  that.translate("invite_status_" + rowObject['person[invitestatus_id]'].toLowerCase().replace(/ /g,"_"));    
                         }
                     }
                     return res;
@@ -198,13 +197,13 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     res = "";
                     if (typeof rowObject['person[acceptance_status_id]'] != 'undefined') {
                         if (rowObject['person[acceptance_status_id]'] == 'Unknown') {
-                            res = "<span class='minor-text'>" + that.translate("participant_acceptance_status") + "</span>";
+                            res = "<span class='minor-text'>" + that.translate("acceptance_unkown") + "</span>";
                         } else if (rowObject['person[acceptance_status_id]'] == 'Accepted') {
-                            res = "<span class='label label-success'><span class='glyphicon glyphicon-ok'></span> " + that.translate("invitation_accepted") +  "</span>";
+                            res = "<span class='label label-success'><span class='glyphicon glyphicon-ok'></span> " + that.translate("acceptance_accepted") +  "</span>";
                         } else if (rowObject['person[acceptance_status_id]'] == 'Declined') {
-                            res = "<span class='label label-danger'><span class='glyphicon glyphicon-remove'></span> " + that.translate("invitation_declined") +  "</span>";
+                            res = "<span class='label label-danger'><span class='glyphicon glyphicon-remove'></span> " + that.translate("acceptance_declined") +  "</span>";
                         } else if (rowObject['person[acceptance_status_id]'] == 'Probable') {
-                            res = "<span class='label label-warning'> " + that.translate("invitation_probable") +  "</span>";
+                            res = "<span class='label label-warning'> " + that.translate("acceptance_probable") +  "</span>";
                         }
                         else {
                             res =  rowObject['person[acceptance_status_id]'];    
