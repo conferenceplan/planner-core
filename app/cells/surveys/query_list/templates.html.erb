@@ -8,7 +8,7 @@
     <div class="row voffset10">
         <div class='collapse-group' id="query-area-parent" style="height : 370px; overflow : auto;"> <!-- TODO - move this to the style sheet -->
             <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#MyQueries">My Queries</a>
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#MyQueries"><%= t 'my-queries' %></a>
             </div>
             <div id="MyQueries" class="accordion-body collapse.in">
                 <div class="accordion-inner">
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#SharedQueries">Shared Queries</a>
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#SharedQueries"><%= t 'shared-queries' %></a>
             </div>
             <div id="SharedQueries" class="accordion-body collapse.in">
                 <div class="accordion-inner">
@@ -34,7 +34,7 @@
         <a href="#query-tab" data-toggle="tab" class="model-select-button">{{= name}}</a>
     </td>
     <td>
-        <button class="model-copy-button btn btn-xs">Copy</button>
+        <button class="model-copy-button btn btn-xs"><%= t 'copy' %></button>
     </td>
     <td>
         <button class="model-delete-button btn btn-xs"><small><i class="glyphicon glyphicon-trash"></i></small></button>
