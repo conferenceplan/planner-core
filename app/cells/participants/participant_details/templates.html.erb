@@ -447,7 +447,7 @@
     <button class="model-edit-button btn btn-primary btn-xs pull-right">
         <%= t "edit" %>
     </button>
-    <small> <em>Arrival</em>: {{= start_time_str }} <i class="glyphicon glyphicon-arrow-right"></i> <em>Departure</em>: {{= end_time_str }} </small>
+    <small> <em><%= t 'arrival'%></em>: {{= start_time_str }} <i class="glyphicon glyphicon-arrow-right"></i> <em><%= t 'departure'%></em>: {{= end_time_str }} </small>
 </div>
 {{ } else { }}
     <button class="model-new-button btn btn-primary btn-xs pull-right">
@@ -471,9 +471,12 @@
 <script type="text/template" id="program-item-view-template">
     {{ if (typeof id != 'undefined') { }}
             <td>
-                {{= time_slot ? start_time_str : '<span class="minor-text"><%= t "no-date-and-time-specified" %></span>' }}<br>
                 <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})<br>
-                <strong><%= t "with"%> </strong><em>{{= other_participants.join(", ") }}</em>
+                {{= time_slot ? start_time_str : '<span class="minor-text"><%= t "no-date-and-time-specified" %></span>' }}
+                {{ if ((typeof other_participants.join(", ") != 'undefined') && other_participants.join(", ").length > 1) { }}
+                    <br>
+                    <strong><%= t "with"%> </strong><em>{{= other_participants.join(", ") }}</em>
+                {{ }; }}
             </td>
             <td align="right">
                 <nobr>{{= isPublished ? '<div class="default-label"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}</nobr>
