@@ -27,7 +27,12 @@ $.widget( "cp.baseTable" , {
         modelTemplate       : null,
         delayed             : false,
         confirm_content     : "Are you sure you want to delete the selected data?",
-        confirm_title       : "Confirm Deletion"
+        confirm_title       : "Confirm Deletion",
+        translations        : {}
+    },
+
+    translate : function(str) {
+        return this.options.translations[str] ? this.options.translations[str] : str;
     },
     
     /*
