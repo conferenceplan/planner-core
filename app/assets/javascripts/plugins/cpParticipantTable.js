@@ -11,6 +11,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
     },
 
         createColModel : function(){
+            that = this;
             return [{
                 label : this.options.name[1], //'Name',
                 index : 'people.last_name',
@@ -135,7 +136,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     res = "";
                     if (typeof rowObject['person[invitestatus_id]'] != 'undefined') {
                         if (rowObject['person[invitestatus_id]'] == 'Not Set') {
-                            res = "<span class='minor-text'>" + translate("participant_status_not_set") + "</span>";
+                            res = "<span class='minor-text'>" + that.translate("participant_status_not_set") + "</span>";
                         } else {
                             
                             res =  rowObject['person[invitestatus_id]'];    
@@ -197,13 +198,13 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     res = "";
                     if (typeof rowObject['person[acceptance_status_id]'] != 'undefined') {
                         if (rowObject['person[acceptance_status_id]'] == 'Unknown') {
-                            res = "<span class='minor-text'>" + translate("participant_acceptance_status") + "</span>";
+                            res = "<span class='minor-text'>" + that.translate("participant_acceptance_status") + "</span>";
                         } else if (rowObject['person[acceptance_status_id]'] == 'Accepted') {
-                            res = "<span class='label label-success'><span class='glyphicon glyphicon-ok'></span> " + translate("invitation_accepted") +  "</span>";
+                            res = "<span class='label label-success'><span class='glyphicon glyphicon-ok'></span> " + that.translate("invitation_accepted") +  "</span>";
                         } else if (rowObject['person[acceptance_status_id]'] == 'Declined') {
-                            res = "<span class='label label-danger'><span class='glyphicon glyphicon-remove'></span> " + translate("invitation_declined") +  "</span>";
+                            res = "<span class='label label-danger'><span class='glyphicon glyphicon-remove'></span> " + that.translate("invitation_declined") +  "</span>";
                         } else if (rowObject['person[acceptance_status_id]'] == 'Probable') {
-                            res = "<span class='label label-warning'> " + translate("invitation_probable") +  "</span>";
+                            res = "<span class='label label-warning'> " + that.translate("invitation_probable") +  "</span>";
                         }
                         else {
                             res =  rowObject['person[acceptance_status_id]'];    
@@ -279,7 +280,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                         } else if (nbEmails > 1) {
                             emailDescString = rowObject['person[mail_history]'][nbEmails - 1]; // only display the most recent one sent
                             if (emailDescString.length > 25) { emailDescString = emailDescString.substr(0,25) + "..."; };
-                            res = emailDescString + ' + ' + (nbEmails - 1) + ' ' + translate("participant_email_more");  
+                            res = emailDescString + ' + ' + (nbEmails - 1) + ' ' + that.translate("participant_email_more");  
                         }
                    }
                    
