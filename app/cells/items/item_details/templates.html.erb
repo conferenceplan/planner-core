@@ -144,7 +144,7 @@
 
 <script type="text/template" id="program-item-summary-view-template">
     <div class="col-md-4">
-        <h5>Item</h5>
+        <h5><%= t 'item' %></h5>
         <dl class="dl-airy">
             <dt><%= t "title" %></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
             <dt><%= t "item-description" %></dt><dd>{{= precis ? precis : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>
@@ -153,7 +153,7 @@
         </dl>
     </div>
     <div class="col-md-4">
-        <h5>Details</h5>
+        <h5><%= t 'details' %></h5>
         <dl class="dl-horizontal-small dt60">
             <dt><%= t "ref-number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
             <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
@@ -168,7 +168,7 @@
         </dl>
     </div>
     <div class="col-md-4">
-        <h5>Notes</h5>
+        <h5><%= t 'notes' %></h5>
         <dl class="dl-airy">
             <dt><%= t "item-notes-for-organizers" %></dt><dd>{{= item_notes ? item_notes : '<span class="minor-text"><%= t "no-notes-provided" %></span>' }}</dd>
             <dt><%= t "item-notes-for-participants" %></dt><dd>{{= participant_notes ? participant_notes : '<span class="minor-text"><%= t "no-notes-provided" %></span>' }}</dd>
