@@ -50,8 +50,7 @@ jQuery(document).ready(function() {
 
         confirm_content     : '<%= t "delete-selected-data" %>',
         confirm_title       : '<%= t "delete-confirmation" %>'
-
-
+        
 
     });
     
@@ -90,5 +89,14 @@ jQuery(document).ready(function() {
     $( window ).resize(function() {
         resizeSideBar();
     });
+    
+    var translations = {
+        participant_status_not_set: '<%= t ('participant-status-not-set') %>',
+        participant_acceptance_status: '<%= t ('participant-acceptance-status') %>',
+        participant_email_more: '<%= t ('participant-email-more') %>',
+        invitation_accepted: '<%= t ('invitation-accepted') %>',
+        invitation_declined: '<%= t ('invitation-declined') %>',
+        invitation_probable: '<%= t ('invitation-probable') %>'
+    };
 
 </script>
