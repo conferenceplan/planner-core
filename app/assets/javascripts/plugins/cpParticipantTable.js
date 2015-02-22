@@ -197,7 +197,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     res = "";
                     if (typeof rowObject['person[acceptance_status_id]'] != 'undefined') {
                         if (rowObject['person[acceptance_status_id]'] == 'Unknown') {
-                            res = "<span class='minor-text'>" + that.translate("acceptance_unkown") + "</span>";
+                            res = "<span class='minor-text'>" + that.translate("acceptance_unknown") + "</span>";
                         } else if (rowObject['person[acceptance_status_id]'] == 'Accepted') {
                             res = "<span class='label label-success'><span class='glyphicon glyphicon-ok'></span> " + that.translate("acceptance_accepted") +  "</span>";
                         } else if (rowObject['person[acceptance_status_id]'] == 'Declined') {
