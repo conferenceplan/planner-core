@@ -66,7 +66,7 @@ var mobilePageTemplateTop =  '' +
 var mobilePageTemplateBottom =  '' +
                     '</div>';
                     
-CKEDITOR.timeStamp = '1234s567d689'; // change this string to whatever every time you want 
+CKEDITOR.timeStamp = '12334s567d689'; // change this string to whatever every time you want 
                                // CKEditor to force reload of this JS instead of super aggressively using cache as it always annoyingly does!
                                
 CKEDITOR.addTemplates( 'default',
@@ -96,7 +96,7 @@ CKEDITOR.addTemplates( 'default',
                       emailTemplateTop +
                         '<h1><span class="grenadine-editable" contenteditable="true">You\'re invited to attend!</span></h1>' +
                         '<p><span contenteditable="true" class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>We would love to get your feed-back. Please take a few moments to fill out the following survey:</p></div>' +
+                        '<div contenteditable="true" class="grenadine-editable"><p>We would like to invite you to our event which will take place at this date and time and will be located here.</p></div>' +
                         '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button">Accept or Decline</a></span></p>' +
                         '<div contenteditable="true" class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:user].key %></strong></p></div>' +                                        
                       emailTemplateBottom        
@@ -112,6 +112,42 @@ CKEDITOR.addTemplates( 'default',
                         '<div contenteditable="true" class="grenadine-editable"><p>We would love to get your feed-back. Please take a few moments to fill out the following survey:</p></div>' +
                         '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button">Link To Survey</a></span></p>' +
                         '<div contenteditable="true" class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:user].key %></strong></p></div>' +                                    
+                      emailTemplateBottom        
+            },
+            {
+                title: 'Courriel Générique (FR)',
+                image: 'general-purpose-template-fr.png',
+                description: 'Gabarit général pour l\'envoi de courriels d\'information.',
+                html: emailTemplateStyles + 
+                      emailTemplateTop +
+                        '<h1><span class="grenadine-editable" contenteditable="true">Sujet</span></h1>' +
+                        '<p><span contenteditable="true" class="grenadine-editable">Cher</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div contenteditable="true" class="grenadine-editable"><p>Nous avons un message bien intéressant pour vous et je vais l\'écrire ici dans ce texte.</p></div>' +                                    
+                      emailTemplateBottom        
+            },
+            {
+                title: 'Invitation à votre événement (FR)',
+                image: 'invitation-template-fr.png',
+                description: 'Une invitation qui inclut un lien/bouton pouvant être utilisé pour diriger vers votre page d\'enregistrement.',
+                html: emailTemplateStyles + 
+                      emailTemplateTop +
+                        '<h1><span class="grenadine-editable" contenteditable="true">Vous êtes invité!</span></h1>' +
+                        '<p><span contenteditable="true" class="grenadine-editable">Cher</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div contenteditable="true" class="grenadine-editable"><p>Je suis très heureux de vous inviter à notre événement qui se tiendra à cette date et heure et aura lieu à l\'endroit suivant.</p></div>' +
+                        '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button">Accepter ou Refuser</a></span></p>' +                                        
+                      emailTemplateBottom        
+            },
+            {
+                title: 'Invitation à remplir un sondage (FR)',
+                image: 'survey-template-fr.png',
+                description: 'Une invitation à remplir un sondage, incluant un bouton qui peut accueillir un lien vers le sondage.',
+                html: emailTemplateStyles + 
+                      emailTemplateTop +
+                        '<h1><span class="grenadine-editable" contenteditable="true">Votre opinion nous importe!</span></h1>' +
+                        '<p><span contenteditable="true" class="grenadine-editable">Cher</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div contenteditable="true" class="grenadine-editable"><p>Nous aimerions avoir votre opinion. Veuillez remplir le sondage suivant:</p></div>' +
+                        '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button">Lien vers le sondage</a></span></p>' +
+                        '<div contenteditable="true" class="grenadine-editable"><p>Le lien ne fonctionne pas dans votre lecteur de courriel? Alors copiez le lien suivant et collez-le directement dans votre navigateur: <a href="">lien</a>. Votre code unique est: <strong><%= args[:user].key %></strong></p></div>' +                                    
                       emailTemplateBottom        
             },
             {
