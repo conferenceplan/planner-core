@@ -5,7 +5,7 @@
 $.widget( "cp.mailHistoryBootstrapTable", $.cp.baseBootstrapTable , {
 
     createColModel : function(){
-        that = this;
+        var that = this;
         return [{
             field: 'Mailing',
             title: this.options.mailing,

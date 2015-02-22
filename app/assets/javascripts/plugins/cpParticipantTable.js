@@ -11,7 +11,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
     },
 
         createColModel : function(){
-            that = this;
+            var that = this;
             return [{
                 label : this.options.name[1], //'Name',
                 index : 'people.last_name',
