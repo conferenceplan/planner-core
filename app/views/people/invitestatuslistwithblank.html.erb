@@ -1,6 +1,6 @@
 <select> 
 <option value='0'></option>
 <% for inviteEntry in @inviteStatus %>
-	<option value='<%= inviteEntry.id%>'><%= inviteEntry.name %></option> 
+	<option value='<%= inviteEntry.id%>'><%= t 'person-invitation-' + inviteEntry.name %></option> 
 <%end%>
 </select>
