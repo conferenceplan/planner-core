@@ -1,6 +1,6 @@
 <select> 
 <option value='0'></option>
 <% @acceptanceStatus.each do |acceptanceEntry| %>
-	<option value='<%= acceptanceEntry.id%>'><%= t 'person-acceptance-' + acceptanceEntry.name %></option> 
+	<option value='<%= acceptanceEntry.id%>'><%= t 'person-acceptance-' + acceptanceEntry.name.downcase.gsub(/\s/,'-') %></option> 
 <% end %>
 </select>

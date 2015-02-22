@@ -1,5 +1,5 @@
 <select> 
 <% for inviteEntry in @inviteStatus %>
-	<option value='<%= inviteEntry.id%>'><%= t 'person-invitation-' + inviteEntry.name %></option> 
+	<option value='<%= inviteEntry.id%>'><%= t 'person-invitation-' + inviteEntry.name.downcase.gsub(/\s/,'-') %></option> 
 <%end%>
 </select>
