@@ -358,6 +358,16 @@ private
     # Get the image updates
     ext_images = ExternalImage.find :all, :order => "updated_at asc", :conditions => ["(updated_at >= ?) AND (imageable_type like 'PublishedProgrammeItem')", pubDate]
     updated = updated.concat ext_images.collect {|a| a.imageable_id }.compact
+
+    # get the document updates
+    audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PlannerDocs::Document') AND ((audits.action = 'update') OR (audits.action = 'create'))", pubDate]
+    updated = updated.concat audits.collect {|a| (PlannerDocs::Document.exists? a.auditable_id) ? PlannerDocs::Document.find(a.auditable_id).publishedprogrammeitems.collect{|i| i.id} : nil }.compact.flatten
+
+    # and also deal with the document deletes
+    audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
+      :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Link') AND (audits.action = 'destroy')", pubDate]
+    updated = updated.concat audits.collect {|a| (a.audited_changes['linkedto_type'] == 'PublishedProgrammeItem') ? a.audited_changes['linkedto_id'] : nil}.compact
       
     updated.uniq.delete_if{ |i| new_items.include? i }.delete_if{ |i| deleted_items.include? i }
   end
