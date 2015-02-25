@@ -1,5 +1,3 @@
-
-
 /* Variables that will set values depending on the user's language */
 
 $w2: 650px; // under this width, we collapse to a pull-down menu instead of a regular menu
@@ -1111,4 +1109,25 @@ textarea.form-control.notes-text-area {
 .table-hover  tr:hover td span.minor-edit-icons a {
     visibility: visible;
     color: #666;
+}
+/* ------ APIs --------- */
+h4.api {
+    margin-top: 25px;
+}
+.parameter-well {
+    margin-top: 15px;
+}
+.parameter-well ul {
+    padding-left: 15px;
+    margin-bottom: 0px;
+}
+.html-snippet pre {
+    padding: 20px;
+    color: #000099;
+}
+.html-snippet pre var {
+    color: red;
+}
+a var {
+    color: red;
 }
