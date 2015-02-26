@@ -254,9 +254,16 @@ ParticipantApp.PeopleImport = (function(Backbone){
         // Display the model in the view
         onShow : function() {
             if (this.model) {
-                this.form = new Backbone.Form({
+                if (this.options.form_template) {
+                    this.form = new Backbone.Form({
+                        model: this.model,
+                        template: _.template($(this.options.form_template).html())
+                    }).render();
+                } else {
+                    this.form = new Backbone.Form({
                         model: this.model
-                }).render();
+                    }).render();
+                };
                 this.$el.find("#form").html(this.form.el);
             };
         }
@@ -267,7 +274,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
     var stepToView = {
         1 : {
             // Select the data source for the import
-            view : new StepView({ template: '#step-1', model : new DataSource(), eventName : 'STEP1'}),
+            view : new StepView({ template: '#step-1', form_template : "#data-source-template", model : new DataSource(), eventName : 'STEP1'}),
             event : 'STEP1',
             start_func : function(layout) {
                 $("[id$=indicator]").css('background-color', 'white');
