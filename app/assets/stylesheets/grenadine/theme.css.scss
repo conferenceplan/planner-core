@@ -989,7 +989,7 @@ a.mtooltip::before {
 a.mtooltip strong {line-height:30px;}
 a.mtooltip:hover {text-decoration:none;} 
 a.mtooltip span {
-    z-index:10;
+    z-index:10001;
     display:none; 
     padding:14px 20px;
     margin-top:-30px; margin-left:28px;
