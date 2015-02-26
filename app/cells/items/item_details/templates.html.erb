@@ -91,16 +91,22 @@
                         <label><%= t "item-setup" %></label>
                         <div data-editors="setup_type_id"></div>
                     </div>
+                </span>
                 <span data-editor>
                     <div class="col-sm-3">
                         <label><%= t "item-room" %></label>
                         <div data-editors="room_id"></div>
+                        <div class="has-error">
+                            <p class="help-block" id='room-error' data-error></p>
+                        </div>
                     </div>
                     <div class="col-sm-3">
                         <label><%= t "item-start-time" %></label>
                         <div data-editors="start_time"></div>
+                        <div class="has-error">
+                            <p class="help-block" id='start-time-error' data-error></p>
+                        </div>
                     </div>
-                </span>
                 </span>
             </div>
             <div class="form-group">
