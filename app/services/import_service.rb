@@ -162,7 +162,7 @@ protected
         person.pseudonym = Pseudonym.new(
               :first_name => pendingPerson.pub_first_name,
               :last_name => pendingPerson.pub_last_name,
-              :suffix => pendingPerson.pub_suffix,
+              :suffix => pendingPerson.pub_suffix
             )
         person.pseudonym.save!
       end

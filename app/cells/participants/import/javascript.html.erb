@@ -9,7 +9,10 @@ ParticipantApp.PeopleImport = (function(Backbone){
     //
     DataSource = Backbone.Model.extend({
         schema : {
-             datasource_id : { type : 'Select', title : '<%= t "data-source" %>', options : <%= Datasource.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+             datasource_id : { type : 'Select', title : '<%= t "data-source" %>',
+              options : <%= [{'val' => nil, 'label' => ' '}].concat(Datasource.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+              validators: ['required']
+              }
         }
     });
     
@@ -31,6 +34,8 @@ ParticipantApp.PeopleImport = (function(Backbone){
             'pub_first_name' : null,
             'pub_last_name' : null,
             'pub_suffix' : null,
+            'job_title' : null,
+            'company' : null,
             'line1' : null,
             'line2' : null,
             'city' : null,
@@ -94,17 +99,23 @@ ParticipantApp.PeopleImport = (function(Backbone){
         },
         
         gotoNextStep : function() {
-            if (stepToView[currentStep].event) {
+            var success = false
+            if (stepToView[currentStep].event && !(stepToView[currentStep].view.process)) {
+                success = true;
                 AppUtils.eventAggregator.trigger(stepToView[currentStep].event);
+            } else {
+                success = stepToView[currentStep].view.process();
             };
-            if (currentStep < 5) {
-                currentStep = currentStep < 5 ? currentStep + 1 : 5;
-                if (stepToView[currentStep].start_func) {
-                    stepToView[currentStep].start_func(stepToView[currentStep].view);
-                }
-                importLayout.current_step.show(stepToView[currentStep].view);
-                if (currentStep == 5) { // if we have completed the process then we do not allow the user to go back
-                    importLayout.control.close();
+            if (success) {
+                if (currentStep < 5) {
+                    currentStep = currentStep < 5 ? currentStep + 1 : 5;
+                    if (stepToView[currentStep].start_func) {
+                        stepToView[currentStep].start_func(stepToView[currentStep].view);
+                    }
+                    importLayout.current_step.show(stepToView[currentStep].view);
+                    if (currentStep == 5) { // if we have completed the process then we do not allow the user to go back
+                        importLayout.control.close();
+                    }
                 }
             }
         }
@@ -221,12 +232,23 @@ ParticipantApp.PeopleImport = (function(Backbone){
             this.template = this.options.template;
             AppUtils.eventAggregator.on(this.options.eventName, this.process, this);
         },
+
+        validate : function() {
+            res = null;
+            if (this.form) {
+                res = this.form.validate();
+            };
+            return res;
+        },
         
         process : function(eventName) {
+            var res = true;
             // Need to validate the form on the next step choice and make sure the values are recorded
             if (this.form) {
                 var errors = this.form.commit();
+                res = (typeof errors === 'undefined')
             };
+            return res;
         },
         
         // Display the model in the view

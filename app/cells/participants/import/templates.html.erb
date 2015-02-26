@@ -48,6 +48,12 @@
                 <li class="list-group-item ui-droppable" id="suffix">
                     <span>suffix</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof suffix != 'undefined' && suffix != null ? src.models[suffix].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="suffix"><i class="glyphicon glyphicon-remove"></i></button></span>
                 </li>
+                <li class="list-group-item ui-droppable" id="job_title">
+                    <span>job_title</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof job_title != 'undefined' && job_title != null ? src.models[job_title].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="job_title"><i class="glyphicon glyphicon-remove"></i></button></span>
+                </li>
+                <li class="list-group-item ui-droppable" id="company">
+                    <span>company</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof company != 'undefined' && company != null ? src.models[company].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="company"><i class="glyphicon glyphicon-remove"></i></button></span>
+                </li>
                 <li class="list-group-item ui-droppable" id="line1">
                     <span>line1</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line1 != 'undefined' && line1 != null ? src.models[line1].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line1"><i class="glyphicon glyphicon-remove"></i></button></span>
                 </li>
