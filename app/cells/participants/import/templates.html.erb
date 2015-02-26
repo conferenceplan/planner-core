@@ -10,19 +10,36 @@
 </script>
 
 <script type="text/template" id="step-1">
+    <div id="step-1-text">
+        <h3 class="h3-underlined"><%= t 'people-import-wizard-step-1'%></h3>
+        <p><%= t 'people-import-wizard-intro'%> <%= t 'people-import-wizard-step-1-text'%> <a href="<%= baseUri + '/pages/admin_dash/system_configs#data_sources_config' %>"><%= t 'people-import-wizard-step-1-create-data-source-link'%></a>. <%= t 'people-import-wizard-step-1-text-2' %></p>
+    </div>
     <div id='form'></div>
 </script>
 
 <script type="text/template" id="step-2">
+    <div id="step-2-text">
+        <h3 class="h3-underlined"><%= t 'people-import-wizard-step-2'%></h3>
+        <p><%= t 'people-import-wizard-step-2-text'%></p>
+    </div>    
     <div id='form'></div>
 </script>
 
 <script type="text/template" id="mapping-layout">
     <div class="row">
+        <div class="col-md-12">
+            <div id="step-3-text">
+                <h3 class="h3-underlined"><%= t 'people-import-wizard-step-3'%></h3>
+                <p><%= t 'people-import-wizard-step-3-text'%></p>
+            </div>
+        </div>
+        <div class="voffset20">&nbsp;</div>
         <div class="col-xs-6">
+            <h4><%= t 'grenadine-fields'%></h4>
             <div id='mapping'></div>
         </div>
         <div class="col-xs-6">
+            <h4><%= t 'your-fields'%></h4>
             <div id='source'></div>
         </div>
     </div>
@@ -36,58 +53,60 @@
     </div>
 </script>
 
-<script type="text/template" id="step-3">
-            <ul class="list-group">
-                <!--  What about pseudonyms? -->
-                <li class="list-group-item ui-droppable" id="first_name">
-                    <span>first_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= (typeof first_name != 'undefined' && first_name != null) ? src.models[first_name].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="first_name"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="last_name">
-                    <span>last_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof last_name != 'undefined' && last_name != null ? src.models[last_name].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="last_name"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="suffix">
-                    <span>suffix</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof suffix != 'undefined' && suffix != null ? src.models[suffix].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="suffix"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="job_title">
-                    <span>job_title</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof job_title != 'undefined' && job_title != null ? src.models[job_title].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="job_title"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="company">
-                    <span>company</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof company != 'undefined' && company != null ? src.models[company].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="company"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="line1">
-                    <span>line1</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line1 != 'undefined' && line1 != null ? src.models[line1].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line1"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="line2">
-                    <span>line2</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line2 != 'undefined' && line2 != null ? src.models[line2].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line2"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="city">
-                    <span>city</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof city != 'undefined' && city != null ? src.models[city].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="city"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="postcode">
-                    <span>postcode</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof postcode != 'undefined' && postcode != null ? src.models[postcode].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="postcode"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="state">
-                    <span>state</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof state != 'undefined' && state != null ? src.models[state].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="state"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="country">
-                    <span>country</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof country != 'undefined' && country != null ? src.models[country].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="country"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="phone">
-                    <span>phone</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof phone != 'undefined' && phone != null ? src.models[phone].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="phone"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="email">
-                    <span>email</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof email != 'undefined' && email != null ? src.models[email].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="email"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="registration_number">
-                    <span>registration_number</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof registration_number != 'undefined' && registration_number != null ? src.models[registration_number].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="registration_number"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="registration_type">
-                    <span>registration_type</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof registration_type != 'undefined' && registration_type != null ? src.models[registration_type].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="registration_type"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-                <li class="list-group-item ui-droppable" id="datasource_dbid">
-                    <span>datasource_dbid</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof datasource_dbid != 'undefined' && datasource_dbid != null ? src.models[datasource_dbid].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="datasource_dbid"><i class="glyphicon glyphicon-remove"></i></button></span>
-                </li>
-            </ul>
+<script type="text/template" id="step-3"> 
+    <div>    
+        <ul class="list-group">
+            <!--  What about pseudonyms? -->
+            <li class="list-group-item ui-droppable" id="first_name">
+                <span>first_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= (typeof first_name != 'undefined' && first_name != null) ? src.models[first_name].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="first_name"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="last_name">
+                <span>last_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof last_name != 'undefined' && last_name != null ? src.models[last_name].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="last_name"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="suffix">
+                <span>suffix</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof suffix != 'undefined' && suffix != null ? src.models[suffix].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="suffix"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="job_title">
+                <span>job_title</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof job_title != 'undefined' && job_title != null ? src.models[job_title].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="job_title"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="company">
+                <span>company</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof company != 'undefined' && company != null ? src.models[company].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="company"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="line1">
+                <span>line1</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line1 != 'undefined' && line1 != null ? src.models[line1].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line1"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="line2">
+                <span>line2</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line2 != 'undefined' && line2 != null ? src.models[line2].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line2"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="city">
+                <span>city</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof city != 'undefined' && city != null ? src.models[city].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="city"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="postcode">
+                <span>postcode</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof postcode != 'undefined' && postcode != null ? src.models[postcode].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="postcode"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="state">
+                <span>state</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof state != 'undefined' && state != null ? src.models[state].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="state"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="country">
+                <span>country</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof country != 'undefined' && country != null ? src.models[country].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="country"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="phone">
+                <span>phone</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof phone != 'undefined' && phone != null ? src.models[phone].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="phone"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="email">
+                <span>email</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof email != 'undefined' && email != null ? src.models[email].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="email"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="registration_number">
+                <span>registration_number</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof registration_number != 'undefined' && registration_number != null ? src.models[registration_number].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="registration_number"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="registration_type">
+                <span>registration_type</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof registration_type != 'undefined' && registration_type != null ? src.models[registration_type].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="registration_type"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+            <li class="list-group-item ui-droppable" id="datasource_dbid">
+                <span>datasource_dbid</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof datasource_dbid != 'undefined' && datasource_dbid != null ? src.models[datasource_dbid].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="datasource_dbid"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
+        </ul>
+    </div>
 </script>
 
 <script type="text/template" id="csv-source">
@@ -97,7 +116,10 @@
 </script>
 
 <script type="text/template" id="step-4">
-    <%= t "proceed-with-import" %>
+    <div id="step-4-text">
+        <h3 class="h3-underlined"><%= t 'people-import-wizard-step-4'%></h3>
+        <p><%= t 'people-import-wizard-step-4-text'%></p>
+    </div>     
     <div id='form'></div>
 </script>
 

@@ -18,7 +18,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
     
     CSVUpload = Backbone.Model.extend({
         schema : {
-            file_upload  : { type : 'FileUpload', title : 'CSV for Import', handler : '/file_uploads' },
+            file_upload  : { type : 'FileUpload', title : '<%= t "csv-for-import" %>', handler : '/file_uploads' },
         }
     });
     
@@ -60,7 +60,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
         schema : {
             datasource_id : { type : 'Hidden' },
             file : { type : 'Hidden' },
-            ignore_first : { type : 'Checkbox', title : 'Ignore First Line' }
+            ignore_first : { type : 'Checkbox', title : '<%= t "people-import-wizard-ignore-first-line" %>', help: '<%= t "people-import-wizard-ignore-first-line-hint" %>' }
         },
         urlRoot : "<%= baseUri + '/pending_import_people/import_file' %>"
     });
