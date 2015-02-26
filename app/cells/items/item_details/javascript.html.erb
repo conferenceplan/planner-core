@@ -27,7 +27,20 @@ ItemApp.ItemManagement = (function(Backbone){
             short_title : { type : 'Text', title : '<%= t "short-title" %>' },
             precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
             short_precis : { type : 'Html', title : '<%= t "short-item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
-            room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }, // TODO
+            room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                validators: [
+                    function check_for_room(value, formValues) {
+                        var err = {
+                            type: "room_id",
+                            message: "time is required when you set a room"
+                        };
+                        if (formValues.room_id != "" && formValues.start_time == "") {
+                            $('#room-error').html(err.message);
+                            return err;
+                        }
+                    }
+                ]
+             },
             start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
                     tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/(60*60) %>,
                     picker : {
@@ -35,10 +48,23 @@ ItemApp.ItemManagement = (function(Backbone){
                         minuteStepping : 15,
                         orientation : 'left',
                         format : "DD MMM YYYY, HH:mm",
-                        defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        defaultDate : null, //"<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
                         startDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
                         endDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
-                } },
+                },
+                validators: [
+                    function check_for_room(value, formValues) {
+                        var err = {
+                            type: "start_time",
+                            message: "room is required when you set a time"
+                        };
+                        if (formValues.room_id == "" && formValues.start_time != "") {
+                            $('#start-time-error').html(err.message);
+                            return err;
+                        }
+                    }
+                ]
+            },
             item_notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 2, cols : 60 } },
             participant_notes : { type : 'TextArea', title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60 } },
             format_id : { type : 'Select',  editorAttrs : {tabindex : "-1"} , title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
