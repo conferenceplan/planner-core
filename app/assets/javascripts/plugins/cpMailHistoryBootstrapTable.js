@@ -5,6 +5,7 @@
 $.widget( "cp.mailHistoryBootstrapTable", $.cp.baseBootstrapTable , {
 
     createColModel : function(){
+        var that = this;
         return [{
             field: 'Mailing',
             title: this.options.mailing,
@@ -42,6 +43,8 @@ $.widget( "cp.mailHistoryBootstrapTable", $.cp.baseBootstrapTable , {
             formatter : function(value, row) {
                 if (typeof row.email_status === 'undefined') {
                     return "";
+                } else if (row.email_status == 'Sent') {
+                    return that.translate("email_sent");
                 } else {
                     return row.email_status;
                 }

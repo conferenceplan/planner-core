@@ -237,14 +237,25 @@ class PublishJob
   end
   
   def updateLinks(srcItem, newItem)
-    # copy the links from the src to the new itme
-    newItem.linked.delete_all # delete the old image(s) TODO - make sure it does not destroy the original
-    srcItem.linked.each do |link|
+    # 1. Get the list for deletion
+    # 2. Get the list for addition
+    
+    src_doc_ids = srcItem.linked.collect{|l| l.document_id}.compact
+    dest_doc_ids = newItem.linked.collect{|l| l.document_id}.compact
+    
+    for_delete = dest_doc_ids - src_doc_ids
+    for_add = src_doc_ids - dest_doc_ids
+
+    newItem.linked.each do |link|
+      link.delete if (for_delete.include? link.document_id)
+    end
+
+    for_add.each do |doc_id|
       new_link = Link.new
-      obj = copy(link, new_link) # copy the variables (except linked to etc)
-      obj.linkedto_type = newItem.class.name
-      obj.linkedto_id = newItem.id
-      obj.save
+      new_link.linkedto_type = newItem.class.name
+      new_link.linkedto_id = newItem.id
+      new_link.document_id = doc_id
+      new_link.save
     end
   end
   

@@ -1,5 +1,3 @@
-
-
 /* Variables that will set values depending on the user's language */
 
 $w2: 650px; // under this width, we collapse to a pull-down menu instead of a regular menu
@@ -63,21 +61,31 @@ body:lang(fr) .dl-horizontal dd {
 .boffset150 { margin-bottom: 150px; }
 
 /* Styles for the header logo */
+body:lang(en) #event-planner-logo-link-container {
+   background: url('/assets/grenadine-event-planner-en.png') 0 0 no-repeat;
+}
+body:lang(fr) #event-planner-logo-link-container {
+   background: url('/assets/grenadine-event-planner-fr.png') 0 0 no-repeat;
+}
 #event-planner-logo-link-container {
 	height: 67px;
 	width: 282px;
 	margin-left: 00px;
-	background: url('/assets/grenadine-event-planner-en.png') 0 0 no-repeat;
 }
 @media
 screen and (-webkit-min-device-pixel-ratio: 1.5),
 screen and (-moz-min-device-pixel-ratio: 1.5),
 screen and (min-device-pixel-ratio: 1.5) {
-	#event-planner-logo-link-container {
-		background: url('/assets/grenadine-event-planner-en-134.png') 0 0 no-repeat;
+	body:lang(fr) #event-planner-logo-link-container {
+		background: url('/assets/grenadine-event-planner-fr-134.png') 0 0 no-repeat;
 		background-size: 100%;
+        }
+    body:lang(en) #event-planner-logo-link-container {
+        background: url('/assets/grenadine-event-planner-en-134.png') 0 0 no-repeat;
+        background-size: 100%;
+        }
 	}
-}
+
 .conference-title {
 	color: #808284;
 	font-size: 12pt;
@@ -1101,4 +1109,30 @@ textarea.form-control.notes-text-area {
 .table-hover  tr:hover td span.minor-edit-icons a {
     visibility: visible;
     color: #666;
+}
+/* ------ APIs --------- */
+h4.api {
+    margin-top: 25px;
+}
+.parameter-well {
+    margin-top: 15px;
+}
+.parameter-well ul {
+    padding-left: 15px;
+    margin-bottom: 0px;
+}
+.html-snippet pre {
+    padding: 20px;
+    color: #000099;
+    white-space: pre-wrap;       /* CSS 3 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+.html-snippet pre var {
+    color: #e0234a;
+}
+a var {
+    color: #e0234a;
 }

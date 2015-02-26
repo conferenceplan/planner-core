@@ -200,11 +200,11 @@
                 <dd>{{= invitestatus_name ? invitestatus_name : "&nbsp;"}}</dd>
                 <dt><%= t "acceptance-status" %></dt>
                 {{ if (acceptance_status_name == 'Accepted') { }}
-                    <dd><span class="label label-success"><span class="glyphicon glyphicon-ok"></span> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span></dd>
+                    <dd><span class="label label-success"><span class="glyphicon glyphicon-ok"></span> <%= t "person-acceptance-accepted" %></span></dd>
                     {{ } else if (acceptance_status_name == 'Declined')  { }}
-                    <dd><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span></dd>
+                    <dd><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span> <%= t "person-acceptance-declined" %></span></dd>
                     {{ } else if ((acceptance_status_name == 'Unknown') || (acceptance_status_name == 'Probable'))  { }}
-                    <dd><span class="label label-warning"> {{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</span></dd>                    
+                    <dd><span class="label label-warning"> <%= t "person-acceptance-unknown" %></span></dd>                    
                     {{ } else { }}
                     <dd>{{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</dd>
                 {{ } }}    
@@ -266,18 +266,18 @@
         {{ if (typeof id != 'undefined') { }}
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
             <dl class="dl-airy">
-                <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text">(edited)</span>' : (survey_bio ? ' <span class="minor-text">(as filled out by person on survey)</span>' : '&nbsp;') }}</dt>
+                <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text"> (<%= t "biography-edited" %>)</span>' : (survey_bio ? ' <span class="minor-text"> (<%= t "biography-filled-out-by-person-on-the-survey" %>)</span>' : '&nbsp;') }}</dt>
                 <dd>{{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}</dd>
                 <dt><%= t "participant-photo" %></dt>
-                <dd>{{= photourl ? "<a href='" + photourl + "' target='_blank'>" + photourl + "</a>" : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dd>{{= photourl ? "<a href='" + photourl + "' target='_blank'>" + photourl + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "participant-url" %></dt>
-                <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "participant-twitter-handle" %></dt>
-                <dd>{{= twitterinfo ? "<a href='https://twitter.com/" + twitterinfo + "' target='_blank'>" + twitterinfo + "</a>" : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dd>{{= twitterinfo ? "<a href='https://twitter.com/" + twitterinfo + "' target='_blank'>" + twitterinfo + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "participant-facebook-url" %></dt>
-                <dd>{{= facebook ? "<a href='" + facebook + "' target='_blank'>" + facebook + "</a>" : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dd>{{= facebook ? "<a href='" + facebook + "' target='_blank'>" + facebook + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "other-social-media" %></dt>
-                <dd>{{= othersocialmedia ? "<a href='" + othersocialmedia + "' target='_blank'>" + othersocialmedia + "</a>" : "<span class='minor-text'>(none provided)</span>" }}</dd>
+                <dd>{{= othersocialmedia ? "<a href='" + othersocialmedia + "' target='_blank'>" + othersocialmedia + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
             </dl>
         {{ } else { }}
             <button class="model-new-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
@@ -447,7 +447,7 @@
     <button class="model-edit-button btn btn-primary btn-xs pull-right">
         <%= t "edit" %>
     </button>
-    <small> <em>Arrival</em>: {{= start_time_str }} <i class="glyphicon glyphicon-arrow-right"></i> <em>Departure</em>: {{= end_time_str }} </small>
+    <small> <em><%= t 'arrival'%></em>: {{= start_time_str }} <i class="glyphicon glyphicon-arrow-right"></i> <em><%= t 'departure'%></em>: {{= end_time_str }} </small>
 </div>
 {{ } else { }}
     <button class="model-new-button btn btn-primary btn-xs pull-right">
@@ -471,9 +471,12 @@
 <script type="text/template" id="program-item-view-template">
     {{ if (typeof id != 'undefined') { }}
             <td>
-                {{= time_slot ? start_time_str : '<span class="minor-text"><%= t "no-date-and-time-specified" %></span>' }}<br>
                 <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})<br>
-                <strong><%= t "with"%> </strong><em>{{= other_participants.join(", ") }}</em>
+                {{= time_slot ? start_time_str : '<span class="minor-text"><%= t "no-date-and-time-specified" %></span>' }}
+                {{ if ((typeof other_participants.join(", ") != 'undefined') && other_participants.join(", ").length > 1) { }}
+                    <br>
+                    <strong><%= t "with"%> </strong><em>{{= other_participants.join(", ") }}</em>
+                {{ }; }}
             </td>
             <td align="right">
                 <nobr>{{= isPublished ? '<div class="default-label"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}</nobr>
