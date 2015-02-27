@@ -1,11 +1,15 @@
 
 <script type="text/template" id="data-source-template">
-    <div class="form-horizontal" data-fieldsets>
-        <div style="float: right; padding: 10px;">
-            <a class="btn btn-primary btn-small back-step pull-left" href="<%= baseUri%>/pages/admin_dash/system_configs#data_sources_config">
-                <%= t "create-a-data-source" %>
-            </a>
+    <div class="well" style="padding-bottom: 0;">
+        <center>
+        <div class="form-horizontal" data-fieldsets>
+            <div style="float: right; padding-left: 10px;">
+                <a class="btn btn-primary btn-small back-step pull-left" href="<%= baseUri%>/pages/admin_dash/system_configs#data_sources_config">
+                    <%= t "create-a-data-source" %>
+                </a>
+            </div>
         </div>
+        </center>
     </div>
 </script>
 
@@ -41,6 +45,10 @@
             <div id="step-3-text">
                 <h3 class="h3-underlined"><%= t 'people-import-wizard-step-3'%></h3>
                 <p><%= t 'people-import-wizard-step-3-text'%></p>
+                <div class="bs-callout bs-callout-info">
+                    <h4><%= t 'hint'%></h4>
+                    <%= (t 'dbid-hint').html_safe %>
+                </div>
             </div>
         </div>
         <div class="voffset20">&nbsp;</div>
@@ -134,11 +142,13 @@
 </script>
 
 <script type="text/template" id="result-template">
-    <dl class="dl-horizontal">
-        <dt><%= t "created" %></dt><dd>{{= created }}</dd>
-        <dt><%= t "updated" %></dt><dd>{{= updates }}</dd>
-        <dt><%= t "possible-matches" %></dt><dd>{{= possible_matches }}</dd>
-        <dt><%= t "registration-in-use" %></dt><dd>{{= registration_in_use }}</dd>
-        <dt><%= t "possible-name-updates" %></dt><dd>{{= possible_name_updates }}</dd>
-    </dl>
+    <div id="step-5-text">
+        <h3 class="h3-underlined"><%= t 'people-import-wizard-step-5'%></h3>
+        <h4><%= t 'results'%></h4>
+        <p><%= t "created" %>: {{= created }}</p>
+        <p><%= t "updated" %>: {{= updates }}</p>
+        <p><%= t "possible-matches" %>: {{= possible_matches }}</p>
+        <p><%= t "registration-in-use" %> <a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t "registration-in-use-explanation" %></span></a> : {{= registration_in_use }}</p>
+        <p><%= t "possible-name-updates" %>: {{= possible_name_updates }}</p>
+    </div>
 </script>
