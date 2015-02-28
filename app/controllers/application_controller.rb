@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
     #
     #
     def store_location
-      session[:return_to] = request.protocol + request.host_with_port + baseUri + request.fullpath
+      session[:return_to] = request.protocol + request.host_with_port + request.fullpath
     end
     
     def store_page page
