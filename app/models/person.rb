@@ -81,10 +81,10 @@ class Person < ActiveRecord::Base
               end
             end
   
-  has_many  :programmeItemAssignments, :dependent => :delete_all
+  has_many  :programmeItemAssignments, :dependent => :destroy
   has_many  :programmeItems, :through => :programmeItemAssignments
   
-  has_many  :publishedProgrammeItemAssignments, :dependent => :delete_all
+  has_many  :publishedProgrammeItemAssignments #, :dependent => :destroy # NOTE - we let the publish mechanism to the destroy so that the update service knows what is happening
   has_many  :published_programme_items, :through => :publishedProgrammeItemAssignments
 
   has_one   :registrationDetail, :dependent => :delete

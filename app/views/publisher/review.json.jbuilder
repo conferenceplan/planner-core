@@ -8,6 +8,6 @@ if @peopleChanged
         json.person_name Person.find(personid).getFullPublicationName
     end
     json.people_removed    @peopleChanged[:removedPeople].each do |personid|
-        json.person_name Person.find(personid).getFullPublicationName
+        json.person_name Person.find(personid).getFullPublicationName if Person.exists? personid
     end
 end

@@ -23,7 +23,7 @@ class ProgrammeItem < ActiveRecord::Base
  
   belongs_to :format 
   
-  has_one :room_item_assignment, :dependent => :delete # really we only use one anyway...
+  has_one :room_item_assignment, :dependent => :destroy # really we only use one anyway...
   has_one :room, :through => :room_item_assignment #
   has_one :time_slot, :through => :room_item_assignment
 
