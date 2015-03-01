@@ -1,3 +1,3 @@
 class Feature < ActiveRecord::Base
-  # attr_accessible :title, :body
+  attr_accessible :name, :migrated
 end
