@@ -43,6 +43,7 @@ protected
   end
 
   def check_authenticated
-    redirect_to root_path unless user_signed_in? or support_user_signed_in? 
+    session[:user_return_to] = request.fullpath
+    redirect_to '/users/sign_in' unless user_signed_in? or support_user_signed_in? 
   end  
 end
