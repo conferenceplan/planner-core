@@ -173,7 +173,7 @@ CKEDITOR.config.htmlbuttons =	[
 			{
                 name:'survey-key',
                 //icon:'icon2.png',
-                html:'<%= args[:user].key %>',
+                html:'<%= args[:key] %>',
                 title:'Person\'s Personal Survey Key'
             },
             {
