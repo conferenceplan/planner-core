@@ -12,7 +12,8 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         schema : {
             name            : { type : 'Text',      title : '<%= t "name" %>',  validators: ['required'] },
             survey_id       : { type : 'Select',    title : '<%= t "survey" %>',
-                                options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
+                                options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                                validators: ['required']
                               },
             shared          : { type : 'Checkbox',  title : '<%= t "survey-shared" %>' },
             show_country    : { type : 'Checkbox',  title : '<%= t "survey-show-country" %>' },
