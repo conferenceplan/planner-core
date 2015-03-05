@@ -11,6 +11,7 @@
 				Merge suggestion by Julian Ivancsuk. Ability to use a menu-button instead of several different buttons
  * Version 1.5.1: Correction to fix validation by CKBuilder
  */
+CKEDITOR.timeStamp = '12334s67d689';
 
 CKEDITOR.plugins.add( 'htmlbuttons', {
 	requires: ['menubutton'],
