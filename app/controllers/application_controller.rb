@@ -73,32 +73,5 @@ class ApplicationController < ActionController::Base
         return false
       end
     end
-    
-    #
-    #
-    #
-    def store_location
-      session[:return_to] = request.protocol + request.host_with_port + request.fullpath
-    end
-    
-    def store_page page
-      session[:page] = page
-    end
-    
-    def redirect_back_or_default(default)
-      redirect_to(session[:return_to] || default)
-      session[:return_to] = nil
-    end
-    
-    def survey_redirect_back(default, token)
-      if session[:return_to]
-        redirect_to((session[:return_to] + '/?key=' + token) || default)
-      else
-        redirect_to(default + '/?key=' + token)
-      end      
-    end
-    
-    def get_stored_page
-      session[:page]
-    end
+
 end
