@@ -2,7 +2,11 @@ module Planner
   module ControllerAdditions
     
     def self.included(base)
-      base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu, :request_path
+      base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu, :request_path, :current_identity
+    end
+
+    def current_identity
+      nil
     end
     
     def request_path
