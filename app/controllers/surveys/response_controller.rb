@@ -426,7 +426,7 @@ class Surveys::ResponseController < ApplicationController
         # check to see if we have a response
         if !params[:survey_response] || !params[:survey_response][question.id.to_s] || params[:survey_response][question.id.to_s].empty?
           errors[question.id] = Hash.new if (errors[question.id].nil?())
-          errors[question.id][question.question] = "Question requires an answer"
+          errors[question.id][question.question] = "This question requires an answer"
         end
       end
     end
