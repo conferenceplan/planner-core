@@ -10,7 +10,8 @@ class Survey < ActiveRecord::Base
 
   has_many :survey_responses
   
-  before_destroy :check_for_use, :check_if_published
+  #before_destroy :check_for_use, :check_if_published
+  before_destroy :check_if_published
   
   def getAllQuestions
     res = Array.new

@@ -7,7 +7,7 @@ class SurveyGroup < ActiveRecord::Base
 
   has_many :survey_questions, :dependent => :destroy, :order => 'sort_order asc'
   
-  before_destroy :check_for_use, :check_if_published
+  #before_destroy :check_for_use, :check_if_published
 
 private
 
