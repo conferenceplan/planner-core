@@ -5,15 +5,21 @@
         <div class="col-sm-12 <%='error' if @errors && @errors[question.id] %>">
             <% if question.question && (question.question.size > 0) && !([:address, :phone].include? question.question_type) %>
                 <% if ([:textbox].include? question.question_type) || question.horizontal %>
-                    <label class="col-sm-12 <%= question.mandatory ? 'text-danger' : '' %>">
+                    <label class="col-sm-12">
                 <% else %>
                     <% if (question.text_size && question.text_size < 10) %>
-                        <label class="col-sm-6 <%= question.mandatory ? 'text-danger' : '' %>">
+                        <label class="col-sm-6">
                     <% else %>
-                        <label class="col-sm-2 <%= question.mandatory ? 'text-danger' : '' %>">
+                        <label class="col-sm-2">
                     <% end %>
                 <% end %>
+                    <% if question.mandatory %>
+                        <span class='' style='color: red;'>*</span>
+                    <% end %>
                     <%= question.question.html_safe %>
+                    <% if question.mandatory %>
+                        <span class='text-danger'><small><i>(required)</i></small></span>
+                    <% end %>
                     <% if question.survey_format.help && !question.survey_format.help.blank? %>
                     <a class="survey-help" href="#" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
                     <% end %>
@@ -31,7 +37,7 @@
                 <% end %>
                 <%= render :partial => "#{question.question_type}", :locals => {:question => question} %>
                 <% if @errors && @errors[question.id] %>
-                    <span class="help-inline"><%=@errors[question.id][question.question]%></span>
+                    <span class="help-inline text-danger"><%=@errors[question.id][question.question]%></span>
                 <% end %>
                 </div>
             <% else %>
