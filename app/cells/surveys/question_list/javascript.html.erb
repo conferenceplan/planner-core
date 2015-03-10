@@ -8,22 +8,24 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
 
     SurveyQuestion = Backbone.DeepModel.extend({
         schema : {
-            question            : { type : 'Html', title : '<%= t "survey-question" %>' },
+            question            : { type : 'Html', title : '<%= t "survey-question" %>', validators: ['required'] },
             //title               : { type : 'Text', title : '<%= t "title" %>' }, // TODO - is this used???
-            sort_order          : { type : 'Number', title : '<%= t "sort_order" %>' },
-            question_type       : { type : 'Select', title : '<%= t "survey-question-type" %>',
+            sort_order          : { type : 'Number', title : '<%= t "sort_order" %>', help: '<%= t "sort_order-help" %>', validators: ['number', /^[0-9]\d*$/] },
+            question_type       : { type : 'Select', title : '<%= t "survey-question-type" %>', help: '<%= t "survey-question-type-help" %>',
                                     options : <%= [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone].to_json.html_safe %>
                                     },
-            mandatory           : { type : 'Checkbox', title : '<%= t "survey-mandatory" %>' },
-            private             : { type : 'Checkbox', title : '<%= t "survey-private" %>' },
-            tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>',
-                                    validators : [ /^[A-z0-9_]*$/ ],
-                                    dependsOn : 'question_type', dependentValues : ['textfield'] },
             text_size           : { type : 'Number',  title : '<%= t "survey-length-of-textbox" %>',
+                                    dependsOn : 'question_type', dependentValues : ['textfield'] , validators: ['number', /^[0-9]\d*$/]},        
+            mandatory           : { type : 'Checkbox', title : '<%= t "survey-mandatory" %>' },
+            private             : { type : 'Checkbox', title : '<%= t "survey-private" %>', help: '<%= t "survey-private-help" %>' },
+            tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>',
+                                    validators : [ /^[A-z0-9_]*$/ ], help: '<%= t "tags_label-help" %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
-            questionmapping_id  : { type : 'Select', title : '<%= t "question-mapping" %>', options : <%= [[' ',' ']].concat(QuestionMapping.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+
+            questionmapping_id  : { type : 'Select', title : '<%= t "question-mapping" %>', options : <%= [[' ',' ']].concat(QuestionMapping.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
+                                            , help: '<%= t "question-mapping-help" %>' },
             isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
-                                     dependsOn : 'question_type', dependentValues : ['textbox']  }, // only if the question type is text
+                                     dependsOn : 'question_type', dependentValues : ['textbox'] , help: '<%= t "isbio-help" %>' }, // only if the question type is text
             horizontal          : { type : 'DependentCheckbox', title : '<%= t "survey-horizontal-layout" %>', 
                                     dependsOn : 'question_type', dependentValues : ['multiplechoice', 'singlechoice'] },
             'survey_format.help' : { type :'Html', title : '<%= t "help-text" %>' }, // Just need the help text...

@@ -7,7 +7,7 @@
             <div class="voffset10"></div>
         </div>
     </div>
-    <div class="row" style="height : 370px; overflow : auto; overflow-x:hidden;">
+    <div class="row" id="questions-list-div">
         <div class="col-xs-12" >
         <div id="survey-question-region-div"></div>
         </div>
@@ -59,7 +59,7 @@
                 {{ _.each(survey_answers, function(answer) { }}
                     <li class="clearfix">
                         <div class="pull-left">
-                            <div class="bbf-list-modal">
+                            <div class="bbf-list-modal-survey-questions">
                             {{= AppUtils.partial('answer-data-template', answer) }}
                             </div>
                         </div>
