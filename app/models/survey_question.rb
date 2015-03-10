@@ -15,7 +15,7 @@ class SurveyQuestion < ActiveRecord::Base
   
   validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone]
 
-  before_destroy :check_for_use, :check_if_published
+  #before_destroy :check_for_use, :check_if_published
   
   def question_type
     read_attribute(:question_type).to_sym
