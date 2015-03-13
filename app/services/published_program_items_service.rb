@@ -43,7 +43,7 @@ module PublishedProgramItemsService
     PublishedRoom.uncached do
       PublishedRoom.all :select => 'distinct published_rooms.name',
                       :order => 'published_venues.name DESC, published_rooms.name ASC', 
-                      :include => [:published_venue, {:published_room_item_assignments => {:published_programme_item => {:people => :pseudonym}}}],
+                      :include => [:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}],
                       :conditions => getConditions(day, name, lastname)
     end
     
@@ -385,15 +385,25 @@ private
 
 private
 
-  def self.getConditions(day = nil, name = nil, lastname = nil)    
+  def self.getConditions(day = nil, name = nil, lastname = nil)
+    # get the start date
+    # find the day start_date + day.days@
+    if (day)
+      cfg = SiteConfig.first
+      start_of_day = cfg.start_date + day.to_i.days
+      end_of_day = start_of_day + 1.days
+    end
+    
     conditionStr = "" if (day || name || lastname)
-    conditionStr += '(published_room_item_assignments.day = ?) ' if day
+    # conditionStr += '(published_room_item_assignments.day = ?) ' if day
+    conditionStr += '(published_time_slots.start >= ? AND published_time_slots.start <= ?) ' if day
     conditionStr += ' AND ' if day && (name || lastname)
     conditionStr += '(people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ? )' if name && !lastname
     conditionStr += '((people.last_name like ? OR pseudonyms.last_name like ?) AND (people.first_name like ? OR pseudonyms.first_name like ?))' if name && lastname
     conditionStr += '(people.last_name like ? OR pseudonyms.last_name like ?)' if lastname && !name
     conditions = [conditionStr] if (day || name || lastname)
-    conditions << day if day 
+    # conditions << day if day 
+    conditions += [start_of_day, end_of_day] if day 
     lastname = name if !lastname
     conditions += ['%'+lastname+'%', '%'+lastname+'%', '%'+name+'%', '%'+name+'%'] if name
     conditions += ['%'+lastname+'%', '%'+lastname+'%'] if lastname && !name
