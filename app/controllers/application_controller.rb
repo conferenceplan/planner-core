@@ -23,7 +23,25 @@ class ApplicationController < ActionController::Base
     user
   end
   
+  after_filter :store_prev_location
+    
   private
+
+    def store_prev_location
+      # store last url - this is needed for post-login redirect to whatever the user last visited.
+      return unless request.get? 
+      if (!request.path.include?("/sign_in") &&
+          !request.path.include?("/sign_up") &&
+          !request.path.include?("/password/new") &&
+          !request.path.include?("/password/edit") &&
+          !request.path.include?("/confirmation") &&
+          !request.path.include?("/sign_out") &&
+          !request.xhr?) # don't store ajax calls
+        session[:previous_url] = request.fullpath 
+        store_location
+      end
+    end  
+  
     def check_for_single_access_token # TODO - change name???
       if params[:key] && !params[:key].empty?
         @respondent                 = SurveyRespondent.where({:single_access_token => params[:key]}).first
