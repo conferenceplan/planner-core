@@ -396,7 +396,7 @@ private
     
     conditionStr = "" if (day || name || lastname)
     # conditionStr += '(published_room_item_assignments.day = ?) ' if day
-    conditionStr += '(published_time_slots.start >= ? AND published_time_slots.start <= ?) ' if day
+    conditionStr += '(published_time_slots.start >= ? AND published_time_slots.start < ?) ' if day
     conditionStr += ' AND ' if day && (name || lastname)
     conditionStr += '(people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ? )' if name && !lastname
     conditionStr += '((people.last_name like ? OR pseudonyms.last_name like ?) AND (people.first_name like ? OR pseudonyms.first_name like ?))' if name && lastname
