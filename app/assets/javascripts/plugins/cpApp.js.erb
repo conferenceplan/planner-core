@@ -262,7 +262,7 @@ var AppUtils = (function(){
             this.template = _.template($('#modal-plain-panel-template').html());
         },
         
-        render: function () {
+        render: function (after_render) {
             var url = this.options.url;
             var that = this;
             Backbone.BootstrapModal.count++;
@@ -276,6 +276,9 @@ var AppUtils = (function(){
                         content : data,
                         title : that.options.title
                     })));
+                    if (after_render) {
+                        after_render();
+                    };
                 }
             });
             

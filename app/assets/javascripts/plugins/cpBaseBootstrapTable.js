@@ -12,6 +12,9 @@ $.widget( "cp.baseBootstrapTable" , {
         root_url            : "/",              // so that sub-domains can be taken care of
         baseUrl             : "",               // HAS TO BE OVER-RIDDEN by the sub-component
         getGridData         : "",               // for getting the data (part of the URL)
+        clickToSelect       : true,
+        checkbox            : false,
+        singleSelect        : true,
         delayed             : false,
         selectNotifyMethod  : function(row, data) { return null; },
         onloadMethod        : function() { return null; },
@@ -303,6 +306,9 @@ $.widget( "cp.baseBootstrapTable" , {
                 },
                 method: 'get',
                 cache: false,
+                clickToSelect   :  this.options.clickToSelect,
+                checkbox :  this.options.checkbox,
+                singleSelect:  this.options.singleSelect,
                 striped: true,
                 sidePagination: 'server',
                 pagination: this.options.pagination,
