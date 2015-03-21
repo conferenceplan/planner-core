@@ -15,13 +15,15 @@ class PublisherController < PlannerController
     
     pstatus = PublicationStatus.first
     pstatus = PublicationStatus.new if pstatus == nil
-    pstatus.status = :inprogress
-    pstatus.save!
-    
-    pubjob = PublishJob.new(ref_numbers)
-    
-    # Create a job that will be run seperately
-    Delayed::Job.enqueue pubjob
+    if pstatus.status != :inprogress
+      pstatus.status = :inprogress
+      pstatus.save!
+      
+      pubjob = PublishJob.new(ref_numbers)
+      
+      # Create a job that will be run seperately
+      Delayed::Job.enqueue pubjob
+    end
 
     render status: :ok, text: {}.to_json
   end
