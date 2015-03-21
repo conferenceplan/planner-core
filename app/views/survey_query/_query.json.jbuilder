@@ -19,8 +19,8 @@ if (!(defined? terse)) || ((defined? terse) && !terse)
             json.operation              p.operation
             json.survey_query_id        p.survey_query_id
             json.survey_question_id     p.survey_question_id
-            json.survey_question_name   p.survey_question.question
-            json.survey_question_type   p.survey_question.question_type
+            json.survey_question_name   p.survey_question.question if p.survey_question
+            json.survey_question_type   p.survey_question.question_type if p.survey_question
             json.value                  p.value
         end
     end
