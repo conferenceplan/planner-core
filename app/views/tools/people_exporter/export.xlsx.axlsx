@@ -15,6 +15,7 @@ wb.add_worksheet(name: "People") do |sheet|
         "Invite Status",
         "Acceptance Status",
         "Email",
+        "Job Title",
         "Company Name",
         "Address Line 1",
         "Address Line 2",
@@ -37,14 +38,15 @@ wb.add_worksheet(name: "People") do |sheet|
                 (person.invitation_category ? person.invitation_category.name : ''),
                 (person.invitestatus ? person.invitestatus.name : ''),
                 (person.acceptance_status ? person.acceptance_status.name : ''),
-                (person.getDefaultEmail ? person.getDefaultEmail.email : '')
+                (person.getDefaultEmail ? person.getDefaultEmail.email : ''),
+                (person.job_title ? person.job_title : ''),
+                (person.company ? person.company : '')
             ]
             
         address = person.getDefaultPostalAddress
             
         if address
             row.concat([
-                address.company_name,
                 address.line1,
                 address.line2,
                 address.city,
