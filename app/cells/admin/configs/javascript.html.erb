@@ -4,7 +4,7 @@ ConfigApp = new Backbone.Marionette.Application();
 
 ConfigApp.ConfigManagement = (function(Backbone){
     
-    var tzOffset = <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/(60*60) %>;
+    var tzOffset = <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>;
 
     TitleMdl =  Backbone.Model.extend({});
     
