@@ -32,7 +32,7 @@ class SiteConfigsController < PlannerController
     Time.use_zone(site_config.time_zone) do 
       site_config.save!
       
-      site_config.tz_offset = site_config.start_date.utc_offset/(60*60)
+      site_config.tz_offset = site_config.start_date.utc_offset/60
     end
 
     # UISettingsService.setLanguages params[:languages].split(',')
@@ -50,7 +50,7 @@ class SiteConfigsController < PlannerController
     Time.use_zone(site_config.time_zone) do 
       site_config.save!
       
-      site_config.tz_offset = site_config.start_date.utc_offset/(60*60)
+      site_config.tz_offset = site_config.start_date.utc_offset/60
     end
     
     # UISettingsService.setLanguages params[:languages].split(',')

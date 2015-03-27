@@ -15,9 +15,9 @@ DailyGrid = (function() {
     }
 
     var customTimeFormat = timeFormat([
-      [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('HH:mm');}, function(d) { return d.getHours() != 0 ; }],
-      [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('HH:mm');}, function(d) { return d.getHours() == 0; }],
-      [function(d) { return moment(d).utc().add('hour', time_zone_offset).format('HH:mm');}, function() { return true; }]
+      [function(d) { return moment(d).utc().add('minute', time_zone_offset).format('HH:mm');}, function(d) { return d.getHours() != 0 ; }],
+      [function(d) { return moment(d).utc().add('minute', time_zone_offset).format('HH:mm');}, function(d) { return d.getHours() == 0; }],
+      [function(d) { return moment(d).utc().add('minute', time_zone_offset).format('HH:mm');}, function() { return true; }]
     ]);
 
     // The area on the screen for the grid with margins

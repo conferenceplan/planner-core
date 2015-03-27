@@ -9,7 +9,7 @@ class SiteConfig < ActiveRecord::Base
       day = self.start_date.day
       self.start_date = self.start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
       self.start_date = self.start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
-      self.tz_offset = self.start_date.utc_offset/(60*60)
+      self.tz_offset = self.start_date.utc_offset/60
     end
   end
 

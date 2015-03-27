@@ -42,13 +42,13 @@ ItemApp.ItemManagement = (function(Backbone){
                 ]
              },
             start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
-                    tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/(60*60) %>,
+                    tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                     picker : {
                         useSeconds : false,
                         minuteStepping : 15,
                         orientation : 'left',
                         format : "DD MMM YYYY, HH:mm",
-                        defaultDate : null, //"<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>", // set to the start of the conference by default
                         startDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
                         endDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
                 },
