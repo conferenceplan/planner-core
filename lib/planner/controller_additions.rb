@@ -2,7 +2,7 @@ module Planner
   module ControllerAdditions
     
     def self.included(base)
-      base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang,
+      base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :baseUri_with_lang,
                          :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
                          :request_path, :current_identity, :current_attendee, :omniauth_state_params
     end
@@ -37,6 +37,11 @@ module Planner
     def baseUri
       '/' + I18n.locale.to_s
     end
+    
+    def baseUri_with_lang(lang)
+      '/' + lang.to_s
+    end
+
   
     def baseUri_no_lang
       ''
