@@ -37,6 +37,9 @@
 
   Form.NestedField.template = _.template('\
     <div class="field-<%= key %>">\
+      <label for="<%= editorId %>">\
+        <%= title %>\
+      </label>\
       <div title="<%= title %>" class="input-xlarge">\
         <span data-editor></span>\
         <div class="help-inline" data-error></div>\

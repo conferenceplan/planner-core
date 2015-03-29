@@ -1011,19 +1011,36 @@ Form.Field = Backbone.View.extend({
 //NESTEDFIELD
 //==================================================================================================
 
+// Form.NestedField = Form.Field.extend({
+// 
+  // template: _.template($.trim('\
+    // <div>\
+      // <span data-editor></span>\
+      // <% if (help) { %>\
+        // <div><%= help %></div>\
+      // <% } %>\
+      // <div data-error></div>\
+    // </div>\
+  // '), null, Form.templateSettings)
+// 
+// });
 Form.NestedField = Form.Field.extend({
-
-  template: _.template($.trim('\
+  template: _.template('\
     <div>\
-      <span data-editor></span>\
-      <% if (help) { %>\
-        <div><%= help %></div>\
-      <% } %>\
-      <div data-error></div>\
+      <label for="<%= editorId %>">\
+        <% if (titleHTML){ %><%= titleHTML %>\
+        <% } else { %><%- title %><% } %>\
+      </label>\
+      <div>\
+        <span data-editor></span>\
+        <div class="error-text" data-error></div>\
+        <div class="error-help"><%= help %></div>\
+      </div>\
     </div>\
-  '), null, Form.templateSettings)
+  ', null, Form.templateSettings)
 
 });
+
 
 /**
  * Base editor (interface). To be extended, not used directly
