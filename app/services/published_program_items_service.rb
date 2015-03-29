@@ -48,6 +48,11 @@ module PublishedProgramItemsService
     end
     
   end
+
+  def self.countPublishedProgramItems
+    PublishedProgrammeItem.count
+  end
+
   
   #
   #
@@ -94,6 +99,23 @@ module PublishedProgramItemsService
   #
   #
   #
+  def self.countParticipants
+    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
+    cndStr  = '(published_time_slots.start is not NULL)'
+    cndStr += ' AND (published_programme_item_assignments.role_id in (?))'
+
+    conditions = [cndStr]
+    conditions << roles
+    
+    Person.where(conditions).
+            joins({:publishedProgrammeItemAssignments => {:published_programme_item => :published_time_slot}}).
+            where(self.constraints()).count
+    
+  end
+  
+  #
+  #
+  #
   def self.findParticipants(peopleIds = nil)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     cndStr  = '(published_time_slots.start is not NULL)'
@@ -134,7 +156,7 @@ module PublishedProgramItemsService
     end
 
   end
-  
+
   #
   # Get a lits of the changes to the published items to be used for the pink sheet(s)
   #
