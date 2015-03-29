@@ -59,7 +59,7 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
             }
             var hours = Math.floor(offset / 60);
             var minutes = offset % 60;
-            valStr += this.lpad(hours.toString(), "0",2) + this.lpad(minutes.toString(), "0",2); // add in the time offset for the convention i.e. " -0500";
+            valStr += this.lpad(Math.abs(hours.toString()), "0",2) + this.lpad(Math.abs(minutes).toString(), "0",2); // add in the time offset for the convention i.e. " -0500";
         }
         return valStr; // and that is what we will send to the backend
     },
