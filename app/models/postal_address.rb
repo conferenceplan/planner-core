@@ -13,7 +13,7 @@ class PostalAddress < ActiveRecord::Base
   after_validation :geocode, if: ->(obj){ (obj.full_street_address.length > 0) and obj.changed? }
   
   def get_latlong
-    if latitude == nil && longitude == nil
+    if latitude == nil && longitude == nil && full_street_address.length > 0
       geocode
       save
     end
