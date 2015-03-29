@@ -12,4 +12,9 @@ class PublishedVenue < ActiveRecord::Base
   has_one :original, :through => :publication,
           :source => :original,
           :source_type => 'Venue'
+
+  def address
+    original.address if original
+  end
+
 end

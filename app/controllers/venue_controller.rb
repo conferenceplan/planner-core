@@ -64,6 +64,16 @@ class VenueController < PlannerController
   def create
     @venue = Venue.new params[:venue]
     @venue.save!
+
+    if params[:postal_address]
+      pa = PostalAddress.new( params[:postal_address] )
+      pa.save!
+      addr = @venue.build_address({
+        venue_id: @venue.id,
+        addressable: pa
+      })
+      addr.save!
+    end
   end
 
   #
@@ -72,6 +82,21 @@ class VenueController < PlannerController
   def update
     @venue = Venue.find params[:id]
     @venue.update_attributes params[:venue]
+    
+    if params[:postal_address]
+      if !@venue.postal_address
+        pa = PostalAddress.new( params[:postal_address] )
+        pa.save!
+        addr = @venue.build_address({
+          venue_id: @venue.id,
+          addressable: pa
+        })
+        addr.save!
+      else
+        @venue.postal_address.update_attributes params[:postal_address]
+      end
+      @venue.save!
+    end
   end
 
   #

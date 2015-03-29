@@ -8,10 +8,19 @@ VenueApp.VenueManagement = (function(Backbone){
 
     var current_room_id = current_venue_id = 0;
 
-    Venue = Backbone.Model.extend({
+    Venue = Backbone.DeepModel.extend({
         schema : {
             name : { type : 'Text', title : '<%= t "name" %>' },
-            sort_order : { type : 'Number', title : '<%= t "sort-order" %>' }
+            sort_order : { type : 'Number', title : '<%= t "sort-order" %>' },
+            postal_address : { type : 'Object',
+                subSchema : {
+                    line1   : { type : 'Text', title : '<%= t "line1" %>' },
+                    city : { type : 'Text', title : '<%= t "city" %>' },
+                    state : { type : 'Text', title : '<%= t "state" %>' },
+                    postcode : { type : 'Text', title : '<%= t "post-code" %>' },
+                    country : { type : 'Text', title : '<%= t "country" %>' }
+                }
+            }
         },
         urlRoot : "<%= baseUri + '/venue' %>"
     });
