@@ -18,7 +18,7 @@ class PostalAddress < ActiveRecord::Base
       save
     end
     
-    {latitude: latitude, longitude: longitude}
+    {lat: latitude, lng: longitude}
   end
   
   def full_street_address
