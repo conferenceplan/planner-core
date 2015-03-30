@@ -594,7 +594,10 @@ input[type="checkbox"] {
 
 .form-control {
     padding: 4px;
-    height: auto;
+}
+
+.field-postal_address .form-control {
+  height: auto;  
 }
 
 .form-row {
