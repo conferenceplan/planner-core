@@ -1,10 +1,6 @@
 module Planner
   module ControllerExtensions
 
-    def get_base_image_url
-      eval(ENV[:base_image_url.to_s])
-    end
-    
     def first_filter
       # do nowt
     end

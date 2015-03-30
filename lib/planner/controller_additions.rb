@@ -4,8 +4,13 @@ module Planner
     def self.included(base)
       base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :baseUri_with_lang,
                          :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
-                         :request_path, :current_identity, :current_attendee, :omniauth_state_params
+                         :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url
     end
+
+    def get_base_image_url
+      eval(ENV[:base_image_url.to_s])
+    end
+
 
     def omniauth_state_params
       ''
