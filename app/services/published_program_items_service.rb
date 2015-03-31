@@ -101,15 +101,14 @@ module PublishedProgramItemsService
   #
   def self.countParticipants
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
-    cndStr  = '(published_time_slots.start is not NULL)'
-    cndStr += ' AND (published_programme_item_assignments.role_id in (?))'
+    cndStr = ' (published_programme_item_assignments.role_id in (?))'
 
     conditions = [cndStr]
     conditions << roles
     
     Person.where(conditions).
-            joins({:publishedProgrammeItemAssignments => {:published_programme_item => :published_time_slot}}).
-            where(self.constraints()).count
+            joins([:publishedProgrammeItemAssignments]).
+            where(self.constraints()).uniq.count
     
   end
   
