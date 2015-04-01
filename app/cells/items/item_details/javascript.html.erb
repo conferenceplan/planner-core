@@ -56,7 +56,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     function check_for_room(value, formValues) {
                         var err = {
                             type: "start_time",
-                            message: "room is required when you set a time"
+                            message: "<%= t 'room-required-when-you-set-a-time' %>"
                         };
                         if (formValues.room_id == "" && formValues.start_time != "") {
                             $('#start-time-error').html(err.message);
