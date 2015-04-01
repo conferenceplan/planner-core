@@ -48,7 +48,7 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
     // can we do this by overloading the get and set?
     getValue: function() {
         var offset = (typeof this.schema.tz_offset != 'undefined') ? this.schema.tz_offset : 0;
-        var val = this.picker.data("DateTimePicker").getDate(); // date the datetime from the widget
+        var val = this.picker.data("DateTimePicker").date(); // date the datetime from the widget
         var valStr = "";
         if (val) {
             valStr = val.format('YYYY-MM-DD HH:mm'); // create a string without the timezone
@@ -67,7 +67,7 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
     setInitialValue: function(value) {
         // fix the display value, i.e. remove the TZ info
         if (value) {
-            var dispValue = value ? moment(value.substr(0,value.length-6)) : '';
+            var dispValue = (value.size > 0) ? moment(value.substr(0,value.length-6)) : '';
             this.picker.data("DateTimePicker").setDate(dispValue); // Fix for initial value ...
         }
     }

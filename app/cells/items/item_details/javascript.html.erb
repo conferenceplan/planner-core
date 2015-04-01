@@ -44,13 +44,12 @@ ItemApp.ItemManagement = (function(Backbone){
             start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
                     tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                     picker : {
-                        useSeconds : false,
-                        minuteStepping : 15,
-                        orientation : 'left',
+                        locale : "<%= I18n.locale %>",
+                        stepping : 15,
                         format : "DD MMM YYYY, HH:mm",
-                        defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>", // set to the start of the conference by default
-                        startDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        endDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
+                        useCurrent: false,
+                        minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                        maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
                 },
                 validators: [
                     function check_for_room(value, formValues) {
@@ -439,7 +438,7 @@ ItemApp.ItemManagement = (function(Backbone){
 })(Backbone);
 
 jQuery(document).ready(function() {
-    // moment.lang("<%= I18n.locale %>");
+    moment.locale("<%= I18n.locale %>");
     ItemApp.addInitializer(ItemApp.ItemManagement.init);
     ItemApp.start();
 });

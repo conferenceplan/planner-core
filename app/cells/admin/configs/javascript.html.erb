@@ -28,6 +28,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
             start_date          : { type : 'Datetime', title : '<%= t "conference-start-date" %>',
                                     tz_offset : function() { return tzOffset; },
                                     picker : {
+                                        locale : "<%= I18n.locale %>",
                                         pickTime: false,
                                     } },
             number_of_days      : { type : 'Number', title : '<%= t "number-of-days" %>' },
