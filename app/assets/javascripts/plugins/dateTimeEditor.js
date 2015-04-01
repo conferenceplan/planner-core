@@ -67,8 +67,8 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
     setInitialValue: function(value) {
         // fix the display value, i.e. remove the TZ info
         if (value) {
-            var dispValue = (value.size > 0) ? moment(value.substr(0,value.length-6)) : '';
-            this.picker.data("DateTimePicker").setDate(dispValue); // Fix for initial value ...
+            var dispValue = (value.length > 0) ? moment(value.substr(0,value.length-6)) : '';
+            this.picker.data("DateTimePicker").date(dispValue); // Fix for initial value ...
         }
     }
 }, {
