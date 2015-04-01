@@ -57,6 +57,9 @@ var AppUtils = (function(){
                 }
                 this.options.closeAction = null;
                 this.$el.modal("hide");
+                this.remove();
+            } else {
+                this.remove();
             };
         },
         
@@ -64,9 +67,9 @@ var AppUtils = (function(){
             if (this.options.closeAction) {
                 this.options.closeAction(e);
             };
-            this.remove();
             this.unbind();
             this.views = [];  
+            this.remove();
         }
     });
     
@@ -127,6 +130,7 @@ var AppUtils = (function(){
                 this.$el.modal("hide");
                 this.options.continueAction();
             };
+            this.remove();
         },
         
         hide: function (e) {
@@ -157,9 +161,9 @@ var AppUtils = (function(){
                 iframes[i].parentNode.removeChild(iframes[i]);
             };
             
-            this.remove();
             this.unbind();
             this.views = [];  
+            this.remove();
         },
         
         hideCheck : function(e) {
@@ -178,6 +182,7 @@ var AppUtils = (function(){
                         continueAction : function() {
                             panel.checked = true;
                             panel.$el.modal("hide");
+                            panel.remove();
                         }
                     });
                     mdl.render();
@@ -229,9 +234,9 @@ var AppUtils = (function(){
                 this.options.closeAction(e);
             };
             
-            this.remove();
             this.unbind();
             this.views = [];  
+            this.remove();
         },
         
         hideCheck : function(e) {
@@ -250,6 +255,7 @@ var AppUtils = (function(){
                         continueAction : function() {
                             panel.checked = true;
                             panel.$el.modal("hide");
+                            panel.remove();
                         }
                     });
                     mdl.render();
@@ -347,6 +353,7 @@ var AppUtils = (function(){
             
             if (! errors ) {
                 if (e.type != "hide") this.$el.modal("hide");
+                this.remove();
             }
         },
         
@@ -487,6 +494,7 @@ var AppUtils = (function(){
             var that = this;
             this.submitData(function() {
                 that.$el.modal("hide");
+                that.remove();
             });
         },
 
