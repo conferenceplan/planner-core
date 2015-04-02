@@ -29,7 +29,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
                                     tz_offset : function() { return tzOffset; },
                                     picker : {
                                         locale : "<%= I18n.locale %>",
-                                        pickTime: false,
+                                        format : 'dddd, MMMM Do YYYY'
                                     } },
             number_of_days      : { type : 'Number', title : '<%= t "number-of-days" %>' },
             print_time_format   : { type : 'Select', title : '<%= t "time-format-for-publications" %>',
