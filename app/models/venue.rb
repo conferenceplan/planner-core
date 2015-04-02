@@ -1,5 +1,6 @@
 class Venue < ActiveRecord::Base
-  attr_accessible :lock_version, :name, :sort_order #, :postal_address
+  attr_accessible :lock_version, :name, :sort_order, :latitude, :longitude #, :postal_address
+
   include RankedModel
   ranks :sort_order
 
