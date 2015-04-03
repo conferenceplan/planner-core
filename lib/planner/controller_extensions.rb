@@ -43,7 +43,9 @@ module Planner
     end
 
     def store_location
-      session[:return_to] = request.protocol + request.host_with_port + request.fullpath
+      if !request.path.include?("/survey_respondents/new")
+        session[:return_to] = request.protocol + request.host_with_port + request.fullpath
+      end
     end
     
     def store_page page
