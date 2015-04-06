@@ -89,6 +89,8 @@ module ImportService
                         PendingType['PossibleMatchExisting'].id.to_s +
                         @@UPDATE_IMPORT_STATES_NAME2 +
                         PendingType['RegistrationInUse'].id.to_s +
+                        @@UPDATE_IMPORT_STATES_NAME22 +
+                        PendingType['RegistrationInUse'].id.to_s +
                         @@UPDATE_IMPORT_STATES_NAME3 +
                         PendingType['PossibleMatchExisting'].id.to_s +
                         @@UPDATE_IMPORT_STATES_NAME4
@@ -108,7 +110,7 @@ module ImportService
         createPerson candidate, datasource
       end
       nbr_created = PendingImportPerson.where(:pendingtype_id => nil).delete_all
-        
+              
       # Select where the pending_type_id is -1 and update into people (and count) - update address info and reg status (and pub name?)
       # candidates = PendingImportPerson.where(:pendingtype_id => -1) TODO
 
@@ -212,7 +214,7 @@ protected
     on pending_import_people.first_name = people.first_name 
     and pending_import_people.last_name = people.last_name
     left join peoplesources on peoplesources.person_id = people.id
-    group by pending_import_people.id, people.id
+    group by pending_import_people.id
   ) cand
   set pendingtype_id = case
       when (cand.matches = 1 AND cand.datasource_id = cand.people_did AND cand.datasource_dbid = cand.people_dbid ) then 
@@ -222,6 +224,10 @@ EOS
       when (cand.matches = 1 AND (cand.datasource_id != cand.people_did OR cand.datasource_dbid != cand.people_dbid) ) then 
 EOS
 
+# TODO we need to deal with the case when the user does not specify a dbid - then it is case 2 registration in use
+@@UPDATE_IMPORT_STATES_NAME22 = <<"EOS"    
+      when (cand.matches = 1 AND (cand.datasource_dbid is null) ) then 
+EOS
 
 @@UPDATE_IMPORT_STATES_NAME3 = <<"EOS"    
       when (cand.matches > 1) then
