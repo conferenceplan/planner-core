@@ -27,6 +27,8 @@ module Planner
       basepath = request.fullpath 
       if basepath.include? baseUri
         basepath = basepath.slice(baseUri.length(), basepath.length())
+      elsif basepath.include? baseUri_no_lang
+        basepath = basepath.slice(baseUri_no_lang.length(), basepath.length())
       end
       basepath
     end
