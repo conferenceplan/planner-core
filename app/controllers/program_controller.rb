@@ -87,6 +87,7 @@ class ProgramController < ApplicationController
     @cloudinaryURI = get_base_image_url
     @partition_val = /upload/
     @showAll = params[:all] ? params[:all] == 'true' : false
+    @scale = params[:scale].to_f
     
     @people = PeopleService.findConfirmedPeople(@peopleIds, tag).sort_by{ |a| a.pubLastName.mb_chars.normalize(:kd).gsub(/[^-x00-\x7F]/n, '').downcase.to_s }
   end
