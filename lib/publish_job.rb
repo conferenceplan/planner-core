@@ -107,7 +107,7 @@ class PublishJob
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null ', nil)
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < external_images.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < links.updated_at)', nil)
+    clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < external_images.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at)', nil)
     # check the date of the programme item compared with the published
     args = { :conditions => clause, :include => [:room_item_assignment, :programme_item_assignments, :publication, :external_images, :linked] }
     return ProgrammeItem.find :all, args
