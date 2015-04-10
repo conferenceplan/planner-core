@@ -153,7 +153,7 @@
                 <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
                 <dt><%= t "registered" %></dt>
                 <dd>{{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-                <dt><%= t "can-share-details" %></dt>
+                <dt class="dt-breaking"><%= t "can-share-details" %> <a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t "can-share-details-hint" %></span></a></dt>
                 <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
             </dl>       
         {{ } else { }}
