@@ -7,5 +7,6 @@ if @registrationDetail
     json.registration_type @registrationDetail.registration_type 
     json.registered @registrationDetail.registered
     json.ghost @registrationDetail.ghost
+    json.can_share @registrationDetail.can_share
     json.lock_version @registrationDetail.lock_version
 end

@@ -1,5 +1,5 @@
 class RegistrationDetail < ActiveRecord::Base
-  attr_accessible :lock_version, :registration_number, :registration_type, :registered, :person_id
+  attr_accessible :lock_version, :registration_number, :registration_type, :registered, :person_id, :can_share
   
   belongs_to  :person 
   

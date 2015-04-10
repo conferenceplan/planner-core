@@ -59,6 +59,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             registration_number : { type : 'Number', title : '<%= t "reg-number" %>' },
             registration_type : { type : 'Text', title : '<%= t "reg-type" %>' },
             registered : { type : 'Checkbox', title : '<%= t "registered" %>' },
+            can_share : { type : 'Checkbox', title : '<%= t "can-share-details" %>' }
         },
         urlRoot: "<%= baseUri + '/registrationDetails' %>"
     });

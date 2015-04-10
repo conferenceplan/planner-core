@@ -153,6 +153,8 @@
                 <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
                 <dt><%= t "registered" %></dt>
                 <dd>{{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+                <dt><%= t "can-share-details" %></dt>
+                <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
             </dl>       
         {{ } else { }}
             <%= t "no-registration-details" %>
