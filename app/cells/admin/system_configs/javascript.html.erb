@@ -3,34 +3,6 @@
 ConfigApp = new Backbone.Marionette.Application();
 
 ConfigApp.ConfigManagement = (function(Backbone){
-    // var roles = <%= [].concat(Role.find(:all).collect {|p| {'val' => p.id, 'label' => p.title}}).to_json.html_safe %>;
-// 
-    // UserMdl =  Backbone.DeepModel.extend({
-        // schema : {
-            // login   : { type : 'Text', title : '<%= t "user-login" %>' },
-            // email   : { type : 'Text', title : '<%= t "email" %>' },
-            // password : { type : 'Password', title : '<%= t "user-password" %>'},
-            // password_confirmation : { type : 'Password', title : '<%= t "user-password-again" %>'},
-            // roles : { type : 'List',
-                        // title : '<%= t "roles" %>',
-                        // itemToString : function(item) {
-                                            // var r = _.find(roles, function(v) { return v.val == item.id;});
-                                            // return r.label;
-                                        // },
-                        // itemType : 'Object',
-                        // subSchema : {
-                            // id : { 
-                                    // title : '<%= t "user-role" %>',
-                                    // type : 'Select',
-                                    // options : roles 
-                            // }
-                        // }
-                    // }
-// 
-        // },
-//         
-        // urlRoot : "<%= baseUri + '/users/admin' %>"
-    // });
     TitleMdl =  Backbone.Model.extend({});
     
     EmailConfig = Backbone.Model.extend({
