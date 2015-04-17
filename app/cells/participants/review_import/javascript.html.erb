@@ -1,0 +1,115 @@
+<script type="text/javascript">
+
+ParticipantMergeApp = new Backbone.Marionette.Application();
+
+ParticipantMergeApp.MergeManagement = (function(Backbone){
+    
+    function reset_tables() {
+      $("#pending-list").pendingPeopleImportTable("reset");
+      $("#matched-list").pendingPeopleImportTable({ extraClause : null });
+      $("#matched-list").pendingPeopleImportTable("reset");
+    };
+
+    ControlView = Backbone.Marionette.ItemView.extend({
+        el: '#merge-actions',
+        template : '#merge-actions-template',
+
+        events : {
+            'click .discard'    : 'discard',
+            'click .merge'      : 'merge',
+            'click .create'     : 'create',
+            'click .merge-all'  : 'merge_all'
+        },
+        
+        // Test with: http://boskone.myplan.co:3000/en/Boskone_52/pages/participants_dash/review_import
+        discard : function() {
+            // Delete the selected pending
+            jQuery.ajax( "<%= baseUri + '/pending_import_people/' %>" + pending_id, {
+                         type : 'DELETE',
+                         error : function() {
+                            alertMessage('<%= t "unable to delete selected pending..." %>');
+                         },
+                         success : function(data, status, jqXHR) {
+                              reset_tables();
+                         }
+                     });
+        },
+        merge : function() {
+            var args = { 
+                pending_id : pending_id,
+                person_id : matched_id 
+            };
+
+            // Merge the pending from the db with the select person
+            jQuery.ajax( "<%= baseUri + '/pending_import_people/merge_pending' %>", {
+                         type : 'POST',
+                         data : args,
+                         error : function() {
+                            alertMessage('<%= t "unable to merge..." %>');
+                         },
+                         success : function(data, status, jqXHR) {
+                              reset_tables();
+                         }
+                     });
+        },
+        create : function() {
+            var args = { 
+                pending_id : pending_id
+            };
+
+            // Create a new person based on the pending
+            jQuery.ajax( "<%= baseUri + '/pending_import_people/create_from_pending' %>", {
+                         type : 'POST',
+                         data : args,
+                         error : function() {
+                            alertMessage('<%= t "unable to create..." %>');
+                         },
+                         success : function(data, status, jqXHR) {
+                              reset_tables();
+                         }
+                     });
+        },
+        merge_all : function() {
+            // For all pending with one match do a merge
+            jQuery.ajax( "<%= baseUri + '/pending_import_people/merge_all_pending' %>", {
+                         type : 'POST',
+                         error : function() {
+                            alertMessage('<%= t "unable to create..." %>');
+                         },
+                         success : function(data, status, jqXHR) {
+                              reset_tables();
+                         }
+                     });
+        }
+    });
+    
+    var pending_id = null;
+    var matched_id = null;
+    
+    return {
+        selectMatch : function(id) {
+            // alert("MATCH SELECTED");
+            matched_id = id;
+        },
+        selectPerson : function(id) {
+            pending_id = id;
+            $("#matched-list").pendingPeopleImportTable({ extraClause : "pending_id="+id });
+            $("#matched-list").pendingPeopleImportTable("render");
+        },
+        
+        init : function() {
+            var ctl = new ControlView();
+            ctl.render();
+        }
+    }
+    
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    ParticipantMergeApp.addInitializer(ParticipantMergeApp.MergeManagement.init);
+    ParticipantMergeApp.start();
+});
+</script>

@@ -12,7 +12,7 @@ $.widget( "cp.baseBootstrapTable" , {
         root_url            : "/",              // so that sub-domains can be taken care of
         baseUrl             : "",               // HAS TO BE OVER-RIDDEN by the sub-component
         getGridData         : "",               // for getting the data (part of the URL)
-        clickToSelect       : true,
+        clickToSelect       : false,
         checkbox            : false,
         singleSelect        : true,
         delayed             : false,

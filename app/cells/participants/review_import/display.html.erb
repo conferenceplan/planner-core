@@ -1,0 +1,45 @@
+
+<div class="row" id="pending-main-row">
+    <div class="col-md-4" >
+        <h3 class="h3-underlined"><%= t "Pending Imports" %></h3>
+        <div id="pending-toolbar">
+            <div id="pending-control-area"></div>
+        </div>
+        <a name="pending-table"></a>
+        <%= render_cell "participants/pending_list", :display, :place => 'pending-list' %>
+    </div>
+    <div class="col-md-4" >
+        <div id="merge-actions"></div>
+    </div>
+    <div class="col-md-4">
+        <h3 class="h3-underlined"><%= t "Matches" %></h3>
+        <div id="matched-toolbar">
+            <div id="matched-control-area"></div>
+        </div>
+        <a name="matched-table"></a>
+        <%= render_cell "participants/pending_list", :display, :place => 'matched-list' %>
+    </div>
+</div>
+
+<%= render_cell "participants/pending_list", :javascript, 
+    :pageSize => 20,
+    :pageList => '[5, 10, 20, 100]',
+    :toolbar => '#pending-toolbar',
+    :controlDiv => 'pending-control-area',
+    :place => 'pending-list',
+    :selectNotifyMethod => 'ParticipantMergeApp.MergeManagement.selectPerson'
+    %>
+
+<%= render_cell "participants/pending_list", :javascript,
+    :baseUrl => 'pending_import_people/get_possible_matches.json',
+    :delayed => true,
+    :pageSize => 20,
+    :pageList => '[5, 10, 20, 100]',
+    :toolbar => '#matched-toolbar',
+    :controlDiv => 'matched-control-area',
+    :place => 'matched-list',
+    :selectNotifyMethod => 'ParticipantMergeApp.MergeManagement.selectMatch'
+    %>
+
+<%= render_cell "participants/review_import", :javascript %> 
+<%= render_cell "participants/review_import", :templates %> 

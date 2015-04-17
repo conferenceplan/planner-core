@@ -225,23 +225,21 @@ Rails.application.routes.draw do
   end
 
   match 'pending_import_people/import_file', :controller => 'pending_import_people', :action => 'import_file'
+  match 'pending_import_people/get_possible_matches', :controller => 'pending_import_people', :action => 'get_possible_matches'
+  match 'pending_import_people/merge_all_pending', :controller => 'pending_import_people', :action => 'merge_all_pending'
+  match 'pending_import_people/merge_pending', :controller => 'pending_import_people', :action => 'merge_pending'
+  match 'pending_import_people/create_from_pending', :controller => 'pending_import_people', :action => 'create_from_pending'
   resources :pending_import_people
 
   match 'program_planner/assignments', :controller => 'program_planner', :action => 'assignments', :method => 'get'
   match 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :method => 'post'
   match 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :method => 'get'
   match 'program_planner/getConflicts', :controller => 'program_planner', :action => 'getConflicts', :method => 'get'
-  # match 'program_planner/list', :controller => 'program_planner', :action => 'list', :method => 'post'
-  # resources :program_planner, :member => {:index => :get, :edit => :get}
-
 
   match 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'post'
   match 'publisher/review', :controller => 'publisher', :action => 'review', :method => 'get'
   match 'publisher/publishPending', :controller => 'publisher', :action => 'publishPending', :method => 'get'
   match 'publisher', :controller => 'publisher', :action => 'index', :method => 'get'
-  # resources :publisher, :member => {:index => :get},
-      # :except => [:destroy, :new, :create, :edit, :show, :update, :list]
-
 
   match 'rooms/list.:format', :controller => 'rooms', :action => 'list' #, :defaults => { :format => 'json' }
   match 'rooms/simple_list', :controller => 'rooms', :action => 'simple_list', :defaults => { :format => 'json' }
@@ -265,8 +263,7 @@ Rails.application.routes.draw do
   resources :mail_configs
   resources :cloudinary_config
   resources :mail_templates
-  resources :site_configs # TODO 
-
+  resources :site_configs
   resources :equipment_types
 
 
@@ -307,18 +304,12 @@ Rails.application.routes.draw do
   resources :planner_reports
 
   match 'program/publicationDates.:format', :controller => 'program', :action => 'publicationDates', :method => 'get'
-  # match 'program/updateSelect', :controller => 'program', :action => 'updateSelect', :method => 'get'
   
   match 'program.:format', :controller => 'program', :action => 'index', :method => 'get'
   match 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
   match 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
   match 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
   match 'program/confirmed_participants.:format', :controller => 'program', :action => 'confirmed_participants', :method => 'get'
-#  match 'program/streams.:format', :controller => 'program', :action => 'streams', :method => 'get'
-#  match 'program/participants_and_bios.:format', :controller => 'program', :action => 'participants_and_bios', :method => 'get'
-#  match 'program/feed.:format', :controller => 'program', :action => 'feed', :method => 'get'
-  # match 'program/updates2.:format', :controller => 'program', :action => 'updates2', :method => 'get'
-#  match 'program/grid.:format', :controller => 'program', :action => 'grid', :method => 'get'
   resources :program
 
   match '/form/:page(/:preview)', :controller => 'surveys/response', :action => 'renderalias'

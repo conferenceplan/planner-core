@@ -1,0 +1,38 @@
+<script type="text/javascript">
+
+jQuery(document).ready(function() {
+    
+    jQuery("#<%= @place %>").pendingPeopleImportTable({
+        selectNotifyMethod  : <%= @selectNotifyMethod %>,
+        root_url            : "<%= @root_url %>",
+        baseUrl             : "<%= @baseUrl %>",
+        getGridData         : "<%= @getGridData %>",
+        
+        delayed             : <%= @delayed %>,
+        clickToSelect       : false,
+        
+        pageSize            : <%= @pageSize %>,
+        pageList            : <%= @pageList %>,
+        search              : <%= @search %>,
+        showRefresh         : <%= @showRefresh %>,
+        cardView            : <%= @cardView %>,
+        
+        toolbar             : "<%= @toolbar %>",
+        
+        name                : '<%= t "name" %>',
+        email               : '<%= t "email" %>',
+        registration_number : '<%= t "registration-number" %>',
+        registration_type   : '<%= t "registration-type" %>',
+        job_title           : '<%= t "job-title" %>',
+        company             : '<%= t "company" %>',
+        address             : '<%= t "address" %>',
+        phone               : '<%= t "phone" %>',
+        pending_type        : '<%= t "reason" %>',
+        
+        showControls        : <%= @showControls %>,
+        
+        controlDiv          : '<%= @controlDiv %>'
+    });
+});
+
+</script>

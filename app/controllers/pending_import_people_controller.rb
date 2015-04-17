@@ -2,9 +2,60 @@ class PendingImportPeopleController < PlannerController
   require 'csv'
 
   def index
-    pendingImportPeople = PendingImportPerson.find :all, :order => :last_name
+    limit = params[:limit] ? params[:limit].to_i : nil
+    offset = params[:offset] ? params[:offset].to_i : nil
 
-    render json: pendingImportPeople.to_json, :content_type => 'application/json'
+    sort_by = params[:sort] ? params[:sort] : 'last_name'
+    sort_order = params[:order] ? params[:order] : 'desc'
+
+    @total = PendingImportPerson.count
+    
+    @pendingImportPeople = PendingImportPerson.offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+  end
+  
+  def get_possible_matches
+    pending_id = params[:pending_id]
+    
+    @matches = ImportService.getPossibleMatches(pending_id)
+    @total = @matches.size
+  end
+  
+  def merge_all_pending
+    begin
+      PendingImportPerson.transaction do
+        ImportService.mergeAllPending
+        render json: ['sucess'], :content_type => 'application/json'
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+  end
+
+  def merge_pending
+    begin
+      PendingImportPerson.transaction do
+        pending_id = params[:pending_id]
+        person_id = params[:person_id]
+    
+        ImportService.mergePending pending_id, person_id
+        render json: ['sucess'], :content_type => 'application/json'        
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
+  end
+
+  def create_from_pending
+    begin
+      PendingImportPerson.transaction do
+        pending_id = params[:pending_id]
+    
+        ImportService.newFromPending pending_id
+        render json: ['sucess'], :content_type => 'application/json'
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
   end
   
   def show
@@ -25,9 +76,11 @@ class PendingImportPeopleController < PlannerController
 
   def update
     begin
-      pendingImportPerson = PendingImportPerson.find(params[:id])
-      pendingImportPerson.update_attributes(params[:pending_import_person])
-      render json: pendingImportPerson.to_json, :content_type => 'application/json'
+      PendingImportPerson.transaction do
+        pendingImportPerson = PendingImportPerson.find(params[:id])
+        pendingImportPerson.update_attributes(params[:pending_import_person])
+        render json: pendingImportPerson.to_json, :content_type => 'application/json'
+      end
     rescue => ex
       render status: :bad_request, text: ex.message
     end
@@ -35,9 +88,11 @@ class PendingImportPeopleController < PlannerController
   
   def destroy
     begin
-      pendingImportPerson = PendingImportPerson.find(params[:id])
-      pendingImportPerson.destroy
-      render status: :ok, text: {}.to_json
+      PendingImportPerson.transaction do
+        pendingImportPerson = PendingImportPerson.find(params[:id])
+        pendingImportPerson.destroy
+        render status: :ok, text: {}.to_json
+      end
     rescue => ex
       render status: :bad_request, text: ex.message
     end

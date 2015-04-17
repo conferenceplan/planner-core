@@ -70,6 +70,7 @@
 //= require plugins/dateTimeEditor
 //= require plugins/clImageEditor
 //= require plugins/fileUploadEditor
+//= require plugins/cpPendingImportPeopleTable
 
 //= require TabViews
 

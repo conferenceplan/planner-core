@@ -4,6 +4,28 @@
 module ImportService
   require 'csv'
   
+  # given an id from the pending table return a list of people that could be a match
+  def self.getPossibleMatches(pending_id)
+    people = Arel::Table.new(:people)
+    pending_import_people = Arel::Table.new(:pending_import_people)
+    peoplesources = Arel::Table.new(:peoplesources)
+
+    attrs = [people[:id].as('person_id')]
+    
+    query = pending_import_people.project(*attrs).
+              where(pending_import_people[:id].eq(pending_id)).
+              join(people, Arel::Nodes::OuterJoin).
+                on(people[:first_name].eq(pending_import_people[:first_name]).
+                and(people[:last_name].eq(pending_import_people[:last_name]))).
+              join(peoplesources, Arel::Nodes::OuterJoin).
+                on(peoplesources[:person_id].eq(people[:id])).
+              order(pending_import_people[:id])
+
+    people_ids = ActiveRecord::Base.connection.select_all(query.to_sql)
+
+    Person.where(id: people_ids.collect{|a| a["person_id"] })
+  end
+  
   # Take the CSV file and import it into the pending table
   def self.importCSVtoPending(filename, mapping, datasource_id, ignore_first_line = false)
     Person.transaction do
@@ -84,13 +106,12 @@ module ImportService
       # DIFFERENT Datasource SAME reg id DIFFENT name
       # DIFFERENT Datasource DIFFERENT reg id SAME name
     
-      #        -1 IIF ALLOWED else PossibleMatchExisting
       ActiveRecord::Base.connection.execute(@@UPDATE_IMPORT_STATES_NAME +
                         PendingType['PossibleMatchExisting'].id.to_s +
                         @@UPDATE_IMPORT_STATES_NAME2 +
                         PendingType['RegistrationInUse'].id.to_s +
                         @@UPDATE_IMPORT_STATES_NAME22 +
-                        PendingType['RegistrationInUse'].id.to_s +
+                        PendingType['PossibleMatchExisting'].id.to_s +
                         @@UPDATE_IMPORT_STATES_NAME3 +
                         PendingType['PossibleMatchExisting'].id.to_s +
                         @@UPDATE_IMPORT_STATES_NAME4
@@ -111,9 +132,6 @@ module ImportService
       end
       nbr_created = PendingImportPerson.where(:pendingtype_id => nil).delete_all
               
-      # Select where the pending_type_id is -1 and update into people (and count) - update address info and reg status (and pub name?)
-      # candidates = PendingImportPerson.where(:pendingtype_id => -1) TODO
-
       # Report on what has been done and what is left to the user
       {
         :created => nbr_created,
@@ -124,53 +142,137 @@ module ImportService
       }
     end
   end
+  
+  # Merge all that have a single match
+  def self.mergeAllPending()
+    matches = getSinglePossibleMatches
+    matches.each do |match|
+      # match contains the person and pending
+      pending = PendingImportPerson.find match['pending_id']
+      person = Person.find match['person_id']
+      copy_person pending, person
+      pending.delete
+    end
+  end
+
+  # Merge the pending with the specified person
+  def self.mergePending(pending_id, person_id)
+    pending = PendingImportPerson.find pending_id
+    person = Person.find person_id
+    copy_person pending, person
+    pending.delete
+  end
+
+  # create a new entry from the pending person
+  def self.newFromPending(pending_id)
+    pending = PendingImportPerson.find pending_id
+    createPerson pending, pending.datasource
+    pending.delete
+  end
 
 #
 #
 #
 protected
 
-    # Given an entry from the pending table that we know is an insert create that person
-    def self.createPerson(pendingPerson, datasource)
-      
-      # Create the person
-      person = Person.new(
-            :first_name => pendingPerson.first_name,
-            :last_name => pendingPerson.last_name,
-            :suffix => pendingPerson.suffix,
-            :company => pendingPerson.company,
-            :job_title => pendingPerson.job_title
-          )
-      person.save!
-          
+  # Get all the people where there was only one match
+  def self.getSinglePossibleMatches()
+    people = Arel::Table.new(:people)
+    pending_import_people = Arel::Table.new(:pending_import_people)
+    peoplesources = Arel::Table.new(:peoplesources)
+
+    attrs = [people[:id].as('person_id'), pending_import_people[:id].as('pending_id')]
+    
+    query = pending_import_people.project(*attrs).
+              join(people, Arel::Nodes::OuterJoin).
+                on(people[:first_name].eq(pending_import_people[:first_name]).
+                and(people[:last_name].eq(pending_import_people[:last_name]))).
+              join(peoplesources, Arel::Nodes::OuterJoin).
+                on(peoplesources[:person_id].eq(people[:id])).
+              group(pending_import_people[:id]).having(pending_import_people[:id].count.eq(1))
+
+    result = ActiveRecord::Base.connection.select_all(query.to_sql)
+
+    # Person.where(id: people_ids.collect{|a| a["person_id"] })
+  end
+
+  # Given an entry from the pending table that we know is an insert create that person
+  def self.createPerson(pendingPerson, datasource = nil)
+    
+    # Create the person
+    person = Person.new(
+          :first_name => pendingPerson.first_name,
+          :last_name => pendingPerson.last_name,
+          :suffix => pendingPerson.suffix,
+          :company => pendingPerson.company,
+          :job_title => pendingPerson.job_title
+        )
+    person.save!
+
+    if datasource
       peoplesource = Peoplesource.new({ :person_id => person.id, :datasource_id => datasource.id, :datasource_dbid => pendingPerson.datasource_dbid })
       peoplesource.save!
-      
-      person.person_con_state = PersonConState.new
-      person.person_con_state.save!
-
-      # Create the reg info
-      if pendingPerson.registration_number && pendingPerson.registration_type
+    end
+    
+    person.person_con_state = PersonConState.new
+    person.person_con_state.save!
+    
+    copy_person(pendingPerson, person)
+  end
+  
+  def self.copy_person(pendingPerson, person)
+    # Create the reg info
+    if !pendingPerson.registration_number && pendingPerson.registration_type
+      if !person.registrationDetail
         person.registrationDetail = RegistrationDetail.new(
               :registration_number => pendingPerson.registration_number,
               :registration_type => pendingPerson.registration_type,
               :registered => true
           )
-        person.registrationDetail.save!
+      else  
+        person.registrationDetail.update_attributes(
+              :registration_number => pendingPerson.registration_number,
+              :registration_type => pendingPerson.registration_type,
+              :registered => true
+        )
       end
-      
-      # Create the pseudonym
-      if !pendingPerson.pseudonymNil?
+      person.registrationDetail.save!
+    end
+    
+    # Create the pseudonym
+    if !pendingPerson.pseudonymNil?
+      if !person.pseudonym
         person.pseudonym = Pseudonym.new(
               :first_name => pendingPerson.pub_first_name,
               :last_name => pendingPerson.pub_last_name,
               :suffix => pendingPerson.pub_suffix
             )
-        person.pseudonym.save!
+      else  
+        person.pseudonym.update_attributes(
+              :first_name => pendingPerson.pub_first_name,
+              :last_name => pendingPerson.pub_last_name,
+              :suffix => pendingPerson.pub_suffix
+            )
       end
-      
-      # Create the address, email & phone
-      if !pendingPerson.addressNil?
+      person.pseudonym.save!
+    end
+    
+    # Create the address, email & phone
+    if !pendingPerson.addressNil?
+      # TODO - CHECK
+      postal = person.getDefaultPostalAddress
+      if postal
+        postal.update_attributes(
+            :line1 => pendingPerson.line1, 
+            :line2 => pendingPerson.line2, 
+            :line3 => pendingPerson.line3, 
+            :city => pendingPerson.city, 
+            :state => pendingPerson.state, 
+            :postcode => pendingPerson.postcode, 
+            :country => pendingPerson.country, 
+            :isdefault => true
+          );
+      else  
         postal = person.postal_addresses.new(
             :line1 => pendingPerson.line1, 
             :line2 => pendingPerson.line2, 
@@ -181,25 +283,33 @@ protected
             :country => pendingPerson.country, 
             :isdefault => true
           );
-        person.save!
       end
-      
-      if !pendingPerson.emailNil?
-        postal = person.email_addresses.new(
+      person.save!
+    end
+    
+    if !pendingPerson.emailNil?
+      # TODO - CHECK
+      email = person.getDefaultEmail
+      if email
+        email.update_attributes(
             :email => pendingPerson.email,
             :isdefault => true
           );
-        person.save!
-      end
-      
-      if !pendingPerson.phoneNil?
-        postal = person.phone_numbers.new(
-            :number => pendingPerson.phone, 
-            :phone_type_id => PhoneTypes['Home'].id # Assumption!!!
+      else  
+        email = person.email_addresses.new(
+            :email => pendingPerson.email,
+            :isdefault => true
           );
-        person.save!
       end
+      person.save!
     end
+    
+    if !pendingPerson.phoneNil?
+      # TODO - CHECK
+      person.updatePhone(pendingPerson.phone, PhoneTypes['Work'].name)
+      person.save!
+    end    
+  end
 
 #
 #
@@ -238,7 +348,6 @@ EOS
   where pip.id = cand.id
 EOS
 
-# Afer the above AND the following - -1 == update
 # After the following - null == insert
 @@UPDATE_IMPORT_STATES_DBID = <<"EOS"
   update pending_import_people pip,(
