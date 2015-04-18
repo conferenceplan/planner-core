@@ -21,7 +21,6 @@ ParticipantMergeApp.MergeManagement = (function(Backbone){
             'click .merge-all'  : 'merge_all'
         },
         
-        // Test with: http://boskone.myplan.co:3000/en/Boskone_52/pages/participants_dash/review_import
         discard : function() {
             // Delete the selected pending
             jQuery.ajax( "<%= baseUri + '/pending_import_people/' %>" + pending_id, {

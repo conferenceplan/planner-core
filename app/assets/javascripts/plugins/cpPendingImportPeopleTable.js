@@ -76,7 +76,30 @@ $.widget( "cp.pendingPeopleImportTable", $.cp.baseBootstrapTable , {
             valign: 'middle',
             sortable: false,
             formatter : function(value, row) {
-                return ''; // TODO
+                var addr = '';
+                if (row.line1) {
+                    addr += row.line1 + ', ';
+                };
+                if (row.line2) {
+                    addr += row.line2 + ', ';
+                };
+                if (row.line3) {
+                    addr += row.line3 + ', ';
+                };
+                if (row.city) {
+                    addr += row.city + ', ';
+                };
+                if (row.state) {
+                    addr += row.state + ', ';
+                };
+                if (row.postcode) {
+                    addr += row.postcode + ', ';
+                };
+                if (row.country) {
+                    addr += row.country;
+                };
+                addr += '';
+                return addr; // TODO
             }
         }, {
             field: 'phone',

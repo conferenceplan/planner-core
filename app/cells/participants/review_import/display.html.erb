@@ -1,18 +1,18 @@
 
 <div class="row" id="pending-main-row">
     <div class="col-md-4" >
-        <h3 class="h3-underlined"><%= t "Pending Imports" %></h3>
+        <h3 class="h3-underlined"><%= t "pending-imports" %></h3>
         <div id="pending-toolbar">
             <div id="pending-control-area"></div>
         </div>
         <a name="pending-table"></a>
         <%= render_cell "participants/pending_list", :display, :place => 'pending-list' %>
     </div>
-    <div class="col-md-4" >
+    <div class="col-md-4" style='margin-top: 6em;'>
         <div id="merge-actions"></div>
     </div>
     <div class="col-md-4">
-        <h3 class="h3-underlined"><%= t "Matches" %></h3>
+        <h3 class="h3-underlined"><%= t "potential-matches" %></h3>
         <div id="matched-toolbar">
             <div id="matched-control-area"></div>
         </div>

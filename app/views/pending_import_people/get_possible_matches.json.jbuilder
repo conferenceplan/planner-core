@@ -39,5 +39,9 @@ json.rows @matches do |match|
         json.pub_last_name      match.pseudonym.last_name
         json.pub_suffix         match.pseudonym.suffix
     end
+    if match.phone_numbers.size > 0
+        phone = match.phone_numbers.detect { |ph| ph.phone_type == PhoneTypes['Work'] }
+        json.phone     phone.number if phone
+    end
 end
 
