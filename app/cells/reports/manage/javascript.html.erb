@@ -79,6 +79,7 @@ ReportApp.ReportManagement = (function(Backbone){
     var PanelistsWithPanelsForm = Backbone.Form.extend({
         schema : {
             scheduled   : { type : 'Checkbox', title : '<%= t "report-selection-only-scheduled-items" %>'}, // Include scheduled panelists only
+            invisible   : { type : 'Checkbox', title : '<%= t "report-selection-include-invisible-participants" %>'},
             reserved    : { type : 'Checkbox', title : '<%= t "report-selection-include-reserved-participants" %>'},
             forprint    : { type : 'Checkbox', title : '<%= t "report-selection-only-items-for-print" %>'}
         },

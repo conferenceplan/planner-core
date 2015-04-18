@@ -406,9 +406,11 @@ class PlannerReportsController < PlannerController
   #
   #
   def panelists_with_panels
-      
+    roles = []
+    roles << PersonItemRole['Reserved'].id if params[:reserved] == "true"
+    roles << PersonItemRole['Invisible'].id if params[:invisible] == "true"
     @people = PlannerReportsService.findPanelistsWithPanels( params[:specific_panelists], 
-                            (params[:reserved] == "true" ? [PersonItemRole['Reserved'].id] : nil), 
+                            roles, 
                             (params[:scheduled] == "true"), 
                             (params[:forprint] == "true") ).sort_by{ |a| a.pubLastName.mb_chars.normalize(:kd).gsub(/[^-x00-\x7F]/n, '').downcase.to_s }
 
