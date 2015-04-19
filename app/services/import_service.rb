@@ -14,6 +14,7 @@ module ImportService
     
     query = pending_import_people.project(*attrs).
               where(pending_import_people[:id].eq(pending_id)).
+              where(self.constraints()).
               join(people, Arel::Nodes::OuterJoin).
                 on(people[:first_name].eq(pending_import_people[:first_name]).
                 and(people[:last_name].eq(pending_import_people[:last_name]))).
@@ -71,7 +72,7 @@ module ImportService
               "(" + 
               fields.collect{|f| f ? f : '@dummy' }.join(",") + (extra_cols.blank? ? "" : "," + extra_cols) +
               ") SET datasource_id = " + datasource_id.to_s + 
-              ", updated_at = NOW(), created_at = NOW();"
+              ", updated_at = NOW(), created_at = NOW()" + extra_set + ";"
       
       ActiveRecord::Base.connection.execute(query)
       
@@ -106,7 +107,9 @@ module ImportService
       # DIFFERENT Datasource SAME reg id DIFFENT name
       # DIFFERENT Datasource DIFFERENT reg id SAME name
     
-      ActiveRecord::Base.connection.execute(@@UPDATE_IMPORT_STATES_NAME +
+      ActiveRecord::Base.connection.execute(@@UPDATE_IMPORT_STATES_NAME_1 +
+                        constraint() +
+                        @@UPDATE_IMPORT_STATES_NAME_2 +
                         PendingType['PossibleMatchExisting'].id.to_s +
                         @@UPDATE_IMPORT_STATES_NAME2 +
                         PendingType['RegistrationInUse'].id.to_s +
@@ -117,7 +120,9 @@ module ImportService
                         @@UPDATE_IMPORT_STATES_NAME4
       );
 
-      ActiveRecord::Base.connection.execute(@@UPDATE_IMPORT_STATES_DBID +
+      ActiveRecord::Base.connection.execute(@@UPDATE_IMPORT_STATES_DBID_1 +
+                        constraint() +
+                        @@UPDATE_IMPORT_STATES_DBID_2 +
                         PendingType['PossibleNameUpdate'].id.to_s +
                         @@UPDATE_IMPORT_STATES_DBID2 +
                         PendingType['PossibleMatchExisting'].id.to_s +
@@ -188,7 +193,7 @@ protected
                 on(people[:first_name].eq(pending_import_people[:first_name]).
                 and(people[:last_name].eq(pending_import_people[:last_name]))).
               join(peoplesources, Arel::Nodes::OuterJoin).
-                on(peoplesources[:person_id].eq(people[:id])).
+                on(peoplesources[:person_id].eq(people[:id])).where(self.arel_constraints()).
               group(pending_import_people[:id]).having(pending_import_people[:id].count.eq(1))
 
     result = ActiveRecord::Base.connection.select_all(query.to_sql)
@@ -311,11 +316,28 @@ protected
     end    
   end
 
+  def self.extra_set()
+    ' '
+  end
+
+  def self.constraints(*args)
+    true
+  end
+
+  def self.arel_constraints(*args)
+    true
+  end
+  
+
+  def self.constraint()
+    ' '
+  end
+
 #
 #
 #
 
-@@UPDATE_IMPORT_STATES_NAME = <<"EOS"
+@@UPDATE_IMPORT_STATES_NAME_1 = <<"EOS"
   update pending_import_people pip,(
     select pending_import_people.id, pending_import_people.datasource_id, pending_import_people.datasource_dbid,
     count(people.id) matches, peoplesources.datasource_id people_did, peoplesources.datasource_dbid people_dbid
@@ -324,6 +346,9 @@ protected
     on pending_import_people.first_name = people.first_name 
     and pending_import_people.last_name = people.last_name
     left join peoplesources on peoplesources.person_id = people.id
+EOS
+
+@@UPDATE_IMPORT_STATES_NAME_2 = <<"EOS"
     group by pending_import_people.id
   ) cand
   set pendingtype_id = case
@@ -349,7 +374,7 @@ EOS
 EOS
 
 # After the following - null == insert
-@@UPDATE_IMPORT_STATES_DBID = <<"EOS"
+@@UPDATE_IMPORT_STATES_DBID_1 = <<"EOS"
   update pending_import_people pip,(
     select pending_import_people.id, count(peoplesources.id) matches, 
     people.first_name, people.last_name, 
@@ -358,6 +383,9 @@ EOS
     left join peoplesources on peoplesources.datasource_id = pending_import_people.datasource_id
     AND peoplesources.datasource_dbid = pending_import_people.datasource_dbid
     left join people on people.id = peoplesources.person_id
+EOS
+    
+@@UPDATE_IMPORT_STATES_DBID_2 = <<"EOS"
     group by pending_import_people.id, peoplesources.id
   ) cand
   set pendingtype_id = case
