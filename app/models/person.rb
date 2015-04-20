@@ -1,6 +1,8 @@
 class Person < ActiveRecord::Base
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :language, :comments, :company, :job_title,
-                  :invitation_category_id, :pseudonym_attributes, :acceptance_status_id, :invitestatus_id
+                  :invitation_category_id, :pseudonym_attributes, :acceptance_status_id, :invitestatus_id,
+                  :postal_addresses_attributes, :email_addresses_attributes, :phone_numbers_attributes, :registrationDetail_attributes
+                  
   attr_accessor :details
 
   acts_as_taggable
@@ -88,6 +90,8 @@ class Person < ActiveRecord::Base
   has_many  :published_programme_items, :through => :publishedProgrammeItemAssignments
 
   has_one   :registrationDetail, :dependent => :delete
+  accepts_nested_attributes_for :registrationDetail
+
   has_one   :survey_respondent
 
   has_many  :person_mailing_assignments
