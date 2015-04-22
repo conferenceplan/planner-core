@@ -146,8 +146,8 @@ class Person < ActiveRecord::Base
   
   # check that the person has not been assigned to program items, if they have then return an error and do not delete
   def check_if_assigned
-    if programmeItemAssignments.size > 0 # TODO - scope for conference
-      raise 'Can not delete a person that has been assigned to programme items'
+    if ProgrammeItemAssignment.where(person_id: id).count > 0 # TODO - scope for conference
+      raise 'Can not delete a person that has been assigned to programme items in any conference'
     end
   end
 
