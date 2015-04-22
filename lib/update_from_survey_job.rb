@@ -11,12 +11,16 @@ class UpdateFromSurveyJob
   #  
   #
   def perform
+    # TODO - change to iterate through all the organizations
+    # TODO - at the moment this is done per org/conference. Change so that it iterates through all the conferences for the org
+    
     cfg = getSiteConfig
     zone = cfg ? cfg.time_zone : Time.zone
     Time.use_zone(zone) do
       JobInfo.transaction do
         # need time that the job was last run
         currentRunTime = Time.now
+
         jobInfo = JobInfo.where(:job_name => :update_from_survey).first # should only be one entry
         jobInfo = JobInfo.new if !jobInfo
     
