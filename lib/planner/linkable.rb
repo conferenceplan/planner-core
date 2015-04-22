@@ -62,7 +62,7 @@ module Planner
       #
       #
       def linked(options = {})
-        has_many  :linked, :as => :linkedto, :dependent => :destroy, :class_name => 'Link'
+        has_many  :linked, :as => :linkedto, :dependent => :delete_all, :class_name => 'Link'
 
         Planner::Linkable.config.linkedto_types.each do |linkedto_type|
           # has_many ('linked_' + linkedto_type.name.demodulize.pluralize.downcase).to_sym, :through => :linked, :class_name => linkedto_type.name
