@@ -228,7 +228,7 @@ $.widget( "cp.baseTable" , {
                 autowidth       : true,
                 shrinkToFit     : true,
                 height          : "100%",
-                rowList         : [10, 20, 30],
+                rowList         : [10, 20, 30, 60],
                 sortname        : this.options.sortname,
                 sortorder       : "asc",
                 viewrecords     : true,
