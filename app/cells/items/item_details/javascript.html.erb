@@ -392,7 +392,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     if (index > 0) {
                         str += "&";
                     };
-                    str += "context[" + index + "]=" + key + "&tags[" + index + "]=" + val;
+                    str += "context[" + index + "]=" + key + "&tags[" + index + "]=" + encodeURIComponent(val);
                     index += 1;
                 });
                 tagQuery = str;
