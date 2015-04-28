@@ -294,7 +294,7 @@ Rails.application.routes.draw do
   end
   
   match 'survey_query/list.:format', :controller => 'survey_query', :action => 'list'  
-  match 'survey_query/questions', :controller => 'survey_query', :action => 'questions'  
+  match 'survey_query/questions', :controller => 'survey_query', :action => 'questions', :defaults => { :format => 'json' }
   match 'survey_query/copy/:id', :controller => 'survey_query', :action => 'copy'  
   resources :survey_query
 

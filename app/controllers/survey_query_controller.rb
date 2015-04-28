@@ -20,12 +20,13 @@ class SurveyQueryController < PlannerController
     surveyId = survey.id if survey
     
     # TODO - use the group and question ordering
-    questions = SurveyQuestion.all :joins => {:survey_group => :survey}, :include => :survey_answers,
+    @questions = SurveyQuestion.all :joins => {:survey_group => :survey}, :include => :survey_answers,
                 :conditions => {:surveys => {:id => surveyId}, :question_type => ['textfield', 'textbox', 'singlechoice', 'multiplechoice', 'selectionbox', 'availability']}
     
-    render json: questions.to_json(:only => [ :id, :name, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order, :answer ],
-                                  :include => {:survey_answers => {}}
-                                ), :content_type => 'application/json'
+    # render json: questions.to_json
+    # (:only => [ :id, :name, :question, :question_type, :mandatory, :answer_type, :isbio, :survey_group, :sort_order, :answer, :survey_answers ],
+                                  # :include => [:survey_answers]
+                                # ), :content_type => 'application/json'
   end
 
   def show
