@@ -475,6 +475,9 @@
             <td>
                 <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})<br>
                 {{= time_slot ? start_time_str : '<span class="minor-text"><%= t "no-date-and-time-specified" %></span>' }}
+                {{ if (room) { }}
+                    {{= '<br>' + room.name }} {{= venue ? '(' + venue.name + ')' : '' }}
+                {{ } }}
                 {{ if ((typeof other_participants.join(", ") != 'undefined') && other_participants.join(", ").length > 1) { }}
                     <br>
                     <strong><%= t "with"%> </strong><em>{{= other_participants.join(", ") }}</em>

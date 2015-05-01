@@ -17,6 +17,8 @@ json.array!(@assignments) do |assignment|
         json.isPublished            assignment.programmeItem.published != nil
         json.start_time_str         assignment.programmeItem.time_slot ? assignment.programmeItem.time_slot.start.strftime('%A, %B %e %Y, %l:%M %P') : ""
         json.time_slot              assignment.programmeItem.time_slot
+        json.room                   assignment.programmeItem.room
+        json.venue                  assignment.programmeItem.room.venue if assignment.programmeItem.room
         json.setup_type_id          assignment.programmeItem.setup_type.id if assignment.programmeItem.setup_type
         json.setup_type_name        assignment.programmeItem.setup_type.name if assignment.programmeItem.setup_type
         json.role                   assignment.role.name
