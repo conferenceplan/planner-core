@@ -80,10 +80,11 @@ module ConstraintService
               end
               updateParams = { :start_time => startTime, :end_time => endTime}
               if (person.available_date != nil)
-                if ((person.available_date.start_time != startTime) || (person.available_date.end_time != endTime))                 
-                  person.available_date.start_time = startTime
-                  person.available_date.end_time = endTime
-                  person.save
+                if ((person.available_date.start_time != startTime) || (person.available_date.end_time != endTime))
+                  available_date =  person.available_date
+                  available_date.start_time = startTime
+                  available_date.end_time = endTime
+                  available_date.save
                 end
               else
                 person.create_available_date(updateParams)
