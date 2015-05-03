@@ -88,7 +88,7 @@ module DataService
              fields << lambda { return isInteger ? subclause['data'].to_i : subclause['data'] + '%' }.call
           end
         end
-        clause = [clausestr] | fields
+        clause = [clausestr].concat fields
       end
     end
     return clause

@@ -23,20 +23,22 @@ json.rowdata @result.collect do |result|
     # if there are multiple responses to same question then concat them i.e. multiple-choice questions
     answers = {}
     result.survey_responses.each do |res|
-        if (@meta_data[res.survey_question_id][:question_type] == :multiplechoice) && answers[res.survey_question_id.to_s]
-            answers[res.survey_question_id.to_s] += '; ' + res.response
-        elsif (@meta_data[res.survey_question_id][:question_type] == :availability)
-            if res.response5
-                answers[res.survey_question_id.to_s] = "I am extremely uncertain when I will be available to be on the Program"
-            else
-                answers[res.survey_question_id.to_s] = res.response == '1' ? 'I am available for Program for the complete duration of the convention' : 'I plan to be at the convention.'
-                if res.response == '2'
-                    answers[res.survey_question_id.to_s] += ": " + (Time.zone.parse(@site_config.start_date.to_s) + res.response1.to_i.day).strftime('%A, %B %e') + ", " + res.response2
-                    answers[res.survey_question_id.to_s] += " => " + (Time.zone.parse(@site_config.start_date.to_s) + res.response3.to_i.day).strftime('%A, %B %e') + ", " + res.response4
+        if @meta_data && @meta_data[res.survey_question_id]
+            if (@meta_data[res.survey_question_id][:question_type] == :multiplechoice) && answers[res.survey_question_id.to_s]
+                answers[res.survey_question_id.to_s] += '; ' + res.response
+            elsif (@meta_data[res.survey_question_id][:question_type] == :availability)
+                if res.response5
+                    answers[res.survey_question_id.to_s] = "I am extremely uncertain when I will be available to be on the Program"
+                else
+                    answers[res.survey_question_id.to_s] = res.response == '1' ? 'I am available for Program for the complete duration of the convention' : 'I plan to be at the convention.'
+                    if res.response == '2'
+                        answers[res.survey_question_id.to_s] += ": " + (Time.zone.parse(@site_config.start_date.to_s) + res.response1.to_i.day).strftime('%A, %B %e') + ", " + res.response2
+                        answers[res.survey_question_id.to_s] += " => " + (Time.zone.parse(@site_config.start_date.to_s) + res.response3.to_i.day).strftime('%A, %B %e') + ", " + res.response4
+                    end
                 end
+            else
+                answers[res.survey_question_id.to_s] = res.response
             end
-        else
-            answers[res.survey_question_id.to_s] = res.response
         end
     end
     answers.each do |k,v|
