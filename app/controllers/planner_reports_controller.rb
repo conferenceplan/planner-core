@@ -568,6 +568,31 @@ class PlannerReportsController < PlannerController
   #
   #
   #
+  def participants_report
+    @page_size = params[:page_size]
+    @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
+    @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false # TODO - check if this is needed and if not remove
+    @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+
+    # Get the people and bios
+    @people = PlannerReportsService.findPanelistsAndBios
+
+    respond_to do |format|
+      format.xml {
+        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.xml"'
+      }
+      format.pdf {
+        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.pdf"'
+      }
+      format.xlsx{
+        response.headers['Content-Disposition'] = 'attachment; filename="program_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+      }
+    end
+  end
+  
+  #
+  #
+  #
   def program_book_report
     @page_size = params[:page_size]
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape

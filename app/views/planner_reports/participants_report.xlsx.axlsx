@@ -1,0 +1,35 @@
+xlsx_package.use_shared_strings = true
+wb = xlsx_package.workbook
+
+wb.add_worksheet(name: "Participants") do |sheet|
+
+    titles =     [
+        'Name',
+        'Job Title',
+        'Company',
+        'Photo Url',
+        'Bio'
+    ]
+    titles.concat Array.new(20) {|e| ['Time ' + (e+1).to_s, 'Item ' + (e+1).to_s] }.flatten # TODO - check, split time and item into seperate cols
+    
+    sheet.add_row titles
+    
+    @people.each do |p|
+        row = []
+        row << p.getFullPublicationName
+        row << p.job_title
+        row << p.company
+        row << (p.bio_image ? p.bio_image.bio_picture.url : '')
+        row << p.bio
+                
+        p.programmeItemAssignments.each do |ia|
+            if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
+                row << (ia.programmeItem.time_slot.start + Time.zone.utc_offset.seconds)
+                row << (ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)
+            end
+        end
+        
+        sheet.add_row row
+    end
+
+end

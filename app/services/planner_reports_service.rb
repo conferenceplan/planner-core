@@ -159,10 +159,23 @@ module PlannerReportsService
           where(self.constraints()).
           order("people.last_name, time_slots.start asc")
   end
-  # find people with items that have only one person...?
-#    Person.all( :conditions => conditions, :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}},:order => "people.last_name, time_slots.start asc")
-# Need a find panelists with panels that have only one person
 
+  #
+  #
+  #  
+  def self.findPanelistsAndBios()
+    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
+    cndStr = '(programme_item_assignments.role_id in (?))'
+    cndStr += ' AND (time_slots.start is not NULL)'
+    cndStr += ' AND (programme_items.print = true)'
+
+    conditions = [cndStr, roles]
+    
+    Person.where(conditions).
+          includes([:pseudonym, :edited_bio, :bio_image , :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}]).
+          where(self.constraints()).
+          order("people.last_name, time_slots.start asc")
+  end
   
   #
   #

@@ -1,8 +1,7 @@
 kai = "#{Rails.root}/public/gkai00mp.ttf"
-dejavu = "#{Prawn::BASEDIR}/data/fonts/DejaVuSans.ttf"
 
 def fallback_fonts
-  ["times", 'kai']
+  ["Open Sans", 'kai']
 end
 
 pdf.font_families.update("times" => {
@@ -20,3 +19,13 @@ pdf.font_families.update(
         :bold_italic => kai
        }
     )
+
+pdf.font_families.update(
+      "Open Sans" => {
+        :normal => { :file => "#{Rails.root}/public/OpenSans-Regular.ttf", :font => "OpenSans-Regular" },
+        :italic => { :file => "#{Rails.root}/public/OpenSans-Italic.ttf", :font => "OpenSans-Italic" },
+        :bold   => { :file => "#{Rails.root}/public/OpenSans-Bold.ttf", :font => "OpenSans-Bold" },
+        :bold_italic => { :file => "#{Rails.root}/public/OpenSans-BoldItalic.ttf", :font => "OpenSans-BoldItalic" },
+       }
+    )
+

@@ -3,6 +3,7 @@ wb = xlsx_package.workbook
 wb.add_worksheet(name: "Program") do |sheet|
 
     sheet.add_row [
+        'Datetime',
         'Day',
         'Time',
         'Duration',
@@ -14,11 +15,14 @@ wb.add_worksheet(name: "Program") do |sheet|
         'Description',
         'Participants',
         'Short Title',
-        'Publication Reference Number'
+        'Publication Reference Number',
+        'Medium Image URL',
+        'Large Image URL'
     ]
 
     @times.each do |time|
         sheet.add_row [
+            time.start + Time.zone.utc_offset.seconds, # fix for the timezone, since Excel does not understand timezones
             time.start.strftime('%A'),
             time.start.strftime('%H:%M'),
             time.programme_items[0].duration,
@@ -32,6 +36,8 @@ wb.add_worksheet(name: "Program") do |sheet|
                 p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","),
             time.programme_items[0].short_title,
             time.programme_items[0].pub_reference_number,
+            time.programme_items[0].external_images.use('mediumcard')[0] ? time.programme_items[0].external_images.use('mediumcard')[0].picture.url : '',
+            time.programme_items[0].external_images.use('largecard')[0] ? time.programme_items[0].external_images.use('largecard')[0].picture.url : ''
         ]
     end
     
