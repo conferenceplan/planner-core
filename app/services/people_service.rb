@@ -87,7 +87,7 @@ module PeopleService
     end
     
     Person.joins(:person_con_state).
-                            includes([:pseudonym, :email_addresses, :postal_addresses, :person_con_state, :invitation_category, {:programmeItemAssignments => {:programmeItem => [:time_slot, :format]}}]).
+                            includes([:pseudonym, :email_addresses, :postal_addresses, :person_con_state, :invitation_category]).
                             where(query).
                             where(self.constraints()).
                             order("people.last_name")
