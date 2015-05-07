@@ -11,8 +11,14 @@ xml.participants do
                 person.programmeItemAssignments.each do |assignment|
                     if assignment.programmeItem.time_slot && (@allowed_roles.include? assignment.role)
                         xml.item do
+                            xml.reference_number assignment.programmeItem.pub_reference_number if assignment.programmeItem.pub_reference_number
                             xml.role assignment.role.name if assignment.role
-                            xml.title assignment.programmeItem.short_title.blank? ? assignment.programmeItem.title : assignment.programmeItem.short_title
+                            xml.title do
+                                xml.cdata!(assignment.programmeItem.short_title.blank? ? assignment.programmeItem.title : assignment.programmeItem.short_title)
+                            end
+                            xml.description do
+                                xml.cdata!(assignment.programmeItem.precis) if assignment.programmeItem.precis
+                            end
                             xml.format assignment.programmeItem.format ? assignment.programmeItem.format.name : ''
                             xml.room assignment.programmeItem.room.name
                             xml.venue assignment.programmeItem.room.venue.name
