@@ -12,6 +12,9 @@
             <li><a href="#item-reports-tab" data-toggle="tab"><%= t 'item-reports' %></a></li>
             <li><a href="#capacity-and-equipment-reports-tab" data-toggle="tab"><%= t 'capacity-and-equipment' %></a></li>
             <li><a href="#scheduling-reports-tab" data-toggle="tab"><%= t 'scheduling-reports' %></a></li>
+            <% @extra_reports_menu.each do |extra| %>
+                <%= render extra %>
+            <% end %>
         </ul>
 
         <div id="report-panel-body" class="tab-content panel-body">
@@ -82,6 +85,9 @@
                     </li>
               </ul>
             </div>
+            <% @extra_reports_display.each do |extra| %>
+                <%= render extra %>
+            <% end %>
         </div>
 
 </div>

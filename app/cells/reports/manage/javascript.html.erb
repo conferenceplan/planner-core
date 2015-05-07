@@ -457,6 +457,8 @@ ReportApp.ReportManagement = (function(Backbone){
      * 
      */
     return {
+        ReportBase : ReportBase,
+        
         init : function(options) {
             new Workspace();
             
@@ -477,3 +479,7 @@ jQuery(document).ready(function() {
 });
 
 </script>
+
+<% @extra_javascript.each do |extra| %>
+    <%= render extra %>
+<% end %>

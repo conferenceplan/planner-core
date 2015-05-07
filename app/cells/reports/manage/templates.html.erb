@@ -1,4 +1,7 @@
 <!-- Templates used for the reports -->
+<% @extra_template.each do |extra| %>
+    <%= render extra %>
+<% end %>
 
 <script type="text/template" id="report-menu-template">
     Report menu
