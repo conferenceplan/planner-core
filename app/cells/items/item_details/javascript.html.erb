@@ -45,7 +45,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                     picker : {
                         locale : "<%= I18n.locale %>",
-                        stepping : 15,
+                        stepping : 5,
                         format : "DD MMM YYYY, HH:mm",
                         useCurrent: false,
                         minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
