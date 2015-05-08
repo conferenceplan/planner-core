@@ -1,5 +1,5 @@
 class Pseudonym < ActiveRecord::Base
-  attr_accessible :lock_version, :first_name, :last_name, :suffix, :person_id
+  attr_accessible :lock_version, :first_name, :last_name, :suffix, :person_id, :prefix
   
   belongs_to  :person 
   

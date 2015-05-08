@@ -1,10 +1,12 @@
 
     json.id                         person.id
+    json.prefix                     person.prefix 
     json.first_name                 person.first_name 
     json.last_name                  person.last_name
     json.suffix                     person.suffix
     if person.pseudonym
         json.pseudonym do
+            json.prefix             person.pseudonym.prefix if person.pseudonym.prefix
             json.first_name         person.pseudonym.first_name if person.pseudonym.first_name
             json.last_name          person.pseudonym.last_name if person.pseudonym.last_name
             json.suffix             person.pseudonym.suffix if person.pseudonym.suffix

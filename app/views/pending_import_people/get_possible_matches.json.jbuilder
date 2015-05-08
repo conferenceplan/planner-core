@@ -4,6 +4,7 @@ json.total @total
 json.rows @matches do |match|
     json.id             match.id
     json.pending_type   ''
+    json.prefix         match.prefix
     json.first_name     match.first_name
     json.last_name      match.last_name
     json.suffix         match.suffix
@@ -35,6 +36,7 @@ json.rows @matches do |match|
         json.datasource_name    match.datasource.name
     end
     if match.pseudonym
+        json.pub_prefix         match.pseudonym.prefix
         json.pub_first_name     match.pseudonym.first_name
         json.pub_last_name      match.pseudonym.last_name
         json.pub_suffix         match.pseudonym.suffix

@@ -31,7 +31,7 @@ class Surveys::ResponseController < ApplicationController
       begin
         SurveyRespondentDetail.transaction do
           originalResponses = nil
-          p = params[:survey_respondent_detail].reject {|x| ['pub_first_name', 'pub_last_name', 'pub_suffix'].include? x }
+          p = params[:survey_respondent_detail].reject {|x| ['pub_first_name', 'pub_last_name', 'pub_suffix', 'pub_prefix'].include? x }
           if @respondent && @respondent.survey_respondent_detail
             respondentDetails = @respondent.survey_respondent_detail
             respondentDetails.update_attributes(p)
@@ -202,7 +202,7 @@ class Surveys::ResponseController < ApplicationController
             end
           else
             # if we have a respondent and empty details then we want to pre-populate the details
-            @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.suffix})
+            @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.prefix, :suffix => @respondent.prefix})
             @respondent.survey_respondent_detail.save
             @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail, @respondent.person)
               @survey_response = convertInitialInputArray(@survey, @respondent.person)
@@ -355,13 +355,15 @@ class Surveys::ResponseController < ApplicationController
       end
       
       # Now do Publication Name
-      if !respondentParams['pub_first_name'].blank? || !respondentParams['pub_last_name'].blank? || !respondentParams['pub_suffix'].blank?
+      if !respondentParams['pub_first_name'].blank? || !respondentParams['pub_last_name'].blank? || !respondentParams['pub_suffix'].blank? || !respondentParams['pub_prefix'].blank?
         if !person.pseudonym
-          person.pseudonym = Pseudonym.new :first_name => respondentParams['pub_first_name'], :last_name => respondentParams['pub_last_name'], :suffix => respondentParams['pub_suffix'] 
+          person.pseudonym = Pseudonym.new :first_name => respondentParams['pub_first_name'], :last_name => respondentParams['pub_last_name'],
+                                           :suffix => respondentParams['pub_suffix'], :prefix => respondentParams['pub_prefix'] 
         else
           person.pseudonym.first_name = respondentParams['pub_first_name']
           person.pseudonym.last_name = respondentParams['pub_last_name']
           person.pseudonym.suffix = respondentParams['pub_suffix']
+          person.pseudonym.prefix = respondentParams['pub_prefix']
         end
         
         person.pseudonym.save!
@@ -374,6 +376,7 @@ class Surveys::ResponseController < ApplicationController
       person.first_name = detail.first_name if detail.first_name
       person.last_name = detail.last_name if detail.last_name
       person.suffix = detail.suffix if detail.suffix
+      person.prefix = detail.prefix if detail.prefix
       
       person.acceptance_status = AcceptanceStatus[:Accepted]
       
@@ -538,11 +541,13 @@ class Surveys::ResponseController < ApplicationController
       res['first_name'] = person.first_name
       res['last_name'] = person.last_name
       res['suffix'] = person.suffix
+      res['prefix'] = person.prefix
       res['email'] = person.getDefaultEmail() ? person.getDefaultEmail().email : ''
     else  
       res['first_name'] = details.first_name  if details.first_name
       res['last_name'] = details.last_name  if details.last_name
       res['suffix'] = details.suffix if details.suffix
+      res['prefix'] = details.prefix if details.prefix
       res['email'] = details.email if details.email
     end
     
@@ -551,6 +556,7 @@ class Surveys::ResponseController < ApplicationController
       res['pub_first_name'] = person.pseudonym.first_name  if person.pseudonym.first_name
       res['pub_last_name'] = person.pseudonym.last_name  if person.pseudonym.last_name
       res['pub_suffix'] = person.pseudonym.suffix if person.pseudonym.suffix
+      res['pub_prefix'] = person.pseudonym.prefix if person.pseudonym.prefix
     end
 
     return res

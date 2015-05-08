@@ -209,6 +209,7 @@ protected
           :first_name => pendingPerson.first_name,
           :last_name => pendingPerson.last_name,
           :suffix => pendingPerson.suffix,
+          :prefix => pendingPerson.prefix,
           :company => pendingPerson.company,
           :job_title => pendingPerson.job_title
         )
@@ -250,17 +251,25 @@ protected
         person.pseudonym = Pseudonym.new(
               :first_name => pendingPerson.pub_first_name,
               :last_name => pendingPerson.pub_last_name,
-              :suffix => pendingPerson.pub_suffix
+              :suffix => pendingPerson.pub_suffix,
+              :prefix => pendingPerson.pub_prefix
             )
       else  
         person.pseudonym.update_attributes(
               :first_name => pendingPerson.pub_first_name,
               :last_name => pendingPerson.pub_last_name,
-              :suffix => pendingPerson.pub_suffix
+              :suffix => pendingPerson.pub_suffix,
+              :prefix => pendingPerson.pub_prefix
             )
       end
       person.pseudonym.save!
     end
+    
+    person.suffix = pendingPerson.suffix
+    person.first_name = pendingPerson.first_name
+    person.last_name = pendingPerson.last_name
+    person.prefix = pendingPerson.prefix
+    person.save!
     
     # Create the address, email & phone
     if !pendingPerson.addressNil?

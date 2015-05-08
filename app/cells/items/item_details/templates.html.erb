@@ -204,10 +204,10 @@
                 {{ _.each(moderators, function(person) { }}
                     <li class="list-group-item">
                         {{ if (person.pseudonym) { }}
-                            {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                         {{ } else { }}
-                            {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
                     </li>
                 {{ }); }}
@@ -219,10 +219,10 @@
                 {{ _.each(participants, function(person) { }}
                     <li class="list-group-item">
                         {{ if (person.pseudonym) { }}
-                            {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                         {{ } else { }}
-                            {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
                     </li>
                 {{ }); }}
@@ -234,10 +234,10 @@
                 {{ _.each(reserves, function(person) { }}
                     <li class="list-group-item">
                         {{ if (person.pseudonym) { }}
-                            {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                         {{ } else { }}
-                            {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
                     </li>
                 {{ }); }}
@@ -249,10 +249,10 @@
                 {{ _.each(invisibles, function(person) { }}
                     <li class="list-group-item">
                         {{ if (person.pseudonym) { }}
-                            {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                         {{ } else { }}
-                            {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
                     </li>
                 {{ }); }}

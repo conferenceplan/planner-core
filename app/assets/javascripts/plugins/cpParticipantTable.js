@@ -25,8 +25,16 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 formatter : function(cellvalue, options, rowObject) {
                     var res = "";
                     
+                    if (typeof rowObject['person[pseudonym_attributes][prefix]'] != 'undefined') {
+                        if (rowObject['person[pseudonym_attributes][prefix]']) {
+                            res += rowObject['person[pseudonym_attributes][prefix]'];
+                        }
+                    };
                     if (typeof rowObject['person[pseudonym_attributes][first_name]'] != 'undefined') {
                         if (rowObject['person[pseudonym_attributes][first_name]']) {
+                            if (res.length > 0) {
+                                res += ' ';
+                            }
                             res += rowObject['person[pseudonym_attributes][first_name]'];
                         }
                     };
@@ -46,8 +54,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                             res += rowObject['person[pseudonym_attributes][suffix]'];
                         }
                     };
-                    var name = (rowObject['person[first_name]'] + ' ' + rowObject['person[last_name]'] + ' ' + rowObject['person[suffix]']).trim();
-                                
+                    var name = (rowObject['person[prefix]'] + ' ' + rowObject['person[first_name]'] + ' ' + rowObject['person[last_name]'] + ' ' + rowObject['person[suffix]']).trim();
                     
                     if (res.length > 0) {
                         res += " (" +  name + ")";
@@ -102,6 +109,23 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 formoptions : {
                     rowpos : 3,
                     label : "Suffix",
+                },
+                editrules : {
+                    required : false,
+                    edithidden : true
+                }
+            }, {
+                name : 'person[prefix]',
+                label : 'Prefis',
+                index : 'people.prefix',
+                hidden : true, //!settings['prefix'],
+                editable : true,
+                search : false,
+                editoptions : {
+                },
+                formoptions : {
+                    rowpos : 3,
+                    label : "Prefix",
                 },
                 editrules : {
                     required : false,
@@ -358,6 +382,24 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     edithidden : true
                 }
             }, {
+                name : 'person[pseudonym_attributes][prefix]',
+                label : 'Publication<br/>Prefix',
+                index : 'pseudonyms.prefix',
+                hidden : true, //!settings['pub_suffix'],
+                editable : true,
+                sortable : false,
+                search : false,
+                editoptions : {
+                },
+                formoptions : {
+                    rowpos : 9,
+                    label : "Pub Prefix"
+                },
+                editrules : {
+                    required : false,
+                    edithidden : true
+                }
+            }, {
                 name : 'person[comments]',
                 index : 'people.comments',
                 hidden : true,
@@ -401,10 +443,12 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         // get an object that represents the person from the underlying grid - just the id and names
         return {
             id : id,
+            prefix : this.element.jqGrid('getCell', id, 'person[prefix]'),
             first_name : this.element.jqGrid('getCell', id, 'person[first_name]'),
             last_name : this.element.jqGrid('getCell', id, 'person[last_name]'),
             suffix : this.element.jqGrid('getCell', id, 'person[suffix]'),
-            // TODO - put in the pseudonym
+
+            pub_prefix : this.element.jqGrid('getCell', id, 'person[pseudonym_attributes][prefix]'),
             pub_first_name : this.element.jqGrid('getCell', id, 'person[pseudonym_attributes][first_name]'),
             pub_last_name :this.element.jqGrid('getCell', id, 'person[pseudonym_attributes][last_name]'),
             pub_suffix :this.element.jqGrid('getCell', id, 'person[pseudonym_attributes][suffix]')

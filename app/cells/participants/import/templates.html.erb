@@ -75,6 +75,9 @@
     <div>    
         <ul class="list-group">
             <!--  What about pseudonyms? -->
+            <li class="list-group-item ui-droppable" id="prefix">
+                <span>prefix</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof prefix != 'undefined' && prefix != null ? src.models[prefix].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="prefix"><i class="glyphicon glyphicon-remove"></i></button></span>
+            </li>
             <li class="list-group-item ui-droppable" id="first_name">
                 <span>first_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= (typeof first_name != 'undefined' && first_name != null) ? src.models[first_name].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="first_name"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>

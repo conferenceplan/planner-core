@@ -22,7 +22,7 @@ $.widget( "cp.pendingPeopleImportTable", $.cp.baseBootstrapTable , {
             valign: 'middle',
             sortable: true,
             formatter : function(value, row) {
-                return (row.first_name + ' ' + row.last_name + ' ' + row.suffix).trim();
+                return (row.prefix + ' ' + row.first_name + ' ' + row.last_name + ' ' + row.suffix).trim();
             }
         }, {
             field: 'email',

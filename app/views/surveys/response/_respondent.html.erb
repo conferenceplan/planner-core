@@ -11,6 +11,10 @@
             <label class="col-sm-2 control-label"><%= t 'name' %></label>
             <div class="col-sm-10">
                     <div class="row">
+                        <div class="col-sm-2">
+                            <input name="survey_respondent_detail[prefix]" value="<%=@survey_respondent_detail['prefix'] if @survey_respondent_detail %>" 
+                                size="5" type="text" class="form-control" placeholder="Prefix">
+                        </div>
                         <div class="col-sm-4">
                             <div style='color: red; float: left;'>*&nbsp;</div>
                             <div>
@@ -25,7 +29,7 @@
                                     size="30" type="text" class="form-control" placeholder="Last Name" required>
                             </div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             <input name="survey_respondent_detail[suffix]" value="<%=@survey_respondent_detail['suffix'] if @survey_respondent_detail %>" 
                                 size="5" type="text" class="form-control" placeholder="Suffix">
                         </div>
@@ -58,6 +62,10 @@
     <div class="col-sm-10">
     <div class="controls">
                     <div class="row">
+                        <div class="col-sm-2">
+        <input name="survey_respondent_detail[pub_prefix]" value="<%=@survey_respondent_detail['pub_prefix'] if @survey_respondent_detail %>" 
+            size="5" type="text" class="form-control" placeholder="Prefix">
+                        </div>
                         <div class="col-sm-4">
         <input name="survey_respondent_detail[pub_first_name]" value="<%=@survey_respondent_detail['pub_first_name'] if @survey_respondent_detail %>" 
             size="30" type="text" class="form-control" placeholder="First Name">
@@ -66,7 +74,7 @@
         <input name="survey_respondent_detail[pub_last_name]" value="<%=@survey_respondent_detail['pub_last_name'] if @survey_respondent_detail %>" 
             size="30" type="text" class="form-control" placeholder="Last Name">
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-2">
         <input name="survey_respondent_detail[pub_suffix]" value="<%=@survey_respondent_detail['pub_suffix'] if @survey_respondent_detail %>" 
             size="5" type="text" class="form-control" placeholder="Suffix">
                         </div>

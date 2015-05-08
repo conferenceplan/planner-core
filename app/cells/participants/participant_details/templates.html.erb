@@ -85,8 +85,9 @@
                    <%= t  "name" %>
                 </label>
                 <span data-editor>
-                <div class="col-sm-4" data-editors="first_name"></div> <!--  The form element needs a placeholder="XXXXXX" -->
-                <div class="col-sm-4" data-editors="last_name"></div>
+                <div class="col-sm-2" data-editors="prefix"></div>
+                <div class="col-sm-3" data-editors="first_name"></div> <!--  The form element needs a placeholder="XXXXXX" -->
+                <div class="col-sm-3" data-editors="last_name"></div>
                 <div class="col-sm-2" data-editors="suffix"></div>
                 </span>
             </div>
@@ -94,8 +95,9 @@
             <label class="col-sm-2 control-label">
                 <%= t "publication-name" %>
             </label>
-            <div class="col-sm-4" data-editors="pseudonym.first_name"></div>
-            <div class="col-sm-4" data-editors="pseudonym.last_name"></div>
+            <div class="col-sm-2" data-editors="pseudonym.prefix"></div>
+            <div class="col-sm-3" data-editors="pseudonym.first_name"></div>
+            <div class="col-sm-3" data-editors="pseudonym.last_name"></div>
             <div class="col-sm-2" data-editors="pseudonym.suffix"></div>
             </div>
             <div class="form-group">
@@ -172,12 +174,12 @@
         <button class="model-edit-button btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-pencil"></i></button>
         <p>
             {{ if (first_name || last_name) { }}
-                <strong>{{= first_name ? first_name : "" }} {{= last_name ? last_name : "" }} {{= suffix ? suffix : "" }}</strong>
+                <strong>{{= prefix ? prefix : "" }} {{= first_name ? first_name : "" }} {{= last_name ? last_name : "" }} {{= suffix ? suffix : "" }}</strong>
                 <br>
             {{ } }}  
             {{ if (typeof pseudonym != 'undefined') { }}  
                 {{ if (pseudonym.first_name || pseudonym.last_name) { }}
-                    <strong>{{= pseudonym.first_name ? pseudonym.first_name : "" }} {{= pseudonym.last_name ? pseudonym.last_name : "" }} {{= pseudonym.suffix ? pseudonym.suffix : "" }}</strong>
+                    <strong>{{= pseudonym.prefix ? pseudonym.prefix : "" }} {{= pseudonym.first_name ? pseudonym.first_name : "" }} {{= pseudonym.last_name ? pseudonym.last_name : "" }} {{= pseudonym.suffix ? pseudonym.suffix : "" }}</strong>
                     <span class="minor-text">(<%= t "published-name" %>)</span>
                     <br>
                 {{ } }}    

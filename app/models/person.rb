@@ -1,7 +1,8 @@
 class Person < ActiveRecord::Base
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :language, :comments, :company, :job_title,
                   :invitation_category_id, :pseudonym_attributes, :acceptance_status_id, :invitestatus_id,
-                  :postal_addresses_attributes, :email_addresses_attributes, :phone_numbers_attributes, :registrationDetail_attributes
+                  :postal_addresses_attributes, :email_addresses_attributes, :phone_numbers_attributes, :registrationDetail_attributes,
+                  :prefix
                   
   attr_accessor :details
 
@@ -300,6 +301,19 @@ class Person < ActiveRecord::Base
   def getFullPublicationName
    # if we set the pseudonym in people table, use that
    if (self.pseudonym != nil)
+        name = [self.pseudonym.prefix, self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix].compact.join(' ')
+        if (name =~ /^\s*$/)
+           name = [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ')
+        end
+        return name.rstrip
+    else
+        return [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ').rstrip
+    end
+  end
+  
+  def getFullPublicationNameSansPrefix
+   # if we set the pseudonym in people table, use that
+   if (self.pseudonym != nil)
         name = [self.pseudonym.first_name,self.pseudonym.last_name,self.pseudonym.suffix].compact.join(' ')
         if (name =~ /^\s*$/)
            name = [self.first_name,self.last_name,self.suffix].compact.join(' ')
@@ -310,20 +324,26 @@ class Person < ActiveRecord::Base
     end
   end
   
+  def pubPrefix
+    return self.pseudonym.prefix if (self.pseudonym != nil) && !(self.pseudonym.prefix.empty?)
+    
+    return prefix ? prefix : ''
+  end
+
   def pubFirstName
-    return self.pseudonym.first_name if (self.pseudonym != nil) && !(self.pseudonym.first_name.empty? && self.pseudonym.first_name.empty?)
+    return self.pseudonym.first_name if (self.pseudonym != nil) && !(self.pseudonym.first_name.empty?)
     
     return first_name
   end
 
   def pubLastName
-    return self.pseudonym.last_name if (self.pseudonym != nil) && !(self.pseudonym.last_name.empty? && self.pseudonym.last_name.empty?)
+    return self.pseudonym.last_name if (self.pseudonym != nil) && !(self.pseudonym.last_name.empty?)
     
     return last_name
   end
   
   def pubSuffix
-    return self.pseudonym.suffix if (self.pseudonym != nil) && !(self.pseudonym.suffix.empty? && self.pseudonym.suffix.empty?)
+    return self.pseudonym.suffix if (self.pseudonym != nil) && !(self.pseudonym.suffix.empty?)
     
     return suffix
   end

@@ -7,6 +7,7 @@ json.rowdata @people do |person|
 
     
     json.id person.id
+    json.set! "person[prefix]", person.prefix
     json.set! "person[first_name]", person.first_name
     json.set! "person[last_name]", person.last_name
     json.set! "person[suffix]", person.suffix
@@ -18,6 +19,7 @@ json.rowdata @people do |person|
     json.set! "person[lock_version]", person.lock_version
     
     if person.pseudonym
+            json.set! "person[pseudonym_attributes][prefix]", person.pseudonym.prefix 
             json.set! "person[pseudonym_attributes][first_name]", person.pseudonym.first_name 
             json.set! "person[pseudonym_attributes][last_name]", person.pseudonym.last_name
             json.set! "person[pseudonym_attributes][suffix]", person.pseudonym.suffix

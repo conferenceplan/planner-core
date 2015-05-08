@@ -37,7 +37,7 @@ class PeopleController < PlannerController
         # so delete attributes from input parameter list so
         # it won't get created
         if (params[:pseudonym])
-          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "") || (params[:pseudonym][:prefix] != "")
                params[:person][:pseudonym_attributes] = params[:pseudonym]
           end
         end
@@ -66,11 +66,11 @@ class PeopleController < PlannerController
         # out (it existed before and now is not going to exist),
         # we do need to update, so we don't delete the attributes
         if (@person.pseudonym == nil && params[:pseudonym]) #params[:person].has_key?(:pseudonym_attributes))
-          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "") || (params[:pseudonym][:prefix] != "")
                params[:person][:pseudonym_attributes] = params[:pseudonym]
           end
         elsif (@person.pseudonym != nil && params[:pseudonym])
-          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "")
+          if (params[:pseudonym][:last_name] != "") || (params[:pseudonym][:first_name] != "") || (params[:pseudonym][:suffix] != "") || (params[:pseudonym][:prefix] != "")
             @person.pseudonym.update_attributes(params[:pseudonym])
           else
             @person.pseudonym.destroy

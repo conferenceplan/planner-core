@@ -15,6 +15,7 @@ xml.rows do
       SurveyService.personAnsweredSurvey( person, 'partsurvey') ? xml.cell("Y") : xml.cell("N")
       #
       if person.pseudonym
+        person.pseudonym.prefix ? xml.cell(person.pseudonym.prefix) : xml.cell("")
         person.pseudonym.first_name ? xml.cell(person.pseudonym.first_name) : xml.cell("")
         person.pseudonym.last_name ? xml.cell(person.pseudonym.last_name) : xml.cell("")
         person.pseudonym.suffix ? xml.cell(person.pseudonym.suffix) : xml.cell("")

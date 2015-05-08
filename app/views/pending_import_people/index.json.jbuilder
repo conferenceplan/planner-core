@@ -10,9 +10,11 @@ json.rows @pendingImportPeople do |pending|
     json.first_name         pending.first_name
     json.last_name          pending.last_name
     json.suffix             pending.suffix
+    json.prefix             pending.prefix
     json.pub_first_name     pending.pub_first_name
     json.pub_last_name      pending.pub_last_name
     json.pub_suffix         pending.pub_suffix
+    json.pub_prefix         pending.pub_prefix
     json.job_title          pending.job_title
     json.company            pending.company
     json.line1              pending.line1

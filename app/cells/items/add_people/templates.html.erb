@@ -39,10 +39,10 @@
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="moderators">
             <small>
                 {{ if (person.pseudonym) { }}
-                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                    {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
-                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                    {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
             </small>
             <button class="btn btn-xs btn-link pull-right remove-person" src="moderators" person="{{= person.id}}"><i class="glyphicon glyphicon-remove"></i></button>
@@ -55,13 +55,13 @@
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="participants">
             <small>
                 {{ if (person.pseudonym) { }}
-                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                    {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else if (person.pub_first_name || person.pub_last_name) { }}
-                    {{= person.pub_first_name }} {{= person.pub_last_name }}  {{= person.pub_suffix }}
-                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                    {{= person.pseudonym.prefix }} {{= person.pub_first_name }} {{= person.pub_last_name }}  {{= person.pub_suffix }}
+                    ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
-                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                    {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
             </small>
             <button class="btn btn-xs btn-link pull-right remove-person" src="participants" person="{{= person.id}}"><i class="glyphicon glyphicon-remove"></i></button>
@@ -74,10 +74,10 @@
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="reserves">
             <small>
                 {{ if (person.pseudonym) { }}
-                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                    {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
-                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                    {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
             </small>
             <button class="btn btn-xs btn-link pull-right remove-person" src="reserves" person="{{= person.id}}"><i class="glyphicon glyphicon-remove"></i></button>
@@ -90,10 +90,10 @@
         <div class="thumbnail clearfix ui-draggable" id="{{= person.id}}" src="invisibles">
             <small>
                 {{ if (person.pseudonym) { }}
-                    {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                    ({{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                    {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
-                    {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                    {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
             </small>
             <button class="btn btn-xs btn-link pull-right remove-person" src="invisibles" person="{{= person.id}}"><i class="glyphicon glyphicon-remove"></i></button>

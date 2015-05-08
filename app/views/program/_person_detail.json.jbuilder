@@ -1,6 +1,7 @@
 
 json.id         person.id    
-json.name       person.getFullPublicationName    
+json.name       person.getFullPublicationNameSansPrefix
+json.prefix     person.prefix    
 json.bio        person.bio ? person.bio : ''
 json.company    person.company
 json.job_title  person.job_title
