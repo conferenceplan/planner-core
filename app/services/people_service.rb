@@ -76,18 +76,20 @@ module PeopleService
     peopleTable = Arel::Table.new(:people)
     query = nil
     
-    query = stateTable[:invitestatus_id].eq(invitestatus) if invitestatus
+    query = stateTable[:invitestatus_id].eq(invitestatus) if invitestatus && invitestatus > 0
+    include_list = [:pseudonym, :email_addresses, :postal_addresses, :person_con_state]
     
-    if invite_category
+    if invite_category && invite_category > 0
       if query
         query = query.and(peopleTable[:invitation_category_id].eq(invite_category))
       else
         query = peopleTable[:invitation_category_id].eq(invite_category)
       end
+      include_list << :invitation_category
     end
     
     Person.joins(:person_con_state).
-                            includes([:pseudonym, :email_addresses, :postal_addresses, :person_con_state, :invitation_category]).
+                            includes(include_list).
                             where(query).
                             where(self.constraints()).
                             order("people.last_name")
