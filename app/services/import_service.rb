@@ -24,6 +24,17 @@ module ImportService
 
     people_ids = ActiveRecord::Base.connection.select_all(query.to_sql)
 
+    query = pending_import_people.project(*attrs).
+              where(pending_import_people[:id].eq(pending_id)).
+              where(self.constraints()).
+              join(peoplesources).
+                on(peoplesources[:datasource_dbid].eq(pending_import_people[:datasource_dbid]).and(peoplesources[:datasource_dbid].not_eq(nil))).
+              join(people, Arel::Nodes::OuterJoin).
+                on(people[:id].eq(peoplesources[:person_id])).
+              order(pending_import_people[:id])
+
+    people_ids += ActiveRecord::Base.connection.select_all(query.to_sql)
+
     Person.where(id: people_ids.collect{|a| a["person_id"] })
   end
   
@@ -243,6 +254,12 @@ protected
       end
       person.registrationDetail.save!
     end
+
+    person.suffix = pendingPerson.suffix
+    person.first_name = pendingPerson.first_name
+    person.last_name = pendingPerson.last_name
+    person.prefix = pendingPerson.prefix
+    person.save!
     
     # Create the pseudonym
     if !pendingPerson.pseudonymNil?
