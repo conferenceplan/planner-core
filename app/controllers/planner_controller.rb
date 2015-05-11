@@ -36,14 +36,18 @@ class PlannerController < ApplicationController
 
 protected
 
+  def set_return_to(path)
+    session[:user_return_to] = path
+  end
+
   def stale_record_recovery_action
     flash.now[:error] = "Another user has made a change to that record "+
          "since you accessed the edit form."
     render :edit, :status => :conflict, :layout => 'content'
   end
 
-  def check_authenticated
-    session[:user_return_to] = request.fullpath
+  def check_authenticated 
+    set_return_to request.fullpath
     redirect_to '/users/sign_in' unless user_signed_in? or support_user_signed_in? 
   end  
 end
