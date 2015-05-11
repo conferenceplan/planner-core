@@ -43,8 +43,8 @@ module ImportService
     Person.transaction do
       # Get the mappings from the database and convert into suitable form for the query
       fields = []
-      mapping.attributes.collect{|name,val| fields[val] = name if (["lock_version", "created_at", "updated_at", "id", "datasource_id"].index(name) == nil) && val != nil }
-  
+      mapping.attributes.collect{|name,val| fields[val] = name if ((["lock_version", "created_at", "updated_at", "id", "datasource_id"].index(name) == nil) && ((val != nil) && (val != -1))) }
+      
       sampler = EncodingSampler::Sampler.new(filename, ['ASCII-8BIT', 'UTF-8', 'ISO-8859-1', 'ISO-8859-2', 'ISO-8859-15'])
       
       # logger.debug sampler.valid_encodings
@@ -260,6 +260,15 @@ protected
     person.last_name = pendingPerson.last_name
     person.prefix = pendingPerson.prefix
     person.save!
+
+    peoplesource = person.peoplesource
+    if peoplesource
+      peoplesource.datasource_id = pendingPerson.datasource_id
+      peoplesource.datasource_dbid = pendingPerson.datasource_dbid
+    else 
+      peoplesource = Peoplesource.new({ :person_id => person.id, :datasource_id => datasource.id, :datasource_dbid => pendingPerson.datasource_dbid })
+    end
+    peoplesource.save!
     
     # Create the pseudonym
     if !pendingPerson.pseudonymNil?
