@@ -13,6 +13,7 @@ module Planner
         def create
           begin
             @object.save!
+            after_save
             render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :create, params[:controller]
           rescue => ex
             render status: :bad_request, text: ex.message
@@ -26,6 +27,7 @@ module Planner
         def update
           begin
             @object.update_attributes params[object_name]
+            after_update
             render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :update, params[:controller]
           rescue => ex
             render status: :bad_request, text: ex.message
@@ -42,6 +44,12 @@ module Planner
         end
       
         protected
+          def after_update
+          end
+
+          def after_save
+          end
+        
           def action
             params[:action].to_sym
           end
