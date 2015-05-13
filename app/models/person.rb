@@ -311,19 +311,19 @@ class Person < ActiveRecord::Base
   end
   
   def pubFirstName
-    return self.pseudonym.first_name if (self.pseudonym != nil) && !(self.pseudonym.first_name.empty? && self.pseudonym.first_name.empty?)
+    return self.pseudonym.first_name if (self.pseudonym != nil) && !(self.pseudonym.first_name && self.pseudonym.first_name.empty?)
     
     return first_name
   end
 
   def pubLastName
-    return self.pseudonym.last_name if (self.pseudonym != nil) && !(self.pseudonym.last_name.empty? && self.pseudonym.last_name.empty?)
+    return self.pseudonym.last_name if (self.pseudonym != nil) && !(self.pseudonym.last_name && self.pseudonym.last_name.empty?)
     
     return last_name
   end
   
   def pubSuffix
-    return self.pseudonym.suffix if (self.pseudonym != nil) && !(self.pseudonym.suffix.empty? && self.pseudonym.suffix.empty?)
+    return self.pseudonym.suffix if (self.pseudonym != nil) && !(self.pseudonym.suffix && self.pseudonym.suffix.empty?)
     
     return suffix
   end

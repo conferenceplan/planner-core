@@ -412,7 +412,7 @@ class PlannerReportsController < PlannerController
     @people = PlannerReportsService.findPanelistsWithPanels( params[:specific_panelists], 
                             roles, 
                             (params[:scheduled] == "true"), 
-                            (params[:forprint] == "true") ).sort_by{ |a| a.pubLastName.mb_chars.normalize(:kd).gsub(/[^-x00-\x7F]/n, '').downcase.to_s }
+                            (params[:forprint] == "true") ).sort_by{ |a| a.pubLastName ? a.pubLastName.mb_chars.normalize(:kd).gsub(/[^-x00-\x7F]/n, '').downcase.to_s : '' }
 
     respond_to do |format|
       format.json
