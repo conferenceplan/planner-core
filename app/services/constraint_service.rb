@@ -59,7 +59,7 @@ module ConstraintService
 
           if (surveyResponse != nil)
             if (surveyResponse.response == '2')
-              if (surveyResponse.response2 != '---')
+              if (surveyResponse.response2 && surveyResponse.response2 != '---')
                 if (surveyResponse.response2.downcase == 'noon')
                    startTime = startOfConference + (12.hour) + (surveyResponse.response1.to_i).day
                 else
@@ -69,7 +69,7 @@ module ConstraintService
                 startTime = startOfConference + 8.hour + (surveyResponse.response1.to_i).day
               end
               
-              if (surveyResponse.response4 != '---')
+              if (surveyResponse.response4 && surveyResponse.response4 != '---')
                 if (surveyResponse.response4.downcase == 'noon')
                     endTime = startOfConference + 12.hour + (surveyResponse.response3.to_i).day
                 else
