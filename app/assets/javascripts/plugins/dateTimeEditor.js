@@ -51,15 +51,19 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
         var val = this.picker.data("DateTimePicker").date(); // date the datetime from the widget
         var valStr = "";
         if (val) {
-            valStr = val.format('YYYY-MM-DD HH:mm'); // create a string without the timezone
-            if (offset < 0) {
-                valStr += ' -';
+            if (this.schema.date_only) {
+                valStr = val.format('YYYY-MM-DD'); // create a string without the timezone
             } else {
-                valStr += ' +';
+                valStr = val.format('YYYY-MM-DD HH:mm'); // create a string without the timezone
+                if (offset < 0) {
+                    valStr += ' -';
+                } else {
+                    valStr += ' +';
+                }
+                var hours = Math.floor(offset / 60);
+                var minutes = offset % 60;
+                valStr += this.lpad(Math.abs(hours.toString()), "0",2) + this.lpad(Math.abs(minutes).toString(), "0",2); // add in the time offset for the convention i.e. " -0500";
             }
-            var hours = Math.floor(offset / 60);
-            var minutes = offset % 60;
-            valStr += this.lpad(Math.abs(hours.toString()), "0",2) + this.lpad(Math.abs(minutes).toString(), "0",2); // add in the time offset for the convention i.e. " -0500";
         }
         return valStr; // and that is what we will send to the backend
     },
