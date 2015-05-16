@@ -305,9 +305,9 @@ class Person < ActiveRecord::Base
         if (name =~ /^\s*$/)
            name = [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ')
         end
-        return name.rstrip
+        return name.strip
     else
-        return [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ').rstrip
+        return [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ').strip
     end
   end
   
@@ -318,14 +318,14 @@ class Person < ActiveRecord::Base
         if (name =~ /^\s*$/)
            name = [self.first_name,self.last_name,self.suffix].compact.join(' ')
         end
-        return name.rstrip
+        return name.strip
     else
-        return [self.first_name,self.last_name,self.suffix].compact.join(' ').rstrip
+        return [self.first_name,self.last_name,self.suffix].compact.join(' ').strip
     end
   end
   
   def pubPrefix
-    return self.pseudonym.prefix if (self.pseudonym != nil) && !(self.pseudonym.prefix.empty?)
+    return self.pseudonym.prefix if (self.pseudonym != nil) && !(self.pseudonym.prefix && self.pseudonym.prefix.empty?)
     
     return prefix ? prefix : ''
   end
