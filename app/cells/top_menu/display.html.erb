@@ -18,7 +18,7 @@
                     <% @topmenu.each do |entry| %>
                         <% if entry %>
                             <li class="<%= 'active' if entry[:title].eql? @active_top_menu %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + entry[:target] %>">
-                                <i class="glyphicon <%= entry[:icon]%>"></i> <%= entry[:title].empty? ? '' : (t entry[:title]) %></a>
+                                <i class="<%= entry[:icon]%>"></i> <%= entry[:title].empty? ? '' : (t entry[:title]) %></a>
                             </li>
                         <% end %>
                     <% end %>
