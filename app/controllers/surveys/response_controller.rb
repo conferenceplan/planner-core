@@ -202,7 +202,7 @@ class Surveys::ResponseController < ApplicationController
             end
           else
             # if we have a respondent and empty details then we want to pre-populate the details
-            @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.prefix, :suffix => @respondent.prefix})
+            @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.suffix, :prefix => @respondent.prefix})
             @respondent.survey_respondent_detail.save
             @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail, @respondent.person)
               @survey_response = convertInitialInputArray(@survey, @respondent.person)

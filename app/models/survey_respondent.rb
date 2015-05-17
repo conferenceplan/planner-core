@@ -27,6 +27,10 @@ class SurveyRespondent < ActiveRecord::Base
     return person.suffix
   end
 
+  def prefix
+    return person.prefix
+  end
+
   def email
     if person.getDefaultEmail()
       return person.getDefaultEmail().email
