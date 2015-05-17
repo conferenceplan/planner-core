@@ -32,8 +32,8 @@ json.rowdata @result.collect do |result|
                 else
                     answers[res.survey_question_id.to_s] = res.response == '1' ? 'I am available for Program for the complete duration of the convention' : 'I plan to be at the convention.'
                     if res.response == '2'
-                        answers[res.survey_question_id.to_s] += ": " + (Time.zone.parse(@site_config.start_date.to_s) + res.response1.to_i.day).strftime('%A, %B %e') + ", " + res.response2
-                        answers[res.survey_question_id.to_s] += " => " + (Time.zone.parse(@site_config.start_date.to_s) + res.response3.to_i.day).strftime('%A, %B %e') + ", " + res.response4
+                        answers[res.survey_question_id.to_s] += ": " + (Time.zone.parse(@site_config.start_date.to_s) + res.response1.to_i.day).strftime('%A, %B %e') + ", " + (res.response2 ? res.response2 : '')
+                        answers[res.survey_question_id.to_s] += " => " + (Time.zone.parse(@site_config.start_date.to_s) + res.response3.to_i.day).strftime('%A, %B %e') + ", " + (res.response4 ? res.response4 : '')
                     end
                 end
             else
