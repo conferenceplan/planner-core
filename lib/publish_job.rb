@@ -226,7 +226,7 @@ class PublishJob
     newItem.external_images.delete_all # delete the old image(s)
     srcItem.external_images.each do |img|
       
-      if img.picture
+      if img.picture && img.picture.url
         p = Cloudinary::Uploader.upload(img.picture.url) # copy the cloudinary remote image
         url = p['url'].partition(/upload/)[2]
         sig = p['signature']
