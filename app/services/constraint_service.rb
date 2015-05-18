@@ -128,7 +128,8 @@ module ConstraintService
       
       # Now we also want to remove exclusions that are no longer relevent
       exclusion_ids = excludedTimesMaps.collect{|i| i.period_id}.uniq
-      peopleWithConstraints.each do |person|
+      people = getPeopleWithTimeExclusions
+      people.each do |person|
         candidate_ids = person.excluded_periods.find_by_source('survey').collect{|i| i.id}.uniq - exclusion_ids
         if candidate_ids.size > 0
           candidates = candidate_ids.collect{|i| Period.find(i) }
@@ -171,7 +172,8 @@ module ConstraintService
       
       # Now we also want to remove exclusions that are no longer relevent
       exclusion_ids = excludedItemMaps.collect{|i| i.programme_item_id}.uniq
-      peopleWithConstraints.each do |person|
+      people = getPeopleWithItemExclusions
+      people.each do |person|
         candidate_ids = person.excluded_items.find_by_source('survey').collect{|i| i.id}.uniq - exclusion_ids
         if candidate_ids.size > 0
           candidates = candidate_ids.collect{|i| ProgrammeItem.find(i) }
@@ -179,6 +181,21 @@ module ConstraintService
         end
       end
     end
+    
   end
-  
+
+  private
+
+  def self.getPeopleWithItemExclusions
+    Person.joins([:exclusions]).where("excludable_type = 'ProgrammeItem'").where(self.constraints())
+  end
+
+  def self.getPeopleWithTimeExclusions
+    Person.joins([:exclusions]).where("excludable_type = 'TimeSlot'").where(self.constraints())
+  end
+
+  def self.constraints(*args)
+    true
+  end
+    
 end

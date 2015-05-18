@@ -33,11 +33,11 @@ module SurveyService
     Person.transaction do
       # Get the response from the survey
       # If the response is newer that the info in the Bio then update the Bio
-      websiteQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['WebSite']).order("created_at desc").first
-      twitterQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Twitter']).order("created_at desc").first
-      otherQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['OtherSocialMedia']).order("created_at desc").first
-      photoQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Photo']).order("created_at desc").first
-      faceQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Facebook']).order("created_at desc").first
+      websiteQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['WebSite']).order("created_at desc")
+      twitterQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Twitter']).order("created_at desc")
+      otherQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['OtherSocialMedia']).order("created_at desc")
+      photoQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Photo']).order("created_at desc")
+      faceQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Facebook']).order("created_at desc")
 
       setResponse('website', websiteQuestion,sinceDate) if websiteQuestion
       setResponse('twitterinfo', twitterQuestion,sinceDate) if twitterQuestion
@@ -46,20 +46,7 @@ module SurveyService
       setResponse('facebook', faceQuestion,sinceDate) if faceQuestion
     end
   end
-  
-  def self.setResponse(mapping, question, sinceDate)
-    people = SurveyService.findPeopleWhoAnsweredQuestion(question, sinceDate)
-    people.each do |person|
-      response = SurveyService.findResponseToQuestionForPerson(question,person,sinceDate)[0]
 
-      if (response && !response.response.empty?)
-          person.edited_bio = EditedBio.new(:person_id => person.id) if !person.edited_bio
-          person.edited_bio.send("#{mapping}=", response.response)
-          person.edited_bio.save!
-      end
-    end
-  end
-  
   #
   #
   #
@@ -203,6 +190,25 @@ module SurveyService
   #
   #
   #
+  def self.findPeopleWhoAnsweredQuestions(questions, sinceDate = nil)
+    
+    conditions = ["survey_responses.survey_question_id in (?)", questions.collect{|q| q.id}]
+    if (sinceDate)
+      conditions[0] += " AND (survey_responses.updated_at > ? OR survey_questions.updated_at > ?)"
+      conditions << sinceDate
+      conditions << sinceDate
+    end
+    
+    Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}).
+            where(conditions).
+            where(self.constraints()).
+            order('last_name, first_name')
+      
+  end
+  
+  #
+  #
+  #
   def self.findPeopleWhoAnsweredBio(sinceDate = nil)
     
     conditions = ["survey_questions.isbio = 1"]
@@ -242,6 +248,27 @@ module SurveyService
   #
   #
   #
+  def self.findResponseToQuestionsForPerson(questions, person, sinceDate = nil)
+    
+    if questions
+      conditions = ["survey_responses.survey_question_id in (?) and people.id = ? ", questions.collect{|q| q.id}, person.id]
+      if (sinceDate)
+        conditions[0] += " AND (survey_responses.updated_at > ? OR survey_questions.updated_at > ?)"
+        conditions << sinceDate
+        conditions << sinceDate
+      end
+      
+      SurveyResponse.all :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
+        :conditions => conditions, :order => "created_at desc"
+    else
+      [nil] 
+    end
+         
+  end
+  
+  #
+  #
+  #
   def self.getSurveyBio(person_id)
 
     SurveyResponse.first :joins => {:survey_respondent_detail => {:survey_respondent => :person}}, :conditions => {:isbio => true, :people => {:id => person_id}}, :order => "created_at desc"
@@ -264,6 +291,25 @@ module SurveyService
   
 
 private
+  #
+  #
+  #
+  def self.setResponse(mapping, questions, sinceDate)
+    
+    people = SurveyService.findPeopleWhoAnsweredQuestions(questions, sinceDate)
+    people.each do |person|
+      response = SurveyService.findResponseToQuestionsForPerson(questions,person,sinceDate)[0]
+
+      if (response && !response.response.empty?)
+          person.edited_bio = EditedBio.new(:person_id => person.id) if !person.edited_bio
+          person.edited_bio.send("#{mapping}=", response.response)
+          person.edited_bio.save!
+      end
+    end
+    
+  end
+  
+
   #
   # Use AREL to construct a query based on the predicates
   #
