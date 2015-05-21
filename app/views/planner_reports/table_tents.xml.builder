@@ -8,7 +8,7 @@ xml.table_tent do
                     person.published_programme_items.collect{|i| @itemList ? (@itemList.include?(i.id.to_s) ? i : nil) : i }.compact.each do |item|
                         xml.item do
                             xml.title item.title
-                            xml.description item.precis
+                            xml.description item.precis if item.precis
                             xml.format item.format.name if item.format
                             xml.room item.published_room.name
                             xml.venue item.published_room.published_venue.name

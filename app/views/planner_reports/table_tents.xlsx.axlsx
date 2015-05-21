@@ -20,7 +20,7 @@ wb.add_worksheet(name: "Table Tents") do |sheet|
                 sheet.add_row [
                     person.getFullPublicationName,
                     item.title,
-                    item.precis,
+                    item.precis ? item.precis : '',
                     (item.format ? item.format.name : ''),
                     item.published_room.name,
                     item.published_room.published_venue.name,
