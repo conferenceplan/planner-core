@@ -20,7 +20,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                 v[:changed].each do |k, v|
                     if (!v.blank? && (k.to_s != 'created_at'))
                         str = '<b>' + k.to_s + '</b>'
-                        str += ' ' + ActionView::Base.full_sanitizer.sanitize(v[0])
+                        str += ' ' + ActionView::Base.full_sanitizer.sanitize(v[0]) if v[0]
                         str += ' <b>changed to</b> ' + ActionView::Base.full_sanitizer.sanitize(v[1])
                         pdf.pad(5) { pdf.text  str, :inline_format => true, :fallback_fonts => fallback_fonts }
                      end
