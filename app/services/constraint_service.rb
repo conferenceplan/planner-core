@@ -103,40 +103,48 @@ module ConstraintService
   def self.updateExcludedTimes(sinceDate = nil)
     Person.transaction do
       Time.use_zone(SiteConfig.first.time_zone) do
-      excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
-      
-      peopleWithConstraints = []
-      excludedTimesMaps.each do |excludedTimesMap|
-        people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer,sinceDate)
-        peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
+        excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
         
+        peopleWithConstraints = []
+        excludedTimesMaps.each do |excludedTimesMap|
+          people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer,sinceDate)
+          peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
+          
+          people.each do |person|
+            # check that the exclusion is not already associated with the person
+            if ! person.excluded_periods.include? excludedTimesMap.period
+              # if it is not then do the association
+              exclusion = Exclusion.new(
+                :person_id        => person.id,
+                :excludable_id    => excludedTimesMap.period_id,
+                :excludable_type  => TimeSlot.name,
+                :source           => 'survey'
+              )
+              
+              exclusion.save!
+            end
+          end
+        end
+      
+        # Now we also want to remove exclusions that are no longer relevent
+        exclusion_ids = excludedTimesMaps.collect{|i| i.period_id}.uniq
+        people = getPeopleWithTimeExclusions
         people.each do |person|
-          # check that the exclusion is not already associated with the person
-          if ! person.excluded_periods.include? excludedTimesMap.period
-            # if it is not then do the association
-            exclusion = Exclusion.new(
-              :person_id        => person.id,
-              :excludable_id    => excludedTimesMap.period_id,
-              :excludable_type  => TimeSlot.name,
-              :source           => 'survey'
-            )
-            
-            exclusion.save!
+          candidate_ids = person.excluded_periods.find_by_source('survey').collect{|i| i.id}.uniq - exclusion_ids
+          if candidate_ids.size > 0
+            candidates = candidate_ids.collect{|i| TimeSlot.find(i) }
+            person.excluded_periods.delete candidates
+          end
+  
+          answers = getPersonsSurveyAnswers(person.id, AnswerType["TimeConflict"].id)
+          exclusions = excludedTimesMaps.collect{|i| answers.include?(i.survey_answer_id) ? i.period_id : nil }.compact.uniq
+          candidate_ids = person.exclusions.where(['source = ? and excludable_type = ? and excludable_id not in (?)', 'survey', 'TimeSlot', exclusions]).pluck("excludable_id")
+          if candidate_ids.size > 0
+            candidates = candidate_ids.collect{|i| TimeSlot.find(i) }
+            person.excluded_periods.delete candidates
           end
         end
       end
-      
-      # Now we also want to remove exclusions that are no longer relevent
-      exclusion_ids = excludedTimesMaps.collect{|i| i.period_id}.uniq
-      people = getPeopleWithTimeExclusions
-      people.each do |person|
-        candidate_ids = person.excluded_periods.find_by_source('survey').collect{|i| i.id}.uniq - exclusion_ids
-        if candidate_ids.size > 0
-          candidates = candidate_ids.collect{|i| Period.find(i) }
-          person.excluded_periods.delete candidates
-        end
-      end
-    end
     end
   end
   
@@ -179,12 +187,52 @@ module ConstraintService
           candidates = candidate_ids.collect{|i| ProgrammeItem.find(i) }
           person.excluded_items.delete candidates
         end
+        
+        # check if person has an answer for the given exclusions
+        # exclusions = person.excluded_items.find_by_source('survey') # all the exclusions they have
+        # now see if they have corresponding survey answers
+        answers = getPersonsSurveyAnswers(person.id, AnswerType["ItemConflict"].id)
+        # we delete those that don't
+        exclusions = excludedItemMaps.collect{|i| answers.include?(i.survey_answer_id) ? i.programme_item_id : nil }.compact.uniq
+        candidate_ids = person.exclusions.where(['source = ? and excludable_type = ? and excludable_id not in (?)', 'survey', 'ProgrammeItem', exclusions]).pluck("excludable_id")
+        if candidate_ids.size > 0
+          candidates = candidate_ids.collect{|i| ProgrammeItem.find(i) }
+          person.excluded_items.delete candidates
+        end
       end
     end
     
   end
-
+  
   private
+  
+  #TODO - change
+  def self.getPersonsSurveyAnswers(person_id, answer_type_id)
+    
+    survey_responses = Arel::Table.new(:survey_responses)
+    survey_questions = Arel::Table.new(:survey_questions)
+    survey_answers = Arel::Table.new(:survey_answers)
+    survey_respondent_details = Arel::Table.new(:survey_respondent_details)
+    survey_answers = Arel::Table.new(:survey_answers)
+    survey_respondents = Arel::Table.new(:survey_respondents)
+    
+    attrs = [survey_answers[:id]]
+
+    query = survey_responses.project(*attrs).
+              join(survey_questions).on(survey_questions[:id].eq(survey_responses[:survey_question_id])).
+              join(survey_answers).on(survey_answers[:survey_question_id].eq(survey_questions[:id])).
+              join(survey_respondent_details).on(survey_respondent_details[:id].eq(survey_responses[:survey_respondent_detail_id])).
+              join(survey_respondents).on(survey_respondents[:id].eq(survey_respondent_details[:survey_respondent_id]))
+
+    query = query.where(survey_answers[:answertype_id].eq(answer_type_id).and(survey_respondents[:person_id].eq(person_id)))
+    query = query.where(survey_responses[:response].eq(survey_answers[:answer]))
+
+    query = query.where(self.arel_constraints())
+    
+    ActiveRecord::Base.connection.select_all(query.to_sql).uniq.collect{|a| a['id']}
+  end
+
+# Apartment::Database.switch 'boskone'
 
   def self.getPeopleWithItemExclusions
     Person.joins([:exclusions]).where("excludable_type = 'ProgrammeItem'").where(self.constraints())
@@ -195,6 +243,10 @@ module ConstraintService
   end
 
   def self.constraints(*args)
+    true
+  end
+
+  def self.arel_constraints(*args)
     true
   end
     
