@@ -13,6 +13,8 @@ class SurveyQuestion < ActiveRecord::Base
   has_many :survey_answers, :dependent => :destroy, :order => 'sort_order asc'
   accepts_nested_attributes_for :survey_answers, :allow_destroy => true
   
+  has_many :survey_responses
+  
   validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone]
 
   #before_destroy :check_for_use, :check_if_published
