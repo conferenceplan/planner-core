@@ -10,7 +10,14 @@ wb.add_worksheet(name: "Participants") do |sheet|
         'Photo Url',
         'Bio'
     ]
-    titles.concat Array.new(20) {|e| ['Publication Reference Number ' + (e+1).to_s, 'Time ' + (e+1).to_s, 'Item ' + (e+1).to_s, 'Item Description '+ (e+1).to_s] }.flatten # TODO - check, split time and item into seperate cols
+    titles.concat Array.new(20) {|e| ['Publication Reference Number ' + (e+1).to_s, 
+                                        'Time ' + (e+1).to_s, 
+                                        'Duration ' + (e+1).to_s, 
+                                        'Item ' + (e+1).to_s, 
+                                        'Item Description '+ (e+1).to_s,
+                                        'Room ' + (e+1).to_s, 
+                                        'Venue ' + (e+1).to_s 
+                                    ] }.flatten # TODO - check, split time and item into seperate cols
     
     sheet.add_row titles
     
@@ -26,8 +33,11 @@ wb.add_worksheet(name: "Participants") do |sheet|
             if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
                 row << (ia.programmeItem.pub_reference_number ? ia.programmeItem.pub_reference_number : '')
                 row << (ia.programmeItem.time_slot.start + Time.zone.utc_offset.seconds)
+                row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')
                 row << (ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)
                 row << (ia.programmeItem.precis ? ia.programmeItem.precis : '')
+                row << (ia.programmeItem.room ? ia.programmeItem.room.name : '')
+                row << (ia.programmeItem.room.venue ? ia.programmeItem.room.venue.name : '')
             end
         end
         
