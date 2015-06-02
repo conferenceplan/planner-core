@@ -140,8 +140,7 @@ module ConstraintService
           exclusions = excludedTimesMaps.collect{|i| answers.include?(i.survey_answer_id) ? i.period_id : nil }.compact.uniq
           candidate_ids = person.exclusions.where(['source = ? and excludable_type = ? and excludable_id not in (?)', 'survey', 'TimeSlot', exclusions]).pluck("excludable_id")
           if candidate_ids.size > 0
-            candidates = candidate_ids.collect{|i| TimeSlot.find(i) }
-            person.excluded_periods.delete candidates
+            Exclusion.delete_all(["excludable_id in (?) and excludable_type = ? and person_id = ?", candidate_ids,'TimeSlot',person.id])
           end
         end
       end
@@ -196,8 +195,7 @@ module ConstraintService
         exclusions = excludedItemMaps.collect{|i| answers.include?(i.survey_answer_id) ? i.programme_item_id : nil }.compact.uniq
         candidate_ids = person.exclusions.where(['source = ? and excludable_type = ? and excludable_id not in (?)', 'survey', 'ProgrammeItem', exclusions]).pluck("excludable_id")
         if candidate_ids.size > 0
-          candidates = candidate_ids.collect{|i| ProgrammeItem.find(i) }
-          person.excluded_items.delete candidates
+          Exclusion.delete_all(["excludable_id in (?) and excludable_type = ? and person_id = ?", candidate_ids,'ProgrammeItem',person.id])
         end
       end
     end
