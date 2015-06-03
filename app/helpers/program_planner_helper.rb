@@ -2,13 +2,8 @@ module ProgramPlannerHelper
   
   #
   def addItemToRoomAndTime(item, room, day, time)
-    # Calculate a delta for the case when daylight savings changes
-    start_offset = Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime.in_time_zone.utc_offset
-    item_offset = time.in_time_zone.utc_offset
-    delta = (start_offset - item_offset)/60
-
     assignment = nil
-    itemStartTime = time + delta.minutes
+    itemStartTime = time
     itemEndTime = itemStartTime + item.duration.minute
 
     RoomItemAssignment.transaction do # ensure that all the changes are done within the one transaction
