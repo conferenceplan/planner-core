@@ -82,6 +82,9 @@ ScheduleApp.ItemManagement = (function(Backbone){
         }
     });
     
+    // The offsets for each day (in case there is a change to/from daylight savings)
+    var _offsets = <%= (0..@start_date.number_of_days).collect{|d| {d => Time.zone.parse((@start_date.start_date + d.days + 4.hours).to_s).utc_offset/60} }.reduce(Hash.new, :merge).to_json.html_safe %>;
+    
     /*
      * 
      */
@@ -101,7 +104,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
             var nbrOfRooms = assignments.get('rooms').length;
             var gridWidth = (nbrOfRooms > ($("#program-grid").width() / 150)) ? $("#program-grid").width() : ((150 * nbrOfRooms) + 40);
             
-            DailyGrid.paint(_containerElem, assignments, gridWidth, <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>);
+            DailyGrid.paint(_containerElem, assignments, gridWidth, _offsets[_day]); // adjust in case of daylight savings ....
             
             // when an item is droped on the grid we need to
             // 1. create a new assignment (need the room and the time)
