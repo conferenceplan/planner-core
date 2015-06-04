@@ -52,7 +52,7 @@ class ProgrammeItemsController < PlannerController
     # NOTE - name of the programmeItem passed in from form
     @programmeItem = ProgrammeItem.new(params[:programme_item])
     @programmeItem.lock_version = 0
-    startTime = params[:start_time] ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
+    startTime = (params[:start_time] && params[:start_time].to_datetime) ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
     startDay = -1
     startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
@@ -76,7 +76,7 @@ class ProgrammeItemsController < PlannerController
   #  
   def update
     @programmeItem = ProgrammeItem.find(params[:id])
-    startTime = params[:start_time] ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
+    startTime = (params[:start_time] && params[:start_time].to_datetime) ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
     startDay = -1
     startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
