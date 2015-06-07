@@ -12,6 +12,7 @@ wb.add_worksheet(name: "Participants") do |sheet|
     ]
     titles.concat Array.new(20) {|e| ['Publication Reference Number ' + (e+1).to_s, 
                                         'Time ' + (e+1).to_s, 
+                                        'Day ' + (e+1).to_s, 
                                         'Duration ' + (e+1).to_s, 
                                         'Item ' + (e+1).to_s, 
                                         'Item Description '+ (e+1).to_s,
@@ -33,6 +34,7 @@ wb.add_worksheet(name: "Participants") do |sheet|
             if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
                 row << (ia.programmeItem.pub_reference_number ? ia.programmeItem.pub_reference_number : '')
                 row << (ia.programmeItem.time_slot.start + Time.zone.utc_offset.seconds)
+                row << (ia.programmeItem.time_slot.start.strftime('%A'))
                 row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')
                 row << (ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)
                 row << (ia.programmeItem.precis ? ia.programmeItem.precis : '')
