@@ -3,6 +3,8 @@
 #
 class PublishedRoom < ActiveRecord::Base
   attr_accessible :lock_version, :name, :published_venue_id
+
+  default_scope order('published_rooms.sort_order asc, published_rooms.name asc')
   
   audited :allow_mass_assignment => true
   belongs_to  :published_venue
