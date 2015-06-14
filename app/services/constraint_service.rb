@@ -105,44 +105,37 @@ module ConstraintService
       Time.use_zone(SiteConfig.first.time_zone) do
         excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
         
+        Exclusion.delete_all({:excludable_type  => TimeSlot.name}) # clear out the time exclusions and then we recreate them
+        
         peopleWithConstraints = []
         excludedTimesMaps.each do |excludedTimesMap|
-          people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer,sinceDate)
-          peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
+          people = []
+          if excludedTimesMap.survey_answer.answertype == AnswerType['TimeConflict']
+            people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer)
+          else
+            people = SurveyService.findPeopleWhoDidNotGiveAnswer(excludedTimesMap.survey_answer)
+          end
           
-          people.each do |person|
-            # check that the exclusion is not already associated with the person
-            if ! person.excluded_periods.include? excludedTimesMap.period
-              # if it is not then do the association
-              exclusion = Exclusion.new(
-                :person_id        => person.id,
-                :excludable_id    => excludedTimesMap.period_id,
-                :excludable_type  => TimeSlot.name,
-                :source           => 'survey'
-              )
-              
-              exclusion.save!
+          if people.size > 0 
+            peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
+            
+            people.each do |person|
+              # check that the exclusion is not already associated with the person
+              if ! person.excluded_periods.include? excludedTimesMap.period
+                # if it is not then do the association
+                exclusion = Exclusion.new(
+                  :person_id        => person.id,
+                  :excludable_id    => excludedTimesMap.period_id,
+                  :excludable_type  => TimeSlot.name,
+                  :source           => 'survey'
+                )
+                
+                exclusion.save!
+              end
             end
           end
         end
       
-        # Now we also want to remove exclusions that are no longer relevent
-        exclusion_ids = excludedTimesMaps.collect{|i| i.period_id}.uniq
-        people = getPeopleWithTimeExclusions
-        people.each do |person|
-          candidate_ids = person.excluded_periods.find_by_source('survey').collect{|i| i.id}.uniq - exclusion_ids
-          if candidate_ids.size > 0
-            candidates = candidate_ids.collect{|i| TimeSlot.find(i) }
-            person.excluded_periods.delete candidates
-          end
-  
-          answers = getPersonsSurveyAnswers(person.id, AnswerType["TimeConflict"].id)
-          exclusions = excludedTimesMaps.collect{|i| answers.include?(i.survey_answer_id) ? i.period_id : nil }.compact.uniq
-          candidate_ids = person.exclusions.where(['source = ? and excludable_type = ? and excludable_id not in (?)', 'survey', 'TimeSlot', exclusions]).pluck("excludable_id")
-          if candidate_ids.size > 0
-            Exclusion.delete_all(["excludable_id in (?) and excludable_type = ? and person_id = ?", candidate_ids,'TimeSlot',person.id])
-          end
-        end
       end
     end
   end
@@ -229,8 +222,6 @@ module ConstraintService
     
     ActiveRecord::Base.connection.select_all(query.to_sql).uniq.collect{|a| a['id']}
   end
-
-# Apartment::Database.switch 'boskone'
 
   def self.getPeopleWithItemExclusions
     Person.joins([:exclusions]).where("excludable_type = 'ProgrammeItem'").where(self.constraints())

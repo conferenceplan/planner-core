@@ -17,7 +17,7 @@ class SurveyAnswer < ActiveRecord::Base
   #
   #
   def updateTimeConflicts
-    if answertype == AnswerType['TimeConflict']
+    if (answertype == AnswerType['TimeConflict']) || (answertype == AnswerType['AvailableTime'])
       numberOfDays = SiteConfig.first.number_of_days
       nbrConflicts = excluded_periods.size
       
