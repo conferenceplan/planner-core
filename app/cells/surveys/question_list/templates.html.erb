@@ -78,7 +78,7 @@
         <dt><%= t "answer" %></dt><dd>{{= answer ? answer : "&nbsp;" }}</dd> 
         <dt><%= t "sort-order" %></dt><dd>{{= sort_order }}</dd> 
         <dt><%= t "survey-answer-type" %></dt><dd>{{= answertype_id ? SurveyQuestionApp.SurveyQuestionManagement.convertAnswerTypeIdToString(answertype_id) : "&nbsp;" }}</dd>
-        {{ if ( answertype_id == <%= AnswerType["TimeConflict"].id %>) { }}
+        {{ if ( (answertype_id == <%= AnswerType["TimeConflict"].id %>) || (answertype_id == <%= AnswerType["AvailableTime"].id %>) ) { }}
             <dt><%= t "item-start-day" %></dt><dd>{{= (SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day).length > -1) ? SurveyQuestionApp.SurveyQuestionManagement.convertDayIdToString(start_day) : "&nbsp;" }}</dd> 
             <dt><%= t "item-start-time" %></dt><dd>{{= start_time ? start_time : "&nbsp;" }}</dd> 
             <dt><%= t "item-duration" %></dt><dd>{{= duration >= 0 ? duration : "&nbsp;" }}</dd> 

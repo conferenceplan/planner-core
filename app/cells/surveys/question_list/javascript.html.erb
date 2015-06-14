@@ -47,11 +47,11 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                                        title : '<%= t "survey-answer-type" %>',
                                        options : <%= [].concat(AnswerType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
                     start_day : { type : 'DependentSelect', title : '<%= t "start day" %>', options : <%=  ([[' ','-1']].concat((0..((@start_date.number_of_days).to_i-1)).to_a.collect{ |r| [ (Time.zone.parse(@start_date.start_date.to_s) + r.days).strftime('%A'), r] })).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%>,
-                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
+                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
                     start_time : { type : 'DependentTime', title : '<%= t "item-start-time" %>',
-                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
+                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
                     duration : { type : 'DependentNumber', title : '<%= t "duration (minutes)" %>',
-                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>'] },
+                     dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
                 }
             } 
         }

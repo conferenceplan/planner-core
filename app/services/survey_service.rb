@@ -169,6 +169,18 @@ module SurveyService
   end
   
   #
+  # For a given answer find the people who did not provide any response
+  #
+  def self.findPeopleWhoDidNotGiveAnswer(answer)
+    Person.joins({:survey_respondent => :survey_respondent_detail}).
+           joins("left join survey_responses on survey_responses.survey_respondent_detail_id = survey_respondent_details.id and survey_responses.response = '" + 
+                                      answer.answer + "'").
+           where("survey_responses.id is null").
+           where(self.constraints()).
+           order('last_name, first_name')
+  end
+  
+  #
   #
   #
   def self.findPeopleWhoAnsweredQuestion(question, sinceDate = nil)
