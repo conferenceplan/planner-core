@@ -9,12 +9,24 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   def public_id
     publicid = common_root_path + '/'
-    if ((defined? model.person) && model.person)
-      publicid += model.person.first_name ? model.person.first_name : ''
-      publicid += model.person.last_name ? model.person.last_name : ''
-    else
-      publicid += 'default_bio_image'
+    if model.is_a?(SurveyResponse)
+      details = model.survey_respondent_detail
+      if details
+        publicid += details.first_name ? details.first_name : ''
+        publicid += details.last_name ? details.last_name : ''
+      else
+        publicid += 'response'
+      end
+      publicid += '_' + model.id.to_s
+    else  
+      if ((defined? model.person) && model.person)
+        publicid += model.person.first_name ? model.person.first_name : ''
+        publicid += model.person.last_name ? model.person.last_name : ''
+      else
+        publicid += 'default_bio_image'
+      end
     end
+      
     publicid.gsub(/[?!&\s+]/, '')
   end
   

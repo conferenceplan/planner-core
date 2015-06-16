@@ -12,7 +12,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
             //title               : { type : 'Text', title : '<%= t "title" %>' }, // TODO - is this used???
             sort_order          : { type : 'Number', title : '<%= t "sort_order" %>', help: '<%= t "sort_order-help" %>', validators: ['number', /^[0-9]\d*$/] },
             question_type       : { type : 'Select', title : '<%= t "survey-question-type" %>', help: '<%= t "survey-question-type-help" %>',
-                                    options : <%= [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone].to_json.html_safe %>
+                                    options : <%= [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone, :photo].to_json.html_safe %>
                                     },
             text_size           : { type : 'Number',  title : '<%= t "survey-length-of-textbox" %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] , validators: ['number', /^[0-9]\d*$/]},        

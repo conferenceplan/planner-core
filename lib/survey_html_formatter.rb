@@ -71,6 +71,8 @@ module SurveyHtmlFormatter
         content += single_choice_to_html(question, respondent_detail, forEmail, responses)
       when :textbox
         content += textbox_to_html(question, respondent_detail, forEmail, responses)
+      when :photo
+        content += "THIS IS A PICTURE" # TODO - change to get the picture and put in an image tag
       else
         content += text_to_html(question, respondent_detail, forEmail, responses)
       end

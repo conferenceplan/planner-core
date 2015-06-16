@@ -15,7 +15,7 @@ class SurveyQuestion < ActiveRecord::Base
   
   has_many :survey_responses
   
-  validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone]
+  validates_inclusion_of :question_type, :in => [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone, :photo]
 
   #before_destroy :check_for_use, :check_if_published
   
