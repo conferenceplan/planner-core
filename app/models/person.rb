@@ -261,6 +261,34 @@ class Person < ActiveRecord::Base
   #
   #
   #
+  def replaceDefaultAddress(new_line1, new_line2, new_city, new_state, new_postcode, new_country)
+    # We will create a new address object and make that the default (so the old one will no longer be used but will still be in the list)
+    address = getDefaultPostalAddress
+    
+    if address
+      address.line1 = new_line1
+      address.line2 = new_line2
+      address.city = new_city
+      address.state = new_state
+      address.postcode = new_postcode
+      address.country = new_country
+      address.save!
+    else
+      postalAddress = self.postal_addresses.new :line1 => new_line1, 
+                                    :line1 => new_line2, 
+                                    :city => new_city, 
+                                    :state => new_state, 
+                                    :postcode => new_postcode, 
+                                    :country => new_country, 
+                                    :isdefault => true 
+    end
+
+    self.save!
+  end
+
+  #
+  #
+  #
   def getDefaultPostalAddress()
     possibleAddresses = postal_addresses
     theAddress = nil
