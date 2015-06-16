@@ -1,0 +1,20 @@
+<div class="upload_section" data-preview='<%= "survey_response_#{ question.id }_preview" %>'>
+    <div class="upload_button_holder">
+        <input id='<%= "survey_response[#{ question.id }][photo]" %>' class="form-control" name='<%= "survey_response[#{ question.id }][photo]" %>' type="hidden">
+        <span class="btn btn-success fileinput-button">
+            <span>Select file...</span>
+            <%= cl_image_upload_tag("survey_response[#{ question.id }][photo]") %>
+        </span>
+        <div class="status-area">
+            <span class="status"></span>
+            <div class="upload_progress">
+                <div class="progress progress-success active"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+            </div>
+        </div>
+    </div>
+    <div id='<%= "survey_response_#{ question.id }_preview" %>'>
+        <% if @survey_response && @survey_response[question.id.to_s] %>
+            <%= image_tag(@survey_response[question.id.to_s]['photo'], :width => 250) %>
+        <% end %>
+    </div> 
+</div>

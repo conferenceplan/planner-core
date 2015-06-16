@@ -73,6 +73,9 @@ class Surveys::ResponseController < ApplicationController
                     saveAvailability(res[1], @survey, res[0], respondentDetails)
                   elsif surveyQuestion.question_type == :phone
                     savePhone(res[1], @survey, res[0], respondentDetails)
+                  elsif surveyQuestion.question_type == :photo
+                    Rails.logger.debug "***** WE HAVE A PHOTO"
+                    savePhoto(res[1], @survey, res[0], respondentDetails)
                   else  
                     res[1].each do |r, v|
                       response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => v, :survey_respondent_detail => respondentDetails
@@ -235,6 +238,43 @@ class Surveys::ResponseController < ApplicationController
         :response5 => values['response5'], 
         :survey_respondent_detail => respondentDetails
     end
+    response.save!
+  end
+  
+  def savePhoto(values, survey, questionId, respondentDetails)
+    response = respondentDetails.getResponse(survey.id, questionId)
+    if response != nil
+      response.response = values['photo']
+      response.photo = values['photo']
+    else  
+      response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, 
+        :response => values['photo'], 
+        :photo => values['photo'], 
+        :survey_respondent_detail => respondentDetails
+    end
+    
+    # set the photo for the person if there is one ... TODO only if a photo mapping
+    
+    if @respondent
+      if response.photo && response.photo.url
+        person = @respondent.person
+        bio_image = person.bio_image
+        
+        p = Cloudinary::Uploader.upload(response.photo.url) # copy the cloudinary remote image
+        url = p['url'].partition(/upload/)[2]
+        sig = p['signature']
+        finalUrl = 'image/upload' +url + '#' + sig
+        
+        if bio_image
+          bio_image.bio_picture = finalUrl
+          bio_image.save!
+        else
+          bio_image = person.create_bio_image :bio_picture => finalUrl
+          person.save!
+        end
+      end
+    end
+
     response.save!
   end
   
@@ -484,6 +524,12 @@ class Surveys::ResponseController < ApplicationController
           res[response.survey_question_id.to_s]['response3'] = response.response3
           res[response.survey_question_id.to_s]['response4'] = response.response4
         end
+      elsif response.survey_question && response.survey_question.question_type == :photo
+        if !res[response.survey_question_id.to_s]
+          res[response.survey_question_id.to_s] = {}
+        end
+        res[response.survey_question_id.to_s]['response'] = response.response
+        res[response.survey_question_id.to_s]['photo'] = response.photo
       else
         res[response.survey_question_id.to_s] = response.response.to_s
       end

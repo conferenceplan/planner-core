@@ -1,5 +1,41 @@
 jQuery(document).ready(function() {
 
+    var upload_areas = $('.upload_section');
+    
+    upload_areas.each(function (idx, el) {
+        var element = $(this);
+        console.debug(element);
+        var preview_id = element.attr('data-preview');
+        $('.cloudinary-fileupload').cloudinary_fileupload(
+        {
+            start: function (e) {
+                element.find('.status').html("Starting upload ....");
+                element.find('.progress_bar .completed').css('width', '0%');
+            },
+            progress: function (e, data) {
+                var percent = Math.round((data.loaded * 100.0) / data.total);
+                element.find('.progress-bar').css('width', percent + '%');
+                if (percent == 100) {
+                    element.find('.progress-bar').css('width', percent + '%');
+                    element.find('.upload_button_holder').css('visibility','hidden');;
+                }    
+            },
+            fail: function (e, data) {
+                element.find('.status').html("Upload failed " + e);
+            }
+        })
+        .off("cloudinarydone").on("cloudinarydone", function(e, data) {
+            // Put in a preview of the image
+            element.find('#' + preview_id ).html(
+                        $.cloudinary.image(data.result.public_id, 
+                        { format: data.result.format, version: data.result.version, 
+                            crop: 'scale', width: 250 }) );
+            // and hide the upload button... TODO - check if we want to do this
+            //element.find('.cloudinary-fileupload').hide();
+        });
+    });
+    
+
     if (!$('#pub_first_name').val() && !$('#pub_last_name').val()) {
         $('div.pubname_toggle').parent().append("<a class='prefix_1 grid_4 toggle_pub_name'>Click to add Publication Name (if different from above)</a>");
         $('a.toggle_pub_name').click(function(){
