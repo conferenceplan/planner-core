@@ -72,13 +72,37 @@ module SurveyHtmlFormatter
       when :textbox
         content += textbox_to_html(question, respondent_detail, forEmail, responses)
       when :photo
-        content += "THIS IS A PICTURE" # TODO - change to get the picture and put in an image tag
+        content += photo_to_html(question, respondent_detail, forEmail, responses)
       else
         content += text_to_html(question, respondent_detail, forEmail, responses)
       end
     end
     
     return content    
+  end
+  
+  def photo_to_html(question, respondent_detail, forEmail, responses)
+    content = '<div class="response_answer">'
+
+    responses = getResponsesForQuestion(responses, question.survey_group.survey.id, question.id)
+    if !responses.empty? && !responses[0].response.blank?
+
+      content += '<div class="response_question_text"'
+      content += 'style="font-weight: bold; padding-right: 1em;"' if forEmail
+      content += '><strong>' + question.question + "</strong></div>"
+
+      responses.each do |response|
+        content += '<div class="response_answer">'
+        content += '<div class="response_photo"><image src="' + response.photo.url + '" width="250"></div>'
+        content += '</div>'
+        content += "\n" if forEmail
+      end
+      
+    end
+
+    content += '</div>'
+    content += "\n" if forEmail
+    return content
   end
 
   def text_to_html(question, respondent_detail, forEmail, responses)
