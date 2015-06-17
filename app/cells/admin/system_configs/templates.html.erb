@@ -2,9 +2,6 @@
     <%= render extra %>
 <% end %>
 
-<h3 class="h3-underlined" style="margin-top: 0;"><%= t 'general-config-title' %></h3>
-<p style="margin-bottom: 25px;"><%= (t 'general-config-intro-text').html_safe %></p>
-
 <script type="text/template" id="config-users-template">
     <%= render_cell "admin/user_list", :display, :pager => "user-pager" %>
     <%= render_cell "admin/user_list", :javascript, 
