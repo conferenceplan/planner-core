@@ -74,8 +74,7 @@ class Surveys::ResponseController < ApplicationController
                   elsif surveyQuestion.question_type == :phone
                     savePhone(res[1], @survey, res[0], respondentDetails)
                   elsif surveyQuestion.question_type == :photo
-                    Rails.logger.debug "***** WE HAVE A PHOTO"
-                    savePhoto(res[1], @survey, res[0], respondentDetails)
+                    savePhoto(res[1], @survey, res[0], respondentDetails, (surveyQuestion.questionmapping == QuestionMapping['Photo']) )
                   else  
                     res[1].each do |r, v|
                       response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => v, :survey_respondent_detail => respondentDetails
@@ -241,7 +240,7 @@ class Surveys::ResponseController < ApplicationController
     response.save!
   end
   
-  def savePhoto(values, survey, questionId, respondentDetails)
+  def savePhoto(values, survey, questionId, respondentDetails, is_mapped)
     response = respondentDetails.getResponse(survey.id, questionId)
     if response != nil
       response.response = values['photo']
@@ -253,24 +252,25 @@ class Surveys::ResponseController < ApplicationController
         :survey_respondent_detail => respondentDetails
     end
     
-    # set the photo for the person if there is one ... TODO only if a photo mapping
-    
-    if @respondent
-      if response.photo && response.photo.url
-        person = @respondent.person
-        bio_image = person.bio_image
-        
-        p = Cloudinary::Uploader.upload(response.photo.url) # copy the cloudinary remote image
-        url = p['url'].partition(/upload/)[2]
-        sig = p['signature']
-        finalUrl = 'image/upload' +url + '#' + sig
-        
-        if bio_image
-          bio_image.bio_picture = finalUrl
-          bio_image.save!
-        else
-          bio_image = person.create_bio_image :bio_picture => finalUrl
-          person.save!
+    # set the photo for the person if there is one ... only if a photo mapping
+    if is_mapped
+      if @respondent
+        if response.photo && response.photo.url
+          person = @respondent.person
+          bio_image = person.bio_image
+          
+          p = Cloudinary::Uploader.upload(response.photo.url) # copy the cloudinary remote image
+          url = p['url'].partition(/upload/)[2]
+          sig = p['signature']
+          finalUrl = 'image/upload' +url + '#' + sig
+          
+          if bio_image
+            bio_image.bio_picture = finalUrl
+            bio_image.save!
+          else
+            bio_image = person.create_bio_image :bio_picture => finalUrl
+            person.save!
+          end
         end
       end
     end
