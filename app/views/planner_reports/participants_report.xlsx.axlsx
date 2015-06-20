@@ -36,7 +36,7 @@ wb.add_worksheet(name: "Participants") do |sheet|
                 row << (ia.programmeItem.time_slot.start + Time.zone.utc_offset.seconds)
                 row << (ia.programmeItem.time_slot.start.strftime('%A'))
                 row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')
-                row << (ia.programmeItem.short_title.blank? ? ia.programmeItem.title.gsub("\n","") : ia.programmeItem.short_title.gsub("\n",""))
+                row << (ia.programmeItem.short_title.blank? ? (ia.programmeItem.title ? ia.programmeItem.title.gsub("\n","") : "") : (ia.programmeItem.short_title ? ia.programmeItem.short_title.gsub("\n","") : ""))
                 row << (ia.programmeItem.precis ? ia.programmeItem.precis.gsub("\n","") : '')
                 row << (ia.programmeItem.room ? ia.programmeItem.room.name : '')
                 row << (ia.programmeItem.room.venue ? ia.programmeItem.room.venue.name : '')
