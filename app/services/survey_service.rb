@@ -42,7 +42,9 @@ module SurveyService
       setResponse('website', websiteQuestion,sinceDate) if websiteQuestion
       setResponse('twitterinfo', twitterQuestion,sinceDate) if twitterQuestion
       setResponse('othersocialmedia', otherQuestion,sinceDate) if otherQuestion
-      setResponse('photourl', photoQuestion,sinceDate) if photoQuestion && (photoQuestion.question_type == :textfield)
+      if photoQuestion && photoQuestion.size > 0
+        setResponse('photourl', photoQuestion,sinceDate) if photoQuestion && (photoQuestion[0].question_type == :textfield)
+      end
       setResponse('facebook', faceQuestion,sinceDate) if faceQuestion
     end
   end
