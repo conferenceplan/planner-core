@@ -41,6 +41,9 @@
                 {{ if (person.pseudonym) { }}
                     {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                     ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else if (person.pub_first_name || person.pub_last_name) { }}
+                    {{= person.pub_prefix}} {{= person.pub_first_name }} {{= person.pub_last_name }} {{= person.pub_suffix }}
+                    ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
@@ -58,7 +61,7 @@
                     {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                     ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else if (person.pub_first_name || person.pub_last_name) { }}
-                    {{= person.pseudonym.prefix }} {{= person.pub_first_name }} {{= person.pub_last_name }}  {{= person.pub_suffix }}
+                    {{= person.pub_prefix}} {{= person.pub_first_name }} {{= person.pub_last_name }} {{= person.pub_suffix }}
                     ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
@@ -76,6 +79,9 @@
                 {{ if (person.pseudonym) { }}
                     {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                     ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else if (person.pub_first_name || person.pub_last_name) { }}
+                    {{= person.pub_prefix}} {{= person.pub_first_name }} {{= person.pub_last_name }} {{= person.pub_suffix }}
+                    ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                 {{ } }}
@@ -91,6 +97,9 @@
             <small>
                 {{ if (person.pseudonym) { }}
                     {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                    ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                {{ } else if (person.pub_first_name || person.pub_last_name) { }}
+                    {{= person.pub_prefix}} {{= person.pub_first_name }} {{= person.pub_last_name }} {{= person.pub_suffix }}
                     ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
                 {{ } else { }}
                     {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
