@@ -337,7 +337,7 @@ protected
                   join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
                   join(items_alias).on(items_alias[:id].eq(room_assignments_alias[:programme_item_id]))
 
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()).take(1000) # TODO - we need paging in the results
 
     query.to_sql
   end
