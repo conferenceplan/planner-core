@@ -108,6 +108,12 @@
 </script>
 
 <script type="text/template" id="email-config-view-template">
+    <h3 class="h3-underlined"><%= t 'email-addresses-setup-title' %></h3>
+    <p><%= t 'email-addresses-setup-intro' %></p>
+    <div class="bs-callout bs-callout-info">
+        <h4><%= t 'hint' %></h4>
+        <%= t 'email-addresses-setup-hint' %>    
+    </div>
     <dl class="dl-horizontal">
         {{ if (typeof id != 'undefined') { }}
         <dt><%= t "config-info-email" %></dt><dd>{{= info }}</dd>
