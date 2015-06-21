@@ -11,27 +11,29 @@ module SurveyHtmlFormatter
   # For a given survey produce an HTML version of the questions and answers
   #
   def survey_to_html(survey, respondent_detail, forEmail = true)
-    content = '<div class="survey_responses"><h1>' + survey.name + '</h1>'
-    content += "\n" if forEmail
-    
-    responses = respondent_detail.getResponses(survey.id)
-    
-    if respondent_detail.survey_respondent
-      person = respondent_detail.survey_respondent.person
-      if person
-        fname = person.getFullPublicationName()
-        content += '<h3 class="response_group_header">Publication Name:</h3><div class="response_group_body"><div class="response_answer"><div class="response_text">' + fname + '</div></div></div>'
-        content += "\n" if forEmail
-      end      
+    if survey
+      content = '<div class="survey_responses"><h1>' + survey.name + '</h1>'
+      content += "\n" if forEmail
+      responses = respondent_detail.getResponses(survey.id)
+      
+      if respondent_detail.survey_respondent
+        person = respondent_detail.survey_respondent.person
+        if person
+          fname = person.getFullPublicationName()
+          content += '<h3 class="response_group_header">Publication Name:</h3><div class="response_group_body"><div class="response_answer"><div class="response_text">' + fname + '</div></div></div>'
+          content += "\n" if forEmail
+        end      
+      end
+      
+      survey.survey_groups.each do |group|
+        content += group_to_html(group, respondent_detail, forEmail, responses)
+      end
+      
+      content += '</div>'
+      content += "\n" if forEmail
+    else
+      content = '<div>No Survey Found</div>'
     end
-    
-    survey.survey_groups.each do |group|
-      content += group_to_html(group, respondent_detail, forEmail, responses)
-    end
-    
-    content += '</div>'
-    content += "\n" if forEmail
-    
     return content
   end
   
@@ -92,10 +94,12 @@ module SurveyHtmlFormatter
       content += '><strong>' + question.question + "</strong></div>"
 
       responses.each do |response|
-        content += '<div class="response_answer">'
-        content += '<div class="response_photo"><image src="' + response.photo.url + '" width="250"></div>'
-        content += '</div>'
-        content += "\n" if forEmail
+        if response.photo && response.photo.url
+          content += '<div class="response_answer">'
+          content += '<div class="response_photo"><image src="' + response.photo.url + '" width="250"></div>'
+          content += '</div>'
+          content += "\n" if forEmail
+        end
       end
       
     end
