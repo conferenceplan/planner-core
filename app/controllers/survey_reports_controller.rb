@@ -40,7 +40,7 @@ class SurveyReportsController < PlannerController
               if (@meta_data[res.survey_question_id][:question_type] == :multiplechoice) && answers[res.survey_question_id.to_s]
                   answers[res.survey_question_id.to_s] += '; ' + res.response
               elsif (@meta_data[res.survey_question_id][:question_type] == :singlechoice)
-                ans = SurveyAnswers.find res.response.to_i
+                ans = SurveyAnswer.find res.response.to_i
                 answers[res.survey_question_id.to_s] = ans.answer
               elsif (@meta_data[res.survey_question_id][:question_type] == :availability)
                   if res.response5
