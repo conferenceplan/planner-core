@@ -4,6 +4,7 @@ json.lock_version   query.lock_version
 json.name           query.name
 json.user_id        query.user_id
 json.shared         query.shared
+json.valid_survey   (query.survey != nil)
 
 if (!(defined? terse)) || ((defined? terse) && !terse)
     json.operation      query.operation
