@@ -267,7 +267,7 @@ protected
       peoplesource.datasource_id = pendingPerson.datasource_id
       peoplesource.datasource_dbid = pendingPerson.datasource_dbid
     else 
-      peoplesource = Peoplesource.new({ :person_id => person.id, :datasource_id => datasource.id, :datasource_dbid => pendingPerson.datasource_dbid })
+      peoplesource = Peoplesource.new({ :person_id => person.id, :datasource_id => pendingPerson.datasource_id, :datasource_dbid => pendingPerson.datasource_dbid })
     end
     peoplesource.save!
     
