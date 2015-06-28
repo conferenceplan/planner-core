@@ -597,6 +597,9 @@ class PlannerReportsController < PlannerController
     @page_size = params[:page_size]
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
     @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false
+    
+    @max_people = PlannerReportsService.findMaxParticipants[0]["max_people"] # maximum nbr of participants for this conference
+    @contexts = getContexts('ProgrammeItem').sort_by{|name| name.downcase }
 
     TimeSlot.uncached do
       @times = PlannerReportsService.findProgramItemsByTimeAndRoom
@@ -763,5 +766,19 @@ class PlannerReportsController < PlannerController
     end
   end
   
+  def getContexts(className)
+    taggings = ActsAsTaggableOn::Tagging.find :all,
+                  :select => "DISTINCT(context)",
+                  :conditions => "taggable_type like '" + className + "'"
+                  
+    contexts = Array.new
+
+    # for each context get the set of tags (sorted), and add them to the collection for display on the page
+    taggings.each do |tagging|
+      contexts << tagging.context
+    end
+    
+    return contexts
+  end
 
 end

@@ -29,10 +29,18 @@ xml.program do
                         xml.description ((@short_desc && !item.programme_items[0].short_precis.blank?) ? item.programme_items[0].short_precis : item.programme_items[0].precis)
                         xml.people do # we want the moderators and then participants
                             item.programme_items[0].programme_item_assignments.find_all {|x| x.role == PersonItemRole['Moderator'] }.each do |p|
-                                xml.moderator p.person.getFullPublicationName
+                                xml.moderator do
+                                    xml.name p.person.getFullPublicationName
+                                    xml.job_title p.person.job_title if p.person.job_title
+                                    xml.company p.person.company if p.person.company
+                                end
                             end
                             item.programme_items[0].programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] }.each do |p|
-                                xml.participant p.person.getFullPublicationName
+                                xml.participant do
+                                    xml.name p.person.getFullPublicationName
+                                    xml.job_title p.person.job_title if p.person.job_title
+                                    xml.company p.person.company if p.person.company
+                                end
                             end
                         end
                     end

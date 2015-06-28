@@ -255,6 +255,21 @@ module PlannerReportsService
   #
   #
   #
+  def self.findMaxParticipants
+    prog_items = Arel::Table.new(:programme_item_assignments)
+
+    query = prog_items.project((prog_items[:person_id].count).as('people')).
+                where(prog_items[:role_id].in([PersonItemRole['Moderator'].id, PersonItemRole['Participant'].id])).
+                where(self.arel_constraints()).
+                group(prog_items[:programme_item_id])
+
+    ActiveRecord::Base.connection.select_all( "select max(people) as max_people from (" + query.to_sql + ") as p" )
+  end
+  
+
+  #
+  #
+  #
   def self.findPanelsByRoom
     Room.includes([:venue, {:programme_items => [:time_slot, :format, :equipment_needs]}]).
           where("time_slots.start is not NULL").
@@ -309,7 +324,7 @@ module PlannerReportsService
               where(self.constraints()).
               order("time_slots.start, time_slots.end, venues.name desc, rooms.name")
   end
-  
+
   #
   #
   #
