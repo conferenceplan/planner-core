@@ -2,7 +2,7 @@ xlsx_package.use_shared_strings = true
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Program") do |sheet|
 
-    sheet.add_row [
+    titles = [
         'Datetime',
         'Day',
         'Time',
@@ -13,15 +13,24 @@ wb.add_worksheet(name: "Program") do |sheet|
         'Format',
         'Title',
         'Description',
-        'Participants',
         'Short Title',
         'Publication Reference Number',
         'Medium Image URL',
         'Large Image URL'
     ]
+    
+    titles.concat @contexts.collect{|name| name.downcase }
+
+    titles.concat Array.new(@max_people) {|e| ['Participant ' + (e+1).to_s,
+                                        'Job Title ' + (e+1).to_s, 
+                                        'Company ' + (e+1).to_s,
+                                        'Role ' + (e+1).to_s
+                                    ] }.flatten
+
+    sheet.add_row titles
 
     @times.each do |time|
-        sheet.add_row [
+        row = [
             time.start + Time.zone.utc_offset.seconds, # fix for the timezone, since Excel does not understand timezones
             time.start.strftime('%A'),
             time.start.strftime('%H:%M'),
@@ -32,13 +41,26 @@ wb.add_worksheet(name: "Program") do |sheet|
             (time.programme_items[0].format ? time.programme_items[0].format.name : ""),
             (time.programme_items[0].title ? time.programme_items[0].title.gsub("\n","") : ""),
             ((@short_desc && !time.programme_items[0].short_precis.blank?) ? time.programme_items[0].short_precis.gsub("\n","") : (time.programme_items[0].precis ? time.programme_items[0].precis.gsub("\n","") : "")),
-            time.programme_items[0].programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
-                p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","),
             (time.programme_items[0].short_title ? time.programme_items[0].short_title.gsub("\n","") : ""),
             time.programme_items[0].pub_reference_number,
             time.programme_items[0].external_images.use('mediumcard')[0] ? time.programme_items[0].external_images.use('mediumcard')[0].picture.url : '',
             time.programme_items[0].external_images.use('largecard')[0] ? time.programme_items[0].external_images.use('largecard')[0].picture.url : ''
         ]
+        
+        @contexts.each do |ctx|
+            row << time.programme_items[0].tag_list_on( ctx ).join(",")
+        end
+        
+        time.programme_items[0].programme_item_assignments.each do |assignment|
+            if assignment.role == PersonItemRole['Participant'] || assignment.role == PersonItemRole['Moderator']
+                row <<  assignment.person.getFullPublicationName
+                row <<  assignment.person.job_title ? assignment.person.job_title : ''
+                row <<  assignment.person.company ? assignment.person.company : ''
+                row <<  assignment.role.name
+            end
+        end
+    
+        sheet.add_row row
     end
     
 end
