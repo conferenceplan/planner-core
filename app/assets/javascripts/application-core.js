@@ -31,7 +31,7 @@
 //= require bootstrap-table/extensions/filter-control/bootstrap-table-filter-control
 
 //= require backbone/underscore-min
-//= require backbone/backbone-min
+//= require backbone/backbone
 //= require backbone/deep-model
 //= require backbone-model-file-upload.js
 //= require backbone/backbone.marionette
