@@ -29,6 +29,8 @@ $.widget( "cp.baseBootstrapTable" , {
         modelType           : null,
         modelTemplate       : null,
         showControls        : true,
+        filterControl       : false,
+        filterShowClear     : false,
         controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
         rowStyle            : function(row, idx) {
                                             return {
@@ -321,6 +323,8 @@ $.widget( "cp.baseBootstrapTable" , {
                 searchAlign: 'right',
                 // maintainSelected : true,
                 toolbar: this.options.toolbar,
+                filterControl       : this.options.filterControl,
+                filterShowClear     : this.options.filterShowClear,
                 rowAttributes       : function(row, idx) {
                                             return {
                                                 'data-item-id' : row.id,

@@ -146,7 +146,7 @@ class Person < ActiveRecord::Base
   end  
   
   def getFullName()
-    [self.first_name,self.last_name,self.suffix].compact.join(' ')
+    [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ').strip
   end
   
   # check that the person has not been assigned to program items, if they have then return an error and do not delete
