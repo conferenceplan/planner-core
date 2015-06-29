@@ -14,6 +14,7 @@ wb.add_worksheet(name: "Program") do |sheet|
         'Title',
         'Description',
         'Short Title',
+        'Short Description',
         'Publication Reference Number',
         'Medium Image URL',
         'Large Image URL'
@@ -40,8 +41,9 @@ wb.add_worksheet(name: "Program") do |sheet|
             time.programme_items[0].tag_list_on(:PrimaryArea).join(","),
             (time.programme_items[0].format ? time.programme_items[0].format.name : ""),
             (time.programme_items[0].title ? time.programme_items[0].title.gsub("\n","") : ""),
-            ((@short_desc && !time.programme_items[0].short_precis.blank?) ? time.programme_items[0].short_precis.gsub("\n","") : (time.programme_items[0].precis ? time.programme_items[0].precis.gsub("\n","") : "")),
+            (!time.programme_items[0].precis.blank? ? time.programme_items[0].precis.gsub("\n","") : ""),
             (time.programme_items[0].short_title ? time.programme_items[0].short_title.gsub("\n","") : ""),
+            (!time.programme_items[0].short_precis.blank? ? time.programme_items[0].short_precis.gsub("\n","") : ""),
             time.programme_items[0].pub_reference_number,
             time.programme_items[0].external_images.use('mediumcard')[0] ? time.programme_items[0].external_images.use('mediumcard')[0].picture.url : '',
             time.programme_items[0].external_images.use('largecard')[0] ? time.programme_items[0].external_images.use('largecard')[0].picture.url : ''
