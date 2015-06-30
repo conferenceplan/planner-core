@@ -26,6 +26,12 @@ jQuery.download = function(url, data, method){
                 //send request
                 jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
                 .appendTo('body').submit().remove();
+        } else {               
+                inputs+='<input type="hidden" name="'+ $("meta[name='csrf-param']").attr('content') +'" value="'+ $("meta[name='csrf-token']").attr('content') +'" />';
+                
+                //send request
+                jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
+                .appendTo('body').submit().remove();
         };
 };
 
