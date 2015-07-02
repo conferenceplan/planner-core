@@ -28,7 +28,7 @@ wb.add_worksheet(name: "Participants") do |sheet|
         row << p.job_title
         row << p.company
         row << (p.bio_image ? p.bio_image.bio_picture.url : '')
-        row << p.bio
+        row << (p.bio ? p.bio.gsub(/\n|\r/,"") : "")
                 
         p.programmeItemAssignments.each do |ia|
             if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
@@ -36,8 +36,8 @@ wb.add_worksheet(name: "Participants") do |sheet|
                 row << (ia.programmeItem.time_slot.start + Time.zone.utc_offset.seconds)
                 row << (ia.programmeItem.time_slot.start.strftime('%A'))
                 row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')
-                row << (ia.programmeItem.short_title.blank? ? (ia.programmeItem.title ? ia.programmeItem.title.gsub("\n","") : "") : (ia.programmeItem.short_title ? ia.programmeItem.short_title.gsub("\n","") : ""))
-                row << (ia.programmeItem.precis ? ia.programmeItem.precis.gsub("\n","") : '')
+                row << (ia.programmeItem.short_title.blank? ? (ia.programmeItem.title ? ia.programmeItem.title.gsub(/\n|\r/,"") : "") : (ia.programmeItem.short_title ? ia.programmeItem.short_title.gsub(/\n|\r/,"") : ""))
+                row << (ia.programmeItem.precis ? ia.programmeItem.precis.gsub(/\n|\r/,"") : '')
                 row << (ia.programmeItem.room ? ia.programmeItem.room.name : '')
                 row << (ia.programmeItem.room.venue ? ia.programmeItem.room.venue.name : '')
             end
