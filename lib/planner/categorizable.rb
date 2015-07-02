@@ -13,6 +13,21 @@ module Planner
 
         has_many :category_names, :through => :categories 
         
+        send(:define_method, 'update_categories') do |category_name_ids|
+          cat_ids = categories.collect{|c| c.category_name_id }
+          del_candidates = categories.keep_if{|c| !category_name_ids.include?(c.category_name_id.to_s) } # candidates for deletion
+          add_candidates = category_name_ids.keep_if{|i| !cat_ids.include?(i.to_i) } # candidates to add
+
+          del_candidates.each do |c|
+            self.categories.delete c
+          end
+          add_candidates.each do |c|
+            self.categories.create({category_name_id: c.to_i})
+          end
+          
+          reload          
+        end                  
+
         CategoryName._categorizable(self)
       end
       

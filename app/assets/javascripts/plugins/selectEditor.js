@@ -36,7 +36,11 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
     },
      
     setValue: function(val) {
-        this.$el.val(val);
+        if (typeof val === 'object') {
+            this.$el.val(JSON.stringify(val));
+        } else {
+            this.$el.val(val);
+        }
     }
  
 });

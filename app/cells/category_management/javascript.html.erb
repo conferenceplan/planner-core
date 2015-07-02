@@ -1,0 +1,43 @@
+<script type="text/javascript">
+
+CategoryApp = new Backbone.Marionette.Application();
+
+CategoryApp.Mgmt = (function(Backbone){
+
+    Category = Backbone.Model.extend({
+        schema : {
+            name                      : {type : 'Text', title : '<%= t "category-name" %>'},
+        },
+        urlRoot : "<%= baseUri + '/category_names' %>",
+    });
+
+    return {
+        Category : Category,
+
+        createNewCategory : function(name, callback, arg) {
+            var mdl = new CategoryApp.Mgmt.Category({ name : name });
+            var modal = new ModelModal({
+                model : mdl,
+                title : '<%= t "create-a-new-category" %>',
+                refresh : function(mdl) {
+                    if (callback) {
+                        callback(mdl, arg);
+                    }
+                }
+            });
+            modal.render();
+        },
+
+        init : function() {
+        }
+    }
+    
+})(Backbone);
+
+jQuery(document).ready(function() {
+    moment.lang('<%= I18n.locale %>');
+    CategoryApp.addInitializer(CategoryApp.Mgmt.init);
+    CategoryApp.start();
+});
+
+</script>
