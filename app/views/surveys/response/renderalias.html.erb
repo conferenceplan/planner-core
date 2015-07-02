@@ -50,7 +50,7 @@
             <% if @survey.use_captcha && @captcha_config %>
                 <div class="row">
                     <div class="col-sm-12">
-                        <%= recaptcha_tags :public_key => @captcha_config.captcha_pub_key %>
+                        <%= recaptcha_tags :public_key => @captcha_config.captcha_pub_key, :api_version => "v2" %>
                     </div>
                 </div>
             <% end %>

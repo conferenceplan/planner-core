@@ -42,6 +42,7 @@ require "twitter-typeahead-rails"
 require "encoding_sampler"
 require "figaro"
 require "ranked-model"
+require "planner/categorizable"
 
 module PlannerCore
   class Engine < ::Rails::Engine
@@ -68,7 +69,7 @@ module PlannerCore
       end
       Dir.glob(PlannerCore::Engine.config.paths["lib"].expanded[0] + "/planner/**/*.rb").each do |c|
         require_dependency(c)
-      end
+      end      
     end
 
     # RAILS 3 mechanism so parent app use the migrations in this engine
