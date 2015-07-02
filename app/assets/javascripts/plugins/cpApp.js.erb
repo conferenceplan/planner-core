@@ -327,13 +327,19 @@ var AppUtils = (function(){
         },
 
         render: function () {
-            Backbone.BootstrapModal.count++;
+            var numModals = Backbone.BootstrapModal.count++;
 
             this.$el.html($(this.template({
                 title : this.options.title
             })));
 
             this.$el.modal(this.modalOptions);
+          
+//            var $backdrop = $('.modal-backdrop:eq('+numModals+')'),
+//                backdropIndex = $backdrop.css('z-index'),
+//                elIndex = $backdrop.css('z-index');
+//            $backdrop.css('z-index', backdropIndex + numModals);
+//            this.$el.css('z-index', elIndex + numModals);
 
             this.renderBody();
             this.$el.find(".modal-body").append(this.form.el);
