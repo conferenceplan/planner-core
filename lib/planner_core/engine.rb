@@ -42,7 +42,6 @@ require "twitter-typeahead-rails"
 require "encoding_sampler"
 require "figaro"
 require "ranked-model"
-require "planner/categorizable"
 
 module PlannerCore
   class Engine < ::Rails::Engine
