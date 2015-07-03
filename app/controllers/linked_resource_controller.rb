@@ -24,6 +24,8 @@ class LinkedResourceController < ResourceController
           link.linkedto_type = @linkedto_type
           link.save!
         end
+        _after_save
+        after_save
         render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :create, params[:controller]
       end
     rescue => ex
