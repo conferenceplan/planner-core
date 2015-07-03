@@ -13,6 +13,7 @@ module Planner
         def create
           begin
             @object.save!
+            _after_save
             after_save
             render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :create, params[:controller]
           rescue => ex
@@ -27,6 +28,7 @@ module Planner
         def update
           begin
             @object.update_attributes params[object_name]
+            _after_update
             after_update
             render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :update, params[:controller]
           rescue => ex
@@ -49,6 +51,21 @@ module Planner
 
           def after_save
           end
+
+          def _after_update
+            if @object.respond_to? :update_categories
+              category_names = params[:category_name_ids].split(",") # comma seperated list, split into ids
+              @object.update_categories category_names
+            end
+          end
+        
+          def _after_save
+            if @object.respond_to? :update_categories
+              category_names = params[:category_name_ids].split(",") # comma seperated list, split into ids
+              @object.update_categories category_names
+            end
+          end
+
         
           def action
             params[:action].to_sym

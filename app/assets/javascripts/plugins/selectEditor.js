@@ -24,7 +24,7 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
         var self = this;
 
         this.setValue(this.value);
-         
+
         setTimeout(function() {
             self.$el.select2(self.config);
         }, 0);
@@ -36,11 +36,7 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
     },
      
     setValue: function(val) {
-        if (typeof val === 'object') {
-            this.$el.val(JSON.stringify(val));
-        } else {
-            this.$el.val(val);
-        }
+        this.$el.val(val);
     }
  
 });
