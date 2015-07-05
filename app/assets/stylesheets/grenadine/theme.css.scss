@@ -989,6 +989,38 @@ tbody tr.info td a {
 
 
 /* Tooltips */
+.bpopover {
+    color: #CCC;
+    font-size: 13px;
+    padding-left: 5px;
+    
+}
+.popover {
+    border:1px solid #DCA; 
+    background:#fffAF0;
+    padding: 0px;
+}
+.popover-content {
+    padding: 15px;
+    font-size: 13px;
+    line-height: 125%;
+    color: #111;
+    font-weight: normal;
+    
+}
+.popover-title {
+    font-weight: bold;
+    background:#f9f4e7;
+}
+
+.popover.right .arrow:after {
+  border-right-color: #fffAF0;
+  
+}
+.popover.right .arrow {
+  border-right-color: #DCA;
+  
+}
 
 a.mtooltip {
     outline:none; 
@@ -1165,4 +1197,9 @@ a var {
     padding-left: 0px;
     padding-right: 0px;
     
+}
+
+/* ---- popovers ----*/
+.popover {
+    z-index: 15000;
 }

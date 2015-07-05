@@ -111,6 +111,14 @@ jQuery(document).ready(function() {
     };
     
     $('.survey-help').tooltip();
+    
+    // enable the popover bootstrap javascript thing
+    $('[data-toggle="popover"]').popover({
+        trigger: 'hover',
+        html: true,
+        animation: false,
+        viewport: { selector: 'body', padding: 0 },
+    });
                 
 });
 
@@ -142,3 +150,7 @@ function randomString(length, chars) {
     for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
     return result;
 }
+
+
+
+
