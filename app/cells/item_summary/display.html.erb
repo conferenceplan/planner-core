@@ -48,13 +48,23 @@ $(function() {
                 </div>
             </div>
             <div class="row   overview-detail">
-                <div class="col-md-5  ">
-                    <a href="<%= baseUri + '/pages/surveys_dash/manage' %>"><%= t "surveys" %></a>
+                <div class="col-md-8  ">
+                    <a href="<%= baseUri + '/pages/registrations_dash/ticket_types' %>"><%= t "tickets-and-registrations" %></a>
                 </div>    
-                <div class="col-md-7 text-right ">
-                    <!-- None sent -->
+                <div class="col-md-4 text-right ">
+                    <span class="label label-success"><%= t 'new' %>!</span>
                 </div>
             </div>
+
+            <div class="row overview-detail">
+                <div class="col-md-5">
+                    <a href="<%= baseUri + '/pages/reports_dash/manage' %>"><%= t "reports" %></a>
+                </div>    
+                <div class="col-md-7 text-right">
+                    
+                </div>
+            </div>
+
             <div class="row overview-detail">
                 <div class="col-md-5">
                     <a href="<%= baseUri + '/pages/communications_dash/manage' %>"><%= t "communications" %></a>
