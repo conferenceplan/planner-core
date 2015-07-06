@@ -155,7 +155,7 @@
                 <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
                 <dt><%= t "registered" %></dt>
                 <dd>{{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-                <dt class="dt-breaking"><%= t "can-share-details" %> <a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t "can-share-details-hint" %></span></a></dt>
+                <dt class="dt-breaking"><%= t "can-share-details" %> <i class="glyphicon glyphicon-info-sign bpopover" title data-toggle="<%= t 'can-share-details-hint' %>"></i></dt>
                 <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
             </dl>       
         {{ } else { }}
