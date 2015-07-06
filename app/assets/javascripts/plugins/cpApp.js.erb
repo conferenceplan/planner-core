@@ -37,7 +37,7 @@ var AppUtils = (function(){
 
             if (this.options.content) {
                 this.$el.find(".modal-body").append(this.options.content);
-                this.$el.find('[data-toggle="popover"]').popover();
+                this.$el.find('[data-toggle="popover"]').popover({html : true});
             };
             
             this.delegateEvents();
@@ -211,7 +211,7 @@ var AppUtils = (function(){
 
             if (this.options.content) {
                 this.$el.find(".modal-body").append(this.options.content);
-                this.$el.find('[data-toggle="popover"]').popover();
+                this.$el.find('[data-toggle="popover"]').popover({html : true});
             }
             
             this.delegateEvents();
@@ -294,7 +294,7 @@ var AppUtils = (function(){
 
             if (this.options.content) {
                 this.$el.find(".modal-body").append(this.options.content);
-                this.$el.find('[data-toggle="popover"]').popover();
+                this.$el.find('[data-toggle="popover"]').popover({html : true});
             }
             
             this.delegateEvents();
@@ -345,7 +345,7 @@ var AppUtils = (function(){
 
             this.renderBody();
             this.$el.find(".modal-body").append(this.form.el);
-            this.$el.find('[data-toggle="popover"]').popover();
+            this.$el.find('[data-toggle="popover"]').popover({html : true});
             
             this.delegateEvents();
             
@@ -592,7 +592,7 @@ var AppUtils = (function(){
             })));
             
             this.renderModel();
-            this.$el.find('[data-toggle="popover"]').popover();
+            this.$el.find('[data-toggle="popover"]').popover({html : true});
         },
         
         renderModel : function() {

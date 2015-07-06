@@ -29,7 +29,7 @@ var ReportBase = (function(Backbone){
                 }
                 
                 this.$el.find(".report-body").html(this.form.el);
-                this.$el.find('[data-toggle="popover"]').popover();
+                this.$el.find('[data-toggle="popover"]').popover({html : true});
             },
             
             submitCSV : function() {
