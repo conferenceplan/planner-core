@@ -992,8 +992,10 @@ tbody tr.info td a {
 .bpopover {
     color: #CCC;
     font-size: 13px;
-    padding-left: 5px;
-    
+    padding-left: 3px;
+}
+h3 i.bpopover {
+    padding-left: 7px;
 }
 .popover {
     border:1px solid #DCA; 
@@ -1001,7 +1003,9 @@ tbody tr.info td a {
     padding: 0px;
 }
 .popover-content {
-    padding: 15px;
+    padding: 12px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-size: 13px;
     line-height: 125%;
     color: #111;
@@ -1011,16 +1015,24 @@ tbody tr.info td a {
 .popover-title {
     font-weight: bold;
     background:#f9f4e7;
-}
-
+    padding-left: 12px;
+    padding-right: 12px;
+} 
 .popover.right .arrow:after {
   border-right-color: #fffAF0;
-  
+}
+.popover.top .arrow:after {
+  border-top-color: #fffAF0;
 }
 .popover.right .arrow {
   border-right-color: #DCA;
-  
 }
+.popover.top .arrow {
+  border-top-color: #DCA;
+  margin-left: -10px;
+}
+
+
 
 a.mtooltip {
     outline:none; 

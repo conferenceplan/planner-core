@@ -28,7 +28,7 @@
       <label class='col-sm-4 control-label' for='<%= editorId %>'>\
         <%= title %>\
         <% if (help && (help.length > 0) ) { %>\
-            <i class='glyphicon glyphicon-info-sign bpopover' title='' data-container='body' data-trigger='hover' data-placement='right' data-toggle='popover' data-content='<%= help %>'></i>\
+            <i class='glyphicon glyphicon-info-sign bpopover' title='<%= title %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= help %>'></i>\
         <% }; %>\
       </label>\
       <div class='col-sm-8'>\
