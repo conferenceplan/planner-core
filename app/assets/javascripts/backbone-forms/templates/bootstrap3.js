@@ -3,9 +3,26 @@
  * 
  * 'data-*' attributes control where elements are placed
  */
+//;(function(root) {
+//})(window || global || this);
+
 ;(function(Form) {
 
-  
+  Form.Field.prototype.templateData = function() {
+    var schema = this.schema;
+
+    return {
+      help: schema.help || '',
+      hint: schema.hint || '',
+      title: schema.title,
+      fieldAttrs: schema.fieldAttrs,
+      editorAttrs: schema.editorAttrs,
+      key: this.key,
+      editorId: this.editor.id
+    };
+  };
+
+
   /**
    * Bootstrap 3 templates
    */
@@ -33,6 +50,7 @@
       </label>\
       <div class='col-sm-8'>\
         <span data-editor></span>\
+        <p class='help-block'><%= hint %></p>\
         <p class='help-block' data-error></p>\
       </div>\
     </div>\
@@ -53,7 +71,6 @@
 
   Form.editors.Base.prototype.className = 'form-control';
   Form.Field.errorClassName = 'has-error';
-
 
   if (Form.editors.List) {
 
@@ -77,7 +94,6 @@
       <div class="bbf-list-modal"><%= summary %></div>\
     ');
 
-  }
-
+  };
 
 })(Backbone.Form);
