@@ -478,7 +478,9 @@ screen and (min-device-pixel-ratio: 1.5) {
 .select2-container-multi {
     height: auto;
 }
-
+.select2-container-multi .select2-choices {
+    padding-top: 5px;
+}
 .left-jqgrid {
     padding-left: 0;
 }
