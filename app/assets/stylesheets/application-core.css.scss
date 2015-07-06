@@ -29,6 +29,18 @@
  *= require_self
  */
 
+.select2-drop {
+  z-index: 1050;  
+}
+
+.select2-drop-mask {
+  z-index: 1050;
+}
+
+.select2-search {
+  z-index: 1050;
+}
+
 .bbf-list-modal {
   width: 308px;
 }
