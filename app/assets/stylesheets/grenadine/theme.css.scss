@@ -478,7 +478,7 @@ screen and (min-device-pixel-ratio: 1.5) {
 .select2-container-multi {
     height: auto;
 }
-.select2-container-multi .select2-choices {
+.select2-container-multi.select2-choices {
     padding-top: 5px;
 }
 .left-jqgrid {
@@ -699,10 +699,13 @@ input[type="checkbox"] {
     margin-top: 0px;
 }
 
-.right-bar-action-group span.glyphicon {
+.right-bar-action-group span.glyphicon, .right-bar-action-group i.fa {
     color: #BBB;
     font-size: 12px;
     margin-right: +3px;
+}
+.right-bar-action-group i.fa {
+    font-size: 14px;
 }
 .tab-pane.active h5 {
     line-height: 1.5;
