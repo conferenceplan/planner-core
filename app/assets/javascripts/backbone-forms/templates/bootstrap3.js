@@ -23,17 +23,20 @@
   ');
 
 
-  Form.Field.template = _.template('\
-    <div class="form-group field-<%= key %>">\
-      <label class="col-sm-4 control-label" for="<%= editorId %>"><%= title %></label>\
-      <div class="col-sm-8">\
+  Form.Field.template = _.template("\
+    <div class='form-group field-<%= key %>'>\
+      <label class='col-sm-4 control-label' for='<%= editorId %>'>\
+        <%= title %>\
+        <% if (help && (help.length > 0) ) { %>\
+            <i class='glyphicon glyphicon-info-sign bpopover' title='' data-container='body' data-trigger='hover' data-placement='right' data-toggle='popover' data-content='<%= help %>'></i>\
+        <% }; %>\
+      </label>\
+      <div class='col-sm-8'>\
         <span data-editor></span>\
-        <p class="help-block" data-error></p>\
-        <p class="help-block"><%= help %></p>\
+        <p class='help-block' data-error></p>\
       </div>\
     </div>\
-  ');
-
+  ");
 
   Form.NestedField.template = _.template('\
     <div class="field-<%= key %>">\

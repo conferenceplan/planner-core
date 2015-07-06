@@ -37,6 +37,7 @@ var AppUtils = (function(){
 
             if (this.options.content) {
                 this.$el.find(".modal-body").append(this.options.content);
+                this.$el.find('[data-toggle="popover"]').popover();
             };
             
             this.delegateEvents();
@@ -210,6 +211,7 @@ var AppUtils = (function(){
 
             if (this.options.content) {
                 this.$el.find(".modal-body").append(this.options.content);
+                this.$el.find('[data-toggle="popover"]').popover();
             }
             
             this.delegateEvents();
@@ -292,6 +294,7 @@ var AppUtils = (function(){
 
             if (this.options.content) {
                 this.$el.find(".modal-body").append(this.options.content);
+                this.$el.find('[data-toggle="popover"]').popover();
             }
             
             this.delegateEvents();
@@ -334,7 +337,6 @@ var AppUtils = (function(){
             })));
 
             this.$el.modal(this.modalOptions);
-          
 //            var $backdrop = $('.modal-backdrop:eq('+numModals+')'),
 //                backdropIndex = $backdrop.css('z-index'),
 //                elIndex = $backdrop.css('z-index');
@@ -343,6 +345,7 @@ var AppUtils = (function(){
 
             this.renderBody();
             this.$el.find(".modal-body").append(this.form.el);
+            this.$el.find('[data-toggle="popover"]').popover();
             
             this.delegateEvents();
             
@@ -589,6 +592,7 @@ var AppUtils = (function(){
             })));
             
             this.renderModel();
+            this.$el.find('[data-toggle="popover"]').popover();
         },
         
         renderModel : function() {

@@ -47,14 +47,20 @@ $(function() {
                     <!-- 255 scheduled items -->
                 </div>
             </div>
-            <div class="row   overview-detail">
-                <div class="col-md-5  ">
-                    <a href="<%= baseUri + '/pages/surveys_dash/manage' %>"><%= t "surveys" %></a>
+
+            <% @extra_summary_display.each do |extra| %>
+                <%= render extra %>
+            <% end %>
+
+            <div class="row overview-detail">
+                <div class="col-md-5">
+                    <a href="<%= baseUri + '/pages/reports_dash/manage' %>"><%= t "reports" %></a>
                 </div>    
-                <div class="col-md-7 text-right ">
-                    <!-- None sent -->
+                <div class="col-md-7 text-right">
+                    
                 </div>
             </div>
+
             <div class="row overview-detail">
                 <div class="col-md-5">
                     <a href="<%= baseUri + '/pages/communications_dash/manage' %>"><%= t "communications" %></a>
