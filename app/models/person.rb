@@ -275,7 +275,7 @@ class Person < ActiveRecord::Base
       address.save!
     else
       postalAddress = self.postal_addresses.new :line1 => new_line1, 
-                                    :line1 => new_line2, 
+                                    :line2 => new_line2, 
                                     :city => new_city, 
                                     :state => new_state, 
                                     :postcode => new_postcode, 
