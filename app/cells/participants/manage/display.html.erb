@@ -30,8 +30,9 @@
             <span class="glyphicon glyphicon-chevron-left"></span>
         </button>          
         <div id="right-bar-action-group" class="right-bar-action-group">
-            <h5><%= t "registrations" %></h5>
-            <i class="fa fa-ticket"></i> <a href="<%= baseUri + '/pages/registrations_dash/report/ticket_sales' %>"><%= t "view-tickets-sold" %></a>
+            <% @extra_menu_display.each do |extra| %>
+                <%= render extra %>
+            <% end %>
             <h5><%= t "import-and-export" %></h5>
             <span class="glyphicon glyphicon-import"></span> <a href="<%= baseUri + '/pages/participants_dash/import' %>"><%= t "import-people" %></a><br>
             <span class="glyphicon glyphicon-inbox"></span> <a href="<%= baseUri + '/pages/participants_dash/review_import' %>"><%= t "review-pending-import" %></a><br>
