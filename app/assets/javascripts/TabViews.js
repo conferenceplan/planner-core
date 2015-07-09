@@ -39,6 +39,10 @@ var TabUtils = (function(){
             editTitle : "EDIT",
             addTitle : "ADD",
         },
+
+        onShow: function(){
+            this.$el.find('[data-toggle="popover"]').popover({html : true});
+        },
         
         events : {
             "click .model-edit-button"   : "editModel",
