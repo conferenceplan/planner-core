@@ -92,7 +92,10 @@ module Planner
                   { :title => 'mail-templates', :target => '/pages/communications_dash/templates', :display => allowed?(:mailing_templates) }
                 ]
               } if allowed? :communications
-      menu << { :title => 'reports',        :target => '/pages/reports_dash/manage', :icon => "glyphicon glyphicon-stats",     :target_base => '/pages/reports_dash'} if allowed? :reports
+      menu << { :title => 'reports',        :target => '/pages/reports_dash/manage', :icon => "glyphicon glyphicon-stats",     :target_base => '/pages/reports_dash',
+                :sub_menu => [
+                  {:title => 'reports', :target => '/pages/reports_dash/manage', :display => allowed?(:reports) }
+              ]} if allowed? :reports
       menu << { :title => 'menu-publications',   :target => '/pages/publications_dash/print', :icon => "glyphicon glyphicon-print",     :target_base => '/pages/publications_dash',
                 :sub_menu => [
                   {:title => 'publish', :target => '/pages/publications_dash/online', :display => allowed?(:publish) },
