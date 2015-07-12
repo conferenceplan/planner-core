@@ -1,4 +1,15 @@
 <script type="text/javascript">
+    function showShortDescriptionDiv() {
+        if ($('#short-versions-div').is(":visible")) {
+            $('#short-versions-div').hide();
+        } else {
+            $('#short-versions-div').show();
+        }
+            
+    }
+</script>
+
+<script type="text/javascript">
 
 ItemApp = new Backbone.Marionette.Application();
 
