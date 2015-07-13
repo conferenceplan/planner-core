@@ -1,5 +1,16 @@
 <script type="text/javascript">
 
+function showRegistrationsDiv(el) {
+    target = jQuery(el).closest(".form-horizontal").find('#short-version-div');
+    if (target.is(":visible")) {
+        target.hide();
+    } else {
+        target.show();
+    }
+};
+
+
+
 ParticipantApp = new Backbone.Marionette.Application();
 
 ParticipantApp.PeopleManagement = (function(Backbone){
