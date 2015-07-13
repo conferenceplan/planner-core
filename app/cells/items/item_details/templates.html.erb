@@ -47,7 +47,7 @@
             </div>
             <div class="col-sm-9 col-sm-offset-3" style="margin-top: -15px; padding-left: 7.5px; margin-bottom: 15px;">
                 <div id="short-version-selection-div">
-                    <input type="checkbox" onclick="showShortDescriptionDiv();"> <%= t 'show-short-versions' %></input> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-title-and-description" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-title-and-description-help" %>'></i>
+                    <input type="checkbox" onclick="showShortDescriptionDiv();" tabindex="-1"> <%= t 'show-short-versions' %></input> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-title-and-description" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-title-and-description-help" %>'></i>
                 </div>
             </div>
             <div id="short-versions-div" style="display:none;">
@@ -120,8 +120,8 @@
             <div class="form-group" id="item-form-template-print">
                 <span data-editor>
                     <div class="col-sm-3">
-                        <label><%= t "item-print" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-print" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-print-hint" %>'></i></label>
-                        <div data-editors="print"></div>
+                        <label class="inline-checkbox"><%= t "item-print" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-print" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-print-hint" %>'></i></label>
+                        <div data-editors="print" class="inline-checkbox"></div>
                     </div>
                     <div class="col-sm-3">
                         <label><%= t "item-publication-reference" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-publication-reference" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-publication-reference-help" %>'></i></label>
