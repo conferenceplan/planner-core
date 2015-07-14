@@ -10,6 +10,7 @@ ReportApp.ReportManagement = (function(Backbone){
     var PanelsWithOnePersonColModel= [
                     {name: 'title',       label : '<%= t "item" %>',  jsonmap: "title",    width: 300},
                     {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
+                    {name: 'company', label : '<%= t "company" %>', jsonmap: "company", width: 150},
                     {name:'Items', label : '<%= t "items" %>', jsonmap: "items", width: 500, formatter: AppUtils.arrayToString}
     ];
     
@@ -128,6 +129,7 @@ ReportApp.ReportManagement = (function(Backbone){
     
     var PeopleBioColModel = [
                     {name: 'name', label : '<%= t "person" %>', jsonmap: "name", width: 150},
+                    {name: 'company', label : '<%= t "company" %>', jsonmap: "company", width: 150},
                     {name: 'bio', label : '<%= t "bio" %>', jsonmap: "bio", width: 700, 
                             cellattr: function (rowId, tv, rawObject, cm, rdata) { return 'style="height: auto; white-space: normal;"' }},
                     {name: 'website', label : '<%= t "participant-url" %>', jsonmap: "website"},

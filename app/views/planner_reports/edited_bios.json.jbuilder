@@ -5,6 +5,7 @@ json.currpage 1
 json.rowdata @editedBios do |e|
 
     json.name               e.person.getFullPublicationName
+    json.company            e.person.company
     json.bio                e.bio
     json.website            e.website ? e.website : ''
     json.twitterinfo        e.twitterinfo ? e.twitterinfo : ''
