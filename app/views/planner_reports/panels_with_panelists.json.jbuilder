@@ -24,8 +24,8 @@ json.rowdata @panels.collect { |panel|
     json.venue_name panel.room.venue.name if panel.room
     json.equipment panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type } # TODO - need the name/type of equipment listed here
     
-    json.participants panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName }
-    json.moderators panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName }
-    json.reserve panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName }
-    json.invisible panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName }
+    json.participants panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}
+    json.moderators panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}
+    json.reserve panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}
+    json.invisible panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}
 end

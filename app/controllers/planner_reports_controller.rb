@@ -124,13 +124,14 @@ class PlannerReportsController < PlannerController
         output = Array.new
 
         output.push [
-          'Title','Person','Items for Person'
+          'Title','Person','Company','Items for Person'
         ]
 
         @assignments.each do |assignment|
           output.push [
               assignment.programmeItem ? assignment.programmeItem.title : '',
               assignment.person.getFullPublicationName,
+              assignment.person.company,
               assignment.person.programmeItemAssignments.collect { |pi|
                 pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 
                                   ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
@@ -265,11 +266,12 @@ class PlannerReportsController < PlannerController
         outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
         output.push [
-          'Name','Bio','Web Site','Twitter','Other Social Media','Photo URL','Facebook'
+          'Name', 'Company','Bio','Web Site','Twitter','Other Social Media','Photo URL','Facebook'
         ]
         
         @editedBios.each do |e|
           output.push [e.person.getFullPublicationName,
+              e.person.company,
               e.bio,
               e.website ? e.website : '',
               e.twitterinfo ? e.twitterinfo : '',
@@ -314,10 +316,10 @@ class PlannerReportsController < PlannerController
             ((panel.room != nil) ? panel.room.name : ''),
             ((panel.room != nil) ? panel.room.venue.name : ''),
             panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName }.join(",")
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(",")
           ]
           
         end
@@ -366,10 +368,10 @@ class PlannerReportsController < PlannerController
             ((panel.room != nil) ? panel.room.name : ''),
             ((panel.room != nil) ? panel.room.venue.name : ''),
             panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName }.join(",")
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(",")
           ]
           
         end

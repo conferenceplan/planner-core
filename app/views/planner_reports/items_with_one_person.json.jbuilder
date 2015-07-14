@@ -5,6 +5,7 @@ json.rowdata @assignments do |assignment|
 
     json.title              assignment.programmeItem ? assignment.programmeItem.title : ''
     json.name               assignment.person.getFullPublicationName
+    json.company            assignment.person.company
 
     # List the items that the person is on for the day in question
     json.items assignment.person.programmeItemAssignments.collect { |pi|
