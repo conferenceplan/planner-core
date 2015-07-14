@@ -14,7 +14,9 @@
     </div>
     <div id='<%= "survey_response_#{ question.id }_preview" %>'>
         <% if @survey_response && @survey_response[question.id.to_s] %>
-            <%= image_tag(@survey_response[question.id.to_s]['photo'], :width => 250) %>
+            <% if !@survey_response[question.id.to_s]['photo'].blank? %>
+                <%= image_tag(@survey_response[question.id.to_s]['photo'], :width => 250) %>
+            <% end %>
         <% end %>
     </div> 
 </div>
