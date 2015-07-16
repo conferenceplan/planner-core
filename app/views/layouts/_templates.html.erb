@@ -204,6 +204,19 @@
     </div>
 </script>
 
+<script type="text/template" id="logistics-template">
+    <div class="report-title"><h4>{{= caption }}</h4></div>
+    <div class="report-body" id="report-body"></div>
+    <div id="report-buttons">
+        <button class="btn btn-primary report-submit-button">
+            <%= t "reports-run-report-button" %>
+        </button>
+        <button class="btn btn-primary report-xlsx-button">
+            <%= t "publications-export-to-xlsx" %>
+        </button>
+    </div>
+</script>
+
 <script type="text/template" id="export-template">
     <div class="row">
         <div class="col-xs-12">

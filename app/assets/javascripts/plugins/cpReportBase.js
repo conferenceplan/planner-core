@@ -117,6 +117,8 @@ var ReportBase = (function(Backbone){
         });
 
     return {
+        ReportViewBase : ReportViewBase,
+        
         ResultSet : Backbone.RelationalModel.extend({
             relations : [{
                 type : Backbone.HasMany,
@@ -188,6 +190,12 @@ var ReportBase = (function(Backbone){
         ReportView : ReportViewBase.extend({
             initialize : function() {
                 this.template = _.template($('#report-template').html()); // caption
+            }
+        }),
+        
+        LogisticsView : ReportViewBase.extend({
+            initialize : function() {
+                this.template = _.template($('#logistics-template').html());
             }
         }),
         
