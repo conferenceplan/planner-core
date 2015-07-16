@@ -160,7 +160,7 @@
 
 <script type="text/template" id="registration-view-template">
     <div class="col-md-4" id="registration-view-details">  
-        <h5><%= t "registration"%> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-trigger="hover"  data-content="<%= t "registration-help" %>"></i></h5>  
+        <h5><%= t "registration"%> <i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "registration"%>" data-toggle="popover" data-trigger="hover"  data-content="<%= t "registration-help" %>"></i></h5>  
         {{ if (typeof id != 'undefined') { }}
             
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
@@ -171,7 +171,7 @@
                 <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
                 <dt><%= t "registered" %></dt>
                 <dd>{{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-                <dt class="dt-breaking"><%= t "can-share-details" %> <i class="glyphicon glyphicon-info-sign bpopover" title data-toggle="<%= t 'can-share-details-hint' %>"></i></dt>
+                <dt class="dt-breaking"><%= t "can-share-details" %> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-trigger="hover" title="<%= t "can-share-details" %>" data-content="<%= t 'can-share-details-hint' %>"></i></dt>
                 <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
             </dl>       
         {{ } else { }}
@@ -207,7 +207,7 @@
     </div>
 
     <div class="col-md-5">
-        <h5><%= t "invitation-status"%> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-trigger="hover" data-content="<%= t "invitation-status-help" %>"></i></h5>
+        <h5><%= t "invitation-status"%> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" title="<%= t "invitation-status"%>" data-trigger="hover" data-content="<%= t "invitation-status-help" %>"></i></h5>
         <button class="model-edit-button btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-pencil"></i></button>
         {{ if (typeof id != 'undefined') { }}
             {{ if (!survey_key) { }}
