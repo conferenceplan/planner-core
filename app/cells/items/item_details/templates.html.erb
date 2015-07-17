@@ -344,35 +344,36 @@
 </script>
 
 <script type="text/template" id="item-images-template">
+    <h3 class="h3-underlined"><%= t 'published-images'%><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "published-images" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t 'published-images-help') %>"></i></h3>
     <% if ConfigService.hasCloudinaryConfig? %>
-    {{ if (typeof id != 'undefined') { }}
-    <div class="boffset10">
-        {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
-        {{ if (typeof image != 'undefined') { }}
-            <image src="{{= image.picture.large_card.url }}"></image>
-            <button class="large-image-edit-button btn btn-primary btn-xs">
-                <%= t "edit-large-card-image" %>
-            </button>
-        {{ } else { }}
-            <button class="large-image-create-button btn btn-primary btn-xs">
-                <%= t "add-large-card-image" %>
-            </button>
-        {{ } }}
-    </div>
-    <div>
-        {{ var image = _.find(external_images, function(im) { return im['use'] == 'mediumcard' }); }}
-        {{ if (typeof image != 'undefined') { }}
-            <image src="{{= image.picture.medium_card.url }}"></image>
-            <button class="medium-image-edit-button btn btn-primary btn-xs">
-                <%= t "edit-medium-card-image" %>
-            </button>
-        {{ } else { }}
-            <button class="medium-image-create-button btn btn-primary btn-xs">
-                <%= t "add-medium-card-image" %>
-            </button>
-        {{ } }}
-    </div>
-    {{ }; }}    
+        {{ if (typeof id != 'undefined') { }}
+        <div class="boffset10">
+            {{ var image = _.find(external_images, function(im) { return im['use'] == 'largecard' }); }}
+            {{ if (typeof image != 'undefined') { }}
+                <image src="{{= image.picture.large_card.url }}"></image>
+                <button class="large-image-edit-button btn btn-primary btn-xs">
+                    <%= t "edit-large-card-image" %>
+                </button>
+            {{ } else { }}
+                <button class="large-image-create-button btn btn-primary btn-xs">
+                    <%= t "add-large-card-image" %>
+                </button>
+            {{ } }}
+        </div>
+        <div>
+            {{ var image = _.find(external_images, function(im) { return im['use'] == 'mediumcard' }); }}
+            {{ if (typeof image != 'undefined') { }}
+                <image src="{{= image.picture.medium_card.url }}"></image>
+                <button class="medium-image-edit-button btn btn-primary btn-xs">
+                    <%= t "edit-medium-card-image" %>
+                </button>
+            {{ } else { }}
+                <button class="medium-image-create-button btn btn-primary btn-xs">
+                    <%= t "add-medium-card-image" %>
+                </button>
+            {{ } }}
+        </div>
+        {{ }; }}    
     <% else %>
         <%= t 'cloudinary-not-configured' %>
     <% end %>

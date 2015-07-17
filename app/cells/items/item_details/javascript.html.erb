@@ -9,6 +9,8 @@ function showShortDescriptionDiv(el) {
     }
 };
 
+
+
 ItemApp = new Backbone.Marionette.Application();
 
 ItemApp.ItemManagement = (function(Backbone){
@@ -141,6 +143,7 @@ ItemApp.ItemManagement = (function(Backbone){
         initialize : function() {
             this.listenTo(this.model, 'change', this.render);
             eventAggregator.on("refreshImagesList", this.render, this);
+
         },
         
         onBeforeClose : function() {
@@ -292,6 +295,11 @@ ItemApp.ItemManagement = (function(Backbone){
         }) );
 
         itemTabLayout.images.show(new ItemImageView({model : itemMdl}) );
+        
+        //initialize the popovers
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
 
         TabUtils.createTabControl({
             template : "#equipment-control-template",
