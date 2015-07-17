@@ -344,7 +344,7 @@
 </script>
 
 <script type="text/template" id="item-images-template">
-    <h3 class="h3-underlined"><%= t 'published-images'%><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "published-images" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t 'published-images-help') %>"></i></h3>
+    <h3 class="h3-underlined"><%= t 'published-images'%><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "published-images" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t 'published-images-help').html_safe %>"></i></h3>
     <% if ConfigService.hasCloudinaryConfig? %>
         {{ if (typeof id != 'undefined') { }}
         <div class="boffset10">
