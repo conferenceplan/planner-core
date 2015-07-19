@@ -109,7 +109,7 @@ module SurveyService
             # :conditions => ["survey_answers.answertype_id = ? AND survey_answers.answer = survey_responses.response", AnswerType['DoNotShareEmail'].id]
             
     Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}}).
-            where(["survey_answers.answertype_id = ? AND survey_answers.answer = survey_responses.response", AnswerType['DoNotShareEmail'].id]).
+            where(["survey_answers.answertype_id = ? AND survey_answers.id = survey_responses.response", AnswerType['DoNotShareEmail'].id]).
             where(self.constraints())
 
   end
