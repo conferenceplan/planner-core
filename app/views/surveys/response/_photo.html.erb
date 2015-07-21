@@ -15,7 +15,11 @@
     <div id='<%= "survey_response_#{ question.id }_preview" %>'>
         <% if @survey_response && @survey_response[question.id.to_s] %>
             <% if !@survey_response[question.id.to_s]['photo'].blank? %>
-                <%= image_tag(@survey_response[question.id.to_s]['photo'], :width => 250) %>
+                <% if  @survey_response[question.id.to_s]['photo'].is_a?(BioPictureUploader) %>
+                    <%= image_tag(@survey_response[question.id.to_s]['photo'], :width => 250) %>
+                <% elsif @survey_response[question.id.to_s]['photo'].is_a?(String) %>
+                    <%= image_tag( get_base_image_url + @survey_response[question.id.to_s]['photo'].sub('image/upload',''), :width => 250) %>
+                <% end %>
             <% end %>
         <% end %>
     </div> 
