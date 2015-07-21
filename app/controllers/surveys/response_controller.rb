@@ -168,7 +168,7 @@ class Surveys::ResponseController < ApplicationController
 
     if page
       
-      # TODO - check if this is preview, if so do a render (but disable the save on submit)
+      # check if this is preview, if so do a render (but disable the save on submit)
       # if not a preview then check if authentication is needed, it it is then ask for authentication before rendering the form
       
       # find the survey for the page alias
@@ -177,21 +177,19 @@ class Surveys::ResponseController < ApplicationController
         
         # return unless @survey.public || @preview
         
-        if  !@preview && @survey.authenticate # TODO *****
+        if  !@preview && @survey.authenticate
           # check to see if the use is authenticated
-          # require_user # TODO - change to test for single access token etc.
           if !respondent_logged_in?
             logger.error "NEED TO LOGIN " + new_survey_respondent_url
             store_page page
             store_location
-            # redirect_to baseUri + '/survey_respondents/new' #new_survey_respondent_url # TODO - add baseUri +
             redirect_to new_survey_respondent_url
           end
         end
         
         @page_title = @survey.name
         @current_key = params[:key]
-        @path = baseUri + '/surveys/' + @survey.id.to_s + '/response' # TODO - fix for language...
+        @path = baseUri + '/surveys/' + @survey.id.to_s + '/response' # TODO - fix for language?...
 
         if @respondent && !@preview
           if @respondent.survey_respondent_detail
