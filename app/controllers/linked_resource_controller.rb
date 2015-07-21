@@ -49,7 +49,7 @@ class LinkedResourceController < ResourceController
     end
     
     def sanitize_params(p)
-        ['linkedto_id', 'linkedto_type', 'tenant', 'locale', 'format', 'controller', 'action', 'id', 'conference_id'].each do |arg|
+        ['linkedto_id', 'linkedto_type', 'tenant', 'locale', 'format', 'controller', 'action', 'id', 'conference_id', 'category_name_ids'].each do |arg|
           p.delete(arg)
         end
         params.each do |x,v|
