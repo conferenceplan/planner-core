@@ -113,7 +113,7 @@ jQuery(document).ready(function() {
     $('.survey-help').tooltip();
     
     // enable the popover bootstrap javascript thing
-    $('[data-toggle="popover"]').popover({
+    $('.bpopover').popover({
         trigger: 'hover',
         html: true,
         animation: false,

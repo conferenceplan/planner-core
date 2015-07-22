@@ -41,7 +41,7 @@ var TabUtils = (function(){
         },
 
         onShow: function(){
-            this.$el.find('[data-toggle="popover"]').popover({html : true});
+            this.$el.find('.bpopover').popover({html : true});
         },
         
         events : {
