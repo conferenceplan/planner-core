@@ -18,7 +18,7 @@ SurveyApp.SurveyManagement = (function(Backbone){
             declined_msg    : { type : 'DependentHtml', title : '<%= t "survey-declined-message" %>', 
                                         dependsOn : 'authenticate', dependentValues : ['true'] },
             submit_string   : { type : 'Text', title : '<%= t "survey-submit-string" %>' },
-            header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>' },
+            header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>', validators: ['url'] },
             accept_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-submit-to" %>',
                                             options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                         dependsOn : 'authenticate', dependentValues : ['true'] },
