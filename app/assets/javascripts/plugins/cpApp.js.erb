@@ -641,6 +641,7 @@ var AppUtils = (function(){
             
             // the render it in the area
             this.$el.find(".model-body").html(this.form.el);
+            this.$el.find('.bpopover').popover({html : true});
         },
         
         onEvent : function(eventname, func) {
