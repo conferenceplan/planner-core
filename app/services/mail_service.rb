@@ -58,8 +58,9 @@ module MailService
           cc:       config.cc,
           subject:  template.subject,
           title:    template.title,
-          return_path: config.from
-        }, content
+          return_path: config.from,
+          body:     content
+        }
       ).deliver
       transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
     rescue => msg
@@ -100,8 +101,9 @@ module MailService
           cc:       cc,
           subject:  template.subject,
           title:    template.title,
-          return_path: config.from
-        }, content
+          return_path: config.from,
+          body:     content
+        }
       ).deliver
       saveMailHistory(person, nil, content, EmailStatus[:Sent])
       transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
@@ -154,14 +156,18 @@ module MailService
           to:       to,
           cc:       cc,
           subject:  template.subject,
-          title:    template.title
-        }, content
+          title:    template.title,
+          body:     content
+        }
       ).deliver
       saveMailHistory(person, mailing, content, EmailStatus[:Sent])
       transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
     rescue => msg
       saveMailHistory(person, mailing, msg, EmailStatus[:Failed])
       # THROW ERROR - TODO
+      # puts "*********"
+      # puts msg
+      # puts msg.backtrace
     end
 
   end
