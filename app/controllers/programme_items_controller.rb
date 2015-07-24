@@ -113,13 +113,6 @@ class ProgrammeItemsController < PlannerController
 
     begin
       ProgrammeItem.transaction do
-        if programmeItem.time_slot
-          TimeSlot.destroy(programmeItem.time_slot.id)
-        end
-        if programmeItem.room_item_assignment
-          RoomItemAssignment.destroy(programmeItem.room_item_assignment.id)
-        end
-        
         programmeItem.destroy
     
         render status: :ok, text: {}.to_json
