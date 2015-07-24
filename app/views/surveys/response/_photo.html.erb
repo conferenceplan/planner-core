@@ -1,7 +1,11 @@
 <div class="upload_section" data-preview='<%= "survey_response_#{ question.id }_preview" %>'>
     <div class="upload_button_holder">
         <input id='<%= "survey_response[#{ question.id }][photo]" %>' class="form-control" name='<%= "survey_response[#{ question.id }][photo]" %>' type="hidden"
-            value="<%= !@survey_response[question.id.to_s]['photo'].blank? ? @survey_response[question.id.to_s]['photo'] : '' %>"
+        <% if @survey_response && @survey_response[question.id.to_s] %>
+          <% if @survey_response[question.id.to_s]['photo'] %>
+            value="<%= @survey_response[question.id.to_s]['photo'] %>"
+          <% end %>
+        <% end %>
         >
         <span class="btn btn-success fileinput-button">
             <span>Select file...</span>
