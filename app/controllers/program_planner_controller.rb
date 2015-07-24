@@ -35,17 +35,19 @@ class ProgramPlannerController < PlannerController
   #
   def addItem
     begin
-      @assignment = nil
-      if !params[:cancel]
-        item = ProgrammeItem.find(params[:itemid])
-        room = Room.find(params[:roomid])
-        day = params[:day]
-        time = params[:time].to_time # The start time
-      
-        @assignment = addItemToRoomAndTime(item, room, day, time)
+      ProgrammeItem.transaction do
+        @assignment = nil
+        if !params[:cancel]
+          item = ProgrammeItem.find(params[:itemid])
+          room = Room.find(params[:roomid])
+          day = params[:day]
+          time = params[:time].to_time # The start time
+        
+          @assignment = addItemToRoomAndTime(item, room, day, time)
+        end
+    
+        render :layout => 'content'
       end
-  
-      render :layout => 'content'
     rescue => ex
       render status: :bad_request, text: ex.message
     end
@@ -56,11 +58,13 @@ class ProgramPlannerController < PlannerController
   #
   def removeItem
     begin
-      item = ProgrammeItem.find(params[:itemid])
-  
-      removeAssignment(item.room_item_assignment)
-      
-      render status: :ok, text: {}.to_json
+      ProgrammeItem.transaction do
+        item = ProgrammeItem.find(params[:itemid])
+    
+        removeAssignment(item.room_item_assignment)
+        
+        render status: :ok, text: {}.to_json
+      end
     rescue => ex
       render status: :bad_request, text: ex.message
     end

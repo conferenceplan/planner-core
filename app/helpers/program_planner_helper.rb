@@ -26,7 +26,6 @@ module ProgramPlannerHelper
   def removeAssignment(candidate)
     RoomItemAssignment.transaction do
       # 1. Unassociate a room with the program item i.e. remove the program item from the association
-      candidate.time_slot.destroy
       candidate.destroy
     end
   end
