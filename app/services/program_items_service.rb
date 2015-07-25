@@ -44,7 +44,7 @@ module ProgramItemsService
     if tagquery.empty?
       ProgrammeItem.count args
     else
-      eval "ProgrammeItem#{tagquery}.uniq.count( :all, " + args.inspect + ")"
+      ProgrammeItem.tagged_with(*tagquery).uniq.count( :all, args.inspect )
     end
   end
   
@@ -69,7 +69,7 @@ module ProgramItemsService
     if tagquery.empty?
       items = ProgrammeItem.includes(:programme_item_assignments).find :all, args
     else
-      items = eval "ProgrammeItem#{tagquery}.uniq.includes(:programme_item_assignments).find :all, " + args.inspect
+      items = ProgrammeItem.tagged_with(*tagquery).uniq.includes(:programme_item_assignments).find :all, args
     end
   end
   

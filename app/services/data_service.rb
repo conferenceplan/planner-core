@@ -4,16 +4,27 @@
 module DataService
   
   def self.genTagSql(context, tags)
-    tagquery = ""
+    tagquery = []
     if context
+      # TODO - put in the options for ...
       if context.class == HashWithIndifferentAccess
         context.each do |key, ctx|
           # tagquery += ".tagged_with('" + tags[key].gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + ctx + "', :any => true)"
-          tagquery += ".tagged_with('" + tags[key].gsub(/'/, "\\\\'") + "', :on => '" + ctx + "', :any => true)"
+          if conditions
+            tagquery = [tags[key].gsub(/'/, "\\\\'"), {:on => ctx, :any => true, :owned_by => conditions}]
+          else  
+            tagquery = [tags[key].gsub(/'/, "\\\\'"), {:on => ctx, :any => true}]
+            # tagquery += ".tagged_with('" + tags[key].gsub(/'/, "\\\\'") + "', :on => '" + ctx + "', :any => true)"
+          end
         end
       else
         # tagquery += ".tagged_with('" + tags.gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + context + "', :op => true)"
-        tagquery += ".tagged_with('" + tags.gsub(/'/, "\\\\'") + "', :on => '" + context + "', :match_all => true)"
+        if conditions
+          tagquery = [tags[key].gsub(/'/, "\\\\'"), {:on => context, :match_all => true, :owned_by => conditions}]
+        else  
+          # tagquery += ".tagged_with('" + tags.gsub(/'/, "\\\\'") + "', :on => '" + context + "', :match_all => true)"
+          tagquery = [tags[key].gsub(/'/, "\\\\'"), {:on => context, :match_all => true}]
+        end
         #.gsub("&"){'\&'}
       end
     end
@@ -112,6 +123,10 @@ module DataService
     end
     
     return clause
+  end
+
+  def self.conditions
+    nil
   end
   
 end

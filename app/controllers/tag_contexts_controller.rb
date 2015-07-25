@@ -36,7 +36,7 @@ class TagContextsController < PlannerController
     tag_context = TagContext.find(params[:id])
 
     if ((Person.tag_counts_on(tag_context.name).size > 0) || (ProgrammeItem.tag_counts_on(tag_context.name).size > 0))
-      render status: :bad_request, text: 'Unable to context as it is in use'
+      render status: :bad_request, text: 'Unable to delete context as it is in use'
     else
       tag_context.destroy
       render status: :ok, text: {}.to_json

@@ -366,13 +366,24 @@ class Surveys::ResponseController < ApplicationController
   # set the tag list on the respondent for the context
   #
   def saveTags(respondent, responseText, context)
-    respondent.set_tag_list_on(context, responseText)
+
+    if getTagOwner
+      getTagOwner.tag(respondent, :with => responseText, :on => context)
+    else
+      respondent.set_tag_list_on(context, responseText)
+    end
+
     respondent.save!
     
     # attach tags to the underlying person as well
     person = respondent.person
     if person
-      person.set_tag_list_on(context, responseText)
+      if getTagOwner
+        getTagOwner.tag(person, :with => responseText, :on => context)
+      else
+        person.set_tag_list_on(context, responseText)
+      end
+      
       person.save!
     end
   end
@@ -606,5 +617,10 @@ class Surveys::ResponseController < ApplicationController
     return res
   end
 
+  private
+  
+  def getTagOwner
+    nil
+  end
 end
 

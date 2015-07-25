@@ -437,7 +437,7 @@
     </button>
     <span class="label label-default">{{= context }}</span>
     {{ _.each(tags, function(tag) { }}
-    <span class="label label-info">{{= tag }} <a href="{{= '/tags/' + obj_id + '/remove?class=Person&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="glyphicon glyphicon-remove"></i></a></span>
+    <span class="label label-info">{{= tag }} <a href="{{= '<%= baseUri %>/tags/' + obj_id + '/remove?class=Person&context=' + context + '&tag=' + tag }}" class="tag-remove-link"><i class="glyphicon glyphicon-remove"></i></a></span>
     {{ }); }}
 </div>
 </script>

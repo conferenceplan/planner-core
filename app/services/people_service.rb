@@ -12,6 +12,7 @@ module PeopleService
     whereClause[:id] = peopleIds if peopleIds
     
     if (tag)
+      # takes options
       Person.tagged_with(tag, :on => 'PrimaryArea', :op => true).where(whereClause).includes([:pseudonym, :bio_image, :edited_bio]).
               where(self.constraints()).
               joins(:person_con_state).
@@ -110,7 +111,8 @@ module PeopleService
     if tagquery.empty?
       Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).uniq.count args
     else
-      eval %Q[Person#{tagquery}.where(#{self.constraints(includeMailings,includeMailHistory,mailing_id,onlySurveyRespondents,filters,extraClause)}).uniq.count( :all, ] + args.inspect + ")"
+      Person.tagged_with(*tagquery).uniq.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).uniq.count args
+      # eval %Q[Person#{tagquery}.where(#{self.constraints(includeMailings,includeMailHistory,mailing_id,onlySurveyRespondents,filters,extraClause)}).uniq.count( :all, ] + args.inspect + ")"
     end
   end
 
@@ -135,7 +137,8 @@ module PeopleService
     if tagquery.empty?
       people = Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).includes(:pseudonym).uniq.all args
     else
-      people = eval %Q[Person#{tagquery}.uniq.where(#{self.constraints(includeMailings,includeMailHistory,mailing_id,onlySurveyRespondents,filters,extraClause)}).includes(:pseudonym).uniq.find :all, ] + args.inspect
+      people = Person.tagged_with(*tagquery).uniq.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).includes(:pseudonym).uniq.all args
+      # people = eval %Q[Person#{tagquery}.uniq.where(#{self.constraints(includeMailings,includeMailHistory,mailing_id,onlySurveyRespondents,filters,extraClause)}).includes(:pseudonym).uniq.find :all, ] + args.inspect
     end
   end
   

@@ -10,6 +10,7 @@ class SurveyRespondents::TagsController < ApplicationController
     respondent = SurveyRespondent.find(params[:respondent_id])
     tag_context = params[:context] # tag context
     
+    # TODO - verify that this is ok
     taglist = respondent.tag_list_on(tag_context) # return the list of tags (array)
     
     # render the layout as a list of comma seperated tags
@@ -22,7 +23,11 @@ class SurveyRespondents::TagsController < ApplicationController
     tag_context = params[:context] # tag context
     tag_list = params[:tags] # comma seperated list of tags
 
-    respondent.set_tag_list_on(tag_context, tag_list) # set the tag list on the respondent for the context
+    if getTagOwner
+      getTagOwner.tag(respondent, :with => tag_list, :on => tag_context)
+    else
+      respondent.set_tag_list_on(tag_context, tag_list) # set the tag list on the respondent for the context
+    end
     
     respondent.save
     
@@ -58,6 +63,12 @@ class SurveyRespondents::TagsController < ApplicationController
     else  
       render :layout => 'content'
     end
+  end
+  
+  private
+  
+  def getTagOwner
+    nil
   end
 end
 

@@ -31,6 +31,8 @@ class TagsController < PlannerController
     @className = params[:class]
     @personId = params[:id]
     
+    # taggings.tagger_id IS NULl .... need to deal with owner ????
+    
     if isok(@className)
       obj = eval(@className).find(@personId)
       # 1. Get the set of contexts
@@ -42,7 +44,12 @@ class TagsController < PlannerController
       # 2. For each context get the tags for thie person and add them to the results
       @allTags = Hash.new
       contexts.each do |context|
-        tags = obj.tag_list_on( context )
+        if getTagOwner
+          tags = obj.owner_tag_list_on(getTagOwner, context)
+        else  
+          tags = obj.tag_list_on( context )
+        end
+          
         if tags != nil
           @allTags[context] = tags
         end
@@ -97,8 +104,11 @@ class TagsController < PlannerController
       tagList = params[:tag].split(',') # allow the addition of multiple tags (comma seperated)
     
       tagList.each do |tag|
-        # TODO - capitalise?
-        obj.tag_list_on(context).add(tag)
+        if getTagOwner
+          obj.owner_tag_list_on(getTagOwner, context).add(tag) # set the tag list on the respondent for the context
+        else
+          obj.tag_list_on(context).add(tag) # set the tag list on the respondent for the context
+        end
       end
       obj.id_will_change!
       obj.save
@@ -114,8 +124,12 @@ class TagsController < PlannerController
     if isok(className)
       obj = eval(className).find(params[:id]) # object find by id
       tag = params[:tag]
-
-      obj.tag_list_on(context).delete(tag)
+      
+      if getTagOwner
+        obj.owner_tag_list_on(getTagOwner, context).delete(tag)
+      else
+        obj.tag_list_on(context).delete(tag)
+      end
       obj.id_will_change!
       obj.save
     end
@@ -162,6 +176,12 @@ class TagsController < PlannerController
     end
     
     return contexts
+  end
+
+  private
+  
+  def getTagOwner
+    nil
   end
   
 end
