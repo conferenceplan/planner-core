@@ -112,7 +112,7 @@ jQuery(document).ready(function() {
         }); // show the tag cloud
         
         $.ajax({
-            url: "/survey_respondents/tags/alltags.xml?context=" + context,
+            url: base_url + "/survey_respondents/tags/alltags.xml?context=" + context,
             async: true,
             dataType: "xml",
             success: function(xmlResponse){

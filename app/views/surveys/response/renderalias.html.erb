@@ -1,3 +1,6 @@
+<script>
+    var base_url = "<%= baseUri %>";
+</script>
 
 <% if @survey && !@survey.header_image.empty? %>
     <div class="row"><div class="col-sm-12"><img src="<%= @survey.header_image if @survey.header_image %>" class="center-block"/></div></div>

@@ -32,7 +32,7 @@ class SurveyRespondents::TagsController < ApplicationController
   # get the tags for a specific tag list
   def alltags
     tag_context = params[:context] # tag context
-    @tags = SurveyRespondent.tag_counts_on(tag_context)
+    @tags = TagsService.tag_counts_on(SurveyRespondent, tag_context)
     
     respond_to do |format|
       format.xml
@@ -44,7 +44,7 @@ class SurveyRespondents::TagsController < ApplicationController
     tag_context = params[:context] # tag context
     target = params[:target] # tag context
     limit = params[:limit] # if there is a limit then we only report back on the limit number of tags and sort by most popular
-    @tags = SurveyRespondent.tag_counts_on(tag_context).sort { |x, y| x.name.downcase <=> y.name.downcase }
+    @tags = TagsService.tag_counts_on(SurveyRespondent, tag_context).sort { |x, y| x.name.downcase <=> y.name.downcase }
     
     if limit
       l = limit.to_i

@@ -3,6 +3,15 @@
 #
 
 module TagsService
+  
+  def self.tag_counts_on(_class, context)
+    if conditions
+      tag_counts = _class.tag_counts_on(context, conditions)
+    else  
+      tag_counts = _class.tag_counts_on(context)
+    end
+    tag_counts
+  end
 
   def self.getTagCounts(classname, context)
     ActiveRecord::Base.connection.select_all tagCountSql(classname, context).to_sql
@@ -28,6 +37,10 @@ protected
   def self.taggingSql(instance, context)
     taggings = Arel::Table.new(:taggings)
     taggings[:taggable_id].eq(instance.id.to_s).and(taggings[:taggable_type].eq(instance.class.name))
+  end
+  
+  def self.conditions
+    nil
   end
 
   def self.constraints(*args)

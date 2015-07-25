@@ -7,7 +7,7 @@
     <div class="context" style='display:none'><%= question.tags_label%></div>
     <script type="text/javascript">
         var <%= question.tags_label%>_array = [
-        <% SurveyRespondent.tag_counts_on(question.tags_label).sort { |x, y| x.name.downcase <=> y.name.downcase }.sort { |x, y| y.count <=> x.count }[0..20].each do |tag| %>
+        <% TagsService.tag_counts_on(SurveyRespondent, question.tags_label).sort { |x, y| x.name.downcase <=> y.name.downcase }.sort { |x, y| y.count <=> x.count }[0..20].each do |tag| %>
             { text: "<%= tag.name%>", weight: <%= tag.count%>},
         <% end %>
         ];
