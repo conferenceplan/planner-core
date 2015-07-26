@@ -410,12 +410,27 @@ class PublishJob
                   :conditions => "taggable_type like '" + from.class.name + "' AND context != 'Admin'"
     
     taggings.each do |tagging|
-      tags = from.tag_list_on(tagging.context)
+      if getTagOwner
+        tags = from.owner_tags_on(getTagOwner, tagging.context)
+      else  
+        tags = from.tag_list_on(tagging.context) # TODO - fix
+      end
       tagstr = tags * ","
       if tags
-        to.set_tag_list_on(tagging.context, tagstr)
+        if getTagOwner
+          getTagOwner.tag(to, :with => tagstr, :on => tagging.context)
+        else
+          to.set_tag_list_on(tagging.context, tagstr) # set the tag list on the respondent for the context
+          #to.set_tag_list_on(tagging.context, tagstr) # TODO - set owner
+        end
       end
     end
+  end
+
+  private
+  
+  def getTagOwner
+    nil
   end
 
 end
