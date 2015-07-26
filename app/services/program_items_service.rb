@@ -44,7 +44,7 @@ module ProgramItemsService
     if tagquery.empty?
       ProgrammeItem.count args
     else
-      ProgrammeItem.tagged_with(*tagquery).uniq.count( :all, args.inspect )
+      ProgrammeItem.tagged_with(*tagquery).uniq.count( :all, args )
     end
   end
   
@@ -54,7 +54,7 @@ module ProgramItemsService
     
     offset = (page - 1) * rows.to_i
     offset = 0 if offset < 0
-    args.merge!(:offset => offset, :limit => rows)
+    # args.merge!(:offset => offset, :limit => rows)
     
     if (index != nil && index != "")
        args.merge!(:offset => offset, :limit => rows, :order => index + " " + sort_order)
