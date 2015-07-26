@@ -1175,9 +1175,12 @@ Form.Editor = Form.editors.Base = Backbone.View.extend({
         getValidator = this.getValidator;
 
     if (validators) {
+        var self = this;
       //Run through validators until an error is found
+      
       _.every(validators, function(validator) {
-        error = getValidator(validator)(value, formValues);
+          fn = getValidator(validator).bind(self);
+        error = fn(value, formValues);
 
         return error ? false : true;
       });

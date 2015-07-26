@@ -46,7 +46,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             message: '<%= t "time-required-when-you-set-a-room" %>'
                         };
                         if (formValues.room_id != "" && formValues.start_time == "") {
-                            this.modal.$el.find('#room-error').html(err.message);
+                            $(this.$el).parent().parent().find('#room-error').html(err.message);
                             return err;
                         }
                     }
@@ -69,7 +69,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
                         if (formValues.room_id == "" && formValues.start_time != "") {
-                            this.modal.$el.find('#start-time-error').text(err.message);
+                            $(this.$el).parent().parent().find('#start-time-error').text(err.message);
                             return err;
                         }
                     }
