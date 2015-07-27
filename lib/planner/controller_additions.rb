@@ -4,7 +4,11 @@ module Planner
     def self.included(base)
       base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :baseUri_with_lang,
                          :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
-                         :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url
+                         :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo
+    end
+
+    def get_logo(conference = nil,scale = 2)
+      nil
     end
 
     def get_base_image_url
