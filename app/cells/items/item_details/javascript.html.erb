@@ -298,7 +298,9 @@ ItemApp.ItemManagement = (function(Backbone){
         
         //initialize the popovers
         $(function () {
-            $('.bpopover').popover()
+            $('.bpopover').popover({
+                html: true,
+            })
         });
 
         TabUtils.createTabControl({
