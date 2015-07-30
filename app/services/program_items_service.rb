@@ -12,7 +12,7 @@ module ProgramItemsService
   
   def self.assign_reference_numbers(increment = 3)
       items = ProgrammeItem.all(:include => [:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ],
-                                                 :order => 'time_slots.start ASC, venues.name DESC, rooms.name ASC',
+                                                 :order => 'time_slots.start ASC, venues.sort_order, rooms.sort_order',
                                                  :conditions => 'programme_items.print = true')
                                                  
       itemNumber = increment
