@@ -38,7 +38,7 @@ module PlannerReportsService
     ProgrammeItem.where("(audience_size is not null) AND (audience_size > room_setups.capacity)").
                     includes([{:room_item_assignment => {:room => [:room_setup, :venue]}}, :time_slot]).
                     where(self.constraints()).
-                    order("time_slots.start, venues.name desc, rooms.name")
+                    order("time_slots.start, venues.sort_order, rooms.sort_order")
   end
   
   #
@@ -115,9 +115,9 @@ module PlannerReportsService
     conditions.unshift cond_str
 
     if sort_by == 'time'
-      ord_str = "time_slots.start, time_slots.end, venues.name desc, rooms.name, people.last_name"
+      ord_str = "time_slots.start, time_slots.end, venues.sort_order, rooms.sort_order, people.last_name"
     elsif sort_by == 'room'
-      ord_str = "venues.name desc, rooms.name, time_slots.start, time_slots.end, people.last_name"
+      ord_str = "venues.sort_order, rooms.sort_order, time_slots.start, time_slots.end, people.last_name"
     else
       ord_str = "programme_items.title, people.last_name"
     end
@@ -274,7 +274,7 @@ module PlannerReportsService
     Room.includes([:venue, {:programme_items => [:time_slot, :format, :equipment_needs]}]).
           where("time_slots.start is not NULL").
           where(self.constraints()).
-          order("venues.name desc, rooms.name, time_slots.start, time_slots.end")
+          order("venues.sort_order, rooms.sort_order, time_slots.start, time_slots.end")
   end
   
   #
@@ -295,7 +295,7 @@ module PlannerReportsService
               :published_room_item_assignments => 
               [:published_time_slot, {:published_programme_item => [{:published_programme_item_assignments => {:person => :pseudonym}}, :format]}] ]).
             where(self.constraints()).
-            order("published_venues.name desc, published_rooms.name, published_time_slots.start")
+            order("published_venues.sort_order, published_rooms.sort_order, published_time_slots.start")
     
     # .all :include => [:published_venue,
             # :published_room_item_assignments => [:published_time_slot, {:published_programme_item => [{:published_programme_item_assignments => {:person => :pseudonym}}, :format]}] ], 
@@ -311,7 +311,7 @@ module PlannerReportsService
             includes([{:rooms => :venue}, {:programme_items => :equipment_needs}]).
             where("time_slots.start is not NULL").
             where(self.constraints()).
-            order("time_slots.start, time_slots.end, venues.name desc, rooms.name")
+            order("time_slots.start, venues.sort_order, rooms.sort_order")
   end
   
   #
@@ -322,7 +322,7 @@ module PlannerReportsService
               includes([{:rooms => :venue}, {:programme_items => [{:programme_item_assignments => {:person => :pseudonym}}, :format, ]}]).
               where("print = 1 and time_slots.start is not NULL").
               where(self.constraints()).
-              order("time_slots.start, time_slots.end, venues.name desc, rooms.name")
+              order("time_slots.start, venues.sort_order, rooms.sort_order")
   end
 
   #
@@ -382,7 +382,7 @@ module PlannerReportsService
 
     ProgrammeItem.all :include => [:programme_item_assignments, :time_slot, {:room => :venue}, :format],
       :conditions => ["(time_slots.start is not NULL) AND (programme_items.minimum_people > 1 OR programme_items.maximum_people > 1) AND (programme_items.id not in (?))", ids],
-      :order => "time_slots.start, time_slots.end, venues.name desc, rooms.name"
+      :order => "time_slots.start, time_slots.end, venues.sort_order, rooms.sort_order"
 
   end
 
