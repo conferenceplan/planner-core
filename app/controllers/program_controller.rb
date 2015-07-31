@@ -60,7 +60,7 @@ class ProgramController < ApplicationController
       conditions = getConditions(params)
       
       if stream
-        @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day, name, lastname
+        @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day
       else
         @programmeItems = PublishedProgramItemsService.getPublishedProgramItems day
       end

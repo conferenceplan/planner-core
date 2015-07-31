@@ -57,14 +57,14 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getPublishedProgramItems(day = nil, term = nil)
+  def self.getPublishedProgramItems(day = nil, term = nil, signups = nil)
 
     # join with tags - use :base_tags to get all the tags associated with the item(s)
     PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order',
                               :include => [:base_tags, :publication, :published_time_slot, :format, :external_images, {:published_programme_item_assignments => {:person => [:pseudonym, :edited_bio]}}, 
                                 {:published_room_item_assignment => {:published_room => [:published_venue]}} ],
-                               :conditions => getItemConditions(day, term)
+                               :conditions => getItemConditions(day, term, signups)
     end
     
   end
@@ -85,13 +85,13 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getTaggedPublishedProgramItems(tag, day = nil, name = nil, lastname = nil)
+  def self.getTaggedPublishedProgramItems(tag, day = nil, term = nil, signups = nil)
 
     PublishedProgrammeItem.uncached do
-      PublishedProgrammeItem.tagged_with(tag, :on => 'PrimaryArea', :op => true).all(
+      PublishedProgrammeItem.tagged_with(tag, :op => true).all(
                                         :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
                                         :order => 'published_time_slots.start, published_venues.sort_order, published_rooms.sort_order',
-                                        :conditions => getConditions(day, name, lastname) )
+                                        :conditions => getItemConditions(day, term, signups) )
     end
 
   end
@@ -406,12 +406,14 @@ private
 
 private
 
-  def self.getItemConditions(day, term)
+  def self.getItemConditions(day, term, signups)
     if (day)
       cfg = SiteConfig.first
       start_of_day = cfg.start_date + day.to_i.days
       end_of_day = start_of_day + 1.days
     end
+    
+    # TODO - ensure we also use tags ....
     
     conditionStr = "" if (day || term)
     conditionStr += '(published_time_slots.start >= ? AND published_time_slots.start < ?) ' if day
@@ -422,6 +424,10 @@ private
       conditionStr += ' OR published_programme_items.title like ? '
       conditionStr += ' OR published_programme_items.precis like ? '
       conditionStr += ')'
+    end
+    if signups
+      conditionStr += ' AND ' if (conditionStr.size > 0)
+      conditionStr += ' (published_programme_items.item_registerable = 1) '
     end
     conditions = [conditionStr] if (day || term)
     conditions += [start_of_day, end_of_day] if day 
