@@ -606,7 +606,7 @@ class PlannerReportsController < PlannerController
     TimeSlot.uncached do
       @times = PlannerReportsService.findProgramItemsByTimeAndRoom
       @rooms = Room.all :select => 'distinct rooms.name',
-                                 :order => 'venues.name DESC, rooms.name ASC', 
+                                 :order => 'venues.sort_order, rooms.sort_order', 
                                  :include => :venue
       
       respond_to do |format|

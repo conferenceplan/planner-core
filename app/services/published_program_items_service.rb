@@ -42,7 +42,7 @@ module PublishedProgramItemsService
     
     PublishedRoom.uncached do
       PublishedRoom.all :select => 'distinct published_rooms.name',
-                      :order => 'published_venues.name DESC, published_rooms.name ASC', 
+                      :order => 'published_venues.sort_order, published_rooms.sort_order', 
                       :include => [:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}],
                       :conditions => getConditions(day, name, lastname)
     end
@@ -61,7 +61,7 @@ module PublishedProgramItemsService
 
     # join with tags - use :base_tags to get all the tags associated with the item(s)
     PublishedProgrammeItem.uncached do
-      PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
+      PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order',
                               :include => [:base_tags, :publication, :published_time_slot, :format, :external_images, {:published_programme_item_assignments => {:person => [:pseudonym, :edited_bio]}}, 
                                 {:published_room_item_assignment => {:published_room => [:published_venue]}} ],
                                :conditions => getItemConditions(day, term)
@@ -76,7 +76,7 @@ module PublishedProgramItemsService
                                               {:published_programme_item_assignments => {:person => [:pseudonym, :email_addresses]}},
                                               {:published_room => [:published_venue]} ],
                                :conditions => "published_programme_item_assignments.id is not null",
-                               :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC'
+                               :order => 'published_time_slots.start, published_venues.sort_order, published_rooms.sort_order'
                                # :order => 'published_programme_items.title ASC'
     end
     
@@ -90,7 +90,7 @@ module PublishedProgramItemsService
     PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.tagged_with(tag, :on => 'PrimaryArea', :op => true).all(
                                         :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
-                                        :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
+                                        :order => 'published_time_slots.start, published_venues.sort_order, published_rooms.sort_order',
                                         :conditions => getConditions(day, name, lastname) )
     end
 
