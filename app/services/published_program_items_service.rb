@@ -57,14 +57,14 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getPublishedProgramItems(day = nil, name = nil, lastname = nil)
+  def self.getPublishedProgramItems(day = nil, term = nil)
 
     # join with tags - use :base_tags to get all the tags associated with the item(s)
     PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.name DESC, published_rooms.name ASC',
                               :include => [:base_tags, :publication, :published_time_slot, :format, :external_images, {:published_programme_item_assignments => {:person => [:pseudonym, :edited_bio]}}, 
                                 {:published_room_item_assignment => {:published_room => [:published_venue]}} ],
-                               :conditions => getConditions(day, name, lastname)
+                               :conditions => getItemConditions(day, term)
     end
     
   end
@@ -405,6 +405,29 @@ private
   end
 
 private
+
+  def self.getItemConditions(day, term)
+    if (day)
+      cfg = SiteConfig.first
+      start_of_day = cfg.start_date + day.to_i.days
+      end_of_day = start_of_day + 1.days
+    end
+    
+    conditionStr = "" if (day || term)
+    conditionStr += '(published_time_slots.start >= ? AND published_time_slots.start < ?) ' if day
+    if term
+      conditionStr += ' AND ' if day
+      conditionStr += '('
+      conditionStr += 'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ? '
+      conditionStr += ' OR published_programme_items.title like ? '
+      conditionStr += ' OR published_programme_items.precis like ? '
+      conditionStr += ')'
+    end
+    conditions = [conditionStr] if (day || term)
+    conditions += [start_of_day, end_of_day] if day 
+    conditions += ['%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%'] if term
+    conditions    
+  end
 
   def self.getConditions(day = nil, name = nil, lastname = nil)
     # get the start date

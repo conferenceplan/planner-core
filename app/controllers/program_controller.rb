@@ -54,8 +54,6 @@ class ProgramController < ApplicationController
     stream = params[:stream]
     layout = params[:layout]
     day = params[:day]
-    name = params[:name]
-    lastname = params[:lastname]
     @singleVenue = Venue.count == 1
 
     if !json_fragment_exist?( [request.host, request.path, params[:scale]] )
@@ -64,7 +62,7 @@ class ProgramController < ApplicationController
       if stream
         @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day, name, lastname
       else
-        @programmeItems = PublishedProgramItemsService.getPublishedProgramItems day, name, lastname
+        @programmeItems = PublishedProgramItemsService.getPublishedProgramItems day
       end
   
       @scale = params[:scale].to_f
