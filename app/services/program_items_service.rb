@@ -247,13 +247,12 @@ protected
     query = assignments.project(*assignment_attrs).
                                       join(room_assignments).on(room_assignments[:programme_item_id].eq(assignments[:programme_item_id])).
                                       join(time_slots).on(room_assignments[:time_slot_id].eq(time_slots[:id])).
-                                      join(assignments_alias).on(assignments[:id].lt(assignments_alias[:id])).
+                                      join(assignments_alias).on(assignments[:id].not_eq(assignments_alias[:id])).
                                       join(room_assignments_alias).on(room_assignments_alias[:programme_item_id].eq(assignments_alias[:programme_item_id])).
                                       join(time_slots_alias).on(room_assignments_alias[:time_slot_id].eq(time_slots_alias[:id])).
                                       where(
-                                          time_slots[:start].lt(time_slots_alias[:start]).
-                                          or(time_slots[:start].eq(time_slots_alias[:start])).
-                                          and(time_slots[:end].gt(time_slots_alias[:start])).
+                                          time_slots[:end].gt(time_slots_alias[:start]).
+                                          and(time_slots[:start].lteq(time_slots_alias[:start])).
                                           and(assignments[:programme_item_id].not_eq(assignments_alias[:programme_item_id])).
                                           and(assignments[:person_id].eq(assignments_alias[:person_id])).
                                           and(assignments[:role_id].not_eq(PersonItemRole['Reserved'].id).and(assignments_alias[:role_id].not_eq(PersonItemRole['Reserved'].id)))
