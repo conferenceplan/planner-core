@@ -6,6 +6,7 @@ json.rowdata @assignments do |assignment|
     json.name               assignment.person.getFullPublicationName
     json.day                assignment.day
     json.day_str            (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A')
+    json.date_str           (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%d %b %Y')
     json.nbr_items          assignment.nbr_items
     json.max_items_per_day  assignment.max_items_per_day ? assignment.max_items_per_day : ''
     json.max_items_per_con  assignment.max_items_per_con ? assignment.max_items_per_con : ''

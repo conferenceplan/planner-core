@@ -87,7 +87,25 @@ module PlannerReportsService
                   where(self.constraints()).
                   order("time_slots.start")
 
-  end  
+  end
+  
+  def self.findPanelsWithEquipmentNeeds(plus_setups = true)
+    conditions = []
+
+    if plus_setups
+      setup = Format.find_by_name('RESET') # TODO - check that this makes sense i.e. format of name RESET?
+      cond_str = "(equipment_needs.programme_item_id is not NULL or formats.id = ?) and time_slots.start is not NULL"
+      conditions.push setup
+    else
+      cond_str = "equipment_needs.programme_item_id is not NULL and time_slots.start is not NULL"
+    end
+    
+    conditions.unshift cond_str
+    
+    ProgrammeItem.where(conditions).
+                  includes([{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
+                  order("time_slots.start, venues.sort_order, rooms.sort_order")
+  end
   
   def self.findPanelsWithPanelists(sort_by = '', mod_date = '1900-01-01', format_id = nil, sched_only = false, equip_only = false, plus_setups = false)
 
@@ -185,12 +203,10 @@ module PlannerReportsService
     roles.concat(additional_roles) if additional_roles
     cndStr = '(published_programme_item_assignments.role_id in (?))'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
-    # cndStr += ' AND (published_rooms.id in(?))' if roomIds
     cndStr += ' AND (published_programme_item_assignments.published_programme_item_id in(?))' if itemIds
 
     conditions = [cndStr, roles] #, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
     conditions << peopleIds if peopleIds
-    # conditions << roomIds if roomIds
     conditions << itemIds if itemIds
     
     Person.where(conditions).
@@ -204,19 +220,27 @@ module PlannerReportsService
   #
   def self.findTagsByContext(context)
     tags = ActsAsTaggableOn::Tagging.
-                            where(['context = ?', context]).
+                            where(['context = ? and tagger_id = ?', context, getTagOwner]).
                             joins("join tags on taggings.tag_id = tags.id").
                             where(self.constraints()).select('distinct name')
     
     tags.collect! {|t| t.name}
     peopleAndTags = Array.new
     tags.each do |tag|
-      peopleAndTags.concat Person.tagged_with(tag, :on => context)
+        if getTagOwner
+          peopleAndTags.concat Person.tagged_with(tag, :on => context, :owned_by => getTagOwner)
+        else  
+          peopleAndTags.concat Person.tagged_with(tag, :on => context)
+        end
     end
     peopleAndTags.uniq!
     peopleAndTags.sort! {|x,y| x.last_name <=> y.last_name}
     peopleAndTags.each do |n|
-      n.details = n.tag_list_on(context)
+      if getTagOwner
+        n.details = n.owner_tags_on(getTagOwner, context).collect{|t| t.name}
+      else  
+        n.details = n.tag_list_on(context)
+      end
     end
     
     peopleAndTags
@@ -390,6 +414,10 @@ module PlannerReportsService
 #
 #
 protected
+
+  def getTagOwner
+    nil
+  end
 
   def self.word_counts_if_clause(attr)
     attr_length = Arel::Nodes::NamedFunction.new( "CHAR_LENGTH", [ attr ])

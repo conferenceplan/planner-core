@@ -86,7 +86,7 @@ class PlannerReportsController < PlannerController
         output = Array.new
 
         output.push [
-          'Person','Day','Nbr of Items','Max per Day','Max per Con','Items'
+          'Person','Day','Date','Nbr of Items','Max per Day','Max per Con','Items'
         ]
         
         @assignments.each do |assignment|
@@ -94,6 +94,7 @@ class PlannerReportsController < PlannerController
           output.push [
                 assignment.person.getFullPublicationName,
                 (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A'),
+                (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%d %b %Y'),
                 assignment.nbr_items,
                 (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
                 (assignment.max_items_per_con ? assignment.max_items_per_con : ''),
@@ -194,13 +195,15 @@ class PlannerReportsController < PlannerController
         output = Array.new
 
         output.push [
-          'Title','Format','Start Time','End Time','Room','Venue','Capacity', 'Estimated Audience'
+          'Title','Format','Date','Daye','Start Time','End Time','Room','Venue','Capacity', 'Estimated Audience'
         ]
         
         @items.each do |item|
           
           output.push [item.title,
             (item.format ? item.format.name : ''), 
+            ((item.time_slot != nil) ? item.time_slot.start.strftime('%d %b %Y') : ''),
+            ((item.time_slot != nil) ? item.time_slot.start.strftime('%A') : ''),
             ((item.time_slot != nil) ? item.time_slot.start.strftime('%a %H:%M') : ''),
             ((item.time_slot != nil) ? item.time_slot.end.strftime('%a %H:%M') : ''),
             ((item.room != nil) ? item.room.name : ''),
@@ -219,10 +222,7 @@ class PlannerReportsController < PlannerController
   #
   #
   def equipment_needs
-    scheduled = params[:scheduled] == "true"
-    format_id = params[:format_id].to_i > 0 ? params[:format_id].to_i : nil
-    plus_setups = false
-    @panels = PlannerReportsService.findPanelsWithPanelists('','1900-01-01', format_id, scheduled, true, plus_setups)
+    @panels = PlannerReportsService.findPanelsWithEquipmentNeeds
     
     respond_to do |format|
       format.json
@@ -231,20 +231,22 @@ class PlannerReportsController < PlannerController
         output = Array.new
 
         output.push [
-          'Ref','Title','Min People','Max People','Format','Day', 'Start Time','End Time','Room','Venue','Equipment'
+          'Date', 'Day', 'Start Time','End Time','Venue','Room','Room Setup', 'Title','Format', 'Equipment'
         ]
         
         @panels.each do |panel|
           
-          output.push [panel.pub_reference_number, panel.title, panel.minimum_people, 
-            panel.maximum_people, 
-            (panel.format ? panel.format.name : ''), 
-            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a') : ''),
+          output.push [
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%d %b %Y') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%A') : ''),
             ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%H:%M') : ''),
             ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%H:%M') : ''),
-            ((panel.room != nil) ? panel.room.name : ''),
             ((panel.room != nil) ? panel.room.venue.name : ''),
-            panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(","),
+            ((panel.room != nil) ? panel.room.name : ''),
+            ((panel.room != nil && panel.room.room_setup) ? panel.room.room_setup.setup_type.name : ''),
+            (panel.title ? panel.title : ''), 
+            (panel.format ? panel.format.name : ''), 
+            panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(", ")
           ]
         end
         
@@ -349,8 +351,7 @@ class PlannerReportsController < PlannerController
         outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
         output.push [
-          'Ref','Title','Min People','Max People','Format','Area(s)','Start Time','End Time','Room','Venue',
-          'Equipment','Participants','Moderators','Reserve','Invisible'
+          'Date', 'Day', 'Start Time','End Time','Venue','Room','Format', 'Title','Moderators','Participants'
         ]
         
         @panels.each do |panel|
@@ -359,19 +360,17 @@ class PlannerReportsController < PlannerController
           next if (@fewer_than > 0 && count >= @fewer_than)
           next if (@more_than > 0 && count <= @more_than)
 
-          output.push [panel.pub_reference_number, panel.title, panel.minimum_people, 
-            panel.maximum_people, 
-            (panel.format ? panel.format.name : ''), 
-            panel.taggings.collect{|t| t.context}.uniq.join(","),
-            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
-            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
-            ((panel.room != nil) ? panel.room.name : ''),
+          output.push [
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%d %b %Y') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%A') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%H:%M') : ''),
+            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%H:%M') : ''),
             ((panel.room != nil) ? panel.room.venue.name : ''),
-            panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
+            ((panel.room != nil) ? panel.room.name : ''),
+            (panel.format ? panel.format.name : ''), 
+            panel.title,
             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(",")
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(",")
           ]
           
         end
@@ -518,15 +517,17 @@ class PlannerReportsController < PlannerController
       format.csv {
         outfile = "panels_by_room" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
-        output.push ['Room', 'Venue', 'Item', 'Day', 'Time', 'Equipment']
+        output.push ['Room', 'Venue', 'Date', 'Day', 'Start', 'End', 'Item', 'Equipment']
         
         @rooms.collect {|r| r.programme_items.collect {|i| { :room => r, :item => i } } }.flatten.each do |e|
           output.push [
             e[:room].name,
             e[:room].venue.name,
+            e[:item].time_slot.start.strftime('%d %b %Y'),
+            e[:item].time_slot.start.strftime('%A'),
+            e[:item].time_slot.start.strftime('%H:%M'),
+            e[:item].time_slot.end.strftime('%H:%M'),
             e[:item].title,
-            e[:item].time_slot.start.strftime('%a'),
-            e[:item].time_slot.start.strftime('%H:%M') + ' - ' + e[:item].time_slot.end.strftime('%H:%M'),
             e[:item].equipment_needs.collect {|eq| eq.equipment_type.description if eq.equipment_type }.join("\n")
           ]
         end
@@ -548,12 +549,14 @@ class PlannerReportsController < PlannerController
       format.csv {
         outfile = "panels_by_timeslot" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
-        output.push ['Day', 'Time', 'Room', 'Venue', 'Item', 'Equipment']
+        output.push ['Date', 'Day', 'Start', 'End,' 'Room', 'Venue', 'Item', 'Equipment']
         
         @times.collect {|t| t.programme_items.collect {|i| { :time => t, :item => i } } }.flatten.each do |e|
           output.push [
-            e[:time].start.strftime('%a'),
-            e[:time].start.strftime('%H:%M') + ' - ' + e[:time].end.strftime('%H:%M'),
+            e[:time].start.strftime('%d %b %Y'),
+            e[:time].start.strftime('%A'),
+            e[:time].start.strftime('%H:%M'),
+            e[:time].end.strftime('%H:%M'),
             e[:item].room.name,
             e[:item].room.venue.name,
             e[:item].title,
