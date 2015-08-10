@@ -13,6 +13,7 @@ prawn_document(:page_size => @label_dimensions.page_size,
     
     cols = @label_dimensions.across
     rows = @label_dimensions.down
+    max_per_label = 6
 
     pdf.define_grid(:columns => cols, :rows => rows, 
                     :row_gutter => (@label_dimensions.vertical_spacing * 1.send(@label_dimensions.unit)), 
@@ -20,37 +21,53 @@ prawn_document(:page_size => @label_dimensions.page_size,
     
     i = x = y = 0
     @people.each do |p|
-    
-        label = "<b><u>" + p.getFullPublicationName + "</u></b>\n" if !@exclude_items
-        label = "<b>" + p.getFullPublicationName + "</b>\n" if @exclude_items
+        labels = []
+        labels[0] = "<b>" + p.getFullPublicationName + "</b>\n" if @exclude_items
         
         if (@exclude_items == false)
-            label += p.programmeItemAssignments.collect { |i|
+            # TODO - if number of items > 7 then we create a new label to continue the list
+            items_to_print = p.programmeItemAssignments.collect { |i|
                 if i.programmeItem.time_slot && (@allowed_roles.include? i.role)
-                    "(" + i.role.name[0] +
-                    ") <b>" + i.programmeItem.time_slot.start.strftime(@time_format) + "</b> : " + 
-                    i.programmeItem.room.name + " " +
-                    (i.programmeItem.short_title.blank? ? i.programmeItem.title : i.programmeItem.short_title)
+                    i
                 end
-            }.compact.join("\n")
+            }.compact
+            
+            nbr_labels = (items_to_print.size / max_per_label) + ((items_to_print.size % max_per_label > 0) ? 1 : 0) - 1
+            
+            (0..nbr_labels).each do |l|
+                labels[l] = "<b><u>" + p.getFullPublicationName + "</u></b>\n" if !@exclude_items
+                
+                ((l*max_per_label)..(l*max_per_label+max_per_label-1)).each do |p|
+                    if items_to_print[p]
+                        labels[l] += "(" + items_to_print[p].role.name[0] +
+                                ") <b>" + items_to_print[p].programmeItem.time_slot.start.strftime(@time_format) + "</b> : " + 
+                                items_to_print[p].programmeItem.room.name + " " +
+                                (items_to_print[p].programmeItem.short_title.blank? ? items_to_print[p].programmeItem.title : items_to_print[p].programmeItem.short_title) +
+                                "\n"
+                    end
+                end
+            end
+        
         end
     
-        y, x = i.divmod(cols)
-        pdf.grid(y,x).bounding_box do |b|
-            pdf.transparent(0.5) { pdf.dash(1); pdf.stroke_bounds; pdf.undash }
-            # use text_box so that we truncate/re-size the text
-            pdf.text_box label, :at => [(pdf.bounds.top_left[0] + bleed.in),(pdf.bounds.top_left[1] - bleed.in)], # plus blead
-                            :width => pdf.bounds.right - bleed.in, # minus blead
-                            :height => pdf.bounds.height - bleed.in, # minus blead
-                            :overflow => :shrink_to_fit,
-                            :inline_format => true,
-                            :fallback_fonts => fallback_fonts
-        end
-        if (y == (rows -1) && x == (cols -1))
-            i = 0
-            pdf.start_new_page
-        else    
-            i += 1
+        labels.each do |label|
+            y, x = i.divmod(cols)
+            pdf.grid(y,x).bounding_box do |b|
+                pdf.transparent(0.5) { pdf.dash(1); pdf.stroke_bounds; pdf.undash }
+                # use text_box so that we truncate/re-size the text
+                pdf.text_box label, :at => [(pdf.bounds.top_left[0] + bleed.in),(pdf.bounds.top_left[1] - bleed.in)], # plus blead
+                                :width => pdf.bounds.right - bleed.in, # minus blead
+                                :height => pdf.bounds.height - bleed.in, # minus blead
+                                :overflow => :shrink_to_fit,
+                                :inline_format => true,
+                                :fallback_fonts => fallback_fonts
+            end
+            if (y == (rows -1) && x == (cols -1))
+                i = 0
+                pdf.start_new_page
+            else    
+                i += 1
+            end
         end
     end
 end
