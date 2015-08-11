@@ -605,6 +605,8 @@ class PlannerReportsController < PlannerController
     
     @max_people = PlannerReportsService.findMaxParticipants[0]["max_people"] # maximum nbr of participants for this conference
     @contexts = getContexts('ProgrammeItem').sort_by{|name| name.downcase }
+    
+    @tagOwner = getTagOwner
 
     TimeSlot.uncached do
       @times = PlannerReportsService.findProgramItemsByTimeAndRoom
@@ -784,6 +786,12 @@ class PlannerReportsController < PlannerController
     end
     
     return contexts
+  end
+
+  private
+  
+  def getTagOwner
+    nil
   end
 
 end

@@ -38,7 +38,7 @@ wb.add_worksheet(name: "Program") do |sheet|
             time.programme_items[0].duration,
             time.rooms[0].name,
             time.rooms[0].venue.name,
-            time.programme_items[0].tag_list_on(:PrimaryArea).join(","),
+            (@tagOwner ? time.programme_items[0].owner_tag_list_on(@tagOwner, :PrimaryArea).join(",") : time.programme_items[0].tag_list_on(:PrimaryArea).join(",")),
             (time.programme_items[0].format ? time.programme_items[0].format.name : ""),
             (time.programme_items[0].title ? time.programme_items[0].title.gsub(/\n|\r/,"") : ""),
             (!time.programme_items[0].precis.blank? ? time.programme_items[0].precis.gsub(/\n|\r/,"") : ""),
@@ -50,7 +50,11 @@ wb.add_worksheet(name: "Program") do |sheet|
         ]
         
         @contexts.each do |ctx|
-            row << time.programme_items[0].tag_list_on( ctx ).join(",")
+            if @tagOwner
+                row << time.programme_items[0].owner_tag_list_on( @tagOwner, ctx ).join(",")
+            else  
+                row << time.programme_items[0].tag_list_on( ctx ).join(",")
+            end
         end
         
         time.programme_items[0].programme_item_assignments.each do |assignment|

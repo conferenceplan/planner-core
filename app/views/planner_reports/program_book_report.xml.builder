@@ -15,8 +15,14 @@ xml.program do
                         xml.duration item.programme_items[0].duration
                         xml.format item.programme_items[0].format.name if item.programme_items[0].format
                         xml.tracks do
-                            item.programme_items[0].tag_list_on(:PrimaryArea).each do |track| # TODO - check to make sure we have PrimaryArea
-                                xml.track track
+                            if @tagOwner
+                                item.programme_items[0].owner_tag_list_on(@tagOwner, :PrimaryArea).each do |track| # TODO - check to make sure we have PrimaryArea
+                                    xml.track track
+                                end
+                            else
+                                item.programme_items[0].tag_list_on(:PrimaryArea).each do |track| # TODO - check to make sure we have PrimaryArea
+                                    xml.track track
+                                end
                             end
                         end
                         xml.tags do
