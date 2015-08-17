@@ -202,7 +202,8 @@ module PublishedProgramItemsService
         if item
           # The changes could be an array to need to know ...
           rm_id = a.audited_changes['published_room_id'].kind_of?(Array) ? a.audited_changes['published_room_id'][1] : a.audited_changes['published_room_id']
-          ts_id = a.audited_changes['published_time_slot_id'].kind_of?(Array) ? (a.audited_changes['published_time_slot_id'][1] != a.audited_changes['published_time_slot_id'][0] ? a.audited_changes['published_time_slot_id'][1] : nil) : a.audited_changes['published_time_slot_id']
+          ts_id = a.audited_changes['published_time_slot_id'].kind_of?(Array) ? (has_time_changed(a.audited_changes['published_time_slot_id'][1],a.audited_changes['published_time_slot_id'][0]) ? a.audited_changes['published_time_slot_id'][1] : nil) : a.audited_changes['published_time_slot_id']
+
           if (PublishedTimeSlot.exists? ts_id) || (PublishedRoom.exists? rm_id)
             time_slot = ts_id && (PublishedTimeSlot.exists? ts_id) ? PublishedTimeSlot.find(ts_id) : nil
             room = rm_id && (PublishedRoom.exists? rm_id) ? PublishedRoom.find(rm_id) : nil
@@ -236,6 +237,18 @@ module PublishedProgramItemsService
     end
     
     res
+  end
+
+# SELECT count( distinct audited_changes ) FROM sasquan.audits where 
+# audits.auditable_type like 'PublishedTimeSlot'
+# and auditable_id in (3800,3866)
+# order by created_at desc;  
+  def self.has_time_changed(id1, id2)
+    changes = Audited::Adapters::ActiveRecord::Audit.
+                    select("DISTINCT audited_changes").
+                    where(["auditable_type like 'PublishedTimeSlot' and auditable_id in (?)", [id1,id2]])
+    
+    changes.size > 1
   end
     
   #
