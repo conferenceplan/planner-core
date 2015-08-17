@@ -205,7 +205,7 @@ module PublishedProgramItemsService
           ts_id = a.audited_changes['published_time_slot_id'].kind_of?(Array) ? a.audited_changes['published_time_slot_id'][1] : a.audited_changes['published_time_slot_id']
           if (PublishedTimeSlot.exists? ts_id) || (PublishedRoom.exists? rm_id)
             time_slot = ts_id && (PublishedTimeSlot.exists? ts_id) ? PublishedTimeSlot.find(ts_id) : nil
-            room = rm_id && (PublishedTimeSlot.exists? rm_id) ? PublishedRoom.find(rm_id) : nil
+            room = rm_id && (PublishedRoom.exists? rm_id) ? PublishedRoom.find(rm_id) : nil
             
             res[item.id] = { :item => item }  if !res[item.id]
             res[item.id][:time] = {:time => time_slot, :created_at => a.created_at} if time_slot && (res[item.id][:time] ? (a.created_at > res[item.id][:time][:created_at]) : true)
