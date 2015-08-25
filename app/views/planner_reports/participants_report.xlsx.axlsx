@@ -31,7 +31,7 @@ wb.add_worksheet(name: "Participants") do |sheet|
         row << p.getFullPublicationName
         row << p.job_title
         row << p.company
-        row << (p.getDefaultEmail ? p.getDefaultEmail : '')
+        row << (p.getDefaultEmail ? p.getDefaultEmail.email : '')
         row << (p.bio_image ? p.bio_image.bio_picture.url : '')
         row << (p.bio ? p.bio.gsub(/\n|\r/,"") : "")
         
@@ -48,8 +48,8 @@ wb.add_worksheet(name: "Participants") do |sheet|
                 row << (ia.programmeItem.format ? ia.programmeItem.format.name : '')
                 row << (ia.programmeItem.precis ? ia.programmeItem.precis.gsub(/\n|\r/,"") : '')
                 row << (ia.programmeItem.room ? ia.programmeItem.room.name : '')
-                row << ((ia.programmeItem.room && ia.programmeItem.room.venue) ? ia.programmeItem.room.venue.name : ''),
-                row << (ia.programmeItem.setup_type ? ia.programmeItem.setup_type.name : ''),
+                row << ((ia.programmeItem.room && ia.programmeItem.room.venue) ? ia.programmeItem.room.venue.name : '')
+                row << (ia.programmeItem.setup_type ? ia.programmeItem.setup_type.name : '')
                 row << (ia.programmeItem.participant_notes ? ia.programmeItem.participant_notes : '')
             end
         end
