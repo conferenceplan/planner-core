@@ -20,8 +20,8 @@ xml.participants do
                                 xml.cdata!(assignment.programmeItem.precis) if assignment.programmeItem.precis
                             end
                             xml.format assignment.programmeItem.format ? assignment.programmeItem.format.name : ''
-                            xml.room assignment.programmeItem.room.name
-                            xml.venue assignment.programmeItem.room.venue.name
+                            xml.room assignment.programmeItem.room.name if assignment.programmeItem.room
+                            xml.venue assignment.programmeItem.room.venue.name if (assignment.programmeItem.room && assignment.programmeItem.room.venue)
                             xml.day assignment.programmeItem.time_slot.start.strftime('%A')
                             xml.time assignment.programmeItem.time_slot.start.strftime('%H:%M')
                             xml.date assignment.programmeItem.time_slot.start.strftime('%y-%m-%d')

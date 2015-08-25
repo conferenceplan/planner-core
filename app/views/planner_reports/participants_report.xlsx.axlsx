@@ -7,6 +7,7 @@ wb.add_worksheet(name: "Participants") do |sheet|
         'Name',
         'Job Title',
         'Company',
+        'Email',
         'Photo Url',
         'Bio'
     ]
@@ -15,11 +16,14 @@ wb.add_worksheet(name: "Participants") do |sheet|
                                         'Day ' + (e+1).to_s, 
                                         'Duration ' + (e+1).to_s, 
                                         'Item ' + (e+1).to_s, 
+                                        'Item Format '+ (e+1).to_s,
                                         'Item Description '+ (e+1).to_s,
                                         'Room ' + (e+1).to_s, 
-                                        'Venue ' + (e+1).to_s 
-                                    ] }.flatten # TODO - check, split time and item into seperate cols
-    
+                                        'Venue ' + (e+1).to_s,
+                                        'Setup ' + (e+1).to_s,
+                                        'Participant Notes ' + (e+1).to_s
+                                    ] }.flatten
+
     sheet.add_row titles
     
     @people.each do |p|
@@ -27,8 +31,12 @@ wb.add_worksheet(name: "Participants") do |sheet|
         row << p.getFullPublicationName
         row << p.job_title
         row << p.company
+        row << (p.getDefaultEmail ? p.getDefaultEmail : '')
         row << (p.bio_image ? p.bio_image.bio_picture.url : '')
         row << (p.bio ? p.bio.gsub(/\n|\r/,"") : "")
+        
+        # TODO - add short bio description
+        # TODO - add bullet points (use a note/extra data field ...)
                 
         p.programmeItemAssignments.each do |ia|
             if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
@@ -37,9 +45,12 @@ wb.add_worksheet(name: "Participants") do |sheet|
                 row << (ia.programmeItem.time_slot.start.strftime('%A'))
                 row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')
                 row << (ia.programmeItem.short_title.blank? ? (ia.programmeItem.title ? ia.programmeItem.title.gsub(/\n|\r/,"") : "") : (ia.programmeItem.short_title ? ia.programmeItem.short_title.gsub(/\n|\r/,"") : ""))
+                row << (ia.programmeItem.format ? ia.programmeItem.format.name : '')
                 row << (ia.programmeItem.precis ? ia.programmeItem.precis.gsub(/\n|\r/,"") : '')
                 row << (ia.programmeItem.room ? ia.programmeItem.room.name : '')
-                row << (ia.programmeItem.room.venue ? ia.programmeItem.room.venue.name : '')
+                row << ((ia.programmeItem.room && ia.programmeItem.room.venue) ? ia.programmeItem.room.venue.name : ''),
+                row << (ia.programmeItem.setup_type ? ia.programmeItem.setup_type.name : ''),
+                row << (ia.programmeItem.participant_notes ? ia.programmeItem.participant_notes : '')
             end
         end
         
