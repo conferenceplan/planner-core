@@ -25,6 +25,23 @@ PublicationsApp.PrintManagement = (function(Backbone){
         }    
     });
     
+    var ParticipantsForm = Backbone.Form.extend({
+        schema : {
+            page_size : { type : 'Select', title : '<%= t "page-size" %>', 
+                          options : <%= [[' ',' ']].concat(PDF::Core::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %> 
+                },
+            orientation : { type : 'Select', title : '<%= t "print-orientation" %>', 
+                          options : { landscape : 'Landscape' , portrait : 'Portrait'} 
+                }
+            // short_desc : { type : 'Checkbox', title : '<%= t "short-description" %>' }
+        },
+    
+        data : {
+            page_size : 'LETTER',
+            orientation : 'portrait'
+        }    
+    });
+    
     var TableTentForm = Backbone.Form.extend({
         schema : {
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
@@ -190,6 +207,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
     var Workspace = Backbone.Router.extend({
         routes : {
             'report/:query' : 'report',
+            'participants_report' : 'participants_report',
             'table_tents'   : 'table_tents',
             'badge_labels'  : 'badge_labels',
             'part_schedule' : 'part_schedule',
@@ -203,6 +221,15 @@ PublicationsApp.PrintManagement = (function(Backbone){
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
                 form        : GenericForm,
                 endPoint    : "<%= baseUri + '/planner_reports/' %>" + query
+            }));
+        },
+        
+        participants_report : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+                form        : ParticipantsForm,
+                endPoint    : "<%= baseUri + '/planner_reports/participants_report' %>"
             }));
         },
         
@@ -225,15 +252,6 @@ PublicationsApp.PrintManagement = (function(Backbone){
             }));
         },
         
-        part_schedule : function() {
-            ReportBase.reportRegion.close();
-            ReportBase.resultRegion.close();
-            ReportBase.reportRegion.show(new ReportBase.PublicationView({
-                form        : PartScheduleForm,
-                endPoint    : "<%= baseUri + '/planner_reports/part_schedule' %>"
-            }));
-        },
-        
         publications_room_signs : function() {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
@@ -251,13 +269,25 @@ PublicationsApp.PrintManagement = (function(Backbone){
                 form        : ChangeSheetsForm,
                 endPoint    : "<%= baseUri + '/planner_reports/change_sheet' %>"
             }));
-        }
+        },
+
+        part_schedule : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+                form        : PartScheduleForm,
+                endPoint    : "<%= baseUri + '/planner_reports/part_schedule' %>"
+            }));
+        },
+        
     });
     
     /*
      * 
      */
     return {
+        ParticipantsForm : ParticipantsForm,
+        
         init : function(options) {
             new Workspace();
         }
@@ -274,3 +304,7 @@ jQuery(document).ready(function() {
 });
 
 </script>
+
+<% @extra_javascript.each do |extra| %>
+    <%= render extra %>
+<% end %>

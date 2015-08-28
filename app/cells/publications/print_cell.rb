@@ -5,6 +5,7 @@ class Publications::PrintCell < Cell::Rails
   end
 
   def javascript
+    @extra_javascript = [] if ! @extra_javascript
     @start_date = SiteConfig.first
     render
   end
