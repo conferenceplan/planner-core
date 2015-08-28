@@ -22,9 +22,14 @@ wb.add_worksheet(name: "People") do |sheet|
         "City",
         "Postal Code",
         "State",
-        "Country"
+        "Country",
+        "Phone - Home",
+        "Phone - Mobile",
+        "Phone - Work",
+        "Phone - Fax",
+        "Phone - Other",
     ]
-    
+
     sheet.add_row titles
 
     @people.each do |person|
@@ -54,6 +59,39 @@ wb.add_worksheet(name: "People") do |sheet|
                 address.state,
                 address.country
             ])
+        else
+            row.concat([
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+            ])
+        end
+        
+        phone_numbers = person.phone_numbers
+
+        if phone_numbers
+            numbers = ["","","","",""]
+        
+            phone_numbers.each do |pn|
+                case pn.phone_type
+                    when PhoneTypes['Home']
+                        numbers[0] = pn.number
+                    when PhoneTypes['Mobile']
+                        numbers[1] = pn.number
+                    when PhoneTypes['Work']
+                        numbers[2] = pn.number
+                    when PhoneTypes['Fax']
+                        numbers[3] = pn.number
+                    when PhoneTypes['Other']
+                        numbers[4] = pn.number
+                end
+            end
+
+            row.concat(numbers)
+
         end
         
         sheet.add_row row
