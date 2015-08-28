@@ -22,7 +22,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                         cells.border_width = 0
                     end
     
-        title = pdf.make_table([[(person.bio_image ? ({:image => open(person.bio_image.bio_picture.url), :fit => [100, 100] }) : '') , 
+        title = pdf.make_table([[((person.bio_image && (person.bio_image.bio_picture.url.include?(".png") || person.bio_image.bio_picture.url.include?(".jpg") || person.bio_image.bio_picture.url.include?(".jpeg"))) ? ({:image => open(person.bio_image.bio_picture.url), :fit => [100, 100] }) : '') , 
                         person_name
                     ]],
                     :column_widths => { 0 => 100, 1 => (page_width - 140) },
