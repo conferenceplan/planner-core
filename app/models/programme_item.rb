@@ -6,12 +6,13 @@ class ProgrammeItem < ActiveRecord::Base
   audited :allow_mass_assignment => true
   acts_as_taggable
   
+  has_many   :children, :class_name => 'ProgrammeItem', foreign_key: "parent_id"
+  belongs_to :parent,   :class_name => 'ProgrammeItem' 
+  
   validates_presence_of :title
   validates_numericality_of :duration, :allow_nil => true
   validates_numericality_of :minimum_people, :allow_nil => true
   validates_numericality_of :maximum_people, :allow_nil => true
-  
-  # TODO - add expected audience size
   
   has_many  :programme_item_assignments, :dependent => :delete_all
   has_many  :people, :through => :programme_item_assignments
@@ -44,3 +45,18 @@ class ProgrammeItem < ActiveRecord::Base
   end
 
 end
+
+# TODO - create a clone function
+# Should create with a new name (copy of)
+# keep the description
+# do not keep the time/room/people
+
+# TODO - create nested items
+# An item can have a parent
+# If there is a parent then display it in a "sub-grid"
+# if it is a child then do not allow a room assignment
+# For conflict checking use the parent's times (or should we have a subset of times?)
+# For conflict checking use the combination of people from children and parent
+# Publish ?
+# Mobile app ?
+# TODO Do we need new role types for people assigned to items? (Allow conference to add/define?)
