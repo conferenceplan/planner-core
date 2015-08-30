@@ -181,7 +181,7 @@ module PlannerReportsService
   #
   #
   #  
-  def self.findPanelistsAndBios()
+  def self.findPanelistsAndBios(order_by)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     cndStr = '(programme_item_assignments.role_id in (?))'
     cndStr += ' AND (time_slots.start is not NULL)'
@@ -192,7 +192,7 @@ module PlannerReportsService
     Person.where(conditions).
           includes([:pseudonym, :edited_bio, :bio_image , :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}]).
           where(self.constraints()).
-          order("people.last_name, time_slots.start asc")
+          order(order_by)
   end
   
   #

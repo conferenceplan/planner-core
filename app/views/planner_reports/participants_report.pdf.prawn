@@ -46,7 +46,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
 
         t = pdf.make_table([
                 [ title ],
-                [ person.bio ],
+                [ sanitize(person.bio, tags: %w(b i u strikethrough sub sup font link color), attributes: %w(href size name character_spacing rgb cmyk) ) ],
                 [ item_cell_table ]
             ],
             :cell_style => {:inline_format => true},
@@ -63,14 +63,10 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
           row(2).border_bottom_width = 2
         end
 
-        # pdf.text t.height.to_s
-        if pdf.cursor < t.height
-            pdf.start_new_page
-        end
-
         t.draw
         pdf.move_down 20
 
+        pdf.start_new_page # start a new page for each person
     end
 
 end

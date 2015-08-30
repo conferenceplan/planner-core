@@ -578,9 +578,16 @@ class PlannerReportsController < PlannerController
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
     @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false # TODO - check if this is needed and if not remove
     @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+    
+    # if the report is a pdf then order by format then name
+    if request.format == :pdf
+      @order_by = "programme_items.format_id, people.last_name"
+    else  
+      @order_by = "people.last_name, time_slots.start asc"
+    end
 
     # Get the people and bios
-    @people = PlannerReportsService.findPanelistsAndBios
+    @people = PlannerReportsService.findPanelistsAndBios @order_by
 
     respond_to do |format|
       format.xml {
