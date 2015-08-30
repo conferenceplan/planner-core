@@ -70,7 +70,6 @@ class ProgramController < ApplicationController
       @partition_val = /upload/
       respond_to do |format|
         format.json
-        # format.js #{ render :json }
       end
     end
 

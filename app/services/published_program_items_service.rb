@@ -428,8 +428,9 @@ private
     
     # TODO - ensure we also use tags ....
     
-    conditionStr = "" if (day || term)
-    conditionStr += '(published_time_slots.start >= ? AND published_time_slots.start < ?) ' if day
+    # Only return items that are not children
+    conditionStr = "(parent_id is null)" # if (day || term)
+    conditionStr += ' AND (published_time_slots.start >= ? AND published_time_slots.start < ?) ' if day
     if term
       conditionStr += ' AND ' if day
       conditionStr += '('
@@ -442,7 +443,7 @@ private
       conditionStr += ' AND ' if (conditionStr.size > 0)
       conditionStr += ' (published_programme_items.item_registerable = 1) '
     end
-    conditions = [conditionStr] if (day || term)
+    conditions = [conditionStr] #if (day || term)
     conditions += [start_of_day, end_of_day] if day 
     conditions += ['%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%'] if term
     conditions    

@@ -31,6 +31,7 @@ class PublishJob
         p = PublicationDate.new
         newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
         modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
+        
         removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
         removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
         
@@ -168,6 +169,7 @@ class PublishJob
         
         # # copy the details from the unpublished item to the new
         newItem = copy(srcItem, newItem)
+        
         newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
         # and once fixed we need to 'touch' all the items
         copyTags(srcItem, newItem)
@@ -202,7 +204,7 @@ class PublishJob
           end
           newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
           newItem.published_room_item_assignment.save
-        else
+        elif srcItem.time_slot # we only need to worry about the assignment if the source has a time and room assigned (which will not be the case for children)
           newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
           assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
                   :published_time_slot => newTimeSlot, 
@@ -217,6 +219,10 @@ class PublishJob
         newItem.publication.save
         nbrProcessed += 1
       end
+
+      # TODO - need to put the links to children back in etc
+      # i.e. for through the items and ensure that the parent_id is set appropriately
+
     end
     return nbrProcessed
   end
@@ -382,7 +388,7 @@ class PublishJob
   def copy(src, dest)
     src.attributes.each do |name, val|
       # but do not copy any of the variables needed for the optimistic locking, the id, etc
-      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id", "linkedto_type", "linkedto_id"].index(name) == nil)
+      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id", "linkedto_type", "linkedto_id", "parent_id"].index(name) == nil)
         # Only copy values that have changed?
         dest.send("#{name}=",val) if (dest.attributes[name] == nil) || (dest.attributes[name] != val) || (val != nil)
       end
@@ -413,7 +419,7 @@ class PublishJob
       if getTagOwner
         tags = from.owner_tags_on(getTagOwner, tagging.context)
       else  
-        tags = from.tag_list_on(tagging.context) # TODO - fix
+        tags = from.tag_list_on(tagging.context)
       end
       tagstr = tags * ","
       if tags
@@ -421,7 +427,6 @@ class PublishJob
           getTagOwner.tag(to, :with => tagstr, :on => tagging.context)
         else
           to.set_tag_list_on(tagging.context, tagstr) # set the tag list on the respondent for the context
-          #to.set_tag_list_on(tagging.context, tagstr) # TODO - set owner
         end
       end
     end
