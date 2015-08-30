@@ -6,7 +6,7 @@ class ProgrammeItem < ActiveRecord::Base
   audited :allow_mass_assignment => true
   acts_as_taggable
   
-  has_many   :children, :class_name => 'ProgrammeItem', foreign_key: "parent_id"
+  has_many   :children, :dependent => :destroy, :class_name => 'ProgrammeItem', foreign_key: "parent_id"
   belongs_to :parent,   :class_name => 'ProgrammeItem' 
   
   validates_presence_of :title
@@ -14,10 +14,10 @@ class ProgrammeItem < ActiveRecord::Base
   validates_numericality_of :minimum_people, :allow_nil => true
   validates_numericality_of :maximum_people, :allow_nil => true
   
-  has_many  :programme_item_assignments, :dependent => :delete_all
+  has_many  :programme_item_assignments, :dependent => :destroy
   has_many  :people, :through => :programme_item_assignments
   
-  has_many :equipment_needs, :dependent => :delete_all
+  has_many :equipment_needs, :dependent => :destroy
   has_many :equipment_types, :through => :equipment_needs
   
   belongs_to :setup_type
@@ -28,7 +28,7 @@ class ProgrammeItem < ActiveRecord::Base
   has_one :room, :through => :room_item_assignment #
   has_one :time_slot, :through => :room_item_assignment
 
-  has_many :excluded_items_survey_maps, :dependent => :delete_all
+  has_many :excluded_items_survey_maps, :dependent => :destroy
   # has_many :mapped_survey_questions, :through => :excluded_items_survey_maps
   
   # The relates the published programme item back to the original programme item

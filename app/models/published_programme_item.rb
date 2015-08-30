@@ -8,6 +8,9 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   audited :allow_mass_assignment => true
 
+  has_many   :children, :dependent => :destroy, :class_name => 'PublishedProgrammeItem', foreign_key: "parent_id"
+  belongs_to :parent,   :class_name => 'PublishedProgrammeItem' 
+
   has_many  :published_programme_item_assignments, :dependent => :destroy do #, :class_name => 'Published::ProgrammeItemAssignment'
     def role(r) # get the people with the given role
       find(:all, :conditions => ['role_id = ?', r.id])

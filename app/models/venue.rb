@@ -6,7 +6,7 @@ class Venue < ActiveRecord::Base
 
   default_scope order('venues.sort_order asc, venues.name asc')
   
-  has_many  :rooms, :dependent => :delete_all
+  has_many  :rooms, :dependent => :destroy
   validates_presence_of :name
 
   audited :allow_mass_assignment => true
