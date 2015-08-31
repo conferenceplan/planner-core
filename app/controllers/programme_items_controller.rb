@@ -121,6 +121,26 @@ class ProgrammeItemsController < PlannerController
       render status: :bad_request, text: ex.message
     end
   end
+  
+  #
+  #
+  #
+  def list
+    limit = params[:limit] ? params[:limit].to_i : nil
+    offset = params[:offset] ? params[:offset].to_i : nil
+    search = params[:search] ? params[:search] : nil
+
+    sort_by = params[:sort] ? params[:sort] : 'title'
+    sort_order = params[:order] ? params[:order] : 'asc'
+
+    if search
+      @total = ProgrammeItem.where(["title like ?", '%' + search + '%']).count
+      @items = ProgrammeItem.where(["title like ?", '%' + search + '%']).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+    else
+      @total = ProgrammeItem.count
+      @items = ProgrammeItem.offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+    end
+  end
 
   #
   # Get list of program items...

@@ -18,4 +18,6 @@ json.rowdata @items do |item|
     
     json.set! "programme_item[participants]", item.programme_item_assignments.collect{|m| (m.role == PersonItemRole['Participant'] || m.role == PersonItemRole['Moderator'])? m : nil}.compact.length
 
+    # TODO - children ???? - we need to put this in the same form as the row data?
+    json.set! "programme_item[children]", item.children
 end

@@ -18,12 +18,11 @@ json.setup_type_id          item.setup_type_id
 json.setup_name             item.setup_type ? item.setup_type.name : "" 
 json.format_id              item.format_id if item.format
 json.format_name            item.format ? item.format.name : ""
-    
+
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A') : "" # we want this to be the number
 json.start_time             item.time_slot ? item.time_slot.start : ""
 json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
-json.pub_reference_number   item.pub_reference_number
 json.audience_size          item.audience_size
 json.mobile_card_size       item.mobile_card_size
 
@@ -34,6 +33,14 @@ json.room                   item.room ? item.room.name : ""
 json.room_id                item.room ? item.room.id : ""
     
 json.lock_version           item.lock_version
+
+json.parent_id              item.parent_id
+json.parent do
+    if item.parent
+        json.id     item.parent.id
+        json.name   item.parent.name
+    end
+end
 
 # TODO - do we want to list the participants?
 if moderators

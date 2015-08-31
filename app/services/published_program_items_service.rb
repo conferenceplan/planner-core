@@ -239,10 +239,6 @@ module PublishedProgramItemsService
     res
   end
 
-# SELECT count( distinct audited_changes ) FROM sasquan.audits where 
-# audits.auditable_type like 'PublishedTimeSlot'
-# and auditable_id in (3800,3866)
-# order by created_at desc;  
   def self.has_time_changed(id1, id2)
     changes = Audited::Adapters::ActiveRecord::Audit.
                     select("DISTINCT audited_changes").
@@ -310,7 +306,6 @@ module PublishedProgramItemsService
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Pseudonym') AND (audits.action != 'destroy')", pubDate]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (Pseudonym.exists? a.auditable_id) ? Pseudonym.find(a.auditable_id).person_id : nil }.compact
 
-    # TODO - we need to test for the updated docs as well???
     # get the document updates
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PlannerDocs::Document') AND ((audits.action = 'update') OR (audits.action = 'create'))", pubDate]

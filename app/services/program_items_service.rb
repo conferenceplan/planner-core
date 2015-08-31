@@ -67,9 +67,9 @@ module ProgramItemsService
     # end
     
     if tagquery.empty?
-      items = ProgrammeItem.includes(:programme_item_assignments).find :all, args
+      items = ProgrammeItem.includes(:children).includes(:programme_item_assignments).find :all, args
     else
-      items = ProgrammeItem.tagged_with(*tagquery).uniq.includes(:programme_item_assignments).find :all, args
+      items = ProgrammeItem.includes(:children).tagged_with(*tagquery).uniq.includes(:programme_item_assignments).find :all, args
     end
   end
   
@@ -205,6 +205,7 @@ protected
     
     # TODO - assumed that the new creation does not have a time slot. Need to change
     clause = DataService.addClause( clause, 'programme_items.title <= ? AND time_slots.start is null', page_to) if page_to
+    clause = DataService.addClause( clause, 'programme_items.parent_id is null', nil)
 
     args = { :conditions => clause }
     

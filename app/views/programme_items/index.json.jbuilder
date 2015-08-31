@@ -23,5 +23,7 @@ json.array!(@assignments) do |assignment|
         json.setup_type_name        assignment.programmeItem.setup_type.name if assignment.programmeItem.setup_type
         json.role                   assignment.role.name
         json.other_participants     assignment.programmeItem.programme_item_assignments.collect{|a| (a.person != @person && ![PersonItemRole['Invisible'], PersonItemRole['Reserved']].include?(a.role)) ? a.person.getFullPublicationName : nil }.compact
+        json.parent_id              assignment.programmeItem.parent_id
+        # TODO - put in list of child items ????
     end
 end

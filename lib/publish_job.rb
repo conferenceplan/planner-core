@@ -220,8 +220,19 @@ class PublishJob
         nbrProcessed += 1
       end
 
-      # TODO - need to put the links to children back in etc
+      # Need to put the links to children back in etc
       # i.e. for through the items and ensure that the parent_id is set appropriately
+      srcItems.each do |srcItem|
+        if srcItem.parent_id
+          # then the published item also need a parent
+          pub_item = srcItem.published # get the published version of the item
+          if pub_item
+            # Then set the parent to the published version of the parent
+            pub_item.parent = srcItem.parent.published
+            pub_item.save!
+          end
+        end
+      end
 
     end
     return nbrProcessed

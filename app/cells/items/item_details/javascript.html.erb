@@ -16,6 +16,7 @@ ItemApp = new Backbone.Marionette.Application();
 ItemApp.ItemManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
     var selectCallbacks = $.Callbacks();
+    var current_item = null;
 
     Picture = Backbone.RelationalModel.extend({
         schema : {
@@ -75,6 +76,42 @@ ItemApp.ItemManagement = (function(Backbone){
                     }
                 ]
             },
+            // TODO - if there is a parent then the room and time need to blanked
+            parent_id : {
+                        type : 'Select2', 
+                        title : '<%= t "parent-item" %>',
+                        help: '<%= t "parent-item-help" %>',
+                        config : {
+                            multiple: false,
+                            initSelection : function(element,callback) {
+                                if (current_item) {
+                                    var pitem = current_item.get('parent');
+                                    if (pitem) {
+                                        callback({'id' : pitem.get('id'), 'text' : pitem.get('title')});
+                                    }
+                                }
+                            },
+                            formatSelection : function(obj, container) {
+                                return obj.text;
+                            },
+                            ajax : {
+                                url : "<%= baseUri %>/programme_items/list", // get the list of programme items - using a search term ....
+                                data : function(term, page) {
+                                    return { 'search' : term };
+                                },
+                                results : function(_data, page, query) {
+                                    res = [];
+                                    _.each(_data.rows, function(item) {
+                                        res.push( {'id' : item.id, 'text' : item.title} );
+                                    });
+                                    var data = {
+                                        results: res
+                                    };
+                                    return data;
+                                }
+                            }
+                        }                
+            },
             item_notes : { type : 'TextArea', title : '<%= t "item-notes" %>', editorAttrs: { rows : 2, cols : 60 } },
             participant_notes : { type : 'TextArea', title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60 } },
             format_id : { type : 'Select', title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
@@ -102,8 +139,14 @@ ItemApp.ItemManagement = (function(Backbone){
             key            : 'external_images',
             relatedModel   : 'Picture',
             collectionType : 'PictureCollection'
+        }, {
+            type           : Backbone.HasOne,
+            key            : 'parent',
+            relatedModel   : 'ParentItem'
         }]
     });
+    
+    ParentItem = Backbone.RelationalModel.extend({});
     
     Equipment = Backbone.Model.extend({
         schema : {
@@ -236,6 +279,8 @@ ItemApp.ItemManagement = (function(Backbone){
         eventAggregator.off("refreshTagList", syncModel);
         
         _.invoke(tabContent, 'clear' );
+        
+        current_item = null;
     };
     
     function showDetails(id) {
@@ -338,6 +383,7 @@ ItemApp.ItemManagement = (function(Backbone){
             model : itemMdl
         });
 
+        current_item = itemMdl;
         return itemMdl;
     };
     

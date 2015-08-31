@@ -79,7 +79,7 @@ Rails.application.routes.draw do
   # Programme Items
   #
   match 'programme_items/drop',                         :controller => 'programme_items', :action => 'drop',                        :method => 'get'
-  match 'programme_items/list',                         :controller => 'programme_items', :action => 'list'
+  match 'programme_items/list',                         :controller => 'programme_items', :action => 'list',   :defaults => { :format => 'json' }
   match 'programme_items/getList',                      :controller => 'programme_items', :action => 'getList',                     :method => 'post'
   # TOOD - need a cleaner mechanism to assign the publication reference number and change to match the new mechanisms
   match 'programme_items/assign_reference_numbers',     :controller => 'programme_items', :action => 'assign_reference_numbers'
