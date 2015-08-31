@@ -33,7 +33,7 @@ wb.add_worksheet(name: "Participants") do |sheet|
         row << p.company
         row << (p.getDefaultEmail ? p.getDefaultEmail.email : '')
         row << (p.bio_image ? p.bio_image.bio_picture.url : '')
-        row << (p.bio ? p.bio.gsub(/\n|\r/,"") : "")
+        row << (p.bio ? sanitize(p.bio.gsub(/\n|\r/,"") : "")
         
         # TODO - add short bio description
         # TODO - add bullet points (use a note/extra data field ...)
