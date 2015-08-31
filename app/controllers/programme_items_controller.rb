@@ -50,19 +50,30 @@ class ProgrammeItemsController < PlannerController
   def create
     plain = params[:plain]
     # NOTE - name of the programmeItem passed in from form
-    @programmeItem = ProgrammeItem.new(params[:programme_item])
-    @programmeItem.lock_version = 0
     startTime = (params[:start_time] && params[:start_time].to_datetime) ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
     startDay = -1
     startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
+    parent_id = params[:parent_id]
 
     begin
       ProgrammeItem.transaction do
+        @programmeItem = ProgrammeItem.new(params[:programme_item])
+        @programmeItem.lock_version = 0
         if @programmeItem.save
           if (startDay.to_i > -1) && startTime && (roomId.to_i > 0)
             room = Room.find(roomId)
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
+          end
+        end
+
+        if parent_id
+          @programmeItem.parent_id = parent_id
+          @programmeItem.save!
+
+          if @programmeItem.parent
+            @programmeItem.parent.touch
+            @programmeItem.parent.save
           end
         end
       end
@@ -75,15 +86,17 @@ class ProgrammeItemsController < PlannerController
   # Update a program item based on the inputs
   #  
   def update
-    @programmeItem = ProgrammeItem.find(params[:id])
     startTime = (params[:start_time] && params[:start_time].to_datetime) ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
     startDay = -1
     startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
+    parent_id = params[:parent_id]
     
     begin
       ProgrammeItem.transaction do
+        @programmeItem = ProgrammeItem.find(params[:id])
         if @programmeItem.update_attributes(params[:programme_item])
+          
           if (startDay.to_i > -1) && startTime && (roomId.to_i > 0)
             room = Room.find(roomId)
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
@@ -97,6 +110,16 @@ class ProgrammeItemsController < PlannerController
           if (ts)
             ts.end = ts.start + @programmeItem.duration.minutes
             ts.save
+          end
+        end
+        
+        if parent_id
+          @programmeItem.parent_id = parent_id
+          @programmeItem.save!
+
+          if @programmeItem.parent
+            @programmeItem.parent.touch
+            @programmeItem.parent.save
           end
         end
       end
