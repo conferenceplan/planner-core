@@ -204,7 +204,7 @@ class PublishJob
           end
           newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
           newItem.published_room_item_assignment.save
-        elif srcItem.time_slot # we only need to worry about the assignment if the source has a time and room assigned (which will not be the case for children)
+        elsif srcItem.time_slot # we only need to worry about the assignment if the source has a time and room assigned (which will not be the case for children)
           newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
           assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
                   :published_time_slot => newTimeSlot, 
