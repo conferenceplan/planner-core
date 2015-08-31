@@ -157,11 +157,11 @@ class ProgrammeItemsController < PlannerController
     sort_order = params[:order] ? params[:order] : 'asc'
 
     if search
-      @total = ProgrammeItem.where(["title like ?", '%' + search + '%']).count
-      @items = ProgrammeItem.where(["title like ?", '%' + search + '%']).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+      @total = ProgrammeItem.where(["parent_id is null AND title like ?", '%' + search + '%']).count
+      @items = ProgrammeItem.where(["parent_id is null AND title like ?", '%' + search + '%']).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
     else
-      @total = ProgrammeItem.count
-      @items = ProgrammeItem.offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+      @total = ProgrammeItem.where(["parent_id is null"]).count
+      @items = ProgrammeItem.where(["parent_id is null"]).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
     end
   end
 

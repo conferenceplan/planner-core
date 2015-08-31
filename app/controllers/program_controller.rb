@@ -55,6 +55,8 @@ class ProgramController < ApplicationController
     layout = params[:layout]
     day = params[:day]
     @singleVenue = Venue.count == 1
+    
+    @extra_item_json = [] if ! @extra_item_json
 
     if !json_fragment_exist?( [request.host, request.path, params[:scale]] )
       conditions = getConditions(params)
@@ -153,6 +155,7 @@ class ProgramController < ApplicationController
     @scale = params[:scale].to_f
     pubIndex = params[:pubidx] ? params[:pubidx].to_i : (PublicationDate.find :first, :order => 'id desc').id
     since_date = PublishedProgramItemsService.determineChangeDate(pubIndex)
+    @extra_item_json = [] if ! @extra_item_json
     
     @cloudinaryURI = get_base_image_url
     @partition_val = /upload/

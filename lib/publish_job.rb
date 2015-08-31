@@ -233,7 +233,7 @@ class PublishJob
       # Need to put the links to children back in etc
       # i.e. for through the items and ensure that the parent_id is set appropriately
       srcItems.each do |srcItem|
-        srcItem.reload
+        srcItem.reload # we need to do a reload otherwise we do not have the link to the parent
         if srcItem.parent_id
           # then the published item also need a parent
           pub_item = srcItem.published # get the published version of the item
