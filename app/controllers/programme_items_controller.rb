@@ -35,6 +35,7 @@ class ProgrammeItemsController < PlannerController
   # Return a program item given an id
   #  
   def show
+    @extra_item_json = [] if ! @extra_item_json
     @programmeItem = ProgrammeItem.find(params[:id])
     
     # Order these by last name
@@ -48,6 +49,7 @@ class ProgrammeItemsController < PlannerController
   # Create a new program item
   #  
   def create
+    @extra_item_json = [] if ! @extra_item_json
     plain = params[:plain]
     # NOTE - name of the programmeItem passed in from form
     startTime = (params[:start_time] && params[:start_time].to_datetime) ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
@@ -86,6 +88,7 @@ class ProgrammeItemsController < PlannerController
   # Update a program item based on the inputs
   #  
   def update
+    @extra_item_json = [] if ! @extra_item_json
     startTime = (params[:start_time] && params[:start_time].to_datetime) ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
     startDay = -1
     startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
@@ -164,6 +167,22 @@ class ProgrammeItemsController < PlannerController
       @items = ProgrammeItem.where(["parent_id is null"]).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
     end
   end
+  
+  #
+  #
+  #
+  def get_children
+    id = params[:id]
+    order = params[:sord]
+    
+    item = ProgrammeItem.find id
+    
+    if item
+      @items = item.children
+      @count = @items.size
+    end
+
+  end
 
   #
   # Get list of program items...
@@ -209,6 +228,7 @@ class ProgrammeItemsController < PlannerController
   # Update the participants associated with this programme item
   #  
   def updateParticipants
+    @extra_item_json = [] if ! @extra_item_json
     programmeItem = ProgrammeItem.find(params[:id])
 
     begin

@@ -108,6 +108,7 @@ class ProgramController < ApplicationController
   def participants
     peopleIds = params[:people_ids] ? params[:people_ids].split(',') : nil
     logger.debug peopleIds
+    @extra_person_json = [] if ! @extra_person_json
     
     @scale = params[:scale].to_f
     @cloudinaryURI = get_base_image_url

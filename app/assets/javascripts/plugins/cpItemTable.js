@@ -166,6 +166,125 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         }];
     },
 
+    subGridRowExpandFn : function(subgrid_id, row_id) {
+        var subgrid_table_id, pager_id;
+        var tbl = jQuery(this).itemTable();
+        var sub_url = tbl.itemTable('getSubGridUrl');
+        var selectMethod = tbl.itemTable('option', 'selectNotifyMethod');
+        var loadNotifyMethod = tbl.itemTable('option', 'loadNotifyMethod');
+        var control =  tbl.itemTable('getControl');
+
+        subgrid_table_id = subgrid_id+"_t"; 
+        pager_id = "p_"+subgrid_table_id; 
+        $("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>"); 
+        jQuery("#"+subgrid_table_id).jqGrid({ 
+                url             : sub_url + "?id="+row_id, 
+                datatype        : "JSON", 
+                jsonReader      : {
+                        repeatitems : false,
+                        page        : "currpage",
+                        records     : "totalrecords",
+                        root        : "rowdata",
+                        total       : "totalpages",
+                        id          : "id",
+                },
+                colModel        : [{
+                                        label: tbl.itemTable('option', 'title')[1],
+                                        name: 'item[title]',
+                                        index: 'programme_items.title',
+                                        sortable: false,
+                                        search: false,
+                                        editable: false,
+                                        width: 450
+                                    }, {
+                                        name: 'programme_item[format_name]',
+                                        label : tbl.itemTable('option', 'format_name')[1],
+                                        index: 'format_id',
+                                        sortable: false,
+                                        search: false,
+                                        editable: false,
+                                        width: 145
+                                    },
+                                    {
+                                        label :  tbl.itemTable('option', 'duration')[1],
+                                        name: 'programme_item[duration]',
+                                        index: 'duration',
+                                        sortable: false,
+                                        search: false,
+                                        editable: false,
+                                        width: 70
+                                    },
+                                     {
+                                        label : tbl.itemTable('option', 'nbr_participants')[1],
+                                        name: 'programme_item[participants]',
+                                        sortable: false,
+                                        search: false,
+                                        editable: false,
+                                        width: 60,
+                                        formatter : function(cellvalue, options, rowObject) {
+                                            if (typeof rowObject['programme_item[participants]'] != 'undefined') {
+                                                if (rowObject['programme_item[participants]'] > 0) {
+                                                    return rowObject['programme_item[participants]'];
+                                                } else {
+                                                    return "<span class='minor-text'>none</span>";
+                                                }
+                                            }
+                                        }     
+                                    },
+                                    {
+                                        name: 'programme_items[lock_version]',
+                                        width: 3,
+                                        index: 'lock_version',
+                                        hidden: true,
+                                        editable: true,
+                                        sortable: false,
+                                        search: false,
+                                        formoptions: {
+                                            rowpos: 8,
+                                            label: "lock"
+                                        }
+                                    }],
+                sortname        : tbl.itemTable('option','sortname'),
+                sortorder       : "asc",
+                height          : '100%',
+                autowidth       : true,
+                editurl         : tbl.itemTable('editUrl'),
+                onSelectRow     : function(ids) {
+                    var data = jQuery("#"+subgrid_table_id).jqGrid('getRowData', ids);
+                    var title = data['item[title]'];
+                    var _model = selectMethod(ids, title); // get the current model and put it in the controller view
+                    
+                    if (_model) {
+                        control.model = _model;
+                    }
+                    
+                    return false;
+                },
+                // loadComplete    : function(data) {
+                    // // $("option[value=100000000]").text('All');
+                    // if (data.currentSelection) {
+                        // grid.setSelection(data.currentSelection);
+                    // };
+                    // grid.setGridParam({
+                         // postData : {page_to : null, current_selection : null},
+                    // });
+                // },
+                gridComplete    : function() {
+                    loadNotifyMethod();
+                }
+        });
+    },
+
+    createSubgridColModel : function() {
+        return this.createColModel();
+        // return [
+            // { 
+                // name : [this.options.title[1], this.options.format_name[1], this.options.duration[1]], 
+                // width : [55,200,80]
+            // }
+        // ];
+    },
+
     getItem : function(id) {
         // get an object that represents the person from the underlying grid - just the id and names
         return {
@@ -191,6 +310,11 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             urlArgs += "igs=true"; 
         }
         url += urlArgs;
+        return url;
+    },
+
+    getSubGridUrl : function() {
+        var url = this.options.root_url + this.options.baseUrl + this.options.subGridUrl; // + this.options.getGridData;
         return url;
     },
     

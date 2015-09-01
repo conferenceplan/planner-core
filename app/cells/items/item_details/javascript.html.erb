@@ -85,7 +85,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             multiple: false,
                             initSelection : function(element,callback) {
                                 if (current_item) {
-                                    var pitem = current_item.get('parent');
+                                    var pitem = current_item.get('parent_val');
                                     if (pitem) {
                                         callback({'id' : pitem.get('id'), 'text' : pitem.get('title')});
                                     }
@@ -141,7 +141,7 @@ ItemApp.ItemManagement = (function(Backbone){
             collectionType : 'PictureCollection'
         }, {
             type           : Backbone.HasOne,
-            key            : 'parent',
+            key            : 'parent_val',
             relatedModel   : 'ParentItem'
         }]
     });
@@ -283,9 +283,13 @@ ItemApp.ItemManagement = (function(Backbone){
         current_item = null;
     };
     
-    function showDetails(id) {
-        var data = jQuery("#items").jqGrid('getRowData', id);
-        $('#selected-program-item').html(data['item[title]']);
+    function showDetails(id, title) {
+        if (typeof title !== 'undefined') {
+            $('#selected-program-item').html(title);
+        } else {
+            var data = jQuery("#items").jqGrid('getRowData', id); // problem when it is a sub-grid ....
+            $('#selected-program-item').html(data['item[title]']);
+        }
 
         var itemMdl = TabUtils.createTabContent({
             modelType : ProgramItem,
@@ -397,9 +401,9 @@ ItemApp.ItemManagement = (function(Backbone){
             selectCallbacks.add(func);
         },
         
-        showDetails : function(id) {
+        showDetails : function(id, title) {
             clearDetails();
-            return showDetails(id);
+            return showDetails(id, title);
         },
         clearDetails : function() {
             clearDetails();

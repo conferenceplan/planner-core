@@ -1,10 +1,9 @@
-json.totalpages @nbr_pages
-json.currpage @page
+json.totalpages 1 #@nbr_pages
+json.currpage 1 #@page
 json.totalrecords @count
 json.currentSelection @currentId if @currentId
     
 json.rowdata @items do |item|
-    
     json.id item.id
     json.set! "item[title]", item.title
     json.set! "programme_item[format_id]", item.format ? item.format.id : nil
@@ -15,9 +14,6 @@ json.rowdata @items do |item|
     json.set! "start_time", item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
     json.set! "programme_item[pub_reference_number]", item.pub_reference_number ? item.pub_reference_number : ""
     json.set! "programme_item[lock_version]", item.lock_version
-    
-    json.set! "programme_item[participants]", item.programme_item_assignments.collect{|m| (m.role == PersonItemRole['Participant'] || m.role == PersonItemRole['Moderator'])? m : nil}.compact.length
 
-    # TODO - children ???? - we need to put this in the same form as the row data?
-    json.set! "programme_item[children]", (item.children.size > 0)
+    json.set! "programme_item[participants]", item.programme_item_assignments.collect{|m| (m.role == PersonItemRole['Participant'] || m.role == PersonItemRole['Moderator'])? m : nil}.compact.length
 end

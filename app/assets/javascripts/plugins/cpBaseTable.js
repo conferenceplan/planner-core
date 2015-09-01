@@ -12,6 +12,7 @@ $.widget( "cp.baseTable" , {
         pager               : '#pager',
         root_url            : "/",              // so that sub-domains can be taken care of
         baseUrl             : "",               // HAS TO BE OVER-RIDDEN by the sub-component
+        subGridUrl          : "",               // HAS TO BE OVER-RIDDEN by the sub-component
         getGridData         : "",               // for getting the data (part of the URL)
         caption             : "My Table",
         selectNotifyMethod  : function(ids) {},
@@ -222,6 +223,10 @@ $.widget( "cp.baseTable" , {
                 mtype           : 'POST',
                 postData        : {'namesearch' : 'true'},
                 colModel        : this.createColModel(),
+                subGrid         : (this.createSubgridColModel() != null),
+                // subGridModel    : this.createSubgridColModel(),
+                subGridRowExpanded : this.subGridRowExpandFn,
+                // subGridUrl      : this.getSubGridUrl(),
                 multiselect     : this.options.multiselect,
                 pager           : jQuery(this.options.pager),
                 rowNum          : 10,
@@ -316,6 +321,10 @@ $.widget( "cp.baseTable" , {
         this.control.options.id = options.id;
         this.control.options.id_name = options.id_name;
     },
+    
+    getControl : function() {
+        return this.control;
+    },
 
     /*
      * 
@@ -373,6 +382,27 @@ $.widget( "cp.baseTable" , {
      * 
      */
     createColModel : function() {
+    },
+    
+    /*
+     * 
+     */
+    createSubgridColModel : function() {
+        return null;
+    },
+    
+    /*
+     * 
+     */
+    subGridRowExpandFn : function(subgrid_id, row_id) {
+        return null;
+    },
+
+    /*
+     * 
+     */
+    getSubGridUrl : function() {
+        return null;
     },
     
     /*

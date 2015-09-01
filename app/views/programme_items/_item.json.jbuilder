@@ -19,6 +19,8 @@ json.setup_name             item.setup_type ? item.setup_type.name : ""
 json.format_id              item.format_id if item.format
 json.format_name            item.format ? item.format.name : ""
 
+json.is_published           item.published ? true : false
+
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A') : "" # we want this to be the number
 json.start_time             item.time_slot ? item.time_slot.start : ""
@@ -35,7 +37,7 @@ json.room_id                item.room ? item.room.id : ""
 json.lock_version           item.lock_version
 
 json.parent_id              item.parent_id
-json.parent do
+json.parent_val do
     if item.parent
         json.id     item.parent.id
         json.name   item.parent.name
@@ -70,4 +72,8 @@ if invisibles
             json.partial! 'person', person: p.person
         end
     end
+end
+
+@extra_item_json.each do |extra|
+    json.partial! extra, item: item
 end

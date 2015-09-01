@@ -1,4 +1,8 @@
 
 json.array! @participants.each do |person|
     json.partial! 'person_detail', person: person
+
+    @extra_person_json.each do |extra|
+        json.partial! extra, person: person
+    end
 end
