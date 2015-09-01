@@ -40,7 +40,7 @@ json.parent_id              item.parent_id
 json.parent_val do
     if item.parent
         json.id     item.parent.id
-        json.name   item.parent.name
+        json.title   item.parent.title
     end
 end
 
