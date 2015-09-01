@@ -46,6 +46,7 @@ imMedium = ImageService.getExternalImage(item,:mediumcard)[0] #item.external_ima
 imMedium.scale = @scale if imMedium
 json.medium_card        imMedium.picture.medium_card.url.partition(@partition_val)[2] if imMedium
 
+json.parent item.parent_id
 if item.children
     json.children item.children.each do |sub_item|
             json.partial! 'item', item: sub_item
