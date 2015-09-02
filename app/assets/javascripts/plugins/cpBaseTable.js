@@ -258,10 +258,9 @@ $.widget( "cp.baseTable" , {
                     grid.setGridParam({
                          postData : {page_to : null, current_selection : null},
                     });
-                    
-                    that.removeSubgridIcon.call(this);
                 },
                 gridComplete    : function() {
+                    that.removeSubgridIcon.call(this);
                     // Call back - to call when the load has been done
                     loadNotifyMethod();
                 }
