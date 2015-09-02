@@ -152,7 +152,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         ,
         */
         {
-            name: 'programme_items[lock_version]',
+            name: 'programme_item[lock_version]',
             width: 3,
             index: 'lock_version',
             hidden: true,
@@ -163,7 +163,28 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 rowpos: 8,
                 label: "lock"
             }
+        },
+        {
+            name: 'children',
+            width: 3,
+            index: 'children',
+            hidden: true,
+            editable: true,
+            sortable: false,
+            search: false,
+            formoptions: {
+                rowpos: 9,
+                label: "children"
+            }
         }];
+    },
+
+    removeSubgridIcon : function () {
+        var $this = $(this);
+        $this.find(">tbody>tr.jqgrow>td.ui-sgcollapsed").filter(function () {
+            var rowData = $this.jqGrid("getRowData", $(this).closest("tr.jqgrow").attr("id"));
+            return rowData.children == 'false';
+        }).unbind("click").html("");
     },
 
     subGridRowExpandFn : function(subgrid_id, row_id) {

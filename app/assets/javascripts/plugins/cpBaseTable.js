@@ -89,6 +89,7 @@ $.widget( "cp.baseTable" , {
         var modelTemplate = this.options.modelTemplate;
         var control = null;
         var pageTo = this.pageTo;
+        var that = this;
         
         // View type for controls
         TableControlView = Backbone.Marionette.ItemView.extend({
@@ -257,6 +258,8 @@ $.widget( "cp.baseTable" , {
                     grid.setGridParam({
                          postData : {page_to : null, current_selection : null},
                     });
+                    
+                    that.removeSubgridIcon.call(this);
                 },
                 gridComplete    : function() {
                     // Call back - to call when the load has been done
@@ -315,6 +318,9 @@ $.widget( "cp.baseTable" , {
             control.render();
             $("#" + this.options.controlDiv).html(control.el);
         }
+    },
+
+    removeSubgridIcon : function () {
     },
     
     setControlOptions : function(options) {

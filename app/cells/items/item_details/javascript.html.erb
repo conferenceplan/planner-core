@@ -41,7 +41,15 @@ ItemApp.ItemManagement = (function(Backbone){
             short_precis : { type : 'Html', title : '<%= t "short-item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
             room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                 validators: [
-                    function check_for_room(value, formValues) {
+                    function check_for_time(value, formValues) {
+                        var parent_err = {
+                            type: "room_id",
+                            message: '<%= t "child-item-can-not-be-assigned-to-room" %>'
+                        };
+                        if (formValues.room_id != "" && formValues.parent_id != "") {
+                            $(this.$el).parent().parent().find('#room-error').html(parent_err.message);
+                            return parent_err;
+                        };
                         var err = {
                             type: "room_id",
                             message: '<%= t "time-required-when-you-set-a-room" %>'
@@ -49,7 +57,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         if (formValues.room_id != "" && formValues.start_time == "") {
                             $(this.$el).parent().parent().find('#room-error').html(err.message);
                             return err;
-                        }
+                        };
                     }
                 ]
              },
@@ -65,6 +73,14 @@ ItemApp.ItemManagement = (function(Backbone){
                 },
                 validators: [
                     function check_for_room(value, formValues) {
+                        var parent_err = {
+                            type: "start_time",
+                            message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
+                        };
+                        if (formValues.start_time != "" && formValues.parent_id != "") {
+                            $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
+                            return parent_err;
+                        };
                         var err = {
                             type: "start_time",
                             message: '<%= t "room-required-when-you-set-a-time" %>'
@@ -72,8 +88,8 @@ ItemApp.ItemManagement = (function(Backbone){
                         if (formValues.room_id == "" && formValues.start_time != "") {
                             $(this.$el).parent().parent().find('#start-time-error').text(err.message);
                             return err;
-                        }
-                    }
+                        };
+                    },
                 ]
             },
             // TODO - if there is a parent then the room and time need to blanked
@@ -100,7 +116,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                     return { 'search' : term };
                                 },
                                 results : function(_data, page, query) {
-                                    res = [];
+                                    res = [{'id' : null, 'text' : ''}];
                                     _.each(_data.rows, function(item) {
                                         res.push( {'id' : item.id, 'text' : item.title} );
                                     });

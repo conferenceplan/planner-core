@@ -20,4 +20,5 @@ json.rowdata @items do |item|
 
     # TODO - children ???? - we need to put this in the same form as the row data?
     json.set! "programme_item[children]", (item.children.size > 0)
+    json.set! "children", (item.children.size > 0)
 end
