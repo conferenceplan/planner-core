@@ -108,13 +108,13 @@ module DataService
   #
   #
   #
-  def self.addClause(clause, clausestr, field = nil)
+  def self.addClause(clause, clausestr, field = nil, op = "AND")
     if (clause == nil) || clause.empty?
       clause = [clausestr, field]
     else
       isEmpty = clause[0].strip().empty?
       clause[0] = " ( " + clause[0]
-      clause[0] += ") AND ( " if ! isEmpty
+      clause[0] += ") " + op + " ( " if ! isEmpty
       clause[0] += " " + clausestr
       clause[0] += " ) "  #if ! isEmpty
       if field

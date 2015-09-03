@@ -197,6 +197,7 @@ class ProgrammeItemsController < PlannerController
     nameSearch = params[:namesearch]
     filters = params[:filters]
     extraClause = params[:extraClause]
+    include_children = params[:include_children] ? (params[:include_children] == 'true') : true
 
     @currentId = params[:current_selection]
     page_to = params[:page_to]
@@ -204,16 +205,16 @@ class ProgrammeItemsController < PlannerController
     ignoreScheduled = params[:igs] == 'true' # TODO
     ignorePending = params[:igp] == 'true'
 
-    @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled
+    @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled, include_children
 
     if page_to && !page_to.empty?
-      gotoNum = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled, page_to
+      gotoNum = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled, include_children, page_to
       if gotoNum
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
       end
     end
-    # logger.debug "******** " + @count.to_s
+
     if rows.to_i > 0
       @nbr_pages = (@count / rows.to_i).floor
       @nbr_pages += 1 if @count % rows.to_i > 0
@@ -221,7 +222,7 @@ class ProgrammeItemsController < PlannerController
       @nbr_pages = 1
     end
     
-    @items = ProgramItemsService.findItems rows, @page, idx, order, filters, extraClause, nameSearch, context, tags, ignoreScheduled
+    @items = ProgramItemsService.findItems rows, @page, idx, order, filters, extraClause, nameSearch, context, tags, ignoreScheduled, include_children
   end
 
   #

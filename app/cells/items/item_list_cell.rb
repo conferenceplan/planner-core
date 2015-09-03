@@ -28,6 +28,8 @@ class Items::ItemListCell < Cell::Rails
     @edit = args.has_key?(:edit) ? args[:edit] : false
     @add = args.has_key?(:add) ? args[:add] : false
     @refresh = args.has_key?(:refresh) ? args[:refresh] : false
+
+    @include_children = args.has_key?(:include_children) ? args[:include_children] : true
     
     @multiselect = args.has_key?(:multiselect) ? args[:multiselect] : false
     

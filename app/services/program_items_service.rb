@@ -35,21 +35,21 @@ module ProgramItemsService
   #
   #
   #
-  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false, page_to = nil)
-    args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, page_to)
+  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false, include_children = true, page_to = nil)
+    args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, include_children, page_to)
     tagquery = DataService.genTagSql(context, tags)
     
     args.merge!(:order => "time_slots.start asc, programme_items.title asc")
 
     if tagquery.empty?
-      ProgrammeItem.count args
+      ProgrammeItem.uniq.count args
     else
       ProgrammeItem.tagged_with(*tagquery).uniq.count( :all, args )
     end
   end
   
-  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false)
-    args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled)
+  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false, include_children = true)
+    args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, include_children)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
@@ -67,7 +67,7 @@ module ProgramItemsService
     # end
     
     if tagquery.empty?
-      items = ProgrammeItem.includes(:children).includes(:programme_item_assignments).find :all, args
+      items = ProgrammeItem.includes(:children).uniq.includes(:programme_item_assignments).find :all, args
     else
       items = ProgrammeItem.includes(:children).tagged_with(*tagquery).uniq.includes(:programme_item_assignments).find :all, args
     end
@@ -181,7 +181,7 @@ module ProgramItemsService
   
 protected
 
-  def self.genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, page_to = nil)
+  def self.genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, include_children, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['format_id','pub_reference_number'],
                   ['format_id','pub_reference_number'], ['programme_items.title'])
@@ -191,9 +191,11 @@ protected
     end
     # add the name search of the title
     if nameSearch
+      # TODO - add in sub-items and search those titles as well ????
       st = DataService.getFilterData( filters, 'programme_items.title' )
       if (st)
-        clause = DataService.addClause(clause,'programme_items.title like ?','%' + st + '%')
+        clause = DataService.addClause(clause,'programme_items.title like ? ','%' + st + '%')
+        clause = DataService.addClause(clause,'children.title like ? ','%' + st + '%','OR') if include_children
       end
     end
     
@@ -210,7 +212,8 @@ protected
     args = { :conditions => clause }
     
     args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
-                           'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' )
+                           'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
+                           'LEFT OUTER JOIN programme_items as children on children.parent_id = programme_items.id ')
 
     args
   end

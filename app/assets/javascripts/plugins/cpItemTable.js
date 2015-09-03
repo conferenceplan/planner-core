@@ -4,6 +4,10 @@
 (function($) {
 $.widget( "cp.itemTable", $.cp.baseTable , {
 
+    options : {
+        include_children : true
+    },
+
     createColModel : function(){
         return [{
             label: this.options.title[1],
@@ -23,7 +27,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             }
         }, {
             name: 'programme_item[format_name]',
-            label : this.options.format_name[1], //"Format",
+            label : this.options.format_name[1],
             index: 'format_id',
             hidden: !this.options.format_name[0],
             width: 145,
@@ -130,27 +134,6 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 }
             }     
         },
-        /*
-         {
-            label : this.options.ref_number[1], //'Ref',
-            name: 'programme_item[pub_reference_number]',
-            index: 'pub_reference_number',
-            hidden : !this.options.ref_number[0],
-            width: 60,
-            editable: false,
-            searchoptions: {
-                clearSearch : false
-            },
-            formoptions: {
-                rowpos: 7,
-                label: "Ref Number",
-                elmprefix: "(*)"
-            },
-           
-        }
-        
-        ,
-        */
         {
             name: 'programme_item[lock_version]',
             width: 3,
@@ -281,15 +264,6 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                     
                     return false;
                 },
-                // loadComplete    : function(data) {
-                    // // $("option[value=100000000]").text('All');
-                    // if (data.currentSelection) {
-                        // grid.setSelection(data.currentSelection);
-                    // };
-                    // grid.setGridParam({
-                         // postData : {page_to : null, current_selection : null},
-                    // });
-                // },
                 gridComplete    : function() {
                     loadNotifyMethod();
                 }
@@ -313,17 +287,22 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             title : jQuery(this.element.jqGrid('getCell', id, 'item[title]')).text()
         };
     },
-
     
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
-        if (this.options.extraClause || this.options.onlySurveyRespondents) {
+        if (this.options.extraClause || this.options.onlySurveyRespondents || this.options.include_children) {
             urlArgs += '?';
         }
         if (this.options.extraClause) {
             urlArgs += this.options.extraClause; 
         }
+
+        if (urlArgs.length > 0) {
+            urlArgs += "&";
+        }
+        urlArgs += this.options.include_children ? "include_children=true" : "include_children=false"; 
+
         if (this.options.ignoreScheduled) {
             if (urlArgs.length > 0) {
                 urlArgs += "&";
