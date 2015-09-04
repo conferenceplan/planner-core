@@ -209,40 +209,16 @@ module MailService
       noShareEmails = SurveyService.findPeopleWithDoNotShareEmail
       
       assignments.each do | assignment |
-        if (assignment.programmeItem && assignment.programmeItem.time_slot) # only interested in items that have been assigned to a time slot
+        # only interested in items that have been assigned to a time slot
+        if (assignment.programmeItem && (assignment.programmeItem.time_slot || (assignment.programmeItem.parent_id != nil && assignment.programmeItem.parent.time_slot)))
           # item
           result += "<div>\n"
           # title
           result += '<h2>' + assignment.programmeItem.title  + "</h2>\n" if assignment.programmeItem
-          # time
-          result += '<p>' + assignment.programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + assignment.programmeItem.time_slot.end.strftime('%H:%M') 
-          result += ', ' + assignment.programmeItem.room.name + ' (' + assignment.programmeItem.room.venue.name + ')' if assignment.programmeItem.room
-          result += "</p>\n"
-          # description
-          result += '<p>' + assignment.programmeItem.precis + "</p>\n" if assignment.programmeItem.precis
-          # participants (name + email)
-          names = []
-          assignment.programmeItem.programme_item_assignments.each do |asg|
-            if asg.person != nil
-              if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
-                name = ''
-                name = asg.person.getFullPublicationName()
-                name += " (M)" if asg.role == PersonItemRole['Moderator']                
-                asg.person.email_addresses.each do |addr|
-                  if addr.isdefault && (!noShareEmails.index(asg.person))
-                    name += "(" + addr.email + ")\n"
-                  end
-                end
-                names << name
-              end
-            end
-          end
-          result += '<p>' + names.join(', ') + "</p>\n"
           
-          if (assignment.programmeItem.participant_notes && (assignment.programmeItem.participant_notes.to_s.strip.length != 0))
-            result += "<h4>Notes for Participant(s)</h4>\n"
-            result += '<p>' + assignment.programmeItem.participant_notes + "</p>\n"
-          end
+          # TODO - If it is a sub item the show part of and the parent info
+          
+          result += assignment_to_html(assignment.programmeItem, noShareEmails)
         
           # 
           result += "</div></br>\n"
@@ -251,6 +227,44 @@ module MailService
     end
     
     return result
+  end
+  
+  def self.assignment_to_html(programmeItem, noShareEmails)
+    # time
+   if (programmeItem.parent_id == nil)
+      result = '<p>' + programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + programmeItem.time_slot.end.strftime('%H:%M') 
+      result += ', ' + programmeItem.room.name + ' (' + programmeItem.room.venue.name + ')' if programmeItem.room
+      result += "</p>\n"
+      # description
+      result += '<p>' + programmeItem.precis + "</p>\n" if programmeItem.precis
+      # participants (name + email)
+      names = []
+      programmeItem.programme_item_assignments.each do |asg|
+        if asg.person != nil
+          if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
+            name = ''
+            name = asg.person.getFullPublicationName()
+            name += " (M)" if asg.role == PersonItemRole['Moderator']                
+            asg.person.email_addresses.each do |addr|
+              if addr.isdefault && (!noShareEmails.index(asg.person))
+                name += "(" + addr.email + ")\n"
+              end
+            end
+            names << name
+          end
+        end
+      end
+      result += '<p>' + names.join(', ') + "</p>\n"
+      
+      if (programmeItem.participant_notes && (programmeItem.participant_notes.to_s.strip.length != 0))
+        result += "<h4>Notes for Participant(s)</h4>\n"
+        result += '<p>' + programmeItem.participant_notes + "</p>\n"
+      end
+    else
+      result = 'part of: <b><big>' + programmeItem.parent.title  + "</big></b>\n" #programmeItem.parent
+      result += assignment_to_html(programmeItem.parent, noShareEmails)
+    end
+    result
   end
 
   #
