@@ -328,7 +328,7 @@ ItemApp.ItemManagement = (function(Backbone){
             template : "#tag-context-layout-template",
             // view_refresh_event : "address:refresh",
             region : itemTabLayout.tags,
-            newTitle : '<%= t "create-tag" %>',
+            addTitle : '<%= t "create-tag" %>',
         });
         
         eventAggregator.on("refreshTagList", syncModel, itemMdl);
