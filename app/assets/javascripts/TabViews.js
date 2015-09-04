@@ -322,11 +322,11 @@ var TabUtils = (function(){
                             this.options = options || {};
                             // eventAggregator.on("refreshTagList", this.refreshList, this);
                         },
-
                         itemViewOptions : {
                             template : options.template,
                             newTitle  : options.newTitle,
                             editTitle : options.editTitle,
+                            addTitle : options.addTitle,
                             tagUrl : options.tagUrl
                         },
                         events : {
