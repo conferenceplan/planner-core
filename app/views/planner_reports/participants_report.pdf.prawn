@@ -23,9 +23,9 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                     end
 
         has_image = person.bio_image && person.bio_image.bio_picture.url
-        has_image = person.bio_image.bio_picture.url.include?(".png") || person.bio_image.bio_picture.url.include?(".jpg") || person.bio_image.bio_picture.url.include?(".jpeg") if has_image
+#        has_image = person.bio_image.bio_picture.url.include?(".png") || person.bio_image.bio_picture.url.include?(".jpg") || person.bio_image.bio_picture.url.include?(".jpeg") if has_image
 
-        title = pdf.make_table([[( has_image ? ({:image => open(person.bio_image.bio_picture.url), :fit => [100, 100] }) : '') ,
+        title = pdf.make_table([[( has_image ? ({:image => open(listImage.bio_picture.full.url), :fit => [100, 100] }) : '') ,
                         person_name
                     ]],
                     :column_widths => { 0 => 100, 1 => (page_width - 140) },

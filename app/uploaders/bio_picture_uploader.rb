@@ -49,7 +49,14 @@ class BioPictureUploader < CarrierWave::Uploader::Base
     # cloudinary_transformation :transformation => transform
     process :standardImage
   end
-  
+
+  #
+  #
+  #  
+  version :full do
+    process :fullSize
+  end
+
   #
   #
   #
@@ -80,6 +87,10 @@ class BioPictureUploader < CarrierWave::Uploader::Base
     width = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
     height = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
     return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
+  end
+  
+  def fullSize
+    return :fetch_format => :jpg
   end
   
 end
