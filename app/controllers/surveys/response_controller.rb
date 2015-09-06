@@ -31,7 +31,7 @@ class Surveys::ResponseController < ApplicationController
       begin
         SurveyRespondentDetail.transaction do
           originalResponses = nil
-          p = params[:survey_respondent_detail].reject {|x| ['pub_first_name', 'pub_last_name', 'pub_suffix', 'pub_prefix'].include? x }
+          p = params[:survey_respondent_detail].reject {|x| ['pub_first_name', 'pub_last_name', 'pub_suffix', 'pub_prefix'].include? x } if params[:survey_respondent_detail]
           if @respondent && @respondent.survey_respondent_detail
             respondentDetails = @respondent.survey_respondent_detail
             respondentDetails.update_attributes(p)
@@ -39,7 +39,11 @@ class Surveys::ResponseController < ApplicationController
             originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id) #.collect{|r| r.id}
           else
             # save the details and add to the respondent, create the respondent details and link to the responses
-            respondentDetails = SurveyRespondentDetail.new(p)
+            if p
+              respondentDetails = SurveyRespondentDetail.new(p)
+            else  
+              respondentDetails = SurveyRespondentDetail.new
+            end
             respondentDetails.save!
             if @respondent
               # and assign the details to the respondent
@@ -132,10 +136,12 @@ class Surveys::ResponseController < ApplicationController
       
       # send email confirmation of survey etc., use the email address that they provided in the survey
       begin
-        if (@respondent)
-          MailService.sendEmail(@respondent.person, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails))
-        else
-          MailService.sendGeneralEmail(respondentDetails.email, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails)) if respondentDetails.email
+        if respondentDetails
+          if (@respondent)
+            MailService.sendEmail(@respondent.person, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails))
+          else
+            MailService.sendGeneralEmail(respondentDetails.email, MailUse[:CompletedSurvey], @survey, (@respondent ? @respondent.survey_respondent_detail : respondentDetails)) if respondentDetails.email
+          end
         end
       rescue Exception => err
         logger.error "Unable to send the email to " + @respondent.email if @respondent

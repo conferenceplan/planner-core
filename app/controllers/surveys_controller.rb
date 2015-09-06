@@ -13,14 +13,22 @@ class SurveysController < PlannerController
   end
 
   def create
-    @survey = Survey.new params[:survey]
-    @survey.save!
+    begin
+      @survey = Survey.new params[:survey]
+      @survey.save!
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
   end
 
   def update
-    @survey = Survey.find params[:id]
-
-    @survey.update_attributes(params[:survey])
+    begin
+      @survey = Survey.find params[:id]
+  
+      @survey.update_attributes(params[:survey])
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
   end
 
   def destroy

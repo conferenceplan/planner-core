@@ -1,7 +1,7 @@
 class Survey < ActiveRecord::Base
   attr_accessible :lock_version, :name, :welcome, :thank_you, :alias, :submit_string, :header_image, :use_captcha, :public, :authenticate,
-                  :declined_msg, :authenticate_msg, :accept_status_id, :decline_status_id
-  
+                  :declined_msg, :authenticate_msg, :accept_status_id, :decline_status_id, :anonymous
+
   # Survey contains a series of groups, groups contain a series of questions
   has_many :survey_groups, :dependent => :destroy, :order => 'sort_order asc'
   
@@ -12,6 +12,7 @@ class Survey < ActiveRecord::Base
   
   #before_destroy :check_for_use, :check_if_published
   before_destroy :check_if_published
+  before_save :check_anon
   
   def getAllQuestions
     res = Array.new
@@ -25,6 +26,12 @@ class Survey < ActiveRecord::Base
   end
 
 private
+
+  def check_anon
+    if anonymous && authenticate
+      raise "can not have an anonymous survey that requires authentication"
+    end
+  end
 
   def check_for_use
     if survey_responses.any?
