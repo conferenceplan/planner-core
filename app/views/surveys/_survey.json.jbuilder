@@ -16,3 +16,4 @@ json.accept_status_name   survey.accept_status ? survey.accept_status.name : ''
 json.decline_status_id     survey.decline_status_id
 json.decline_status_name   survey.decline_status ? survey.decline_status.name : ''
 json.lock_version   survey.lock_version
+json.anonymous   survey.anonymous

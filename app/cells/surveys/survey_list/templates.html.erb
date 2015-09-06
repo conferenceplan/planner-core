@@ -41,6 +41,7 @@
         <dt><%= t "survey-public" %></dt><dd>{{= public ? 'Yes' : 'No' }}</dd>
         <dt><%= t "survey-authenticate" %></dt><dd>{{= authenticate ? 'Yes' : 'No' }}</dd>
         <dt><%= t "survey-use-captcha" %></dt><dd>{{= use_captcha ? 'Yes' : 'No' }}</dd>
+        <dt><%= t "survey-anonymous" %></dt><dd>{{= anonymous ? 'Yes' : 'No' }}</dd>
         {{ if (authenticate) { }}
         <dt><%= t "survey-authentication-intro" %></dt><dd>{{= authenticate_msg ? authenticate_msg : "&nbsp;"}}</dd>
         {{ } }}

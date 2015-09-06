@@ -11,6 +11,19 @@ SurveyApp.SurveyManagement = (function(Backbone){
             public          : { type : 'Checkbox', title : '<%= t "survey-public" %>' },
             authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>' },
             use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>' },
+            anonymous       : { type : 'Checkbox', title : '<%= t "survey-anonymous" %>',
+                                    validators: [
+                                        function check_for_auth(value, formValues) {
+                                            var err = {
+                                                type: "anonymous",
+                                                message: '<%= t "authenticated-survey-can-not-be-anonymous" %>'
+                                            };
+                                            if ((formValues.authenticate != "") && value) {
+                                                return err;
+                                            }
+                                        }
+                                    ]
+                                 },
             authenticate_msg : { type : 'DependentHtml', title : '<%= t "survey-authentication-intro" %>',
                                         dependsOn : 'authenticate', dependentValues : ['true'] },
             welcome         : { type : 'Html', title : '<%= t "survey-welcome-message" %>' },
