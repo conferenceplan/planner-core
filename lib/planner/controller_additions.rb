@@ -4,7 +4,15 @@ module Planner
     def self.included(base)
       base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :baseUri_with_lang,
                          :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
-                         :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo
+                         :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo,
+                         :strip_html_tags
+    end
+    
+    def strip_html_tags(txt)
+      html = Nokogiri::HTML(txt.gsub(/\n|\r/,""))
+      html.css('br').each{ |e| e.replace "\n" }
+      html.css('p').each{ |e| e.replace(e.text + "\n") }
+      html.text
     end
 
     def get_logo(conference = nil,scale = 2)
