@@ -12,7 +12,7 @@ module Planner
       html = Nokogiri::HTML(txt.gsub(/\n|\r/,""))
       html.css('br').each{ |e| e.replace "\n" }
       html.css('p').each{ |e| e.replace(e.text + "\n") }
-      html.text
+      html.text.strip
     end
 
     def get_logo(conference = nil,scale = 2)
