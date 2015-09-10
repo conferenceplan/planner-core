@@ -5,7 +5,7 @@ module Planner
       base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :baseUri_with_lang,
                          :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
                          :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo,
-                         :strip_html_tags
+                         :strip_html_tags, :site_url
     end
     
     def strip_html_tags(txt)
@@ -23,6 +23,9 @@ module Planner
       eval(ENV[:base_image_url.to_s])
     end
 
+    def site_url
+      ''
+    end
 
     def omniauth_state_params
       ''
