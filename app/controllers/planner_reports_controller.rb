@@ -410,6 +410,7 @@ class PlannerReportsController < PlannerController
     roles = []
     roles << PersonItemRole['Reserved'].id if params[:reserved] == "true"
     roles << PersonItemRole['Invisible'].id if params[:invisible] == "true"
+    @conf_start_time = SiteConfig.first.start_date
     @people = PlannerReportsService.findPanelistsWithPanels( params[:specific_panelists], 
                             roles, 
                             (params[:scheduled] == "true"), 
@@ -422,14 +423,14 @@ class PlannerReportsController < PlannerController
         output = Array.new
         output.push ['Fisrt Name','Last Name','Status','Items', 'Pub Ref Nbr']
         
-        # TODO - want to sort by the last name
-        
         @people.each do |person|
           output.push [
             person.pubFirstName,
             person.pubLastName,
             person.acceptance_status.name,
-            person.programmeItemAssignments.collect { |pi|
+            person.programmeItemAssignments.
+              sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
+              collect { |pi|
                 if (pi.programmeItem)
                     (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number.to_s + ' ' : '' ) +
                     pi.programmeItem.title +
@@ -437,7 +438,16 @@ class PlannerReportsController < PlannerController
                     ' (' + pi.role.name + '), ' +
                     (pi.programmeItem.time_slot ? pi.programmeItem.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.time_slot.end.strftime('%H:%M') : '') +
                     (pi.programmeItem.room ? ', ' + pi.programmeItem.room.name : '') +
-                    (pi.programmeItem.room ? ' (' + pi.programmeItem.room.venue.name + ')': '')
+                    (pi.programmeItem.room ? ' (' + pi.programmeItem.room.venue.name + ')': '') +
+                    (pi.programmeItem.parent ?
+                        ' part of ' +
+                        (pi.programmeItem.parent.pub_reference_number ? pi.programmeItem.parent.pub_reference_number.to_s + ' ' : '' ) +
+                        pi.programmeItem.parent.title +
+                        ( pi.programmeItem.parent.format ? ' (' + pi.programmeItem.parent.format.name + ') ' : '' ) +
+                        (pi.programmeItem.parent.time_slot ? ' ' + pi.programmeItem.parent.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.parent.time_slot.end.strftime('%H:%M') : '') +
+                        (pi.programmeItem.parent.room ? ', ' + pi.programmeItem.parent.room.name : '') +
+                        (pi.programmeItem.parent.room ? ' (' + pi.programmeItem.parent.room.venue.name + ')': '') : ''
+                    )
                 end
             }.reject { |c| c == nil }.join("\n"),
             person.programmeItemAssignments.collect { |pi|
@@ -576,7 +586,7 @@ class PlannerReportsController < PlannerController
   def participants_report
     @page_size = params[:page_size]
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
-    @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false # TODO - check if this is needed and if not remove
+    @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false
     @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
     
     # if the report is a pdf then order by format then name

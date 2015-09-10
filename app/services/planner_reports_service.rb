@@ -164,18 +164,29 @@ module PlannerReportsService
   def self.findPanelistsWithPanels(peopleIds = nil, additional_roles = nil, scheduledOnly = false, visibleOnly = false)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     roles.concat(additional_roles) if additional_roles
-    cndStr = '(programme_item_assignments.role_id in (?))'
-    cndStr += ' AND (programme_item_assignments.person_id in (?))' if peopleIds
-    cndStr += ' AND (time_slots.start is not NULL)' if scheduledOnly
-    cndStr += ' AND (programme_items.print = true)' if visibleOnly
-
-    conditions = [cndStr, roles]
-    conditions << peopleIds if peopleIds
     
-    Person.where(conditions).
-          includes({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}}).
+    assignments = Arel::Table.new(ProgrammeItemAssignment.table_name)
+    items = Arel::Table.new(ProgrammeItem.table_name)
+    time_slots = Arel::Table.new(TimeSlot.table_name)
+    parent_time_slots = time_slots.alias('time_slots_programme_items') # NOTE - this alias is what AR generates ....
+    
+    conditions = assignments[:role_id].in(roles)
+    conditions = conditions.and(assignments[:person_id].in(peopleIds)) if peopleIds
+    conditions = conditions.and(time_slots[:start].not_eq(nil).or(parent_time_slots[:start].not_eq(nil))) if scheduledOnly
+    conditions = conditions.and(items[:print].eq(true)) if visibleOnly
+    
+    Person.
+          includes({:pseudonym => {}, :programmeItemAssignments => {
+                      :programmeItem => [
+                          :time_slot, 
+                          {:room => :venue}, 
+                          :format, 
+                          :parent => [:time_slot, {:room => :venue}, :format] ]
+                    }
+                  }).
+          where(conditions).
           where(self.constraints()).
-          order("people.last_name, time_slots.start asc")
+          order(Person.arel_table[:last_name].desc, parent_time_slots[:start].asc, time_slots[:start].asc)
   end
 
   #

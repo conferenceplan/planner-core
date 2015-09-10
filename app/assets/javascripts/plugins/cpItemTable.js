@@ -169,7 +169,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             return rowData.children == 'false';
         }).unbind("click").html("");
     },
-
+    
     subGridRowExpandFn : function(subgrid_id, row_id) {
         var subgrid_table_id, pager_id;
         var tbl = jQuery(this).itemTable();
@@ -177,10 +177,18 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         var selectMethod = tbl.itemTable('option', 'selectNotifyMethod');
         var loadNotifyMethod = tbl.itemTable('option', 'loadNotifyMethod');
         var control =  tbl.itemTable('getControl');
+        var parentGrid = jQuery(this).jqGrid(); // get the parent grid so that we can deselect if necessary
 
+        // collapse the other grids that are open
+        parentGrid.find("tr:has(.sgexpanded)").each(function () {
+            num = $(this).attr('id');
+            parentGrid.collapseSubGridRow(num);
+        });
+        // TODO - store the grid id of to reopen it if needed upon change
+        
         subgrid_table_id = subgrid_id+"_t"; 
         pager_id = "p_"+subgrid_table_id; 
-        $("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll'></table><div id='"+pager_id+"' class='scroll'></div>"); 
+        $("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll cp_subgrid'></table><div id='"+pager_id+"' class='scroll'></div>"); 
         jQuery("#"+subgrid_table_id).jqGrid({ 
                 url             : sub_url + "?id="+row_id, 
                 datatype        : "JSON", 
@@ -254,6 +262,8 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 autowidth       : true,
                 editurl         : tbl.itemTable('editUrl'),
                 onSelectRow     : function(ids) {
+                    parentGrid.jqGrid('resetSelection');
+                    
                     var data = jQuery("#"+subgrid_table_id).jqGrid('getRowData', ids);
                     var title = data['item[title]'];
                     var _model = selectMethod(ids, title); // get the current model and put it in the controller view

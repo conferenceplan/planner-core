@@ -46,7 +46,7 @@ class Person < ActiveRecord::Base
 
   # named_scope :by_last_name, :order => "last_name ASC"
   def by_last_name
-    order("ast_name ASC")
+    order("last_name ASC")
   end
   
   # ----------------------------------------------------------------------------------------------

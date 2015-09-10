@@ -303,7 +303,7 @@ ItemApp.ItemManagement = (function(Backbone){
         if (typeof title !== 'undefined') {
             $('#selected-program-item').html(title);
         } else {
-            var data = jQuery("#items").jqGrid('getRowData', id); // problem when it is a sub-grid ....
+            var data = jQuery("#items").jqGrid('getRowData', id);
             $('#selected-program-item').html(data['item[title]']);
         }
 

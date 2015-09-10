@@ -90,6 +90,7 @@ $.widget( "cp.baseTable" , {
         var control = null;
         var pageTo = this.pageTo;
         var that = this;
+        var _el = this.element;
         
         // View type for controls
         TableControlView = Backbone.Marionette.ItemView.extend({
@@ -242,6 +243,11 @@ $.widget( "cp.baseTable" , {
                 caption         : this.options.caption,
                 editurl         : this.editUrl(),
                 onSelectRow     : function(ids) {
+                    
+                    _el.find(".ui-subgrid").each(function () {
+                        $(this).find(".cp_subgrid").jqGrid('resetSelection');
+                    });
+                    
                     var _model = selectMethod(ids); // get the current model and put it in the controller view
                     
                     if (_model) {
