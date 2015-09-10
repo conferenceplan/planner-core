@@ -22,7 +22,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 var res = "<div itemId='" + options.rowId + "'>" + cellvalue + "</div>"; // adding the item id so that drag-n-drop can use it
                 return res;
             },
-            cellattr : function(rowId, val, rawObject) { // TODO - see if we can move out as an option
+            cellattr : function(rowId, val, rawObject) {
                 return 'class="ui-draggable"';
             }
         }, {
@@ -184,12 +184,12 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             num = $(this).attr('id');
             parentGrid.collapseSubGridRow(num);
         });
-        // TODO - store the grid id of to reopen it if needed upon change
         
-        subgrid_table_id = subgrid_id+"_t"; 
+        subgrid_table_id = subgrid_id+"_t";
+        
         pager_id = "p_"+subgrid_table_id; 
         $("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll cp_subgrid'></table><div id='"+pager_id+"' class='scroll'></div>"); 
-        jQuery("#"+subgrid_table_id).jqGrid({ 
+        var subgrid = jQuery("#"+subgrid_table_id).jqGrid({ 
                 url             : sub_url + "?id="+row_id, 
                 datatype        : "JSON", 
                 jsonReader      : {
@@ -270,12 +270,19 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                     
                     if (_model) {
                         control.model = _model;
+                        control.subgrid = subgrid_table_id;
+                        control.parent_id = row_id;
                     }
                     
                     return false;
                 },
                 gridComplete    : function() {
                     loadNotifyMethod();
+                },
+                loadComplete    : function() {
+                    if (control.model) {
+                        subgrid.setSelection(control.model.id);
+                    }
                 }
         });
     },

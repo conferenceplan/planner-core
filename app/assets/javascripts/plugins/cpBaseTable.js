@@ -100,7 +100,7 @@ $.widget( "cp.baseTable" , {
                 "click .edit-model-button"      : "editModel",
                 "click .delete-model-button"    : "deleteModal",
             },
-        
+            
             initialize : function(options) {
                 this.options = options || {};
                 // this.template = _.template(this.templateStr);
@@ -119,7 +119,8 @@ $.widget( "cp.baseTable" , {
                             current_selection : to_id // to pass back for the selection
                         },
                     });
-                }
+                };
+
                 grid.trigger("reloadGrid");
             },
             
@@ -163,11 +164,16 @@ $.widget( "cp.baseTable" , {
                         title : this.options.modal_edit_title,
                         refresh : function(mdl) {
                             grid.jqGrid('setGridParam', {
-                            loadComplete: function(data) {
-                                    grid.jqGrid('setSelection', mdl.id); // when load is complete the selection is called...
-                                    // load complete is called every time... only want it once, so remove it after it has been used...
-                                    grid.jqGrid('setGridParam', { loadComplete: function() {} });
-                                }
+                                loadComplete: function(data) {
+                                        if (control.subgrid) {
+                                            var grid_id = control.parent_id;
+                                            grid.expandSubGridRow(grid_id);
+                                        } else {
+                                            grid.jqGrid('setSelection', mdl.id); // when load is complete the selection is called...
+                                        }
+                                        // load complete is called every time... only want it once, so remove it after it has been used...
+                                        grid.jqGrid('setGridParam', { loadComplete: function() {} });
+                                    }
                             });
                             grid.trigger("reloadGrid");
                         }
@@ -191,10 +197,10 @@ $.widget( "cp.baseTable" , {
                                     success : function(md, response) {
                                         // TODO - we need a method to call to ensure that selected is nilled out before the grid reload etc
                                         grid.jqGrid('setGridParam', {
-                                        loadComplete: function(data) {
-                                                grid.jqGrid('resetSelection');
-                                                grid.jqGrid('setGridParam', { loadComplete: function() {} });
-                                            }
+                                            loadComplete: function(data) {
+                                                    grid.jqGrid('resetSelection');
+                                                    grid.jqGrid('setGridParam', { loadComplete: function() {} });
+                                                }
                                         });
                                         grid.trigger("reloadGrid");
                                         clearNotifyMethod();
@@ -243,7 +249,6 @@ $.widget( "cp.baseTable" , {
                 caption         : this.options.caption,
                 editurl         : this.editUrl(),
                 onSelectRow     : function(ids) {
-                    
                     _el.find(".ui-subgrid").each(function () {
                         $(this).find(".cp_subgrid").jqGrid('resetSelection');
                     });
@@ -252,8 +257,10 @@ $.widget( "cp.baseTable" , {
                     
                     if (_model) {
                         control.model = _model;
+                        control.subgrid = null;
+                        control.parent_id = null;
                     }
-                    
+
                     return false;
                 },
                 loadComplete    : function(data) {
@@ -269,6 +276,11 @@ $.widget( "cp.baseTable" , {
                     that.removeSubgridIcon.call(this);
                     // Call back - to call when the load has been done
                     loadNotifyMethod();
+
+                    if (control.subgrid) {
+                        var grid_id = control.parent_id;
+                        grid.expandSubGridRow(grid_id);
+                    }
                 }
         });
 
