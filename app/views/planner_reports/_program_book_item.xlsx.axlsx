@@ -1,0 +1,37 @@
+
+row = [
+    time.start + Time.zone.utc_offset.seconds, # fix for the timezone, since Excel does not understand timezones
+    time.start.strftime('%A'),
+    time.start.strftime('%H:%M'),
+    time.programme_items[0].duration,
+    time.rooms[0].name,
+    time.rooms[0].venue.name,
+    (@tagOwner ? time.programme_items[0].owner_tag_list_on(@tagOwner, :PrimaryArea).join(",") : time.programme_items[0].tag_list_on(:PrimaryArea).join(",")),
+    (time.programme_items[0].format ? time.programme_items[0].format.name : ""),
+    (time.programme_items[0].title ? strip_html_tags(time.programme_items[0].title.gsub(/\n|\r/,"")) : ""),
+    (!time.programme_items[0].precis.blank? ? strip_html_tags(time.programme_items[0].precis.gsub(/\n|\r/,"")) : ""),
+    (time.programme_items[0].short_title ? strip_html_tags(time.programme_items[0].short_title.gsub(/\n|\r/,"")) : ""),
+    (!time.programme_items[0].short_precis.blank? ? strip_html_tags(time.programme_items[0].short_precis.gsub(/\n|\r/,"")) : ""),
+    time.programme_items[0].pub_reference_number,
+    time.programme_items[0].external_images.use('mediumcard')[0] ? time.programme_items[0].external_images.use('mediumcard')[0].picture.url : '',
+    time.programme_items[0].external_images.use('largecard')[0] ? time.programme_items[0].external_images.use('largecard')[0].picture.url : ''
+]
+
+contexts.each do |ctx|
+    if @tagOwner
+        row << time.programme_items[0].owner_tag_list_on( @tagOwner, ctx ).join(",")
+    else  
+        row << time.programme_items[0].tag_list_on( ctx ).join(",")
+    end
+end
+
+time.programme_items[0].programme_item_assignments.each do |assignment|
+    if assignment.role == PersonItemRole['Participant'] || assignment.role == PersonItemRole['Moderator']
+        row <<  assignment.person.getFullPublicationName
+        row <<  assignment.person.job_title ? assignment.person.job_title : ''
+        row <<  assignment.person.company ? assignment.person.company : ''
+        row <<  assignment.role.name
+    end
+end
+
+sheet.add_row row

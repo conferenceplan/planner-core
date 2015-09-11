@@ -588,6 +588,7 @@ class PlannerReportsController < PlannerController
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
     @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false
     @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+    @conf_start_time = SiteConfig.first.start_date
     
     # if the report is a pdf then order by format then name
     if request.format == :pdf

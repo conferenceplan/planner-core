@@ -10,7 +10,6 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
 
     pdf.font "Open Sans"
 
-
     # Do we want one page per person?
     @people.each do |person|
         person_name = pdf.make_table(
@@ -23,7 +22,6 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                     end
 
         has_image = person.bio_image && person.bio_image.bio_picture.url
-#        has_image = person.bio_image.bio_picture.url.include?(".png") || person.bio_image.bio_picture.url.include?(".jpg") || person.bio_image.bio_picture.url.include?(".jpeg") if has_image
 
         title = pdf.make_table([[( has_image ? ({:image => open(person.bio_image.bio_picture.full.url), :fit => [100, 100] }) : '') ,
                         person_name
@@ -36,10 +34,17 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                     end
 
         item_cell = []
-        person.programmeItemAssignments.each do |ia|
-            if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
-                item_cell << [(ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)]
-            end
+
+        person.programmeItemAssignments.
+            sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
+            each do |ia|
+
+                if @allowed_roles.include? ia.role
+
+                    item_cell << [(ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)]
+
+                end
+
         end
         item_cell_table = pdf.make_table(item_cell,
                             :column_widths => { 0 => (page_width - 140) }

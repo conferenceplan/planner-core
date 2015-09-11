@@ -195,13 +195,24 @@ module PlannerReportsService
   def self.findPanelistsAndBios(order_by)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     cndStr = '(programme_item_assignments.role_id in (?))'
-    cndStr += ' AND (time_slots.start is not NULL)'
+    cndStr += ' AND (time_slots.start is not NULL || time_slots_programme_items.start is not null)'
     cndStr += ' AND (programme_items.print = true)'
 
     conditions = [cndStr, roles]
-    
+
+    # TODO - add in parent here
     Person.where(conditions).
-          includes([:pseudonym, :edited_bio, :bio_image , :programmeItemAssignments => {:programmeItem => [:time_slot, {:room => :venue}, :format]}]).
+          includes([
+                    :pseudonym, :edited_bio, :bio_image , 
+                    :programmeItemAssignments => {
+                      :programmeItem => [
+                            { :parent => [:time_slot, {:room => :venue}, :format] },
+                            { :room => :venue }, 
+                            :time_slot, 
+                            :format
+                          ]
+                      }
+                  ]).
           where(self.constraints()).
           order(order_by)
   end
@@ -354,8 +365,17 @@ module PlannerReportsService
   #
   def self.findProgramItemsByTimeAndRoom
     TimeSlot.joins([{:rooms => :venue}, :programme_items]).
-              includes([{:rooms => :venue}, {:programme_items => [{:programme_item_assignments => {:person => :pseudonym}}, :format, ]}]).
-              where("print = 1 and time_slots.start is not NULL").
+              includes([
+                  {:rooms => :venue},
+                  {:programme_items => 
+                    [
+                      {:programme_item_assignments => {:person => :pseudonym}},
+                      {:children => {:programme_item_assignments => {:person => :pseudonym}}},
+                      :format
+                    ]
+                  }
+                 ]).
+              where("programme_items.print = 1 and time_slots.start is not NULL").
               where(self.constraints()).
               order("time_slots.start, venues.sort_order, rooms.sort_order")
   end

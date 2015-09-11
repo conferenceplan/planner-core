@@ -1,0 +1,35 @@
+
+row = [
+    '','','',
+    item.duration,
+    '',
+    '',
+    (@tagOwner ? item.owner_tag_list_on(@tagOwner, :PrimaryArea).join(",") : item.tag_list_on(:PrimaryArea).join(",")),
+    (item.format ? item.format.name : ""),
+    (item.title ? strip_html_tags(item.title.gsub(/\n|\r/,"")) : ""),
+    (!item.precis.blank? ? strip_html_tags(item.precis.gsub(/\n|\r/,"")) : ""),
+    (item.short_title ? strip_html_tags(item.short_title.gsub(/\n|\r/,"")) : ""),
+    (!item.short_precis.blank? ? strip_html_tags(item.short_precis.gsub(/\n|\r/,"")) : ""),
+    item.pub_reference_number,
+    item.external_images.use('mediumcard')[0] ? item.external_images.use('mediumcard')[0].picture.url : '',
+    item.external_images.use('largecard')[0] ? item.external_images.use('largecard')[0].picture.url : ''
+]
+
+contexts.each do |ctx|
+    if @tagOwner
+        row << item.owner_tag_list_on( @tagOwner, ctx ).join(",")
+    else  
+        row << item.tag_list_on( ctx ).join(",")
+    end
+end
+
+item.programme_item_assignments.each do |assignment|
+    if assignment.role == PersonItemRole['Participant'] || assignment.role == PersonItemRole['Moderator']
+        row <<  assignment.person.getFullPublicationName
+        row <<  assignment.person.job_title ? assignment.person.job_title : ''
+        row <<  assignment.person.company ? assignment.person.company : ''
+        row <<  assignment.role.name
+    end
+end
+
+sheet.add_row row

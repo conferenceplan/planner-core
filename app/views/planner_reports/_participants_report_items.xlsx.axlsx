@@ -1,0 +1,31 @@
+
+item_assignments.
+  sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
+  each do |ia|
+
+    if ia.programmeItem && (@allowed_roles.include? ia.role)
+        row << (ia.programmeItem.pub_reference_number ? ia.programmeItem.pub_reference_number : '')
+        if ia.programmeItem.time_slot
+            row << (ia.programmeItem.time_slot.start + Time.zone.utc_offset.seconds)
+            row << (ia.programmeItem.time_slot.start.strftime('%A'))
+        else
+            row << (ia.programmeItem.parent.time_slot.start + Time.zone.utc_offset.seconds)
+            row << (ia.programmeItem.parent.time_slot.start.strftime('%A'))
+        end
+        row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')
+        row << (ia.programmeItem.short_title.blank? ? (ia.programmeItem.title ? strip_html_tags(ia.programmeItem.title.gsub(/\n|\r/,"")) : "") : (ia.programmeItem.short_title ? strip_html_tags(ia.programmeItem.short_title.gsub(/\n|\r/,"")) : ""))
+        if ia.programmeItem.parent
+            row << (ia.programmeItem.parent.short_title.blank? ? (ia.programmeItem.parent.title ? strip_html_tags(ia.programmeItem.parent.title.gsub(/\n|\r/,"")) : "") : (ia.programmeItem.parent.short_title ? strip_html_tags(ia.programmeItem.parent.short_title.gsub(/\n|\r/,"")) : ""))
+        else
+            row << ''
+        end
+        row << (ia.programmeItem.format ? ia.programmeItem.format.name : '')
+        row << (ia.programmeItem.precis ? strip_html_tags(ia.programmeItem.precis.gsub(/\n|\r/,"")) : '')
+        row << (ia.programmeItem.room ? ia.programmeItem.room.name : '')
+        row << ((ia.programmeItem.room && ia.programmeItem.room.venue) ? ia.programmeItem.room.venue.name : '')
+        row << (ia.programmeItem.setup_type ? ia.programmeItem.setup_type.name : '')
+        row << (ia.programmeItem.participant_notes ? ia.programmeItem.participant_notes : '')
+    end
+
+end
+        

@@ -11,6 +11,7 @@ wb.add_worksheet(name: "Participants") do |sheet|
         'Photo Url',
         'Bio'
     ]
+    
     titles.concat Array.new(20) {|e| ['Publication Reference Number ' + (e+1).to_s, 
                                         'Time ' + (e+1).to_s, 
                                         'Day ' + (e+1).to_s, 
@@ -33,23 +34,9 @@ wb.add_worksheet(name: "Participants") do |sheet|
         row << p.company
         row << (p.getDefaultEmail ? p.getDefaultEmail.email : '')
         row << (p.bio_image ? p.bio_image.bio_picture.url : '')
-        row << (p.bio ? strip_html_tags(p.bio.gsub(/\n|\r/,"") : "")
+        row << (p.bio ? strip_html_tags(p.bio.gsub(/\n|\r/,"")) : "")
         
-        p.programmeItemAssignments.each do |ia|
-            if ia.programmeItem.time_slot && (@allowed_roles.include? ia.role)
-                row << (ia.programmeItem.pub_reference_number ? ia.programmeItem.pub_reference_number : '')
-                row << (ia.programmeItem.time_slot.start + Time.zone.utc_offset.seconds)
-                row << (ia.programmeItem.time_slot.start.strftime('%A'))
-                row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')
-                row << (ia.programmeItem.short_title.blank? ? (ia.programmeItem.title ? strip_html_tags(ia.programmeItem.title.gsub(/\n|\r/,"")) : "") : (ia.programmeItem.short_title ? strip_html_tags(ia.programmeItem.short_title.gsub(/\n|\r/,"")) : ""))
-                row << (ia.programmeItem.format ? ia.programmeItem.format.name : '')
-                row << (ia.programmeItem.precis ? strip_html_tags(ia.programmeItem.precis.gsub(/\n|\r/,""), tags: []) : '')
-                row << (ia.programmeItem.room ? ia.programmeItem.room.name : '')
-                row << ((ia.programmeItem.room && ia.programmeItem.room.venue) ? ia.programmeItem.room.venue.name : '')
-                row << (ia.programmeItem.setup_type ? ia.programmeItem.setup_type.name : '')
-                row << (ia.programmeItem.participant_notes ? ia.programmeItem.participant_notes : '')
-            end
-        end
+        render :partial => "participants_report_items", :locals => {:item_assignments => p.programmeItemAssignments, :row => row}
         
         sheet.add_row row
     end
