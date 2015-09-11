@@ -165,6 +165,7 @@ $.widget( "cp.baseTable" , {
                         refresh : function(mdl) {
                             grid.jqGrid('setGridParam', {
                                 loadComplete: function(data) {
+                                    if (control) {
                                         if (control.subgrid) {
                                             var grid_id = control.parent_id;
                                             grid.expandSubGridRow(grid_id);
@@ -174,6 +175,7 @@ $.widget( "cp.baseTable" , {
                                         // load complete is called every time... only want it once, so remove it after it has been used...
                                         grid.jqGrid('setGridParam', { loadComplete: function() {} });
                                     }
+                                }
                             });
                             grid.trigger("reloadGrid");
                         }
@@ -256,9 +258,11 @@ $.widget( "cp.baseTable" , {
                     var _model = selectMethod(ids); // get the current model and put it in the controller view
                     
                     if (_model) {
-                        control.model = _model;
-                        control.subgrid = null;
-                        control.parent_id = null;
+                        if (control) {
+                            control.model = _model;
+                            control.subgrid = null;
+                            control.parent_id = null;
+                        }
                     }
 
                     return false;
@@ -277,9 +281,11 @@ $.widget( "cp.baseTable" , {
                     // Call back - to call when the load has been done
                     loadNotifyMethod();
 
-                    if (control.subgrid) {
-                        var grid_id = control.parent_id;
-                        grid.expandSubGridRow(grid_id);
+                    if (control) {
+                        if (control.subgrid) {
+                            var grid_id = control.parent_id;
+                            grid.expandSubGridRow(grid_id);
+                        }
                     }
                 }
         });
