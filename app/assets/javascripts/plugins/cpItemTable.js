@@ -28,7 +28,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         }, {
             name: 'programme_item[format_name]',
             label : this.options.format_name[1],
-            index: 'format_id',
+            index: 'programme_items.format_id',
             hidden: !this.options.format_name[0],
             width: 145,
             search: true,
@@ -97,7 +97,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         {
             label : this.options.duration[1], //'Duration',
             name: 'programme_item[duration]',
-            index: 'duration',
+            index: 'programme_items.duration',
             hidden : !this.options.duration[0],
             width: 70,
             searchoptions: {

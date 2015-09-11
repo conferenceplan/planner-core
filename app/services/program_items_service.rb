@@ -219,8 +219,8 @@ protected
 
   def self.genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, include_children, page_to = nil)
     clause = DataService.createWhereClause(filters, 
-                  ['format_id','pub_reference_number'],
-                  ['format_id','pub_reference_number'], ['programme_items.title'])
+                  ['programme_items.format_id','programme_items.pub_reference_number'],
+                  ['programme_items.format_id','programme_items.pub_reference_number'], ['programme_items.title'])
 
     if ignoreScheduled
       clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
