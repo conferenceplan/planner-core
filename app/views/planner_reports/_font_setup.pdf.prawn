@@ -29,3 +29,4 @@ pdf.font_families.update(
        }
     )
 
+pdf.font "Open Sans"

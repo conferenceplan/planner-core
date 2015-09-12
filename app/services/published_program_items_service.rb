@@ -73,6 +73,7 @@ module PublishedProgramItemsService
 
     PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.all :include => [:publication, :published_time_slot, :published_room_item_assignment, :format,
+                                              {:parent => [:published_time_slot, {:published_room => :published_venue}, :format] },
                                               {:published_programme_item_assignments => {:person => [:pseudonym, :email_addresses]}},
                                               {:published_room => [:published_venue]} ],
                                :conditions => "published_programme_item_assignments.id is not null",

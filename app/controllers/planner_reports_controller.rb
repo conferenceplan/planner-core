@@ -656,6 +656,7 @@ class PlannerReportsController < PlannerController
     @single = (!params[:single].blank?) ? params[:single] == "true" : false
     @page_size = params[:page_size]
     @by_time = (@itemList == nil) && (peopleList == nil) && !@single
+    @conf_start_time = SiteConfig.first.start_date
 
     if (@itemList == nil) && (peopleList == nil) && !@single
       @items = PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople
@@ -686,7 +687,8 @@ class PlannerReportsController < PlannerController
     @orientation = params[:orientation] == 'landscape' ? :landscape : :portrait
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     additional_roles = params[:additional_roles] == "true" ? [PersonItemRole['Invisible'].id] : nil
-    
+    @conf_start_time = SiteConfig.first.start_date
+
     Person.uncached do
       # Only use the scheduled items
       @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, true
@@ -716,6 +718,7 @@ class PlannerReportsController < PlannerController
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     additional_roles = params[:additional_roles] == "true" ? [PersonItemRole['Invisible'].id] : nil
     for_print = params[:for_print] ? (params[:for_print] == true) : false
+    @conf_start_time = SiteConfig.first.start_date
     
     Person.uncached do
       # Only use the scheduled items

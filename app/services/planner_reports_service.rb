@@ -186,7 +186,7 @@ module PlannerReportsService
                   }).
           where(conditions).
           where(self.constraints()).
-          order(Person.arel_table[:last_name].desc, parent_time_slots[:start].asc, time_slots[:start].asc)
+          order(Person.arel_table[:last_name].asc, parent_time_slots[:start].asc, time_slots[:start].asc)
   end
 
   #
@@ -232,7 +232,14 @@ module PlannerReportsService
     conditions << itemIds if itemIds
     
     Person.where(conditions).
-              includes([:pseudonym, {:published_programme_items => [:format, {:published_room => :published_venue}, :published_time_slot]}]).
+              includes([
+                    :pseudonym, 
+                    {:published_programme_items => [
+                      :format, 
+                      {:published_room => :published_venue}, :published_time_slot,
+                      {:parent => [:published_time_slot, {:published_room => :published_venue}, :format] }
+                     ]}
+                  ]).
               where(self.constraints()).
               order("people.last_name, published_time_slots.start asc")
   end

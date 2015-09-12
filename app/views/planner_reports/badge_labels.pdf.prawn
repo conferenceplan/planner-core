@@ -25,9 +25,12 @@ prawn_document(:page_size => @label_dimensions.page_size,
         labels[0] = "<b>" + p.getFullPublicationName + "</b>\n" if @exclude_items
         
         if (@exclude_items == false)
-            # TODO - if number of items > 7 then we create a new label to continue the list
-            items_to_print = p.programmeItemAssignments.collect { |i|
-                if i.programmeItem.time_slot && (@allowed_roles.include? i.role)
+
+            items_to_print = p.programmeItemAssignments.
+               sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
+               collect { |i|
+                #if i.programmeItem.time_slot && (@allowed_roles.include? i.role)
+                if (@allowed_roles.include? i.role)
                     i
                 end
             }.compact
@@ -39,11 +42,19 @@ prawn_document(:page_size => @label_dimensions.page_size,
                 
                 ((l*max_per_label)..(l*max_per_label+max_per_label-1)).each do |p|
                     if items_to_print[p]
-                        labels[l] += "(" + items_to_print[p].role.name[0] +
-                                ") <b>" + items_to_print[p].programmeItem.time_slot.start.strftime(@time_format) + "</b> : " + 
-                                items_to_print[p].programmeItem.room.name + " " +
-                                (items_to_print[p].programmeItem.short_title.blank? ? items_to_print[p].programmeItem.title : items_to_print[p].programmeItem.short_title) +
-                                "\n"
+                        labels[l] += "(" + items_to_print[p].role.name[0] + ")" 
+                        if items_to_print[p].programmeItem.time_slot
+                            labels[l] += " <b>" + items_to_print[p].programmeItem.time_slot.start.strftime(@time_format) + "</b>"
+                        else
+                            labels[l] += " <b>" + items_to_print[p].programmeItem.parent.time_slot.start.strftime(@time_format) + "</b>"
+                        end
+                        labels[l] +=  " : " 
+                        if items_to_print[p].programmeItem.time_slot
+                            labels[l] += items_to_print[p].programmeItem.room.name + " "
+                        else
+                            labels[l] += items_to_print[p].programmeItem.parent.room.name + " "
+                        end
+                        labels[l] += (items_to_print[p].programmeItem.short_title.blank? ? items_to_print[p].programmeItem.title : items_to_print[p].programmeItem.short_title) + "\n"
                     end
                 end
             end

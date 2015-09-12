@@ -16,18 +16,30 @@ wb.add_worksheet(name: "Table Tents") do |sheet|
     if @people
         @people.each do |person|
             # should be the published items
-            person.published_programme_items.collect{|i| @itemList ? (@itemList.include?(i.id.to_s) ? i : nil) : i }.compact.each do |item|
-                sheet.add_row [
-                    person.getFullPublicationName,
-                    item.title,
-                    item.precis ? item.precis : '',
-                    (item.format ? item.format.name : ''),
-                    item.published_room.name,
-                    item.published_room.published_venue.name,
-                    item.published_time_slot.start.strftime('%A'),
-                    item.published_time_slot.start.strftime('%H:%M'),
-                    item.published_time_slot.start.strftime('%y-%m-%d')
-                ]
+            person.published_programme_items.collect{|i| @itemList ? (@itemList.include?(i.id.to_s) ? i : nil) : i }.compact.
+                sort_by{ |a| (a.parent && a.parent.published_time_slot) ? a.parent.published_time_slot.start : (a.published_time_slot ? a.published_time_slot.start : @conf_start_time) }.
+                each do |item|
+                    row = []
+                    
+                    row << person.getFullPublicationName
+                    row << item.title
+                    row << item.precis ? item.precis : ''
+                    row << (item.format ? item.format.name : '')
+                    if item.parent
+                        row << item.parent.published_room.name
+                        row << item.parent.published_room.published_venue.name
+                        row << item.parent.published_time_slot.start.strftime('%A')
+                        row << item.parent.published_time_slot.start.strftime('%H:%M')
+                        row << item.parent.published_time_slot.start.strftime('%y-%m-%d')
+                    else
+                        row << item.published_room.name
+                        row << item.published_room.published_venue.name
+                        row << item.published_time_slot.start.strftime('%A')
+                        row << item.published_time_slot.start.strftime('%H:%M')
+                        row << item.published_time_slot.start.strftime('%y-%m-%d')
+                    end
+
+                    sheet.add_row row
             end
         end
     end
