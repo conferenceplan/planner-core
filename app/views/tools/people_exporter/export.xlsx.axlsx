@@ -28,6 +28,10 @@ wb.add_worksheet(name: "People") do |sheet|
         "Phone - Work",
         "Phone - Fax",
         "Phone - Other",
+        "Registered",
+        "Reg Type",
+        "Reg Number",
+        "Number of Items"
     ]
 
     sheet.add_row titles
@@ -70,11 +74,10 @@ wb.add_worksheet(name: "People") do |sheet|
             ])
         end
         
-        phone_numbers = person.phone_numbers
 
+        numbers = ["","","","",""]
+        phone_numbers = person.phone_numbers
         if phone_numbers
-            numbers = ["","","","",""]
-        
             phone_numbers.each do |pn|
                 case pn.phone_type
                     when PhoneTypes['Home']
@@ -89,9 +92,20 @@ wb.add_worksheet(name: "People") do |sheet|
                         numbers[4] = pn.number
                 end
             end
+        end
+        row.concat(numbers)
 
-            row.concat(numbers)
-
+        reg_details = ['','','']        
+        if person.registrationDetail
+            reg_details[0] = person.registrationDetail.registered ? 'Y' : 'N'
+            reg_details[1] = person.registrationDetail.registration_type if person.registrationDetail.registration_type
+            reg_details[2] = person.registrationDetail.registration_number if person.registrationDetail.registration_number
+        else
+        end
+        row.concat reg_details
+        
+        if person.publishedProgrammeItemAssignments.size > 0
+            row << person.publishedProgrammeItemAssignments.size.to_s
         end
         
         sheet.add_row row
