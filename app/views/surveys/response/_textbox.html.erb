@@ -1,6 +1,6 @@
 <% 
     args = {:class=> 'form-control', :rows => 5}
-    if question.text_size
+    if question.text_size && (question.text_size > 0)
         args[:maxlength] = question.text_size
     end
 %>
