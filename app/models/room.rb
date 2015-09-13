@@ -9,7 +9,7 @@ class Room < ActiveRecord::Base
   belongs_to  :venue
   
   # this is a many to many
-  has_many :room_item_assignments do
+  has_many :room_item_assignments, :dependent => :destroy do
     def day(d) # get the room item assignments for the given day if the day parameter is used
       find(:all, 
         :include => [:programme_item, :time_slot],
