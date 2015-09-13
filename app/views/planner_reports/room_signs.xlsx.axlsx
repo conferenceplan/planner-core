@@ -12,7 +12,6 @@ days.each do |day| # For each day ...
                 row << assignment.published_time_slot.start.strftime('%H:%M')
                 row << assignment.published_programme_item.title
                 row << assignment.published_programme_item.published_programme_item_assignments.collect{|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.collect{|p| p.person.getFullPublicationName}.join(',')
-                
             end
             sheet.add_row row
         end

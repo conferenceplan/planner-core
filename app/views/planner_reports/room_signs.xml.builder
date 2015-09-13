@@ -26,6 +26,24 @@ xml.room_signs do
                                     end
                                 end
                             end
+                            
+                            if assignment.published_programme_item.children
+                                xml.children do
+                                    assignment.published_programme_item.children.each do |child|
+                                        xml.child do
+                                            xml.title child.title
+                                            xml.participants do # Participants (Moderators etc)
+                                                child.published_programme_item_assignments.collect {|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.each do |p|
+                                                    xml.participant do
+                                                        xml.name p.person.getFullPublicationName
+                                                        xml.role p.role.name
+                                                    end
+                                                end
+                                            end
+                                        end
+                                    end
+                                end
+                            end
                         end
                     end
                 end
