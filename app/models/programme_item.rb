@@ -44,19 +44,17 @@ class ProgrammeItem < ActiveRecord::Base
     end
   end
 
+  before_save :check_parent
+  
+  protected
+  
+  def check_parent
+      raise "can not set an item as a parent of itself" if self.id == self.parent_id
+  end
+
 end
 
 # TODO - create a clone function
 # Should create with a new name (copy of)
 # keep the description
 # do not keep the time/room/people
-
-# TODO - create nested items
-# An item can have a parent
-# If there is a parent then display it in a "sub-grid"
-# if it is a child then do not allow a room assignment
-# For conflict checking use the parent's times (or should we have a subset of times?)
-# For conflict checking use the combination of people from children and parent
-# Publish ?
-# Mobile app ?
-# TODO Do we need new role types for people assigned to items? (Allow conference to add/define?)
