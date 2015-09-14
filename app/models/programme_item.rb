@@ -49,7 +49,7 @@ class ProgrammeItem < ActiveRecord::Base
   protected
   
   def check_parent
-      raise "can not set an item as a parent of itself" if self.id == self.parent_id
+    raise "can not set an item as a parent of itself" if self.id && (self.id == self.parent_id)
   end
 
 end
