@@ -262,6 +262,8 @@ $.widget( "cp.baseTable" , {
                             control.model = _model;
                             control.subgrid = null;
                             control.parent_id = null;
+                            control.subgrid_page = 1;
+                            controle.current_grid = null;
                         }
                     }
 

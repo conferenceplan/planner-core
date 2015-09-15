@@ -169,7 +169,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             return rowData.children == 'false';
         }).unbind("click").html("");
     },
-    
+
     subGridRowExpandFn : function(subgrid_id, row_id) {
         var subgrid_table_id, pager_id;
         var tbl = jQuery(this).itemTable();
@@ -178,7 +178,8 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         var loadNotifyMethod = tbl.itemTable('option', 'loadNotifyMethod');
         var control =  tbl.itemTable('getControl');
         var parentGrid = jQuery(this).jqGrid(); // get the parent grid so that we can deselect if necessary
-
+        var current_page = control.subgrid_page;
+        
         // collapse the other grids that are open
         parentGrid.find("tr:has(.sgexpanded)").each(function () {
             num = $(this).attr('id');
@@ -187,11 +188,19 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         
         subgrid_table_id = subgrid_id+"_t";
         
+        if (control.current_grid != subgrid_table_id) {
+            current_page = 1;
+        };
+
+        control.current_grid = subgrid_table_id;
+        
         pager_id = "p_"+subgrid_table_id; 
-        $("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll cp_subgrid'></table><div id='"+pager_id+"' class='scroll'></div>"); 
+        $("#"+subgrid_id).html("<table id='"+subgrid_table_id+"' class='scroll cp_subgrid'></table><div id='"+pager_id+"' class='scroll'></div>");
         var subgrid = jQuery("#"+subgrid_table_id).jqGrid({ 
                 url             : sub_url + "?id="+row_id, 
                 datatype        : "JSON", 
+                mtype           : 'POST',
+                page            : current_page,
                 jsonReader      : {
                         repeatitems : false,
                         page        : "currpage",
@@ -261,6 +270,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 height          : '100%',
                 autowidth       : true,
                 editurl         : tbl.itemTable('editUrl'),
+                pager           : pager_id,
+                rowList         : [10, 20, 30, 60],
+                rowNum          : 10,
                 onSelectRow     : function(ids) {
                     parentGrid.jqGrid('resetSelection');
                     
@@ -283,18 +295,27 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                     if (control.model) {
                         subgrid.setSelection(control.model.id);
                     }
+                },
+                onPaging : function(pgButton) {
+                    var pagerId = this.p.pager.substr(1);
+                    var newValue = parseInt($('input.ui-pg-input', "#pg_" + $.jgrid.jqID(pagerId)).val());
+                    if (pgButton.indexOf("first") > -1) {
+                        newValue = 1;
+                    } else if (pgButton.indexOf("last") > -1) {
+                        newValue = parseInt(subgrid.jqGrid("getGridParam", 'lastpage'));
+                    } else if (pgButton.indexOf("prev") > -1) {
+                        newValue = newValue - 1;
+                    } else if (pgButton.indexOf("next") > -1) {
+                        newValue = newValue + 1;
+                    };
+                    control.subgrid_page = newValue;
                 }
         });
+        jQuery("#"+subgrid_table_id).jqGrid('navGrid',"#"+pager_id,{edit:false,add:false,del:false,search:false});
     },
 
     createSubgridColModel : function() {
         return this.createColModel();
-        // return [
-            // { 
-                // name : [this.options.title[1], this.options.format_name[1], this.options.duration[1]], 
-                // width : [55,200,80]
-            // }
-        // ];
     },
 
     getItem : function(id) {

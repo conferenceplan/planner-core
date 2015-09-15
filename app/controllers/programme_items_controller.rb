@@ -174,12 +174,33 @@ class ProgrammeItemsController < PlannerController
   def get_children
     id = params[:id]
     order = params[:sord]
+    rows = params[:rows] ? params[:rows].to_i : 15
+    @page = params[:page] ? params[:page].to_i : 1
+    page_to = params[:page_to]
+
+    sort_by = params[:sort] ? params[:sort] : 'title'
+    sort_order = params[:order] ? params[:order] : 'asc'
     
     item = ProgrammeItem.find id
-    
+
     if item
-      @items = item.children
-      @count = @items.size
+      @count = item.children.size
+      if page_to && !page_to.empty?
+        gotoNum = item.children.where(['programme_items.title <= ?', page_to]).size
+        if gotoNum
+          @page = (gotoNum / rows.to_i).floor
+          @page += 1 if gotoNum % rows.to_i > 0
+        end
+      end
+    
+      @items = item.children.offset(rows*(@page -1)).limit(rows).order(sort_by + ' ' + sort_order)
+    end
+
+    if rows.to_i > 0
+      @nbr_pages = (@count / rows.to_i).floor
+      @nbr_pages += 1 if @count % rows.to_i > 0
+    else
+      @nbr_pages = 1
     end
 
   end

@@ -1,5 +1,5 @@
-json.totalpages 1 #@nbr_pages
-json.currpage 1 #@page
+json.totalpages @nbr_pages
+json.currpage @page
 json.totalrecords @count
 json.currentSelection @currentId if @currentId
     
