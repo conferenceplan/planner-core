@@ -197,7 +197,6 @@ $.widget( "cp.baseTable" , {
                                 model.destroy({
                                     wait: true,
                                     success : function(md, response) {
-                                        // TODO - we need a method to call to ensure that selected is nilled out before the grid reload etc
                                         grid.jqGrid('setGridParam', {
                                             loadComplete: function(data) {
                                                     grid.jqGrid('resetSelection');
@@ -263,14 +262,14 @@ $.widget( "cp.baseTable" , {
                             control.subgrid = null;
                             control.parent_id = null;
                             control.subgrid_page = 1;
-                            controle.current_grid = null;
+                            control.current_grid = null;
+                            // control.subgrid_rows = 10;
                         }
                     }
 
                     return false;
                 },
                 loadComplete    : function(data) {
-                    // $("option[value=100000000]").text('All');
                     if (data.currentSelection) {
                         grid.setSelection(data.currentSelection);
                     };

@@ -179,6 +179,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         var control =  tbl.itemTable('getControl');
         var parentGrid = jQuery(this).jqGrid(); // get the parent grid so that we can deselect if necessary
         var current_page = control.subgrid_page;
+        var row_count = control.subgrid_rows ? control.subgrid_rows : 10;
         
         // collapse the other grids that are open
         parentGrid.find("tr:has(.sgexpanded)").each(function () {
@@ -272,7 +273,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 editurl         : tbl.itemTable('editUrl'),
                 pager           : pager_id,
                 rowList         : [10, 20, 30, 60],
-                rowNum          : 10,
+                rowNum          : row_count,
                 onSelectRow     : function(ids) {
                     parentGrid.jqGrid('resetSelection');
                     
@@ -292,6 +293,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                     loadNotifyMethod();
                 },
                 loadComplete    : function() {
+                    control.subgrid_rows = subgrid.getGridParam("reccount");
                     if (control.model) {
                         subgrid.setSelection(control.model.id);
                     }
