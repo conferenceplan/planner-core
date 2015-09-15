@@ -56,7 +56,7 @@ class ProgrammeItemsController < PlannerController
     startDay = -1
     startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
-    parent_id = params[:parent_id]
+    parent_id = params[:parent_id] if params[:parent_id].present?
 
     begin
       ProgrammeItem.transaction do
