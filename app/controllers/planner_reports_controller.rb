@@ -89,8 +89,7 @@ class PlannerReportsController < PlannerController
           'Person','Day','Date','Nbr of Items','Max per Day','Max per Con','Items'
         ]
         
-        @assignments.each do |assignment|
-          
+        @assignments.reject{|a| a.day == nil }.each do |assignment|
           output.push [
                 assignment.person.getFullPublicationName,
                 (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A'),
@@ -99,9 +98,18 @@ class PlannerReportsController < PlannerController
                 (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
                 (assignment.max_items_per_con ? assignment.max_items_per_con : ''),
                 assignment.person.programmeItemAssignments.collect { |pi|
-                        pi.programmeItem.title if pi.programmeItem && pi.programmeItem.room_item_assignment && 
-                                                  pi.programmeItem.room_item_assignment.day == assignment.day &&
+                        title = pi.programmeItem.title if pi.programmeItem && 
+                                                  (
+                                                  ((pi.programmeItem.parent_id != nil) && (pi.programmeItem.parent.room_item_assignment.day == assignment.day)) || 
+                                                  (pi.programmeItem.room_item_assignment && pi.programmeItem.room_item_assignment.day == assignment.day)
+                                                  ) && 
                                                   ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
+                        title += ' [' + pi.programmeItem.parent.title + ']' if pi.programmeItem && 
+                                                  (
+                                                  ((pi.programmeItem.parent_id != nil) && (pi.programmeItem.parent.room_item_assignment.day == assignment.day))
+                                                  ) && 
+                                                  ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
+                        title
                     }.reject { |c| c == nil }.join("\n")
           ]
         end
@@ -130,7 +138,7 @@ class PlannerReportsController < PlannerController
 
         @assignments.each do |assignment|
           output.push [
-              assignment.programmeItem ? assignment.programmeItem.title : '',
+              assignment.programmeItem ? (assignment.programmeItem.title + (assignment.programmeItem.parent ? ' [' + assignment.programmeItem.parent.title + ']' : "")): '',
               assignment.person.getFullPublicationName,
               assignment.person.company,
               assignment.person.programmeItemAssignments.collect { |pi|
@@ -222,7 +230,9 @@ class PlannerReportsController < PlannerController
   #
   #
   def equipment_needs
-    @panels = PlannerReportsService.findPanelsWithEquipmentNeeds
+    conf_start_time = SiteConfig.first.start_date
+    @panels = PlannerReportsService.findPanelsWithEquipmentNeeds.
+                sort_by{ |a| (a.parent && a.parent.time_slot) ? a.parent.time_slot.start : (a.time_slot ? a.time_slot.start : conf_start_time) }
     
     respond_to do |format|
       format.json
@@ -231,23 +241,48 @@ class PlannerReportsController < PlannerController
         output = Array.new
 
         output.push [
-          'Date', 'Day', 'Start Time','End Time','Venue','Room','Room Setup', 'Title','Format', 'Equipment'
+          'Date', 'Day', 'Start Time','End Time','Venue','Room','Room Setup', 'Title','Parent','Format', 'Equipment'
         ]
         
         @panels.each do |panel|
+          row = []
           
-          output.push [
-            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%d %b %Y') : ''),
-            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%A') : ''),
-            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%H:%M') : ''),
-            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%H:%M') : ''),
-            ((panel.room != nil) ? panel.room.venue.name : ''),
-            ((panel.room != nil) ? panel.room.name : ''),
-            ((panel.room != nil && panel.room.room_setup) ? panel.room.room_setup.setup_type.name : ''),
-            (panel.title ? panel.title : ''), 
+          if panel.parent
+            row = [
+              ((panel.parent.time_slot != nil) ? panel.parent.time_slot.start.strftime('%d %b %Y') : ''),
+              ((panel.parent.time_slot != nil) ? panel.parent.time_slot.start.strftime('%A') : ''),
+              ((panel.parent.time_slot != nil) ? panel.parent.time_slot.start.strftime('%H:%M') : ''),
+              ((panel.parent.time_slot != nil) ? panel.parent.time_slot.end.strftime('%H:%M') : ''),
+              ((panel.parent.room != nil) ? panel.parent.room.venue.name : ''),
+              ((panel.parent.room != nil) ? panel.parent.room.name : ''),
+              ((panel.parent.room != nil && panel.parent.room.room_setup) ? panel.parent.room.room_setup.setup_type.name : '')
+            ]
+          else  
+            row = [
+              ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%d %b %Y') : ''),
+              ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%A') : ''),
+              ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%H:%M') : ''),
+              ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%H:%M') : ''),
+              ((panel.room != nil) ? panel.room.venue.name : ''),
+              ((panel.room != nil) ? panel.room.name : ''),
+              ((panel.room != nil && panel.room.room_setup) ? panel.room.room_setup.setup_type.name : '')
+            ]
+          end
+          
+          row << (panel.title ? panel.title : '')
+
+          if panel.parent
+            row << (panel.parent.title ? panel.parent.title : '')
+          else
+            row << ''
+          end
+
+          row.concat [
             (panel.format ? panel.format.name : ''), 
             panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(", ")
           ]
+          
+          output.push row
         end
         
         csv_out(output, outfile)
@@ -309,20 +344,40 @@ class PlannerReportsController < PlannerController
           
           count = panel.programme_item_assignments.length
 
-          output.push [panel.pub_reference_number, panel.title, panel.minimum_people, 
+          row = [
+            panel.pub_reference_number, 
+            (panel.title + (panel.parent ? " [" + panel.parent.title  + "]" : '')), 
+            panel.minimum_people, 
             panel.maximum_people, 
             (panel.format ? panel.format.name : ''), 
-            panel.taggings.collect{|t| t.context}.uniq.join(","),
-            ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
-            ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
-            ((panel.room != nil) ? panel.room.name : ''),
-            ((panel.room != nil) ? panel.room.venue.name : ''),
+            panel.taggings.collect{|t| t.context}.uniq.join(",")
+          ]
+
+          if panel.time_slot
+            row.concat [
+              ((panel.time_slot != nil) ? panel.time_slot.start.strftime('%a %H:%M') : ''),
+              ((panel.time_slot != nil) ? panel.time_slot.end.strftime('%a %H:%M') : ''),
+              ((panel.room != nil) ? panel.room.name : ''),
+              ((panel.room != nil) ? panel.room.venue.name : '')
+            ]
+          elsif panel.parent
+            row.concat [
+              ((panel.parent.time_slot != nil) ? panel.parent.time_slot.start.strftime('%a %H:%M') : ''),
+              ((panel.parent.time_slot != nil) ? panel.parent.time_slot.end.strftime('%a %H:%M') : ''),
+              ((panel.parent.room != nil) ? panel.parent.room.name : ''),
+              ((panel.parent.room != nil) ? panel.parent.room.venue.name : '')
+            ]
+          end
+
+          row.concat [ 
             panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.join(","),
             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(","),
             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}.join(",")
           ]
+          
+          output.push row
           
         end
         csv_out(output, outfile)
