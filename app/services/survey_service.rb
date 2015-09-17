@@ -333,18 +333,21 @@ private
     
     if queryPredicates
       queryPredicates.each do |predicate|
+        val = nil
         
         if predicate.survey_question.question_type == :singlechoice
           ans = predicate.survey_question.survey_answers.find { |answer| answer.answer == predicate["value"] }
-          val = ans.id
+          val = ans.id if ans
         else
           val = predicate["value"]
         end
         
-        opAndValue = getOpAndValue(predicate["operation"], val)
-        q = responseTable[:response].send(opAndValue[0],opAndValue[1]).
-                      and(responseTable[:survey_question_id].eq(predicate["survey_question_id"]))
-        query = query ? query.or(q) : q
+        if val
+          opAndValue = getOpAndValue(predicate["operation"], val)
+          q = responseTable[:response].send(opAndValue[0],opAndValue[1]).
+                        and(responseTable[:survey_question_id].eq(predicate["survey_question_id"]))
+          query = query ? query.or(q) : q
+        end
       end
     end
     
