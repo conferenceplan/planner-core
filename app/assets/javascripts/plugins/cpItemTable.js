@@ -169,7 +169,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             return rowData.children == 'false';
         }).unbind("click").html("");
     },
-
+    
     subGridRowExpandFn : function(subgrid_id, row_id) {
         var subgrid_table_id, pager_id;
         var tbl = jQuery(this).itemTable();
@@ -179,7 +179,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
         var control =  tbl.itemTable('getControl');
         var parentGrid = jQuery(this).jqGrid(); // get the parent grid so that we can deselect if necessary
         var current_page = control.subgrid_page;
-        var row_count = control.subgrid_rows ? control.subgrid_rows : 10;
+        var row_count = (typeof control.subgrid_rows != 'undefined') ? control.subgrid_rows : 10;
         
         // collapse the other grids that are open
         parentGrid.find("tr:has(.sgexpanded)").each(function () {
@@ -293,7 +293,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                     loadNotifyMethod();
                 },
                 loadComplete    : function() {
-                    control.subgrid_rows = subgrid.getGridParam("reccount");
+                    control.subgrid_rows = subgrid.getGridParam("rowNum");
                     if (control.model) {
                         subgrid.setSelection(control.model.id);
                     }

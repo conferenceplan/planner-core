@@ -18,16 +18,24 @@ class MailingJob
     Time.use_zone(zone) do
       # find all the mailings that have been scheduled
       mailing = Mailing.find mailing_id #:all, :conditions => [ "scheduled = ?", true]
+      index = mailing.last_person_idx
       
       if mailing.scheduled # Check just in case this is a dup
-        mailing.people.each do |person|
-          begin
-            MailService.sendEmailForMailing(person, mailing)
-          rescue => msg
-            # Delayed::Worker.logger.add(Logger::ERROR, msg) if Delayed::Worker.logger
-            Sidekiq::Logging.logger.error msg if Sidekiq::Logging.logger
+        mailing.people.each_with_index do |person, idx|
+          if ((index == -1) || (idx > index))
+            begin
+              MailService.sendEmailForMailing(person, mailing)
+              
+              # note the last person processes so we can continue from there if job stopped and restarted
+              mailing.last_person_idx = idx # use a counter
+              mailing.save
+            rescue => msg
+              # Delayed::Worker.logger.add(Logger::ERROR, msg) if Delayed::Worker.logger
+              Sidekiq::Logging.logger.error msg if Sidekiq::Logging.logger
+              raise msg
+            end
+            sleep 0.5 # For 0.5 second between sending emails
           end
-          sleep 20 # For 20 seconds
         end
     
         # When the mailing is done mark the mailing as completed      

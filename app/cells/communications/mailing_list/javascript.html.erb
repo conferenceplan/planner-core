@@ -13,6 +13,9 @@ CommunicationsList = (function(Backbone){
                                         },
             // scheduled               : { type : 'Checkbox', title : '<%= t "mail-scheduled" %>' },
             testrun                 : { type : 'Checkbox', title : '<%= t "mail-test-run" %>', help: '<%= t "mail-mailing-test-run-hint" %>' }
+        },
+        defaults : {
+            "last_person_idx" : -1
         }
     });
     

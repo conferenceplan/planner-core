@@ -163,11 +163,9 @@ module MailService
       saveMailHistory(person, mailing, content, EmailStatus[:Sent])
       transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
     rescue => msg
-      # saveMailHistory(person, mailing, msg, EmailStatus[:Failed])
-      # THROW ERROR - TODO
-      # puts "*********"
-      # puts msg
-      # puts msg.backtrace
+      throw msg
+      # THROW ERROR ??? - this would cause a retry of the whole list, which would be an issue for dups
+      # do not do a retry unless we can resume from the failed message only
     end
 
   end

@@ -125,6 +125,7 @@ $.widget( "cp.baseTable" , {
             },
             
             newModel : function() {
+                clearNotifyMethod();
                 var mdl = new this.options.modelType({});
                 if (this.options.id) {
                     mdl.set(this.options.id_name, this.options.id);
@@ -249,6 +250,16 @@ $.widget( "cp.baseTable" , {
                 imgpath         : 'stylesheets/custom-theme/images', // Check if this is needed
                 caption         : this.options.caption,
                 editurl         : this.editUrl(),
+                subGridBeforeExpand : function(pId, id) {
+                    if (control && (typeof control.parent_id != 'undefined')) {
+                        if (control.parent_id.localeCompare(id) != 0) {
+                            control.subgrid_rows = 10;
+                        };
+                    } else {
+                        control.subgrid_rows = 10;
+                    }
+                    return true;
+                },
                 onSelectRow     : function(ids) {
                     _el.find(".ui-subgrid").each(function () {
                         $(this).find(".cp_subgrid").jqGrid('resetSelection');
