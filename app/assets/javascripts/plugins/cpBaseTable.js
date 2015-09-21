@@ -251,7 +251,7 @@ $.widget( "cp.baseTable" , {
                 caption         : this.options.caption,
                 editurl         : this.editUrl(),
                 subGridBeforeExpand : function(pId, id) {
-                    if (control && (typeof control.parent_id != 'undefined')) {
+                    if (control && (typeof control.parent_id != 'undefined') && (control.parent_id != null)) {
                         if (control.parent_id.localeCompare(id) != 0) {
                             control.subgrid_rows = 10;
                         };
