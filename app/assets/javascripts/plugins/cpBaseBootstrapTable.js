@@ -42,7 +42,11 @@ $.widget( "cp.baseBootstrapTable" , {
         confirm_content     : "Are you sure you want to delete the selected data?",
         confirm_title       : "Confirm Deletion",
         translations        : {},
-        modalType           : ModelModal
+        modalType           : ModelModal,
+        filterShowClear     : false,
+        detailView          : false,
+        detailFormatter     : function(index, row) { return ""; }
+        
         // data-item-id=<%= "#{thing.id}"
 
         // pager               : '#pager',
@@ -331,7 +335,10 @@ $.widget( "cp.baseBootstrapTable" , {
                                                 'data-item-base' : (this.pageNumber -1) * this.pageSize
                                             };
                                         },
-                rowStyle            : this.options.rowStyle
+                filterShowClear     : this.options.filterShowClear,
+                rowStyle            : this.options.rowStyle,
+                detailView          : this.options.detailView,
+                detailFormatter     : this.options.detailFormatter
         });
 
         if (this.options.showControls) {
