@@ -118,7 +118,7 @@ module PublishedProgramItemsService
   #
   def self.findParticipants(peopleIds = nil)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
-    cndStr  = '(published_time_slots.start is not NULL)'
+    cndStr  = '(published_time_slots.start is not NULL || published_time_slots_published_programme_items.start is not null)'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
     cndStr += ' AND (published_programme_item_assignments.role_id in (?))'
 
@@ -128,7 +128,16 @@ module PublishedProgramItemsService
     
     
     Person.where(conditions).
-            includes({:pseudonym => {}, :publishedProgrammeItemAssignments => {:published_programme_item => [:published_time_slot, :published_room, :format]}}).
+            includes({
+              :pseudonym => {}, 
+              :publishedProgrammeItemAssignments => 
+                  {
+                    :published_programme_item => [
+                        :published_time_slot, :published_room, :format,
+                        { :parent => [:published_time_slot] },
+                      ]
+                  }
+              }).
             where(self.constraints()).
             order("people.last_name, published_time_slots.start asc")
     
