@@ -45,16 +45,12 @@ $.widget( "cp.baseBootstrapTable" , {
         modalType           : ModelModal,
         filterShowClear     : false,
         detailView          : false,
-        detailFormatter     : function(index, row) { return ""; }
-        
-        // data-item-id=<%= "#{thing.id}"
-
-        // pager               : '#pager',
-        // clearNotifyMethod   : function() {},
-        // loadNotifyMethod    : function() {},
-        // multiselect         : false,
-        // sortname            : null,
-        // filtertoolbar       : true,
+        detailFormatter     : function(index, row) { return ""; },
+        showHeader          : true,
+        showFooter          : true,
+        striped             : true,
+        onExpandRow         : function(index, row, detail) {},
+        onCollapseRow       : function(index, row) {}
     },
     
     /*
@@ -104,6 +100,10 @@ $.widget( "cp.baseBootstrapTable" , {
     
     getSelected : function() {
         return this.selected;
+    },
+    
+    getModel : function() {
+        return this.model;
     },
     
     /*
@@ -170,6 +170,94 @@ $.widget( "cp.baseBootstrapTable" , {
     /*
      * 
      */
+    newModel : function(callback) {
+        var modelTemplate = this.options.modelTemplate;
+
+        var mdl = new this.options.modelType({});
+        if (this.options.id) {
+            mdl.set(this.options.id_name, this.options.id);
+        }
+        
+        // iterate though extra_model_params
+        _.each(this.options.extra_model_params, function(val,key) {
+            mdl.set(key, val);
+        });
+    
+        var grid = this.element.bootstrapTable(); //this.options.grid;
+
+        var modal = new this.options.modalType({
+            model : mdl,
+            modal_template : modelTemplate,
+            title : this.options.modal_create_title,
+            refresh : function(mdl) {
+                grid.bootstrapTable('refresh');
+                if (callback) {
+                    callback();
+                }
+                // that.model = null;
+                // that.selected = null;
+                // that.selected_element = null;
+            }
+        });
+        modal.render();
+    },
+    
+    /*
+     * 
+     */
+    editModel : function() {
+        var modelTemplate = this.options.modelTemplate;
+        var grid = this.element.bootstrapTable(); //this.options.grid;
+
+        if (this.model) {
+            // Put up a modal dialog to edit the reg details
+            // This is done via the select method
+            modal = new ModelModal({
+                model : this.model, 
+                modal_template : modelTemplate,
+                title : this.options.modal_edit_title,
+                refresh : function(mdl) {
+                    grid.bootstrapTable('refresh');
+                }
+            });
+            modal.render();
+        };
+    },
+    
+    /*
+     * 
+     */
+    deleteModel : function() {
+        if (this.model) {
+            var model = this.model;
+            var grid = this.element.bootstrapTable(); //this.options.grid;
+            var confirm_content = this.options.confirm_content;
+            var that = this;
+            // confirmation for the model delete
+            modal = new AppUtils.ConfirmModel({
+                    content : confirm_content,
+                    title : this.options.confirm_title,
+                    continueAction : function() {
+                        model.destroy({
+                            wait: true,
+                            success : function(md, response) {
+                                that.selected = null;
+                                that.selected_element = null;
+                                grid.bootstrapTable('refresh');
+                            }
+                        });
+                        that.model = null;
+                    },
+                    closeAction : function() {
+                    }
+            });
+            modal.render();
+        };        
+    },
+    
+    /*
+     * 
+     */
     createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
         var onloadMethod = this.options.onloadMethod;
@@ -203,81 +291,24 @@ $.widget( "cp.baseBootstrapTable" , {
             newModel : function(e) {
                 e.stopPropagation();
                 e.preventDefault();
-
-                var mdl = new this.options.modelType({});
-                if (this.options.id) {
-                    mdl.set(this.options.id_name, this.options.id);
-                }
                 
-                // iterate though extra_model_params
-                _.each(this.options.extra_model_params, function(val,key) {
-                    mdl.set(key, val);
+                that.newModel(function() {
+                    that.model = null;
+                    that.selected = null;
+                    that.selected_element = null;
                 });
-            
-                var grid = this.options.grid;
-
-                var modal = new this.options.modalType({
-                    model : mdl,
-                    modal_template : modelTemplate,
-                    title : this.options.modal_create_title,
-                    refresh : function(mdl) {
-                        grid.bootstrapTable('refresh');
-                        that.model = null;
-                        that.selected = null;
-                        that.selected_element = null;
-                    }
-                });
-                modal.render();
             },
         
             editModel : function(e) {
                 e.stopPropagation();
                 e.preventDefault();
-
-                var grid = this.options.grid;
-                if (that.model) {
-                    // Put up a modal dialog to edit the reg details
-                    // This is done via the select method
-                    modal = new ModelModal({
-                        model : that.model, 
-                        modal_template : modelTemplate,
-                        title : this.options.modal_edit_title,
-                        refresh : function(mdl) {
-                            grid.bootstrapTable('refresh');
-                        }
-                    });
-                    modal.render();
-                };
+                that.editModel();
             },
         
             deleteModal : function(e) {
                 e.stopPropagation();
                 e.preventDefault();
-
-                if (that.model) {
-                    var model = that.model;
-                    var grid = this.options.grid;
-                    var confirm_content = this.options.confirm_content;
-                    // confirmation for the model delete
-                    modal = new AppUtils.ConfirmModel({
-                            content : confirm_content,
-                            title : this.options.confirm_title,
-                            continueAction : function() {
-                                model.destroy({
-                                    wait: true,
-                                    success : function(md, response) {
-                                        that.selected = null;
-                                        that.selected_element = null;
-                                        grid.bootstrapTable('refresh');
-                                    }
-                                });
-                                that.model = null;
-                            },
-                            closeAction : function() {
-                            }
-                    });
-                    modal.render();
-                };
+                that.deleteModel();
             },
         });
 
@@ -290,12 +321,7 @@ $.widget( "cp.baseBootstrapTable" , {
                         that.selected_element = element.attr('data-index');
                         that.model = selectMethod(row.id, row); // NOTE - we may want to change to pass the whole row
                     },
-                // onAll : function(name, args) {
-                    // console.debug(name);
-                    // return false;
-                // },
                 onPageChange : function(number, size) {
-                    // console.debug("page change");
                     that.selected = null;
                     that.selected_element = null;
                     that.model = null;
@@ -315,7 +341,7 @@ $.widget( "cp.baseBootstrapTable" , {
                 clickToSelect   :  this.options.clickToSelect,
                 checkbox :  this.options.checkbox,
                 singleSelect:  this.options.singleSelect,
-                striped: true,
+                striped: this.options.striped,
                 sidePagination: 'server',
                 pagination: this.options.pagination,
                 pageSize: this.options.pageSize,
@@ -338,7 +364,11 @@ $.widget( "cp.baseBootstrapTable" , {
                 filterShowClear     : this.options.filterShowClear,
                 rowStyle            : this.options.rowStyle,
                 detailView          : this.options.detailView,
-                detailFormatter     : this.options.detailFormatter
+                detailFormatter     : this.options.detailFormatter,
+                showHeader          : this.options.showHeader,
+                showFooter          : this.options.showFooter,
+                onExpandRow         : this.options.onExpandRow,
+                onCollapseRow       : this.options.onCollapseRow
         });
 
         if (this.options.showControls) {

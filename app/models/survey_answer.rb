@@ -13,6 +13,11 @@ class SurveyAnswer < ActiveRecord::Base
             :source => :period,
             :source_type => 'TimeSlot'
 
+  before_save :default_values
+  def default_values
+    self.answertype ||= AnswerType[:Simple]
+  end
+  
   #
   #
   #
