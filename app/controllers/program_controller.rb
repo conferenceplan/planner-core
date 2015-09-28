@@ -51,9 +51,6 @@ class ProgramController < ApplicationController
   end
 
   def index
-    stream = params[:stream]
-    layout = params[:layout]
-    day = params[:day]
     @singleVenue = Venue.count == 1
     
     @extra_item_json = [] if ! @extra_item_json
@@ -61,11 +58,7 @@ class ProgramController < ApplicationController
     if !json_fragment_exist?( [request.host, request.path, params[:scale]] )
       conditions = getConditions(params)
       
-      if stream
-        @programmeItems = PublishedProgramItemsService.getTaggedPublishedProgramItems stream, day
-      else
-        @programmeItems = PublishedProgramItemsService.getPublishedProgramItems day
-      end
+      @programmeItems = PublishedProgramItemsService.getPublishedProgramItems
   
       @scale = params[:scale].to_f
       @cloudinaryURI = get_base_image_url

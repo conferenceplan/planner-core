@@ -26,25 +26,16 @@ json.people     item.published_programme_item_assignments.each do |assignment|
 end
 json.card_size          item.mobile_card_size
 
-#item.external_images.each do |im|
-#    im.scale = @scale
-#    if (im.use == :largecard)
-#        json.large_card         im.picture.large_card.url.partition(@partition_val)[2]
-#    elsif (im.use == :mediumcard)
-#        if im.picture.medium_card.url
-#            json.medium_card        im.picture.medium_card.url.partition(@partition_val)[2]
-#        else
-#            json.medium_card        "PROBLEM"
-#        end
-#    end
-#end
-    
-imLarge = ImageService.getExternalImage(item,:largecard)[0] #item.external_images.use(:largecard)[0]
-imLarge.scale = @scale if imLarge
-json.large_card         imLarge.picture.large_card.url.partition(@partition_val)[2] if imLarge
-imMedium = ImageService.getExternalImage(item,:mediumcard)[0] #item.external_images.use(:mediumcard)[0]
-imMedium.scale = @scale if imMedium
-json.medium_card        imMedium.picture.medium_card.url.partition(@partition_val)[2] if imMedium
+item.external_images.each do |im|
+    im.scale = @scale
+    if (im.use == :largecard)
+        json.large_card         im.picture.large_card.url.partition(@partition_val)[2]
+    elsif (im.use == :mediumcard)
+        if im.picture.medium_card.url
+            json.medium_card        im.picture.medium_card.url.partition(@partition_val)[2]
+        end
+    end
+end
 
 json.parent item.parent_id
 if item.children

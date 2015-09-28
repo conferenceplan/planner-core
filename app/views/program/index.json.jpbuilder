@@ -1,7 +1,7 @@
 json.cache! [request.host, request.path, params[:scale]] do
     json.array! @programmeItems.each do |item|
         json.partial! 'item', item: item
-        
+
         @extra_item_json.each do |extra|
             json.partial! extra, item: item
         end

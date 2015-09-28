@@ -59,14 +59,19 @@ module PublishedProgramItemsService
   #
   def self.getPublishedProgramItems(day = nil, term = nil, signups = nil)
 
-    # join with tags - use :base_tags to get all the tags associated with the item(s)
-    PublishedProgrammeItem.uncached do
-      PublishedProgrammeItem.all :order => 'published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order',
-                              :include => [:base_tags, :publication, :published_time_slot, :format, :external_images, {:published_programme_item_assignments => {:person => [:pseudonym, :edited_bio]}}, 
-                                {:published_room_item_assignment => {:published_room => [:published_venue]}} ],
-                               :conditions => getItemConditions(day, term, signups)
-    end
-    
+    PublishedProgrammeItem.all  :order => 'published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order',
+                          :include => [
+                              :published_time_slot,
+                              {:published_room => [:published_venue]},
+                              :format,
+                              :children,
+                              :original,
+                              :linked,
+                              :external_images, 
+                              {:published_programme_item_assignments => {:person => [:pseudonym]}}, #, :edited_bio
+                              :published_room_item_assignment #=> [:published_time_slot, {:published_room => [:published_venue]}]} 
+                              ]
+
   end
   
   def self.getPublishedProgramItemsThatHavePeople
