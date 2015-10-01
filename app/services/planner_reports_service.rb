@@ -168,7 +168,7 @@ module PlannerReportsService
   #
   #
   #  
-  def self.findPanelistsWithPanels(peopleIds = nil, additional_roles = nil, scheduledOnly = false, visibleOnly = false)
+  def self.findPanelistsWithPanels(peopleIds = nil, additional_roles = nil, scheduledOnly = false, visibleOnly = false, format_id = nil)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     roles.concat(additional_roles) if additional_roles
     
@@ -181,13 +181,14 @@ module PlannerReportsService
     conditions = conditions.and(assignments[:person_id].in(peopleIds)) if peopleIds
     conditions = conditions.and(time_slots[:start].not_eq(nil).or(parent_time_slots[:start].not_eq(nil))) if scheduledOnly
     conditions = conditions.and(items[:print].eq(true)) if visibleOnly
+    conditions = conditions.and(items[:format_id].eq(format_id)) if format_id
     
     Person.
           includes({:pseudonym => {}, :programmeItemAssignments => {
                       :programmeItem => [
                           :time_slot, 
                           {:room => :venue}, 
-                          :format, 
+                          # :format, 
                           :parent => [:time_slot, {:room => :venue}, :format] ]
                     }
                   }).
