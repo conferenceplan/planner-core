@@ -462,6 +462,7 @@ class PlannerReportsController < PlannerController
   #
   #
   def panelists_with_panels
+    format_id = params[:format_id].to_i > 0 ? params[:format_id].to_i : nil
     roles = []
     roles << PersonItemRole['Reserved'].id if params[:reserved] == "true"
     roles << PersonItemRole['Invisible'].id if params[:invisible] == "true"
@@ -469,19 +470,21 @@ class PlannerReportsController < PlannerController
     @people = PlannerReportsService.findPanelistsWithPanels( params[:specific_panelists], 
                             roles, 
                             (params[:scheduled] == "true"), 
-                            (params[:forprint] == "true") ).sort_by{ |a| a.pubLastName ? a.pubLastName.mb_chars.normalize(:kd).gsub(/[^-x00-\x7F]/n, '').downcase.to_s : '' }
+                            (params[:forprint] == "true"), format_id ).sort_by{ |a| a.pubLastName ? a.pubLastName.mb_chars.normalize(:kd).gsub(/[^-x00-\x7F]/n, '').downcase.to_s : '' }
 
     respond_to do |format|
       format.json
       format.csv {
         outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
-        output.push ['Fisrt Name','Last Name','Status','Items', 'Pub Ref Nbr']
+        output.push ['Fisrt Name','Last Name','Company', 'Email', 'Status','Items', 'Pub Ref Nbr']
         
         @people.each do |person|
           output.push [
             person.pubFirstName,
             person.pubLastName,
+            person.company,
+            (person.getDefaultEmail ? person.getDefaultEmail.email : ''),
             person.acceptance_status.name,
             person.programmeItemAssignments.
               sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.

@@ -3,6 +3,8 @@ json.currpage 1
     
 json.rowdata @people do |person|
     json.name               person.getFullPublicationName
+    json.company            person.company
+    json.email              person.getDefaultEmail ? person.getDefaultEmail.email : ''
     json.acceptance_status  person.acceptance_status.name if person.acceptance_status
     json.items              person.programmeItemAssignments.
                     sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
