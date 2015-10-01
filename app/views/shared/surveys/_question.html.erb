@@ -1,0 +1,12 @@
+<div class="form-group">
+    <label class="col-sm-4 control-label">
+        <%= question.question.html_safe %>
+        <% if !question.survey_format.help.blank?%>
+            <i class="glyphicon glyphicon-info-sign bpopover" data-content="<%= question.survey_format.help %>" data-toggle="popover" data-original-title="<%= question.question %>"></i>
+        <% end %>
+    </label>
+
+    <div class="col-sm-8">
+        <%= render :partial => "shared/surveys/#{question.question_type}", :locals => {:question => question} %>
+    </div>
+</div>

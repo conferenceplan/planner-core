@@ -57,21 +57,26 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getPublishedProgramItems(day = nil, term = nil, signups = nil)
+  def self.getPublishedProgramItems #(day = nil, term = nil, signups = nil)
 
-    PublishedProgrammeItem.all  :order => 'published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order',
-                          :include => [
+    PublishedProgrammeItem.where("published_programme_items.parent_id is null").
+                          includes( [
                               :published_time_slot,
-                              {:published_room => [:published_venue]},
-                              :format,
-                              :children,
+                              {
+                                :children => [
+#                                    :published_programme_item_assignments,
+#                                  {:published_programme_item_assignments => {:person => [:pseudonym]}},
+                                  :external_images, 
+                                  :linked
+                                ]
+                              },
                               :original,
                               :linked,
-                              :external_images, 
-                              {:published_programme_item_assignments => {:person => [:pseudonym]}}, #, :edited_bio
-                              :published_room_item_assignment #=> [:published_time_slot, {:published_room => [:published_venue]}]} 
-                              ]
-
+                              :external_images,
+                              {:published_programme_item_assignments => {:person => [:pseudonym]}},
+                              {:published_room_item_assignment => [:published_time_slot, {:published_room => [:published_venue]}]} 
+                            ] ).
+                            order('published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order')
   end
   
   def self.getPublishedProgramItemsThatHavePeople

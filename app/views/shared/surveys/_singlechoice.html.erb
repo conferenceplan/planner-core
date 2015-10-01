@@ -1,0 +1,10 @@
+<%#
+#
+%>
+
+<%question.survey_answers.each do |answer|%>
+    <label>
+        <%= radio_button_tag "SCSCSSC", "#{answer.id}", false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+        <%= answer.answer.html_safe %>
+    </label>
+<%end%>

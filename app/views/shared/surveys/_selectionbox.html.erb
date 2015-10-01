@@ -1,0 +1,5 @@
+
+<%= select_tag "SBSBSBS",
+    options_for_select([''].concat(question.survey_answers.collect{ |e| [e.answer, e.id]}), nil),
+    :class => "form-control", :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+
