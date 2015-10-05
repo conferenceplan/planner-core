@@ -96,6 +96,7 @@ module PlannerCore
     end    
 
     initializer :after_initialize do
+      Cell::Rails.prepend_view_path(PlannerCore::Engine.config.paths["app/views"].expanded[0])
       ActiveRecord::Base.send(:include, Planner::Linkable)
       Planner::Linkable.setup
     end

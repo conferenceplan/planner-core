@@ -1,0 +1,20 @@
+
+<div class="col-sm-4">
+    <%= text_field_tag "#{arg_name}[#{ question.id }][response]", '', :class => "form-control", :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+</div>
+<div class="col-sm-1">
+    <%= radio_button_tag "#{arg_name}[#{ question.id }][response1]", 'Home', false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+    home
+</div>
+<div class="col-sm-1">
+    <%= radio_button_tag "#{arg_name}[#{ question.id }][response1]", 'Work', false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+    work
+</div>
+<div class="col-sm-1">
+    <%= radio_button_tag "#{arg_name}[#{ question.id }][response1]", 'Fax', false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+    fax
+</div>
+<div class="col-sm-2">
+    <%= radio_button_tag "#{arg_name}[#{ question.id }][response1]", 'Mobile', false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+    cell/mobile
+</div>

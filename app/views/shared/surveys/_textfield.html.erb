@@ -1,0 +1,8 @@
+
+<%= text_field_tag "#{arg_name}[#{ question.id }]", '', :class => "form-control", :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+
+<!--
+    tickets[51][1][email]
+    also need the attribute name 
+    data-fv-notempty="true" 
+    -->

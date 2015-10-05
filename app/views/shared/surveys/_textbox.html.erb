@@ -1,0 +1,7 @@
+
+<%= text_area_tag "#{arg_name}[#{ question.id }]", '', :class => "form-control", :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+
+<!--
+    also need the attribute name 
+    data-fv-notempty="true" 
+    -->
