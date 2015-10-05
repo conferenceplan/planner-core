@@ -7,6 +7,6 @@
     </label>
 
     <div class="col-sm-8">
-        <%= render :partial => "shared/surveys/#{question.question_type}", :locals => {:question => question} %>
+        <%= render :partial => "shared/surveys/#{question.question_type}", :locals => {:question => question, :arg_name => arg_name, :respones => responses} %>
     </div>
 </div>
