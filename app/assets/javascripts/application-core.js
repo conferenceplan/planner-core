@@ -117,6 +117,7 @@ jQuery(document).ready(function() {
         trigger: 'hover',
         html: true,
         animation: false,
+        container: 'body',
         viewport: { selector: 'body', padding: 0 },
     });
                 
