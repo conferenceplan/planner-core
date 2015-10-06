@@ -1254,6 +1254,17 @@ label.inline-checkbox {
 .selectionbox-choices-question .dl-horizontal {
     margin-bottom: 0;
 }
+.selectionbox-choices-question .dl-horizontal dt {
+    width: inherit;
+    
+}
+.selectionbox-choices-question .dl-horizontal dd {
+    width: inherit;
+    margin-left: 90px;
+}
+.selectionbox-choices-question .row {
+    min-height: 23px;
+}
 .reg-form-section {
     margin-top: -15px;
 }
