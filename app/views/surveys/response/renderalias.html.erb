@@ -54,8 +54,12 @@
             <% end %>
             <% if @survey.use_captcha && @captcha_config %>
                 <div class="row">
-                    <div class="col-sm-12">
-                        <%= recaptcha_tags :public_key => @captcha_config.captcha_pub_key, :api_version => "v2" %>
+                    <div class="col-sm-6">
+                        <div class="row row-buffered">
+                            <div class="col-sm-12 ">
+                                <%= recaptcha_tags :public_key => @captcha_config.captcha_pub_key, :api_version => "v2" %>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <% end %>
@@ -64,7 +68,11 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <button type="submit" class="btn btn-primary" <%= 'disabled' if @preview %> ><%= @survey.submit_string %></button>
+            <div class="row row-buffered">
+                <div class="col-sm-12 ">
+                    <button type="submit" class="btn btn-lg btn-primary" <%= 'disabled' if @preview %> ><%= @survey.submit_string %></button>
+                </div>
+            </div>
         </div>
     </div>
     <% end %>

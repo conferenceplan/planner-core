@@ -24,7 +24,9 @@ class ImportMappingsController < ApplicationController
     # read the first row of the file and return as an array of columns....
     if file && !file.empty?
       cols = nil
-      CSV.foreach("/tmp/" + file) do |row|
+      csv_text = File.read("/tmp/" + file).encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+      csv = CSV.parse(csv_text, headers: false)
+      csv.each do |row|
         cols = row
         break # just get the first row
       end
