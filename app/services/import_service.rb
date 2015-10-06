@@ -53,7 +53,7 @@ module ImportService
         # then convert the file
         # string.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
         text = File.read(filename)
-        replace = text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
+        replace = text.encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "")
         File.open(filename, "w") {|file| file.puts replace}
       end
 
