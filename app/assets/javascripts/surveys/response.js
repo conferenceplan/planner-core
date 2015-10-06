@@ -94,6 +94,7 @@ jQuery(document).ready(function() {
                             html:true,
                             placement:'left',
                             trigger: 'hover click',
+                            container: 'body',
                             content: function(){
                                 return $($(this).data('contentwrapper')).html();
                             }
