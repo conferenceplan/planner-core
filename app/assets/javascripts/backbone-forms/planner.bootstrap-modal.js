@@ -112,7 +112,7 @@
       //Create the modal container
       $el.html(options.template(options));
 
-      var $content = this.$content = $el.find('.modal-body')
+      var $content = this.$content = $el.find('.modal-body');
 
       //Insert the main content if it's a view
       if (content.$el) {
@@ -120,6 +120,14 @@
       }
 
       if (options.animate) $el.addClass('fade');
+
+        $el.find('.bpopover').popover({
+            trigger: 'hover',
+            html: true,
+            animation: false,
+            container: 'body',
+            viewport: { selector: 'body', padding: 0 },
+        });
 
       this.isRendered = true;
 
