@@ -47,7 +47,7 @@ $.widget( "cp.baseBootstrapTable" , {
         detailView          : false,
         detailFormatter     : function(index, row) { return ""; },
         showHeader          : true,
-        showFooter          : true,
+        showFooter          : false,
         striped             : true,
         onExpandRow         : function(index, row, detail) {},
         onCollapseRow       : function(index, row) {}
@@ -146,6 +146,8 @@ $.widget( "cp.baseBootstrapTable" , {
     setControlOptions : function(options) {
         this.control.options.id = options.id;
         this.control.options.id_name = options.id_name;
+        this.options.id = options.id;
+        this.options.id_name = options.id_name;
     },
     
     /*
