@@ -50,7 +50,8 @@ $.widget( "cp.baseBootstrapTable" , {
         showFooter          : false,
         striped             : true,
         onExpandRow         : function(index, row, detail) {},
-        onCollapseRow       : function(index, row) {}
+        onCollapseRow       : function(index, row) {},
+        sortOrder           : 'asc'
     },
     
     /*
@@ -370,7 +371,8 @@ $.widget( "cp.baseBootstrapTable" , {
                 showHeader          : this.options.showHeader,
                 showFooter          : this.options.showFooter,
                 onExpandRow         : this.options.onExpandRow,
-                onCollapseRow       : this.options.onCollapseRow
+                onCollapseRow       : this.options.onCollapseRow,
+                sortOrder           : this.options.sortOrder
         });
 
         if (this.options.showControls) {

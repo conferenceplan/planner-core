@@ -365,6 +365,8 @@ ItemApp.ItemManagement = (function(Backbone){
         $(function () {
             $('.bpopover').popover({
                 html: true,
+                viewport: { selector: 'body', padding: 0 },
+                container: 'body',
             })
         });
 
