@@ -1,7 +1,11 @@
 
 <%question.survey_answers.each do |answer|%>
-    <label>
-        <%= check_box_tag "#{arg_name}[#{ question.id }][]", "#{answer.id}", false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
-        <%= answer.answer.html_safe %>
-    </label>
+    <div class="checkbox-group-div">
+        <label>
+            <span class="checkbox-group">
+                <%= check_box_tag "#{arg_name}[#{ question.id }][]", "#{answer.id}", false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+                <%= answer.answer.html_safe %>
+            </span>
+        </label>
+    </div>
 <%end%>
