@@ -1276,6 +1276,8 @@ label.inline-checkbox {
 .centered {
     text-align: center;
 }
-#order-form div.form-group  label {
-    padding-top: 6px;
+#order-form div.form-group  label input[type="radio"] 
+{
+        margin-top: 9px;
+        
 }
