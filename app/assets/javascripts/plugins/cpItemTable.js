@@ -14,7 +14,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             hidden : !this.options.title[0],
             name: 'item[title]',
             index: 'programme_items.title',
-            width: 450,
+            width: 400,
             searchoptions : {
                 clearSearch : false
             },
@@ -45,36 +45,15 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             sortable: false,
             search: false,
             width: 125,
-            editable: false,
-            edittype: "select",
-            editoptions: {
-                dataUrl: '/rooms/listwithblank'
-            },
-            formoptions: {
-                label: "Room",
-            },
-            editrules: {
-                required: false
-            }
+            editable: false
         }, {
             label: this.options.day[1], //'Day',
             name: 'start_day',
             hidden : !this.options.day[0],
             sortable: false,
             search: false,
-            width: 80,
-            editable: false,
-            edittype: "select",
-            editoptions: {
-                value: "-1:;0:Wednesday;1:Thursday;2:Friday;3:Saturday;4:Sunday"
-            },
-            formoptions: {
-                rowpos: 5,
-                label: "Day",
-            },
-            editrules: {
-                required: false
-            }
+            width: 130,
+            editable: false
         }, {
             label : this.options.time[1], //'Time',
             name: 'start_time',
@@ -82,17 +61,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             sortable: false,
             search: false,
             width: 60,
-            editable: false,
-            editoptions: {
-                size: 20
-            },
-            formoptions: {
-                rowpos: 6,
-                label: "Start Time",
-            },
-            editrules: {
-                required: false
-            }
+            editable: false
         },
         {
             label : this.options.duration[1], //'Duration',
@@ -103,18 +72,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             searchoptions: {
                 clearSearch : false
             },
-            editable: true,
-            editoptions: {
-                size: 20
-            },
-            formoptions: {
-                rowpos: 3,
-                label: "Duration",
-                elmprefix: "(*)"
-            },
-            editrules: {
-                required: true
-            }
+            editable: false
         },
          {
             label : this.options.nbr_participants[1], //'Ref',
@@ -139,26 +97,18 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             width: 3,
             index: 'lock_version',
             hidden: true,
-            editable: true,
+            editable: false,
             sortable: false,
-            search: false,
-            formoptions: {
-                rowpos: 8,
-                label: "lock"
-            }
+            search: false
         },
         {
             name: 'children',
             width: 3,
             index: 'children',
             hidden: true,
-            editable: true,
+            editable: false,
             sortable: false,
-            search: false,
-            formoptions: {
-                rowpos: 9,
-                label: "children"
-            }
+            search: false
         }];
     },
 
@@ -258,13 +208,9 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                                         width: 3,
                                         index: 'lock_version',
                                         hidden: true,
-                                        editable: true,
+                                        editable: false,
                                         sortable: false,
-                                        search: false,
-                                        formoptions: {
-                                            rowpos: 8,
-                                            label: "lock"
-                                        }
+                                        search: false
                                     }],
                 sortname        : tbl.itemTable('option','sortname'),
                 sortorder       : "asc",

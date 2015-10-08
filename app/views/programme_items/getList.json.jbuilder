@@ -11,7 +11,7 @@ json.rowdata @items do |item|
     json.set! "programme_item[format_name]", item.format ? item.format.name : ""
     json.set! "programme_item[duration]", item.duration ? item.duration : ""
     json.set! "room", item.room ? item.room.name : ""
-    json.set! "start_day", item.time_slot ? item.time_slot.start.strftime('%A') : "" 
+    json.set! "start_day", item.time_slot ? (I18n.t(:"date.day_names")[item.time_slot.start.strftime('%w').to_i] + ', ' +  I18n.l(item.time_slot.start.to_date, format: :short)) : ""
     json.set! "start_time", item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
     json.set! "programme_item[pub_reference_number]", item.pub_reference_number ? item.pub_reference_number : ""
     json.set! "programme_item[lock_version]", item.lock_version
