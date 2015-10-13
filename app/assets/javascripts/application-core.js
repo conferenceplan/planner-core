@@ -77,6 +77,8 @@
 
 //= require twitter/typeahead.min
 
+//= require iframeResizer.contentWindow.min
+
 //= require_self
 
 jQuery(document).ready(function() {
