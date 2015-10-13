@@ -4,7 +4,9 @@
 
 <%question.survey_answers.each do |answer|%>
     <label>
-        <%= radio_button_tag "#{arg_name}[#{ question.id }]", "#{answer.id}", false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
-        <%= answer.answer.html_safe %>
+        <span class="radio-group">
+            <%= radio_button_tag "#{arg_name}[#{ question.id }]", "#{answer.id}", false, :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+            <%= answer.answer.html_safe %>
+        </span>
     </label>
 <%end%>
