@@ -12,7 +12,7 @@ class SurveyQuestion < ActiveRecord::Base
   has_one :survey_format, :as => :formatable, :dependent => :destroy
   accepts_nested_attributes_for :survey_format
   
-  has_many :survey_answers, :dependent => :destroy, order: [:sort_order, :answer]
+  has_many :survey_answers, :dependent => :destroy, order: [:sort_order, :id]
   accepts_nested_attributes_for :survey_answers, :allow_destroy => true
   
   has_many :survey_responses
