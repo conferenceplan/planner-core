@@ -116,7 +116,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                     return { 'search' : term };
                                 },
                                 results : function(_data, page, query) {
-                                    res = [{'id' : null, 'text' : ''}];
+                                    res = [{'id' : null, 'text' : "(<%= t 'planner.core.messages.no-parent' %>)" }];
                                     _.each(_data.rows, function(item) {
                                         res.push( {'id' : item.id, 'text' : item.title} );
                                     });

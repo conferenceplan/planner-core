@@ -77,7 +77,7 @@
 
 //= require twitter/typeahead.min
 
-//= require iframeResizer.contentWindow.min
+//= require iframeResizer.contentWindow
 
 //= require_self
 

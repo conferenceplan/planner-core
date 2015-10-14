@@ -24,3 +24,7 @@ en:
   en    : "English"
   en-GB : "English"
   fr    : "French"
+  planner: 
+    core:
+      messages:
+        no-parent: 'none'

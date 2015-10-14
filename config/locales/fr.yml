@@ -4,3 +4,7 @@ fr:
   hello: "Bonjour"
   en   : "Anglais"
   fr   : "Français"
+  planner: 
+    core:
+      messages:
+        no-parent: 'aucun'
