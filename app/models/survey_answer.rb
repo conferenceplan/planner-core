@@ -5,6 +5,8 @@ class SurveyAnswer < ActiveRecord::Base
   has_enumerated :answertype, :class_name => 'AnswerType'
   belongs_to :survey_question
 
+  default_scope order([:sort_order, :answer])
+
   has_many  :excluded_items_survey_maps
   has_many  :programme_items, :through => :excluded_items_survey_maps
 

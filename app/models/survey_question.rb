@@ -5,12 +5,14 @@ class SurveyQuestion < ActiveRecord::Base
                   :isbio, :horizontal, :private, :survey_group_id, :questionmapping_id
     
   has_enumerated :questionmapping, :class_name => 'QuestionMapping'
+  
+  default_scope order([:sort_order, :question])
 
   belongs_to  :survey_group
   has_one :survey_format, :as => :formatable, :dependent => :destroy
   accepts_nested_attributes_for :survey_format
   
-  has_many :survey_answers, :dependent => :destroy, :order => 'sort_order asc'
+  has_many :survey_answers, :dependent => :destroy, order: [:sort_order, :answer]
   accepts_nested_attributes_for :survey_answers, :allow_destroy => true
   
   has_many :survey_responses
