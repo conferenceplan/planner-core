@@ -165,9 +165,9 @@ $.widget( "cp.baseBootstrapTable" , {
      * 
      */
     unSelect : function() {
-        that.model = null;
-        that.selected = null;
-        that.selected_element = null;
+        this.model = null;
+        this.selected = null;
+        this.selected_element = null;
     },
     
     /*
@@ -244,6 +244,7 @@ $.widget( "cp.baseBootstrapTable" , {
                         model.destroy({
                             wait: true,
                             success : function(md, response) {
+                                that.model = null;
                                 that.selected = null;
                                 that.selected_element = null;
                                 grid.bootstrapTable('refresh');
