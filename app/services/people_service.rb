@@ -236,7 +236,7 @@ module PeopleService
   end
   
   def self.conStateJoinString
-    ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id'
+    ' LEFT OUTER JOIN person_con_states on person_con_states.person_id = people.id LEFT OUTER JOIN registration_details on registration_details.person_id = people.id'
   end
   
   def self.constraints(*args)

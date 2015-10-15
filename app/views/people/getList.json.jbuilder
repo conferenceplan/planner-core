@@ -36,5 +36,8 @@ json.rowdata @people do |person|
     json.set! "person[has_survey]", SurveyService.personHasSurveys( person) ? "Y" : "N"
     
     json.set! "default_email", person.getDefaultEmail
+    
+    json.set! "person[reg_type]",   person.registrationDetail ? person.registrationDetail.registration_type : ''
+    json.set! "person[reg_nbr]",   person.registrationDetail ? person.registrationDetail.registration_number : ''
 
 end

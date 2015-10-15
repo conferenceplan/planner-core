@@ -310,6 +310,19 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                    return res;
                 }
             }, {
+                name : 'person[reg_type]',
+                index : 'registration_details.registration_type',
+                label : this.options.reg_type[1], //'Survey',
+                hidden : !this.options.reg_type[0],
+                editable : false,
+                sortable : true,
+                search : true,
+                searchoptions : {
+                    clearSearch : false
+                },
+                align : 'right',
+                width : 50
+            }, {
                 name : 'person[has_survey]',
                 label : this.options.has_survey[1], //'Survey',
                 hidden : !this.options.has_survey[0],
