@@ -55,7 +55,6 @@ ItemApp.ItemManagement = (function(Backbone){
                             message: '<%= t "time-required-when-you-set-a-room" %>'
                         };
                         if (formValues.room_id != "" && formValues.start_time == "") {
-                            $(this.$el).parent().parent().find('#room-error').html(err.message);
                             return err;
                         };
                     }
@@ -86,7 +85,6 @@ ItemApp.ItemManagement = (function(Backbone){
                             message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
                         if (formValues.room_id == "" && formValues.start_time != "") {
-                            $(this.$el).parent().parent().find('#start-time-error').text(err.message);
                             return err;
                         };
                     },
@@ -134,8 +132,12 @@ ItemApp.ItemManagement = (function(Backbone){
             setup_type_id : { type : 'Select', title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             print : { type : 'Checkbox', title : '<%= t "item-print" %>',  editorAttrs : {tabindex : "-1"} },
             duration : { type : 'Number', title : '<%= t "item-duration" %>', validators: ['required'] },
-            minimum_people : { type : 'Number', title : '<%= t "item-min-participants" %>' },
-            maximum_people : { type : 'Number', title : '<%= t "item-max-participants" %>' },
+            minimum_people : { type : 'Number', title : '<%= t "item-min-participants" %>', validators: [
+                                { type: 'regexp', message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', regexp: /^[0-9]\d*$/ }
+                            ] },
+            maximum_people : { type : 'Number', title : '<%= t "item-max-participants" %>', validators: [
+                                { type: 'regexp', message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', regexp: /^[0-9]\d*$/ }
+                            ] },
             audience_size  : { type : 'Number', title : '<%= t "item-estimated-audience-size" %>' },
             pub_reference_number : { type : 'Text', title : '<%= t "item-publication-reference" %>' },
             mobile_card_size    : { type : 'Select',  editorAttrs : {tabindex : "-1"}, title : '<%= t "mobile-card-size" %>', 

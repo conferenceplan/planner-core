@@ -96,10 +96,16 @@
                         <div class="col-sm-3">
                             <label><%= t "item-min-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-min-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-min-participants-help" %>'></i></label>
                             <div data-editors="minimum_people"></div>
+                            <div class="has-error">
+                                <p class="help-block" data-error></p>
+                            </div>
                         </div>
                         <div class="col-sm-3">
                             <label><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>
                             <div data-editors="maximum_people"></div>
+                            <div class="has-error">
+                                <p class="help-block" data-error></p>
+                            </div>
                         </div>
                         <div class="col-sm-3">
                             <label><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>

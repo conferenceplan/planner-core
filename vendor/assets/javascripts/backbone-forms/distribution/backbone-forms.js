@@ -515,7 +515,7 @@ Form.validators = (function() {
   
   validators.regexp = function(options) {
     if (!options.regexp) throw new Error('Missing required "regexp" option for "regexp" validator');
-  
+    
     options = _.extend({
       type: 'regexp',
       match: true,
@@ -898,7 +898,7 @@ Form.Field = Backbone.View.extend({
    */
   validate: function() {
     var error = this.editor.validate();
-
+    
     if (error) {
       this.setError(error.message);
     } else {
@@ -921,7 +921,12 @@ Form.Field = Backbone.View.extend({
     this.$el.addClass(this.errorClassName);
 
     //Set error message
-    this.$('[data-error]').html(msg);
+    if (this.$('[data-error]').size() > 0) {
+        this.$('[data-error]').html(msg);
+    } else {
+        $(this.editor.$el).parent().parent().find('[data-error]').text(msg); //.text(err.message);
+    };
+
   },
 
   /**

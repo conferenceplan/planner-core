@@ -28,3 +28,5 @@ en:
     core:
       messages:
         no-parent: 'none'
+      errors:
+        must-be-a-positive-number: 'Must be a positive number.'

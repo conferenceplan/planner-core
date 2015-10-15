@@ -8,3 +8,5 @@ fr:
     core:
       messages:
         no-parent: 'aucun'
+      errors:
+        must-be-a-positive-number: 'Doit être un nombre positif.'
