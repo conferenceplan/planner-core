@@ -94,7 +94,8 @@ ParticipantApp.PeopleImport = (function(Backbone){
         
         gotoBackStep : function() {
             currentStep = currentStep > 1 ? currentStep - 1 : 1;
-            importLayout.current_step.show(stepToView[currentStep].view); //new stepToView[currentStep].view({ model : stepToView[currentStep].model}) );
+            importLayout.current_step.show(stepToView[currentStep].view);
+            $('.bpopover').popover({html : true});
             if (stepToView[currentStep].start_func) {
                 stepToView[currentStep].start_func(stepToView[currentStep].view);
             }
@@ -115,6 +116,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
                         stepToView[currentStep].start_func(stepToView[currentStep].view);
                     }
                     importLayout.current_step.show(stepToView[currentStep].view);
+                    $('.bpopover').popover({html : true});
                     if (currentStep == 5) { // if we have completed the process then we do not allow the user to go back
                         importLayout.control.close();
                     }
