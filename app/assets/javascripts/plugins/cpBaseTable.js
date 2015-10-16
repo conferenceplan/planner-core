@@ -198,12 +198,6 @@ $.widget( "cp.baseTable" , {
                                 model.destroy({
                                     wait: true,
                                     success : function(md, response) {
-                                        grid.jqGrid('setGridParam', {
-                                            loadComplete: function(data) {
-                                                    grid.jqGrid('resetSelection');
-                                                    grid.jqGrid('setGridParam', { loadComplete: function() {} });
-                                                }
-                                        });
                                         grid.trigger("reloadGrid");
                                         clearNotifyMethod();
                                     }
@@ -280,6 +274,15 @@ $.widget( "cp.baseTable" , {
 
                     return false;
                 },
+
+                onPaging : function(pgButton) {
+                    that.selected = null;
+                    that.model = null;
+                    grid.setGridParam({
+                         postData : {page_to : null, current_selection : null},
+                    });
+                },
+
                 loadComplete    : function(data) {
                     if (data.currentSelection) {
                         grid.setSelection(data.currentSelection);

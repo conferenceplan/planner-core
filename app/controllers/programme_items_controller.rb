@@ -221,6 +221,7 @@ class ProgrammeItemsController < PlannerController
     include_children = params[:include_children] ? (params[:include_children] == 'true') : true
 
     @currentId = params[:current_selection]
+    @currentId = nil if ! ProgrammeItem.exists? @currentId
     page_to = params[:page_to]
     
     ignoreScheduled = params[:igs] == 'true' # TODO
