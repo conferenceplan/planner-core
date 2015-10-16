@@ -57,7 +57,7 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getPublishedProgramItems #(day = nil, term = nil, signups = nil)
+  def self.getPublishedProgramItems(day = nil)
 
     PublishedProgrammeItem.where("published_programme_items.parent_id is null").
                           includes( [
@@ -75,7 +75,7 @@ module PublishedProgramItemsService
                               :external_images,
                               {:published_programme_item_assignments => {:person => [:pseudonym]}},
                               {:published_room_item_assignment => [:published_time_slot, {:published_room => [:published_venue]}]} 
-                            ] ).
+                            ] ).where(getItemConditions(day, nil, nil)).
                             order('published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order')
   end
   
@@ -444,7 +444,7 @@ private
     # TODO - ensure we also use tags ....
     
     # Only return items that are not children
-    conditionStr = "(parent_id is null)" # if (day || term)
+    conditionStr = "(published_programme_items.parent_id is null)" # if (day || term)
     conditionStr += ' AND (published_time_slots.start >= ? AND published_time_slots.start < ?) ' if day
     if term
       conditionStr += ' AND ' if day
