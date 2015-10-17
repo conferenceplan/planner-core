@@ -22,7 +22,17 @@ module SurveyHtmlFormatter
           fname = person.getFullPublicationName()
           content += '<h3 class="response_group_header">Publication Name:</h3><div class="response_group_body"><div class="response_answer"><div class="response_text">' + fname + '</div></div></div>'
           content += "\n" if forEmail
-        end      
+        end
+      else
+        fname = respondent_detail.getFullName()
+        if ! fname.blank?
+          content += '<h3 class="response_group_header">Name:</h3><div class="response_group_body"><div class="response_answer"><div class="response_text">' + fname + '</div></div></div>'
+          content += "\n" if forEmail
+        end
+        if ! respondent_detail.email.blank?
+          content += '<h3 class="response_group_header">Email:</h3><div class="response_group_body"><div class="response_answer"><div class="response_text">' + respondent_detail.email + '</div></div></div>'
+          content += "\n" if forEmail
+        end
       end
       
       survey.survey_groups.each do |group|

@@ -27,5 +27,9 @@ class SurveyRespondentDetail < ActiveRecord::Base
   def hasResponsesForQuestion(surveyId, questionId) # TODO - optimize usage
     return survey_responses.exists?({:survey_id => surveyId, :survey_question_id => questionId})
   end
+  
+  def getFullName
+      return [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ').strip
+  end
 
 end
