@@ -14,7 +14,9 @@ module Planner
     end
      
     def set_locale
-      I18n.locale = (params[:locale] && params[:locale].size > 0)? params[:locale] : I18n.default_locale
+      def_locale = http_accept_language.compatible_language_from(I18n.available_locales)
+      
+      I18n.locale = (params[:locale] && params[:locale].size > 0)? params[:locale] : def_locale #I18n.default_locale
     end
     
     def application_time_zone(&block)

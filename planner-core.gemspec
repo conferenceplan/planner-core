@@ -66,4 +66,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'encoding_sampler'
   s.add_dependency 'ranked-model'
   s.add_dependency 'geocoder'
+  s.add_dependency 'http_accept_language'
 end
