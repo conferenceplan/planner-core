@@ -6,7 +6,7 @@ class SurveyQuestion < ActiveRecord::Base
     
   has_enumerated :questionmapping, :class_name => 'QuestionMapping'
   
-  default_scope order([:sort_order, :question])
+  default_scope order(['survey_questions.sort_order', :question])
 
   belongs_to  :survey_group
   has_one :survey_format, :as => :formatable, :dependent => :destroy
