@@ -197,8 +197,10 @@ ItemApp.ItemManagement = (function(Backbone){
         events : {
             "click .large-image-create-button"  : "create_large_image",
             "click .large-image-edit-button"    : "edit_large_image",
+            "click .large-image-delete-button"  : "delete_large_image",
             "click .medium-image-create-button" : "create_medium_image",
             "click .medium-image-edit-button"   : "edit_medium_image",
+            "click .medium-image-delete-button" : "delete_medium_image"
         },
 
         initialize : function() {
@@ -217,11 +219,17 @@ ItemApp.ItemManagement = (function(Backbone){
         edit_large_image : function(event) {
             this.edit_image("largecard","Edit Large Image");
         },
+        delete_large_image : function(event) {
+            this.delete_image("largecard");
+        },
         create_medium_image : function(event) {
             this.create_image("mediumcard","Create Medium Image");
         },
         edit_medium_image : function(event) {
             this.edit_image("mediumcard","Edit Medium Image");
+        },
+        delete_medium_image : function(event) {
+            this.delete_image("mediumcard");
         },
         
         create_image : function(cardtype, title) {
@@ -253,6 +261,16 @@ ItemApp.ItemManagement = (function(Backbone){
                         }
                     });
             mdl.render();
+        },
+        
+        delete_image : function(cardtype) {
+            var item_id = this.model.id;
+            var model = this.model;
+            var img = _.find(this.model.get('external_images').models, function(im) { return im.get('use') == cardtype });
+            img.destroy({
+                url : "<%= baseUri + '/external_images/' %>" + img.id
+            });
+            this.render();
         }
     });
 

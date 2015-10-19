@@ -370,6 +370,9 @@
                 <button class="large-image-edit-button btn btn-primary btn-xs">
                     <%= t "edit-large-card-image" %>
                 </button>
+                <button class="large-image-delete-button btn btn-primary btn-xs">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </button>
             {{ } else { }}
                 <button class="large-image-create-button btn btn-primary btn-xs">
                     <%= t "add-large-card-image" %>
@@ -382,6 +385,9 @@
                 <image src="{{= image.picture.medium_card.url }}"></image>
                 <button class="medium-image-edit-button btn btn-primary btn-xs">
                     <%= t "edit-medium-card-image" %>
+                </button>
+                <button class="medium-image-delete-button btn btn-primary btn-xs">
+                    <i class="glyphicon glyphicon-trash"></i>
                 </button>
             {{ } else { }}
                 <button class="medium-image-create-button btn btn-primary btn-xs">
