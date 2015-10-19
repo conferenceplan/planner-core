@@ -247,38 +247,41 @@
 </script>
 
 <script type="text/template" id="bio-image-template">
-            <h5><%= t "published-picture" %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-published-picture' %></span></a></h5>
-            <% if ConfigService.hasCloudinaryConfig? %>
-            <div>
-                {{ if (typeof id != 'undefined') { }}
-                <div align="left" class="voffset10">
-                	<image src="{{= bio_picture ? bio_picture.standard.url : '' }}" class="img-responsive img-rounded"></image>
-                </div>
-                <div class="caption voffset5">
-                    <p><%= t "bio-image" %>
-                        <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                            <i class="glyphicon glyphicon-trash"></i>
-                        </button>
-                        <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                            <i class="glyphicon glyphicon-pencil"></i>
-                        </button>
-                    </p>
-                </div>
-                {{ } else { }}
-                <div class="caption">
-                    <p>
-                        <%= t "bio-image" %>
-                        <button class="model-new-button btn btn-primary btn-xs pull-right">
-                            <i class="glyphicon glyphicon-pencil"></i>
-                        </button>
-                    </p>
-                </div>
-                {{ }; }}
+    <div>
+        <h5><%= t "published-picture" %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-published-picture' %></span></a></h5>
+        <% if ConfigService.hasCloudinaryConfig? %>
+        <div>
+            {{ if (typeof id != 'undefined') { }}
+            <div align="left" class="voffset10">
+                {{ if (bio_picture &&  (typeof bio_picture.standard != 'undefined') ) { }}
+            	<image src="{{= bio_picture.standard.url }}" class="img-responsive img-rounded" id="bio-picture-image"></image>
+            	{{ } }}
             </div>
-            <% else %>
-                <%= t 'cloudinary-not-configured' %>
-            <% end %>
-   
+            <div class="caption voffset5">
+                <p><%= t "bio-image" %>
+                    <button class="model-delete-button btn btn-primary btn-xs pull-right">
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </button>
+                    <button class="model-edit-button btn btn-primary btn-xs pull-right">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                </p>
+            </div>
+            {{ } else { }}
+            <div class="caption">
+                <p>
+                    <%= t "bio-image" %>
+                    <button class="model-new-button btn btn-primary btn-xs pull-right">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                </p>
+            </div>
+            {{ }; }}
+        </div>
+        <% else %>
+            <%= t 'cloudinary-not-configured' %>
+        <% end %>
+    </div>
 </script>
 
 <script type="text/template" id="bio-view-template">

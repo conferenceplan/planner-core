@@ -129,7 +129,14 @@ var TabUtils = (function(){
         },
         
         newModel : function() {
-            this.model.set(this.options.id_name, this.options.id);
+            if (!this.model) {
+                this.model = new this.options.modelType();
+                this.model.set(this.options.id_name, this.options.id);
+                this.initialize(that.options);
+            } else {
+                this.model.set(this.options.id_name, this.options.id);
+            };
+            
             mdl = new AppUtils.ModelModal({
                 model : this.model,
                 title : this.options.newTitle,
@@ -144,8 +151,17 @@ var TabUtils = (function(){
         },
         
         deleteModal : function() {
+            var that = this;
+            var clearFn = this.options.clearFn;
             this.model.destroy({
-                wait: true
+                wait: true,
+                success : function(mdl) {
+                    if (clearFn) {
+                        clearFn();
+                    };
+                    that.model = null;
+                    that.render();
+                }
             });
         }
     });
@@ -232,7 +248,9 @@ var TabUtils = (function(){
                         template : options.template,
                         id : options.id,
                         id_name : options.id_name, 
+                        model_url : options.url,
                         model : model,
+                        modelType : options.modelType,
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
                         selectFn : options.selectFn,
@@ -242,7 +260,7 @@ var TabUtils = (function(){
                         form_event_fn : options.form_event_fn,
                         modal_template : options.modal_template,
                         extra_events : options.events,
-                        view_refresh_event : options.view_refresh_event
+                        view_refresh_event : options.view_refresh_event,
                     });
                     tabView.render();
                     if (options.region) {
@@ -260,7 +278,9 @@ var TabUtils = (function(){
                 template : options.template,
                 id : options.id,
                 id_name : options.id_name, 
+                model_url : options.url,
                 model : options.model,
+                modelType : options.modelType,
                 newTitle  : options.newTitle,
                 editTitle : options.editTitle,
                 selectFn : options.selectFn,
