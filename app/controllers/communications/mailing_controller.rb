@@ -58,7 +58,7 @@ class Communications::MailingController < PlannerController
     person = Person.find params[:person_id]
     mailing = Mailing.find params[:mailing]
     
-    content = MailService.preview(person, mailing)
+    content = MailService.preview(person, mailing, request.protocol + request.host_with_port + baseUri_no_lang)
     
     render :json => {:content => content}
   end
@@ -80,6 +80,7 @@ class Communications::MailingController < PlannerController
     if @mailing.scheduled
       mailingJob = MailingJob.new
       mailingJob.mailing_id = @mailing.id
+      mailingJob.base_url = request.protocol + request.host_with_port + baseUri_no_lang
       Delayed::Job.enqueue mailingJob
     end
   end

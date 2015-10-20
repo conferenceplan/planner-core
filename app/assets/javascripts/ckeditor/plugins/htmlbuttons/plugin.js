@@ -188,6 +188,12 @@ CKEDITOR.config.htmlbuttons =	[
                 //icon:'icon2.png',
                 html:'<%= survey_to_html(args[:survey],args[:respondentDetails]) %>',
                 title:'List of Person\'s Survey Responses'
+            },
+            {
+                name:'survey-url',
+                //icon:'icon2.png',
+                html:'<%= args[:survey_url] %>',
+                title:'Survey URL'
             }
 
 		]

@@ -11,6 +11,7 @@
 <script type="text/template" id="survey-template">
     <td>
         <a href="#survey-tab" data-toggle="tab" class="model-select-button">{{= name}}</a>
+        <br>URL: <a href="<%= baseUri %>/form/{{= alias }}" target='_blank'><%= request.protocol + request.host_with_port + baseUri_no_lang %>/form/{{= alias }}</a>
     </td>
     <td>
         <button class="model-preview-button btn btn-xs"><i class="glyphicon glyphicon-eye-open"></i></button>

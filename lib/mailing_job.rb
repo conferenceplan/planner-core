@@ -8,6 +8,7 @@ class MailingJob
   include JobUtils
   
   attr_accessor :mailing_id
+  attr_accessor :base_url
 
   #
   #
@@ -24,7 +25,7 @@ class MailingJob
         mailing.people.each_with_index do |person, idx|
           if ((index == -1) || (idx > index))
             begin
-              MailService.sendEmailForMailing(person, mailing)
+              MailService.sendEmailForMailing(person, mailing, base_url)
               
               # note the last person processes so we can continue from there if job stopped and restarted
               mailing.last_person_idx = idx # use a counter

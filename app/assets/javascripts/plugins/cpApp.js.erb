@@ -562,14 +562,21 @@ var AppUtils = (function(){
             
             if (!errors) { // save if there are no errors
                 var refreshFn = this.options.refresh;
+                var mdl = this.model;
             
-                // accept-charset="UTF-8"
                 this.model.save(null, { 
                     success : function(mdl) {
                         // Refresh the view if there is a refresh method
                         if (refreshFn) {
                             refreshFn(mdl); // cause problem with templates used ???
                         };
+                    },
+                    statusCode: {
+                        400 : function(response) {
+                            mdl.fetch({
+                                async:false
+                            });
+                        }
                     }
                 }); // save the model to the server
             };

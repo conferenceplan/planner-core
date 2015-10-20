@@ -10,7 +10,7 @@ module MailService
   # Possible args:
   # @responses = args[:responses].responses # survey_to_html(args[:survey],args[:respondentDetails])
 
-  def self.preview(person, mailing) 
+  def self.preview(person, mailing, base_url) 
     # get the template from the database that matches the specified use
     template = mailing.mail_template
     
@@ -23,6 +23,7 @@ module MailService
             :person             => person,
             :key                => 'KEY', # do not show the key in the preview
             :survey             => survey,
+            :survey_url         => base_url + '/form/' + survey.alias,
             :respondentDetails  => respondentDetails,
             :assignments        => assignments
           })
@@ -124,7 +125,7 @@ module MailService
   #
   #
   #
-  def self.sendEmailForMailing(person, mailing)
+  def self.sendEmailForMailing(person, mailing, base_url)
     # Generate the email given the template and the args
     config = MailConfig.first # it will be the first mail config anyway
     raise "there is no mail configuration" if !config
@@ -146,6 +147,7 @@ module MailService
               :person             => person,
               :key                => key, 
               :survey             => survey,
+              :survey_url         => base_url + '/form/' + survey.alias,
               :respondentDetails  => person.survey_respondent,
               :assignments        => assignments
             })
