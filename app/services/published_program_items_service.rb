@@ -75,7 +75,7 @@ module PublishedProgramItemsService
                               :external_images,
                               {:published_programme_item_assignments => {:person => [:pseudonym]}},
                               {:published_room_item_assignment => [:published_time_slot, {:published_room => [:published_venue]}]} 
-                            ] ).where(getItemConditions(day, nil, nil)).
+                            ] ).where(getItemConditions(day, nil)).
                             order('published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order')
   end
   
@@ -96,13 +96,13 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getTaggedPublishedProgramItems(tag, day = nil, term = nil, signups = nil)
+  def self.getTaggedPublishedProgramItems(tag, day = nil, term = nil)
 
     PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.tagged_with(tag, :op => true).all(
                                         :include => [:publication, :published_time_slot, :published_room_item_assignment, {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} ],
                                         :order => 'published_time_slots.start, published_venues.sort_order, published_rooms.sort_order',
-                                        :conditions => getItemConditions(day, term, signups) )
+                                        :conditions => getItemConditions(day, term) )
     end
 
   end
@@ -434,7 +434,7 @@ private
 
 private
 
-  def self.getItemConditions(day, term, signups)
+  def self.getItemConditions(day, term)
     if (day)
       cfg = SiteConfig.first
       start_of_day = cfg.start_date + day.to_i.days
@@ -454,10 +454,7 @@ private
       conditionStr += ' OR published_programme_items.precis like ? '
       conditionStr += ')'
     end
-    if signups
-      conditionStr += ' AND ' if (conditionStr.size > 0)
-      conditionStr += ' (published_programme_items.item_registerable = 1) '
-    end
+
     conditions = [conditionStr] #if (day || term)
     conditions += [start_of_day, end_of_day] if day 
     conditions += ['%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%', '%'+term+'%'] if term

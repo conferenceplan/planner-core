@@ -8,6 +8,13 @@ class ExternalImage < ActiveRecord::Base
   belongs_to :imageable, polymorphic: true # so we can have many different model types that reference an external image
 
   validates_inclusion_of :use, :in => [:largecard, :mediumcard, :logo, :sponsor, :biodefault] # restrict the values that can be used for the image use
+  
+  before_destroy :update_imageable_timestamp
+  
+  def update_imageable_timestamp
+    self.imageable.id_will_change!
+    self.imageable.save!
+  end
 
   def use
     read_attribute(:use).to_sym
