@@ -266,11 +266,22 @@ ItemApp.ItemManagement = (function(Backbone){
         delete_image : function(cardtype) {
             var item_id = this.model.id;
             var model = this.model;
-            var img = _.find(this.model.get('external_images').models, function(im) { return im.get('use') == cardtype });
-            img.destroy({
-                url : "<%= baseUri + '/external_images/' %>" + img.id
+            var that = this;
+
+            modal = new AppUtils.ConfirmModel({
+                title : '<%= I18n.t "delete-confirmation" %> ',
+                content : '<%= I18n.t "confirm-that-you-really-want-to-delete" %>',
+                continueAction : function() {
+                    var img = _.find(model.get('external_images').models, function(im) { return im.get('use') == cardtype });
+                    img.destroy({
+                        url : "<%= baseUri + '/external_images/' %>" + img.id
+                    });
+                    that.render();
+                },
+                closeAction : function() {
+                }
             });
-            this.render();
+            modal.render();
         }
     });
 

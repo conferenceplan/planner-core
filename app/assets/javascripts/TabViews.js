@@ -132,7 +132,7 @@ var TabUtils = (function(){
             if (!this.model) {
                 this.model = new this.options.modelType();
                 this.model.set(this.options.id_name, this.options.id);
-                this.initialize(that.options);
+                this.initialize(this.options);
             } else {
                 this.model.set(this.options.id_name, this.options.id);
             };
@@ -152,17 +152,29 @@ var TabUtils = (function(){
         
         deleteModal : function() {
             var that = this;
-            var clearFn = this.options.clearFn;
-            this.model.destroy({
-                wait: true,
-                success : function(mdl) {
-                    if (clearFn) {
-                        clearFn();
-                    };
-                    that.model = null;
-                    that.render();
+            var clearFn = this.options.clearFn; 
+            // TODO
+
+            modal = new AppUtils.ConfirmModel({
+                title : this.options.deleteTitle,
+                content : this.options.deleteMessage,
+                continueAction : function() {
+                    that.model.destroy({
+                        wait: true,
+                        success : function(mdl) {
+                            if (clearFn) {
+                                clearFn();
+                            };
+                            that.model = null;
+                            that.render();
+                        }
+                    });
+                },
+                closeAction : function() {
                 }
             });
+            modal.render();
+
         }
     });
     
@@ -253,6 +265,8 @@ var TabUtils = (function(){
                         modelType : options.modelType,
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
+                        deleteTitle : options.deleteTitle,
+                        deleteMessage : options.deleteMessage,
                         selectFn : options.selectFn,
                         clearFn         : options.clearFn,
                         selectCsvFn : options.selectCsvFn,
@@ -283,6 +297,8 @@ var TabUtils = (function(){
                 modelType : options.modelType,
                 newTitle  : options.newTitle,
                 editTitle : options.editTitle,
+                deleteTitle : options.deleteTitle,
+                deleteMessage : options.deleteMessage,
                 selectFn : options.selectFn,
                 clearFn         : options.clearFn,
                 selectCsvFn : options.selectCsvFn,
