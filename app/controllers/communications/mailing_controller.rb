@@ -68,20 +68,28 @@ class Communications::MailingController < PlannerController
   end
 
   def create
-    @mailing = Mailing.new params[:mailing]
-    @mailing.save!
+    begin
+      @mailing = Mailing.new params[:mailing]
+      @mailing.save!
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
   end
 
   def update
     @mailing = Mailing.find params[:id]
 
-    @mailing.update_attributes(params[:mailing])
-    
-    if @mailing.scheduled
-      mailingJob = MailingJob.new
-      mailingJob.mailing_id = @mailing.id
-      mailingJob.base_url = request.protocol + request.host_with_port + baseUri_no_lang
-      Delayed::Job.enqueue mailingJob
+    begin
+      @mailing.update_attributes(params[:mailing])
+      
+      if @mailing.scheduled
+        mailingJob = MailingJob.new
+        mailingJob.mailing_id = @mailing.id
+        mailingJob.base_url = request.protocol + request.host_with_port + baseUri_no_lang
+        Delayed::Job.enqueue mailingJob
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
     end
   end
 

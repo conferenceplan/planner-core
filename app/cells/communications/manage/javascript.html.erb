@@ -133,7 +133,8 @@ CommunicationsApp.Management = (function(Backbone){
     var poller = null; 
     
     function selectMailing(id, mdl) {
-        // TODO - replace the poller with a web-socket...
+        $('#mailing-area').show();
+
         controlRegion.close();
         mailingCtlLayout = new MailingControlLayout();
         controlRegion.show(mailingCtlLayout);
@@ -177,12 +178,11 @@ CommunicationsApp.Management = (function(Backbone){
         },
         
         init : function(options) {
-            // showMailings();
+            $('#mailing-area').hide();
             var ctlView = new MailingListControlView();
             ctlView.render();
             var previewCtl = new PreviewControlView();
             previewCtl.render();
-            
         }
     }
     

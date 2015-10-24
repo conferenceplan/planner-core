@@ -10,3 +10,4 @@ fr:
         no-parent: 'aucun'
       errors:
         must-be-a-positive-number: 'Doit être un nombre positif.'
+        unique-mailing-error: "La combinaison de numéro de diffusion et l'utilisation de messagerie doit être unique."
