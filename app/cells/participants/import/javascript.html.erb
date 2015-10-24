@@ -359,6 +359,15 @@ ParticipantApp.PeopleImport = (function(Backbone){
     //
     //    
     return {
+        
+        column_name(src, col) {
+            if (typeof(src.models[col]) != 'undefined') {
+                return src.models[col].get('name');
+            } else {
+                return 'undefined';
+            }
+        },
+        
         init : function(options) {
             importStepsRegion = new Backbone.Marionette.Region({
                 el: "#step-region"

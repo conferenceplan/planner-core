@@ -79,52 +79,52 @@
                 <span>prefix</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof prefix != 'undefined' && prefix != null ? src.models[prefix].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="prefix"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="first_name">
-                <span>first_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= (typeof first_name != 'undefined' && first_name != null) ? src.models[first_name].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="first_name"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>first_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= (typeof first_name != 'undefined' && first_name != null) ? ParticipantApp.PeopleImport.column_name(src, first_name) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="first_name"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="last_name">
-                <span>last_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof last_name != 'undefined' && last_name != null ? src.models[last_name].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="last_name"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>last_name</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= (typeof(last_name) != 'undefined') && last_name != null ? ParticipantApp.PeopleImport.column_name(src, last_name) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="last_name"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="suffix">
-                <span>suffix</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof suffix != 'undefined' && suffix != null ? src.models[suffix].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="suffix"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>suffix</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= (typeof(suffix) != 'undefined') && suffix != null ? ParticipantApp.PeopleImport.column_name(src, suffix) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="suffix"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="job_title">
-                <span>job_title</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof job_title != 'undefined' && job_title != null ? src.models[job_title].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="job_title"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>job_title</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof job_title != 'undefined' && job_title != null ? ParticipantApp.PeopleImport.column_name(src, job_title) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="job_title"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="company">
-                <span>company</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof company != 'undefined' && company != null ? src.models[company].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="company"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>company</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof company != 'undefined' && company != null ? ParticipantApp.PeopleImport.column_name(src, company) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="company"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="line1">
-                <span>line1</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line1 != 'undefined' && line1 != null ? src.models[line1].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line1"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>line1</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line1 != 'undefined' && line1 != null ? ParticipantApp.PeopleImport.column_name(src,line1) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line1"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="line2">
-                <span>line2</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line2 != 'undefined' && line2 != null ? src.models[line2].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line2"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>line2</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof line2 != 'undefined' && line2 != null ? ParticipantApp.PeopleImport.column_name(src,line2) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="line2"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="city">
-                <span>city</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof city != 'undefined' && city != null ? src.models[city].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="city"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>city</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof city != 'undefined' && city != null ? ParticipantApp.PeopleImport.column_name(src,city) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="city"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="postcode">
-                <span>postcode</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof postcode != 'undefined' && postcode != null ? src.models[postcode].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="postcode"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>postcode</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof postcode != 'undefined' && postcode != null ? ParticipantApp.PeopleImport.column_name(src,postcode) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="postcode"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="state">
-                <span>state</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof state != 'undefined' && state != null ? src.models[state].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="state"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>state</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof state != 'undefined' && state != null ? ParticipantApp.PeopleImport.column_name(src,state) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="state"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="country">
-                <span>country</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof country != 'undefined' && country != null ? src.models[country].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="country"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>country</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof country != 'undefined' && country != null ? ParticipantApp.PeopleImport.column_name(src,country) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="country"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="phone">
-                <span>phone</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof phone != 'undefined' && phone != null ? src.models[phone].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="phone"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>phone</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof phone != 'undefined' && phone != null ? ParticipantApp.PeopleImport.column_name(src,phone) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="phone"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="email">
-                <span>email</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof email != 'undefined' && email != null ? src.models[email].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="email"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>email</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof email != 'undefined' && email != null ? ParticipantApp.PeopleImport.column_name(src,email) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="email"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="registration_number">
-                <span>registration_number</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof registration_number != 'undefined' && registration_number != null ? src.models[registration_number].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="registration_number"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>registration_number</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof registration_number != 'undefined' && registration_number != null ? ParticipantApp.PeopleImport.column_name(src,registration_number) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="registration_number"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="registration_type">
-                <span>registration_type</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof registration_type != 'undefined' && registration_type != null ? src.models[registration_type].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="registration_type"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>registration_type</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof registration_type != 'undefined' && registration_type != null ? ParticipantApp.PeopleImport.column_name(src,registration_type) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="registration_type"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
             <li class="list-group-item ui-droppable" id="datasource_dbid">
-                <span>datasource_dbid</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof datasource_dbid != 'undefined' && datasource_dbid != null ? src.models[datasource_dbid].get('name') : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="datasource_dbid"><i class="glyphicon glyphicon-remove"></i></button></span>
+                <span>datasource_dbid</span> <span class="glyphicon glyphicon-arrow-left"></span> <span>{{= typeof datasource_dbid != 'undefined' && datasource_dbid != null ? ParticipantApp.PeopleImport.column_name(src,datasource_dbid) : '' }} <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="datasource_dbid"><i class="glyphicon glyphicon-remove"></i></button></span>
             </li>
         </ul>
     </div>
