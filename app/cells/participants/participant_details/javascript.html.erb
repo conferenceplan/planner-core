@@ -122,7 +122,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     
     BioPicture = Backbone.Model.extend({
         schema : {
-            bio_picture : { type : 'CLImage', title : 'Bio Pic',
+            bio_picture : { type : 'CLImage', title : '<%= (I18n.t "bio-image").html_safe %>', help: '<%= (I18n.t "bio-image-upload-help").html_safe %>', help_placement: 'bottom' ,
                 cl_image_upload_tag : '<%= cl_image_upload_tag(:bio_picture) %>'
             }
         },
