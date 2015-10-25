@@ -12,7 +12,7 @@ CommunicationsList = (function(Backbone){
                                             options : <%= [].concat(MailTemplate.find(:all).collect {|s| {'val' => s.id, 'label' => s.title} }).to_json.html_safe %>
                                         },
             // scheduled               : { type : 'Checkbox', title : '<%= t "mail-scheduled" %>' },
-            testrun                 : { type : 'Checkbox', title : '<%= t "mail-test-run" %>', help: '<%= t "mail-mailing-test-run-hint" %>' }
+            testrun                 : { type : 'Checkbox', title : '<%= t "mail-test-run" %>', help: '<%= t "mail-mailing-test-run-hint" %>', help_placement: 'bottom' }
         },
         defaults : {
             "last_person_idx" : -1

@@ -30,4 +30,4 @@ en:
         no-parent: 'none'
       errors:
         must-be-a-positive-number: 'Must be a positive number.'
-        unique-mailing-error: "Combination of mailing number and mail usage must be unique."
+        unique-mailing-error: "Combination of <b>Mailing number</b> and <b>Mailing Template</b> must be unique."
