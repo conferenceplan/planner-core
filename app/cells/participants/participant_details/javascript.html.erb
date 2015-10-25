@@ -413,7 +413,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             newTitle : '<%= t "create-bio-image" %>',
             editTitle : '<%= t "edit-bio-image" %>',
             deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
-            deleteMessage : '<%= I18n.t "confirm-that-you-really-want-to-delete" %>'
+            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
         }) );
         
         TabUtils.createTabListContent({

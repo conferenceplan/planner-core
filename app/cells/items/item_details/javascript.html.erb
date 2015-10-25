@@ -270,7 +270,7 @@ ItemApp.ItemManagement = (function(Backbone){
 
             modal = new AppUtils.ConfirmModel({
                 title : '<%= I18n.t "delete-confirmation" %> ',
-                content : '<%= I18n.t "confirm-that-you-really-want-to-delete" %>',
+                content : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>',
                 continueAction : function() {
                     var img = _.find(model.get('external_images').models, function(im) { return im.get('use') == cardtype });
                     img.destroy({
