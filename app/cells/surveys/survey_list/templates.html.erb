@@ -1,4 +1,5 @@
 
+
 <script type="text/template" id="survey-list-layout-template">
     <h3 class="h3-underlined"><%= t 'surveys' %></h3>
     <div id="survey-control-div"></div>
@@ -39,7 +40,7 @@
         <dt><%= t "name" %></dt><dd>{{= name ? name : "&nbsp;" }}</dd>
         <dt><%= t "survey-alias" %></dt><dd>{{= alias ? alias : "&nbsp;"}}</dd>
         <dt><%= t "survey-public" %></dt><dd>{{= public ? 'Yes' : 'No' }}</dd>
-        <dt><%= t 'public-survey-url' %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "public-survey-url" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t "public-survey-url-hint").html_safe %>"></i></dt><dd><%= baseUri %>/form/{{= alias }}</dd>
+        <dt><%= t 'public-survey-url' %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "public-survey-url" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t "public-survey-url-hint").html_safe %>"></i></dt><dd><%= baseUri %>/form/{{= alias }} <a class="copy-url" target='_blank' a href="<%= baseUri %>/form/{{= alias }}"><a class="bpopover" title="<%= t "public-survey-url" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t 'right-click-to-copy-survey-url').html_safe %>" href="<%= baseUri %>/form/{{= alias }}"><i class="fa fa-clipboard"></i></a></dd>
         <dt><%= t "survey-authenticate" %></dt><dd>{{= authenticate ? 'Yes' : 'No' }}</dd>
         <dt><%= t "survey-use-captcha" %></dt><dd>{{= use_captcha ? 'Yes' : 'No' }}</dd>
         <dt><%= t "survey-anonymous" %></dt><dd>{{= anonymous ? 'Yes' : 'No' }}</dd>
