@@ -34,10 +34,12 @@ var TabUtils = (function(){
     });
     
     TabView = Marionette.ItemView.extend({
-        options : { // The titles should be over-ridden
+        def_options : { // The titles should be over-ridden
             newTitle  : "NEW",
             editTitle : "EDIT",
             addTitle : "ADD",
+            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
         },
 
         onShow: function(){
@@ -67,8 +69,8 @@ var TabUtils = (function(){
             }
         },
         
-        initialize : function(options) {
-            this.options = options || {};
+        initialize : function(opts) {
+            $.extend( this.options, this.def_options, opts);
             
             this.listenTo(this.model, 'change', this.render);
             
@@ -153,7 +155,6 @@ var TabUtils = (function(){
         deleteModal : function() {
             var that = this;
             var clearFn = this.options.clearFn; 
-            // TODO
 
             modal = new AppUtils.ConfirmModel({
                 title : this.options.deleteTitle,
@@ -363,6 +364,8 @@ var TabUtils = (function(){
                             newTitle  : options.newTitle,
                             editTitle : options.editTitle,
                             addTitle : options.addTitle,
+                            deleteTitle : options.deleteTitle,
+                            deleteMessage : options.deleteMessage,
                             tagUrl : options.tagUrl
                         },
                         events : {
@@ -409,6 +412,8 @@ var TabUtils = (function(){
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
                         attributes : options.view_attributes,
+                        deleteTitle : options.deleteTitle,
+                        deleteMessage : options.deleteMessage,
                         tagselect : options.tagselect,
                         tagremove : options.tagremove
                     },
@@ -441,6 +446,8 @@ var TabUtils = (function(){
                             template : options.template,
                             newTitle  : options.newTitle,
                             editTitle : options.editTitle,
+                            deleteTitle : options.deleteTitle,
+                            deleteMessage : options.deleteMessage,
                             attributes : options.view_attributes,
                             tagremove : options.tagremove,
                             syncCallback : options.updateCallback,
@@ -470,6 +477,8 @@ var TabUtils = (function(){
                         template : options.template,
                         newTitle  : options.newTitle,
                         editTitle : options.editTitle,
+                        deleteTitle : options.deleteTitle,
+                        deleteMessage : options.deleteMessage,
                         attributes : options.view_attributes,
                         tagremove : options.tagremove,
                         syncCallback : options.updateCallback,
