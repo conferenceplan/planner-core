@@ -354,6 +354,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id_name : 'person_id',
             newTitle : '<%= t "create-registration" %>',
             editTitle : '<%= t "edit-registration" %>',
+            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
         });
         
         var invite_details = TabUtils.createTabContent({
@@ -401,6 +403,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id_name : 'person_id',
             newTitle : '<%= t "create-bio" %>',
             editTitle : '<%= t "edit-bio" %>',
+            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
         }) );
         
         tabContent.push( TabUtils.createTabContent({
@@ -445,7 +449,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             id : id,
             id_name : 'person_id',
             newTitle : '<%= t "create-availability" %>',
-            editTitle : '<%= t "edit-availability" %>'
+            editTitle : '<%= t "edit-availability" %>',
+            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
         }) );
 
         

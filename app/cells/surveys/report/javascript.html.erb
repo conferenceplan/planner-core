@@ -259,6 +259,8 @@ SurveyReportApp.SurveyReport = (function(Backbone){
             selectCsvFn : runCSVQuery,
             clearFn   : clearDetails,
             view_refresh_event : "query:refresh",
+            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>',
             form_event : 'survey_id:change',
             form_event_fn : function(form, editor, extra) { // TODO - This is not used when it is a new query because we do not have a query shown
                 // Get the current set of questions
