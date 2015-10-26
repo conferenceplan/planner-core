@@ -45,7 +45,7 @@
         </dt>
         <dd> 
             <a class="copy-url" target='_blank' href="<%= request.protocol + request.host_with_port + baseUri_no_lang %>/form/{{= alias }}"><%= request.protocol + request.host_with_port + baseUri_no_lang %>/form/{{= alias }}</a>
-            <a class="bpopover" title="<%= t 'public-survey-url' %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t 'right-click-to-copy-survey-url').html_safe %>">
+            <a class="bpopover" title="<%= t 'public-survey-url' %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t 'right-click-to-copy-survey-url').html_safe %>" href="<%= request.protocol + request.host_with_port + baseUri_no_lang %>/form/{{= alias }}" target="_blank">
                 <i class="fa fa-clipboard"></i>
             </a>
         </dd>
