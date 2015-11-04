@@ -342,7 +342,7 @@ private
           val = predicate["value"]
         end
         
-        if val
+        if val || ['answered', 'not answered'].include?(predicate["operation"])
           opAndValue = getOpAndValue(predicate["operation"], val)
           q = responseTable[:response].send(opAndValue[0],opAndValue[1]).
                         and(responseTable[:survey_question_id].eq(predicate["survey_question_id"]))
