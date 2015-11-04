@@ -57,7 +57,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                                 _.each(currentQuestions.models, function(element) {
                                                     if (element.get('id') == question_id) {
                                                         if ($.inArray(element.get('question_type'), ['singlechoice', 'multiplechoice', 'selectionbox']) > -1) {
-                                                            ops = ["", "is", "is not"]; 
+                                                            ops = ["", "is", "is not", "answered", "not answered"]; 
                                                         } else {
                                                             ops = ["", "contains", "does not contain", "answered", "not answered"];
                                                         }

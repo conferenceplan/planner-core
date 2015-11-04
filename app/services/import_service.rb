@@ -239,7 +239,7 @@ protected
   
   def self.copy_person(pendingPerson, person)
     # Create the reg info
-    if pendingPerson.registration_number #&& pendingPerson.registration_type
+    if pendingPerson.registration_number || pendingPerson.registration_type
       if !person.registrationDetail
         person.registrationDetail = RegistrationDetail.new(
               :registration_number => pendingPerson.registration_number,
