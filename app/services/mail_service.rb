@@ -147,7 +147,7 @@ module MailService
               :person             => person,
               :key                => key, 
               :survey             => survey,
-              :survey_url         => base_url ? (base_url + '/form/' + survey.alias) : '',
+              :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
               :respondentDetails  => person.survey_respondent,
               :assignments        => assignments
             })
