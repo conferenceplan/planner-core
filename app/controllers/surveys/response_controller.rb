@@ -356,6 +356,17 @@ class Surveys::ResponseController < ApplicationController
       response.response = responseText
     else
       response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, :response => responseText, :survey_respondent_detail => respondentDetails
+
+      question =  response.survey_question
+      if [:singlechoice, :multiplechoice, :selectionbox].include? question.question_type.to_sym
+        answer = SurveyAnswer.find responseText
+        if answer
+          response.response = answer.answer
+          response.survey_answer_id = answer.id
+        end
+      else
+        response.response = responseText
+      end
     end
     
     response.isbio = surveyQuestion.isbio
