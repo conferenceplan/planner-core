@@ -9,6 +9,8 @@ class BioImagesController < PlannerController
     end
     
     render json: bio_image.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def show
@@ -21,6 +23,8 @@ class BioImagesController < PlannerController
     end
         
     render json: bio_image.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def create
@@ -31,6 +35,8 @@ class BioImagesController < PlannerController
     end # TODO - if no person should we return an error?
     
     render json: bio_image.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def update
@@ -40,6 +46,8 @@ class BioImagesController < PlannerController
     bio_image.save!
 
     render json: bio_image.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def destroy
@@ -48,5 +56,7 @@ class BioImagesController < PlannerController
     bio_image.destroy
     
     render status: :ok, text: {}.to_json
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 end

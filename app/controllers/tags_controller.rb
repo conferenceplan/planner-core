@@ -19,6 +19,8 @@ class TagsController < PlannerController
         end
       end
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   # GET /tags/1
@@ -55,6 +57,8 @@ class TagsController < PlannerController
         end
       end
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   #

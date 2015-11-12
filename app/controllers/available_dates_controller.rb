@@ -15,6 +15,8 @@ class AvailableDatesController < PlannerController
     end
     
     @availableDate.save
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def show
@@ -24,12 +26,16 @@ class AvailableDatesController < PlannerController
     else
       @availableDate = AvailableDate.find(params[:id])
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def destroy
     availableDate = AvailableDate.find(params[:id])
     availableDate.destroy
     render status: :ok, text: {}.to_json
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def index
@@ -41,6 +47,8 @@ class AvailableDatesController < PlannerController
     else
       @availableDate = AvailableDate.find(params[:id])
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
 end

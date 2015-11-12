@@ -6,6 +6,8 @@ class EmailAddressesController < PlannerController
     emailAddress.update_attributes(params[:email_address])
 
     render json: emailAddress.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def create
@@ -20,6 +22,8 @@ class EmailAddressesController < PlannerController
     end
 
     render json: emailAddress.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def show
@@ -33,14 +37,18 @@ class EmailAddressesController < PlannerController
     emailAddress = EmailAddress.find(params[:id])
     emailAddress.destroy
     render status: :ok, text: {}.to_json
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def index
-    person = Person.find(params[:person_id])
+    person = Person.find(params[:person_id]) # TODO
    
     emailAddresses = person.email_addresses
     
     render json: emailAddresses.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
   
 end

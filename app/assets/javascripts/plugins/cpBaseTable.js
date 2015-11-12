@@ -198,6 +198,7 @@ $.widget( "cp.baseTable" , {
                                 model.destroy({
                                     wait: true,
                                     success : function(md, response) {
+                                        grid.jqGrid('resetSelection'); 
                                         grid.trigger("reloadGrid");
                                         clearNotifyMethod();
                                     }
