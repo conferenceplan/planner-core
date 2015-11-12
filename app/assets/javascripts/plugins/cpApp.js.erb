@@ -742,8 +742,8 @@ var AppUtils = (function(){
             var thatModel = this.model;
 
             modal = new AppUtils.ConfirmModel({
-                title : '<%= I18n.t "delete-confirmation" %> ',
-                content : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>',
+                title : '<%= j (I18n.t "delete-confirmation") %> ',
+                content : '<%= j (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>',
                 continueAction : function() {
                     thatModel.destroy({
                         wait  : true,
@@ -893,8 +893,8 @@ var AppUtils = (function(){
             var model = this.model;
             var baseUri = this.options.baseUri ? this.options.baseUri : '';
             modal = new AppUtils.ConfirmModel({
-                title : '<%= I18n.t "remove-exclusion-confirmation" %> ',
-                content : '<%= I18n.t "remove-exclusion" %> '  + (model.get('person_name') ? model.get('person_name') : model.get('room_name')) ,
+                title : '<%= j (I18n.t "remove-exclusion-confirmation") %> ',
+                content : '<%= j (I18n.t "remove-exclusion") %> '  + (model.get('person_name') ? model.get('person_name') : model.get('room_name')) ,
                 continueAction : function() {
                     data = { conflict_exception : {
                             conflict_type : model.get('type')
