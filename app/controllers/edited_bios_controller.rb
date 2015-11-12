@@ -31,6 +31,8 @@ class EditedBiosController < PlannerController
       @editedBio = EditedBio.find(params[:id])
       @surveyBio = @editedBio.person.GetSurveyBio
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def index
@@ -42,6 +44,8 @@ class EditedBiosController < PlannerController
       @editedBio = EditedBio.find(params[:id])
       @surveyBio = @editedBio.person.GetSurveyBio
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
   
   def destroy

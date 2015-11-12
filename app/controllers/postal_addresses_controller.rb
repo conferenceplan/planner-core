@@ -6,6 +6,8 @@ class PostalAddressesController < PlannerController
     postalAddress.update_attributes(params[:postal_address])
 
     render json: postalAddress.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def create
@@ -20,6 +22,8 @@ class PostalAddressesController < PlannerController
     end
 
     render json: postalAddress.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def show
@@ -34,14 +38,18 @@ class PostalAddressesController < PlannerController
     postalAddress = PostalAddress.find(params[:id])
     postalAddress.destroy
     render status: :ok, text: {}.to_json
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def index
-    person = Person.find(params[:person_id])
+    person = Person.find(params[:person_id]) # TODO
    
     postalAddresses = person.postal_addresses
     
     render json: postalAddresses.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 end
 

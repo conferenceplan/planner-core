@@ -187,7 +187,7 @@ module SurveyHtmlFormatter
       content += "\n" if forEmail
       responses.each do |response|
         content += '<div class="response_answer">'
-        content += '<div class="response_text"><pre>' + SurveyAnswer.find(response.response.to_i).answer + "</pre></div>"
+        content += '<div class="response_text"><pre>' + response.response + "</pre></div>"
         content += '</div>'
         content += "\n" if forEmail
       end
