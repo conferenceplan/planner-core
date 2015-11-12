@@ -7,6 +7,8 @@ class RegistrationDetailsController < PlannerController
 
     # render :layout => 'content'
     render json: registrationDetail.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def create
@@ -20,6 +22,8 @@ class RegistrationDetailsController < PlannerController
     
     # render :layout => 'content'
     render json: registrationDetail.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def show
@@ -32,6 +36,8 @@ class RegistrationDetailsController < PlannerController
     end
         
     render json: registrationDetail.to_json, :content_type => 'application/json' # need to return the model so that the client has the id
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def index
@@ -42,6 +48,8 @@ class RegistrationDetailsController < PlannerController
     else
       @registrationDetail = RegistrationDetail.find(params[:id])
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
   
   #
@@ -51,6 +59,8 @@ class RegistrationDetailsController < PlannerController
     regDetail = RegistrationDetail.find(params[:id])
     regDetail.destroy
     render status: :ok, text: {}.to_json
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
 end

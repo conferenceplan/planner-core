@@ -8,6 +8,8 @@ class ProgrammeItemsController < PlannerController
       @person = Person.find(params[:person_id])
       @assignments = @person.programmeItemAssignments.includes({:programmeItem => [:time_slot, :people]}).order('time_slots.start asc').collect{|a| (a.programmeItem != nil) ? a : nil}.compact
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   #
@@ -29,6 +31,8 @@ class ProgrammeItemsController < PlannerController
     end
 
     render status: :ok, text: {}.to_json
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
   
   #
@@ -43,6 +47,8 @@ class ProgrammeItemsController < PlannerController
     @moderatorAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']], :include => {:person => :pseudonym}, :order => "people.last_name"
     @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] , :include => {:person => :pseudonym}, :order => "people.last_name"
     @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] , :include => {:person => :pseudonym}, :order => "people.last_name"
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   #

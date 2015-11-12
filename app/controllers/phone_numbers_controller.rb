@@ -4,6 +4,8 @@ class PhoneNumbersController < PlannerController
     @phone = PhoneNumber.find(params[:id])
 
     @phone.update_attributes(params[:phone_number])
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def create
@@ -16,6 +18,8 @@ class PhoneNumbersController < PlannerController
       @phone = PhoneNumber.new(params[:phone_number]);
       phoneNumber.save!
     end
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def show
@@ -29,11 +33,15 @@ class PhoneNumbersController < PlannerController
     phoneNumber = PhoneNumber.find(params[:id])
     phoneNumber.destroy
     render status: :ok, text: {}.to_json
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def index
     person = Person.find(params[:person_id])
    
     @phoneNumbers = person.phone_numbers
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 end

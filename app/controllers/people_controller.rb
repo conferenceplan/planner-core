@@ -25,6 +25,8 @@ class PeopleController < PlannerController
   #
   def show
     @person = Person.find(params[:id])
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   #
