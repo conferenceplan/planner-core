@@ -743,7 +743,7 @@ var AppUtils = (function(){
 
             modal = new AppUtils.ConfirmModel({
                 title : "<%=  (I18n.t "delete-confirmation") %>",
-                content : "<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>",
+                content : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>',
                 continueAction : function() {
                     thatModel.destroy({
                         wait  : true,
