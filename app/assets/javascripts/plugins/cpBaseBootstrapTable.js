@@ -211,6 +211,8 @@ $.widget( "cp.baseBootstrapTable" , {
     editModel : function() {
         var modelTemplate = this.options.modelTemplate;
         var grid = this.element.bootstrapTable(); //this.options.grid;
+        var that = this;
+        var selectMethod = this.options.selectNotifyMethod;
 
         if (this.model) {
             // Put up a modal dialog to edit the reg details
@@ -221,6 +223,7 @@ $.widget( "cp.baseBootstrapTable" , {
                 title : this.options.modal_edit_title,
                 refresh : function(mdl) {
                     grid.bootstrapTable('refresh');
+                    that.model = selectMethod(mdl.id);
                 }
             });
             modal.render();
