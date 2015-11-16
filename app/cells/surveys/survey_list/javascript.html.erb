@@ -6,12 +6,12 @@ SurveyApp.SurveyManagement = (function(Backbone){
 
     Survey = Backbone.DeepModel.extend({
         schema : {
-            name            : { type : 'Text', title : '<%= t "name" %>' },
-            alias           : { type : 'Text', title : '<%= t "survey-alias" %>' },
-            public          : { type : 'Checkbox', title : '<%= t "survey-public" %>' },
-            authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>' },
-            use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>' },
-            anonymous       : { type : 'Checkbox', title : '<%= t "survey-anonymous" %>',
+            name            : { type : 'Text', title : '<%= t "name" %>', help: '<%= t 'survey-name-hint' %>' },
+            alias           : { type : 'Text', title : '<%= t "survey-alias" %>', help: '<%= t 'survey-alias-hint' %>' },
+            public          : { type : 'Checkbox', title : '<%= t "survey-public" %>', help: '<%= t 'survey-public-hint' %>' },
+            authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>', help: '<%= t 'survey-authenticate-hint' %>' },
+            use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>', help: '<%= t 'survey-use-captcha-hint' %>' },
+            anonymous       : { type : 'Checkbox', title : '<%= t "survey-anonymous" %>', help: '<%= t 'survey-anonymous-hint' %>',
                                     validators: [
                                         function check_for_auth(value, formValues) {
                                             var err = {
@@ -25,17 +25,17 @@ SurveyApp.SurveyManagement = (function(Backbone){
                                     ]
                                  },
             authenticate_msg : { type : 'DependentHtml', title : '<%= t "survey-authentication-intro" %>',
+                                        dependsOn : 'authenticate', dependentValues : ['true'], help: '<%= t 'survey-authenticate-msg-hint' %>' },
+            welcome         : { type : 'Html', title : '<%= t "survey-welcome-message" %>', help: '<%= t 'survey-welcome-msg-hint' %>' },
+            thank_you       : { type : 'Html', title : '<%= t "survey-thank-you-message" %>', help: '<%= t 'survey-thank-you-msg-hint' %>' },
+            declined_msg    : { type : 'DependentHtml', title : '<%= t "survey-declined-message" %>', help: '<%= t 'survey-decline-msg-hint' %>',
                                         dependsOn : 'authenticate', dependentValues : ['true'] },
-            welcome         : { type : 'Html', title : '<%= t "survey-welcome-message" %>' },
-            thank_you       : { type : 'Html', title : '<%= t "survey-thank-you-message" %>' },
-            declined_msg    : { type : 'DependentHtml', title : '<%= t "survey-declined-message" %>', 
-                                        dependsOn : 'authenticate', dependentValues : ['true'] },
-            submit_string   : { type : 'Text', title : '<%= t "survey-submit-string" %>' },
-            header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>', validators: ['url'] },
-            accept_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-submit-to" %>',
+            submit_string   : { type : 'Text', title : '<%= t "survey-submit-string" %>', help: '<%= t 'survey-submit-string-hint' %>' },
+            header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>', validators: ['url'], help: '<%= t 'survey-url-for-header-hint' %>' },
+            accept_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-submit-to" %>', help: '<%= t 'survey-acceptance-status-hint' %>',
                                             options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                         dependsOn : 'authenticate', dependentValues : ['true'] },
-            decline_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-decline-to" %>',
+            decline_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-decline-to" %>', help: '<%= t 'survey-decline-status-hint' %>',
                                             options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                         dependsOn : 'authenticate', dependentValues : ['true'] }
         },
