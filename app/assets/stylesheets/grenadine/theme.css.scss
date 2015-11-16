@@ -1029,6 +1029,9 @@ h3 i.bpopover {
 .popover.top .arrow:after {
   border-top-color: #fffAF0;
 }
+.popover.bottom .arrow:after {
+  border-bottom-color: #f9f4e7;
+}
 .popover.right .arrow {
   border-right-color: #DCA;
 }
@@ -1036,7 +1039,11 @@ h3 i.bpopover {
   border-top-color: #DCA;
   margin-left: -10px;
 }
-
+.popover.bottom .arrow {
+  border-bottom-color: #DCA;
+  margin-left: -10px;
+  
+}
 
 
 a.mtooltip {

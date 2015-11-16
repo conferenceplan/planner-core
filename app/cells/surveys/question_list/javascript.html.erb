@@ -40,17 +40,17 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                 
                 subSchema : {
                     id : { type : 'Hidden' },
-                    answer : { type : 'Text' },
-                    sort_order : { type : 'Number' },
+                    answer : { type : 'Text', help: '<%= t 'answer-help' %>', help_placement: "bottom" },
+                    sort_order : { type : 'Number', title : '<%= t "sort-order" %>', help: '<%= t 'sort_order-help' %>', help_placement: "bottom" },
                     // default ?
                     answertype_id : { type : 'Select', 
-                                       title : '<%= t "survey-answer-type" %>',
+                                       title : '<%= t "survey-answer-type" %>', help: '<%= t 'survey-question-answer-type-hint' %>',
                                        options : <%= [].concat(AnswerType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-                    start_day : { type : 'DependentSelect', title : '<%= t "start day" %>', options : <%=  ([[' ','-1']].concat((0..((@start_date.number_of_days).to_i-1)).to_a.collect{ |r| [ (Time.zone.parse(@start_date.start_date.to_s) + r.days).strftime('%A'), r] })).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%>,
+                    start_day : { type : 'DependentSelect', title : '<%= t "start day" %>', help: '<%= t 'survey-question-start-day-hint' %>', options : <%=  ([[' ','-1']].concat((0..((@start_date.number_of_days).to_i-1)).to_a.collect{ |r| [ (Time.zone.parse(@start_date.start_date.to_s) + r.days).strftime('%A'), r] })).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%>,
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
-                    start_time : { type : 'DependentTime', title : '<%= t "item-start-time" %>',
+                    start_time : { type : 'DependentTime', title : '<%= t "item-start-time" %>', help: '<%= t 'survey-question-start-time-hint' %>',
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
-                    duration : { type : 'DependentNumber', title : '<%= t "duration (minutes)" %>',
+                    duration : { type : 'DependentNumber', title : '<%= t "duration (minutes)" %>', help: '<%= t 'survey-question-duration-hint' %>',
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
                 }
             } 
