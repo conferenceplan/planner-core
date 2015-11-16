@@ -8,17 +8,17 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
 
     SurveyQuestion = Backbone.DeepModel.extend({
         schema : {
-            question            : { type : 'Html', title : '<%= t "survey-question" %>', validators: ['required'] },
+            question            : { type : 'Html', title : '<%= t "survey-question" %>', validators: ['required'], help: '<%= t 'survey-question-help' %>' },
             //title               : { type : 'Text', title : '<%= t "title" %>' }, // TODO - is this used???
             sort_order          : { type : 'Number', title : '<%= t "sort_order" %>', help: '<%= t "sort_order-help" %>', validators: ['number', /^[0-9]\d*$/] },
             question_type       : { type : 'Select', title : '<%= t "survey-question-type" %>', help: '<%= t "survey-question-type-help" %>',
                                     options : <%= [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone, :photo].to_json.html_safe %>
                                     },
-            text_size           : { type : 'Number',  title : '<%= t "survey-length-of-textbox" %>',
+            text_size           : { type : 'Number',  title : '<%= t "survey-length-of-textbox" %>', help: '<%= t 'survey-text-size-hint' %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] , validators: ['number', /^[0-9]\d*$/]},        
-            mandatory           : { type : 'Checkbox', title : '<%= t "survey-mandatory" %>' },
+            mandatory           : { type : 'Checkbox', title : '<%= t "survey-mandatory" %>', help: '<%= t 'survey-mandatory-question-hint' %>' },
             private             : { type : 'Checkbox', title : '<%= t "survey-private" %>', help: '<%= t "survey-private-help" %>' },
-            tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>',
+            tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>', help: '<%= t 'survey-tage-label-hint' %>',
                                     validators : [ /^[A-z0-9_]*$/ ], help: '<%= t "tags_label-help" %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
 
@@ -26,9 +26,9 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                                             , help: '<%= t "question-mapping-help" %>' },
             isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
                                      dependsOn : 'question_type', dependentValues : ['textbox'] , help: '<%= t "isbio-help" %>' }, // only if the question type is text
-            horizontal          : { type : 'DependentCheckbox', title : '<%= t "survey-horizontal-layout" %>', 
+            horizontal          : { type : 'DependentCheckbox', title : '<%= t "survey-horizontal-layout" %>', help: '<%= t 'survey-horizontal-layout-hint' %>',
                                     dependsOn : 'question_type', dependentValues : ['multiplechoice', 'singlechoice'] },
-            'survey_format.help' : { type :'Html', title : '<%= t "help-text" %>' }, // Just need the help text...
+            'survey_format.help' : { type :'Html', title : '<%= t "help-text" %>', help: '<%= t 'survey-help-text-help' %>' }, // Just need the help text...
             // nested answers object - only if the type is appropriate
             survey_answers      : { type : 'DependentList',
                 title : '<%= t "survey_answers" %>',
