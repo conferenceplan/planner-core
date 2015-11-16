@@ -12,6 +12,7 @@ module Planner
         
         def create
           begin
+            before_save
             @object.save!
             _after_save
             after_save
@@ -27,6 +28,7 @@ module Planner
           
         def update
           begin
+            before_update
             @object.update_attributes params[object_name]
             _after_update
             after_update
@@ -46,6 +48,12 @@ module Planner
         end
       
         protected
+          def before_update
+          end
+
+          def before_save
+          end
+
           def after_update
           end
 

@@ -51,7 +51,8 @@ $.widget( "cp.baseBootstrapTable" , {
         striped             : true,
         onExpandRow         : function(index, row, detail) {},
         onCollapseRow       : function(index, row) {},
-        sortOrder           : 'asc'
+        sortOrder           : 'asc',
+        ctl_template        : '#table-control-template'
     },
     
     /*
@@ -274,7 +275,6 @@ $.widget( "cp.baseBootstrapTable" , {
         var el = this.element;
 
         TableControlView = Backbone.Marionette.ItemView.extend({
-
             events : {
                 "click .add-model-button"       : "newModel",
                 "click .edit-model-button"      : "editModel",
@@ -283,17 +283,9 @@ $.widget( "cp.baseBootstrapTable" , {
         
             initialize : function(options) {
                 this.options = options || {};
-                this.template = _.template($('#table-control-template').html());
+                var ctl_template = this.options.ctl_template;//'#table-control-template'
+                this.template = _.template($(ctl_template).html());
             },
-            
-            // TODO - we need a way to go to the page that the new item is on...
-            // refreshGrid : function(grid, mdl) {
-                // if (mdl) {
-                    // // var page_to = pageTo(mdl);
-                    // // var to_id = mdl.id;
-                    // // mdl.clear();
-                // }
-            // },
             
             newModel : function(e) {
                 e.stopPropagation();
@@ -376,7 +368,8 @@ $.widget( "cp.baseBootstrapTable" , {
                 showFooter          : this.options.showFooter,
                 onExpandRow         : this.options.onExpandRow,
                 onCollapseRow       : this.options.onCollapseRow,
-                sortOrder           : this.options.sortOrder
+                sortOrder           : this.options.sortOrder//,
+                // ctl_template        : this.options.ctl_template
         });
 
         if (this.options.showControls) {
@@ -392,7 +385,8 @@ $.widget( "cp.baseBootstrapTable" , {
                     confirm_title       : this.options.confirm_title,
                     modelType           : modelType,
                     modalType           : this.options.modalType,
-                    view_callback       : this.options.callback
+                    view_callback       : this.options.callback,
+                    ctl_template        : this.options.ctl_template
             });
             control.render();
             $("#" + this.options.controlDiv).html(control.el);

@@ -25,20 +25,29 @@ Form.editors.CLImage = Form.editors.Text.extend({
         this.setValue(this.value);
         
         var element = this.$el;
-        var field_name = this.key;
- 
+        var field_name = this.key; 
+
+        if (this.value) {
+            if (typeof this.value == 'string') {
+                var image_str = this.value;
+                element.find('#' + field_name + '_preview').html(
+                        $.cloudinary.image(image_str.replace("image/upload/", ""), 
+                        { format: 'jpg', //, version: data.result.version, 
+                            crop: 'scale', width: 100 }) );
+            }
+        }
+
         element.find('.cloudinary-fileupload').cloudinary_fileupload(
         {
             start: function (e) {
-                element.find('.status').html("Starting upload ....");
-                element.find('.progress_bar .completed').css('width', '0%');
+                element.find('.progress_bar').css('width', '0%');
             },
             progress: function (e, data) {
                 var percent = Math.round((data.loaded * 100.0) / data.total);
                 element.find('.progress-bar').css('width', percent + '%');
                 if (percent == 100) {
                     element.find('.progress-bar').css('width', percent + '%');
-                    element.find('.upload_button_holder').css('visibility','hidden');;
+                    element.find('.fileinput-button').hide();
                 }    
             },
             fail: function (e, data) {
@@ -51,8 +60,6 @@ Form.editors.CLImage = Form.editors.Text.extend({
                         $.cloudinary.image(data.result.public_id, 
                         { format: data.result.format, version: data.result.version, 
                             crop: 'scale', width: 100 }) );
-            // and hide the upload button...
-            element.find('.cloudinary-fileupload').hide();
         });
 
         return this;
@@ -71,6 +78,7 @@ Form.editors.CLImage = Form.editors.Text.extend({
     template: _.template('\
             <span>\
             <div class="upload_section">\
+                <div id="<%= field_name %>_preview" class="pull-left"></div>\
                 <div class="upload_button_holder">\
                     <input id="<%= field_name %>" class="form-control" name="<%= field_name %>" type="hidden"> \
                     <span class="btn btn-success fileinput-button">\
@@ -84,7 +92,6 @@ Form.editors.CLImage = Form.editors.Text.extend({
                         </div>\
                     </div>\
                 </div>\
-                <div id="<%= field_name %>_preview"></div>\
             </div>\
             </span>\
         ', null, Form.templateSettings),
