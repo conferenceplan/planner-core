@@ -4,7 +4,27 @@
 
 var AppUtils = (function(){
     var eventAggregator = new Backbone.Wreqr.EventAggregator(); // Event aggregator - global
-    
+
+    var translations = {
+        en: {
+                remove_exclusion_confirmation : '<%= (I18n.t "remove-exclusion-confirmation", :locale => :en).gsub(/'/, "\\\'").html_safe %>',
+                remove_exclusion : '<%= (I18n.t "remove-exclusion", :locale => :en).gsub(/'/, "\\\'").html_safe %>',
+                delete_confirmation : '<%= (I18n.t "delete-confirmation", :locale => :en).gsub(/'/, "\\\'").html_safe %>',
+                confirm_that_you_really_want_to_delete : '<%= (I18n.t "confirm-that-you-really-want-to-delete", :locale => :en).gsub(/'/, "\\\'").html_safe %>'
+            },
+        fr : {
+                remove_exclusion_confirmation : '<%= (I18n.t "remove-exclusion-confirmation", :locale => :fr).gsub(/'/, "\\\'").html_safe %>',
+                remove_exclusion : '<%= (I18n.t "remove-exclusion", :locale => :fr).gsub(/'/, "\\\'").html_safe %>',
+                delete_confirmation : '<%= (I18n.t "delete-confirmation", :locale => :fr).gsub(/'/, "\\\'").html_safe %>',
+                confirm_that_you_really_want_to_delete : '<%= (I18n.t "confirm-that-you-really-want-to-delete", :locale => :fr).gsub(/'/, "\\\'").html_safe %>'
+            }
+    };
+
+    function translate(str) {
+        // use moment.locale
+        return translations[moment.locale()][str] ? translations[moment.locale()][str] : str;
+    };
+
    /*
     * 
     */
@@ -742,8 +762,8 @@ var AppUtils = (function(){
             var thatModel = this.model;
 
             modal = new AppUtils.ConfirmModel({
-                title : "<%=  (I18n.t "delete-confirmation") %>",
-                content : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>',
+                title : translate("delete_confirmation"),
+                content : translate("confirm_that_you_really_want_to_delete"),
                 continueAction : function() {
                     thatModel.destroy({
                         wait  : true,
@@ -869,7 +889,7 @@ var AppUtils = (function(){
             // collectionKey  : false, // cause there is no reference from the collection back to the containiing model
         }]
     });
-    
+
     ConflictView = Marionette.ItemView.extend({
         events: {
             "click .conflict": "selectConflict",
@@ -893,8 +913,8 @@ var AppUtils = (function(){
             var model = this.model;
             var baseUri = this.options.baseUri ? this.options.baseUri : '';
             modal = new AppUtils.ConfirmModel({
-                title : "<%= (I18n.t "remove-exclusion-confirmation") %>",
-                content : "<%=  (I18n.t "remove-exclusion") %> "  + (model.get('person_name') ? model.get('person_name') : model.get('room_name')) ,
+                title : translate("remove_exclusion_confirmation"),
+                content : translate("remove_exclusion")  + (model.get('person_name') ? model.get('person_name') : model.get('room_name')) ,
                 continueAction : function() {
                     data = { conflict_exception : {
                             conflict_type : model.get('type')
