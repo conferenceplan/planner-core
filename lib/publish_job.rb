@@ -39,6 +39,8 @@ class PublishJob
         
         updateAssignmentNames()
         
+        extra_pubish_tasks(p);
+        
         PublishedProgrammeItem.transaction do
           sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
           
@@ -59,6 +61,11 @@ class PublishJob
       clearDalliCache # clear the mem cache ...
       post_process
     end
+  end
+  
+  # put in any extra publish tasks in here - i.e. over-ride using decorator
+  def extra_pubish_tasks
+    
   end
   
   def post_process

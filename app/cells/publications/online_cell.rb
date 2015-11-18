@@ -9,6 +9,8 @@ class Publications::OnlineCell < Cell::Rails
   end
 
   def templates
+    @extra_review_template = [] if !@extra_review_template
+    @extra_last_pub_template = [] if !@extra_last_pub_template
     render
   end
 

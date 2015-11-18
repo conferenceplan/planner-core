@@ -33,6 +33,9 @@
                 <dt><%= t "modified" %></dt><dd>{{= modified }}</dd>
                 <dt><%= t "removed" %></dt><dd>{{= removed }}</dd>
             </dl>
+            <% @extra_last_pub_template.each do |extra| %>
+                <%= render extra %>
+            <% end %>
         </div>
     </div>
 </script>
@@ -87,4 +90,7 @@
         {{ }); }}
         </ul>
     </div>
+    <% @extra_review_template.each do |extra| %>
+        <%= render extra %>
+    <% end %>
 </script>

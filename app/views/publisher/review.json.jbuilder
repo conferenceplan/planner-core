@@ -11,3 +11,8 @@ if @peopleChanged
         json.person_name Person.find(personid).getFullPublicationName if Person.exists? personid
     end
 end
+
+# add extra
+@extra_pub_review_json.each do |extra|
+    json.partial! extra
+end

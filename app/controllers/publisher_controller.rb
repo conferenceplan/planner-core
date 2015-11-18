@@ -6,11 +6,13 @@ require 'publish_job'
 class PublisherController < PlannerController
 
   def index
+    @extra_pub_index_json = [] if !@extra_pub_index_json
     @publicationInfo = PublicationDate.last
   end
   
   # publish the selected program items
   def publish
+    @extra_pub_review_json = [] if !@extra_pub_review_json
     ref_numbers = params[:ref_numbers] ? params[:ref_numbers] == 'true' : false
     
     pstatus = PublicationStatus.first
@@ -50,6 +52,8 @@ class PublisherController < PlannerController
     if (lastPubDate)
       @peopleChanged = PublishedProgramItemsService.getUpdatedPeople lastPubDate.timestamp
     end
+
+    # TODO - add extra
     
   end
   
