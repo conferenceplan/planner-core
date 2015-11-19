@@ -27,63 +27,8 @@ $(function() {
 });
 </script>
 
-<div class="col-md-4">
-    <div id="overview" class="panel panel-default">
-        <div class="panel-heading"><%= t 'overview' %></div>
-        <div class="panel-body">
-            <div class="row overview-detail">
-                <div class="col-md-5  ">
-                    <a href="<%= baseUri + '/pages/participants_dash/manage' %>"><%= t "participants" %></a>
-                </div>    
-                <div class="col-md-7 text-right ">
-                    <!-- 1200 attendees, 154 speakers -->
-                </div>
-            </div>
-            <div class="row   overview-detail">
-                <div class="col-md-5 ">
-                    <a href="<%= baseUri + '/pages/items_dash/manage' %>"><%= t "program-items" %></a>
-                </div>    
-                <div class="col-md-7 text-right">
-                    <!-- 255 scheduled items -->
-                </div>
-            </div>
-
-            <% @extra_summary_display.each do |extra| %>
-                <%= render extra %>
-            <% end %>
-
-            <div class="row overview-detail">
-                <div class="col-md-5">
-                    <a href="<%= baseUri + '/pages/reports_dash/manage' %>"><%= t "reports" %></a>
-                </div>    
-                <div class="col-md-7 text-right">
-                    
-                </div>
-            </div>
-
-            <div class="row overview-detail">
-                <div class="col-md-5">
-                    <a href="<%= baseUri + '/pages/communications_dash/manage' %>"><%= t "communications" %></a>
-                </div>    
-                <div class="col-md-7 text-right">
-                    <!-- 3 mailings -->
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-5">
-                    <a href="<%= baseUri + '/pages/reports_dash/manage' %>"><%= t "reports" %></a>
-                </div>    
-                <div class="col-md-7 text-right">
-                    <!-- 3 mailings -->
-                </div>
-            </div>            
-            <!-- TODO Split into multi
-            <p><a href="#">Documents</a></p>
-            <p><a href="#">Tasks</a></p>
-            <p><a href="#">Costs</a></p>
-            -->
-        </div>
-    </div>
+<div class="row">
+<div class="col-md-12">
     <div id="program-items-charts" class="panel panel-default">
         <div class="panel-heading"><%= t 'prog-items' %></div>
             <div class="panel-body">
@@ -103,4 +48,4 @@ $(function() {
             </div>
      </div>
 </div>
-
+</div>
