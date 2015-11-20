@@ -46,6 +46,8 @@ class PublisherController < PlannerController
     @candidateRemovedItems  = []
     @candidateRemovedItems.concat(pubjob.getRemovedProgramItems()) # all items that should no longer be published
     @candidateRemovedItems.concat(pubjob.getUnpublishedItems()) # all items that should no longer be published
+ 
+    @extra_pub_review_json = [] if ! @extra_pub_review_json
     
     # Get a list of the people that have change since the past pub date
     lastPubDate = PublicationDate.find :first, :order => 'id desc'
