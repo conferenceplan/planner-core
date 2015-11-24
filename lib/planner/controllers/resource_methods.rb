@@ -2,6 +2,18 @@ module Planner
   module Controllers
     module ResourceMethods
 
+        def find_page
+          begin
+            @page = 0
+            idx = params[:idx]
+            limit = params[:limit] ? params[:limit].to_i : nil
+            _find_page(idx, limit)
+            render json: @page.to_json, :content_type => 'application/json' if !lookup_context.exists? :find_page, params[:controller]
+          rescue => ex
+            render status: :bad_request, text: ex.message
+          end
+        end
+
         def index
           begin
             render json: @collection.to_json, :content_type => 'application/json' if !lookup_context.exists? :index, params[:controller]
@@ -48,6 +60,10 @@ module Planner
         end
       
         protected
+          def _find_page(idx, limit)
+            @page = 0
+          end
+        
           def before_update
           end
 
@@ -80,6 +96,10 @@ module Planner
           end
       
           def collection
+            _collection
+          end
+          
+          def _collection
             model_class.scoped
           end
           

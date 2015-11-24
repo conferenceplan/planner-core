@@ -7,6 +7,7 @@ class BaseListCell < Cell::Rails
 
   def javascript(args)
     @place = args.has_key?(:place) ? args[:place] : "base-list"
+    @deleteNotifyMethod = args.has_key?(:deleteNotifyMethod) ? args[:deleteNotifyMethod] : "function() {}"
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
     @root_url = baseUri + (args.has_key?(:root_url) ? args[:root_url] : "/")
     # @baseUrl = args.has_key?(:baseUrl) ? args[:baseUrl] : "planner_docs/documents"
