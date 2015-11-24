@@ -64,7 +64,7 @@ class PublishJob
   end
   
   # put in any extra publish tasks in here - i.e. over-ride using decorator
-  def extra_pubish_tasks
+  def extra_pubish_tasks(p)
     
   end
   
