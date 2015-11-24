@@ -18,7 +18,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                                     dependsOn : 'question_type', dependentValues : ['textfield'] , validators: ['number', /^[0-9]\d*$/]},        
             mandatory           : { type : 'Checkbox', title : '<%= t "survey-mandatory" %>', help: '<%= t 'survey-mandatory-question-hint' %>' },
             private             : { type : 'Checkbox', title : '<%= t "survey-private" %>', help: '<%= t "survey-private-help" %>' },
-            tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>', help: '<%= t 'survey-tage-label-hint' %>',
+            tags_label          : { type : 'DependentText', title : '<%= t "tags_label" %>', help: '<%= t 'survey-tag-label-hint' %>',
                                     validators : [ /^[A-z0-9_]*$/ ], help: '<%= t "tags_label-help" %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
 
@@ -50,7 +50,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
                     start_time : { type : 'DependentTime', title : '<%= t "item-start-time" %>', help: '<%= t 'survey-question-start-time-hint' %>',
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
-                    duration : { type : 'DependentNumber', title : '<%= t "duration (minutes)" %>', help: '<%= t 'survey-question-duration-hint' %>',
+                    duration : { type : 'DependentNumber', title : '<%= t "duration-minutes" %>', help: '<%= t 'survey-question-duration-hint' %>',
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
                 }
             } 
