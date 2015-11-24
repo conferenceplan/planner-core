@@ -5,6 +5,7 @@
 (function($) {
     
 $.widget( "cp.baseBootstrapTable" , {
+
     /*
      * 
      */
@@ -18,6 +19,7 @@ $.widget( "cp.baseBootstrapTable" , {
         delayed             : false,
         selectNotifyMethod  : function(row, data) { return null; },
         onloadMethod        : function() { return null; },
+        deleteNotifyMethod  : function() { return null; },
         extraClause         : null,
         cardView            : false,
         showRefresh         : false,
@@ -52,6 +54,7 @@ $.widget( "cp.baseBootstrapTable" , {
         onExpandRow         : function(index, row, detail) {},
         onCollapseRow       : function(index, row) {},
         sortOrder           : 'asc',
+        sortName            : 'id',
         ctl_template        : '#table-control-template'
     },
     
@@ -176,6 +179,8 @@ $.widget( "cp.baseBootstrapTable" , {
      */
     newModel : function(callback) {
         var modelTemplate = this.options.modelTemplate;
+        var selectMethod = this.options.selectNotifyMethod;
+        var that = this;
 
         var mdl = new this.options.modelType({});
         if (this.options.id) {
@@ -194,13 +199,34 @@ $.widget( "cp.baseBootstrapTable" , {
             modal_template : modelTemplate,
             title : this.options.modal_create_title,
             refresh : function(mdl) {
-                grid.bootstrapTable('refresh');
+                var opts = grid.bootstrapTable('getOptions');
+                if (typeof opts.sortName !== 'undefined') {
+                    var params = {
+                        search: opts.searchText,
+                        sort:   opts.sortName ? opts.sortName : 'name',
+                        order:  opts.sortOrder,
+                        limit : opts.pageSize
+                    };
+                    jQuery.ajax( opts.url + '/find_page/' + mdl.get(opts.sortName),{
+                             data : params,
+                             error : function(response) {
+                             },
+                             success : function(data, status, xhr) {
+                                grid.bootstrapTable('selectPage', data);
+                                that.selected_element = mdl.id;
+                                grid.bootstrapTable('refresh');
+                                selectMethod(mdl.id);
+                             }
+                         });        
+                } else {
+                    that.selected_element = mdl.id;
+                    grid.bootstrapTable('refresh');
+                    selectMethod(mdl.id);
+                }             
+                
                 if (callback) {
                     callback();
                 }
-                // that.model = null;
-                // that.selected = null;
-                // that.selected_element = null;
             }
         });
         modal.render();
@@ -240,6 +266,7 @@ $.widget( "cp.baseBootstrapTable" , {
             var grid = this.element.bootstrapTable(); //this.options.grid;
             var confirm_content = this.options.confirm_content;
             var that = this;
+            var deleteNotifyMethod = this.options.deleteNotifyMethod; 
             // confirmation for the model delete
             modal = new AppUtils.ConfirmModel({
                     content : confirm_content,
@@ -252,6 +279,7 @@ $.widget( "cp.baseBootstrapTable" , {
                                 that.selected = null;
                                 that.selected_element = null;
                                 grid.bootstrapTable('refresh');
+                                deleteNotifyMethod();
                             }
                         });
                         that.model = null;
@@ -292,9 +320,9 @@ $.widget( "cp.baseBootstrapTable" , {
                 e.preventDefault();
                 
                 that.newModel(function() {
-                    that.model = null;
-                    that.selected = null;
-                    that.selected_element = null;
+                    // that.model = null;
+                    // that.selected = null;
+                    // that.selected_element = null;
                 });
             },
         
@@ -317,7 +345,7 @@ $.widget( "cp.baseBootstrapTable" , {
                         $(element).parent().find('tr').removeClass('success');
                         $(element).addClass('success');
                         that.selected = row;
-                        that.selected_element = element.attr('data-index');
+                        that.selected_element = element.attr('data-item-id');
                         that.model = selectMethod(row.id, row); // NOTE - we may want to change to pass the whole row
                     },
                 onPageChange : function(number, size) {
@@ -327,11 +355,9 @@ $.widget( "cp.baseBootstrapTable" , {
                     return false;
                 },
                 onLoadSuccess : function(data) {
-                    if (that.selected) {
-                        if (that.selected_element) {
-                            var selector = "[data-index='" + that.selected_element + "']";
-                            jQuery(el).find(selector).addClass('success');
-                        };
+                    if (that.selected_element) {
+                        var selector = "[data-item-id='" + that.selected_element + "']";
+                        jQuery(el).find(selector).addClass('success');
                     };
                     onloadMethod();
                 },
@@ -368,7 +394,8 @@ $.widget( "cp.baseBootstrapTable" , {
                 showFooter          : this.options.showFooter,
                 onExpandRow         : this.options.onExpandRow,
                 onCollapseRow       : this.options.onCollapseRow,
-                sortOrder           : this.options.sortOrder//,
+                sortOrder           : this.options.sortOrder,
+                sortName            : this.options.sortName
                 // ctl_template        : this.options.ctl_template
         });
 

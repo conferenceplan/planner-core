@@ -117,7 +117,7 @@ Rails.application.routes.draw do
 
   match 'formats/list', :controller => 'formats', :action => 'list'
   match 'formats/listwithblank', :controller => 'formats', :action => 'listwithblank'
-  resources :formats
+  planner_resources :formats
 
   match 'edited_bios/exportbiolist.:format', :controller => 'edited_bios',:action => 'exportbiolist'
   match 'edited_bios/selectExportBioList', :controller => 'edited_bios',:action => 'selectExportBioList'
@@ -324,5 +324,5 @@ Rails.application.routes.draw do
   match "tools/people_exporter/export", :controller => 'tools/people_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
   match "tools/item_exporter/export", :controller => 'tools/item_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
 
-  resources 'category_names',         :defaults => { :format => 'json' }
+  planner_resources 'category_names',         :defaults => { :format => 'json' }
 end
