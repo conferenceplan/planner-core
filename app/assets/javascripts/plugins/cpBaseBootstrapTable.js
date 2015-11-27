@@ -210,6 +210,9 @@ $.widget( "cp.baseBootstrapTable" , {
                     jQuery.ajax( opts.url + '/find_page/' + mdl.get(opts.sortName),{
                              data : params,
                              error : function(response) {
+                                that.selected_element = mdl.id;
+                                grid.bootstrapTable('refresh');
+                                selectMethod(mdl.id);
                              },
                              success : function(data, status, xhr) {
                                 grid.bootstrapTable('selectPage', data);
