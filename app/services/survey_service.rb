@@ -18,7 +18,7 @@ module SurveyService
         person.edited_bio = EditedBio.new(:person_id => person.id) if !person.edited_bio
         surveyResponse = SurveyService.findResponseToQuestionForPerson(bioQuestion,person,sinceDate)[0]
 
-        if surveyResponse && !(surveyResponse.response.blank?) && person.edited_bio.bio.blank?
+        if surveyResponse && !(surveyResponse.response.blank?) #&& person.edited_bio.bio.blank?
           person.edited_bio.bio = surveyResponse.response
           person.edited_bio.save!
         end
