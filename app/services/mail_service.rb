@@ -23,7 +23,7 @@ module MailService
             :person             => person,
             :key                => 'KEY', # do not show the key in the preview
             :survey             => survey,
-            :survey_url         => base_url + '/form/' + survey.alias,
+            :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
             :respondentDetails  => respondentDetails,
             :assignments        => assignments
           })
