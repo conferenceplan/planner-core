@@ -307,6 +307,35 @@ Form.editors.DependentTime = Form.editors.Time.extend({
     },
 });
 
+Form.editors.DependentDatetime = Form.editors.Datetime.extend({
+
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Datetime.prototype.initialize.call(this, options);
+    },
+
+    render: function() {
+        this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
+        var options = this.options,
+            schema = this.schema,
+            ctl = this;
+
+        var $el = $($.trim(this.template({})));
+        
+        this.setElement($el);
+        
+        var element = this.$el;
+        
+        this.picker = element.find('.datetimefield').datetimepicker(this.schema.picker);
+        this.setInitialValue(this.value);
+        
+        this.dependInit(this.form);
+        
+        return this;
+    }
+
+});
+
 Form.editors.DependentList = Form.editors.List.extend({
 
     initialize: function(options) {

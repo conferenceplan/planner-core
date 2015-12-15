@@ -66,9 +66,9 @@
 //= require plugins/htmlExtEditor
 //= require plugins/colorEditor
 //= require plugins/selectEditor
+//= require plugins/dateTimeEditor
 //= require plugins/DependentEditors
 //= require plugins/cpReportBase
-//= require plugins/dateTimeEditor
 //= require plugins/clImageEditor
 //= require plugins/fileUploadEditor
 //= require plugins/cpPendingImportPeopleTable
