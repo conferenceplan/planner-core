@@ -32,8 +32,20 @@ ConfigApp.ConfigManagement = (function(Backbone){
                                         format : 'dddd, MMMM Do YYYY'
                                     } },
             number_of_days      : { type : 'Number', title : '<%= t "number-of-days" %>' },
+            public_start_date   : { type : 'Datetime', title : '<%= t "conference-public-start-date" %>',
+                                    tz_offset : function() { return tzOffset; },
+                                    picker : {
+                                        locale : "<%= I18n.locale %>",
+                                        format : 'dddd, MMMM Do YYYY'
+                                    },
+                                    // to be >= start_date but <= start_date + numver of days
+                                   },
+            public_number_of_days : { type : 'Number', title : '<%= t "public-number-of-days" %>'
+                                    // to be <= number_of_days
+                                    },
             print_time_format   : { type : 'Select', title : '<%= t "time-format-for-publications" %>',
-                                    options : [{val: '24', label: '24 hour'},{val: '12', label: '12 hour'}] }
+                                    options : [{val: '24', label: '24 hour'},{val: '12', label: '12 hour'}] 
+                                  }
             // languages           : { type : 'Text', title : '<%= t "supported-languages" %>'},
         },
         

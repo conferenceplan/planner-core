@@ -1,15 +1,14 @@
 class SiteConfigsController < PlannerController
   def index
-    # TODO - when we have multi-tenant base this on the current convention...
     site_config = SiteConfig.find :first
     
     if site_config
       site_config.start_date  = Date.today if !site_config.start_date
     end
     
-    # site_config.languages = UISettingsService.getLanguages
-    
     render json: site_config.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def show
@@ -19,9 +18,9 @@ class SiteConfigsController < PlannerController
       site_config.start_date  = Date.today if !site_config.start_date
     end
     
-    # site_config.languages = UISettingsService.getLanguages
-    
     render json: site_config.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def create
@@ -35,10 +34,9 @@ class SiteConfigsController < PlannerController
       site_config.tz_offset = site_config.start_date.utc_offset/60
     end
 
-    # UISettingsService.setLanguages params[:languages].split(',')
-    # site_config.languages = UISettingsService.getLanguages
-
     render json: site_config.to_json(:methods => [:tz_offset]), :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def update
@@ -53,10 +51,9 @@ class SiteConfigsController < PlannerController
       site_config.tz_offset = site_config.start_date.utc_offset/60
     end
     
-    # UISettingsService.setLanguages params[:languages].split(',')
-    # site_config.languages = UISettingsService.getLanguages
-
     render json: site_config.to_json(:methods => [:tz_offset]), :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 
   def destroy
@@ -64,5 +61,7 @@ class SiteConfigsController < PlannerController
     site_config.destroy
 
     render status: :ok, text: {}.to_json
+  rescue => ex
+    render status: :bad_request, text: ex.message
   end
 end
