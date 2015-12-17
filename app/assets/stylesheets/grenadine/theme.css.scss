@@ -2,11 +2,11 @@
 
 $w2: 650px; // under this width, we collapse to a pull-down menu instead of a regular menu
 
-$w3: 1229px; // small toolbar width in English
-$w4: 1364px; // medium toolbar width in English 
+$w3: 1350px; // small toolbar width in English
+$w4: 1461px; // medium toolbar width in English 
 
-$w3f: 1303px;  // small toolbar width in French
-$w4f: 1450px; // medium toolbar width in French
+$w3f: 1339px;  // small toolbar width in French
+$w4f: 1487px; // medium toolbar width in French
 
 $iPadScreenWidth: 1024px;
 
@@ -1297,11 +1297,16 @@ label.inline-checkbox {
     
 }
 .empty-tab {
-    background-color: rgb(97%,97%,97%);
+    background-color: rgb(98%,98%,98%);
     text-align: center;
     padding: 30px;
-    color: rgb(90%,90%,90%);
+    color: rgb(85%,85%,85%);
     font-size: 135%;
+    border-radius: 10px;
+}
+img.lonely-image {
+    height: 40px;
+    opacity: 0.25;
 }
 i.fa.fa-map-marker {
     font-size: 115%;
