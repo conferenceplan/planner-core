@@ -66,6 +66,8 @@
         <dt><%= t "conference-time-zone" %></dt><dd>{{= time_zone }}</dd>
         <dt><%= t "conference-start-date" %></dt><dd>{{= start_date }}</dd>
         <dt><%= t "number-of-days" %></dt><dd>{{= number_of_days }}</dd>
+        <dt><%= t "conference-public-start-date" %></dt><dd>{{= (typeof public_start_date != 'undefined') ? public_start_date : "" }}</dd>
+        <dt><%= t "public-number-of-days" %></dt><dd>{{= (typeof public_number_of_days != 'undefined') ? public_number_of_days : "" }}</dd>
         <dt><%= t "time-format-for-publications" %></dt><dd>{{= print_time_format }}</dd>
         {{ } else{ }}
         NO CONFIG
