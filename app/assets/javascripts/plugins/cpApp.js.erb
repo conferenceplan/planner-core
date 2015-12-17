@@ -348,7 +348,7 @@ var AppUtils = (function(){
             backdrop: 'static',
             keyboard : false
         },
-
+        
         render: function () {
             var numModals = Backbone.BootstrapModal.count++;
 
@@ -357,17 +357,19 @@ var AppUtils = (function(){
             })));
 
             this.$el.modal(this.modalOptions);
-//            var $backdrop = $('.modal-backdrop:eq('+numModals+')'),
-//                backdropIndex = $backdrop.css('z-index'),
-//                elIndex = $backdrop.css('z-index');
-//            $backdrop.css('z-index', backdropIndex + numModals);
-//            this.$el.css('z-index', elIndex + numModals);
 
             this.renderBody();
             this.$el.find(".modal-body").append(this.form.el);
             this.$el.find('.bpopover').popover({html : true});
             
             this.delegateEvents();
+
+            <!-- Force the focus to change to this dialog -->
+            var e = jQuery.Event("keydown");
+            e.which = 27; // # Some key code value
+            $(document.activeElement).trigger(e);
+            
+            this.$el.find("input").filter(':visible:first').focus();
             
             return this;
         },
