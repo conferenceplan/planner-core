@@ -7,7 +7,15 @@
 
 <script type="text/template" id="item-tab-layout-template">
     <div class="tab-content">
-        <div class="tab-pane active" id="program-item-tab"></div>
+        <div class="tab-pane active" id="program-item-tab">
+            <div id="invite-view">
+                <div class="empty-tab">
+                    <img src="/assets/lonely.png" class="lonely-image">
+                    <i class="fa fa-angle-up"></i>
+                    &nbsp;<%= t 'select-item-from-list' %>
+                </div>
+            </div>
+        </div>
         <div class="tab-pane" id="item-participants-tab"></div>
         <div class="tab-pane" id="equipment-tab">
             <section>

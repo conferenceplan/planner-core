@@ -4,7 +4,15 @@
 
 <script type="text/template" id="person-tab-layout-template">
     <div class="tab-content">
-        <div class="tab-pane  active" id="invite-tab"><div id="invite-view"></div></div>
+        <div class="tab-pane  active" id="invite-tab">
+            <div id="invite-view">
+                <div class="empty-tab">
+                    <img src="/assets/lonely.png" class="lonely-image">
+                    <i class="fa fa-angle-up"></i>
+                    &nbsp;<%= t 'select-person-from-list' %>
+                </div>
+            </div>
+        </div>
         <div class="tab-pane" id="contacts-tab">
             <div id="contacts-view"></div>
         </div>
