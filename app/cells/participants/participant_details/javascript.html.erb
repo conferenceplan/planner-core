@@ -535,6 +535,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         
         eventAggregator.on("refreshTagList", syncModel, invite_details);
 
+        //initialize the popovers
+        $(function () {
+            $('.bpopover').popover({
+                html: true,
+                viewport: { selector: 'body', padding: 0 },
+                container: 'body',
+            })
+        });
+
         selectCallbacks.fire({
             id : id,
             model : invite_details
