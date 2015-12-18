@@ -72,6 +72,7 @@
 //= require plugins/clImageEditor
 //= require plugins/fileUploadEditor
 //= require plugins/cpPendingImportPeopleTable
+//= require plugins/typeAheadTextEditor
 
 //= require TabViews
 
