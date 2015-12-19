@@ -478,8 +478,12 @@ screen and (min-device-pixel-ratio: 1.5) {
 .select2-container-multi {
     height: auto;
 }
-.select2-container-multi.select2-choices {
+.select2-container-multi ul.select2-choices {
     padding-top: 5px;
+    //margin-bottom: -4px;
+    border: none;
+    background-color: #fff;
+    background-image: none;
 }
 .left-jqgrid {
     padding-left: 0;
@@ -1340,14 +1344,14 @@ i.fa.fa-map-marker {
 .tt-menu {
     background-color: #fff;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    border-radius: 4px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    margin: 12px 0;
-    padding: 8px 0;
+    margin: 2px 0;
+    padding: 5px 0;
     width: 422px;
 }
 .tt-suggestion {
-    font-size: 18px;
+    font-size: 14px;
     line-height: 24px;
     padding: 3px 20px;
 }
