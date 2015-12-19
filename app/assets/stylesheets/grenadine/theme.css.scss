@@ -3,7 +3,7 @@
 $w2: 650px; // under this width, we collapse to a pull-down menu instead of a regular menu
 
 $w3: 1350px; // small toolbar width in English
-$w4: 1461px; // medium toolbar width in English 
+$w4: 1440px; // medium toolbar width in English 
 
 $w3f: 1339px;  // small toolbar width in French
 $w4f: 1487px; // medium toolbar width in French
@@ -243,6 +243,9 @@ screen and (min-device-pixel-ratio: 1.5) {
     font-size: 12px;
     text-align: center;
     padding-top: 10px;
+}
+#grenadine-application-menu .nav > li > a {
+    padding: 15px 14px;
 }
 #grenadine-sub-application-menu .navbar-nav li.active {
     font-weight: bold;
