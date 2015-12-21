@@ -106,7 +106,7 @@
             if (!column.filterControl) {
                 html.push('<div style="height: 34px;"></div>');
             } else {
-                html.push('<div style="margin: 0px 2px 2px 2px;" class="filterControl">');
+                html.push('<div class="filterControl">');
 
                 if (column.filterControl && column.searchable) {
                     addedFilterControl = true;
