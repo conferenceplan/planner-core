@@ -17,6 +17,7 @@ class LinkedResourceController < ResourceController
   def create
     begin
       Link.transaction do
+        before_save
         @object.save!
         if @linkedto_id
           link = @object.links.new
