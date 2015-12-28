@@ -35,6 +35,16 @@ class PictureUploader < CarrierWave::Uploader::Base
     process :mediumCard
   end
   
+  version :company_card do
+    process :companyCard
+  end
+  
+  def companyCard
+    width = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
+    height = ((model.scale && model.scale > 0) ? 132 * model.scale : 132).to_i
+    return :width => width, :height => height, :crop => :fit, :fetch_format => :jpg
+  end
+  
   def largeCard
     width = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
     height = ((model.scale && model.scale > 0) ? 132 * model.scale : 132).to_i
