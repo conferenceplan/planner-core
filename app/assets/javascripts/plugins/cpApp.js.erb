@@ -671,6 +671,10 @@ var AppUtils = (function(){
             // the render it in the area
             this.$el.find(".model-body").html(this.form.el);
             this.$el.find('.bpopover').popover({html : true});
+            
+            if (this.options.form_init) {
+                this.options.form_init(form, this.model);
+            }
         },
         
         onEvent : function(eventname, func) {
@@ -1050,7 +1054,8 @@ var AppUtils = (function(){
                             // drillDownFn     : options.drillDownFn,
                             itemArea        : options.itemArea,
                             readTemplate    : options.readTemplate,
-                            modal_template  : options.modal_template
+                            modal_template  : options.modal_template,
+                            form_init       : options.form_init
             });
             
             view.render();
