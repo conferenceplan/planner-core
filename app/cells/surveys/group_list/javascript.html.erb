@@ -66,6 +66,11 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
             readTemplate            : '#group-data-template',
             itemArea                : "#survey-edit-area"
         }) );
+
+        $('.bpopover').popover({
+            html: true,
+            trigger: 'hover'
+        });
     };
     
     function drillDownGroup(sid, gid) { // should be sid and gid

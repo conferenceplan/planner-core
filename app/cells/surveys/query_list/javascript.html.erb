@@ -70,6 +70,11 @@ SurveyReportApp.SurveyQueries = (function(Backbone){
         
         showQueries(queryLayout.myQueryRegion, 'subset=user', formCallback);
         showQueries(queryLayout.sharedRegion, 'subset=shared', formCallback);
+
+        $('.bpopover').popover({
+            html: true,
+            trigger: 'hover'
+        });
     };
     
     function copyQuery(model) {

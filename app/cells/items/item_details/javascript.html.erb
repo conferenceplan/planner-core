@@ -392,15 +392,6 @@ ItemApp.ItemManagement = (function(Backbone){
 
         itemTabLayout.images.show(new ItemImageView({model : itemMdl}) );
         
-        //initialize the popovers
-        $(function () {
-            $('.bpopover').popover({
-                html: true,
-                viewport: { selector: 'body', padding: 0 },
-                container: 'body',
-            })
-        });
-
         TabUtils.createTabControl({
             template : "#equipment-control-template",
             modelType : Equipment,
@@ -427,6 +418,15 @@ ItemApp.ItemManagement = (function(Backbone){
             // view_refresh_event : "address:refresh",
             region : itemTabLayout.tags,
             addTitle : '<%= t "create-tag" %>',
+        });
+
+        //initialize the popovers
+        $(function () {
+            $('.bpopover').popover({
+                html: true,
+                viewport: { selector: 'body', padding: 0 },
+                container: 'body',
+            })
         });
         
         eventAggregator.on("refreshTagList", syncModel, itemMdl);

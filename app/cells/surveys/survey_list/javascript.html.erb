@@ -89,6 +89,12 @@ SurveyApp.SurveyManagement = (function(Backbone){
             readTemplate            : '#survey-data-template',
             itemArea                : "#survey-edit-area"
         }) );
+
+        $('.bpopover').popover({
+            html: true,
+            trigger: 'hover'
+        });
+
     };
     
     function previewSurvey(mdl) {

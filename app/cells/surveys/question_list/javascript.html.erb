@@ -104,6 +104,11 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
             readTemplate            : '#question-data-template', // Add a composite view in here
             itemArea                : "#survey-edit-area"
         }) );
+
+        $('.bpopover').popover({
+            html: true,
+            trigger: 'hover'
+        });
     };
     
     function selectQuestion(id) {
