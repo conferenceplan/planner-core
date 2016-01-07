@@ -9,20 +9,27 @@
         <div class='collapse-group' id="query-area-parent" style="height : 370px; overflow : auto;">
             <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#MyQueries"><%= t 'my-queries' %></a>
+                <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-container="body" data-content="<%= t 'my-queries-hint' %>" data-original-title="<%= t 'my-queries' %>"></i>
             </div>
             <div id="MyQueries" class="accordion-body collapse.in">
                 <div class="accordion-inner">
-                    <div id="my-query-region-div"></div>
+                    <div id="my-query-region-div">
+                    </div>
                 </div>
             </div>
             <div class="accordion-heading">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#query-area-parent" href="#SharedQueries"><%= t 'shared-queries' %></a>
+                <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-container="body" data-content="<%= t 'shared-queries-hint' %>" data-original-title="<%= t 'shared-queries' %>"></i>
             </div>
             <div id="SharedQueries" class="accordion-body collapse.in">
                 <div class="accordion-inner">
                     <div id="shared-query-region-div"></div>
                 </div>
             </div>
+        </div>
+        <div class="bs-callout bs-callout-info">
+            <h4><%= t 'hint' %></h4>
+            <%= (t 'queries-hint').html_safe %>
         </div>
     </div>
 </section>
