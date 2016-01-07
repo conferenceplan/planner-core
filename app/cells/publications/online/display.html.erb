@@ -15,11 +15,23 @@
             </ul>
         </div>
         <div>
-            <div id='online-pub-info-area'></div>
+            <div id='online-pub-info-area'>
+                
+            </div>
         </div>
     </div>
     <div class="col-xs-10">
-        <div id='online-pub-results-area'></div>
+        <h3 class="h3-underlined"><%= (t "online-publishing").html_safe %></h3>
+        <div id='online-pub-results-area'>
+            <p><%= (t "review-items-before-publishing-text").html_safe %></p> 
+            <div class="voffset20"></div>
+            <center><%= image_tag("overview-planning-process.png", width: "75%" ) %></center>
+            <center><%= t 'overview-of-process-caption'%></center>
+            <div class="voffset30"></div>
+            <a class="publish-button btn btn-primary" href="#program_publish_review">
+                <i class="fa fa-chevron-right"></i> <%= t "review-your-changes" %>
+            </a>    
+        </div>
         <div id='online-pub-mgmt-area'></div>
     </div>
 </div>

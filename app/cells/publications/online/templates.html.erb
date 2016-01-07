@@ -1,21 +1,33 @@
 
 <script type="text/template" id="publish-template">
-    <h3><%= t "publications-publish" %></h3>
-    {{ if (pending == 'true') { }}
-        <div><%= t "publish-pending" %></div>
-    {{ } else { }}
-        <div class="row">
-            <label class="col-sm-4 control-label"><%= t "publications-generate-ref-numbers" %></label>
-            <div class="col-sm-1">
-                <span>
-                    <input type="checkbox" id="ref-numbers" class="form-control" name="ref-numbers">
-                </span>
-            </div>
+    <div class="row">
+        <div class="col-md-12">
+            <p><%= t 'ready-to-publish' %></p>
         </div>
-        <button class="publish-button btn btn-primary">
-            <%= t "schedule-publish" %>
-        </button>
-    {{ } }}
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            {{ if (pending == 'true') { }}
+                <p>
+                    <button class="publish-button btn btn-lg btn-warning">
+                        <i class="fa fa-cog fa-spin fa-lg"></i> <%= t "publish-pending-button" %>
+                    </button>
+                </p>
+                <p>
+                    <%= t "publish-pending" %>
+                </p>
+            {{ } else { }}
+                <button class="publish-button btn btn-lg btn-primary">
+                    <i class="fa fa-chevron-right"></i> <%= t "schedule-publish" %></label>
+                </button>
+            {{ } }}
+        </div>
+    </div>
+    <div class="row voffset20">
+        <div class="col-md-12">
+            <input type="checkbox" id="ref-numbers" name="ref-numbers"></input> <%= t "publications-generate-ref-numbers" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "publication-numbers" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "publication-numbers-help" %>'></i>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="review-layout-template">
@@ -42,8 +54,9 @@
 
 <script type="text/template" id="review-template">
     <div id="review-items-before-publishing">
-        <h3 class="h3-underlined"><%= t "review-items-before-publishing" %></h3>
         <p><%= (t "review-items-before-publishing-text").html_safe %></p>
+        <h4 class="voffset30"><%= (t "changes-since-your-last-publish").html_safe %></h4>
+        
     </div>
     <div class="voffset30"><h5><%= t "new-items" %></h5>
         <ul class="list-group">
@@ -93,4 +106,7 @@
     <% @extra_review_template.each do |extra| %>
         <%= render extra %>
     <% end %>
+    <a class="publish-button btn btn-primary" href="#program_publish">
+        <i class="fa fa-chevron-right"></i> <%= t "looks-good-publish" %>
+    </a>
 </script>

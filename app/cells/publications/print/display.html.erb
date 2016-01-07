@@ -1,7 +1,11 @@
 
 <%= render_cell "publications/print", :javascript %>
 <%= render_cell "publications/print", :templates %>
-
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="h3-underlined"><%= t "printable-documents" %></h3>
+    </div>
+</div>
 <div class="row">
     <div class="col-xs-2">
         <div class="gr-sidebar" role="complementary">
@@ -31,11 +35,23 @@
         </div>
     </div>
     <div class="col-xs-10">
-        <div id='report-form-area'></div>
+        <div id='report-form-area'>
+            <div>
+                <p><%= (t 'select-report-to-view-intro-text').html_safe %></p>
+                <p><%= (t 'if-you-need-to-publish-online-go-to').html_safe %> <a href="../publications_dash/online"><%= t 'if-you-need-to-publish-online-go-to-href' %></a>.</p>
+            </div>
+            <div class="empty-tab">
+                <i class="fa fa-angle-left"></i>
+                <i class="fa fa-print"></i>
+                <%= t 'select-report-to-view' %>
+            </div>
+        </div>
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <div id='report-results-area'></div>
+        <div id='report-results-area'>
+            
+        </div>
     </div>
 </div>
