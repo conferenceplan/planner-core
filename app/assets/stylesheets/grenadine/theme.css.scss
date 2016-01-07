@@ -1387,3 +1387,7 @@ i.fa.fa-map-marker {
 .fht-cell div.filterControl {
     margin-right: 11px;
 }
+#query-area-parent {
+    max-height : 370px; 
+    overflow : auto;    
+}
