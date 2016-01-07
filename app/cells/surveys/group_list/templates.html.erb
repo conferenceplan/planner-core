@@ -2,7 +2,7 @@
 <section>
     <div class="row">
         <div class="col-md-12">
-            <h3 class="h3-underlined"><%= t 'survey-question-groups' %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-question-groups' %></span></a></h3>
+            <h3 class="h3-underlined"><%= t 'survey-question-groups' %><i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-container="body" data-content="<%= t 'tip-question-groups' %>" data-original-title="<%= t 'survey-question-groups' %>"></i></h3>
             <div id="survey-group-control-div"></div>
              <div class="voffset10"></div>
         </div>
@@ -22,7 +22,7 @@
     </a>
     </td>
     <td>
-        <button class="model-drill-down-button btn btn-xs"><i class="glyphicon glyphicon-arrow-right"></i></button>
+        <button class="model-drill-down-button btn btn-xs"><i class="fa fa-arrow-right"></i></button>
     </td>
     <td>
         <button class="model-delete-button btn btn-xs"><i class="glyphicon glyphicon-trash"></i></button>
@@ -32,8 +32,8 @@
 <script type="text/template" id="survey-group-control-template">
     <div class="row">
         <div class="col-md-12">
-            <button class="add-model-button btn btn-primary pull-right">
-                <%= t 'survey-add-question-group' %>
+            <button class="add-model-button btn btn-xs btn-primary pull-right">
+                <i class="fa fa-plus"></i> <%= t 'survey-add-question-group' %>
             </button>            
         </div>
     </div>

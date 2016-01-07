@@ -2,7 +2,7 @@
 <section>
     <div class="row">
         <div class="col-md-12">
-            <h3 class="h3-underlined"><%= t 'questions' %></h3>
+            <h3 class="h3-underlined"><%= t 'questions' %><i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-container="body" data-content="<%= t 'questions-hint' %>" data-original-title="<%= t 'questions' %>"></i></h3>
             <div id="survey-question-control-div"></div>
             <div class="voffset10"></div>
         </div>
@@ -29,8 +29,8 @@
 <script type="text/template" id="survey-question-control-template">
     <div class="row">
         <div class="col-md-12">
-            <button class="add-model-button btn btn-primary pull-right">
-                <%= t 'survey-add-question' %>
+            <button class="add-model-button btn btn-xs btn-primary pull-right">
+                <i class="fa fa-plus"></i> <%= t 'survey-add-question' %>
             </button>            
         </div>
     </div>

@@ -10,20 +10,21 @@ SurveyReportApp.SurveyReport = (function(Backbone){
     Query = Backbone.DeepModel.extend({
         urlRoot : "<%= baseUri + '/survey_query' %>",
         schema : {
-            name            : { type : 'Text',      title : '<%= t "name" %>',  validators: ['required'] },
-            survey_id       : { type : 'Select',    title : '<%= t "survey" %>',
+            name            : { type : 'Text',      title : '<%= t "name" %>',  validators: ['required'], help: '<%= t "survey-query-name-hint" %>' },
+            survey_id       : { type : 'Select',    title : '<%= t "survey" %>', help: '<%= t "survey-select-hint" %>',
                                 options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                 validators: ['required']
                               },
-            shared          : { type : 'Checkbox',  title : '<%= t "survey-shared" %>' },
-            show_country    : { type : 'Checkbox',  title : '<%= t "survey-show-country" %>' },
-            date_order      : { type : 'Checkbox',   title : '<%= t "survey-order-by-date-received" %>' },
-            operation       : { type : 'Select',    title : '<%= t "survey-operation" %>',
+            shared          : { type : 'Checkbox',  title : '<%= t "survey-shared" %>', help: '<%= t "survey-shared-hint" %>' },
+            show_country    : { type : 'Checkbox',  title : '<%= t "survey-show-country" %>', help: '<%= t "survey-show-country-hint" %>' },
+            date_order      : { type : 'Checkbox',   title : '<%= t "survey-order-by-date-received" %>', help: '<%= t "survey-order-by-date-received-hint" %>' },
+            operation       : { type : 'Select',    title : '<%= t "survey-operation" %>', help: '<%= t "survey-operation-hint" %>',
                                 options : ['ANY'] //, 'ALL']
                               },
             // Predicate list
             survey_query_predicates : {
                 title : '<%= t "survey-query-predicates" %>',
+                help: '<%= t "survey-query-predicates-hint" %>',
                 type : 'List',
                 itemToString : function(item) {
                     return _.template($('#predicate-data-template').html(), { item : item, question : getQuestionById(item.survey_question_id) }); // TODO
@@ -32,6 +33,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                 subSchema : {
                     // survey_question_type : { type : 'Hidden' },
                     survey_question_id   : { type : 'Select',
+                                            help: '<%= t "survey-question-hint" %>', help_placement: 'bottom',
                                             title : '<%= t "survey-question" %>',
                                             options : function(callback, editor) { // Get a list of the questions for this survey
                                                 var res = [];
@@ -48,6 +50,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                     // Each question has a type... each type uses a different operation...
                     operation            : { type : 'DependentValueSelect', 
                                             title : '<%= t "operation" %>',
+                                            help: '<%= t "operation-hint" %>',
                                             dependsOn : 'survey_question_id',
                                             options: function(callback, editor) { // For the question return the valid operations ...
                                                 var question_id = editor.form.fields['survey_question_id'].editor.getValue();
@@ -69,6 +72,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                 },
                     value                : { type : 'DependentValueSelect', dependsOn : 'operation', dependentValues : ['is', 'is not'], altField : 'Text',
                                              title : '<%= t "survey-value" %>',
+                                             help: '<%= t "survey-value-hint" %>',
                                              options : function(callback, editor) {
                                                 var question_id = editor.form.fields['survey_question_id'].editor.getValue();
                                                 var ops = [{val : "", label :""}];

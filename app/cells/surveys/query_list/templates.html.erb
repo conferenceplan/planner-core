@@ -2,7 +2,7 @@
 <script type="text/template" id="query-list-layout-template">
 <section>
     <div class="row">
-        <h3 class="h3-underlined"><%= t 'survey-report-queries' %> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-container="body" data-content="<%= t 'queries-hint' %>" data-original-title="<%= t 'survey-report-queries' %>"></i></h3>
+        <h3 class="h3-underlined"><%= t 'survey-report-queries' %><i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-container="body" data-content="<%= t 'queries-hint' %>" data-original-title="<%= t 'survey-report-queries' %>"></i></h3>
         <div id="query-control-div"></div>
     </div>
     <div class="row voffset10">
@@ -14,6 +14,7 @@
             <div id="MyQueries" class="accordion-body collapse.in">
                 <div class="accordion-inner">
                     <div id="my-query-region-div">
+                        
                     </div>
                 </div>
             </div>
@@ -56,7 +57,7 @@
 </script>
 
 <script type="text/template" id="query-control-template">
-    <button class="add-model-button btn btn-primary pull-right">
-        <%= t 'add-query' %>
+    <button class="add-model-button btn btn-xs btn-primary pull-right">
+        <i class="fa fa-plus"></i> <%= t 'add-query' %>
     </button>
 </script>
