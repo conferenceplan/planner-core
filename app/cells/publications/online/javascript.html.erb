@@ -79,6 +79,13 @@ OnlinePublicationsApp.Management = (function(Backbone){
             this.model.on("sync", this.render ); // when the modal does the update and second after the update to the server
         },
         
+        onRender : function() {
+            jQuery(this.$el).find('.bpopover').popover({
+                        html: true,
+                        trigger: 'hover'
+                    });
+        },
+        
         publish : function() {
             $.ajax({
                 type: 'POST',
@@ -136,7 +143,6 @@ OnlinePublicationsApp.Management = (function(Backbone){
         
         program_publish : function() {
             resultRegion.close();
-            // TODO - put in mechanism to get the publish status from the server
             pending = new PublishPending();
             pending.fetch({
                 success : function(mdl) {
@@ -144,6 +150,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
                         model : mdl
                     });
                     publishRegion.show(pubCtl);
+
                     pendingPoller = Backbone.Poller.get(mdl, {
                        delay : 10000, // ms - every 10 seconds...
                        // delayed : true,
