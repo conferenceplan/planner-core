@@ -831,13 +831,19 @@ var AppUtils = (function(){
                             form_event      : options.form_event,
                             form_event_fn   : options.form_event_fn,
                             editDisableCondition : options.editDisableCondition
+                        },
+                        onRender : function() {
+                            jQuery(this.$el).find('.bpopover').popover({
+                                        html: true,
+                                        trigger: 'hover'
+                                    });
                         }
                     });
                     
         var collectionView = new viewType({
                         collection          : collection,
                         view_refresh_event  : options.view_refresh_event,
-                        tagName             : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div' 
+                        tagName             : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div'
                     });
 
         if (options.place) {

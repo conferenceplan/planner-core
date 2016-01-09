@@ -454,7 +454,8 @@ var TabUtils = (function(){
                             tagName : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
                             selectFn : options.selectFn,
                             url : options.modelURL,
-                            modal_template : options.modal_template
+                            modal_template : options.modal_template,
+                            view_refresh_event : options.child_view_refresh_event
                         },
                     });
                     var collectionView = new viewType({
@@ -485,7 +486,8 @@ var TabUtils = (function(){
                         tagName : typeof options.tagName != 'undefined'  ? options.tagName : 'div',
                         selectFn : options.selectFn,
                         url : options.modelURL,
-                        modal_template : options.modal_template
+                        modal_template : options.modal_template,
+                        view_refresh_event : options.child_view_refresh_event
                     },
                 });
                 var collectionView = new viewType({

@@ -35,4 +35,14 @@ class PostalAddress < ActiveRecord::Base
     addr
   end
 
+  after_save :check_default
+
+  def check_default
+    if self.isdefault # if this is the default then make the others non default (for the person)
+      self.addresses.each do |address|
+        PostalAddress.joins(:addresses).where(['addresses.person_id = ? && postal_addresses.id != ?', address.person_id, self.id]).update_all("postal_addresses.isdefault = 0")
+      end
+    end
+  end
+
 end

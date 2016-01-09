@@ -1,5 +1,5 @@
 class SurveyGroup < ActiveRecord::Base
-  attr_accessible :lock_version, :code, :name, :altname, :description, :sort_order, :survey_id
+  attr_accessible :lock_version, :code, :name, :description, :sort_order, :survey_id
     
   belongs_to  :survey
   has_one :survey_format, :as => :formatable, :dependent => :destroy
