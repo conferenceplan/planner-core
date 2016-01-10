@@ -10,14 +10,14 @@ class SiteConfig < ActiveRecord::Base
   def adjust_timezone
     Time.use_zone(self.time_zone) do 
       day = self.start_date.day
-      self.start_date = self.start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
-      self.start_date = self.start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
+      month = self.start_date.month
+      self.start_date = self.start_date.in_time_zone.change({:day => day, :month => month, :hour => 0 , :min => 0 , :sec => 0 })
       self.tz_offset = self.start_date.utc_offset/60
 
       if self.public_start_date
         day = self.public_start_date.day
-        self.public_start_date = self.public_start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
-        self.public_start_date = self.public_start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
+        month = self.public_start_date.month
+        self.public_start_date = self.public_start_date.in_time_zone.change({:day => day, :month => month, :hour => 0 , :min => 0 , :sec => 0 })
       else
         self.public_start_date = self.start_date
       end
