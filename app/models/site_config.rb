@@ -10,14 +10,14 @@ class SiteConfig < ActiveRecord::Base
   def adjust_timezone
     Time.use_zone(self.time_zone) do 
       day = self.start_date.day
-      self.start_date = self.start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
-      self.start_date = self.start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
+      month = self.start_date.month
+      self.start_date = self.start_date.in_time_zone.change({:day => day, :month => month, :hour => 0 , :min => 0 , :sec => 0 })
       self.tz_offset = self.start_date.utc_offset/60
 
       if self.public_start_date
         day = self.public_start_date.day
-        self.public_start_date = self.public_start_date.in_time_zone.change({:day => day, :hour => 0 , :min => 0 , :sec => 0 })
-        self.public_start_date = self.public_start_date.change({:hour => 0 , :min => 0 , :sec => 0 })
+        month = self.public_start_date.month
+        self.public_start_date = self.public_start_date.in_time_zone.change({:day => day, :month => month, :hour => 0 , :min => 0 , :sec => 0 })
       else
         self.public_start_date = self.start_date
       end
@@ -30,9 +30,9 @@ class SiteConfig < ActiveRecord::Base
   
   # before save check that the public dates etc are within the time period
   def check_public_dates
-    raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if (start_date <= public_start_date)
-    if (number_of_days > 0) && (public_number_of_days.days > 0)
-      raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if (public_start_date + public_number_of_days.days) <= (start_date + number_of_days.days)
+    raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if (public_start_date < start_date)
+    if number_of_days > 0
+      raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if (public_start_date + public_number_of_days.days) > (start_date + number_of_days.days)
     end
   end
 
