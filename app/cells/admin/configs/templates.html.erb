@@ -52,6 +52,9 @@
         <a href="#item-format-tab" data-toggle="tab" class="model-select-button">{{= name }}</a>
     </td>
     <td>
+        {{= publish ? '<%= t "tags-publish" %>' : '<%= t "tags-not-published" %>' }}
+    </td>
+    <td>
         <button class="model-edit-button btn btn-xs"><i class="glyphicon glyphicon-pencil"></i></button>
     </td>
     <td>

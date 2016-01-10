@@ -438,9 +438,16 @@ class PublishJob
   
   def copyTags(from, to)
     # need to get all tags except admin
+    context_part = ""
+
+    contexts = TagContext.where("publish = 1").collect{|i| "'" + i.name + "'"}.join(',')
+    if contexts && contexts.size > 0
+      context_part = "' AND context in (" + contexts + ")"
+    end
+        
     taggings = ActsAsTaggableOn::Tagging.find :all,
                   :select => "DISTINCT(context)",
-                  :conditions => "taggable_type like '" + from.class.name + "' AND context != 'Admin'"
+                  :conditions => "taggable_type like '" + from.class.name + context_part
     
     taggings.each do |tagging|
       if getTagOwner

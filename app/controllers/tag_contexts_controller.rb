@@ -26,7 +26,8 @@ class TagContextsController < PlannerController
   def update
     tag_context = TagContext.find(params[:id])
     str = params[:tag_context]
-    tag_context.name = str['name'].gsub(/[^\p{Alnum}\p{Space}_]/, '').gsub(/\p{Space}/, '_');
+    tag_context.name = str['name'].gsub(/[^\p{Alnum}\p{Space}_]/, '').gsub(/\p{Space}/, '_')
+    tag_context.publish = str['publish']
     tag_context.save!
 
     render json: tag_context.to_json, :content_type => 'application/json'

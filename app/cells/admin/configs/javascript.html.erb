@@ -58,7 +58,8 @@ ConfigApp.ConfigManagement = (function(Backbone){
     
     TagContext = Backbone.Model.extend({
         schema : {
-            name     : { type : 'Text', title : '<%= t "tag-context-name" %>' }
+            name     : { type : 'Text', title : '<%= t "tag-context-name" %>' },
+            publish  : { type : 'Checkbox', title : '<%= t "tags-publish" %>' }
         },
         urlRoot : "<%= baseUri + '/tag_contexts' %>"
     });

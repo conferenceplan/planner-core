@@ -1,3 +1,3 @@
 class TagContext < ActiveRecord::Base
-  attr_accessible :lock_version, :name
+  attr_accessible :lock_version, :name, :publish
 end
