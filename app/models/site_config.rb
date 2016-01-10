@@ -30,9 +30,9 @@ class SiteConfig < ActiveRecord::Base
   
   # before save check that the public dates etc are within the time period
   def check_public_dates
-    raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if (public_start_date < start_date)
-    if number_of_days > 0
-      raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if (public_start_date + public_number_of_days.days) > (start_date + number_of_days.days)
+    raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if (start_date <= public_start_date)
+    if (number_of_days > 0) && (public_number_of_days.days > 0)
+      raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if (public_start_date + public_number_of_days.days) <= (start_date + number_of_days.days)
     end
   end
 
