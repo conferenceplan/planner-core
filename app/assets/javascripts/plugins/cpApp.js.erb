@@ -804,6 +804,7 @@ var AppUtils = (function(){
         }
     });
     
+    
     /*
      * 
      */
@@ -853,6 +854,77 @@ var AppUtils = (function(){
             options.region.show(collectionView);
         }
     };
+    
+    
+    /*
+     * 
+     */    
+    CompositeView = Backbone.Marionette.CompositeView.extend({
+        itemView: ItemView,
+
+        initialize : function(options) {
+            this.options = options || {};
+            eventAggregator.on(this.options.view_refresh_event, this.refreshList, this);
+        },
+        
+        refreshList : function() {
+            this.collection.fetch({});
+        }
+    });
+    
+    /*
+     * 
+     */
+    function renderComposite(collection, options) {
+        viewType = CompositeView.extend({
+                        attributes          : options.collection_attributes,
+                        itemViewOptions     : {
+                            template        : options.itemTemplate,
+                            className       : options.itemClassName,
+                            newTitle        : options.newTitle,
+                            editTitle       : options.editTitle,
+                            attributes      : options.view_attributes,
+                            syncCallback    : options.updateCallback,
+                            tagName         : typeof options.itemTagName != 'undefined'  ? options.itemTagName : 'div',
+                            url             : options.modelURL,
+                            selectFn        : options.selectFn,
+                            clearFn         : options.clearFn,
+                            copyFn          : options.copyFn,
+                            previewFn       : options.previewFn,
+                            drillDownFn     : options.drillDownFn,
+                            itemArea        : options.itemArea,
+                            readTemplate    : options.readTemplate,
+                            modal_edit_title : options.modal_edit_title,
+                            modal_template  : options.modal_template,
+                            modal_edit      : options.modal_edit,
+                            form_event      : options.form_event,
+                            form_event_fn   : options.form_event_fn,
+                            editDisableCondition : options.editDisableCondition
+                        },
+                        itemViewContainer : options.itemViewContainer,
+                        template : options.collectionTemplate,
+                        onRender : function() {
+                            jQuery(this.$el).find('.bpopover').popover({
+                                        html: true,
+                                        trigger: 'hover'
+                                    });
+                        }
+                    });
+                    
+        var collectionView = new viewType({
+                        collection          : collection,
+                        view_refresh_event  : options.view_refresh_event,
+                        tagName             : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div'
+                    });
+
+        if (options.place) {
+            collectionView.render();
+            $(options.place).html(collectionView.el);
+        } else {
+            options.region.show(collectionView);
+        }
+    };
+    
     
     /*
      * 
@@ -1081,6 +1153,22 @@ var AppUtils = (function(){
                 });
             } else {
                 renderCollection(options.collection, options);
+            };
+
+            return collection;
+        },
+        
+        createCompositeView : function(options) {
+            if (!options.collection) {
+                collection = new options.collectionType();
+                collection.url = options.url;
+                collection.fetch({
+                    success : function(col) {
+                        renderComposite(col, options);
+                    }
+                });
+            } else {
+                renderComposite(options.collection, options);
             };
 
             return collection;
