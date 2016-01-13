@@ -113,6 +113,10 @@ OnlinePublicationsApp.Management = (function(Backbone){
     var publishRegion = new Backbone.Marionette.Region({
                 el: "#online-pub-mgmt-area"
             });
+
+    var infoRegion = new Backbone.Marionette.Region({
+                el: "#online-pub-mgmt-area"
+            });
             
     var infoRegion = new Backbone.Marionette.Region({
                 el: "#online-pub-info-area"
@@ -127,6 +131,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
         
         program_publish_review : function() {
             publishRegion.close();
+            $('#online-pub-instructions-area').html('')
             // fetch the review
             review = new PublicationReview();
             review.fetch({
@@ -143,6 +148,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
         
         program_publish : function() {
             resultRegion.close();
+            $('#online-pub-instructions-area').html('')
             pending = new PublishPending();
             pending.fetch({
                 success : function(mdl) {
