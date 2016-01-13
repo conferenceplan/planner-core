@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
   s.add_dependency "browser"
   s.add_dependency 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
   s.add_dependency 'jquery-ui-rails', '3.0.1'
-  s.add_dependency 'momentjs-rails', '>= 2.9.0'
+  # s.add_dependency 'momentjs-rails', '>= 2.9.0'
   s.add_dependency 'bootstrap3-datetimepicker-rails', '~> 4.7.14' #, '~> 2.1.30'
   s.add_dependency 'd3_rails'
   s.add_dependency 'jqgrid-jquery-rails', '~> 4.5.200'

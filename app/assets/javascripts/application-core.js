@@ -44,8 +44,8 @@
 //= require backbone-forms/templates/bootstrap3
 //= require spin
 
-//= require moment
-//= require moment/fr.js
+//= require moment-with-locales
+// require moment/fr.js
 //= require bootstrap-datetimepicker
 //= require d3
 
