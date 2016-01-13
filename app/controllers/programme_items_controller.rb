@@ -104,6 +104,12 @@ class ProgrammeItemsController < PlannerController
     begin
       ProgrammeItem.transaction do
         @programmeItem = ProgrammeItem.find(params[:id])
+
+        if @programmeItem.parent
+          @programmeItem.parent.touch
+          @programmeItem.parent.save
+        end
+
         if @programmeItem.update_attributes(params[:programme_item])
           
           if (startDay.to_i > -1) && startTime && (roomId.to_i > 0)

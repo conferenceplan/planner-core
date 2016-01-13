@@ -34,6 +34,7 @@ class PublishJob
         
         removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
         removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
+        removedItems += unPublish(getRemovedSubItems())
         
         modifiedItems += publishRooms(getModifiedRooms())
         
@@ -125,6 +126,11 @@ class PublishJob
     PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
       joins("LEFT OUTER JOIN room_item_assignments on publications.original_id = room_item_assignments.programme_item_id").
       where("(room_item_assignments.id is null OR publications.id is null) AND published_programme_items.parent_id is null")
+  end
+  
+  def getRemovedSubItems
+    # get published items that have a parent but who's regular item no longer has a parent
+    PublishedProgrammeItem.joins(:original).where("programme_items.parent_id is null AND published_programme_items.parent_id is not null")
   end
 
   def getUnpublishedItems
@@ -418,6 +424,12 @@ class PublishJob
       if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id", "linkedto_type", "linkedto_id", "parent_id"].index(name) == nil)
         # Only copy values that have changed?
         dest.send("#{name}=",val) if (dest.attributes[name] == nil) || (dest.attributes[name] != val) || (val != nil)
+      end
+    end
+    
+    if dest.is_a? PublishedProgrammeItem
+      if dest.parent_id && !src.parent_id
+        dest.parent_id = nil
       end
     end
     

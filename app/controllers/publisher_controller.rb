@@ -46,6 +46,7 @@ class PublisherController < PlannerController
     @candidateRemovedItems  = []
     @candidateRemovedItems.concat(pubjob.getRemovedProgramItems()) # all items that should no longer be published
     @candidateRemovedItems.concat(pubjob.getUnpublishedItems()) # all items that should no longer be published
+    @candidateRemovedItems.concat(pubjob.getRemovedSubItems())
  
     @extra_pub_review_json = [] if ! @extra_pub_review_json
     
