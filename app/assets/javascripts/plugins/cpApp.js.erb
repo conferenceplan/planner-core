@@ -876,7 +876,13 @@ var AppUtils = (function(){
      * 
      */
     function renderComposite(collection, options) {
-        viewType = CompositeView.extend({
+        if(options.viewType.toLowerCase() == "composite"){
+        	var view = CompositeView;
+        } else {
+        	var view  = CollectionView;
+        }
+        
+        viewType = view.extend({
                         attributes          : options.collection_attributes,
                         itemViewOptions     : {
                             template        : options.itemTemplate,
