@@ -752,7 +752,8 @@ var AppUtils = (function(){
                 var modal = new ModelModal({
                     model : this.model,
                     title : this.options.modal_edit_title,
-                    modal_template : this.options.modal_template
+                    modal_template : this.options.modal_template,
+                    view_refresh_event : this.options.view_refresh_event
                 });
                 modal.render();
                 if (this.options.form_event_fn) {
@@ -831,7 +832,8 @@ var AppUtils = (function(){
                             modal_edit      : options.modal_edit,
                             form_event      : options.form_event,
                             form_event_fn   : options.form_event_fn,
-                            editDisableCondition : options.editDisableCondition
+                            editDisableCondition : options.editDisableCondition,
+                            view_refresh_event : options.child_view_refresh_event
                         },
                         onRender : function() {
                             jQuery(this.$el).find('.bpopover').popover({
@@ -905,7 +907,8 @@ var AppUtils = (function(){
                             modal_edit      : options.modal_edit,
                             form_event      : options.form_event,
                             form_event_fn   : options.form_event_fn,
-                            editDisableCondition : options.editDisableCondition
+                            editDisableCondition : options.editDisableCondition,
+                            view_refresh_event : options.child_view_refresh_event
                         },
                         itemViewContainer : options.itemViewContainer,
                         template : options.collectionTemplate,
