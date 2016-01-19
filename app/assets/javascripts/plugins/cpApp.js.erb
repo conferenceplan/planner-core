@@ -942,6 +942,7 @@ var AppUtils = (function(){
 	            var that = this;
 	            this.collection.fetch({
 	            	success : function(collection){
+	            		
 	            		if (collection.length == 1) {
 			            	that.$(".model-delete-button").hide();
 			            } else {
@@ -973,14 +974,6 @@ var AppUtils = (function(){
             tagName             : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div'
         });
         
-        
-        if (collection.length == 0 && typeof options.emptyTemplate != 'undefined'){
-        	collectionView = new Backbone.Marionette.ItemView(
-        		{
-        			template : options.emptyTemplate
-    			}
-			);
-        }
 
         if (options.place) {
             collectionView.render();
