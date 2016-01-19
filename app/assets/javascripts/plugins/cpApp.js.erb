@@ -703,6 +703,7 @@ var AppUtils = (function(){
             if (this.options.url) {
                 this.model.urlRoot = this.options.url;
             };
+            
 
             this.model.on("sync", this.options.syncCallback ); // when the modal does the update and second after the update to the server
         },
@@ -743,7 +744,8 @@ var AppUtils = (function(){
                     model           : this.model,
                     readTemplate    : this.options.readTemplate,
                     editDisableCondition : this.options.editDisableCondition,
-                    modal_template  : this.options.modal_template
+                    modal_template  : this.options.modal_template,
+                    view_refresh_event : this.options.view_refresh_event
                 });
                 
                 v.render();
@@ -884,47 +886,101 @@ var AppUtils = (function(){
         	var view  = CollectionView;
         }
         
+        
         viewType = view.extend({
-                        attributes          : options.collection_attributes,
-                        itemViewOptions     : {
-                            template        : options.itemTemplate,
-                            className       : options.itemClassName,
-                            newTitle        : options.newTitle,
-                            editTitle       : options.editTitle,
-                            attributes      : options.view_attributes,
-                            syncCallback    : options.updateCallback,
-                            tagName         : typeof options.itemTagName != 'undefined'  ? options.itemTagName : 'div',
-                            url             : options.modelURL,
-                            selectFn        : options.selectFn,
-                            clearFn         : options.clearFn,
-                            copyFn          : options.copyFn,
-                            previewFn       : options.previewFn,
-                            drillDownFn     : options.drillDownFn,
-                            itemArea        : options.itemArea,
-                            readTemplate    : options.readTemplate,
-                            modal_edit_title : options.modal_edit_title,
-                            modal_template  : options.modal_template,
-                            modal_edit      : options.modal_edit,
-                            form_event      : options.form_event,
-                            form_event_fn   : options.form_event_fn,
-                            editDisableCondition : options.editDisableCondition,
-                            view_refresh_event : options.child_view_refresh_event
-                        },
-                        itemViewContainer : options.itemViewContainer,
-                        template : options.collectionTemplate,
-                        onRender : function() {
-                            jQuery(this.$el).find('.bpopover').popover({
-                                        html: true,
-                                        trigger: 'hover'
-                                    });
-                        }
-                    });
+            attributes          : options.collection_attributes,
+            itemViewOptions     : {
+                template        : options.itemTemplate,
+                className       : options.itemClassName,
+                newTitle        : options.newTitle,
+                editTitle       : options.editTitle,
+                attributes      : options.view_attributes,
+                syncCallback    : options.updateCallback,
+                tagName         : typeof options.itemTagName != 'undefined'  ? options.itemTagName : 'div',
+                url             : options.modelURL,
+                selectFn        : options.selectFn,
+                clearFn         : options.clearFn,
+                copyFn          : options.copyFn,
+                previewFn       : options.previewFn,
+                drillDownFn     : options.drillDownFn,
+                itemArea        : options.itemArea,
+                readTemplate    : options.readTemplate,
+                modal_edit_title : options.modal_edit_title,
+                modal_template  : options.modal_template,
+                modal_edit      : options.modal_edit,
+                form_event      : options.form_event,
+                form_event_fn   : options.form_event_fn,
+                editDisableCondition : options.editDisableCondition,
+                view_refresh_event : options.child_view_refresh_event
+            },
+            itemViewContainer : options.itemViewContainer,
+            template : options.collectionTemplate,
+            onRender : function() {
+                jQuery(this.$el).find('.bpopover').popover({
+                    html: true,
+                    trigger: 'hover'
+                });
+                	
+                if ( collection.length == 0 && typeof options.renderControl != 'undefined'){
+                	TabUtils.createTabControl({
+		                template                : options.renderControl.template,
+		                modelType               : options.renderControl.modelType,
+		                view_refresh_event      : options.renderControl.view_refresh_event,
+		                modal_create_title      : options.renderControl.modal_create_title,
+		                region                  : options.renderControl.region,
+			            id                      : options.renderControl.id,
+			            id_name                 : options.renderControl.id_name
+		            });
+                };
+                if (collection.length == 1) {
+                	this.$(".model-delete-button").hide();
+                } else {
+                	this.$(".model-delete-button").show();
+                }
+            },
+            refreshList : function() {
+	            var that = this;
+	            this.collection.fetch({
+	            	success : function(collection){
+	            		if (collection.length == 1) {
+			            	that.$(".model-delete-button").hide();
+			            } else {
+			            	that.$(".model-delete-button").show();
+			            };
+			            if (typeof options.renderControl != 'undefined'){
+				            if (collection.length == 0){
+                            	TabUtils.createTabControl({
+					                template                : options.renderControl.template,
+					                modelType               : options.renderControl.modelType,
+					                view_refresh_event      : options.renderControl.view_refresh_event,
+					                modal_create_title      : options.renderControl.modal_create_title,
+					                region                  : options.renderControl.region,
+						            id                      : options.renderControl.id,
+						            id_name                 : options.renderControl.id_name
+					            });
+                      		} else { 
+	                      		options.renderControl.region.reset();
+                      		};
+                  		};
+	            	}
+	            });
+	        }
+        });
                     
         var collectionView = new viewType({
-                        collection          : collection,
-                        view_refresh_event  : options.view_refresh_event,
-                        tagName             : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div'
-                    });
+            collection          : collection,
+            view_refresh_event  : options.view_refresh_event,
+            tagName             : typeof options.collection_tagName != 'undefined'  ? options.collection_tagName : 'div'
+        });
+        
+        
+        if (collection.length == 0 && typeof options.emptyTemplate != 'undefined'){
+        	collectionView = new Backbone.Marionette.ItemView(
+        		{
+        			template : options.emptyTemplate
+    			}
+			);
+        }
 
         if (options.place) {
             collectionView.render();
