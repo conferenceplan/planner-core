@@ -52,8 +52,8 @@ class SurveyRespondentsController < ApplicationController
           rescue => ex
             logger.error "No email template. We were not able to send the email to " + @survey_respondent.person.getFullName
           end
-          
-          redirect_to  '/nosurvey.html' # TODO - to be changed
+
+          render 'no_survey'
         else # Otherwise we continue to the form
           # TODO - change the '/' to the participant page (for past surveys and managing availabilities etc.)
           @survey_respondent.single_access_token = (0...25).map { ('a'..'z').to_a[rand(26)] }.join # generate random key for access
