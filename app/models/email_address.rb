@@ -5,7 +5,12 @@ class EmailAddress < ActiveRecord::Base
   has_many :addresses, as: :addressable
   has_many :people, through: :addresses
 
-  after_save :check_default
+  before_save :clean_email
+  after_save  :check_default
+
+  def clean_email
+    self.email.strip!
+  end
 
   def check_default
     if self.isdefault # if this is the default then make the others non default (for the person)
