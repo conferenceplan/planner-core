@@ -212,6 +212,10 @@ var TabUtils = (function(){
             if (this.options.id) {
                 mdl.set(this.options.id_name, this.options.id);
             }
+            if (typeof this.options.extraDocumentParams != 'undefined' && typeof this.options.extraDocumentParams.linkedto_id != 'undefined' && typeof this.options.extraDocumentParams.linkedto_type != 'undefined' ){
+            	mdl.set('linkedto_id', this.options.extraDocumentParams.linkedto_id);
+            	mdl.set('linkedto_type', this.options.extraDocumentParams.linkedto_type);
+            }
             if (this.options.modelURL) {
                 mdl.url = this.options.modelURL;
             }
@@ -337,7 +341,8 @@ var TabUtils = (function(){
                 form_event_fn   : options.form_event_fn,
                 modal_template : options.modal_template,
                 extra_events : options.events,
-                view_refresh_event : options.view_refresh_event
+                view_refresh_event : options.view_refresh_event,
+                extraDocumentParams : options.extraDocumentParams
             });
         if (options.place) {
             control.render();
