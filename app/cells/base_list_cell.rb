@@ -2,7 +2,6 @@ class BaseListCell < Cell::Rails
 
   def display(args = {})
     @place = args.has_key?(:place) ? args[:place] : "base-list"
-    render
   end
 
   def javascript(args)
@@ -38,7 +37,6 @@ class BaseListCell < Cell::Rails
 
     @show_linkedto = args.has_key?(:show_linkedto) ? args[:show_linkedto] : 'false'
     @extra_model_params = args.has_key?(:extra_model_params) ? args[:extra_model_params] : 'null'
-    render
   end
 
 end
