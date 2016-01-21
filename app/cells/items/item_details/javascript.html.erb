@@ -68,7 +68,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         format : "DD MMM YYYY, HH:mm",
                         useCurrent: false,
                         minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>"
+                        maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days - 1.seconds).strftime('%m/%d/%Y %H:%M:%S') %>"
                 },
                 validators: [
                     function check_for_room(value, formValues) {
