@@ -6,6 +6,9 @@
 <div class="form-group <%='error' if @errors && @errors[question.id] %>">
 
         <label class="control-label col-sm-2">
+            <% if question.mandatory %>
+                <span class='' style='color: red;'>*</span>
+            <% end %>
             <%= question.question %>
             <% if question.survey_format.help && !question.survey_format.help.blank? %>
             <a class="survey-help" href="#" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
