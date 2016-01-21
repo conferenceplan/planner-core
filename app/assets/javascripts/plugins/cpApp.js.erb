@@ -915,12 +915,14 @@ var AppUtils = (function(){
             },
             itemViewContainer : options.itemViewContainer,
             template : options.collectionTemplate,
+            emptyView : options.emptyView,
+            emptyViewOptions : options.emptyViewOptions,
             onRender : function() {
                 jQuery(this.$el).find('.bpopover').popover({
                     html: true,
                     trigger: 'hover'
                 });
-                	
+                
                 if ( collection.length == 0 && typeof options.renderControl != 'undefined'){
                 	TabUtils.createTabControl({
 		                template                : options.renderControl.template,
@@ -932,21 +934,24 @@ var AppUtils = (function(){
 			            id_name                 : options.renderControl.id_name
 		            });
                 };
-                if (collection.length == 1) {
-                	this.$(".model-delete-button").hide();
-                } else {
-                	this.$(".model-delete-button").show();
-                }
+                if (typeof options.hideDeleteButton == 'undefined'){
+	                if (collection.length == 1) {
+	                	this.$(".model-delete-button").hide();
+	                } else {
+	                	this.$(".model-delete-button").show();
+	                }
+                };
             },
             refreshList : function() {
 	            var that = this;
 	            this.collection.fetch({
 	            	success : function(collection){
-	            		
-	            		if (collection.length == 1) {
-			            	that.$(".model-delete-button").hide();
-			            } else {
-			            	that.$(".model-delete-button").show();
+	            		if (typeof options.hideDeleteButton == 'undefined'){
+		            		if (collection.length == 1) {
+				            	that.$(".model-delete-button").hide();
+				            } else {
+				            	that.$(".model-delete-button").show();
+				            };
 			            };
 			            if (typeof options.renderControl != 'undefined'){
 				            if (collection.length == 0){
