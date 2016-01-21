@@ -223,7 +223,12 @@ var TabUtils = (function(){
             var refreshEvent = this.options.view_refresh_event;
             var callback = this.options.view_callback;
             
-            var modal = new AppUtils.ModelModal({
+            if(typeof this.options.modalType != 'undefined'){
+            	var modalType = this.options.modalType;
+            } else{
+            	var modalType = AppUtils.ModelModal;
+            }
+            var modal = new modalType({
                 model : mdl,
                 title : this.options.modal_create_title,
                 modal_template : this.options.modal_template,
@@ -342,7 +347,8 @@ var TabUtils = (function(){
                 modal_template : options.modal_template,
                 extra_events : options.events,
                 view_refresh_event : options.view_refresh_event,
-                extraDocumentParams : options.extraDocumentParams
+                extraDocumentParams : options.extraDocumentParams,
+                modalType : options.modalType
             });
         if (options.place) {
             control.render();
