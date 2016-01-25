@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  max_items_per_day: 1
-  max_items_per_con: 1
-
-two:
-  max_items_per_day: 1
-  max_items_per_con: 1

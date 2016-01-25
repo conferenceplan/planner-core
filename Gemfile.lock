@@ -1,0 +1,358 @@
+GIT
+  remote: git://github.com/balen/enumerations_mixin.git
+  revision: ea07c9f01ac3783c407a93ee46fb417865c0aaac
+  specs:
+    enumerations_mixin (0.2.5)
+      rails (>= 3.2.0)
+
+GIT
+  remote: git://github.com/svenfuchs/i18n-active_record.git
+  revision: 4628202f676aecfbc00d404342e61f75078d9439
+  tag: rails-3.2
+  specs:
+    i18n-active_record (0.0.2)
+      i18n (>= 0.6.0)
+
+PATH
+  remote: .
+  specs:
+    planner-core (0.8.76)
+      actionmailer
+      activerecord
+      acts-as-taggable-on (= 3.1.1)
+      audited-activerecord (~> 3.0)
+      axlsx_rails
+      bcrypt
+      bootstrap-sass (= 3.1.1.0)
+      bootstrap3-datetimepicker-rails (~> 4.7.14)
+      browser
+      carrierwave
+      cells (~> 3.11.3)
+      ckeditor_rails (= 4.4.7)
+      cloudinary
+      connection_pool
+      d3_rails
+      dalli
+      declarative_authorization
+      deep_cloneable (~> 1.6.0)
+      delayed_job
+      delayed_job_active_record
+      devise
+      encoding_sampler
+      figaro
+      font_assets
+      geocoder
+      http_accept_language
+      i18n
+      jbuilder
+      jpbuilder
+      jqgrid-jquery-rails (~> 4.5.200)
+      jquery-rails (= 2.2.1)
+      jquery-ui-rails (= 3.0.1)
+      log4r
+      prawn-table
+      prawn_rails
+      rails (~> 3.2.17)
+      ranked-model
+      recaptcha (= 0.4.0)
+      routing-filter
+      scrypt
+      select2-rails
+      time_diff
+      turbolinks
+      twitter-typeahead-rails
+      will_paginate
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    actionmailer (3.2.22)
+      actionpack (= 3.2.22)
+      mail (~> 2.5.4)
+    actionpack (3.2.22)
+      activemodel (= 3.2.22)
+      activesupport (= 3.2.22)
+      builder (~> 3.0.0)
+      erubis (~> 2.7.0)
+      journey (~> 1.0.4)
+      rack (~> 1.4.5)
+      rack-cache (~> 1.2)
+      rack-test (~> 0.6.1)
+      sprockets (~> 2.2.1)
+    activemodel (3.2.22)
+      activesupport (= 3.2.22)
+      builder (~> 3.0.0)
+    activerecord (3.2.22)
+      activemodel (= 3.2.22)
+      activesupport (= 3.2.22)
+      arel (~> 3.0.2)
+      tzinfo (~> 0.3.29)
+    activeresource (3.2.22)
+      activemodel (= 3.2.22)
+      activesupport (= 3.2.22)
+    activesupport (3.2.22)
+      i18n (~> 0.6, >= 0.6.4)
+      multi_json (~> 1.0)
+    acts-as-taggable-on (3.1.1)
+      actionpack (>= 3, < 5)
+      activerecord (>= 3, < 5)
+      activesupport (>= 3, < 5)
+    arel (3.0.3)
+    audited (3.0.0)
+    audited-activerecord (3.0.0)
+      activerecord (~> 3.0)
+      audited (= 3.0.0)
+    aws_cf_signer (0.1.3)
+    axlsx (2.0.1)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (~> 1.0.0)
+    axlsx_rails (0.4.0)
+      axlsx (>= 2.0.1)
+      rails (>= 3.1)
+    bcrypt (3.1.10)
+    bootstrap-sass (3.1.1.0)
+      sass (~> 3.2)
+    bootstrap3-datetimepicker-rails (4.7.14)
+      momentjs-rails (>= 2.8.1)
+    browser (1.1.0)
+    builder (3.0.4)
+    capybara (2.3.0)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
+    capybara-webkit (1.7.0)
+      capybara (>= 2.3.0, < 2.6.0)
+      json
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
+    cells (3.11.3)
+      actionpack (>= 3.0)
+      railties (>= 3.0)
+      uber (~> 0.0.8)
+    ckeditor_rails (4.4.7)
+      railties (>= 3.0)
+    cloudinary (1.1.2)
+      aws_cf_signer
+      rest-client
+    coffee-rails (3.2.2)
+      coffee-script (>= 2.2.0)
+      railties (~> 3.2.0)
+    coffee-script (2.4.1)
+      coffee-script-source
+      execjs
+    coffee-script-source (1.10.0)
+    connection_pool (2.2.0)
+    d3_rails (3.5.11)
+      railties (>= 3.1.0)
+    dalli (2.7.5)
+    database_cleaner (1.5.1)
+    declarative_authorization (0.5.7)
+    deep_cloneable (1.6.1)
+      activerecord (>= 3.1.0)
+    delayed_job (4.1.1)
+      activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.1.0)
+      activerecord (>= 3.0, < 5)
+      delayed_job (>= 3.0, < 5)
+    devise (3.5.3)
+      bcrypt (~> 3.0)
+      orm_adapter (~> 0.1)
+      railties (>= 3.2.6, < 5)
+      responders
+      thread_safe (~> 0.1)
+      warden (~> 1.2.3)
+    diff-lcs (1.2.5)
+    domain_name (0.5.25)
+      unf (>= 0.0.5, < 1.0.0)
+    encoding_sampler (0.3.1)
+      diff-lcs (~> 1.1)
+    erubis (2.7.0)
+    execjs (2.6.0)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.5.0)
+      factory_girl (~> 4.5.0)
+      railties (>= 3.0.0)
+    ffi (1.9.10)
+    ffi-compiler (0.1.3)
+      ffi (>= 1.0.0)
+      rake
+    figaro (1.1.1)
+      thor (~> 0.14)
+    font_assets (0.1.12)
+      rack
+    geocoder (1.2.14)
+    hike (1.2.3)
+    htmlentities (4.3.4)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
+    http_accept_language (2.0.5)
+    i18n (0.7.0)
+    jbuilder (2.4.0)
+      activesupport (>= 3.0.0, < 5.1)
+      multi_json (~> 1.2)
+    journey (1.0.4)
+    jpbuilder (0.2.5)
+      jbuilder
+    jqgrid-jquery-rails (4.5.400)
+      jquery-rails
+      jquery-ui-rails (< 5.0.0)
+      railties (>= 3.1)
+    jquery-rails (2.2.1)
+      railties (>= 3.0, < 5.0)
+      thor (>= 0.14, < 2.0)
+    jquery-ui-rails (3.0.1)
+      jquery-rails
+      railties (>= 3.1.0)
+    json (1.8.3)
+    log4r (1.1.10)
+    mail (2.5.4)
+      mime-types (~> 1.16)
+      treetop (~> 1.4.8)
+    mime-types (1.25.1)
+    mini_portile2 (2.0.0)
+    momentjs-rails (2.11.0)
+      railties (>= 3.1)
+    multi_json (1.11.2)
+    mysql2 (0.3.20)
+    netrc (0.11.0)
+    nokogiri (1.6.7.1)
+      mini_portile2 (~> 2.0.0.rc2)
+    orm_adapter (0.5.0)
+    pdf-core (0.6.0)
+    polyglot (0.3.5)
+    power_assert (0.2.2)
+    prawn (2.0.2)
+      pdf-core (~> 0.6.0)
+      ttfunk (~> 1.4.0)
+    prawn-table (0.2.2)
+      prawn (>= 1.3.0, < 3.0.0)
+    prawn_rails (0.0.11)
+      prawn (>= 0.11.1)
+      railties (>= 3.0.0)
+    rack (1.4.7)
+    rack-cache (1.5.1)
+      rack (>= 0.4)
+    rack-ssl (1.3.4)
+      rack
+    rack-test (0.6.3)
+      rack (>= 1.0)
+    rails (3.2.22)
+      actionmailer (= 3.2.22)
+      actionpack (= 3.2.22)
+      activerecord (= 3.2.22)
+      activeresource (= 3.2.22)
+      activesupport (= 3.2.22)
+      bundler (~> 1.0)
+      railties (= 3.2.22)
+    railties (3.2.22)
+      actionpack (= 3.2.22)
+      activesupport (= 3.2.22)
+      rack-ssl (~> 1.3.2)
+      rake (>= 0.8.7)
+      rdoc (~> 3.4)
+      thor (>= 0.14.6, < 2.0)
+    rake (10.5.0)
+    ranked-model (0.4.0)
+      activerecord (>= 3.1.12)
+    rdoc (3.12.2)
+      json (~> 1.4)
+    recaptcha (0.4.0)
+    responders (1.1.2)
+      railties (>= 3.2, < 4.2)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 3.0)
+      netrc (~> 0.7)
+    routing-filter (0.4.0.1)
+      actionpack (< 4.2)
+    rspec-core (3.4.1)
+      rspec-support (~> 3.4.0)
+    rspec-expectations (3.4.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-mocks (3.4.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-rails (3.4.0)
+      actionpack (>= 3.0, < 4.3)
+      activesupport (>= 3.0, < 4.3)
+      railties (>= 3.0, < 4.3)
+      rspec-core (~> 3.4.0)
+      rspec-expectations (~> 3.4.0)
+      rspec-mocks (~> 3.4.0)
+      rspec-support (~> 3.4.0)
+    rspec-support (3.4.1)
+    rubyzip (1.0.0)
+    sass (3.4.21)
+    sass-rails (3.2.6)
+      railties (~> 3.2.0)
+      sass (>= 3.1.10)
+      tilt (~> 1.3)
+    scrypt (2.0.2)
+      ffi-compiler (>= 0.0.2)
+      rake
+    select2-rails (4.0.1)
+      thor (~> 0.14)
+    shoulda-matchers (2.8.0)
+      activesupport (>= 3.0.0)
+    sprockets (2.2.3)
+      hike (~> 1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.0)
+      tilt (~> 1.1, != 1.3.0)
+    test-unit (3.0.8)
+      power_assert
+    thor (0.19.1)
+    thread_safe (0.3.5)
+    tilt (1.4.1)
+    time_diff (0.3.0)
+      activesupport
+      i18n
+    treetop (1.4.15)
+      polyglot
+      polyglot (>= 0.3.1)
+    ttfunk (1.4.0)
+    turbolinks (2.5.3)
+      coffee-rails
+    twitter-typeahead-rails (0.11.1)
+      actionpack (>= 3.1)
+      jquery-rails
+      railties (>= 3.1)
+    tzinfo (0.3.46)
+    uber (0.0.15)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.1)
+    warden (1.2.4)
+      rack (>= 1.0)
+    will_paginate (3.1.0)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  capybara (= 2.3.0)
+  capybara-webkit (= 1.7.0)
+  database_cleaner (= 1.5.1)
+  enumerations_mixin!
+  factory_girl_rails (= 4.5.0)
+  geocoder
+  i18n-active_record!
+  mysql2 (= 0.3.20)
+  planner-core!
+  rspec-rails (~> 3.0)
+  sass-rails (>= 3.2)
+  shoulda-matchers (= 2.8)
+  test-unit (~> 3.0)
+
+BUNDLED WITH
+   1.11.2

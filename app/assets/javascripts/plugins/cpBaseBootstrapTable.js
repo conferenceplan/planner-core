@@ -1,13 +1,13 @@
 /*
  * Base table widget ...
- * 
+ *
  */
 (function($) {
-    
+
 $.widget( "cp.baseBootstrapTable" , {
 
     /*
-     * 
+     *
      */
     options : {
         root_url            : "/",              // so that sub-domains can be taken care of
@@ -57,14 +57,14 @@ $.widget( "cp.baseBootstrapTable" , {
         sortName            : 'id',
         ctl_template        : '#table-control-template'
     },
-    
+
     /*
-     * 
+     *
      */
     translate : function(str) {
         return this.options.translations[str] ? this.options.translations[str] : str;
     },
-    
+
     /*
      *
      */
@@ -74,7 +74,7 @@ $.widget( "cp.baseBootstrapTable" , {
             this.createTable();
         }
     },
-    
+
     render : function() {
         if (this.options.delayed) {
             this.selected = this.model = null;
@@ -94,59 +94,59 @@ $.widget( "cp.baseBootstrapTable" , {
         var newUrl = this.createUrl();
         this.element.bootstrapTable('refresh');//, { url : newUrl});
     },
-    
+
     pageFrom : function() {
         this.element.bootstrapTable('pageFrom');
     },
-    
+
     pageFrom : function() {
         this.element.bootstrapTable('pageFrom');
     },
-    
+
     getSelected : function() {
         return this.selected;
     },
-    
+
     getModel : function() {
         return this.model;
     },
-    
+
     /*
-     * 
+     *
      */
     root_url : function() {
         return this.options.root_url;
     },
 
     /*
-     * 
-     */    
+     *
+     */
     _url : function() {
         // Determine what the URL for the table should be
         return this.options.root_url + this.options.baseUrl + this.options.getGridData;
     },
-    
+
     /*
-     * 
+     *
      */
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
         if (this.options.extraClause) {
             urlArgs += '?';
-            urlArgs += this.options.extraClause; 
+            urlArgs += this.options.extraClause;
         };
         url += urlArgs;
         return url;
     },
-    
+
     /*
-     * 
+     *
      */
     createColModel : function() {},
 
     /*
-     * 
+     *
      */
     setControlOptions : function(options) {
         this.control.options.id = options.id;
@@ -154,28 +154,28 @@ $.widget( "cp.baseBootstrapTable" , {
         this.options.id = options.id;
         this.options.id_name = options.id_name;
     },
-    
+
     /*
-     * 
+     *
      */
     setExtraModelParams : function(arg) {
         this.options.extra_model_params = arg;
         if (this.control) {
-            this.control.options.extra_model_params = arg;   
+            this.control.options.extra_model_params = arg;
         };
     },
-    
+
     /*
-     * 
+     *
      */
     unSelect : function() {
         this.model = null;
         this.selected = null;
         this.selected_element = null;
     },
-    
+
     /*
-     * 
+     *
      */
     newModel : function(callback) {
         var modelTemplate = this.options.modelTemplate;
@@ -186,12 +186,12 @@ $.widget( "cp.baseBootstrapTable" , {
         if (this.options.id) {
             mdl.set(this.options.id_name, this.options.id);
         }
-        
+
         // iterate though extra_model_params
         _.each(this.options.extra_model_params, function(val,key) {
             mdl.set(key, val);
         });
-    
+
         var grid = this.element.bootstrapTable(); //this.options.grid;
 
         var modal = new this.options.modalType({
@@ -220,13 +220,13 @@ $.widget( "cp.baseBootstrapTable" , {
                                 grid.bootstrapTable('refresh');
                                 selectMethod(mdl.id);
                              }
-                         });        
+                         });
                 } else {
                     that.selected_element = mdl.id;
                     grid.bootstrapTable('refresh');
                     selectMethod(mdl.id);
-                }             
-                
+                }
+
                 if (callback) {
                     callback();
                 }
@@ -234,9 +234,9 @@ $.widget( "cp.baseBootstrapTable" , {
         });
         modal.render();
     },
-    
+
     /*
-     * 
+     *
      */
     editModel : function() {
         var modelTemplate = this.options.modelTemplate;
@@ -248,7 +248,7 @@ $.widget( "cp.baseBootstrapTable" , {
             // Put up a modal dialog to edit the reg details
             // This is done via the select method
             modal = new ModelModal({
-                model : this.model, 
+                model : this.model,
                 modal_template : modelTemplate,
                 title : this.options.modal_edit_title,
                 refresh : function(mdl) {
@@ -259,9 +259,9 @@ $.widget( "cp.baseBootstrapTable" , {
             modal.render();
         };
     },
-    
+
     /*
-     * 
+     *
      */
     deleteModel : function() {
         if (this.model) {
@@ -269,7 +269,7 @@ $.widget( "cp.baseBootstrapTable" , {
             var grid = this.element.bootstrapTable(); //this.options.grid;
             var confirm_content = this.options.confirm_content;
             var that = this;
-            var deleteNotifyMethod = this.options.deleteNotifyMethod; 
+            var deleteNotifyMethod = this.options.deleteNotifyMethod;
             // confirmation for the model delete
             modal = new AppUtils.ConfirmModel({
                     content : confirm_content,
@@ -291,11 +291,11 @@ $.widget( "cp.baseBootstrapTable" , {
                     }
             });
             modal.render();
-        };        
+        };
     },
-    
+
     /*
-     * 
+     *
      */
     createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
@@ -311,30 +311,30 @@ $.widget( "cp.baseBootstrapTable" , {
                 "click .edit-model-button"      : "editModel",
                 "click .delete-model-button"    : "deleteModal",
             },
-        
+
             initialize : function(options) {
                 this.options = options || {};
                 var ctl_template = this.options.ctl_template;//'#table-control-template'
                 this.template = _.template($(ctl_template).html());
             },
-            
+
             newModel : function(e) {
                 e.stopPropagation();
                 e.preventDefault();
-                
+
                 that.newModel(function() {
                     // that.model = null;
                     // that.selected = null;
                     // that.selected_element = null;
                 });
             },
-        
+
             editModel : function(e) {
                 e.stopPropagation();
                 e.preventDefault();
                 that.editModel();
             },
-        
+
             deleteModal : function(e) {
                 e.stopPropagation();
                 e.preventDefault();
