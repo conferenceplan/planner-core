@@ -35,7 +35,7 @@
 
 <script type="text/template" id="item-form-template">
     <div>
-    <form class="form-horizontal" role="form" style="padding-left: 15px; padding-right: 15px;">
+    <form class="form-horizontal item-form" role="form" style="padding-left: 15px; padding-right: 15px;">
         <fieldset>
             <div class="row">
                 <div class="form-group" id="item-form-template-title">
@@ -47,14 +47,12 @@
                     </span>
                 </div>
             </div>
-            <div class="row">
-                <div class="form-group" id="item-form-template-themes">
-                    <label class="col-sm-3 control-label">
-                       <%= t  "themes" %>
-                    </label>
-                    <span data-editor>
-                    <div class="col-sm-9" data-editors="theme_name_ids"></div>
-                    </span>
+            <div class="row" id="item-break-row">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><%= t "item-is-break" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-is-break" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-is-break-hint" %>'></i></label>
+                    <div class="col-sm-1">
+                        <div data-editors="is_break" class="inline-checkbox" onclick="hideNonBreakDiv(this);"></div>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -94,6 +92,16 @@
                     </div>
                 </div>
             </div>
+            <div class="row" id="themes-row">
+                <div class="form-group" id="item-form-template-themes">
+                    <label class="col-sm-3 control-label">
+                       <%= t  "themes" %>
+                    </label>
+                    <span data-editor>
+                    <div class="col-sm-9" data-editors="theme_name_ids"></div>
+                    </span>
+                </div>
+            </div>
             <div class="row">
                     <div class="form-group" id="item-form-template-parent-id">
                         <label class="col-sm-3 control-label">
@@ -105,98 +113,108 @@
                     </div>
             </div>
             <div class="row">
-                <div class="form-group" id="item-form-template-time-and-audience">
-                    <span data-editor>
-                        <div class="col-sm-3">
-                            <label><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
-                            <div data-editors="duration"></div>
-                        </div>
-                        <div class="col-sm-3">
-                            <label><%= t "item-min-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-min-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-min-participants-help" %>'></i></label>
-                            <div data-editors="minimum_people"></div>
-                            <div class="has-error">
-                                <p class="help-block" data-error></p>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <label><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>
-                            <div data-editors="maximum_people"></div>
-                            <div class="has-error">
-                                <p class="help-block" data-error></p>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <label><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
-                            <div data-editors="audience_size"></div>
-                        </div>
-                    </span>
-                </div>
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
+                                <label><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
+                                <div data-editors="duration"></div>
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
+                                <label><%= t "item-min-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-min-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-min-participants-help" %>'></i></label>
+                                <div data-editors="minimum_people"></div>
+                                <div class="has-error">
+                                    <p class="help-block" data-error></p>
+                                </div>
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
+                                <label><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>
+                                <div data-editors="maximum_people"></div>
+                                <div class="has-error">
+                                    <p class="help-block" data-error></p>
+                                </div>
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
+                                <label class="item-form-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
+                                <div data-editors="audience_size"></div>
+                        </span>
+                    </div>
             </div>
             <div class="row">
-                <div class="form-group" id="item-form-template-format">
-                    <span data-editor>
-                        <div class="col-sm-3">
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
                             <label><%= t "item-format" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-format" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-format-help" %>'></i></label>
                             <div data-editors="format_id"></div>
-                        </div>
-                        <div class="col-sm-3">
+                                <div class="has-error">
+                                    <p class="help-block" data-error></p>
+                                </div>
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
                             <label><%= t "item-setup" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-setup" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-setup-help" %>'></i></label>
                             <div data-editors="setup_type_id"></div>
-                        </div>
-                    </span>
-                    <span data-editor>
-                        <div class="col-sm-3">
+                                <div class="has-error">
+                                    <p class="help-block" data-error></p>
+                                </div>
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
                             <label><%= t "item-room" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-room" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-room-help" %>'></i></label>
                             <div data-editors="room_id"></div>
                             <div class="has-error">
                                 <p class="help-block" id='room-error' data-error></p>
                             </div>
-                        </div>
-                        <div class="col-sm-3">
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
                             <label><%= t "item-start-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>
                             <div data-editors="start_time"></div>
                             <div class="has-error">
                                 <p class="help-block" id='start-time-error' data-error></p>
                             </div>
-                        </div>
-                    </span>
-                </div>
+                        </span>
+                    </div>
             </div>
             <div class="row">
-                <div class="form-group" id="item-form-template-print">
-                    <span data-editor>
-                        <div class="col-sm-3">
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
                             <label class="inline-checkbox"><%= t "item-print" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-print" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-print-hint" %>'></i></label>
                             <div data-editors="print" class="inline-checkbox"></div>
-                        </div>
-                        <div class="col-sm-3">
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-3">
+                        <span data-editor>
                             <label><%= t "item-publication-reference" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-publication-reference" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-publication-reference-help" %>'></i></label>
                             <div data-editors="pub_reference_number"></div>
-                        </div>
-                        <div class="col-sm-4">
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-4">
+                        <span data-editor>
                             <label><%= t "mobile-card-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "mobile-card-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "mobile-card-size-help" %>'></i></label>
                             <div data-editors="mobile_card_size"></div>
-                        </div>
-                    </span>
-                </div>
+                        </span>
+                    </div>
             </div>
             <div class="row">
-                <div class="form-group" id="item-form-template-notes">
-                    <span data-editor>
-                        <div class="col-sm-6">
-                            <span>
+                    <div class="form-group col-sm-6">
+                        <span data-editor>
                             <label><%= t "item-notes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "notes-help" %>'></i></label>
                             <div data-editors="item_notes"></div>
-                            </span>
-                        </div>
-                        <div class="col-sm-6">
-                            <span>
+                        </span>
+                    </div>
+                    <div class="form-group col-sm-6">
+                        <span data-editor>
                             <label><%= t "item-notes-for-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes-for-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-notes-for-participants-help" %>'></i></label>
                             <div data-editors="participant_notes"></div>
-                            </span>
-                        </div>
-                    </span>
-                </div>
+                        </span>
+                    </div>
             </div>
         </fieldset>
     </form>
