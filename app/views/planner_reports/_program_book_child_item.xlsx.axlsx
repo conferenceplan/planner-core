@@ -4,7 +4,7 @@ row = [
     item.duration,
     '',
     '',
-    (@tagOwner ? item.owner_tag_list_on(@tagOwner, :PrimaryArea).join(",") : item.tag_list_on(:PrimaryArea).join(",")),
+    item.themes.collect{|t| t.theme_name.name}.join(","),
     (item.format ? item.format.name : ""),
     (item.title ? strip_html_tags(item.title.gsub(/\n|\r/,"")) : ""),
     (!item.precis.blank? ? strip_html_tags(item.precis.gsub(/\n|\r/,"")) : ""),

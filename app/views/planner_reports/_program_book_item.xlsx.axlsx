@@ -6,7 +6,7 @@ row = [
     time.programme_items[0].duration,
     time.rooms[0].name,
     time.rooms[0].venue.name,
-    (@tagOwner ? time.programme_items[0].owner_tag_list_on(@tagOwner, :PrimaryArea).join(",") : time.programme_items[0].tag_list_on(:PrimaryArea).join(",")),
+    time.programme_items[0].themes.collect{|t| t.theme_name.name}.join(","),
     (time.programme_items[0].format ? time.programme_items[0].format.name : ""),
     (time.programme_items[0].title ? strip_html_tags(time.programme_items[0].title.gsub(/\n|\r/,"")) : ""),
     (!time.programme_items[0].precis.blank? ? strip_html_tags(time.programme_items[0].precis.gsub(/\n|\r/,"")) : ""),

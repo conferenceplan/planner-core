@@ -50,10 +50,10 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                     
                     pdf.pad_top(10) { pdf.text str, :inline_format => true }
 
-                    if assignment.programmeItem.equipment_needs && (assignment.programmeItem.equipment_needs.size > 0)
-                        str = "<i>Equipment:</i> " + assignment.programmeItem.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.compact.join(", ")
-                        pdf.text str, :inline_format => true, :indent_paragraphs => 30
-                    end
+#                    if assignment.programmeItem.equipment_needs && (assignment.programmeItem.equipment_needs.size > 0)
+#                        str = "<i>Equipment:</i> " + assignment.programmeItem.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type }.compact.join(", ")
+#                        pdf.text str, :inline_format => true, :indent_paragraphs => 30
+#                    end
 
     #                pdf.pad_bottom(10) { pdf.text assignment.programmeItem.participant_notes, :inline_format => true }
                 end

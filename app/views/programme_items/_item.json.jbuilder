@@ -44,6 +44,16 @@ json.parent_val do
     end
 end
 
+json.theme_name_ids item.theme_names.collect{|c| c.id}
+
+json.theme_names do
+    json.array! item.theme_names do |n|
+        json.id     n.id
+        json.name   n.name
+    end
+end
+
+
 # TODO - do we want to list the participants?
 if moderators
     json.moderators do

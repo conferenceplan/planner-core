@@ -35,8 +35,8 @@ module ProgramItemsService
   #
   #
   #
-  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false, include_children = true, page_to = nil)
-    args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, include_children, page_to)
+  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, theme_ids = nil, ignoreScheduled = false, include_children = true, page_to = nil)
+    args = genArgsForSql(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to)
     tagquery = DataService.genTagSql(context, tags)
     
     args.merge!(:order => "time_slots.start asc, programme_items.title asc")
@@ -48,8 +48,8 @@ module ProgramItemsService
     end
   end
   
-  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, ignoreScheduled = false, include_children = true)
-    args = genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, include_children)
+  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, theme_ids = nil, ignoreScheduled = false, include_children = true)
+    args = genArgsForSql(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
@@ -217,7 +217,7 @@ module ProgramItemsService
   
 protected
 
-  def self.genArgsForSql(nameSearch, filters, extraClause, ignoreScheduled, include_children, page_to = nil)
+  def self.genArgsForSql(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['programme_items.format_id','programme_items.pub_reference_number'],
                   ['programme_items.format_id','programme_items.pub_reference_number'], ['programme_items.title'])
@@ -232,6 +232,10 @@ protected
         clause = DataService.addClause(clause,'programme_items.title like ? ','%' + st + '%')
         clause = DataService.addClause(clause,'children.title like ? ','%' + st + '%','OR') if include_children
       end
+    end
+    if theme_ids && theme_ids.size > 0
+      clause = DataService.addClause(clause,'themes.theme_name_id in (?) ',theme_ids) 
+      clause = DataService.addClause(clause,'child_themes.theme_name_id in (?) ',theme_ids, 'OR') if include_children
     end
     
     # TODO - add these
@@ -248,7 +252,9 @@ protected
     
     args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
                            'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
-                           'LEFT OUTER JOIN programme_items as children on children.parent_id = programme_items.id ')
+                           'LEFT OUTER JOIN programme_items as children on children.parent_id = programme_items.id ' +
+                           "LEFT OUTER JOIN themes on themes.themed_id = programme_items.id AND themes.themed_type = 'ProgrammeItem' " +
+                           "LEFT OUTER JOIN themes as child_themes on child_themes.themed_id = children.id AND child_themes.themed_type = 'ProgrammeItem' ")
 
     args
   end

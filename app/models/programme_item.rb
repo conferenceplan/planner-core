@@ -6,6 +6,8 @@ class ProgrammeItem < ActiveRecord::Base
   audited :allow_mass_assignment => true
   acts_as_taggable
 
+  themed
+  
   has_many   :children, :dependent => :destroy, :class_name => 'ProgrammeItem', foreign_key: "parent_id"
   belongs_to :parent,   :class_name => 'ProgrammeItem' 
   
@@ -45,7 +47,7 @@ class ProgrammeItem < ActiveRecord::Base
   end
 
   before_save :check_parent
-  
+
   protected
   
   def check_parent

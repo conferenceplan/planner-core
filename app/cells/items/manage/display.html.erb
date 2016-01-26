@@ -15,7 +15,9 @@
 
 <div class="row">
     <div class="col-md-9 left-jqgrid" id="item-detail-div" style="margin-bottom: 35px;">
-        <div id="item-filters" class="top-tag-filters"></div>
+        <div class="row">
+            <div id="item-filters" class="top-tag-filters col-sm-12"> </div>
+        </div>
         <%= render_cell "items/item_list", :display %>
         <h3 id='selected-program-item'></h3>
         <%= render_cell "items/item_details", :display %>
@@ -33,6 +35,10 @@
             <h5><%= t "assignments" %></h5>
             <span class="glyphicon glyphicon-chevron-right"></span> <a href="<%= baseUri + '/pages/items_dash/add_people' %>"><%= t "assign-participants-to-items" %></a><br>
             <span class="glyphicon glyphicon-chevron-right"></span> <a href="<%= baseUri + '/pages/items_dash/exclusions' %>"><%= t "exclusions" %></a>         
+            <h5><%= t "filter-by-theme" %></h5>
+            <div class="form-horizontal">
+                <input id="theme-filters" type="text" class="form-control"></input>
+            </div>
             <h5><%= t "filter-by-tag" %></h5>
             <div class='collapse-group tag-cloud-area' style="overflow : auto;">
                 <div id="item-tag-cloud" class="collapse in"></div>

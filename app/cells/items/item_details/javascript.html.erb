@@ -1,3 +1,5 @@
+<%= render_cell "theme_management", :javascript %>
+
 <script type="text/javascript">
 
 function showShortDescriptionDiv(el) {
@@ -24,7 +26,7 @@ ItemApp.ItemManagement = (function(Backbone){
                 cl_image_upload_tag : '<%= cl_image_upload_tag(:picture) %>'
             }
         },
-        urlRoot : "<%= baseUri + '/external_images/ProgrammeItem' %>" //           pic.url = '/external_images/ProgrammeItem/' + item_id + '/' + cardtype
+        urlRoot : "<%= baseUri + '/external_images/ProgrammeItem' %>"
     });
     PictureCollection = Backbone.Collection.extend({
         model : Picture
@@ -36,6 +38,44 @@ ItemApp.ItemManagement = (function(Backbone){
     ProgramItem = Backbone.RelationalModel.extend({
         schema : {
             title       : { type : 'Text', title : '<%= t "title" %>' },
+            theme_name_ids  : { type : 'Select2', title : '<%= t "themes" %>',
+                                        config : {
+                                            multiple: true,
+                                            initSelection : function(element,callback) {
+                                                var vals = element.val();
+                                                if (vals && current_item) {
+                                                    res = [];
+                                                    cats = current_item.get("theme_names");
+                                                    _.each(cats, function(item) {
+                                                        res.push( {'id' : item.id, 'text' : item.name} );
+                                                    });
+                                                    callback(res);
+                                                }
+                                            },
+                                            formatSelection : function(obj, container) {
+                                                return obj.text;
+                                            },
+                                            formatNoMatches : function(term) {
+                                                return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + term + '\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
+                                            },
+                                            ajax : {
+                                                url : "<%= baseUri %>/theme_names",
+                                                data : function(term, page) {
+                                                    return { 'search' : term };
+                                                },
+                                                results : function(_data, page, query) {
+                                                    res = [];
+                                                    _.each(_data.rows, function(item) {
+                                                        res.push( {'id' : item.id, 'text' : item.name} );
+                                                    });
+                                                    var data = {
+                                                        results: res
+                                                    };
+                                                    return data;
+                                                }
+                                            }
+                                        }
+                                    },
             short_title : { type : 'Text', title : '<%= t "short-title" %>' },
             precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
             short_precis : { type : 'Html', title : '<%= t "short-item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
@@ -190,6 +230,14 @@ ItemApp.ItemManagement = (function(Backbone){
     TagFilterCollection = Backbone.Collection.extend({
         model : TagFilter
     });
+    
+    ThemeName = Backbone.Model.extend({});
+    Themes = Backbone.Collection.extend({
+        model : ThemeName,
+        urlRoot : "<%= baseUri + '/theme_names' %>"
+    });
+    
+    ThemeView = Marionette.ItemView.extend({});
 
 
     ItemImageView = Marionette.ItemView.extend({
@@ -439,8 +487,40 @@ ItemApp.ItemManagement = (function(Backbone){
         current_item = itemMdl;
         return itemMdl;
     };
+
+    // item-filters == id
+    // TODO - add filter for items
+    function create_theme_selector() {
+        
+        $('#theme-filters').select2({
+            multiple: true,
+            formatSelection : function(obj, container) {
+                return obj.text;
+            },
+            ajax : {
+                url : "<%= baseUri %>/theme_names",
+                data : function(term, page) {
+                    return { 'search' : term };
+                },
+                results : function(_data, page, query) {
+                    res = [];
+                    _.each(_data.rows, function(item) {
+                        res.push( {'id' : item.id, 'text' : item.name} );
+                    });
+                    var data = {
+                        results: res
+                    };
+                    return data;
+                }
+            }
+        }).on("change", function(e) {
+            filterThemes = e.val;
+            ItemApp.ItemManagement.refreshTable();
+        });      
+    };
     
     var filterCol = null;
+    var filterThemes = null;
 
     return {
         
@@ -459,9 +539,6 @@ ItemApp.ItemManagement = (function(Backbone){
         },
 
         addFilter : function(context, name) {
-            // TODO - add the context and tag to the TagFilterCollection
-            // associate the collection with a view if not already
-
             if (!filters) {
                 filters = new TagFilterCollection();
             }
@@ -471,14 +548,11 @@ ItemApp.ItemManagement = (function(Backbone){
                     collection : filters,
                     template : "#item-filters-template",
                     place : "#item-filters",
-                    //collection_attributes : { "class" : "clearfix" },
-                    tagremove : function(context, name) {
-                        // force a refresh of the table etc
+                    tagremove : function(context, name) { // force a refresh of the table etc
                         ItemApp.ItemManagement.refreshTable();
                     },
                     view_attributes : { "style" : "display : inline" }, // TODO - move the style to the style-sheet
                 });
-                
             }
             
             filters.add(
@@ -516,6 +590,15 @@ ItemApp.ItemManagement = (function(Backbone){
                 tagQuery = str;
             }
             
+            if (filterThemes && filterThemes.length > 0) {
+                var str = "";
+                if (tagQuery.length > 0) {
+                    str += "&"
+                }
+                str += "theme_ids=" + encodeURIComponent(filterThemes);
+                tagQuery += str;
+            }
+            
             return tagQuery;
         },
         
@@ -532,6 +615,8 @@ ItemApp.ItemManagement = (function(Backbone){
             itemTabLayout = new ItemTabLayout();
             itemTabLayout.render();
             $('#item-tabs').html(itemTabLayout.el);
+            
+            create_theme_selector();
             
             TabUtils.createTagCloudContent({
                 collectionType : TagContextCollection,

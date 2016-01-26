@@ -77,6 +77,10 @@ module Planner
           end
 
           def _after_update
+            if @object.respond_to? :update_themes
+              theme_names = params[:theme_name_ids].split(",") # comma seperated list, split into ids
+              @object.update_themes theme_names
+            end
             if @object.respond_to? :update_categories
               category_names = params[:category_name_ids].split(",") # comma seperated list, split into ids
               @object.update_categories category_names
@@ -84,6 +88,10 @@ module Planner
           end
         
           def _after_save
+            if @object.respond_to? :update_themes
+              theme_names = params[:theme_name_ids].split(",") # comma seperated list, split into ids
+              @object.update_themes theme_names
+            end
             if @object.respond_to? :update_categories
               category_names = params[:category_name_ids].split(",") # comma seperated list, split into ids
               @object.update_categories category_names

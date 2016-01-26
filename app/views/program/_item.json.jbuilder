@@ -1,9 +1,10 @@
 
-json.id                 item.id    
+json.id                 item.id
 json.lock_version       item.lock_version    
 json.updated_at         item.updated_at.utc
 json.created_at         item.created_at.utc
 json.title              item.title    
+json.themes             item.theme_names.collect{|c| c.name}
 json.format             item.format.name if item.format
 json.tags               item.base_tags.collect{|t| t.name} #tag_list_on('PrimaryArea') # TODO - do we jut want the PrimaryArea or make this configrable
 json.desc               item.precis

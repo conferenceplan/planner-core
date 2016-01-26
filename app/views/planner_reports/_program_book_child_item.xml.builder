@@ -4,14 +4,8 @@ builder.bar do
         builder.duration item.duration
         builder.format item.format.name if item.format
         builder.tracks do
-            if @tagOwner
-                item.owner_tag_list_on(@tagOwner, :PrimaryArea).each do |track| # TODO - check to make sure we have PrimaryArea
-                    builder.track track
-                end
-            else
-                item.tag_list_on(:PrimaryArea).each do |track| # TODO - check to make sure we have PrimaryArea
-                    builder.track track
-                end
+            item.themes.each do |theme|
+                builder.track theme.theme_name.name
             end
         end
         builder.tags do

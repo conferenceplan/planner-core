@@ -84,6 +84,8 @@ class ProgrammeItemsController < PlannerController
             @programmeItem.parent.save
           end
         end
+
+        _after_save(@programmeItem)
       end
     rescue => ex
       render status: :bad_request, text: ex.message
@@ -137,6 +139,8 @@ class ProgrammeItemsController < PlannerController
             @programmeItem.parent.save
           end
         end
+        
+        _after_save(@programmeItem)
       end
     rescue => ex
       render status: :bad_request, text: ex.message
@@ -226,6 +230,7 @@ class ProgrammeItemsController < PlannerController
     idx = params[:sidx]
     order = params[:sord]
     context = params[:context]
+    theme_ids = params[:theme_ids] ? params[:theme_ids].split(",") : nil
     tags = params[:tags]
     nameSearch = params[:namesearch]
     filters = params[:filters]
@@ -239,10 +244,10 @@ class ProgrammeItemsController < PlannerController
     ignoreScheduled = params[:igs] == 'true' # TODO
     ignorePending = params[:igp] == 'true'
 
-    @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled, include_children
-
+    @count = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, theme_ids, ignoreScheduled, include_children
+    
     if page_to && !page_to.empty?
-      gotoNum = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, ignoreScheduled, include_children, page_to
+      gotoNum = ProgramItemsService.countItems filters, extraClause, nameSearch, context, tags, theme_ids, ignoreScheduled, include_children, page_to
       if gotoNum
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
@@ -256,7 +261,7 @@ class ProgrammeItemsController < PlannerController
       @nbr_pages = 1
     end
     
-    @items = ProgramItemsService.findItems rows, @page, idx, order, filters, extraClause, nameSearch, context, tags, ignoreScheduled, include_children
+    @items = ProgramItemsService.findItems rows, @page, idx, order, filters, extraClause, nameSearch, context, tags, theme_ids, ignoreScheduled, include_children
   end
 
   #
@@ -298,6 +303,13 @@ class ProgrammeItemsController < PlannerController
   end
   
 private
+
+  def _after_save(item)
+    if item.respond_to? :update_themes
+      theme_names = params[:theme_name_ids].split(",") # comma seperated list, split into ids
+      item.update_themes theme_names
+    end
+  end
 
   def zone_delta(_time)
     start_offset = Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime.in_time_zone.utc_offset

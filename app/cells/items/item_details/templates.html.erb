@@ -48,6 +48,16 @@
                 </div>
             </div>
             <div class="row">
+                <div class="form-group" id="item-form-template-themes">
+                    <label class="col-sm-3 control-label">
+                       <%= t  "themes" %>
+                    </label>
+                    <span data-editor>
+                    <div class="col-sm-9" data-editors="theme_name_ids"></div>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
                 <div class="form-group" id="item-form-template-description">
                     <label class="col-sm-3 control-label">
                        <%= t  "item-description" %>
@@ -199,6 +209,7 @@
         <h5><%= t 'item' %></h5>
         <dl class="dl-airy">
             <dt><%= t "title" %></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
+            <dt><%= t "themes" %></dt><dd>{{= theme_names ? theme_names.map(function(item) {return item['name'];}).join(', ') : "&nbsp;" }}</dd>
             <dt><%= t "item-description" %></dt><dd>{{= precis ? precis : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>
             <dt><%= t "short-title" %></dt><dd>{{= short_title ? short_title : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>
             <dt><%= t "short-item-description" %></dt><dd>{{= short_precis ? short_precis : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>

@@ -20,6 +20,8 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   acts_as_taggable
 
+  themed
+
   belongs_to :format 
   
   has_one :published_room_item_assignment, :dependent => :destroy

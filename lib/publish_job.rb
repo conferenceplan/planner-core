@@ -23,7 +23,7 @@ class PublishJob
       PublishedProgrammeItem.transaction do
         load_cloudinary_config
         
-        ProgramItemsService.assign_reference_numbers if @ref_numbers #
+        ProgramItemsService.assign_reference_numbers if @ref_numbers
         
         newItems = 0
         modifiedItems = 0
@@ -192,6 +192,7 @@ class PublishJob
         
         updateImages(srcItem, newItem)
         updateLinks(srcItem, newItem)
+        updateThemes(srcItem, newItem)
 
         # link to the people (and their roles)
         updateAssignments(srcItem, newItem)
@@ -275,6 +276,26 @@ class PublishJob
         newimg.save
       end
       
+    end
+  end
+  
+  def updateThemes(srcItem, newItem)
+    src_theme_ids = srcItem.themes.collect{|t| t.theme_name_id}
+    dest_theme_ids = newItem.themes.collect{|t| t.theme_name_id}
+    
+    for_delete = dest_theme_ids - src_theme_ids
+    for_add = src_theme_ids - dest_theme_ids
+
+    newItem.themes.each do |theme|
+      theme.delete if (for_delete.include? theme.theme_name_id)
+    end
+
+    for_add.each do |theme_id|
+      new_theme = Theme.new
+      new_theme.themed_type = newItem.class.name
+      new_theme.themed_id = newItem.id
+      new_theme.theme_name_id = theme_id
+      new_theme.save
     end
   end
   

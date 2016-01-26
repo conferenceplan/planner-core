@@ -325,4 +325,5 @@ Rails.application.routes.draw do
   match "tools/item_exporter/export", :controller => 'tools/item_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
 
   planner_resources 'category_names',         :defaults => { :format => 'json' }
+  planner_resources 'theme_names',         :defaults => { :format => 'json' }
 end

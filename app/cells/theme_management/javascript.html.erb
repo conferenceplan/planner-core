@@ -1,0 +1,43 @@
+<script type="text/javascript">
+
+ThemeApp = new Backbone.Marionette.Application();
+
+ThemeApp.Mgmt = (function(Backbone){
+
+    Theme = Backbone.Model.extend({
+        schema : {
+            name                      : {type : 'Text', title : '<%= t "theme-name" %>'},
+        },
+        urlRoot : "<%= baseUri + '/theme_names' %>",
+    });
+
+    return {
+        Theme : Theme,
+
+        createNewTheme : function(name, callback, arg) {
+            var mdl = new ThemeApp.Mgmt.Theme({ name : name });
+            var modal = new ModelModal({
+                model : mdl,
+                title : '<%= t "create-a-new-theme" %>',
+                refresh : function(mdl) {
+                    if (callback) {
+                        callback(mdl, arg);
+                    }
+                }
+            });
+            modal.render();
+        },
+
+        init : function() {
+        }
+    }
+    
+})(Backbone);
+
+jQuery(document).ready(function() {
+    moment.lang('<%= I18n.locale %>');
+    ThemeApp.addInitializer(ThemeApp.Mgmt.init);
+    ThemeApp.start();
+});
+
+</script>
