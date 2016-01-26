@@ -1,6 +1,3 @@
-
-
-
 <% @extra_template.each do |extra| %>
     <%= render extra %>
 <% end %>
@@ -95,7 +92,7 @@
             <div class="row" id="themes-row">
                 <div class="form-group" id="item-form-template-themes">
                     <label class="col-sm-3 control-label">
-                       <%= t  "themes" %>
+                       <%= t  "themes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "themes" %>' data-container='body' data-trigger='hover' data-placement='right' data-toggle='popover' data-content='<%= t "themes-help" %>'></i>
                     </label>
                     <span data-editor>
                     <div class="col-sm-9" data-editors="theme_name_ids"></div>
