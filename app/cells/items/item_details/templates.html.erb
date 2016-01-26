@@ -47,16 +47,7 @@
                     </span>
                 </div>
             </div>
-            <div class="row">
-                <div class="form-group" id="item-form-template-themes">
-                    <label class="col-sm-3 control-label">
-                       <%= t  "themes" %>
-                    </label>
-                    <span data-editor>
-                    <div class="col-sm-9" data-editors="theme_name_ids"></div>
-                    </span>
-                </div>
-            </div>
+
             <div class="row">
                 <div class="form-group" id="item-form-template-description">
                     <label class="col-sm-3 control-label">
@@ -74,6 +65,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="row" id="short-versions-row">
                 <div id="short-versions-div" style="display:none;">
                     <div class="form-group" id="item-form-template-short-title">
@@ -92,6 +84,16 @@
                         <div class="col-sm-9" data-editors="short_precis"></div>
                         </span>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group" id="item-form-template-themes">
+                    <label class="col-sm-3 control-label">
+                       <%= t  "themes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "themes" %>' data-container='body' data-trigger='hover' data-placement='right' data-toggle='popover' data-content='<%= t "themes-help" %>'></i>
+                    </label>
+                    <span data-editor>
+                    <div class="col-sm-9" data-editors="theme_name_ids"></div>
+                    </span>
                 </div>
             </div>
             <div class="row">
