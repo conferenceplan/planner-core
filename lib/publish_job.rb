@@ -30,6 +30,7 @@ class PublishJob
         renmovedItems = 0
         p = PublicationDate.new
         newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
+        newItems += copyProgrammeItems(getNewChildren())
         modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
         
         removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
@@ -96,12 +97,22 @@ class PublishJob
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getNewProgramItems
-    clause = addClause(nil,'print = ?',true) # only get those that are marked for print
+    # TODO fix
+    clause = addClause(nil,'programme_items.print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'room_item_assignments.id is not null OR parent_id is not null ', nil)
-#    clause = addClause(clause,'programme_item_assignments.role_id != ? ', PersonItemRole['Reserved'])
-    args = { :conditions => clause, :include => :room_item_assignment } #, :programme_item_assignments] }
-    return ProgrammeItem.find :all, args
+    clause = addClause(clause,'room_item_assignments.id is not null AND programme_items.parent_id is null', nil)
+
+    return ProgrammeItem.
+        includes(:room_item_assignment).where(clause)
+  end
+  
+  def getNewChildren
+    clause = addClause(nil,'programme_items.print = ?',true) # only get those that are marked for print
+    clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
+    clause = addClause(clause,'programme_items.parent_id is not null AND parents_programme_items.print = ? ', true)
+
+    return ProgrammeItem.
+        includes([:parent]).where(clause)
   end
 
   #  
@@ -136,7 +147,7 @@ class PublishJob
   def getUnpublishedItems
     PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
       joins("join programme_items on programme_items.id = publications.original_id and publications.original_type = 'ProgrammeItem'").
-      where("(programme_items.print = 0 AND publications.published_id is not null) AND published_programme_items.parent_id is null")
+      where("(programme_items.print = 0 AND publications.published_id is not null)")
   end
 
   private
@@ -234,15 +245,16 @@ class PublishJob
         newItem.publication.save
         nbrProcessed += 1
       end
-    end
+
+      updateParents(srcItems)
     
-    updateParents(srcItems)
+    end
     
     return nbrProcessed
   end
   
   def updateParents(srcItems)
-    PublishedProgrammeItem.transaction do
+    # PublishedProgrammeItem.transaction do
       # Need to put the links to children back in etc
       # i.e. for through the items and ensure that the parent_id is set appropriately
       srcItems.each do |srcItem|
@@ -257,7 +269,7 @@ class PublishJob
           end
         end
       end
-    end
+    # end
   end
   
   def updateImages(srcItem, newItem)
