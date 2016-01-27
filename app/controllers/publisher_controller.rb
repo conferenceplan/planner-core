@@ -41,7 +41,9 @@ class PublisherController < PlannerController
   
   def review
     pubjob = PublishJob.new(false)
-    @candidateNewItems      = pubjob.getNewProgramItems() # all unpublished programme items
+    @candidateNewItems = []
+    @candidateNewItems.concat(pubjob.getNewProgramItems()) # all unpublished programme items
+    @candidateNewItems.concat(pubjob.getNewChildren())
     @candidateModifiedItems = pubjob.getModifiedProgramItems() # all programme items that have changes made (room assignment, added person, details etc)
     @candidateRemovedItems  = []
     @candidateRemovedItems.concat(pubjob.getRemovedProgramItems()) # all items that should no longer be published
