@@ -151,7 +151,8 @@ module PeopleService
     includeConState = false
     clause = DataService.createWhereClause(filters, 
           ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
-          ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'], ['people.last_name'])
+          ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'], ['people.last_name'],
+          {'person_con_states.acceptance_status_id' => '6', 'person_con_states.invitestatus_id' => '1'})
 
     # add the name search for last of first etc
     if nameSearch #&& ! nameSearch.empty?
