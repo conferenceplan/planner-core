@@ -66,8 +66,8 @@ xml.changes do
         @changes[:new_items].each do |item_id|
             item = PublishedProgrammeItem.find(item_id)
                 xml.item do
-                    xml.room item.published_room.name
-                    xml.venue item.published_room.published_venue.name
+                    xml.room item.published_room.name if item.published_room
+                    xml.venue item.published_room.published_venue.name if item.published_room
                     xml.details do
                         xml.reference_number item.pub_reference_number
                         xml.duration item.duration

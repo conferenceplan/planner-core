@@ -69,8 +69,9 @@ class ProgrammeItemsController < PlannerController
         @programmeItem = ProgrammeItem.new(params[:programme_item])
         @programmeItem.lock_version = 0
         if @programmeItem.save
-          if (startDay.to_i > -1) && startTime && (roomId.to_i > 0)
-            room = Room.find(roomId)
+          if (startDay.to_i > -1) && startTime #&& (roomId.to_i > 0)
+            room = nil
+            room = Room.find(roomId) if roomId.to_i > 0
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           end
         end
@@ -114,8 +115,9 @@ class ProgrammeItemsController < PlannerController
 
         if @programmeItem.update_attributes(params[:programme_item])
           
-          if (startDay.to_i > -1) && startTime && (roomId.to_i > 0)
-            room = Room.find(roomId)
+          if (startDay.to_i > -1) && startTime #&& (roomId.to_i > 0)
+            room = nil
+            room = Room.find(roomId) if roomId.to_i > 0
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           else
             if (@programmeItem.room_item_assignment)

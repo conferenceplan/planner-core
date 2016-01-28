@@ -685,7 +685,7 @@ class PlannerReportsController < PlannerController
     @tagOwner = getTagOwner
 
     TimeSlot.uncached do
-      @times = PlannerReportsService.findProgramItemsByTimeAndRoom
+      @times = PlannerReportsService.findProgramItemsByTimeAndRoom # TODO - need to fix
       @rooms = Room.all :select => 'distinct rooms.name',
                                  :order => 'venues.sort_order, rooms.sort_order', 
                                  :include => :venue

@@ -399,7 +399,7 @@ module PlannerReportsService
   #
   #
   def self.findProgramItemsByTimeAndRoom
-    TimeSlot.joins([{:rooms => :venue}, :programme_items]).
+    TimeSlot.joins([:programme_items]).
               includes([
                   {:rooms => :venue},
                   {:programme_items => 
@@ -412,7 +412,7 @@ module PlannerReportsService
                  ]).
               where("programme_items.print = 1 and time_slots.start is not NULL").
               where(self.constraints()).
-              order("time_slots.start, venues.sort_order, rooms.sort_order")
+              order("time_slots.start, venues.sort_order, rooms.sort_order") #
   end
 
   #

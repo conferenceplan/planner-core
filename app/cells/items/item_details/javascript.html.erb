@@ -138,7 +138,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             type: "start_time",
                             message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
-                        if (formValues.room_id == "" && formValues.start_time != "") {
+                        if (formValues.room_id == "" && formValues.start_time != "" && !formValues.is_break) {
                             return err;
                         };
                     },

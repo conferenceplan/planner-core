@@ -65,7 +65,9 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
             item = PublishedProgrammeItem.find(item_id)
     
             pdf.text  item.pub_reference_number.to_s + ' <b>' + item.title + '</b>', :inline_format => true, :fallback_fonts => fallback_fonts
-            pdf.text  item.published_room.name + ' ' + item.published_room.published_venue.name, :fallback_fonts => fallback_fonts
+            if item.published_room
+                pdf.text  item.published_room.name + ' ' + item.published_room.published_venue.name, :fallback_fonts => fallback_fonts
+            end
             pdf.text  item.published_time_slot.start.strftime('%A') + ' ' + item.published_time_slot.start.strftime(@plain_time_format), :fallback_fonts => fallback_fonts
             pdf.text  item.duration.to_s + ' minutes, ' + (item.format ? item.format.name : ''), :fallback_fonts => fallback_fonts
             pdf.text  item.precis , :inline_format => true, :fallback_fonts => fallback_fonts

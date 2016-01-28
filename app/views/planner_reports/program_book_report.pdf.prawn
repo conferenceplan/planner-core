@@ -19,9 +19,11 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
             row[0] = items[0].strftime(@time_format)
 
             items[1].each do |item|
-                idx = @rooms.index{|x| x.id == item.rooms[0].id }
-                if (idx && ((start..(start+(nbrColumns-1))).member? idx ))
-                    row[idx - start + 1] = (pdf.make_cell :content => item.programme_items[0].title)
+                if item.rooms[0]
+                    idx = @rooms.index{|x| x.id == item.rooms[0].id }
+                    if (idx && ((start..(start+(nbrColumns-1))).member? idx ))
+                        row[idx - start + 1] = (pdf.make_cell :content => item.programme_items[0].title)
+                    end
                 end
             end
 
