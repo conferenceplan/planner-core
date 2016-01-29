@@ -4,11 +4,65 @@
 module ProgramItemsService
   
   def self.findAllItems
-
-    ProgrammeItem.includes([:time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
-                            order("time_slots.start ASC, programme_items.title")
+    time_slots = Arel::Table.new(:time_slots)
+    parent_time_slots = time_slots.alias("parent_time_slots")
+    
+    ProgrammeItem.select([ ProgrammeItem.arel_table[Arel.star],
+                          parent_time_slots[:start].as('parent_item_start')
+                        ]).
+                        includes([:time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
+                        joins(find_all_joins).
+                        order(
+                          %w(
+                            IF(parent_item_start IS NULL, time_slots.start, parent_item_start) ASC,
+                            programme_items.title
+                          ).join(" ")
+                        )
     
   end
+  
+  def self.find_all_joins
+    programme_items = Arel::Table.new(:programme_items)
+    parent_items = programme_items.alias('parent_items')
+    room_item_assignments = Arel::Table.new(:room_item_assignments)
+    parent_room_item_assignments = room_item_assignments.alias('parent_room_item_assignments')
+    time_slots =  Arel::Table.new(:time_slots)
+    parent_time_slots = time_slots.alias("parent_time_slots")
+    
+    [
+        programme_items.
+          create_join(room_item_assignments, 
+            programme_items.create_on(
+              room_item_assignments[:programme_item_id].eq(programme_items[:id])
+            ),
+            Arel::Nodes::OuterJoin),
+        programme_items.
+          create_join(time_slots, 
+            programme_items.create_on(
+              room_item_assignments[:time_slot_id].eq(time_slots[:id])
+            ),
+            Arel::Nodes::OuterJoin),
+        programme_items.
+          create_join(parent_items, 
+            programme_items.create_on(
+              parent_items[:id].eq(programme_items[:parent_id])
+            ),
+            Arel::Nodes::OuterJoin),
+        programme_items.
+          create_join(parent_room_item_assignments, 
+            parent_room_item_assignments.create_on(
+              parent_room_item_assignments[:programme_item_id].eq(parent_items[:id])
+            ),
+            Arel::Nodes::OuterJoin),
+        programme_items.
+          create_join(parent_time_slots, 
+            parent_time_slots.create_on(
+              parent_room_item_assignments[:time_slot_id].eq(parent_time_slots[:id])
+            ),
+            Arel::Nodes::OuterJoin)
+    ]
+  end
+
   
   def self.assign_reference_numbers(increment = 3)
       items = ProgrammeItem.all(:include => [:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ],

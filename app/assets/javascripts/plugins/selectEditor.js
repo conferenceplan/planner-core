@@ -41,4 +41,26 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
  
 });
 
+Form.editors.DependentSelect2 = Form.editors.Select2.extend({
+
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Select2.prototype.initialize.call(this, options);
+    },
+
+    render: function() {
+        this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
+
+        var self = this;
+
+        this.setValue(this.value);
+
+        setTimeout(function() {
+            self.$el.select2(self.config);
+        }, 0);
+        return this;
+    }
+
+});
+
 })(Backbone.Form);

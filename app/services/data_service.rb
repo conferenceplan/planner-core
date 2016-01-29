@@ -58,7 +58,7 @@ module DataService
   #
   #
   #
-  def self.createWhereClause(filters, integerFieldsSkipIfEmpty = [], integerFields = [], skipfields = [])
+  def self.createWhereClause(filters, integerFieldsSkipIfEmpty = [], integerFields = [], skipfields = [], integerFieldsTestNull = {})
     clause = nil
     fields = Array::new
     j = ActiveSupport::JSON
@@ -75,6 +75,15 @@ module DataService
           
           if clausestr.length > 0 
             clausestr << ' ' + queryParams["groupOp"] + ' '
+          end
+          
+          if integerFieldsTestNull.has_key? subclause['field']
+            if integerFieldsTestNull[subclause['field']] == subclause['data']
+              clausestr << subclause['field'] + lambda { return ' is null ' }.call
+              if clausestr.length > 0 
+                clausestr << ' OR '
+              end
+            end
           end
           
           # integer items (integers or select id's) need to be handled differently in the query

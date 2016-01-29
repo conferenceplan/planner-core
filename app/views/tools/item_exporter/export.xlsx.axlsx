@@ -15,6 +15,7 @@ wb.add_worksheet(name: "Items") do |sheet|
         'Room',
         'Venue',
         'Tracks',
+        'Parent',
         'Participants'
     ]
     
@@ -27,11 +28,12 @@ wb.add_worksheet(name: "Items") do |sheet|
             item.short_title,
             item.format ? item.format.name : "",
             item.duration,
-            (item.room_item_assignment ? item.room_item_assignment.time_slot.start.strftime('%A') : ""),
-            (item.room_item_assignment ? item.room_item_assignment.time_slot.start.strftime('%H:%M') : ""),
-            (item.room_item_assignment ? item.room_item_assignment.room.name : ""),
-            (item.room_item_assignment ? item.room_item_assignment.room.venue.name : ""),
-            item.tag_list_on(:PrimaryArea).join(","),
+            (item.room_item_assignment ? item.room_item_assignment.time_slot.start.strftime('%A') : (item.parent_id && item.parent.room_item_assignment ? item.parent.room_item_assignment.time_slot.start.strftime('%A') : '')),
+            (item.room_item_assignment ? item.room_item_assignment.time_slot.start.strftime('%H:%M') : (item.parent_id && item.parent.room_item_assignment ? item.parent.room_item_assignment.time_slot.start.strftime('%H:%M') : '')),
+            ((item.room_item_assignment && item.room_item_assignment.room) ? item.room_item_assignment.room.name : (item.parent_id && item.parent.room_item_assignment ? item.parent.room_item_assignment.room.name : '')),
+            ((item.room_item_assignment && item.room_item_assignment.room) ? item.room_item_assignment.room.venue.name : (item.parent_id && item.parent.room_item_assignment ? item.parent.room_item_assignment.room.venue.name : '')),
+            item.themes.collect{|t| t.theme_name.name }.join(","),
+            (item.parent_id ? item.parent.title : ''),
             item.programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
                 p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(",")
         ]

@@ -20,6 +20,7 @@ json.format_id              item.format_id if item.format
 json.format_name            item.format ? item.format.name : ""
 
 json.is_published           item.published ? true : false
+json.is_break               item.is_break
 
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A') : "" # we want this to be the number

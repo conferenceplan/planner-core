@@ -73,10 +73,15 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
         if (value) {
             var dispValue;
             if ((typeof this.schema !== 'undefined') && this.schema.date_only) {
-                dispValue = moment(value);
+                if (value.length > 10) { // 2015-02-13T00:00:00-05:00
+                    dispValue = (value.length > 0) ? moment(value.substr(0,value.length-6)) : '';
+                } else {
+                    dispValue = moment(value);
+                }
             } else {
                 dispValue = (value.length > 0) ? moment(value.substr(0,value.length-6)) : '';
             };
+
             this.picker.data("DateTimePicker").date(dispValue); // Fix for initial value ...
         }
     }

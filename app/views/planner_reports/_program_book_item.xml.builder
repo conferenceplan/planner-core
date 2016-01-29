@@ -1,6 +1,8 @@
 builder.bar do
-    builder.room item.rooms[0].name
-    builder.venue item.rooms[0].venue.name
+    if item.rooms[0]
+        builder.room item.rooms[0].name
+        builder.venue item.rooms[0].venue.name
+    end
     builder.details do
         builder.reference_number item.programme_items[0].pub_reference_number
         builder.duration item.programme_items[0].duration

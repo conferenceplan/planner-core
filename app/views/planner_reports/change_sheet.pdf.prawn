@@ -61,16 +61,20 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     pdf.text  '<b>New Items</b>', :size => 20, :inline_format => true, :fallback_fonts => fallback_fonts
 
     @changes[:new_items].each do |item_id|
-        item = PublishedProgrammeItem.find(item_id)
-
-        pdf.text  item.pub_reference_number.to_s + ' <b>' + item.title + '</b>', :inline_format => true, :fallback_fonts => fallback_fonts
-        pdf.text  item.published_room.name + ' ' + item.published_room.published_venue.name, :fallback_fonts => fallback_fonts
-        pdf.text  item.published_time_slot.start.strftime('%A') + ' ' + item.published_time_slot.start.strftime(@plain_time_format), :fallback_fonts => fallback_fonts
-        pdf.text  item.duration.to_s + ' minutes, ' + (item.format ? item.format.name : ''), :fallback_fonts => fallback_fonts
-        pdf.text  item.precis , :inline_format => true, :fallback_fonts => fallback_fonts
-        pdf.text item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
-                p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join("\n"), :fallback_fonts => fallback_fonts
-        pdf.pad_bottom(5) {pdf.text ' ', :fallback_fonts => fallback_fonts }
+        if PublishedProgrammeItem.exists?(item_id)
+            item = PublishedProgrammeItem.find(item_id)
+    
+            pdf.text  item.pub_reference_number.to_s + ' <b>' + item.title + '</b>', :inline_format => true, :fallback_fonts => fallback_fonts
+            if item.published_room
+                pdf.text  item.published_room.name + ' ' + item.published_room.published_venue.name, :fallback_fonts => fallback_fonts
+            end
+            pdf.text  item.published_time_slot.start.strftime('%A') + ' ' + item.published_time_slot.start.strftime(@plain_time_format), :fallback_fonts => fallback_fonts
+            pdf.text  item.duration.to_s + ' minutes, ' + (item.format ? item.format.name : ''), :fallback_fonts => fallback_fonts
+            pdf.text  item.precis , :inline_format => true, :fallback_fonts => fallback_fonts
+            pdf.text item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
+                    p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join("\n"), :fallback_fonts => fallback_fonts
+            pdf.pad_bottom(5) {pdf.text ' ', :fallback_fonts => fallback_fonts }
+        end
     end
     
     pdf.text  '<b>Removed People</b>', :size => 20, :inline_format => true, :fallback_fonts => fallback_fonts

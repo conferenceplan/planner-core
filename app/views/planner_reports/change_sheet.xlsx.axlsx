@@ -99,8 +99,8 @@ wb.add_worksheet(name: "New Items") do |sheet|
         item = PublishedProgrammeItem.find(item_id)
 
         sheet.add_row [
-            item.published_room.name,
-            item.published_room.published_venue.name,
+            item.published_room ? item.published_room.name : '',
+            item.published_room ? item.published_room.published_venue.name : '',
             item.pub_reference_number,
             item.duration,
             item.format ? item.format.name : '',
