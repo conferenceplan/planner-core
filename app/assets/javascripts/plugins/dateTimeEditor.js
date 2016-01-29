@@ -81,6 +81,8 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
             } else {
                 dispValue = (value.length > 0) ? moment(value.substr(0,value.length-6)) : '';
             };
+
+            this.picker.data("DateTimePicker").date(dispValue); // Fix for initial value ...
         }
     }
 }, {
