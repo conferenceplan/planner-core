@@ -18,9 +18,11 @@ module Planner
 
       if session[:locale]
         def_locale = session[:locale]
+      else
+        def_locale = I18n.default_locale
       end
       
-      I18n.locale = (params[:locale] && params[:locale].size > 0)? params[:locale] : I18n.default_locale #def_locale #I18n.default_locale
+      I18n.locale = (params[:locale] && params[:locale].size > 0)? params[:locale] : def_locale
 
       session[:locale] = I18n.locale
     end
