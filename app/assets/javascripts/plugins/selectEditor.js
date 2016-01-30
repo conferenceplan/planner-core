@@ -58,6 +58,9 @@ Form.editors.DependentSelect2 = Form.editors.Select2.extend({
         setTimeout(function() {
             self.$el.select2(self.config);
         }, 0);
+
+        this.dependInit(this.form);
+
         return this;
     }
 

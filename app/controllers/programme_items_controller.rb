@@ -71,7 +71,7 @@ class ProgrammeItemsController < PlannerController
         if @programmeItem.save
           if (startDay.to_i > -1) && startTime #&& (roomId.to_i > 0)
             room = nil
-            room = Room.find(roomId) if roomId.to_i > 0
+            room = Room.find(roomId) if roomId.to_i > 0 && !@programmeItem.is_break
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           end
         end
@@ -117,7 +117,7 @@ class ProgrammeItemsController < PlannerController
           
           if (startDay.to_i > -1) && startTime #&& (roomId.to_i > 0)
             room = nil
-            room = Room.find(roomId) if roomId.to_i > 0
+            room = Room.find(roomId) if roomId.to_i > 0 && !@programmeItem.is_break
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           else
             if (@programmeItem.room_item_assignment)
@@ -173,17 +173,22 @@ class ProgrammeItemsController < PlannerController
     limit = params[:limit] ? params[:limit].to_i : nil
     offset = params[:offset] ? params[:offset].to_i : nil
     search = params[:search] ? params[:search] : nil
+    include_breaks = params[:no_breaks] == nil
 
     sort_by = params[:sort] ? params[:sort] : 'title'
     sort_order = params[:order] ? params[:order] : 'asc'
 
     if search
-      @total = ProgrammeItem.where(["parent_id is null AND title like ?", '%' + search + '%']).count
-      @items = ProgrammeItem.where(["parent_id is null AND title like ?", '%' + search + '%']).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+      query = ["parent_id is null AND is_break is false AND title like ?", '%' + search + '%'] 
+      query = ["parent_id is null AND title like ?", '%' + search + '%'] if include_breaks
     else
-      @total = ProgrammeItem.where(["parent_id is null"]).count
-      @items = ProgrammeItem.where(["parent_id is null"]).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+      query = ["parent_id is null AND is_break is false"]
+      query = ["parent_id is null"] if include_breaks
     end
+
+    @total = ProgrammeItem.where(query).count
+    @items = ProgrammeItem.where(query).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+
   end
   
   #
@@ -308,8 +313,12 @@ private
 
   def _after_save(item)
     if item.respond_to? :update_themes
-      theme_names = params[:theme_name_ids].split(",") # comma seperated list, split into ids
-      item.update_themes theme_names
+      if !item.is_break
+        theme_names = params[:theme_name_ids].split(",") # comma seperated list, split into ids
+        item.update_themes theme_names
+      else  
+        item.update_themes []
+      end
     end
   end
 

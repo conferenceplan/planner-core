@@ -46,12 +46,28 @@ class ProgrammeItem < ActiveRecord::Base
     end
   end
 
-  before_save :check_parent
+  before_save :check_parent, :sanitize_for_break
 
   protected
   
+  def sanitize_for_break
+    if self.is_break
+      self.parent_id = nil # ensure no parent/child
+      self.format_id = nil # no format
+
+      self.programme_item_assignments.destroy_all # ensure no people
+
+      # self.room_item_assignment.destroy if self.room_item_assignment # ensure no room...
+    end
+  end
+  
   def check_parent
     raise "can not set an item as a parent of itself" if self.id && (self.id == self.parent_id)
+    raise "can not set an item as a child of a child" if self.id && self.parent_id && self.parent.parent_id
+    raise "can not have an parent for an item that is also a parent" if self.id && self.parent_id && (self.children.size > 0)
+    raise "can not be a child of a break" if self.id && self.parent_id && self.parent.is_break
+    raise "break can not have a parent" if self.id && self.parent_id && self.is_break
+    raise "break can not be a parent" if self.id && (self.children.size > 0) && self.is_break
   end
 
 end

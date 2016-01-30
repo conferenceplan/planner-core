@@ -16,9 +16,9 @@ _.extend(Form.Editor.prototype, {
 
     setInitValue : function(element, value, expectedValues) {
         if ( ( value != null) && ($.inArray(value.toString(), expectedValues) > -1) ) {
-            element.removeClass('hidden-form-group');
+            element.first().removeClass('hidden-form-group');
         } else {
-            element.addClass('hidden-form-group');
+            element.first().addClass('hidden-form-group');
         }
     },
     

@@ -48,7 +48,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label"><%= t "item-is-break" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-is-break" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-is-break-hint" %>'></i></label>
                     <div class="col-sm-1">
-                        <div data-editors="is_break" class="inline-checkbox" onclick="hideNonBreakDiv(this);"></div>
+                        <div data-editors="is_break" class="inline-checkbox"></div>
                     </div>
                 </div>
             </div>
@@ -110,6 +110,7 @@
                     </div>
             </div>
             <div class="row">
+
                     <div class="form-group col-sm-3">
                         <span data-editor>
                                 <label><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
@@ -138,10 +139,12 @@
                         <span data-editor>
                                 <label class="item-form-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
                                 <div data-editors="audience_size"></div>
+                                <div class="has-error">
+                                    <p class="help-block" data-error></p>
+                                </div>
                         </span>
                     </div>
-            </div>
-            <div class="row">
+
                     <div class="form-group col-sm-3">
                         <span data-editor>
                             <label><%= t "item-format" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-format" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-format-help" %>'></i></label>

@@ -79,7 +79,7 @@ Rails.application.routes.draw do
   # Programme Items
   #
   match 'programme_items/drop',           :controller => 'programme_items', :action => 'drop',                        :method => 'get'
-  match 'programme_items/list',           :controller => 'programme_items', :action => 'list',         :defaults => { :format => 'json' }
+  match 'programme_items/list(/:no_breaks)',           :controller => 'programme_items', :action => 'list',         :defaults => { :format => 'json' }
   match 'programme_items/getList',        :controller => 'programme_items', :action => 'getList',                     :method => 'post'
   match 'programme_items/get_children',   :controller => 'programme_items', :action => 'get_children', :method => 'post', :defaults => { :format => 'json' }
 
