@@ -211,7 +211,12 @@ class PublishJob
         newRoom = nil
         newRoom = publishRoom(srcItem.room) if srcItem.room
         if newItem.published_room_item_assignment
-          newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
+          if newRoom
+            newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
+          else
+            newItem.published_room_item_assignment.published_room = nil
+            newItem.published_room_item_assignment.save
+          end
           
           # Only need to copy time if the new time slot is more recent than the published
           if newItem.published_time_slot != nil
