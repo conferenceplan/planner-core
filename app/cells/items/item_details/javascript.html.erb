@@ -11,6 +11,16 @@ function showShortDescriptionDiv(el) {
     }
 };
 
+function set_theme(mdl, arg) {
+    if (mdl) {
+        var el = $("[name='theme_name_ids']");
+        var data = el.select2('data');
+        data.push({'id' : mdl.id, 'text' : mdl.get('name')});
+        el.select2('data',data);
+        el.select2('close');
+    }
+};
+
 ItemApp = new Backbone.Marionette.Application();
 
 ItemApp.ItemManagement = (function(Backbone){
@@ -36,7 +46,7 @@ ItemApp.ItemManagement = (function(Backbone){
     ProgramItem = Backbone.RelationalModel.extend({
         schema : {
             title       : { type : 'Text', title : '<%= t "title" %>' },
-            theme_name_ids  : { type : 'DependentSelect2', title : '<%= t "themes" %>',
+            theme_name_ids  : { type : 'DependentSelect2', title : '<%= t "themes" %>', fieldClass : 'item-theme',
                                 dependsOn : 'is_break', dependentValues : ['false'],
                                         config : {
                                             multiple: true,
@@ -55,7 +65,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                                 return obj.text;
                                             },
                                             formatNoMatches : function(term) {
-                                                return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + term + '\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
+                                                return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + term + '\', set_theme, \'item-theme\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
                                             },
                                             ajax : {
                                                 url : "<%= baseUri %>/theme_names",
