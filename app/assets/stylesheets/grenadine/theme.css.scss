@@ -920,7 +920,10 @@ p.help-block {
     font-size: 12px;
 }
 
-
+// Only for datetime picker for items ....
+.form-horizontal.item-form .day:not(.disabled) {
+    background: lightblue none repeat scroll 0 0;
+}
 
 /* Callouts */
 
