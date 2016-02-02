@@ -1,1 +1,1 @@
-/planner-core/db/schema.rb
+../../../db/schema.rb
