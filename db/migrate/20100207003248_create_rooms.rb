@@ -6,6 +6,7 @@ class CreateRooms < ActiveRecord::Migration
 
       t.text :string
       t.integer :capacity # what if capacity changes depending on layout?
+      t.integer :sort_order, :integer, { :default => 0 }
 
       t.timestamps
       t.column :lock_version, :integer, { :default => 0 }
