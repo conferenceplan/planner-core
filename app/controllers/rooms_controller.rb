@@ -25,12 +25,7 @@ class RoomsController < PlannerController
   #
   #
   def index
-    tenant = nil # Object.const_defined?(ActsAsTenant) ? ActsAsTenant.current_tenant : nil
-    if tenant
-      rooms = Room.unscoped.where({:conference_id => tenant}).includes(:venue).order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
-    else
-      rooms = Room.unscoped.includes(:venue).order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
-    end
+    rooms = Room.unscoped.includes(:venue).order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
 
     render json: rooms.to_json, :content_type => 'application/json'
   end
