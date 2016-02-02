@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
-
-one:
-  last_run: 2014-04-19 11:49:15
-  job_name: MyString
-
-two:
-  last_run: 2014-04-19 11:49:15
-  job_name: MyString

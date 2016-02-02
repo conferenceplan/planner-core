@@ -1,0 +1,13 @@
+#
+
+fr:
+  hello: "Bonjour"
+  en   : "Anglais"
+  fr   : "Français"
+  planner: 
+    core:
+      messages:
+        no-parent: 'aucun'
+      errors:
+        must-be-a-positive-number: 'Doit être un nombre positif.'
+        unique-mailing-error: "La combinaison <b>Référence d'envoi</b> et <b>Gabarit</b> doit être unique."
