@@ -35,7 +35,7 @@ ThemeApp.Mgmt = (function(Backbone){
 })(Backbone);
 
 jQuery(document).ready(function() {
-    moment.lang('<%= I18n.locale %>');
+    moment.locale('<%= I18n.locale %>');
     ThemeApp.addInitializer(ThemeApp.Mgmt.init);
     ThemeApp.start();
 });
