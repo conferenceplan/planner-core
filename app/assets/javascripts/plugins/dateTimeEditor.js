@@ -29,8 +29,15 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
         this.setElement($el);
         
         var element = this.$el;
-        
+        var default_date = this.schema.defaultDate;
         this.picker = element.find('.datetimefield').datetimepicker(this.schema.picker);
+        var picker = this.picker;
+        
+        picker.on('dp.show', function(e) {
+            if (typeof default_date != 'undefined') {
+                element.find('.datetimefield').data("DateTimePicker").defaultDate(moment(default_date));
+            }
+        });
         this.setInitialValue(this.value);
         
         return this;

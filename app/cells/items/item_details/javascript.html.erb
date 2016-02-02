@@ -113,15 +113,16 @@ ItemApp.ItemManagement = (function(Backbone){
                 ]
              },
             start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
-                    editorClass : 'item-form-element',
-                    tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
-                    picker : {
-                        locale : "<%= I18n.locale %>",
-                        stepping : 5,
-                        format : "DD MMM YYYY, HH:mm",
-                        useCurrent: false,
-                        minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days - 1.seconds).strftime('%m/%d/%Y %H:%M:%S') %>"
+                editorClass : 'item-form-element',
+                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                defaultDate: "<%= Time.zone.parse((@start_date.start_date +  + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                picker : {
+                    locale : "<%= I18n.locale %>",
+                    stepping : 5,
+                    format : "DD MMM YYYY, HH:mm",
+                    useCurrent: false,
+                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days - 1.seconds).strftime('%m/%d/%Y %H:%M:%S') %>"
                 },
                 validators: [
                     function check_for_room(value, formValues) {
