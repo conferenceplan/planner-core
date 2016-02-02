@@ -9,13 +9,13 @@ require 'devise'
 require 'bootstrap-sass'
 require 'cells'
 require 'ckeditor_rails'
-#require "authority" 
+#require "authority"
 require 'declarative_authorization'
 require 'deep_cloneable'
-require 'i18n' 
+require 'i18n'
 require 'jbuilder'
 require 'jpbuilder'
-require 'mysql2' 
+require 'mysql2'
 require 'time_diff'
 require 'turbolinks'
 require 'will_paginate'
@@ -32,7 +32,7 @@ require 'prawn_rails'
 require 'prawn/table'
 require "select2-rails"
 require "recaptcha/rails" # ????
-require "recaptcha" 
+require "recaptcha"
 require 'carrierwave'
 require 'cloudinary'
 require 'dalli'
@@ -69,7 +69,7 @@ module PlannerCore
       end
       Dir.glob(PlannerCore::Engine.config.paths["lib"].expanded[0] + "/planner/**/*.rb").each do |c|
         require_dependency(c)
-      end      
+      end
     end
 
     # RAILS 3 mechanism so parent app use the migrations in this engine
@@ -87,14 +87,14 @@ module PlannerCore
         require_dependency(c)
       end
     end
-    
+
     #
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
 
     initializer :before_initialize do
       ActionController::Base.send(:include, Planner::ControllerAdditions)
       Cell::Rails.send(:include, Planner::ControllerAdditions)
-    end    
+    end
 
     initializer :after_initialize do
       Cell::Rails.prepend_view_path(PlannerCore::Engine.config.paths["app/views"].expanded[0])

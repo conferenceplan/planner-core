@@ -1,0 +1,1 @@
+/planner-core/db/schema.rb

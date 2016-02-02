@@ -39,4 +39,6 @@ config/secrets.yml
 config/database.yml
 log/**/*
 tmp/**/*
+/spec/dummy/log
+/spec/dummy/tmp
 
