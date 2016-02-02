@@ -171,9 +171,9 @@ ItemApp.ItemManagement = (function(Backbone){
                         }                
             },
             item_notes : { type : 'DependentTextArea', 
-                            dependsOn : 'is_break', dependentValues : ['false'],
-                            title : '<%= t "item-notes" %>', editorClass : 'item-form-element', editorAttrs: { rows : 2, cols : 60 } },
-            participant_notes : { type : 'DependentTextArea', editorClass : 'item-form-element',
+                            dependsOn : 'is_break', dependentValues : ['false'], 
+                            title : '<%= t "item-notes" %>', editorClass : 'item-form-element notes-text-area note-small', editorAttrs: { rows : 2, cols : 60 } },
+            participant_notes : { type : 'DependentTextArea', editorClass : 'item-form-element notes-text-area note-small',
                         dependsOn : 'is_break', dependentValues : ['false'],
                         title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60 } },
             format_id : { type : 'DependentSelect',

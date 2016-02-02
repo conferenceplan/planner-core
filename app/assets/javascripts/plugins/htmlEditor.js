@@ -40,20 +40,20 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
                 // Maximum allowed Char Count, -1 is default for unlimited
                 maxCharCount: -1
             },
-            height : '5em',
+            height : '7em',
             enterMode : CKEDITOR.ENTER_BR,
             shiftEnterMode: CKEDITOR.ENTER_P,
             toolbar : 'CPlan',
             toolbar_CPlan : [
                 { name: 'document', items : [ 'Source' ] },
-                { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+                { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Superscript','-','RemoveFormat' ] },
                 { name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Blockquote' ] }, //'Outdent','Indent','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock',,'-','BidiLtr','BidiRtl'
-                { name: 'links', items : [ 'Link','Unlink','Anchor' ] },
-                { name: 'insert', items : [ 'HorizontalRule', 'SpecialChar' ] }, // 'Image', 'Table',
+                { name: 'links', items : [ 'Link','Unlink' ] }, //'Anchor'
+                //{ name: 'insert', items : [ 'HorizontalRule', 'SpecialChar' ] }, // 'Image', 'Table',
                 // '/',
                 // { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
                 // { name: 'colors', items : [ 'TextColor','BGColor' ] },
-                { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] }
+                { name: 'tools', items : [ 'Maximize' ] } //, 'ShowBlocks','-','About'
             ]
         });
     },
