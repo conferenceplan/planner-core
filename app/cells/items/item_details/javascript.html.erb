@@ -21,6 +21,23 @@ function set_theme(mdl, arg) {
     }
 };
 
+function toggleItemExtras(el) {
+	if (!jQuery('input[name="is_break"]').is(":checked")){
+		$extras = jQuery("#programme-item-extras");
+		$el = jQuery(el);
+		if ($extras.length > 0){
+			$extras.toggle();
+			if ($extras.is(":visible")){
+				$el.removeClass("fa-plus-square");
+				$el.addClass("fa-minus-square");
+			} else {
+				$el.removeClass("fa-minus-square");
+				$el.addClass("fa-plus-square");
+			}
+		}
+	}
+};
+
 ItemApp = new Backbone.Marionette.Application();
 
 ItemApp.ItemManagement = (function(Backbone){
