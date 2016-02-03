@@ -123,6 +123,7 @@
                     </span>
                 </div>
             </div>
+            <div class="voffset10"></div>
             <div class="row item-section-title">
                 <h3><%= t 'scheduling' %></h3>
             </div>
@@ -150,16 +151,9 @@
                             </div>
                         </div>
                     </span>
-                </div>
-            </div>
-            <div id="item-planning-title" class="row item-section-title">
-                <h3><%= t 'planning' %></h3>
-            </div>
-            <div class="row">
-                <div class="form-group" style="margin-bottom: 3px;">
                     <span data-editor>
-                        <label  class="col-sm-3 control-label"><%= t "item-setup" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-setup" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-setup-help" %>'></i></label>
-                        <div class="col-sm-4">
+                        <label  class="col-sm-2 control-label"><%= t "item-setup-short" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-setup" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-setup-help" %>'></i></label>
+                        <div class="col-sm-3">
                             <div data-editors="setup_type_id"></div>
                             <div class="has-error">
                                 <p class="help-block" data-error></p>
@@ -167,6 +161,9 @@
                         </div>
                     </span>
                 </div>
+            </div>
+            <div id="item-planning-title" class="row item-section-title">
+                <h3><%= t 'planning' %></h3>
             </div>
             <div class="row">
                 <div class="form-group" style="margin-bottom: 0;">
@@ -199,6 +196,7 @@
                     </div>
                 </div>
             </div>
+            <div class="voffset10"></div>
             <div class="row item-section-title">
                 <h3><%= t 'options' %></h3>
             </div>
