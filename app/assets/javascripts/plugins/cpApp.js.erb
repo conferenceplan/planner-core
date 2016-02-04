@@ -332,6 +332,7 @@ var AppUtils = (function(){
         events: {
             "submit": "submit",
             "hidden": "close",
+            "click .close-modal": "close_modal",
             "keypress" : "swallow"
         },
         
@@ -400,7 +401,7 @@ var AppUtils = (function(){
             });
         },
         
-        close: function (e) {
+        close_modal: function (e) {
             this.removeCK();
             this.remove();
             this.unbind();
@@ -507,6 +508,7 @@ var AppUtils = (function(){
             
             return errors; // if there are any errors
         }
+
     });
 
     /*
@@ -531,7 +533,6 @@ var AppUtils = (function(){
 
         progress : function(e, ctx) {
             var percent = Math.round(e * 100.0);
-            console.debug(percent);
             this.$el.find('.progress-bar').css('width', percent + '%');
         }
     });
