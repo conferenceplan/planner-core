@@ -269,7 +269,6 @@ $.widget( "cp.baseTable" , {
                             control.parent_id = null;
                             control.subgrid_page = 1;
                             control.current_grid = null;
-                            // control.subgrid_rows = 10;
                         }
                     }
 

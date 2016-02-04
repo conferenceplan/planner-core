@@ -190,7 +190,7 @@ var TabUtils = (function(){
         },
         
         refreshList : function() {
-            this.collection.fetch({});
+            this.collection.deferred = this.collection.fetch({});
         }
     });
     
@@ -262,7 +262,7 @@ var TabUtils = (function(){
             showSpinner(options.place);
             
             detail = new options.modelType();
-            detail.fetch({
+            detail.deferred = detail.fetch({
                 url : options.url,
                 async:false,
                 success : function(model) {
@@ -364,7 +364,7 @@ var TabUtils = (function(){
         if (!options.collection) {
             collection = new options.collectionType();
             collection.url = options.url;
-            collection.fetch({
+            collection.deferred = collection.fetch({
                 success : function(col) {
                     viewType = TabCollectionView.extend({
                         initialize : function(options) {
@@ -415,7 +415,7 @@ var TabUtils = (function(){
     tabModule.createTagCloudContent = function createTagCloudContent(options) {
         collection = new options.collectionType();
         collection.url = options.url;
-        collection.fetch({
+        collection.deferred = collection.fetch({
             success : function(col) {
                 viewType = TabCollectionView.extend({
                     attributes : options.collection_attributes,
@@ -450,7 +450,7 @@ var TabUtils = (function(){
         if (!options.collection) {
             collection = new options.collectionType();
             collection.url = options.url;
-            collection.fetch({
+            collection.deferred = collection.fetch({
                 success : function(col) {
                     viewType = TabCollectionView.extend({
                         attributes : options.collection_attributes,

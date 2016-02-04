@@ -402,7 +402,7 @@ ItemApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
-    var tabContent = [];
+    var tabContent = {};
     var filters = null;
     var itemTabLayout = null;
     
@@ -423,8 +423,6 @@ ItemApp.ItemManagement = (function(Backbone){
 
         eventAggregator.off("refreshTagList", syncModel);
         
-        _.invoke(tabContent, 'clear' );
-        
         current_item = null;
     };
     
@@ -436,105 +434,105 @@ ItemApp.ItemManagement = (function(Backbone){
             $('#selected-program-item').html(data['item[title]']);
         }
 
-        var itemMdl = TabUtils.createTabContent({
-            modelType : ProgramItem,
+        var itemMdl = null;
+        if (tabContent[id]) {
+            itemMdl = tabContent[id];
+        } else {
+            itemMdl = new ProgramItem;
+        };
+
+        itemMdl.deferred = itemMdl.fetch({
             url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
-            template : '#program-participants-view-template',
-            region : itemTabLayout.participants,
-            id : id,
-            id_name : 'programme_item_id',
-            editTitle : "Edit Item",
-            updateCallback : function(mdl) {
-                // 1. we need to refresh the row in the table (or the current table)
-                // and make sure that the row is selected
-                // Also need to update the title above the tabs
-                $("#items").jqGrid('setGridParam', {
-                    loadComplete: function(data) {
-                        // alert("dd");
-                        $("#items").jqGrid('setSelection', id); // when load is complete the selection is called...
-                        // load complete is called every time... only want it once, so remove it after it has been used...
-                        $(this).jqGrid('setGridParam', { loadComplete: function() {} });
+            async: true,
+        }).done(function() {
+                // tabContent.push( itemMdl );
+                tabContent[itemMdl.id] = itemMdl;
+
+                TabUtils.createTabContent({
+                    model : itemMdl,
+                    template : '#program-participants-view-template',
+                    region : itemTabLayout.participants,
+                    id : id,
+                    id_name : 'programme_item_id',
+                    editTitle : "Edit Item",
+                    events : {
+                        'click .add-people-button' : function() {
+                            model = itemMdl;
+                            modal = new AppUtils.PanelModal({
+                                title : "<%= escape_javascript(t 'add-people') %>",
+                                url   : "<%= baseUri + '/panels/item_mgmt?prog_item=' %>" + itemMdl.id,
+                                title : '<%= t "add-people" %>',
+                                closeCheck : function() {
+                                    var res = document.getElementById('modal-iframe').contentWindow.ItemApp.PeopleManagement.needsSaved();
+                                    return res;
+                                },
+                                closeAction : function() {
+                                    itemMdl.fetch();
+                                }
+                            });
+                            modal.render();
+                        }
                     }
                 });
-                $("#items").trigger("reloadGrid");
-            },
-            events : {
-                'click .add-people-button' : function() {
-                    model = this.model;
-                    modal = new AppUtils.PanelModal({
-                        title : "<%= escape_javascript(t 'add-people') %>",
-                        url   : "<%= baseUri + '/panels/item_mgmt?prog_item=' %>" + model.id,
-                        title : '<%= t "add-people" %>',
-                        closeCheck : function() {
-                            var res = document.getElementById('modal-iframe').contentWindow.ItemApp.PeopleManagement.needsSaved();
-                            return res;
-                        },
-                        closeAction : function() {
-                            model.fetch();
-                        }
-                    });
-                    modal.render();
-                }
-            }
-        });
-        tabContent.push( itemMdl );
+                
+                mdl = TabUtils.createTabContent({
+                    model : itemMdl,
+                    url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
+                    template : '#program-item-summary-view-template',
+                    region : itemTabLayout.program_item,
+                    id : id,
+                    id_name : 'programme_item_id',
+                });
+                
+                itemTabLayout.images.show(new ItemImageView({model : itemMdl}) );
+                
+                TabUtils.createTabControl({
+                    template : "#equipment-control-template",
+                    modelType : Equipment,
+                    id : id, // need to pass in the name of the id field
+                    id_name : 'programme_item_id',
+                    view_refresh_event : "equipment:refresh",
+                    modal_create_title : '<%= t "create-equipment-needs" %>',
+                    region : itemTabLayout.equipment_ctl
+                });
+                TabUtils.createTabListContent({
+                    collectionType : EquipmentCollection,
+                    url : "<%= baseUri + '/programme_items/' %>" + id + "/equipment_needs.json",
+                    template : "#equipment-detail-template",
+                    view_refresh_event : "equipment:refresh",
+                    region : itemTabLayout.equipment,
+                    newTitle : '<%= t "equipment-create-equipment" %>',
+                    editTitle : '<%= t "equipment-edit-equipment" %>',
+                });
+                TabUtils.createTagListContent({
+                    collectionType : TagContextCollection,
+                    url : "<%= baseUri + '/tags/' %>" + id + "?class=ProgrammeItem",
+                    tagUrl : "<%= baseUri + '/tags/' %>"+ id + "/add?class=ProgrammeItem",
+                    template : "#tag-context-layout-template",
+                    // view_refresh_event : "address:refresh",
+                    region : itemTabLayout.tags,
+                    addTitle : '<%= t "create-tag" %>',
+                });
         
-        tabContent.push( TabUtils.createTabContent({
-            model : itemMdl,
-            url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
-            template : '#program-item-summary-view-template',
-            region : itemTabLayout.program_item,
-            id : id,
-            id_name : 'programme_item_id',
-        }) );
-
-        itemTabLayout.images.show(new ItemImageView({model : itemMdl}) );
+                //initialize the popovers
+                $(function () {
+                    $('.bpopover').popover({
+                        html: true,
+                        viewport: { selector: 'body', padding: 0 },
+                        container: 'body',
+                    })
+                });
+                
+                eventAggregator.on("refreshTagList", syncModel, itemMdl);
         
-        TabUtils.createTabControl({
-            template : "#equipment-control-template",
-            modelType : Equipment,
-            id : id, // need to pass in the name of the id field
-            id_name : 'programme_item_id',
-            view_refresh_event : "equipment:refresh",
-            modal_create_title : '<%= t "create-equipment-needs" %>',
-            region : itemTabLayout.equipment_ctl
-        });
-        TabUtils.createTabListContent({
-            collectionType : EquipmentCollection,
-            url : "<%= baseUri + '/programme_items/' %>" + id + "/equipment_needs.json",
-            template : "#equipment-detail-template",
-            view_refresh_event : "equipment:refresh",
-            region : itemTabLayout.equipment,
-            newTitle : '<%= t "equipment-create-equipment" %>',
-            editTitle : '<%= t "equipment-edit-equipment" %>',
-        });
-        TabUtils.createTagListContent({
-            collectionType : TagContextCollection,
-            url : "<%= baseUri + '/tags/' %>" + id + "?class=ProgrammeItem",
-            tagUrl : "<%= baseUri + '/tags/' %>"+ id + "/add?class=ProgrammeItem",
-            template : "#tag-context-layout-template",
-            // view_refresh_event : "address:refresh",
-            region : itemTabLayout.tags,
-            addTitle : '<%= t "create-tag" %>',
+                selectCallbacks.fire({
+                    id : id,
+                    model : itemMdl
+                });
+
+            current_item = itemMdl;
         });
 
-        //initialize the popovers
-        $(function () {
-            $('.bpopover').popover({
-                html: true,
-                viewport: { selector: 'body', padding: 0 },
-                container: 'body',
-            })
-        });
-        
-        eventAggregator.on("refreshTagList", syncModel, itemMdl);
-
-        selectCallbacks.fire({
-            id : id,
-            model : itemMdl
-        });
-
-        current_item = itemMdl;
         return itemMdl;
     };
 
