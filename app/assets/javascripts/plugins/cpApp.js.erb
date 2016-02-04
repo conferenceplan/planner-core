@@ -33,6 +33,7 @@ var AppUtils = (function(){
         className: "modal bs-modal-lg",
         events: {
             "submit"            : "submit",
+            "click .close-modal": "hide",
             "hidden.bs.modal"   : "hide",
             "keypress"          : "swallow"
         },
@@ -112,7 +113,8 @@ var AppUtils = (function(){
         className: "modal bs-modal-lg fade",
         events: {
             "submit": "submit",
-            "hidden": "hide",
+            //"hidden": "hide",
+            "click .close-modal": "hide",
             "click .abandon" : "abandon"
         },
         
