@@ -256,7 +256,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     });
 
     var tabLists = [];
-    var tabContent = [];
+    var tabContent = {};
     var filters = null;
     var personTabLayout = null;
 
@@ -278,8 +278,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         };
         
         eventAggregator.off("refreshTagList", syncModel);
-        
-        _.invoke(tabContent, 'clear' );
     };
 
     function syncModel() {
@@ -331,6 +329,29 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
         return res;
     };
+    
+    var reg_detail_objs = {};
+    var invite_detail_objs = {};
+    var bio_detail_objs = {};
+    var bio_pic_objs = {};
+    var availability_objs = {};
+    
+    function instantiate_area(id, object_type, url, instances) {
+        var obj = null;
+        if (instances[id]) {
+            obj = instances[id];
+        } else {
+            obj = new object_type();
+            instances[id] = obj;
+        };
+
+        obj.deferred = obj.fetch({
+            url : url,
+            async: true,
+        });
+        
+        return obj;
+    };
 
     function showRegDetails(id) {
         var data = jQuery("#participants").jqGrid('getRowData', id);
@@ -345,80 +366,83 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             person_id : id
         });
 
-        TabUtils.createTabContent({
-            modelType : RegistrationDetail,
-            url : "<%= baseUri + '/participants/' %>" + id + "/registrationDetails.json",
-            template : '#registration-view-template',
-            region : summaryLayout.registration,
-            id : id,
-            id_name : 'person_id',
-            newTitle : '<%= t "create-registration" %>',
-            editTitle : '<%= t "edit-registration" %>',
-            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
-            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
+        var reg_details = instantiate_area(id, RegistrationDetail, "<%= baseUri + '/participants/' %>" + id + "/registrationDetails.json", reg_detail_objs);
+        reg_details.deferred.done(function() {
+            TabUtils.createTabContent({
+                model : reg_details,
+                template : '#registration-view-template',
+                region : summaryLayout.registration,
+                id : id,
+                id_name : 'person_id',
+                newTitle : '<%= t "create-registration" %>',
+                editTitle : '<%= t "edit-registration" %>',
+                deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+                deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
+            });
+        });
+
+        var invite_details = instantiate_area(id, InviteDetails, "<%= baseUri + '/participants/' %>" + id + ".json", invite_detail_objs);
+        invite_details.deferred.done(function() {
+            TabUtils.createTabContent({
+                model : invite_details,
+                modal_template : "#person-form-template",
+                template : '#invite-view-template',
+                region : summaryLayout.identity,
+                id : id,
+                id_name : 'person_id',
+                newTitle : '<%= t "create-invite" %>',
+                editTitle : '<%= t "edit-invite" %>',
+                events : {
+                    'click .model-generate-invite-key-button' : function() {
+                        mdl = this.model;
+                        $.ajax({
+                            url : "<%= baseUri + '/participants/generateInviteKey/' %>" + id + ".json",
+                            success : function() {
+                                mdl.fetch();
+                            }
+                        })
+                    }
+                }
+            });
+
+            selectCallbacks.fire({
+                id : id,
+                model : invite_details
+            });
         });
         
-        var invite_details = TabUtils.createTabContent({
-            modelType : InviteDetails,
-            modal_template : "#person-form-template",
-            url : "<%= baseUri + '/participants/' %>" + id + ".json",
-            template : '#invite-view-template',
-            region : summaryLayout.identity,
-            id : id,
-            id_name : 'person_id',
-            newTitle : '<%= t "create-invite" %>',
-            editTitle : '<%= t "edit-invite" %>',
-            updateCallback : function(mdl) {
-                $("#participants").jqGrid('setGridParam', {
-                    loadComplete: function(data) {
-                        $("#participants").jqGrid('setSelection', id); // when load is complete the selection is called...
-                        $(this).jqGrid('setGridParam', { loadComplete: function() {} });
-                    }
-                });
-                $("#participants").trigger("reloadGrid");
-            },
-            events : {
-                'click .model-generate-invite-key-button' : function() {
-                    mdl = this.model;
-                    $.ajax({
-                        url : "<%= baseUri + '/participants/generateInviteKey/' %>" + id + ".json",
-                        success : function() {
-                            mdl.fetch();
-                        }
-                    })
-                }
-            }
-        });
-        tabContent.push( invite_details );
-
         publishedInfoLayout = new PublishedInfoLayout();
         personTabLayout.published_info.show(publishedInfoLayout);
+
+        var bio_details = instantiate_area(id, BioDetails, "<%= baseUri + '/participants/' %>" + id + "/edited_bios.json", bio_detail_objs);
+        bio_details.deferred.done(function() {
+            TabUtils.createTabContent({
+                model : bio_details,
+                template : '#bio-view-template',
+                region : publishedInfoLayout.bio,
+                id : id,
+                id_name : 'person_id',
+                newTitle : '<%= t "create-bio" %>',
+                editTitle : '<%= t "edit-bio" %>',
+                deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+                deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
+            });
+        });
         
-        tabContent.push( TabUtils.createTabContent({
-            modelType : BioDetails,
-            url : "<%= baseUri + '/participants/' %>" + id + "/edited_bios.json",
-            template : '#bio-view-template',
-            region : publishedInfoLayout.bio,
-            id : id,
-            id_name : 'person_id',
-            newTitle : '<%= t "create-bio" %>',
-            editTitle : '<%= t "edit-bio" %>',
-            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
-            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
-        }) );
-        
-        tabContent.push( TabUtils.createTabContent({
-            modelType : BioPicture,
-            url : "<%= baseUri + '/participants/' %>" + id + "/bio_images.json",
-            template : '#bio-image-template',
-            region : publishedInfoLayout.picture,
-            id : id,
-            id_name : 'person_id',
-            newTitle : '<%= t "create-bio-image" %>',
-            editTitle : '<%= t "edit-bio-image" %>',
-            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
-            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
-        }) );
+        var bio_pics = instantiate_area(id, BioPicture, "<%= baseUri + '/participants/' %>" + id + "/bio_images.json", bio_pic_objs);
+        bio_pics.deferred.done(function() {
+            TabUtils.createTabContent({
+                model : bio_pics,
+                template : '#bio-image-template',
+                region : publishedInfoLayout.picture,
+                id : id,
+                id_name : 'person_id',
+                newTitle : '<%= t "create-bio-image" %>',
+                editTitle : '<%= t "edit-bio-image" %>',
+                deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+                deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
+            });
+        });
         
         TabUtils.createTabListContent({
             collectionType : ProgramItemCollection,
@@ -441,19 +465,20 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         //
         // get the exclusions and show them within the layout
         //
-        tabContent.push( TabUtils.createTabContent({
-            modelType : AvailabilityDateModel,
-            url : "<%= baseUri + '/participants/' %>" + id + '/available_dates.json',
-            template : '#date-exclusion-view-template',
-            region : personTabLayout.availability,
-            id : id,
-            id_name : 'person_id',
-            newTitle : '<%= t "create-availability" %>',
-            editTitle : '<%= t "edit-availability" %>',
-            deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
-            deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
-        }) );
-
+        var availability = instantiate_area(id, AvailabilityDateModel, "<%= baseUri + '/participants/' %>" + id + '/available_dates.json', availability_objs);
+        availability.deferred.done(function() {
+            TabUtils.createTabContent({
+                model : availability,
+                template : '#date-exclusion-view-template',
+                region : personTabLayout.availability,
+                id : id,
+                id_name : 'person_id',
+                newTitle : '<%= t "create-availability" %>',
+                editTitle : '<%= t "edit-availability" %>',
+                deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+                deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
+            });
+        });
         
         exclusions = new Exclusions();
         exclusions.fetch({
@@ -546,11 +571,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             })
         });
 
-        selectCallbacks.fire({
-            id : id,
-            model : invite_details
-        });
-        
         return invite_details;
     };
     
