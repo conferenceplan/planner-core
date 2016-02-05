@@ -392,6 +392,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 id_name : 'person_id',
                 newTitle : '<%= t "create-invite" %>',
                 editTitle : '<%= t "edit-invite" %>',
+                updateCallback : function(mdl) {
+                                $("#participants").jqGrid('setGridParam', {
+                                    loadComplete: function(data) {
+                                        $("#participants").jqGrid('setSelection', id, false); // when load is complete the selection is called...
+                                        $(this).jqGrid('setGridParam', { loadComplete: function() {} });
+                                    }
+                                });
+                                $("#participants").trigger("reloadGrid");
+                            },
                 events : {
                     'click .model-generate-invite-key-button' : function() {
                         mdl = this.model;

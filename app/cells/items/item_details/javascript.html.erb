@@ -455,6 +455,20 @@ ItemApp.ItemManagement = (function(Backbone){
                     id : id,
                     id_name : 'programme_item_id',
                     editTitle : "Edit Item",
+                    updateCallback : function(mdl) {
+                                    // 1. we need to refresh the row in the table (or the current table)
+                                    // and make sure that the row is selected
+                                    // Also need to update the title above the tabs
+                                    $("#items").jqGrid('setGridParam', {
+                                        loadComplete: function(data) {
+                                            // alert("dd");
+                                            $("#items").jqGrid('setSelection', id, false); // when load is complete the selection is called...
+                                            // load complete is called every time... only want it once, so remove it after it has been used...
+                                            $(this).jqGrid('setGridParam', { loadComplete: function() {} });
+                                        }
+                                    });
+                                    $("#items").trigger("reloadGrid");
+                                },
                     events : {
                         'click .add-people-button' : function() {
                             model = itemMdl;
