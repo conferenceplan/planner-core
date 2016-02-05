@@ -241,7 +241,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 loadComplete    : function() {
                     control.subgrid_rows = subgrid.getGridParam("rowNum");
                     if (control.model) {
-                        subgrid.setSelection(control.model.id);
+                        subgrid.setSelection(control.model.id, false);
                     }
                 },
                 onPaging : function(pgButton) {
