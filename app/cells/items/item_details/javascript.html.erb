@@ -215,11 +215,13 @@ ItemApp.ItemManagement = (function(Backbone){
             duration : { type : 'Number', title : '<%= t "item-duration" %>', editorClass : 'item-form-element', validators: ['required'] },
             minimum_people : { type : 'DependentNumber', editorClass : 'item-form-element',
                                 dependsOn : 'is_break', dependentValues : ['false'],
+                                editorAttrs : { placeholder : '<%= t "min" %>' },
                                 title : '<%= t "item-min-participants" %>', validators: [
                                 { type: 'regexp', message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', regexp: /^[0-9]\d*$/ }
                             ] },
             maximum_people : { type : 'DependentNumber', editorClass : 'item-form-element',
                                 dependsOn : 'is_break', dependentValues : ['false'],
+                                editorAttrs : { placeholder : '<%= t "max" %>' },
                                 title : '<%= t "item-max-participants" %>', validators: [
                                 { type: 'regexp', message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', regexp: /^[0-9]\d*$/ }
                             ] },

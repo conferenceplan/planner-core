@@ -169,26 +169,22 @@
                 <div class="form-group" style="margin-bottom: 0;">
                     <span data-editor>
                         <label  class="col-sm-3 control-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size-long" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-2">
                             <div data-editors="audience_size"></div>
                             <div class="has-error">
                                 <p class="help-block" data-error></p>
                             </div>
                         </div>
                     </span>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <label class="col-sm-3 control-label"><%= t "item-min-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-min-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-min-participants-help" %>'></i></label>
-                    <div class="col-sm-3">
+                    <label class="col-sm-3 control-label"><%= t "item-nb-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-nb-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-nb-participants-help" %>'></i></label>
+                    <div class="col-sm-2">
                         <div data-editors="minimum_people"></div>
                         <div class="has-error">
                             <p class="help-block" data-error></p>
                         </div>
                     </div>
-                    <label class="col-sm-3 control-label"><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>
-                    <div class="col-sm-3">
+                    <!--<label class="col-sm-3 control-label"><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>-->
+                    <div class="col-sm-2">
                         <div data-editors="maximum_people"></div>
                         <div class="has-error">
                             <p class="help-block" data-error></p>
@@ -196,7 +192,7 @@
                     </div>
                 </div>
             </div>
-
+            <div class="voffset10"></div>
             <div class="row item-section-title" style="margin-bottom: 20px;">
                 <h3><%= t 'options' %></h3>
             </div>
