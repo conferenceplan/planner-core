@@ -93,9 +93,9 @@ module ImportService
             )
             
       # Check for duplicates in the pending table - get rid of the older ones
-      ActiveRecord::Base.connection.execute(
-              "delete from pending_import_people where id not in (select * from  (select max(id) from pending_import_people pi group by pi.datasource_id, pi.datasource_dbid, pi.first_name, pi.last_name ) a);"
-            )
+      # ActiveRecord::Base.connection.execute(
+              # "delete from pending_import_people where id not in (select * from  (select max(id) from pending_import_people pi group by pi.datasource_id, pi.datasource_dbid, pi.first_name, pi.last_name ) a);"
+            # )
       
     end
   end
