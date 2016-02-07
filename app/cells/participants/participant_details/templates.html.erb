@@ -168,7 +168,7 @@
 
 <script type="text/template" id="registration-view-template">
     <div class="col-md-4" id="registration-view-details">  
-        <h5><%= t "registration"%> <i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "registration"%>" data-toggle="popover" data-trigger="hover"  data-content="<%= t "registration-help" %>"></i></h5>  
+        <h5><%= t "registration"%> <i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "registration"%>" data-toggle="popover" data-trigger="hover" data-placement="top"  data-content="<%= t "registration-help" %>"></i></h5>  
         {{ if (typeof id != 'undefined') { }}
             
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
@@ -215,7 +215,7 @@
     </div>
 
     <div class="col-md-5">
-        <h5><%= t "invitation-status"%> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" title="<%= t "invitation-status"%>" data-trigger="hover" data-content="<%= t "invitation-status-help" %>"></i></h5>
+        <h5><%= t "invitation-status"%> <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" title="<%= t "invitation-status"%>" data-trigger="hover" data-content="<%= t "invitation-status-help" %>"></i></h5>
         <button class="model-edit-button btn btn-primary btn-xs pull-right"><i class="glyphicon glyphicon-pencil"></i></button>
         {{ if (typeof id != 'undefined') { }}
             {{ if (!survey_key) { }}
