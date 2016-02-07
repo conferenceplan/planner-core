@@ -64,6 +64,7 @@ ItemApp.ItemManagement = (function(Backbone){
         schema : {
             title       : { type : 'Text', title : '<%= t "title" %>' },
             theme_name_ids  : { type : 'DependentSelect2', title : '<%= t "themes" %>', fieldClass : 'item-theme',
+                                editorAttrs : { placeholder : '<%= t "select-a-theme-for-this-item" %>' },
                                 dependsOn : 'is_break', dependentValues : ['false'],
                                         config : {
                                             multiple: true,
