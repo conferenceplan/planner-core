@@ -23,7 +23,7 @@
 
 <%= render_cell "participants/pending_list", :javascript, 
     :pageSize => 20,
-    :pageList => '[5, 10, 20, 100]',
+    :pageList => '[5, 10, 20, 100, 250, 500]',
     :toolbar => '#pending-toolbar',
     :controlDiv => 'pending-control-area',
     :place => 'pending-list',
@@ -34,7 +34,7 @@
     :baseUrl => 'pending_import_people/get_possible_matches.json',
     :delayed => true,
     :pageSize => 20,
-    :pageList => '[5, 10, 20, 100]',
+    :pageList => '[5, 10, 20, 100, 250, 500]',
     :toolbar => '#matched-toolbar',
     :controlDiv => 'matched-control-area',
     :place => 'matched-list',
