@@ -40,4 +40,13 @@ class PublishedProgrammeItem < ActiveRecord::Base
       find(:all, :conditions => ['external_images.use = ?', u])
     end
   end
+  
+  def sorted_published_item_assignments
+    assignments = []
+    [PersonItemRole["Moderator"],PersonItemRole["Participant"]].each do |role|
+      assignments.concat published_programme_item_assignments.role(role)
+    end
+    assignments
+  end
+  
 end
