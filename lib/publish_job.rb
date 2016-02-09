@@ -496,24 +496,25 @@ class PublishJob
     contexts = TagContext.where("publish = 1").collect{|i| "'" + i.name + "'"}.join(',')
     if contexts && contexts.size > 0
       context_part = "' AND context in (" + contexts + ")"
-    end
-        
-    taggings = ActsAsTaggableOn::Tagging.find :all,
-                  :select => "DISTINCT(context)",
-                  :conditions => "taggable_type like '" + from.class.name + context_part
-    
-    taggings.each do |tagging|
-      if getTagOwner
-        tags = from.owner_tags_on(getTagOwner, tagging.context)
-      else  
-        tags = from.tag_list_on(tagging.context)
-      end
-      tagstr = tags * ","
-      if tags
+
+
+      taggings = ActsAsTaggableOn::Tagging.find :all,
+                    :select => "DISTINCT(context)",
+                    :conditions => "taggable_type like '" + from.class.name + context_part
+      
+      taggings.each do |tagging|
         if getTagOwner
-          getTagOwner.tag(to, :with => tagstr, :on => tagging.context)
-        else
-          to.set_tag_list_on(tagging.context, tagstr) # set the tag list on the respondent for the context
+          tags = from.owner_tags_on(getTagOwner, tagging.context)
+        else  
+          tags = from.tag_list_on(tagging.context)
+        end
+        tagstr = tags * ","
+        if tags
+          if getTagOwner
+            getTagOwner.tag(to, :with => tagstr, :on => tagging.context)
+          else
+            to.set_tag_list_on(tagging.context, tagstr) # set the tag list on the respondent for the context
+          end
         end
       end
     end
