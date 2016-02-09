@@ -219,22 +219,26 @@ class PublishJob
           end
           
           # Only need to copy time if the new time slot is more recent than the published
-          if newItem.published_time_slot != nil
-            if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
-              newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
-              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
-              newTimeSlot.save
-              newItem.published_time_slot = newTimeSlot
-              newItem.save
+          if srcItem.time_slot != nil
+            if newItem.published_time_slot != nil
+              if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
+                newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
+                newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+                newTimeSlot.save
+                newItem.published_time_slot = newTimeSlot
+                newItem.save
+              end
+            else
+                newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+                newTimeSlot.save
+                newItem.published_time_slot = newTimeSlot
+                newItem.save
             end
+            newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
+            newItem.published_room_item_assignment.save
           else
-              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
-              newTimeSlot.save
-              newItem.published_time_slot = newTimeSlot
-              newItem.save
+            newItem.published_room_item_assignment.delete
           end
-          newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
-          newItem.published_room_item_assignment.save
         elsif srcItem.time_slot # we only need to worry about the assignment if the source has a time and room assigned (which will not be the case for children)
           newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
           assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
