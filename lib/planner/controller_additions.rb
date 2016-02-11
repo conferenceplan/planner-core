@@ -119,7 +119,7 @@ module Planner
                 :sub_menu => [
                   {:title => 'reports', :target => '/pages/reports_dash/manage', :display => allowed?(:reports) }
               ]} if allowed? :reports
-      menu << { :title => 'menu-publications',   :target => '/pages/publications_dash/print', :icon => "fa fa-print",     :target_base => '/pages/publications_dash',
+      menu << { :title => 'menu-publications',   :target => '/pages/publications_dash/print', :icon => "fa fa-globe",     :target_base => '/pages/publications_dash',
                 :sub_menu => [
                   {:title => 'publish', :target => '/pages/publications_dash/online', :display => allowed?(:publish) },
                   {:title => 'print', :target => '/pages/publications_dash/print', :display => allowed?(:print) }
