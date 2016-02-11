@@ -22,9 +22,9 @@ var emailTemplateTop = '<div id="grenadine-email-template-div">' +
                         '<table width="600" border="0" cellspacing="0" cellpadding="0" align="center">' +
                             '<tr>' +
                                 '<td style="padding: 0px 15px 0px 15px; font-size: 16px; font-family: Arial, Helvetica, sans-serif;">' +
-                                    '<div contenteditable="false">' +
+                                    '<div>' +
                                         '<center>' +
-                                            '<h1 contenteditable="false"><span class="grenadine-editable" contenteditable="true">Your Event Name</span></h1>' +
+                                            '<h1><span class="grenadine-editable">Your Event Name</span></h1>' +
                                         '</center>' +  
                                     '</div>' +                                 
                                 '</td>' +
@@ -40,7 +40,7 @@ var emailTemplateBottom =            '</td>' +
                         '<table width="600" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: Arial, Helvetica, sans-serif; font-size: 11px; color: white; border-bottom-right-radius: 6px; border-bottom-left-radius: 6px; background-color: #CCC;">' +
                             '<tr>' +
                                 '<td align="left" style="padding: 15px;">' +
-                                    'Sent to you by <strong><span contenteditable="true" class="grenadine-editable">YOUR EVENT NAME</span></strong><br>' +
+                                    'Sent to you by <strong><span  class="grenadine-editable">YOUR EVENT NAME</span></strong><br>' +
                                     'using the <strong>Grenadine Event Planner</strong>.<br>' +
                                     '420 Beaubien West suite 203, Montreal QC Canada H2V 4S6<br>' +
                                     'http://events.grenadine.co' +
@@ -82,9 +82,9 @@ CKEDITOR.addTemplates( 'default',
                 description: 'General-purpose email template. Send informational messages, thank you notes, etc.',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
-                        '<h1><span class="grenadine-editable" contenteditable="true">My Email Subject</span></h1>' +
-                        '<p><span contenteditable="true" class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>We have a message for you and I\'m going to write it here.</p></div>' +                                    
+                        '<h1><span class="grenadine-editable" >My Email Subject</span></h1>' +
+                        '<p><span  class="grenadine-editable">Dear</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div  class="grenadine-editable"><p>We have a message for you and I\'m going to write it here.</p></div>' +                                    
                       emailTemplateBottom        
             },   
             {
@@ -93,11 +93,11 @@ CKEDITOR.addTemplates( 'default',
                 description: 'A simple email invitation to your event, includes a button where you can put a link',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
-                        '<h1><span class="grenadine-editable" contenteditable="true">You\'re invited to attend!</span></h1>' +
-                        '<p><span contenteditable="true" class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>We would like to invite you to our event which will take place at this date and time and will be located here.</p></div>' +
-                        '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Accept or Decline</a></span></p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:key] %></strong></p></div>' +                                        
+                        '<h1><span class="grenadine-editable" >You\'re invited to attend!</span></h1>' +
+                        '<p><span class="grenadine-editable">Dear</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div class="grenadine-editable"><p>We would like to invite you to our event which will take place at this date and time and will be located here.</p></div>' +
+                        '<p><span class="grenadine-editable"><a href="" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Accept or Decline</a></span></p>' +
+                        '<div class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:key] %></strong></p></div>' +                                        
                       emailTemplateBottom        
             },
             {
@@ -106,11 +106,11 @@ CKEDITOR.addTemplates( 'default',
                 description: 'An email invitation to fill out a survey, includes a button where you can link the survey',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
-                        '<h1><span class="grenadine-editable" contenteditable="true">Please give us your opinion</span></h1>' +
-                        '<p><span contenteditable="true" class="grenadine-editable">Dear</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>We would love to get your feed-back. Please take a few moments to fill out the following survey:</p></div>' +
-                        '<p><span contenteditable="true" class="grenadine-editable"><a href="<%= args[:survey_url] %>" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Link To Survey</a></span></p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="<%= args[:survey_url] %>"><%= args[:survey_url] %></a> in your browser and type in your unique key code: <strong><%= args[:key] %></strong></p></div>' +                                    
+                        '<h1><span class="grenadine-editable" >Please give us your opinion</span></h1>' +
+                        '<p><span class="grenadine-editable">Dear</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div class="grenadine-editable"><p>We would love to get your feed-back. Please take a few moments to fill out the following survey:</p></div>' +
+                        '<p><span class="grenadine-editable"><a href="<%= args[:survey_url] %>" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Link To Survey</a></span></p>' +
+                        '<div class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="<%= args[:survey_url] %>"><%= args[:survey_url] %></a> in your browser and type in your unique key code: <strong><%= args[:key] %></strong></p></div>' +                                    
                       emailTemplateBottom        
             },
             {
@@ -119,9 +119,9 @@ CKEDITOR.addTemplates( 'default',
                 description: 'Gabarit général pour l\'envoi de courriels d\'information.',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
-                        '<h1><span class="grenadine-editable" contenteditable="true">Sujet</span></h1>' +
-                        '<p><span contenteditable="true" class="grenadine-editable">Cher</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>Nous avons un message bien intéressant pour vous et je vais l\'écrire ici dans ce texte.</p></div>' +                                    
+                        '<h1><span class="grenadine-editable" >Sujet</span></h1>' +
+                        '<p><span  class="grenadine-editable">Cher</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div class="grenadine-editable"><p>Nous avons un message bien intéressant pour vous et je vais l\'écrire ici dans ce texte.</p></div>' +                                    
                       emailTemplateBottom        
             },
             {
@@ -130,10 +130,10 @@ CKEDITOR.addTemplates( 'default',
                 description: 'Une invitation qui inclut un lien/bouton pouvant être utilisé pour diriger vers votre page d\'enregistrement.',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
-                        '<h1><span class="grenadine-editable" contenteditable="true">Vous êtes invité!</span></h1>' +
-                        '<p><span contenteditable="true" class="grenadine-editable">Cher</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>Je suis très heureux de vous inviter à notre événement qui se tiendra à cette date et heure et aura lieu à l\'endroit suivant.</p></div>' +
-                        '<p><span contenteditable="true" class="grenadine-editable"><a href="" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Accepter ou Refuser</a></span></p>' +                                        
+                        '<h1><span class="grenadine-editable" >Vous êtes invité!</span></h1>' +
+                        '<p><span class="grenadine-editable">Cher</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div class="grenadine-editable"><p>Je suis très heureux de vous inviter à notre événement qui se tiendra à cette date et heure et aura lieu à l\'endroit suivant.</p></div>' +
+                        '<p><span class="grenadine-editable"><a href="" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Accepter ou Refuser</a></span></p>' +                                        
                       emailTemplateBottom        
             },
             {
@@ -142,11 +142,11 @@ CKEDITOR.addTemplates( 'default',
                 description: 'Une invitation à remplir un sondage, incluant un bouton qui peut accueillir un lien vers le sondage.',
                 html: emailTemplateStyles + 
                       emailTemplateTop +
-                        '<h1><span class="grenadine-editable" contenteditable="true">Votre opinion nous importe!</span></h1>' +
-                        '<p><span contenteditable="true" class="grenadine-editable">Cher</span><span contenteditable="false"> <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>Nous aimerions avoir votre opinion. Veuillez remplir le sondage suivant:</p></div>' +
-                        '<p><span contenteditable="true" class="grenadine-editable"><a href="<%= args[:survey_url] %>" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Lien vers le sondage</a></span></p>' +
-                        '<div contenteditable="true" class="grenadine-editable"><p>Le lien ne fonctionne pas dans votre lecteur de courriel? Alors copiez le lien suivant et collez-le directement dans votre navigateur: <a href="<%= args[:survey_url] %>"><%= args[:survey_url] %></a>. Votre code unique est: <strong><%= args[:key] %></strong></p></div>' +                                    
+                        '<h1><span class="grenadine-editable" >Votre opinion nous importe!</span></h1>' +
+                        '<p><span class="grenadine-editable">Cher</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
+                        '<div class="grenadine-editable"><p>Nous aimerions avoir votre opinion. Veuillez remplir le sondage suivant:</p></div>' +
+                        '<p><span class="grenadine-editable"><a href="<%= args[:survey_url] %>" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Lien vers le sondage</a></span></p>' +
+                        '<div class="grenadine-editable"><p>Le lien ne fonctionne pas dans votre lecteur de courriel? Alors copiez le lien suivant et collez-le directement dans votre navigateur: <a href="<%= args[:survey_url] %>"><%= args[:survey_url] %></a>. Votre code unique est: <strong><%= args[:key] %></strong></p></div>' +                                    
                       emailTemplateBottom        
             },
             {
@@ -155,9 +155,9 @@ CKEDITOR.addTemplates( 'default',
                 description: 'A typical mobile page that has text contents',
                 html: mobilePageTemplateStyles + 
                       mobilePageTemplateTop +
-                        '<h1 contenteditable="false"><span class="grenadine-editable" contenteditable="true">Page Title</span></h1>' +
-                        '<div contenteditable="false">' +
-                            '<div contenteditable="true" class="grenadine-editable">Write the contents of your page here.</div>' + 
+                        '<h1 ><span class="grenadine-editable" >Page Title</span></h1>' +
+                        '<div >' +
+                            '<div class="grenadine-editable">Write the contents of your page here.</div>' + 
                         '</div>'+                                     
                       mobilePageTemplateBottom        
             },
@@ -169,9 +169,9 @@ CKEDITOR.addTemplates( 'default',
                       mobilePageTemplateTop +
                         '<style type="text/css">.mobile-div-class { padding: 0px; }</style>' +
                         '<img src="/assets/mobile-template-dummy-image.jpg" width="100%"></img>' +
-                        '<h1 contenteditable="true" class="grenadine-editable">An Optional Page Title</h1>' +
-                        '<div contenteditable="false">' +
-                            '<div contenteditable="true" class="grenadine-editable">Write the contents of your page here.</div>' + 
+                        '<h1 class="grenadine-editable">An Optional Page Title</h1>' +
+                        '<div >' +
+                            '<div class="grenadine-editable">Write the contents of your page here.</div>' + 
                         '</div>'+                                     
                       mobilePageTemplateBottom        
             }
