@@ -171,18 +171,19 @@ CKEDITOR.config.htmlbuttons =	[
 				html:'<%= args[:person].last_name %>',
 				title:'Person\'s last name'
 			},
+            {
+                name:'survey-url',
+                //icon:'icon2.png',
+                html:'<%= args[:survey_url] %>',
+                title:'Survey URL (the URL to access the survey selected above)'
+            },
 			{
                 name:'survey-key',
                 //icon:'icon2.png',
                 html:'<%= args[:key] %>',
-                title:'Person\'s Personal Survey Key'
+                title:'Person\'s Personal Survey Key (required if survey is not anonymous)'
             },
-            {
-                name:'schedule-assignments',
-                //icon:'icon2.png',
-                html:'<%= assignments_to_html(args[:assignments]) %>',
-                title:'Person\'s Participant Assignments'
-            },
+
             {
                 name:'survey-responses',
                 //icon:'icon2.png',
@@ -190,10 +191,10 @@ CKEDITOR.config.htmlbuttons =	[
                 title:'List of Person\'s Survey Responses'
             },
             {
-                name:'survey-url',
+                name:'schedule-assignments',
                 //icon:'icon2.png',
-                html:'<%= args[:survey_url] %>',
-                title:'Survey URL'
+                html:'<%= assignments_to_html(args[:assignments]) %>',
+                title:'Person\'s Speaking Schedule'
             }
 
 		]
