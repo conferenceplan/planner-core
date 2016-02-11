@@ -55,8 +55,8 @@ var emailTemplateBottom =            '</td>' +
                     
 var mobilePageTemplateStyles = '' +
                     '<style>' +
-                        'li { margin-top: 10px; }' +
-                        'h1 { font-size: 24px; border-bottom: 1px solid gray; padding-bottom: 10px; margin-bottom: 15px; }' +
+                        'li.mobile { margin-top: 10px; }' +
+                        'h1.mobile { font-size: 24px; border-bottom: 1px solid gray; padding-bottom: 10px; margin-bottom: 15px; }' +
                     '</style>';                     
 
 var mobilePageTemplateTop =  '' +
@@ -155,8 +155,8 @@ CKEDITOR.addTemplates( 'default',
                 description: 'A typical mobile page that has text contents',
                 html: mobilePageTemplateStyles + 
                       mobilePageTemplateTop +
-                        '<h1 ><span class="grenadine-editable" >Page Title</span></h1>' +
-                        '<div >' +
+                        '<h1 class="mobile"><span class="grenadine-editable" >Page Title</span></h1>' +
+                        '<div>' +
                             '<div class="grenadine-editable">Write the contents of your page here.</div>' + 
                         '</div>'+                                     
                       mobilePageTemplateBottom        
@@ -169,7 +169,7 @@ CKEDITOR.addTemplates( 'default',
                       mobilePageTemplateTop +
                         '<style type="text/css">.mobile-div-class { padding: 0px; }</style>' +
                         '<img src="/assets/mobile-template-dummy-image.jpg" width="100%"></img>' +
-                        '<h1 class="grenadine-editable">An Optional Page Title</h1>' +
+                        '<h1 class="mobile grenadine-editable">An Optional Page Title</h1>' +
                         '<div >' +
                             '<div class="grenadine-editable">Write the contents of your page here.</div>' + 
                         '</div>'+                                     
