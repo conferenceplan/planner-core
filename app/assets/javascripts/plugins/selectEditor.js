@@ -14,19 +14,27 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
         options = options || {};
         
         Form.editors.Base.prototype.initialize.call(this, options);
-        
+
         var schema = this.schema;
-         
+        
         this.config = schema.config || {};
+        this.init_callback = schema.init;
     },
      
     render: function() {
         var self = this;
 
         this.setValue(this.value);
+        
+        var key = this.key;
+        var form = this.form;
+        var init = this.init_callback;
 
         setTimeout(function() {
             self.$el.select2(self.config);
+            self.$el.on("change", function (e) {
+                    self.form.trigger(key + ":change", self, self);
+                });
         }, 0);
         return this;
     },
@@ -52,11 +60,17 @@ Form.editors.DependentSelect2 = Form.editors.Select2.extend({
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
 
         var self = this;
+        var key = this.key;
+        var form = this.form;
+        var init = this.init_callback;
 
         this.setValue(this.value);
 
         setTimeout(function() {
             self.$el.select2(self.config);
+            self.$el.on("change", function (e) { 
+                    self.form.trigger(key + ":change", self, self);
+                });
         }, 0);
 
         this.dependInit(this.form);

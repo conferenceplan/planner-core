@@ -12,10 +12,16 @@ _.extend(Form.Editor.prototype, {
         var groupElement = this.$el.parents('.form-group');
 
         this.setInitValue(groupElement, editor.getValue(), this.options.schema.dependentValues);
+        
+        if (this.options.schema.callback) {
+            this.options.schema.callback(editor.getValue(), editor, this);
+        }
     },
 
     setInitValue : function(element, value, expectedValues) {
-        if ( ( value != null) && ($.inArray(value.toString(), expectedValues) > -1) ) {
+        if ( (( value != null) && ($.inArray(value.toString(), expectedValues) > -1)) ||
+           ((value == null) && ($.inArray('false', expectedValues) > -1))
+        ) {
             element.first().removeClass('hidden-form-group');
         } else {
             element.first().addClass('hidden-form-group');
