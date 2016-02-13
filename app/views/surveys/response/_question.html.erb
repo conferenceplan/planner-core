@@ -1,8 +1,8 @@
 <%#
 %>
 
-<div class="row row-buffered">
-        <div class="col-sm-12 <%='error' if @errors && @errors[question.id] %>">
+<div class="row row-buffered question-row">
+        <div class="<%='error' if @errors && @errors[question.id] %>">
             <% if question.question && (question.question.size > 0) && !([:address, :phone].include? question.question_type) %>
                 <% if ([:textbox].include? question.question_type) || question.horizontal %>
                     <label class="col-sm-12">
