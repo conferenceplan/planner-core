@@ -14,18 +14,18 @@
     </script>
     
     <div class="row">
-        <div class="col-sm-11">
+        <div class="col-sm-10">
             <!-- TODO - question.questionmapping to HTML5 input type QuestionMappingp[''] -->
         <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", 
-                :rows => 5, :size => question.text_size, :class => question.tags_label + '_text ui-autocomplete-input col-xs-12' %>
+                :rows => 5, :size => question.text_size, :class => question.tags_label + '_text ui-autocomplete-input col-xs-12 form-control' %>
         </div>
-        <div class="col-sm-1">
-            <a href='#' rel="popover" data-html=true class="cloud-popover btn btn-success" data-trigger="focus" data-contentwrapper="#<%= question.tags_label%>_popup">tags</a>
+        <div class="col-sm-2">
+            <a href='#' rel="popover" data-html=true class="cloud-popover btn btn-success" data-trigger="focus" data-contentwrapper="#<%= question.tags_label%>_popup" style="width: 100%;"><%= t 'tags' %></a>
             <div id="<%= question.tags_label%>_popup" class="hidden-area"><div id="<%= question.tags_label%>_cloud" style="width: 248px; height: 250px;"></div></div>
         </div>
     </div>
 </div>
 <% else %>
-    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => ((question.text_size && question.text_size < 10) ? 'col-xs-2' : 'col-xs-12'),
+    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => ((question.text_size && question.text_size < 10) ? 'col-xs-2 form-control' : 'col-xs-12 form-control'),
     :type => ([QuestionMapping['WebSite'], QuestionMapping['Photo']].include?(question.questionmapping) ? 'url' : nil) %>
 <% end %>

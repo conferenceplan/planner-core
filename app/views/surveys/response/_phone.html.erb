@@ -15,7 +15,7 @@
             <% end %>
         </label>
         <div class="col-sm-4">
-        <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 30, :class => "col-xs-12" %>
+        <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 30, :class => "col-xs-12 form-control" %>
         </div>
         <div class="col-sm-1">
         <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Home', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Home' : false %>
