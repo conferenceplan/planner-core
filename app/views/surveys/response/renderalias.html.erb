@@ -3,7 +3,11 @@
 </script>
 
 <% if @survey && !@survey.header_image.empty? %>
-    <div class="row"><div class="col-sm-12"><img src="<%= @survey.header_image if @survey.header_image %>" class="center-block"/></div></div>
+    <div class="row">
+        <div class="col-sm-12 voffset30">
+            <img src="<%= @survey.header_image if @survey.header_image %>" class="survey-title-image"/>
+        </div>
+    </div>
 <%end%>
 
 <% if @errors %>
@@ -16,7 +20,7 @@
 <% end %>
 
 <% if @survey %>
-    <%= form_tag @path, :method => :post, :class => "form-horizontal" do -%>
+    <%= form_tag @path, :method => :post, :class => "form-horizontal survey-form" do -%>
     <%= hidden_field_tag("key", @current_key) %>
     <div class="row">
         <div class="col-sm-12">
@@ -29,12 +33,6 @@
             <div class="row">
                 <div class="col-sm-12">
                 <%= @survey.welcome.html_safe %>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <br/>
-                    <p><span style="color: red;">*</span> <i>Indicates required field</i></p>
                 </div>
             </div>
             <!-- Get Biogragraphic info -->

@@ -1508,3 +1508,16 @@ i.fa.fa-map-marker {
     margin: -3px 0 0 12px;
 }
 /* Required field END */
+
+.survey-form h3:first-child {
+    margin-top: 25px;
+}
+img.survey-title-image {
+    max-width: 100%;
+}
+.survey-form div.checkbox {
+    padding-top: 0;
+}
+.survey-form input[type="checkbox"] {
+    margin-top: 5px;
+}

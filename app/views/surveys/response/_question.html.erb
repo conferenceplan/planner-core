@@ -41,7 +41,9 @@
                 <% end %>
                 </div>
             <% else %>
-                <%= render :partial => "#{question.question_type}", :locals => {:question => question} %>
+                <div class="col-md-12">
+                    <%= render :partial => "#{question.question_type}", :locals => {:question => question} %>
+                </div>
             <% end %>
         </div>
 </div>

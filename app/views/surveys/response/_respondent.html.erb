@@ -91,12 +91,17 @@
         <div class="col-sm-12">
 <div class="form-group  <%='has-error' if @errors && @errors['email'] %>">
     <label class="control-label col-sm-2">
-        <span class='' style='color: red;'>*</span> <%= t 'survey-email-address' %>
+        <%= t 'survey-email-address' %>
         <a class="survey-help" href="#" data-original-title="Enter your primary e-mail address; the one you&rsquo;re most likely to monitor."><i class='glyphicon glyphicon-info-sign'></i></a>
     </label>
     <div class="col-sm-10">
-        <input name="survey_respondent_detail[email]" value="<%=@survey_respondent_detail['email'] if @survey_respondent_detail %>" 
-            size="50" class="form-control" type="email" required>
+        <div class="required-field-block">
+            <input name="survey_respondent_detail[email]" value="<%=@survey_respondent_detail['email'] if @survey_respondent_detail %>" 
+                size="50" class="form-control" type="email" required>
+            <div class="required-icon">
+                <div class="text">*</div>
+            </div>
+        </div>
         <% if @errors && @errors['email'] %>
             <span class="help-inline"><%=@errors['email']['Email Address']%></span>
         <% end %>
