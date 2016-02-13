@@ -22,7 +22,7 @@
         <%= cloudinary_js_config %> 
     </head>
     <body>
-        <div id="main-screen-container" class="container">
+        <div id="main-screen-container" class="container survey-container">
             <div class="row"><div id="alert-area"><%= render partial: 'layouts/messages', flash: flash %></div></div>
             <%= content_for?(:content) ? yield(:content) : yield %>
         </div>
