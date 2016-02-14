@@ -22,9 +22,9 @@
 <% if @survey %>
     <%= form_tag @path, :method => :post, :class => "form-horizontal survey-form" do -%>
     <%= hidden_field_tag("key", @current_key) %>
-    <div class="row">
+    <div class="row survey-title-row">
         <div class="col-sm-12">
-            <h2><%= @survey.name %></h2>
+            <h1 class="survey-title"><%= @survey.name %></h1>
         </div>
     </div>
     <div class="row">

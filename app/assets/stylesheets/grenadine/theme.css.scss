@@ -1524,6 +1524,8 @@ img.survey-title-image {
 .container.survey-container {
     margin-top: 25px;
     margin-bottom: 25px;
+    max-width: 1125px;
+    background-color: white;
 }
 .question-row {
     padding-top: 10px;
@@ -1537,4 +1539,20 @@ img.survey-title-image {
 }
 .no-bottom-margin {
     margin-bottom: 0px;
+}
+.survey-body {
+    background-color: #EEEEEE;
+}
+.survey-title-row {
+    background-color: #777;
+    margin-bottom: 20px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+h1.survey-title {
+    color: white;
+    font-size: 32px;
+    margin-top: 34px;
+    margin-bottom: 15px;
+    font-weight:100;
 }
