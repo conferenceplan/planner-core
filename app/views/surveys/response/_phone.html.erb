@@ -1,41 +1,48 @@
-<%#
-%>
 
-<div class="row">
-    <div class="col-sm-12">
-        <div class="form-group <%='error' if @errors && @errors[question.id] %> no-bottom-margin">
-                <label class="control-label col-sm-2">
-                    <% if question.mandatory %>
-                        <span class='' style='color: red;'>*</span>
-                    <% end %>
+    <div class="form-group <%='error' if @errors && @errors[question.id] %> col-sm-12 no-bottom-margin">
+        <div class="row">
+            <div class="col-sm-4">
+                <label class="control-label">
                     <%= question.question %>
                     <% if question.survey_format.help && !question.survey_format.help.blank? %>
-                    <a class="survey-help" href="#" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
+                        <a class="survey-help" tabindex="-1" href="#" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
                     <% end %>
                 </label>
-                <div class="col-sm-4">
-                    <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 30, :class => "col-xs-12 form-control" %>
-                </div>
-                <div class="col-sm-1">
-                    <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Home', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Home' : false %>
-                    <%= t 'home' %>
-                </div>
-                <div class="col-sm-1">
-                    <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Work', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Work' : false %>
-                    <%= t 'office' %>
-                </div>
-                <div class="col-sm-1">
-                    <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Fax', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Fax' : false %>
-                    <%= t 'fax' %>
-                </div>
-                <div class="col-sm-2">
-                    <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Mobile', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Mobile' : false %>
-                    <%= t 'mobile' %>
-                </div>
-        
-                <% if @errors && @errors[question.id] %>
-                    <%=@errors[question.id][question.question2]%>
+            </div>
+            <div class="col-sm-4">
+                <% if question.mandatory %>
+                    <div class="required-field-block">
                 <% end %>
+                    <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}", :size => 30, :class => "form-control" %>
+                <% if question.mandatory %>
+                    <div class="required-icon">
+                        <div class="text">*</div>
+                    </div>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-sm-4">
+                
+            </div>
+            <div class="col-sm-8">
+                <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Home', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Home' : false %>
+                <%= t 'home' %>
+                <br>
+                <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Work', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Work' : false %>
+                <%= t 'office' %>
+                <br>
+                <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Fax', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Fax' : false %>
+                <%= t 'fax' %>
+                <br>
+                <%= radio_button_tag "survey_response[#{question.id}][response1]", 'Mobile', @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] == 'Mobile' : false %>
+                <%= t 'mobile' %>
+            </div>
+            <% if @errors && @errors[question.id] %>
+                <%=@errors[question.id][question.question2]%>
+            <% end %>
         </div>
     </div>
-</div>
+
