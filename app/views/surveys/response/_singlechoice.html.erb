@@ -6,7 +6,7 @@
     <% if question.horizontal %>
         <label class="radio-inline survey-radio-inline col-sm-3">
     <% else %>
-        <div class="radio">
+        <div class="radio radio-choices-div">
         <label>
     <% end %>
         <%= radio_button_tag "survey_response[#{question.id}]", "#{answer.id}", @survey_response ? @survey_response[question.id.to_s] == answer.id.to_s : false %>

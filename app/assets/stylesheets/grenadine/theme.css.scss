@@ -1525,3 +1525,16 @@ img.survey-title-image {
     margin-top: 25px;
     margin-bottom: 25px;
 }
+.question-row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.question-row:hover {
+    background-color: #EEE;
+}
+.radio-choices-div {
+    padding-top: 0 !important;
+}
+.no-bottom-margin {
+    margin-bottom: 0px;
+}
