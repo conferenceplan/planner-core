@@ -5,7 +5,7 @@
                 <label class="control-label">
                     <%= question.question %>
                     <% if question.survey_format.help && !question.survey_format.help.blank? %>
-                        <a class="survey-help" tabindex="-1" href="#" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
+                        <a class="survey-help" tabindex="-1" data-original-title="<%= question.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
                     <% end %>
                 </label>
             </div>
