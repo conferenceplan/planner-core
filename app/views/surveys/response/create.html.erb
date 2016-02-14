@@ -1,4 +1,9 @@
 <% if @survey %>
+    <div class="row survey-title-row">
+        <div class="col-sm-12">
+            <h1 class="survey-title"><%= @survey.name %></h1>
+        </div>
+    </div>
     <% if !@survey.header_image.empty? %>
         <div class="row">
             <div class="col-sm-12">
@@ -6,6 +11,9 @@
             </div>
         </div>
     <%end%>
-    <h2><%= @survey.name %></h2>
-    <div class="survey-thankyou"><%= @survey.thank_you.html_safe %></div>
+    <div class="survey-thankyou row">
+        <div class="col-md-12">
+            <%= @survey.thank_you.html_safe %>
+        </div>
+    </div>
 <% end %>

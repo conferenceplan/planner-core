@@ -21,7 +21,7 @@
         
         <%= cloudinary_js_config %> 
     </head>
-    <body class="survey-body">
+    <body lang="<%= I18n.locale %>" class="survey-body">
         <div id="main-screen-container" class="container survey-container">
             <div class="row">
                 <div id="alert-area"><%= render partial: 'layouts/messages', flash: flash %>
@@ -30,7 +30,22 @@
             </div>
             <%= content_for?(:content) ? yield(:content) : yield %>
             <div class="voffset20"></div>
-
+        </div>
+        <div class="survey-footer container voffset20">
+            <div class="row" style="padding-right: 7.5px;">
+                <div class="col-md-6">
+                    <div id="event-planner-logo-link-container" class="event-planner-logo-link-container">
+                        
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div id="report-notice">
+                        <span style="text-align: right; display:block;">
+                            <%= t 'survey-powered-by' %> <b><a href="https://events.grenadine.co/" target="_blank"><%= t 'grenadine-event-planner' %></a></b>.
+                        </span>
+                    </div> 
+                </div>
+            </div>
         </div>
     </body>
 </html>

@@ -2,13 +2,7 @@
     var base_url = "<%= baseUri %>";
 </script>
 
-<% if @survey && !@survey.header_image.empty? %>
-    <div class="row">
-        <div class="col-sm-12">
-            <img src="<%= @survey.header_image if @survey.header_image %>" class="survey-title-image"/>
-        </div>
-    </div>
-<%end%>
+
 
 <% if @errors %>
 <div class="row">
@@ -27,6 +21,16 @@
             <h1 class="survey-title"><%= @survey.name %></h1>
         </div>
     </div>
+    <% if @survey && !@survey.header_image.empty? %>
+        <div class="row">
+            <div class="col-sm-12">
+                <center>
+                    <img src="<%= @survey.header_image if @survey.header_image %>" class="survey-title-image"/>
+                </center>
+            </div>
+        </div>
+        <div class="voffset15"></div>
+    <%end%>
     <div class="row">
         <div class="col-sm-12">
         <fieldset>
@@ -67,8 +71,12 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="row row-buffered">
-                <div class="col-sm-12 ">
-                    <button type="submit" class="btn btn-lg btn-primary" <%= 'disabled' if @preview %> ><%= @survey.submit_string %></button>
+                <div class="col-sm-12">
+                    <center>
+                        <button style="min-width: 150px;" type="submit" class="btn btn-lg btn-success survey-submit-button" <%= 'disabled' if @preview %> >
+                            <i class="fa fa-chevron-right"></i> <%= @survey.submit_string %>
+                        </button>
+                    </center>
                 </div>
             </div>
         </div>
@@ -77,7 +85,7 @@
 <% else %>
     <div class="row">
         <div class="col-sm-12">
-            <p>No Valid Survey</p>
+            <p>No Valid Survey. Have you marked your survey as public?</p>
             <%= @survey_id%>
         </div>
     </div>

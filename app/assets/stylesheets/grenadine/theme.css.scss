@@ -1556,3 +1556,8 @@ h1.survey-title {
     margin-bottom: 15px;
     font-weight:100;
 }
+@media all and (max-width: $w2) {
+    .survey-submit-button {
+        white-space:normal;
+    }
+}

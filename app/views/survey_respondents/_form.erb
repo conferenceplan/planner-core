@@ -5,8 +5,10 @@
         <fieldset>
             <div class="row row-buffered">
                 <div class="form-group">
-                <%= form.label "First Name:", nil ,:class => "control-label col-sm-3" %>
-                <%= text_field_tag :first_name, nil, :class => "col-sm-5" %>
+                <%= form.label (t 'first-name'), nil ,:class => "control-label col-sm-3" %>
+                <div class="col-sm-4">
+                    <%= text_field_tag :first_name, nil, :class => "form-control" %>
+                </div>
                 <div class="col-sm-1">
                     <a class="survey-help" href="#" data-original-title="Enter your first name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
@@ -14,8 +16,15 @@
             </div>
             <div class="row row-buffered">
                 <div class="form-group">
-                <%= form.label "Last Name:", nil ,:class => "control-label col-sm-3" %>
-                <%= text_field_tag :last_name, nil, :class => "col-sm-5" %>
+                <%= form.label (t 'last-name'), nil ,:class => "control-label col-sm-3" %>
+                <div class="col-sm-4">
+                    <div class="required-field-block">
+                        <%= text_field_tag :last_name, nil, :class => "form-control required" %>
+                        <div class="required-icon">
+                            <div class="text">*</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-1">
                     <a class="survey-help" href="#" data-original-title="Enter your last name as it appears in your invitation e-mail.  You can change this in the questionnaire itself if needed."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
@@ -23,8 +32,15 @@
             </div>
             <div class="row row-buffered">
                 <div class="form-group">
-                <%= form.label "Invitation Code:", nil ,:class => "control-label col-sm-3" %>
-                <%= text_field_tag :key, nil, :class => "col-sm-2" %>
+                <%= form.label (t 'invitation-code'), nil ,:class => "control-label col-sm-3" %>
+                <div class="col-sm-2">
+                    <div class="required-field-block">
+                        <%= text_field_tag :key, nil, :class => "form-control" %>   
+                        <div class="required-icon">
+                            <div class="text">*</div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-sm-1">
                     <a class="survey-help" href="#" data-original-title="Enter the invitation code as it appears in your invitation e-mail. If the mail did not include an invitation code or if the invitation code did not work, write to <%= @ourEmail %> so we can send you the correct code."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
@@ -36,7 +52,7 @@
                     <a class="survey-help" href="#" data-original-title="Select this button if you accept the invitation from <%= @site_config.name%>. Selecting the button will take you to the next page in the form."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
                 <div class="col-sm-3">
-                    <%= submit_tag "I decline the invitation", :name => "cancel", :confirm => "Are you sure?", :class => 'btn btn-primary' %>
+                    <%= submit_tag (t 'decline-invitation'), :name => "cancel", :confirm => "Are you sure?", :class => 'btn btn-primary' %>
                     <a class="survey-help" href="#" data-original-title="Select this button if you do not accept the invitation for <%= @site_config.name%>."><i class='glyphicon glyphicon-info-sign'></i></a>
                 </div>
             </div>
