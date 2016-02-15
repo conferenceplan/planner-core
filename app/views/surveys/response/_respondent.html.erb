@@ -6,11 +6,11 @@
 <div class="row question-row no-bottom-margin">   
     <div class="col-sm-12">
         <div class="form-group  no-bottom-margin <%='has-error' if @errors && (@errors['first_name'] || @errors['last_name']) %>">
-            <label class="col-sm-2 control-label">
+            <label class="col-sm-3 control-label">
                 <%= t 'name' %>
                 <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-registration-name' %>"></i>
             </label>
-            <div class="col-sm-10">
+            <div class="col-sm-9">
                     <div class="row">
                         <div class="col-sm-2">
                             <input name="survey_respondent_detail[prefix]" value="<%=@survey_respondent_detail['prefix'] if @survey_respondent_detail %>" 
@@ -55,44 +55,53 @@
 </div>
 
 <% if @respondent %>
-    <% if !(@survey_respondent_detail && (@survey_respondent_detail['pub_first_name'] || @survey_respondent_detail['pub_suffix'])) %>
-        <div class="form-group pubname_toggle">
-    <% else %>
-        <div class="form-group">
-    <% end %>
-            <label class="control-label col-sm-2"><%= t 'publication-name' %></label>
-            <div class="col-sm-10">
-            <div class="controls">
-                            <div class="row">
-                                <div class="col-sm-2">
-                <input name="survey_respondent_detail[pub_prefix]" value="<%=@survey_respondent_detail['pub_prefix'] if @survey_respondent_detail %>" 
-                    size="5" type="text" class="form-control" placeholder="Prefix">
-                                </div>
-                                <div class="col-sm-4">
-                <input name="survey_respondent_detail[pub_first_name]" value="<%=@survey_respondent_detail['pub_first_name'] if @survey_respondent_detail %>" 
-                    size="30" type="text" class="form-control" placeholder="First Name">
-                                </div>
-                                <div class="col-sm-4">
-                <input name="survey_respondent_detail[pub_last_name]" value="<%=@survey_respondent_detail['pub_last_name'] if @survey_respondent_detail %>" 
-                    size="30" type="text" class="form-control" placeholder="Last Name">
-                                </div>
-                                <div class="col-sm-2">
-                <input name="survey_respondent_detail[pub_suffix]" value="<%=@survey_respondent_detail['pub_suffix'] if @survey_respondent_detail %>" 
-                    size="5" type="text" class="form-control" placeholder="Suffix">
-                                </div>
-                          </div>
+    
+        <% if !(@survey_respondent_detail && (@survey_respondent_detail['pub_first_name'] || @survey_respondent_detail['pub_suffix'])) %>
+            <div class="form-group pubname_toggle no-bottom-margin">
+        <% else %>
+            <div class="form-group">
+        <% end %>
+        <div class="row question-row no-bottom-margin" style="margin-left: 0; margin-right: 0;">
+                <label class="control-label col-sm-3">
+                    <%= t 'publication-name' %>
+                    <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-publication-name' %>"></i>
+                </label>
+                
+                <div class="col-sm-9">
+                    <div class="controls">
+                                    <div class="row">
+                                        <div class="col-sm-2">
+                        <input name="survey_respondent_detail[pub_prefix]" value="<%=@survey_respondent_detail['pub_prefix'] if @survey_respondent_detail %>" 
+                            size="5" type="text" class="form-control" placeholder="<%= t 'prefix' %>">
+                                        </div>
+                                        <div class="col-sm-4">
+                        <input name="survey_respondent_detail[pub_first_name]" value="<%=@survey_respondent_detail['pub_first_name'] if @survey_respondent_detail %>" 
+                            size="30" type="text" class="form-control" placeholder="<%= t 'first-name' %>">
+                                        </div>
+                                        <div class="col-sm-4">
+                        <input name="survey_respondent_detail[pub_last_name]" value="<%=@survey_respondent_detail['pub_last_name'] if @survey_respondent_detail %>" 
+                            size="30" type="text" class="form-control" placeholder="<%= t 'last-name' %>">
+                                        </div>
+                                        <div class="col-sm-2">
+                        <input name="survey_respondent_detail[pub_suffix]" value="<%=@survey_respondent_detail['pub_suffix'] if @survey_respondent_detail %>" 
+                            size="5" type="text" class="form-control" placeholder="<%= t 'suffix' %>">
+                                        </div>
+                                  </div>
+                    </div>
             </div>
         </div>
     </div>
 <% end %>    
+
+
     <div class="row question-row">   
         <div class="col-sm-12">
 <div class="form-group  no-bottom-margin <%='has-error' if @errors && @errors['email'] %>">
-    <label class="control-label col-sm-2">
+    <label class="control-label col-sm-3">
         <%= t 'survey-email-address' %>
         <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-email-address' %>"></i>
     </label>
-    <div class="col-sm-5">
+    <div class="col-sm-4">
         <div class="required-field-block">
             <input name="survey_respondent_detail[email]" value="<%=@survey_respondent_detail['email'] if @survey_respondent_detail %>" 
                 size="50" class="form-control" type="email" required>

@@ -37,7 +37,7 @@ jQuery(document).ready(function() {
     
 
     if (!$('#pub_first_name').val() && !$('#pub_last_name').val()) {
-        $('div.pubname_toggle').parent().append("<a class='prefix_1 grid_4 toggle_pub_name'>Click to add Publication Name (if different from above)</a>");
+        $('div.pubname_toggle').parent().append("<a class='prefix_1 grid_4 toggle_pub_name col-sm-8 col-sm-offset-3'>Click if your published name should be different than your real name</a>");
         $('a.toggle_pub_name').click(function(){
             $('div.pubname_toggle').show();
             $(this).hide();
