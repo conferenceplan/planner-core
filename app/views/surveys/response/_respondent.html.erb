@@ -5,7 +5,7 @@
 </div>
 <div class="row question-row no-bottom-margin">   
     <div class="col-sm-12">
-        <div class="form-group <%='has-error' if @errors && (@errors['first_name'] || @errors['last_name']) %>"">
+        <div class="form-group <%='has-error' if @errors && (@errors['first_name'] || @errors['last_name']) %>">
             <label class="col-sm-2 control-label">
                 <%= t 'name' %>
                 <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-registration-name' %>"></i>

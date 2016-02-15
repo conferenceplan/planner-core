@@ -1,68 +1,68 @@
-
-
 <div class="row">
     <div class="col-sm-12">
+        <div class="row">
+            <div class="col-sm-12">
+                <p><%= t 'please-identify-yourself' %></p>
+            </div>
+        </div>
         <fieldset>
-            <div class="row row-buffered">
-                <div class="form-group">
-                <%= form.label (t 'first-name'), nil ,:class => "control-label col-sm-3" %>
-                <div class="col-sm-4">
-                    <%= text_field_tag :first_name, nil, :class => "form-control" %>
-                </div>
-                <div class="col-sm-1">
-                    <a class="survey-help" href="#" data-original-title="Enter your first name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed."><i class='glyphicon glyphicon-info-sign'></i></a>
-                </div>
+            <div class="row">
+                <div class="form-group"  style="margin-left: 0; margin-right: 0;">
+                    <div class="col-sm-2">
+                        <%= form.label (t 'first-name'), nil ,:class => "control-label" %>
+                        <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="Enter your first name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed."></i>
+                    </div>
+                    <div class="col-sm-4">
+                        <%= text_field_tag :first_name, nil, :class => "form-control" %>
+                    </div>
                 </div>
             </div>
-            <div class="row row-buffered">
-                <div class="form-group">
-                <%= form.label (t 'last-name'), nil ,:class => "control-label col-sm-3" %>
-                <div class="col-sm-4">
-                    <div class="required-field-block">
-                        <%= text_field_tag :last_name, nil, :class => "form-control required" %>
-                        <div class="required-icon">
-                            <div class="text">*</div>
+            <div class="row">
+                <div class="form-group"  style="margin-left: 0; margin-right: 0;">
+                    <div class="col-sm-2">
+                        <%= form.label (t 'last-name'), nil ,:class => "control-label" %>
+                        <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="Enter your last name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed."></i>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="required-field-block">
+                            <%= text_field_tag :last_name, nil, :class => "form-control required" %>
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-1">
-                    <a class="survey-help" href="#" data-original-title="Enter your last name as it appears in your invitation e-mail.  You can change this in the questionnaire itself if needed."><i class='glyphicon glyphicon-info-sign'></i></a>
-                </div>
-                </div>
             </div>
-            <div class="row row-buffered">
-                <div class="form-group">
-                <%= form.label (t 'invitation-code'), nil ,:class => "control-label col-sm-3" %>
-                <div class="col-sm-2">
-                    <div class="required-field-block">
-                        <%= text_field_tag :key, nil, :class => "form-control" %>   
-                        <div class="required-icon">
-                            <div class="text">*</div>
+            <div class="row">
+                <div class="form-group"  style="margin-left: 0; margin-right: 0;">
+                    <div class="col-sm-2">
+                        <%= form.label (t 'invitation-code'), nil ,:class => "control-label" %>
+                        <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="Enter the invitation code as it appears in your invitation e-mail. If the mail did not include an invitation code or if the invitation code did not work, write to <%= @ourEmail %> so we can send you the correct code."></i>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="required-field-block">
+                            <%= text_field_tag :key, nil, :class => "form-control" %>   
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-1">
-                    <a class="survey-help" href="#" data-original-title="Enter the invitation code as it appears in your invitation e-mail. If the mail did not include an invitation code or if the invitation code did not work, write to <%= @ourEmail %> so we can send you the correct code."><i class='glyphicon glyphicon-info-sign'></i></a>
-                </div>
-                </div>
             </div>
-            <div class="row row-buffered">
-                <div class="col-sm-3 col-sm-offset-2">
+            <div class="row">
+                <div class="col-sm-12">
+                    <%= submit_tag (t 'decline-invitation'), :name => "cancel", :confirm => "Are you sure?", :class => 'btn btn-default' %>
+                    <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="Select this button if you do not accept the invitation for <%= @site_config.name%>."></i>
+                    &nbsp;&nbsp;&nbsp;
                     <%= form.submit button, :class => 'btn btn-primary' %>
-                    <a class="survey-help" href="#" data-original-title="Select this button if you accept the invitation from <%= @site_config.name%>. Selecting the button will take you to the next page in the form."><i class='glyphicon glyphicon-info-sign'></i></a>
-                </div>
-                <div class="col-sm-3">
-                    <%= submit_tag (t 'decline-invitation'), :name => "cancel", :confirm => "Are you sure?", :class => 'btn btn-primary' %>
-                    <a class="survey-help" href="#" data-original-title="Select this button if you do not accept the invitation for <%= @site_config.name%>."><i class='glyphicon glyphicon-info-sign'></i></a>
+                    <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="Select this button if you accept the invitation from <%= @site_config.name%>. Selecting the button will take you to the next page in the form."></i>
                 </div>
             </div>
         </fieldset>
             <div class="row row-buffered">
                 <div class="col-sm-12">
                     <p>
-                    The small blue <a class="survey-help" href="#"><i class='glyphicon glyphicon-info-sign'></i></a> icon provides a link to informational help text.
-                    If you're unsure what to do, hover over the help icon.
-                    If you read the help text and are still uncertain what to do, write to <a href='mailto:<%= @ourEmail %>'><%= @ourEmail %></a>
+                        If you read the help texts and are still uncertain what to do, contact us at <a href='mailto:<%= @ourEmail %>'><%= @ourEmail %></a>.
                     </p>
                 </div>
             </div>
