@@ -30,14 +30,38 @@
             <% if question.question && (question.question.size > 0) && !([:address, :phone].include? question.question_type) %>
                 <% if ([:textbox].include? question.question_type) || question.horizontal %>
                     <div class="col-sm-12">
+                    <% if question.mandatory %>
+                        <div class="required-field-block">
+                    <% end %>
                 <% else %>
                     <% if (question.text_size && question.text_size <= 12 && question.text_size >= 1) %>
                         <div class="col-sm-<%= question.text_size %>">
                     <% else %>
                         <div class="col-sm-12">
                     <% end %>
+                    <% if ([:textfield].include? question.question_type) %>
+                        <% if question.mandatory %>
+                            <div class="required-field-block">
+                        <% end %>
+                    <% end %>
                 <% end %>
-                <%= render :partial => "#{question.question_type}", :locals => {:question => question} %>
+                    <%= render :partial => "#{question.question_type}", :locals => {:question => question} %>
+                    <% if ([:textbox].include? question.question_type) || question.horizontal %>
+                        <% if question.mandatory %>
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
+                            </div>
+                        <% end %>
+                    <% end %>
+                    <% if ([:textfield].include? question.question_type) %>
+                        <% if question.mandatory %>
+                            <div class="required-icon">
+                                <div class="text">*</div>
+                            </div>
+                            </div>
+                        <% end %>                    
+                    <% end %>
                 <% if @errors && @errors[question.id] %>
                     <span class="help-inline text-danger"><%=@errors[question.id][question.question]%></span>
                 <% end %>

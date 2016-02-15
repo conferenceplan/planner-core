@@ -18,7 +18,7 @@
             <label class="col-sm-3 control-label">
                 <%= question.question.html_safe %>
             </label>
-            <div class="col-sm-9">
+            <div class="col-sm-4">
                 <%= text_field_tag "survey_response[#{ question.id }][response]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response'] : ''}",
                  :size => 100, :class => 'col-xs-9 form-control' %>
                 <% if @errors && @errors[question.id] %>
@@ -34,7 +34,7 @@
             <label class="control-label col-sm-3">
                 <%= question.question1.html_safe %>
             </label>
-            <div class="col-sm-9">
+            <div class="col-sm-3">
             <%= text_field_tag "survey_response[#{ question.id }][response1]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'] : ''}",
              :size => 20, :class => 'col-xs-9 form-control' %>
             <% if @errors && @errors[question.id] %>
@@ -50,7 +50,7 @@
         <label class="control-label col-sm-3">
             <%= question.question2.html_safe %>
         </label>
-        <div class="col-sm-9">
+        <div class="col-sm-2">
         <%= text_field_tag "survey_response[#{ question.id }][response2]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : ''}",
          :size => 20, :class => 'col-xs-9 form-control' %>
             <% if @errors && @errors[question.id] %>
@@ -66,7 +66,7 @@
             <label class="control-label col-sm-3">
                 <%= question.question3.html_safe %>
             </label>
-            <div class="col-sm-9">
+            <div class="col-sm-2">
             <%= text_field_tag "survey_response[#{ question.id }][response3]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'] : ''}",
              :size => 20, :class => 'col-xs-9 form-control' %>
                 <% if @errors && @errors[question.id] %>
@@ -82,7 +82,7 @@
             <label class="control-label col-sm-3">
                 <%= question.question4.html_safe %>
             </label>
-            <div class="col-sm-9">
+            <div class="col-sm-2">
             <%= text_field_tag "survey_response[#{ question.id }][response4]", "#{@survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : ''}",
              :size => 20, :class => 'col-xs-9 form-control' %>
                 <% if @errors && @errors[question.id] %>

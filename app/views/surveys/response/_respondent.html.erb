@@ -1,16 +1,14 @@
-
 <div class="row">
     <div class="col-sm-12">
         <h3><%= t 'survey-personal-details' %></h3>
     </div>
 </div>
-
 <div class="row question-row no-bottom-margin">   
     <div class="col-sm-12">
         <div class="form-group <%='has-error' if @errors && (@errors['first_name'] || @errors['last_name']) %>"">
             <label class="col-sm-2 control-label">
-                    <%= t 'name' %>
-                    <a class="survey-help" href="#" data-original-title="Enter your Registration name"><i class='glyphicon glyphicon-info-sign'></i></a>
+                <%= t 'name' %>
+                <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-registration-name' %>"></i>
             </label>
             <div class="col-sm-10">
                     <div class="row">
@@ -92,9 +90,9 @@
 <div class="form-group  <%='has-error' if @errors && @errors['email'] %>">
     <label class="control-label col-sm-2">
         <%= t 'survey-email-address' %>
-        <a class="survey-help" href="#" data-original-title="Enter your primary e-mail address; the one you&rsquo;re most likely to monitor."><i class='glyphicon glyphicon-info-sign'></i></a>
+        <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-email-address' %>"></i>
     </label>
-    <div class="col-sm-10">
+    <div class="col-sm-5">
         <div class="required-field-block">
             <input name="survey_respondent_detail[email]" value="<%=@survey_respondent_detail['email'] if @survey_respondent_detail %>" 
                 size="50" class="form-control" type="email" required>

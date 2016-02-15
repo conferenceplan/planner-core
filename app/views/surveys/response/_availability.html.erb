@@ -10,7 +10,7 @@
             <%else%>
                 <%= radio_button_tag "survey_response[#{question.id}][response]", "1" %>
             <%end%>
-            I am available for Program for the complete duration of the convention.
+            <%= t 'available-for-complete-duration-of-event'%>
         </label>
     </div>
     <div class="radiobutton">
@@ -20,43 +20,51 @@
             <%else%>
                 <%= radio_button_tag "survey_response[#{question.id}][response]", "2" %>
             <%end%>
-            I plan to be at the convention. 
+            <%= t 'available-for-partial-duration-of-event' %>
         </label>
     </div>
     <div class="row">
-        <div class="col-xs-5 col-xs-offset-1">I will be available to be on Program beginning:</div>
+        <div class="col-xs-5 col-xs-offset-1">
+            <%= t 'available-starting-from' %>
+        </div>
         <div class="select col-xs-6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response1]",
                 options_for_select((0..(@site_config.number_of_days.to_i-1)).collect {|x| [(Time.zone.parse(@site_config.start_date.to_s) + x.day).strftime('%A, %B %e'), x]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response1'].to_i : nil) %>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-5 col-xs-offset-1">starting from:</div>
+        <div class="col-xs-5 col-xs-offset-1"></div>
         <div class="select col-xs-6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response2]",
                 options_for_select(['---','10am', '11am','Noon', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm'].collect{ |e| [e, e]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response2'] : nil) %>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-5 col-xs-offset-1">I will not be available for program after:</div>
+        <div class="col-xs-5 col-xs-offset-1">
+            <%= t 'available-ending-at' %>
+        </div>
         <div class="select col-xs-6 timeselect">
             <%= select_tag "survey_response[#{question.id}][response3]",
                 options_for_select((0..(@site_config.number_of_days.to_i-1)).collect {|x| [(Time.zone.parse(@site_config.start_date.to_s) + x.day).strftime('%A, %B %e'), x]}.reverse!, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response3'].to_i : nil) %>
         </div>
     </div>
     <div class="row">
-            <div class="col-xs-5 col-xs-offset-1">ending at:</div>
+            <div class="col-xs-5 col-xs-offset-1"></div>
             <div class="select col-xs-6 timeselect">
                 <%= select_tag "survey_response[#{question.id}][response4]",
                     options_for_select(['---','10am', '11am','Noon', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm'].collect{ |e| [e, e]}, @survey_response &&  @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response4'] : nil) %>
             </div>
     </div>
-    <div class="timeselect">
-        <div class="checkbox">
-            <label>
-                <%= check_box_tag "survey_response[#{question.id}][response5]", "1", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response5'] == '1' : false %>
-                I am extremely uncertain when I will be available to be on the Program
-            </label>
+    <div class="row">
+        <div class="col-xs-11 col-xs-offset-1">
+            <div class="timeselect">
+                <div class="checkbox">
+                    <label>
+                        <%= check_box_tag "survey_response[#{question.id}][response5]", "1", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s]['response5'] == '1' : false %>
+                        <%= t 'draft-schedule' %>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
