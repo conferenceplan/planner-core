@@ -54,6 +54,9 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
                 }
             } 
+        },
+        defaults: {
+            text_size: 5,
         }
     });
     
