@@ -2,7 +2,7 @@
 <h3><%= group.name %></h3>
 <p><%= group.description.html_safe %>
 <% if group.survey_format && !group.survey_format.help.blank? %>
-    <a class="survey-help" href="#" data-original-title="<%= group.survey_format.help %>"><i class='glyphicon glyphicon-info-sign'></i></a>
+    <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= group.survey_format.help %>"></i>
 <% end %>
 </p>
 
