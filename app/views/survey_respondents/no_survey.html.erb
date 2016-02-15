@@ -1,25 +1,30 @@
 <% if @survey %>
+    <div class="row survey-title-row">
+        <div class="col-sm-12">
+            <h1 class="survey-title"><%= @survey.name %></h1>
+        </div>
+    </div>
+<% end %>
+<% if @survey %>
     <% if !@survey.header_image.empty? %>
         <div class="row">
             <div class="col-md-12">
-                <div><img src="<%= @survey.header_image if @survey.header_image %>"></div>
+                <div><img src="<%= @survey.header_image if @survey.header_image %>" class="survey-title-image"></div>
             </div>
         </div>
     <% end %>
-<%end%>
+<% end %>
+<div class="voffset15"></div>
 <div class="row">
     <div class="col-md-12">
-        <h1 class="grid_8 push_2"><%= @survey.name %></h1>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12">
-        <% if @survey.declined_msg %>
+        <% if @survey && @survey.declined_msg && @survey.declined_msg.length > 0 %>
             <%= @survey.declined_msg %>
         <% else %>
-            Thank you. It has been noted that you have declined this invitation.
-            If, at a later date, you decide to change your mind you can return to the survey using
-            the information in your original invitation email.
+            <p>
+                Thank you. It has been noted that you have declined this invitation.
+                If, at a later date, you decide to change your mind you can return to the survey using
+                the information in your original survey invitation.
+            </p>
         <% end %>
     </div>
 </div>
