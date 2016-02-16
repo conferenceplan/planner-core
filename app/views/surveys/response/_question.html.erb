@@ -33,6 +33,8 @@
                     <% if question.mandatory %>
                         <div class="required-field-block">
                     <% end %>
+                <% elsif ([:availability].include? question.question_type) %>
+                    <div class="col-sm-12">
                 <% else %>
                     <% if (question.text_size && question.text_size <= 12 && question.text_size >= 1) %>
                         <div class="col-sm-<%= question.text_size %>">
