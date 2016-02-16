@@ -706,9 +706,14 @@ var AppUtils = (function(){
             if (this.options.url) {
                 this.model.urlRoot = this.options.url;
             };
-            
 
             this.model.on("sync", this.options.syncCallback ); // when the modal does the update and second after the update to the server
+        },
+
+        onRender : function() {
+            if (this.options.onRender) {
+                this.options.onRender(this.$el, this.model);
+            }
         },
         
         select : function(event) {
@@ -815,6 +820,7 @@ var AppUtils = (function(){
      * 
      */
     function renderCollection(collection, options) {
+        var render_callback = options.render_callback;
         viewType = CollectionView.extend({
                         attributes          : options.collection_attributes,
                         itemViewOptions     : {
@@ -838,7 +844,8 @@ var AppUtils = (function(){
                             form_event      : options.form_event,
                             form_event_fn   : options.form_event_fn,
                             editDisableCondition : options.editDisableCondition,
-                            view_refresh_event : options.child_view_refresh_event
+                            view_refresh_event : options.child_view_refresh_event,
+                            onRender : render_callback
                         },
                         onRender : function() {
                             jQuery(this.$el).find('.bpopover').popover({
