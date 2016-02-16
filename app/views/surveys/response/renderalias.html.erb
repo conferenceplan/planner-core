@@ -83,9 +83,14 @@
     </div>
     <% end %>
 <% else %>
-    <div class="row">
+    <div class="row survey-title-row">
         <div class="col-sm-12">
-            <p>No Valid Survey.</p>
+            <h1 class="survey-title"><%= t 'oops' %></h1>
+        </div>
+    </div>
+    <div class="row voffset20">
+        <div class="col-sm-12">
+            <p><%= (t 'no-valid-survey-message').html_safe %></p>
             <%= @survey_id%>
         </div>
     </div>
