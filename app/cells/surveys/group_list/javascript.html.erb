@@ -6,11 +6,12 @@ SurveyGroupApp.SurveyGroupManagement = (function(Backbone){
 
     SurveyGroup = Backbone.DeepModel.extend({
         schema : {
-            name                    : { type : 'Text', title : '<%= t "name" %>', help: '<%= t 'survey-group-name-hint' %>' },
+            name                    : { type : 'Text', title : '<%= t "name" %>', help: '<%= t 'survey-group-name-hint' %>', validators: ['required'] },
             description             : { type : 'Html', title : '<%= t "survey-description" %>', help: '<%= t 'survey-group-description-hint' %>' },
             sort_order              : { type : 'Number', title : '<%= t "sort_order" %>', help: '<%= t 'survey-sort-order-hint' %>' },
             'survey_format.help'    : { type :'Text', title : '<%= t "help-text" %>', help: '<%= t 'survey-help-text-hint' %>' } // Just need the help text...
         },
+        
     });
 
     SurveyGroupCollection = Backbone.Collection.extend({
