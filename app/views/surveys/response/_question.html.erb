@@ -36,6 +36,8 @@
                 <% else %>
                     <% if (question.text_size && question.text_size <= 12 && question.text_size >= 1) %>
                         <div class="col-sm-<%= question.text_size %>">
+                    <% elsif (question.text_size && question.text_size = 0) %>
+                        <div class="col-sm-6">
                     <% else %>
                         <div class="col-sm-12">
                     <% end %>
