@@ -28,6 +28,12 @@
             <input type="checkbox" id="ref-numbers" name="ref-numbers"></input> <%= t "publications-generate-ref-numbers" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "publication-numbers" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "publication-numbers-help" %>'></i>
         </div>
     </div>
+    <!-- technically this perhaps should not be in core, like the publication drawings -->
+    <div class="row voffset15">
+        <div class="col-md-12">
+            <%= t 'have-you-already-published' %> <a href="info_site"><%= t 'go-see-your-site' %></a>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="review-layout-template">
