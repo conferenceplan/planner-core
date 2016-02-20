@@ -175,13 +175,13 @@ CKEDITOR.config.htmlbuttons =	[
                 name:'survey-url',
                 //icon:'icon2.png',
                 html:'<%= args[:survey_url] %>',
-                title:'Survey URL (the URL to access the survey selected above)'
+                title:'Survey URL (inserts the URL to access the survey specified in this template)'
             },
 			{
                 name:'survey-key',
                 //icon:'icon2.png',
                 html:'<%= args[:key] %>',
-                title:'Person\'s Personal Survey Key (required if survey is not anonymous)'
+                title:'Person\'s Survey Authentication Code (required if survey requires authentication)'
             },
 
             {
