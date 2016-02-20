@@ -139,13 +139,13 @@
             </div>
             <div class="form-group">
             <label class="col-sm-4 control-label">
-                <%= t "invitation-status" %>
+                <%= t "invitation-status" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "invitation-status" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "invitation-status-help" %>'></i>
             </label>
             <div class="col-sm-4" data-editors="invitestatus_id"></div>
             </div>
             <div class="form-group">
             <label class="col-sm-4 control-label">
-                <%= t "acceptance-status" %>
+                <%= t "acceptance-status" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "acceptance-status" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "acceptance-status-help" %>'></i>
             </label>
             <div class="col-sm-4" data-editors="acceptance_status_id"></div>
             </div>
@@ -223,7 +223,7 @@
                 <button class="model-generate-invite-key-button btn btn-primary btn-xs pull-right"><%= t "generate-invite-key" %></button>
             </p>
             {{ } }}
-            <dl class="dl-horizontal-small dt35">
+            <dl class="dl-horizontal-small dt50">
                 <dt><%= t "invite-status" %></dt>
                 <dd>{{= invitestatus_name ? invitestatus_name : "&nbsp;"}}</dd>
                 <dt><%= t "acceptance-status" %></dt>
