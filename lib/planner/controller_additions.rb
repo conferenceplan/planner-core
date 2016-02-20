@@ -103,7 +103,7 @@ module Planner
                   # conflicts ?
                 ]
               } if allowed? :items
-      menu << { :title => 'surveys',          :target => '/pages/surveys_dash/report', :icon => "fa fa-comment",  :target_base => '/pages/surveys_dash',
+      menu << { :title => 'surveys',          :target => '/pages/surveys_dash/manage', :icon => "fa fa-comment",  :target_base => '/pages/surveys_dash',
                 :sub_menu => [
                   { :title => 'manage-surveys', :target => '/pages/surveys_dash/manage', :display => allowed?(:manage_surveys) },
                   { :title => 'survey-reports', :target => '/pages/surveys_dash/report', :display => allowed?(:survey_reports) }
@@ -119,7 +119,7 @@ module Planner
                 :sub_menu => [
                   {:title => 'reports', :target => '/pages/reports_dash/manage', :display => allowed?(:reports) }
               ]} if allowed? :reports
-      menu << { :title => 'menu-publications',   :target => '/pages/publications_dash/print', :icon => "fa fa-globe",     :target_base => '/pages/publications_dash',
+      menu << { :title => 'menu-publications',   :target => '/pages/publications_dash/online', :icon => "fa fa-globe",     :target_base => '/pages/publications_dash',
                 :sub_menu => [
                   {:title => 'publish', :target => '/pages/publications_dash/online', :display => allowed?(:publish) },
                   {:title => 'print', :target => '/pages/publications_dash/print', :display => allowed?(:print) }
