@@ -105,6 +105,14 @@ var AppUtils = (function(){
         }
     });
     
+    
+	DeleteModal = ConfirmModel.extend({
+		initialize : function(options) {
+            this.options = options || {};
+            this.template = _.template($('#modal-delete-template').html());
+        }
+	});
+    
     /*
      * 
      */
@@ -777,8 +785,7 @@ var AppUtils = (function(){
             var clearFn = this.options.clearFn;
             
             var thatModel = this.model;
-
-            modal = new AppUtils.ConfirmModel({
+            modal = new AppUtils.DeleteModal({
                 title : translate("delete_confirmation"),
                 content : translate("confirm_that_you_really_want_to_delete"),
                 continueAction : function() {
@@ -1174,6 +1181,8 @@ var AppUtils = (function(){
         InfoModal : InfoModal,
         
         ConfirmModel : ConfirmModel,
+        
+        DeleteModal : DeleteModal,
         
         GenericModal : GenericModal,
         
