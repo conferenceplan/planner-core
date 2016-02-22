@@ -33,7 +33,11 @@ class MailingJob
             rescue => msg
               # Delayed::Worker.logger.add(Logger::ERROR, msg) if Delayed::Worker.logger
               Sidekiq::Logging.logger.error msg if Sidekiq::Logging.logger
-              raise msg
+              
+              # if the problem is that the person does not have an email address do not stop the sidekiq process
+              if !person.getDefaultEmail || !person.getDefaultEmail.email.blank?
+                raise msg
+              end
             end
             sleep 0.5 # For 0.5 second between sending emails
           end
