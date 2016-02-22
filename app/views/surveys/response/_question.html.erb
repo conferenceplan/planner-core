@@ -33,11 +33,19 @@
                     <% if question.mandatory %>
                         <div class="required-field-block">
                     <% end %>
+                <% elsif ([:availability].include? question.question_type) %>
+                    <div class="col-sm-12">
                 <% else %>
                     <% if (question.text_size && question.text_size <= 12 && question.text_size >= 1) %>
                         <div class="col-sm-<%= question.text_size %>">
                     <% elsif (question.text_size && question.text_size = 0) %>
-                        <div class="col-sm-6">
+                        <% if ([:multiplechoice].include? question.question_type) || ([:singlechoice].include? question.question_type) %>
+                            <!-- put full width for checkboxes or radio buttons -->
+                            <div class="col-sm-12">
+                        <% else %>
+                            <!-- put half width for other types of questions -->
+                            <div class="col-sm-6">
+                        <% end %>
                     <% else %>
                         <div class="col-sm-12">
                     <% end %>

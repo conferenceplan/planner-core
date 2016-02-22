@@ -6,8 +6,8 @@ SurveyApp.SurveyManagement = (function(Backbone){
 
     Survey = Backbone.DeepModel.extend({
         schema : {
-            name            : { type : 'Text', title : '<%= t "name" %>', help: '<%= t 'survey-name-hint' %>' },
-            alias           : { type : 'Text', title : '<%= t "survey-alias" %>', help: '<%= t 'survey-alias-hint' %>' },
+            name            : { type : 'Text', title : '<%= t "name" %>', help: '<%= t 'survey-name-hint' %>', validators: ['required'] },
+            alias           : { type : 'Text', title : '<%= t "survey-alias" %>', help: '<%= t 'survey-alias-hint' %>', validators: ['required'] },
             public          : { type : 'Checkbox', title : '<%= t "survey-public" %>', help: '<%= t 'survey-public-hint' %>' },
             authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>', help: '<%= t 'survey-authenticate-hint' %>' },
             use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>', help: '<%= t 'survey-use-captcha-hint' %>' },
@@ -38,6 +38,10 @@ SurveyApp.SurveyManagement = (function(Backbone){
             decline_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-decline-to" %>', help: '<%= t 'survey-decline-status-hint' %>',
                                             options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                         dependsOn : 'authenticate', dependentValues : ['true'] }
+        },
+        defaults: {
+            submit_string: 'Submit',
+            thank_you: 'Thank you for filling out this survey.',
         },
         urlRoot : "<%= baseUri + '/surveys' %>"
     });

@@ -8,11 +8,11 @@
     <% else %>
         <!-- checkbox question -->
         <div class="checkbox">
-        <label>
+            <label>
     <% end %>
-        <%= check_box_tag "survey_response[#{question.id}][#{answer.id}]", "#{answer.answer}", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s][answer.id.to_s] : false %>
-        <%= answer.answer.html_safe %>
-    </label>
+                <%= check_box_tag "survey_response[#{question.id}][#{answer.id}]", "#{answer.answer}", @survey_response && @survey_response[question.id.to_s] ? @survey_response[question.id.to_s][answer.id.to_s] : false %>
+                <%= answer.answer.html_safe %>
+            </label>
     <% if !question.horizontal %>
         </div>
     <% end %>
