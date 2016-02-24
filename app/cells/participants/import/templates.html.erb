@@ -29,7 +29,7 @@
         <h3 class="h3-underlined"><%= t 'people-import-wizard-step-1'%></h3>
         <div class="bs-callout bs-callout-info">
             <h4><%= t 'hint' %></h4>
-            <%= t 'before-importing-people-text' %>  
+            <%= (t 'before-importing-people-text').html_safe %>  
         </div>
         <p><%= t 'people-import-wizard-intro'%> <%= t 'people-import-wizard-step-1-text'%> <a href="<%= baseUri + '/pages/admin_dash/system_configs#data_sources_config' %>"><%= t 'people-import-wizard-step-1-create-data-source-link'%></a>. <%= t 'people-import-wizard-step-1-text-2' %></p>
     </div>
