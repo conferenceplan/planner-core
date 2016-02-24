@@ -43,6 +43,7 @@ require "encoding_sampler"
 require "figaro"
 require "ranked-model"
 require "http_accept_language"
+require "country_select"
 
 module PlannerCore
   class Engine < ::Rails::Engine
@@ -94,6 +95,7 @@ module PlannerCore
     initializer :before_initialize do
       ActionController::Base.send(:include, Planner::ControllerAdditions)
       Cell::Rails.send(:include, Planner::ControllerAdditions)
+      ActionMailer::Base.send(:include, Planner::ControllerAdditions)
     end
 
     initializer :after_initialize do

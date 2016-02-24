@@ -67,6 +67,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'ranked-model'
   s.add_dependency 'geocoder'
   s.add_dependency 'http_accept_language'
+  s.add_dependency 'country_select'
 
   s.add_development_dependency  'capybara', '2.3.0'
   s.add_development_dependency  'database_cleaner', '1.5.1'

@@ -5,7 +5,24 @@ module Planner
       base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :baseUri_with_lang,
                          :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
                          :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo,
-                         :strip_html_tags, :site_url, :site_url_no_long, :only_free_tickets_available?
+                         :strip_html_tags, :site_url, :site_url_no_long, :only_free_tickets_available?,
+                         :public_start_date, :public_end_date, :public_days, :conference_name
+    end
+    
+    def conference_name
+      SiteConfig.first ? SiteConfig.first.name : ''
+    end
+    
+    def public_start_date
+      SiteConfig.first.public_start_date if SiteConfig.first
+    end
+
+    def public_end_date
+      (SiteConfig.first.public_start_date + (SiteConfig.first.public_number_of_days - 1).day) if SiteConfig.first
+    end
+
+    def public_days
+      SiteConfig.first.public_number_of_days if SiteConfig.first
     end
     
     def only_free_tickets_available?
