@@ -9,13 +9,6 @@
                     <label class="col-sm-12 question">
                 <% else %>
                     <label class="col-sm-12 question">
-                    <!-- removing question size for determining label size 
-                    <% if (question.text_size && question.text_size < 10) %>
-                        <label class="col-sm-6">
-                    <% else %>
-                        <label class="col-sm-2">
-                    <% end %>
-                    -->
                 <% end %>
                         <% if question.mandatory %>
                             <span class='' style='color: red;'>*</span>
@@ -37,14 +30,14 @@
                     <div class="col-sm-12">
                 <% else %>
                     <% if (question.text_size && question.text_size <= 12 && question.text_size >= 1) %>
-                        <div class="col-sm-<%= question.text_size %>">
+                        <div class="col-sm-6">
                     <% elsif (question.text_size && question.text_size = 0) %>
                         <% if ([:multiplechoice].include? question.question_type) || ([:singlechoice].include? question.question_type) %>
                             <!-- put full width for checkboxes or radio buttons -->
                             <div class="col-sm-12">
                         <% else %>
                             <!-- put half width for other types of questions -->
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                         <% end %>
                     <% else %>
                         <div class="col-sm-12">
