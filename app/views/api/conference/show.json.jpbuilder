@@ -4,6 +4,8 @@ json.start_day      SiteConfig.first.start_date ? Time.zone.parse(SiteConfig.fir
 json.num_days       SiteConfig.first.number_of_days
 json.utc_offset     SiteConfig.first.start_date ? Time.zone.parse(SiteConfig.first.start_date.to_s).utc_offset/60 : 0
 
+json.last_publish   PublicationDate.last ? PublicationDate.last.timestamp : ''
+
 json.cloudinary_url  @cloudinaryURI #.sub(/http\:\/\/a[0-9]*\./,'') #
 
 json.set! 'mobile' do
