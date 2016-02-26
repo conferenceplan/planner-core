@@ -69,6 +69,8 @@ json.set! 'mobile' do
             img = @logo.image
             @logo.scale = @scale
             json.image     img.standard.url.partition(@partition_val)[2]
+        else
+            json.image  "https://s3.amazonaws.com/media.events.grenadine.co/grenadine-event-guide-logo.jpg"
         end
     end
     
