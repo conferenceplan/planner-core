@@ -526,7 +526,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     url : "<%= baseUri + '/tags/' %>" + id + "?class=ProgrammeItem",
                     tagUrl : "<%= baseUri + '/tags/' %>"+ id + "/add?class=ProgrammeItem",
                     template : "#tag-context-layout-template",
-                    // view_refresh_event : "address:refresh",
+                    view_refresh_event : "tags:refresh",
                     region : itemTabLayout.tags,
                     addTitle : '<%= t "create-tag" %>',
                 });

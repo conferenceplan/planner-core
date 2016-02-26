@@ -369,7 +369,7 @@ var TabUtils = (function(){
                     viewType = TabCollectionView.extend({
                         initialize : function(options) {
                             this.options = options || {};
-                            // eventAggregator.on("refreshTagList", this.refreshList, this);
+                            eventAggregator.on("refreshTagList", this.refreshList, this);
                         },
                         itemViewOptions : {
                             template : options.template,
