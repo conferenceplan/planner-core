@@ -11,6 +11,7 @@ json.rowdata @mailItems do |item|
     
     json.set! "item[testrun]", item.testrun ? "Y" : "N"
     json.set! "item[content]", item.content
+    json.set! "item[subject]", item.subject
     
     json.set! "item[person][first_name]", item.person.first_name
     json.set! "item[person][last_name]", item.person.last_name

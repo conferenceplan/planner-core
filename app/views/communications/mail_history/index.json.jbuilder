@@ -10,6 +10,7 @@ json.rows @mail_history do |history|
     
     json.testrun            history.testrun ? "Y" : "N"
     json.content            history.content
+    json.subject            history.subject
 
     json.person do
         json.first_name history.person.first_name

@@ -13,8 +13,12 @@ $.widget( "cp.mailHistoryBootstrapTable", $.cp.baseBootstrapTable , {
             valign: 'middle',
             sortable: false,
             formatter : function(value, row) {
-                if (typeof row.mailing.mail_use === 'undefined') {
-                    return "";
+                if (typeof row.mailing.mail_use === 'undefined' || (row.mailing.mail_use == '' && row.mailing.title == '')) {
+                    if (row.subject) {
+                        return '<a href="#"><b>' +  row.subject + '</b></a>';  
+                    } else {
+                        return "";
+                    }
                 } else {
                     return '<a href="#"><b>' + row.mailing.mailing_number + ' - ' + row.mailing.title + '</b></a>';
                 }

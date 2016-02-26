@@ -1,6 +1,6 @@
 class MailHistory < ActiveRecord::Base
   attr_accessible :lock_version, :date_sent, :content, :testrun, :person_mailing_assignment_id, :person_id, :email_status_id, :mailing_id,
-                  :person_mailing_assignment, :email, :person, :mailing, :email_status
+                  :person_mailing_assignment, :email, :person, :mailing, :email_status, :subject
     
   belongs_to :person_mailing_assignment
   belongs_to :person

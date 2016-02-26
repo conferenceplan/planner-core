@@ -106,10 +106,10 @@ module MailService
           skip_premailer: true
         }, content
       ).deliver
-      saveMailHistory(person, nil, content, EmailStatus[:Sent])
+      saveMailHistory(person, nil, content, EmailStatus[:Sent], template.subject)
       transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
     rescue => msg
-      saveMailHistory(person, nil, msg, EmailStatus[:Failed])
+      saveMailHistory(person, nil, msg, EmailStatus[:Failed], template.subject)
       # THROW ERROR - TODO
     end    
   end
@@ -163,7 +163,7 @@ module MailService
             skip_premailer: true
           }, content
         ).deliver
-        saveMailHistory(person, mailing, content, EmailStatus[:Sent])
+        saveMailHistory(person, mailing, content, EmailStatus[:Sent], template.subject)
         transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
       rescue Net::SMTPSyntaxError
       rescue EOFError
@@ -180,7 +180,7 @@ module MailService
   #
   #
   #
-  def self.saveMailHistory(person, mailing, content, email_status)
+  def self.saveMailHistory(person, mailing, content, email_status, subject = nil)
     pma = PersonMailingAssignment.find :first, :conditions => {:person_id => person, :mailing_id => mailing}
 
     mailHistory = MailHistory.new :person_mailing_assignment  => pma,
@@ -190,7 +190,8 @@ module MailService
                                   :date_sent                  => DateTime.now,
                                   :content                    => content,
                                   :mailing                    => mailing,
-                                  :email_status               => email_status
+                                  :email_status               => email_status,
+                                  :subject                    => subject
         
     mailHistory.save
   end

@@ -43,7 +43,7 @@ require "encoding_sampler"
 require "figaro"
 require "ranked-model"
 require "http_accept_language"
-require "country_select"
+#require "country_select"
 
 module PlannerCore
   class Engine < ::Rails::Engine

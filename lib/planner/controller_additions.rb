@@ -15,7 +15,7 @@ module Planner
     end
     
     def end_date
-      (SiteConfig.first.start_date + (SiteConfig.first.number_of_days - 1).day) if SiteConfig.first
+      (SiteConfig.first.start_date + (SiteConfig.first.number_of_days - 1).day).end_of_day if SiteConfig.first
     end
     
     def conference_days
