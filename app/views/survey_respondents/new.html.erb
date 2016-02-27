@@ -5,14 +5,14 @@
             <h1 class="survey-title"><%= @survey.name %></h1>
         </div>
     </div>
-<% end %>
-<% if !@survey.header_image.empty? %>
-    <div class="row">
-        <div class="col-sm-12">
-            <img src="<%= @survey.header_image if @survey.header_image %>" class="survey-title-image"/>
+    <% if !@survey.header_image.empty? %>
+        <div class="row">
+            <div class="col-sm-12">
+                <img src="<%= @survey.header_image if @survey.header_image %>" class="survey-title-image"/>
+            </div>
         </div>
-    </div>
-<%end%>
+    <%end%>
+<% end %>
 
 <% if @survey && @survey.authenticate_msg %>
 <div class="row row-buffered">
@@ -22,6 +22,8 @@
 </div>
 <% end %>
 
-<%= form_for @survey_respondent, :html => {:'accept-charset' => 'UTF-8', :class => 'form-horizontal'} do |f| %>
-  <%= render :partial => "form", :locals => {:form => f, :button => (t 'accept-invitation')} %>
+<% if @survey %>
+    <%= form_for @survey_respondent, :html => {:'accept-charset' => 'UTF-8', :class => 'form-horizontal'} do |f| %>
+      <%= render :partial => "form", :locals => {:form => f, :button => (t 'accept-invitation')} %>
+    <% end %>
 <% end %>
