@@ -326,4 +326,5 @@ Rails.application.routes.draw do
 
   planner_resources 'category_names',         :defaults => { :format => 'json' }
   planner_resources 'theme_names',         :defaults => { :format => 'json' }
+  planner_resources 'published_programme_items', :defaults => { :format => 'json' }
 end

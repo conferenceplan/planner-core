@@ -65,7 +65,7 @@ module Planner
         has_many  :linked, :as => :linkedto, :dependent => :delete_all, :class_name => 'Link'
 
         Planner::Linkable.config.linkedto_types.each do |linkedto_type|
-          has_many linkedto_type.name.demodulize.pluralize.downcase.to_sym, :through => :linked, :class_name => linkedto_type.name  do
+          has_many linkedto_type.name.demodulize.pluralize.underscore.to_sym, :through => :linked, :class_name => linkedto_type.name  do
                       def category(c)
                         find(:all, :joins => [:category_names], :conditions => ['category_names.name = ?', c])
                       end
@@ -83,7 +83,7 @@ module Planner
         has_many  :links, :dependent => :destroy
 
         Planner::Linkable.config.linkable_types.each do |linkable_type|
-          has_many  linkable_type.name.demodulize.pluralize.downcase.to_sym, :through => :links,
+          has_many  linkable_type.name.demodulize.pluralize.underscore.to_sym, :through => :links,
                     :source => :linkedto,
                     :source_type => linkable_type.name
         end
