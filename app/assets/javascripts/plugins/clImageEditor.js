@@ -36,6 +36,14 @@ Form.editors.CLImage = Form.editors.Text.extend({
                             crop: 'scale', width: 100 }) );
             }
         }
+        
+        var that = this;
+        element.find('.clear-image').click(function(ev) {
+            that.setValue("");
+            element.find('#' + field_name + '_preview').html("");
+            element.find('.fileinput-button').show();
+            return false;
+        });
 
         element.find('.cloudinary-fileupload').cloudinary_fileupload(
         {
@@ -93,6 +101,7 @@ Form.editors.CLImage = Form.editors.Text.extend({
                     </div>\
                 </div>\
             </div>\
+            <div><button class="clear-image btn btn-primary"><i class="glyphicon glyphicon-trash"></i></button></div>\
             </span>\
         ', null, Form.templateSettings),
 });
