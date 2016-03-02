@@ -153,17 +153,19 @@ module MailService
             })
   
       begin
+        subject = template.subject
+        subject += ' - ' + person.getFullName() if person
         PlannerMailer.send_email({
             from:     config.from,
             reply_to: config.reply_to,
             to:       to,
             cc:       cc,
-            subject:  template.subject,
+            subject:  subject,
             title:    template.title,
             skip_premailer: true
           }, content
         ).deliver
-        saveMailHistory(person, mailing, content, EmailStatus[:Sent], template.subject)
+        saveMailHistory(person, mailing, content, EmailStatus[:Sent], subject)
         transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
       rescue Net::SMTPSyntaxError
       rescue EOFError
