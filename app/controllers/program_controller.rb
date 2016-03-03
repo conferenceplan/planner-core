@@ -147,13 +147,24 @@ class ProgramController < ApplicationController
   #
   def updates
     @scale = params[:scale].to_f
-    pubIndex = params[:pubidx] ? params[:pubidx].to_i : (PublicationDate.find :first, :order => 'id desc').id
-    since_date = PublishedProgramItemsService.determineChangeDate(pubIndex)
+    @changes = nil
+
+    first_date = PublicationDate.find :first, :order => 'id desc'
+    if first_date
+      pubIndex = params[:pubidx] ? params[:pubidx].to_i : first_date.id
+    else
+      pubIndex = 0
+    end
+
     @extra_item_json = [] if ! @extra_item_json
     
     @cloudinaryURI = get_base_image_url
     @partition_val = /upload/
-    @changes = PublishedProgramItemsService.getUpdates(since_date)
+
+    if pubIndex > 0
+      since_date = PublishedProgramItemsService.determineChangeDate(pubIndex)
+      @changes = PublishedProgramItemsService.getUpdates(since_date)
+    end
   end
   
 end
