@@ -11,12 +11,21 @@ module ProgramPlannerHelper
       newTimeSlot = TimeSlot.new(:start => itemStartTime, :end => itemEndTime)
       newTimeSlot.save
       
+      # update the assignment ...
       if item.room_item_assignment != nil 
-        removeAssignment(item.room_item_assignment)
+        assignment = item.room_item_assignment
+        old_time_slot = assignment.time_slot
+        
+        assignment.room = room
+        assignment.time_slot = newTimeSlot
+        assignment.day = day
+        
+        old_time_slot.delete
+      else
+        # Create the new assignment
+        assignment = RoomItemAssignment.new(:room => room, :time_slot => newTimeSlot, :day => day, :programme_item => item)
       end
       
-      # Create the new assignment
-      assignment = RoomItemAssignment.new(:room => room, :time_slot => newTimeSlot, :day => day, :programme_item => item)
       assignment.save
     end
     
