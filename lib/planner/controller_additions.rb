@@ -128,8 +128,8 @@ module Planner
       menu << { :title => 'participants',   :target => '/pages/participants_dash/manage', :icon => "glyphicon glyphicon-user",      :target_base => '/pages/participants_dash'} if allowed? :participants
       menu << { :title => 'program-items',  :target => '/pages/items_dash/manage', :icon => "fa fa-calendar",     :target_base => '/pages/items_dash',
                 :sub_menu => [
-                  { :title => 'items',      :target => '/pages/items_dash/manage', :display => allowed?(:items) },
-                  { :title => 'schedule',   :target => '/pages/schedule_dash/manage', :display => allowed?(:schedule)  }
+                  { :title => 'prog-items',      :target => '/pages/items_dash/manage', :display => allowed?(:items) },
+                  { :title => 'scheduling-conflicts-tab-title',   :target => '/pages/schedule_dash/manage', :display => allowed?(:schedule)  }
                   # conflicts ?
                 ]
               } if allowed? :items
