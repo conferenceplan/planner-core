@@ -316,8 +316,6 @@ Rails.application.routes.draw do
 
   match '/form/:page(/:preview)', :controller => 'surveys/response', :action => 'renderalias'
 
-  match 'api/conference.:format', :controller => 'api/conference', :action => 'show'  
-
   match 'tasks/update_exclusions', :controller => 'tasks/update_exclusions', :action => 'index'
 
   # Tools for exporting
