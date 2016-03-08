@@ -62,7 +62,7 @@ module PeopleService
     end
     
     Person.joins(:person_con_state).
-                            includes([:pseudonym, :email_addresses, :postal_addresses, :person_con_state, :invitation_category, {:programmeItemAssignments => {:programmeItem => [:time_slot, :format]}}]).
+                            includes([:pseudonym, :email_addresses, :postal_addresses, :person_con_state, {:programmeItemAssignments => {:programmeItem => [:time_slot, :format]}}]).
                             where(query).
                             where(self.constraints()).
                             order("people.last_name, people.first_name")
@@ -82,11 +82,10 @@ module PeopleService
     
     if invite_category && invite_category > 0
       if query
-        query = query.and(peopleTable[:invitation_category_id].eq(invite_category))
-      else
-        query = peopleTable[:invitation_category_id].eq(invite_category)
+        query = query.and(stateTable[:invitation_category_id].eq(invite_category))
+      else  
+        query = stateTable[:invitation_category_id].eq(invite_category)
       end
-      include_list << :invitation_category
     end
     
     Person.joins(:person_con_state).
@@ -94,7 +93,6 @@ module PeopleService
                             where(query).
                             where(self.constraints()).
                             order("people.last_name")
-    
   end
 
   #
@@ -105,7 +103,7 @@ module PeopleService
     tagquery = DataService.genTagSql(context, tags)
 
     includes = [:pseudonym, :email_addresses]
-    includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
+    # includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
     args.merge! :include => includes
 
     if tagquery.empty?
@@ -131,7 +129,7 @@ module PeopleService
     end
     
     includes = [:pseudonym, :email_addresses]
-    includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
+    # includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
     args.merge! :include => includes
     
     if tagquery.empty?
@@ -150,8 +148,8 @@ module PeopleService
   def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false, includeMailHistory=false)
     includeConState = false
     clause = DataService.createWhereClause(filters, 
-          ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
-          ['person_con_states.invitestatus_id', 'invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'], ['people.last_name'],
+          ['person_con_states.invitestatus_id', 'person_con_states.invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
+          ['person_con_states.invitestatus_id', 'person_con_states.invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'], ['people.last_name'],
           {'person_con_states.acceptance_status_id' => '6', 'person_con_states.invitestatus_id' => '1'})
 
     # add the name search for last of first etc

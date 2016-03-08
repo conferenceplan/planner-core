@@ -170,7 +170,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
             }, {
                 name : 'person[invitation_category_id]',
                 label : this.options.invite_category[1], //'Invitation<br/>Category',
-                index : 'invitation_category_id',
+                index : 'person_con_states.invitation_category_id',
                 hidden : !this.options.invite_category[0],
                 editable : true,
                 edittype : "select",

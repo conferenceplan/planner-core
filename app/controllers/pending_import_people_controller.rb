@@ -40,8 +40,8 @@ class PendingImportPeopleController < PlannerController
         ImportService.mergePending pending_id, person_id
         render json: ['sucess'], :content_type => 'application/json'        
       end
-    rescue => ex
-      render status: :bad_request, text: ex.message
+    # rescue => ex
+      # render status: :bad_request, text: ex.message
     end
   end
 
@@ -116,6 +116,14 @@ class PendingImportPeopleController < PlannerController
       
       # Process the pending table
       result = ImportService.processPendingImports datasource_id
+      # result =       {
+        # :created => 0,
+        # :updates => 0,
+        # :possible_matches => 0,
+        # :registration_in_use => 0,
+        # :possible_name_updates => 0
+      # }
+
   
       # TODO - need to return a JSON result set listing how many imported and how many need review....
       render json: result.to_json, :content_type => 'application/json'

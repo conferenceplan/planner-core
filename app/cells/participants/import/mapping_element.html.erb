@@ -1,0 +1,11 @@
+
+<li class="list-group-item ui-droppable" id="<%= @field %>">
+    <span><%= @field %></span> 
+    <span class="glyphicon glyphicon-arrow-left"></span> 
+    <span>
+        {{= (typeof(<%= @field %>) != 'undefined') && <%= @field %> != null ? ParticipantApp.PeopleImport.column_name(src, <%= @field %>) : '' }} 
+        <button class="btn btn-xs btn-link pull-right remove-mapping" mapping="<%= @field %>">
+            <i class="glyphicon glyphicon-remove"></i>
+        </button>
+    </span>
+</li>

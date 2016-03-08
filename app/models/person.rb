@@ -1,6 +1,6 @@
 class Person < ActiveRecord::Base
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :language, :comments, :company, :job_title,
-                  :invitation_category_id, :pseudonym_attributes, :acceptance_status_id, :invitestatus_id,
+                  :pseudonym_attributes, :acceptance_status_id, :invitestatus_id, :invitation_category_id,
                   :postal_addresses_attributes, :email_addresses_attributes, :phone_numbers_attributes, :registrationDetail_attributes,
                   :prefix
                   
@@ -51,7 +51,7 @@ class Person < ActiveRecord::Base
   
   # ----------------------------------------------------------------------------------------------
   #
-  # TODO - conference specific data - need to change so that the access is scoped by conference id
+  # Conference specific data - need to change so that the access is scoped by conference id
   #
   has_one :available_date, :dependent => :delete
   accepts_nested_attributes_for :available_date
@@ -99,9 +99,9 @@ class Person < ActiveRecord::Base
   has_many  :mailings, :through => :person_mailing_assignments
   has_many  :mail_histories #, :through => :person_mailing_assignments
   
-  belongs_to      :invitation_category # TODO - SCOPE
+  belongs_to  :dep_invitation_category, :foreign_key => 'invitation_category_id', :class_name => "InvitationCategory" # TODO - SCOPE
   
-  has_one      :person_con_state # TODO - SCOPE
+  has_one      :person_con_state
   
   # ----------------------------------------------------------------------------------------------
   def acceptance_status_id=(arg)
@@ -116,6 +116,11 @@ class Person < ActiveRecord::Base
     self.person_con_state.save! if self.id && self.id > 0
   end
   
+  def invitation_category_id=(arg)
+    self.person_con_state = PersonConState.new if !self.person_con_state
+    self.person_con_state.invitation_category_id = arg
+    self.person_con_state.save! if self.id && self.id > 0
+  end
   
   def acceptance_status
     if person_con_state
@@ -142,6 +147,20 @@ class Person < ActiveRecord::Base
   def invitestatus=(arg)
     self.person_con_state = PersonConState.new if !self.person_con_state
     self.person_con_state.invitestatus = arg
+    self.person_con_state.save! if self.id && self.id > 0
+  end  
+  
+  def invitation_category
+    if person_con_state
+      person_con_state.invitation_category
+    else
+      nil
+    end
+  end  
+  
+  def invitation_category=(arg)
+    self.person_con_state = PersonConState.new if !self.person_con_state
+    self.person_con_state.invitation_category = arg
     self.person_con_state.save! if self.id && self.id > 0
   end  
   

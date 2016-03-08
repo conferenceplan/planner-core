@@ -232,9 +232,13 @@ protected
     end
     
     person.person_con_state = PersonConState.new
+    
+    # Check the state fields from pending import
+    
     person.person_con_state.save!
     
     copy_person(pendingPerson, person)
+    
   end
   
   def self.copy_person(pendingPerson, person)
@@ -345,10 +349,32 @@ protected
     end
     
     if !pendingPerson.phoneNil?
-      # TODO - CHECK
       person.updatePhone(pendingPerson.phone, PhoneTypes['Work'].name)
       person.save!
     end    
+
+    # and the bio
+    if !pendingPerson.bio.blank?
+      person.edited_bio = EditedBio.new if !person.edited_bio
+      person.edited_bio.bio = pendingPerson.bio
+      person.edited_bio.save!
+    end
+    
+    if !pendingPerson.invite_status.blank?
+      invite_status = Enum.where({'name' => pendingPerson.invite_status, :type => InviteStatus.name}).first
+      person.invitestatus_id = invite_status.id if invite_status
+    end
+
+    if !pendingPerson.accept_status.blank?
+      accept_status = Enum.where({'name' => pendingPerson.accept_status, :type => AcceptanceStatus.name}).first
+      person.acceptance_status_id = accept_status.id if accept_status
+    end
+
+    if !pendingPerson.invite_category.blank?
+      invite_category = InvitationCategory.where({'name' => pendingPerson.invite_category}).first
+      person.invitation_category_id = invite_category.id if invite_category
+    end
+
   end
 
   def self.extra_set()

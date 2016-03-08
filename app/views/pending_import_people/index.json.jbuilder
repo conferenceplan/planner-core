@@ -28,5 +28,9 @@ json.rows @pendingImportPeople do |pending|
     json.datasource_dbid    pending.datasource_dbid
     json.registration_type  pending.registration_type
     json.registration_number    pending.registration_number
+    json.bio                pending.bio
+    json.invite_status      pending.invite_status
+    json.invite_category    pending.invite_category
+    json.accept_status      pending.accept_status
 
 end

@@ -12,4 +12,9 @@ class Participants::ImportCell < Cell::Rails
     render
   end
 
+  def mapping_element(args)
+    @field = args[:field]
+    render
+  end
+
 end
