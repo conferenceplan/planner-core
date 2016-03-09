@@ -252,11 +252,11 @@ module MailService
           if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
             name = ''
             name = asg.person.getFullPublicationName()
-            name += " (M)" if asg.role == PersonItemRole['Moderator']                
-            asg.person.email_addresses.each do |addr|
-              if addr.isdefault && (!noShareEmails.index(asg.person))
-                name += "(" + addr.email + ")\n"
-              end
+            name += " (M)" if asg.role == PersonItemRole['Moderator']
+            # use default email ...
+            if !noShareEmails.index(asg.person)
+              email = asg.person.getDefaultEmail
+              name += "(" + email.email + ")\n" if email
             end
             names << name
           end

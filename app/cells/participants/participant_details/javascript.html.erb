@@ -67,7 +67,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     RegistrationDetail = Backbone.Model.extend({
         schema : {
-            registration_number : { type : 'Number', title : '<%= t "reg-number" %>' },
+            registration_number : { type : 'Text', title : '<%= t "reg-number" %>' },
             registration_type : { type : 'Text', title : '<%= t "reg-type" %>' },
             registered : { type : 'Checkbox', title : '<%= t "registered" %>' },
             can_share : { type : 'Checkbox', title : '<%= t "can-share-details" %>', help: '<%= t "can-share-details-hint" %>' }
