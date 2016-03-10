@@ -63,14 +63,16 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     };
                     
                     if (typeof rowObject['email_addresses'] != 'undefined') {
-                        res += " <span class='minor-text'>[";
-                        for (i = 0 ; i < rowObject['email_addresses'].length; i++) {
-                            if (i > 0) {
-                                res += ",";
+                        if (rowObject['email_addresses'].length > 0) {
+                            res += " <span class='minor-text'>[";
+                            for (i = 0 ; i < rowObject['email_addresses'].length; i++) {
+                                if (i > 0) {
+                                    res += ",";
+                                }
+                                res += rowObject['email_addresses'][i];
                             }
-                            res += rowObject['email_addresses'][i];
+                            res += "]</span>";
                         }
-                        res += "]</span>";
                     }
                     
                     return res;
