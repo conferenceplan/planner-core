@@ -111,13 +111,14 @@ $.widget( "cp.baseTable" , {
                 if (mdl) {
                     var page_to = pageTo(mdl);
                     var to_id = mdl.id;
-                    mdl.clear();
-                    grid.jqGrid('setGridParam', {
-                        postData : {
+                    var post_data = {
                             page_to : page_to, // make sure that the current page contains the selected element
                             filters : {},
                             current_selection : to_id // to pass back for the selection
-                        },
+                    };
+                    mdl.clear();
+                    grid.jqGrid('setGridParam', {
+                        postData : post_data
                     });
                 };
 
@@ -278,8 +279,9 @@ $.widget( "cp.baseTable" , {
                 onPaging : function(pgButton) {
                     that.selected = null;
                     that.model = null;
+                    var post_data = {page_to : null, current_selection : null};
                     grid.setGridParam({
-                         postData : {page_to : null, current_selection : null},
+                         postData : post_data
                     });
                 },
 
@@ -287,8 +289,9 @@ $.widget( "cp.baseTable" , {
                     if (data.currentSelection) {
                         grid.setSelection(data.currentSelection);
                     };
+                    var post_data = {page_to : null, current_selection : null};
                     grid.setGridParam({
-                         postData : {page_to : null, current_selection : null},
+                         postData : post_data
                     });
                 },
                 gridComplete    : function() {
@@ -382,8 +385,12 @@ $.widget( "cp.baseTable" , {
      * 
      */
     tagQuery : function(options) {
-        this.options.extraClause = options.tagQuery;
-        
+        if (this.options.extraClause && (this.options.extraClause.length > 0)) {
+            this.options.extraClause += "&" + options.tagQuery;
+        } else {
+            this.options.extraClause = options.tagQuery;
+        }
+
         if (!this.options.delayed) {
             var newUrl = this.createUrl();
             

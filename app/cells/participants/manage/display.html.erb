@@ -39,6 +39,18 @@
             <span class="glyphicon glyphicon-export"></span> <a href="<%= baseUri + '/pages/participants_dash/export' %>"><%= t "export-people" %></a>
             <h5><%= t "surveys" %></h5>
             <span class="glyphicon glyphicon-comment"></span> <a href="<%= baseUri + '/pages/participants_dash/survey_review' %>"><%= t "review-surveys" %></a>            
+            <h5><%= t "filter-by-email" %></h5>
+            <div class="form-horizontal">
+                <div class="input-group" id="email-filter-input-group">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" id="clear-email-filters"><i class="fa fa-times"></i></button>
+                    </span>
+                    <input id="email-filters" type="text" class="form-control"></input>
+                    <span class="input-group-btn">
+                        <button class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </span>
+                </div>
+            </div>
             <h5><%= t "filter-by-tag" %></h5>
             <div class='collapse-group tag-cloud-area' id='tag-cloud-area'>
                 <div id="participant-tag-cloud" class="collapse in"></div>

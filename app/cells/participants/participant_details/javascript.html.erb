@@ -583,6 +583,18 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         return invite_details;
     };
     
+    // Add filter for email
+    function create_email_filter() {
+        $('#clear-email-filters').click(function(ev) {
+           $('#email-filters').val("");
+            jQuery("#participants").participantTable('emailQuery', "");
+        });
+        $('#email-filters').change(function(ev) {
+            var val = $(this).val();
+            jQuery("#participants").participantTable('emailQuery', val);
+        });
+    };    
+    
     var filterCol = null;
 
     //
@@ -610,6 +622,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                     ParticipantApp.PeopleManagement.refreshTable();
                 },
             });
+
+            create_email_filter();
             
             $('#participant-tabs').tabdrop({
                 text : "..."

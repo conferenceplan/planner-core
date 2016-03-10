@@ -498,6 +498,26 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         url += urlArgs;
         return url;
     },
+    
+    /*
+     * 
+     */
+    emailQuery : function(email) {
+        if (this.options.extraClause && (this.options.extraClause.length > 0)) {
+            this.options.extraClause += "&email=" + email;
+        } else {
+            this.options.extraClause = "email=" + email;
+        }
+
+        if (!this.options.delayed) {
+            var newUrl = this.createUrl();
+                
+            this.element.jqGrid('setGridParam', {
+                url: newUrl,
+                contentType : 'application/x-www-form-urlencoded; charset=UTF-8'
+            }).trigger("reloadGrid");
+        }
+    },
 
     /*
      * 
