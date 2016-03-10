@@ -7,3 +7,4 @@ json.mail_template      mailing.mail_template ? mailing.mail_template.title : ''
 json.mail_use           mailing.mail_template ? mailing.mail_template.mail_use.name : ''
 json.scheduled          mailing.scheduled
 json.testrun            mailing.testrun
+json.include_email      mailing.include_email

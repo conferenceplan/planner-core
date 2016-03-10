@@ -25,7 +25,7 @@ module MailService
             :survey             => survey,
             :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
             :respondentDetails  => respondentDetails,
-            :assignments        => assignments
+            :assignments        => {assignments: assignments, include_email: mailing.include_email}
           })
   end
   
@@ -149,7 +149,7 @@ module MailService
               :survey             => survey,
               :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
               :respondentDetails  => person.survey_respondent,
-              :assignments        => assignments
+              :assignments        => {assignments: assignments, include_email: mailing.include_email}
             })
   
       begin
@@ -210,10 +210,12 @@ module MailService
   #
   # Convert the assignments for a person to HTML for inclusion in the email
   #
-  def self.assignments_to_html(assignments)
+  def self.assignments_to_html(assignments_hash)
     result = ''
     
-    if assignments
+    if assignments_hash && assignments_hash[:assignments]
+      assignments = assignments_hash[:assignments]
+      include_email = assignments_hash[:include_email]
       noShareEmails = SurveyService.findPeopleWithDoNotShareEmail
       
       assignments.each do | assignment |
@@ -226,7 +228,7 @@ module MailService
           
           # TODO - If it is a sub item the show part of and the parent info
           
-          result += assignment_to_html(assignment.programmeItem, noShareEmails)
+          result += assignment_to_html(assignment.programmeItem, noShareEmails, include_email)
         
           # 
           result += "</div></br>\n"
@@ -237,7 +239,7 @@ module MailService
     return result
   end
   
-  def self.assignment_to_html(programmeItem, noShareEmails)
+  def self.assignment_to_html(programmeItem, noShareEmails, include_email)
     # time
    if (programmeItem.parent_id == nil)
       result = '<p>' + programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + programmeItem.time_slot.end.strftime('%H:%M') 
@@ -254,7 +256,7 @@ module MailService
             name = asg.person.getFullPublicationName()
             name += " (M)" if asg.role == PersonItemRole['Moderator']
             # use default email ...
-            if !noShareEmails.index(asg.person)
+            if !noShareEmails.index(asg.person) && include_email
               email = asg.person.getDefaultEmail
               name += "(" + email.email + ")\n" if email
             end
@@ -270,7 +272,7 @@ module MailService
       end
     else
       result = 'part of: <b><big>' + programmeItem.parent.title  + "</big></b>\n" #programmeItem.parent
-      result += assignment_to_html(programmeItem.parent, noShareEmails)
+      result += assignment_to_html(programmeItem.parent, noShareEmails, include_email)
     end
     result
   end
