@@ -308,7 +308,8 @@ protected
                            'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
                            'LEFT OUTER JOIN programme_items as children on children.parent_id = programme_items.id ' +
                            "LEFT OUTER JOIN themes on themes.themed_id = programme_items.id AND themes.themed_type = 'ProgrammeItem' " +
-                           "LEFT OUTER JOIN themes as child_themes on child_themes.themed_id = children.id AND child_themes.themed_type = 'ProgrammeItem' ")
+                           "LEFT OUTER JOIN themes as child_themes on child_themes.themed_id = children.id AND child_themes.themed_type = 'ProgrammeItem' " +
+                           "LEFT OUTER JOIN rooms on rooms.id = room_item_assignments.room_id" )
 
     args
   end

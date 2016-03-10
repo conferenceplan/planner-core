@@ -42,7 +42,8 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             label : this.options.room[1], //'Room',
             name: 'room',
             hidden : !this.options.room[0],
-            sortable: false,
+            sortable: true,
+            index: 'rooms.name',
             search: false,
             width: 125,
             editable: false
@@ -50,7 +51,8 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             label: this.options.day[1], //'Day',
             name: 'start_day',
             hidden : !this.options.day[0],
-            sortable: false,
+            index: 'time_slots.start',
+            sortable: true,
             search: false,
             width: 130,
             editable: false
