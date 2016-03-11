@@ -258,7 +258,7 @@ module MailService
             # use default email ...
             if !noShareEmails.index(asg.person) && include_email
               email = asg.person.getDefaultEmail
-              name += "(" + email.email + ")\n" if email
+              name += " (" + email.email + ")\n" if email
             end
             names << name
           end
@@ -267,7 +267,7 @@ module MailService
       result += '<p>' + names.join(', ') + "</p>\n"
       
       if (programmeItem.participant_notes && (programmeItem.participant_notes.to_s.strip.length != 0))
-        result += "<h4>Notes for Participant(s)</h4>\n"
+        result += "<h4>Notes</h4>\n"
         result += '<p>' + programmeItem.participant_notes + "</p>\n"
       end
     else
