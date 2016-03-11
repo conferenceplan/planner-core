@@ -796,14 +796,15 @@ h5.tag-panel-title {
     padding: 10px 10px 10px 10px;
 }
 .dl-horizontal-small dd { min-height: 20px;}
-.dl-horizontal-small.dt10 dt { width: 10%; }
-.dl-horizontal-small.dt20 dt { width: 20%; }
-.dl-horizontal-small.dt30 dt { width: 30%; }
-.dl-horizontal-small.dt35 dt { width: 35%; }
-.dl-horizontal-small.dt40 dt { width: 40%; }
-.dl-horizontal-small.dt50 dt { width: 50%; }
-.dl-horizontal-small.dt60 dt { width: 60%; }
-.dl-horizontal-small.dt70 dt { width: 70%; } 
+.dl-horizontal.dt10 dt, .dl-horizontal-small.dt10 dt { width: 10%; }
+.dl-horizontal.dt20 dt, .dl-horizontal-small.dt20 dt { width: 20%; }
+.dl-horizontal.dt30 dt, .dl-horizontal-small.dt30 dt { width: 30%; }
+.dl-horizontal.dt35 dt, .dl-horizontal-small.dt35 dt { width: 35%; }
+.dl-horizontal.dt35 dd { margin-left: calc(35% + 10px); }
+.dl-horizontal.dt40 dt, .dl-horizontal-small.dt40 dt { width: 40%; }
+.dl-horizontal.dt50 dt, .dl-horizontal-small.dt50 dt { width: 50%; }
+.dl-horizontal.dt60 dt, .dl-horizontal-small.dt60 dt { width: 60%; }
+.dl-horizontal.dt70 dt, .dl-horizontal-small.dt70 dt { width: 70%; } 
 
 .dl-airy dd {
     margin-bottom: 15px;
@@ -1561,4 +1562,11 @@ h1.survey-title {
     .survey-submit-button {
         white-space:normal;
     }
+}
+.fa.fa-arrows-v {
+    color: gray;
+}
+.fa.fa-arrows-v:hover {
+    cursor: pointer;
+    color: #000;
 }
