@@ -82,7 +82,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 label : 'First Name',
                 // index : 'people.first_name',
                 hidden : true, //!settings['first_name'],
-                width : 200,
+                width : 225,
                 editable : true,
                 editoptions : {
                 },
@@ -189,7 +189,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                 edittype : "select",
                 search : true,
                 stype : "select",
-                width : 60,
+                width : 50,
                 searchoptions : {
                     dataUrl: this.options.root_url + "invitation_categories/list",
                     clearSearch : false
