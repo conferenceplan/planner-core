@@ -11,9 +11,6 @@ class UpdateFromSurveyJob
   #  
   #
   def perform
-    # TODO - change to iterate through all the organizations
-    # TODO - at the moment this is done per org/conference. Change so that it iterates through all the conferences for the org
-    
     cfg = getSiteConfig
     zone = cfg ? cfg.time_zone : Time.zone
     Time.use_zone(zone) do
