@@ -110,27 +110,29 @@ module ConstraintService
         peopleWithConstraints = []
         excludedTimesMaps.each do |excludedTimesMap|
           people = []
-          if excludedTimesMap.survey_answer.answertype == AnswerType['TimeConflict']
-            people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer)
-          else
-            people = SurveyService.findPeopleWhoDidNotGiveAnswer(excludedTimesMap.survey_answer)
-          end
-          
-          if people.size > 0 
-            peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
+          if excludedTimesMap.survey_answer.answer && excludedTimesMap.survey_answer.survey_question_id
+            if excludedTimesMap.survey_answer.answertype == AnswerType['TimeConflict']
+              people = SurveyService.findPeopleWhoGaveAnswer(excludedTimesMap.survey_answer)
+            else
+              people = SurveyService.findPeopleWhoDidNotGiveAnswer(excludedTimesMap.survey_answer)
+            end
             
-            people.each do |person|
-              # check that the exclusion is not already associated with the person
-              if ! person.excluded_periods.include? excludedTimesMap.period
-                # if it is not then do the association
-                exclusion = Exclusion.new(
-                  :person_id        => person.id,
-                  :excludable_id    => excludedTimesMap.period_id,
-                  :excludable_type  => TimeSlot.name,
-                  :source           => 'survey'
-                )
-                
-                exclusion.save!
+            if people.size > 0 
+              peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
+              
+              people.each do |person|
+                # check that the exclusion is not already associated with the person
+                if ! person.excluded_periods.include? excludedTimesMap.period
+                  # if it is not then do the association
+                  exclusion = Exclusion.new(
+                    :person_id        => person.id,
+                    :excludable_id    => excludedTimesMap.period_id,
+                    :excludable_type  => TimeSlot.name,
+                    :source           => 'survey'
+                  )
+                  
+                  exclusion.save!
+                end
               end
             end
           end
@@ -151,21 +153,23 @@ module ConstraintService
       excludedItemMaps.each do |excludedItemMap|
         since = nil
         since = ((excludedItemMap.updated_at < sinceDate) ? sinceDate : nil) if sinceDate# if there is a new mapping since the last time we ran then ignore the last run date
-        people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer,since)
-        peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
-        
-        people.each do |person|
-          # check that the exclusion is not already associated with the person
-          if ! person.excluded_items.include? excludedItemMap.programme_item
-            # if it is not then do the association
-            exclusion = Exclusion.new(
-              :person_id        => person.id,
-              :excludable_id    => excludedItemMap.programme_item_id,
-              :excludable_type  => ProgrammeItem.name,
-              :source           => 'survey'
-            )
-            
-            exclusion.save!
+        if excludedItemMap.survey_answer
+          people = SurveyService.findPeopleWhoGaveAnswer(excludedItemMap.survey_answer,since)
+          peopleWithConstraints.concat(people).uniq! # add these people to collection of people with constraints
+          
+          people.each do |person|
+            # check that the exclusion is not already associated with the person
+            if ! person.excluded_items.include? excludedItemMap.programme_item
+              # if it is not then do the association
+              exclusion = Exclusion.new(
+                :person_id        => person.id,
+                :excludable_id    => excludedItemMap.programme_item_id,
+                :excludable_type  => ProgrammeItem.name,
+                :source           => 'survey'
+              )
+              
+              exclusion.save!
+            end
           end
         end
       end
