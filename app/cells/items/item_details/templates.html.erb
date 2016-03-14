@@ -40,7 +40,8 @@
                        <%= t  "title" %>
                     </label>
                     <span data-editor>
-                    <div class="col-sm-9" data-editors="title"></div>
+                        <div data-editors="title"></div>
+                        <div class="has-error"><p class="help-block" data-error></p></div>
                     </span>
                 </div>
             </div>
@@ -50,7 +51,8 @@
                        <%= t  "item-description" %>
                     </label>
                     <span data-editor>
-                    <div class="col-sm-9" data-editors="precis"></div>
+                        <div class="col-sm-9" data-editors="precis"></div>
+                        <div class="has-error"><p class="help-block" data-error></p></div>
                     </span>
                 </div>
             </div>
@@ -68,7 +70,8 @@
                            <%= t  "short-title" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-title" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-title-help" %>'></i>
                         </label>
                         <span data-editor>
-                        <div class="col-sm-9" data-editors="short_title"></div>
+                            <div class="col-sm-9" data-editors="short_title"></div>
+                            <div class="has-error"><p class="help-block" data-error></p></div>
                         </span>
                     </div>
                     <div class="form-group" id="item-form-template-short-description">
@@ -76,7 +79,8 @@
                            <%= t  "short-item-description" %>  <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-item-description" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-description-help" %>'></i>
                         </label>
                         <span data-editor>
-                        <div class="col-sm-9" data-editors="short_precis"></div>
+                            <div class="col-sm-9" data-editors="short_precis"></div>
+                            <div class="has-error"><p class="help-block" data-error></p></div>
                         </span>
                     </div>
                 </div>
@@ -84,7 +88,10 @@
             <div class="row" id="item-break-row">
                 <div class="col-sm-9 col-sm-offset-3">
                     <div id="break-selection-div">
-                        <div data-editors="is_break" tabindex="-1" class="inline-checkbox-div"></div> <%= t "item-is-break" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-is-break" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-is-break-hint" %>'></i>
+                        <span data-editor>
+                            <div data-editors="is_break" tabindex="-1" class="inline-checkbox-div"></div> <%= t "item-is-break" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-is-break" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-is-break-hint" %>'></i>
+                            <div class="has-error"><p class="help-block" data-error></p></div>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -92,14 +99,12 @@
                 <div class="form-group " style="margin-bottom: 3px;">                
                     <label class="col-sm-3 control-label"><%= t "item-format" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-format" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-format-help" %>'></i></label>
                     <div class="col-sm-4">
-                        
-                            <span data-editor>
-                                <div data-editors="format_id"></div>
-                                <div class="has-error">
-                                    <p class="help-block" data-error></p>
-                                </div>
-                            </span>
-                        
+                        <span data-editor>
+                            <div data-editors="format_id"></div>
+                            <div class="has-error">
+                                <p class="help-block" data-error></p>
+                            </div>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -110,6 +115,7 @@
                     </label>
                     <span data-editor>
                         <div class="col-sm-9" data-editors="theme_name_ids"></div>
+                        <div class="has-error"><p class="help-block" data-error></p></div>
                     </span>
                 </div>
             </div>
@@ -119,7 +125,8 @@
                        <%= t  "parent-item" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "parent-item" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "parent-title-help" %>'></i>
                     </label>
                     <span data-editor>
-                    <div class="col-sm-9" data-editors="parent_id"></div>
+                        <div class="col-sm-9" data-editors="parent_id"></div>
+                        <div class="has-error"><p class="help-block" data-error></p></div>
                     </span>
                 </div>
             </div>
@@ -137,7 +144,14 @@
                         </div>
                     </div>
                     <label class="col-sm-3 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
-                    <div data-editors="duration" class="col-sm-2"></div>
+                    <div class="col-sm-2">
+                        <span data-editor>
+                            <div data-editors="duration"></div>
+                            <div class="has-error">
+                                <p class="help-block" data-error></p>
+                            </div>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="row">
