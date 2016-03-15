@@ -521,11 +521,7 @@
                 {{ }; }}
             </td>
             <td align="right">
-                {{ if (parent_id == null) {  }}
-                    <nobr>{{= isPublished ? '<div class="default-label"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}</nobr>
-                {{ } else { }}
-                    <nobr>{{= parent_val.isPublished ? '<div class="default-label"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}</nobr>
-                {{ }; }}
+                <nobr>{{= isPublished ? '<div class="default-label"><span class="glyphicon glyphicon-ok"></span> <%= t "published" %></div>' : ''}}</nobr>
             </td>
     {{ }; }}
 </script>

@@ -252,7 +252,9 @@ $.widget( "cp.baseTable" , {
                             control.subgrid_rows = 10;
                         };
                     } else {
-                        control.subgrid_rows = 10;
+                        if (control) {
+                            control.subgrid_rows = 10;
+                        }
                     }
                     return true;
                 },

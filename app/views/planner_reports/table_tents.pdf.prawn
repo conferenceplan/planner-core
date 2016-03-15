@@ -46,7 +46,7 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
                             pdf.text item.parent.published_time_slot.start.strftime(@day_and_time_format), :fallback_fonts => fallback_fonts
                         end
                         pdf.text "<b>Participants:</b> " + item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","), :inline_format => true, :fallback_fonts => fallback_fonts
-                        pdf.text "<b>Description:</b> " + item.precis, :fallback_fonts => fallback_fonts, :inline_format => true if item.precis
+                        pdf.text "<b>Description:</b> " + sanitize(item.precis, tags: %w(b i u strikethrough sub sup font link color), attributes: %w(href size name character_spacing rgb cmyk) ), :fallback_fonts => fallback_fonts, :inline_format => true if item.precis
             end
         end
     else

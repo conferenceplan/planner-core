@@ -27,7 +27,7 @@ data = [
         ]
 
 if ! assignment.published_programme_item.precis.blank? && @include_desc
-    data.concat [['', assignment.published_programme_item.precis]]
+    data.concat [['', sanitize(assignment.published_programme_item.precis, tags: %w(b i u strikethrough sub sup font link color), attributes: %w(href size name character_spacing rgb cmyk) ) ]]
 end
 
 pdf.table(data,
