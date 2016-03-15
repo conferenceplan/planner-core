@@ -307,24 +307,24 @@ protected
       postal = person.getDefaultPostalAddress
       if postal
         postal.update_attributes(
-            :line1 => pendingPerson.line1, 
-            :line2 => pendingPerson.line2, 
-            :line3 => pendingPerson.line3, 
-            :city => pendingPerson.city, 
-            :state => pendingPerson.state, 
-            :postcode => pendingPerson.postcode, 
-            :country => pendingPerson.country, 
+            :line1 => (pendingPerson.line1.blank? ? postal.line1 : pendingPerson.line1), 
+            :line2 => (pendingPerson.line2.blank? ? postal.line2 : pendingPerson.line2), 
+            :line3 => (pendingPerson.line3.blank? ? postal.line3 : pendingPerson.line3), 
+            :city => (pendingPerson.city.blank? ? postal.city : pendingPerson.city), 
+            :state => (pendingPerson.state.blank? ? pendingPerson.state : postal.state), 
+            :postcode => (pendingPerson.postcode.blank? ? postal.postcode : pendingPerson.postcode), 
+            :country => (pendingPerson.country.blank? ? postal.country : pendingPerson.country), 
             :isdefault => true
           );
       else  
         postal = person.postal_addresses.new(
-            :line1 => pendingPerson.line1, 
-            :line2 => pendingPerson.line2, 
-            :line3 => pendingPerson.line3, 
-            :city => pendingPerson.city, 
-            :state => pendingPerson.state, 
-            :postcode => pendingPerson.postcode, 
-            :country => pendingPerson.country, 
+            :line1 => (pendingPerson.line1.blank? ? postal.line1 : pendingPerson.line1), 
+            :line2 => (pendingPerson.line2.blank? ? postal.line2 : pendingPerson.line2), 
+            :line3 => (pendingPerson.line3.blank? ? postal.line3 : pendingPerson.line3), 
+            :city => (pendingPerson.city.blank? ? postal.city : pendingPerson.city), 
+            :state => (pendingPerson.state.blank? ? pendingPerson.state : postal.state), 
+            :postcode => (pendingPerson.postcode.blank? ? postal.postcode : pendingPerson.postcode), 
+            :country => (pendingPerson.country.blank? ? postal.country : pendingPerson.country), 
             :isdefault => true
           );
       end
