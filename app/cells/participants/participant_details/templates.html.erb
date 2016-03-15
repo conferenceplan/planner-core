@@ -502,7 +502,15 @@
 <script type="text/template" id="program-item-view-template">
     {{ if (typeof id != 'undefined') { }}
             <td>
-                <strong><a href="#">{{= title ? title : "&nbsp;" }}</a></strong> ({{= role ? role : "&nbsp;" }})<br>
+                    <strong>
+                        {{ if (isPublished) { }}
+                            <a href="#">
+                        {{ }; }}
+                    {{= title ? title : "&nbsp;" }}
+                        {{ if (isPublished) { }}
+                            </a>
+                        {{ }; }}
+                    </strong> ({{= role ? role : "&nbsp;" }})<br>
                 {{ if (parent_id == null) {  }}
                     {{= time_slot ? start_time_str : '<span class="minor-text"><%= t "no-date-and-time-specified" %></span>' }}
                     {{ if (room) { }}
