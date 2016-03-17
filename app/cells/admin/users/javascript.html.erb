@@ -9,9 +9,29 @@ UserMgmtApp.UserManagement = (function(Backbone){
 
     UserMdl =  Backbone.DeepModel.extend({
         schema : {
-            login   : { type : 'Text', title : '<%= t "user-login" %>' },
-            email   : { type : 'Text', title : '<%= t "email" %>' },
-            password : { type : 'Password', title : '<%= t "user-password" %>'},
+            login   : { type : 'Text', title : '<%= t "user-login" %>', 
+                        validators: ['required', {
+                                        type: 'regexp',
+                                        regexp: /^[A-Za-z0-9]+$/,
+                                        message: '<%= t "login-name-conditions" %>'
+                        }]
+                      },
+            email   : { type : 'Text', title : '<%= t "email" %>', 
+                        validators: ['required', 'email'] 
+                      },
+            password : { type : 'Password', title : '<%= t "user-password" %>',
+                         validators: [
+                            { type: 'match', field: 'password_confirmation', message: '<%= t "passwords-must-match" %>'},
+                            function checkLength(value, formValues) {
+                                var err = {
+                                  type: 'password',
+                                  message: '<%= t "passwords-too-short" %>'
+                                };
+                        
+                                if (value.length < 8) return err;
+                            }
+                         ]
+                       },
             password_confirmation : { type : 'Password', title : '<%= t "user-password-again" %>'},
             roles : { type : 'List',
                         title : '<%= t "roles" %>',
