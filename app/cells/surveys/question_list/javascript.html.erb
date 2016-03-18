@@ -22,8 +22,10 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                                     validators : [ /^[A-z0-9_]*$/ ], help: '<%= t "tags_label-help" %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield'] },
 
-            questionmapping_id  : { type : 'Select', title : '<%= t "question-mapping" %>', options : <%= [[' ',' ']].concat(QuestionMapping.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
-                                            , help: '<%= t "question-mapping-help" %>' },
+            questionmapping_id  : { type : 'Select', 
+                                    title : '<%= t "question-mapping" %>', 
+                                    options : <%= [[' ',' ']].concat(QuestionMapping.find(:all).delete_if{|a| a == QuestionMapping['Photo']}.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                                    help: '<%= t "question-mapping-help" %>' },
             isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
                                      dependsOn : 'question_type', dependentValues : ['textbox'] , help: '<%= t "isbio-help" %>' }, // only if the question type is text
             horizontal          : { type : 'DependentCheckbox', title : '<%= t "survey-horizontal-layout" %>', help: '<%= t 'survey-horizontal-layout-hint' %>',
