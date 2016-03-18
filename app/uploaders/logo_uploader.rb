@@ -10,7 +10,7 @@ class LogoUploader < CarrierWave::Uploader::Base
   def public_id
     publicid = root_path + '/'
     publicid += 'conf_logo'
-    publicid.gsub(/\s+/, "")
+    publicid.gsub(/[^a-zA-Z0-9\- ]/, '')
   end
   
   #
