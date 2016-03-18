@@ -12,7 +12,7 @@ UserMgmtApp.UserManagement = (function(Backbone){
             login   : { type : 'Text', title : '<%= t "user-login" %>', 
                         validators: ['required', {
                                         type: 'regexp',
-                                        regexp: /^[A-Za-z0-9\.@]+$/,
+                                        regexp: /^[A-Za-z0-9\.@-_\+]+$/,
                                         message: '<%= t "login-name-conditions" %>'
                         }]
                       },
