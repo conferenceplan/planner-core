@@ -28,7 +28,7 @@ UserMgmtApp.UserManagement = (function(Backbone){
                                   message: '<%= t "passwords-too-short" %>'
                                 };
                         
-                                if (value.length < 8) return err;
+                                if ((value.length < 8) && (value.length >= 1)) return err;
                             }
                          ]
                        },
