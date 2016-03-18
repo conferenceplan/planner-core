@@ -7,7 +7,15 @@ SurveyApp.SurveyManagement = (function(Backbone){
     Survey = Backbone.DeepModel.extend({
         schema : {
             name            : { type : 'Text', title : '<%= t "name" %>', help: '<%= t 'survey-name-hint' %>', validators: ['required'] },
-            alias           : { type : 'Text', title : '<%= t "survey-alias" %>', help: '<%= t 'survey-alias-hint' %>', validators: ['required'] },
+            alias           : { type : 'Text', title : '<%= t "survey-alias" %>', help: '<%= t 'survey-alias-hint' %>', 
+                                validators: ['required',
+                                    {
+                                        type: 'regexp',
+                                        regexp: /^[A-Za-z0-9\-_]+$/,
+                                        message: '<%= t "survey-alias-must-be-alphanumeric" %>'
+                                    }
+                                ]
+                              },
             public          : { type : 'Checkbox', title : '<%= t "survey-public" %>', help: '<%= t 'survey-public-hint' %>' },
             authenticate    : { type : 'Checkbox', title : '<%= t "survey-authenticate" %>', help: '<%= t 'survey-authenticate-hint' %>' },
             use_captcha     : { type : 'Checkbox', title : '<%= t "survey-use-captcha" %>', help: '<%= t 'survey-use-captcha-hint' %>' },
