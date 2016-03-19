@@ -92,7 +92,16 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                                             }
                 }
             }
-        }
+        },
+
+        validate: function(attrs, options) {
+            var err = {};
+            err.survey_query_predicates = '<%= t "at-least-one-predicate-needed" %>';
+            
+            if (attrs.survey_query_predicates.length == 0) {
+                return err;
+            }
+        },
     });
 
     Question = Backbone.Model.extend({
