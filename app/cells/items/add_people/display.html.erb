@@ -7,15 +7,14 @@
     :edit => false,
     :add => false,
     :invite_status => false,
-    :invite_category => false,
-    :acceptance_status => false,
+    :invite_category => true,
+    :acceptance_status => true,
     :has_survey => false,
     :reg_type => false,
     
     :pub_first_name => false,
     :pub_last_name => false,
     :pub_suffix => false,
-    :extraClause => "extraClause[param]=person_con_states.acceptance_status_id&extraClause[value]=7,8", # Only display the people who accepted to be on the program
     
     :multiselect => true,
     :showControls => false,
@@ -42,7 +41,7 @@
 <%= render_cell "items/add_people", :templates %>
 
 <div class="row">
-    <div class="col-xs-3 left-jqgrid">
+    <div class="col-xs-4 left-jqgrid">
         <%= render_cell "participants/participant_list", :display,
                 :pager => "participants-pager"
          %>
@@ -52,7 +51,7 @@
     <div class="col-xs-5" id="program-item-view">
         <div></div>
     </div>
-    <div class="col-xs-4 right-jqgrid" >
+    <div class="col-xs-3 right-jqgrid" >
         <%= render_cell "items/item_list", :display %>
     </div>
 </div>

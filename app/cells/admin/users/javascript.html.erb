@@ -51,6 +51,15 @@ UserMgmtApp.UserManagement = (function(Backbone){
 
         },
         
+        validate: function(attrs, options) {
+            var err = {};
+            err.roles = '<%= t "at-least-one-user-role-needed" %>';
+            
+            if (attrs.roles.length == 0) {
+                return err;
+            }
+        },
+        
         urlRoot : "<%= baseUri + '/users/admin' %>"
     });
 
