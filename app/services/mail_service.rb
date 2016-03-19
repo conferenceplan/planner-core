@@ -138,6 +138,17 @@ module MailService
     if (mailing.testrun && config.test_email) || person.getDefaultEmail
       to = mailing.testrun ? config.test_email : person.getDefaultEmail.email
       cc = mailing.testrun ? nil : config.cc
+      
+      if !mailing.testrun && mailing.cc_all
+        # add all the email addresses for the person to the CC
+        person.email_addresses.each do |addr|
+          if addr.email != to
+            cc += ", " if !cc.blank?
+            cc += addr.email
+          end
+        end
+      end
+      
       assignments = (mailing.mail_template && mailing.mail_template.mail_use == MailUse[:Schedule]) ? ProgramItemsService.findProgramItemsForPerson(person) : nil
       respondentDetails = person.survey_respondent
       key = respondentDetails ? respondentDetails.key : generateSurveyKey(person) # get the key (or generate it)
