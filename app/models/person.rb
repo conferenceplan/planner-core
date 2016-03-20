@@ -295,7 +295,7 @@ class Person < ActiveRecord::Base
       address.country_code = new_country_code
       address.save!
     else
-      postalAddress = self.postal_addresses.new :line1 => new_line1, 
+      postalAddress = self.postal_addresses.create :line1 => new_line1, 
                                     :line2 => new_line2, 
                                     :city => new_city, 
                                     # :state => new_state, 
@@ -306,10 +306,11 @@ class Person < ActiveRecord::Base
                                     :isdefault => true 
       postalAddress.state = new_state if !new_state.blank?
       postalAddress.country = new_country if !new_country.blank?
-      postalAddress.save!
+      postalAddress.save
     end
 
     self.save!
+    self
   end
 
   #
