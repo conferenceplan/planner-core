@@ -48,21 +48,17 @@ class PostalAddress < ActiveRecord::Base
   end
   
   def state_and_country_from_code
-    # see if country has changed but not code...
-    if self.country_changed?
-      if self.country_code_changed? && !self.country_code.blank?
+    if !self.country_changed? || self.country.blank?
+      if !self.country_code.blank?
         c = ISO3166::Country.new(self.country_code)
         self.country = c.name if c
-      else
-        self.country_code = nil
       end
     end
-    if self.state_code_changed?
-      if self.country_code_changed? && !self.state_code.blank?
+
+    if !self.state_changed? || self.state.blank?
+      if !self.state_code.blank?
         s = ISO3166::Country.new(self.country_code).states[self.state_code] if !self.country_code.blank?
         self.state = s["name"] if s
-      else
-        self.state_code = nil
       end
     end
   end
