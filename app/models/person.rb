@@ -288,9 +288,9 @@ class Person < ActiveRecord::Base
       address.line1 = new_line1
       address.line2 = new_line2
       address.city = new_city
-      address.state = new_state
+      address.state = new_state if !new_state.blank?
       address.postcode = new_postcode
-      address.country = new_country
+      address.country = new_country if !new_country.blank?
       address.state_code = new_state_code
       address.country_code = new_country_code
       address.save!
@@ -298,12 +298,15 @@ class Person < ActiveRecord::Base
       postalAddress = self.postal_addresses.new :line1 => new_line1, 
                                     :line2 => new_line2, 
                                     :city => new_city, 
-                                    :state => new_state, 
+                                    # :state => new_state, 
                                     :postcode => new_postcode, 
-                                    :country => new_country, 
+                                    # :country => new_country, 
                                     :state_code => new_state_code,
                                     :country_code => new_country_code,
                                     :isdefault => true 
+      postalAddress.state = new_state if !new_state.blank?
+      postalAddress.country = new_country if !new_country.blank?
+      postalAddress.save!
     end
 
     self.save!
