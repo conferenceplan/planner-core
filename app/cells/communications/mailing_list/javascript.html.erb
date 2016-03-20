@@ -11,8 +11,8 @@ CommunicationsList = (function(Backbone){
             mail_template_id        : { type : 'Select', title : '<%= t "mail-mailing-template" %>',help: '<%= t "mail-mailing-template-hint" %>',
                                             options : <%= [].concat(MailTemplate.find(:all).collect {|s| {'val' => s.id, 'label' => s.title} }).to_json.html_safe %>
                                         },
-            include_email           : { type : 'Checkbox', title : '<%= t "mail-include-email" %>', help: '<%= t "mail-mailing-include-email-hint" %>' },
-            cc_all                  : { type : 'Checkbox', title : '<%= t "mail-cc-all" %>', help: '<%= t "mail-mailing-cc-all-hint" %>' },
+            include_email           : { type : 'Checkbox', title : '<%= t "mail-include-email" %>', help: '<%= t "mail-mailing-include-email-hint" %>', help_placement: 'right' },
+            cc_all                  : { type : 'Checkbox', title : '<%= t "mail-cc-all" %>', help: '<%= t "mail-mailing-cc-all-hint" %>', help_placement: 'right' },
             testrun                 : { type : 'Checkbox', title : '<%= t "mail-test-run" %>', help: '<%= t "mail-mailing-test-run-hint" %>', help_placement: 'bottom' }
         },
         defaults : {
