@@ -2,6 +2,9 @@
 # , data-provide="typeahead", autocomplete="off"
 # .sort { |x, y| y.count <=> x.count }
 %>
+<% 
+    max_length = (question.text_size && (question.text_size > 0)) ?  question.text_size : nil
+%>
 <% if question.tags_label && !question.tags_label.empty? %>
     <div class="taggable">
         <div class="context" style='display:none'><%= question.tags_label%></div>
@@ -15,9 +18,8 @@
         
         <div class="row">
             <div class="col-sm-10">
-                <!-- TODO - question.questionmapping to HTML5 input type QuestionMappingp[''] -->
             <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", 
-                    :rows => 5, :size => question.text_size, :class => question.tags_label + '_text ui-autocomplete-input col-xs-12 form-control' %>
+                    :rows => 5, :maxlength => max_length, :class => question.tags_label + '_text ui-autocomplete-input col-xs-12 form-control' %>
             </div>
             <div class="col-sm-2">
                 <a href='#' rel="popover" data-html=true class="cloud-popover btn btn-success" data-trigger="focus" data-contentwrapper="#<%= question.tags_label%>_popup" style="width: 100%;" data-placement="auto top"><%= t 'tags' %></a>
@@ -26,6 +28,5 @@
         </div>
     </div>
 <% else %>
-    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :size => question.text_size, :class => ((question.text_size && question.text_size < 10) ? 'col-xs-2 form-control' : 'col-xs-12 form-control'),
-    :type => ([QuestionMapping['WebSite'], QuestionMapping['Photo']].include?(question.questionmapping) ? 'url' : nil) %>
+    <%= text_field_tag "survey_response[#{ question.id }]", "#{@survey_response ? @survey_response[question.id.to_s] : ''}", :maxlength => max_length, :class => ((question.text_size && question.text_size < 10) ? 'col-xs-2 form-control' : 'col-xs-12 form-control'), :type => ([QuestionMapping['WebSite'], QuestionMapping['Photo']].include?(question.questionmapping) ? 'url' : nil) %>
 <% end %>
