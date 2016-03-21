@@ -31,7 +31,7 @@
                 <% else %>
                     <% if (question.text_size && question.text_size <= 12 && question.text_size >= 1) %>
                         <div class="col-sm-6">
-                    <% elsif (question.text_size && question.text_size = 0) %>
+                    <% elsif (question.text_size && question.text_size == 0) %>
                         <% if ([:multiplechoice].include? question.question_type) || ([:singlechoice].include? question.question_type) %>
                             <!-- put full width for checkboxes or radio buttons -->
                             <div class="col-sm-12">
