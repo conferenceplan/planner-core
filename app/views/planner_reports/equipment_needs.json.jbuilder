@@ -30,5 +30,4 @@ json.rowdata @panels do |panel|
         json.room_setup panel.parent.room.room_setup.setup_type.name if panel.parent.room && panel.parent.room.room_setup
         json.venue_name panel.parent.room.venue.name if panel.parent.room
     end
-    json.equipment panel.equipment_needs.collect {|e| e.equipment_type.description if e.equipment_type } # TODO - need the name/type of equipment listed here
 end

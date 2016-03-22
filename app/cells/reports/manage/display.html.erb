@@ -10,7 +10,7 @@
         <ul class="nav nav-tabs" id="report-tabs">
             <li class="active"><a href="#people-reports-tab" data-toggle="tab"><%= t 'people-reports' %></a></li>
             <li><a href="#item-reports-tab" data-toggle="tab"><%= t 'item-reports' %></a></li>
-            <li><a href="#capacity-and-equipment-reports-tab" data-toggle="tab"><%= t 'capacity-and-equipment' %></a></li>
+            <li><a href="#capacity-reports-tab" data-toggle="tab"><%= t 'capacity' %></a></li>
             <li><a href="#scheduling-reports-tab" data-toggle="tab"><%= t 'scheduling-reports' %></a></li>
             <% @extra_reports_menu.each do |extra| %>
                 <%= render extra %>
@@ -47,13 +47,10 @@
                 </li>
               </ul>
             </div>
-            <div role="tabpanel" class="tab-pane" id="capacity-and-equipment-reports-tab">
+            <div role="tabpanel" class="tab-pane" id="capacity-reports-tab">
               <ul>
                 <li>
                     <a href="#capacity_report"><%= t "reports-items-over-capacity" %></a>
-                </li>
-                <li>
-                    <a href="#equipment_needs"><%= t "reports-items-with-equipment-needs" %></a>
                 </li>
                 <li>
                     <a href="#people_item_allocation"><%= t "report-people-item-allocation" %></a>

@@ -53,8 +53,7 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'day',       label : '<%= t "item-day" %>',  jsonmap: "day",    width: 30},
                     {name: 'start-time',      label : '<%= t "item-start-time" %>',  jsonmap: "start_time",    width: 30},
                     {name: 'end-time',      label : '<%= t "item-end-time" %>',  jsonmap: "end_time",    width: 30},
-                    {name: 'item',      label : '<%= t "item" %>',  jsonmap: "item" },
-                    {name: 'equipment', label : '<%= t "equipment" %>',  jsonmap: "equipment", width: 70, formatter: AppUtils.arrayToString},
+                    {name: 'item',      label : '<%= t "item" %>',  jsonmap: "item" }
     ];
     
     var PanelsByTimeslotColModel = [
@@ -64,8 +63,7 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'End Time',          label : '<%= t "item-end-time" %>',     jsonmap: 'end_time',    width: 50},
                     {name: 'room',              label : '<%= t "room" %>',              jsonmap: "room",        width: 50},
                     {name: 'venue',             label : '<%= t "venue" %>',             jsonmap: "venue",       width: 50},
-                    {name: 'item',              label : '<%= t "item" %>',              jsonmap: "item" },
-                    {name: 'equipment',         label : '<%= t "equipment" %>',         jsonmap: "equipment",   width: 70, formatter: AppUtils.arrayToString},
+                    {name: 'item',              label : '<%= t "item" %>',              jsonmap: "item" }
     ];
 
     var PanelsWithPanelistsForm = Backbone.Form.extend({
@@ -189,22 +187,8 @@ ReportApp.ReportManagement = (function(Backbone){
                     // {name: 'Area(s)', label : '<%= t "area(s)" %>', jsonmap: 'context', formatter: AppUtils.arrayToString},
                     // {name: 'Min People', label : '<%= t "item-min-participants" %>', jsonmap: 'minimum_people'},
                     // {name: 'Max People', label : '<%= t "item-max-participants" %>', jsonmap: 'maximum_people'},
-                    // {name: 'Equipment', label : '<%= t "equipment" %>', jsonmap: 'equipment',width: 300, formatter: AppUtils.arrayToString},
                     // {name: 'Reserve', label : '<%= t "reserved" %>', jsonmap: 'reserve',width: 300,formatter: AppUtils.arrayToString},
                     // {name: 'Invisible', label : '<%= t "invisible" %>', jsonmap: 'invisible',width: 300, formatter: AppUtils.arrayToString},
-                ];
-
-    var EquipmentNeedsColModel = [ 
-                    {name: 'item-date',         label : '<%= t "item-date" %>',                     jsonmap: 'date'},
-                    {name: 'item-day',          label : '<%= t "item-day" %>',                      jsonmap: 'day'},
-                    {name: 'item-start-time',   label : '<%= t "item-start-time" %>',               jsonmap: 'start_time'},
-                    {name: 'End Time',          label : '<%= t "item-end-time" %>',                 jsonmap: 'end_time'},
-                    {name: 'Venue',             label : '<%= t "venue" %>',                         jsonmap: "venue_name"},
-                    {name: 'Room',              label : '<%= t "room" %>',                          jsonmap: "room_name"},
-                    {name: 'Setup',             label : '<%= t "setup" %>',                         jsonmap: "room_setup"},
-                    {name: 'Title',             label : '<%= t "item-title" %>',                    jsonmap: "title", width: 500},
-                    {name: 'Format',            label : '<%= t "report-selection-item-format" %>',  jsonmap: 'format'},
-                    {name: 'Equipment',         label : '<%= t "equipment" %>',                     jsonmap: 'equipment',width: 300, formatter: AppUtils.arrayToString}
                 ];
 
     var ItemWordCountsColModel = [
@@ -231,7 +215,6 @@ ReportApp.ReportManagement = (function(Backbone){
             'panels_by_room'        : 'panels_by_room',
             'panels_by_timeslot'    : 'panels_by_timeslot',
             'edited_bios'           : 'edited_bios',
-            'equipment_needs'       : 'equipment_needs',
             'capacity_report'       : 'capacity_report',
             'people_item_allocation' : 'people_item_allocation',
             'people_with_too_many_items' : 'people_with_too_many_items',
@@ -310,18 +293,6 @@ ReportApp.ReportManagement = (function(Backbone){
                 endPoint    : "<%= baseUri + '/planner_reports/capacity_report' %>",
                 colModel    : ItemCapacityColModel,
                 caption     : '<%= t "reports-items-over-capacity" %>'
-            }));
-        },
-        
-        equipment_needs : function() {
-            ReportBase.reportRegion.close();
-            ReportBase.resultRegion.close();
-            $('#report-results-area').html('');
-            ReportBase.reportRegion.show(new ReportBase.ReportView({
-                form        : GenericForm,
-                endPoint    : "<%= baseUri + '/planner_reports/equipment_needs' %>",
-                colModel    : EquipmentNeedsColModel,
-                caption     : '<%= t "reports-items-with-equipment-needs" %>'
             }));
         },
         

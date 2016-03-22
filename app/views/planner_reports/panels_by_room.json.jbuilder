@@ -9,6 +9,4 @@ json.rowdata @rooms.collect {|r| r.programme_items.collect {|i| { :room => r, :i
     json.day        e[:item].time_slot.start.strftime('%a')
     json.start_time e[:item].time_slot.start.strftime('%H:%M')
     json.end_time   e[:item].time_slot.end.strftime('%H:%M')
-#    json.time_slot  e[:item].time_slot.start.strftime('%H:%M') + ' - ' + e[:item].time_slot.end.strftime('%H:%M')
-    json.equipment  e[:item].equipment_needs.collect {|eq| eq.equipment_type.description if eq.equipment_type }
 end
