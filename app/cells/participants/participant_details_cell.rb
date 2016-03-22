@@ -1,7 +1,8 @@
 class Participants::ParticipantDetailsCell < Cell::Rails
 
   def display
-    @extra_tab_display = [] if ! @extra_tab_display
+    @extra_items_display = [] if ! @extra_items_display
+    @extra_items_tab_display = [] if ! @extra_items_tab_display
     render
   end
   

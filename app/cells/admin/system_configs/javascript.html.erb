@@ -26,17 +26,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
         urlRoot : "<%= baseUri + '/cloudinary_config' %>"
     });
 
-    Equipment = Backbone.Model.extend({
-        schema : {
-            description     : { type : 'Text', title : '<%= t "equipment-name" %>' }
-        },
-        urlRoot : "<%= baseUri + '/equipment_types' %>"
-    });
-    
-    EquipmentCollection = Backbone.Collection.extend({
-        model : Equipment
-    });
-    
     ItemFormat = Backbone.Model.extend({
         schema : {
             name     : { type : 'Text', title : '<%= t "format-name" %>' },
@@ -104,7 +93,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
     var Workspace = Backbone.Router.extend({
         routes : {
             'users_config' : 'users_config',
-            'equipment_config' : 'equipment_config',
             'item_format_config' : 'item_format_config',
             'room_setups_config' : 'room_setups_config',
             'data_sources_config' : 'data_sources_config',
@@ -118,35 +106,6 @@ ConfigApp.ConfigManagement = (function(Backbone){
             layout = new ConfigLayout();
             configRegion.show(layout);
             layout.configRegion.show ( new UsersView() );
-        },
-        
-        equipment_config : function() {
-            configRegion.close();
-            
-            equipmentLayout = new ConfigLayout();
-            configRegion.show(equipmentLayout);
-            equipmentLayout.titleRegion.show ( new TitleView({ model : new TitleMdl({ title : '<%= t "equipment" %>' }) }) );
-            
-            TabUtils.createTabControl({
-                template                : "#equipment-control-template",
-                modelType               : Equipment,
-                view_refresh_event      : "equipment:refresh",
-                modal_create_title      : '<%= t "equipment-create-equipment" %>',
-                region                  : equipmentLayout.controlRegion,
-            });
-            
-            tabLists.push( AppUtils.createCollectionView({
-                url                     : "<%= baseUri + '/equipment_types.json' %>",
-                collectionType          : EquipmentCollection,
-                region                  : equipmentLayout.configRegion,
-                template                : "#equipment-template",
-                collection_attributes   : { "class" : "table table-striped table-condensed" },
-                collection_tagName      : 'table',
-                tagName                 : 'tr',
-                view_refresh_event      : "equipment:refresh",
-                modal_edit_title        : '<%= t "equipment-edit-equipment" %>',
-                modal_edit              : true
-            }) );
         },
         
         item_format_config : function() {

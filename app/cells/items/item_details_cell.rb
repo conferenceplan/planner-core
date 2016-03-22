@@ -14,6 +14,7 @@ class Items::ItemDetailsCell < Cell::Rails
 
   def display
     @extra_tab_display = [] if ! @extra_tab_display
+    @extra_tab_post_participants_display = [] if ! @extra_tab_post_participants_display
     render
   end
 
