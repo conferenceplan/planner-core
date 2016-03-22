@@ -13,7 +13,7 @@
 
     return {
       help: schema.help || '',
-      help_placement: schema.help_placement || 'top',
+      help_placement: schema.help_placement || 'auto',
       hint: schema.hint || '',
       title: schema.title,
       fieldAttrs: schema.fieldAttrs,
