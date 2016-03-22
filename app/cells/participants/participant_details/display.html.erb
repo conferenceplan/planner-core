@@ -6,6 +6,9 @@
     <li><a href="#surveys-tab" data-toggle="tab"><%= t 'surveys' %></a></li>
     <li><a href="#availability-tab" data-toggle="tab"><%= t 'availability' %></a></li>
     <li><a href="#items-tab" data-toggle="tab"><%= t 'program-items' %></a></li>
+    <% @extra_items_tab_display.each do |extra| %>
+        <%= render extra %>
+    <% end %>
     <li><a href="#emails-tab" data-toggle="tab"><%= t 'emails' %></a></li>
     <% @extra_tab_display.each do |extra| %>
         <%= render extra %>
