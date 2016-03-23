@@ -1,5 +1,5 @@
 <script type="text/template" id="people-control-view-template">
-    <button class="btn btn-primary add-people-button pull-right"><%= t "add" %> ></button>
+    <button class="btn btn-primary add-people-button pull-right"><%= t "assign" %> <i class="fa fa-chevron-right"></i></button>
 </script>
 
 <script type="text/template" id="program-item-view-template">
@@ -9,19 +9,19 @@
                 <dl class="dl-horizontal dt35 no-bottom-margin">
                     <dt><%= t 'title'%></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
                     <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
-                    <dt><%= t "setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
+                    <dt><%= t "item-description" %></dt><dd><%= t 'hover-to-show' %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "item-description" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='{{= precis ? precis : "&nbsp;" }}'></i></dd>
+                    <dt><%= t "item-start-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
+                    <dt><%= t "duration" %></dt><dd>{{= duration ? duration : "&nbsp;" }} mins</dd>
+                    <dt><%= t "room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
+                    <dt><%= t "min-people" %></dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
+                    <dt><%= t "max-people" %></dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
                     <!--
                     <dt><%= t "ref-number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
+                    <dt><%= t "setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
                     <dt><%= t "short-title" %></dt><dd>{{= short_title ? short_title : "&nbsp;" }}</dd>
-                    <dt><%= t "item-description" %></dt><dd>{{= precis ? precis : "&nbsp;" }}</dd>
                     <dt><%= t "notes" %></dt><dd>{{= item_notes ? item_notes : "&nbsp;" }}</dd>
                     <dt><%= t "for-print" %></dt><dd>{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
                     -->
-                    <dt><%= t "duration" %></dt><dd>{{= duration ? duration : "&nbsp;" }}</dd>
-                    <dt><%= t "max-people" %></dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
-                    <dt><%= t "min-people" %></dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
-                    <dt><%= t "room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
-                    <dt><%= t "item-start-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
                 </dl>
             </div>
         </div>
