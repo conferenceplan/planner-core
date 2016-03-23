@@ -13,14 +13,27 @@
         <div class="row">
             <div class="well col-xs-12">
                 <dl class="dl-horizontal dt35 no-bottom-margin">
-                    <dt><%= t 'title'%></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
-                    <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
-                    <dt><%= t "item-description" %></dt><dd><%= t 'hover-to-show' %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "item-description" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='{{= precis ? precis : "&nbsp;" }}'></i></dd>
-                    <dt><%= t "item-start-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
-                    <dt><%= t "duration" %></dt><dd>{{= duration ? duration : "&nbsp;" }} mins</dd>
-                    <dt><%= t "room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
-                    <dt><%= t "min-people" %></dt><dd>{{= minimum_people ? minimum_people : "&nbsp;" }}</dd>
-                    <dt><%= t "max-people" %></dt><dd>{{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
+                    {{ if (title) {}}
+                        <dt><%= t 'title'%></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
+                    {{ }; }}
+                    {{ if (format_name) {}}
+                        <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
+                    {{ }; }}
+                    {{ if (precis) {}}
+                        <dt><%= t "item-description" %></dt><dd><%= t 'hover-to-show' %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "item-description" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='{{= precis ? precis : "&nbsp;" }}'></i></dd>
+                    {{ }; }}
+                    {{ if (start_day_str) {}}
+                        <dt><%= t "item-start-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
+                    {{ }; }}
+                    {{ if (duration) {}}
+                        <dt><%= t "duration" %></dt><dd>{{= duration ? duration : "&nbsp;" }} mins</dd>
+                    {{ }; }}
+                    {{ if (room) {}}
+                        <dt><%= t "room" %></dt><dd>{{= room ? room : "&nbsp;" }}</dd>
+                    {{ }; }}
+                    {{ if (minimum_people && maximum_people) {}}
+                        <dt><%= t "item-nb-participants" %></dt><dd>min {{= minimum_people ? minimum_people : "&nbsp;" }} max {{= maximum_people ? maximum_people : "&nbsp;" }}</dd>
+                    {{ }; }}
                     <!--
                     <dt><%= t "ref-number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
                     <dt><%= t "setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>
