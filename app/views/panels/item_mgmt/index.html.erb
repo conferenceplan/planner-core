@@ -24,7 +24,13 @@
 <%= render_cell "items/add_people", :javascript, :prog_item => @prog_item %>
 <%= render_cell "items/add_people", :templates %>
 
-<div class="row">
+<div class="row" style="margin-left: -30px; margin-right: -30px;">
+    <div class="col-md-12">
+        <p><%= (t 'assign-people-intro-text').html_safe %></p>
+    </div>
+</div>
+<div class="voffset10"></div>
+<div class="row" style="margin-left: -30px; margin-right: -30px;">
     <div class="col-xs-6">
         <div class="row">
             <div class="col-xs-12">
