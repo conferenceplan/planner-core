@@ -1576,3 +1576,18 @@ h1.survey-title {
     cursor: pointer;
     color: #000;
 }
+
+div.thumbnail.clearfix.ui-draggable {
+    margin-bottom: 0;
+}
+div.ui-droppable.well {
+    padding: 7px;
+    min-height: 42px;
+}
+div.understated-drag-person-hint p {
+    font-size: 10px;
+    color: #ccc;
+    font-style: italic;
+    text-align: right;
+    margin-top: -15px;
+}

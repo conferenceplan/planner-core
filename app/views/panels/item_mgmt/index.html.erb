@@ -1,6 +1,6 @@
 
 <%= render_cell "participants/participant_list", :javascript, 
-    :caption => "participants-(confirmed)",
+    :caption => 'participants',
     :pager => "participants-pager",
     :del => false,
     :edit => false,
@@ -25,14 +25,19 @@
 <%= render_cell "items/add_people", :templates %>
 
 <div class="row">
-    <div class="col-xs-5 left-jqgrid">
-        <%= render_cell "participants/participant_list", :display,
-                :pager => "participants-pager"
-         %>
-        <div class="voffset10"></div>
-        <div id="people-control-view"></div>
+    <div class="col-xs-6 left-jqgrid">
+        <div class="row">
+            <div class="col-xs-12">
+                <%= render_cell "participants/participant_list", :display,
+                        :pager => "participants-pager"
+                 %>
+                <div class="voffset10"></div>
+                <div id="people-control-view"></div>
+            </div>
+        </div>
     </div>
-    <div class="col-xs-7" id="program-item-view">
+    <div class="col-xs-1"></div>
+    <div class="col-xs-5" id="program-item-view">
         <div></div>
     </div>
 </div>
