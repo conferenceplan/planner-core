@@ -88,7 +88,7 @@ ItemApp.PeopleManagement = (function(Backbone){
                 url : "<%= baseUri + '/programme_items/' %>" + id + "/updateParticipants",
                 success : function() {
                     // message that the save happened
-                    infoMessage("Program item assignment has been saved.");
+                    infoMessage("<%= j t('item-assignments-have-been-saved') %>");
                     needsSaved = false;
                 }
             });
