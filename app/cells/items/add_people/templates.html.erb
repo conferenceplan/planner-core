@@ -12,10 +12,10 @@
     {{ if (typeof id != 'undefined') { }}
         <div class="row">
             <div class="well col-xs-12">
+                {{ if (title) {}}
+                    <b>{{= title ? title : "&nbsp;" }}</b>
+                {{ }; }}
                 <dl class="dl-horizontal dt35 no-bottom-margin">
-                    {{ if (title) {}}
-                        <dt><%= t 'title'%></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
-                    {{ }; }}
                     {{ if (format_name) {}}
                         <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
                     {{ }; }}
@@ -42,6 +42,9 @@
                     <dt><%= t "for-print" %></dt><dd>{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
                     -->
                 </dl>
+                <div class="col-xs-12" style="padding-right:0;">
+                    <button class="btn btn-primary save-button pull-right"><%= t "save-assignments" %></button>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -136,7 +139,7 @@
         </div>
         <div class="row">
             <div class="col-xs-12" style="padding-right:0;">
-                <button class="btn btn-primary save-button pull-right"><%= t "save" %></button>
+                <button class="btn btn-primary save-button pull-right"><%= t "save-assignments" %></button>
             </div>
         </div>
         <div class="voffset10"></div>
