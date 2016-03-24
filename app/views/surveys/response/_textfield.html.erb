@@ -20,7 +20,7 @@
                     :rows => 5, :size => question.text_size, :class => question.tags_label + '_text ui-autocomplete-input col-xs-12 form-control' %>
             </div>
             <div class="col-sm-2">
-                <a href='#' rel="popover" data-html=true class="cloud-popover btn btn-success" data-trigger="focus" data-contentwrapper="#<%= question.tags_label%>_popup" style="width: 100%;"><%= t 'tags' %></a>
+                <a href='#' rel="popover" data-html=true class="cloud-popover btn btn-success" data-trigger="focus" data-contentwrapper="#<%= question.tags_label%>_popup" style="width: 100%;" data-placement="auto top"><%= t 'tags' %></a>
                 <div id="<%= question.tags_label%>_popup" class="hidden-area"><div id="<%= question.tags_label%>_cloud" style="width: 248px; height: 250px;"></div></div>
             </div>
         </div>

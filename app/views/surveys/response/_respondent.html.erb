@@ -8,7 +8,7 @@
         <div class="form-group  no-bottom-margin <%='has-error' if @errors && (@errors['first_name'] || @errors['last_name']) %>">
             <label class="col-sm-3 control-label">
                 <%= t 'name' %>
-                <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-registration-name' %>"></i>
+                <i class="glyphicon glyphicon-info-sign bpopover" data-placement="auto top" data-toggle="popover" data-content="<%= t 'enter-registration-name' %>"></i>
             </label>
             <div class="col-sm-9">
                     <div class="row">
@@ -64,7 +64,7 @@
         <div class="row question-row no-bottom-margin" style="margin-left: 0; margin-right: 0;">
                 <label class="control-label col-sm-3">
                     <%= t 'publication-name' %>
-                    <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-publication-name' %>"></i>
+                    <i class="glyphicon glyphicon-info-sign bpopover" data-placement="auto top" data-toggle="popover" data-content="<%= t 'enter-publication-name' %>"></i>
                 </label>
                 
                 <div class="col-sm-9">
@@ -99,7 +99,7 @@
 <div class="form-group  no-bottom-margin <%='has-error' if @errors && @errors['email'] %>">
     <label class="control-label col-sm-3">
         <%= t 'survey-email-address' %>
-        <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= t 'enter-email-address' %>"></i>
+        <i class="glyphicon glyphicon-info-sign bpopover" data-placement="auto top" data-toggle="popover" data-content="<%= t 'enter-email-address' %>"></i>
     </label>
     <div class="col-sm-4">
         <div class="required-field-block">
