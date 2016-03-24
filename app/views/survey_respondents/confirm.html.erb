@@ -1,7 +1,7 @@
 <% if @survey %>
     <div class="row survey-title-row">
         <div class="col-sm-12">
-            <h1 class="survey-title"><%= @survey.name %></h1>
+            <h1 class="survey-title"><%= @survey.name.html_safe %></h1>
         </div>
     </div>
 <% end %>
@@ -18,7 +18,7 @@
 <div class="row">
     <div class="col-md-12">
         <% if @survey.thank_you %>
-            <%= @survey.thank_you %>
+            <%= @survey.thank_you.html_safe %>
         <% else %>
             Thank you for completing the questionnaire. You will receive an email shortly confirming your responses to the questionnaire.
             You can always review and edit your response by returning to the <%= link_to 'survey', survey_respondents_path %> and 
