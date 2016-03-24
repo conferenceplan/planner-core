@@ -15,7 +15,7 @@
                         <% end %>
                         <%= question.question.html_safe %>
                         <% if question.survey_format.help && !question.survey_format.help.blank? %>
-                            <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="<%= question.survey_format.help %>"></i>
+                            <i class="glyphicon glyphicon-info-sign bpopover" data-placement="auto top" data-toggle="popover" data-content="<%= question.survey_format.help %>"></i>
                         <% end %>
                     </label>
             <% end %>
