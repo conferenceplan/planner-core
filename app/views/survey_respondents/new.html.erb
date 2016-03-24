@@ -2,7 +2,7 @@
 <% if @survey %>
     <div class="row survey-title-row">
         <div class="col-sm-12">
-            <h1 class="survey-title"><%= @survey.name %></h1>
+            <h1 class="survey-title"><%= @survey.name.html_safe %></h1>
         </div>
     </div>
     <% if !@survey.header_image.empty? %>

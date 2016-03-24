@@ -1,7 +1,9 @@
 <% if @survey %>
     <div class="row survey-title-row">
         <div class="col-sm-12">
-            <h1 class="survey-title"><%= @survey.name %></h1>
+            <h1 class="survey-title">
+                <%= @survey.name.html_safe %>
+            </h1>
         </div>
     </div>
 <% end %>
@@ -18,7 +20,7 @@
 <div class="row">
     <div class="col-md-12">
         <% if @survey && @survey.declined_msg && @survey.declined_msg.length > 0 %>
-            <%= @survey.declined_msg %>
+            <%= @survey.declined_msg.html_safe %>
         <% else %>
             <p>
                 Thank you. It has been noted that you have declined this invitation.
