@@ -55,7 +55,7 @@ class ProgrammeItem < ActiveRecord::Base
       self.parent_id = nil # ensure no parent/child
       self.format_id = nil # no format
 
-      self.programme_item_assignments.destroy_all # ensure no people
+      # self.programme_item_assignments.destroy_all # ensure no people
 
       # self.room_item_assignment.destroy if self.room_item_assignment # ensure no room...
     end
