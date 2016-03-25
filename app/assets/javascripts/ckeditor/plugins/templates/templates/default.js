@@ -145,8 +145,8 @@ CKEDITOR.addTemplates( 'default',
                         '<h1><span class="grenadine-editable" >Votre opinion nous importe!</span></h1>' +
                         '<p><span class="grenadine-editable">Cher</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
                         '<div class="grenadine-editable"><p>Nous aimerions avoir votre opinion. Veuillez remplir le sondage suivant:</p></div>' +
-                        '<p><span class="grenadine-editable"><a href="<%= args[:survey_url] %>" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Lien vers le sondage</a></span></p>' +
-                        '<div class="grenadine-editable"><p>Le lien ne fonctionne pas dans votre lecteur de courriel? Alors copiez le lien suivant et collez-le directement dans votre navigateur: <a href="<%= args[:survey_url] %>"><%= args[:survey_url] %></a>. Votre code unique est: <strong><%= args[:key] %></strong></p></div>' +                                    
+                        '<p><span class="grenadine-editable"><%= args[:survey_url] %></span></p>' +
+                        '<div class="grenadine-editable"><p>Le lien ne fonctionne pas dans votre lecteur de courriel? Alors copiez le lien suivant et collez-le directement dans votre navigateur: <%= args[:survey_url] %>. Votre code est: <strong><%= args[:key] %></strong></p></div>' +                                    
                       emailTemplateBottom        
             },
             {
