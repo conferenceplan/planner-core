@@ -97,7 +97,7 @@ CKEDITOR.addTemplates( 'default',
                         '<p><span class="grenadine-editable">Dear</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
                         '<div class="grenadine-editable"><p>We would like to invite you to our event which will take place at this date and time and will be located here.</p></div>' +
                         '<p><span class="grenadine-editable"><a href="" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Accept or Decline</a></span></p>' +
-                        '<div class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your unique key code: <strong><%= args[:key] %></strong></p></div>' +                                        
+                        '<div class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="">big link here</a> in your browser and type in your code: <strong><%= args[:key] %></strong></p></div>' +                                        
                       emailTemplateBottom        
             },
             {
@@ -110,7 +110,7 @@ CKEDITOR.addTemplates( 'default',
                         '<p><span class="grenadine-editable">Dear</span><span > <strong><%= args[:person].first_name %> <%= args[:person].last_name %></strong></span>,</p>' +
                         '<div class="grenadine-editable"><p>We would love to get your feed-back. Please take a few moments to fill out the following survey:</p></div>' +
                         '<p><span class="grenadine-editable"><a href="<%= args[:survey_url] %>" class="grenadine-button" style="border: 1px solid #C01F40;border-radius: 6px;padding: 13px 20px 13px 20px;width: auto;color: white;font-weight: bold;background-color: #C01F40;text-align: center;text-decoration: none;margin: 15px auto 15px auto;display: inline-block;min-width: 200px;">Link To Survey</a></span></p>' +
-                        '<div class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="<%= args[:survey_url] %>"><%= args[:survey_url] %></a> in your browser and type in your unique key code: <strong><%= args[:key] %></strong></p></div>' +                                    
+                        '<div class="grenadine-editable"><p>Link doesn\'t work? Then paste this link <a href="<%= args[:survey_url] %>"><%= args[:survey_url] %></a> in your browser and type in your code: <strong><%= args[:key] %></strong></p></div>' +                                    
                       emailTemplateBottom        
             },
             {
