@@ -226,7 +226,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                 title : '<%= t "item-max-participants" %>', validators: [
                                 { type: 'regexp', message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', regexp: /^[0-9]\d*$/ }
                             ] },
-            audience_size  : { type : 'DependentNumber', validators: ['required'], editorClass : 'item-form-element',
+            audience_size  : { type : 'DependentNumber', editorClass : 'item-form-element',
                                 dependsOn : 'is_break', dependentValues : ['false'],
                                 title : '<%= t "item-estimated-audience-size" %>' },
             pub_reference_number : { type : 'DependentText', editorClass : 'item-form-element',
