@@ -3,6 +3,9 @@ json.new_items      @candidateNewItems
 json.modified_items @candidateModifiedItems
 json.removed_items  @candidateRemovedItems
 
+json.modifed_rooms  @candidateRooms
+json.modifed_venues @candidateVenues
+
 if @peopleChanged
     json.people_added_updated    @peopleChanged[:updatedPeople].each do |personid|
         json.person_name Person.find(personid).getFullPublicationName

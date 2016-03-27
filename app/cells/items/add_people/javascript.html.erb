@@ -177,8 +177,15 @@ ItemApp.PeopleManagement = (function(Backbone){
                 success : function(model) {
 	                needsSaved = false;
                     ItemApp.getRegion("people").show(new ProgramItemPeopleView({model : model}));
+
+                    $('#program-item-view').find('.bpopover').popover({
+                        html: true,
+                        viewport: { selector: 'body', padding: 0 },
+                        container: 'body',
+                    })
+
                 }
-            });        
+            });
     };
     
     return {

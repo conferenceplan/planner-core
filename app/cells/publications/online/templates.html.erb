@@ -109,6 +109,24 @@
         {{ }); }}
         </ul>
     </div>
+    <div><h5><%= t "rooms-modified" %></h5>
+        <ul class="list-group">
+        {{ _.each(modifed_rooms, function(room) { }}
+            <li class="list-group-item">
+                {{= room.name}}
+            </li>
+        {{ }); }}
+        </ul>
+    </div>
+    <div><h5><%= t "venues-modified" %></h5>
+        <ul class="list-group">
+        {{ _.each(modifed_venues, function(venue) { }}
+            <li class="list-group-item">
+                {{= venue.name}}
+            </li>
+        {{ }); }}
+        </ul>
+    </div>
     <% @extra_review_template.each do |extra| %>
         <%= render extra %>
     <% end %>

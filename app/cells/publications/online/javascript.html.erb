@@ -179,7 +179,7 @@ OnlinePublicationsApp.Management = (function(Backbone){
                    model : mdl
                });
                infoRegion.show(lpView);
-               // TODO - put in loop to update this
+
                lastPubPoller = Backbone.Poller.get(mdl, {
                    delay : 10000, // ms - every 10 seconds...
                    delayed : true,

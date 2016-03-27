@@ -37,7 +37,8 @@ class PublishJob
         removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
         removedItems += unPublish(getRemovedSubItems())
         
-        modifiedItems += publishRooms(getModifiedRooms())
+        modifiedRooms = publishRooms(getModifiedRooms())
+        modifiedVenues = publishVenues(getModifiedVenues())
         
         updateAssignmentNames()
         
@@ -50,6 +51,8 @@ class PublishJob
           p.newitems = newItems
           p.modifieditems = modifiedItems
           p.removeditems = renmovedItems
+          p.modified_rooms = modifiedRooms
+          p.modified_venues = modifiedVenues
           p.save
         end
   
@@ -97,7 +100,6 @@ class PublishJob
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getNewProgramItems
-    # TODO fix
     clause = addClause(nil,'programme_items.print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
     clause = addClause(clause,'room_item_assignments.id is not null AND programme_items.parent_id is null', nil)
@@ -119,6 +121,12 @@ class PublishJob
   def getModifiedRooms
     rooms = Room.find :all
     rooms.collect {|r| (r.published && (r.updated_at > r.published.updated_at)) ? r : nil}.compact
+  end
+
+  def getModifiedVenues
+    # Take into account the venue changing details
+    venues = Venue.find :all
+    venues.collect {|v| (v.published && (v.updated_at > v.published.updated_at)) ? v : nil}.compact
   end
   
   # Check this for modified items - i.e what happens if the time is changed?
@@ -345,19 +353,36 @@ class PublishJob
   def publishRooms(rooms)
     # We have a set of rooms that have name change or similar, so we need to republish them
     nbrProcessed = 0
-    # Room.uncached do
-      rooms.each do |srcRoom|
-        pubRoom = srcRoom.published
-        if pubRoom
-          pubRoom.name = srcRoom.name
-          pubRoom.sort_order = srcRoom.sort_order
 
-          pubRoom.touch
-          pubRoom.save
-          nbrProcessed += pubRoom.published_programme_items.size
-        end
+    rooms.each do |srcRoom|
+      pubRoom = srcRoom.published
+      if pubRoom
+        pubRoom.name = srcRoom.name
+        pubRoom.sort_order = srcRoom.sort_order
+
+        pubRoom.touch
+        pubRoom.save
+        nbrProcessed += 1
       end
-    # end
+    end
+    
+    return nbrProcessed
+  end
+  
+  def publishVenues(venues)
+    nbrProcessed = 0
+
+    venues.each do |srcVenue|
+      pubVenue = srcVenue.published
+      if pubVenue
+        pubVenue.name = srcVenue.name
+        pubVenue.sort_order = srcVenue.sort_order
+
+        pubVenue.touch
+        pubVenue.save
+        nbrProcessed += 1
+      end
+    end
     
     return nbrProcessed
   end
@@ -429,6 +454,8 @@ class PublishJob
             assignment.save
           end
         else # the destination has the person, but their role may have changed
+          # TODO - if the person is assigned twice we need to deal with it correctly... i.e. participant and reserved
+          
           # find the index of the person only if the role is also different
           idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && (a.role != srcAssignment.role) }
           if idx != nil
