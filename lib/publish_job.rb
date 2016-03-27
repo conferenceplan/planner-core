@@ -51,8 +51,8 @@ class PublishJob
           p.newitems = newItems
           p.modifieditems = modifiedItems
           p.removeditems = renmovedItems
-          p.modified_rooms = modifiedRooms
-          p.modified_venues = modifiedVenues
+#          p.modified_rooms = modifiedRooms
+#          p.modified_venues = modifiedVenues
           p.save
         end
   
