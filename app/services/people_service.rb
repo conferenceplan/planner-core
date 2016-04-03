@@ -125,8 +125,8 @@ module PeopleService
         src_detail = src_person.survey_respondent.survey_respondent_detail
         dest_detail = dest_person.survey_respondent.survey_respondent_detail
         src_detail.survey_responses.each do |response|
-          reponse.survey_respondent_detail = dest_detail
-          reponse.save
+          response.survey_respondent_detail = dest_detail
+          response.save
         end
 
         src_detail.survey_histories.each do |history|

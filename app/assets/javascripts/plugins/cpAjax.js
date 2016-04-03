@@ -40,6 +40,7 @@ jQuery(document).ready(function() {
             // };
         },
         error : function(response) {
+            $("body").removeClass("loading");
             if (response.status > 0) {
                 if (response.responseText) {
                     alertMessage(response.responseText);
