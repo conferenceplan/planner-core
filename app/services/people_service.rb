@@ -122,17 +122,23 @@ module PeopleService
         survey_respondent.save
       else
         # move each of the surveys
-        # TODO - if the dest already has a respondent detail then do not move the survey ....
         src_detail = src_person.survey_respondent.survey_respondent_detail
         dest_detail = dest_person.survey_respondent.survey_respondent_detail
-        src_detail.survey_responses.each do |response|
-          response.survey_respondent_detail = dest_detail
-          response.save
-        end
 
-        src_detail.survey_histories.each do |history|
-          history.survey_respondent_detail = dest_detail
-          history.save
+        # go through each of the surveys
+        surveys = Survey.all
+        surveys.each do |survey|
+          # if the dest already has a responses then do not copy ....
+          if dest_detail.getResponses(survey.id).size == 0
+            src_detail.getResponses(survey.id).each do |response|
+              response.survey_respondent_detail = dest_detail
+              response.save
+            end
+            src_detail.getHistories(survey.id).each do |history|
+              history.survey_respondent_detail = dest_detail
+              history.save
+            end
+          end
         end
       end
     end

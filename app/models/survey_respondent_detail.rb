@@ -10,6 +10,10 @@ class SurveyRespondentDetail < ActiveRecord::Base
     return survey_responses.find(:all, :conditions => {:survey_id => surveyId})
   end
 
+  def getHistories(surveyId)
+    return survey_histories.find(:all, :conditions => {:survey_id => surveyId})
+  end
+
   # Get a particular response for a given survey and question  
   def getResponse(surveyId, questionId)
     return survey_responses.first(:conditions => {:survey_id => surveyId, :survey_question_id => questionId})
