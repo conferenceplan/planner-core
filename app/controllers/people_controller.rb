@@ -6,6 +6,39 @@ class PeopleController < PlannerController
   #
   #
   #
+  def merge
+    Person.transaction do
+      src_person_id = params[:src_person_id]
+      dest_person_id = params[:dest_person_id]
+      to_destination = params[:direction] != "true"
+      
+      if to_destination
+        src_person = Person.find src_person_id
+        dest_person = Person.find dest_person_id
+      else  # we are merging in the other direction
+        src_person = Person.find dest_person_id
+        dest_person = Person.find src_person_id
+      end
+      
+      if !src_person || !dest_person
+        raise I18n.t("planner.core.errors.people-not-found")
+      end
+      
+      PeopleService.merge_people(src_person, dest_person)
+      
+      # delete the src_person
+      src_person.destroy
+      
+      render status: :ok, json: {person_id: dest_person.id}.to_json
+    end
+
+  rescue => ex
+    render status: :bad_request, text: ex.message
+  end
+
+  #
+  #
+  #
   def destroy
     begin
       Person.transaction do

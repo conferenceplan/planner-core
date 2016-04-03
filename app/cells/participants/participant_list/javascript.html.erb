@@ -33,12 +33,18 @@ jQuery(document).ready(function() {
         pager : "#<%= @pager %>",
         
         multiselect : <%= @multiselect %>,
+        multiboxonly : <%= @multiboxonly %>,
+        hide_select_all : <%= @hide_select_all %>,
         
         extraClause : "<%= @extraClause %>",
         includeMailings : <%= @includeMailings %>,
         includeMailHistory : <%= @includeMailHistory %>,
         
         onlySurveyRespondents : <%= @onlySurveyRespondents %>,
+        
+        extra_button : <%= @extra_button %>,
+        extra_button_title : "<%= @extra_button_title %>",
+        extra_modal_action : <%= @extra_modal_action %>,
         
         sortname : 'people.last_name',
         

@@ -13,6 +13,7 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         createColModel : function(){
             var that = this;
             return [{
+                name : 'identifier',
                 label : this.options.name[1], //'Name',
                 index : 'people.last_name',
                 // hidden : false,
@@ -75,6 +76,23 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                         }
                     }
                     
+                    return res;
+                }
+            }, {
+                name : 'emails',
+                hidden : true,
+                formatter : function(cellvalue, options, rowObject) {
+                    var res = "";
+                    if (typeof rowObject['email_addresses'] != 'undefined') {
+                        if (rowObject['email_addresses'].length > 0) {
+                            for (i = 0 ; i < rowObject['email_addresses'].length; i++) {
+                                if (i > 0) {
+                                    res += ",";
+                                }
+                                res += rowObject['email_addresses'][i];
+                            }
+                        }
+                    }
                     return res;
                 }
             }, {

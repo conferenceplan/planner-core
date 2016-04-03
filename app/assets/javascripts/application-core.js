@@ -73,6 +73,7 @@
 //= require plugins/fileUploadEditor
 //= require plugins/cpPendingImportPeopleTable
 //= require plugins/typeAheadTextEditor
+//= require plugins/styledCheckboxEditor
 
 //= require TabViews
 

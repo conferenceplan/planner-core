@@ -36,12 +36,19 @@ class Participants::ParticipantListCell < Cell::Rails
     @includeMailHistory = args.has_key?(:includeMailHistory) ? args[:includeMailHistory] : false
     
     @multiselect = args.has_key?(:multiselect) ? args[:multiselect] : false
+    @multiboxonly = args.has_key?(:multiboxonly) ? args[:multiboxonly] : false
+    @hide_select_all = args.has_key?(:hide_select_all) ? args[:hide_select_all] : false
     
     @onlySurveyRespondents = args.has_key?(:onlySurveyRespondents) ? args[:onlySurveyRespondents] : false
     
     @modelType = args.has_key?(:modelType) ? args[:modelType] : 'null'
     @modelTemplate = args.has_key?(:modelTemplate) ? args[:modelTemplate] : ""
     @showControls = args.has_key?(:showControls) ? args[:showControls] : false
+    
+    @extra_button = args.has_key?(:extra_button) ? args[:extra_button] : false
+    @extra_button_title = args.has_key?(:extra_button_title) ? args[:extra_button_title] : ""
+    @extra_modal_action = args.has_key?(:extra_modal_action) ? args[:extra_modal_action] : "function() {}"
+
     
     @delayed = args.has_key?(:delayed) ? args[:delayed] : false
     

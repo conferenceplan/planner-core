@@ -36,15 +36,15 @@ module SurveyService
       websiteQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['WebSite']).order("created_at desc")
       twitterQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Twitter']).order("created_at desc")
       otherQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['OtherSocialMedia']).order("created_at desc")
-      photoQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Photo']).order("created_at desc")
+      # photoQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Photo']).order("created_at desc")
       faceQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Facebook']).order("created_at desc")
 
       setResponse('website', websiteQuestion,sinceDate) if websiteQuestion
       setResponse('twitterinfo', twitterQuestion,sinceDate) if twitterQuestion
       setResponse('othersocialmedia', otherQuestion,sinceDate) if otherQuestion
-      if photoQuestion && photoQuestion.size > 0
-        setResponse('photourl', photoQuestion,sinceDate) if photoQuestion && (photoQuestion[0].question_type == :textfield)
-      end
+      # if photoQuestion && photoQuestion.size > 0
+        # setResponse('photourl', photoQuestion,sinceDate) if photoQuestion && (photoQuestion[0].question_type == :textfield)
+      # end
       setResponse('facebook', faceQuestion,sinceDate) if faceQuestion
     end
   end

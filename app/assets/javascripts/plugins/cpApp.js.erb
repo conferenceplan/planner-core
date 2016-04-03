@@ -448,19 +448,25 @@ var AppUtils = (function(){
                 var refreshEvent = this.options.view_refresh_event;
                 var data = this.form.getValue();
                 var endPoint = this.options.endPoint;
-            
+
+                var $body = $("body");
+                // show please wait  
+                $body.addClass("loading");
                 $.ajax({
                     url : endPoint,
                     type : 'POST',
                     data : data,
-                    success : function() {
+                    success : function(data) {
                         if (refreshEvent) {
                             eventAggregator.trigger(refreshEvent); 
                         };
                         if (refreshFn) {
-                            refreshFn(); // cause problem with templates used ???
+                            refreshFn(data); // cause problem with templates used ???
                         };
-                    }
+                    },
+                }).done(function(d) {
+                    // remove please wait
+                    $body.removeClass("loading");
                 });
             };
             

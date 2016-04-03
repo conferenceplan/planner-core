@@ -4,6 +4,151 @@
 module PeopleService
   
   #
+  #
+  #
+  def self.merge_people(src_person, dest_person)
+    # Take the details from the src_person and merge them into the dest_person
+    # but do not change the dest person's name ....
+    dest_person.language = src_person.language if dest_person.language.blank?
+    dest_person.comments = src_person.comments if dest_person.comments.blank?
+    dest_person.job_title = src_person.job_title if dest_person.job_title.blank?
+    dest_person.save
+    
+    # postal address email address phone address
+    src_person.addresses.each do |addr|
+      addr.person = dest_person
+      addr.save
+    end
+    
+    if src_person.pseudonym && !dest_person.pseudonym
+      pseudonym = src_person.pseudonym
+      pseudonym.person = dest_person
+      pseudonym.save
+    end
+
+    src_person.relationships do |relationship|
+      relationship.person = dest_person
+      relationship.save
+    end
+    
+    # bio
+    if src_person.edited_bio
+      edited_bio = src_person.edited_bio
+      if !dest_person.edited_bio
+        edited_bio.person = dest_person
+        edited_bio.save
+      else # do a field by field copy where empty
+        dest_bio = dest_person.edited_bio
+        dest_bio.bio = edited_bio.bio if dest_bio.bio.blank?
+        dest_bio.website = edited_bio.website if dest_bio.website.blank?
+        dest_bio.twitterinfo = edited_bio.twitterinfo if dest_bio.twitterinfo.blank?
+        dest_bio.othersocialmedia = edited_bio.othersocialmedia if dest_bio.othersocialmedia.blank?
+        dest_bio.photourl = edited_bio.photourl if dest_bio.photourl.blank?
+        dest_bio.facebook = edited_bio.facebook if dest_bio.facebook.blank?
+      end
+    end
+
+    if src_person.bio_image && !dest_person.bio_image
+      bio_image = src_person.bio_image
+      bio_image.person = dest_person
+      bio_image.save
+    end
+
+    # links - not scoped
+    src_person.linked do |link|
+      link.person = dest_person
+      link.save
+    end
+    
+    copy_single_relationships(src_person, dest_person)
+    copy_many_relationships(src_person, dest_person)
+
+    # item reg
+    # reg
+    # tickets & orders
+    # my schedules
+  end
+  
+  # Need to do these across ALL conferences .... i.e. not scoped
+  def self.copy_many_relationships(src_person, dest_person)
+    [ProgrammeItemAssignment, PublishedProgrammeItemAssignment, PersonMailingAssignment, MailHistory, Exclusion].each do |claz|
+      assignments = claz.unscoped.where(person_id: src_person.id)
+      assignments.each do |assignment|
+        assignment.person = dest_person
+        assignment.save
+      end
+    end
+    
+    taggings = ActsAsTaggableOn::Tagging.unscoped.where({taggable_type: 'Person', taggable_id: src_person.id})
+    taggings.each do |tagging|
+      tagging.taggable_id = dest_person.id
+      tagging.save
+    end
+  end
+
+  def self.copy_single_relationships(src_person, dest_person)
+    if src_person.registrationDetail
+      if !dest_person.registrationDetail 
+        reg_detail = src_person.registrationDetail
+        reg_detail.person = dest_person
+        reg_detail.save
+      elsif !dest_person.registrationDetail.registered
+        dest_person.registrationDetail.delete
+        reg_detail = src_person.registrationDetail
+        reg_detail.person = dest_person
+        reg_detail.save
+      end
+    end
+
+    if src_person.person_con_state
+      if !dest_person.person_con_state
+        person_con_state = src_person.person_con_state
+        person_con_state.person = dest_person
+        person_con_state.save
+      else
+        dest_person.person_con_state.acceptance_status = src_person.person_con_state.acceptance_status if dest_person.person_con_state.acceptance_status.blank? || dest_person.person_con_state.acceptance_status == AcceptanceStatus["Unknown"]
+        dest_person.person_con_state.invitestatus = src_person.person_con_state.invitestatus if dest_person.person_con_state.invitestatus.blank? || dest_person.person_con_state.invitestatus == InviteStatus["Not Set"]
+
+        dest_person.person_con_state.invitation_category = src_person.person_con_state.invitation_category if dest_person.person_con_state.invitation_category.blank?
+        dest_person.person_con_state.save
+      end
+    end
+
+    if !dest_person.available_date && src_person.available_date
+      available_date = src_person.available_date
+      available_date.person = dest_person
+      available_date.save
+    end
+
+    if src_person.survey_respondent
+      if !dest_person.survey_respondent
+        survey_respondent = src_person.survey_respondent
+        survey_respondent.person = dest_person
+        survey_respondent.save
+      else
+        # move each of the surveys
+        src_detail = src_person.survey_respondent.survey_respondent_detail
+        dest_detail = dest_person.survey_respondent.survey_respondent_detail
+        src_detail.survey_responses.each do |response|
+          reponse.survey_respondent_detail = dest_detail
+          reponse.save
+        end
+
+        src_detail.survey_histories.each do |history|
+          history.survey_respondent_detail = dest_detail
+          history.save
+        end
+      end
+    end
+
+    if !dest_person.person_constraints && src_person.person_constraints
+      person_constraints = src_person.person_constraints
+      person_constraints.person = dest_person
+      person_constraints.save
+    end
+  end
+  
+  #
   # Get people who have been invited and have accepted
   # along with their Bios
   #

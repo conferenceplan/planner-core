@@ -9,13 +9,25 @@ function showRegistrationsDiv(el) {
     }
 };
 
-
-
 ParticipantApp = new Backbone.Marionette.Application();
 
 ParticipantApp.PeopleManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
     var selectCallbacks = $.Callbacks();
+
+    var MergePeopleForm = Backbone.Form.extend({
+        schema : {
+            src_person_id : { type : 'Hidden' },
+            dest_person_id : { type : 'Hidden' },
+            src_person_name : { type : 'Text', title : 'source-person', editorAttrs: { readonly: true }, editorClass: "xxx" },
+            direction : { title : 'direction',
+                          type : 'StyledCheckbox', 
+                          unchecked_icon : "fa fa-fw fa-arrow-down",
+                          checked_icon : "fa fa-fw fa-arrow-up"
+                        },
+            dest_person_name : { type : 'Text', title : 'dest-person', editorAttrs: { readonly: true } }
+        }
+    });
 
     //
     //
@@ -263,6 +275,12 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         $('#selected-participant').text("");
         
         if (personTabLayout) {
+            // personTabLayout.close();
+
+            // personTabLayout = new PersonTabLayout();
+            // personTabLayout.render();
+            // $('#item-tabs').html(personTabLayout.el);
+
             personTabLayout.registration.close();
             personTabLayout.contacts.close();
             personTabLayout.published_info.close();
@@ -275,6 +293,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             personTabLayout.exclusion_times.close();
             personTabLayout.items.close();
         };
+
+        Backbone.Relational.store.reset();
         
         eventAggregator.off("refreshTagList", syncModel);
     };
@@ -329,20 +349,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         return res;
     };
     
-    var reg_detail_objs = {};
-    var invite_detail_objs = {};
-    var bio_detail_objs = {};
-    var bio_pic_objs = {};
-    var availability_objs = {};
-    
-    function instantiate_area(id, object_type, url, instances) {
-        var obj = null;
-        if (instances[id]) {
-            obj = instances[id];
-        } else {
-            obj = new object_type();
-            instances[id] = obj;
-        };
+    function instantiate_area(id, object_type, url) {
+        var obj = new object_type();
 
         obj.deferred = obj.fetch({
             url : url,
@@ -365,7 +373,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             person_id : id
         });
 
-        var reg_details = instantiate_area(id, RegistrationDetail, "<%= baseUri + '/participants/' %>" + id + "/registrationDetails.json", reg_detail_objs);
+        var reg_details = instantiate_area(id, RegistrationDetail, "<%= baseUri + '/participants/' %>" + id + "/registrationDetails.json");
         reg_details.deferred.done(function() {
             TabUtils.createTabContent({
                 model : reg_details,
@@ -380,7 +388,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             });
         });
 
-        var invite_details = instantiate_area(id, InviteDetails, "<%= baseUri + '/participants/' %>" + id + ".json", invite_detail_objs);
+        var invite_details = instantiate_area(id, InviteDetails, "<%= baseUri + '/participants/' %>" + id + ".json");
         invite_details.deferred.done(function() {
             TabUtils.createTabContent({
                 model : invite_details,
@@ -391,7 +399,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 id_name : 'person_id',
                 newTitle : '<%= t "create-invite" %>',
                 editTitle : '<%= t "edit-invite" %>',
-                updateCallback : function(mdl) {
+                updateCallback : function(mdl, response, opts) {
                                 $("#participants").jqGrid('setGridParam', {
                                     loadComplete: function(data) {
                                         $("#participants").jqGrid('setSelection', id, false); // when load is complete the selection is called...
@@ -422,7 +430,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         publishedInfoLayout = new PublishedInfoLayout();
         personTabLayout.published_info.show(publishedInfoLayout);
 
-        var bio_details = instantiate_area(id, BioDetails, "<%= baseUri + '/participants/' %>" + id + "/edited_bios.json", bio_detail_objs);
+        var bio_details = instantiate_area(id, BioDetails, "<%= baseUri + '/participants/' %>" + id + "/edited_bios.json");
         bio_details.deferred.done(function() {
             TabUtils.createTabContent({
                 model : bio_details,
@@ -437,7 +445,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             });
         });
         
-        var bio_pics = instantiate_area(id, BioPicture, "<%= baseUri + '/participants/' %>" + id + "/bio_images.json", bio_pic_objs);
+        var bio_pics = instantiate_area(id, BioPicture, "<%= baseUri + '/participants/' %>" + id + "/bio_images.json");
         bio_pics.deferred.done(function() {
             TabUtils.createTabContent({
                 model : bio_pics,
@@ -473,7 +481,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         //
         // get the exclusions and show them within the layout
         //
-        var availability = instantiate_area(id, AvailabilityDateModel, "<%= baseUri + '/participants/' %>" + id + '/available_dates.json', availability_objs);
+        var availability = instantiate_area(id, AvailabilityDateModel, "<%= baseUri + '/participants/' %>" + id + '/available_dates.json');
         availability.deferred.done(function() {
             TabUtils.createTabContent({
                 model : availability,
@@ -592,9 +600,63 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             var val = $(this).val();
             jQuery("#participants").participantTable('emailQuery', val);
         });
-    };    
+    };
+    
+    function mergePeople() {
+        /*
+         * 1. we need to have two selected people, if not show an error dialog
+         * 2. we need to show who is selected and allow them so select destination
+         * 3. we need an inprogress dialog that will go away when the merge is completed
+         * 
+         * When finished we need to remove the selection and clear the tabs? or select the merged person...
+         */
+        if (selected_people.length != 2) {
+            modal = new AppUtils.InfoModal({
+                            content : '<%= t "need-to-select-two-people" %>',
+                            title : '<%= t "error" %>'
+                    });
+            modal.render();
+        } else {
+            // Show a modal with both people and ask to proceed
+            // get the names of the peopel based on the ids - can be extracted from the grid
+            // these need to be put in the form
+            var data = jQuery("#participants").jqGrid('getRowData', selected_people[0]);
+            src_name = getPersonName(data); // add email
+            src_name += " (" + data['emails'] + ")"
+            data = jQuery("#participants").jqGrid('getRowData', selected_people[1]);
+            dest_name = getPersonName(data); // add email
+            dest_name += " (" + data['emails'] + ")"
+
+            var modal = new AppUtils.FormModal({
+                title: "merge people",
+                form: new MergePeopleForm({
+                    data : {
+                        src_person_id: selected_people[0],
+                        src_person_name: src_name,
+                        dest_person_id: selected_people[1],
+                        dest_person_name: dest_name
+                    }
+                }),
+                endPoint: '<%= baseUri %>/participants/merge',
+                refresh : function(data) {
+                    person_id = data.person_id;
+                    $("#participants").jqGrid('resetSelection');
+                    $("#participants").jqGrid('setGridParam', {
+                        loadComplete: function(data) {
+                            $("#participants").jqGrid('setSelection', person_id, true); // when load is complete the selection is called...
+                            $(this).jqGrid('setGridParam', { loadComplete: function() {} });
+                        }
+                    });
+                    $("#participants").trigger("reloadGrid");
+                }
+            });
+            modal.render();
+        }
+    };
     
     var filterCol = null;
+    var current_person = null;
+    var selected_people = [];
 
     //
     //
@@ -631,9 +693,39 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         
         InviteDetails : InviteDetails,
         
-        showDetails : function(id) {
-            clearRegDetails();
-            return showRegDetails(id);
+        mergePeople : mergePeople,
+        
+        showDetails : function(id, status, e) {
+            if (status) {
+                var selected_rows = jQuery('#participants').getGridParam('selarrrow');
+
+                if (selected_rows.length == 1) {
+                    jQuery("#participants").jqGrid('setSelection',removed);
+                    selected_people = [];
+                    selected_people.push(id);
+                } else {
+                    selected_people.push(id);
+                    if (selected_people.length > 2) {
+                        var removed = selected_people.shift();
+                        jQuery("#participants").jqGrid('setSelection',removed);
+                    }
+                }
+                
+                clearRegDetails();
+                current_person = showRegDetails(id);
+                return current_person;
+            } else {
+                idx = selected_people.indexOf(id);
+                if (idx > -1) {
+                    selected_people.splice(idx, 1);
+                }
+                // clear the reg details if there are no more selections
+                if (selected_people.length == 0) {
+                    clearRegDetails();
+                    current_person = null;
+                }
+                return null;
+            }
         },
         clearDetails : function() {
             clearRegDetails();

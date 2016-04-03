@@ -15,10 +15,12 @@ $.widget( "cp.baseTable" , {
         subGridUrl          : "",               // HAS TO BE OVER-RIDDEN by the sub-component
         getGridData         : "",               // for getting the data (part of the URL)
         caption             : "My Table",
-        selectNotifyMethod  : function(ids) {},
+        selectNotifyMethod  : function(ids, status, e) {},
         clearNotifyMethod   : function() {},
         loadNotifyMethod    : function() {},
         multiselect         : false,
+        multiboxonly        : false,
+        hide_select_all     : false,
         extraClause         : null,
         sortname            : null,
         filtertoolbar       : true,
@@ -29,7 +31,10 @@ $.widget( "cp.baseTable" , {
         delayed             : false,
         confirm_content     : "Are you sure you want to delete the selected data?",
         confirm_title       : "Confirm Deletion",
-        translations        : {}
+        translations        : {},
+        extra_button        : false,
+        extra_button_title  : "extra",
+        extra_modal_action  : function() {}
     },
 
     translate : function(str) {
@@ -96,17 +101,23 @@ $.widget( "cp.baseTable" , {
         TableControlView = Backbone.Marionette.ItemView.extend({
 
             events : {
-                "click .add-model-button"       : "newModel",
-                "click .edit-model-button"      : "editModel",
-                "click .delete-model-button"    : "deleteModal",
+                "click .add-model-button"           : "newModel",
+                "click .edit-model-button"          : "editModel",
+                "click .delete-model-button"        : "deleteModal",
+                "click .extra-action-model-button"  : "extraAction"
             },
             
             initialize : function(options) {
                 this.options = options || {};
-                // this.template = _.template(this.templateStr);
-                this.template = _.template($('#table-control-template').html()); //_.template(_model_html); //
             },
             
+            template : function(mdl) {
+                return _.template($('#table-control-template').html())({
+                                display: that.options.extra_button,
+                                label: that.options.extra_button_title
+                });
+            },
+
             refreshGrid : function(grid, mdl) {
                 if (mdl) {
                     var page_to = pageTo(mdl);
@@ -123,6 +134,10 @@ $.widget( "cp.baseTable" , {
                 };
 
                 grid.trigger("reloadGrid");
+            },
+            
+            extraAction : function() {
+                that.options.extra_modal_action();
             },
             
             newModel : function() {
@@ -234,6 +249,7 @@ $.widget( "cp.baseTable" , {
                 subGridRowExpanded : this.subGridRowExpandFn,
                 // subGridUrl      : this.getSubGridUrl(),
                 multiselect     : this.options.multiselect,
+                multiboxonly    : this.options.multiboxonly,
                 pager           : jQuery(this.options.pager),
                 rowNum          : 10,
                 autowidth       : true,
@@ -258,12 +274,12 @@ $.widget( "cp.baseTable" , {
                     }
                     return true;
                 },
-                onSelectRow     : function(ids) {
+                onSelectRow     : function(id, status, e) {
                     _el.find(".ui-subgrid").each(function () {
                         $(this).find(".cp_subgrid").jqGrid('resetSelection');
                     });
-                    
-                    var _model = selectMethod(ids); // get the current model and put it in the controller view
+
+                    var _model = selectMethod(id, status, e); // get the current model and put it in the controller view
                     
                     if (_model) {
                         if (control) {
@@ -309,6 +325,10 @@ $.widget( "cp.baseTable" , {
                     }
                 }
         });
+        
+        if (this.options.hide_select_all) {
+            $("#cb_" + this.element.attr('id')).hide();
+        }
 
         /*
          * 

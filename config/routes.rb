@@ -56,6 +56,7 @@ Rails.application.routes.draw do
   #
   # Participant/Attendee management
   #
+  match 'participants/merge',                         :controller => 'people', :action => 'merge',            :method => 'post'
   match 'participants/getList',                       :controller => 'people', :action => 'getList',            :method => 'post'
   match 'participants/count',                         :controller => 'people', :action => 'count',              :method => 'get'
   match 'participants/generateInviteKey/:id',         :controller => 'people', :action => 'generateInviteKey',  :method => 'get'

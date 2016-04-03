@@ -406,7 +406,6 @@ ItemApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
-    var tabContent = {};
     var filters = null;
     var itemTabLayout = null;
     
@@ -418,12 +417,14 @@ ItemApp.ItemManagement = (function(Backbone){
         $('#selected-program-item').text("");
         
         if (itemTabLayout) {
-            itemTabLayout.program_item.close();
-            itemTabLayout.participants.close();
-            itemTabLayout.equipment.close();
-            itemTabLayout.tags.close();
-            itemTabLayout.images.close();
+            itemTabLayout.close();
+
+            itemTabLayout = new ItemTabLayout();
+            itemTabLayout.render();
+            $('#item-tabs').html(itemTabLayout.el);
         };
+
+        Backbone.Relational.store.reset();
 
         eventAggregator.off("refreshTagList", syncModel);
         
@@ -438,20 +439,12 @@ ItemApp.ItemManagement = (function(Backbone){
             $('#selected-program-item').html(data['item[title]']);
         }
 
-        var itemMdl = null;
-        if (tabContent[id]) {
-            itemMdl = tabContent[id];
-        } else {
-            itemMdl = new ProgramItem;
-        };
+        var itemMdl = new ProgramItem;
 
         itemMdl.deferred = itemMdl.fetch({
             url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
             async: true,
         }).done(function() {
-                // tabContent.push( itemMdl );
-                tabContent[itemMdl.id] = itemMdl;
-
                 TabUtils.createTabContent({
                     model : itemMdl,
                     template : '#program-participants-view-template',
@@ -459,7 +452,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     id : id,
                     id_name : 'programme_item_id',
                     editTitle : "Edit Item",
-                    updateCallback : function(mdl) {
+                    updateCallback : function(mdl, response, opts) {
                                     // 1. we need to refresh the row in the table (or the current table)
                                     // and make sure that the row is selected
                                     // Also need to update the title above the tabs

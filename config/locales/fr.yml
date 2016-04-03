@@ -9,5 +9,6 @@ fr:
       messages:
         no-parent: 'aucun'
       errors:
+        people-not-found: "Ne peut pas trouver la source ou la destination personne"
         must-be-a-positive-number: 'Doit être un nombre positif.'
         unique-mailing-error: "La combinaison <b>Référence d'envoi</b> et <b>Gabarit</b> doit être unique."

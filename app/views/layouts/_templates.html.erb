@@ -4,6 +4,9 @@
     <button class='add-model-button btn btn-primary btn-xs toolbar-button'><i class="fa fa-plus"></i> <%= t "add" %></button>
     <button class='edit-model-button btn btn-primary btn-xs toolbar-button'><%= t "edit" %></button>
     <button class='delete-model-button btn btn-primary btn-xs toolbar-button'><%= t "delete" %></button>
+    {{ if ((typeof(display) !== 'undefined') && display) { }}
+        <button class='extra-action-model-button btn btn-primary btn-xs toolbar-button'>{{= label }}</button>
+    {{ }; }}
 </script>
 
 <script type="text/template" id="add-table-control-template">

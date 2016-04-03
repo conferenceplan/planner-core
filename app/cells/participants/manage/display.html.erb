@@ -9,7 +9,13 @@
     :includeMailHistory => true,
     :modelType => "ParticipantApp.PeopleManagement.InviteDetails",
     :modelTemplate => "#person-form-template",
-    :showControls => true
+    :showControls => true,
+    :multiselect => true,
+    :multiboxonly => true,
+    :extra_button => true,
+    :extra_button_title => "merge",
+    :extra_modal_action => "ParticipantApp.PeopleManagement.mergePeople",
+    :hide_select_all => true
     %>
 <%= render_cell "participants/participant_details", :javascript %>
 

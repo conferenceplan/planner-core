@@ -50,7 +50,7 @@
         <% }; %>\
       </label>\
       <div class='col-sm-8'>\
-        <span data-editor></span>\
+        <div data-editor></div>\
         <p class='help-block'><%= hint %></p>\
         <p class='help-block' data-error></p>\
       </div>\
