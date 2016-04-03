@@ -67,14 +67,14 @@ module PeopleService
   # Need to do these across ALL conferences .... i.e. not scoped
   def self.copy_many_relationships(src_person, dest_person)
     [ProgrammeItemAssignment, PublishedProgrammeItemAssignment, PersonMailingAssignment, MailHistory, Exclusion].each do |claz|
-      assignments = claz.unscoped.where(person_id: src_person.id)
+      assignments = claz.where(person_id: src_person.id)
       assignments.each do |assignment|
         assignment.person = dest_person
         assignment.save
       end
     end
     
-    taggings = ActsAsTaggableOn::Tagging.unscoped.where({taggable_type: 'Person', taggable_id: src_person.id})
+    taggings = ActsAsTaggableOn::Tagging.where({taggable_type: 'Person', taggable_id: src_person.id})
     taggings.each do |tagging|
       tagging.taggable_id = dest_person.id
       tagging.save
@@ -122,6 +122,7 @@ module PeopleService
         survey_respondent.save
       else
         # move each of the surveys
+        # TODO - if the dest already has a respondent detail then do not move the survey ....
         src_detail = src_person.survey_respondent.survey_respondent_detail
         dest_detail = dest_person.survey_respondent.survey_respondent_detail
         src_detail.survey_responses.each do |response|
