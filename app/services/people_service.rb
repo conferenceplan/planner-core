@@ -55,18 +55,13 @@ module PeopleService
     end
 
     # links - not scoped
-    src_person.linked do |link|
-      link.person = dest_person
+    src_person.linked.each do |link|
+      link.linkedto_id = dest_person.id
       link.save
     end
     
     copy_single_relationships(src_person, dest_person)
     copy_many_relationships(src_person, dest_person)
-
-    # item reg
-    # reg
-    # tickets & orders
-    # my schedules
   end
   
   # Need to do these across ALL conferences .... i.e. not scoped

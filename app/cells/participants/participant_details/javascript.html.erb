@@ -19,13 +19,13 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         schema : {
             src_person_id : { type : 'Hidden' },
             dest_person_id : { type : 'Hidden' },
-            src_person_name : { type : 'Text', title : 'source-person', editorAttrs: { readonly: true }, editorClass: "xxx" },
-            direction : { title : 'direction',
+            src_person_name : { type : 'Text', title : '', editorAttrs: { readonly: true } },
+            direction : { title : '<%= t "merge-direction" %>',
                           type : 'StyledCheckbox', 
                           unchecked_icon : "fa fa-fw fa-arrow-down",
                           checked_icon : "fa fa-fw fa-arrow-up"
                         },
-            dest_person_name : { type : 'Text', title : 'dest-person', editorAttrs: { readonly: true } }
+            dest_person_name : { type : 'Text', title : '', editorAttrs: { readonly: true } }
         }
     });
 
@@ -628,7 +628,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             dest_name += " (" + data['emails'] + ")"
 
             var modal = new AppUtils.FormModal({
-                title: "merge people",
+                title: '<%= t "merge-people" %>',
                 form: new MergePeopleForm({
                     data : {
                         src_person_id: selected_people[0],
