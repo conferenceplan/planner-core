@@ -45,6 +45,7 @@ module PeopleService
         dest_bio.othersocialmedia = edited_bio.othersocialmedia if dest_bio.othersocialmedia.blank?
         dest_bio.photourl = edited_bio.photourl if dest_bio.photourl.blank?
         dest_bio.facebook = edited_bio.facebook if dest_bio.facebook.blank?
+        dest_bio.save
       end
     end
 
