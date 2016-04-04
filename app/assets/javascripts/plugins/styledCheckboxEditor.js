@@ -17,6 +17,8 @@ Form.editors.StyledCheckbox = Form.editors.Checkbox.extend({
     },
 
     render: function() {
+        this.setValue(this.value);
+
         var $el = $($.trim(this.template({
                 field_name : this.key,
                 checked_icon : this.schema.checked_icon,
@@ -27,7 +29,20 @@ Form.editors.StyledCheckbox = Form.editors.Checkbox.extend({
         Form.editors.Checkbox.prototype.render.call(this);
        
         return this;
+    },
+
+    getValue: function() {
+        return this.$el.find("#c2_" + this.key).prop('checked');
+    },
+    
+    setValue: function(value) {
+        if (value) {
+          this.$el.find("#c2_" + this.key).prop('checked', true);
+        }else{
+          this.$el.find("#c2_" + this.key).prop('checked', false);
+        }
     }
+    
 }, {
     template: _.template('\
             <div style="width: 50%;">\
