@@ -22,20 +22,20 @@ function set_theme(mdl, arg) {
 };
 
 function toggleItemExtras(el) {
-	if (!jQuery('input[name="is_break"]').is(":checked")){
-		$extras = jQuery("#programme-item-extras");
-		$el = jQuery(el);
-		if ($extras.length > 0){
-			$extras.toggle();
-			if ($extras.is(":visible")){
-				$el.removeClass("fa-plus-square");
-				$el.addClass("fa-minus-square");
-			} else {
-				$el.removeClass("fa-minus-square");
-				$el.addClass("fa-plus-square");
-			}
-		}
-	}
+    if (!jQuery('input[name="is_break"]').is(":checked")){
+        $extras = jQuery("#programme-item-extras");
+        $el = jQuery(el);
+        if ($extras.length > 0){
+            $extras.toggle();
+            if ($extras.is(":visible")){
+                $el.removeClass("fa-plus-square");
+                $el.addClass("fa-minus-square");
+            } else {
+                $el.removeClass("fa-minus-square");
+                $el.addClass("fa-plus-square");
+            }
+        }
+    }
 };
 
 ItemApp = new Backbone.Marionette.Application();
@@ -162,7 +162,6 @@ ItemApp.ItemManagement = (function(Backbone){
                     },
                 ]
             },
-            // TODO - if there is a parent then the room and time need to blanked
             parent_id : {
                         type : 'DependentSelect2', 
                         dependsOn : 'is_break', dependentValues : ['false'],
@@ -259,17 +258,6 @@ ItemApp.ItemManagement = (function(Backbone){
     });
     
     ParentItem = Backbone.RelationalModel.extend({});
-    
-    Equipment = Backbone.Model.extend({
-        schema : {
-            equipment_type_id : { type : 'Select', title : '<%= t "name" %>', options : <%= [].concat(EquipmentType.find(:all).collect {|s| {'val' => s.id, 'label' => s.description} }).to_json.html_safe %> },
-        },
-        urlRoot : "<%= baseUri + '/equipment_needs' %>"
-    });
-    
-    EquipmentCollection = Backbone.Collection.extend({
-        model : Equipment
-    });
     
     //
     TagContext = Backbone.Model.extend({
@@ -396,8 +384,6 @@ ItemApp.ItemManagement = (function(Backbone){
         regions : {
             program_item    : "#program-item-tab",
             participants    : "#item-participants-tab",
-            equipment       : "#equipment-region-div",
-            equipment_ctl   : "#equipment-control-div",
             tags            : "#tags-tab",
             images          : "#item-images-tab"
         }
@@ -417,11 +403,10 @@ ItemApp.ItemManagement = (function(Backbone){
         $('#selected-program-item').text("");
         
         if (itemTabLayout) {
-            itemTabLayout.close();
-
-            itemTabLayout = new ItemTabLayout();
-            itemTabLayout.render();
-            $('#item-tabs').html(itemTabLayout.el);
+            itemTabLayout.program_item.close();
+            itemTabLayout.participants.close();
+            itemTabLayout.tags.close();
+            itemTabLayout.images.close();
         };
 
         Backbone.Relational.store.reset();
@@ -431,13 +416,9 @@ ItemApp.ItemManagement = (function(Backbone){
         current_item = null;
     };
     
-    function showDetails(id, title) {
-        if (typeof title !== 'undefined') {
-            $('#selected-program-item').html(title);
-        } else {
-            var data = jQuery("#items").jqGrid('getRowData', id);
-            $('#selected-program-item').html(data['item[title]']);
-        }
+    function showDetails(id) {
+        var data = jQuery("#items").jqGrid('getRowData', id);
+        $('#selected-program-item').html(data['item[title]']);
 
         var itemMdl = new ProgramItem;
 
@@ -497,24 +478,6 @@ ItemApp.ItemManagement = (function(Backbone){
                 
                 itemTabLayout.images.show(new ItemImageView({model : itemMdl}) );
                 
-                TabUtils.createTabControl({
-                    template : "#equipment-control-template",
-                    modelType : Equipment,
-                    id : id, // need to pass in the name of the id field
-                    id_name : 'programme_item_id',
-                    view_refresh_event : "equipment:refresh",
-                    modal_create_title : '<%= t "create-equipment-needs" %>',
-                    region : itemTabLayout.equipment_ctl
-                });
-                TabUtils.createTabListContent({
-                    collectionType : EquipmentCollection,
-                    url : "<%= baseUri + '/programme_items/' %>" + id + "/equipment_needs.json",
-                    template : "#equipment-detail-template",
-                    view_refresh_event : "equipment:refresh",
-                    region : itemTabLayout.equipment,
-                    newTitle : '<%= t "equipment-create-equipment" %>',
-                    editTitle : '<%= t "equipment-edit-equipment" %>',
-                });
                 TabUtils.createTagListContent({
                     collectionType : TagContextCollection,
                     url : "<%= baseUri + '/tags/' %>" + id + "?class=ProgrammeItem",
@@ -589,9 +552,9 @@ ItemApp.ItemManagement = (function(Backbone){
             selectCallbacks.add(func);
         },
         
-        showDetails : function(id, title) {
+        showDetails : function(id) {
             clearDetails();
-            return showDetails(id, title);
+            return showDetails(id);
         },
         clearDetails : function() {
             clearDetails();

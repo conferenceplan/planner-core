@@ -14,12 +14,6 @@
             </div>
         </div>
         <div class="tab-pane" id="item-participants-tab"></div>
-        <div class="tab-pane" id="equipment-tab">
-            <section>
-                <div id="equipment-control-div"></div>
-                <div id="equipment-region-div"></div>
-            </section>
-        </div>
         <div class="tab-pane" id="tags-tab">
             <div id="tags-view"></div>
         </div>
@@ -378,30 +372,6 @@
         </div>
     </div>
     {{ }; }}    
-</script>
-
-<script type="text/template" id="equipment-control-template">
-<div>
-    <button class="add-model-button btn btn-xs btn-primary pull-right boffset10">
-        <%= t "add-equipment" %>
-    </button>
-</div>
-</script>
-
-<script type="text/template" id="equipment-detail-template">
-<div class="col-xs-12 clearfix" style="padding-left:0px; padding-right: 0px;">
-    <div class="thumbnail clearfix">
-        <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-            <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-pencil"></i>
-            </button>
-            {{= equipment_type_name ? equipment_type_name : "&nbsp;"}}
-        </div>
-    </div>
-</div>
 </script>
 
 <script type="text/template" id="tag-context-layout-template">
