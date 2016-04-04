@@ -102,10 +102,15 @@ module PeopleService
         person_con_state.person = dest_person
         person_con_state.save
       else
-        dest_person.person_con_state.acceptance_status = src_person.person_con_state.acceptance_status if dest_person.person_con_state.acceptance_status.blank? || dest_person.person_con_state.acceptance_status == AcceptanceStatus["Unknown"]
-        dest_person.person_con_state.invitestatus = src_person.person_con_state.invitestatus if dest_person.person_con_state.invitestatus.blank? || dest_person.person_con_state.invitestatus == InviteStatus["Not Set"]
-
-        dest_person.person_con_state.invitation_category = src_person.person_con_state.invitation_category if dest_person.person_con_state.invitation_category.blank?
+        if src_person.person_con_state.acceptance_status
+          dest_person.person_con_state.acceptance_status = src_person.person_con_state.acceptance_status if dest_person.person_con_state.acceptance_status.blank? || dest_person.person_con_state.acceptance_status == AcceptanceStatus["Unknown"]
+        end
+        if src_person.person_con_state.invitestatus
+          dest_person.person_con_state.invitestatus = src_person.person_con_state.invitestatus if dest_person.person_con_state.invitestatus.blank? || dest_person.person_con_state.invitestatus == InviteStatus["Not Set"]
+        end
+        if src_person.person_con_state.invitation_category
+          dest_person.person_con_state.invitation_category = src_person.person_con_state.invitation_category if dest_person.person_con_state.invitation_category.blank?
+        end
         dest_person.person_con_state.save
       end
     end
