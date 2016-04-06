@@ -19,13 +19,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         schema : {
             src_person_id : { type : 'Hidden' },
             dest_person_id : { type : 'Hidden' },
-            src_person_name : { type : 'Text', title : '', editorAttrs: { readonly: true } },
+            src_person_name : { type : 'Text', title : '', editorAttrs: { readonly: true },
+                                   hint: '<%= (t "merge-src-person-hint").html_safe %>' },
             direction : { title : '<%= t "merge-direction" %>',
                           type : 'StyledCheckbox', 
                           unchecked_icon : "fa fa-fw fa-arrow-down",
                           checked_icon : "fa fa-fw fa-arrow-up"
                         },
-            dest_person_name : { type : 'Text', title : '', editorAttrs: { readonly: true } }
+            dest_person_name : { type : 'Text', title : '', editorAttrs: { readonly: true },
+                        hint:  '<%= (t "merge-src-person-hint").html_safe %>' }
         }
     });
 
