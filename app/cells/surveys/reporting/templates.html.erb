@@ -1,0 +1,17 @@
+
+<script type="text/template" id="survey-list-layout-template">
+    <h3 class="h3-underlined"><%= t 'surveys' %><i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-container="body" data-content="<%= t 'survey-reports-hint' %>" data-original-title="<%= t 'surveys' %>"></i></h3>
+    <div class="voffset10"></div>
+    <div class="row">
+        <div id="survey-region-div" class="col-xs-12"></div>
+    </div>
+</script>
+
+<script type="text/template" id="survey-template">
+    <td>
+        <a href="#survey-tab" data-toggle="tab" class="model-select-button">{{= name}}</a>
+    </td>
+    <td>
+        <button class="model-preview-button btn btn-xs"><i class="fa fa-download"></i> <%= t 'download' %></button>
+    </td>
+</script>

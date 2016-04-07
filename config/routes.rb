@@ -301,6 +301,7 @@ Rails.application.routes.draw do
   match 'survey_query/copy/:id', :controller => 'survey_query', :action => 'copy'  
   resources :survey_query
 
+  match 'survey_reports/extract_all/:survey_id', :controller => 'survey_reports', :action => 'extract_all', :defaults => { :format => 'xlsx' }
   match 'survey_reports/:action', :controller => 'survey_reports'
 
   match 'planner_reports/:action', :controller => 'planner_reports'
