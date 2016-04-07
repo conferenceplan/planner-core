@@ -149,7 +149,13 @@ class PublishJob
   
   def getRemovedSubItems
     # get published items that have a parent but who's regular item no longer has a parent
-    PublishedProgrammeItem.joins(:original).where("programme_items.parent_id is null AND published_programme_items.parent_id is not null")
+    items = PublishedProgrammeItem.joins(:original).where("programme_items.parent_id is null AND published_programme_items.parent_id is not null")
+
+    # TODO - FIX, also need Published items that have been removed
+    items.concat PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
+      where("publications.id is null AND published_programme_items.parent_id is not null")
+
+    items
   end
 
   def getUnpublishedItems
