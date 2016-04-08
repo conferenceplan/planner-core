@@ -9,6 +9,38 @@ class SurveyReportsController < PlannerController
   #
   #
   #
+  def extract_all
+    # for a survey generate an excel with all the answers
+    survey = Survey.find params[:survey_id]
+    fname = survey.name.gsub(/[^a-zA-Z\d]/, '')
+    
+    @questions = SurveyQuestion.includes(:survey_group).
+                        where({ :'survey_groups.survey_id' =>  survey.id}).
+                        order("survey_groups.sort_order, survey_questions.sort_order")
+
+    # Build a map of questions to columns
+    @question_column = Hash.new
+    i = 0
+    @questions.each do |question|
+      @question_column[question.id] = i
+      i += 1
+    end
+
+    # TODO - get the respondents with their responses to the survey
+    @respondents = SurveyRespondentDetail.includes([{:survey_responses => {:survey_question => :survey_group}}]).
+                        where({ :'survey_responses.survey_id' =>  survey.id}).
+                        order("survey_respondent_details.last_name, survey_groups.sort_order, survey_questions.sort_order")
+
+    respond_to do |format|
+      format.xlsx{
+        response.headers['Content-Disposition'] = 'attachment; filename="' + fname + '_' + Time.now.strftime("%m-%d-%Y") + '.xlsx"'
+      }
+    end
+  end
+  
+  #
+  #
+  #
   def runReport
     # Get the query from the database
     surveyQuery = SurveyQuery.find params[:query_id]

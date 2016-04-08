@@ -1,0 +1,31 @@
+xlsx_package.use_shared_strings = true
+wb = xlsx_package.workbook
+wb.add_worksheet(name: "Responses") do |sheet|
+
+    questions = ['Prefix','First Name','Last Name','Suffix','Email']
+    @questions.each do |question|
+        questions << question.question
+    end
+    sheet.add_row questions
+    
+    @respondents.each do |respondent|
+        row = Array.new(@questions.size + 5){''}
+        
+        row[0] = respondent.prefix
+        row[1] = respondent.first_name
+        row[2] = respondent.last_name
+        row[3] = respondent.suffix
+        row[4] = respondent.email
+        
+        respondent.survey_responses.each do |response|
+            if @question_column[response.survey_question_id]
+                idx = @question_column[response.survey_question_id] + 5
+                row[idx] += ", " if row[idx].length > 0
+                row[idx] += response.response
+            end
+        end
+
+        sheet.add_row row
+    end
+
+end

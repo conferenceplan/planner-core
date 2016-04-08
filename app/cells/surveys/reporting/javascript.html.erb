@@ -1,0 +1,81 @@
+<script type="text/javascript">
+
+SurveyApp = new Backbone.Marionette.Application();
+
+SurveyApp.SurveyReports = (function(Backbone){
+
+    Survey = Backbone.Model.extend();
+
+    SurveyCollection = Backbone.Collection.extend({
+        model : Survey
+    });
+
+    // list layut for the surveys
+    SurveyLayout = Backbone.Marionette.Layout.extend({
+        template: "#survey-list-layout-template",
+        
+        regions : {
+            surveyRegion: "#survey-region-div",
+        }
+    });
+
+    function showSurveys() {
+        surveyLayout = new SurveyLayout();
+        surveyLayout.render();
+        $('#survey-region-view').html(surveyLayout.el);
+
+        AppUtils.createCollectionView({
+            url                     : "<%= baseUri + '/surveys/list.json' %>",
+            collectionType          : SurveyCollection,
+            region                  : surveyLayout.surveyRegion,
+            template                : "#survey-template",
+            collection_attributes   : { "class" : "table table-condensed" },
+            collection_tagName      : 'table',
+            tagName                 : 'tr',
+            view_refresh_event      : "survey:refresh",
+            selectFn                : selectSurvey,
+            previewFn               : download,
+            readTemplate            : '#survey-data-template'
+        });
+
+        $('.bpopover').popover({
+            html: true,
+            trigger: 'hover'
+        });
+    };
+
+    function selectSurvey(id) {
+        // alert("select survey " + id);
+    };
+
+    function download(survey) {
+        // console.debug(survey.id);
+        $.download("<%= baseUri + '/survey_reports/extract_all' %>/" + survey.id );
+    };
+
+    /*
+     * 
+     */
+    return {
+        init : function() {
+            showSurveys();
+        },
+        
+        clearDetails : function() {
+        },
+        
+        selectSurvey : function(id) {
+        }
+    }
+
+})(Backbone);
+
+/*
+ * 
+ */
+jQuery(document).ready(function() {
+    SurveyApp.start();
+    SurveyApp.SurveyReports.init();
+});
+
+</script>
