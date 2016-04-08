@@ -18,9 +18,11 @@ wb.add_worksheet(name: "Responses") do |sheet|
         row[4] = respondent.email
         
         respondent.survey_responses.each do |response|
-            idx = @question_column[response.survey_question_id] + 5
-            row[idx] += ", " if row[idx].length > 0
-            row[idx] += response.response
+            if @question_column[response.survey_question_id]
+                idx = @question_column[response.survey_question_id] + 5
+                row[idx] += ", " if row[idx].length > 0
+                row[idx] += response.response
+            end
         end
 
         sheet.add_row row
