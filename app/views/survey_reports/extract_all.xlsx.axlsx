@@ -2,26 +2,79 @@ xlsx_package.use_shared_strings = true
 wb = xlsx_package.workbook
 wb.add_worksheet(name: "Responses") do |sheet|
 
-    questions = ['Prefix','First Name','Last Name','Suffix','Email']
+    startOfConference = Time.zone.parse(SiteConfig.first.start_date.to_s).beginning_of_day
+    questions = ['Prefix','First Name','Last Name','Suffix','Email','Pub Prefix','Pub First Name','Pub Last Name','Pub Suffix']
     @questions.each do |question|
         questions << question.question
+        if question.question_type == :availability
+            questions << ""
+        end
     end
     sheet.add_row questions
     
     @respondents.each do |respondent|
-        row = Array.new(@questions.size + 5){''}
+        row = Array.new(@questions.size + 10){''}
         
         row[0] = respondent.prefix
         row[1] = respondent.first_name
         row[2] = respondent.last_name
         row[3] = respondent.suffix
         row[4] = respondent.email
+
+        if respondent.survey_respondent && respondent.survey_respondent.person
+            # Get the pseudonymn
+            if respondent.survey_respondent.person.pseudonym
+                row[5] = respondent.survey_respondent.person.pseudonym.prefix
+                row[6] = respondent.survey_respondent.person.pseudonym.first_name
+                row[7] = respondent.survey_respondent.person.pseudonym.last_name
+                row[8] = respondent.survey_respondent.person.pseudonym.suffix
+            end
+        end
         
         respondent.survey_responses.each do |response|
             if @question_column[response.survey_question_id]
-                idx = @question_column[response.survey_question_id] + 5
+                idx = @question_column[response.survey_question_id] + 9
                 row[idx] += ", " if row[idx].length > 0
-                row[idx] += response.response
+                if response.survey_question.question_type == :availability
+                    if (response.response == '2')
+                      if (response.response2 && response.response2 != '---')
+                        if (response.response2.downcase == 'noon')
+                           startTime = startOfConference + (12.hour) + (response.response1.to_i).day
+                        else
+                           startTime = startOfConference + (Time.zone.parse(response.response2) - Time.zone.now.beginning_of_day) + (response.response1.to_i).day
+                        end
+                      else
+                        startTime = startOfConference + 8.hour + (response.response1.to_i).day
+                      end
+                      
+                      row[idx] = startTime + startTime.utc_offset.seconds # take the offset out because of axslx bug with time
+                      
+                      if (response.response4 && response.response4 != '---')
+                        if (response.response4.downcase == 'noon')
+                            endTime = startOfConference + 12.hour + (response.response3.to_i).day
+                        else
+                            endTime = startOfConference + (Time.zone.parse(response.response4) - Time.zone.now.beginning_of_day) + (response.response3.to_i).day
+                        end
+                      else
+                       endTime = startOfConference + 21.hour + (response.response3.to_i).day
+                      end
+
+                      idx += 1
+                      row[idx] =  endTime  + endTime.utc_offset.seconds
+                    end
+                elsif response.survey_question.question_type == :photo
+                    if response.photo && response.photo.url
+                        row[idx] += get_base_image_url + response.photo.url.partition(/upload/)[2]
+                    end
+                else
+                    row[idx] += response.response
+                    row[idx] += "\n" + response.response1 if response.response1
+                    row[idx] += "\n" + response.response2 if response.response2
+                    row[idx] += "\n" + response.response3 if response.response3
+                    row[idx] += "\n" + response.response4 if response.response4
+                    row[idx] += "\n" + response.response5 if response.response5
+                    row[idx] += "\n" + response.response6 if response.response6
+                end
             end
         end
 
