@@ -16,7 +16,9 @@ wb.add_worksheet(name: "Items") do |sheet|
         'Venue',
         'Tracks',
         'Parent',
-        'Participants'
+        'Participants',
+        'Notes for Organizers',
+        'Notes for Speakers'
     ]
     
     sheet.add_row titles
@@ -35,7 +37,9 @@ wb.add_worksheet(name: "Items") do |sheet|
             item.themes.collect{|t| t.theme_name.name }.join(","),
             (item.parent_id ? item.parent.title : ''),
             item.programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
-                p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(",")
+                p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","),
+            item.item_notes,
+            item.participant_notes
         ]
     end
 

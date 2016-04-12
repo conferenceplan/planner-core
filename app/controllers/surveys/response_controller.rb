@@ -166,6 +166,7 @@ class Surveys::ResponseController < ApplicationController
   #
   # Use a page alias for the survey and use it to render the survey to the potential respondent
   #
+  before_filter :prevent_cache, :only => [:renderalias]
   def renderalias
     page = params[:page] # use this to find the id of the survey from the database
     @preview = params[:preview] == 'preview'
@@ -221,6 +222,12 @@ class Surveys::ResponseController < ApplicationController
   end
 
   private
+
+  def prevent_cache
+    response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+  end
   
   def saveAvailability(values, survey, questionId, respondentDetails)
     response = respondentDetails.getResponse(survey.id, questionId)
