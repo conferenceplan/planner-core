@@ -4,12 +4,21 @@ wb.add_worksheet(name: "Responses") do |sheet|
 
     startOfConference = Time.zone.parse(SiteConfig.first.start_date.to_s).beginning_of_day
     questions = ['Prefix','First Name','Last Name','Suffix','Email','Pub Prefix','Pub First Name','Pub Last Name','Pub Suffix']
+    groups = Array.new(questions.size){''}
+    current_group = nil
     @questions.each do |question|
         questions << question.question
+        if current_group != question.survey_group
+            current_group = question.survey_group
+            groups << current_group.name
+        else
+            groups << ""  
+        end
         if question.question_type == :availability
             questions << ""
         end
     end
+    sheet.add_row groups
     sheet.add_row questions
     
     @respondents.each do |respondent|
