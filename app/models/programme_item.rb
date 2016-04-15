@@ -47,6 +47,36 @@ class ProgrammeItem < ActiveRecord::Base
   end
 
   before_save :check_parent, :sanitize_for_break
+  
+  #
+  # Update the item assignments for the given role
+  #
+  def update_assignments(updates, role_id)
+    update_ids = updates.collect{|u| u.id }.compact
+
+    # find the assignments to remove
+    del_candidates = programme_item_assignments.where({role_id: role_id}).keep_if{|c| !update_ids.include?(c.id)}
+    
+    # find the assignments to create & update
+    create_candidates = updates.keep_if{|u| u.id == nil }
+    update_candidates = updates.keep_if{|u| u.id > 0 }
+
+    del_candidates.each do |c|
+      c.delete
+    end
+    
+    create_candidates.each do |c|
+      assignment = programme_item_assignments.create({role_id: c.role_id, person_id: c.person_id})
+      assignment.sort_order_position = c.sort_order
+      assignment.save
+    end
+
+    update_candidates.each do |u|
+      assignment = programme_item_assignments.create({role_id: role_id, person_id: c.person_id})
+      assignment.sort_order_position = c.sort_order
+      assignment.save
+    end
+  end
 
   protected
   

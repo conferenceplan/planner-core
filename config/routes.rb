@@ -85,14 +85,18 @@ Rails.application.routes.draw do
   match 'programme_items/get_children',   :controller => 'programme_items', :action => 'get_children', :method => 'post', :defaults => { :format => 'json' }
 
   # TOOD - need a cleaner mechanism to assign the publication reference number and change to match the new mechanisms
-  match 'programme_items/assign_reference_numbers',     :controller => 'programme_items', :action => 'assign_reference_numbers'
+  # match 'programme_items/assign_reference_numbers',     :controller => 'programme_items', :action => 'assign_reference_numbers'
 
   resources :programme_items do
     resources :excluded_items_survey_maps,:mapped_survey_questions,:equipment_needs
-    member do
-      put 'updateParticipants'
-    end
+    # member do
+      # put 'updateParticipants'
+    # end
   end
+  
+  #
+  get 'programme_item_assignments/:item_id(/:role_id)', :controller => 'programme_item_assignments', :action => 'index',  :defaults => { :format => 'json' }
+  put 'programme_item_assignments/:item_id(/:role_id)', :controller => 'programme_item_assignments', :action => 'update', :defaults => { :format => 'json' }
   
   #
   #

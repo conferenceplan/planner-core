@@ -4,11 +4,60 @@ ItemApp = new Backbone.Marionette.Application();
 ItemApp.PeopleManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
     
+    function get_pub_name(person) {
+        var res = "";
+        
+        if (person.pub_first_name || person.pub_last_name) {
+            res = person.pub_prefix
+            if (res.length > 0 && person.pub_first_name.length > 0) {
+                res += " "
+            }
+            res += person.pub_first_name
+            if (res.length > 0 && person.pub_last_name.length > 0) {
+                res += " "
+            }
+            res += person.pub_last_name
+            if (res.length > 0 && person.pub_suffix.length > 0) {
+                res += " "
+            }
+            res += person.pub_suffix
+        } else {
+            res = person.prefix
+            if (res.length > 0 && person.first_name.length > 0) {
+                res += " "
+            }
+            res += person.first_name
+            if (res.length > 0 && person.last_name.length > 0) {
+                res += " "
+            }
+            res += person.last_name
+            if (res.length > 0 && person.last_name.length > 0) {
+                res += " "
+            }
+            res += person.suffix
+        }
+        
+        return res;
+    };
+
     /*
      * Models
      */
     ProgramItem = Backbone.Model.extend({
         urlRoot : "<%= baseUri + '/programme_items' %>"
+    });
+    
+    ItemAssignment = Backbone.Model.extend({});
+
+    ItemAssignments = Backbone.Collection.extend({
+        model : ItemAssignment,
+        save : function(){
+                    Backbone.sync('create', this, {
+                        success: function() {
+                            //console.log('Saved!');
+                        }
+                    });
+                }
     });
     
     /*
@@ -27,133 +76,115 @@ ItemApp.PeopleManagement = (function(Backbone){
                 // get the selected people from the grid
                 var selectedIds = jQuery('#participants').jqGrid('getGridParam','selarrrow');
                 // currentItem - add the names and id to the participants
-                var participants = currentItem.get('participants');
                 
                 // get the data from the rows
                 _.each(selectedIds, function(id) {
-                    var p = jQuery('#participants').participantTable('getPerson',id);
-                    
                     // make sure that it is unique i.e. not already in the list
-                    var found = _.find(participants, function(a) {
-                        return (a.id == id);
-                    });
-                    
+                    var found = participants.find(function(item){
+                                        return item.get('person_id') === parseInt(id);
+                                    });
+
                     if (!found) {
-                        participants.push(p); 
+                        var p = jQuery('#participants').participantTable('getPerson',id);
+                        
+                        // console.debug(p);
+                        // console.debug(participants);
+                        
+                        var assignment = new ItemAssignment({
+                            role_id: <%= PersonItemRole['Participant'].id %>,
+                            role_name: "<%= PersonItemRole['Participant'].name %>",
+                            programme_item_id: parseInt(currentItem.id),
+                            person_id: parseInt(p.id),
+                            person_name: get_pub_name(p)
+                        });
+                    
+                        participants.add(assignment);
+
+                        needsSaved = true;
                     }
                 });
             
                 // unselect them and re-render the view
                 jQuery('#participants').jqGrid('resetSelection');
                 eventAggregator.trigger("refreshViews");
-                
-                needsSaved = true;
             }
         }
     });
     
-    ProgramItemPeopleView = Marionette.ItemView.extend({
+    ProgramItemView = Marionette.ItemView.extend({
         template : '#program-item-view-template',
-        
+
         initialize : function() {
             eventAggregator.on("refreshViews", this.render, this);
+        }
+    });
+    
+    ParticipantView = Marionette.ItemView.extend({
+        template : '#participant-template',
+        events : {
+            "click .remove-person"   : "removePerson",
+            // "click .save-button"     : "saveItem"
         },
         
-        onRender : function() {
-            var thisView = this;
+        removePerson : function() {
+            src = this.model.get('role_name');
+            src_col = get_collection(src);
+            src_col.remove(this.model);
+        }
+    });
+
+    ParticipantsView = Marionette.CollectionView.extend({
+        itemView: ParticipantView,
+
+        initialize : function() {
+            eventAggregator.on("refreshViews", this.refresh_view, this);
+        },
+        
+        refresh_view : function() {
             this.$el.find( ".ui-draggable" ).draggable({
                 axis: "y", // constrain vertical
                 revert: true // return to origin if not dropped on droppable area
             });
-            this.$el.find(".ui-droppable").droppable({
-                drop: function(event, ui) {
-                    thisView.render();
-                }
-            });
         },
 
-        events : {
-            "drop #moderator-area"   : "addModerator",
-            "drop #participant-area" : "addParticipant",
-            "drop #reserve-area"     : "addReserve",
-            "drop #invisible-area"   : "addInvisible",
-            "click .remove-person"   : "removePerson",
-            "click .save-button"     : "saveItem"
-        },
-        
-        saveItem : function(event) {
-            // Update the program item - but we just want to save the people...
-            var id = this.model.id;
-            this.model.save(null, {
-                url : "<%= baseUri + '/programme_items/' %>" + id + "/updateParticipants",
-                success : function() {
-                    // message that the save happened
-                    infoMessage("<%= j t('item-assignments-have-been-saved') %>");
-                    needsSaved = false;
-                }
+        onRender : function() {
+            this.$el.find( ".ui-draggable" ).draggable({
+                axis: "y", // constrain vertical
+                revert: true // return to origin if not dropped on droppable area
             });
-        },
-        
-        removePerson : function(event) { 
-            // alert("remove person");
-            var personId = $(event.currentTarget).attr('person');
-            var source = $(event.currentTarget).attr('src');
-            
-            var c = this.model.get(source);
-            var p = _.find(c, function(a) {
-                return (a.id == personId);
-            });
-            var idx = _.indexOf(c, p);
-            var el = c.splice(idx,1);
-
-            needsSaved = true;            
-            this.render();
-        },
-        
-        addModerator : function(event, src) {
-            this.movePerson(src, 'moderators');
-        },
-        
-        addParticipant : function(event, src) {
-            this.movePerson(src, 'participants');
-        },
-        
-        addReserve : function(event, src) {
-            this.movePerson(src, 'reserves');
-        },
-        
-        addInvisible : function(event, src) {
-            this.movePerson(src, 'invisibles');
-        },
-        
-        movePerson : function(src, dest) {
-            var personId = $(src.draggable).attr('id'); // get the id of the person from the dragged object
-            var source = $(src.draggable).attr('src'); // get the source area
-            
-            var p = _.find(this.model.get(source), function(a) {
-                return (a.id == personId);
-            });
-            var idx = _.indexOf(this.model.get(source), p);
-            // remove from the source
-            var c = this.model.get(source);
-            var el = c.splice(idx,1);
-            
-            // add to the destination
-            c = this.model.get(dest);
-            c.push(p); 
         }
-
     });
 
     /*
      * Other stuff
      */
-    var tabContent = []; // TODO
     var currentItem = null;
     var needsSaved = false;
+    var moderators = null;
+    var participants = null;
+    var reserved = null;
+    var invisible = null;
+    
+    function get_collection(src) {
+        var coll = null;
+        switch(src) {
+            case "Participant":
+                coll = participants;
+                break;
+            case "Moderator":
+                coll = moderators;
+                break;
+            case "Reserved":
+                coll = reserved;
+                break;
+            case "Invisible":
+                coll = invisible;
+                break;
+        };
+        return coll;
+    };
     
     function showProgrammeItem(id) {
-        
         // check if a save is needed
         if (needsSaved) {
             mdl = new LeavePageModal({
@@ -169,23 +200,63 @@ ItemApp.PeopleManagement = (function(Backbone){
     };
     
     function loadProgItem(id) {
-            showSpinner('#program-item-view');
-            currentItem = new ProgramItem();
-            currentItem.fetch({
-                url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
-                async:false,
-                success : function(model) {
-	                needsSaved = false;
-                    ItemApp.getRegion("people").show(new ProgramItemPeopleView({model : model}));
+        showSpinner('#program-item-view');
+        currentItem = new ProgramItem();
+        currentItem.fetch({
+            url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
+            // async:false,
+            success : function(model) {
+                needsSaved = false;
+                
+                ItemApp.getRegion("item").show(new ProgramItemView({model : model}));
 
-                    $('#program-item-view').find('.bpopover').popover({
-                        html: true,
-                        viewport: { selector: 'body', padding: 0 },
-                        container: 'body',
-                    })
+                $('#program-item-view').find('.bpopover').popover({
+                    html: true,
+                    viewport: { selector: 'body', padding: 0 },
+                    container: 'body',
+                });
+            }
+        });
+        
+        showSpinner('#moderators-view');
+        moderators = new ItemAssignments();
+        moderators.fetch({ ///programme_item_assignments/:item_id(/:role_id)
+            url : "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Moderator'].id %>,
+            // async:false,
+            success : function(coll) {
+                ItemApp.getRegion("moderators").show(new ParticipantsView({collection : coll}));
+            }
+        });
 
-                }
-            });
+        showSpinner('#participants-view');
+        participants = new ItemAssignments();
+        participants.fetch({ ///programme_item_assignments/:item_id(/:role_id)
+            url : "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Participant'].id %>,
+            // async:false,
+            success : function(coll) {
+                ItemApp.getRegion("participants").show(new ParticipantsView({collection : coll}));
+            }
+        });
+
+        showSpinner('#reserveds-view');
+        reserved = new ItemAssignments();
+        reserved.fetch({ ///programme_item_assignments/:item_id(/:role_id)
+            url : "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Reserved'].id %>,
+            // async:false,
+            success : function(coll) {
+                ItemApp.getRegion("reserveds").show(new ParticipantsView({collection : coll}));
+            }
+        });
+
+        showSpinner('#invisibles-view');
+        invisible = new ItemAssignments();
+        invisible.fetch({ ///programme_item_assignments/:item_id(/:role_id)
+            url : "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Invisible'].id %>,
+            // async:false,
+            success : function(coll) {
+                ItemApp.getRegion("invisibles").show(new ParticipantsView({collection : coll}));
+            }
+        });
     };
     
     return {
@@ -208,9 +279,60 @@ ItemApp.PeopleManagement = (function(Backbone){
         init : function() {
             // Add the regions to this app
             ItemApp.addRegions({
-                people_ctl : "#people-control-view",
-                people     : "#program-item-view",
+                people_ctl      : "#people-control-view",
+                item            : "#program-item-view",
+                moderators      : "#moderators-view",
+                participants    : "#participants-view",
+                reserveds       : "#reserveds-view",
+                invisibles      : "#invisibles-view",
             });
+            
+            $('#participants-area').find(".ui-droppable").droppable({
+                drop: function(event, ui) {
+                    var person_id = $(ui.draggable).attr('id'); // get the id of the person from the dragged object
+                    var source = $(ui.draggable).attr('src'); // get the source area
+
+                    var src = get_collection(source);
+                    if (src) {
+                        var assignment = src.find(function(item){
+                            
+                                            return item.get('person_id') == parseInt(person_id);
+                                        });
+    
+                        // force a refresh of the views
+                        var dest = null;
+                        switch(this.id) {
+                            case "participant-area":
+                                dest = participants;
+                                dest_role = "Participant";
+                                break;
+                            case "moderator-area":
+                                dest = moderators;
+                                dest_role = "Moderator";
+                                break;
+                            case "reserve-area":
+                                dest = reserved;
+                                dest_role = "Reserved";
+                                break;
+                            case "invisible-area":
+                                dest = invisible;
+                                dest_role = "Invisible";
+                                break;
+                        };
+
+                        src.remove(assignment);
+                        assignment.set('role_name',dest_role);
+                        dest.add(assignment);
+                        needsSaved = true;
+                        
+                        eventAggregator.trigger("refreshViews");
+                    }
+                }
+            });
+
+        // events : {
+            // "click .save-button"     : "saveItem"
+        // },
 
             // Add the control for adding people to items            
             ItemApp.getRegion("people_ctl").show(new PeopleControlView());

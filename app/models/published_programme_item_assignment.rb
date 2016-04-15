@@ -2,9 +2,13 @@
 #
 #
 class PublishedProgrammeItemAssignment < ActiveRecord::Base
-  attr_accessible :lock_version, :person, :role, :published_programme_item_id, :person_name
+  attr_accessible :lock_version, :person, :role, :published_programme_item_id, :person_name, :sort_order
   
   audited :allow_mass_assignment => true
+
+  include RankedModel
+  ranks :sort_order, :with_same => [:published_programme_item_id, :role_id]
+  default_scope order('published_programme_item_assignments.sort_order asc')
 
   belongs_to  :person
   belongs_to  :published_programme_item, :foreign_key => "published_programme_item_id"
