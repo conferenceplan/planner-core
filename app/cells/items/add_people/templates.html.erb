@@ -21,7 +21,7 @@
                             <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
                         {{ }; }}
                         {{ if (precis) {}}
-                            <dt><%= t "item-description" %></dt><dd><%= t 'hover-to-show' %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "item-description" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='{{= precis ? precis : "&nbsp;" }}'></i></dd>
+                            <dt><%= t "item-description" %></dt><dd><%= t 'hover-to-show' %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "item-description" %>" data-container="body" data-trigger="hover" data-placement="auto top" data-toggle="popover" data-content='{{= precis ? _.escape(precis) : "&nbsp;" }}'></i></dd>
                         {{ }; }}
                         {{ if (start_day_str) {}}
                             <dt><%= t "item-start-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
