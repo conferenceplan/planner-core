@@ -63,8 +63,8 @@ class PlannerReportsController < PlannerController
         @people.each do |person|
           output.push [
             person.getFullPublicationName,
-            person.invitestatus.name,
-            person.acceptance_status.name
+            (person.invitestatus ? person.invitestatus.name : ''),
+            (person.acceptance_status ? person.acceptance_status.name : '')
           ]
         end
         csv_out(output, outfile)
@@ -449,8 +449,8 @@ class PlannerReportsController < PlannerController
         @people.each do |person|
           output.push [
             person.getFullPublicationName,
-            person.invitestatus.name,
-            person.acceptance_status.name
+            (person.invitestatus ? person.invitestatus.name : ''),
+            (person.acceptance_status ? person.acceptance_status.name : '')
           ]
         end
         csv_out(output, outfile)
@@ -485,7 +485,7 @@ class PlannerReportsController < PlannerController
             person.pubLastName,
             person.company,
             (person.getDefaultEmail ? person.getDefaultEmail.email : ''),
-            person.acceptance_status.name,
+            (person.acceptance_status ? person.acceptance_status.name : ''),
             person.programmeItemAssignments.
               sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
               collect { |pi|
