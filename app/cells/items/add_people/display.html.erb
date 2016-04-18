@@ -40,7 +40,7 @@
 <%= render_cell "items/add_people", :javascript, :prog_item => @prog_item %>
 <%= render_cell "items/add_people", :templates %>
 
-<div class="row">
+<div class="row" id="item-assignment-mgmt">
     <div class="col-xs-4 left-jqgrid" id="participants-list">
         <%= render_cell "participants/participant_list", :display,
                 :pager => "participants-pager"

@@ -3,6 +3,7 @@ ItemApp = new Backbone.Marionette.Application();
 
 ItemApp.PeopleManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
+    var current_url = null;
     
     function get_pub_name(person) {
         var res = "";
@@ -51,13 +52,6 @@ ItemApp.PeopleManagement = (function(Backbone){
 
     ItemAssignments = Backbone.Collection.extend({
         model : ItemAssignment,
-        save : function(){
-                    Backbone.sync('create', this, {
-                        success: function() {
-                            //console.log('Saved!');
-                        }
-                    });
-                }
     });
     
     /*
@@ -86,9 +80,6 @@ ItemApp.PeopleManagement = (function(Backbone){
 
                     if (!found) {
                         var p = jQuery('#participants').participantTable('getPerson',id);
-                        
-                        // console.debug(p);
-                        // console.debug(participants);
                         
                         var assignment = new ItemAssignment({
                             role_id: <%= PersonItemRole['Participant'].id %>,
@@ -123,13 +114,13 @@ ItemApp.PeopleManagement = (function(Backbone){
         template : '#participant-template',
         events : {
             "click .remove-person"   : "removePerson",
-            // "click .save-button"     : "saveItem"
         },
         
         removePerson : function() {
             src = this.model.get('role_name');
             src_col = get_collection(src);
             src_col.remove(this.model);
+            needsSaved = true;
         }
     });
 
@@ -218,11 +209,13 @@ ItemApp.PeopleManagement = (function(Backbone){
             }
         });
         
+        current_url = "<%= baseUri + '/programme_item_assignments/' %>" + id;
+        
         showSpinner('#moderators-view');
         moderators = new ItemAssignments();
-        moderators.fetch({ ///programme_item_assignments/:item_id(/:role_id)
-            url : "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Moderator'].id %>,
-            // async:false,
+        moderators.url = "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Moderator'].id %>;
+        moderators.fetch({
+            url: "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Moderator'].id %>,
             success : function(coll) {
                 ItemApp.getRegion("moderators").show(new ParticipantsView({collection : coll}));
             }
@@ -230,9 +223,9 @@ ItemApp.PeopleManagement = (function(Backbone){
 
         showSpinner('#participants-view');
         participants = new ItemAssignments();
-        participants.fetch({ ///programme_item_assignments/:item_id(/:role_id)
-            url : "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Participant'].id %>,
-            // async:false,
+        participants.url = "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Participant'].id %>;
+        participants.fetch({
+            url: "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Participant'].id %>,
             success : function(coll) {
                 ItemApp.getRegion("participants").show(new ParticipantsView({collection : coll}));
             }
@@ -240,9 +233,9 @@ ItemApp.PeopleManagement = (function(Backbone){
 
         showSpinner('#reserveds-view');
         reserved = new ItemAssignments();
-        reserved.fetch({ ///programme_item_assignments/:item_id(/:role_id)
-            url : "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Reserved'].id %>,
-            // async:false,
+        reserved.url = "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Reserved'].id %>;
+        reserved.fetch({
+            url: "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Reserved'].id %>,
             success : function(coll) {
                 ItemApp.getRegion("reserveds").show(new ParticipantsView({collection : coll}));
             }
@@ -250,13 +243,29 @@ ItemApp.PeopleManagement = (function(Backbone){
 
         showSpinner('#invisibles-view');
         invisible = new ItemAssignments();
-        invisible.fetch({ ///programme_item_assignments/:item_id(/:role_id)
-            url : "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Invisible'].id %>,
-            // async:false,
+        invisible.url = "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Invisible'].id %>;
+        invisible.fetch({
+            url: "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Invisible'].id %>,
             success : function(coll) {
                 ItemApp.getRegion("invisibles").show(new ParticipantsView({collection : coll}));
             }
         });
+    };
+    
+    function save_collection(collection) {
+        if (current_url) {
+            var programme_item_assignments = {
+                programme_item_assignments: collection
+            }
+    
+            $.ajax({
+                method: 'PUT',
+                contentType: 'application/json',
+                url: current_url,
+                dataType: 'JSON',
+                data: JSON.stringify(programme_item_assignments)
+            });
+        }
     };
     
     return {
@@ -305,22 +314,27 @@ ItemApp.PeopleManagement = (function(Backbone){
                             case "participant-area":
                                 dest = participants;
                                 dest_role = "Participant";
+                                dest_role_id = <%= PersonItemRole['Participant'].id %>;
                                 break;
                             case "moderator-area":
                                 dest = moderators;
                                 dest_role = "Moderator";
+                                dest_role_id = <%= PersonItemRole['Moderator'].id %>;
                                 break;
                             case "reserve-area":
                                 dest = reserved;
                                 dest_role = "Reserved";
+                                dest_role_id = <%= PersonItemRole['Reserved'].id %>;
                                 break;
                             case "invisible-area":
                                 dest = invisible;
                                 dest_role = "Invisible";
+                                dest_role_id = <%= PersonItemRole['Invisible'].id %>;
                                 break;
                         };
 
                         src.remove(assignment);
+                        assignment.set('role_id',dest_role_id);
                         assignment.set('role_name',dest_role);
                         dest.add(assignment);
                         needsSaved = true;
@@ -330,9 +344,18 @@ ItemApp.PeopleManagement = (function(Backbone){
                 }
             });
 
-        // events : {
-            // "click .save-button"     : "saveItem"
-        // },
+            $("#item-assignment-mgmt").find(".save-button").click(function() {
+                var all_people = [];
+                all_people = all_people.concat(moderators.models);
+                all_people = all_people.concat(participants.models);
+                all_people = all_people.concat(reserved.models);
+                all_people = all_people.concat(invisible.models);
+                
+                save_collection(all_people);
+
+                needsSaved = false;
+                eventAggregator.trigger("refreshViews");
+            });
 
             // Add the control for adding people to items            
             ItemApp.getRegion("people_ctl").show(new PeopleControlView());

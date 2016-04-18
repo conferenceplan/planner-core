@@ -96,7 +96,7 @@ Rails.application.routes.draw do
   
   #
   get 'programme_item_assignments/:item_id(/:role_id)', :controller => 'programme_item_assignments', :action => 'index',  :defaults => { :format => 'json' }
-  put 'programme_item_assignments/:item_id(/:role_id)', :controller => 'programme_item_assignments', :action => 'update', :defaults => { :format => 'json' }
+  put 'programme_item_assignments/:item_id',            :controller => 'programme_item_assignments', :action => 'update', :defaults => { :format => 'json' }
   
   #
   #

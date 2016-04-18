@@ -51,16 +51,19 @@ class ProgrammeItem < ActiveRecord::Base
   #
   # Update the item assignments for the given role
   #
-  def update_assignments(updates, role_id)
+  def update_assignments(updates)
     update_ids = updates.collect{|u| u.id }.compact
 
     # find the assignments to remove
-    del_candidates = programme_item_assignments.where({role_id: role_id}).keep_if{|c| !update_ids.include?(c.id)}
+    del_candidates = programme_item_assignments.
+                          where(["role_id in (?)",[PersonItemRole['Invisible'].id, PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Reserved'].id]]).
+                          keep_if{|c| !update_ids.include?(c.id)}
     
     # find the assignments to create & update
-    create_candidates = updates.keep_if{|u| u.id == nil }
-    update_candidates = updates.keep_if{|u| u.id > 0 }
+    create_candidates = updates.map{|u| u.id == nil ? u : nil }.compact
+    update_candidates = updates.map{|u| u.id != nil ? u : nil }.compact
 
+    # We may not want to delete since the item may be moved to another role ....
     del_candidates.each do |c|
       c.delete
     end
@@ -72,8 +75,8 @@ class ProgrammeItem < ActiveRecord::Base
     end
 
     update_candidates.each do |u|
-      assignment = programme_item_assignments.create({role_id: role_id, person_id: c.person_id})
-      assignment.sort_order_position = c.sort_order
+      assignment = u
+      assignment.sort_order_position = u.sort_order
       assignment.save
     end
   end
@@ -84,9 +87,6 @@ class ProgrammeItem < ActiveRecord::Base
     if self.is_break
       self.parent_id = nil # ensure no parent/child
       self.format_id = nil # no format
-
-      # self.programme_item_assignments.destroy_all # ensure no people
-
       # self.room_item_assignment.destroy if self.room_item_assignment # ensure no room...
     end
   end
