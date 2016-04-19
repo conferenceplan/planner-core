@@ -4,6 +4,7 @@ ItemApp = new Backbone.Marionette.Application();
 ItemApp.PeopleManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
     var current_url = null;
+    var dropped = false;
     
     function get_pub_name(person) {
         var res = "";
@@ -126,23 +127,52 @@ ItemApp.PeopleManagement = (function(Backbone){
 
     ParticipantsView = Marionette.CollectionView.extend({
         itemView: ParticipantView,
+        itemViewOptions : {
+            className: 'ui-draggable sortable thumbnail clearfix'
+        },
 
         initialize : function() {
-            eventAggregator.on("refreshViews", this.refresh_view, this);
+            eventAggregator.on("refreshViews", this.render, this);
         },
         
-        refresh_view : function() {
-            this.$el.find( ".ui-draggable" ).draggable({
-                axis: "y", // constrain vertical
-                revert: true // return to origin if not dropped on droppable area
+        make_sortable : function() {
+            $(".ui-droppable").sortable({
+                items: '.sortable',
+                cursor: 'move',
+                axis: 'y',
+                stop : function(e, ui) {
+                    if (dropped) {
+                        dropped = false;
+                    }
+                    eventAggregator.trigger("refreshViews");
+                },
+                update : function(e, ui) {
+                    if (!dropped) {
+                        var new_posn = ui.item.index();
+                        var person_id = ui.item.find(".assignment-details").attr("id");
+                        var src = ui.item.find(".assignment-details").attr("src");
+                        var col = get_collection(src);
+                        var assignment = col.find(function(item){
+                                            return item.get('person_id') == parseInt(person_id);
+                                        });
+                        
+                        col.remove(assignment);
+                        col.add(assignment, {at: new_posn})
+
+                        var posn = 0
+                        col.each(function(mdl) {
+                            mdl.set('sort_order_position', posn);
+                            posn += 1;
+                        });
+                        
+                        needsSaved = true;
+                    }
+                }
             });
         },
 
         onRender : function() {
-            this.$el.find( ".ui-draggable" ).draggable({
-                axis: "y", // constrain vertical
-                revert: true // return to origin if not dropped on droppable area
-            });
+            this.make_sortable();
         }
     });
 
@@ -220,6 +250,11 @@ ItemApp.PeopleManagement = (function(Backbone){
                 ItemApp.getRegion("moderators").show(new ParticipantsView({collection : coll}));
             }
         });
+        var posn = 0
+        moderators.each(function(mdl) {
+            mdl.set('sort_order_position', posn);
+            posn += 1;
+        });
 
         showSpinner('#participants-view');
         participants = new ItemAssignments();
@@ -229,6 +264,11 @@ ItemApp.PeopleManagement = (function(Backbone){
             success : function(coll) {
                 ItemApp.getRegion("participants").show(new ParticipantsView({collection : coll}));
             }
+        });
+        posn = 0
+        participants.each(function(mdl) {
+            mdl.set('sort_order_position', posn);
+            posn += 1;
         });
 
         showSpinner('#reserveds-view');
@@ -240,6 +280,11 @@ ItemApp.PeopleManagement = (function(Backbone){
                 ItemApp.getRegion("reserveds").show(new ParticipantsView({collection : coll}));
             }
         });
+        posn = 0
+        reserved.each(function(mdl) {
+            mdl.set('sort_order_position', posn);
+            posn += 1;
+        });
 
         showSpinner('#invisibles-view');
         invisible = new ItemAssignments();
@@ -249,6 +294,11 @@ ItemApp.PeopleManagement = (function(Backbone){
             success : function(coll) {
                 ItemApp.getRegion("invisibles").show(new ParticipantsView({collection : coll}));
             }
+        });
+        posn = 0
+        invisible.each(function(mdl) {
+            mdl.set('sort_order_position', posn);
+            posn += 1;
         });
     };
     
@@ -265,6 +315,14 @@ ItemApp.PeopleManagement = (function(Backbone){
                 dataType: 'JSON',
                 data: JSON.stringify(programme_item_assignments)
             });
+            
+            // Force a reload of the models etc
+            moderators.fetch();
+            participants.fetch();
+            reserved.fetch();
+            invisible.fetch();
+
+            eventAggregator.trigger("refreshViews");
         }
     };
     
@@ -298,48 +356,51 @@ ItemApp.PeopleManagement = (function(Backbone){
             
             $('#participants-area').find(".ui-droppable").droppable({
                 drop: function(event, ui) {
-                    var person_id = $(ui.draggable).attr('id'); // get the id of the person from the dragged object
-                    var source = $(ui.draggable).attr('src'); // get the source area
+                    var person_id = $(ui.draggable).find(".assignment-details").attr('id'); // get the id of the person from the dragged object
+                    var source = $(ui.draggable).find(".assignment-details").attr('src'); // get the source area
 
-                    var src = get_collection(source);
-                    if (src) {
-                        var assignment = src.find(function(item){
-                            
-                                            return item.get('person_id') == parseInt(person_id);
-                                        });
+                    if (this.id.indexOf(source.toLowerCase()) == -1) {
+                        dropped = true;
     
-                        // force a refresh of the views
-                        var dest = null;
-                        switch(this.id) {
-                            case "participant-area":
-                                dest = participants;
-                                dest_role = "Participant";
-                                dest_role_id = <%= PersonItemRole['Participant'].id %>;
-                                break;
-                            case "moderator-area":
-                                dest = moderators;
-                                dest_role = "Moderator";
-                                dest_role_id = <%= PersonItemRole['Moderator'].id %>;
-                                break;
-                            case "reserve-area":
-                                dest = reserved;
-                                dest_role = "Reserved";
-                                dest_role_id = <%= PersonItemRole['Reserved'].id %>;
-                                break;
-                            case "invisible-area":
-                                dest = invisible;
-                                dest_role = "Invisible";
-                                dest_role_id = <%= PersonItemRole['Invisible'].id %>;
-                                break;
-                        };
-
-                        src.remove(assignment);
-                        assignment.set('role_id',dest_role_id);
-                        assignment.set('role_name',dest_role);
-                        dest.add(assignment);
-                        needsSaved = true;
-                        
-                        eventAggregator.trigger("refreshViews");
+                        var src = get_collection(source);
+                        if (src) {
+                            var assignment = src.find(function(item){
+                                                return item.get('person_id') == parseInt(person_id);
+                                            });
+        
+                            // force a refresh of the views
+                            var dest = null;
+                            switch(this.id) {
+                                case "participant-area":
+                                    dest = participants;
+                                    dest_role = "Participant";
+                                    dest_role_id = <%= PersonItemRole['Participant'].id %>;
+                                    break;
+                                case "moderator-area":
+                                    dest = moderators;
+                                    dest_role = "Moderator";
+                                    dest_role_id = <%= PersonItemRole['Moderator'].id %>;
+                                    break;
+                                case "reserve-area":
+                                    dest = reserved;
+                                    dest_role = "Reserved";
+                                    dest_role_id = <%= PersonItemRole['Reserved'].id %>;
+                                    break;
+                                case "invisible-area":
+                                    dest = invisible;
+                                    dest_role = "Invisible";
+                                    dest_role_id = <%= PersonItemRole['Invisible'].id %>;
+                                    break;
+                            };
+    
+                            src.remove(assignment);
+                            assignment.set('role_id',dest_role_id);
+                            assignment.set('role_name',dest_role);
+                            dest.add(assignment);
+                            needsSaved = true;
+                            
+                            eventAggregator.trigger("refreshViews");
+                        }
                     }
                 }
             });

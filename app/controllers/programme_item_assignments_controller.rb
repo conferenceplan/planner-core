@@ -21,12 +21,15 @@ class ProgrammeItemAssignmentsController < PlannerController
     if _assignments
       assignments = _assignments.map{|a|
           assignment = nil
+          # venue.sort_order_position = params[:venue_order_position]
           if (a["id"])
             assignment = ProgrammeItemAssignment.find(a["id"])
-            assignment.update_attributes a.delete_if{|e| ["role_name", "person_name", "item_title"].include? e}
+            assignment.update_attributes a.delete_if{|e| ["role_name", "person_name", "item_title", "sort_order_position"].include? e}
           else
-            assignment = ProgrammeItemAssignment.new(a.delete_if{|e| ["role_name", "person_name", "item_title"].include? e})
+            assignment = ProgrammeItemAssignment.new(a.delete_if{|e| ["role_name", "person_name", "item_title", "sort_order_position"].include? e})
           end
+          assignment.sort_order = a["sort_order_position"]
+          assignment.sort_order_position = a["sort_order_position"]
           assignment
         }
     end
