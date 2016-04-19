@@ -1,5 +1,10 @@
 class ProgrammeItemAssignment < ActiveRecord::Base  
-  attr_accessible :lock_version, :person, :role, :programme_item_id
+  attr_accessible :lock_version, :person, :person_id, :role, :role_id, :programme_item_id, :sort_order,
+                  :id #, :role_name, :person_name, :item_title
+
+  include RankedModel
+  ranks :sort_order, :with_same => [:programme_item_id, :role_id]
+  default_scope order('programme_item_assignments.sort_order asc')
   
   belongs_to  :person
   belongs_to  :programmeItem, :foreign_key => "programme_item_id"
