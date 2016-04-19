@@ -25,6 +25,7 @@ json.people     item.published_programme_item_assignments.each do |assignment|
         json.id             assignment.person_id
         json.name           (assignment.person_name ? assignment.person_name : assignment.person.getFullPublicationName)
         json.role           assignment.role.name if assignment.role
+        json.sort_order     assignment.sort_order
     end
 end
 json.card_size          item.mobile_card_size
