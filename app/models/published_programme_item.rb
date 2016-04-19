@@ -13,7 +13,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   has_many  :published_programme_item_assignments, :dependent => :destroy do #, :class_name => 'Published::ProgrammeItemAssignment'
     def role(r) # get the people with the given role
-      find(:all, :conditions => ['role_id = ?', r.id])
+      where(['role_id = ?', r.id]).order('published_programme_item_assignments.sort_order asc')
     end
   end
   has_many  :people, :through => :published_programme_item_assignments
