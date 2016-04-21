@@ -3,6 +3,8 @@
 ReportApp = new Backbone.Marionette.Application();
 
 ReportApp.ReportManagement = (function(Backbone){
+
+    var eventAggregator = AppUtils.eventAggregator;
     
     var GenericForm = Backbone.Form.extend({
     });
@@ -202,6 +204,8 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'Shor Description Words', label : '<%= t "item-short-description-words" %>', jsonmap: 'short_precis_words'}
                 ];
 
+    var conflicts = null;
+    
     var Workspace = Backbone.Router.extend({
 
         routes : {
@@ -383,6 +387,23 @@ ReportApp.ReportManagement = (function(Backbone){
 
             // Render the conflicts for this day
             conflicts = new AppUtils.Conflicts();
+            conflicts.fetch({
+                url : "<%= baseUri + '/program_planner/getConflicts.json' %>",
+                success : function(obj) {
+                    ReportBase.resultRegion.show(conflictLayout);
+                    AppUtils.createConflictCollectionView(obj.get('schedule'), "#schedule-conflict-view-template",conflictLayout.scheduleRegion, '<%= baseUri %>');
+                    AppUtils.createConflictCollectionView(obj.get('room'), "#room-conflict-view-template",conflictLayout.roomRegion, '<%= baseUri %>');
+                    AppUtils.createConflictCollectionView(obj.get('excluded_item'), "#excluded-item-conflict-view-template",conflictLayout.excludedItemRegion, '<%= baseUri %>');
+                    AppUtils.createConflictCollectionView(obj.get('excluded_time'), "#excluded-time-conflict-view-template",conflictLayout.excludedTimeRegion, '<%= baseUri %>');
+                    AppUtils.createConflictCollectionView(obj.get('availability'), "#availability-conflict-view-template",conflictLayout.availabilityRegion, '<%= baseUri %>');
+                    AppUtils.createConflictCollectionView(obj.get('back_to_back'), "#back-to-back-conflict-view-template",conflictLayout.backToBackRegion, '<%= baseUri %>');
+                } 
+            });
+
+            eventAggregator.on("refreshConflicts", this.refreshConflicts, this);
+        },
+
+        refreshConflicts : function() {
             conflicts.fetch({
                 url : "<%= baseUri + '/program_planner/getConflicts.json' %>",
                 success : function(obj) {

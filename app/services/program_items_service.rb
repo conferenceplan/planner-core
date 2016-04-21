@@ -500,7 +500,7 @@ protected
     query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
     query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
-                  on(conflict_exceptions[:affected].eq(room_assignments[:id]).
+                  on(conflict_exceptions[:affected].eq(room_assignments[:room_id]).
                       and(conflict_exceptions[:src1].eq(room_assignments[:programme_item_id])).
                       and(conflict_exceptions[:src2].eq(room_assignments_alias[:programme_item_id]))
                     ).where(
