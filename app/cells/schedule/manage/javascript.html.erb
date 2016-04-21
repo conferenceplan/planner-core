@@ -182,7 +182,6 @@ ScheduleApp.ItemManagement = (function(Backbone){
      * 
      */
     function removeAssignment(_itemid, parent_group, obj) {
-        console.debug(obj);
         var group = parent_group;
         // ask the user if they want to remove the item
         modal = new AppUtils.ConfirmModel({
@@ -261,14 +260,14 @@ ScheduleApp.ItemManagement = (function(Backbone){
                                         break;
                                     }
                                 };
-        
-                                if (idx < rooms.length) {
-                                    DailyGrid.createItem(response, idx);
-                                };
                                 
                                 if (obj) {
                                     DailyGrid.remove_group(obj.group)
                                 }
+
+                                if (idx < rooms.length) {
+                                    DailyGrid.createItem(response, idx);
+                                };
                             };
                             
                             // And we reload the list of items so that the dropped one is removed

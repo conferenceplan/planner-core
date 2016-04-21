@@ -300,20 +300,25 @@ class PlannerReportsController < PlannerController
     respond_to do |format|
       format.json
       format.csv {
-        outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        outfile = "bios_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
         output.push [
           'Name', 'Company','Bio','Web Site','Twitter','Other Social Media','Photo URL','Facebook'
         ]
-        
+
         @editedBios.each do |e|
+          if e.person.bio_image && e.person.bio_image.bio_picture.url
+              photourl = get_base_image_url + e.person.bio_image.bio_picture.url.partition(/upload/)[2]
+          else
+              photourl = e.photourl ? e.photourl : ''
+          end
           output.push [e.person.getFullPublicationName,
               e.person.company,
               e.bio,
               e.website ? e.website : '',
               e.twitterinfo ? e.twitterinfo : '',
               e.othersocialmedia ? e.othersocialmedia : '',
-              e.photourl ? e.photourl : '',
+              photourl,
               e.facebook ? e.facebook : ''
           ]
         end
