@@ -18,10 +18,17 @@ xml.people do
             xml.OtherSocialMediaInfo :type => 'url',
               :href => e.othersocialmedia
       end
-      if (e.photourl)
+      if e.person.bio_image && e.person.bio_image.bio_picture.url
+         xml.PhotoUrl :type => 'url',
+           :href => get_base_image_url + e.person.bio_image.bio_picture.url.partition(/upload/)[2]
+      else
+          if (e.photourl)
              xml.PhotoUrl :type => 'url',
                :href => e.photourl
+          end
       end
+
+
       if (e.facebook)
             xml.Facebook(e.facebook)
       end
