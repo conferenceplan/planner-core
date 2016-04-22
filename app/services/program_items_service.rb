@@ -167,6 +167,10 @@ module ProgramItemsService
     query = "select count(*) as count from (" + itemConflictSql(day) + ") res"
     res = ActiveRecord::Base.connection.select_one(query)
     count += res['count'].to_i
+
+    query = "select count(*) as count from (" + sub_item_conflict_sql(day) + ") res"
+    res = ActiveRecord::Base.connection.select_one(query)
+    count += res['count'].to_i
     
     count
   end
@@ -177,6 +181,10 @@ module ProgramItemsService
     res = ActiveRecord::Base.connection.select_all(query)
 
     query = itemConflictSqlWithParent(day)
+
+    res.concat(ActiveRecord::Base.connection.select_all(query)) # Combine the queries
+
+    query = sub_item_conflict_sql(day)
 
     res.concat(ActiveRecord::Base.connection.select_all(query)) # Combine the queries
   end
@@ -316,6 +324,7 @@ protected
 
   # For double book participants
   # take into account parent items
+  # todo - prune out parent of the item i.e. so it is not a conflict with itself....
   def self.itemConflictSqlWithParent(day = nil)
     conflict_exceptions = Arel::Table.new(:conflict_exceptions)
 
@@ -386,6 +395,88 @@ protected
     query = query.where(self.constraints())
     
     query.to_sql
+  end
+  
+  #
+  # Need sub-item conflicts
+  #
+  def self.sub_item_conflict_sql(day = nil)
+    conflict_exceptions = Arel::Table.new(:conflict_exceptions)
+
+    assignments = Arel::Table.new(:programme_item_assignments)
+    room_assignments = Arel::Table.new(:room_item_assignments)
+    time_slots = Arel::Table.new(:time_slots)
+
+    assignments_alias = assignments.alias
+    room_assignments_alias = room_assignments.alias
+    time_slots_alias = time_slots.alias
+
+    rooms = Arel::Table.new(:rooms)
+    people = Arel::Table.new(:people)
+    items = Arel::Table.new(:programme_items)
+
+    rooms_alias = rooms.alias
+    people_alias = people.alias
+    items_alias = items.alias
+    
+    candidate_items = items.alias('candidate_items')
+    parents = items.alias('parent_items')
+    parents_alias = items.alias('parent_items_2')
+
+    pitems_alias = items.alias('pitems_2')
+
+    assignment_attrs = [
+      rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
+      people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
+      items[:id].as('item_id'), items[:title].as('item_name'), assignments[:role_id].as('item_role'), 
+      time_slots[:start].as('item_start'),
+      rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
+      items_alias[:id].as('conflict_item_id'), items_alias[:title].as('conflict_item_title'), 
+      assignments_alias[:role_id].as('conflict_item_role'), time_slots_alias[:start].as('conflict_start')
+      ]
+
+    query = assignments.project(*assignment_attrs).
+# join assigment to item and item to parent
+                                      join(candidate_items).on(candidate_items[:id].eq(assignments[:programme_item_id])).
+                                      join(parents).on(parents[:id].eq(candidate_items[:parent_id])).
+                                      join(room_assignments).on(room_assignments[:programme_item_id].eq(parents[:id])).
+                                      join(time_slots).on(room_assignments[:time_slot_id].eq(time_slots[:id])).
+                                      join(assignments_alias).on(assignments[:id].not_eq(assignments_alias[:id])).
+# need the parent of the other assignment ... items_alias
+                                      join(pitems_alias).on(pitems_alias[:id].eq(assignments_alias[:programme_item_id])).
+                                      join(parents_alias).on(parents_alias[:id].eq(pitems_alias[:parent_id])).
+
+                                      join(room_assignments_alias).on(room_assignments_alias[:programme_item_id].eq(parents_alias[:id])).
+                                      join(time_slots_alias).on(room_assignments_alias[:time_slot_id].eq(time_slots_alias[:id])).
+                                      where(
+                                          time_slots[:end].gt(time_slots_alias[:start]).
+                                          and(time_slots[:start].lteq(time_slots_alias[:start])).
+                                          and(assignments[:programme_item_id].not_eq(assignments_alias[:programme_item_id])).
+                                          and(assignments[:person_id].eq(assignments_alias[:person_id])).
+                                          and(assignments[:role_id].not_eq(PersonItemRole['Reserved'].id).and(assignments_alias[:role_id].not_eq(PersonItemRole['Reserved'].id)))
+                                      )
+
+    query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
+  
+    query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
+                                                  on(conflict_exceptions[:affected].eq(assignments[:person_id]).
+                                                      and(conflict_exceptions[:src1].eq(assignments[:programme_item_id])).
+                                                      and(conflict_exceptions[:src2].eq(assignments_alias[:programme_item_id]))
+                                                    ).where(
+                                                      conflict_exceptions[:id].eq(nil)
+                                                    )
+
+    query = query.
+                                join(rooms).on(rooms[:id].eq(room_assignments[:room_id])).
+                                join(people).on(people[:id].eq(assignments[:person_id])).
+                                join(items).on(items[:id].eq(assignments[:programme_item_id])).
+                                join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
+                                join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
+                                join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
+
+    query = query.where(self.constraints())
+    
+    query.to_sql    
   end
 
   def self.itemConflictSql(day = nil)
