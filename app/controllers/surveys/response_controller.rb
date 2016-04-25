@@ -359,21 +359,19 @@ class Surveys::ResponseController < ApplicationController
     end
     
     response = respondentDetails.getResponse(survey.id, questionId)
-    if response != nil
-      response.response = responseText
-    else
+    if response == nil
       response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, :response => responseText, :survey_respondent_detail => respondentDetails
+    end
 
-      question =  response.survey_question
-      if [:singlechoice, :multiplechoice, :selectionbox].include? question.question_type.to_sym
-        answer = SurveyAnswer.find responseText
-        if answer
-          response.response = answer.answer
-          response.survey_answer_id = answer.id
-        end
-      else
-        response.response = responseText
+    question =  response.survey_question
+    if [:singlechoice, :multiplechoice, :selectionbox].include? question.question_type.to_sym
+      answer = SurveyAnswer.find responseText
+      if answer
+        response.response = answer.answer
+        response.survey_answer_id = answer.id
       end
+    else
+      response.response = responseText
     end
     
     response.isbio = surveyQuestion.isbio
@@ -523,7 +521,7 @@ class Surveys::ResponseController < ApplicationController
           res[response.survey_question_id.to_s] = {}
         end
         idx = response.survey_question.survey_answers.index{|x| x.answer == response.response }
-        res[response.survey_question_id.to_s][response.survey_question.survey_answers[idx].id.to_s] = response.response.to_s if idx
+        res[response.survey_question_id.to_s][response.survey_question.survey_answers[idx].id.to_s] = response.survey_answer_id.to_s if idx # response.response.to_s if idx
       elsif response.survey_question && response.survey_question.question_type == :availability
         if !res[response.survey_question_id.to_s]
           res[response.survey_question_id.to_s] = {}
@@ -565,7 +563,12 @@ class Surveys::ResponseController < ApplicationController
         res[response.survey_question_id.to_s]['response'] = response.response
         res[response.survey_question_id.to_s]['photo'] = response.photo
       else
-        res[response.survey_question_id.to_s] = response.response.to_s
+        if response.survey_question && (response.survey_question.question_type == :singlechoice || response.survey_question.question_type == :selectionbox)
+          idx = response.survey_question.survey_answers.index{|x| x.answer == response.response }
+          res[response.survey_question_id.to_s] = response.survey_answer_id.to_s
+        else  
+          res[response.survey_question_id.to_s] = response.response.to_s
+        end
       end
     end
     end
