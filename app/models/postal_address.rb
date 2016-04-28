@@ -55,7 +55,7 @@ class PostalAddress < ActiveRecord::Base
       end
     end
 
-    if !self.state_changed? || self.state.blank?
+    if !self.state_changed? || self.state.blank? || self.state_code_changed?
       if !self.state_code.blank?
         s = ISO3166::Country.new(self.country_code).states[self.state_code] if !self.country_code.blank?
         self.state = s["name"] if s
