@@ -42,7 +42,58 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-6" id="program-item-view">
-        <div></div>
+    <div class="col-xs-6" id="item-assignment-mgmt">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="well">
+                    <div id="program-item-view"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <button class="btn btn-primary save-button pull-right"><%= t "save-assignments" %></button>
+            </div>
+        </div>
+        <div class="row" id="participants-area">
+            <div class="col-xs-12">
+                <div>
+                    <h5><%= t "moderator(s)" %></h5>
+                </div>
+                <div class="ui-droppable well" id="moderator-area">
+                    <div id="moderators-view"></div>
+                </div>
+
+                <div>
+                    <h5><%= t "program-participants" %></h5>
+                </div>
+                <div class="ui-droppable well" id="participant-area">
+                    <div id="participants-view"></div>
+                </div>
+
+                <div class="understated-drag-person-hint">
+                    <p><%= (t 'drag-people-hint').html_safe %></p>
+                </div>
+                <div>
+                    <h5><%= t "reserved" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "reserved" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "reserved-help").html_safe %>'></i></h5>
+                </div>
+                <div class="ui-droppable well" id="reserve-area">
+                    <div id="reserveds-view"></div>
+                </div>
+
+                <div>
+                    <h5><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisible-help").html_safe %>'></i></h5>
+                </div>
+                <div class="ui-droppable well" id="invisible-area">
+                    <div id="invisibles-view"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <button class="btn btn-primary save-button pull-right"><%= t "save-assignments" %></button>
+            </div>
+        </div>
+        <div class="voffset10"></div>
     </div>
 </div>

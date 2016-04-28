@@ -6,7 +6,9 @@ class ProgrammeItemsController < PlannerController
   def index
     if params[:person_id] # then we only get the items for a given person
       @person = Person.find(params[:person_id])
-      @assignments = @person.programmeItemAssignments.includes({:programmeItem => [:time_slot, :people]}).order('time_slots.start asc').collect{|a| (a.programmeItem != nil) ? a : nil}.compact
+      @assignments = @person.programmeItemAssignments.
+                        includes({:programmeItem => [:time_slot, :people]}).
+                        order('time_slots.start asc').collect{|a| (a.programmeItem != nil) ? a : nil}.compact
     end
   rescue => ex
     render status: :bad_request, text: ex.message
@@ -274,40 +276,41 @@ class ProgrammeItemsController < PlannerController
   #
   # Update the participants associated with this programme item
   #  
-  def updateParticipants
-    @extra_item_json = [] if ! @extra_item_json
-    programmeItem = ProgrammeItem.find(params[:id])
-
-    begin
-      ProgrammeItem.transaction do
-        # 1. Clear out the current set of participants    
-        programmeItem.people.clear # remove it from the person.
-        programmeItem.id_will_change! # NOTE: this will force the update date of the programme item to be changed
-        programmeItem.save
-    
-        # 2. Create the new sets
-        addParticipant(programmeItem.id, params['moderators'],PersonItemRole['Moderator'])
-        addParticipant(programmeItem.id, params['participants'],PersonItemRole['Participant'])
-        addParticipant(programmeItem.id, params['reserves'],PersonItemRole['Reserved'])
-        addParticipant(programmeItem.id, params['invisibles'],PersonItemRole['Invisible'])
-        
-        @programmeItem = ProgrammeItem.find(params[:id])
-        @invisibleAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id =?',@programmeItem,PersonItemRole['Invisible']], :include => {:person => :pseudonym}
-        @moderatorAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']], :include => {:person => :pseudonym}
-        @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] , :include => {:person => :pseudonym}
-        @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] , :include => {:person => :pseudonym}
-      end
-    rescue => ex
-      render status: :bad_request, text: ex.message
-    end
-  end
+  # def updateParticipants
+    # @extra_item_json = [] if ! @extra_item_json
+    # programmeItem = ProgrammeItem.find(params[:id])
+# 
+    # # TODO - change for sort order
+    # begin
+      # ProgrammeItem.transaction do
+        # # 1. Clear out the current set of participants    
+        # programmeItem.people.clear # remove it from the person.
+        # programmeItem.id_will_change! # NOTE: this will force the update date of the programme item to be changed
+        # programmeItem.save
+#     
+        # # 2. Create the new sets
+        # addParticipant(programmeItem.id, params['moderators'],PersonItemRole['Moderator'])
+        # addParticipant(programmeItem.id, params['participants'],PersonItemRole['Participant'])
+        # addParticipant(programmeItem.id, params['reserves'],PersonItemRole['Reserved'])
+        # addParticipant(programmeItem.id, params['invisibles'],PersonItemRole['Invisible'])
+#         
+        # @programmeItem = ProgrammeItem.find(params[:id])
+        # @invisibleAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id =?',@programmeItem,PersonItemRole['Invisible']], :include => {:person => :pseudonym}
+        # @moderatorAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']], :include => {:person => :pseudonym}
+        # @participantAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] , :include => {:person => :pseudonym}
+        # @reserveAssociations = ProgrammeItemAssignment.find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] , :include => {:person => :pseudonym}
+      # end
+    # rescue => ex
+      # render status: :bad_request, text: ex.message
+    # end
+  # end
   
   # ---------------------------------
-  def assign_reference_numbers
-    ProgrammeItem.transaction do
-      ProgramItemsService.assign_reference_numbers
-    end
-  end
+  # def assign_reference_numbers
+    # ProgrammeItem.transaction do
+      # ProgramItemsService.assign_reference_numbers
+    # end
+  # end
   
 private
 
