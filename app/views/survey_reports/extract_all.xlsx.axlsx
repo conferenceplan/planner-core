@@ -3,7 +3,7 @@ wb = xlsx_package.workbook
 wb.add_worksheet(name: "Responses") do |sheet|
 
     startOfConference = Time.zone.parse(SiteConfig.first.start_date.to_s).beginning_of_day
-    questions = ['Prefix','First Name','Last Name','Suffix','Email','Pub Prefix','Pub First Name','Pub Last Name','Pub Suffix']
+    questions = ['Prefix','First Name','Last Name','Suffix','Company','Email','Pub Prefix','Pub First Name','Pub Last Name','Pub Suffix']
     groups = Array.new(questions.size){''}
     current_group = nil
     @questions.each do |question|
@@ -22,27 +22,28 @@ wb.add_worksheet(name: "Responses") do |sheet|
     sheet.add_row questions
     
     @respondents.each do |respondent|
-        row = Array.new(@questions.size + 10){''}
+        row = Array.new(@questions.size + 11){''}
         
         row[0] = respondent.prefix
         row[1] = respondent.first_name
         row[2] = respondent.last_name
         row[3] = respondent.suffix
-        row[4] = respondent.email
+        row[4] = respondent.company
+        row[5] = respondent.email
 
         if respondent.survey_respondent && respondent.survey_respondent.person
             # Get the pseudonymn
             if respondent.survey_respondent.person.pseudonym
-                row[5] = respondent.survey_respondent.person.pseudonym.prefix
-                row[6] = respondent.survey_respondent.person.pseudonym.first_name
-                row[7] = respondent.survey_respondent.person.pseudonym.last_name
-                row[8] = respondent.survey_respondent.person.pseudonym.suffix
+                row[6] = respondent.survey_respondent.person.pseudonym.prefix
+                row[7] = respondent.survey_respondent.person.pseudonym.first_name
+                row[8] = respondent.survey_respondent.person.pseudonym.last_name
+                row[9] = respondent.survey_respondent.person.pseudonym.suffix
             end
         end
         
         respondent.survey_responses.each do |response|
             if @question_column[response.survey_question_id]
-                idx = @question_column[response.survey_question_id] + 9
+                idx = @question_column[response.survey_question_id] + 10
                 row[idx] += ", " if row[idx].length > 0
                 if response.survey_question.question_type == :availability
                     if (response.response == '2')

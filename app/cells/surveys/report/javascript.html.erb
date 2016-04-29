@@ -132,6 +132,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
                     {name:'First Name', jsonmap: "first_name", sortable:true, width: 20}, 
                     {name:'Last Name', jsonmap: "last_name", sortable:true, width: 30},
                     {name:'Email', jsonmap: "email", sortable:true, width: 35}, 
+                    {name:'Organization', jsonmap: "company", sortable:true, width: 35}, 
                     {name:'Date Filled', jsonmap: "filled_at", sortable:true, sorttype: function(cell, obj) {
                         var d = moment(cell);
                         return d.valueOf();
