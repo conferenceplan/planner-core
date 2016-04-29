@@ -213,9 +213,7 @@ class Surveys::ResponseController < ApplicationController
                         :first_name => @respondent.first_name, 
                         :last_name => @respondent.last_name, 
                         :suffix => @respondent.suffix, 
-                        :prefix => @respondent.prefix,
-                        :company => @respondent.company, 
-                        :job_title => @respondent.job_title
+                        :prefix => @respondent.prefix
                         })
             @respondent.survey_respondent_detail.save
             @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail, @respondent.person)
