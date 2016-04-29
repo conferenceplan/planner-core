@@ -70,13 +70,11 @@ class ProgrammeItem < ActiveRecord::Base
     
     create_candidates.each do |c|
       assignment = programme_item_assignments.create({role_id: c.role_id, person_id: c.person_id})
-      assignment.sort_order_position = c.sort_order
       assignment.save
     end
 
     update_candidates.each do |u|
       assignment = u
-      assignment.sort_order_position = u.sort_order
       assignment.save
     end
   end
