@@ -61,6 +61,8 @@ module PlannerCore
         surveys/*.css
         users/*.js
         grenadine/ckeditor-edit.css
+        jquery.js
+        iframeResizer.contentWindow.js
       )
     end
 
