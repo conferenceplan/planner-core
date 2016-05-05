@@ -8,6 +8,7 @@ class TopMenuCell < Cell::Rails
     @active_top_menu = @active_sub_menu = @submenu = subidx = nil
     
     path = request.fullpath
+
     if path.include? baseUri
       path = path.slice(baseUri.length(), path.length())
     end
@@ -16,7 +17,7 @@ class TopMenuCell < Cell::Rails
     idx = @topmenu.find_index{|item| 
       found = item[:target].eql? path
       if item[:sub_menu] # && !found
-        subidx = item[:sub_menu].find_index{|i| i[:target].eql? path }
+        subidx = item[:sub_menu].find_index{|i| i[:target].split("#")[0].eql? path }
       end
       found || (subidx != nil)
     }

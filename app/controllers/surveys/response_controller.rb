@@ -209,10 +209,17 @@ class Surveys::ResponseController < ApplicationController
             end
           else
             # if we have a respondent and empty details then we want to pre-populate the details
-            @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, :first_name => @respondent.first_name, :last_name => @respondent.last_name, :suffix => @respondent.suffix, :prefix => @respondent.prefix})
+            @respondent.survey_respondent_detail = SurveyRespondentDetail.new( {:email => @respondent.email, 
+                        :first_name => @respondent.first_name, 
+                        :last_name => @respondent.last_name, 
+                        :suffix => @respondent.suffix, 
+                        :prefix => @respondent.prefix,
+                        :company => @respondent.company, 
+                        :job_title => @respondent.job_title
+                        })
             @respondent.survey_respondent_detail.save
             @survey_respondent_detail = getSurveyResponseDetails(@respondent.survey_respondent_detail, @respondent.person)
-              @survey_response = convertInitialInputArray(@survey, @respondent.person)
+            @survey_response = convertInitialInputArray(@survey, @respondent.person)
           end
         end
       else
@@ -448,6 +455,8 @@ class Surveys::ResponseController < ApplicationController
       person.last_name = detail.last_name if detail.last_name
       person.suffix = detail.suffix if detail.suffix
       person.prefix = detail.prefix if detail.prefix
+      person.company = detail.company if detail.company
+      person.job_title = detail.job_title if detail.job_title
       
       person.acceptance_status = AcceptanceStatus[:Accepted]
       
@@ -626,12 +635,16 @@ class Surveys::ResponseController < ApplicationController
       res['suffix'] = person.suffix
       res['prefix'] = person.prefix
       res['email'] = person.getDefaultEmail() ? person.getDefaultEmail().email : ''
+      res['company'] = person.company ? person.company : ''
+      res['job_title'] = person.job_title ? person.job_title : ''
     else  
       res['first_name'] = details.first_name  if details.first_name
       res['last_name'] = details.last_name  if details.last_name
       res['suffix'] = details.suffix if details.suffix
       res['prefix'] = details.prefix if details.prefix
       res['email'] = details.email if details.email
+      res['company'] = details.company ? details.company : ''
+      res['job_title'] = details.job_title ? details.job_title : ''
     end
     
     # if we have a pseudonym then use it

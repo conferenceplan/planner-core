@@ -9,6 +9,7 @@ json.rowdata @result.collect do |result|
     json.first_name result.first_name
     json.last_name  result.last_name
     json.suffix     result.suffix
+    json.company    result.company ? result.company : ''
     json.email      result.email
     if result.survey_respondent && result.survey_respondent.person && result.survey_respondent.person.postal_addresses[0]
         address = city = result.survey_respondent.person.postal_addresses[0].city ? result.survey_respondent.person.postal_addresses[0].city : ''

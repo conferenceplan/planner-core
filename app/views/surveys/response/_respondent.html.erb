@@ -93,26 +93,41 @@
     </div>
 <% end %>    
 
-
-    <div class="row question-row">   
-        <div class="col-sm-12">
-<div class="form-group  no-bottom-margin <%='has-error' if @errors && @errors['email'] %>">
-    <label class="control-label col-sm-3">
-        <%= t 'survey-email-address' %>
-        <i class="glyphicon glyphicon-info-sign bpopover" data-placement="auto top" data-toggle="popover" data-content="<%= t 'enter-email-address' %>"></i>
-    </label>
-    <div class="col-sm-4">
-        <div class="required-field-block">
-            <input name="survey_respondent_detail[email]" value="<%=@survey_respondent_detail['email'] if @survey_respondent_detail %>" 
-                size="50" class="form-control" type="email" required>
-            <div class="required-icon">
-                <div class="text">*</div>
+<div class="row question-row">   
+    <div class="col-sm-12">
+        <div class="form-group  no-bottom-margin <%='has-error' if @errors && @errors['email'] %>">
+            <label class="control-label col-sm-3">
+                <%= t 'survey-email-address' %>
+                <i class="glyphicon glyphicon-info-sign bpopover" data-placement="auto top" data-toggle="popover" data-content="<%= t 'enter-email-address' %>"></i>
+            </label>
+            <div class="col-sm-4">
+                <div class="required-field-block">
+                    <input name="survey_respondent_detail[email]" value="<%=@survey_respondent_detail['email'] if @survey_respondent_detail %>" 
+                        size="50" class="form-control" type="email" required>
+                    <div class="required-icon">
+                        <div class="text">*</div>
+                    </div>
+                </div>
+                <% if @errors && @errors['email'] %>
+                    <span class="help-inline"><%=@errors['email']['Email Address']%></span>
+                <% end %>
             </div>
         </div>
-        <% if @errors && @errors['email'] %>
-            <span class="help-inline"><%=@errors['email']['Email Address']%></span>
-        <% end %>
     </div>
 </div>
+
+<div class="row question-row">   
+    <div class="col-sm-12">
+        <div class="form-group  no-bottom-margin <%='has-error' if @errors && @errors['company'] %>">
+            <label class="control-label col-sm-3">
+                <%= t 'company' %>
+            </label>
+            <div class="col-sm-9">
+                <div class="required-field-block">
+                    <input name="survey_respondent_detail[company]" value="<%=@survey_respondent_detail['company'] if @survey_respondent_detail %>" 
+                        size="200" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
     </div>
 </div>

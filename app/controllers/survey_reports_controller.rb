@@ -64,7 +64,7 @@ class SurveyReportsController < PlannerController
         outfile = "survey_report_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         # TODO -
         output = Array.new
-        output.push ['Prefix', 'First Name', 'Last Name', 'Suffix', 'Email', 'Date Filled'].concat @meta_data.collect{ |cn| cn[1][:question] }
+        output.push ['Prefix', 'First Name', 'Last Name', 'Suffix', 'Organization', 'Email', 'Date Filled'].concat @meta_data.collect{ |cn| cn[1][:question] }
 
         @result.each do |result|
           answers = {}
@@ -91,6 +91,7 @@ class SurveyReportsController < PlannerController
             result.first_name,
             result.last_name,
             result.suffix,
+            result.company,
             result.email,
             result.survey_histories.first.filled_at.strftime('%I:%M %p, %d %B %Y')
           ].concat @meta_data.collect{ |cn| answers[cn[0].to_s] }

@@ -38,7 +38,7 @@
         <%= cloudinary_js_config %>
 
     </head>
-    <body lang="<%= I18n.locale %>">
+    <body lang="<%= I18n.locale %>" class="<%= request.domain.gsub(".","-") %>">
         <div id="top-colored-line"></div>
   		<div id="application-header" role="navigation"> <!-- This is the top bar with the logo and login/logout buttons -->
 	  		<nav id="logo-bar" class="navbar gradient" role="navigation">

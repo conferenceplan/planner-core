@@ -157,13 +157,14 @@ ItemApp.PeopleManagement = (function(Backbone){
                                         });
                         
                         col.remove(assignment);
-                        col.add(assignment, {at: new_posn})
+                        col.add(assignment, {at: new_posn});
+                        assignment.set('sort_order_position', new_posn);
 
-                        var posn = 0
-                        col.each(function(mdl) {
-                            mdl.set('sort_order_position', posn);
-                            posn += 1;
-                        });
+                        // var posn = 0
+                        // col.each(function(mdl) {
+                            // mdl.set('sort_order_position', posn);
+                            // posn += 1;
+                        // });
                         
                         needsSaved = true;
                     }
@@ -250,11 +251,6 @@ ItemApp.PeopleManagement = (function(Backbone){
                 ItemApp.getRegion("moderators").show(new ParticipantsView({collection : coll}));
             }
         });
-        var posn = 0
-        moderators.each(function(mdl) {
-            mdl.set('sort_order_position', posn);
-            posn += 1;
-        });
 
         showSpinner('#participants-view');
         participants = new ItemAssignments();
@@ -264,11 +260,6 @@ ItemApp.PeopleManagement = (function(Backbone){
             success : function(coll) {
                 ItemApp.getRegion("participants").show(new ParticipantsView({collection : coll}));
             }
-        });
-        posn = 0
-        participants.each(function(mdl) {
-            mdl.set('sort_order_position', posn);
-            posn += 1;
         });
 
         showSpinner('#reserveds-view');
@@ -280,11 +271,6 @@ ItemApp.PeopleManagement = (function(Backbone){
                 ItemApp.getRegion("reserveds").show(new ParticipantsView({collection : coll}));
             }
         });
-        posn = 0
-        reserved.each(function(mdl) {
-            mdl.set('sort_order_position', posn);
-            posn += 1;
-        });
 
         showSpinner('#invisibles-view');
         invisible = new ItemAssignments();
@@ -294,11 +280,6 @@ ItemApp.PeopleManagement = (function(Backbone){
             success : function(coll) {
                 ItemApp.getRegion("invisibles").show(new ParticipantsView({collection : coll}));
             }
-        });
-        posn = 0
-        invisible.each(function(mdl) {
-            mdl.set('sort_order_position', posn);
-            posn += 1;
         });
     };
     
@@ -313,16 +294,17 @@ ItemApp.PeopleManagement = (function(Backbone){
                 contentType: 'application/json',
                 url: current_url,
                 dataType: 'JSON',
-                data: JSON.stringify(programme_item_assignments)
+                data: JSON.stringify(programme_item_assignments),
+                success : function() {
+                    // Force a reload of the models etc
+                    moderators.fetch({async: false});
+                    participants.fetch({async: false});
+                    reserved.fetch({async: false});
+                    invisible.fetch({async: false});
+        
+                    eventAggregator.trigger("refreshViews");
+                }
             });
-            
-            // Force a reload of the models etc
-            moderators.fetch();
-            participants.fetch();
-            reserved.fetch();
-            invisible.fetch();
-
-            eventAggregator.trigger("refreshViews");
         }
     };
     

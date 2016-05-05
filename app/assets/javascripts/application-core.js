@@ -47,6 +47,7 @@
 //= require moment-with-locales
 // require moment/fr.js
 //= require bootstrap-datetimepicker
+//= require bootstrap-daterangepicker/daterangepicker
 //= require d3
 
 // ---------------
