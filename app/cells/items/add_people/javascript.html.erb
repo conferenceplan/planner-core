@@ -160,12 +160,14 @@ ItemApp.PeopleManagement = (function(Backbone){
                         col.add(assignment, {at: new_posn});
                         assignment.set('sort_order_position', new_posn);
 
-                        // var posn = 0
-                        // col.each(function(mdl) {
-                            // mdl.set('sort_order_position', posn);
-                            // posn += 1;
-                        // });
-                        
+                        var posn = 0
+                        col.each(function(mdl) {
+                            if (mdl.get('sort_order_position') != null) {
+                                mdl.set('sort_order_position', posn);
+                            }
+                            posn += 1;
+                        });
+
                         needsSaved = true;
                     }
                 }
@@ -283,6 +285,14 @@ ItemApp.PeopleManagement = (function(Backbone){
         });
     };
     
+    function clear_and_refresh(collection) {
+        var mdl = null;
+        while (mdl = collection.pop({silent: true})) {
+            mdl.clear({silent: true})
+        };
+        collection.fetch({async: false, silent: true});
+    };
+    
     function save_collection(collection) {
         if (current_url) {
             var programme_item_assignments = {
@@ -296,11 +306,11 @@ ItemApp.PeopleManagement = (function(Backbone){
                 dataType: 'JSON',
                 data: JSON.stringify(programme_item_assignments),
                 success : function() {
-                    // Force a reload of the models etc
-                    moderators.fetch({async: false});
-                    participants.fetch({async: false});
-                    reserved.fetch({async: false});
-                    invisible.fetch({async: false});
+                    // Force a reload of the models etc....
+                    clear_and_refresh(moderators);
+                    clear_and_refresh(participants);
+                    clear_and_refresh(reserved);
+                    clear_and_refresh(invisible);
         
                     eventAggregator.trigger("refreshViews");
                 }
