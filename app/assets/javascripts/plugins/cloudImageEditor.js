@@ -91,12 +91,16 @@ Form.editors.CloudImage = Form.editors.Text.extend({
     template: _.template('\
         <div class="upload_section">\
             <input id="<%= field_name %>" class="form-control" name="<%= field_name %>" type="hidden"> \
-            <div>\
-                <a href="#" id="upload_widget_opener">Upload image</a>\
-                <div id="<%= field_name %>_preview" class="pull-right"></div>\
+            <div class="row">\
+                <div class="col-sm-12">\
+                    <a href="#" id="upload_widget_opener">Upload image</a>\
+                    <div id="<%= field_name %>_preview" class="pull-right"></div>\
+                </div>\
             </div>\
-            <div>\
-                <div id="<%= field_name %>_container"></div>\
+            <div class="row">\
+                <div class="col-sm-12">\
+                    <div id="<%= field_name %>_container"></div>\
+                </div>\
             </div>\
         </div>\
         ', null, Form.templateSettings),

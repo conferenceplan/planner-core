@@ -85,6 +85,25 @@
 </div>
 </script>
 
+<script type="text/template" id="bio-image-form-template">
+    <form class="form-horizontal" role="form">
+        <fieldset>
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-sm-4 control-label">
+                       <%= (I18n.t "bio-image").html_safe %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= (I18n.t "bio-image").html_safe %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= (I18n.t "bio-image-upload-help").html_safe %>'></i>
+                    </label>
+                </div>
+                <span data-editor>
+                    <div class="row">
+                        <div class="col-sm-12"><span data-editors="bio_picture"></span></div>
+                    </div>
+                </span>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
 <script type="text/template" id="person-form-template">
     <form class="form-horizontal" role="form">
         <fieldset>
