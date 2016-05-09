@@ -24,6 +24,32 @@ en:
   en    : "English"
   en-GB : "English"
   fr    : "French"
+  cloudinary:
+    widget:
+      sources:
+        local:
+          title: "My files"
+          drop_file: "Drop file here"
+          drop_files: "Drop files here"
+          drop_or: "Or"
+          select_file: "Select File"
+          select_files: "Select Files"
+        url:
+          title: "Web Address"
+          note: "Public URL of an image file:"
+          upload: "Upload"
+          error: "Please type a valid HTTP URL."
+        camera:
+          title: "Camera"
+          note: "Make sure your browser allows camera capture, position yourself and click Capture:"
+          capture: "Capture"
+      progress:
+        uploading: "Uploading..."
+        upload_cropped: "Upload"
+        processing: "Processing..."
+        retry_upload: "Try again"
+        use_succeeded: "OK"
+        failed_note: "Some of your images failed uploading."
   planner: 
     core:
       messages:

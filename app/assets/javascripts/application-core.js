@@ -19,6 +19,9 @@
 
 //= require cloudinary
 
+//= require i18n
+//= require i18n/core-translations
+
 //= require select2
 //  require select2_locale_fr
 

@@ -44,6 +44,7 @@ require "figaro"
 require "ranked-model"
 require "http_accept_language"
 #require "country_select"
+require "i18n/js"
 
 module PlannerCore
   class Engine < ::Rails::Engine
