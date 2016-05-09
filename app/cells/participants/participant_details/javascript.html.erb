@@ -135,8 +135,16 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     
     BioPicture = Backbone.Model.extend({
         schema : {
-            bio_picture : { type : 'CLImage', title : '<%= (I18n.t "bio-image").html_safe %>', help: '<%= (I18n.t "bio-image-upload-help").html_safe %>', help_placement: 'bottom' ,
-                cl_image_upload_tag : '<%= cl_image_upload_tag(:bio_picture) %>'
+            bio_picture : { type : 'CloudImage', 
+                        title : '<%= (I18n.t "bio-image").html_safe %>', 
+                        help: '<%= (I18n.t "bio-image-upload-help").html_safe %>', 
+                        help_placement: 'bottom' ,
+                cl_args : {
+                          client_allowed_formats: ["png","gif","jpeg","jpg"],
+                          max_file_size: (2 * 1024 * 1024), // 2Mb
+                          cropping_aspect_ratio: 1.0,
+                          button_caption: "GET IMAGE"
+                }
             }
         },
         urlRoot : "<%= baseUri + '/bio_images' %>"
@@ -451,6 +459,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         bio_pics.deferred.done(function() {
             TabUtils.createTabContent({
                 model : bio_pics,
+                modelType: BioPicture,
                 template : '#bio-image-template',
                 region : publishedInfoLayout.picture,
                 id : id,

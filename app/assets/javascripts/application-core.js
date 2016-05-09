@@ -71,6 +71,7 @@
 //= require plugins/DependentEditors
 //= require plugins/cpReportBase
 //= require plugins/clImageEditor
+//= require plugins/cloudImageEditor
 //= require plugins/fileUploadEditor
 //= require plugins/cpPendingImportPeopleTable
 //= require plugins/typeAheadTextEditor
