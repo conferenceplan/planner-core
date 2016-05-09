@@ -47,11 +47,26 @@ ItemApp.ItemManagement = (function(Backbone){
 
     Picture = Backbone.RelationalModel.extend({
         schema : {
-            picture : { type : 'CLImage', title : 'Image',
-                cl_image_upload_tag : '<%= cl_image_upload_tag(:picture) %>'
+            picture : { 
+                type : 'CloudImage', 
+                title : 'Image',
+                cl_args : {
+                          client_allowed_formats: ["png","gif","jpeg","jpg"],
+                          max_file_size: (2 * 1024 * 1024), // 2Mb
+                          button_caption: '<%= I18n.t("upload-image") %>'
+                }
             }
         },
-        urlRoot : "<%= baseUri + '/external_images/ProgrammeItem' %>"
+        urlRoot : "<%= baseUri + '/external_images/ProgrammeItem' %>",
+        aspect_ratio : function() {
+            var card_size = this.get('use');
+            if (card_size == 'mediumcard') {
+                return 1;
+            } else if (card_size == 'largecard') {
+                return 736/264;
+            }
+            return null;
+        }
     });
     PictureCollection = Backbone.Collection.extend({
         model : Picture
@@ -322,14 +337,18 @@ ItemApp.ItemManagement = (function(Backbone){
             this.delete_image("mediumcard");
         },
         
+        // TOOD - aspect ratio for model depending on use
         create_image : function(cardtype, title) {
             var model = this.model;
-            var pic = new Picture();
+            var pic = new Picture({
+                use: cardtype
+            });
             var item_id = model.id;
             pic.url = "<%= baseUri + '/external_images/ProgrammeItem/' %>" + item_id + '/' + cardtype
             mdl = new AppUtils.ModelModal({
                         model : pic,
                         title : title,
+                        modal_template : "#image-uploader-form-template",
                         refresh : function(mdl) {
                             model.fetch({async : false});
                         }

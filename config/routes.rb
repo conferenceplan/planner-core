@@ -327,6 +327,7 @@ Rails.application.routes.draw do
   # Tools for exporting
   match "tools/people_exporter/export", :controller => 'tools/people_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
   match "tools/item_exporter/export", :controller => 'tools/item_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
+  match "tools/cloud_tools/sign", :controller => 'tools/cloud_tools', :action => 'sign' #, :defaults => { :format => 'json' }
 
   planner_resources 'category_names',         :defaults => { :format => 'json' }
   planner_resources 'theme_names',         :defaults => { :format => 'json' }

@@ -63,6 +63,15 @@ Form.editors.CloudImage = Form.editors.Text.extend({
             };
 
         cl_args = $.extend(pargs, this.schema.cl_args);
+        
+        if (this.form.model != null) {
+            if (this.form.model.aspect_ratio && (typeof this.form.model.aspect_ratio === 'function')) {
+                var aspect_ratio = this.form.model.aspect_ratio();
+                if (aspect_ratio) {
+                    pargs['cropping_aspect_ratio'] = aspect_ratio;
+                }
+            }
+        };
 
         var _this = this;
         element.find('#upload_widget_opener').cloudinary_upload_widget(cl_args,
