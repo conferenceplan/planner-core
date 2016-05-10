@@ -274,7 +274,7 @@ class Surveys::ResponseController < ApplicationController
         if response.photo && response.photo.url
           person = @respondent.person
           bio_image = person.bio_image
-          
+
           p = Cloudinary::Uploader.upload(response.photo.url) # copy the cloudinary remote image
           url = p['url'].partition(/upload/)[2]
           sig = p['signature']
