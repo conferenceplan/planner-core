@@ -6,7 +6,7 @@ jQuery(document).ready(function() {
         var element = $(this);
         console.debug(element);
         var preview_id = element.attr('data-preview');
-        $('.cloudinary-fileupload').cloudinary_fileupload(
+        $(this).find('.cloudinary-fileupload').cloudinary_fileupload( // Fix so preview do not get mixed
         {
             start: function (e) {
                 element.find('.status').html("Starting upload ....");

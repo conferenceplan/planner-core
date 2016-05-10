@@ -65,12 +65,27 @@ Form.editors.CloudImage = Form.editors.Text.extend({
         cl_args = $.extend(pargs, this.schema.cl_args);
         
         if (this.form.model != null) {
-            if (this.form.model.aspect_ratio && (typeof this.form.model.aspect_ratio === 'function')) {
-                var aspect_ratio = this.form.model.aspect_ratio();
-                if (aspect_ratio) {
-                    pargs['cropping_aspect_ratio'] = aspect_ratio;
+            var _that = this;
+            _.each(["cropping_aspect_ratio", 
+                    "cropping_default_selection_ratio",
+                    "cropping_show_dimensions",
+                    "cropping_coordinates_mode",
+                    "max_file_size",
+                    "max_image_width",
+                    "max_image_height",
+                    "min_image_height",
+                    "min_image_width",
+                    "cropping_validate_dimensions",
+                    "max_chunk_size",
+                    "context"
+            ], function(el, idx, lst) {
+                if (_that.form.model[el] && (typeof _that.form.model[el] === 'function')) {
+                    var arg = _that.form.model[el]();
+                    if (arg) {
+                        cl_args[el] = arg;
+                    }
                 }
-            }
+            });
         };
 
         var _this = this;

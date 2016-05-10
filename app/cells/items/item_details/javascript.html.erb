@@ -58,7 +58,7 @@ ItemApp.ItemManagement = (function(Backbone){
             }
         },
         urlRoot : "<%= baseUri + '/external_images/ProgrammeItem' %>",
-        aspect_ratio : function() {
+        cropping_aspect_ratio : function() {
             var card_size = this.get('use');
             if (card_size == 'mediumcard') {
                 return 1;
