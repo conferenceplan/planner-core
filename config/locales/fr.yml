@@ -12,29 +12,29 @@ fr:
           drop_file: "Déposez le fichier ici"
           drop_files: "Déposez fichiers ici"
           drop_or: "Ou"
-          select_file: "Choisir le dossier"
-          select_files: "Sélectionnez les fichiers"
+          select_file: "Choisir..."
+          select_files: "Sélectionnez fichiers"
         url:
           title: "Adresse web"
           note: "URL publique d'un fichier d'image:"
           upload: "Télécharger"
-          error: "S'il vous plaît taper une URL HTTP valide."
+          error: "S'il vous plaît fournissez une URL HTTP valide."
         camera:
           title: "Caméra"
-          note: "Assurez-vous que votre navigateur permet la caméra capture, placez-vous et cliquez sur Capturer:"
+          note: "Assurez-vous que votre navigateur permet la capture par caméra, placez-vous et cliquez sur Capturer:"
           capture: "Capture"
       progress:
-        uploading: "Uploading..."
+        uploading: "Téléchargement..."
         upload_cropped: "Télécharger"
         processing: "En traitement..."
         retry_upload: "Réessayer"
         use_succeeded: "OK"
-        failed_note: "Certains de vos images a échoué ajout."
+        failed_note: "Certains de vos téléchargements ont échoué."
   planner: 
     core:
       messages:
         no-parent: 'aucun'
       errors:
-        people-not-found: "Ne peut pas trouver la source ou la destination personne"
+        people-not-found: "Nous ne pouvons pas trouver le dossier de la personne de destination pour cette image."
         must-be-a-positive-number: 'Doit être un nombre positif.'
         unique-mailing-error: "La combinaison <b>Référence d'envoi</b> et <b>Gabarit</b> doit être unique."
