@@ -24,6 +24,7 @@ body:lang(fr) .dl-horizontal dd {
 	margin-left: 270px;
 }
 /* the following are general purpose vertical spacers since Bootstrap does not offer this */
+.voffset0  { margin-top: 0; }
 .voffset2  { margin-top: 2px; }
 .voffset5 { margin-top: 5px; }
 .voffset10 { margin-top: 10px; }
@@ -48,6 +49,7 @@ body:lang(fr) .dl-horizontal dd {
 .loffset100 { margin-left: 100px; }
 .loffset150 { margin-left: 150px; }
 
+.boffset0  { margin-bottom: 0; }
 .boffset2  { margin-bottom: 2px; }
 .boffset5 { margin-bottom: 5px; }
 .boffset10 { margin-bottom: 10px; }
