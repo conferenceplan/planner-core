@@ -164,10 +164,13 @@ var TabUtils = (function(){
                         wait: true,
                         success : function(mdl) {
                             if (clearFn) {
-                                clearFn();
+                                clearFn.bind(that)();
                             };
                             that.model = null;
                             that.render();
+                            if (post_clearFn) {
+                                post_clearFn.bind(that)();
+                            };
                         }
                     });
                 },
@@ -279,6 +282,7 @@ var TabUtils = (function(){
                         deleteMessage : options.deleteMessage,
                         selectFn : options.selectFn,
                         clearFn         : options.clearFn,
+                        post_clearFn         : options.post_clearFn,
                         selectCsvFn : options.selectCsvFn,
                         form_event : options.form_event,
                         form_event_fn : options.form_event_fn,
@@ -312,6 +316,7 @@ var TabUtils = (function(){
                 deleteMessage : options.deleteMessage,
                 selectFn : options.selectFn,
                 clearFn         : options.clearFn,
+                post_clearFn         : options.post_clearFn,
                 selectCsvFn : options.selectCsvFn,
                 form_event : options.form_event,
                 form_event_fn : options.form_event_fn,
