@@ -16,7 +16,7 @@ GIT
 PATH
   remote: .
   specs:
-    planner-core (1.0.39)
+    planner-core (1.0.46)
       actionmailer
       activerecord
       acts-as-taggable-on (= 3.1.1)
@@ -117,7 +117,7 @@ GEM
       sass (~> 3.2)
     bootstrap3-datetimepicker-rails (4.7.14)
       momentjs-rails (>= 2.8.1)
-    browser (2.0.3)
+    browser (2.1.0)
     builder (3.0.4)
     capybara (2.3.0)
       mime-types (>= 1.16)
@@ -364,6 +364,7 @@ DEPENDENCIES
   factory_girl_rails (= 4.5.0)
   geocoder
   i18n-active_record!
+  i18n-js (>= 3.0.0.rc11)
   mysql2 (= 0.3.20)
   planner-core!
   rspec-rails (~> 3.0)

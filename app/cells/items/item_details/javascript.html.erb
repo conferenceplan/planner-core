@@ -364,9 +364,15 @@ ItemApp.ItemManagement = (function(Backbone){
             mdl = new AppUtils.ModelModal({
                         model : img,
                         title : title,
+                        modal_template : "#image-uploader-form-template",
                         refresh : function(mdl) {
                             // Need to refresh the model
-                            model.fetch({async : false});
+                            model.fetch({
+                                async : false,
+                                success : function() {
+                                    eventAggregator.trigger("refreshImagesList");
+                                }
+                            });
                         }
                     });
             mdl.render();

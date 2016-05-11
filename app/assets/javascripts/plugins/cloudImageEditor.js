@@ -30,8 +30,9 @@ Form.editors.CloudImage = Form.editors.Text.extend({
         var image_place = $el.find("#" + image_container);
 
         var pargs = { cloud_name: 'grenadine',
-                    upload_preset: 'cwqjqwkj', // TODO - name
-                    show_powered_by: false, 
+                    upload_preset: 'cwqjqwkj',
+                    show_powered_by: false,
+                    sources:  ['local', 'url'] ,
                     keep_widget_open: false,
                     theme: 'white',
                     inline_container: image_place[0],
