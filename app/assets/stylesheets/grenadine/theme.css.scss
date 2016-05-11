@@ -1642,3 +1642,13 @@ body.loading .ajax-loading-modal {
 {
     display: none;
 }
+
+
+/* coudinary upload button */ 
+
+@media all and (min-width: $w2) {
+    div.upload_section {
+        margin-left: 188px;
+        margin-top: 10px;
+    }
+}
