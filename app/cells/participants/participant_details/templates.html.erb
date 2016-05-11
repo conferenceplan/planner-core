@@ -91,7 +91,7 @@
             <div class="form-group">
                 <div class="row">
                     <label class="col-sm-4 control-label">
-                       <%= (I18n.t "bio-image").html_safe %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= (I18n.t "bio-image").html_safe %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= (I18n.t "bio-image-upload-help").html_safe %>'></i>
+                       <%= (I18n.t "bio-image").html_safe %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= (I18n.t "bio-image").html_safe %>' data-container='body' data-trigger='hover' data-placement='right auto' data-toggle='popover' data-content='<%= (I18n.t "bio-image-upload-help").html_safe %>'></i>
                     </label>
                 </div>
                 <span data-editor>
@@ -281,7 +281,7 @@
             {{ if (typeof id != 'undefined') { }}
             <div align="left" class="voffset10">
                 {{ if (bio_picture &&  (typeof bio_picture.standard != 'undefined') ) { }}
-            	<image src="{{= bio_picture.standard.url }}" class="img-responsive img-rounded" id="bio-picture-image"></image>
+            	   <image src="{{= bio_picture.standard.url }}" class="img-responsive img-rounded" id="bio-picture-image"></image>
             	{{ } }}
             </div>
             <div class="caption voffset5">

@@ -7,6 +7,7 @@ gem 'i18n-active_record',
       :tag => 'rails-3.2',
       :require => 'i18n/active_record'
 gem 'mysql2', '0.3.20'
+gem "i18n-js", ">= 3.0.0.rc11"
 
 group :assets do
   gem 'sass-rails', '>= 3.2'

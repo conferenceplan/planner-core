@@ -93,7 +93,7 @@ class Person < ActiveRecord::Base
   has_one   :registrationDetail, :dependent => :delete
   accepts_nested_attributes_for :registrationDetail
 
-  has_one   :survey_respondent
+  has_one   :survey_respondent, :dependent => :destroy
 
   has_many  :person_mailing_assignments
   has_many  :mailings, :through => :person_mailing_assignments
@@ -376,6 +376,19 @@ class Person < ActiveRecord::Base
         return name.strip
     else
         return [self.first_name,self.last_name,self.suffix].compact.join(' ').strip
+    end
+  end
+  
+  def getFullPublicationFirstAndLastName
+   # if we set the pseudonym in people table, use that
+   if (self.pseudonym != nil)
+        name = [self.pseudonym.first_name,self.pseudonym.last_name].compact.join(' ')
+        if (name =~ /^\s*$/)
+           name = [self.first_name,self.last_name].compact.join(' ')
+        end
+        return name.strip
+    else
+        return [self.first_name,self.last_name].compact.join(' ').strip
     end
   end
   

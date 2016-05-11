@@ -2,9 +2,9 @@ class SurveyRespondentDetail < ActiveRecord::Base
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :email, :survey_respondent_id, :survey_id, :prefix, 
                   :company, :job_title
   
-  has_many :survey_responses
+  has_many :survey_responses, :dependent => :destroy
   belongs_to  :survey_respondent 
-  has_many :survey_histories
+  has_many :survey_histories, :dependent => :destroy
 
   # Get the responses for a particular survey
   def getResponses(surveyId)
