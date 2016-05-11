@@ -155,6 +155,7 @@ var TabUtils = (function(){
         deleteModal : function() {
             var that = this;
             var clearFn = this.options.clearFn; 
+            var post_clearFn = this.options.post_clearFn; 
 
             modal = new AppUtils.ConfirmModel({
                 title : this.options.deleteTitle,
