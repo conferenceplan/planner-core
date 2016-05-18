@@ -39,6 +39,7 @@ Form.editors.CloudImage = Form.editors.Text.extend({
                     cropping: 'server',
                     multiple: false,
                     thumbnails: false,
+                    field_name: 'cl_image',
                     text: {
                       "powered_by_cloudinary": "Powered by Cloudinary - Image management in the cloud",
                       "sources.local.title": I18n.t("cloudinary.widget.sources.local.title"),
