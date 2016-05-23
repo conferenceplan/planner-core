@@ -230,7 +230,6 @@ module PeopleService
                             where(query).
                             where(self.constraints()).
                             order("people.last_name, people.first_name")
-    
   end
   
   #
@@ -239,24 +238,41 @@ module PeopleService
   def self.findAllPeople(invitestatus = nil, invite_category = nil)
     stateTable = Arel::Table.new(:person_con_states)
     peopleTable = Arel::Table.new(:people)
+    regTable = Arel::Table.new(:registration_details)
+    assignments = Arel::Table.new(:programme_item_assignments)
     query = nil
     
-    query = stateTable[:invitestatus_id].eq(invitestatus) if invitestatus && invitestatus > 0
-    include_list = [:pseudonym, :email_addresses, :postal_addresses, :person_con_state]
+    # Get people for conference
+    # i.e. if they have registrations or item assignments
+    join_query = peopleTable.join(stateTable, Arel::Nodes::OuterJoin).
+                    on(
+                      stateTable[:person_id].eq(peopleTable[:id]).and(
+                        self.arel_constraints(PersonConState)
+                      )
+                    ).join(regTable, Arel::Nodes::OuterJoin). # Look at the registration data
+                    on(
+                      regTable[:person_id].eq(peopleTable[:id]).and(
+                        self.arel_constraints(RegistrationDetail)
+                      )
+                    ).join(assignments, Arel::Nodes::OuterJoin). # Look at the item assignment data
+                    on(
+                      assignments[:person_id].eq(peopleTable[:id]).and(
+                        self.arel_constraints(ProgrammeItemAssignment)
+                      )
+                    ).
+                    join_sources
+    query = assignments[:id].not_eq(nil).or(regTable[:id].not_eq(nil)) # only get people that have assignments AND/OR registered
+
+    query = query.and(stateTable[:invitestatus_id].eq(invitestatus)) if invitestatus && invitestatus > 0
+    query = query.and(stateTable[:invitation_category_id].eq(invite_category)) if invite_category && invite_category > 0
     
-    if invite_category && invite_category > 0
-      if query
-        query = query.and(stateTable[:invitation_category_id].eq(invite_category))
-      else  
-        query = stateTable[:invitation_category_id].eq(invite_category)
-      end
-    end
+    include_list = [:pseudonym, :email_addresses, :postal_addresses, :programmeItemAssignments]
     
-    Person.joins(:person_con_state).
-                            includes(include_list).
-                            where(query).
-                            where(self.constraints()).
-                            order("people.last_name")
+    Person.joins(join_query).
+                includes(include_list).
+                where(query).
+                uniq.
+                order("people.last_name")
   end
 
   #
@@ -408,6 +424,10 @@ module PeopleService
   end
   
   def self.constraints(*args)
+    true
+  end
+  
+  def self.arel_constraints(*args)
     true
   end
   
