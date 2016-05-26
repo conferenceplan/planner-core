@@ -27,13 +27,15 @@ class PublishJob
         
         newItems = 0
         modifiedItems = 0
-        renmovedItems = 0
+        removedItems = 0
         p = PublicationDate.new
         newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
         newItems += copyProgrammeItems(getNewChildren())
         modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
         
+        # TODO - issue with order of deletes
         removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
+        removedItems += unPublish(getUnpublishedSubItems()) # remove all items that should no longer be published
         removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
         removedItems += unPublish(getRemovedSubItems())
         
@@ -50,7 +52,7 @@ class PublishJob
           p.timestamp = DateTime.current
           p.newitems = newItems
           p.modifieditems = modifiedItems
-          p.removeditems = renmovedItems
+          p.removeditems = removedItems
 #          p.modified_rooms = modifiedRooms
 #          p.modified_venues = modifiedVenues
           p.save
@@ -161,7 +163,13 @@ class PublishJob
   def getUnpublishedItems
     PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
       joins("join programme_items on programme_items.id = publications.original_id and publications.original_type = 'ProgrammeItem'").
-      where("(programme_items.print = 0 AND publications.published_id is not null)")
+      where("(programme_items.print = 0 AND publications.published_id is not null AND published_programme_items.parent_id is null)")
+  end
+
+  def getUnpublishedSubItems
+    PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
+      joins("join programme_items on programme_items.id = publications.original_id and publications.original_type = 'ProgrammeItem'").
+      where("(programme_items.print = 0 AND publications.published_id is not null AND published_programme_items.parent_id is not null)")
   end
 
   private
