@@ -255,6 +255,13 @@ module PlannerReportsService
   #
   #
   #
+  def self.findItemsWithNoTags
+    ProgrammeItem.joins('LEFT JOIN taggings ON taggings.taggable_id = programme_items.id AND taggings.taggable_type = "ProgrammeItem"').where('taggings.id IS NULL')
+  end
+  
+  #
+  #
+  #
   def self.findTagsByContext(context)
     tags = ActsAsTaggableOn::Tagging.
                             where(['context = ? and tagger_id = ?', context, getTagOwner]).

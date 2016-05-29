@@ -526,6 +526,40 @@ class PlannerReportsController < PlannerController
   end
   
   #
+  # 
+  #
+  def items_without_tags
+    @items = PlannerReportsService.findItemsWithNoTags
+
+    respond_to do |format|
+      format.json
+      format.csv {
+        outfile = "items_with_no_tags_" + Time.now.strftime("%m-%d-%Y") + ".csv"
+        output = Array.new
+
+        output.push [
+          'Title','Format','Date','Daye','Start Time','End Time','Room','Venue'
+        ]
+        
+        @items.each do |item|
+          
+          output.push [item.title,
+            (item.format ? item.format.name : ''), 
+            ((item.time_slot != nil) ? item.time_slot.start.strftime('%d %b %Y') : ''),
+            ((item.time_slot != nil) ? item.time_slot.start.strftime('%A') : ''),
+            ((item.time_slot != nil) ? item.time_slot.start.strftime('%a %H:%M') : ''),
+            ((item.time_slot != nil) ? item.time_slot.end.strftime('%a %H:%M') : ''),
+            ((item.room != nil) ? item.room.name : ''),
+            ((item.room != nil) ? item.room.venue.name : '')
+          ]
+        end
+
+        csv_out(output, outfile)
+      }
+    end
+  end
+  
+  #
   #
   #
   def admin_tags_by_context

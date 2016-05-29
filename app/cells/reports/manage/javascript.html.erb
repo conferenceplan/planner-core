@@ -48,6 +48,16 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name:'Audience', label : '<%= t "item-estimated-audience-size" %>', jsonmap: "audience"},
     ];
     
+    var ItemsWithoutTagsColModel = [
+                    {name: 'title',       label : '<%= t "item" %>',  jsonmap: "title",    width: 300},
+                    {name: 'item-date',         label : '<%= t "item-date" %>',                     jsonmap: 'date'},
+                    {name: 'item-day',          label : '<%= t "item-day" %>',                      jsonmap: 'day'},
+                    {name: 'item-start-time',   label : '<%= t "item-start-time" %>',               jsonmap: 'start_time'},
+                    {name: 'End Time',          label : '<%= t "item-end-time" %>',                 jsonmap: 'end_time'},
+                    {name:'Venue', label : '<%= t "venue" %>', jsonmap: "venue_name"},
+                    {name:'Room', label : '<%= t "room" %>', jsonmap: "room_name"},
+    ];
+    
     var PanelsByRoomColModel = [
                     {name: 'room',      label : '<%= t "room" %>',  jsonmap: "room", width: 50},
                     {name: 'venue',     label : '<%= t "venue" %>', jsonmap: "venue", width: 50},
@@ -222,6 +232,7 @@ ReportApp.ReportManagement = (function(Backbone){
             'capacity_report'       : 'capacity_report',
             'people_item_allocation' : 'people_item_allocation',
             'people_with_too_many_items' : 'people_with_too_many_items',
+            'items_with_no_tags'    : 'items_with_no_tags',
             'panels_with_one_person' : 'panels_with_one_person',
             'panelists_without_bios' : 'panelists_without_bios',
             'item_word_counts'      : 'item_word_counts'
@@ -261,6 +272,19 @@ ReportApp.ReportManagement = (function(Backbone){
                 endPoint    : "<%= baseUri + '/planner_reports/items_with_one_person' %>",
                 colModel    : PanelsWithOnePersonColModel,
                 caption     : '<%= t "report-items-with-one-person" %>'
+            }));
+        },
+        
+        items_with_no_tags : function() {
+            ReportBase.reportRegion.close();
+            ReportBase.resultRegion.close();
+            $('#report-results-area').html('');
+            
+            ReportBase.reportRegion.show(new ReportBase.ReportView({
+                form        : GenericForm,
+                endPoint    : "<%= baseUri + '/planner_reports/items_without_tags' %>",
+                colModel    : ItemsWithoutTagsColModel,
+                caption     : '<%= t "items-without-tags" %>'
             }));
         },
         
