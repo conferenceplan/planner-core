@@ -64,8 +64,12 @@ class ProgrammeItem < ActiveRecord::Base
     update_candidates = updates.map{|u| u.id != nil ? u : nil }.compact
 
     # We may not want to delete since the item may be moved to another role ....
+    if del_candidates
+      self.touch
+      self.save
+    end
     del_candidates.each do |c|
-      c.delete
+      c.destroy
     end
     
     create_candidates.each do |c|

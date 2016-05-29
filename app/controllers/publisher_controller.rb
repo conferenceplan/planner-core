@@ -60,9 +60,6 @@ class PublisherController < PlannerController
     if (lastPubDate)
       @peopleChanged = PublishedProgramItemsService.getUpdatedPeople lastPubDate.timestamp
     end
-
-    # TODO - add extra
-    
   end
   
 end
