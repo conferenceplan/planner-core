@@ -8,6 +8,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   audited :allow_mass_assignment => true
 
+  # default sort children
   has_many   :children, :dependent => :destroy, :class_name => 'PublishedProgrammeItem', foreign_key: "parent_id"
   belongs_to :parent,   :class_name => 'PublishedProgrammeItem' 
 

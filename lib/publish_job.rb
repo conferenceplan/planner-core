@@ -467,6 +467,7 @@ class PublishJob
             assignment = dest.published_programme_item_assignments.new(:person => srcAssignment.person, 
                                     :role => srcAssignment.role, 
                                     :sort_order => srcAssignment.sort_order,
+                                    :description => srcAssignment.description,
                                     :person_name => srcAssignment.person.getFullPublicationName)
             assignment.save
           end
@@ -481,6 +482,7 @@ class PublishJob
               dest.published_programme_item_assignments[idx].destroy
             else  
               dest.published_programme_item_assignments[idx].role = srcAssignment.role
+              dest.published_programme_item_assignments[idx].description = srcAssignment.description
               dest.published_programme_item_assignments[idx].sort_order = srcAssignment.sort_order
               dest.published_programme_item_assignments[idx].save
             end

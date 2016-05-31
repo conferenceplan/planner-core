@@ -177,6 +177,9 @@ ItemApp.ItemManagement = (function(Backbone){
                     },
                 ]
             },
+            // TODO - start_offset, need to constrain based on the startime and duration of the parent
+            // start_offser >= start of parent and <= duration of parent - duration of item
+            // if parent is assigned we then need to get those details etc...
             parent_id : {
                         type : 'DependentSelect2', 
                         dependsOn : 'is_break', dependentValues : ['false'],

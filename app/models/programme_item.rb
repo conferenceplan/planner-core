@@ -8,6 +8,7 @@ class ProgrammeItem < ActiveRecord::Base
 
   themed
   
+  # default sort children?
   has_many   :children, :dependent => :destroy, :class_name => 'ProgrammeItem', foreign_key: "parent_id"
   belongs_to :parent,   :class_name => 'ProgrammeItem' 
   

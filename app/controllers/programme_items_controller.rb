@@ -203,6 +203,7 @@ class ProgrammeItemsController < PlannerController
     @page = params[:page] ? params[:page].to_i : 1
     page_to = params[:page_to]
 
+# TODO - change sort order
     sort_by = params[:sort] ? params[:sort] : 'title'
     sort_order = params[:order] ? params[:order] : 'asc'
     

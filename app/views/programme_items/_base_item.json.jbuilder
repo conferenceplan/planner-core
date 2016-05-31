@@ -22,6 +22,7 @@ json.role                   role if role
 json.other_participants     item.programme_item_assignments.collect{|a| (a.person != @person && ![PersonItemRole['Invisible'], PersonItemRole['Reserved']].include?(a.role)) ? a.person.getFullPublicationName : nil }.compact
 json.parent_id              item.parent_id
 json.is_break               item.is_break
+json.start_offset           item.start_offset
 
 json.parent_val do
     if item.parent
