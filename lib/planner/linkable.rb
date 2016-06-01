@@ -44,6 +44,11 @@ module Planner
       end
       @@config.linkedto_types.each do |linkedto_type|
         linkedto_type.linkable
+        linkedto_type.send(:define_method, 'before_links_destroy') do
+          if defined? self._before_links_destroy
+            _before_links_destroy
+          end
+        end
       end
     end
     
@@ -62,7 +67,7 @@ module Planner
       #
       #
       def linked(options = {})
-        has_many  :linked, :as => :linkedto, :dependent => :delete_all, :class_name => 'Link'
+        has_many  :linked, :as => :linkedto, :dependent => :destroy, :class_name => 'Link'
 
         Planner::Linkable.config.linkedto_types.each do |linkedto_type|
           has_many linkedto_type.name.demodulize.pluralize.underscore.to_sym, :through => :linked, :class_name => linkedto_type.name  do
@@ -80,6 +85,8 @@ module Planner
       #
       #
       def linkable(options = {})
+        before_destroy :before_links_destroy
+
         has_many  :links, :dependent => :destroy
 
         Planner::Linkable.config.linkable_types.each do |linkable_type|
