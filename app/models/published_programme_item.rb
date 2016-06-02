@@ -4,7 +4,7 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :format_id, :is_break
+                  :format_id, :is_break, :start_offset
 
   audited :allow_mass_assignment => true
 
