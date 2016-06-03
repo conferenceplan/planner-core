@@ -279,11 +279,17 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
-        if (this.options.extraClause || this.options.onlySurveyRespondents || this.options.include_children) {
+        if (this.options.extraClause || this.options.onlySurveyRespondents || this.options.include_children || this.options.tagQuery) {
             urlArgs += '?';
         }
         if (this.options.extraClause) {
             urlArgs += this.options.extraClause; 
+        }
+        if (this.options.tagQuery) {
+            if (urlArgs.length > 0) {
+                urlArgs += "&";
+            }
+            urlArgs += this.options.tagQuery; 
         }
 
         if (urlArgs.length > 0) {

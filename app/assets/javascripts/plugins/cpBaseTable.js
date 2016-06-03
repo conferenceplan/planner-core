@@ -34,7 +34,8 @@ $.widget( "cp.baseTable" , {
         translations        : {},
         extra_button        : false,
         extra_button_title  : "extra",
-        extra_modal_action  : function() {}
+        extra_modal_action  : function() {},
+        tagQuery            : ''
     },
 
     translate : function(str) {
@@ -407,21 +408,10 @@ $.widget( "cp.baseTable" , {
      * 
      */
     tagQuery : function(options) {
-        if (this.options.extraClause && (this.options.extraClause.length > 0)) {
-            this.options.extraClause += "&" + options.tagQuery;
-        } else {
-            this.options.extraClause = options.tagQuery;
-        }
+        this.options.tagQuery = options.tagQuery;
 
         if (!this.options.delayed) {
             var newUrl = this.createUrl();
-            
-            if (newUrl.indexOf("?") != -1) {
-                newUrl += "&";
-            } else {
-                newUrl += "?";
-            };
-            newUrl += options.tagQuery;
                 
             this.element.jqGrid('setGridParam', {
                 url: newUrl,
@@ -436,9 +426,17 @@ $.widget( "cp.baseTable" , {
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
-        if (this.options.extraClause) {
+        if (this.options.extraClause || this.options.tagQuery) {
             urlArgs += '?';
+        }
+        if (this.options.extraClause) {
             urlArgs += this.options.extraClause; 
+        }
+        if (this.options.tagQuery) {
+            if (urlArgs.length > 0) {
+                urlArgs += "&";
+            }
+            urlArgs += this.options.tagQuery; 
         }
         url += urlArgs;
         return url;
