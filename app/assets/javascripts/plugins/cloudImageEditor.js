@@ -97,7 +97,7 @@ Form.editors.CloudImage = Form.editors.Text.extend({
                     _this.setValue("image/upload/" + result[0].path + '#' + result[0].signature); // value
                     image_place.find('iframe').css("display","none");
                     $("#" + image_placement).html("");
-                    $("#" + image_placement).html("<img src='http://res.cloudinary.com/grenadine/image/upload/c_scale,w_100/"+ result[0].path + "'>");
+                    $("#" + image_placement).html("<img src='http://res.cloudinary.com/grenadine/image/upload/c_scale,h_150/"+ result[0].path + "'>");
                 } // TODO - report error to user if there is any ???
             }
         );
@@ -120,7 +120,7 @@ Form.editors.CloudImage = Form.editors.Text.extend({
             <div class="row">\
                 <div class="col-sm-12">\
                     <a href="#" id="upload_widget_opener">Upload image</a>\
-                    <div id="<%= field_name %>_preview" class="pull-right"></div>\
+                    <div id="<%= field_name %>_preview" class="image-upload-preview"></div>\
                 </div>\
             </div>\
             <div class="row">\
@@ -128,8 +128,10 @@ Form.editors.CloudImage = Form.editors.Text.extend({
                     <div id="<%= field_name %>_container"></div>\
                 </div>\
             </div>\
+            <div class="has-error"><p class="help-block" data-error></p></div>\
         </div>\
         ', null, Form.templateSettings),
 });
+
 
 })(Backbone.Form);

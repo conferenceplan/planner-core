@@ -50,6 +50,10 @@ ItemApp.ItemManagement = (function(Backbone){
             picture : { 
                 type : 'CloudImage', 
                 title : 'Image',
+                validators: [{
+                    type: 'required',
+                    message: '<%= I18n.t("you-have-not-uploaded-an-image") %>'   
+                }],
                 cl_args : {
                           client_allowed_formats: ["png","gif","jpeg","jpg"],
                           max_file_size: (4.5 * 1024 * 1024), // 4.5Mb

@@ -1648,10 +1648,18 @@ body.loading .ajax-loading-modal {
 
 /* coudinary upload button */ 
 
+.cloudinary-button {
+  float: left;
+  margin-right: 2em;
+}
 
-    div.upload_section {
-        margin-left: 10px;
-        margin-top: 10px;
-    }
+.image-upload-preview {
+  float: left;
+}
+
+div.upload_section {
+    margin-left: 10px;
+    margin-top: 10px;
+}
 
 
