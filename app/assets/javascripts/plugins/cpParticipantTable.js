@@ -502,11 +502,17 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
     createUrl : function () {
         var url = this.options.root_url + this.options.baseUrl + this.options.getGridData;
         var urlArgs = "";
-        if (this.options.extraClause || this.options.onlySurveyRespondents || this.options.includeMailings || this.options.includeMailHistory) {
+        if (this.options.extraClause || this.options.onlySurveyRespondents || this.options.includeMailings || this.options.includeMailHistory || this.options.tagQuery) {
             urlArgs += '?';
         }
         if (this.options.extraClause) {
             urlArgs += this.options.extraClause; 
+        }
+        if (this.options.tagQuery) {
+            if (urlArgs.length > 0) {
+                urlArgs += "&";
+            }
+            urlArgs += this.options.tagQuery; 
         }
         if (this.options.includeMailings) {
             if (urlArgs.length > 1) {
