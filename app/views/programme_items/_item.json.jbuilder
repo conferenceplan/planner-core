@@ -18,6 +18,7 @@ json.setup_type_id          item.setup_type_id
 json.setup_name             item.setup_type ? item.setup_type.name : "" 
 json.format_id              item.format_id if item.format
 json.format_name            item.format ? item.format.name : ""
+json.start_offset           item.start_offset
 
 json.is_published           item.published ? true : false
 json.is_break               item.is_break

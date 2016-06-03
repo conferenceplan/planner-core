@@ -14,7 +14,7 @@ class PostalAddress < ActiveRecord::Base
   after_save :check_default
   before_save :state_and_country_from_code
 
-  after_validation :geocode, if: ->(obj){ (obj.full_street_address.length > 0) and obj.changed? }
+  after_validation :geocode, if: ->(obj){ (obj.full_street_address.length > 0) and obj.changed? and can_geocode_address }
   
   def get_latlong
     if latitude == nil && longitude == nil && full_street_address.length > 0
@@ -23,6 +23,18 @@ class PostalAddress < ActiveRecord::Base
     end
     
     {lat: latitude, lng: longitude}
+  end
+  
+  def can_geocode_address
+    valid = false
+    if line1
+      valid = line1.length > 0
+    end
+    valid = postcode != nil if valid
+    if postcode
+      valid = postcode.length > 0
+    end
+    valid
   end
   
   def full_street_address
