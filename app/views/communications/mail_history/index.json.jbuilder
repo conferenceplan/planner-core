@@ -9,7 +9,7 @@ json.rows @mail_history do |history|
     json.date_sent          history.date_sent #.strftime('%e %b %Y, %H:%M')
     
     json.testrun            history.testrun ? "Y" : "N"
-    json.content            history.content
+    json.content            history.content.lines.collect{|l| l.unpack("M")[0]}.join
     json.subject            history.subject
 
     json.person do
