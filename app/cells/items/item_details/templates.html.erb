@@ -160,7 +160,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="" style="margin-bottom: 0;"> <!-- used to be a form-group style here, not sure if it's required for the form, or if it was just for styling -->
+                <%-
+                # Has to be a form group do the dependent editor to work
+                %>
+                <div class="form-group" style="margin-bottom: 0;"> 
                     <label class="col-sm-3 control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>
                     <div class="col-sm-4">
                         <div data-editors="start_time"></div>
@@ -169,8 +172,10 @@
                         </div>
                     </div>
                 </div>
-                
-                <!--<div class="form-group" style="margin-bottom: 0;">-->
+                <%-
+                # Has to be a form group do the dependent editor to work
+                %>
+                <div class="form-group" style="margin-bottom: 0;">
                     <label class="col-sm-3 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
                     <div class="col-sm-2">
                         <span data-editor>
@@ -180,8 +185,7 @@
                             </div>
                         </span>
                     </div>
-                <!--</div>-->
-                
+                </div>                
             </div>
             <div class="row">
                 <div class="form-group">
