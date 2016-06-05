@@ -477,7 +477,7 @@ class PublishJob
             
             # find the index of the person only if the role and sort order are also different
             idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && ((a.role != srcAssignment.role) || (a.sort_order != srcAssignment.sort_order))}
-            if idx != nil
+            if idx != nil && !dest.published_programme_item_assignments[idx].destroyed?
               if (srcAssignment.role == PersonItemRole['Reserved']) || (srcAssignment.role == PersonItemRole['Invisible'])
                 # If the role is changed to reserved or invisible then they should be removed...
                 dest.published_programme_item_assignments[idx].destroy

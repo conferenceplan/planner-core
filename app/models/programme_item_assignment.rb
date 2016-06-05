@@ -1,6 +1,6 @@
 class ProgrammeItemAssignment < ActiveRecord::Base  
   attr_accessible :lock_version, :person, :person_id, :role, :role_id, :programme_item_id, :sort_order,
-                  :id, :sort_order_position, :role_description
+                  :id, :sort_order_position, :description
 
   before_validation :check_role_description
 
@@ -22,7 +22,7 @@ class ProgrammeItemAssignment < ActiveRecord::Base
     if role_id == PersonItemRole['Moderator'].id
       role_desc = UserInterfaceSetting.first :conditions => {:key => 'moderator_role'}
       if role_desc
-        self.role_description = role_desc._value
+        self.description = role_desc._value
       end
     end
   end

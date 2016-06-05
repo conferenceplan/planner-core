@@ -2,7 +2,7 @@
 #
 #
 class PublishedProgrammeItemAssignment < ActiveRecord::Base
-  attr_accessible :lock_version, :person, :role, :published_programme_item_id, :person_name, :sort_order, :role_description
+  attr_accessible :lock_version, :person, :role, :published_programme_item_id, :person_name, :sort_order, :description
   
   audited :allow_mass_assignment => true
 
