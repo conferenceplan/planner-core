@@ -3,7 +3,7 @@ json.id                     assignment.id
 json.lock_version           assignment.lock_version
 
 json.role_id                assignment.role_id
-json.description            assignment.description
+json.role_description       assignment.role_description
 json.person_id              assignment.person_id
 json.programme_item_id      assignment.programme_item_id
 json.sort_order             assignment.sort_order
