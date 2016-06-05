@@ -9,11 +9,11 @@ json.format             item.format.name if item.format
 json.tags               item.base_tags.collect{|t| t.name} #tag_list_on('PrimaryArea') # TODO - do we jut want the PrimaryArea or make this configrable
 json.desc               item.precis
 json.mins               item.duration
+json.date               item.start_time.strftime('%Y-%m-%d')
+json.time               item.start_time.strftime('%H:%M')
+json.datetime           item.start_time.start
 if item.published_room_item_assignment
     json.day            item.published_room_item_assignment.day
-    json.date           item.published_time_slot.start.strftime('%Y-%m-%d')
-    json.time           item.published_time_slot.start.strftime('%H:%M')
-    json.datetime       item.published_time_slot.start
 
     loc = [item.published_room_item_assignment.published_room.name]
     loc = loc << item.published_room_item_assignment.published_room.published_venue.name if !@singleVenue

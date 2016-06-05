@@ -49,5 +49,31 @@ class PublishedProgrammeItem < ActiveRecord::Base
     end
     assignments
   end
+
+  def duration
+    _duration = read_attribute(:duration)
+    _duration = self.parent.duration if self.parent && (_duration == nil || _duration == 0)
+    _duration
+  end
+
+  def start_time
+    if self.parent
+      _start_time = self.parent.published_time_slot.start
+      _start_time = self.parent.published_time_slot.start + self.start_offset.minutes if self.start_offset
+    else
+      _start_time = self.published_time_slot.start
+    end
+    _start_time
+  end
+  
+  def end_time
+    if self.parent
+      _end_time = self.parent.published_time_slot.end
+      _end_time = self.parent.published_time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset
+    else
+      _end_time = self.published_time_slot.end
+    end
+    _end_time
+  end
   
 end

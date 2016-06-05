@@ -9,7 +9,7 @@ xml.badge_labels do
                 each do |assignment|
                     if @allowed_roles.include? assignment.role
                         xml.item do
-                            xml.role assignment.role.name if assignment.role
+                            xml.role (assignment.description.blank? ? assignment.role.name : assignment.description) if assignment.role
                             xml.title assignment.programmeItem.short_title.blank? ? assignment.programmeItem.title : assignment.programmeItem.short_title
                             xml.format assignment.programmeItem.format ? assignment.programmeItem.format.name : ''
                             if assignment.programmeItem.parent
