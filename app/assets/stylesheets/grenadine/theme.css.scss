@@ -1662,4 +1662,8 @@ div.upload_section {
     margin-top: 10px;
 }
 
-
+@media all and (min-width: 992px) {
+    #start-day-and-time-form-group {
+        margin-bottom: -50px;
+    }
+} 
