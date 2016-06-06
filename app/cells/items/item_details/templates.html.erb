@@ -149,7 +149,7 @@
             # So we need a way to make form groups line up without screwing up the rest of the display
             %>
             <div class="row">
-                <div class="form-group" style="margin-bottom: 0; ">
+                <div class="form-group" id="start-offset-form-group">
                     <label class="col-sm-3 control-label">
                        <%= t  "item-start-offset" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-offset" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-offset-help" %>'></i>
                     </label>
@@ -175,7 +175,7 @@
                 <%-
                 # Has to be a form group do the dependent editor to work
                 %>
-                <div class="form-group" style="margin-bottom: 0; ">
+                <div class="form-group" style="margin-bottom: 0;">
                     <label class="col-sm-3 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
                     <div class="col-sm-2">
                         <span data-editor>
