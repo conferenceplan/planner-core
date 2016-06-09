@@ -9,7 +9,12 @@ class PublishedProgrammeItem < ActiveRecord::Base
   audited :allow_mass_assignment => true
 
   # default sort children
-  has_many   :children, :dependent => :destroy, :class_name => 'PublishedProgrammeItem', foreign_key: "parent_id"
+  has_many   :children, :dependent => :destroy, :class_name => 'PublishedProgrammeItem', foreign_key: "parent_id" do
+    def ordered_by_offset
+      order("start_offset asc, title asc")
+    end
+  end
+  
   belongs_to :parent,   :class_name => 'PublishedProgrammeItem' 
 
   has_many  :published_programme_item_assignments, :dependent => :destroy do #, :class_name => 'Published::ProgrammeItemAssignment'
