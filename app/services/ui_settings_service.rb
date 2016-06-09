@@ -7,8 +7,11 @@ module UISettingsService
   def self.getLanguages
 
     setting = UserInterfaceSetting.first :conditions => {:key => 'languages'}
-    setting.value
-
+    if setting
+      setting.value
+    else
+      ['en','fr']
+    end
   end
 
   def self.setLanguages(value)
