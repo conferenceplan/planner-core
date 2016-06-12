@@ -317,6 +317,7 @@ Rails.application.routes.draw do
   match 'program/rooms.:format', :controller => 'program', :action => 'rooms', :method => 'get'
   match 'program/participants.:format', :controller => 'program', :action => 'participants', :method => 'get'
   match 'program/updates.:format', :controller => 'program', :action => 'updates', :method => 'get'
+  match 'program/theme_names.:format', :controller => 'program', :action => 'theme_names', :method => 'get', :defaults => { :format => 'json' }
   match 'program/confirmed_participants.:format', :controller => 'program', :action => 'confirmed_participants', :method => 'get'
   resources :program
 

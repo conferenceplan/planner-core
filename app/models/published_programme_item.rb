@@ -4,11 +4,17 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :format_id, :is_break
+                  :format_id, :is_break, :start_offset
 
   audited :allow_mass_assignment => true
 
-  has_many   :children, :dependent => :destroy, :class_name => 'PublishedProgrammeItem', foreign_key: "parent_id"
+  # default sort children
+  has_many   :children, :dependent => :destroy, :class_name => 'PublishedProgrammeItem', foreign_key: "parent_id" do
+    def ordered_by_offset
+      order("start_offset asc, title asc")
+    end
+  end
+  
   belongs_to :parent,   :class_name => 'PublishedProgrammeItem' 
 
   has_many  :published_programme_item_assignments, :dependent => :destroy do #, :class_name => 'Published::ProgrammeItemAssignment'
@@ -47,6 +53,32 @@ class PublishedProgrammeItem < ActiveRecord::Base
       assignments.concat published_programme_item_assignments.role(role)
     end
     assignments
+  end
+
+  def duration
+    _duration = read_attribute(:duration)
+    _duration = self.parent.duration if self.parent && (_duration == nil || _duration == 0)
+    _duration
+  end
+
+  def start_time
+    if self.parent
+      _start_time = self.parent.published_time_slot.start
+      _start_time = self.parent.published_time_slot.start + self.start_offset.minutes if self.start_offset
+    else
+      _start_time = self.published_time_slot.start
+    end
+    _start_time
+  end
+  
+  def end_time
+    if self.parent
+      _end_time = self.parent.published_time_slot.end
+      _end_time = self.parent.published_time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset
+    else
+      _end_time = self.published_time_slot.end
+    end
+    _end_time
   end
   
 end

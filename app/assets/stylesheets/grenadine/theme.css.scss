@@ -682,7 +682,7 @@ input[type="checkbox"] {
     min-height: 100px;
 }
 #report-panel-body ul {
-    margin-left: 10px;
+    margin-left: 0px;
     padding-left: 0px;
     list-style-type: none;
     
@@ -1648,10 +1648,26 @@ body.loading .ajax-loading-modal {
 
 /* coudinary upload button */ 
 
+.cloudinary-button {
+  float: left;
+  margin-right: 2em;
+}
 
-    div.upload_section {
-        margin-left: 10px;
-        margin-top: 10px;
+.image-upload-preview {
+  float: left;
+}
+
+div.upload_section {
+    margin-left: 10px;
+    margin-top: 10px;
+}
+
+@media all and (min-width: 992px) {
+    #start-day-and-time-form-group {
+        margin-bottom: -50px;
     }
 
-
+    #start-offset-form-group {
+        margin-bottom: -50px;
+    }
+} 

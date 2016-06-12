@@ -70,6 +70,10 @@ class ProgramController < ApplicationController
 
   end
   
+  def theme_names
+    @theme_names = ThemeName.joins(:themes).where({themed_type: "PublishedProgrammeItem"})
+  end
+  
   #
   #
   #

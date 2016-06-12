@@ -136,9 +136,13 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     BioPicture = Backbone.Model.extend({
         schema : {
             bio_picture : { type : 'CloudImage', 
-                        title : '<%= (I18n.t "bio-image").html_safe %>', 
-                        help: '<%= (I18n.t "bio-image-upload-help").html_safe %>', 
-                        help_placement: 'bottom' ,
+                title : '<%= (I18n.t "bio-image").html_safe %>', 
+                help: '<%= (I18n.t "bio-image-upload-help").html_safe %>', 
+                help_placement: 'bottom' ,
+                validators: [{
+                    type: 'required',
+                    message: '<%= I18n.t("you-have-not-uploaded-an-image") %>'   
+                }],
                 cl_args : {
                           client_allowed_formats: ["png","gif","jpeg","jpg"],
                           max_file_size: (3.5 * 1024 * 1024), // 3.5Mb

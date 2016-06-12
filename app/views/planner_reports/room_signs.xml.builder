@@ -22,7 +22,7 @@ xml.room_signs do
                                 assignment.published_programme_item.published_programme_item_assignments.collect {|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.each do |p|
                                     xml.participant do
                                         xml.name p.person.getFullPublicationName
-                                        xml.role p.role.name
+                                        xml.role p.description.blank? ? p.role.name : p.description
                                     end
                                 end
                             end
@@ -36,7 +36,7 @@ xml.room_signs do
                                                 child.published_programme_item_assignments.collect {|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.each do |p|
                                                     xml.participant do
                                                         xml.name p.person.getFullPublicationName
-                                                        xml.role p.role.name
+                                                        xml.role p.description.blank? ? p.role.name : p.description
                                                     end
                                                 end
                                             end

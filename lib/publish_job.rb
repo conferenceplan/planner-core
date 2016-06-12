@@ -460,29 +460,33 @@ class PublishJob
   def updateAssignments(src, dest)
     if src.programme_item_assignments
       src.programme_item_assignments.each do |srcAssignment|
-        # add the person only if the destination does not have that person
-        if (dest.people == nil) || (dest.people.index(srcAssignment.person) == nil)
-          # check their role for reserved, if reserved then we do not want that person published
-          if (srcAssignment.role != PersonItemRole['Reserved']  && srcAssignment.role != PersonItemRole['Invisible'] )
-            assignment = dest.published_programme_item_assignments.new(:person => srcAssignment.person, 
-                                    :role => srcAssignment.role, 
-                                    :sort_order => srcAssignment.sort_order,
-                                    :person_name => srcAssignment.person.getFullPublicationName)
-            assignment.save
-          end
-        else # the destination has the person, but their role may have changed
-          # TODO - if the person is assigned twice we need to deal with it correctly... i.e. participant and reserved
-          
-          # find the index of the person only if the role and sort order are also different
-          idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && ((a.role != srcAssignment.role) || (a.sort_order != srcAssignment.sort_order))}
-          if idx != nil
-            if (srcAssignment.role == PersonItemRole['Reserved']) || (srcAssignment.role == PersonItemRole['Invisible'])
-              # If the role is changed to reserved or invisible then they should be removed...
-              dest.published_programme_item_assignments[idx].destroy
-            else  
-              dest.published_programme_item_assignments[idx].role = srcAssignment.role
-              dest.published_programme_item_assignments[idx].sort_order = srcAssignment.sort_order
-              dest.published_programme_item_assignments[idx].save
+        if !srcAssignment.destroyed?
+          # add the person only if the destination does not have that person
+          if (dest.people == nil) || (dest.people.index(srcAssignment.person) == nil)
+            # check their role for reserved, if reserved then we do not want that person published
+            if (srcAssignment.role != PersonItemRole['Reserved']  && srcAssignment.role != PersonItemRole['Invisible'] )
+              assignment = dest.published_programme_item_assignments.new(:person => srcAssignment.person, 
+                                      :role => srcAssignment.role, 
+                                      :sort_order => srcAssignment.sort_order,
+                                      :description => srcAssignment.description,
+                                      :person_name => srcAssignment.person.getFullPublicationName)
+              assignment.save
+            end
+          else # the destination has the person, but their role may have changed
+            # TODO - if the person is assigned twice we need to deal with it correctly... i.e. participant and reserved
+            
+            # find the index of the person only if the role and sort order are also different
+            idx = dest.published_programme_item_assignments.index{ |a| (a.person == srcAssignment.person) && ((a.role != srcAssignment.role) || (a.sort_order != srcAssignment.sort_order))}
+            if idx != nil && !dest.published_programme_item_assignments[idx].destroyed?
+              if (srcAssignment.role == PersonItemRole['Reserved']) || (srcAssignment.role == PersonItemRole['Invisible'])
+                # If the role is changed to reserved or invisible then they should be removed...
+                dest.published_programme_item_assignments[idx].destroy
+              else  
+                dest.published_programme_item_assignments[idx].role = srcAssignment.role
+                dest.published_programme_item_assignments[idx].description = srcAssignment.description
+                dest.published_programme_item_assignments[idx].sort_order = srcAssignment.sort_order
+                dest.published_programme_item_assignments[idx].save
+              end
             end
           end
         end

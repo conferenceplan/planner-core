@@ -50,6 +50,10 @@ ItemApp.ItemManagement = (function(Backbone){
             picture : { 
                 type : 'CloudImage', 
                 title : 'Image',
+                validators: [{
+                    type: 'required',
+                    message: '<%= I18n.t("you-have-not-uploaded-an-image") %>'   
+                }],
                 cl_args : {
                           client_allowed_formats: ["png","gif","jpeg","jpg"],
                           max_file_size: (4.5 * 1024 * 1024), // 4.5Mb
@@ -145,10 +149,11 @@ ItemApp.ItemManagement = (function(Backbone){
                     }
                 ]
              },
-            start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
+            start_time : { type : 'DependentDatetime', title : '<%= t "item-start-time" %>',
                 editorClass : 'item-form-element',
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                 defaultDate: "<%= Time.zone.parse((@start_date.start_date +  + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                dependsOn : 'parent_id', dependentValues : ['false'],
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : 5,
@@ -176,6 +181,22 @@ ItemApp.ItemManagement = (function(Backbone){
                         };
                     },
                 ]
+            },
+            <%-
+            # TODO - start_offset, need to constrain based on the startime and duration of the parent
+            # start_offser >= start of parent and <= duration of parent - duration of item
+            # if parent is assigned we then need to get those details etc...
+            %>
+            start_offset : {
+                        type : 'DependentNumber',
+                        title : '<%= t "item-start-offset" %>',
+                        help: '<%= t "item-start-offset-help" %>',
+                        dependsOn : 'parent_id', dependentValues : ['not_null'],
+                        validators: [
+                            function check_within_parent(value, formValues) {
+                                
+                            }
+                        ]
             },
             parent_id : {
                         type : 'DependentSelect2', 

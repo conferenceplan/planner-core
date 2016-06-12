@@ -142,8 +142,28 @@
             <div class="row item-section-title">
                 <h3><%= t 'scheduling' %></h3>
             </div>
+            <%-
+            # These need to be form groups round each label and edit field because the hide dependant on values hides the form group
+            # if we combine multiple edit fields in one form group then they both get hidden
+            # but we need to hide the time when it is a sub-item but keep the duration
+            # So we need a way to make form groups line up without screwing up the rest of the display
+            %>
             <div class="row">
-                <div class="form-group" style="margin-bottom: 0;">
+                <div class="form-group" id="start-offset-form-group">
+                    <label class="col-sm-3 control-label">
+                       <%= t  "item-start-offset" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-offset" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-offset-help" %>'></i>
+                    </label>
+                    <div class="col-sm-4">
+                        <div data-editors="start_offset"></div>
+                        <div class="has-error">
+                            <p class="help-block" id='start-time-error' data-error></p>
+                        </div>
+                    </div>
+                </div>
+                <%-
+                # Has to be a form group do the dependent editor to work
+                %>
+                <div class="form-group" id="start-day-and-time-form-group"> 
                     <label class="col-sm-3 control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>
                     <div class="col-sm-4">
                         <div data-editors="start_time"></div>
@@ -151,6 +171,11 @@
                             <p class="help-block" id='start-time-error' data-error></p>
                         </div>
                     </div>
+                </div>
+                <%-
+                # Has to be a form group do the dependent editor to work
+                %>
+                <div class="form-group" style="margin-bottom: 0;">
                     <label class="col-sm-3 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
                     <div class="col-sm-2">
                         <span data-editor>
@@ -160,7 +185,7 @@
                             </div>
                         </span>
                     </div>
-                </div>
+                </div>                
             </div>
             <div class="row">
                 <div class="form-group">

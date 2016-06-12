@@ -30,7 +30,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                     str += "\n"
 
                     str += (assignment.programmeItem.format ? assignment.programmeItem.format.name + ', ' : '')
-                    str += ' ' + assignment.role.name + "\n"
+                    str += ' ' + (assignment.description.blank? ? assignment.role.name : assignment.description) + "\n"
                     
                     # Add co-participants
                     str += '<i>'
@@ -41,7 +41,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                         end
                         first_person = false
                         str += p.person.getFullPublicationName 
-                        str += '(' + p.role.name[0] + ')' if p.role == PersonItemRole['Moderator']
+                        str += '(' + (p.description.blank? ? p.role.name : p.description) + ')' if p.role == PersonItemRole['Moderator']
                     end
                     str += '</i>'
     

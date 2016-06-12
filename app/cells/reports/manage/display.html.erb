@@ -10,8 +10,8 @@
         <ul class="nav nav-tabs" id="report-tabs">
             <li class="active"><a href="#people-reports-tab" data-toggle="tab"><%= t 'people-reports' %></a></li>
             <li><a href="#item-reports-tab" data-toggle="tab"><%= t 'item-reports' %></a></li>
-            <li><a href="#capacity-reports-tab" data-toggle="tab"><%= t 'capacity' %></a></li>
-            <li><a href="#scheduling-reports-tab" data-toggle="tab"><%= t 'scheduling-reports' %></a></li>
+            <!--<li><a href="#capacity-reports-tab" data-toggle="tab"><%= t 'capacity' %></a></li>-->
+            <!--<li><a href="#scheduling-reports-tab" data-toggle="tab"><%= t 'scheduling-reports' %></a></li>-->
             <% @extra_reports_menu.each do |extra| %>
                 <%= render extra %>
             <% end %>
@@ -21,8 +21,11 @@
             <div role="tabpanel" class="tab-pane active" id="people-reports-tab">
               <ul>
                 <li>
-                    <a href="#panelists_with_panels"><%= t "report-participants-with-items" %></a> <!-- TODO: CHANGE THE NAME -->
+                    <a href="#panelists_with_panels"><%= t "report-participants-with-items" %></a>
                 </li>
+                <li>
+                    <a href="#people_without_items"><%= t "report-people-without-items" %></a>
+                </li>     
                 <li>
                     <a href="#edited_bios"><%= t "reports-participant-bios" %></a>
                 </li>
@@ -30,61 +33,60 @@
                     <a href="#panelists_without_bios"><%= t "report-participants-with-no-bios" %></a> 
                 </li>
                 <li>
-                    <a href="#people_without_items"><%= t "report-people-without-items" %></a>
-                </li>                
-                <li>
                     <a href="#people_by_tags"><%= t "report-people-by-tags" %></a>
                 </li>  
+                <li>
+                    <a href="#tags_by_context"><%= t "report-tags-by-context" %></a>
+                </li>
+                <li>
+                    <a href="#people_item_allocation"><%= t "report-people-item-allocation" %></a>
+                </li>  
+                <li>
+                    <a href="#people_with_too_many_items"><%= t "report-people-overused" %></a>
+                    <i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "report-people-overused" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content="<%= (t "report-people-overused-hint").html_safe %>"></i>
+                </li>
               </ul>
             </div>
             <div role="tabpanel" class="tab-pane" id="item-reports-tab">
               <ul>
                 <li>
-                    <a href="#item_word_counts"><%= t "reports-item-word-counts" %></a>
+                    <a href="#panels_by_timeslot"><%= t "reports-items-by-time-slot" %></a>
                 </li>
                 <li>
-                    <a href="#tags_by_context"><%= t "report-tags-by-context" %></a>
+                    <a href="#panels_by_room"><%= t "reports-items-by-room" %></a>
+                </li>
+                <li>
+                    <a href="#panels_with_panelists"><%= t "report-items-with-participants" %></a>
+                </li> 
+                <li>
+                    <a href="#panels_with_one_person"><%= t "report-items-with-one-person" %></a>
+                </li>                 
+                <li>
+                    <a href="#panels_with_no_moderator"><%= t "report-items-without-moderator" %></a>
                 </li>
                 <li>
                     <a href="#items_with_no_tags"><%= t "items-without-tags" %></a>
                 </li>
-              </ul>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="capacity-reports-tab">
-              <ul>
                 <li>
                     <a href="#capacity_report"><%= t "reports-items-over-capacity" %></a>
                 </li>
                 <li>
-                    <a href="#people_item_allocation"><%= t "report-people-item-allocation" %></a>
-                </li>                
+                    <a href="#item_word_counts"><%= t "reports-item-word-counts" %></a>
+                </li>
+                <li>
+                    <a href="#scheduling_conflicts"><%= t "report-scheduling-conflicts" %></a>
+                </li>
+
+ 
               </ul>
             </div>
+            <!--
             <div role="tabpanel" class="tab-pane" id="scheduling-reports-tab">
               <ul>
-                    <li>
-                        <a href="#scheduling_conflicts"><%= t "report-scheduling-conflicts" %></a>
-                    </li>
-                    <li>
-                        <a href="#panels_by_timeslot"><%= t "reports-items-by-time-slot" %></a>
-                    </li>
-                    <li>
-                        <a href="#panels_by_room"><%= t "reports-items-by-room" %></a>
-                    </li>
-                    <li>
-                        <a href="#panels_with_no_moderator"><%= t "report-items-without-moderator" %></a>
-                    </li>
-                    <li>
-                        <a href="#panels_with_one_person"><%= t "report-items-with-one-person" %></a>
-                    </li>                 
-                    <li>
-                        <a href="#panels_with_panelists"><%= t "report-items-with-participants" %></a>
-                    </li> 
-                    <li>
-                        <a href="#people_with_too_many_items"><%= t "report-people-overused" %></a>
-                    </li>
+             
               </ul>
             </div>
+            -->
             <% @extra_reports_display.each do |extra| %>
                 <%= render extra %>
             <% end %>
