@@ -13,14 +13,18 @@ xml.badge_labels do
                                 xml.title assignment.programmeItem.short_title.blank? ? assignment.programmeItem.title : assignment.programmeItem.short_title
                                 xml.format assignment.programmeItem.format.name if assignment.programmeItem.format
                                 if assignment.programmeItem.time_slot
-                                    xml.room assignment.programmeItem.room.name
-                                    xml.venue assignment.programmeItem.room.venue.name
+                                    if assignment.programmeItem.room
+                                        xml.room assignment.programmeItem.room.name
+                                        xml.venue assignment.programmeItem.room.venue.name
+                                    end
                                     xml.day assignment.programmeItem.time_slot.start.strftime('%A')
                                     xml.time assignment.programmeItem.time_slot.start.strftime('%H:%M')
                                     xml.date assignment.programmeItem.time_slot.start.strftime('%y-%m-%d')
                                 else
-                                    xml.room assignment.programmeItem.parent.room.name
-                                    xml.venue assignment.programmeItem.parent.room.venue.name
+                                    if assignment.programmeItem.parent.room
+                                        xml.room assignment.programmeItem.parent.room.name
+                                        xml.venue assignment.programmeItem.parent.room.venue.name
+                                    end
                                     xml.day assignment.programmeItem.parent.time_slot.start.strftime('%A')
                                     xml.time assignment.programmeItem.parent.time_slot.start.strftime('%H:%M')
                                     xml.date assignment.programmeItem.parent.time_slot.start.strftime('%y-%m-%d')

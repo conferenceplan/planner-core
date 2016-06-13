@@ -49,10 +49,10 @@ prawn_document(:page_size => @label_dimensions.page_size,
                             labels[l] += " <b>" + items_to_print[p].programmeItem.parent.time_slot.start.strftime(@time_format) + "</b>"
                         end
                         labels[l] +=  " : " 
-                        if items_to_print[p].programmeItem.time_slot
+                        if items_to_print[p].programmeItem.time_slot && items_to_print[p].programmeItem.room
                             labels[l] += items_to_print[p].programmeItem.room.name + " "
                         else
-                            labels[l] += items_to_print[p].programmeItem.parent.room.name + " "
+                            labels[l] += items_to_print[p].programmeItem.parent.room.name + " " if items_to_print[p].programmeItem.parent.room
                         end
                         labels[l] += (items_to_print[p].programmeItem.short_title.blank? ? items_to_print[p].programmeItem.title : items_to_print[p].programmeItem.short_title) + "\n"
                     end
