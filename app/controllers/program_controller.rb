@@ -71,7 +71,7 @@ class ProgramController < ApplicationController
   end
   
   def theme_names
-    @theme_names = ThemeName.joins(:themes).where({:'themes.themed_type' => "PublishedProgrammeItem"})
+    @theme_names = ThemeName.joins(:themes).where({:'themes.themed_type' => "PublishedProgrammeItem"}).uniq
   end
   
   #
