@@ -22,13 +22,15 @@ wb.add_worksheet(name: "Badge Labels") do |sheet|
             each do |ia|
                 if @allowed_roles.include? ia.role
                     if ia.programmeItem.time_slot
-                        row << ia.programmeItem.time_slot.start.strftime('%a %H:%M') + " : (" + 
-                        ia.programmeItem.room.name + ") " + 
-                        (ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)
+                        str = ia.programmeItem.time_slot.start.strftime('%a %H:%M') + " : "
+                        str += "(" + ia.programmeItem.room.name + ") " if ia.programmeItem.room
+                        str += (ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)
+                        row << str
                     else
-                        row << ia.programmeItem.parent.time_slot.start.strftime('%a %H:%M') + " : (" + 
-                        ia.programmeItem.parent.room.name + ") " +
-                        (ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)
+                        str = ia.programmeItem.parent.time_slot.start.strftime('%a %H:%M') + " : "
+                        str += "(" + ia.programmeItem.parent.room.name + ") " if ia.programmeItem.parent.room
+                        str += (ia.programmeItem.short_title.blank? ? ia.programmeItem.title : ia.programmeItem.short_title)
+                        row << str
                     end
                 end
         end
