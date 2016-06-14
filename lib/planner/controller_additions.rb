@@ -7,7 +7,7 @@ module Planner
                          :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo,
                          :strip_html_tags, :site_url, :site_url_no_long, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
-                         :start_date, :end_date, :conference_days
+                         :start_date, :end_date, :conference_days, :event_is_over?
     end
     
     def start_date
@@ -36,6 +36,10 @@ module Planner
 
     def public_days
       SiteConfig.first.public_number_of_days if SiteConfig.first
+    end
+    
+    def event_is_over?
+      ((start_date + (conference_days-1).day).to_date - Date.today).to_i < 0
     end
     
     def only_free_tickets_available?
