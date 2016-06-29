@@ -135,7 +135,7 @@ module MailService
     
     toInviteState = template.transiton_invite_status
     
-    if (mailing.testrun && config.test_email) || person.getDefaultEmail
+    if (mailing.testrun && config.test_email) || (person.getDefaultEmail && person.getDefaultEmail.email.present?)
       to = mailing.testrun ? config.test_email : person.getDefaultEmail.email
       cc = mailing.testrun ? nil : config.cc
       
