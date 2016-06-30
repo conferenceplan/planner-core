@@ -41,7 +41,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'jbuilder'
   s.add_dependency 'jpbuilder'
   s.add_dependency 'time_diff'
-  s.add_dependency 'turbolinks', '2.5.3'
   s.add_dependency 'will_paginate'
   s.add_dependency 'font_assets'
   s.add_dependency 'log4r'
