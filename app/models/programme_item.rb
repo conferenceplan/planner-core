@@ -48,6 +48,26 @@ class ProgrammeItem < ActiveRecord::Base
   end
 
   before_save :check_parent, :sanitize_for_break
+
+  def start_time
+    if self.parent && self.parent.time_slot
+      _start_time = self.parent.time_slot.start
+      _start_time = self.parent.time_slot.start + self.start_offset.minutes if self.start_offset
+    else
+      _start_time = self.time_slot ? self.time_slot.start : nil
+    end
+    _start_time
+  end
+  
+  def end_time
+    if self.parent && self.parent.time_slot
+      _end_time = self.parent.time_slot.end
+      _end_time = self.parent.time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset
+    else
+      _end_time = self.time_slot ? self.time_slot.end : nil
+    end
+    _end_time
+  end
   
   #
   # Update the item assignments for the given role
