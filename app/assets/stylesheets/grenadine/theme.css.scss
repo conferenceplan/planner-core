@@ -768,6 +768,26 @@ h5.venues {
     color: #ddd;
     font-style: italic;
 }
+a.minor-link {
+    color: #AAA;
+}
+/* @group Blink */
+
+.blink {
+    -webkit-animation: blink 2s ease-in-out infinite;
+    -moz-animation: blink 2s ease-in-out infinite;
+    -ms-animation: blink 2s ease-in-out infinite;
+    -o-animation: blink 2s ease-in-out infinite;
+    animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.35; }
+    100% { opacity: 1; }
+}
+
+/* @end */
 .medium-text {
     color: #bbb;
 }
