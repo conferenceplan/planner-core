@@ -71,7 +71,8 @@ class PublisherController < PlannerController
     @pending_count += @candidateRemovedItems.count if @candidateRemovedItems.present?
     @pending_count += @candidateRooms.count if @candidateRooms.present?
     @pending_count += @candidateVenues.count if @candidateVenues.present?
-    @pending_count += @peopleChanged.count if @peopleChanged.present?
+    @pending_count += @peopleChanged[:updatedPeople].count if @peopleChanged.present?
+    @pending_count += @peopleChanged[:removedPeople].count if @peopleChanged.present?
     @pending_count += @new_exhibitors.count if @new_exhibitors.present?
     @pending_count += @updated_exhibitors.count if @updated_exhibitors.present?
     @pending_count += @new_sponsors.count if @new_sponsors.present?
