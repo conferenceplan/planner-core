@@ -1,0 +1,20 @@
+<script id="pending-publish-indicator" type="text/javascript">
+  $(document).ready(function() {
+    $.ajax({
+      url : "<%= baseUri + '/publisher/pending_count.json' %>",
+
+      success : function(response) {
+        if (response.count > 0) {
+          var $nav = $("#right-menu-navbar");
+          var $indicator = $("#pending-changes-indicator");
+          if ($indicator.length > 0) {
+            $indicator.find("#pending-change-count").html(response.count);
+          } else {
+            $indicator = $('<li id="pending-changes-indicator"><a href="<%= baseUri %>/pages/publications_dash/online#program_publish_review" style="color: #337ab7;"><span id="pending-change-count" class="label label-pill label-primary">' + response.count +'</span>&nbsp;&nbsp;<%= t('changes-pending-publish') %></a></li>').fadeIn(1000);
+            $nav.prepend($indicator);
+          }
+        };
+      }
+    });
+  });
+</script>

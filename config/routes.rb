@@ -246,6 +246,7 @@ Rails.application.routes.draw do
   match 'publisher/publish', :controller => 'publisher', :action => 'publish', :method => 'post'
   match 'publisher/review', :controller => 'publisher', :action => 'review', :method => 'get'
   match 'publisher/publishPending', :controller => 'publisher', :action => 'publishPending', :method => 'get'
+  match "publisher/pending_count" => "publisher#pending_publish_count", defaults: {format: "json"}
   match 'publisher', :controller => 'publisher', :action => 'index', :method => 'get'
 
   match 'rooms/list.:format', :controller => 'rooms', :action => 'list' #, :defaults => { :format => 'json' }

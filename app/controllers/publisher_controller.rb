@@ -61,5 +61,25 @@ class PublisherController < PlannerController
       @peopleChanged = PublishedProgramItemsService.getUpdatedPeople lastPubDate.timestamp
     end
   end
+
+  def pending_publish_count
+    review
+
+    @pending_count = 0
+    @pending_count += @candidateNewItems.count if @candidateNewItems.present?
+    @pending_count += @candidateModifiedItems.count if @candidateModifiedItems.present?
+    @pending_count += @candidateRemovedItems.count if @candidateRemovedItems.present?
+    @pending_count += @candidateRooms.count if @candidateRooms.present?
+    @pending_count += @candidateVenues.count if @candidateVenues.present?
+    @pending_count += @peopleChanged.count if @peopleChanged.present?
+    @pending_count += @new_exhibitors.count if @new_exhibitors.present?
+    @pending_count += @updated_exhibitors.count if @updated_exhibitors.present?
+    @pending_count += @new_sponsors.count if @new_sponsors.present?
+    @pending_count += @updated_sponsors.count if @updated_sponsors.present?
+    @pending_count += @new_partners.count if @new_partners.present?
+    @pending_count += @updated_partners.count if @updated_partners.present?
+    @pending_count += @removed_companies.count if @removed_companies.present?
+
+  end
   
 end
