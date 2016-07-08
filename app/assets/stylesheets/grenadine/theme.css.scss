@@ -1718,3 +1718,9 @@ div.upload_section {
     50% { background-color: #eeeeee; }
     100% { background-color: #cccccc; }
 }
+
+.pending-changes-count-badge {
+  &:hover {
+    text-decoration: none;
+  }
+}
