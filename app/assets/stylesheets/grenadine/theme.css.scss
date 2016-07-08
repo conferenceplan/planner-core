@@ -936,6 +936,12 @@ h3:first-child {
     border-bottom: 1px #ccc solid;
     padding-bottom: 10px;
     margin-bottom: 10px;
+
+    &:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
 }
 
 /* For formatting backbone forms */
