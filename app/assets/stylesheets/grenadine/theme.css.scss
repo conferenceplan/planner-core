@@ -787,19 +787,7 @@ a.minor-link {
     100% { opacity: 1; }
 }
 
-.menu-blink {
-    -webkit-animation: blink2 2s ease-in-out infinite;
-    -moz-animation: blink2 2s ease-in-out infinite;
-    -ms-animation: blink2 2s ease-in-out infinite;
-    -o-animation: blink2 2s ease-in-out infinite;
-    animation: blink2 2s ease-in-out infinite;
-}
 
-@keyframes blink2 {
-    0% { color: #cccccc; }
-    50% { color: yellow; }
-    100% {color: #cccccc;}
-}
 
 /* @end */
 .medium-text {
@@ -1705,3 +1693,22 @@ div.upload_section {
         margin-bottom: -50px;
     }
 } 
+
+.navigation-badge {
+    background-color: #cccccc;
+    color: #777;
+}
+
+.navigation-badge-blink {
+    -webkit-animation: blink2 2s ease-in-out infinite;
+    -moz-animation: blink2 2s ease-in-out infinite;
+    -ms-animation: blink2 2s ease-in-out infinite;
+    -o-animation: blink2 2s ease-in-out infinite;
+    animation: blink2 2s ease-in-out infinite;
+}
+
+@keyframes blink2 {
+    0% { background-color: #cccccc; }
+    50% { background-color: #eeeeee; }
+    100% { background-color: #cccccc; }
+}

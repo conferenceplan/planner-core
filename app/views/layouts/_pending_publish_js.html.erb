@@ -5,7 +5,7 @@
 
       success : function(response) {
         if (response.count > 0) {
-          var $pendingBadge =  $('<span id="pending-change-count" class="badge" style="font-size: 10px;">' + response.count +'</span>').fadeIn(1000);
+          var $pendingBadge =  $('<span id="pending-change-count" class="badge navigation-badge navigation-badge-blink" style="font-size: 10px;">' + response.count +'</span>').fadeIn(1000);
           var $pendingLabel = $("<span class='label label-warning'>" + response.count + "&nbsp;&nbsp;<%= t('pending-updates') %></span>");
 
           $("#public-sites-icon").fadeOut(500).replaceWith($pendingBadge);
