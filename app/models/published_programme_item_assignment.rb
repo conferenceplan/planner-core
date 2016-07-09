@@ -8,7 +8,6 @@ class PublishedProgrammeItemAssignment < ActiveRecord::Base
 
   include RankedModel
   ranks :sort_order, :with_same => [:published_programme_item_id, :role_id]
-  default_scope order('published_programme_item_assignments.sort_order asc')
 
   belongs_to  :person
   belongs_to  :published_programme_item, :foreign_key => "published_programme_item_id"

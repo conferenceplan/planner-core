@@ -8,7 +8,7 @@ class ProgrammeItemAssignmentsController < PlannerController
     where_part[:programme_item_id]  = params[:item_id] if params[:item_id]
     where_part[:role_id]  = params[:role_id] if params[:role_id]
     
-    @programme_item_assignments = ProgrammeItemAssignment.where(where_part)
+    @programme_item_assignments = ProgrammeItemAssignment.rank(:sort_order).where(where_part)
   end
 
   #
@@ -35,7 +35,7 @@ class ProgrammeItemAssignmentsController < PlannerController
     item.update_assignments assignments #, role_id
     item.reload
 
-    @programme_item_assignments = item.programme_item_assignments.includes({:person => :pseudonym})
+    @programme_item_assignments = item.programme_item_assignments.rank(:sort_order).includes({:person => :pseudonym})
 
   rescue => ex
     render status: :bad_request, text: ex.message
