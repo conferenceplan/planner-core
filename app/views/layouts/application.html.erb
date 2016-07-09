@@ -75,6 +75,7 @@
         <%= render 'layouts/footer' %>
         <%= render partial: 'layouts/templates' %>
         <%= render_cell :category_management, :javascript %>
+        <%= render partial: "layouts/pending_publish_js" if ActsAsTenant.current_tenant.present? %>
         <div class="ajax-loading-modal"></div>
     </body>
 </html>

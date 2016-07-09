@@ -768,6 +768,28 @@ h5.venues {
     color: #ddd;
     font-style: italic;
 }
+a.minor-link {
+    color: #AAA;
+}
+/* @group Blink */
+
+.blink {
+    -webkit-animation: blink 2s ease-in-out infinite;
+    -moz-animation: blink 2s ease-in-out infinite;
+    -ms-animation: blink 2s ease-in-out infinite;
+    -o-animation: blink 2s ease-in-out infinite;
+    animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.50; }
+    100% { opacity: 1; }
+}
+
+
+
+/* @end */
 .medium-text {
     color: #bbb;
 }
@@ -914,6 +936,12 @@ h3:first-child {
     border-bottom: 1px #ccc solid;
     padding-bottom: 10px;
     margin-bottom: 10px;
+
+    &:last-of-type {
+      border-bottom: none;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
 }
 
 /* For formatting backbone forms */
@@ -1671,3 +1699,36 @@ div.upload_section {
         margin-bottom: -50px;
     }
 } 
+
+.navigation-badge {
+    background-color: #cccccc;
+    color: #777;
+}
+
+.navigation-badge-blink {
+    -webkit-animation: blink2 2s ease-in-out infinite;
+    -moz-animation: blink2 2s ease-in-out infinite;
+    -ms-animation: blink2 2s ease-in-out infinite;
+    -o-animation: blink2 2s ease-in-out infinite;
+    animation: blink2 2s ease-in-out infinite;
+}
+
+@keyframes blink2 {
+    0% { background-color: #cccccc; }
+    50% { background-color: #eeeeee; }
+    100% { background-color: #cccccc; }
+}
+
+.pending-changes-count-badge {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+i.publication-count-num {
+  font-style: normal;
+}
+
+
+
+

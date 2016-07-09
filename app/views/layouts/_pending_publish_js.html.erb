@@ -1,0 +1,62 @@
+<script id="pending-publish-indicator" type="text/javascript">
+  var PublishableChecker = {
+    init : function(interval_secs) {
+      var interval = interval_secs;
+      // If supplied interval is not an integer or is less than 30 secons, set it to 30 seconds
+      if (interval < 30 || !Number.isInteger(interval)) {
+        inverval = 30;
+      };
+
+      // Set value for checker to compare against. Most times there should be no publishable changes.
+      var lastPublishableItemCount = 0;
+
+      function checkForPublishableChanges() {
+        $.ajax({
+          url : "<%= baseUri + '/publisher/pending_count.json' %>",
+
+          success : function(response) {
+            var count = response.count;
+            if (count > 0) {
+              // Only act if the # of pushable changes is greater than 0
+              if (count != lastPublishableItemCount) {
+                // If current count is different than last count, act on it
+                if ($("#pending-change-count, .publication-countlabel").length > 0) {
+                  // If the elements for the checker are already present on the page, only update the counter
+                  $("#pending-change-count").html(count);
+                  $(".publication-count-num").html(count);
+
+                  lastPublishableItemCount = count;
+                } else {
+                  // If elements not present, add them (first-run on page load)
+                  var $pendingBadge =  $('<span id="pending-change-count" class="badge navigation-badge navigation-badge-blink" style="font-size: 10px;">' + count +'</span>').fadeIn(1000);
+                  var $pendingLabel = $("<span class='label label-warning publication-count-label'><i class='publication-count-num'>" + count + "</i>&nbsp;&nbsp;<%= t('pending-updates') %></span>");
+                  var $overviewLabel = $("<a class='pending-changes-count-badge' href='<%= baseUri %>/pages/publications_dash/online#program_publish_review'></a>").append($pendingLabel.clone()).fadeIn(1000);
+
+                  $("#public-sites-icon").fadeOut(500).replaceWith($pendingBadge);
+                  $("#publish-changes-nav-option").append("&nbsp;&nbsp;").append($pendingLabel);
+                  $("#overview-publish-changes-nav-item").append("&nbsp;&nbsp;").append($overviewLabel);
+
+                  lastPublishableItemCount = count;
+                };
+              };
+            };
+          }
+        });
+      };
+
+      checkForPublishableChanges(); //first-run
+
+      // Run checker every interval_secs seconds
+      setInterval(function() {
+        checkForPublishableChanges();
+      }, interval * 1000);
+
+    }
+  };
+  
+  $(document).ready(function() {
+    
+    PublishableChecker.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 30 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 30 %>); // If no env varible set, default to 30 second interval
+
+  });
+</script>
