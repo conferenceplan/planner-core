@@ -5,7 +5,7 @@ module Planner
       base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :baseUri_with_lang,
                          :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
                          :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo,
-                         :strip_html_tags, :site_url, :site_url_no_long, :only_free_tickets_available?,
+                         :strip_html_tags, :site_url, :site_url_no_lang, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
                          :start_date, :end_date, :conference_days, :event_is_over?
     end
@@ -65,7 +65,7 @@ module Planner
       ''
     end
 
-    def site_url_no_long
+    def site_url_no_lang
       ''
     end
 
