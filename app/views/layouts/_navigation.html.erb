@@ -12,6 +12,22 @@
     <div class="nav navbar-nav"><h2 class="conference-title"><%= SiteConfig.first ? SiteConfig.first.name : '' %></h2></div>
     <ul class="nav navbar-nav navbar-right" id="right-menu-navbar">
         <%= extra_navigation.html_safe %>
+        <% if settings_menu.size > 0 %>
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-cog" aria-hidden="true"></i>
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <% settings_menu.each do |item| %>
+                        <li><%= link_to (t item[:title]), item[:target] %></li>
+                    <% end %>
+                    <% if current_user %>
+                        <li><%= link_to (t "logout"), main_app.destroy_user_session_path, :method => :delete %></li>
+                    <% end %>
+                </ul>
+            </li>
+        <% end %>
         <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <%= t I18n.locale %>
@@ -25,21 +41,11 @@
                 <% end %>
             </ul>
         </li>
-        <% if settings_menu.size > 0 %>
-        <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <%= t 'settings' %>
-                <b class="caret"></b>
-            </a>
-            <ul class="dropdown-menu">
-                <% settings_menu.each do |item| %>
-                    <li><%= link_to (t item[:title]), item[:target] %></li>
-                <% end %>
-            </ul>
-        </li>
-        <% end %>
-        <% if current_user %>
-            <li><%= link_to (t "logout"), main_app.destroy_user_session_path, :method => :delete %></li>
+
+        <% if settings_menu.size < 1 %>
+            <% if current_user %>
+                <li><%= link_to (t "logout"), main_app.destroy_user_session_path, :method => :delete %></li>
+            <% end %>
         <% end %>
     </ul>			
 </div>
