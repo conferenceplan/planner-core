@@ -2,6 +2,7 @@ require "prawn/measurement_extensions"
 
 prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     render "font_setup", :pdf => pdf
+    fallback_fonts([planner_fallback_fonts])
     
     page_height = pdf.bounds.top_right[1]
     page_width = pdf.bounds.top_right[0]
@@ -41,7 +42,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     end
 
     pdf.repeat(:all) do
-        pdf.draw_text "Program", :at => [pdf.bounds.left, pdf.bounds.top + 10], :fallback_fonts => fallback_fonts
+        pdf.draw_text "Program", :at => [pdf.bounds.left, pdf.bounds.top + 10], :fallback_fonts => planner_fallback_fonts
     end
     
     pdf.number_pages "page <page> of <total>", {:at => [0 , 0], :width => 150, :align => :left, :start_count_at => 1}

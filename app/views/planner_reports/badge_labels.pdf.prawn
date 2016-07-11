@@ -73,7 +73,7 @@ prawn_document(:page_size => @label_dimensions.page_size,
                                 :height => pdf.bounds.height - bleed.in, # minus blead
                                 :overflow => :shrink_to_fit,
                                 :inline_format => true,
-                                :fallback_fonts => fallback_fonts
+                                :fallback_fonts => planner_fallback_fonts
             end
             if (y == (rows -1) && x == (cols -1))
                 i = 0
