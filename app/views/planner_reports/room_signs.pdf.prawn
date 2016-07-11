@@ -15,7 +15,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                 pdf.start_new_page if !first_page
                 first_page = false
                 current_day = assignment.day
-                pdf.text  '<b>' + room.name + ' - ' + room.published_venue.name + '<br>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.days).strftime('%A') + '</b>', :size => 16, :inline_format => true, :align => :center, :fallback_fonts => fallback_fonts
+                pdf.text  '<b>' + room.name + ' - ' + room.published_venue.name + '<br>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.days).strftime('%A') + '</b>', :size => 16, :inline_format => true, :align => :center, :fallback_fonts => planner_fallback_fonts
                 pdf.move_down 0.25.in
             end
 

@@ -1,15 +1,24 @@
 default: &default
   adapter: mysql2
   encoding: utf8
-  host: 127.0.0.1
+  reconnect: false
+  database: PlannerPrime
+  username: plannerdev
+  password: plannerdev
   pool: 5
-  username: root
-  password: 123456
-  socket: /var/run/mysqld/mysql.sock
+  socket: /tmp/mysql.sock
+
+#  adapter: mysql2
+#  encoding: utf8
+#  host: 127.0.0.1
+#  pool: 5
+#  username: root
+#  password: 123456
+#  socket: /var/run/mysqld/mysql.sock
 
 development:
   <<: *default
-  database: planner_development
+  # database: planner_development
 
 test:
   <<: *default

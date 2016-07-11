@@ -1,6 +1,6 @@
 kai = "#{Rails.root}/public/gkai00mp.ttf"
 
-def fallback_fonts
+def planner_fallback_fonts
   ["Open Sans", 'kai']
 end
 
