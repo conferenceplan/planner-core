@@ -28,7 +28,7 @@
                   lastPublishableItemCount = count;
                 } else {
                   // If elements not present, add them (first-run on page load)
-                  var $pendingBadge =  $('<span id="pending-change-count">&nbsp;&nbsp;<i class="fa fa-refresh" aria-hidden="true"></i> ' + count +'</span>').fadeIn(1000);
+                  var $pendingBadge =  $('<span id="pending-change-count">&nbsp;<i class="fa fa-refresh" aria-hidden="true"></i> ' + count +'</span>').fadeIn(1000);
                   var $pendingLabel = $("<span class='label label-warning publication-count-label'><i class='publication-count-num'>" + count + "</i>&nbsp;&nbsp;<%= t('pending-updates') %></span>");
                   var $overviewLabel = $("<a class='pending-changes-count-badge' href='<%= baseUri %>/pages/publications_dash/online#program_publish_review'></a>").append($pendingLabel.clone()).fadeIn(1000);
 
