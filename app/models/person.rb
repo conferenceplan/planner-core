@@ -459,4 +459,8 @@ class Person < ActiveRecord::Base
     end
   end
 
+  def is_speaker?
+    published_programme_items && published_programme_items.any?
+  end
+
 end
