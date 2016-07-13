@@ -7,6 +7,7 @@ class Link < ActiveRecord::Base
   
   def linkedto
     linkedto_type.constantize.find(linkedto_id)
+  rescue
   end
   
 end
