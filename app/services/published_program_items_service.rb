@@ -290,6 +290,17 @@ module PublishedProgramItemsService
     # person role changed
     
   end
+  
+  def self.countUpdatedPeople(pubDate)
+    count = 0
+    
+    count = Audited::Adapters::ActiveRecord::Audit.count :conditions => ["(audits.created_at >= ?) AND (audits.action != 'destroy') AND (audits.auditable_type in (?))", 
+        pubDate, ['PublishedProgrammeItemAssignment', 'Person', 'EditedBio', 'Pseudonym', 'PlannerDocs::Document']]
+      
+    count +=  BioImage.count :conditions => ["(updated_at >= ?)", pubDate]
+
+    count      
+  end
 
   # new people - PublishedProgrammeItemAssignment
   # updated people - PublishedProgrammeItemAssignment
@@ -326,7 +337,7 @@ module PublishedProgramItemsService
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'Pseudonym') AND (audits.action != 'destroy')", pubDate]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (Pseudonym.exists? a.auditable_id) ? Pseudonym.find(a.auditable_id).person_id : nil }.compact
 
-    # get the document updates
+    # get the document updates - TODO - fix remove document ref
     audits = Audited::Adapters::ActiveRecord::Audit.all :order => "audits.created_at asc",
       :conditions => ["(audits.created_at >= ?) AND (audits.auditable_type like 'PlannerDocs::Document') AND ((audits.action = 'update') OR (audits.action = 'create'))", pubDate]
     updateOrAdded = updateOrAdded.concat audits.collect {|a| (PlannerDocs::Document.exists? a.auditable_id) ? PlannerDocs::Document.find(a.auditable_id).people.collect{|i| i.id} : nil }.compact.flatten
