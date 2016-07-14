@@ -63,16 +63,22 @@ class PublisherController < PlannerController
   end
 
   def pending_publish_count
-    review
-
+    pubjob = PublishJob.new(false)
     @pending_count = 0
-    @pending_count += @candidateNewItems.count if @candidateNewItems.present?
-    @pending_count += @candidateModifiedItems.count if @candidateModifiedItems.present?
-    @pending_count += @candidateRemovedItems.count if @candidateRemovedItems.present?
-    @pending_count += @candidateRooms.count if @candidateRooms.present?
-    @pending_count += @candidateVenues.count if @candidateVenues.present?
-    @pending_count += @peopleChanged[:updatedPeople].count if @peopleChanged.present?
-    @pending_count += @peopleChanged[:removedPeople].count if @peopleChanged.present?
+    @pending_count += pubjob.getNewProgramItems().count
+    @pending_count += pubjob.getNewChildren().count
+    @pending_count += pubjob.getModifiedProgramItems().count
+    @pending_count += pubjob.getRemovedProgramItems().count
+    @pending_count += pubjob.getUnpublishedItems().count
+    @pending_count += pubjob.getRemovedSubItems().count
+ 
+    @pending_count += pubjob.getModifiedRooms().count
+    @pending_count += pubjob.getModifiedVenues().count
+ 
+    lastPubDate = PublicationDate.find :first, :order => 'id desc'
+    if lastPubDate
+      @pending_count += PublishedProgramItemsService.countUpdatedPeople lastPubDate.timestamp
+    end
   end
   
 end
