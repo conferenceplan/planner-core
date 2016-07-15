@@ -40,14 +40,15 @@
                 };
               };
             };
+            setTimeout(function() {
+              checkForPublishableChanges();
+            }, interval * 1000);
           }
         });
       };
 
-      checkForPublishableChanges(); //first-run
-
       // Run checker every interval_secs seconds
-      setInterval(function() {
+      setTimeout(function() {
         checkForPublishableChanges();
       }, interval * 1000);
 
