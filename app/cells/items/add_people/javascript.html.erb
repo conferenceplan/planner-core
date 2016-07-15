@@ -89,6 +89,8 @@ ItemApp.PeopleManagement = (function(Backbone){
                             person_id: parseInt(p.id),
                             person_name: get_pub_name(p)
                         });
+                        var new_posn = participants.size() + 1;
+                        assignment.set('sort_order_position', new_posn);
                     
                         participants.add(assignment);
 
