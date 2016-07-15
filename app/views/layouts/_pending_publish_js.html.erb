@@ -55,8 +55,8 @@
   };
   
   $(document).ready(function() {
-    
-    PublishableChecker.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 30 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 30 %>); // If no env varible set, default to 30 second interval
+    // Comment out until we use the poller 
+    // PublishableChecker.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 30 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 30 %>); // If no env varible set, default to 30 second interval
 
   });
 </script>

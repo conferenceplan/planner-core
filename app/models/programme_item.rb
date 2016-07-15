@@ -95,6 +95,7 @@ class ProgrammeItem < ActiveRecord::Base
     
     create_candidates.each do |c|
       assignment = programme_item_assignments.create({role_id: c.role_id, person_id: c.person_id})
+      assignment.sort_order_position = c.sort_order_position if c.sort_order_position
       assignment.save
     end
 
