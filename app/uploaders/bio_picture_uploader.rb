@@ -64,6 +64,10 @@ class BioPictureUploader < CarrierWave::Uploader::Base
     process :bioList
   end
   
+  version :square256 do
+    process :bioSquare256
+  end
+  
   version :detail do
     process :bioDetail
   end
@@ -86,6 +90,12 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   def standardImage
     width = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
     height = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
+    return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
+  end
+  
+  def bioSquare256
+    width = 256
+    height = 256
     return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
   end
   
