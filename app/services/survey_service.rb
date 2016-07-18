@@ -104,14 +104,10 @@ module SurveyService
   # Get all the people who said that they do not want to share their email with other participants
   #  
   def self.findPeopleWithDoNotShareEmail
-    
-    # Person.all :joins => {:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}},
-            # :conditions => ["survey_answers.answertype_id = ? AND survey_answers.answer = survey_responses.response", AnswerType['DoNotShareEmail'].id]
-            
     Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}}).
-            where(["survey_answers.answertype_id = ? AND survey_answers.id = survey_responses.response", AnswerType['DoNotShareEmail'].id]).
+            where(["survey_answers.answertype_id = ? AND survey_answers.id = survey_responses.survey_answer_id", AnswerType['DoNotShareEmail'].id]).
+            # where(["survey_answers.answertype_id = ?", AnswerType['DoNotShareEmail'].id]).
             where(self.constraints())
-
   end
 
   #
@@ -121,15 +117,10 @@ module SurveyService
     survey = Survey.where("surveys.alias" => survey_name).first
     respondent_detail = SurveyRespondentDetail.includes(:survey_responses).where('survey_responses.survey_id' => survey.id)
 
-    # Person.all  :include => {:survey_respondent => :survey_respondent_detail},
-                # :conditions => ["survey_respondent_details.id in (?)", respondent_detail],
-                # :order => 'people.last_name, people.first_name'
-    
     Person.where(["survey_respondent_details.id in (?)", respondent_detail]).
             include({:survey_respondent => :survey_respondent_detail}).
             where(self.constraints()).
             order('people.last_name, people.first_name')
-
   end
   
   #

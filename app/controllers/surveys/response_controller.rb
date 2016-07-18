@@ -56,14 +56,13 @@ class Surveys::ResponseController < ApplicationController
           # # also update the underlying person          
           updatePerson(@respondent, params[:survey_respondent_detail]) if @respondent
 
-          # TODO - we may need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
+          # we may need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
           # make sure that we have a name and email address
           if params[:survey_response]
             params[:survey_response].each do |res|
             # check the type of the response and if an array then go though them
               if res[1].respond_to?('each')
                 if res[1].is_a?(Hash)
-  
                   responses = respondentDetails.getResponsesForQuestion(@survey.id, res[0])
                   responses.each do |r|
                     originalResponses.delete(r) if originalResponses
@@ -81,7 +80,12 @@ class Surveys::ResponseController < ApplicationController
                     savePhoto(res[1], @survey, res[0], respondentDetails, (surveyQuestion.questionmapping == QuestionMapping['Photo']) )
                   else  
                     res[1].each do |r, v|
-                      response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => v, :survey_respondent_detail => respondentDetails
+                      response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], 
+                                                    :response => v, :survey_respondent_detail => respondentDetails
+                      answer = SurveyAnswer.find r
+                      if answer
+                        response.survey_answer_id = answer.id
+                      end
                       response.isbio = surveyQuestion.isbio
                       response.save!
                     end
@@ -368,7 +372,7 @@ class Surveys::ResponseController < ApplicationController
       response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, :response => responseText, :survey_respondent_detail => respondentDetails
     end
 
-    question =  response.survey_question
+    question =  surveyQuestion #response.survey_question
     if [:singlechoice, :multiplechoice, :selectionbox].include? question.question_type.to_sym
       answer = SurveyAnswer.find responseText
       if answer
