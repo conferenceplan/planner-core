@@ -303,7 +303,7 @@ class PlannerReportsController < PlannerController
         outfile = "bios_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
         output.push [
-          'Name', 'Company','Bio','Web Site','Twitter','Other Social Media','Photo URL','Facebook'
+          'Name', 'Company','Bio','Web Site','Twitter','Other Social Media','Photo URL','Facebook','LinkedIn'
         ]
 
         @editedBios.each do |e|
@@ -319,7 +319,8 @@ class PlannerReportsController < PlannerController
               e.twitterinfo ? e.twitterinfo : '',
               e.othersocialmedia ? e.othersocialmedia : '',
               photourl,
-              e.facebook ? e.facebook : ''
+              e.facebook ? e.facebook : '',
+              e.linkedin ? e.linkedin : ''
           ]
         end
         
