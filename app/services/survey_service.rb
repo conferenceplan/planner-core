@@ -4,6 +4,28 @@
 # NOTE: defined as a module so that we can not instantiate it.
 #
 module SurveyService
+  #
+  #
+  #
+  def self.clone_survey(src_survey)
+    dest = src_survey.dup
+    
+    # now go through the groups and copy that
+    dest.survey_groups = src_survey.survey_groups.map {|x| 
+        d = x.dup
+        d.survey_id = dest.id
+        d.survey_format = x.survey_format.dup
+        d.survey_questions = x.survey_questions.map{ |q|
+          q1 = q.dup
+          q1.survey_format = q.survey_format.dup
+          q1.survey_answers = q.survey_answers.map{|a| a.dup}
+          q1
+        }
+        d
+      }
+
+    dest
+  end
 
   #
   #
