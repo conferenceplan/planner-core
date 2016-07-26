@@ -9,4 +9,5 @@ if @editedBio
     json.photourl @editedBio.photourl
     json.twitterinfo @editedBio.twitterid
     json.website @editedBio.website_url
+    json.linkedin @editedBio.linkedin
 end

@@ -1,6 +1,8 @@
 class EditedBio < ActiveRecord::Base
-  attr_accessible :lock_version, :bio, :website, :twitterinfo, :othersocialmedia, :photourl, :facebook, :person_id
+  attr_accessible :lock_version, :bio, :website, :twitterinfo, :othersocialmedia, :photourl, :facebook, :person_id, :linkedin
   belongs_to  :person 
+
+# https://www.linkedin.com/in - for linkedin URL
 
   audited :associated_with => :person, :allow_mass_assignment => true
   
@@ -10,6 +12,10 @@ class EditedBio < ActiveRecord::Base
   
   def facebookid
     /[^\/|^@]+$/.match(facebook).to_s
+  end
+  
+  def linkedinid
+    /[^\/|^@]+$/.match(linkedin).to_s
   end
   
   def website_url

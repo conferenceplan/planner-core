@@ -200,6 +200,10 @@ class Person < ActiveRecord::Base
     edited_bio ? edited_bio.facebook : ""
   end
   
+  def linkedin
+    edited_bio ? edited_bio.linkedin : ""
+  end
+  
   def updatePhone(new_phone, phonetype)
     
     # first find the existing phone of the given type

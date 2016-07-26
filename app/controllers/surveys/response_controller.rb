@@ -40,7 +40,9 @@ class Surveys::ResponseController < ApplicationController
           else
             # save the details and add to the respondent, create the respondent details and link to the responses
             if p
-              respondentDetails = SurveyRespondentDetail.new(p)
+              # we need to see if we have some existing respondent details for this person.... and use that if so
+              respondentDetails = find_or_create_respondent_details(p) # SurveyRespondentDetail.new(p)
+              @respondent = respondentDetails.survey_respondent
             else  
               respondentDetails = SurveyRespondentDetail.new
             end
@@ -49,21 +51,39 @@ class Surveys::ResponseController < ApplicationController
               # and assign the details to the respondent
               @respondent.survey_respondent_detail = respondentDetails
               @respondent.save!
-              originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id) #.collect{|r| r.id}
+              originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id)
             end
           end
           
           # # also update the underlying person          
-          updatePerson(@respondent, params[:survey_respondent_detail]) if @respondent
+          if @respondent
+            updatePerson(@respondent, params[:survey_respondent_detail]) 
+          else
+             # associate the survey with a person by creatng a respondent...
+             # - find the person (possible match)
+             # - create the respondent
+             candidate = find_or_create_person(respondentDetails)
+             
+             # submitted_survey, :email_status_id, :person_id
+             if candidate
+               @respondent = nil # candidate.survey_respondent
+               if !@respondent
+                 @respondent = SurveyRespondent.create({
+                   person_id: candidate.id
+                 })
+                 @respondent.survey_respondent_detail = respondentDetails
+                 @respondent.save!
+               end
+             end
+          end
 
-          # TODO - we may need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
+          # we may need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
           # make sure that we have a name and email address
           if params[:survey_response]
             params[:survey_response].each do |res|
             # check the type of the response and if an array then go though them
               if res[1].respond_to?('each')
                 if res[1].is_a?(Hash)
-  
                   responses = respondentDetails.getResponsesForQuestion(@survey.id, res[0])
                   responses.each do |r|
                     originalResponses.delete(r) if originalResponses
@@ -81,7 +101,12 @@ class Surveys::ResponseController < ApplicationController
                     savePhoto(res[1], @survey, res[0], respondentDetails, (surveyQuestion.questionmapping == QuestionMapping['Photo']) )
                   else  
                     res[1].each do |r, v|
-                      response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], :response => v, :survey_respondent_detail => respondentDetails
+                      response = SurveyResponse.new :survey_id => @survey.id, :survey_question_id => res[0], 
+                                                    :response => v, :survey_respondent_detail => respondentDetails
+                      answer = SurveyAnswer.find r
+                      if answer
+                        response.survey_answer_id = answer.id
+                      end
                       response.isbio = surveyQuestion.isbio
                       response.save!
                     end
@@ -368,7 +393,7 @@ class Surveys::ResponseController < ApplicationController
       response = SurveyResponse.new :survey_id => survey.id, :survey_question_id => questionId, :response => responseText, :survey_respondent_detail => respondentDetails
     end
 
-    question =  response.survey_question
+    question =  surveyQuestion #response.survey_question
     if [:singlechoice, :multiplechoice, :selectionbox].include? question.question_type.to_sym
       answer = SurveyAnswer.find responseText
       if answer
@@ -657,6 +682,59 @@ class Surveys::ResponseController < ApplicationController
   end
 
   private
+  
+  def find_or_create_respondent_details(p)
+    respondent_detail = nil
+    
+    candidates = SurveyRespondentDetail.where(
+                    ["TRIM(last_name) = ? AND TRIM(first_name) like ? AND email = ?", 
+                      p[:last_name], p[:first_name], p[:email]]
+          )
+
+    if candidates.size > 0
+      candidates.each do |c|
+        if c.survey_respondent && c.survey_respondent.person
+          respondent_detail = c
+          break
+        end
+      end
+      respondent_detail = candidates[0] if !respondent_detail
+    else  
+      respondent_detail = SurveyRespondentDetail.new(p)
+    end
+    
+    respondent_detail
+  end
+  
+  def find_or_create_person(respondentDetails)
+      person = nil
+
+      people = Person.includes(:email_addresses).
+                  where(
+                    ["TRIM(last_name) = ? AND TRIM(first_name) like ? AND email_addresses.email = ?", 
+                      respondentDetails.last_name, respondentDetails.first_name, respondentDetails.email]
+                    )
+
+      if people.size >= 1
+          people.each do |p|
+            if p.programmeItemAssignments.size > 0 # take the one that is a speaker if there are potential dup people
+              person = p
+              break
+            end
+          end
+          person = people[0] if !person
+      else
+        # create the person
+        person = Person.create({
+          first_name: respondentDetails.first_name,
+          last_name: respondentDetails.last_name,
+        })
+        person.updateDefaultEmail respondentDetails.email
+        person.save!
+      end
+      
+      person
+  end
   
   def getTagOwner
     nil

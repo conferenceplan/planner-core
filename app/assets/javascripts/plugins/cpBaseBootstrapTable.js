@@ -44,6 +44,7 @@ $.widget( "cp.baseBootstrapTable" , {
         confirm_content     : "Are you sure you want to delete the selected data?",
         confirm_title       : "Confirm Deletion",
         translations        : {},
+        extra_options       : {},
         modalType           : ModelModal,
         filterShowClear     : false,
         detailView          : false,
@@ -63,6 +64,13 @@ $.widget( "cp.baseBootstrapTable" , {
      */
     translate : function(str) {
         return this.options.translations[str] ? this.options.translations[str] : str;
+    },
+    
+    /*
+     * 
+     */
+    extra_option : function(str) {
+        return this.options.extra_options[str] ? this.options.extra_options[str] : '';
     },
 
     /*
