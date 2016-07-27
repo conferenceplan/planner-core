@@ -2851,7 +2851,8 @@
     };
 
     BootstrapTable.prototype.expandRow_ = function (expand, index) {
-        var $tr = this.$body.find(sprintf('> tr[data-index="%s"]', index));
+        // var $tr = this.$body.find(sprintf('> tr[data-index="%s"]', index));
+        var $tr = this.$body.find(sprintf('> tr[data-item-id="%s"]', index));
         if ($tr.next().is('tr.detail-view') === (expand ? false : true)) {
             $tr.find('> td > .detail-icon').click();
         }
