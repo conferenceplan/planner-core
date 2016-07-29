@@ -732,6 +732,9 @@ class Surveys::ResponseController < ApplicationController
         person.updateDefaultEmail respondentDetails.email
         person.save!
       end
+
+      person.company = respondentDetails.company if respondentDetails.company
+      person.job_title = respondentDetails.job_title if respondentDetails.job_title
       
       person
   end
