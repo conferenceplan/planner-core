@@ -119,6 +119,28 @@ Form.editors.DependentTextArea = Form.editors.TextArea.extend({
 
 });
 
+Form.editors.DependentHtmlExt = Form.editors.HtmlExt.extend({
+
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.HtmlExt.prototype.initialize.call(this, options);
+    },
+
+    render: function() {
+        console.debug(this.options);
+        this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
+        
+        this.createCkWidget();
+       
+        this.setValue(this.value);
+
+        this.dependInit(this.form);
+
+        return this;
+    }
+
+});
+
 Form.editors.DependentHtml = Form.editors.Html.extend({
 
     initialize: function(options) {
