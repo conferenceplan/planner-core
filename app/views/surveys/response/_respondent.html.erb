@@ -118,6 +118,21 @@
 
 <div class="row question-row">   
     <div class="col-sm-12">
+        <div class="form-group  no-bottom-margin <%='has-error' if @errors && @errors['job_title'] %>">
+            <label class="control-label col-sm-3">
+                <%= t 'job-title' %>
+            </label>
+            <div class="col-sm-9">
+                <div class="required-field-block">
+                    <input name="survey_respondent_detail[job_title]" value="<%=@survey_respondent_detail['job_title'] if @survey_respondent_detail %>" 
+                        size="200" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row question-row">   
+    <div class="col-sm-12">
         <div class="form-group  no-bottom-margin <%='has-error' if @errors && @errors['company'] %>">
             <label class="control-label col-sm-3">
                 <%= t 'company' %>

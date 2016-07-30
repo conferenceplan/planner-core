@@ -62,7 +62,7 @@ class Surveys::ResponseController < ApplicationController
              # associate the survey with a person by creatng a respondent...
              # - find the person (possible match)
              # - create the respondent
-             candidate = find_or_create_person(respondentDetails)
+             candidate = find_or_create_person(params[:survey_respondent_detail]) # TODO - params[:survey_respondent_detail]
              
              # submitted_survey, :email_status_id, :person_id
              if candidate
@@ -703,16 +703,22 @@ class Surveys::ResponseController < ApplicationController
       respondent_detail = SurveyRespondentDetail.new(p)
     end
     
+    # Add 
+    respondent_detail.company = p[:company] if p[:company]
+    # respondent_detail.job_title = p[:last_name] if p[:last_name]
+    
     respondent_detail
   end
   
-  def find_or_create_person(respondentDetails)
+  def find_or_create_person(respondentParams)
       person = nil
+
+#      if !respondentParams['pub_first_name'].blank? || !respondentParams['pub_last_name'].blank? || !respondentParams['pub_suffix'].blank? || !respondentParams['pub_prefix'].blank?
 
       people = Person.includes(:email_addresses).
                   where(
                     ["TRIM(last_name) = ? AND TRIM(first_name) like ? AND email_addresses.email = ?", 
-                      respondentDetails.last_name, respondentDetails.first_name, respondentDetails.email]
+                      respondentParams['last_name'], respondentParams['first_name'], respondentParams['email']]
                     )
 
       if people.size >= 1
@@ -726,15 +732,18 @@ class Surveys::ResponseController < ApplicationController
       else
         # create the person
         person = Person.create({
-          first_name: respondentDetails.first_name,
-          last_name: respondentDetails.last_name,
+          first_name: respondentParams['first_name'],
+          last_name: respondentParams['last_name'],
         })
-        person.updateDefaultEmail respondentDetails.email
+        person.updateDefaultEmail respondentParams['email']
         person.save!
       end
 
-      person.company = respondentDetails.company if respondentDetails.company
-      person.job_title = respondentDetails.job_title if respondentDetails.job_title
+      person.prefix = respondentParams['prefix'] if respondentParams['prefix']
+      person.suffix = respondentParams['suffix'] if respondentParams['suffix']
+      person.company = respondentParams['company'] if respondentParams['company']
+      person.job_title = respondentParams['job_title'] if respondentParams['job_title']
+      person.save!
       
       person
   end
