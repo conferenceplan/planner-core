@@ -228,16 +228,18 @@ module PlannerReportsService
   #
   #
   #
-  def self.findPublishedPanelistsWithPanels(peopleIds = nil, additional_roles = nil, itemIds = nil)
+  def self.findPublishedPanelistsWithPanels(peopleIds = nil, additional_roles = nil, itemIds = nil, formatList = nil)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
     roles.concat(additional_roles) if additional_roles
     cndStr = '(published_programme_item_assignments.role_id in (?))'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
     cndStr += ' AND (published_programme_item_assignments.published_programme_item_id in(?))' if itemIds
+    cndStr += " AND published_programme_items.format_id in(?)" if formatList
 
     conditions = [cndStr, roles] #, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
     conditions << peopleIds if peopleIds
     conditions << itemIds if itemIds
+    conditions << formatList if formatList
     
     Person.where(conditions).
               includes([

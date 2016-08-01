@@ -750,16 +750,18 @@ class PlannerReportsController < PlannerController
   #
   def table_tents
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
+    formatList = (params[:formats].length > 0) ? URI.unescape(params[:formats]).split(',') : nil
     @itemList = (params[:items] && params[:items].length > 0) ? URI.unescape(params[:items]).split(',') : nil
     @single = (!params[:single].blank?) ? params[:single] == "true" : false
     @page_size = params[:page_size]
-    @by_time = (@itemList == nil) && (peopleList == nil) && !@single
+    @by_time = !@single
     @conf_start_time = SiteConfig.first.start_date
-
-    if (@itemList == nil) && (peopleList == nil) && !@single
-      @items = PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople
+    
+    # TODO - add filter for program type(s) to be printed
+    if !@single
+      @items = PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople peopleList, @itemList, formatList
     else
-      @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList, nil, @itemList
+      @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList, nil, @itemList, formatList
     end
     
     Person.uncached do
@@ -851,6 +853,7 @@ class PlannerReportsController < PlannerController
     
     PublishedRoom.uncached do
       # Get the program items for the rooms for each day....
+      # TODO - change to be chronological instead of by room
       @rooms = PlannerReportsService.findPublishedPanelsByRoom roomList, @day
       
       respond_to do |format|
