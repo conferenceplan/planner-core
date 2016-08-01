@@ -37,9 +37,7 @@ _.extend(Form.Editor.prototype, {
                 }
             }
         }
-        if (value != null) {
-            console.debug(value.length);
-        }
+
         if ( ((value != null) && ($.inArray(value.toString(), expectedValues) > -1)) || show) {
             element.first().removeClass('hidden-form-group');
         } else {
@@ -127,7 +125,6 @@ Form.editors.DependentHtmlExt = Form.editors.HtmlExt.extend({
     },
 
     render: function() {
-        console.debug(this.options);
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
         
         this.createCkWidget();
@@ -149,7 +146,6 @@ Form.editors.DependentHtml = Form.editors.Html.extend({
     },
 
     render: function() {
-        console.debug(this.options);
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
         
         this.createCkWidget();

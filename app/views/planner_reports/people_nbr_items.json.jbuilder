@@ -15,13 +15,15 @@ json.rowdata @assignments.reject{|a| a.day == nil } do |assignment|
     json.items assignment.person.programmeItemAssignments.collect { |pi|
         title = pi.programmeItem.title if pi.programmeItem && 
                                   (
-                                  ((pi.programmeItem.parent_id != nil) && (pi.programmeItem.parent.room_item_assignment.day == assignment.day)) || 
+                                  ((pi.programmeItem.parent_id != nil) && 
+                                  (pi.programmeItem.parent.room_item_assignment && pi.programmeItem.parent.room_item_assignment.day == assignment.day)) || 
                                   (pi.programmeItem.room_item_assignment && pi.programmeItem.room_item_assignment.day == assignment.day)
                                   ) && 
                                   ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
         title += ' [' + pi.programmeItem.parent.title + ']' if pi.programmeItem && 
                                   (
-                                  ((pi.programmeItem.parent_id != nil) && (pi.programmeItem.parent.room_item_assignment.day == assignment.day))
+                                  ((pi.programmeItem.parent_id != nil) && 
+                                  (pi.programmeItem.parent.room_item_assignment && pi.programmeItem.parent.room_item_assignment.day == assignment.day))
                                   ) && 
                                   ([PersonItemRole['Participant'], PersonItemRole['Moderator']].include? pi.role)
         title
