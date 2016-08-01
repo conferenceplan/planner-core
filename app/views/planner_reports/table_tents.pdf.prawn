@@ -23,12 +23,12 @@ def print_assignment(pdf, item, assignment, page_width, page_height)
         pdf.text item.format.name, :fallback_fonts => planner_fallback_fonts if item.format
         if item.published_room
             pdf.text item.published_room.name + ' ' + item.published_room.published_venue.name, :fallback_fonts => planner_fallback_fonts
-        elsif item.parent.published_room
+        elsif item.parent
             pdf.text item.parent.published_room.name + ' ' + item.parent.published_room.published_venue.name, :fallback_fonts => planner_fallback_fonts
         end
         if item.published_time_slot
             pdf.text item.published_time_slot.start.strftime(@day_and_time_format), :fallback_fonts => planner_fallback_fonts
-        elsif item.parent.published_time_slot
+        elsif item.parent
             pdf.text item.parent.published_time_slot.start.strftime(@day_and_time_format), :fallback_fonts => planner_fallback_fonts
         end
         pdf.text "<b>Participants:</b> " + item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || PersonItemRole['Speaker'] || x.role == PersonItemRole['Moderator']}.collect{|p| p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","), :inline_format => true, :fallback_fonts => planner_fallback_fonts
@@ -93,12 +93,12 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
                         pdf.text item.format.name, :fallback_fonts => planner_fallback_fonts if item.format
                         if item.published_room
                             pdf.text item.published_room.name + ' ' + item.published_room.published_venue.name, :fallback_fonts => planner_fallback_fonts
-                        elsif item.parent.published_room
+                        elsif item.parent
                             pdf.text item.parent.published_room.name + ' ' + item.parent.published_room.published_venue.name, :fallback_fonts => planner_fallback_fonts
                         end
                         if item.published_time_slot
                             pdf.text item.published_time_slot.start.strftime(@day_and_time_format), :fallback_fonts => planner_fallback_fonts
-                        elsif item.parent.published_time_slot
+                        elsif item.parent
                             pdf.text item.parent.published_time_slot.start.strftime(@day_and_time_format), :fallback_fonts => planner_fallback_fonts
                         end
                         pdf.text "<b>Participants:</b> " + item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","), :inline_format => true, :fallback_fonts => planner_fallback_fonts
