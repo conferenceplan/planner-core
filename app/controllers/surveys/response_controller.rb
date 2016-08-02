@@ -705,15 +705,15 @@ class Surveys::ResponseController < ApplicationController
     
     # Add 
     respondent_detail.company = p[:company] if p[:company]
-    # respondent_detail.job_title = p[:last_name] if p[:last_name]
+    respondent_detail.job_title = p[:job_title] if p[:job_title]
+    respondent_detail.prefix = p[:prefix] if p[:prefix]
+    respondent_detail.suffix = p[:suffix] if p[:suffix]
     
     respondent_detail
   end
   
   def find_or_create_person(respondentParams)
       person = nil
-
-#      if !respondentParams['pub_first_name'].blank? || !respondentParams['pub_last_name'].blank? || !respondentParams['pub_suffix'].blank? || !respondentParams['pub_prefix'].blank?
 
       people = Person.includes(:email_addresses).
                   where(
