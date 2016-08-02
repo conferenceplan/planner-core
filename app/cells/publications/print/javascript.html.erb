@@ -7,6 +7,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
     var people = <%= [].concat(PeopleService.findAssignedParticipants.collect {|p| {'id' => p.id, 'text' => p.getFullPublicationName}}).to_json.html_safe %>;
     var rooms = <%= [].concat(RoomsService.findPublishedRooms.collect {|r| {'id' => r.id, 'text' => r.name}}).to_json.html_safe %>
     var items = <%= [].concat(PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople.collect {|r| {'id' => r.id, 'text' => r.title}}).to_json.html_safe %>
+    var all_formats = <%= [].concat(Format.all.collect {|r| {'id' => r.id, 'text' => r.name}}).to_json.html_safe %>
 
     var GenericForm = Backbone.Form.extend({
         schema : {
@@ -47,6 +48,18 @@ PublicationsApp.PrintManagement = (function(Backbone){
             page_size : { type : 'Select', title : '<%= t "page-size" %>', 
                           options : <%= [[' ',' ']].concat(PDF::Core::PageGeometry::SIZES.collect {|k,v| {'val' => k, 'label' => k} }).to_json.html_safe %>,
                           help : '<%= t "the-page-size-for-the-pdf-output" %>' 
+                },
+            formats : { type : 'Select2', title : '<%= t "publications-formats" %>', 
+                        config : {
+                            multiple: true,
+                            maximumSelectionSize : -1,
+                            query: function (query) {
+                                var data = {
+                                    results: _.filter(all_formats, function(x) { return x.text.toLowerCase().indexOf(query.term.toLowerCase()) != -1; })
+                                };
+                                query.callback(data);
+                            }
+                        }
                 },
             people : { type : 'Select2', title : '<%= t "publications-people" %>', 
                         config : {
