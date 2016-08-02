@@ -2,13 +2,22 @@
     PublicationChecker = new Backbone.Marionette.Application();
     PublicationChecker.AppManager = (function(Backbone){
         PendingBadgeView = Marionette.ItemView.extend({
-            template : "#pending-badge-template"
+            template : "#pending-badge-template",
+            initialize : function() {
+                this.model.on("sync", this.render );
+            }
         });
         PendingLabelView = Marionette.ItemView.extend({
-            template : "#pending-label-template"
+            template : "#pending-label-template",
+            initialize : function() {
+                this.model.on("sync", this.render );
+            }
         });
         OverviewLabelView = Marionette.ItemView.extend({
-            template : "#overview-label-template"
+            template : "#overview-label-template",
+            initialize : function() {
+                this.model.on("sync", this.render );
+            }
         });
 
         PendingCount = Backbone.Model.extend({
@@ -57,7 +66,7 @@
                         pendingLabelRegion.show(pendingLabel);
                         overviewLabelRegion.show(overviewLabel);
 
-                        pendingPoller = Backbone.Poller.get(mdl, {
+                        pendingPoller = Backbone.Poller.get(pending, {
                            delay : interval * 1000, // ms - every 10 seconds...
                         });
 
@@ -66,7 +75,7 @@
                         };
                     }
                 });
-            };
+            }
         }
     })(Backbone);
 

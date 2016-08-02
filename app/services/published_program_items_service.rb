@@ -302,17 +302,6 @@ module PublishedProgramItemsService
     
   end
   
-  def self.countUpdatedPeople(pubDate)
-    count = 0
-    
-    count = Audited::Adapters::ActiveRecord::Audit.count :conditions => ["(audits.created_at >= ?) AND (audits.action != 'destroy') AND (audits.auditable_type in (?))", 
-        pubDate, ['PublishedProgrammeItemAssignment', 'Person', 'EditedBio', 'Pseudonym', 'PlannerDocs::Document']]
-      
-    count +=  BioImage.count :conditions => ["(updated_at >= ?)", pubDate]
-
-    count      
-  end
-
   # new people - PublishedProgrammeItemAssignment
   # updated people - PublishedProgrammeItemAssignment
   # deleted people - PublishedProgrammeItemAssignment
@@ -368,6 +357,22 @@ module PublishedProgramItemsService
     { :updatedPeople => updateOrAdded, :removedPeople => removed }
   end
   
+  def self.countUpdatedPeople(pubDate)
+    count = 0
+
+    # TODO - need to deal with dups ...     
+    count = Audited::Adapters::ActiveRecord::Audit.where(
+        ["(audits.created_at >= ?) AND (audits.action != 'destroy') AND (audits.auditable_type in (?))", 
+          pubDate, 
+          ['PublishedProgrammeItemAssignment', 'Person', 'EditedBio', 'Pseudonym', 'PlannerDocs::Document']
+        ]
+    ).count 
+      
+    count +=  BioImage.count :conditions => ["(updated_at >= ?)", pubDate]
+
+    count      
+  end
+
 private
   
   def self.getNewPublishedProgrammeItems(pubDate)
