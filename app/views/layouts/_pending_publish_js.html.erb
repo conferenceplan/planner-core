@@ -1,23 +1,19 @@
 <script id="pending-publish-indicator" type="text/javascript">
     PublicationChecker = new Backbone.Marionette.Application();
     PublicationChecker.AppManager = (function(Backbone){
-        PendingBadgeView = Marionette.ItemView.extend({
-            template : "#pending-badge-template",
+        PendingView = Marionette.ItemView.extend({
             initialize : function() {
                 this.model.on("sync", this.render );
             }
         });
-        PendingLabelView = Marionette.ItemView.extend({
-            template : "#pending-label-template",
-            initialize : function() {
-                this.model.on("sync", this.render );
-            }
+        PendingBadgeView = PendingView.extend({
+            template : "#pending-badge-template"
+        });
+        PendingLabelView = PendingView.extend({
+            template : "#pending-label-template"
         });
         OverviewLabelView = Marionette.ItemView.extend({
-            template : "#overview-label-template",
-            initialize : function() {
-                this.model.on("sync", this.render );
-            }
+            template : "#overview-label-template"
         });
 
         PendingCount = Backbone.Model.extend({
