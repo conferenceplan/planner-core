@@ -58,7 +58,8 @@
                         overviewLabelRegion.show(overviewLabel);
 
                         pendingPoller = Backbone.Poller.get(mdl, {
-                           delay : interval * 1000, // ms - every 10 seconds...
+                           delay : interval * 1000,
+                           delayed : true
                         });
 
                         if (pendingPoller) {
@@ -66,7 +67,7 @@
                         };
                     }
                 });
-            };
+            }
         }
     })(Backbone);
 
