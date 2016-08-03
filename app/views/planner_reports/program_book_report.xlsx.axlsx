@@ -22,11 +22,13 @@ wb.add_worksheet(name: "Program") do |sheet|
     
     titles.concat @contexts.collect{|name| name.downcase }
 
-    titles.concat Array.new(@max_people) {|e| ['Participant ' + (e+1).to_s,
+    if @max_people && (@max_people > 0)
+        titles.concat Array.new(@max_people) {|e| ['Participant ' + (e+1).to_s,
                                         'Job Title ' + (e+1).to_s, 
                                         'Company ' + (e+1).to_s,
                                         'Role ' + (e+1).to_s
                                     ] }.flatten
+    end
 
     sheet.add_row titles
 
