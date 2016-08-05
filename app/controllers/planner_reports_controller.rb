@@ -754,12 +754,11 @@ class PlannerReportsController < PlannerController
     @itemList = (params[:items] && params[:items].length > 0) ? URI.unescape(params[:items]).split(',') : nil
     @single = (!params[:single].blank?) ? params[:single] == "true" : false
     @page_size = params[:page_size]
-    @by_time = !@single
+    @by_time = !@single && !peopleList
     @conf_start_time = SiteConfig.first.start_date
     
-    # TODO - add filter for program type(s) to be printed
-    if !@single
-      @items = PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople peopleList, @itemList, formatList
+    if !@single && !peopleList
+      @items = PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople @itemList, formatList
     else
       @people = PlannerReportsService.findPublishedPanelistsWithPanels peopleList, nil, @itemList, formatList
     end
