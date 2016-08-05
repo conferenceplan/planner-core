@@ -79,15 +79,12 @@ module PublishedProgramItemsService
                             order('published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order')
   end
   
-  def self.getPublishedProgramItemsThatHavePeople(peopleIds = nil, itemIds = nil, formatList = nil)
+  def self.getPublishedProgramItemsThatHavePeople(itemIds = nil, formatList = nil)
     cndStr = "published_programme_items.parent_id is null"
     cndStr += " AND published_programme_items.id in(?)" if itemIds
-    cndStr += " AND (published_programme_item_assignments.person_id in (?) OR published_programme_item_assignments_published_programme_items.person_id in (?))" if peopleIds
     cndStr += " AND published_programme_items.format_id in(?)" if formatList
     conditions = [cndStr]
     conditions << itemIds if itemIds
-    conditions << peopleIds if peopleIds
-    conditions << peopleIds if peopleIds
     conditions << formatList if formatList
 
     PublishedProgrammeItem.where(conditions).
