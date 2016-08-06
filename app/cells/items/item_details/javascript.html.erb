@@ -180,7 +180,13 @@ ItemApp.ItemManagement = (function(Backbone){
                             return err;
                         };
                     },
-                ]
+                ],
+                callback: function(val, editor, obj) {
+                    if (val) {
+                        obj.picker.data("DateTimePicker").clear();
+                        obj.form.fields['room_id'].setValue("");
+                    }
+                }
             },
             <%-
             # TODO - start_offset, need to constrain based on the startime and duration of the parent
