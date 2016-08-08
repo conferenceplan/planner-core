@@ -13,7 +13,7 @@ prawn_document(:page_size => @label_dimensions.page_size,
     
     cols = @label_dimensions.across
     rows = @label_dimensions.down
-    max_per_label = 6
+    max_per_label = 8
 
     pdf.define_grid(:columns => cols, :rows => rows, 
                     :row_gutter => (@label_dimensions.vertical_spacing * 1.send(@label_dimensions.unit)), 
@@ -42,7 +42,7 @@ prawn_document(:page_size => @label_dimensions.page_size,
                 
                 ((l*max_per_label)..(l*max_per_label+max_per_label-1)).each do |p|
                     if items_to_print[p]
-                        labels[l] += "(" + items_to_print[p].role.name[0] + ")" 
+                        labels[l] += "(" + items_to_print[p].role.name[0] + ")" if items_to_print[p].role.name[0] == 'M' || items_to_print[p].role.name[0] == 'I'
                         if items_to_print[p].programmeItem.time_slot
                             labels[l] += " <b>" + items_to_print[p].programmeItem.time_slot.start.strftime(@time_format) + "</b>"
                         else
