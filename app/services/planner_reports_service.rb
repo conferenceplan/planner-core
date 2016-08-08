@@ -265,8 +265,14 @@ module PlannerReportsService
   #
   #
   def self.findTagsByContext(context)
+    if getTagOwner
+      condition = ['context = ? and tagger_id = ?', context, getTagOwner]
+    else
+      condition = ['context = ?', context]
+    end
+    
     tags = ActsAsTaggableOn::Tagging.
-                            where(['context = ? and tagger_id = ?', context, getTagOwner]).
+                            where(condition).
                             joins("join tags on taggings.tag_id = tags.id").
                             where(self.constraints()).select('distinct name')
     
