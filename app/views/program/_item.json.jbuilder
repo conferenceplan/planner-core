@@ -15,8 +15,12 @@ json.datetime           item.start_time
 if item.published_room_item_assignment
     json.day            item.published_room_item_assignment.day
 
-    loc = [item.published_room_item_assignment.published_room.name]
-    loc = loc << item.published_room_item_assignment.published_room.published_venue.name if !@singleVenue
+    if item.published_room_item_assignment.published_room
+        loc = [item.published_room_item_assignment.published_room.name]
+        loc = loc << item.published_room_item_assignment.published_room.published_venue.name if !@singleVenue
+    else
+        loc = []
+    end
     loc = loc << "" if @singleVenue
     json.loc        loc
 end
