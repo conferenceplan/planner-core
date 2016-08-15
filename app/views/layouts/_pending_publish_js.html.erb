@@ -35,9 +35,9 @@
         return {
             init : function(interval_secs) {
                 var interval = interval_secs;
-                // If supplied interval is not an integer or is less than 30 secons, set it to 30 seconds
-                if (interval < 30 || !Number.isInteger(interval)) {
-                  inverval = 30;
+                // If supplied interval is not an integer or is less than 60 seconds, set it to 60 seconds
+                if (interval < 60 || !Number.isInteger(interval)) {
+                  inverval = 60;
                 };
 
                 pending = new PendingCount();
@@ -78,20 +78,26 @@
 
   
     $(document).ready(function() {
-        PublicationChecker.AppManager.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 30 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 30 %>); // If no env varible set, default to 30 second interval
+        PublicationChecker.AppManager.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 60 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 60 %>); // If no env varible set, default to 60 second interval
     });
 </script>
 
 <script type="text/template" id="pending-badge-template">
-    <span class="badge"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;{{=count }}</span>
+    {{ if(count > 0) { }}
+        <span class="badge"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;{{=count }}</span>
+    {{ } }}
 </script>
 
 <script type="text/template" id="pending-label-template">
-    <span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span>
+    {{ if(count > 0) { }}
+        <span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span>
+    {{ } }}
 </script>
 
 <script type="text/template" id="overview-label-template">
-    <a class="pending-changes-count-badge" href="<%= baseUri %>/pages/publications_dash/online#program_publish_review"><span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span></a>
+    {{ if(count > 0) { }}
+        <a class="pending-changes-count-badge" href="<%= baseUri %>/pages/publications_dash/online#program_publish_review"><span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span></a>
+    {{ } }}
 </script>
 
 
