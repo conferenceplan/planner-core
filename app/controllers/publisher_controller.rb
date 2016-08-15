@@ -77,7 +77,8 @@ class PublisherController < PlannerController
  
     lastPubDate = PublicationDate.find :first, :order => 'id desc'
     if lastPubDate
-      @pending_count += PublishedProgramItemsService.getUpdatedPeople(lastPubDate.timestamp).size
+      pending_people = PublishedProgramItemsService.getUpdatedPeople(lastPubDate.timestamp)
+      @pending_count += pending_people[:updatedPeople].size + pending_people[:removedPeople].size
     end
   end
   
