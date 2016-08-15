@@ -35,9 +35,9 @@
         return {
             init : function(interval_secs) {
                 var interval = interval_secs;
-                // If supplied interval is not an integer or is less than 30 secons, set it to 30 seconds
-                if (interval < 30 || !Number.isInteger(interval)) {
-                  inverval = 30;
+                // If supplied interval is not an integer or is less than 60 seconds, set it to 60 seconds
+                if (interval < 60 || !Number.isInteger(interval)) {
+                  inverval = 60;
                 };
 
                 pending = new PendingCount();
@@ -78,7 +78,7 @@
 
   
     $(document).ready(function() {
-        PublicationChecker.AppManager.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 30 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 30 %>); // If no env varible set, default to 30 second interval
+        PublicationChecker.AppManager.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 60 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 60 %>); // If no env varible set, default to 60 second interval
     });
 </script>
 
