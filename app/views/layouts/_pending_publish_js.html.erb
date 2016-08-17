@@ -3,7 +3,7 @@
     PublicationChecker.AppManager = (function(Backbone){
         PendingView = Marionette.ItemView.extend({
             initialize : function() {
-                this.model.on("sync", this.render );
+                this.model.on("change", this.render);
             }
         });
         PendingBadgeView = PendingView.extend({
@@ -17,7 +17,10 @@
         });
 
         PendingCount = Backbone.Model.extend({
-            url : "<%= baseUri + '/publisher/pending_count.json' %>"
+            url : "<%= baseUri + '/publisher/pending_count.json' %>",
+            defaults : {
+                count : 0
+            }
         });
 
         var pendingBadgeRegion = new Backbone.Marionette.Region({
@@ -32,53 +35,61 @@
 
         var pendingPoller = null;
 
+        var interval = 30; // default interval
+
+        function getCount() {
+            pending = new PendingCount();
+            pending.fetch({
+                success : function(mdl) {
+                    if (pendingPoller) {
+                        pendingPoller.stop();
+                    };
+
+                    pendingBadge = new PendingBadgeView({
+                        model : mdl
+                    });
+                    pendingLabel = new PendingLabelView({
+                        model : mdl
+                    });
+                    overviewLabel = new OverviewLabelView({
+                        model : mdl
+                    });
+
+                    pendingBadgeRegion.show(pendingBadge);
+                    pendingLabelRegion.show(pendingLabel);
+                    overviewLabelRegion.show(overviewLabel);
+
+                    pendingPoller = Backbone.Poller.get(mdl, {
+                       delay : interval * 1000,
+                       delayed : true
+                    });
+
+                    if (pendingPoller) {
+                        pendingPoller.start();
+                    };
+                }
+            });
+        };
+
         return {
             init : function(interval_secs) {
-                var interval = interval_secs;
-                // If supplied interval is not an integer or is less than 60 seconds, set it to 60 seconds
-                if (interval < 60 || !Number.isInteger(interval)) {
-                  inverval = 60;
+                interval = interval_secs;
+                // If supplied interval is not an integer or is less than 30 seconds, set it to 30 seconds
+                if (interval < 30 || !Number.isInteger(interval)) {
+                  inverval = 30;
                 };
 
-                pending = new PendingCount();
-
-                pending.fetch({
-                    success : function(mdl) {
-                        if (pendingPoller) {
-                            pendingPoller.stop();
-                        };
-
-                        pendingBadge = new PendingBadgeView({
-                            model : mdl
-                        });
-                        pendingLabel = new PendingLabelView({
-                            model : mdl
-                        });
-                        overviewLabel = new OverviewLabelView({
-                            model : mdl
-                        });
-
-                        pendingBadgeRegion.show(pendingBadge);
-                        pendingLabelRegion.show(pendingLabel);
-                        overviewLabelRegion.show(overviewLabel);
-
-                        pendingPoller = Backbone.Poller.get(mdl, {
-                           delay : interval * 1000,
-                           delayed : true
-                        });
-
-                        if (pendingPoller) {
-                            pendingPoller.start();
-                        };
-                    }
-                });
+                getCount();
+            },
+            update : function() {
+                getCount();
             }
         }
     })(Backbone);
 
   
     $(document).ready(function() {
-        PublicationChecker.AppManager.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 60 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 60 %>); // If no env varible set, default to 60 second interval
+        PublicationChecker.AppManager.init(<%= ENV["PUBLISH_CHECKER_INTERVAL"].present? && ENV["PUBLISH_CHECKER_INTERVAL"].to_i > 30 ? ENV["PUBLISH_CHECKER_INTERVAL"].to_i : 30 %>); // If no env varible set, default to 30 second interval
     });
 </script>
 
