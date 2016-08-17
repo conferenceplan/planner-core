@@ -47,10 +47,16 @@ wb.add_worksheet(name: "Updated Items") do |sheet|
                         row[6] = v[:time][:time].start.strftime('%Y-%m-%d')
                         row[7] = v[:time][:time].start.strftime('%H:%M')
                         row[8] = (v[:time][:time].end - v[:time][:time].start) / 60
+                    elsif v[:item]
+                        row[6] = v[:item].start_time.strftime('%Y-%m-%d')
+                        row[7] = v[:item].start_time.strftime('%H:%M')
                     end
                     if v[:room]
                             row[9] = v[:room][:room].name
                             row[10] = v[:room][:room].published_venue.name
+                    elsif v[:item]
+                        row[9] = v[:item].published_room_item_assignment.published_room.name
+                        row[10] = v[:item].published_room_item_assignment.published_room.published_venue.name
                     end
                     
                     # people added and/or dropped

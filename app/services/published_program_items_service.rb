@@ -200,7 +200,9 @@ module PublishedProgramItemsService
       
     audits.each do |a|
       if a.audited_changes['title'] || a.audited_changes['precis']
-          res[a.auditable_id] = { :item => nil, :deleted => { :title => a.audited_changes['title'], :desc => a.audited_changes['precis'], :created_at => a.created_at} }
+          item = nil
+          item = PublishedProgrammeItem.includes(:published_room_item_assignment).find(a.auditable_id) if PublishedProgrammeItem.exists? a.auditable_id
+          res[a.auditable_id] = { :item => item, :deleted => { :title => a.audited_changes['title'], :desc => a.audited_changes['precis'], :created_at => a.created_at} }
       end
     end
     
