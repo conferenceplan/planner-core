@@ -18,7 +18,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
 
             if v[:changed]
                 v[:changed].each do |k, v|
-                    if (!v.blank? && (k.to_s != 'created_at'))
+                    if (!v.blank? && (k.to_s != 'created_at') && (k.to_s != 'precis') && (k.to_s != 'short_precis'))
                         str = '<b>' + k.to_s + '</b>'
                         str += ' ' + ActionView::Base.full_sanitizer.sanitize(v[0]) if v[0]
                         str += ' <b>changed to</b> ' + ActionView::Base.full_sanitizer.sanitize(v[1])
@@ -27,17 +27,24 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                  end
             end
 
+            time_str = ''
             if v[:time]
-                str = v[:time][:time].start.strftime('%Y-%m-%d')
-                str += ' ' + v[:time][:time].start.strftime(@plain_time_format)
-                str += ' ' + ((v[:time][:time].end - v[:time][:time].start) / 60).to_s
-                pdf.pad(5) { pdf.text str, :fallback_fonts => planner_fallback_fonts }
+                time_str = v[:time][:time].start.strftime('%Y-%m-%d')
+                time_str += ' ' + v[:time][:time].start.strftime(@plain_time_format)
+                time_str += ' ' + ((v[:time][:time].end - v[:time][:time].start) / 60).to_s
+            elsif v[:item]
+                time_str = v[:item].start_time.strftime('%Y-%m-%d')
+                time_str += ' - ' + v[:item].start_time.strftime('%H:%M')
             end
+
             if v[:room]
-                str = v[:room][:room].name
-                str += v[:room][:room].published_venue.name
-                pdf.pad(5) { pdf.text str, :fallback_fonts => planner_fallback_fonts }
+                time_str += " (" + v[:room][:room].name
+                time_str += ', ' + v[:room][:room].published_venue.name + ")"
+            elsif v[:item]
+                time_str += " (" + v[:item].published_room_item_assignment.published_room.name
+                time_str += ', ' + v[:item].published_room_item_assignment.published_room.published_venue.name + ")"
             end
+            pdf.pad(5) { pdf.text time_str, :fallback_fonts => planner_fallback_fonts } if !time_str.blank?
                     
             start = true
             if v[:people]
