@@ -1,5 +1,5 @@
 
-<%= text_field_tag "#{arg_name}[#{ question.id }]", '', :class => "form-control", :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
+<%= text_field_tag "#{arg_name}[#{ question.id }]", '', :class => "form-control", :'data-fv-regexp-regexp' => (question.regex.present? ? question.regex.strip : nil), :'data-fv-regexp-message' => (!question.survey_format.help.blank? ? question.survey_format.help : nil) , :'data-fv-regexp' => (question.regex && question.regex.strip.length > 0 ? 'true' : nil), :'data-fv-notempty' => (question.mandatory ? 'true' : 'false') %>
 
 <!--
     tickets[51][1][email]
