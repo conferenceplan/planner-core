@@ -77,6 +77,13 @@ OnlinePublicationsApp.Management = (function(Backbone){
         
         initialize : function() {
             this.model.on("sync", this.render ); // when the modal does the update and second after the update to the server
+            this.model.on("change", this.updateBadge, this);
+        },
+
+        updateBadge : function() {
+            if (this.model.get("pending") == "false" && PublicationChecker.AppManager) {
+                PublicationChecker.AppManager.update();
+            };
         },
         
         onRender : function() {

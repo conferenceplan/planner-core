@@ -3,7 +3,7 @@
     PublicationChecker.AppManager = (function(Backbone){
         PendingView = Marionette.ItemView.extend({
             initialize : function() {
-                this.model.on("sync", this.render );
+                this.model.on("change", this.render);
             }
         });
         PendingBadgeView = PendingView.extend({
@@ -17,7 +17,10 @@
         });
 
         PendingCount = Backbone.Model.extend({
-            url : "<%= baseUri + '/publisher/pending_count.json' %>"
+            url : "<%= baseUri + '/publisher/pending_count.json' %>",
+            defaults : {
+                count : 0
+            }
         });
 
         var pendingBadgeRegion = new Backbone.Marionette.Region({
@@ -32,46 +35,54 @@
 
         var pendingPoller = null;
 
+        var interval = 30; // default interval
+
+        function getCount() {
+            pending = new PendingCount();
+            pending.fetch({
+                success : function(mdl) {
+                    if (pendingPoller) {
+                        pendingPoller.stop();
+                    };
+
+                    pendingBadge = new PendingBadgeView({
+                        model : mdl
+                    });
+                    pendingLabel = new PendingLabelView({
+                        model : mdl
+                    });
+                    overviewLabel = new OverviewLabelView({
+                        model : mdl
+                    });
+
+                    pendingBadgeRegion.show(pendingBadge);
+                    pendingLabelRegion.show(pendingLabel);
+                    overviewLabelRegion.show(overviewLabel);
+
+                    pendingPoller = Backbone.Poller.get(mdl, {
+                       delay : interval * 1000,
+                       delayed : true
+                    });
+
+                    if (pendingPoller) {
+                        pendingPoller.start();
+                    };
+                }
+            });
+        };
+
         return {
             init : function(interval_secs) {
-                var interval = interval_secs;
-                // If supplied interval is not an integer or is less than 30 secons, set it to 30 seconds
+                interval = interval_secs;
+                // If supplied interval is not an integer or is less than 30 seconds, set it to 30 seconds
                 if (interval < 30 || !Number.isInteger(interval)) {
                   inverval = 30;
                 };
 
-                pending = new PendingCount();
-
-                pending.fetch({
-                    success : function(mdl) {
-                        if (pendingPoller) {
-                            pendingPoller.stop();
-                        };
-
-                        pendingBadge = new PendingBadgeView({
-                            model : mdl
-                        });
-                        pendingLabel = new PendingLabelView({
-                            model : mdl
-                        });
-                        overviewLabel = new OverviewLabelView({
-                            model : mdl
-                        });
-
-                        pendingBadgeRegion.show(pendingBadge);
-                        pendingLabelRegion.show(pendingLabel);
-                        overviewLabelRegion.show(overviewLabel);
-
-                        pendingPoller = Backbone.Poller.get(mdl, {
-                           delay : interval * 1000,
-                           delayed : true
-                        });
-
-                        if (pendingPoller) {
-                            pendingPoller.start();
-                        };
-                    }
-                });
+                getCount();
+            },
+            update : function() {
+                getCount();
             }
         }
     })(Backbone);
@@ -83,15 +94,21 @@
 </script>
 
 <script type="text/template" id="pending-badge-template">
-    <span class="badge"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;{{=count }}</span>
+    {{ if(count > 0) { }}
+        <span class="badge"><i class="fa fa-refresh" aria-hidden="true"></i>&nbsp;{{=count }}</span>
+    {{ } }}
 </script>
 
 <script type="text/template" id="pending-label-template">
-    <span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span>
+    {{ if(count > 0) { }}
+        <span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span>
+    {{ } }}
 </script>
 
 <script type="text/template" id="overview-label-template">
-    <a class="pending-changes-count-badge" href="<%= baseUri %>/pages/publications_dash/online#program_publish_review"><span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span></a>
+    {{ if(count > 0) { }}
+        <a class="pending-changes-count-badge" href="<%= baseUri %>/pages/publications_dash/online#program_publish_review"><span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span></a>
+    {{ } }}
 </script>
 
 
