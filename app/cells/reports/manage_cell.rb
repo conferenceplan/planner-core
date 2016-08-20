@@ -2,6 +2,7 @@ class Reports::ManageCell < Cell::Rails
 
   def display
     @extra_reports_display = [] if ! @extra_reports_display
+    @extra_reports_menu = [] if ! @extra_reports_menu
     render
   end
 
