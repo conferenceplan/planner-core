@@ -86,31 +86,33 @@ module MailService
     toInviteState = template.transiton_invite_status
 
     to = person.getDefaultEmail.email
-    cc = config.cc
-    
-    content = generateEmailContent(template, {
-            :person             => person,
-            :survey             => survey,
-            :respondentDetails  => respondentDetails
-          })
-
-    begin
-      PlannerMailer.send_email({
-          from:     config.from,
-          reply_to: config.reply_to,
-          to:       to,
-          cc:       cc,
-          subject:  template.subject,
-          title:    template.title,
-          return_path: config.from,
-          skip_premailer: true
-        }, content
-      ).deliver
-      saveMailHistory(person, nil, content, EmailStatus[:Sent], template.subject)
-      transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
-    rescue => msg
-      saveMailHistory(person, nil, msg, EmailStatus[:Failed], template.subject)
-      # THROW ERROR - TODO
+    if to && !to.blank?
+      cc = config.cc
+      
+      content = generateEmailContent(template, {
+              :person             => person,
+              :survey             => survey,
+              :respondentDetails  => respondentDetails
+            })
+  
+      begin
+        PlannerMailer.send_email({
+            from:     config.from,
+            reply_to: config.reply_to,
+            to:       to,
+            cc:       cc,
+            subject:  template.subject,
+            title:    template.title,
+            return_path: config.from,
+            skip_premailer: true
+          }, content
+        ).deliver
+        saveMailHistory(person, nil, content, EmailStatus[:Sent], template.subject)
+        transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
+      rescue => msg
+        saveMailHistory(person, nil, msg, EmailStatus[:Failed], template.subject)
+        # THROW ERROR - TODO
+      end    
     end    
   end
   
@@ -137,55 +139,58 @@ module MailService
     
     if (mailing.testrun && config.test_email) || (person.getDefaultEmail && person.getDefaultEmail.email.present?)
       to = mailing.testrun ? config.test_email : person.getDefaultEmail.email
-      cc = mailing.testrun ? nil : config.cc
       
-      if !mailing.testrun && mailing.cc_all
-        # add all the email addresses for the person to the CC
-        person.email_addresses.each do |addr|
-          if addr.email != to
-            cc += ", " if !cc.blank?
-            cc += addr.email
+      if to && !to.blank?
+        cc = mailing.testrun ? nil : config.cc
+        
+        if !mailing.testrun && mailing.cc_all
+          # add all the email addresses for the person to the CC
+          person.email_addresses.each do |addr|
+            if addr.email != to
+              cc += ", " if !cc.blank?
+              cc += addr.email
+            end
           end
         end
-      end
-      
-      assignments = (mailing.mail_template && mailing.mail_template.mail_use == MailUse[:Schedule]) ? ProgramItemsService.findProgramItemsForPerson(person) : nil
-      respondentDetails = person.survey_respondent
-      key = respondentDetails ? respondentDetails.key : generateSurveyKey(person) # get the key (or generate it)
-      survey = (mailing.mail_template && mailing.mail_template.survey) ? mailing.mail_template.survey : nil
-      
-      content = generateEmailContent(template, {
-              :person             => person,
-              :key                => key, 
-              :survey             => survey,
-              :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
-              :respondentDetails  => person.survey_respondent,
-              :assignments        => {assignments: assignments, include_email: mailing.include_email}
-            })
-  
-      begin
-        subject = template.subject
-        subject += ' - ' + person.getFullName() if person
-        PlannerMailer.send_email({
-            from:     config.from,
-            reply_to: config.reply_to,
-            to:       to,
-            cc:       cc,
-            subject:  subject,
-            title:    template.title,
-            skip_premailer: true
-          }, content
-        ).deliver
-        saveMailHistory(person, mailing, content, EmailStatus[:Sent], subject)
-        transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
-      rescue Net::SMTPSyntaxError
-      rescue EOFError
-        # this indicates that the email address is not valid
-      rescue => msg
-        # EOFError
-        throw msg
-        # THROW ERROR ??? - this would cause a retry of the whole list, which would be an issue for dups
-        # do not do a retry unless we can resume from the failed message only
+        
+        assignments = (mailing.mail_template && mailing.mail_template.mail_use == MailUse[:Schedule]) ? ProgramItemsService.findProgramItemsForPerson(person) : nil
+        respondentDetails = person.survey_respondent
+        key = respondentDetails ? respondentDetails.key : generateSurveyKey(person) # get the key (or generate it)
+        survey = (mailing.mail_template && mailing.mail_template.survey) ? mailing.mail_template.survey : nil
+        
+        content = generateEmailContent(template, {
+                :person             => person,
+                :key                => key, 
+                :survey             => survey,
+                :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
+                :respondentDetails  => person.survey_respondent,
+                :assignments        => {assignments: assignments, include_email: mailing.include_email}
+              })
+    
+        begin
+          subject = template.subject
+          subject += ' - ' + person.getFullName() if person
+          PlannerMailer.send_email({
+              from:     config.from,
+              reply_to: config.reply_to,
+              to:       to,
+              cc:       cc,
+              subject:  subject,
+              title:    template.title,
+              skip_premailer: true
+            }, content
+          ).deliver
+          saveMailHistory(person, mailing, content, EmailStatus[:Sent], subject)
+          transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
+        rescue Net::SMTPSyntaxError
+        rescue EOFError
+          # this indicates that the email address is not valid
+        rescue => msg
+          # EOFError
+          throw msg
+          # THROW ERROR ??? - this would cause a retry of the whole list, which would be an issue for dups
+          # do not do a retry unless we can resume from the failed message only
+        end
       end
     end
   end
