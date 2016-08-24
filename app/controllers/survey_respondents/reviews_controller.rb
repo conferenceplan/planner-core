@@ -18,7 +18,7 @@ class SurveyRespondents::ReviewsController < PlannerController
     if params[:id].to_i != 0
       person_id = params[:id].to_i
       @respondent = SurveyRespondent.find :first,
-        :conditions => ["person_id = ?", person_id],
+        :conditions => ["survey_respondents.person_id = ? and survey_respondent_details.id is not null and survey_responses.survey_id = ?", person_id, survey_id],
         :include => { :survey_respondent_detail => {:survey_responses => {}, :survey_respondent => {}} }
     end
     
