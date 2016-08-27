@@ -117,9 +117,9 @@ class ProgrammeItemsController < PlannerController
 
         if @programmeItem.update_attributes(params[:programme_item])
           
-          if (startDay.to_i > -1) && startTime #&& (roomId.to_i > 0)
+          if (startDay.to_i > -1) && startTime
             room = nil
-            room = Room.find(roomId) if roomId.to_i > 0 && !@programmeItem.is_break
+            room = Room.find(roomId) if roomId.to_i > 0
             addItemToRoomAndTime(@programmeItem, room, startDay, startTime)
           else
             if (@programmeItem.room_item_assignment)

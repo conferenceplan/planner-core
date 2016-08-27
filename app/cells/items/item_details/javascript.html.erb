@@ -126,8 +126,7 @@ ItemApp.ItemManagement = (function(Backbone){
             precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
             short_precis : { type : 'Html', title : '<%= t "short-item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
             is_break    : { type : 'Checkbox', title : '<%= t "item-is-break" %>' },
-            room_id : { type : 'DependentSelect', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
-                dependsOn : 'is_break', dependentValues : ['false'],
+            room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                 editorClass : 'item-form-element',
                 validators: [
                     function check_for_time(value, formValues) {
@@ -143,7 +142,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             type: "room_id",
                             message: '<%= t "time-required-when-you-set-a-room" %>'
                         };
-                        if (formValues.room_id != "" && formValues.start_time == "") {
+                        if (formValues.room_id != "" && formValues.start_time == "" && !formValues.is_break) {
                             return err;
                         };
                     }
@@ -246,12 +245,10 @@ ItemApp.ItemManagement = (function(Backbone){
             participant_notes : { type : 'DependentTextArea', editorClass : 'item-form-element notes-text-area note-small',
                         dependsOn : 'is_break', dependentValues : ['false'],
                         title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60 } },
-            format_id : { type : 'DependentSelect',
-                        dependsOn : 'is_break', dependentValues : ['false'],
+            format_id : { type : 'Select',
                         editorClass : 'item-form-element',
                         title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            setup_type_id : { type : 'DependentSelect', editorClass : 'item-form-element',
-                        dependsOn : 'is_break', dependentValues : ['false'],
+            setup_type_id : { type : 'Select', editorClass : 'item-form-element',
                         title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             print : { type : 'Checkbox', title : '<%= t "item-print" %>',  editorClass : 'item-form-element', editorAttrs : {tabindex : "-1"} },
             duration : { type : 'Number', title : '<%= t "item-duration" %>', editorClass : 'item-form-element', validators: ['required'] },

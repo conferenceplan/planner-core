@@ -313,6 +313,7 @@
         <h5><%= t 'details' %></h5>
         <dl class="dl-horizontal-small dt60" id="item-detail-list">
             <dt><%= t "ref-number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
+            <dt><%= t "is-break" %></dt><dd>{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
             <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
             <dt><%= t "setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>    
             <dt><%= t "room" %></dt><dd>{{= room ? '<span class="fa fa-map-marker"></span> ' + room : "&nbsp;" }}</dd>

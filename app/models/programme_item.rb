@@ -110,8 +110,6 @@ class ProgrammeItem < ActiveRecord::Base
   def sanitize_for_break
     if self.is_break
       self.parent_id = nil # ensure no parent/child
-      self.format_id = nil # no format
-      # self.room_item_assignment.destroy if self.room_item_assignment # ensure no room...
     end
   end
   
