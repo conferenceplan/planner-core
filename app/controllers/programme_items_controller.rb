@@ -204,7 +204,7 @@ class ProgrammeItemsController < PlannerController
     page_to = params[:page_to]
 
 # TODO - change sort order
-    sort_by = params[:sort] ? params[:sort] : 'title'
+    sort_by = params[:sort] ? params[:sort] : 'start_offset'
     sort_order = params[:order] ? params[:order] : 'asc'
     
     item = ProgrammeItem.find id
