@@ -24,9 +24,17 @@ json.is_published           item.published ? true : false
 json.is_break               item.is_break
 
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
-json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A') : "" # we want this to be the number
-json.start_time             item.time_slot ? item.time_slot.start : ""
-json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
+
+if item.parent && item.parent.time_slot
+    json.start_time             ""
+    json.start_day_str          item.start_time.strftime('%A')
+    json.start_time_str         item.start_time.strftime('%H:%M')
+else
+    json.start_time             item.time_slot ? item.time_slot.start : ""
+    json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A') : "" # we want this to be the number
+    json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
+end
+
 json.audience_size          item.audience_size
 json.mobile_card_size       item.mobile_card_size
 

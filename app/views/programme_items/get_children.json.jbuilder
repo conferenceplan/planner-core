@@ -10,8 +10,13 @@ json.rowdata @items do |item|
     json.set! "programme_item[format_name]", item.format ? item.format.name : ""
     json.set! "programme_item[duration]", item.duration ? item.duration : ""
     json.set! "room", item.room ? item.room.name : ""
-    json.set! "start_day", item.time_slot ? item.time_slot.start.strftime('%A') : "" 
-    json.set! "start_time", item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
+    if item.parent.time_slot
+        json.set! "start_day", item.start_time.strftime('%A')
+        json.set! "start_time", item.start_time.strftime('%H:%M')
+    else
+        json.set! "start_day", item.time_slot ? item.time_slot.start.strftime('%A') : "" 
+        json.set! "start_time", item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
+    end
     json.set! "programme_item[pub_reference_number]", item.pub_reference_number ? item.pub_reference_number : ""
     json.set! "programme_item[lock_version]", item.lock_version
 
