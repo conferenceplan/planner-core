@@ -48,4 +48,12 @@ form {
   margin-top : 0px;
 }
 
+.select2-container.select2-container-multi.form-control {
+    border: 1px solid #ccc;
+}
+
+input[type="checkbox"].form-control {
+    width: auto;
+}
+
 @import 'grenadine/theme';

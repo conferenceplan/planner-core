@@ -70,8 +70,8 @@ body:lang(fr) #event-planner-logo-link-container {
    background: url('/assets/grenadine-event-planner-fr.png') 0 0 no-repeat;
 }
 #event-planner-logo-link-container {
-	height: 67px;
-	width: 282px;
+	height: 51px;
+	width: 217px;
 	margin-left: 00px;
 }
 @media
@@ -79,19 +79,21 @@ screen and (-webkit-min-device-pixel-ratio: 1.5),
 screen and (-moz-min-device-pixel-ratio: 1.5),
 screen and (min-device-pixel-ratio: 1.5) {
 	body:lang(fr) #event-planner-logo-link-container {
-		background: url('/assets/grenadine-event-planner-fr-134.png') 0 0 no-repeat;
+		background: url('/assets/grenadine-event-planner-fr-102.png') 0 0 no-repeat;
 		background-size: 100%;
+		
         }
     body:lang(en) #event-planner-logo-link-container {
-        background: url('/assets/grenadine-event-planner-en-134.png') 0 0 no-repeat;
+        background: url('/assets/grenadine-event-planner-en-102.png') 0 0 no-repeat;
         background-size: 100%;
+        
         }
 	}
 
 .conference-title {
 	color: #808284;
 	font-size: 12pt;
-	margin-top: 25px;
+	margin-top: 17px;
 	font-weight: 200;
 	padding-left: 2px;
 	letter-spacing: 2px;
@@ -113,9 +115,9 @@ screen and (min-device-pixel-ratio: 1.5) {
 	width: auto;
 	padding-left: 15px;
 	padding-right: 15px;
-  max-width: 350px;
-  margin-left: auto;
-  margin-right: auto;
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .login-field {
 	position:relative;
@@ -1743,6 +1745,11 @@ i.publication-count-num {
   font-style: normal;
 }
 
-
-
+.select2-container.gr-conf-selector {
+    margin-top: 9px;
+    a {
+        background-color: rgba(255,255,255,0.5);
+    border-radius: 0px;
+    }
+}
 

@@ -3,7 +3,7 @@ module Planner
     
     def self.included(base)
       base.helper_method :allowed?, :top_menu, :basePlainUri, :baseUri, :baseUri_no_lang, :baseUri_with_lang,
-                         :extra_navigation, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
+                         :extra_navigation, :extra_navigation_left, :extra_navigation_right, :extra_participant_tabs, :extra_item_tabs, :settings_menu,
                          :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo,
                          :strip_html_tags, :site_url, :site_url_no_lang, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
@@ -114,6 +114,15 @@ module Planner
     def extra_navigation
       ''
     end
+  
+    def extra_navigation_left
+      ''
+    end
+  
+    def extra_navigation_right
+      ''
+    end
+  
   
     def extra_participant_tabs
       ''
