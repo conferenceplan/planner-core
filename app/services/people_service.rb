@@ -262,9 +262,8 @@ module PeopleService
                       )
                     ).
                     join_sources
-    query = assignments[:id].not_eq(nil).or(regTable[:id].not_eq(nil)) # only get people that have assignments AND/OR registered
 
-    query = query.and(stateTable[:invitestatus_id].eq(invitestatus)) if invitestatus && invitestatus > 0
+    query = stateTable[:invitestatus_id].eq(invitestatus) if invitestatus && invitestatus > 0
     query = query.and(stateTable[:invitation_category_id].eq(invite_category)) if invite_category && invite_category > 0
     
     include_list = [:pseudonym, :email_addresses, :postal_addresses, :programmeItemAssignments]
