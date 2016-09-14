@@ -175,6 +175,8 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'Name', label : '<%= t "person" %>', jsonmap: "name", width: 130},
                     {name: 'Company', label : '<%= t "company" %>', jsonmap: "company", width: 100},
                     {name: 'Email', label : '<%= t "email" %>', jsonmap: "email", width: 100},
+                    {name: 'Registered', label : '<%= t "registered" %>', jsonmap: "registered", width: 20, formatter: AppUtils.booleanToString},
+                    {name: 'Reg #', label : '<%= t "reg-number" %>', jsonmap: "registration_number", width: 60},
                     {name: 'Status', label : '<%= t "acceptance-status" %>', jsonmap: "acceptance_status", width: 60},
                     {name:'Items', label : '<%= t "items" %>', jsonmap: "items", width: 500, formatter: AppUtils.arrayToString}
     ];

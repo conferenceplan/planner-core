@@ -1274,6 +1274,14 @@ var AppUtils = (function(){
             }
         },
 
+        booleanToString : function(cellvalue) {
+            if (cellvalue) {
+                return 'Y';
+            } else {
+                return 'N';
+            }
+        },
+
         arrayToStringSingleLine : function(cellvalue) {
             if (cellvalue) {
                 return cellvalue.join(", ");

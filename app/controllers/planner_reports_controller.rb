@@ -430,8 +430,12 @@ class PlannerReportsController < PlannerController
             ((panel.room != nil) ? panel.room.name : ''),
             (panel.format ? panel.format.name : ''), 
             panel.title,
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName}.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName}.join(",")
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {
+              |p| p.person.getFullPublicationName + (p.person.registrationDetail && p.person.registrationDetail.registered  ? " (Registered)" : '') 
+              }.join(","),
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {
+              |p| p.person.getFullPublicationName + (p.person.registrationDetail && p.person.registrationDetail.registered  ? " (Registered)" : '') 
+              }.join(",")
           ]
           
         end
@@ -483,7 +487,7 @@ class PlannerReportsController < PlannerController
       format.csv {
         outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
-        output.push ['Fisrt Name','Last Name','Company', 'Email', 'Status','Items', 'Pub Ref Nbr']
+        output.push ['Fisrt Name','Last Name','Company', 'Email', 'Registered', 'Reg #','Status','Items', 'Pub Ref Nbr']
         
         @people.each do |person|
           output.push [
@@ -491,6 +495,8 @@ class PlannerReportsController < PlannerController
             person.pubLastName,
             person.company,
             (person.getDefaultEmail ? person.getDefaultEmail.email : ''),
+            (person.registrationDetail ? (person.registrationDetail.registered ? 'Y' : 'N') : ''),
+            (person.registrationDetail ? (person.registrationDetail.registration_number ? person.registrationDetail.registration_number : '') : ''),
             (person.acceptance_status ? person.acceptance_status.name : ''),
             person.programmeItemAssignments.
               sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.

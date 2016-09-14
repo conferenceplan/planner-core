@@ -29,8 +29,12 @@ json.rowdata @panels.collect { |panel|
 #    json.maximum_people panel.maximum_people
 #    json.context panel.taggings.collect{|t| t.context}.uniq
     
-    json.participants panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| p.person.getFullPublicationName}
-    json.moderators panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| p.person.getFullPublicationName}
+    json.participants panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| 
+            p.person.getFullPublicationName + (p.person.registrationDetail && p.person.registrationDetail.registered  ? " (Registered)" : '') 
+            }
+    json.moderators panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| 
+            p.person.getFullPublicationName + (p.person.registrationDetail && p.person.registrationDetail.registered  ? " (Registered)" : '') 
+            }
 #    json.reserve panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Reserved']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}
 #    json.invisible panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Invisible']}.collect {|p| p.person.getFullPublicationName + (!p.person.company.blank? ? ' (' + p.person.company + ')' : '')}
 end
