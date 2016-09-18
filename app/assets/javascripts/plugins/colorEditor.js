@@ -31,8 +31,8 @@ Form.editors.Color = Form.editors.Text.extend({
         
         var cp = element.find(id).colorpicker({
             okOnEnter       : true,
-            alpha           : true,
-            altAlpha        : true,
+            alpha           : false,
+            altAlpha        : false,
             colorFormat     : 'RGBA',
             buttonImage     : null,
             buttonText      : ' ',
