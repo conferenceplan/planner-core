@@ -46,17 +46,14 @@ class PublishJob
         
         extra_pubish_tasks(p);
         
-        PublishedProgrammeItem.transaction do
-          sleep 2 # fudge to make sure that the datetime is definitely later than the other transactions!!
-          
-          p.timestamp = DateTime.current
-          p.newitems = newItems
-          p.modifieditems = modifiedItems
-          p.removeditems = removedItems
+        sleep 3 # fudge to make sure that the datetime is definitely later than the other transactions!!
+        p.timestamp = DateTime.current
+        p.newitems = newItems
+        p.modifieditems = modifiedItems
+        p.removeditems = removedItems
 #          p.modified_rooms = modifiedRooms
 #          p.modified_venues = modifiedVenues
-          p.save
-        end
+        p.save!
   
         pstatus = PublicationStatus.first
         pstatus = PublicationStatus.new if pstatus == nil
