@@ -45,6 +45,7 @@ end
 if assignment.published_programme_item.children
     assignment.published_programme_item.children.each do |child|
 
+        first_person = true
         personText = ""
         child.published_programme_item_assignments.collect {|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.each do |p|
             personText += ', ' if !first_person
