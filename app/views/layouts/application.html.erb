@@ -6,20 +6,20 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Convention Planner Application" %>">
         <title><%= SiteConfig.first && !SiteConfig.first.conference_id.nil? ? SiteConfig.first.name + " | " : "" %><%= @page_title or (t "convention-planner") %></title>
-        
+
         <%= csrf_meta_tags %>
 
         <%= stylesheet_link_tag "application", :media => "all" %>
         <%= stylesheet_link_tag params[:controller] if params[:controller] && Rails.application.assets.find_asset( params[:controller] + ".css") %>
-        <%= stylesheet_link_tag "cells/" + params[:cellname] if params[:cellname] && Rails.application.assets.find_asset("cells/" + params[:cellname] + ".css") %> 
+        <%= stylesheet_link_tag "cells/" + params[:cellname] if params[:cellname] && Rails.application.assets.find_asset("cells/" + params[:cellname] + ".css") %>
         <%= yield(:cssheader) if content_for?(:cssheader) %>
-        
+
         <%= javascript_include_tag "application" %>
         <%= javascript_include_tag params[:controller] if params[:controller] && Rails.application.assets.find_asset( params[:controller] + ".js") %>
         <%= javascript_include_tag "cells/" + params[:cellname] if params[:cellname] && Rails.application.assets.find_asset("cells/" + params[:cellname] + ".js") %>
         <%=render 'layouts/common_js' %>
         <%= yield(:jsheader) if content_for?(:jsheader) %>
-        
+
         <style type="text/css">
             <%= yield(:styleheader) if content_for?(:styleheader) %>
         </style>
@@ -56,13 +56,13 @@
 					  </style>
 					<![endif]-->
 	  			<%= render 'layouts/navigation' %>
-	  		</nav>      		
+	  		</nav>
       	</div>
   		<% if current_user %>
 			<%= render 'layouts/topbar' %> <!-- This is the menu and sub-menu section -->
 		<% end %>
     	<%= yield(:submenu) if content_for?(:submenu) %>
-        <div id="menu-separator-div"></div> 
+        <div id="menu-separator-div"></div>
         <div id="main-screen-container" class="container">
             <%= render 'layouts/page_help' rescue nil %> <!-- Plugin for the help system -->
             <div class="row">
@@ -72,11 +72,11 @@
             </div>
             <%= content_for?(:content) ? yield(:content) : yield %>
         </div>
-      
+
         <%= render 'layouts/footer' %>
         <%= render partial: 'layouts/templates' %>
         <%= render_cell :category_management, :javascript %>
-        <%= render partial: "layouts/pending_publish_js" if current_user && params[:controller] != "pages/admin_dash" %>
+        <%= render partial: "layouts/pending_publish_js" if current_user && params[:controller] != "pages/admin_dash" && params[:controller] != "pages/home_dash" %>
         <div class="ajax-loading-modal"></div>
     </body>
 </html>
