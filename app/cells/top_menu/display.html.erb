@@ -18,7 +18,7 @@
                     <% @topmenu.each do |entry| %>
                         <% if entry %>
                             <li class="<%= 'active' if entry[:title].eql? @active_top_menu %>"><a href="<%= '/' + I18n.locale.to_s + baseUri_no_lang + entry[:target] %>">
-                                <i class="<%= entry[:icon]%>"></i> <%= entry[:title].empty? ? '' : (t entry[:title]) %></a>
+                                <i class="<%= entry[:icon]%>"></i> <%= entry[:title].empty? ? '' : (t entry[:title]).html_safe %></a>
                             </li>
                         <% end %>
                     <% end %>
@@ -46,7 +46,7 @@
                     <ul class="nav navbar-nav">
                         <% @submenu.each do |entry| %>
                             <% if entry[:display] %>
-                                <li class="<%= 'active' if entry[:title].eql? @active_sub_menu %>"><a href="<%= baseUri + '/' + entry[:target] %>"><%= t entry[:title] %></a></li>
+                                <li class="<%= 'active' if entry[:title].eql? @active_sub_menu %>"><a href="<%= baseUri + '/' + entry[:target] %>"><%= (t entry[:title]).html_safe %></a></li>
                             <% end %>
                         <% end %>
                     </ul>
