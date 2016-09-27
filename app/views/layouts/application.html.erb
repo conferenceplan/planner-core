@@ -32,14 +32,13 @@
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
           
-          ga('create', 'UA-46240726-2', 'auto', {'allowLinker': true});
-          ga('require', 'linker');
-          
           <% if request.domain %>
             <% if request.domain.include? "uqam.ca" %>
-                ga('linker:autoLink', ['grenadine.co'] );
+                ga('create', 'UA-47360116-5', 'auto');
             <% elsif request.domain.include? "grenadine.co" %>
-                ga('linker:autoLink', ['grenadine.uqam.ca'] );
+                ga('create', 'UA-47360116-3', 'auto');
+            <% elsif request.domain.include? "127.0.0.1" %>
+                /* on local -- no cross-domain inclusion */
             <% end %>
           <% end %>
         
