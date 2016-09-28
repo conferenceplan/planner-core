@@ -381,6 +381,11 @@
                     <dd>
                         {{= email ? "<a href='mailto:" + email + "'>" + email + "</a>" : "&nbsp;" }}
                     </dd>
+                    {{ if (!(typeof label == undefined) && label != null) { }}
+                        <dd>
+                            <span class="badge">{{= label }}</span>
+                        </dd>
+                    {{ } }}
                 </dl> </small>
         
     </div>

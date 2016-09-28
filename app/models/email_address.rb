@@ -1,5 +1,5 @@
 class EmailAddress < ActiveRecord::Base
-  attr_accessible :lock_version, :isdefault, :email
+  attr_accessible :lock_version, :isdefault, :email, :label
   audited :allow_mass_assignment => true
 
   has_many :addresses, as: :addressable

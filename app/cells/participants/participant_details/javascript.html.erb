@@ -55,6 +55,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     EmailAddress = Backbone.Model.extend({
         schema : {
             email : { type : 'Text', title : '<%= t "email" %>'},
+            label : { type : 'Text', title : '<%= t "label" %>'},
             isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'}
         },
         urlRoot : "<%= baseUri + '/email_addresses' %>"
