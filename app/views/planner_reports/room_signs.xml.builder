@@ -29,7 +29,7 @@ xml.room_signs do
                             
                             if assignment.published_programme_item.children
                                 xml.children do
-                                    assignment.published_programme_item.children.each do |child|
+                                    assignment.published_programme_item.children.sort{|x,y| x.start_offset <=> y.start_offset}.each do |child|
                                         xml.child do
                                             xml.title child.title
                                             xml.participants do # Participants (Moderators etc)
