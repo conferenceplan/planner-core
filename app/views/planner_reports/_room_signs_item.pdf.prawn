@@ -43,7 +43,7 @@ pdf.table(data,
 end
 
 if assignment.published_programme_item.children
-    assignment.published_programme_item.children.each do |child|
+    assignment.published_programme_item.children.sort{|x,y| x.start_offset <=> y.start_offset}.each do |child|
 
         first_person = true
         personText = ""
