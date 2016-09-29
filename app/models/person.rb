@@ -35,6 +35,8 @@ class Person < ActiveRecord::Base
 
   has_one :pseudonym
   has_one :bio_image, :dependent => :delete
+  alias_attribute :image, :bio_image
+
   has_one :edited_bio, :dependent => :delete
   
   has_one :peoplesource, :dependent => :delete
@@ -356,7 +358,36 @@ class Person < ActiveRecord::Base
     end
     return theEmail
   end
-    
+
+  def real_name
+    name = {}
+    name[:prefix] = self.prefix
+    name[:first] = self.first_name
+    name[:last] = self.last_name
+    name[:suffix] = self.suffix
+
+    name
+  end
+
+  def publication_name
+    name = {}
+
+    if self.pseudonym.present?
+      name[:prefix] = self.pseudonym.prefix
+      name[:first] = self.pseudonym.first_name
+      name[:last] = self.pseudonym.last_name
+      name[:suffix] = self.pseudonym.suffix
+    else
+      name = real_name
+    end
+
+    name
+  end
+
+  def full_publication_name
+    getFullPublicationName
+  end
+
   def getFullPublicationName
    # if we set the pseudonym in people table, use that
    if (self.pseudonym != nil)
@@ -465,6 +496,13 @@ class Person < ActiveRecord::Base
 
   def is_speaker?
     published_programme_items && published_programme_items.any?
+  end
+
+  def public_image_url opts={}
+    url = ""
+    url = image.public_image_url(opts) if image.present?
+
+    url
   end
 
 end

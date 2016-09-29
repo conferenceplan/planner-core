@@ -17,17 +17,17 @@ class PublishedProgrammeItemAssignment < ActiveRecord::Base
   def time_stamp
     updated_at.utc
   end
-  
+
   def role_as_string
-    PersonItemRole.find(role_id).name
+    if description.present?
+      description
+    else
+      PersonItemRole.find(role_id).name
+    end
   end
 
-  def serializable_hash(options = {})
-    super only: [], methods: [:time_stamp, :role_as_string], include: {
-          published_programme_item: {
-              only: [:id]
-          }
-        }
+  def person_role
+    role_as_string
   end
 
 end

@@ -46,7 +46,12 @@ class PublishedProgrammeItem < ActiveRecord::Base
       find(:all, :conditions => ['external_images.use = ?', u])
     end
   end
-  
+
+  alias_attribute :images, :external_images
+  alias_attribute :card_size, :mobile_card_size
+  alias_attribute :description, :precis
+  alias_attribute :requires_signup, :item_registerable
+
   def sorted_published_item_assignments
     assignments = []
     [PersonItemRole["Moderator"],PersonItemRole["Participant"]].each do |role|
@@ -80,5 +85,9 @@ class PublishedProgrammeItem < ActiveRecord::Base
     end
     _end_time
   end
-  
+
+  def published_room_id
+    published_room.id if published_room
+  end
+
 end

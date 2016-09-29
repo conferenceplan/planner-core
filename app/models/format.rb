@@ -11,6 +11,8 @@ class Format < ActiveRecord::Base
     end
   end
 
+  alias_attribute :images, :external_images
+
   before_destroy :check_for_use
 
 private
