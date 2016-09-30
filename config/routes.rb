@@ -227,6 +227,9 @@ Rails.application.routes.draw do
   resources :email_addresses do
     resources :people
   end
+
+  match "email_addresses/labels(/:query)" => "email_addresses#labels"
+
   resources :phone_numbers do
     resources :people
   end

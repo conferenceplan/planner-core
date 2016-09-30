@@ -1,5 +1,15 @@
 class EmailAddressesController < PlannerController
 
+  def labels
+    query = params[:query] ? params[:query] : ""
+    
+    res = EmailAddress.where("label like ?", "%" + query + "%").select("distinct label")
+    
+    render json: res.collect{|r| r.label}.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
+  end
+
   def update
     emailAddress = EmailAddress.find(params[:id])
 
