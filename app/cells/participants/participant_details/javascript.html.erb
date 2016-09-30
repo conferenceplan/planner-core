@@ -52,10 +52,28 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         model : Address
     });
 
+    var emailLabelNames = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace, //('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '<%= baseUri + '/email_addresses/labels/%QUERY' %>',
+        wildcard: '%QUERY'
+      }
+    });
+
     EmailAddress = Backbone.Model.extend({
         schema : {
             email : { type : 'Text', title : '<%= t "email" %>'},
-            label : { type : 'Text', title : '<%= t "label" %>', help: '<%= t "email-label-help" %>' },
+            label : { 
+                type : 'TypeAheadText', 
+                title : '<%= t "label" %>', 
+                help: '<%= t "email-label-help" %>',
+                config : {
+                    minLength: 0,
+                    limit: 10,
+                    source: emailLabelNames
+                }
+            },
             isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>', help: '<%= t "email-default-help" %>' }
         },
         urlRoot : "<%= baseUri + '/email_addresses' %>"
