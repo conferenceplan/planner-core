@@ -1073,6 +1073,11 @@ tbody tr.info td a {
     font-size: 13px;
     padding-left: 3px;
 }
+
+.bpopover:hover, [data-toggle='popover']:hover, .glyphicon-info-sign:hover {
+  cursor: help;
+}
+
 h3 i.bpopover {
     padding-left: 7px;
 }
