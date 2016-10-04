@@ -93,11 +93,14 @@ screen and (min-device-pixel-ratio: 1.5) {
 .conference-title {
 	color: #808284;
 	font-size: 12pt;
-	margin-top: 17px;
-	font-weight: 200;
-	padding-left: 2px;
-	letter-spacing: 2px;
-	//text-transform:lowercase;
+	margin-top: 9px;
+	font-weight: 300;
+	letter-spacing: 1px;
+	margin-bottom: 0;
+}
+
+.conference-title-section-li {
+    margin-left: 2px;
 }
 
 #change-history .panel-collapse .dl-horizontal {
