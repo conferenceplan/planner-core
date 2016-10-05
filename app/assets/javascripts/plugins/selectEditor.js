@@ -33,12 +33,17 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
         setTimeout(function() {
             self.$el.select2(self.config);
             self.$el.on("change", function (e) {
-                    self.form.trigger(key + ":change", self, self);
+                self.form.trigger(key + ":change", self, self);
 
-                    if (self.options.schema.changeFn) {
-                        self.options.schema.changeFn.call(self, e);
-                    }
-                });
+                if (self.options.schema.changeFn) {
+                    self.options.schema.changeFn.call(self, e);
+                }
+            });
+
+            if (self.value && self.options.schema.changeFn) {
+                self.$el.trigger("change");
+            };
+            
         }, 0);
         return this;
     },
@@ -72,13 +77,19 @@ Form.editors.DependentSelect2 = Form.editors.Select2.extend({
 
         setTimeout(function() {
             self.$el.select2(self.config);
-            self.$el.on("change", function (e) { 
-                    self.form.trigger(key + ":change", self, self);
 
-                    if (self.options.schema.changeFn) {
-                        self.options.schema.changeFn.call(self, e);
-                    }
-                });
+            self.$el.on("change", function (e) { 
+                self.form.trigger(key + ":change", self, self);
+
+                if (self.options.schema.changeFn) {
+                    self.options.schema.changeFn.call(self, e);
+                }
+            });
+
+            if (self.value && self.options.schema.changeFn) {
+                self.$el.trigger("change");
+            };
+
         }, 0);
 
         this.dependInit(this.form);
