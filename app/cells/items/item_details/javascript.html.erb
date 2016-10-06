@@ -260,16 +260,18 @@ ItemApp.ItemManagement = (function(Backbone){
                     // console.log(this);
                     // console.log(e);
                     fields = this.form.fields;
-                    endTime = this.picker.data("DateTimePicker").date();
-                    startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
-                    // console.log(endTime);
+                    
+                    if (this.picker && fields.start_time.editor.picker) {
+                        endTime = this.picker.data("DateTimePicker").date();
+                        startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
+                        // console.log(endTime);
 
-                    if (startTime && endTime) {
-                        diff = moment.duration(endTime.diff(startTime)).asMinutes();
-
-                        fields.duration.editor.$el.val(diff);
-                    }
-                    // console.log(diff);
+                        if (startTime && endTime) {
+                            diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                            fields.duration.editor.$el.val(diff);
+                        };
+                        // console.log(diff);
+                    };
                 }
             },
             <%-
