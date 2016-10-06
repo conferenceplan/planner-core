@@ -247,6 +247,15 @@ ItemApp.ItemManagement = (function(Backbone){
                                     return data;
                                 }
                             }
+                        },
+                        changeFn : function(e) {
+                            parent = this.$el.select2("data");
+
+                            if (parent && parent.id != null) {
+                                this.form.$el.find("[name='room_id']").parents(".form-group").hide();
+                            } else if (parent && parent.id == null){
+                                this.form.$el.find("[name='room_id']").parents(".form-group").show();
+                            };
                         }
             },
             item_notes : { type : 'DependentTextArea', 
