@@ -63,8 +63,8 @@ en:
 
   time:
     formats:
-      start_time_with_date: "%Y-%-m-%-d, %I:%M %p"
-      end_time: "%I:%M %p"
+      start_time_with_date: "%Y-%-m-%-d, %k:%M"
+      end_time: "%k:%M"
 
 
 

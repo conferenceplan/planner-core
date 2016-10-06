@@ -44,3 +44,4 @@ fr:
     formats:
       start_time_with_date: "%Y-%-m-%-d, %kh%M"
       end_time: "%kh%M"
+      
