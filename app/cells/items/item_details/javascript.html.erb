@@ -187,9 +187,34 @@ ItemApp.ItemManagement = (function(Backbone){
                     }
                 },
                 changeFn : function(e) {
-                    console.log("start time changed");
-                    console.log(this);
-                    console.log(e);
+                    // console.log("start time changed");
+                    // console.log(this);
+                    // console.log(e);
+                    fields = this.form.fields;
+                    
+                    if (this.picker && fields.end_time.editor.picker) {
+                        // console.log("both start and end time initialized");
+                        startTime = this.picker.data("DateTimePicker").date();
+                        endTime = fields.end_time.editor.picker.data("DateTimePicker").date();
+                        // console.log(startTime);
+                        if (startTime && endTime) {
+                            diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                            fields.duration.editor.$el.val(diff);
+
+                            parent =  fields.parent_id.editor.$el.select2("data");
+
+                            if (parent && parent.id != null && parent.start_time_str && parent.start_time_str.length > 0) {
+                                pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
+                                // console.log(pStart);
+                                pOffset = moment.duration(startTime.diff(pStart)).asMinutes();
+                                // console.log(pOffset);
+                                fields.start_offset.editor.$el.val(pOffset);
+                            } else {
+                                fields.start_offset.editor.$el.val(null);
+                            };
+                        }
+                    };
+
                 }
             },
             end_time : { type : 'Datetime', title : '<%= t "item-end-time" %>',
@@ -338,6 +363,7 @@ ItemApp.ItemManagement = (function(Backbone){
 
                             } else if (parent && parent.id == null){
                                 this.form.$el.find("[name='room_id']").parents(".form-group").show();
+                                form.fields.start_offset.editor.$el.val(null);
                             };
                         }
             },
