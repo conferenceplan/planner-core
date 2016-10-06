@@ -794,11 +794,14 @@ class PlannerReportsController < PlannerController
     additional_roles = params[:additional_roles] == "true" ? [PersonItemRole['Invisible'].id] : nil
     @conf_start_time = SiteConfig.first.start_date
 
+# TODO - add an option to return a ZIP containing multiple files
+# this would be a in method render and use the ruby zip functionality to add to a file.
     Person.uncached do
       # Only use the scheduled items
       @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, true
       @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
       @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
+      @single_venue = Venue.count == 1
       
       respond_to do |format|
         format.xml {
