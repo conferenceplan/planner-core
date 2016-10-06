@@ -229,6 +229,19 @@ ItemApp.ItemManagement = (function(Backbone){
                         obj.picker.data("DateTimePicker").clear();
                         obj.form.fields['room_id'].setValue("");
                     }
+                },
+                changeFn : function(e) {
+                    // console.log("end time changed");
+                    // console.log(this);
+                    // console.log(e);
+                    fields = this.form.fields;
+                    endTime = this.picker.data("DateTimePicker").date();
+                    startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
+
+                    diff = moment.duration(endTime.diff(startTime)).asMinutes();
+
+                    fields.duration.editor.$el.val(diff);
+                    // console.log(diff);
                 }
             },
             <%-
