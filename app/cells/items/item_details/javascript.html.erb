@@ -148,11 +148,11 @@ ItemApp.ItemManagement = (function(Backbone){
                     }
                 ]
              },
-            start_time : { type : 'DependentDatetime', title : '<%= t "item-start-time" %>',
+            start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
                 editorClass : 'item-form-element',
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                 defaultDate: "<%= Time.zone.parse((@start_date.start_date +  + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
-                dependsOn : 'parent_id', dependentValues : ['false'],
+                // dependsOn : 'parent_id', dependentValues : ['false'],
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : 5,
@@ -163,14 +163,58 @@ ItemApp.ItemManagement = (function(Backbone){
                 },
                 validators: [
                     function check_for_room(value, formValues) {
-                        var parent_err = {
+                        // var parent_err = {
+                        //     type: "start_time",
+                        //     message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
+                        // };
+                        // if (formValues.start_time != "" && formValues.parent_id != "") {
+                        //     $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
+                        //     return parent_err;
+                        // };
+                        var err = {
                             type: "start_time",
-                            message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
+                            message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
-                        if (formValues.start_time != "" && formValues.parent_id != "") {
-                            $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
-                            return parent_err;
+                        if (formValues.room_id == "" && formValues.start_time != "" && !formValues.is_break) {
+                            return err;
                         };
+                    },
+                ],
+                callback: function(val, editor, obj) {
+                    if (val) {
+                        obj.picker.data("DateTimePicker").clear();
+                        obj.form.fields['room_id'].setValue("");
+                    }
+                },
+                changeFn : function(e) {
+                    console.log("start time changed");
+                    console.log(this);
+                    console.log(e);
+                }
+            },
+            end_time : { type : 'Datetime', title : '<%= t "item-end-time" %>',
+                editorClass : 'item-form-element',
+                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                defaultDate: "<%= Time.zone.parse((@start_date.start_date +  + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                // dependsOn : 'parent_id', dependentValues : ['false'],
+                picker : {
+                    locale : "<%= I18n.locale %>",
+                    stepping : 5,
+                    format : "DD MMM YYYY, HH:mm",
+                    useCurrent: false,
+                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days - 1.seconds).strftime('%m/%d/%Y %H:%M:%S') %>"
+                },
+                validators: [
+                    function check_for_room(value, formValues) {
+                        // var parent_err = {
+                        //     type: "start_time",
+                        //     message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
+                        // };
+                        // if (formValues.start_time != "" && formValues.parent_id != "") {
+                        //     $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
+                        //     return parent_err;
+                        // };
                         var err = {
                             type: "start_time",
                             message: '<%= t "room-required-when-you-set-a-time" %>'
