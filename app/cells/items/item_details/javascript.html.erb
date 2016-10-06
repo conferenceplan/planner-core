@@ -252,7 +252,12 @@ ItemApp.ItemManagement = (function(Backbone){
                             parent = this.$el.select2("data");
 
                             if (parent && parent.id != null) {
-                                this.form.$el.find("[name='room_id']").parents(".form-group").hide();
+                                $room = this.form.$el.find("[name='room_id']");
+                                $room.val(null);
+
+                                this.form.$el.find("[name='setup_type_id']").val(null);
+
+                                $room.parents(".form-group").hide();
                             } else if (parent && parent.id == null){
                                 this.form.$el.find("[name='room_id']").parents(".form-group").show();
                             };
