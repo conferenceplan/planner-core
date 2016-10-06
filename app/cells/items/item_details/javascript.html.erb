@@ -237,10 +237,13 @@ ItemApp.ItemManagement = (function(Backbone){
                     fields = this.form.fields;
                     endTime = this.picker.data("DateTimePicker").date();
                     startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
+                    // console.log(endTime);
 
-                    diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                    if (startTime && endTime) {
+                        diff = moment.duration(endTime.diff(startTime)).asMinutes();
 
-                    fields.duration.editor.$el.val(diff);
+                        fields.duration.editor.$el.val(diff);
+                    }
                     // console.log(diff);
                 }
             },
