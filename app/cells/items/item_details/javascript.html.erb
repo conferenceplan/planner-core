@@ -261,7 +261,11 @@ ItemApp.ItemManagement = (function(Backbone){
                                         callback(
                                             {
                                                 'id' : pitem.get('id'), 
-                                                'text' : (pitem.get('title') + pitem.get('date_time_str'))
+                                                'text' : (pitem.get('title') + pitem.get('date_time_str')),
+                                                start_time : pitem.get('start_time'),
+                                                end_time : pitem.get('end_time'),
+                                                start_time_str : pitem.get("start_time_str"),
+                                                end_time_str : pitem.get("end_time_str,")
                                             }
                                         );
                                     }
@@ -281,7 +285,11 @@ ItemApp.ItemManagement = (function(Backbone){
                                         res.push( 
                                             {
                                                 'id' : item.id, 
-                                                'text' : (item.title + item.date_time_str)
+                                                'text' : (item.title + item.date_time_str),
+                                                start_time : item.start_time,
+                                                end_time : item.end_time,
+                                                start_time_str : item.start_time_str,
+                                                end_time_str : item.end_time_str,
                                             } 
                                         );
                                     });
@@ -293,15 +301,25 @@ ItemApp.ItemManagement = (function(Backbone){
                             }
                         },
                         changeFn : function(e) {
+                            // console.log(this);
                             parent = this.$el.select2("data");
 
                             if (parent && parent.id != null) {
-                                $room = this.form.$el.find("[name='room_id']");
+                                // console.log(parent);
+                                form = this.form
+                                $form = this.form.$el;
+                                // Clear room and setup fields
+                                $room = $form.find("[name='room_id']");
                                 $room.val(null);
-
-                                this.form.$el.find("[name='setup_type_id']").val(null);
-
+                                $form.find("[name='setup_type_id']").val(null);
                                 $room.parents(".form-group").hide();
+
+                                // Set times to parent time
+                                if (parent.start_time && parent.start_time && parent.end_time) {
+                                    form.fields.start_time.editor.picker.data("DateTimePicker").date(moment(parent.start_time_str));
+                                    form.fields.end_time.editor.picker.data("DateTimePicker").date(moment(parent.end_time_str));
+                                };
+
                             } else if (parent && parent.id == null){
                                 this.form.$el.find("[name='room_id']").parents(".form-group").show();
                             };
