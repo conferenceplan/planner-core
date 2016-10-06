@@ -58,3 +58,13 @@ en:
         people-not-found: "can not find the source or destination person"
         must-be-a-positive-number: 'Must be a positive number.'
         unique-mailing-error: "Combination of <b>Mailing number</b> and <b>Mailing Template</b> must be unique."
+
+
+
+  time:
+    formats:
+      start_time_with_date: "%Y-%-m-%-d, %I:%M %p"
+      end_time: "%I:%M %p"
+
+
+

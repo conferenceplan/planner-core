@@ -7,5 +7,9 @@ json.rows @items do |item|
     json.title               item.title
     json.start_time          item.start_time
     json.end_time            item.end_time
+    json.date_time_str       ( item.start_time.present? ? 
+        ' [' + l(item.start_time, format: :start_time_with_date) + " - " + l(item.end_time, format: :end_time) + ']' 
+        : ""
+    )
 
 end

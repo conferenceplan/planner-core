@@ -214,17 +214,10 @@ ItemApp.ItemManagement = (function(Backbone){
                                 if (current_item) {
                                     var pitem = current_item.get('parent_val');
                                     if (pitem) {
-                                        dateTime = "";
-                                        if (pitem.get("start_time") && pitem.get("start_time").length > 0 && pitem.get("end_time") && pitem.get("end_time").length > 0) {
-                                            dateTime = ' [' + moment(pitem.get("start_time")).format("YYYY-MM-DD, LT") + " - " + moment(pitem.get("end_time")).format("LT") + ']';
-                                        };
-
                                         callback(
                                             {
                                                 'id' : pitem.get('id'), 
-                                                'text' : (pitem.get('title') + dateTime),
-                                                start_time : pitem.get("start_time"),
-                                                end_time : pitem.get("end_time")
+                                                'text' : (pitem.get('title') + pitem.get('date_time_str'))
                                             }
                                         );
                                     }
@@ -241,17 +234,10 @@ ItemApp.ItemManagement = (function(Backbone){
                                 results : function(_data, page, query) {
                                     res = [{'id' : null, 'text' : "(<%= t 'planner.core.messages.no-parent' %>)" }];
                                     _.each(_data.rows, function(item) {
-                                        dateTime = "";
-                                        if (item.start_time && item.start_time.length > 0 && item.end_time && item.end_time.length > 0) {
-                                            dateTime = ' [' + moment(item.start_time).format("YYYY-MM-DD, LT") + " - " + moment(item.end_time).format("LT") + ']';
-                                        };
-
                                         res.push( 
                                             {
                                                 'id' : item.id, 
-                                                'text' : (item.title + dateTime),
-                                                start_time : item.start_time,
-                                                end_time : item.end_time
+                                                'text' : (item.title + item.date_time_str)
                                             } 
                                         );
                                     });

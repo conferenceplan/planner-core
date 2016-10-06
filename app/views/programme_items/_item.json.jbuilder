@@ -46,8 +46,10 @@ json.parent_val do
     if item.parent
         json.id     item.parent.id
         json.title   item.parent.title
-        json.start_time   item.parent.start_time
-        json.end_time   item.parent.end_time
+        json.date_time_str       ( item.parent.start_time.present? ? 
+        ' [' + l(item.start_time, format: :start_time_with_date) + " - " + l(item.end_time, format: :end_time) + ']' 
+        : ""
+    )
     end
 end
 

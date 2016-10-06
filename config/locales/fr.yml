@@ -38,3 +38,9 @@ fr:
         people-not-found: "Nous ne pouvons pas trouver le dossier de la personne de destination pour cette image."
         must-be-a-positive-number: 'Doit être un nombre positif.'
         unique-mailing-error: "La combinaison <b>Référence d'envoi</b> et <b>Gabarit</b> doit être unique."
+
+
+  time:
+    formats:
+      start_time_with_date: "%Y-%-m-%-d, %kh%M"
+      end_time: "%kh%M"
