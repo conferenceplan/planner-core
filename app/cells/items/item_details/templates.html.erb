@@ -149,35 +149,34 @@
             # So we need a way to make form groups line up without screwing up the rest of the display
             %>
             <div class="row">
-                <div class="form-group" id="start-offset-form-group">
-                    <label class="col-sm-3 control-label">
-                       <%= t  "item-start-offset" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-offset" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-offset-help" %>'></i>
-                    </label>
-                    <div class="col-sm-4">
-                        <div data-editors="start_offset"></div>
-                        <div class="has-error">
-                            <p class="help-block" id='start-time-error' data-error></p>
-                        </div>
-                    </div>
-                </div>
-                <%-
-                # Has to be a form group do the dependent editor to work
-                %>
-                <div class="form-group" id="start-day-and-time-form-group"> 
-                    <label class="col-sm-3 control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>
-                    <div class="col-sm-4">
+                <div class="col-sm-3 hidden-xs"></div>
+                <div class="form-group col-sm-4" id="start-day-and-time-form-group"> 
+                    <div class="">
+                        <label class="control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>
                         <div data-editors="start_time"></div>
                         <div class="has-error">
                             <p class="help-block" id='start-time-error' data-error></p>
                         </div>
                     </div>
                 </div>
+                <div class="form-group col-sm-4" id="end-day-and-time-form-group"> 
+                    <div class="">
+                        <label class="control-label"><%= t "item-end-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-end-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-end-time-help" %>'></i></label>
+                        <div data-editors="end_time"></div>
+                        <div class="has-error">
+                            <p class="help-block" id='end-time-error' data-error></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row boffset20">
                 <%-
                 # Has to be a form group do the dependent editor to work
                 %>
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="col-sm-3 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
-                    <div class="col-sm-2">
+                <div class="form-group col-sm-6" style="margin-bottom: 0;">
+                    <label class="col-sm-6 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
+                    <div class="col-sm-6">
                         <span data-editor>
                             <div data-editors="duration"></div>
                             <div class="has-error">
@@ -185,7 +184,18 @@
                             </div>
                         </span>
                     </div>
-                </div>                
+                </div>    
+                <div class="form-group col-sm-6" id="start-offset-form-group">
+                    <label class="col-sm-6 control-label">
+                       <%= t  "item-start-offset" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-offset" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-offset-help" %>'></i>
+                    </label>
+                    <div class="col-sm-6">
+                        <div data-editors="start_offset"></div>
+                        <div class="has-error">
+                            <p class="help-block" id='start-time-error' data-error></p>
+                        </div>
+                    </div>
+                </div>         
             </div>
             <div class="row">
                 <div class="form-group">
