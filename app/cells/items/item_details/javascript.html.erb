@@ -280,15 +280,33 @@ ItemApp.ItemManagement = (function(Backbone){
             # if parent is assigned we then need to get those details etc...
             %>
             start_offset : {
-                        type : 'DependentNumber',
-                        title : '<%= t "item-start-offset" %>',
-                        help: '<%= t "item-start-offset-help" %>',
-                        dependsOn : 'parent_id', dependentValues : ['not_null'],
-                        validators: [
-                            function check_within_parent(value, formValues) {
-                                
-                            }
-                        ]
+                type : 'DependentNumber',
+                title : '<%= t "item-start-offset" %>',
+                help: '<%= t "item-start-offset-help" %>',
+                dependsOn : 'parent_id', dependentValues : ['not_null'],
+                validators: [
+                    function check_within_parent(value, formValues) {
+                        
+                    }
+                ],
+                changeFn : function() {
+                    console.log(this);
+                    form = this.form;
+                    value = this.$el.val();
+                    console.log(value);
+                    parent =  fields.parent_id.editor.$el.select2("data");
+
+                    if (
+                        form.fields.start_time.editor.picker 
+                        && parent && parent.id != null 
+                        && parent.start_time_str && parent.start_time_str.length > 0
+                    ){
+                        pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
+                        newStart = pStart.add(value, "minutes");
+
+                        form.fields.start_time.editor.picker.data("DateTimePicker").date(newStart);
+                    };
+                }
             },
             parent_id : {
                         type : 'DependentSelect2', 
@@ -349,7 +367,7 @@ ItemApp.ItemManagement = (function(Backbone){
 
                             if (parent && parent.id != null) {
                                 // console.log(parent);
-                                form = this.form
+                                form = this.form;
                                 $form = this.form.$el;
                                 // Clear room and setup fields
                                 $room = $form.find("[name='room_id']");
