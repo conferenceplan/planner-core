@@ -9,14 +9,14 @@ json.rowdata @people do |person|
     json.registered         person.registrationDetail.registered if person.registrationDetail
     json.registration_number    person.registrationDetail.registration_number if person.registrationDetail
     json.items              person.programmeItemAssignments.
-                    sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
+                    sort_by{ |a| (a.programmeItem.start_time ? a.programmeItem.start_time : @conf_start_time) }.
                     collect { |pi|
         if (pi.programmeItem)
             (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number.to_s + ' ' : '' ) +
             '<b>' + pi.programmeItem.title + '</b>' +
             ( pi.programmeItem.format ? ' (' + pi.programmeItem.format.name + ') ' : '' ) +
             ' (' + pi.role.name + ')' +
-            (pi.programmeItem.time_slot ? ', ' + pi.programmeItem.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.time_slot.end.strftime('%H:%M') : '') +
+            (pi.programmeItem.start_time ? ', ' + pi.programmeItem.start_time.strftime(@time_format) + ' - ' + pi.programmeItem.end_time.strftime(@plain_time_format) : '') +
             (pi.programmeItem.room ? ', ' + pi.programmeItem.room.name : '') +
             (pi.programmeItem.room ? ' (' + pi.programmeItem.room.venue.name + ')': '') +
             (pi.programmeItem.parent ?
@@ -24,7 +24,7 @@ json.rowdata @people do |person|
                 (pi.programmeItem.parent.pub_reference_number ? pi.programmeItem.parent.pub_reference_number.to_s + ' ' : '' ) +
                 '<b>' + pi.programmeItem.parent.title + '</b>' +
                 ( pi.programmeItem.parent.format ? ' (' + pi.programmeItem.parent.format.name + ') ' : '' ) +
-                (pi.programmeItem.parent.time_slot ? ' ' + pi.programmeItem.parent.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.parent.time_slot.end.strftime('%H:%M') : '') +
+                (pi.programmeItem.parent.time_slot ? ' ' + pi.programmeItem.parent.start_time.strftime(@time_format) + ' - ' + pi.programmeItem.parent.end_time.strftime(@plain_time_format) : '') +
                 (pi.programmeItem.parent.room ? ', ' + pi.programmeItem.parent.room.name : '') +
                 (pi.programmeItem.parent.room ? ' (' + pi.programmeItem.parent.room.venue.name + ')': '') : ''
             )

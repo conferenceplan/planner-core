@@ -25,8 +25,6 @@ wb.add_worksheet(name: "Badge Labels") do |sheet|
         p.programmeItemAssignments.
         sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
         each do |ia|
-# TODO - this needs ot change so that there is an item per column etc.
-# if it is a break indicate that this is the case (as it may not have a room)
             if @allowed_roles.include? ia.role
                 row << ia.programmeItem.start_time
                 if ia.programmeItem.parent

@@ -10,10 +10,10 @@ json.rowdata @panels.collect { |panel|
     panel
 }.compact do |panel|
     if panel.time_slot
-        json.date       panel.time_slot.start.strftime('%d %b %Y')
-        json.day        panel.time_slot.start.strftime('%A')
-        json.start_time panel.time_slot.start.strftime('%H:%M')
-        json.end_time   panel.time_slot.end.strftime('%H:%M')
+        json.date       panel.start_time.strftime('%d %b %Y')
+        json.day        panel.start_time.strftime('%A')
+        json.start_time panel.start_time.strftime(@plain_time_format)
+        json.end_time   panel.end_time.strftime(@plain_time_format)
     end
 
     json.room_name panel.room.name if panel.room
