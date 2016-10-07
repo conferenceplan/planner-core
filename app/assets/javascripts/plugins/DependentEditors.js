@@ -297,11 +297,18 @@ Form.editors.DependentNumber = Form.editors.Number.extend({
     },
     
     render: function() {
+        var self = this;
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
        
         this.setValue(this.value);
 
         this.dependInit(this.form);
+        
+        this.$el.on("change", function(e) {
+            if (self.options.schema.changeFn) {
+                self.options.schema.changeFn.call(self, e);
+            }
+        });
         
         return this;
     }
