@@ -42,6 +42,7 @@ pdf.table(data,
     end
 end
 
+# TODO - need to put the times for the sub-items in here as well
 if assignment.published_programme_item.children
     assignment.published_programme_item.children.sort{|x,y| x.start_offset <=> y.start_offset}.each do |child|
 
@@ -55,20 +56,29 @@ if assignment.published_programme_item.children
         end
 
         data = [
-            ['', "<b>" + child.title + "</b>"],
-            ['', personText]
+            ['', "<b>" + child.start_time.strftime(@plain_time_format) + "</b>", "<b>" + child.title + "</b>"],
+            ['', " - " + child.end_time.strftime(@plain_time_format), personText]
         ]
         pdf.table(data,
             :cell_style => { :inline_format => true, :border_color => "D0D0D0", :disable_wrap_by_char => true }, :width => pdf.bounds.width ) do
             column(0).borders = []
-            column(1).borders = [:left,:right]
-            row(0).column(1).borders = [:top,:left,:right]
-            row(1).column(1).borders = [:bottom,:left,:right]
+            column(1).borders = [:left]
+            column(2).borders = [:right]
+            row(0).column(1).borders = [:top,:left]
+            row(1).column(1).borders = [:bottom,:left]
+            row(0).column(2).borders = [:top,:right]
+            row(1).column(2).borders = [:bottom,:right]
 
             column(0).width = 70
-            row(0).column(1).size = 16
-            row(0).column(1).valign = :top
-            row(1).column(1).size = 8
+            column(1).width = 70
+            row(0).column(1).size = 10
+            row(0).column(1).valign = :bottom
+            row(1).column(1).size = 5
+            row(1).column(1).valign = :top
+
+            row(0).column(2).size = 16
+            row(0).column(2).valign = :top
+            row(1).column(2).size = 8
         end
         pdf.move_down 0.1.in
     end

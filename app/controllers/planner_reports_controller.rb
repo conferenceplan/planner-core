@@ -487,45 +487,36 @@ class PlannerReportsController < PlannerController
       format.csv {
         outfile = "panelists_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
-        output.push ['Fisrt Name','Last Name','Company', 'Email', 'Registered', 'Reg #','Status','Items', 'Pub Ref Nbr']
+        output.push ['First Name','Last Name','Company', 'Email', 'Registered', 'Reg #', 'Status',
+              ].concat(
+                        Array.new(20) {|e| [
+                                        'Item ' + (e+1).to_s + ' Start', 
+                                        'Item ' + (e+1).to_s + ' End', 
+                                        'Item ' + (e+1).to_s
+                                    ]}.flatten
+              )
+        
+        # TODO - add a column + time per item
         
         @people.each do |person|
-          output.push [
+          row = [
             person.pubFirstName,
             person.pubLastName,
             person.company,
             (person.getDefaultEmail ? person.getDefaultEmail.email : ''),
             (person.registrationDetail ? (person.registrationDetail.registered ? 'Y' : 'N') : ''),
             (person.registrationDetail ? (person.registrationDetail.registration_number ? person.registrationDetail.registration_number : '') : ''),
-            (person.acceptance_status ? person.acceptance_status.name : ''),
-            person.programmeItemAssignments.
-              sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
-              collect { |pi|
-                if (pi.programmeItem)
-                    (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number.to_s + ' ' : '' ) +
-                    pi.programmeItem.title +
-                    ( pi.programmeItem.format ? ' (' + pi.programmeItem.format.name + ') ' : '' ) +
-                    ' (' + pi.role.name + '), ' +
-                    (pi.programmeItem.time_slot ? pi.programmeItem.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.time_slot.end.strftime('%H:%M') : '') +
-                    (pi.programmeItem.room ? ', ' + pi.programmeItem.room.name : '') +
-                    (pi.programmeItem.room ? ' (' + pi.programmeItem.room.venue.name + ')': '') +
-                    (pi.programmeItem.parent ?
-                        ' part of ' +
-                        (pi.programmeItem.parent.pub_reference_number ? pi.programmeItem.parent.pub_reference_number.to_s + ' ' : '' ) +
-                        pi.programmeItem.parent.title +
-                        ( pi.programmeItem.parent.format ? ' (' + pi.programmeItem.parent.format.name + ') ' : '' ) +
-                        (pi.programmeItem.parent.time_slot ? ' ' + pi.programmeItem.parent.time_slot.start.strftime('%a %H:%M') + ' - ' + pi.programmeItem.parent.time_slot.end.strftime('%H:%M') : '') +
-                        (pi.programmeItem.parent.room ? ', ' + pi.programmeItem.parent.room.name : '') +
-                        (pi.programmeItem.parent.room ? ' (' + pi.programmeItem.parent.room.venue.name + ')': '') : ''
-                    )
-                end
-            }.reject { |c| c == nil }.join("\n"),
-            person.programmeItemAssignments.collect { |pi|
-                if (pi.programmeItem)
-                    (pi.programmeItem.pub_reference_number ? pi.programmeItem.pub_reference_number.to_s + ' ' : '' )
-                end
-            }.reject { |c| c == nil }.join(",")
-          ]
+            (person.acceptance_status ? person.acceptance_status.name : '') ]
+
+          person.programmeItemAssignments.sort_by{ |a| (a.programmeItem.start_time ? a.programmeItem.start_time : @conf_start_time) }.each do |assignment|
+            if (assignment.programmeItem)
+              row << (assignment.programmeItem.start_time ? assignment.programmeItem.start_time.strftime(@day_and_time_format) : '')
+              row << (assignment.programmeItem.end_time ? assignment.programmeItem.end_time.strftime(@day_and_time_format) : '')
+              row << assignment.programmeItem.title
+            end
+          end
+
+          output.push row
         end
         csv_out(output, outfile)
       }
@@ -794,11 +785,14 @@ class PlannerReportsController < PlannerController
     additional_roles = params[:additional_roles] == "true" ? [PersonItemRole['Invisible'].id] : nil
     @conf_start_time = SiteConfig.first.start_date
 
+# TODO - add an option to return a ZIP containing multiple files
+# this would be a in method render and use the ruby zip functionality to add to a file.
     Person.uncached do
       # Only use the scheduled items
       @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, true
       @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
       @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
+      @single_venue = Venue.count == 1
       
       respond_to do |format|
         format.xml {

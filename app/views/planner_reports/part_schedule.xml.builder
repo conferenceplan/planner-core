@@ -12,19 +12,22 @@ xml.badge_labels do
                             xml.role (assignment.description.blank? ? assignment.role.name : assignment.description) if assignment.role
                             xml.title assignment.programmeItem.short_title.blank? ? assignment.programmeItem.title : assignment.programmeItem.short_title
                             xml.format assignment.programmeItem.format ? assignment.programmeItem.format.name : ''
+
                             if assignment.programmeItem.parent
-                                xml.room assignment.programmeItem.parent.room.name
-                                xml.venue assignment.programmeItem.parent.room.venue.name
-                                xml.day assignment.programmeItem.parent.time_slot.start.strftime('%A')
-                                xml.time assignment.programmeItem.parent.time_slot.start.strftime('%H:%M')
-                                xml.date assignment.programmeItem.parent.time_slot.start.strftime('%y-%m-%d')
+                                if assignment.programmeItem.parent.room
+                                    xml.room assignment.programmeItem.parent.room.name
+                                    xml.venue assignment.programmeItem.parent.room.venue.name
+                                end
                             else
-                                xml.room assignment.programmeItem.room.name
-                                xml.venue assignment.programmeItem.room.venue.name
-                                xml.day assignment.programmeItem.time_slot.start.strftime('%A')
-                                xml.time assignment.programmeItem.time_slot.start.strftime('%H:%M')
-                                xml.date assignment.programmeItem.time_slot.start.strftime('%y-%m-%d')
+                                if assignment.programmeItem.room
+                                    xml.room assignment.programmeItem.room.name
+                                    xml.venue assignment.programmeItem.room.venue.name
+                                end
                             end
+
+                            xml.day assignment.programmeItem.start_time.strftime('%A')
+                            xml.time assignment.programmeItem.start_time.strftime('%H:%M')
+                            xml.date assignment.programmeItem.start_time.strftime('%y-%m-%d')
 
                             xml.notes assignment.programmeItem.participant_notes
                             if assignment.programmeItem.parent
