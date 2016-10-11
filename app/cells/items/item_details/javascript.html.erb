@@ -403,7 +403,30 @@ ItemApp.ItemManagement = (function(Backbone){
             setup_type_id : { type : 'Select', editorClass : 'item-form-element',
                         title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             print : { type : 'Checkbox', title : '<%= t "item-print" %>',  editorClass : 'item-form-element', editorAttrs : {tabindex : "-1"} },
-            duration : { type : 'Number', title : '<%= t "item-duration" %>', editorClass : 'item-form-element', validators: ['required'] },
+            duration : { 
+                type : 'NumberWithChange', 
+                title : '<%= t "item-duration" %>', 
+                editorClass : 'item-form-element', 
+                validators: ['required'],
+                changeFn : function() {
+                    console.log(this);
+                    form = this.form;
+                    value = this.$el.val();
+                    console.log(value);
+
+                    if (
+                        form.fields.end_time.editor.picker && form.fields.start_time.editor.picker
+                    ){
+                        startTime = form.fields.start_time.editor.picker.data("DateTimePicker").date();
+                        
+                        if (startTime){
+                            newEnd = startTime.add(value, "minutes");
+
+                            form.fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
+                        }
+                    };
+                } 
+            },
             minimum_people : { type : 'DependentNumber', editorClass : 'item-form-element',
                                 dependsOn : 'is_break', dependentValues : ['false'],
                                 editorAttrs : { placeholder : '<%= t "min" %>' },
