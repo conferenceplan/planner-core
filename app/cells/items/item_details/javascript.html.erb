@@ -148,11 +148,11 @@ ItemApp.ItemManagement = (function(Backbone){
                     }
                 ]
              },
-            start_time : { type : 'DependentDatetime', title : '<%= t "item-start-time" %>',
+            start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
                 editorClass : 'item-form-element',
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                 defaultDate: "<%= Time.zone.parse((@start_date.start_date +  + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
-                dependsOn : 'parent_id', dependentValues : ['false'],
+                // dependsOn : 'parent_id', dependentValues : ['false'],
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : 5,
@@ -163,19 +163,19 @@ ItemApp.ItemManagement = (function(Backbone){
                 },
                 validators: [
                     function check_for_room(value, formValues) {
-                        var parent_err = {
-                            type: "start_time",
-                            message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
-                        };
-                        if (formValues.start_time != "" && formValues.parent_id != "") {
-                            $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
-                            return parent_err;
-                        };
+                        // var parent_err = {
+                        //     type: "start_time",
+                        //     message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
+                        // };
+                        // if (formValues.start_time != "" && formValues.parent_id != "") {
+                        //     $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
+                        //     return parent_err;
+                        // };
                         var err = {
                             type: "start_time",
                             message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
-                        if (formValues.room_id == "" && formValues.start_time != "" && !formValues.is_break) {
+                        if (formValues.room_id == "" && formValues.start_time != "" && !formValues.is_break && formValues.parent_id == "") {
                             return err;
                         };
                     },
@@ -185,6 +185,97 @@ ItemApp.ItemManagement = (function(Backbone){
                         obj.picker.data("DateTimePicker").clear();
                         obj.form.fields['room_id'].setValue("");
                     }
+                },
+                changeFn : function(e) {
+                    // console.log("start time changed");
+                    // console.log(this);
+                    // console.log(e);
+                    fields = this.form.fields;
+                    
+                    if (this.picker && fields.end_time.editor.picker) {
+                        // console.log("both start and end time initialized");
+                        startTime = this.picker.data("DateTimePicker").date();
+                        endTime = fields.end_time.editor.picker.data("DateTimePicker").date();
+                        // console.log(startTime);
+                        if (startTime && endTime) {
+                            diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                            fields.duration.editor.$el.val(diff);
+
+                            parent =  fields.parent_id.editor.$el.select2("data");
+
+                            if (parent && parent.id != null && parent.start_time_str && parent.start_time_str.length > 0) {
+                                pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
+                                // console.log(pStart);
+                                pOffset = moment.duration(startTime.diff(pStart)).asMinutes();
+                                // console.log(pOffset);
+                                fields.start_offset.editor.$el.val(pOffset);
+                            } else {
+                                fields.start_offset.editor.$el.val(null);
+                            };
+                        } else if (startTime && endTime == null) {
+                            duration = fields.duration.editor.$el.val();
+                            end = startTime.add(duration, "minutes");
+                            fields.end_time.editor.picker.data("DateTimePicker").date(end);
+                        };
+                    };
+
+                }
+            },
+            end_time : { type : 'Datetime', title : '<%= t "item-end-time" %>',
+                editorClass : 'item-form-element',
+                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                defaultDate: "<%= Time.zone.parse((@start_date.start_date +  + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                // dependsOn : 'parent_id', dependentValues : ['false'],
+                picker : {
+                    locale : "<%= I18n.locale %>",
+                    stepping : 5,
+                    format : "DD MMM YYYY, HH:mm",
+                    useCurrent: false,
+                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days - 1.seconds).strftime('%m/%d/%Y %H:%M:%S') %>"
+                },
+                validators: [
+                    function check_for_room(value, formValues) {
+                        // var parent_err = {
+                        //     type: "start_time",
+                        //     message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
+                        // };
+                        // if (formValues.start_time != "" && formValues.parent_id != "") {
+                        //     $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
+                        //     return parent_err;
+                        // };
+                        var err = {
+                            type: "start_time",
+                            message: '<%= t "room-required-when-you-set-a-time" %>'
+                        };
+                        if (formValues.room_id == "" && formValues.end_time != "" && !formValues.is_break && formValues.parent_id == "") {
+                            return err;
+                        };
+                    },
+                ],
+                callback: function(val, editor, obj) {
+                    if (val) {
+                        obj.picker.data("DateTimePicker").clear();
+                        obj.form.fields['room_id'].setValue("");
+                    }
+                },
+                changeFn : function(e) {
+                    // console.log("end time changed");
+                    // console.log(this);
+                    // console.log(e);
+                    fields = this.form.fields;
+                    
+                    if (this.picker && fields.start_time.editor.picker) {
+                        endTime = this.picker.data("DateTimePicker").date();
+                        startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
+                        // console.log(endTime);
+
+                        if (startTime && endTime) {
+                            diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                            fields.duration.editor.$el.val(diff);
+                        };
+                        // console.log(diff);
+                    };
                 }
             },
             <%-
@@ -193,15 +284,57 @@ ItemApp.ItemManagement = (function(Backbone){
             # if parent is assigned we then need to get those details etc...
             %>
             start_offset : {
-                        type : 'DependentNumber',
-                        title : '<%= t "item-start-offset" %>',
-                        help: '<%= t "item-start-offset-help" %>',
-                        dependsOn : 'parent_id', dependentValues : ['not_null'],
-                        validators: [
-                            function check_within_parent(value, formValues) {
-                                
-                            }
-                        ]
+                type : 'DependentNumber',
+                title : '<%= t "item-start-offset" %>',
+                help: '<%= t "item-start-offset-help" %>',
+                dependsOn : 'parent_id', dependentValues : ['not_null'],
+                validators: [
+                    function check_within_parent(value, formValues) {
+                        
+                    }
+                ],
+                changeFn : function() {
+                    // console.log(this);
+                    form = this.form;
+                    value = this.$el.val();
+                    // console.log(value);
+                    parent =  fields.parent_id.editor.$el.select2("data");
+
+                    if (
+                        form.fields.start_time.editor.picker 
+                        && parent && parent.id != null 
+                        && parent.start_time_str && parent.start_time_str.length > 0
+                    ){
+                        pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
+                        newStart = pStart.add(value, "minutes");
+
+                        form.fields.start_time.editor.picker.data("DateTimePicker").date(newStart);
+                    };
+                }
+            },
+            duration : { 
+                type : 'NumberWithChange', 
+                title : '<%= t "item-duration" %>', 
+                editorClass : 'item-form-element', 
+                validators: ['required'],
+                changeFn : function() {
+                    // console.log(this);
+                    form = this.form;
+                    value = this.$el.val();
+                    // console.log(value);
+
+                    if (
+                        form.fields.end_time.editor.picker && form.fields.start_time.editor.picker
+                    ){
+                        startTime = form.fields.start_time.editor.picker.data("DateTimePicker").date();
+                        
+                        if (startTime){
+                            newEnd = startTime.add(value, "minutes");
+
+                            form.fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
+                        }
+                    };
+                } 
             },
             parent_id : {
                         type : 'DependentSelect2', 
@@ -217,7 +350,11 @@ ItemApp.ItemManagement = (function(Backbone){
                                         callback(
                                             {
                                                 'id' : pitem.get('id'), 
-                                                'text' : (pitem.get('title') + pitem.get('date_time_str'))
+                                                'text' : (pitem.get('title') + pitem.get('date_time_str')),
+                                                start_time : pitem.get('start_time'),
+                                                end_time : pitem.get('end_time'),
+                                                start_time_str : pitem.get("start_time_str"),
+                                                end_time_str : pitem.get("end_time_str,")
                                             }
                                         );
                                     }
@@ -237,7 +374,11 @@ ItemApp.ItemManagement = (function(Backbone){
                                         res.push( 
                                             {
                                                 'id' : item.id, 
-                                                'text' : (item.title + item.date_time_str)
+                                                'text' : (item.title + item.date_time_str),
+                                                start_time : item.start_time,
+                                                end_time : item.end_time,
+                                                start_time_str : item.start_time_str,
+                                                end_time_str : item.end_time_str,
                                             } 
                                         );
                                     });
@@ -249,17 +390,28 @@ ItemApp.ItemManagement = (function(Backbone){
                             }
                         },
                         changeFn : function(e) {
+                            // console.log(this);
                             parent = this.$el.select2("data");
 
                             if (parent && parent.id != null) {
-                                $room = this.form.$el.find("[name='room_id']");
+                                // console.log(parent);
+                                form = this.form;
+                                $form = this.form.$el;
+                                // Clear room and setup fields
+                                $room = $form.find("[name='room_id']");
                                 $room.val(null);
-
-                                this.form.$el.find("[name='setup_type_id']").val(null);
-
+                                $form.find("[name='setup_type_id']").val(null);
                                 $room.parents(".form-group").hide();
+
+                                // Set times to parent time
+                                if (parent.start_time && parent.start_time && parent.end_time) {
+                                    form.fields.start_time.editor.picker.data("DateTimePicker").date(moment(parent.start_time_str));
+                                    form.fields.end_time.editor.picker.data("DateTimePicker").date(moment(parent.end_time_str));
+                                };
+
                             } else if (parent && parent.id == null){
                                 this.form.$el.find("[name='room_id']").parents(".form-group").show();
+                                form.fields.start_offset.editor.$el.val(null);
                             };
                         }
             },
@@ -275,7 +427,6 @@ ItemApp.ItemManagement = (function(Backbone){
             setup_type_id : { type : 'Select', editorClass : 'item-form-element',
                         title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             print : { type : 'Checkbox', title : '<%= t "item-print" %>',  editorClass : 'item-form-element', editorAttrs : {tabindex : "-1"} },
-            duration : { type : 'Number', title : '<%= t "item-duration" %>', editorClass : 'item-form-element', validators: ['required'] },
             minimum_people : { type : 'DependentNumber', editorClass : 'item-form-element',
                                 dependsOn : 'is_break', dependentValues : ['false'],
                                 editorAttrs : { placeholder : '<%= t "min" %>' },

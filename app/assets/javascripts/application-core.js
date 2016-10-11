@@ -79,6 +79,7 @@
 //= require plugins/cpPendingImportPeopleTable
 //= require plugins/typeAheadTextEditor
 //= require plugins/styledCheckboxEditor
+//= require plugins/NumberWithChange
 
 //= require TabViews
 

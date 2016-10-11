@@ -46,10 +46,13 @@ json.parent_val do
     if item.parent
         json.id     item.parent.id
         json.title   item.parent.title
+        json.start_time   item.parent.start_time
+        json.start_time_str   Time.zone.parse((item.parent.start_time).to_s).strftime('%m/%d/%Y %H:%M:%S')
+        json.end_time   item.parent.end_time
+        json.end_time_str        Time.zone.parse((item.parent.end_time).to_s).strftime('%m/%d/%Y %H:%M:%S')
         json.date_time_str       ( item.parent.start_time.present? ? 
-        ' [' + l(item.start_time, format: :start_time_with_date) + " - " + l(item.end_time, format: :end_time) + ']' 
-        : ""
-    )
+        ' [' + l(item.parent.start_time, format: :start_time_with_date) + " - " + l(item.parent.end_time, format: :end_time) + ']' 
+        : "")
     end
 end
 
