@@ -36,4 +36,12 @@ class SiteConfig < ActiveRecord::Base
     end
   end
 
+  def end_date
+    start_date + number_of_days.days
+  end
+
+  def public_end_date
+    public_start_date + public_number_of_days.days
+  end
+
 end
