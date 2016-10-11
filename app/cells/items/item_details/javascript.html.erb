@@ -175,7 +175,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             type: "start_time",
                             message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
-                        if (formValues.room_id == "" && formValues.start_time != "" && !formValues.is_break && formValues.parent_id == null) {
+                        if (formValues.room_id == "" && formValues.start_time != "" && !formValues.is_break && formValues.parent_id == "") {
                             return err;
                         };
                     },
@@ -244,7 +244,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             type: "start_time",
                             message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
-                        if (formValues.room_id == "" && formValues.start_time != "" && !formValues.is_break && formValues.parent_id == null) {
+                        if (formValues.room_id == "" && formValues.end_time != "" && !formValues.is_break && formValues.parent_id == "") {
                             return err;
                         };
                     },
