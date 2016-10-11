@@ -365,6 +365,7 @@ Form.editors.DependentDatetime = Form.editors.Datetime.extend({
     },
 
     render: function() {
+        var self = this;
         this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
         var options = this.options,
             schema = this.schema,
@@ -377,6 +378,13 @@ Form.editors.DependentDatetime = Form.editors.Datetime.extend({
         var element = this.$el;
         
         this.picker = element.find('.datetimefield').datetimepicker(this.schema.picker);
+
+        this.picker.on("dp.change", function(e) {
+            if (schema.changeFn) {
+                schema.changeFn.call(self, e);
+            }
+        });
+        
         this.setInitialValue(this.value);
         
         this.dependInit(this.form);
