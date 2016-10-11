@@ -212,7 +212,11 @@ ItemApp.ItemManagement = (function(Backbone){
                             } else {
                                 fields.start_offset.editor.$el.val(null);
                             };
-                        }
+                        } else if (startTime && endTime == null) {
+                            duration = fields.duration.editor.$el.val();
+                            end = startTime.add(duration, "minutes");
+                            fields.end_time.editor.picker.data("DateTimePicker").date(end);
+                        };
                     };
 
                 }
