@@ -152,7 +152,6 @@ ItemApp.ItemManagement = (function(Backbone){
                 editorClass : 'item-form-element',
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                 defaultDate: "<%= Time.zone.parse((@start_date.start_date +  + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
-                // dependsOn : 'parent_id', dependentValues : ['false'],
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : 5,
@@ -163,20 +162,58 @@ ItemApp.ItemManagement = (function(Backbone){
                 },
                 validators: [
                     function check_for_room(value, formValues) {
-                        // var parent_err = {
-                        //     type: "start_time",
-                        //     message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
-                        // };
-                        // if (formValues.start_time != "" && formValues.parent_id != "") {
-                        //     $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
-                        //     return parent_err;
-                        // };
                         var err = {
                             type: "start_time",
                             message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
                         if (formValues.room_id == "" && formValues.start_time != "" && !formValues.is_break && formValues.parent_id == "") {
                             return err;
+                        };
+                    },
+                    function check_end_time(value, formValues) {
+                        var err = {
+                            type: "mismatched_times",
+                            message: '<%= t("start-time-must-be-less-than-end-time") %>'
+                        };
+
+                        fields = this.form.fields;
+                        if (this.picker && fields.end_time.editor.picker){
+                            startTime = this.picker.data("DateTimePicker").date();
+                            endTime = fields.end_time.editor.picker.data("DateTimePicker").date();
+
+                            if (startTime && endTime) {
+                                diff = moment.duration(startTime.diff(endTime)).asMinutes();
+
+                                if (diff >= 0) {
+                                    return err;
+                                };
+                            };
+                        };
+                    },
+                    function check_within_parent_time(value, formValues) {
+                        var err = {
+                            type: "parent_time",
+                            message: '<%= t("start-time-cant-be-less-than-parent-time") %>'
+                        };
+
+                        fields = this.form.fields;
+                        parent = fields.parent_id.editor.$el.select2("data");
+
+                        if (
+                            this.picker 
+                            && parent && parent.id != null 
+                            && parent.start_time_str && parent.start_time_str.length > 0
+                        ){
+                            startTime = this.picker.data("DateTimePicker").date();
+                            pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
+
+                            if (startTime && pStart) {
+                                diff = moment.duration(startTime.diff(pStart)).asMinutes();
+
+                                if (diff < 0) {
+                                    return err;
+                                };
+                            };
                         };
                     },
                 ],
@@ -199,18 +236,25 @@ ItemApp.ItemManagement = (function(Backbone){
                         // console.log(startTime);
                         if (startTime && endTime) {
                             diff = moment.duration(endTime.diff(startTime)).asMinutes();
-                            fields.duration.editor.$el.val(diff);
+                            duration = fields.duration.editor.$el.val();
 
-                            parent =  fields.parent_id.editor.$el.select2("data");
-
-                            if (parent && parent.id != null && parent.start_time_str && parent.start_time_str.length > 0) {
-                                pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
-                                // console.log(pStart);
-                                pOffset = moment.duration(startTime.diff(pStart)).asMinutes();
-                                // console.log(pOffset);
-                                fields.start_offset.editor.$el.val(pOffset);
+                            if (diff <= 0 && duration > 0) {
+                                end = startTime.add(duration, "minutes");
+                                fields.end_time.editor.picker.data("DateTimePicker").date(end);
                             } else {
-                                fields.start_offset.editor.$el.val(null);
+                                fields.duration.editor.$el.val(diff);
+
+                                parent =  fields.parent_id.editor.$el.select2("data");
+
+                                if (parent && parent.id != null && parent.start_time_str && parent.start_time_str.length > 0) {
+                                    pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
+                                    // console.log(pStart);
+                                    pOffset = moment.duration(startTime.diff(pStart)).asMinutes();
+                                    // console.log(pOffset);
+                                    fields.start_offset.editor.$el.val(pOffset);
+                                } else {
+                                    fields.start_offset.editor.$el.val(null);
+                                };
                             };
                         } else if (startTime && endTime == null) {
                             duration = fields.duration.editor.$el.val();
@@ -224,8 +268,6 @@ ItemApp.ItemManagement = (function(Backbone){
             end_time : { type : 'Datetime', title : '<%= t "item-end-time" %>',
                 editorClass : 'item-form-element',
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
-                defaultDate: "<%= Time.zone.parse((@start_date.start_date +  + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
-                // dependsOn : 'parent_id', dependentValues : ['false'],
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : 5,
@@ -236,20 +278,62 @@ ItemApp.ItemManagement = (function(Backbone){
                 },
                 validators: [
                     function check_for_room(value, formValues) {
-                        // var parent_err = {
-                        //     type: "start_time",
-                        //     message: '<%= t "child-item-can-not-be-assigned-to-time" %>'
-                        // };
-                        // if (formValues.start_time != "" && formValues.parent_id != "") {
-                        //     $(this.$el).parent().parent().find('#start-time-error').text(parent_err.message);
-                        //     return parent_err;
-                        // };
                         var err = {
                             type: "start_time",
                             message: '<%= t "room-required-when-you-set-a-time" %>'
                         };
                         if (formValues.room_id == "" && formValues.end_time != "" && !formValues.is_break && formValues.parent_id == "") {
                             return err;
+                        };
+                    },
+                    function check_start_time(value, formValues) {
+                        var err = {
+                            type: "mismatched_times",
+                            message: '<%= t("end-time-must-be-greater-than-start-time") %>'
+                        };
+
+                        fields = this.form.fields;
+                        if (this.picker && fields.start_time.editor.picker){
+                            endTime = this.picker.data("DateTimePicker").date();
+                            startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
+
+                            if (startTime && endTime) {
+                                diff = moment.duration(endTime.diff(startTime)).asMinutes();
+
+                                if (diff <= 0) {
+                                    return err;
+                                };
+                            };
+
+                        };
+                    },
+                    function check_within_parent_time(value, formValues) {
+                        var err = {
+                            type: "parent_time",
+                            message: '<%= t("end-time-cant-be-greater-than-parent-time") %>'
+                        };
+
+                        fields = this.form.fields;
+                        parent = fields.parent_id.editor.$el.select2("data");
+
+                        console.log(parent);
+
+                        if (
+                            this.picker 
+                            && parent && parent.id != null 
+                            && parent.end_time_str && parent.end_time_str.length > 0
+                        ){
+                            endTime = this.picker.data("DateTimePicker").date();
+                            pEnd = moment(parent.end_time_str, "MM/DD/YYYY, HH:mm:SS");
+
+                            if (endTime && pEnd) {
+                                diff = moment.duration(endTime.diff(pEnd)).asMinutes();
+                                // console.log(diff);
+
+                                if (diff > 0) {
+                                    return err;
+                                };
+                            };
                         };
                     },
                 ],
@@ -271,8 +355,15 @@ ItemApp.ItemManagement = (function(Backbone){
                         // console.log(endTime);
 
                         if (startTime && endTime) {
+                            duration = fields.duration.editor.$el.val();
                             diff = moment.duration(endTime.diff(startTime)).asMinutes();
-                            fields.duration.editor.$el.val(diff);
+
+                            if (diff <= 0 && duration > 0) {
+                                start = endTime.subtract(duration, "minutes");
+                                fields.start_time.editor.picker.data("DateTimePicker").date(start);
+                            } else {
+                                fields.duration.editor.$el.val(diff);
+                            };
                         };
                         // console.log(diff);
                     };
@@ -290,7 +381,14 @@ ItemApp.ItemManagement = (function(Backbone){
                 dependsOn : 'parent_id', dependentValues : ['not_null'],
                 validators: [
                     function check_within_parent(value, formValues) {
-                        
+                        var err = {
+                            type: "start_offset",
+                            message: '<%= t "cant-be-less-than-zero" %>'
+                        };
+
+                        if (value < 0 ) {
+                            return err;
+                        }
                     }
                 ],
                 changeFn : function() {
@@ -298,7 +396,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     form = this.form;
                     value = this.$el.val();
                     // console.log(value);
-                    parent =  fields.parent_id.editor.$el.select2("data");
+                    parent = fields.parent_id.editor.$el.select2("data");
 
                     if (
                         form.fields.start_time.editor.picker 
@@ -316,7 +414,19 @@ ItemApp.ItemManagement = (function(Backbone){
                 type : 'NumberWithChange', 
                 title : '<%= t "item-duration" %>', 
                 editorClass : 'item-form-element', 
-                validators: ['required'],
+                validators: [
+                    'required',
+                    function check_greater_than_zero(value, formValues) {
+                        var err = {
+                            type: "duration",
+                            message: '<%= t "cant-be-less-than-zero" %>'
+                        };
+
+                        if (value < 0) {
+                            return err;
+                        }
+                    }
+                ],
                 changeFn : function() {
                     // console.log(this);
                     form = this.form;
@@ -354,7 +464,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                                 start_time : pitem.get('start_time'),
                                                 end_time : pitem.get('end_time'),
                                                 start_time_str : pitem.get("start_time_str"),
-                                                end_time_str : pitem.get("end_time_str,")
+                                                end_time_str : pitem.get("end_time_str")
                                             }
                                         );
                                     }
@@ -392,11 +502,11 @@ ItemApp.ItemManagement = (function(Backbone){
                         changeFn : function(e) {
                             // console.log(this);
                             parent = this.$el.select2("data");
+                            form = this.form;
+                            $form = this.form.$el;
 
                             if (parent && parent.id != null) {
                                 // console.log(parent);
-                                form = this.form;
-                                $form = this.form.$el;
                                 // Clear room and setup fields
                                 $room = $form.find("[name='room_id']");
                                 $room.val(null);
