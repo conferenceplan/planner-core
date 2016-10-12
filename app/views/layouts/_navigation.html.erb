@@ -12,7 +12,7 @@
         <div class="nav navbar-nav"><h2 class="conference-title"><%= SiteConfig.first ? SiteConfig.first.name : '' %></h2></div>
     -->
     <ul class="nav navbar-nav navbar-left" id="left-menu-navbar" style="margin-left: -15px;">
-        <a id="event-planner-logo-link-container" class="navbar-brand" href='<%= "/" + I18n.locale.to_s + baseUri_no_lang + "/" %>' alt='<%= @page_title or (t "convention-planner") %>'>
+        <a id="event-planner-logo-link-container" class="navbar-brand" href='<%= "/" + I18n.locale.to_s + "/" %>' alt='<%= @page_title or (t "convention-planner") %>'>
         </a>
         <%= extra_navigation_left.html_safe %>
     </ul>
