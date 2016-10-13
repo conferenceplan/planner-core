@@ -416,6 +416,9 @@ ItemApp.ItemManagement = (function(Backbone){
                 type : 'NumberWithChange', 
                 title : '<%= t "item-duration" %>', 
                 editorClass : 'item-form-element', 
+                editorAttrs : {
+                    step : 5
+                },
                 validators: [
                     'required',
                     function check_greater_than_zero(value, formValues) {
