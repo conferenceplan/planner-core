@@ -231,42 +231,95 @@ ItemApp.ItemManagement = (function(Backbone){
                     fields = this.form.fields;
                     
                     if (this.picker && fields.end_time.editor.picker) {
-                        // console.log("both start and end time initialized");
+                        // If both the start and end time fields have been initialized
                         startTime = this.picker.data("DateTimePicker").date();
                         endTime = fields.end_time.editor.picker.data("DateTimePicker").date();
                         // console.log(startTime);
                         if (startTime && endTime) {
-                            diff = moment.duration(endTime.diff(startTime)).asMinutes();
-                            duration = fields.duration.editor.$el.val();
+                            // If both the start and end times are not empty
+                            parent = fields.parent_id.editor.$el.select2("data"); // Parent object or null if not selected
+                            withinParent = true;
 
-                            if (diff <= 0 && duration > 0) {
-                                end = startTime.add(duration, "minutes");
-                                fields.end_time.editor.picker.data("DateTimePicker").date(end);
+                            if (parent && parent.id != null && parent.start_time_str && parent.start_time_str.length > 0) {
+                                // If parent item is set, the end time should not change when changing the start time. 
+                                // Changes in the start time should set the offset to the difference between the parent start time and the new start time.
+                                
+                                pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS"); // Parent Start Time
+                                pOffset = moment.duration(startTime.diff(pStart)).asMinutes(); // Parent start time offset
+                                endDiff = moment.duration(endTime.diff(startTime)).asMinutes(); // Minutes between item's start and end times
+
+                                if (pOffset < 0) {
+                                    withinParent = false; // If calculated offset is less than 0, the item time is outside the parent range
+                                };
+
+                                if (withinParent) { 
+                                    // If the start time is within the parent time range
+                                    if (endDiff >= 5){ 
+                                        // If the difference between the new start time and the end time is at least 5 minutes, set the start_offset field to the calculated offset value
+                                        fields.start_offset.editor.$el.val(pOffset);
+                                        fields.start_offset.editor.$el.trigger("change");
+                                    } else { 
+                                        // If the new start time will be greater than the end time, set the start date to 5 mins less than the end time and cancel any further start time increases. 5 minutes is the min duration.
+                                        newStart = endTime.subtract(5, "minutes");
+                                        this.picker.data("DateTimePicker").date(newStart);
+
+                                        this.picker.effect("shake", { 
+                                            times : 1,
+                                            distance : 5
+                                        }, 200);
+
+                                        fields.duration.editor.$el.effect("shake", { 
+                                            times : 1,
+                                            distance : 5
+                                        }, 200);
+                                    };
+                                } else { 
+                                    // If item time is not within parent's time range, cancel the time change and alert the user by shaking the time and parent fields. This limits the start time to the parent's start time
+                                    this.picker.data("DateTimePicker").date(pStart);
+
+                                    this.picker.effect("shake", { 
+                                        times : 1,
+                                        distance : 5
+                                    }, 200);
+
+                                    fields.parent_id.editor.$el.siblings(".select2-container").effect("shake", { 
+                                        times : 1,
+                                        distance : 5
+                                    }, 200);
+                                };
                             } else {
-                                fields.duration.editor.$el.val(diff);
+                                // If a parent item is not selected, changes in the start time should set the end time to the new start_time  + the duration
+                                fields.start_offset.editor.$el.val(null); // Clear the start_offset field
 
-                                parent =  fields.parent_id.editor.$el.select2("data");
+                                diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                                duration = fields.duration.editor.$el.val();
+                                endMax = fields.end_time.editor.picker.data("DateTimePicker").maxDate();
+                                endDiff = moment.duration(endMax.diff(end)).asMinutes(); // Minutes between the current end time and the max end time
 
-                                if (parent && parent.id != null && parent.start_time_str && parent.start_time_str.length > 0) {
-                                    pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
-                                    // console.log(pStart);
-                                    pOffset = moment.duration(startTime.diff(pStart)).asMinutes();
-                                    // console.log(pOffset);
-                                    fields.start_offset.editor.$el.val(pOffset);
+                                if (endDiff >= 0) {
+                                    // If the new end time will not exceed the max end date, set the end date to the new value
+                                    end = startTime.clone().add(duration, "minutes");
+                                    fields.end_time.editor.picker.data("DateTimePicker").date(end);
+                                    fields.end_time.editor.picker.find("input").effect("highlight", 50);
                                 } else {
-                                    fields.start_offset.editor.$el.val(null);
+                                    fields.duration.editor.$el.val(diff);
+                                    fields.duration.editor.$el.effect("highlight", 50);
                                 };
                             };
                         } else if (startTime && endTime == null) {
+                            // If the start time is present but the end time is empty, set the end time to the start time plus the duration
                             duration = fields.duration.editor.$el.val();
                             end = startTime.add(duration, "minutes");
                             fields.end_time.editor.picker.data("DateTimePicker").date(end);
+                            fields.end_time.editor.picker.find("input").effect("highlight", 50);
                         };
                     };
 
                 }
             },
-            end_time : { type : 'Datetime', title : '<%= t "item-end-time" %>',
+            end_time : { 
+                type : 'Datetime', 
+                title : '<%= t "item-end-time" %>',
                 editorClass : 'item-form-element',
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                 picker : {
@@ -350,32 +403,70 @@ ItemApp.ItemManagement = (function(Backbone){
                     // console.log(this);
                     // console.log(e);
                     fields = this.form.fields;
+                    var self = this;
                     
                     if (this.picker && fields.start_time.editor.picker) {
+                        // If both start and end time fields are instantiated
                         endTime = this.picker.data("DateTimePicker").date();
                         startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
                         // console.log(endTime);
+                        parent = fields.parent_id.editor.$el.select2("data");
 
                         if (startTime && endTime) {
-                            duration = fields.duration.editor.$el.val();
-                            diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                            // If both start and end times are set
+                            duration = fields.duration.editor.$el.val(); // Present duration
+                            diff = moment.duration(endTime.diff(startTime)).asMinutes(); // Calculated new duration
+                            withinParent = true; // Default value. 
 
-                            if (diff <= 0 && duration > 0) {
-                                start = endTime.subtract(duration, "minutes");
-                                fields.start_time.editor.picker.data("DateTimePicker").date(start);
+                            if (parent && parent.id != null && parent.end_time_str && parent.end_time_str.length > 0){
+                                // If parent item is set
+                                pEnd = moment(parent.end_time_str, "MM/DD/YYYY, HH:mm:SS");
+                                pDiff = moment.duration(pEnd.diff(endTime)).asMinutes(); // Minutes between parent end time and new end time
+
+                                if (pDiff < 0) {
+                                    // If new end time is greater than parent end time, set flag to false
+                                    withinParent = false;
+                                };
+                            };
+
+                            if (withinParent) {
+                                // If parent not selected or item end time within parent time range
+                                if (diff >= 5) {
+                                    // If new duration is greater than or equal to the min duration, set the duration
+                                    fields.duration.editor.$el.val(diff);
+                                } else {
+                                    // If new duration is negative or less than the min duration, cancel the new end date change by setting the end time to the start time plus the current duration, and shake the fields to indicate that the change failed
+                                    end = startTime.add(duration, "minutes");
+                                    this.picker.data("DateTimePicker").date(end);
+
+                                    this.picker.effect("shake", { 
+                                        times : 1,
+                                        distance : 5
+                                    }, 200);
+
+                                    fields.duration.editor.$el.effect("shake", { 
+                                        times : 1,
+                                        distance : 5
+                                    }, 200);
+                                };
                             } else {
-                                fields.duration.editor.$el.val(diff);
+                                // If new end date is after parent end date, set the end date to the aprent end date and shake the fields to indicate that the change failed
+                                this.picker.data("DateTimePicker").date(pEnd);
+
+                                this.picker.effect("shake", { 
+                                    times : 1,
+                                    distance : 5
+                                }, 200);
+
+                                fields.parent_id.editor.$el.siblings(".select2-container").effect("shake", { 
+                                    times : 1,
+                                    distance : 5
+                                }, 200);
                             };
                         };
-                        // console.log(diff);
                     };
                 }
             },
-            <%-
-            # TODO - start_offset, need to constrain based on the startime and duration of the parent
-            # start_offser >= start of parent and <= duration of parent - duration of item
-            # if parent is assigned we then need to get those details etc...
-            %>
             start_offset : {
                 type : 'DependentNumber',
                 title : '<%= t "item-start-offset" %>',
@@ -396,19 +487,25 @@ ItemApp.ItemManagement = (function(Backbone){
                 changeFn : function() {
                     // console.log(this);
                     form = this.form;
-                    value = this.$el.val();
-                    // console.log(value);
+                    offset = this.$el.val();
                     parent = fields.parent_id.editor.$el.select2("data");
-
                     if (
                         form.fields.start_time.editor.picker 
                         && parent && parent.id != null 
                         && parent.start_time_str && parent.start_time_str.length > 0
                     ){
+                        // If parent item selected and it has a valid start time string
                         pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
-                        newStart = pStart.add(value, "minutes");
+                        endTime = form.fields.end_time.editor.picker.data("DateTimePicker").date();
 
-                        form.fields.start_time.editor.picker.data("DateTimePicker").date(newStart);
+                        newStart = pStart.add(offset, "minutes"); // New start time is parent time plus offset value
+
+                        // Set duration to difference between new start time and the end time
+                        newDuration = moment.duration(endTime.diff(newStart)).asMinutes();
+                        form.fields.duration.editor.$el.val(newDuration);
+                        
+                        // Set start time to new start time
+                        form.fields.start_time.editor.picker.data("DateTimePicker").date(newStart); 
                     };
                 }
             },
@@ -435,100 +532,115 @@ ItemApp.ItemManagement = (function(Backbone){
                 changeFn : function() {
                     // console.log(this);
                     form = this.form;
-                    value = this.$el.val();
-                    // console.log(value);
-
-                    if (
-                        form.fields.end_time.editor.picker && form.fields.start_time.editor.picker
-                    ){
+                    duration = this.$el.val();
+                    if (duration >= 5 && form.fields.end_time.editor.picker && form.fields.start_time.editor.picker){
+                        // If duration is not less than 5 mins and start and end time fields initialized
                         startTime = form.fields.start_time.editor.picker.data("DateTimePicker").date();
                         
                         if (startTime){
-                            newEnd = startTime.add(value, "minutes");
-
+                            // If start time is not empty, set end time to start time plus duration and highlight the field to indicate it was automatically changed
+                            newEnd = startTime.add(duration, "minutes");
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
-                        }
+
+                            form.fields.end_time.editor.picker.find("input").effect("highlight", 50);
+                        };
+                    } else { 
+                        // If duration is less than 5 mins, set duration to 5 mins (the minimum) and shake field to indicate a failed change
+                        this.$el.val(5);
+                        this.$el.effect("shake", { 
+                            times : 1,
+                            distance : 5
+                        }, 200);
                     };
                 } 
             },
             parent_id : {
-                        type : 'DependentSelect2', 
-                        dependsOn : 'is_break', dependentValues : ['false'],
-                        title : '<%= t "parent-item" %>',
-                        help: '<%= t "parent-item-help" %>',
-                        config : {
-                            multiple: false,
-                            initSelection : function(element,callback) {
-                                if (current_item) {
-                                    var pitem = current_item.get('parent_val');
-                                    if (pitem) {
-                                        callback(
-                                            {
-                                                'id' : pitem.get('id'), 
-                                                'text' : (pitem.get('title') + pitem.get('date_time_str')),
-                                                start_time : pitem.get('start_time'),
-                                                end_time : pitem.get('end_time'),
-                                                start_time_str : pitem.get("start_time_str"),
-                                                end_time_str : pitem.get("end_time_str")
-                                            }
-                                        );
+                type : 'DependentSelect2', 
+                dependsOn : 'is_break', dependentValues : ['false'],
+                title : '<%= t "parent-item" %>',
+                help: '<%= t "parent-item-help" %>',
+                config : {
+                    multiple: false,
+                    initSelection : function(element,callback) {
+                        if (current_item) {
+                            var pitem = current_item.get('parent_val');
+                            if (pitem) {
+                                callback(
+                                    {
+                                        'id' : pitem.get('id'), 
+                                        'text' : (pitem.get('title') + pitem.get('date_time_str')),
+                                        start_time : pitem.get('start_time'),
+                                        end_time : pitem.get('end_time'),
+                                        start_time_str : pitem.get("start_time_str"),
+                                        end_time_str : pitem.get("end_time_str")
                                     }
-                                }
-                            },
-                            formatSelection : function(obj, container) {
-                                return obj.text;
-                            },
-                            ajax : {
-                                url : "<%= baseUri %>/programme_items/list/no_breaks", // get the list of programme items - using a search term ....
-                                data : function(term, page) {
-                                    return { 'search' : term };
-                                },
-                                results : function(_data, page, query) {
-                                    res = [{'id' : null, 'text' : "(<%= t 'planner.core.messages.no-parent' %>)" }];
-                                    _.each(_data.rows, function(item) {
-                                        res.push( 
-                                            {
-                                                'id' : item.id, 
-                                                'text' : (item.title + item.date_time_str),
-                                                start_time : item.start_time,
-                                                end_time : item.end_time,
-                                                start_time_str : item.start_time_str,
-                                                end_time_str : item.end_time_str,
-                                            } 
-                                        );
-                                    });
-                                    var data = {
-                                        results: res
-                                    };
-                                    return data;
-                                }
+                                );
                             }
-                        },
-                        changeFn : function(e) {
-                            // console.log(this);
-                            parent = this.$el.select2("data");
-                            form = this.form;
-                            $form = this.form.$el;
-
-                            if (parent && parent.id != null) {
-                                // console.log(parent);
-                                // Clear room and setup fields
-                                $room = $form.find("[name='room_id']");
-                                $room.val(null);
-                                $form.find("[name='setup_type_id']").val(null);
-                                $room.parents(".form-group").hide();
-
-                                // Set times to parent time
-                                if (parent.start_time && parent.start_time && parent.end_time) {
-                                    form.fields.start_time.editor.picker.data("DateTimePicker").date(moment(parent.start_time_str));
-                                    form.fields.end_time.editor.picker.data("DateTimePicker").date(moment(parent.end_time_str));
-                                };
-
-                            } else if (parent && parent.id == null){
-                                this.form.$el.find("[name='room_id']").parents(".form-group").show();
-                                form.fields.start_offset.editor.$el.val(null);
-                            };
                         }
+                    },
+                    formatSelection : function(obj, container) {
+                        return obj.text;
+                    },
+                    ajax : {
+                        url : "<%= baseUri %>/programme_items/list/no_breaks", // get the list of programme items - using a search term ....
+                        data : function(term, page) {
+                            return { 'search' : term };
+                        },
+                        results : function(_data, page, query) {
+                            res = [{'id' : null, 'text' : "(<%= t 'planner.core.messages.no-parent' %>)" }];
+                            _.each(_data.rows, function(item) {
+                                res.push( 
+                                    {
+                                        'id' : item.id, 
+                                        'text' : (item.title + item.date_time_str),
+                                        start_time : item.start_time,
+                                        end_time : item.end_time,
+                                        start_time_str : item.start_time_str,
+                                        end_time_str : item.end_time_str,
+                                    } 
+                                );
+                            });
+                            var data = {
+                                results: res
+                            };
+                            return data;
+                        }
+                    }
+                },
+                changeFn : function(e) {
+                    // console.log(this);
+                    // console.log(parent);
+                    parent = this.$el.select2("data");
+                    form = this.form;
+                    $form = this.form.$el;
+
+                    if (parent && parent.id != null) {
+                        // If parent item selected, clear room info and set item times to parent times
+                        // 
+                        // Clear room and setup fields
+                        $room = $form.find("[name='room_id']");
+                        $room.val(null);
+                        $form.find("[name='setup_type_id']").val(null);
+                        $room.parents(".form-group").hide();
+
+                        if (parent.start_time_str && parent.end_time_str) {
+                            // If parent has valid date strings, set item times to parent time
+                            pStart = moment(parent.start_time_str);
+                            pEnd = moment(parent.end_time_str);
+
+                            diff = moment.duration(pEnd.diff(pStart)).asMinutes(); // parent duration
+
+                            form.fields.duration.editor.$el.val(diff); // set duration first to avoid change conflicts
+                            // Set start and end time to parent times
+                            form.fields.start_time.editor.picker.data("DateTimePicker").date(pStart);
+                            form.fields.end_time.editor.picker.data("DateTimePicker").date(pEnd);
+                        };
+                    } else if (parent && parent.id == null){
+                        // If parent item is cleared, show room and room setup fields and clear start_offset value
+                        this.form.$el.find("[name='room_id']").parents(".form-group").show();
+                        form.fields.start_offset.editor.$el.val(null);
+                    };
+                }
             },
             item_notes : { type : 'DependentTextArea', 
                             dependsOn : 'is_break', dependentValues : ['false'], 
