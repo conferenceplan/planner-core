@@ -979,6 +979,7 @@ input[type="number"] {
 
 p.help-block {
     font-size: 12px;
+    margin-bottom: 5px;
 }
 
 // Only for datetime picker for items ....
@@ -1356,7 +1357,7 @@ label.inline-checkbox {
     background-image:      -o-linear-gradient(left, #fff, #e5e5e5, #fff);
     text-align:center;
     top: -28px;
-    margin: 0px 0 25px 0;
+    margin: 10px 0 15px 0;
 }
 .item-section-title h3 {
     display:inline-block;
@@ -1492,6 +1493,7 @@ i.fa.fa-map-marker {
 .item-form .form-group {
     margin-left: 0px;
     margin-right: 0px;
+    margin-bottom: 5px;
 }
 
 .item-form-label {
