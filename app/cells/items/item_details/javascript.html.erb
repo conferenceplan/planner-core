@@ -338,15 +338,6 @@ ItemApp.ItemManagement = (function(Backbone){
                     sideBySide : true
                 },
                 validators: [
-                    function check_for_room(value, formValues) {
-                        var err = {
-                            type: "start_time",
-                            message: '<%= t "room-required-when-you-set-a-time" %>'
-                        };
-                        if (formValues.room_id == "" && formValues.end_time != "" && !formValues.is_break && formValues.parent_id == "") {
-                            return err;
-                        };
-                    },
                     function check_start_time(value, formValues) {
                         var err = {
                             type: "mismatched_times",
