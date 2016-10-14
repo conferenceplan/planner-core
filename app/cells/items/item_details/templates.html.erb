@@ -117,7 +117,7 @@
                 </div>
             </div>
             <div class="row" id="themes-row">
-                <div class="form-group" id="item-form-template-themes">
+                <div class="form-group" id="item-form-template-themes" style="margin-bottom: 9px;">
                     <label class="col-sm-3 control-label">
                        <%= t  "themes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "themes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "themes-help" %>'></i>
                     </label>
@@ -143,7 +143,7 @@
             </div>
 
             <div class="row">
-                <div class="form-group col-sm-6" style="margin-bottom: 0;">
+                <div class="form-group col-sm-6">
                     <div class="row">
                         <label class="col-xs-6 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
                         <div class="col-xs-6">
@@ -171,23 +171,20 @@
                 </div>         
             </div>
             <div class="row">
-                <div class="col-md-3 hidden-xs hidden-sm"></div>
-                <div class="form-group col-sm-6 col-md-4 col-xs-6" id="start-day-and-time-form-group"> 
-                    <div class="">
-                        <label class="control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>
-                        <div data-editors="start_time"></div>
-                        <div class="has-error">
-                            <p class="help-block" id='start-time-error' data-error></p>
-                        </div>
+                <label class="col-sm-3 control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>                 
+                <div class="form-group col-sm-4 col-md-4 col-xs-4" id="start-day-and-time-form-group">
+                    <div data-editors="start_time"></div>
+                    <div class="has-error">
+                        <p class="help-block" id='start-time-error' data-error></p>
                     </div>
                 </div>
-                <div class="form-group col-sm-6 col-md-4 col-xs-6" id="end-day-and-time-form-group"> 
-                    <div class="">
-                        <label class="control-label"><%= t "item-end-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-end-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-end-time-help" %>'></i></label>
-                        <div data-editors="end_time"></div>
-                        <div class="has-error">
-                            <p class="help-block" id='end-time-error' data-error></p>
-                        </div>
+                <label class="col-sm-1 control-label"><%= t "item-end-day-and-time" %> 
+                    <!--<i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-end-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-end-time-help" %>'></i>-->
+                </label>
+                <div class="form-group col-sm-4" id="end-day-and-time-form-group"> 
+                    <div data-editors="end_time"></div>
+                    <div class="has-error">
+                        <p class="help-block" id='end-time-error' data-error></p>
                     </div>
                 </div>
             </div>
