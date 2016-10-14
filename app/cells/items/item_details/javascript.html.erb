@@ -155,11 +155,11 @@ ItemApp.ItemManagement = (function(Backbone){
                 defaultDate: "<%= Time.zone.parse((@start_date.start_date + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
                 picker : {
                     locale : "<%= I18n.locale %>",
-                    stepping : 5,
+                    stepping : minItemDuration,
                     format : "DD MMM YYYY, HH:mm",
                     useCurrent: false,
                     minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                    maxDate : "<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 10.minutes).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>",
+                    maxDate : "<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 2.minutes).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>",
                     sideBySide : true
                 },
                 validators: [
@@ -255,13 +255,13 @@ ItemApp.ItemManagement = (function(Backbone){
 
                                 if (withinParent) { 
                                     // If the start time is within the parent time range
-                                    if (endDiff >= 5){ 
+                                    if (endDiff >= minItemDuration){ 
                                         // If the difference between the new start time and the end time is at least 5 minutes, set the start_offset field to the calculated offset value
                                         fields.start_offset.editor.$el.val(pOffset);
                                         fields.start_offset.editor.$el.trigger("change");
                                     } else { 
-                                        // If the new start time will be greater than the end time, set the start date to 5 mins less than the end time and cancel any further start time increases. 5 minutes is the min duration.
-                                        newStart = endTime.subtract(5, "minutes");
+                                        // If the new start time will be greater than the end time, set the start date to minItemDuration mins less than the end time and cancel any further start time increases. 5 minutes is the min duration.
+                                        newStart = endTime.subtract(minItemDuration, "minutes");
                                         this.picker.data("DateTimePicker").date(newStart);
 
                                         this.picker.effect("shake", { 
@@ -299,17 +299,19 @@ ItemApp.ItemManagement = (function(Backbone){
                                 newEnd = startTime.clone().add(duration, "minutes"); // Potential new end time given the changed start time and duration
                                 newEndDiff = moment.duration(endMax.diff(newEnd)).asMinutes(); // Minutes between the potential new end time and the max end time
 
-                                if (newEndDiff >= 5){
+                                if (newEndDiff >= minItemDuration){
                                     // If the difference between the potential new end time will not exceed the max end time
-                                    if (endDiff >= 5 && duration >= 5) {
+                                    if (endDiff >= minItemDuration && duration >= minItemDuration) {
                                         // If the new end time will not exceed the max end date, set the end date to the new value
                                         // 
                                         fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
                                         fields.duration.editor.$el.val(diff);
 
-                                        if (!fields.end_time.editor.picker.find("input").attr('style')) {
-                                            fields.end_time.editor.picker.find("input").effect("highlight", 800);
-                                        }
+                                        if (newEndDiff > minItemDuration){
+                                            if (!fields.end_time.editor.picker.find("input").attr('style')) {
+                                                fields.end_time.editor.picker.find("input").effect("highlight", 800);
+                                            };
+                                        };
                                     } else {
                                         // If the new end time will exceed the max end time, reduce the duration
                                         fields.duration.editor.$el.val(diff);
@@ -358,10 +360,10 @@ ItemApp.ItemManagement = (function(Backbone){
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                 picker : {
                     locale : "<%= I18n.locale %>",
-                    stepping : 5,
+                    stepping : minItemDuration,
                     format : "DD MMM YYYY, HH:mm",
                     useCurrent: false,
-                    minDate : "<%= Time.zone.parse((@start_date.start_date + 5.minutes).to_s).strftime('%m/%d/%Y') %>",
+                    minDate : "<%= Time.zone.parse((@start_date.start_date + 1.minutes).to_s).strftime('%m/%d/%Y') %>",
                     maxDate : "<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 1.seconds).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>",
                     sideBySide : true
                 },
@@ -456,7 +458,7 @@ ItemApp.ItemManagement = (function(Backbone){
 
                             if (withinParent) {
                                 // If parent not selected or item end time within parent time range
-                                if (diff >= 5) {
+                                if (diff >= minItemDuration) {
                                     // If new duration is greater than or equal to the min duration, set the duration
                                     fields.duration.editor.$el.val(diff);
                                 } else {
@@ -539,7 +541,7 @@ ItemApp.ItemManagement = (function(Backbone){
                 title : '<%= t "item-duration" %>', 
                 editorClass : 'item-form-element', 
                 editorAttrs : {
-                    step : 5
+                    step : 1
                 },
                 validators: [
                     'required',
@@ -556,23 +558,37 @@ ItemApp.ItemManagement = (function(Backbone){
                 ],
                 changeFn : function() {
                     // console.log(this);
-                    form = this.form;
+                    fields = this.form.fields;
                     duration = this.$el.val();
-                    if (duration >= 5 && form.fields.end_time.editor.picker && form.fields.start_time.editor.picker){
+                    if (duration >= minItemDuration && fields.end_time.editor.picker && fields.start_time.editor.picker){
                         // If duration is not less than 5 mins and start and end time fields initialized
-                        startTime = form.fields.start_time.editor.picker.data("DateTimePicker").date();
+                        startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
+                        startTime = fields.end_time.editor.picker.data("DateTimePicker").date();
                         
                         if (startTime){
                             // If start time is not empty, set end time to start time plus duration and highlight the field to indicate it was automatically changed
                             newEnd = startTime.clone().add(duration, "minutes");
-                            form.fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
-                            if (!fields.end_time.editor.picker.find("input").attr('style')) {
-                                form.fields.end_time.editor.picker.find("input").effect("highlight", 800);    
-                            }
+                            maxEnd = fields.end_time.editor.picker.data("DateTimePicker").maxDate().add(1, "seconds");
+                            maxEndDiff = moment.duration(maxEnd.diff(newEnd)).asMinutes();
+
+                            if (maxEndDiff <= 0 && endTime) {
+                                newStart = endTime.clone().subtract(duration, "minutes");
+                                fields.start_time.editor.picker.data("DateTimePicker").date(newStart);
+                                if (!fields.start_time.editor.picker.find("input").attr('style')) {
+                                    fields.start_time.editor.picker.find("input").effect("highlight", 800);    
+                                };
+                            } else {
+                                fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
+                                if (!fields.end_time.editor.picker.find("input").attr('style')) {
+                                    fields.end_time.editor.picker.find("input").effect("highlight", 800);
+                                };
+                            };
+
+                            
                         };
                     } else { 
                         // If duration is less than 5 mins, set duration to 5 mins (the minimum) and shake field to indicate a failed change
-                        this.$el.val(5);
+                        this.$el.val(minItemDuration);
                         this.$el.effect("shake", { 
                             times : 1,
                             distance : 5
