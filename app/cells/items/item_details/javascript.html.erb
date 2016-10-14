@@ -300,10 +300,14 @@ ItemApp.ItemManagement = (function(Backbone){
                                     // If the new end time will not exceed the max end date, set the end date to the new value
                                     end = startTime.clone().add(duration, "minutes");
                                     fields.end_time.editor.picker.data("DateTimePicker").date(end);
-                                    fields.end_time.editor.picker.find("input").effect("highlight", 50);
+                                    if (!fields.end_time.editor.picker.find("input").attr('style')) {
+                                        fields.end_time.editor.picker.find("input").effect("highlight", 800);
+                                    }
                                 } else {
                                     fields.duration.editor.$el.val(diff);
-                                    fields.duration.editor.$el.effect("highlight", 50);
+                                    if (!fields.duration.editor.$el.attr('style')) {
+                                        fields.duration.editor.$el.effect("highlight", 800);
+                                    }
                                 };
                             };
                         } else if (startTime && endTime == null) {
@@ -311,7 +315,9 @@ ItemApp.ItemManagement = (function(Backbone){
                             duration = fields.duration.editor.$el.val();
                             end = startTime.add(duration, "minutes");
                             fields.end_time.editor.picker.data("DateTimePicker").date(end);
-                            fields.end_time.editor.picker.find("input").effect("highlight", 50);
+                            if (!fields.end_time.editor.picker.find("input").attr('style')) {
+                                fields.end_time.editor.picker.find("input").effect("highlight", 800);    
+                            }
                         };
                     };
 
@@ -541,8 +547,9 @@ ItemApp.ItemManagement = (function(Backbone){
                             // If start time is not empty, set end time to start time plus duration and highlight the field to indicate it was automatically changed
                             newEnd = startTime.add(duration, "minutes");
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
-
-                            form.fields.end_time.editor.picker.find("input").effect("highlight", 50);
+                            if (!fields.end_time.editor.picker.find("input").attr('style')) {
+                                form.fields.end_time.editor.picker.find("input").effect("highlight", 800);    
+                            }
                         };
                     } else { 
                         // If duration is less than 5 mins, set duration to 5 mins (the minimum) and shake field to indicate a failed change
