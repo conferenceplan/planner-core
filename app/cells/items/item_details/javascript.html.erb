@@ -649,21 +649,33 @@ ItemApp.ItemManagement = (function(Backbone){
                         $form.find("[name='setup_type_id']").val(null);
                         $room.parents(".form-group").hide();
 
-                        if (parent.start_time_str && parent.end_time_str) {
+                        if (parent.start_time_str && parent.start_time_str.length > 0 && parent.end_time_str && parent.end_time_str.length > 0) {
+                            $form.find("#item-times-row").show();
                             // If parent has valid date strings, set item times to parent time
-                            pStart = moment(parent.start_time_str);
-                            pEnd = moment(parent.end_time_str);
+                            var pStart = moment(parent.start_time_str);
+                            var pEnd = moment(parent.end_time_str);
 
-                            diff = moment.duration(pEnd.diff(pStart)).asMinutes(); // parent duration
+                            var pDiff = moment.duration(pEnd.diff(pStart)).asMinutes(); // parent duration
+                            form.fields.duration.editor.$el.val(pDiff); // set duration first to avoid change conflicts
 
-                            form.fields.duration.editor.$el.val(diff); // set duration first to avoid change conflicts
                             // Set start and end time to parent times
+                            
+                            form.fields.start_time.editor.picker.data("DateTimePicker").date(null);
+                            form.fields.end_time.editor.picker.data("DateTimePicker").date(null);
                             form.fields.start_time.editor.picker.data("DateTimePicker").date(pStart);
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(pEnd);
+                            
+                        } else {
+                            form.fields.start_time.editor.picker.data("DateTimePicker").date(null);
+                            form.fields.end_time.editor.picker.data("DateTimePicker").date(null);
+                            form.fields.duration.editor.$el.val(60);
+                            $form.find("#item-times-row").hide();
+
                         };
                     } else if (parent && parent.id == null){
                         // If parent item is cleared, show room and room setup fields and clear start_offset value
                         this.form.$el.find("[name='room_id']").parents(".form-group").show();
+                        $form.find("#item-times-row").show();
                         form.fields.start_offset.editor.$el.val(null);
                     };
                 }
