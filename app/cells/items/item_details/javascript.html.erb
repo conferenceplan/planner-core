@@ -318,6 +318,8 @@ ItemApp.ItemManagement = (function(Backbone){
                             if (!fields.end_time.editor.picker.find("input").attr('style')) {
                                 fields.end_time.editor.picker.find("input").effect("highlight", 800);    
                             }
+                        } else if (startTime == null) {
+                            fields.end_time.editor.picker.data("DateTimePicker").date(null);
                         };
                     };
 
