@@ -79,6 +79,7 @@ ItemApp.ItemManagement = (function(Backbone){
     /*
      * 
      */
+    var minItemDuration = 1;
     ProgramItem = Backbone.RelationalModel.extend({
         schema : {
             title       : { type : 'Text', title : '<%= t "title" %>', validators: ['required'] },
@@ -295,22 +296,45 @@ ItemApp.ItemManagement = (function(Backbone){
                                 duration = fields.duration.editor.$el.val();
                                 endMax = fields.end_time.editor.picker.data("DateTimePicker").maxDate().add(1, "seconds");
                                 endDiff = moment.duration(endMax.diff(endTime)).asMinutes(); // Minutes between the current end time and the max end time
+                                newEnd = startTime.clone().add(duration, "minutes"); // Potential new end time given the changed start time and duration
+                                newEndDiff = moment.duration(endMax.diff(newEnd)).asMinutes(); // Minutes between the potential new end time and the max end time
 
-                                if (endDiff >= 5 && duration >= 5) {
-                                    // If the new end time will not exceed the max end date, set the end date to the new value
-                                    end = startTime.clone().add(duration, "minutes");
-                                    fields.end_time.editor.picker.data("DateTimePicker").date(end);
-                                    fields.duration.editor.$el.val(diff);
+                                if (newEndDiff >= 5){
+                                    // If the difference between the potential new end time will not exceed the max end time
+                                    if (endDiff >= 5 && duration >= 5) {
+                                        // If the new end time will not exceed the max end date, set the end date to the new value
+                                        // 
+                                        fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
+                                        fields.duration.editor.$el.val(diff);
 
-                                    if (!fields.end_time.editor.picker.find("input").attr('style')) {
-                                        fields.end_time.editor.picker.find("input").effect("highlight", 800);
-                                    }
+                                        if (!fields.end_time.editor.picker.find("input").attr('style')) {
+                                            fields.end_time.editor.picker.find("input").effect("highlight", 800);
+                                        }
+                                    } else {
+                                        // If the new end time will exceed the max end time, reduce the duration
+                                        fields.duration.editor.$el.val(diff);
+                                        if (!fields.duration.editor.$el.attr('style')) {
+                                            fields.duration.editor.$el.effect("highlight", 800);
+                                        };
+                                    };
                                 } else {
-                                    fields.duration.editor.$el.val(diff);
-                                    if (!fields.duration.editor.$el.attr('style')) {
-                                        fields.duration.editor.$el.effect("highlight", 800);
+                                    // If the new end time will exceed the max end time
+                                    if (diff > 0){
+                                        // If the new start time is not the same as the current end time, reduce the duration
+                                        fields.duration.editor.$el.val(diff);
+                                        if (!fields.duration.editor.$el.attr('style')) {
+                                            fields.duration.editor.$el.effect("highlight", 800);
+                                        };
+                                    } else {
+                                        // if the new start time is the same as the current end time, 
+                                        this.picker.data("DateTimePicker").date(startTime.clone().subtract(duration, "minutes"));
+                                        this.picker.effect("shake", { 
+                                            times : 1,
+                                            distance : 5
+                                        }, 200);
                                     };
                                 };
+                                
                             };
                         } else if (startTime && endTime == null) {
                             // If the start time is present but the end time is empty, set the end time to the start time plus the duration
