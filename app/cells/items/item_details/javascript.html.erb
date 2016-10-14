@@ -293,13 +293,15 @@ ItemApp.ItemManagement = (function(Backbone){
 
                                 diff = moment.duration(endTime.diff(startTime)).asMinutes();
                                 duration = fields.duration.editor.$el.val();
-                                endMax = fields.end_time.editor.picker.data("DateTimePicker").maxDate();
+                                endMax = fields.end_time.editor.picker.data("DateTimePicker").maxDate().add(1, "seconds");
                                 endDiff = moment.duration(endMax.diff(endTime)).asMinutes(); // Minutes between the current end time and the max end time
 
-                                if (endDiff >= 0) {
+                                if (endDiff >= 5 && duration >= 5) {
                                     // If the new end time will not exceed the max end date, set the end date to the new value
                                     end = startTime.clone().add(duration, "minutes");
                                     fields.end_time.editor.picker.data("DateTimePicker").date(end);
+                                    fields.duration.editor.$el.val(diff);
+
                                     if (!fields.end_time.editor.picker.find("input").attr('style')) {
                                         fields.end_time.editor.picker.find("input").effect("highlight", 800);
                                     }
@@ -307,13 +309,13 @@ ItemApp.ItemManagement = (function(Backbone){
                                     fields.duration.editor.$el.val(diff);
                                     if (!fields.duration.editor.$el.attr('style')) {
                                         fields.duration.editor.$el.effect("highlight", 800);
-                                    }
+                                    };
                                 };
                             };
                         } else if (startTime && endTime == null) {
                             // If the start time is present but the end time is empty, set the end time to the start time plus the duration
                             duration = fields.duration.editor.$el.val();
-                            end = startTime.add(duration, "minutes");
+                            end = startTime.clone().add(duration, "minutes");
                             fields.end_time.editor.picker.data("DateTimePicker").date(end);
                             if (!fields.end_time.editor.picker.find("input").attr('style')) {
                                 fields.end_time.editor.picker.find("input").effect("highlight", 800);    
@@ -435,7 +437,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                     fields.duration.editor.$el.val(diff);
                                 } else {
                                     // If new duration is negative or less than the min duration, cancel the new end date change by setting the end time to the start time plus the current duration, and shake the fields to indicate that the change failed
-                                    end = startTime.add(duration, "minutes");
+                                    end = startTime.clone().add(duration, "minutes");
                                     this.picker.data("DateTimePicker").date(end);
 
                                     this.picker.effect("shake", { 
@@ -497,7 +499,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
                         endTime = form.fields.end_time.editor.picker.data("DateTimePicker").date();
 
-                        newStart = pStart.add(offset, "minutes"); // New start time is parent time plus offset value
+                        newStart = pStart.clone().add(offset, "minutes"); // New start time is parent time plus offset value
 
                         // Set duration to difference between new start time and the end time
                         newDuration = moment.duration(endTime.diff(newStart)).asMinutes();
@@ -538,7 +540,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         
                         if (startTime){
                             // If start time is not empty, set end time to start time plus duration and highlight the field to indicate it was automatically changed
-                            newEnd = startTime.add(duration, "minutes");
+                            newEnd = startTime.clone().add(duration, "minutes");
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
                             if (!fields.end_time.editor.picker.find("input").attr('style')) {
                                 form.fields.end_time.editor.picker.find("input").effect("highlight", 800);    
