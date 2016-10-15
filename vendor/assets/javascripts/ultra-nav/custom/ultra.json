@@ -1,0 +1,98 @@
+{
+	"ultra": [
+    	{
+    		"name": "DASHBOARD",
+      		"link": "javascript:void(0);",
+      		"linkIcon": "fa fa-home",
+      		"id": 1,
+      		"pid": 0
+    	},
+    	{
+    		"name": "11 MENU LEVELS",
+      		"link": "#",
+      		"linkIcon": "fa fa-arrows",
+      		"id": 2,
+      		"pid": 0
+    	},
+    	{
+    		"name": "LEVEL 2",
+      		"link": "#",
+      		"id": 21,
+      		"pid": 2
+    	},
+    	{
+    		"name": "LEVEL 3",
+      		"link": "#",
+      		"id": 211,
+      		"pid": 21
+    	},
+    	{
+    		"name": "LEVEL 4",
+      		"link": "javascript:void(0);",
+      		"id": 2111,
+      		"pid": 211
+    	},
+    	{
+    		"name": "LEVEL 3",
+      		"link": "#",
+      		"id": 212,
+      		"pid": 21
+    	},
+    	{
+    		"name": "LEVEL 4",
+      		"link": "javascript:void(0);",
+      		"id": 2121,
+      		"pid": 212
+    	},
+    	{
+    		"name": "GRAPHS",
+      		"link": "#",
+      		"linkIcon": "fa fa-area-chart",
+      		"id": 3,
+      		"pid": 0
+    	},
+    	{
+    		"name": "Flot Graphs",
+      		"link": "#",
+      		"id": 31,
+      		"pid": 3
+    	},
+    	{
+    		"name": "Line Variant",
+      		"link": "javascript:void(0);",
+      		"id": 311,
+      		"pid": 31
+    	},
+    	{
+    		"name": "Live Statistics",
+      		"link": "javascript:void(0);",
+      		"id": 312,
+      		"pid": 31
+    	},
+    	{
+    		"name": "Area Variant",
+      		"link": "javascript:void(0);",
+      		"id": 313,
+      		"pid": 31
+    	},
+    	{
+    		"name": "Morris Graphs",
+      		"link": "javascript:void(0);",
+      		"id": 32,
+      		"pid": 3
+    	},
+    	{
+    		"name": "Sparklines",
+      		"link": "javascript:void(0);",
+      		"id": 33,
+      		"pid": 3
+    	},
+    	{
+    		"name": "PROFILE",
+      		"link": "javascript:void(0);",
+      		"linkIcon": "fa fa-user",
+      		"id": 4,
+      		"pid": 0
+    	}
+  	]
+}

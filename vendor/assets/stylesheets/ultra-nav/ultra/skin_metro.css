@@ -1,0 +1,115 @@
+/*
+SKIN METRO
+*/
+.skin-metro #u-left-panel {
+  background-color: #004050;
+}
+.skin-metro #u-left-menu {
+  background-color: #004050;
+}
+.skin-metro #u-topbar .title {
+  background-color: #004050;
+}
+.skin-metro .left-menu-parent {
+  width: 104px;
+  display: inline-block;
+  background-color: #5737B2;
+  margin: 0;
+  margin-bottom: 10px;
+  padding: 0;
+  float: left;
+  overflow: hidden;
+  width: 105px;
+}
+.skin-metro .left-menu-parent > a {
+  border-radius: 0;
+  min-height: 105px;
+  height: 105px;
+  background-color: transparent;
+  color: white;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+.skin-metro .left-menu-link-icon {
+  width: 50px;
+  margin: 12px 0 0 0;
+  font-size: 50px;
+}
+.skin-metro .left-menu-link-info {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+}
+.skin-metro .left-menu-link-info .link-name {
+  margin-top: 0px;
+}
+.skin-metro .left-menu-link-info .link-state {
+  display: none;
+}
+.skin-metro .metrobox-row-1 {
+  margin-left: 10px;
+  margin-right: 5px;
+}
+.skin-metro .metrobox-row-2 {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+.skin-metro .metrobox-wide {
+  width: 220px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.skin-metro .metrobox-long > a {
+  min-height: 220px;
+  height: 220px;
+}
+.skin-metro .metrobox-long.metrobox-row-2 {
+  float: right;
+}
+.skin-metro .metrobox-long .left-menu-link-icon {
+  margin-top: 66px;
+}
+.skin-metro .animate-tada:hover {
+  -webkit-animation: tada 1s both;
+  -o-animation: tada 1s both;
+  animation: tada 1s both;
+}
+.skin-metro .animate-wobble:hover {
+  -webkit-animation: wobble 0.5s both;
+  -o-animation: wobble 0.5s both;
+  animation: wobble 0.5s both;
+}
+.skin-metro .animate-rubberband:hover {
+  -webkit-animation: rubberBand 0.7s both;
+  -o-animation: rubberBand 0.7s both;
+  animation: rubberBand 0.7s both;
+}
+.skin-metro .animate-jello:hover {
+  -webkit-animation: jello 1s both;
+  -o-animation: jello 1s both;
+  animation: jello 1s both;
+}
+.skin-metro .animate-pulse:hover {
+  -webkit-animation: pulse 0.5s both;
+  -o-animation: pulse 0.5s both;
+  animation: pulse 0.5s both;
+}
+.skin-metro .metrobox-orange {
+  background-color: #DA532C;
+}
+.skin-metro .metrobox-pink {
+  background-color: #B61C45;
+}
+.skin-metro .metrobox-green {
+  background-color: #009800;
+}
+.skin-metro .metrobox-red {
+  background-color: #DA542D;
+}
+.skin-metro .metrobox-purple {
+  background-color: #9D00A5;
+}
+.skin-metro .metrobox-blue {
+  background-color: #2D89EF;
+}

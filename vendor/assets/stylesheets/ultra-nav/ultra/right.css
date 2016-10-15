@@ -1,0 +1,92 @@
+/*
+Right Panel CSS
+Note- Major right styles are in this file & some are given with their originals.
+*/
+.right-true #u-left-panel {
+  right: 0px;
+  left: auto;
+}
+.right-true #u-topbar {
+  left: auto;
+  right: 0;
+}
+.right-true #u-topbar .title {
+  float: right;
+}
+.right-true .left-panel-toggle {
+  float: right;
+  margin: 27px 60px 0 0;
+}
+.right-true .content-shrink {
+  margin-right: 240px;
+  margin-left: 0;
+  left: auto;
+  right: 0;
+}
+.right-true .content-push {
+  right: 240px;
+  left: auto;
+}
+.right-true .content-overlay {
+  margin-right: 0;
+  right: 0;
+  left: auto;
+}
+.right-true .collapse-true .content-overlay {
+  margin-left: 0;
+  margin-right: 50px;
+}
+@media (min-width: 768px) {
+  .right-true .panel-lg .content-shrink {
+    margin-right: 0;
+  }
+  .right-true .panel-lg .content-push {
+    left: auto;
+    right: 0;
+  }
+}
+@media (max-width: 768px) {
+  .right-true .content-shrink {
+    margin-right: 0;
+  }
+  .right-true .content-push {
+    left: auto;
+    right: 0;
+  }
+  .right-true .content-overlay {
+    margin-right: 0;
+  }
+  .right-true .panel-sm .content-shrink {
+    margin-left: 0;
+    margin-right: 240px;
+  }
+  .right-true .panel-sm .content-push {
+    left: auto;
+    right: 240px;
+  }
+}
+@media (min-width: 768px) {
+  .right-true .panel-cp .content-shrink {
+    margin-left: 0;
+    margin-right: 50px;
+  }
+  .right-true .panel-cp .content-push {
+    left: auto;
+    right: 0;
+    margin-left: 0;
+    margin-right: 50px;
+  }
+}
+@media (min-width: 768px) {
+  .right-true .panel-cp .left-menu-parent {
+    position: relative;
+  }
+  .right-true .panel-cp .left-menu-parent > a > .left-menu-link-info {
+    right: 38px;
+    left: auto;
+  }
+  .right-true .panel-cp .left-menu-parent:hover .left-menu-sub {
+    left: auto;
+    right: 43px;
+  }
+}

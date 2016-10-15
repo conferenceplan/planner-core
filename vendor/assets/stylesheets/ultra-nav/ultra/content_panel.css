@@ -1,0 +1,126 @@
+/*--------------------
+Content_Panel CSS
+----------------------*/
+body {
+  overflow-x: hidden;
+  font-family: 'Open Sans', sans-serif;
+}
+.cp-collapse-fixed {
+  margin-left: 50px !important;
+  left: 0 !important;
+}
+.panel-horizontal .content-panel {
+  left: auto !important;
+  right: auto !important;
+  margin-left: 0 !important;
+  margin-right: 0!important;
+}
+.content-wrapper {
+  position: relative;
+  background-color: white;
+}
+.content-panel {
+  position: relative;
+  top: 80px;
+  padding-top: 15px;
+  overflow-y: auto;
+  background-color: white;
+}
+.content-shrink {
+  margin-left: 240px;
+  left: 0px;
+}
+.content-push {
+  position: relative;
+  left: 240px;
+}
+.content-overlay {
+  margin-left: 0;
+  left: 0;
+}
+.collapse-true .content-overlay {
+  margin-left: 50px;
+}
+@media (max-width: 768px) {
+  .collapse-true .content-overlay {
+    margin-left: 0;
+  }
+}
+@media (min-width: 768px) {
+  .panel-lg .content-shrink {
+    margin-left: 0;
+  }
+  .panel-lg .content-push {
+    left: 0;
+  }
+}
+@media (max-width: 768px) {
+  .content-shrink {
+    margin-left: 0;
+  }
+  .content-push {
+    left: 0;
+  }
+  .content-overlay {
+    margin-left: 0;
+  }
+  .panel-sm .content-shrink {
+    margin-left: 240px;
+  }
+  .panel-sm .content-push {
+    left: 240px;
+  }
+}
+@media (min-width: 768px) {
+  .panel-cp .content-shrink {
+    margin-left: 50px;
+  }
+  .panel-cp .content-push {
+    left: 0;
+    margin-left: 50px;
+  }
+}
+/* Force PUSH Mode
+	Description-When Sreen Width is very less, then .content-push will be used
+*/
+@media (max-width: 768px) {
+  .panel-sm .content-shrink {
+    margin-left: 0;
+    left: 240px;
+  }
+}
+pre {
+  border-radius: 0;
+}
+.ultra-feature-container {
+  background-color: #FBFBFC;
+  border: 1px solid #E1E1E8;
+  margin-top: 5px;
+  padding: 20px;
+  padding-bottom: 0;
+}
+.ultra-feature-container [class^=col-] {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.ultra-feature-container .row {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+.ultra-feature {
+  background-color: #F7F7F9;
+  border: 1px solid #ECECF0;
+  text-align: center;
+  padding: 8px 12px;
+  margin-bottom: 20px;
+}
+.feature-icon {
+  display: block;
+  font-size: 25px;
+  color: #aaa;
+}
+.feature-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #00C3D2;
+}

@@ -1,0 +1,173 @@
+/*
+SWITCHER CSS
+*/
+.style-switcher {
+  width: 246px;
+  height: 500px;
+  position: fixed;
+  display: inline-block;
+  padding: 45px 15px 0px;
+  background-color: #f5f5f5;
+  border: 1px solid #45C7A6;
+  top: 60px;
+  right: -248px;
+  z-index: 200;
+  vertical-align: middle;
+  color: #444;
+  -webkit-transition: 0.1s ease-in-out right;
+  -o-transition: 0.1s ease-in-out right;
+  transition: 0.1s ease-in-out right;
+}
+.style-switcher .switch {
+  cursor: pointer;
+  position: absolute;
+  left: -64px;
+  background-color: #45C7A6;
+  padding: 15px 20px;
+  top: 20px;
+}
+.style-switcher .switch i {
+  color: #FFF;
+  vertical-align: middle;
+  font-size: 25px;
+}
+.style-switcher .toggle-name {
+  font-size: 13px;
+  font-weight: 600;
+  margin-left: 10px;
+}
+.style-switcher .toggle-1 {
+  margin-bottom: 10px;
+}
+.skin-colors-panel {
+  margin-top: 10px;
+  display: none;
+}
+.skin-colors-panel [data-skin-color] {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.skin-colors-panel-active {
+  display: block;
+}
+/*Color Seetings/
+/* Light Skin Settings*/
+[data-skin-color="skin-light-dark"] {
+  background-color: #474C5A;
+}
+[data-skin-color="skin-light-green"] {
+  background-color: #45C7A6;
+}
+[data-skin-color="skin-light-purple"] {
+  background-color: #967ADC;
+}
+[data-skin-color="skin-light-gray"] {
+  background-color: #7F8C8D;
+}
+[data-skin-color="skin-light-orange"] {
+  background-color: #F5883C;
+}
+[data-skin-color="skin-light-red"] {
+  background-color: #F25955;
+}
+[data-skin-color="skin-light-blue"] {
+  background-color: #37A1E7;
+}
+[data-skin-color="skin-light-light-blue"] {
+  background-color: #00C3D2;
+}
+/*Default Settings*/
+[data-skin-color="skin-default-dark"] {
+  background-color: #474C5A;
+}
+[data-skin-color="skin-default-green"] {
+  background-color: #45C7A6;
+}
+[data-skin-color="skin-default-orange"] {
+  background-color: #F5883C;
+}
+[data-skin-color="skin-default-red"] {
+  background-color: #F25955;
+}
+[data-skin-color="skin-default-blue"] {
+  background-color: #37A1E7;
+}
+[data-skin-color="skin-default-purple"] {
+  background-color: #967ADC;
+}
+[data-skin-color="skin-default-gray"] {
+  background-color: #7F8C8D;
+}
+/* Polaris Settings*/
+[data-skin-color="skin-polaris-light-blue"] {
+  background-color: #00C3D2;
+}
+[data-skin-color="skin-polaris-green"] {
+  background-color: #00ce9b;
+}
+[data-skin-color="skin-polaris-blue"] {
+  background-color: #365eab;
+}
+[data-skin-color="skin-polaris-yellow"] {
+  background-color: #ffb527;
+}
+[data-skin-color="skin-polaris-purple"] {
+  background-color: #9f449b;
+}
+[data-skin-color="skin-polaris-gray"] {
+  background-color: #7a828b;
+}
+[data-skin-color="skin-polaris-red"] {
+  background-color: #e63d4d;
+}
+/* Colortic Settings*/
+[data-skin-color="skin-colortic-light-blue"] {
+  background-color: #2DA5DA;
+}
+[data-skin-color="skin-colortic-pink"] {
+  background-color: #d0496d;
+}
+[data-skin-color="skin-colortic-green"] {
+  background-color: #27C1B9;
+}
+[data-skin-color="skin-colortic-light-green"] {
+  background-color: #B6C710;
+}
+[data-skin-color="skin-colortic-blue"] {
+  background-color: #3872ae;
+}
+[data-skin-color="skin-colortic-yellow"] {
+  background-color: #F0C000;
+}
+[data-skin-color="skin-colortic-red"] {
+  background-color: #cc3333;
+}
+[data-skin-color="skin-colortic-purple"] {
+  background-color: #5f1b7f;
+}
+[data-skin-color="skin-colortic-dark-green"] {
+  background-color: #2d983c;
+}
+[data-skin-color="skin-colortic-gray"] {
+  background-color: #7e7e7e;
+}
+[data-skin-color="skin-colortic-orange"] {
+  background-color: #ee5522;
+}
+@media (max-width: 768px) {
+  .style-switcher {
+    height: 422px;
+  }
+}
+.show-swicher.style-switcher {
+  right: 0px;
+  overflow-y: scroll;
+}
+.show-swicher.style-switcher .switch {
+  left: 0;
+  padding: 6px 12px;
+  top: 0px;
+}

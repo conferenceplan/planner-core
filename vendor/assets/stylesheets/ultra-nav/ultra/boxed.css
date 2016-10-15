@@ -1,0 +1,74 @@
+.boxed-bg-panel [data-bg-name] {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  margin: 3px 3px 0 0;
+}
+body[data-boxed-pattern="black-linen"] {
+  background: url("../../img/pattern/black-linen.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="brick-wall"] {
+  background: url("../../img/pattern/brick-wall.png");
+  background-repeat: repeat;
+  background-color: black;
+}
+body[data-boxed-pattern="carbon-fibre"] {
+  background: url("../../img/pattern/carbon-fibre.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="carbon-fibre-big"] {
+  background: url("../../img/pattern/carbon-fibre-big.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="checkered"] {
+  background: url("../../img/pattern/checkered.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="fabric-dark"] {
+  background: url("../../img/pattern/fabric-dark.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="line"] {
+  background: url("../../img/pattern/line.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="tile"] {
+  background: url("../../img/pattern/tile.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="tilt-block"] {
+  background: url("../../img/pattern/tilt-block.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="woven-light"] {
+  background: url("../../img/pattern/woven-light.png");
+  background-repeat: repeat;
+  background-color: black;
+}
+body[data-boxed-pattern="white-leather"] {
+  background: url("../../img/pattern/white-leather.png");
+  background-repeat: repeat;
+  background-color: black;
+}
+body[data-boxed-pattern="wood"] {
+  background: url("../../img/pattern/wood.png");
+  background-repeat: repeat;
+  background-color: white;
+}
+body[data-boxed-pattern="zebra-3d"] {
+  background: url("../../img/pattern/zebra-3d.png");
+  background-repeat: repeat;
+  background-color: black;
+}

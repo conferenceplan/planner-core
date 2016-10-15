@@ -1,0 +1,63 @@
+/*
+SKIN_DEFAULT CSS
+*/
+.skin-default[data-skin-type="skin-default-green"] #u-topbar .title {
+  background-color: #45c7a6;
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-green"] .left-menu-active > a {
+  background-color: #45c7a6;
+}
+.skin-default[data-skin-type="skin-default-green"] .left-menu-active > a:hover {
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-orange"] #u-topbar .title {
+  background-color: #f5883c;
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-orange"] .left-menu-active > a {
+  background-color: #f5883c;
+}
+.skin-default[data-skin-type="skin-default-orange"] .left-menu-active > a:hover {
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-red"] #u-topbar .title {
+  background-color: #f25955;
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-red"] .left-menu-active > a {
+  background-color: #f25955;
+}
+.skin-default[data-skin-type="skin-default-red"] .left-menu-active > a:hover {
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-blue"] #u-topbar .title {
+  background-color: #37a1e7;
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-blue"] .left-menu-active > a {
+  background-color: #37a1e7;
+}
+.skin-default[data-skin-type="skin-default-blue"] .left-menu-active > a:hover {
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-purple"] #u-topbar .title {
+  background-color: #967adc;
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-purple"] .left-menu-active > a {
+  background-color: #967adc;
+}
+.skin-default[data-skin-type="skin-default-purple"] .left-menu-active > a:hover {
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-gray"] #u-topbar .title {
+  background-color: #7f8c8d;
+  color: white;
+}
+.skin-default[data-skin-type="skin-default-gray"] .left-menu-active > a {
+  background-color: #7f8c8d;
+}
+.skin-default[data-skin-type="skin-default-gray"] .left-menu-active > a:hover {
+  color: white;
+}
