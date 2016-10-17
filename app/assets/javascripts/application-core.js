@@ -87,13 +87,6 @@
 
 //= require iframeResizer.contentWindow
 
-//= require ultra-nav/slimscroll/resizer
-//= require ultra-nav/prettify/prettify
-//= require ultra-nav/slimscroll/jquery.slimscroll.min
-//= require ultra-nav/switchery/switchery.min
-//= require ultra-nav/navigation/ultra
-//= require ultra-nav/custom/collapsible
-
 //= require_self
 
 jQuery(document).ready(function() {
