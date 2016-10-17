@@ -563,7 +563,7 @@ ItemApp.ItemManagement = (function(Backbone){
                     if (duration >= minItemDuration && fields.end_time.editor.picker && fields.start_time.editor.picker){
                         // If duration is not less than 5 mins and start and end time fields initialized
                         startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
-                        startTime = fields.end_time.editor.picker.data("DateTimePicker").date();
+                        endTime = fields.end_time.editor.picker.data("DateTimePicker").date();
                         
                         if (startTime){
                             // If start time is not empty, set end time to start time plus duration and highlight the field to indicate it was automatically changed
