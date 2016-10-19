@@ -33,18 +33,19 @@ var AppUtils = (function(){
     // This function can be called to render a message in a bootstrap modal between the header and body seactions
     function setMessage(options) {
         var msgOptions = {
-              text : '',
-              fade : false,
-              style : 'info',
-              fadeTimeout : 3000,
-              fadeInDuration : 500,
-              fadeOutDuration : 100,
-              textAlign : 'left',
-              buttonIconClass : 'fa fa-remove',
-              buttonActionFn : null,
-              errorObject : null,
-              renderLocation : 'modal',
-              msgContainerSelector : '.modal-msg-container'
+              text : '', // the text to display in the message view
+              fade : false, // whether or not the message fades out after a certain duration
+              style : 'info', // the color style for the message background
+              fadeTimeout : 3000, // duration before the modal fades out if fade is set to true
+              fadeInDuration : 500, // the time it takes the message to fade into view
+              fadeOutDuration : 100, // the time it takes for the message to fade out of view
+              textAlign : 'left', // the text alignment for the message contents
+              buttonIconClass : 'fa fa-remove', // the icon class for the message close button
+              buttonActionFn : null, // if set, a method that will be called when the user clicks on the close button
+              errorObject : null, // assign the result of 'form.validate()' to this option and this method will loop 
+              // through the object's properties and append its messages to the message text
+              renderLocation : 'modal', // the location to render the message. Set this to 'main-layout' to render the message in the main application layout #alert-area contianer
+              msgContainerSelector : '.modal-msg-container' // the selector for the desired message container. Override this option to render the message in an alternative container
         };
 
         // Allow method to be called with only the message supplied. Uses all default values.
