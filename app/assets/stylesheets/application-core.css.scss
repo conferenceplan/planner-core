@@ -261,54 +261,7 @@ $turquiose : #009999;
   }
 }
 
-.modal-msg-container, #alert-area {
-  display: table;
-  width: 100%;
-  padding: 5px;
 
-  &.active {
-    z-index: 1000;
-  }
-}
-
-.modal-msg {
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  padding: 10px;
-  opacity: 0;
-  position: relative;
-  padding-right: 50px;
-  border-width: 1px;
-  border-style: solid;
-  display: block;
-
-  #msg {
-    display: inline;
-  }
-
-  button.close {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    color: inherit;
-  }
-
-  & + .modal-msg {
-    margin-top: 5px;
-  }
-}
-
-#alert-area.active {
-  margin-bottom: 20px;
-}
-
-
-/* Placed on the body while a modal is open to prevent scrolling. */
-body.showing-modal {
-  overflow: hidden;
-}
 
 
 
