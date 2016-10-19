@@ -1752,4 +1752,9 @@ i.publication-count-num {
     border-radius: 0px;
     }
 }
-
+div.has-error p.help-block:not(:empty) {
+    color: white;
+    background-color: red;
+    border-radius: 6px;
+    padding: 4px 5px 4px 5px;
+}
