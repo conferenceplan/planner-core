@@ -50,19 +50,19 @@ en:
         retry_upload: "Try again"
         use_succeeded: "OK"
         failed_note: "Some of your images failed uploading."
+  core:
+    messages:
+      modal-indicator-msg-error: 'Please see the errors above'
+      modal-indicator-msg-general: 'Please see the messages above'
+      data-successfully-saved: 'Successfully saved'
   planner: 
     core:
       messages:
         no-parent: 'none'
-        modal-indicator-msg-error: 'Please see the errors above'
-        modal-indicator-msg-general: 'Please see the messages above'
-        data-successfully-saved: 'Successfully saved'
       errors:
         people-not-found: "can not find the source or destination person"
         must-be-a-positive-number: 'Must be a positive number.'
         unique-mailing-error: "Combination of <b>Mailing number</b> and <b>Mailing Template</b> must be unique."
-
-
 
   time:
     formats:

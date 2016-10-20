@@ -16,7 +16,7 @@ GIT
 PATH
   remote: .
   specs:
-    planner-core (1.0.130)
+    planner-core (1.0.132)
       actionmailer
       activerecord
       acts-as-taggable-on (= 3.1.1)
