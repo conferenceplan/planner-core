@@ -29,30 +29,140 @@ var AppUtils = (function(){
      *
      * 
      */
+    
+    const DEFAULT_MSG_OPTIONS = {
+          text : '', // the text to display in the message view
+          fade : false, // whether or not the message fades out after a certain duration
+          style : 'info', // the color style for the message background
+          fadeTimeout : 3000, // duration before the modal fades out if fade is set to true
+          fadeInDuration : 500, // the time it takes the message to fade into view
+          fadeOutDuration : 100, // the time it takes for the message to fade out of view
+          textAlign : 'left', // the text alignment for the message contents
+          buttonIconClass : 'fa fa-remove', // the icon class for the message close button
+          buttonActionFn : null, // if set, a method that will be called when the user clicks on the close button
+          errorObject : null, // assign the result of 'form.validate()' to this option and this method will loop 
+          // through the object's properties and append its messages to the message text
+          renderLocation : 'modal', // the location to render the message. Set this to 'main-layout' to render the message in the main application layout #alert-area contianer
+          msgContainerSelector : '.modal-msg-container', // the selector for the desired message container. Override this option to render the message in an alternative container
+          isIndicator : false, // Determines if the message should be rendered in the bottom msg area or not
+          indicatorMessage : null,
+          indicatorBtnIconClass : 'fa fa-arrow-up',
+          indicatorBtnActionFn : function(e) {
+            // On message button click, fade out the message and scroll the modal up to the top
+            var self = this;
+
+            self.$el.fadeTo(self.options.fadeOutDuration, 0).slideUp(self.options.fadeOutDuration, function(){
+              self.$el.parents('.modal-msg-container').removeClass('active');
+              self.remove();
+            });
+
+            $('.modal').animate({ scrollTop: 0 }, 'fast');
+          },
+    };
+
+    // Create view to be used to render the  message
+    var MsgView = Marionette.ItemView.extend({
+        template : "#modal-msg-template",
+        className : "modal-msg",
+        initialize : function(options) {
+          this.options = $.extend({}, this.options, DEFAULT_MSG_OPTIONS, options); // Set set view with default and supplied options
+
+          if (this.options.renderLocation == 'modal') {
+            // Set msg containers to their defaults for a modal
+            this.msgContainer = $("#top-msg.modal-msg-container");
+            this.indicatorContainer = $("#bottom-msg.modal-msg-container");
+          } else {
+            // Set message container based on provided selector
+            this.msgContainer = $(this.options.msgContainerSelector);
+
+            if (this.options.isIndicator) {
+              // Allow msg to be rendered as an indicator outside of a modal context
+              this.indicatorContainer = $(this.options.msgContainerSelector);
+            };
+          };
+        },
+        events : {
+          "click button" : function(e) {
+            var self = this;
+            
+            if (self.options && self.options.buttonActionFn) {
+              // If method called with a function for the message button, call it
+              self.options.buttonActionFn.call(self, e);
+            } else {
+              // By default, fade out the message on button click
+              self.$el.fadeTo(self.options.fadeOutDuration, 0).slideUp(self.options.fadeOutDuration, function(){
+                self.msgContainer.removeClass("active");
+                self.remove();
+              });
+            };
+          }
+        },
+        onRender : function(){
+          var self = this;
+
+          // Set message background
+          switch (self.model.get("style")) {
+            case "success": self.$el.addClass("alert-success");
+            break;
+            case "info": self.$el.addClass("alert-info");
+            break;
+            case "notice": self.$el.addClass("alert-info");
+            break;
+            case "warning": self.$el.addClass("alert-warning");
+            break;
+            case "danger": self.$el.addClass("alert-danger");
+            break;
+            case "error": self.$el.addClass("alert-danger");
+            break;
+            default: self.$el.addClass("alert-info");
+          };
+
+          // Set text alignment
+          switch (self.model.get("textAlign")) {
+            case "left": self.$el.css('text-align', 'left');
+            break;
+            case "right": self.$el.css('text-align', 'right');
+            break;
+            case "center": self.$el.css('text-align', 'center');
+            break;
+            default: self.$el.css('text-align', 'left');
+          };
+
+          var self = this;
+
+          // If fade is set to true, fade out the message during the given timeframe
+          if (!(typeof self.model.get("fade") == "undefined") && self.model.get("fade")){
+            setTimeout(function() {
+              self.$el.fadeTo(self.options.fadeOutDuration, 0).slideUp(self.options.fadeOutDuration, function(){
+                self.msgContainer.removeClass("active");
+                self.remove();
+              });
+            }, self.options.fadeTimeout);
+          };
+
+          if (self.options.isIndicator) {
+            // Set container as active and append indicator message view to indicator container
+            self.$el.addClass('indicatorMsg');
+            self.indicatorContainer.addClass("active").append(self.$el);
+          } else {
+            // Set container as active and append message view to container
+            self.msgContainer.addClass("active").append(self.$el);
+          };
+
+          // Fade in message view
+          self.$el.fadeTo(self.options.fadeInDuration, 1).slideDown(self.options.fadeInDuration);
+        }
+    });
 
     // This function can be called to render a message in a bootstrap modal between the header and body seactions
     function setMessage(options) {
-        var msgOptions = {
-              text : '', // the text to display in the message view
-              fade : false, // whether or not the message fades out after a certain duration
-              style : 'info', // the color style for the message background
-              fadeTimeout : 3000, // duration before the modal fades out if fade is set to true
-              fadeInDuration : 500, // the time it takes the message to fade into view
-              fadeOutDuration : 100, // the time it takes for the message to fade out of view
-              textAlign : 'left', // the text alignment for the message contents
-              buttonIconClass : 'fa fa-remove', // the icon class for the message close button
-              buttonActionFn : null, // if set, a method that will be called when the user clicks on the close button
-              errorObject : null, // assign the result of 'form.validate()' to this option and this method will loop 
-              // through the object's properties and append its messages to the message text
-              renderLocation : 'modal', // the location to render the message. Set this to 'main-layout' to render the message in the main application layout #alert-area contianer
-              msgContainerSelector : '.modal-msg-container' // the selector for the desired message container. Override this option to render the message in an alternative container
-        };
+        var msgOptions = _.clone(DEFAULT_MSG_OPTIONS);
 
         // Allow method to be called with only the message supplied. Uses all default values.
         if (typeof options == "string") {
           msgOptions.text = options;
         } else if (typeof options == "object") {
-          msgOptions = $.extend(msgOptions, options);
+          msgOptions = $.extend({}, msgOptions, options);
         };
 
         // If error object is present and message style is default, set message style to 'error'
@@ -73,86 +183,16 @@ var AppUtils = (function(){
 
         function renderMsg(renderOptions) {
           // Method to render the message to whichever container has been specified
-          if (renderOptions.renderLocation == 'modal') {
-            // Set msg containers to their defaults for a modal
-            var $msgWrapper = $("#top-msg.modal-msg-container");
-            var $indicatorWrapper = $("#bottom-msg.modal-msg-container");
-          } else {
-            // Set message container based on provided selector
-            var $msgWrapper = $(renderOptions.msgContainerSelector);
-          };
+          var msgRenderOptions = _.clone(renderOptions);
 
-          // Create view to be used to render the  message
-          var MsgView = Marionette.ItemView.extend({
-              template : "#modal-msg-template",
-              className : "modal-msg",
-              events : {
-                "click button" : function(e) {
-                  var self = this;
-                  
-                  if (self.options && self.options.buttonActionFn) {
-                    // If method called with a function for the message button, call it
-                    self.options.buttonActionFn.call(self, e);
-                  } else {
-                    // By default, fade out the message on button click
-                    self.$el.fadeTo(renderOptions.fadeOutDuration, 0).slideUp(renderOptions.fadeOutDuration, function(){
-                      $msgWrapper.removeClass("active");
-                      self.remove();
-                    });
-                  };
-                }
-              },
-              onRender : function(){
-                var self = this;
-
-                // Set message background
-                switch (self.model.get("style")) {
-                  case "success": self.$el.addClass("alert-success");
-                  break;
-                  case "info": self.$el.addClass("alert-info");
-                  break;
-                  case "notice": self.$el.addClass("alert-info");
-                  break;
-                  case "warning": self.$el.addClass("alert-warning");
-                  break;
-                  case "danger": self.$el.addClass("alert-danger");
-                  break;
-                  case "error": self.$el.addClass("alert-danger");
-                  break;
-                  default: self.$el.addClass("alert-info");
-                };
-
-                // Set text alignment
-                switch (self.model.get("textAlign")) {
-                  case "left": self.$el.css('text-align', 'left');
-                  break;
-                  case "right": self.$el.css('text-align', 'right');
-                  break;
-                  case "center": self.$el.css('text-align', 'center');
-                  break;
-                  default: self.$el.css('text-align', 'left');
-                };
-
-                // If fade is set to true, fade out the message during the given timeframe
-                if (!(typeof self.model.get("fade") == "undefined") && self.model.get("fade")){
-                  setTimeout(function() {
-                    self.$el.fadeTo(renderOptions.fadeOutDuration, 0).slideUp(renderOptions.fadeOutDuration, function(){
-                      $msgWrapper.removeClass("active");
-                      self.remove();
-                    });
-                  }, renderOptions.fadeTimeout);
-                }
-              }
-          });
-
-          // Create message object with attributes from method options
+          // Create message object with attributes from method msgRenderOptions
           var Message = new Backbone.Model();
-          Message.set(renderOptions);
+          Message.set(msgRenderOptions);
 
-          if (renderOptions.errorObject && typeof renderOptions.errorObject == "object") {
+          if (msgRenderOptions.errorObject && typeof msgRenderOptions.errorObject == "object") {
             // If errorObject present, append error messages to message text
-            var message = renderOptions.text;
-            var errors = renderOptions.errorObject;
+            var message = msgRenderOptions.text;
+            var errors = msgRenderOptions.errorObject;
             for (var property in errors) {
                 if (errors.hasOwnProperty(property)) {
                     if (Object.keys(errors).length > 1)
@@ -166,28 +206,24 @@ var AppUtils = (function(){
             Message.set('text', message);
           };
 
-          // Instantiate and render message view
-          var view = new MsgView({
+          msgRenderOptions = $.extend({}, msgRenderOptions, {
               model : Message
           });
+          // Instantiate and render message view
+          var view = new MsgView(msgRenderOptions);
           view.render();
-
-          // Set sontainer as active and append message view to container
-          $msgWrapper.addClass("active");
-          $msgWrapper.append(view.$el);
-
-          // Fade in message view
-          view.$el.fadeTo(renderOptions.fadeInDuration, 1).slideDown(renderOptions.fadeInDuration);
 
           var $modal = $('.modal-dialog');
 
-          if (renderOptions.renderLocation == 'modal' && $modal.length > 0 && $modal.offset().top < 0) {
+          if (msgRenderOptions.renderLocation == 'modal' && $modal.length > 0 && $modal.offset().top < 0) {
             // If modal has been scrolled so its top edge falls outside the viewport, 
             // then render the message indicator at the bottom
             function indicatorText() {
               var msg = ""
               // If this is an error message, set the message to the error type else use the default general message
-              if (renderOptions.errorObject && typeof renderOptions.errorObject == "object") {
+              if (msgRenderOptions.indicatorMessage != null && typeof(msgRenderOptions.indicatorMessage) == 'string') {
+                msg = msgRenderOptions.indicatorMessage;
+              } else if (msgRenderOptions.errorObject && typeof msgRenderOptions.errorObject == "object") {
                 msg = '<%= I18n.t('modal-indicator-msg-error').html_safe %>';
               } else {
                 msg = '<%= I18n.t('modal-indicator-msg-general').html_safe %>';
@@ -197,32 +233,24 @@ var AppUtils = (function(){
             };
 
             // Create indicator message model and view
-            indicatorMsg = Message.clone().set({
+            var indicatorMsgAttrs = {
               text : indicatorText(),
               textAlign : 'right',
-              buttonIconClass : 'fa fa-arrow-up'
-            });
-            var indicatorView = new MsgView({
+              buttonIconClass : msgRenderOptions.indicatorBtnIconClass
+            };
+
+            indicatorMsg = Message.clone().set(indicatorMsgAttrs);
+
+            var indicatorOptions = $.extend({}, msgRenderOptions, indicatorMsgAttrs, {
+                isIndicator : true,
                 model : indicatorMsg,
-                buttonActionFn : function(e) {
-                  // On message button click, fade out the message and scroll the modal up to the top
-                  var self = this;
-
-                  self.$el.fadeTo(renderOptions.fadeOutDuration, 0).slideUp(renderOptions.fadeOutDuration, function(){
-                    self.$el.parents('.modal-msg-container').removeClass('active');
-                    self.remove();
-                  });
-
-                  $('.modal').animate({ scrollTop: 0 }, 'fast');
-                }
+                buttonActionFn : msgRenderOptions.indicatorBtnActionFn
             });
+
+            var indicatorView = new MsgView(indicatorOptions);
 
             // Render and append indicator view to the indicator container, then fade it in
             indicatorView.render();
-            $indicatorWrapper.append(indicatorView.$el);
-            indicatorView.$el.fadeTo(renderOptions.fadeInDuration, 1).slideDown(renderOptions.fadeInDuration, function(){
-              $indicatorWrapper.addClass("active");
-            });
           };
         };
 
@@ -554,6 +582,7 @@ var AppUtils = (function(){
             "click .close-modal": "close_modal",
             "keypress" : "swallow"
         },
+        setMsg : setMessage,
         
         swallow : function(e) {
             e.stopPropagation();
