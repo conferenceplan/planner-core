@@ -260,15 +260,12 @@ var AppUtils = (function(){
             this.template = _.template($('#modal-info-template').html());
         },
 
-        setMsg : setMessage,
-        
         modalOptions: {
             backdrop: 'static',
         },
 
         render: function () {
             Backbone.BootstrapModal.count++;
-            $('body').addClass('showing-modal');
 
             this.$el.html($(this.template({
                 title : this.options.title
@@ -303,8 +300,6 @@ var AppUtils = (function(){
             } else {
                 this.remove();
             };
-            
-            $('body').removeClass('showing-modal');
         },
         
         hide : function(e) {
@@ -314,7 +309,6 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];  
             this.remove();
-            $('body').removeClass('showing-modal');
         }
     });
     
@@ -327,9 +321,6 @@ var AppUtils = (function(){
             this.template = _.template($('#modal-confirm-template').html());
         }
     });
-    
-    
-	
     
     /*
      * 
@@ -368,7 +359,6 @@ var AppUtils = (function(){
             this.delegateEvents();
             
             this.$el.modal(this.modalOptions);
-            $('body').addClass('showing-modal');
 
             return this;
         },
@@ -381,14 +371,12 @@ var AppUtils = (function(){
                 this.options.continueAction();
             };
             this.remove();
-            $('body').removeClass('showing-modal');
         },
         
         hide: function (e) {
             this.remove();
             this.unbind();
             this.views = [];  
-            $('body').removeClass('showing-modal');
         },
     });
         
@@ -450,7 +438,6 @@ var AppUtils = (function(){
         render: function () {
             var url = this.options.url;
             Backbone.BootstrapModal.count++;
-            $('body').addClass('showing-modal');
             
             this.checked = false;
 
@@ -582,8 +569,6 @@ var AppUtils = (function(){
             keyboard : false
         },
 
-        setMsg : setMessage,
-        
         render: function () {
             var numModals = Backbone.BootstrapModal.count++;
 
