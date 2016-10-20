@@ -230,7 +230,6 @@ ItemApp.PeopleManagement = (function(Backbone){
         currentItem = new ProgramItem();
         currentItem.fetch({
             url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
-            // async:false,
             success : function(model) {
                 needsSaved = false;
                 
@@ -287,15 +286,21 @@ ItemApp.PeopleManagement = (function(Backbone){
         });
     };
     
-    function clear_and_refresh(collection) {
+    function clear_and_refresh(collection, callback) {
         var mdl = null;
         while (mdl = collection.pop({silent: true})) {
             mdl.clear({silent: true})
         };
-        collection.fetch({async: false, silent: true});
+        collection.fetch({silent: true,
+            success : function() {
+                if (callback) {
+                    callback();
+                }
+            }
+        });
     };
     
-    function save_collection(collection) {
+    function save_collection(collection, callback) {
         if (current_url) {
             var programme_item_assignments = {
                 programme_item_assignments: collection
@@ -309,12 +314,25 @@ ItemApp.PeopleManagement = (function(Backbone){
                 data: JSON.stringify(programme_item_assignments),
                 success : function() {
                     // Force a reload of the models etc....
-                    clear_and_refresh(moderators);
-                    clear_and_refresh(participants);
-                    clear_and_refresh(reserved);
-                    clear_and_refresh(invisible);
-        
-                    eventAggregator.trigger("refreshViews");
+                    clear_and_refresh(moderators,
+                        function() {
+                        clear_and_refresh(participants,
+                            function() {
+                            clear_and_refresh(reserved,
+                                function() {
+                                    clear_and_refresh(invisible,
+                                        function() {
+                                            if (callback) {
+                                                callback();
+                                            }
+                                        }
+                                    )
+                                }
+                            )
+                            }
+                        )
+                        }
+                    );
                 }
             });
         }
@@ -406,10 +424,10 @@ ItemApp.PeopleManagement = (function(Backbone){
                 all_people = all_people.concat(reserved.models);
                 all_people = all_people.concat(invisible.models);
                 
-                save_collection(all_people);
-
-                needsSaved = false;
-                eventAggregator.trigger("refreshViews");
+                save_collection(all_people, function() {
+                    needsSaved = false;
+                    eventAggregator.trigger("refreshViews");
+                });
             });
 
             // Add the control for adding people to items            
