@@ -25,6 +25,223 @@ var AppUtils = (function(){
         return translations[moment.locale()][str] ? translations[moment.locale()][str] : str;
     };
 
+    /*
+     *
+     * 
+     */
+
+    // This function can be called to render a message in a bootstrap modal between the header and body seactions
+    function setMessage(options) {
+        var msgOptions = {
+              text : '', // the text to display in the message view
+              fade : false, // whether or not the message fades out after a certain duration
+              style : 'info', // the color style for the message background
+              fadeTimeout : 3000, // duration before the modal fades out if fade is set to true
+              fadeInDuration : 500, // the time it takes the message to fade into view
+              fadeOutDuration : 100, // the time it takes for the message to fade out of view
+              textAlign : 'left', // the text alignment for the message contents
+              buttonIconClass : 'fa fa-remove', // the icon class for the message close button
+              buttonActionFn : null, // if set, a method that will be called when the user clicks on the close button
+              errorObject : null, // assign the result of 'form.validate()' to this option and this method will loop 
+              // through the object's properties and append its messages to the message text
+              renderLocation : 'modal', // the location to render the message. Set this to 'main-layout' to render the message in the main application layout #alert-area contianer
+              msgContainerSelector : '.modal-msg-container' // the selector for the desired message container. Override this option to render the message in an alternative container
+        };
+
+        // Allow method to be called with only the message supplied. Uses all default values.
+        if (typeof options == "string") {
+          msgOptions.text = options;
+        } else if (typeof options == "object") {
+          msgOptions = $.extend(msgOptions, options);
+        };
+
+        // If error object is present and message style is default, set message style to 'error'
+        if (msgOptions.errorObject && typeof msgOptions.errorObject == "object" && msgOptions.style == 'info') {
+          msgOptions.style = 'error';
+        };
+
+        // If method called with contianer selector, 
+        // set renderLocation value to "other" so it doesn't behave as if it were in a modal
+        if (msgOptions.msgContainerSelector != '.modal-msg-container') {
+          msgOptions.renderLocation = 'other';
+        };
+
+        // If method called with 'main-layout' as renderLocation option, set selector to main layout alert area
+        if (msgOptions.renderLocation == 'main-layout') {
+          msgOptions.msgContainerSelector = '#alert-area';
+        };
+
+        function renderMsg(renderOptions) {
+          // Method to render the message to whichever container has been specified
+          if (renderOptions.renderLocation == 'modal') {
+            // Set msg containers to their defaults for a modal
+            var $msgWrapper = $("#top-msg.modal-msg-container");
+            var $indicatorWrapper = $("#bottom-msg.modal-msg-container");
+          } else {
+            // Set message container based on provided selector
+            var $msgWrapper = $(renderOptions.msgContainerSelector);
+          };
+
+          // Create view to be used to render the  message
+          var MsgView = Marionette.ItemView.extend({
+              template : "#modal-msg-template",
+              className : "modal-msg",
+              events : {
+                "click button" : function(e) {
+                  var self = this;
+                  
+                  if (self.options && self.options.buttonActionFn) {
+                    // If method called with a function for the message button, call it
+                    self.options.buttonActionFn.call(self, e);
+                  } else {
+                    // By default, fade out the message on button click
+                    self.$el.fadeTo(renderOptions.fadeOutDuration, 0).slideUp(renderOptions.fadeOutDuration, function(){
+                      $msgWrapper.removeClass("active");
+                      self.remove();
+                    });
+                  };
+                }
+              },
+              onRender : function(){
+                var self = this;
+
+                // Set message background
+                switch (self.model.get("style")) {
+                  case "success": self.$el.addClass("alert-success");
+                  break;
+                  case "info": self.$el.addClass("alert-info");
+                  break;
+                  case "notice": self.$el.addClass("alert-info");
+                  break;
+                  case "warning": self.$el.addClass("alert-warning");
+                  break;
+                  case "danger": self.$el.addClass("alert-danger");
+                  break;
+                  case "error": self.$el.addClass("alert-danger");
+                  break;
+                  default: self.$el.addClass("alert-info");
+                };
+
+                // Set text alignment
+                switch (self.model.get("textAlign")) {
+                  case "left": self.$el.css('text-align', 'left');
+                  break;
+                  case "right": self.$el.css('text-align', 'right');
+                  break;
+                  case "center": self.$el.css('text-align', 'center');
+                  break;
+                  default: self.$el.css('text-align', 'left');
+                };
+
+                // If fade is set to true, fade out the message during the given timeframe
+                if (!(typeof self.model.get("fade") == "undefined") && self.model.get("fade")){
+                  setTimeout(function() {
+                    self.$el.fadeTo(renderOptions.fadeOutDuration, 0).slideUp(renderOptions.fadeOutDuration, function(){
+                      $msgWrapper.removeClass("active");
+                      self.remove();
+                    });
+                  }, renderOptions.fadeTimeout);
+                }
+              }
+          });
+
+          // Create message object with attributes from method options
+          var Message = new Backbone.Model();
+          Message.set(renderOptions);
+
+          if (renderOptions.errorObject && typeof renderOptions.errorObject == "object") {
+            // If errorObject present, append error messages to message text
+            var message = renderOptions.text;
+            var errors = renderOptions.errorObject;
+            for (var property in errors) {
+                if (errors.hasOwnProperty(property)) {
+                    if (Object.keys(errors).length > 1)
+                      message += errors[property].message + '<br>';
+                    else {
+                      message += errors[property].message;
+                    };
+                };
+            };
+
+            Message.set('text', message);
+          };
+
+          // Instantiate and render message view
+          var view = new MsgView({
+              model : Message
+          });
+          view.render();
+
+          // Set sontainer as active and append message view to container
+          $msgWrapper.addClass("active");
+          $msgWrapper.append(view.$el);
+
+          // Fade in message view
+          view.$el.fadeTo(renderOptions.fadeInDuration, 1).slideDown(renderOptions.fadeInDuration);
+
+          var $modal = $('.modal-dialog');
+
+          if (renderOptions.renderLocation == 'modal' && $modal.length > 0 && $modal.offset().top < 0) {
+            // If modal has been scrolled so its top edge falls outside the viewport, 
+            // then render the message indicator at the bottom
+            function indicatorText() {
+              var msg = ""
+              // If this is an error message, set the message to the error type else use the default general message
+              if (renderOptions.errorObject && typeof renderOptions.errorObject == "object") {
+                msg = '<%= I18n.t('modal-indicator-msg-error').html_safe %>';
+              } else {
+                msg = '<%= I18n.t('modal-indicator-msg-general').html_safe %>';
+              };
+
+              return msg;
+            };
+
+            // Create indicator message model and view
+            indicatorMsg = Message.clone().set({
+              text : indicatorText(),
+              textAlign : 'right',
+              buttonIconClass : 'fa fa-arrow-up'
+            });
+            var indicatorView = new MsgView({
+                model : indicatorMsg,
+                buttonActionFn : function(e) {
+                  // On message button click, fade out the message and scroll the modal up to the top
+                  var self = this;
+
+                  self.$el.fadeTo(renderOptions.fadeOutDuration, 0).slideUp(renderOptions.fadeOutDuration, function(){
+                    self.$el.parents('.modal-msg-container').removeClass('active');
+                    self.remove();
+                  });
+
+                  $('.modal').animate({ scrollTop: 0 }, 'fast');
+                }
+            });
+
+            // Render and append indicator view to the indicator container, then fade it in
+            indicatorView.render();
+            $indicatorWrapper.append(indicatorView.$el);
+            indicatorView.$el.fadeTo(renderOptions.fadeInDuration, 1).slideDown(renderOptions.fadeInDuration, function(){
+              $indicatorWrapper.addClass("active");
+            });
+          };
+        };
+
+        var $msgContainer = $(msgOptions.msgContainerSelector);
+
+        if ($msgContainer.length > 0) {
+          // If message container is present in the DOM, render the message
+          renderMsg(msgOptions);
+        } else if (msgOptions.renderLocation == 'modal') {
+          // If message container is not found in the modal DOM, create and add the contianer elements to the modal
+          $modalBody = $(".modal-body");
+          $msgContainer = $('<div id="top-msg" class="modal-msg-container"></div>');
+          $modalBody.before($msgContainer);
+          $indicatorContainer = $msgContainer.clone().attr('id', 'bottom-msg');
+          $modalBody.after($indicatorContainer);
+          renderMsg(msgOptions);
+        };
+    };
+
    /*
     * 
     */
@@ -42,6 +259,8 @@ var AppUtils = (function(){
             this.options = options || {};
             this.template = _.template($('#modal-info-template').html());
         },
+
+        setMsg : setMessage,
         
         modalOptions: {
             backdrop: 'static',
@@ -49,6 +268,7 @@ var AppUtils = (function(){
 
         render: function () {
             Backbone.BootstrapModal.count++;
+            $('body').addClass('showing-modal');
 
             this.$el.html($(this.template({
                 title : this.options.title
@@ -83,6 +303,8 @@ var AppUtils = (function(){
             } else {
                 this.remove();
             };
+            
+            $('body').removeClass('showing-modal');
         },
         
         hide : function(e) {
@@ -92,6 +314,7 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];  
             this.remove();
+            $('body').removeClass('showing-modal');
         }
     });
     
@@ -145,6 +368,7 @@ var AppUtils = (function(){
             this.delegateEvents();
             
             this.$el.modal(this.modalOptions);
+            $('body').addClass('showing-modal');
 
             return this;
         },
@@ -157,12 +381,14 @@ var AppUtils = (function(){
                 this.options.continueAction();
             };
             this.remove();
+            $('body').removeClass('showing-modal');
         },
         
         hide: function (e) {
             this.remove();
             this.unbind();
             this.views = [];  
+            $('body').removeClass('showing-modal');
         },
     });
         
@@ -224,6 +450,7 @@ var AppUtils = (function(){
         render: function () {
             var url = this.options.url;
             Backbone.BootstrapModal.count++;
+            $('body').addClass('showing-modal');
             
             this.checked = false;
 
@@ -354,6 +581,8 @@ var AppUtils = (function(){
             backdrop: 'static',
             keyboard : false
         },
+
+        setMsg : setMessage,
         
         render: function () {
             var numModals = Backbone.BootstrapModal.count++;
@@ -376,6 +605,8 @@ var AppUtils = (function(){
             $(document.activeElement).trigger(e);
             
             this.$el.find("input").filter(':visible:first').focus();
+
+            $('body').addClass('showing-modal');
             
             return this;
         },
@@ -391,7 +622,8 @@ var AppUtils = (function(){
             if (! errors ) {
                 if (e.type != "hide") this.$el.modal("hide");
                 this.remove();
-            }
+                $('body').removeClass('showing-modal');
+            };
         },
         
         removeCK : function() {
@@ -412,6 +644,7 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];
             Backbone.BootstrapModal.count--;
+            $('body').removeClass('showing-modal');
         },
         
         // over-ride this for the body of the form        
@@ -430,6 +663,7 @@ var AppUtils = (function(){
     FormModal = GenericModal.extend({
         renderBody : function() {
             this.form = this.options.form;
+            this.form.setMsg = setMessage;
             
             if (this.options.modal_template) {
                 this.form.template = _.template($(this.options.modal_template).html());
@@ -440,6 +674,7 @@ var AppUtils = (function(){
         
         // over-ride for the actual data submission        
         submitData : function() {
+            $('.modal-msg-container').removeClass('active').html('');
             // gather the data and update the underlying model etc.
             var errors = this.options.form.validate();
             
@@ -468,6 +703,12 @@ var AppUtils = (function(){
                     // remove please wait
                     $body.removeClass("loading");
                 });
+            } else {
+              this.setMsg({
+                errorObject : errors,
+                fade : true,
+                fadeTimeout : 10000
+              });
             };
             
             return errors; // if there are any errors
@@ -482,6 +723,7 @@ var AppUtils = (function(){
             this.form = new Backbone.Form({
                 model: this.model
             });
+            this.form.setMsg = setMessage;
             
             if (this.options.modal_template) {
                 this.form.template = _.template($(this.options.modal_template).html());
@@ -492,6 +734,8 @@ var AppUtils = (function(){
 
         // over-ride for the actual data submission        
         submitData : function(callback) {
+            $('.modal-msg-container').removeClass('active').html('');
+            var self = this;
             // gather the data and update the underlying model etc.
             var errors = this.form.commit({ validate: true }); // To save the values from the form back into the model
             
@@ -512,9 +756,23 @@ var AppUtils = (function(){
                         if (callback) {
                             callback();
                         };
+
+                        self.setMsg({
+                          text : '<%= I18n.t("data-successfully-saved") %>',
+                          style : 'success',
+                          renderLocation : 'main-layout',
+                          fade : true,
+                          fadeTimeout : 10000
+                        });
                     }
                 }); // save the model to the server
-            }
+            } else {
+              this.setMsg({
+                errorObject : errors,
+                fade : true,
+                fadeTimeout : 10000
+              });
+            };
             
             return errors; // if there are any errors
         }
@@ -538,6 +796,7 @@ var AppUtils = (function(){
             this.submitData(function() {
                 that.$el.modal("hide");
                 that.remove();
+                $('body').removeClass('showing-modal');
             });
         },
 
@@ -559,6 +818,8 @@ var AppUtils = (function(){
         
         formEvents : {
         },
+
+        setMsg : setMessage,
         
         editModel : function(e) {
             e.preventDefault();
@@ -586,10 +847,12 @@ var AppUtils = (function(){
             if (! errors ) {
                 // flip back to the read view
                 this.renderModel();
-            }
+            };
         },
         
         submitData : function() {
+            $('.modal-msg-container').removeClass('active').html('');
+            var self = this;
             // gather the data and update the underlying model etc.
             var errors = this.form.commit(); // To save the values from the form back into the model
             
@@ -603,6 +866,13 @@ var AppUtils = (function(){
                         if (refreshFn) {
                             refreshFn(mdl); // cause problem with templates used ???
                         };
+                        self.setMsg({
+                          text : '<%= I18n.t("data-successfully-saved") %>',
+                          style : 'success',
+                          renderLocation : 'main-layout',
+                          fade : true,
+                          fadeTimeout : 10000
+                        });
                     },
                     statusCode: {
                         400 : function(response) {
@@ -612,6 +882,12 @@ var AppUtils = (function(){
                         }
                     }
                 }); // save the model to the server
+            } else {
+              this.setMsg({
+                errorObject : errors,
+                fade : true,
+                fadeTimeout : 10000
+              });
             };
             
             return errors; // if there are any errors
@@ -1177,6 +1453,8 @@ var AppUtils = (function(){
         },
         
         eventAggregator : eventAggregator,
+
+        setMessage : setMessage,
         
         InfoModal : InfoModal,
         
