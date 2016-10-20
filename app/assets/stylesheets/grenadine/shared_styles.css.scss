@@ -8,13 +8,16 @@ div.has-error p.help-block:not(:empty), small.help-block:not(:empty) {
 }
 
 .modal-msg-container, #alert-area {
-  display: table;
   width: 100%;
   padding: 5px;
 
   &.active {
     z-index: 1000;
   }
+}
+
+.modal-msg-container#bottom-msg {
+  overflow: hidden;
 }
 
 .modal-msg {
@@ -43,6 +46,18 @@ div.has-error p.help-block:not(:empty), small.help-block:not(:empty) {
 
   & + .modal-msg {
     margin-top: 5px;
+  }
+
+  &.indicatorMsg {
+    float: right;
+    width: auto;
+    display: inline-block;
+
+    &:after {
+      clear: both;
+      content: "";
+      display: block;
+    }
   }
 }
 
