@@ -54,6 +54,9 @@ en:
     core:
       messages:
         no-parent: 'none'
+        modal-indicator-msg-error: 'Please see the errors above'
+        modal-indicator-msg-general: 'Please see the messages above'
+        data-successfully-saved: 'Successfully saved'
       errors:
         people-not-found: "can not find the source or destination person"
         must-be-a-positive-number: 'Must be a positive number.'

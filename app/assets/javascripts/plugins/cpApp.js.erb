@@ -224,9 +224,9 @@ var AppUtils = (function(){
               if (msgRenderOptions.indicatorMessage != null && typeof(msgRenderOptions.indicatorMessage) == 'string') {
                 msg = msgRenderOptions.indicatorMessage;
               } else if (msgRenderOptions.errorObject && typeof msgRenderOptions.errorObject == "object") {
-                msg = '<%= I18n.t('modal-indicator-msg-error').html_safe %>';
+                msg = I18n.t('planner.core.messages.modal-indicator-msg-error');
               } else {
-                msg = '<%= I18n.t('modal-indicator-msg-general').html_safe %>';
+                msg = I18n.t('planner.core.messages.modal-indicator-msg-general');
               };
 
               return msg;
@@ -772,7 +772,7 @@ var AppUtils = (function(){
                         };
 
                         self.setMsg({
-                          text : '<%= I18n.t("data-successfully-saved") %>',
+                          text : I18n.t('planner.core.messages.data-sucessfully-saved'),
                           style : 'success',
                           renderLocation : 'main-layout',
                           fade : true,
@@ -881,7 +881,7 @@ var AppUtils = (function(){
                             refreshFn(mdl); // cause problem with templates used ???
                         };
                         self.setMsg({
-                          text : '<%= I18n.t("data-successfully-saved") %>',
+                          text : I18n.t('planner.core.messages.data-sucessfully-saved'),
                           style : 'success',
                           renderLocation : 'main-layout',
                           fade : true,

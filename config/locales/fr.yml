@@ -34,6 +34,9 @@ fr:
     core:
       messages:
         no-parent: 'aucun'
+        modal-indicator-msg-error: 'Veuillez voir les erreurs indiquées ci-haut'
+        modal-indicator-msg-general: 'Veuillez voir les messages indiquées ci-haut'
+        data-successfully-saved: 'Sauvegardé avec succès'
       errors:
         people-not-found: "Nous ne pouvons pas trouver le dossier de la personne de destination pour cette image."
         must-be-a-positive-number: 'Doit être un nombre positif.'
