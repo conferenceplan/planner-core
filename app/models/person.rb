@@ -167,6 +167,10 @@ class Person < ActiveRecord::Base
   end  
   
   def getFullName()
+    full_name
+  end
+  
+  def full_name()
     [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ').strip
   end
   
