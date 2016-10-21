@@ -47,10 +47,12 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "title" %>
                     </label>
-                    <span data-editor>
-                        <div class="col-sm-9" data-editors="title"></div>
-                        <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    <div class="col-sm-9">
+                        <span data-editor>
+                            <div data-editors="title"></div>
+                            <div class="has-error"><p class="help-block" data-error></p></div>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -58,10 +60,12 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "item-description" %>
                     </label>
-                    <span data-editor>
-                        <div class="col-sm-9" data-editors="precis"></div>
-                        <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    <div class="col-sm-9">
+                        <span data-editor>
+                            <div data-editors="precis"></div>
+                            <div class="has-error"><p class="help-block" data-error></p></div>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -77,19 +81,23 @@
                         <label class="col-sm-3 control-label">
                            <%= t  "short-title" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-title" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-title-help" %>'></i>
                         </label>
-                        <span data-editor>
-                            <div class="col-sm-9" data-editors="short_title"></div>
-                            <div class="has-error"><p class="help-block" data-error></p></div>
-                        </span>
+                        <div class="col-sm-9">
+                            <span data-editor>
+                                <div data-editors="short_title"></div>
+                                <div class="has-error"><p class="help-block" data-error></p></div>
+                            </span>
+                        </div>
                     </div>
                     <div class="form-group" id="item-form-template-short-description">
                         <label class="col-sm-3 control-label">
                            <%= t  "short-item-description" %>  <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-item-description" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-description-help" %>'></i>
                         </label>
-                        <span data-editor>
-                            <div class="col-sm-9" data-editors="short_precis"></div>
-                            <div class="has-error"><p class="help-block" data-error></p></div>
-                        </span>
+                        <div class="col-sm-9">
+                            <span data-editor>
+                                <div data-editors="short_precis"></div>
+                                <div class="has-error"><p class="help-block" data-error></p></div>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
