@@ -62,7 +62,12 @@ var AppUtils = (function(){
 
     // Create view to be used to render the  message
     var MsgView = Marionette.ItemView.extend({
-        template : "#modal-msg-template",
+        template : function(mdl) {
+          return _.template('<div id="msg">{{= text }}</div><button type="button" class="close" aria-label="Close"><span aria-hidden="true"><i class="{{= buttonIconClass }}"></i></span></button>')({
+              text : mdl.text,
+              buttonIconClass : mdl.buttonIconClass
+          });
+        },
         className : "modal-msg",
         initialize : function(options) {
           this.options = $.extend({}, this.options, DEFAULT_MSG_OPTIONS, options); // Set set view with default and supplied options
