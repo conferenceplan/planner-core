@@ -7,7 +7,7 @@ div.has-error p.help-block:not(:empty), small.help-block:not(:empty) {
     padding: 4px 5px 4px 5px;
 }
 
-.modal-msg-container, #alert-area {
+.modal-msg-container:not(:empty), #alert-area:not(:empty) {
   width: 100%;
   padding: 5px;
 
