@@ -427,6 +427,12 @@ ItemApp.PeopleManagement = (function(Backbone){
                 save_collection(all_people, function() {
                     needsSaved = false;
                     eventAggregator.trigger("refreshViews");
+                    AppUtils.setMessage({
+                      text : I18n.t('core.messages.data-successfully-saved'),
+                      style : 'success',
+                      renderLocation : 'main-layout',
+                      fade : true
+                    });
                 });
             });
 
