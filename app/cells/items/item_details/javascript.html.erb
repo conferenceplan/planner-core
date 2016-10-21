@@ -52,7 +52,7 @@ ItemApp.ItemManagement = (function(Backbone){
                 title : 'Image',
                 validators: [{
                     type: 'required',
-                    message: '<%= I18n.t("you-have-not-uploaded-an-image") %>'   
+                    message: '<%= j t("you-have-not-uploaded-an-image").html_safe %>'   
                 }],
                 cl_args : {
                           client_allowed_formats: ["png","gif","jpeg","jpg"],
