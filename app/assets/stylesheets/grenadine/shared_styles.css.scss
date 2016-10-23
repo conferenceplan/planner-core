@@ -6,8 +6,16 @@ div.has-error p.help-block:not(:empty), small.help-block:not(:empty) {
     border-radius: 6px;
     padding: 4px 5px 4px 5px;
 }
+#alert-area:not(:empty) {
+  width: 100%;
+  padding: 5px 5px 5px 0;
 
-.modal-msg-container:not(:empty), #alert-area:not(:empty) {
+  &.active {
+    z-index: 1000;
+  }
+}
+
+.modal-msg-container:not(:empty) {
   width: 100%;
   padding: 5px;
 
