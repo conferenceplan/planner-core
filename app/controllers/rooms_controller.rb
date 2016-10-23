@@ -141,4 +141,14 @@ class RoomsController < PlannerController
     render status: :ok, text: {}.to_json
   end
 
+
+  def for_select2
+    query = nil
+    if params[:search].present?
+      query = "rooms.name like '%" + params[:search].strip + "%'"
+    end
+
+    @grouped_rooms = Room.joins(:venue).where(query).reorder('venues.sort_order asc, rooms.sort_order asc, rooms.name asc').group_by(&:venue)
+  end
+
 end

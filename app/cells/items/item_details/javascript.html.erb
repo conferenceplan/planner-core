@@ -127,7 +127,9 @@ ItemApp.ItemManagement = (function(Backbone){
             precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
             short_precis : { type : 'Html', title : '<%= t "short-item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
             is_break    : { type : 'Checkbox', title : '<%= t "item-is-break" %>' },
-            room_id : { type : 'Select', title : '<%= t "item-room" %>', options : <%= [[' ',' ']].concat(Room.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+            room_id : { 
+                type : 'Select2',
+                title : '<%= t "item-room" %>', 
                 editorClass : 'item-form-element',
                 validators: [
                     function check_for_time(value, formValues) {
@@ -147,7 +149,46 @@ ItemApp.ItemManagement = (function(Backbone){
                             return err;
                         };
                     }
-                ]
+                ],
+                config : {
+                    placeholder : '<%= t('none') %>',
+                    allowClear : true,
+                    width : 'resolve',
+                    dropdownAutoWidth : true,
+                    multiple: false,
+                    initSelection : function(element,callback) {
+                        if (current_item) {
+                            var roomId = current_item.get('room_id');
+                            var roomName = current_item.get('room');
+                            if (roomId && roomName && roomName.length > 0) {
+                                callback(
+                                    {
+                                        id : roomId, 
+                                        text : roomName
+                                    }
+                                );
+                            }
+                        }
+                    },
+                    formatSelection : function(obj, container) {
+                        return obj.text;
+                    },
+                    formatResults : function(obj, container) {
+                        return obj.text;
+                    },
+                    ajax : {
+                        url : "<%= baseUri %>/rooms/for_select2", 
+                        data : function(term, page) {
+                            return { 'search' : term };
+                        },
+                        results : function(_data, page, query) {
+                            var data = {
+                                results: _data
+                            };
+                            return data;
+                        }
+                    }
+                }
              },
             start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
                 editorClass : 'item-form-element',
