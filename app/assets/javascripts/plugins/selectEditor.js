@@ -35,8 +35,8 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
             self.$el.on("change", function (e) {
                 self.form.trigger(key + ":change", self, self);
 
-                if (self.options.schema.changeFn) {
-                    self.options.schema.changeFn.call(self, e);
+                if (self.schema.changeFn) {
+                    self.schema.changeFn.call(self, e);
                 }
             });
             
