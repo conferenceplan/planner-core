@@ -700,6 +700,7 @@ var AppUtils = (function(){
         
         // over-ride for the actual data submission        
         submitData : function() {
+            var self = this;
             $('.modal-msg-container').removeClass('active').html('');
             // gather the data and update the underlying model etc.
             var errors = this.options.form.validate();
@@ -724,6 +725,14 @@ var AppUtils = (function(){
                         if (refreshFn) {
                             refreshFn(data); // cause problem with templates used ???
                         };
+
+                        self.setMsg({
+                          text : (!(typeof self.options.form.successMsg == 'undefined') ? self.options.form.successMsg : I18n.t('core.messages.data-successfully-saved')),
+                          style : 'success',
+                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                          fade : true,
+                          fadeTimeout : 10000
+                        });
                     }
                 }).done(function(d) {
                     // remove please wait
