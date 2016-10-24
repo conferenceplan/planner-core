@@ -5,7 +5,14 @@
 $.widget( "cp.roomsTable", $.cp.baseBootstrapTable , {
 
     createColModel : function(){
-        return [{
+        return [
+        {
+            align: 'center',
+            valign: 'top',
+            formatter : function(value, row) {
+                return '<span class="grippy"></span>';
+            }
+        },{
             field: 'name',
             title: this.options.name,
             align: 'left',

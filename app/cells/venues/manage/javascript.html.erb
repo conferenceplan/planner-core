@@ -151,6 +151,7 @@ VenueApp.VenueManagement = (function(Backbone){
         $(the_table).sortable({
             items: '.item',
             cursor: 'move',
+            handle : '.grippy',
             axis: 'y',
             update : function(e, ui) {
                 item_id = ui.item.data('item-id');
