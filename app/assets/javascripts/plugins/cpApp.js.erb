@@ -786,7 +786,7 @@ var AppUtils = (function(){
                         self.setMsg({
                           text : I18n.t('core.messages.data-successfully-saved'),
                           style : 'success',
-                          renderLocation : 'main-layout',
+                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
                           fade : true,
                           fadeTimeout : 10000
                         });
@@ -895,7 +895,7 @@ var AppUtils = (function(){
                         self.setMsg({
                           text : I18n.t('core.messages.data-successfully-saved'),
                           style : 'success',
-                          renderLocation : 'main-layout',
+                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
                           fade : true,
                           fadeTimeout : 10000
                         });
