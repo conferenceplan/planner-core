@@ -93,11 +93,14 @@ screen and (min-device-pixel-ratio: 1.5) {
 .conference-title {
 	color: #808284;
 	font-size: 12pt;
-	margin-top: 17px;
-	font-weight: 200;
-	padding-left: 2px;
-	letter-spacing: 2px;
-	//text-transform:lowercase;
+	margin-top: 9px;
+	font-weight: 300;
+	letter-spacing: 1px;
+	margin-bottom: 0;
+}
+
+.conference-title-section-li {
+    margin-left: 2px;
 }
 
 #change-history .panel-collapse .dl-horizontal {
@@ -976,6 +979,7 @@ input[type="number"] {
 
 p.help-block {
     font-size: 12px;
+    margin-bottom: 5px;
 }
 
 // Only for datetime picker for items ....
@@ -1353,7 +1357,7 @@ label.inline-checkbox {
     background-image:      -o-linear-gradient(left, #fff, #e5e5e5, #fff);
     text-align:center;
     top: -28px;
-    margin: 0px 0 25px 0;
+    margin: 10px 0 15px 0;
 }
 .item-section-title h3 {
     display:inline-block;
@@ -1489,6 +1493,7 @@ i.fa.fa-map-marker {
 .item-form .form-group {
     margin-left: 0px;
     margin-right: 0px;
+    margin-bottom: 5px;
 }
 
 .item-form-label {
@@ -1711,16 +1716,6 @@ div.upload_section {
     margin-top: 10px;
 }
 
-@media all and (min-width: 992px) {
-    #start-day-and-time-form-group {
-        margin-bottom: -50px;
-    }
-
-    #start-offset-form-group {
-        margin-bottom: -50px;
-    }
-} 
-
 .navigation-badge {
     background-color: #cccccc;
     color: #777;
@@ -1757,4 +1752,3 @@ i.publication-count-num {
     border-radius: 0px;
     }
 }
-

@@ -20,6 +20,7 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
     },
     
     render: function() {
+        var self = this;
         var options = this.options,
             schema = this.schema,
             ctl = this;
@@ -36,6 +37,10 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
         picker.on('dp.show', function(e) {
             if (typeof default_date != 'undefined') {
                 element.find('.datetimefield').data("DateTimePicker").defaultDate(moment(default_date));
+            }
+        }).on("dp.change", function(e) {
+            if (schema.changeFn) {
+                schema.changeFn.call(self, e);
             }
         });
         this.setInitialValue(this.value);

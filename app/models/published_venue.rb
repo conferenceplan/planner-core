@@ -19,4 +19,8 @@ class PublishedVenue < ActiveRecord::Base
     original.address if original
   end
 
+  def postal_address
+    original.postal_address if original
+  end
+
 end

@@ -29,4 +29,4 @@ fallbacks: :en
 
 translations:
   - file: "app/assets/javascripts/i18n/core-translations.js"
-    only: ["en.*", "fr.*"]
+    only: ["en.cloudinary.*", "en.core.*", "fr.cloudinary.*", "fr.core.*"]

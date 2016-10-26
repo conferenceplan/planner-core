@@ -254,6 +254,7 @@ Rails.application.routes.draw do
 
   match 'rooms/list.:format', :controller => 'rooms', :action => 'list' #, :defaults => { :format => 'json' }
   match 'rooms/simple_list', :controller => 'rooms', :action => 'simple_list', :defaults => { :format => 'json' }
+  get 'rooms/for_select2' => 'rooms#for_select2', :defaults => { :format => 'json' }
   resources :rooms, :defaults => { :format => 'json' } do
     post :update_row_order, on: :collection
   end

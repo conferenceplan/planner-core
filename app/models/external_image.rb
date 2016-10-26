@@ -23,4 +23,22 @@ class ExternalImage < ActiveRecord::Base
   def use= (value)
     write_attribute(:use, value.to_s)
   end
+
+  def public_image_url opts = {}
+    self.scale = opts[:scale] if opts[:scale].present?
+    url = ""
+    image = nil
+
+    if opts[:version].present?
+      image = picture.send opts[:version].to_sym
+    else
+      image = picture.send use
+    end
+
+    url = image.url if image.present?
+
+    url = eval(ENV[:base_image_url.to_s]) + url.partition(/upload/)[2] if url.present? && eval(ENV[:base_image_url.to_s]).present?
+
+    url
+  end
 end

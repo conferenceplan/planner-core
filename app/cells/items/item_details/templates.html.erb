@@ -47,10 +47,12 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "title" %>
                     </label>
-                    <span data-editor>
-                        <div class="col-sm-9" data-editors="title"></div>
-                        <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    <div class="col-sm-9">
+                        <span data-editor>
+                            <div data-editors="title"></div>
+                            <div class="has-error"><p class="help-block" data-error></p></div>
+                        </span>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -58,13 +60,15 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "item-description" %>
                     </label>
-                    <span data-editor>
-                        <div class="col-sm-9" data-editors="precis"></div>
-                        <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    <div class="col-sm-9">
+                        <span data-editor>
+                            <div data-editors="precis"></div>
+                            <div class="has-error"><p class="help-block" data-error></p></div>
+                        </span>
+                    </div>
                 </div>
             </div>
-            <div class="row" style="margin-top: -10px;">
+            <div class="row">
                 <div class="col-sm-9 col-sm-offset-3">
                     <div id="short-version-selection-div" class="inline-checkbox-div">
                         <input type="checkbox" onclick="showShortDescriptionDiv(this);" tabindex="-1"> <%= t 'show-short-versions' %></input> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-title-and-description" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-title-and-description-help" %>'></i>
@@ -77,19 +81,23 @@
                         <label class="col-sm-3 control-label">
                            <%= t  "short-title" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-title" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-title-help" %>'></i>
                         </label>
-                        <span data-editor>
-                            <div class="col-sm-9" data-editors="short_title"></div>
-                            <div class="has-error"><p class="help-block" data-error></p></div>
-                        </span>
+                        <div class="col-sm-9">
+                            <span data-editor>
+                                <div data-editors="short_title"></div>
+                                <div class="has-error"><p class="help-block" data-error></p></div>
+                            </span>
+                        </div>
                     </div>
                     <div class="form-group" id="item-form-template-short-description">
                         <label class="col-sm-3 control-label">
                            <%= t  "short-item-description" %>  <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "short-item-description" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "short-description-help" %>'></i>
                         </label>
-                        <span data-editor>
-                            <div class="col-sm-9" data-editors="short_precis"></div>
-                            <div class="has-error"><p class="help-block" data-error></p></div>
-                        </span>
+                        <div class="col-sm-9">
+                            <span data-editor>
+                                <div data-editors="short_precis"></div>
+                                <div class="has-error"><p class="help-block" data-error></p></div>
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -117,7 +125,7 @@
                 </div>
             </div>
             <div class="row" id="themes-row">
-                <div class="form-group" id="item-form-template-themes">
+                <div class="form-group" id="item-form-template-themes" style="margin-bottom: 9px;">
                     <label class="col-sm-3 control-label">
                        <%= t  "themes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "themes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "themes-help" %>'></i>
                     </label>
@@ -138,54 +146,55 @@
                     </span>
                 </div>
             </div>
-            <div class="voffset10"></div>
-            <div class="row item-section-title">
+            <div class="row item-section-title voffset10">
                 <h3><%= t 'scheduling' %></h3>
             </div>
-            <%-
-            # These need to be form groups round each label and edit field because the hide dependant on values hides the form group
-            # if we combine multiple edit fields in one form group then they both get hidden
-            # but we need to hide the time when it is a sub-item but keep the duration
-            # So we need a way to make form groups line up without screwing up the rest of the display
-            %>
+
             <div class="row">
-                <div class="form-group" id="start-offset-form-group">
-                    <label class="col-sm-3 control-label">
-                       <%= t  "item-start-offset" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-offset" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-offset-help" %>'></i>
-                    </label>
-                    <div class="col-sm-4">
-                        <div data-editors="start_offset"></div>
-                        <div class="has-error">
-                            <p class="help-block" id='start-time-error' data-error></p>
+                <div class="form-group col-sm-6">
+                    <div class="row">
+                        <label class="col-xs-6 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
+                        <div class="col-xs-6">
+                            <span data-editor>
+                                <div data-editors="duration"></div>
+                                <div class="has-error">
+                                    <p class="help-block" data-error></p>
+                                </div>
+                            </span>
                         </div>
                     </div>
-                </div>
-                <%-
-                # Has to be a form group do the dependent editor to work
-                %>
-                <div class="form-group" id="start-day-and-time-form-group"> 
-                    <label class="col-sm-3 control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>
-                    <div class="col-sm-4">
-                        <div data-editors="start_time"></div>
-                        <div class="has-error">
-                            <p class="help-block" id='start-time-error' data-error></p>
-                        </div>
-                    </div>
-                </div>
-                <%-
-                # Has to be a form group do the dependent editor to work
-                %>
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label class="col-sm-3 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
-                    <div class="col-sm-2">
-                        <span data-editor>
-                            <div data-editors="duration"></div>
+                </div>    
+                <div class="form-group col-sm-6" id="start-offset-form-group">
+                    <div class="row">
+                        <label class="col-xs-6 control-label">
+                           <%= t  "item-start-offset" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-offset" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-offset-help" %>'></i>
+                        </label>
+                        <div class="col-xs-6">
+                            <div data-editors="start_offset"></div>
                             <div class="has-error">
-                                <p class="help-block" data-error></p>
+                                <p class="help-block" id='start-time-error' data-error></p>
                             </div>
-                        </span>
+                        </div>
                     </div>
-                </div>                
+                </div>         
+            </div>
+            <div class="row" id="item-times-row">
+                <label class="col-sm-3 control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>                 
+                <div class="form-group col-sm-4 col-md-4 col-xs-4" id="start-day-and-time-form-group">
+                    <div data-editors="start_time"></div>
+                    <div class="has-error">
+                        <p class="help-block" id='start-time-error' data-error></p>
+                    </div>
+                </div>
+                <label class="col-sm-1 control-label"><%= t "item-end-day-and-time" %> 
+                    <!--<i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-end-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-end-time-help" %>'></i>-->
+                </label>
+                <div class="form-group col-sm-4" id="end-day-and-time-form-group"> 
+                    <div data-editors="end_time"></div>
+                    <div class="has-error">
+                        <p class="help-block" id='end-time-error' data-error></p>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="form-group">
@@ -239,7 +248,6 @@
                     </div>
                 </div>
             </div>
-            <div class="voffset10"></div>
             <div class="row item-section-title" style="margin-bottom: 20px;">
                 <h3><%= t 'options' %></h3>
             </div>
@@ -250,7 +258,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" id="card-size-row" style="margin-top: 10px;">
+            <div class="row voffset10" id="card-size-row">
                 <label class="col-sm-3 control-label"><%= t "mobile-card-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "mobile-card-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "mobile-card-size-help" %>'></i></label>
                 <div class="col-sm-4">
                     <div class="form-group">
@@ -258,7 +266,6 @@
                     </div>
                 </div>
             </div>
-            <div class="voffset10"></div>
             <div id="item-extras-title" class="row item-section-title">
                 <h3><%= t 'extra-information' %> <a><i id="toggle-item-extras-btn" class="fa fa-plus-square"  onclick="toggleItemExtras(this);"></i></a></h3>
             </div>

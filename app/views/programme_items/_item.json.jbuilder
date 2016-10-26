@@ -25,15 +25,10 @@ json.is_break               item.is_break
 
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 
-if item.parent && item.parent.time_slot
-    json.start_time             ""
-    json.start_day_str          item.start_time.strftime('%A')
-    json.start_time_str         item.start_time.strftime('%H:%M')
-else
-    json.start_time             item.time_slot ? item.time_slot.start : ""
-    json.start_day_str          item.time_slot ? item.time_slot.start.strftime('%A') : "" # we want this to be the number
-    json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%H:%M') : ""
-end
+json.start_time             item.start_time.present? ? item.start_time : ""
+json.end_time             item.end_time.present? ? item.end_time : ""
+json.start_day_str          item.start_time.present? ? item.start_time.strftime('%A') : "" # we want this to be the number
+json.start_time_str         item.start_time.present? ? item.start_time.strftime('%H:%M') : ""
 
 json.audience_size          item.audience_size
 json.mobile_card_size       item.mobile_card_size
@@ -51,6 +46,13 @@ json.parent_val do
     if item.parent
         json.id     item.parent.id
         json.title   item.parent.title
+        json.start_time   item.parent.start_time
+        json.start_time_str   (item.parent.start_time.present? ? Time.zone.parse((item.parent.start_time).to_s).strftime('%m/%d/%Y %H:%M:%S') : "")
+        json.end_time   item.parent.end_time
+        json.end_time_str        (item.parent.end_time.present? ? Time.zone.parse((item.parent.end_time).to_s).strftime('%m/%d/%Y %H:%M:%S') : "")
+        json.date_time_str       ( item.parent.start_time.present? ? 
+        ' [' + l(item.parent.start_time, format: :start_time_with_date) + " - " + l(item.parent.end_time, format: :end_time) + ']' 
+        : "")
     end
 end
 
