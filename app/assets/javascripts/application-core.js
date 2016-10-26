@@ -103,16 +103,21 @@ jQuery(document).ready(function() {
             auth_options[$("meta[name='csrf-param']").attr('content')] = $("meta[name='csrf-token']").attr('content');
             model.set(auth_options, {silent: true});
         };
-        options.error = function(response) {
-            if (response.status > 0) {
-                if (response.responseText) {
-                    if (options.handle_error) {
-                        options.handle_error(response);
+
+        if (typeof options.customError == 'function') {
+            options.error = options.customError;
+        } else {
+            options.error = function(response) {
+                if (response.status > 0) {
+                    if (response.responseText) {
+                        if (options.handle_error) {
+                            options.handle_error(response);
+                        } else {
+                            alertMessage(response.responseText);
+                        }
                     } else {
-                        alertMessage(response.responseText);
-                    }
-                } else {
-                    alertMessage("Error communicating with backend ..."); // TODO - change to translatable string
+                        alertMessage("Error communicating with backend ..."); // TODO - change to translatable string
+                    };
                 };
             };
         };
