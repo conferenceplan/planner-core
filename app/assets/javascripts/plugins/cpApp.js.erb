@@ -738,6 +738,16 @@ var AppUtils = (function(){
                           fade : true,
                           fadeTimeout : 10000
                         });
+                    },
+                    customError : function(response) {
+                      // console.log(xhr, status, error);
+                      setMessage({
+                        text : response.responseText,
+                        style : 'error',
+                        renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                        fade : true,
+                        fadeTimeout : 10000
+                      });
                     }
                 }).done(function(d) {
                     // remove please wait
@@ -803,6 +813,16 @@ var AppUtils = (function(){
                           fade : true,
                           fadeTimeout : 10000
                         });
+                    },
+                    customError : function(response) {
+                      // console.log(xhr, status, error);
+                      setMessage({
+                        text : response.responseText,
+                        style : 'error',
+                        renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                        fade : true,
+                        fadeTimeout : 10000
+                      });
                     }
                 }); // save the model to the server
             } else {
@@ -915,6 +935,14 @@ var AppUtils = (function(){
                         400 : function(response) {
                             mdl.fetch({
                                 async:false
+                            });
+                            
+                            setMessage({
+                              text : response.responseText,
+                              style : 'error',
+                              renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                              fade : true,
+                              fadeTimeout : 10000
                             });
                         }
                     }
