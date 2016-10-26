@@ -288,7 +288,13 @@ table.ui-sortable {
       }
     }
   }
+
+  tr.ui-sortable-helper {
+    display: table;
+  }
 }
+
+
 
 
 
