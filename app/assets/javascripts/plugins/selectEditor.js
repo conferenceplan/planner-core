@@ -39,6 +39,10 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
                     self.schema.changeFn.call(self, e);
                 }
             });
+
+            if (self.schema.afterInitFn) {
+                self.schema.afterInitFn.call(self);
+            };
             
         }, 0);
         return this;
