@@ -260,3 +260,41 @@ $turquiose : #009999;
     margin: 0;
   }
 }
+
+span.grippy {
+  content: '....';
+  width: 10px;
+  display: none;
+  line-height: 5px;
+  font-family: sans-serif;
+  letter-spacing: 2px;
+  color: #cccccc;
+  text-shadow: 1px 0 1px black;
+  opacity: 0;
+}
+span.grippy::after {
+  content: '.. .. .. ..';
+}
+
+table.ui-sortable {
+  tbody {
+    .grippy {
+      display: inline-block;
+    }
+    tr:hover, tr.success {
+      .grippy {
+        opacity: 1;
+        cursor: move;
+      }
+    }
+  }
+
+  tr.ui-sortable-helper {
+    display: table;
+  }
+}
+
+
+
+
+

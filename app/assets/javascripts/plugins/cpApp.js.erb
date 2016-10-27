@@ -310,6 +310,13 @@ var AppUtils = (function(){
                 this.$el.find(".modal-body").append(this.options.content);
                 this.$el.find('.bpopover').popover({html : true});
             };
+
+            if (!(typeof this.options.confirmBtnText == 'undefined') && this.options.confirmBtnText.length > 0) {
+              this.$('.confirm-btn').html(this.options.confirmBtnText);
+            };
+            if (!(typeof this.options.cancelBtnText == 'undefined') && this.options.cancelBtnText.length > 0) {
+              this.$('.cancel-btn').html(this.options.cancelBtnText);
+            };
             
             this.delegateEvents();
             
@@ -587,14 +594,13 @@ var AppUtils = (function(){
             "click .close-modal": "close_modal",
             "keypress" : "swallow"
         },
-        setMsg : setMessage,
         
         swallow : function(e) {
             e.stopPropagation();
         },
         
         initialize : function(options) {
-            this.options = options || {};
+            this.options = $.extend({}, this.options, options);
             this.template = _.template($(options.modalTemplate || '#modal-edit-template').html());
         },
 
@@ -626,6 +632,17 @@ var AppUtils = (function(){
             this.$el.find("input").filter(':visible:first').focus();
 
             $('body').addClass('showing-modal');
+
+            if (!(typeof this.options.confirmBtnText == 'undefined') && this.options.confirmBtnText.length > 0) {
+              this.$('.confirm-btn').html(this.options.confirmBtnText);
+            };
+            if (!(typeof this.options.cancelBtnText == 'undefined') && this.options.cancelBtnText.length > 0) {
+              this.$('.cancel-btn').html(this.options.cancelBtnText);
+            };
+
+            if (typeof this.options.postRenderFn == 'function') {
+              this.options.postRenderFn.call(this)
+            };
             
             return this;
         },
@@ -682,7 +699,6 @@ var AppUtils = (function(){
     FormModal = GenericModal.extend({
         renderBody : function() {
             this.form = this.options.form;
-            this.form.setMsg = setMessage;
             
             if (this.options.modal_template) {
                 this.form.template = _.template($(this.options.modal_template).html());
@@ -693,6 +709,7 @@ var AppUtils = (function(){
         
         // over-ride for the actual data submission        
         submitData : function() {
+            var self = this;
             $('.modal-msg-container').removeClass('active').html('');
             // gather the data and update the underlying model etc.
             var errors = this.options.form.validate();
@@ -717,13 +734,31 @@ var AppUtils = (function(){
                         if (refreshFn) {
                             refreshFn(data); // cause problem with templates used ???
                         };
+
+                        setMessage({
+                          text : (!(typeof self.options.form.successMsg == 'undefined') ? self.options.form.successMsg : I18n.t('core.messages.data-successfully-saved')),
+                          style : 'success',
+                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                          fade : true,
+                          fadeTimeout : 10000
+                        });
+                    },
+                    customError : function(response) {
+                      // console.log(xhr, status, error);
+                      setMessage({
+                        text : response.responseText,
+                        style : 'error',
+                        renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                        fade : true,
+                        fadeTimeout : 10000
+                      });
                     }
                 }).done(function(d) {
                     // remove please wait
                     $body.removeClass("loading");
                 });
             } else {
-              this.setMsg({
+              setMessage({
                 errorObject : errors,
                 fade : true,
                 fadeTimeout : 10000
@@ -742,7 +777,6 @@ var AppUtils = (function(){
             this.form = new Backbone.Form({
                 model: this.model
             });
-            this.form.setMsg = setMessage;
             
             if (this.options.modal_template) {
                 this.form.template = _.template($(this.options.modal_template).html());
@@ -776,17 +810,27 @@ var AppUtils = (function(){
                             callback();
                         };
 
-                        self.setMsg({
+                        setMessage({
                           text : I18n.t('core.messages.data-successfully-saved'),
                           style : 'success',
-                          renderLocation : 'main-layout',
+                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
                           fade : true,
                           fadeTimeout : 10000
                         });
+                    },
+                    customError : function(response) {
+                      // console.log(xhr, status, error);
+                      setMessage({
+                        text : response.responseText,
+                        style : 'error',
+                        renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                        fade : true,
+                        fadeTimeout : 10000
+                      });
                     }
                 }); // save the model to the server
             } else {
-              this.setMsg({
+              setMessage({
                 errorObject : errors,
                 fade : true,
                 fadeTimeout : 10000
@@ -837,8 +881,6 @@ var AppUtils = (function(){
         
         formEvents : {
         },
-
-        setMsg : setMessage,
         
         editModel : function(e) {
             e.preventDefault();
@@ -885,10 +927,10 @@ var AppUtils = (function(){
                         if (refreshFn) {
                             refreshFn(mdl); // cause problem with templates used ???
                         };
-                        self.setMsg({
+                        setMessage({
                           text : I18n.t('core.messages.data-successfully-saved'),
                           style : 'success',
-                          renderLocation : 'main-layout',
+                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
                           fade : true,
                           fadeTimeout : 10000
                         });
@@ -898,11 +940,19 @@ var AppUtils = (function(){
                             mdl.fetch({
                                 async:false
                             });
+                            
+                            setMessage({
+                              text : response.responseText,
+                              style : 'error',
+                              renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                              fade : true,
+                              fadeTimeout : 10000
+                            });
                         }
                     }
                 }); // save the model to the server
             } else {
-              this.setMsg({
+              setMessage({
                 errorObject : errors,
                 fade : true,
                 fadeTimeout : 10000
@@ -1478,6 +1528,8 @@ var AppUtils = (function(){
         InfoModal : InfoModal,
         
         ConfirmModel : ConfirmModel,
+        
+        ConfirmModal : ConfirmModel,
         
         GenericModal : GenericModal,
         

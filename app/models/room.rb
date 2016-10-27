@@ -39,4 +39,14 @@ class Room < ActiveRecord::Base
     end
   end
 
+  before_destroy :check_for_use
+
+  def check_for_use
+    in_use = (self.room_item_assignments.any? || Link.where(linkedto_type: 'Room', linkedto_id: self.id).any? )
+
+    if in_use
+      raise I18n.t('planner.core.locations.cannot-delete-in-use').html_safe
+    end
+  end
+
 end
