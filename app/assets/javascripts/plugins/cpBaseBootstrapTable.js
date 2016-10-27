@@ -291,6 +291,15 @@ $.widget( "cp.baseBootstrapTable" , {
                                 that.selected_element = null;
                                 grid.bootstrapTable('refresh');
                                 deleteNotifyMethod();
+                            },
+                            customError : function(response) {
+                              AppUtils.setMessage({
+                                text : response.responseText,
+                                style : 'error',
+                                renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                                fade : true,
+                                fadeTimeout : 10000
+                              });
                             }
                         });
                         that.model = null;
