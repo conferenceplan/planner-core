@@ -85,6 +85,10 @@ Form.editors.DependentSelect2 = Form.editors.Select2.extend({
                     self.options.schema.changeFn.call(self, e);
                 }
             });
+            
+            if (self.options.schema.afterInitFn) {
+                self.options.schema.afterInitFn.call(self);
+            };
 
         }, 0);
 
