@@ -1,6 +1,8 @@
 class Room < ActiveRecord::Base
   attr_accessible :name, :purpose, :comment, :venue_id, :lock_version, :sort_order
 
+  before_destroy :check_for_use
+  
   include RankedModel
   ranks :sort_order, :with_same => :venue_id 
   
@@ -39,7 +41,6 @@ class Room < ActiveRecord::Base
     end
   end
 
-  before_destroy :check_for_use
 
   def check_for_use
     in_use = (self.room_item_assignments.any? || Link.where(linkedto_type: 'Room', linkedto_id: self.id).any? )

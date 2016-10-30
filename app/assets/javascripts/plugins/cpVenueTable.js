@@ -8,7 +8,8 @@ $.widget( "cp.venuesTable", $.cp.baseBootstrapTable , {
         return [
         {
             align: 'center',
-            valign: 'top',
+            valign: 'middle',
+            width: '26px',
             formatter : function(value, row) {
                 return '<span class="grippy"></span>';
             }
