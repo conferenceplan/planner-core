@@ -64,9 +64,9 @@
       </label>\
       <div title="<%= title %>" class="input-xlarge">\
         <span data-editor></span>\
-        <div class="help-inline" data-error></div>\
+        <p class="help-block" data-error></p>\
+        <p class="help-block"><%= help %></p>\
       </div>\
-      <div class="help-block"><%= help %></div>\
     </div>\
   ');
 

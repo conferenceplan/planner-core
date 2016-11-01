@@ -1,6 +1,6 @@
 /* these are shared styles between planner and sites */
 
-div.has-error p.help-block:not(:empty), small.help-block:not(:empty) {
+div.has-error p.help-block:not(:empty), small.help-block:not(:empty), div.error p.help-block[data-error]:not(:empty) {
     color: white;
     background-color: red;
     border-radius: 6px;
