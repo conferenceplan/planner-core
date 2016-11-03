@@ -1739,7 +1739,7 @@ div.upload_section {
 }
 
 i.publication-count-num {
-  font-style: normal;
+  font-style: normal;	
 }
 
 .select2-container.gr-conf-selector {
@@ -1748,4 +1748,10 @@ i.publication-count-num {
         background-color: rgba(255,255,255,0.5);
     border-radius: 0px;
     }
+}
+.url-definition {
+	color: #428bca;
+}
+.subsite-part {
+	font-weight: bold;
 }
