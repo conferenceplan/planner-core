@@ -13,6 +13,9 @@ VenueApp.VenueManagement = (function(Backbone){
             name : { type : 'Text', title : '<%= t "name" %>' },
             sort_order : { type : 'Number', title : '<%= t "sort-order" %>' },
             postal_address : { type : 'Object',
+                editorClass : 'sub-schema-field',
+                title : '<%= t "address" %>',
+                help : '<%= t "address-help-text" %>',
                 subSchema : {
                     line1   : { type : 'Text', title : '<%= t "line1" %>' },
                     city : { type : 'Text', title : '<%= t "city" %>' },
