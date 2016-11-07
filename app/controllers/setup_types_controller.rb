@@ -4,7 +4,11 @@ class SetupTypesController < ApplicationController
   #
   #
   def index
-    setup_types = SetupType.find :all
+    if params[:search].present?
+      setup_types = SetupType.where(["name like ?", ("%" + params[:search] + "%")])
+    else
+      setup_types = SetupType.find :all
+    end
     
     render json: setup_types.to_json, :content_type => 'application/json'
   end
