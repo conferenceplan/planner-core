@@ -21,6 +21,17 @@ class RoomsController < PlannerController
     end
   end
 
+
+  def purposes
+    query = params[:query] ? params[:query] : ""
+    
+    res = Room.unscoped.where("purpose like ?", "%" + query + "%").select("distinct purpose")
+    
+    render json: res.collect{|r| r.purpose}.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
+  end
+
   #
   #
   #
