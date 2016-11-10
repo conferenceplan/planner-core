@@ -2,7 +2,10 @@ class Address < ActiveRecord::Base
   attr_accessible :lock_version, :isvalid, :addressable_id, :addressable_type, :person_id, :addressable, :venue_id
   
   belongs_to :person
+  belongs_to :venue
   belongs_to :addressable, :polymorphic => :true
+
+  has_one :postal_address, as: :addressable
   
   audited :associated_with => :person
 
