@@ -7,7 +7,15 @@ module Planner
                          :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo,
                          :strip_html_tags, :site_url, :site_url_no_lang, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
-                         :start_date, :end_date, :conference_days, :event_is_over?
+                         :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?
+    end
+
+
+
+    def google_map_key
+      key = ""
+      key = ENV["GOOGLE_MAP_KEY"] if ENV["GOOGLE_MAP_KEY"].present?
+      key
     end
     
     def start_date
@@ -22,9 +30,13 @@ module Planner
       SiteConfig.first.number_of_days if SiteConfig.first
     end
     
+    alias_method :event_duration, :conference_days
+
     def conference_name
       SiteConfig.first ? SiteConfig.first.name : ''
     end
+
+    alias_method :event_name, :conference_name
     
     def public_start_date
       SiteConfig.first.public_start_date if SiteConfig.first
@@ -37,9 +49,13 @@ module Planner
     def public_days
       SiteConfig.first.public_number_of_days if SiteConfig.first
     end
+
+    def event_happening_now?
+      Date.today >= start_date.to_date && Date.today <= ( start_date.to_date + (event_duration.days - 1.day)).to_date
+    end
     
     def event_is_over?
-      ((start_date + (conference_days-1).day).to_date - Date.today).to_i < 0
+      ((start_date + (event_duration-1).days).to_date - Date.today).to_i < 0
     end
     
     def only_free_tickets_available?
@@ -54,7 +70,24 @@ module Planner
     end
 
     def get_logo(conference = nil,scale = 2)
-      nil
+      logo = ConferenceLogo.unscoped.find_by_conference_id conference.id if conference
+      
+      if logo && logo.image
+        logo.scale = scale
+        img = logo.image
+        image_url(img)
+      else
+        nil
+      end
+    end
+
+    def image_url(im)
+      if im && im.url
+        base = get_base_image_url
+        url_part = base + im.url.partition(/upload/)[2]
+      else
+        nil
+      end
     end
 
     def get_base_image_url
