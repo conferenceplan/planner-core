@@ -80,7 +80,7 @@
         <%= render 'layouts/footer' %>
         <%= render partial: 'layouts/templates' %>
         <%= render_cell :category_management, :javascript %>
-        <%= render partial: "layouts/pending_publish_js" if current_user && params[:controller] != "pages/admin_dash" %>
+        <%= render partial: "layouts/pending_publish_js" if current_user && params[:controller] != "pages/admin_dash" && params[:controller] != "planner_apis/docs" %>
         <div class="ajax-loading-modal"></div>
     </body>
 </html>
