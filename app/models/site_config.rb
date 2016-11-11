@@ -37,11 +37,19 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def end_date
-    start_date + number_of_days.days
+    start_date + (number_of_days - 1).days
   end
 
   def public_end_date
-    public_start_date + public_number_of_days.days
+    public_start_date + (public_number_of_days - 1).days
+  end
+
+  def on_now?
+    start_date.to_date <= Date.today && end_date >= Date.today
+  end
+
+  def on_now_for_public?
+    public_start_date.to_date <= Date.today && public_end_date >= Date.today
   end
 
 end
