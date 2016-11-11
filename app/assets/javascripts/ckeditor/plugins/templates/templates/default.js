@@ -42,7 +42,7 @@ var emailTemplateBottom =            '</td>' +
                                 '<td align="left" style="padding: 15px;">' +
                                     'Sent to you by <strong><span  class="grenadine-editable">YOUR EVENT NAME</span></strong><br>' +
                                     'using the <strong>Grenadine Event Planner</strong>.<br>' +
-                                    '420 Beaubien West suite 203, Montreal QC Canada H2V 4S6<br>' +
+                                    '4529 Clark Street, suite 201, Montreal QC Canada H2T 2T3<br>' +
                                     'http://events.grenadine.co' +
                                 '</td>' +
                                 '<td  align="right" style="padding: 15px; padding-right: 25px; padding-top: 20px;">' +
