@@ -52,4 +52,16 @@ class SiteConfig < ActiveRecord::Base
     public_start_date.to_date <= Date.today && public_end_date >= Date.today
   end
 
+  def end_dates_the_same?
+    end_date == public_end_date
+  end
+
+  def start_dates_the_same?
+    start_date == public_start_date
+  end
+
+  def pub_dates_the_same?
+    start_dates_the_same? && end_dates_the_same?
+  end
+
 end
