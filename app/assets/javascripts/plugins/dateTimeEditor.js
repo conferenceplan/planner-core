@@ -37,6 +37,10 @@ Form.editors.Datetime = Form.editors.Text.extend({ //Form.editors.Base.extend ({
         picker.on('dp.show', function(e) {
             if (typeof default_date != 'undefined') {
                 element.find('.datetimefield').data("DateTimePicker").defaultDate(moment(default_date));
+            };
+
+            if (schema.showFn) {
+                schema.showFn.call(self, e);
             }
         }).on("dp.change", function(e) {
             if (schema.changeFn) {
