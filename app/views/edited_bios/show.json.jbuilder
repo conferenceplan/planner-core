@@ -10,4 +10,9 @@ if @editedBio
     json.twitterinfo @editedBio.twitterid
     json.website @editedBio.website_url
     json.linkedin @editedBio.linkedin
+    json.youtube @editedBio.youtube
+    json.twitch @editedBio.twitch
+    json.instagram @editedBio.instagram
+    json.flickr @editedBio.flickr
+    json.reddit @editedBio.reddit
 end
