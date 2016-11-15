@@ -379,7 +379,11 @@ Form.editors.DependentDatetime = Form.editors.Datetime.extend({
         
         this.picker = element.find('.datetimefield').datetimepicker(this.schema.picker);
 
-        this.picker.on("dp.change", function(e) {
+        this.picker.on('dp.show', function(e) {
+            if (schema.showFn) {
+                schema.showFn.call(self, e);
+            }
+        }).on("dp.change", function(e) {
             if (schema.changeFn) {
                 schema.changeFn.call(self, e);
             }
