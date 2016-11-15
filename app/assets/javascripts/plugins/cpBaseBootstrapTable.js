@@ -22,11 +22,12 @@ $.widget( "cp.baseBootstrapTable" , {
         deleteNotifyMethod  : function() { return null; },
         extraClause         : null,
         cardView            : false,
+        
         showRefresh         : false,
         search              : true,
         pagination          : true,
-        pageSize            : 10,
-        pageList            : [10, 25, 50, 100, 200],
+        pageSize            : 25,
+        pageList            : [25, 50, 100, 200, 500, 1000],
         toolbar             : null,
         modelType           : null,
         modelTemplate       : null,
@@ -56,7 +57,7 @@ $.widget( "cp.baseBootstrapTable" , {
         onCollapseRow       : function(index, row) {},
         sortOrder           : 'asc',
         sortName            : 'id',
-        ctl_template        : '#table-control-template'
+        ctl_template        : '#table-control-template',
     },
 
     /*
@@ -378,8 +379,11 @@ $.widget( "cp.baseBootstrapTable" , {
                     if (that.selected_element) {
                         var selector = "[data-item-id='" + that.selected_element + "']";
                         jQuery(el).find(selector).addClass('success');
+                        
                     };
                     onloadMethod();
+                    jQuery(el).find("[data-toggle='tooltip']").tooltip();
+                    jQuery(el).find("[data-toggle='popover']").popover();
                 },
                 method: 'get',
                 cache: false,

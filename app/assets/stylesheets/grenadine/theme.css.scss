@@ -11,6 +11,11 @@ $w4f: 1487px; // medium toolbar width in French
 $iPadScreenWidth: 1024px;
 
 /* Bootstrap overide */
+body table.table {
+	font-size: 13px;
+	
+}
+
 .dl-horizontal dt {
 	width: 200px;
 }
