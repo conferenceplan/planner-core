@@ -133,7 +133,7 @@ class Person < ActiveRecord::Base
   end
   
   def acceptance_state
-    if person_con_state
+    if person_con_state && person_con_state.acceptance_status.present?
       person_con_state.acceptance_status.name
     else
       nil
@@ -155,7 +155,7 @@ class Person < ActiveRecord::Base
   end
 
   def invite_state
-    if person_con_state
+    if person_con_state && person_con_state.invitestatus.present?
       person_con_state.invitestatus.name
     else
       nil
