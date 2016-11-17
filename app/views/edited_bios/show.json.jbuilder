@@ -15,4 +15,12 @@ if @editedBio
     json.instagram @editedBio.instagram
     json.flickr @editedBio.flickr
     json.reddit @editedBio.reddit
+    json.facebookid @editedBio.facebookid
+    json.twitterid @editedBio.twitterid
+    json.linkedinid @editedBio.linkedinid
+    json.youtubeid @editedBio.youtubeid
+    json.twitchid @editedBio.twitchid
+    json.instagramid @editedBio.instagramid
+    json.flickrid @editedBio.flickrid
+    json.redditid @editedBio.redditid
 end
