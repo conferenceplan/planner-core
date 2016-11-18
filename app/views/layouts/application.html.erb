@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Convention Planner Application" %>">
-        <% if SiteConfig.first.has_attribute?(:conference_id) %>
+        <% if SiteConfig.first && SiteConfig.first.has_attribute?(:conference_id) %>
             <title><%= SiteConfig.first && !SiteConfig.first.conference_id.nil? ? SiteConfig.first.name + " | " : "" %><%= @page_title or (t "convention-planner") %></title>
         <% else %>
             <title><%= SiteConfig.first  ? SiteConfig.first.name + " | " : "" %><%= @page_title or (t "convention-planner") %></title>
