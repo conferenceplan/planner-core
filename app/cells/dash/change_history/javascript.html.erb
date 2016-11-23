@@ -25,8 +25,8 @@ HistoryApp.Report = (function(Backbone){
     });
     
     var itemHistoryRegion = new Backbone.Marionette.Region({
-            el : '#change-history'
-        });
+        el : '#change-history'
+    });
     
     function showHistory() {
         itemHist = new ItemHistoryCollection();
@@ -34,7 +34,7 @@ HistoryApp.Report = (function(Backbone){
         itemHist.fetch({
             url : "<%= baseUri + '/dash/history/items' %>",
             success : function(mdl) {
-                console.debug(mdl);
+                // console.debug(mdl);
                 view = new ItemHistoryCollectionView({
                     collection : mdl 
                 });
