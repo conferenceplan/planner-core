@@ -130,6 +130,10 @@ class ProgrammeItem < ActiveRecord::Base
     where(["parent_id is null and id not in (?)", ProgrammeItem.scheduled.pluck(:id)])
   end
 
+  def self.child_items
+    where("parent_id is not null")
+  end
+
 end
 
 # TODO - create a clone function
