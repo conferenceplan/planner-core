@@ -545,4 +545,11 @@ class Person < ActiveRecord::Base
     speakers.uniq
   end
 
+  def self.participants
+    where([
+      "people.id in (:assigned_people) OR people.id in (:registered_people)", 
+      { assigned_people: Person.speakers.pluck(:id), registered_people: Person.attendees.pluck(:id) }
+    ]).uniq
+  end
+
 end
