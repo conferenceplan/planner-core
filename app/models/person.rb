@@ -527,21 +527,11 @@ class Person < ActiveRecord::Base
 
   def self.attendees
     people = joins(:registrationDetail).where("registration_details.registered is true")
-    
-    if ActsAsTenant.current_tenant
-      people = people.where("registration_details.conference_id = ?", ActsAsTenant.current_tenant.id)
-    end
-
     people.uniq
   end
 
   def self.speakers
     speakers = joins(:programmeItemAssignments)
-
-    if ActsAsTenant.current_tenant
-      speakers = speakers.where("programme_item_assignments.conference_id = ?", ActsAsTenant.current_tenant.id)
-    end
-
     speakers.uniq
   end
 
