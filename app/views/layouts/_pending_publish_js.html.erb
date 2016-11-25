@@ -16,7 +16,8 @@
         //     template : "#overview-label-template"
         // });
         PendingCountView = Marionette.ItemView.extend({
-            template : "#pending-count-template"
+            template : "#pending-count-template",
+            tagName : 'span'
         });
 
         PendingCount = Backbone.Model.extend({
