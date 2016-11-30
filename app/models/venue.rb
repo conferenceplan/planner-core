@@ -23,4 +23,8 @@ class Venue < ActiveRecord::Base
 
   accepts_nested_attributes_for :postal_address
 
+  def self.with_geocoded_address
+    joins(:postal_address).where("postal_addresses.latitude is not null and postal_addresses.longitude is not null").uniq
+  end
+
 end
