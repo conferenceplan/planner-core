@@ -29,10 +29,17 @@ class RoomSetupsController < PlannerController
     begin
       RoomSetup.transaction do
         
-        @room_setup = RoomSetup.new(setupData)
-        if (@room_setup.save!)
-          setRoomDefault @room_setup if defaultSetup
-          unSetRoomDefault @room_setup if !defaultSetup
+        if params[:setup_type_name]
+          setup_type = SetupType.find_or_create_by_name(params[:setup_type_name])
+          setupData = setupData.merge({:setup_type_id => setup_type.id})
+        end
+
+        if setupData[:setup_type_id]
+          @room_setup = RoomSetup.new(setupData)
+          if (@room_setup.save!)
+            setRoomDefault @room_setup if defaultSetup
+            unSetRoomDefault @room_setup if !defaultSetup
+          end
         end
 
       end
@@ -53,10 +60,17 @@ class RoomSetupsController < PlannerController
     begin
       RoomSetup.transaction do
 
-        @room_setup = RoomSetup.find(params[:id])
-        if @room_setup.update_attributes(setupData)
-          setRoomDefault @room_setup if defaultSetup
-          unSetRoomDefault @room_setup if !defaultSetup
+        if params[:setup_type_name]
+          setup_type = SetupType.find_or_create_by_name(params[:setup_type_name])
+          setupData = setupData.merge({:setup_type_id => setup_type.id})
+        end
+
+        if setupData[:setup_type_id]
+          @room_setup = RoomSetup.find(params[:id])
+          if @room_setup.update_attributes(setupData)
+            setRoomDefault @room_setup if defaultSetup
+            unSetRoomDefault @room_setup if !defaultSetup
+          end
         end
       
       end

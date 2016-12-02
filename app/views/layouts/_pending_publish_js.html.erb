@@ -12,8 +12,12 @@
         PendingLabelView = PendingView.extend({
             template : "#pending-label-template"
         });
-        OverviewLabelView = Marionette.ItemView.extend({
-            template : "#overview-label-template"
+        // OverviewLabelView = Marionette.ItemView.extend({
+        //     template : "#overview-label-template"
+        // });
+        PendingCountView = Marionette.ItemView.extend({
+            template : "#pending-count-template",
+            tagName : 'span'
         });
 
         PendingCount = Backbone.Model.extend({
@@ -29,8 +33,11 @@
         var pendingLabelRegion = new Backbone.Marionette.Region({
             el: "#nav-pub-count-label-area"
         });
-        var overviewLabelRegion = new Backbone.Marionette.Region({
-            el: "#overview-publish-changes-nav-item"
+        // var overviewLabelRegion = new Backbone.Marionette.Region({
+        //     el: "#overview-publish-changes-nav-item"
+        // });
+        var pubCardRegion = new Backbone.Marionette.Region({
+            el: "#card-unpublished-count"
         });
 
         var pendingPoller = null;
@@ -51,13 +58,17 @@
                     pendingLabel = new PendingLabelView({
                         model : mdl
                     });
-                    overviewLabel = new OverviewLabelView({
+                    // overviewLabel = new OverviewLabelView({
+                    //     model : mdl
+                    // });
+                    pendingCount = new PendingCountView({
                         model : mdl
                     });
 
                     pendingBadgeRegion.show(pendingBadge);
                     pendingLabelRegion.show(pendingLabel);
-                    overviewLabelRegion.show(overviewLabel);
+                    // overviewLabelRegion.show(overviewLabel);
+                    pubCardRegion.show(pendingCount);
 
                     pendingPoller = Backbone.Poller.get(mdl, {
                        delay : interval * 1000,
@@ -105,10 +116,14 @@
     {{ } }}
 </script>
 
-<script type="text/template" id="overview-label-template">
+<!-- <script type="text/template" id="overview-label-template">
     {{ if(count > 0) { }}
         <a class="pending-changes-count-badge" href="<%= baseUri %>/pages/publications_dash/online#program_publish_review"><span class="label label-warning publication-count-label"><i class="publication-count-num">{{= count }}</i>&nbsp;&nbsp;<%= t("pending-updates") %></span></a>
     {{ } }}
+</script> -->
+
+<script type="text/template" id="pending-count-template">
+    {{= count }}
 </script>
 
 

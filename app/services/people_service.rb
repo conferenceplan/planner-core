@@ -264,7 +264,13 @@ module PeopleService
                     join_sources
 
     query = stateTable[:invitestatus_id].eq(invitestatus) if invitestatus && invitestatus > 0
-    query = query.and(stateTable[:invitation_category_id].eq(invite_category)) if invite_category && invite_category > 0
+    if invite_category && invite_category > 0
+      if query
+        query = query.and(stateTable[:invitation_category_id].eq(invite_category))
+      else  
+        query = stateTable[:invitation_category_id].eq(invite_category)
+      end
+    end
     
     include_list = [:pseudonym, :email_addresses, :postal_addresses, :programmeItemAssignments]
     

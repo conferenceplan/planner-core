@@ -2,6 +2,8 @@
 #
 #
 class PlannerController < ApplicationController
+
+  helper_method :use_24hour
   
   # before_filter :authenticate_user!
   before_filter :check_authenticated
@@ -32,6 +34,10 @@ class PlannerController < ApplicationController
         render '/errors/permission_error'
       }
     end
+  end
+
+  def use_24hour
+    SiteConfig.first ? (SiteConfig.first.print_time_format == "24") : false
   end
 
 protected

@@ -126,10 +126,10 @@ jQuery(document).ready(function() {
         return Backbone._sync(method, model, options);
     };
     
-    $('.survey-help').tooltip();
+    $('.survey-help, [data-toggle="tooltip"]').tooltip();
     
     // enable the popover bootstrap javascript thing
-    $('.bpopover').popover({
+    $('.bpopover, [data-toggle="popover"]').popover({
         trigger: 'hover',
         html: true,
         animation: false,

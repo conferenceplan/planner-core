@@ -525,4 +525,21 @@ class Person < ActiveRecord::Base
     url
   end
 
+  def self.attendees
+    people = joins(:registrationDetail).where("registration_details.registered is true")
+    people.uniq
+  end
+
+  def self.speakers
+    speakers = joins(:programmeItemAssignments)
+    speakers.uniq
+  end
+
+  def self.participants
+    where([
+      "people.id in (:assigned_people) OR people.id in (:registered_people)", 
+      { assigned_people: Person.speakers.pluck(:id), registered_people: Person.attendees.pluck(:id) }
+    ]).uniq
+  end
+
 end
