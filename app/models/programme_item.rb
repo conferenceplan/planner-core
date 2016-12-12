@@ -47,6 +47,9 @@ class ProgrammeItem < ActiveRecord::Base
     end
   end
 
+  alias_attribute :description, :precis
+  alias_attribute :requires_signup, :item_registerable
+
   before_save :check_parent, :sanitize_for_break
 
   def start_time
