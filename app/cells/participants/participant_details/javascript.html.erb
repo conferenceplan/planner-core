@@ -98,10 +98,30 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     //
     //
+    
+
+
+    var registrationTypes = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace, //('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '<%= baseUri + '/registration_details/registration_types/%QUERY' %>',
+        wildcard: '%QUERY'
+      }
+    });
+
     RegistrationDetail = Backbone.Model.extend({
         schema : {
             registration_number : { type : 'Text', title : '<%= t "reg-number" %>' },
-            registration_type : { type : 'Text', title : '<%= t "reg-type" %>' },
+            registration_type : { 
+                type : 'TypeAheadText', 
+                title : '<%= t "reg-type" %>',
+                config : {
+                    minLength: 0,
+                    limit: 10,
+                    source: registrationTypes
+                }
+            },
             registered : { type : 'Checkbox', title : '<%= t "registered" %>' },
             can_share : { type : 'Checkbox', title : '<%= t "can-share-details" %>', help: '<%= t "can-share-details-hint" %>' }
         },
