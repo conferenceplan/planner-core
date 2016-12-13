@@ -40,6 +40,10 @@ class Items::ItemListCell < Cell::Rails
     @modelType = args.has_key?(:modelType) ? args[:modelType] : 'null'
     @modelTemplate = args.has_key?(:modelTemplate) ? args[:modelTemplate] : ""
     @showControls = args.has_key?(:showControls) ? args[:showControls] : false
+
+    @extra_button = args.has_key?(:extra_button) ? args[:extra_button] : false
+    @extra_button_title = args.has_key?(:extra_button_title) ? args[:extra_button_title] : ""
+    @extra_modal_action = args.has_key?(:extra_modal_action) ? args[:extra_modal_action] : "function() {}"
     
     @showNbrParticipants = args.has_key?(:showNbrParticipants) ? args[:showNbrParticipants] : false
     

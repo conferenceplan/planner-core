@@ -8,7 +8,10 @@
     :modelType => "ItemApp.ItemManagement.ProgramItem",
     :modelTemplate => "#item-form-template",
     :showControls => true,
-    :showNbrParticipants => true
+    :showNbrParticipants => true,
+    :extra_button => true,
+    :extra_button_title => t("copy"),
+    :extra_modal_action => "ItemApp.ItemManagement.cloneItem"
     %>
     
 <%= render_cell "items/item_details", :javascript %>
