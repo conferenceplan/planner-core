@@ -21,21 +21,11 @@ module ProgramItemsService
   def self.duplicate_item(item_id)
     old_item = ProgrammeItem.find item_id
     
-    kopy = old_item.deep_clone include: [
-        :format, 
-        :children, 
-        :programme_item_assignments, 
-        {room_item_assignment: :time_slot},
-        :taggings,
-        :themes,
-        :tasks, # I ended up with the same task on both items!!!
-        :requirements # the requirement was dupped and assigned to both
-    ] do |original, _kopy|
-      _kopy.title = _kopy.title + " - COPY" if _kopy.respond_to?(:title)
-      _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
-    end
-    
-    # TODO - and links??? for requirements and tasks at least .... we need these to be deep copy
+    kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members, 
+      use_dictionary: true do |original, _kopy|
+        _kopy.title = _kopy.title + " - COPY" if _kopy.respond_to?(:title)
+        _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
+      end
     
     kopy.save!
     kopy
