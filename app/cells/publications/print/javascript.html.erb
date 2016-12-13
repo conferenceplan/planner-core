@@ -131,7 +131,23 @@ PublicationsApp.PrintManagement = (function(Backbone){
                                     results: _.filter(people, function(x) { return x.text.toLowerCase().indexOf(query.term.toLowerCase()) != -1; })
                                 };
                                 query.callback(data);
-                            }
+                            },
+                            initSelection(element, callback){
+                                var data = [];
+
+                                $(element.val().split(",")).each(function () {
+                                    var id = this;
+                                    $.ajax({
+                                        async : false,
+                                        url : "<%= baseUri %>/participants/" + id + ".json",
+                                        success : function(response) {
+                                            data.push({id: this, text: response.full_publication_name});
+                                        }
+                                    });
+                                });
+
+                                callback(data);
+                            },
                         }
                 }
         },
@@ -223,7 +239,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
             'participants_report' : 'participants_report',
             'table_tents'   : 'table_tents',
             'badge_labels'  : 'badge_labels',
-            'part_schedule' : 'part_schedule',
+            'part_schedule(/:person)' : 'part_schedule',
             'publications_room_signs' : 'publications_room_signs',
             'publications_change_sheets' : 'publications_change_sheets'
         },
@@ -284,11 +300,20 @@ PublicationsApp.PrintManagement = (function(Backbone){
             }));
         },
 
-        part_schedule : function() {
+        part_schedule : function(person) {
+            var form = PartScheduleForm;
+            if (person != null && !isNaN(person)){
+                form = PartScheduleForm.extend({
+                    data : {
+                        people : [person],
+                        page_size : 'LETTER'
+                    }
+                });
+            };
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
             ReportBase.reportRegion.show(new ReportBase.PublicationView({
-                form        : PartScheduleForm,
+                form        : form,
                 endPoint    : "<%= baseUri + '/planner_reports/part_schedule' %>"
             }));
         },

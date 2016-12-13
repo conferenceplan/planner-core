@@ -13,6 +13,7 @@
             json.lock_version       person.pseudonym.lock_version
         end
     end
+    json.full_publication_name      person.getFullPublicationName
     json.company                    person.company
     json.job_title                  person.job_title
     json.survey_key                 person.survey_respondent ?  person.survey_respondent.key : "" 
