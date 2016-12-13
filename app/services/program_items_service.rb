@@ -17,6 +17,30 @@ module ProgramItemsService
     item
   end
   
+  # given the id of the item to duplicate create a copy and return that copy
+  def self.duplicate_item(item_id)
+    old_item = ProgrammeItem.find item_id
+    
+    kopy = old_item.deep_clone include: [
+        :format, 
+        :children, 
+        :programme_item_assignments, 
+        {room_item_assignment: :time_slot},
+        :taggings,
+        :themes,
+        :tasks, # I ended up with the same task on both items!!!
+        :requirements # the requirement was dupped and assigned to both
+    ] do |original, _kopy|
+      _kopy.title = _kopy.title + " - COPY" if _kopy.respond_to?(:title)
+      _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
+    end
+    
+    # TODO - and links??? for requirements and tasks at least .... we need these to be deep copy
+    
+    kopy.save!
+    kopy
+  end
+  
   def self.findAllItems
     time_slots = Arel::Table.new(:time_slots)
     parent_time_slots = time_slots.alias("parent_time_slots")
