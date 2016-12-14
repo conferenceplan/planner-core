@@ -33,6 +33,7 @@
         </button>
         <h4 id="myModalLabel" class="modal-title">{{= title }}</h4>
     </div>
+    <div class="modal-hint-section" id="modal-hint"></div>
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-footer">
         <button class="btn btn-primary close-modal" data-dismiss="modal" aria-hidden="true">
@@ -54,6 +55,7 @@
         </button>
         <h4 id="myModalLabel" class="modal-title">{{= title }}</h4>
     </div>
+    <div class="modal-hint-section" id="modal-hint"></div>
     <div class="modal-body" id="modal-body"></div>
     <div class="modal-footer">
         <button class="btn close-modal close-btn" data-dismiss="modal" aria-hidden="true" class='close'>
@@ -78,6 +80,7 @@
         </button>
         <h4 id="myModalLabel" class="modal-title">{{= title }}</h4>
     </div>
+    <div class="modal-hint-section" id="modal-hint"></div>
     <div class="modal-body" id="modal-body" style="height: 650px">
             <iframe src="{{= url }}" width="100%" height="100%" frameBorder="0" id="modal-iframe">
                 <p><%= t "your-browser-does-not-support-iframes" %></p>
@@ -103,6 +106,7 @@
         </button>
         <h4 id="myModalLabel" class="modal-title">{{= title }}</h4>
     </div>
+    <div class="modal-hint-section" id="modal-hint"></div>
     <div id="dialog-alert-area"></div>
     <div class="modal-body" id="modal-body">
         {{= content }}
@@ -127,6 +131,7 @@
                     </button>
                     <h4 id="myModalLabel">{{= title }}</h4>
                 </div>
+                <div class="modal-hint-section" id="modal-hint"></div>
                 <div class="modal-body" id="modal-body"></div>
                 <div class="modal-footer">
                     <button class="btn close-modal cancel-btn" data-dismiss="modal" aria-hidden="true" tabindex="-1">
@@ -194,6 +199,7 @@
         </button>
         <h4 id="myModalLabel" class="modal-title">{{= title }}</h4>
     </div>
+    <div class="modal-hint-section" id="modal-hint"></div>
     <div class="modal-body" id="modal-body">{{= confirm_message ? confirm_message : "<%= t 'confirm-message' %>" }}</div>
     <div class="modal-footer">
         <button class="btn" data-dismiss="modal" aria-hidden="true">

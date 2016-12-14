@@ -32,6 +32,7 @@
                 <h4 class="modal-title">Modal title</h4>\
               </div>\
             <% } %>\
+          <div class="modal-hint-section"></div>\
           <div class="modal-body">{{content}}</div>\
           <div class="modal-footer">\
               <% if (allowCancel) { %>\
