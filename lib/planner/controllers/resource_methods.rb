@@ -10,6 +10,7 @@ module Planner
             _find_page(idx, limit)
             render json: @page.to_json, :content_type => 'application/json' if !lookup_context.exists? :find_page, params[:controller]
           rescue => ex
+            Rails.logger.error ex.message if Rails.env.development?
             Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
             render status: :bad_request, text: ex.message
           end
@@ -19,6 +20,7 @@ module Planner
           begin
             render json: @collection.to_json, :content_type => 'application/json' if !lookup_context.exists? :index, params[:controller]
           rescue => ex
+            Rails.logger.error ex.message if Rails.env.development?
             Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
             render status: :bad_request, text: ex.message
           end
@@ -32,6 +34,7 @@ module Planner
             after_save
             render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :create, params[:controller]
           rescue => ex
+            Rails.logger.error ex.message if Rails.env.development?
             Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
             render status: :bad_request, text: ex.message
           end
@@ -49,6 +52,7 @@ module Planner
             after_update
             render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :update, params[:controller]
           rescue => ex
+            Rails.logger.error ex.message if Rails.env.development?
             Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
             render status: :bad_request, text: ex.message
           end
@@ -59,6 +63,7 @@ module Planner
             @object.destroy
             render status: :ok, text: {}.to_json
           rescue => ex
+            Rails.logger.error ex.message if Rails.env.development?
             Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
             render status: :bad_request, text: ex.message
           end

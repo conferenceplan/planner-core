@@ -26,4 +26,13 @@ class ProgrammeItemAssignment < ActiveRecord::Base
     end
   end
 
+
+  def role_as_string
+    if description.present?
+      description
+    else
+      role.name
+    end
+  end
+
 end

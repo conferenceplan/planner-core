@@ -2,6 +2,20 @@
 #
 #
 module ProgramItemsService
+
+  def self.create_item(item_data, format_name)
+    format = Format.find_by_name format_name # find format (or create if does not exist)
+    if !format
+      format = Format.create(name: format_name)
+      format.save!
+    end
+
+    item_data[:format_id] = format.id
+    
+    item = ProgrammeItem.create(item_data)
+    
+    item
+  end
   
   def self.findAllItems
     time_slots = Arel::Table.new(:time_slots)
