@@ -220,6 +220,7 @@ Rails.application.routes.draw do
   end
 
   resources :registrationDetails
+  match "registration_details/registration_types(/:query)" => "registration_details#registration_types"
   
   resources :postal_addresses do
     # resources :people
