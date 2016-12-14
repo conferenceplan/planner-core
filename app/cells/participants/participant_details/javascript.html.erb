@@ -689,7 +689,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             dest_name += " (" + data['emails'] + ")"
 
             var modal = new AppUtils.FormModal({
-                title: '<%= t "merge-people" %>' + ' BETA',
+                title: '<%= t "merge-people" %>',
                 form: new MergePeopleForm({
                     data : {
                         src_person_id: selected_people[0],

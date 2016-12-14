@@ -38,6 +38,24 @@ class ProgrammeItemsController < PlannerController
   end
   
   #
+  #
+  #
+  def clone
+    old_item = ProgrammeItem.find(params[:id])
+    
+    if old_item
+      @programmeItem = ProgramItemsService::duplicate_item(old_item.id)
+      @invisibleAssociations = ProgrammeItemAssignment.rank(:sort_order).find :all, :conditions => ['programme_item_id = ? AND role_id =?',@programmeItem,PersonItemRole['Invisible']], :include => {:person => :pseudonym}, :order => "people.last_name"
+      @moderatorAssociations = ProgrammeItemAssignment.rank(:sort_order).find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Moderator']], :include => {:person => :pseudonym}, :order => "people.last_name"
+      @participantAssociations = ProgrammeItemAssignment.rank(:sort_order).find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Participant']] , :include => {:person => :pseudonym}, :order => "people.last_name"
+      @reserveAssociations = ProgrammeItemAssignment.rank(:sort_order).find :all, :conditions => ['programme_item_id = ? AND role_id = ?', @programmeItem, PersonItemRole['Reserved']] , :include => {:person => :pseudonym}, :order => "people.last_name"
+    end
+
+  rescue => ex
+    render status: :bad_request, text: ex.message
+  end
+  
+  #
   # Return a program item given an id
   #  
   def show

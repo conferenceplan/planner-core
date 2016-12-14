@@ -36,6 +36,10 @@ jQuery(document).ready(function() {
         time : [<%= @time %>, '<%= t "time"%>'],
         ref_number : [<%= @ref_number %>, '<%= t "ref"%>'],
         nbr_participants : [<%= @showNbrParticipants %>, '<%= t "participants"%>'],
+
+        extra_button : <%= @extra_button %>,
+        extra_button_title : "<%= @extra_button_title %>",
+        extra_modal_action : <%= @extra_modal_action %>,
         
         // 
         modal_create_title : '<%= t "create-program-item" %>',

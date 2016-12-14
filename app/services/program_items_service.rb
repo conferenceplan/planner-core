@@ -17,6 +17,20 @@ module ProgramItemsService
     item
   end
   
+  # given the id of the item to duplicate create a copy and return that copy
+  def self.duplicate_item(item_id)
+    old_item = ProgrammeItem.find item_id
+    
+    kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members, 
+      use_dictionary: true do |original, _kopy|
+        _kopy.title = _kopy.title + " - COPY" if _kopy.respond_to?(:title)
+        _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
+      end
+    
+    kopy.save!
+    kopy
+  end
+  
   def self.findAllItems
     time_slots = Arel::Table.new(:time_slots)
     parent_time_slots = time_slots.alias("parent_time_slots")

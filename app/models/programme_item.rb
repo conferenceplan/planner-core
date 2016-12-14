@@ -108,6 +108,17 @@ class ProgrammeItem < ActiveRecord::Base
     end
   end
 
+  def self.deep_clone_members
+    [
+      :format, 
+      :children, 
+      :programme_item_assignments, 
+      {room_item_assignment: :time_slot},
+      :taggings,
+      :themes,
+    ]
+  end
+
   protected
 
   def sanitize_for_break
