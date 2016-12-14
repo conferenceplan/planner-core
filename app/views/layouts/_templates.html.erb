@@ -5,7 +5,7 @@
     <button class='edit-model-button btn btn-primary btn-xs toolbar-button'><%= t "edit" %></button>
     <button class='delete-model-button btn btn-primary btn-xs toolbar-button'><%= t "delete" %></button>
     {{ if ((typeof(display) !== 'undefined') && display) { }}
-        <button class='extra-action-model-button btn btn-primary btn-xs toolbar-button'>{{= label }}</button>
+        <button class='extra-action-model-button btn btn-primary btn-xs toolbar-button' id="copy-button">{{= label }}</button> <span class="label label-success pull-right"><i class="fa fa-arrow-left" aria-hidden="true"></i> <%= t 'new' %>!</span> 
     {{ }; }}
 </script>
 

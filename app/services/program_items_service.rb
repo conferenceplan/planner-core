@@ -23,7 +23,7 @@ module ProgramItemsService
     
     kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members, 
       use_dictionary: true do |original, _kopy|
-        _kopy.title = _kopy.title + " - COPY" if _kopy.respond_to?(:title)
+        _kopy.title = _kopy.title + " (copy)" if _kopy.respond_to?(:title)
         _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
       end
     
