@@ -1129,6 +1129,20 @@ ItemApp.ItemManagement = (function(Backbone){
         clearDetails : function() {
             clearDetails();
         },
+        loadActions : function() {
+            if (!($("#item-control-area .new-msg-label").length > 0)) {
+                var $extraBtn = $("#item-control-area .extra-action-model-button");
+                if ($extraBtn.length > 0) {
+                    var $newLabel = $("<span></span>").attr({
+                        class : "label label-success new-msg-label",
+                        style : "display: inline-block; cursor: default; float: none;"
+                    }).html(
+                        $('<i class="fa fa-arrow-left" aria-hidden="true"></i> <%= t 'new' %>!')
+                    );
+                    $extraBtn.after($newLabel);
+                };
+            };
+        },
 
         addFilter : function(context, name) {
             if (!filters) {
