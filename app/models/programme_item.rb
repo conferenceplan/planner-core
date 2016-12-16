@@ -47,6 +47,9 @@ class ProgrammeItem < ActiveRecord::Base
     end
   end
 
+  alias_attribute :description, :precis
+  alias_attribute :requires_signup, :item_registerable
+
   before_save :check_parent, :sanitize_for_break
 
   def start_time
@@ -103,6 +106,17 @@ class ProgrammeItem < ActiveRecord::Base
       assignment = u
       assignment.save
     end
+  end
+
+  def self.deep_clone_members
+    [
+      :format, 
+      :children, 
+      :programme_item_assignments, 
+      {room_item_assignment: :time_slot},
+      :taggings,
+      :themes,
+    ]
   end
 
   protected

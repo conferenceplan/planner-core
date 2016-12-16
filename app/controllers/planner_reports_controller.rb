@@ -783,13 +783,14 @@ class PlannerReportsController < PlannerController
     @orientation = params[:orientation] == 'landscape' ? :landscape : :portrait
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     additional_roles = params[:additional_roles] == "true" ? [PersonItemRole['Invisible'].id] : nil
+    show_invisible_items = params[:additional_roles] == "true"
     @conf_start_time = SiteConfig.first.start_date
 
 # TODO - add an option to return a ZIP containing multiple files
 # this would be a in method render and use the ruby zip functionality to add to a file.
     Person.uncached do
       # Only use the scheduled items
-      @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, true
+      @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, !show_invisible_items
       @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
       @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
       @single_venue = Venue.count == 1

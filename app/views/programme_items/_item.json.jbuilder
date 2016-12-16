@@ -96,6 +96,8 @@ if invisibles
     end
 end
 
-@extra_item_json.each do |extra|
-    json.partial! extra, item: item
+if @extra_item_json
+    @extra_item_json.each do |extra|
+        json.partial! extra, item: item
+    end
 end

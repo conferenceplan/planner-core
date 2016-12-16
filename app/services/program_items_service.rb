@@ -2,6 +2,34 @@
 #
 #
 module ProgramItemsService
+
+  def self.create_item(item_data, format_name)
+    format = Format.find_by_name format_name # find format (or create if does not exist)
+    if !format
+      format = Format.create(name: format_name)
+      format.save!
+    end
+
+    item_data[:format_id] = format.id
+    
+    item = ProgrammeItem.create(item_data)
+    
+    item
+  end
+  
+  # given the id of the item to duplicate create a copy and return that copy
+  def self.duplicate_item(item_id)
+    old_item = ProgrammeItem.find item_id
+    
+    kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members, 
+      use_dictionary: true do |original, _kopy|
+        _kopy.title = _kopy.title + " (copy)" if _kopy.respond_to?(:title)
+        _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
+      end
+    
+    kopy.save!
+    kopy
+  end
   
   def self.findAllItems
     time_slots = Arel::Table.new(:time_slots)

@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'cells', '~> 3.11.3'
   s.add_dependency 'ckeditor_rails', '4.4.7'
   s.add_dependency 'declarative_authorization'
-  s.add_dependency 'deep_cloneable', '~> 1.6.0'
+  s.add_dependency 'deep_cloneable' #, '~> 1.6.0'
   s.add_dependency 'delayed_job'
   s.add_dependency 'delayed_job_active_record'
   s.add_dependency 'i18n'

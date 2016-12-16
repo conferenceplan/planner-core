@@ -79,9 +79,10 @@ Rails.application.routes.draw do
   #
   # Programme Items
   #
-  match 'programme_items/drop',           :controller => 'programme_items', :action => 'drop',                        :method => 'get'
+  match 'programme_items/clone/:id',      :controller => 'programme_items', :action => 'clone',                       :method => 'get', :defaults => { :format => 'json' }
+  match 'programme_items/drop',           :controller => 'programme_items', :action => 'drop',                        :method => 'get', :defaults => { :format => 'json' }
   match 'programme_items/list(/:no_breaks)',           :controller => 'programme_items', :action => 'list',         :defaults => { :format => 'json' }
-  match 'programme_items/getList',        :controller => 'programme_items', :action => 'getList',                     :method => 'post'
+  match 'programme_items/getList',        :controller => 'programme_items', :action => 'getList',                     :method => 'post', :defaults => { :format => 'json' }
   match 'programme_items/get_children',   :controller => 'programme_items', :action => 'get_children', :method => 'post', :defaults => { :format => 'json' }
 
   # TOOD - need a cleaner mechanism to assign the publication reference number and change to match the new mechanisms
@@ -220,6 +221,7 @@ Rails.application.routes.draw do
   end
 
   resources :registrationDetails
+  match "registration_details/registration_types(/:query)" => "registration_details#registration_types"
   
   resources :postal_addresses do
     # resources :people

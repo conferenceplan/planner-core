@@ -318,8 +318,6 @@
             <dl class="dl-airy">
                 <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text"> (<%= t "biography-edited" %>)</span>' : (survey_bio ? ' <span class="minor-text"> (<%= t "biography-filled-out-by-person-on-the-survey" %>)</span>' : '&nbsp;') }}</dt>
                 <dd>{{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}</dd>
-                <dt><%= t "participant-photo" %></dt>
-                <dd>{{= photourl ? "<a href='" + photourl + "' target='_blank'>" + photourl + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "participant-url" %></dt>
                 <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "participant-facebook-url" %></dt>

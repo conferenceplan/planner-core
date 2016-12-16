@@ -13,6 +13,7 @@
             json.lock_version       person.pseudonym.lock_version
         end
     end
+    json.full_publication_name      person.getFullPublicationName
     json.company                    person.company
     json.job_title                  person.job_title
     json.survey_key                 person.survey_respondent ?  person.survey_respondent.key : "" 
@@ -26,4 +27,5 @@
     json.comments                   person.comments ? person.comments : ""
     json.bio_image                  person.bio_image if person.bio_image
     json.lock_version               person.lock_version
+    json.email_address              person.getDefaultEmail.present? ? person.getDefaultEmail.email : nil
     

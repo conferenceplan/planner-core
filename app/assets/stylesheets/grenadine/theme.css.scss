@@ -789,7 +789,7 @@ h5.venues {
     
 }
 .minor-text {
-    color: #ddd;
+    color: #ccc;
     font-style: italic;
 }
 a.minor-link {
@@ -1080,7 +1080,7 @@ tbody tr.info td a {
     padding-left: 3px;
 }
 
-.bpopover:hover, [data-toggle='popover']:hover, .glyphicon-info-sign:hover {
+.bpopover:hover, [data-toggle='popover']:not(.btn):hover, .glyphicon-info-sign:hover {
   cursor: help;
 }
 

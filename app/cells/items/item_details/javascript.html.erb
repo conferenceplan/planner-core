@@ -1089,10 +1089,34 @@ ItemApp.ItemManagement = (function(Backbone){
     
     var filterCol = null;
     var filterThemes = null;
+    
+    function cloneItem() {
+        // Get the selected person and call the clone and refresh the table...
+        if (current_item) {
+            modal = new AppUtils.ConfirmModel({
+                    content : '<%= j t("do-you-want-to-copy-programme-item").html_safe %> <b>' + current_item.get('title') + '</b>?<br><br>' + '<%= j t("program-item-copy-details").html_safe %>',
+                    title : '<%= j t("copy-programme-item").html_safe %>',
+                    continueAction : function() {
+                        // TODO - send the request to the server for a copy
+                        $.ajax({
+                            url : "<%= baseUri + '/programme_items/clone/' %>" + current_item.id,
+                            success : function() {
+                                $("#items").trigger("reloadGrid");
+                            }
+                        })
+                    },
+                    closeAction : function() {
+                    }
+            });
+            modal.render();
+        }
+    };
 
     return {
         
         ProgramItem : ProgramItem,
+
+        cloneItem : cloneItem,
         
         addSelectCallback : function(func) {
             selectCallbacks.add(func);

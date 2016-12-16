@@ -1,5 +1,15 @@
 class RegistrationDetailsController < PlannerController
 
+  def registration_types
+    query = params[:query] ? params[:query] : ""
+    
+    res = RegistrationDetail.where("registration_type is not null and registration_type like ?", "%" + query + "%").select("distinct registration_type")
+    
+    render json: res.collect{|r| r.registration_type}.to_json, :content_type => 'application/json'
+  rescue => ex
+    render status: :bad_request, text: ex.message
+  end
+
   def update
     registrationDetail = RegistrationDetail.find(params[:id])
     

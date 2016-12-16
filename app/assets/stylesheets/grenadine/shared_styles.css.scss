@@ -83,5 +83,20 @@ body.showing-modal {
   word-break: break-word;
 }
 
-
-
+ul.form-control {
+  list-style-type: none;
+  height: auto;
+  border: none;
+  padding-left: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.form-control li input[type="radio"] {
+  margin-right: 7px;
+  vertical-align: top;
+}
+.form-control li label {
+  font-weight: normal;
+  max-width: 90%;
+}
+//

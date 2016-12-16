@@ -7,10 +7,20 @@ module Planner
                          :request_path, :current_identity, :current_attendee, :omniauth_state_params, :get_base_image_url, :get_logo,
                          :strip_html_tags, :site_url, :site_url_no_lang, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
-                         :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?
+                         :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?,
+                         :human_time
     end
 
 
+    
+    def human_time mins
+      [[60, I18n.t(:minutes)], [24, I18n.t(:hours)], [1000, I18n.t(:days)]].map{ |count, name|
+        if mins > 0
+          mins, n = mins.divmod(count)
+          "#{n.to_i} #{(n == 1 ? name.to_s.singularize : name)}" if n > 0
+        end
+      }.compact.reverse.join(' ')
+    end
 
     def google_map_key
       key = ""
