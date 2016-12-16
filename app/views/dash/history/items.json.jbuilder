@@ -27,8 +27,6 @@ json.array!(@changes) do |change|
                             json.person   instance.getFullPublicationName if className == 'Person'
                         end
                     end
-                elsif ['Role', 'Format', 'SetupType'].include? className
-                    json.set! className.downcase, (Enum.find v).name if v
                 elsif v
                     json.set! k,  v if v && v != ""
                 end
