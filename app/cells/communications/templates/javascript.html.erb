@@ -54,6 +54,12 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
         mailTemplateLayout = new MailTemplateLayout();
         mailTemplateLayout.render();
         $('#mail-template-region-view').html(mailTemplateLayout.el);
+        
+        $('#mail-template-region-view').find('.bpopover').popover({
+                                        html: true,
+                                        trigger: 'hover'
+                                    });
+        
         var template = "#mail-template-template";
         
         // if (options.nops) {

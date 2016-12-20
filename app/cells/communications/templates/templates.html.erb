@@ -2,7 +2,12 @@
 <script type="text/template" id="mail-template-list-layout-template">
 <section>
     <div class="row">
-        <h3 class="h3-underlined"><%= t 'email-templates' %></h3>
+        <h3 class="h3-underlined"><%= t 'email-templates' %>
+            <i class="glyphicon glyphicon-info-sign bpopover"
+                title="<%= t "email-templates" %>" 
+                data-container="body" data-trigger="hover" 
+                data-placement="right auto" data-toggle="popover" data-content="<%= (t "email-templates-tooltip").html_safe %>"></i>
+        </h3>
         <div id="mail-template-control-div"></div>
     </div>
     <div class="row voffset10">
