@@ -7,7 +7,13 @@
         <div id="mail-template-region-view"></div>
     </div>
     <div class="col-md-9">
-        <h3 class="h3-underlined"><%= t 'template-details' %></h3>
+        <h3 class="h3-underlined"><%= t 'template-details' %>
+            <i class="glyphicon glyphicon-info-sign bpopover"
+                title="<%= t "template-details" %>" 
+                data-container="body" data-trigger="hover" 
+                data-placement="right auto" data-toggle="popover" data-content="<%= (t "template-details-tooltip").html_safe %>">
+            </i>
+        </h3>
         <div id="mail-template-edit-area">
             <div class="empty-tab">
                 <i class="fa fa-angle-left"></i>
