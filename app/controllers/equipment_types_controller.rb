@@ -4,7 +4,7 @@ class EquipmentTypesController < PlannerController
   #
   #
   def index
-    equipment_types = EquipmentType.find :all
+    equipment_types = EquipmentType.all
     
     render json: equipment_types.to_json, :content_type => 'application/json'
   end

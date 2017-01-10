@@ -19,7 +19,7 @@ class ProgrammeItemAssignment < ActiveRecord::Base
   #
   def check_role_description
     if role_id == PersonItemRole['Moderator'].id
-      role_desc = UserInterfaceSetting.first :conditions => {:key => 'moderator_role'}
+      role_desc = UserInterfaceSetting.where({:key => 'moderator_role'}).first
       if role_desc
         self.description = role_desc._value
       end

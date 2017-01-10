@@ -1,7 +1,7 @@
 class Items::ConfictExceptionsController < PlannerController
 
   def index
-    exceptions = ConflictException.find :all
+    exceptions = ConflictException.all
     
     render json: exceptions.to_json, :content_type => 'application/json'
   end

@@ -28,13 +28,13 @@ module Planner
     end
 
     def application_time_zone(&block)
-      cfg = SiteConfig.find :first # for now we only have one convention... change when we have many
+      cfg = SiteConfig.first # for now we only have one convention... change when we have many
       zone = cfg ? cfg.time_zone : Time.zone
       Time.use_zone(zone, &block)
     end
 
     def load_configs
-      cfg = CloudinaryConfig.find :first # for now we only have one convention... change when we have many
+      cfg = CloudinaryConfig.first # for now we only have one convention... change when we have many
       Cloudinary.config do |config|
         config.cloud_name           = cfg ? cfg.cloud_name : ''
         config.api_key              = cfg ? cfg.api_key : ''
@@ -44,7 +44,7 @@ module Planner
        config.cdn_subdomain = true
       end
 
-      mail_cfg = MailConfig.find :first
+      mail_cfg = MailConfig.first
       if mail_cfg
         Devise.setup do |config|
           config.mailer_sender = mail_cfg.from

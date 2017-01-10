@@ -11,7 +11,7 @@
 	"Save As" from the browser to get the report as a file.
   </div>
   <div class='line'><div class='field_name'><%= f.label :invitestatus_id,"Select Invitation Status" %></div><div class='field_value'><%= f.select :invitestatus_id,
-	                 InviteStatus.find(:all).collect {|s| [s.name,s.id] },
+	                 InviteStatus.all.to_a.collect {|s| [s.name,s.id] },
                     {:include_blank => false}%></div></div>	 
 					
    <div class='line'>
@@ -31,7 +31,7 @@
 		<%= f.radio_button :acceptance_select, :true%>Select One
   </div>
   <div class='line'><div class='field_name'><%= f.label :acceptance_status_id,"Select Acceptance Status" %></div><div class='field_value'><%= f.select :acceptance_status_id,
-	                 AcceptanceStatus.find(:all).collect {|s| [s.name,s.id] },
+	                 AcceptanceStatus.all.to_a.collect {|s| [s.name,s.id] },
                     {:include_blank => false}%></div></div>	 
 					
   <div class='line'>
@@ -40,7 +40,7 @@
 		<%= f.radio_button :category_select, :true-%>Select One
   </div>
   <div class='line'><div class='field_name'><%= f.label :invitation_category_id,"Enter Invitation Category" %></div><div class='field_value'><%= f.select :invitation_category_id,
-	                 InvitationCategory.find(:all).collect {|s| [s.name,s.id] },
+	                 InvitationCategory.all.to_a.collect {|s| [s.name,s.id] },
 	                 {:include_blank => true}%></div></div>
  
   <div class='form-buttons'>

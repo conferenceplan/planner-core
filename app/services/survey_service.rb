@@ -75,28 +75,28 @@ module SurveyService
   #
   #
   def self.findAnswersForExcludedItems
-    SurveyAnswer.find :all, :include => :programme_items, :conditions => ['answertype_id = ?', AnswerType['ItemConflict'].id], :order => 'answer'
+    SurveyAnswer.where(['answertype_id = ?', AnswerType['ItemConflict'].id]).includes(:programme_items).order('answer')
   end
 
   #
   #
   #
   def self.findAnswersForExcludedTimes
-    SurveyAnswer.find :all,  :conditions => ['answertype_id = ?', AnswerType['TimeConflict'].id]
+    SurveyAnswer.where(['answertype_id = ?', AnswerType['TimeConflict'].id])
   end
   
   #
   #
   #
   def self.findQuestionForMaxItemsPerDay
-    SurveyQuestion.find :first, :conditions => ['questionmapping_id = ?', QuestionMapping['ItemsPerDay'].id] # There should only be one
+    SurveyQuestion.where(['questionmapping_id = ?', QuestionMapping['ItemsPerDay'].id]).first  # There should only be one
   end
 
   #
   #
   #
   def self.findQuestionForMaxItemsPerCon
-    SurveyQuestion.find :first, :conditions => ['questionmapping_id = ?', QuestionMapping['ItemsPerConference'].id] # There should only be one
+    SurveyQuestion.where(['questionmapping_id = ?', QuestionMapping['ItemsPerConference'].id]).first  # There should only be one
   end
 
   #
@@ -149,9 +149,10 @@ module SurveyService
   #
   #
   def self.personAnsweredSurvey(person, survey_alias)
-    nbr = SurveyResponse.count :joins => [{:survey_question => {:survey_group => :survey}}, {:survey_respondent_detail => {:survey_respondent => :person}}],
-      :conditions => ["people.id = ? && surveys.alias = ?", person.id, survey_alias]
-      
+    nbr = SurveyResponse.where(["people.id = ? && surveys.alias = ?", person.id, survey_alias]).
+                  joins([{:survey_question => {:survey_group => :survey}}, {:survey_respondent_detail => {:survey_respondent => :person}}]).
+                  count
+
     nbr > 0
   end
   
@@ -264,8 +265,10 @@ module SurveyService
         conditions << sinceDate
       end
       
-      SurveyResponse.all :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
-        :conditions => conditions, :order => "created_at desc"
+      SurveyResponse.
+          references([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}]).
+          where(conditions).
+          order("created_at desc")
     else
       [nil] 
     end
@@ -285,8 +288,10 @@ module SurveyService
         conditions << sinceDate
       end
       
-      SurveyResponse.all :joins => [:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}],
-        :conditions => conditions, :order => "created_at desc"
+      SurveyResponse.
+            references([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}])
+            where(conditions).
+            order("created_at desc")
     else
       [nil] 
     end
@@ -298,7 +303,9 @@ module SurveyService
   #
   def self.getSurveyBio(person_id)
 
-    SurveyResponse.first :joins => {:survey_respondent_detail => {:survey_respondent => :person}}, :conditions => {:isbio => true, :people => {:id => person_id}}, :order => "created_at desc"
+    SurveyResponse.joins({:survey_respondent_detail => {:survey_respondent => :person}}).
+          where({:isbio => true, :people => {:id => person_id}}).
+          order("created_at desc").first
     
   end
   
@@ -392,7 +399,7 @@ private
   end
 
   def self.constraints(*args)
-    true
+    nil
   end
     
 end

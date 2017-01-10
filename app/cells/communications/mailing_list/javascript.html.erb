@@ -9,7 +9,7 @@ CommunicationsList = (function(Backbone){
         schema : {
             mailing_number          : { type : 'Number', title : '<%= t "mail-mailing-number" %>', help: '<%= t "mail-mailing-number-hint" %>' },
             mail_template_id        : { type : 'Select', title : '<%= t "mail-mailing-template" %>',help: '<%= t "mail-mailing-template-hint" %>',
-                                            options : <%= [].concat(MailTemplate.find(:all).collect {|s| {'val' => s.id, 'label' => s.title} }).to_json.html_safe %>
+                                            options : <%= [].concat(MailTemplate.all.to_a.collect {|s| {'val' => s.id, 'label' => s.title} }).to_json.html_safe %>
                                         },
             include_email           : { type : 'Checkbox', title : '<%= t "mail-include-email" %>', help: '<%= t "mail-mailing-include-email-hint" %>', help_placement: 'right' },
             cc_all                  : { type : 'Checkbox', title : '<%= t "mail-cc-all" %>', help: '<%= t "mail-mailing-cc-all-hint" %>', help_placement: 'right' },

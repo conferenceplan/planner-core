@@ -4,7 +4,7 @@ class Theme < ActiveRecord::Base
   belongs_to :theme_name
   belongs_to :themed, :polymorphic => :true
 
-  scope :for_pub_programme_items, where(themed_type: "PublishedProgrammeItem")
+  scope :for_pub_programme_items, -> { where(themed_type: "PublishedProgrammeItem") }
 
   before_destroy :update_timestamp
   after_save  :update_timestamp

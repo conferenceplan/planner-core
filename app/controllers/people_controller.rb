@@ -145,11 +145,13 @@ class PeopleController < PlannerController
     operation = params[:op]
     @includeMailings = params[:includeMailings] ? params[:includeMailings] : false
     @includeMailHistory = params[:includeMailHistory] ? params[:includeMailHistory] : false
-        
+
+# TODO - fix page_to does a find as well....
     @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, nil, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email
     
     if page_to && !page_to.empty?
-      gotoNum = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, page_to, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email
+      gotoNum = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, 
+                                  tags, page_to, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email
       if gotoNum
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
@@ -164,7 +166,9 @@ class PeopleController < PlannerController
       @nbr_pages = 1
     end
     
-    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email
+    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents,
+                  nameSearch, context, tags, mailing_id, operation, scheduled, 
+                  @includeMailings, @includeMailHistory, email
   end
   
   #
@@ -187,22 +191,22 @@ class PeopleController < PlannerController
   # The invite status etc. should be in a seperate controller. TODO
   #
   def invitestatuslist
-    @inviteStatus = InviteStatus.find :all
+    @inviteStatus = InviteStatus.all
     render :layout => 'plain'
   end
 
   def invitestatuslistwithblank
-     @inviteStatus = InviteStatus.find :all
+     @inviteStatus = InviteStatus.all
       render :layout => 'plain'
   end
   
   def acceptancestatuslist
-     @acceptanceStatus = AcceptanceStatus.find :all
+     @acceptanceStatus = AcceptanceStatus.all
       render :layout => 'plain'
   end
   
   def acceptancestatuslistwithblank
-     @acceptanceStatus = AcceptanceStatus.find :all
+     @acceptanceStatus = AcceptanceStatus.all
       render :layout => 'plain'
   end
   

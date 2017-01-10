@@ -7,7 +7,7 @@ module DataService
     tagquery = []
     if context
       # TODO - put in the options for ...
-      if context.class == HashWithIndifferentAccess
+      if context.class <= HashWithIndifferentAccess
         context.each do |key, ctx|
           # tagquery += ".tagged_with('" + tags[key].gsub(/'/, "\\\\'").gsub(/\(/, "\\(").gsub(/\)/, "\\)") + "', :on => '" + ctx + "', :any => true)"
           if conditions

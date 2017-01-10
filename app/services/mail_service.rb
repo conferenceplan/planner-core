@@ -37,9 +37,9 @@ module MailService
     raise "there is no mail configuration" if !config
 
     if (survey)
-      template = MailTemplate.first(:conditions => ["mail_use_id = ? and survey_id = ?",mail_use.id, survey.id])
+      template = MailTemplate.where(["mail_use_id = ? and survey_id = ?",mail_use.id, survey.id]).first
     else  
-      template = MailTemplate.first(:conditions => ["mail_use_id = ?",mail_use.id])
+      template = MailTemplate.where(["mail_use_id = ?",mail_use.id]).first
     end
     raise "can not find a template for the email" if !template
     
@@ -77,9 +77,9 @@ module MailService
     raise "there is no mail configuration" if !config
 
     if (survey)
-      template = MailTemplate.first(:conditions => ["mail_use_id = ? and survey_id = ?",mail_use.id, survey.id])
+      template = MailTemplate.where(["mail_use_id = ? and survey_id = ?",mail_use.id, survey.id]).first
     else  
-      template = MailTemplate.first(:conditions => ["mail_use_id = ?",mail_use.id])
+      template = MailTemplate.where(["mail_use_id = ?",mail_use.id]).first
     end
     raise "can not find a template for the email" if !template
     
@@ -199,8 +199,8 @@ module MailService
   #
   #
   def self.saveMailHistory(person, mailing, content, email_status, subject = nil)
-    pma = PersonMailingAssignment.find :first, :conditions => {:person_id => person, :mailing_id => mailing}
-
+    pma = PersonMailingAssignment.where({:person_id => person, :mailing_id => mailing}).first
+    
     mailHistory = MailHistory.new :person_mailing_assignment  => pma,
                                   :email                      => person.getDefaultEmail,
                                   :person                     => person,

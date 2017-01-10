@@ -15,8 +15,8 @@ module Planner
         
         send(:define_method, 'update_categories') do |category_name_ids|
           cat_ids = categories.collect{|c| c.category_name_id }
-          del_candidates = categories.keep_if{|c| !category_name_ids.include?(c.category_name_id.to_s) } # candidates for deletion
-          add_candidates = category_name_ids.keep_if{|i| (i.to_i != 0)  && !cat_ids.include?(i.to_i) } # candidates to add
+          del_candidates = categories.to_a.keep_if{|c| !category_name_ids.include?(c.category_name_id.to_s) } # candidates for deletion
+          add_candidates = category_name_ids.to_a.keep_if{|i| (i.to_i != 0)  && !cat_ids.include?(i.to_i) } # candidates to add
           del_candidates.each do |c|
             c.delete
           end

@@ -6,13 +6,14 @@ class SurveyQuestion < ActiveRecord::Base
     
   has_enumerated :questionmapping, :class_name => 'QuestionMapping'
   
-  default_scope order(['survey_questions.sort_order', :question])
+  default_scope {order(['survey_questions.sort_order', :question])}
 
   belongs_to  :survey_group
   has_one :survey_format, :as => :formatable, :dependent => :destroy
   accepts_nested_attributes_for :survey_format
   
-  has_many :survey_answers, :dependent => :destroy, order: [:sort_order, :id]
+  # TODO - RAILS 4 fix ordering of collection
+  has_many :survey_answers, :dependent => :destroy #, order: [:sort_order] #, :id]
   accepts_nested_attributes_for :survey_answers, :allow_destroy => true
   
   has_many :survey_responses

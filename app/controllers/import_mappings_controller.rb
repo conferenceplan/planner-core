@@ -9,7 +9,7 @@ class ImportMappingsController < ApplicationController
     if datasource_id
       mappings = ImportMapping.where(datasource_id: datasource_id).first
     else  
-      mappings = ImportMapping.find :all
+      mappings = ImportMapping.all
     end
 
     render json: mappings.to_json, :content_type => 'application/json'

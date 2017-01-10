@@ -7,7 +7,7 @@ class SetupTypesController < ApplicationController
     if params[:search].present?
       setup_types = SetupType.where(["name like ?", ("%" + params[:search] + "%")])
     else
-      setup_types = SetupType.find :all
+      setup_types = SetupType.all
     end
     
     render json: setup_types.to_json, :content_type => 'application/json'
@@ -74,10 +74,12 @@ class SetupTypesController < ApplicationController
     
       off = (@page.to_i - 1) * rows.to_i
       args = {:offset => off, :limit => rows, :order => idx + " " + order}
+
+      @setup_types = SetupType.all.offset(off).limit(rows).order(idx + " " + order)
+    else
+      @setup_types = SetupType.all
     end
 
-    @setup_types = SetupType.find :all, args
-   
     respond_to do |format|
       format.html { render :layout => 'plain' } # list.html.erb
       format.xml
@@ -85,7 +87,7 @@ class SetupTypesController < ApplicationController
   end
 
    def picklist
-     @setup_types = SetupType.find :all
+     @setup_types = SetupType.all
      render :action => :picklist, :layout => "plain"
    end
 end

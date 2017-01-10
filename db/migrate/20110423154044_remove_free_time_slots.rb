@@ -3,7 +3,7 @@ require 'room_item_assignment'
 class RemoveFreeTimeSlots < ActiveRecord::Migration
   def self.up
     RoomItemAssignment.transaction do
-      candidates = RoomItemAssignment.all(:conditions => "programme_item_id is null")
+      candidates = RoomItemAssignment.where("programme_item_id is null")
       # delete all the assignments that do not have a programme item associated with it
       candidates.each do |candidate|
         candidate.delete

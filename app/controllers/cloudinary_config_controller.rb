@@ -4,7 +4,7 @@ class CloudinaryConfigController < PlannerController
   #
   def index
     # TODO - when we have multi-tenant base this on the current convention...
-    cloud_config = CloudinaryConfig.find :first
+    cloud_config = CloudinaryConfig.first
     
     render json: cloud_config.to_json, :content_type => 'application/json'
   end

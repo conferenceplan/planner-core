@@ -117,7 +117,7 @@ class Users::AdminController < PlannerController
   #
   #
   def index
-    users = User.find :all
+    users = User.all
     render json: users.to_json, :content_type => 'application/json'
   end
 

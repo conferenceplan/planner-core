@@ -40,7 +40,7 @@
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
           
-          ga('create', 'UA-46240726-2', 'auto');
+          ga('create', 'UA-47360116-3', 'auto');
           ga('send', 'pageview');
         
         </script>
@@ -54,22 +54,22 @@
         <body lang="<%= I18n.locale %>">
     <% end %>
         <div id="top-colored-line"></div>
-  		<div id="application-header" role="navigation"> <!-- This is the top bar with the logo and login/logout buttons -->
-	  		<nav id="logo-bar" class="navbar gradient" role="navigation">
-	  			<!--[if gte IE 9]>
-					  <style type="text/css">
-					    .gradient {
-					       filter: none;
-					    }
-					  </style>
-					<![endif]-->
-	  			<%= render 'layouts/navigation' %>
-	  		</nav>
-      	</div>
-  		<% if current_user %>
-			<%= render 'layouts/topbar' %> <!-- This is the menu and sub-menu section -->
-		<% end %>
-    	<%= yield(:submenu) if content_for?(:submenu) %>
+        <div id="application-header" role="navigation"> <!-- This is the top bar with the logo and login/logout buttons -->
+            <nav id="logo-bar" class="navbar gradient" role="navigation">
+                <!--[if gte IE 9]>
+                      <style type="text/css">
+                        .gradient {
+                           filter: none;
+                        }
+                      </style>
+                    <![endif]-->
+                <%= render 'layouts/navigation' %>
+            </nav>
+        </div>
+        <% if current_user %>
+            <%= render 'layouts/topbar' %> <!-- This is the menu and sub-menu section -->
+        <% end %>
+        <%= yield(:submenu) if content_for?(:submenu) %>
         <div id="menu-separator-div"></div>
         <div id="main-screen-container" class="container">
             <%= render 'layouts/page_help' rescue nil %> <!-- Plugin for the help system -->

@@ -8,8 +8,7 @@ class RoomSetupsController < PlannerController
   #
   def list
     room_id = params[:room_id]
-    args = {:conditions => {:room_id => room_id}}
-    @room_setups = RoomSetup.find :all, :conditions => {:room_id => room_id}, :include => :setup_type
+    @room_setups = RoomSetup.where({:room_id => room_id}).includes(:setup_type)
   end
 
   #
@@ -30,7 +29,7 @@ class RoomSetupsController < PlannerController
       RoomSetup.transaction do
         
         if params[:setup_type_name]
-          setup_type = SetupType.find_or_create_by_name(params[:setup_type_name])
+          setup_type = SetupType.where(name: params[:setup_type_name]).first_or_create
           setupData = setupData.merge({:setup_type_id => setup_type.id})
         end
 
@@ -61,7 +60,7 @@ class RoomSetupsController < PlannerController
       RoomSetup.transaction do
 
         if params[:setup_type_name]
-          setup_type = SetupType.find_or_create_by_name(params[:setup_type_name])
+          setup_type = SetupType.where(name: params[:setup_type_name]).first_or_create
           setupData = setupData.merge({:setup_type_id => setup_type.id})
         end
 
@@ -74,8 +73,8 @@ class RoomSetupsController < PlannerController
         end
       
       end
-    rescue => ex
-      render status: :bad_request, text: ex.message
+    # rescue => ex
+      # render status: :bad_request, text: ex.message
     end
   end
 

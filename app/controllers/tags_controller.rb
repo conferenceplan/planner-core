@@ -19,8 +19,8 @@ class TagsController < PlannerController
         end
       end
     end
-  rescue => ex
-    render status: :bad_request, text: ex.message
+  # rescue => ex
+    # render status: :bad_request, text: ex.message
   end
 
   # GET /tags/1
@@ -168,9 +168,8 @@ class TagsController < PlannerController
   # For a given class get all the tag contexts that are being used
   #
   def getContexts(className)
-    taggings = ActsAsTaggableOn::Tagging.find :all,
-                  :select => "DISTINCT(context)",
-                  :conditions => "taggable_type like '" + className + "'"
+    taggings = ActsAsTaggableOn::Tagging.where(["taggable_type like ?", className]).
+                  distinct(:context)
                   
     contexts = Array.new
 

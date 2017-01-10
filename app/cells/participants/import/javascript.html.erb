@@ -10,7 +10,7 @@ ParticipantApp.PeopleImport = (function(Backbone){
     DataSource = Backbone.Model.extend({
         schema : {
              datasource_id : { type : 'Select', title : '<%= t "data-source" %>',
-              options : <%= [{'val' => nil, 'label' => ' '}].concat(Datasource.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+              options : <%= [{'val' => nil, 'label' => ' '}].concat(Datasource.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
               validators: ['required']
               }
         }

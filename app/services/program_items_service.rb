@@ -93,10 +93,12 @@ module ProgramItemsService
 
   
   def self.assign_reference_numbers(increment = 3)
-      items = ProgrammeItem.all(:include => [:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ],
-                                                 :order => 'time_slots.start ASC, venues.sort_order, rooms.sort_order',
-                                                 :conditions => 'programme_items.print = true')
-                                                 
+      items = ProgrammeItem.
+                  references([:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ]).
+                  where('programme_items.print = true').
+                  includes([:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ]).
+                  order('time_slots.start ASC, venues.sort_order, rooms.sort_order')
+      
       itemNumber = increment
       base = 1000
       current_day = 0
@@ -118,40 +120,44 @@ module ProgramItemsService
   #
   #
   def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, theme_ids = nil, ignoreScheduled = false, include_children = true, page_to = nil)
-    args = genArgsForSql(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to)
+    clause = where_clause(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to)
     tagquery = DataService.genTagSql(context, tags)
     
-    args.merge!(:order => "time_slots.start asc, programme_items.title asc")
-
     if tagquery.empty?
-      ProgrammeItem.uniq.count args
+      ProgrammeItem.where(clause).joins(join_clause).uniq.count
     else
-      ProgrammeItem.tagged_with(*tagquery).uniq.count( :all, args )
+      ProgrammeItem.where(clause).joins(join_clause).tagged_with(*tagquery).order("time_slots.start asc, programme_items.title asc").uniq.count
     end
   end
   
-  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, theme_ids = nil, ignoreScheduled = false, include_children = true)
-    args = genArgsForSql(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children)
+  def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, extraClause = nil, nameSearch=nil, 
+                        context=nil, tags = nil, theme_ids = nil, ignoreScheduled = false, include_children = true, page_to = nil)
+    clause = where_clause(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
     offset = 0 if offset < 0
-    # args.merge!(:offset => offset, :limit => rows)
     
     if (index != nil && index != "")
-       args.merge!(:offset => offset, :limit => rows, :order => index + " " + sort_order)
+      order_clause = index + " " + sort_order
     else
-       args.merge!(:offset => offset, :limit => rows, :order => "time_slots.start asc, programme_items.title asc")
+      order_clause = "time_slots.start asc, programme_items.title asc"
     end
 
-    # if index
-      # args.merge!(:order => index + " " + sort_order)
-    # end
-    
     if tagquery.empty?
-      items = ProgrammeItem.includes(:children).uniq.includes(:programme_item_assignments).find :all, args
+      items = ProgrammeItem.includes(:children).
+                      where(clause).joins(join_clause).
+                      order(order_clause).
+                      offset(offset).
+                      limit(rows).
+                      uniq.includes(:programme_item_assignments)
     else
-      items = ProgrammeItem.includes(:children).tagged_with(*tagquery).uniq.includes(:programme_item_assignments).find :all, args
+      items = ProgrammeItem.includes(:children).tagged_with(*tagquery).
+                      where(clause).joins(join_clause).
+                      order(order_clause).
+                      offset(offset).
+                      limit(rows).
+                      uniq.includes(:programme_item_assignments)
     end
   end
   
@@ -159,13 +165,19 @@ module ProgramItemsService
   #
   #
   def self.findProgramItemsForPerson(person)
-    ProgrammeItemAssignment.all(
-        :conditions => ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
-            person.id, 
-            [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]],
-            :include => {:programmeItem => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, :equipment_types, {:room => :venue}, :time_slot]},
-            :order => "time_slots.start asc"
-    )
+    ProgrammeItemAssignment.
+        references(
+          {:programmeItem => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, :equipment_types, {:room => :venue}, :time_slot]}
+        ).
+        where(
+            ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
+              person.id, 
+              [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]]        
+        ).
+        includes(
+          {:programmeItem => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, :equipment_types, {:room => :venue}, :time_slot]}
+        ).
+        order("time_slots.start asc")
   end
   
   #
@@ -210,11 +222,11 @@ module ProgramItemsService
 
     query = itemConflictSqlWithParent(day)
 
-    res.concat(ActiveRecord::Base.connection.select_all(query)) # Combine the queries
+    res.to_a.concat(ActiveRecord::Base.connection.select_all(query).to_a) # Combine the queries
 
     query = sub_item_conflict_sql(day)
 
-    res.concat(ActiveRecord::Base.connection.select_all(query)) # Combine the queries
+    res.to_a.concat(ActiveRecord::Base.connection.select_all(query).to_a) # Combine the queries
   end
   
   #
@@ -250,7 +262,7 @@ module ProgramItemsService
   def self.getExcludedItemConflicts(day = nil)
     res = ActiveRecord::Base.connection.select_all(excludedItemConflictsSql(day))
     
-    res.concat(ActiveRecord::Base.connection.select_all(excludedItemConflictsSqlWithParent(day))) # Combine the queries
+    res.to_a.concat(ActiveRecord::Base.connection.select_all(excludedItemConflictsSqlWithParent(day)).to_a) # Combine the queries
   end
   
   #
@@ -271,7 +283,7 @@ module ProgramItemsService
   def self.getExcludedTimeConflicts(day = nil)
     res = ActiveRecord::Base.connection.select_all(excludedTimeConflictsSql(day))
 
-    res.concat(ActiveRecord::Base.connection.select_all(excludedTimeConflictsSqlWithParent(day))) # Combine the queries
+    res.to_a.concat(ActiveRecord::Base.connection.select_all(excludedTimeConflictsSqlWithParent(day)).to_a) # Combine the queries
   end
   
   #
@@ -292,7 +304,7 @@ module ProgramItemsService
   def self.getAvailabilityConficts(day = nil)
     res = ActiveRecord::Base.connection.select_all(availabilityConfictsSql(day))
 
-    res.concat(ActiveRecord::Base.connection.select_all(availabilityConfictsSqlWithParent(day))) # Combine the queries
+    res.to_a.concat(ActiveRecord::Base.connection.select_all(availabilityConfictsSqlWithParent(day)).to_a) # Combine the queries
   end
   
   def self.getNbrBackToBackConflicts(day = nil)
@@ -307,7 +319,7 @@ module ProgramItemsService
   
 protected
 
-  def self.genArgsForSql(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to = nil)
+  def self.where_clause(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['programme_items.format_id','programme_items.pub_reference_number'],
                   ['programme_items.format_id','programme_items.pub_reference_number'], ['programme_items.title'])
@@ -315,6 +327,7 @@ protected
     if ignoreScheduled
       clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
     end
+
     # add the name search of the title
     if nameSearch
       st = DataService.getFilterData( filters, 'programme_items.title' )
@@ -338,16 +351,16 @@ protected
     clause = DataService.addClause( clause, 'programme_items.title <= ? AND time_slots.start is null', page_to) if page_to
     clause = DataService.addClause( clause, 'programme_items.parent_id is null', nil) # do not show the children in the result set
 
-    args = { :conditions => clause }
-    
-    args.merge!( :joins => 'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
-                           'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
-                           'LEFT OUTER JOIN programme_items as children on children.parent_id = programme_items.id ' +
-                           "LEFT OUTER JOIN themes on themes.themed_id = programme_items.id AND themes.themed_type = 'ProgrammeItem' " +
-                           "LEFT OUTER JOIN themes as child_themes on child_themes.themed_id = children.id AND child_themes.themed_type = 'ProgrammeItem' " +
-                           "LEFT OUTER JOIN rooms on rooms.id = room_item_assignments.room_id" )
+    clause    
+  end
 
-    args
+  def self.join_clause()
+    'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
+    'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
+    'LEFT OUTER JOIN programme_items as children on children.parent_id = programme_items.id ' +
+    "LEFT OUTER JOIN themes on themes.themed_id = programme_items.id AND themes.themed_type = 'ProgrammeItem' " +
+    "LEFT OUTER JOIN themes as child_themes on child_themes.themed_id = children.id AND child_themes.themed_type = 'ProgrammeItem' " +
+    "LEFT OUTER JOIN rooms on rooms.id = room_item_assignments.room_id"    
   end
 
   # For double book participants
@@ -420,7 +433,7 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
     
     query.to_sql
   end
@@ -502,7 +515,7 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
     
     query.to_sql    
   end
@@ -568,7 +581,7 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
     
     query.to_sql
   end
@@ -631,9 +644,9 @@ protected
                   join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
                   join(items_alias).on(items_alias[:id].eq(room_assignments_alias[:programme_item_id]))
 
-    query = query.where(self.constraints()).take(1000) # TODO - we need paging in the results
+    query = query.where(self.constraints()) if self.constraints() #.take(1000) # TODO - we need paging in the results
 
-    query.to_sql
+    query.take(1000).to_sql
   end
 
   
@@ -707,7 +720,7 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     )
 
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
   end
@@ -781,7 +794,7 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     )
 
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
   end
@@ -847,7 +860,7 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
   end
@@ -916,7 +929,7 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
   end
@@ -972,7 +985,7 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
   end
@@ -1030,7 +1043,7 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
   end
@@ -1114,12 +1127,13 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    query = query.where(self.constraints())
+    query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
   end
+
   def self.constraints(*args)
-    true
+    nil
   end
 
 end

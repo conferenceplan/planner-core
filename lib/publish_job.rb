@@ -104,7 +104,7 @@ class PublishJob
     clause = addClause(clause,'room_item_assignments.id is not null AND programme_items.parent_id is null', nil)
 
     return ProgrammeItem.
-        includes(:room_item_assignment).where(clause)
+        joins(:room_item_assignment).where(clause)
   end
   
   def getNewChildren
@@ -113,18 +113,18 @@ class PublishJob
     clause = addClause(clause,'programme_items.parent_id is not null AND parents_programme_items.print = ? ', true)
 
     return ProgrammeItem.
-        includes([:parent]).where(clause)
+        joins([:parent]).where(clause)
   end
 
   #  
   def getModifiedRooms
-    rooms = Room.find :all
+    rooms = Room.all
     rooms.collect {|r| (r.published && (r.updated_at > r.published.updated_at)) ? r : nil}.compact
   end
 
   def getModifiedVenues
     # Take into account the venue changing details
-    venues = Venue.find :all
+    venues = Venue.all
     venues.collect {|v| (v.published && (v.updated_at > v.published.updated_at)) ? v : nil}.compact
   end
   
@@ -136,7 +136,9 @@ class PublishJob
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
     clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < external_images.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at)', nil)
 
-    ProgrammeItem.includes([:room_item_assignment, :programme_item_assignments, :publication, :external_images, :linked]).where(clause)
+    ProgrammeItem.includes([:room_item_assignment, :programme_item_assignments, :publication, :external_images, :linked]).
+                  references([:room_item_assignment, :programme_item_assignments]).
+                  where(clause)
   end
 
   def getRemovedProgramItems
@@ -523,7 +525,7 @@ class PublishJob
   end
 
   def load_cloudinary_config
-    cfg = CloudinaryConfig.find :first
+    cfg = CloudinaryConfig.first
     Cloudinary.config do |config|
       config.cloud_name           = cfg ? cfg.cloud_name : ''
       config.api_key              = cfg ? cfg.api_key : ''
@@ -543,9 +545,9 @@ class PublishJob
       context_part = "' AND context in (" + contexts + ")"
 
 
-      taggings = ActsAsTaggableOn::Tagging.find :all,
-                    :select => "DISTINCT(context)",
-                    :conditions => "taggable_type like '" + from.class.name + context_part
+      taggings = ActsAsTaggableOn::Tagging.
+                    where("taggable_type like '" + from.class.name + context_part).
+                    distinct("context")
       
       taggings.each do |tagging|
         if getTagOwner

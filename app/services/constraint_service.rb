@@ -103,7 +103,7 @@ module ConstraintService
   def self.updateExcludedTimes(sinceDate = nil)
     Person.transaction do
       Time.use_zone(SiteConfig.first.time_zone) do
-        excludedTimesMaps = ExcludedPeriodsSurveyMap.find :all
+        excludedTimesMaps = ExcludedPeriodsSurveyMap.all
         
         Exclusion.delete_all({:excludable_type  => TimeSlot.name}) # clear out the time exclusions and then we recreate them
         
@@ -147,7 +147,7 @@ module ConstraintService
   #
   def self.updateExcludedItems(sinceDate = nil)
     Person.transaction do
-      excludedItemMaps = ExcludedItemsSurveyMap.find :all # Get the map of exclusion from the survey, based on date that this was last run
+      excludedItemMaps = ExcludedItemsSurveyMap.all # Get the map of exclusion from the survey, based on date that this was last run
   
       peopleWithConstraints = []
       excludedItemMaps.each do |excludedItemMap|
@@ -222,25 +222,33 @@ module ConstraintService
     query = query.where(survey_answers[:answertype_id].eq(answer_type_id).and(survey_respondents[:person_id].eq(person_id)))
     query = query.where(survey_responses[:response].eq(survey_answers[:answer]))
 
-    query = query.where(self.arel_constraints())
+    query = query.where(self.arel_constraints()) if self.arel_constraints()
     
     ActiveRecord::Base.connection.select_all(query.to_sql).uniq.collect{|a| a['id']}
   end
 
   def self.getPeopleWithItemExclusions
-    Person.joins([:exclusions]).where("excludable_type = 'ProgrammeItem'").where(self.constraints())
+    if self.constraints()
+      Person.joins([:exclusions]).where("excludable_type = 'ProgrammeItem'").where(self.constraints())
+    else
+      Person.joins([:exclusions]).where("excludable_type = 'ProgrammeItem'")
+    end
   end
 
   def self.getPeopleWithTimeExclusions
-    Person.joins([:exclusions]).where("excludable_type = 'TimeSlot'").where(self.constraints())
+    if self.constraints()
+      Person.joins([:exclusions]).where("excludable_type = 'TimeSlot'").where(self.constraints())
+    else  
+      Person.joins([:exclusions]).where("excludable_type = 'TimeSlot'")
+    end
   end
 
   def self.constraints(*args)
-    true
+    nil
   end
 
   def self.arel_constraints(*args)
-    true
+    nil
   end
     
 end

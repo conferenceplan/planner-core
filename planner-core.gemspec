@@ -21,16 +21,20 @@ Gem::Specification.new do |s|
   #
   #
   #
-  s.add_dependency 'rails', '~> 3.2.17'
+  s.add_dependency 'rails', '~> 4.2.0'
+  s.add_dependency 'protected_attributes'
   s.add_dependency 'actionmailer'
   s.add_dependency 'activerecord'
   s.add_dependency 'axlsx_rails'
-  s.add_dependency 'audited-activerecord', '~> 3.0'
-  s.add_dependency 'acts-as-taggable-on', '3.1.1'
+  s.add_dependency 'audited-activerecord' #, '~> 3.0'
+  s.add_dependency 'acts-as-taggable-on' #, '3.1.1'
+  s.add_dependency 'power_enum'
   s.add_dependency 'devise'
   s.add_dependency 'scrypt'
   s.add_dependency 'bcrypt'
-  s.add_dependency 'bootstrap-sass', '3.1.1.0' #'~> 3.1'
+  s.add_dependency 'bootstrap-sass' #, '3.1.1.0' #'~> 3.1'
+  # s.add_dependency 'cells-rails' #, '~> 3.11.3'
+  # s.add_dependency 'cells-erb'
   s.add_dependency 'cells', '~> 3.11.3'
   s.add_dependency 'ckeditor_rails', '4.4.7'
   s.add_dependency 'declarative_authorization'
@@ -38,6 +42,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'delayed_job'
   s.add_dependency 'delayed_job_active_record'
   s.add_dependency 'i18n'
+  s.add_dependency 'rails-i18n', '~> 4.0.0' # For 4.0.x
   s.add_dependency 'jbuilder'
   s.add_dependency 'jpbuilder'
   s.add_dependency 'time_diff'
@@ -45,8 +50,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'font_assets'
   s.add_dependency 'log4r'
   s.add_dependency 'browser'
-  s.add_dependency 'jquery-rails', '2.2.1' # for 1.9.2 of jquery
-  s.add_dependency 'jquery-ui-rails', '3.0.1'
+  s.add_dependency 'jquery-rails' #, '2.2.1' # for 1.9.2 of jquery
+  s.add_dependency 'jquery-ui-rails' #, '3.0.1'
   # s.add_dependency 'momentjs-rails', '>= 2.9.0'
   s.add_dependency 'bootstrap3-datetimepicker-rails', '~> 4.7.14' #, '~> 2.1.30'
   s.add_dependency 'd3_rails'
@@ -67,7 +72,9 @@ Gem::Specification.new do |s|
   s.add_dependency 'geocoder'
   s.add_dependency 'http_accept_language'
   s.add_dependency 'country_select'
-  s.add_dependency "i18n-js", ">= 3.0.0.rc11"
+  s.add_dependency "i18n-js" #, ">= 3.0.0.rc11"
+  
+  s.add_dependency 'responders', '~> 2.0' #R4.2
 
   s.add_development_dependency  'capybara', '2.3.0'
   s.add_development_dependency  'database_cleaner', '1.5.1'

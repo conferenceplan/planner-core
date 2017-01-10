@@ -5,7 +5,7 @@ UserMgmtApp = new Backbone.Marionette.Application();
 UserMgmtApp.UserManagement = (function(Backbone){
     
     Backbone.Form.editors.List.Modal.ModalAdapter = Backbone.BootstrapModal;
-    var roles = <%= [].concat(Role.find(:all).collect {|p| {'val' => p.id, 'label' => p.title}}).to_json.html_safe %>;
+    var roles = <%= [].concat(Role.all.to_a.collect {|p| {'val' => p.id, 'label' => p.title}}).to_json.html_safe %>;
 
     UserMdl =  Backbone.DeepModel.extend({
         schema : {

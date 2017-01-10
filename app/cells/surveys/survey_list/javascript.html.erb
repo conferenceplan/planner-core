@@ -41,10 +41,10 @@ SurveyApp.SurveyManagement = (function(Backbone){
             submit_string   : { type : 'Text', title : '<%= t "survey-submit-string" %>', help: '<%= t 'survey-submit-string-hint' %>' },
             header_image    : { type : 'Text', title : '<%= t "survey-url-for-header-image" %>', validators: ['url'], help: '<%= t 'survey-url-for-header-hint' %>' },
             accept_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-submit-to" %>', help: '<%= t 'survey-acceptance-status-hint' %>',
-                                            options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                                            options : <%= [''].concat(AcceptanceStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                         dependsOn : 'authenticate', dependentValues : ['true'] },
             decline_status_id : { type : 'DependentSelect', title : '<%= t "acceptance-status-on-decline-to" %>', help: '<%= t 'survey-decline-status-hint' %>',
-                                            options : <%= [''].concat(AcceptanceStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                                            options : <%= [''].concat(AcceptanceStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                         dependsOn : 'authenticate', dependentValues : ['true'] }
         },
         defaults: {

@@ -24,7 +24,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
 
             questionmapping_id  : { type : 'Select', 
                                     title : '<%= t "question-mapping" %>', 
-                                    options : <%= [[' ',' ']].concat(QuestionMapping.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                                    options : <%= [[' ',' ']].concat(QuestionMapping.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                     help: '<%= t "question-mapping-help" %>' },
             isbio               : { type : 'DependentCheckbox', title : '<%= t "isbio" %>',
                                      dependsOn : 'question_type', dependentValues : ['textbox'] , help: '<%= t "isbio-help" %>' }, // only if the question type is text
@@ -47,7 +47,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
                     // default ?
                     answertype_id : { type : 'Select', 
                                        title : '<%= t "survey-answer-type" %>', help: '<%= t 'survey-question-answer-type-hint' %>',
-                                       options : <%= [].concat(AnswerType.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+                                       options : <%= [].concat(AnswerType.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
                     start_day : { type : 'DependentSelect', title : '<%= t "start day" %>', help: '<%= t 'survey-question-start-day-hint' %>', options : <%=  ([[' ','-1']].concat((0..((@start_date.number_of_days).to_i-1)).to_a.collect{ |r| [ (Time.zone.parse(@start_date.start_date.to_s) + r.days).strftime('%A'), r] })).collect {|i,l| {'val' => l, 'label' => i}}.to_json.html_safe%>,
                      dependsOn : 'answertype_id', dependentValues : ['<%= AnswerType["TimeConflict"].id %>', '<%= AnswerType["AvailableTime"].id %>'] },
                     start_time : { type : 'DependentTime', title : '<%= t "item-start-time" %>', help: '<%= t 'survey-question-start-time-hint' %>',
@@ -120,7 +120,7 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
         <%= @selectNotifyMethod %>(id);
     };
     
-    var answerTypes = <%= Hash[AnswerType.find(:all).map { |a| [a.id.to_s, a.name.to_s] }].to_json.html_safe %>;
+    var answerTypes = <%= Hash[AnswerType.all.to_a.map { |a| [a.id.to_s, a.name.to_s] }].to_json.html_safe %>;
     var dayStrings = <%=  Hash[[[-1,'&nbsp;']].concat((0..((@start_date.number_of_days).to_i-1)).to_a.map{ |r| [r.to_s, (Time.zone.parse(@start_date.start_date.to_s) + r.days).strftime('%A')]})].to_json.html_safe %>
     
     return {

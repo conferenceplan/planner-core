@@ -3,7 +3,8 @@ class Survey < ActiveRecord::Base
                   :declined_msg, :authenticate_msg, :accept_status_id, :decline_status_id, :anonymous
 
   # Survey contains a series of groups, groups contain a series of questions
-  has_many :survey_groups, :dependent => :destroy, :order => 'sort_order asc'
+  # TODO - RAILS 4 ordering
+  has_many :survey_groups, :dependent => :destroy #, :order => 'sort_order asc'
   
   has_enumerated :accept_status, :class_name => 'AcceptanceStatus' # the status that a person's acceptance transistions too completing syrvey
   has_enumerated :decline_status, :class_name => 'AcceptanceStatus' # the status that a person's acceptance transistions too when declining the survey

@@ -12,21 +12,21 @@ $iPadScreenWidth: 1024px;
 
 /* Bootstrap overide */
 body table.table {
-	font-size: 13px;
-	
+  font-size: 13px;
+  
 }
 
 .dl-horizontal dt {
-	width: 200px;
+  width: 200px;
 }
 .dl-horizontal dd {
-	margin-left: 220px;
+  margin-left: 220px;
 }
 body:lang(fr) .dl-horizontal dt {
     width: 250px;
 }
 body:lang(fr) .dl-horizontal dd {
-	margin-left: 270px;
+  margin-left: 270px;
 }
 /* the following are general purpose vertical spacers since Bootstrap does not offer this */
 .voffset0  { margin-top: 0; }
@@ -75,33 +75,33 @@ body:lang(fr) #event-planner-logo-link-container {
    background: url('/assets/grenadine-event-planner-fr.png') 0 0 no-repeat;
 }
 #event-planner-logo-link-container {
-	height: 51px;
-	width: 217px;
-	margin-left: 00px;
+  height: 51px;
+  width: 217px;
+  margin-left: 00px;
 }
 @media
 screen and (-webkit-min-device-pixel-ratio: 1.5),
 screen and (-moz-min-device-pixel-ratio: 1.5),
 screen and (min-device-pixel-ratio: 1.5) {
-	body:lang(fr) #event-planner-logo-link-container {
-		background: url('/assets/grenadine-event-planner-fr-102.png') 0 0 no-repeat;
-		background-size: 100%;
-		
+  body:lang(fr) #event-planner-logo-link-container {
+    background: url('/assets/grenadine-event-planner-fr-102.png') 0 0 no-repeat;
+    background-size: 100%;
+    
         }
     body:lang(en) #event-planner-logo-link-container {
         background: url('/assets/grenadine-event-planner-en-102.png') 0 0 no-repeat;
         background-size: 100%;
         
         }
-	}
+  }
 
 .conference-title {
-	color: #808284;
-	font-size: 12pt;
-	margin-top: 9px;
-	font-weight: 300;
-	letter-spacing: 1px;
-	margin-bottom: 0;
+  color: #808284;
+  font-size: 12pt;
+  margin-top: 9px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  margin-bottom: 0;
 }
 
 .conference-title-section-li {
@@ -115,21 +115,21 @@ screen and (min-device-pixel-ratio: 1.5) {
 
 /* UI changes to bootstrap elements */
 .ui-droppable {
-	/* padding-bottom: 0px; */
+  /* padding-bottom: 0px; */
 }
 
 /* Styles for the login form */
 #login-form {
-	width: auto;
-	padding-left: 15px;
-	padding-right: 15px;
+  width: auto;
+  padding-left: 15px;
+  padding-right: 15px;
     max-width: 350px;
     margin-left: auto;
     margin-right: auto;
 }
 .login-field {
-	position:relative;
-	min-width: 30px;
+  position:relative;
+  min-width: 30px;
 }
 #login-form-text-helpers {
   text-align: center;
@@ -138,9 +138,9 @@ screen and (min-device-pixel-ratio: 1.5) {
 /* Styles for the menus and headers in the app */
 
 #app-menu-div ul {
-	width: 100%;
-	margin-left: 0;
-	margin-right: 0;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 #app-menu-div.affix {
   top: 4px;
@@ -164,12 +164,12 @@ screen and (min-device-pixel-ratio: 1.5) {
    width: 100%;
    z-index:800;
    background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMTAwJSIgeDI9IjEwMCUiIHkyPSIwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjE5JSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjA1Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjI3JSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjE0Ii8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjMDFmM2YiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-   background: -moz-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%, rgba(255,255,255,0.14) 27%, rgba(192,31,63,1) 100%);
+   background: -moz-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%, rgba(255,255,255,0.14) 27%, rgba(192,31,63,1) 1);
    background: -webkit-gradient(linear, left bottom, right top, color-stop(19%,rgba(255,255,255,0.05)), color-stop(27%,rgba(255,255,255,0.14)), color-stop(100%,rgba(192,31,63,1)));
-   background: -webkit-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
-   background: -o-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
-   background: -ms-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
-   background: linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 100%);
+   background: -webkit-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 1);
+   background: -o-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 1);
+   background: -ms-linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 1);
+   background: linear-gradient(45deg,  rgba(255,255,255,0.05) 19%,rgba(255,255,255,0.14) 27%,rgba(192,31,63,1) 1);
    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0dffffff', endColorstr='#c01f40',GradientType=1 );
    border:0px;
    //margin-bottom: 25px;
@@ -298,13 +298,13 @@ screen and (min-device-pixel-ratio: 1.5) {
   
 }
 @media all and (max-width: $w2) {
-	#grenadine-application-menu {
-		box-shadow: none;
-		z-index: 810;
-	}
-	#grenadine-sub-application-menu {
-	  z-index: 799;
-	}	
+  #grenadine-application-menu {
+    box-shadow: none;
+    z-index: 810;
+  }
+  #grenadine-sub-application-menu {
+    z-index: 799;
+  } 
 }
 
 /* This is the case when we have only enough space for the fully-collapsed menu */
@@ -316,9 +316,9 @@ screen and (min-device-pixel-ratio: 1.5) {
     width: 100%;
   }
   #app-sub-menu-div.affix {
-	top: 53px;
-	z-index: 800;
-	width:100%;
+  top: 53px;
+  z-index: 800;
+  width:100%;
   }
 /* This is the case when we have only enough space for the medium toolbar but on 2 separate lines. In this case we can use a large font. */
 @media all and (min-width: $w2)
@@ -332,7 +332,7 @@ screen and (min-device-pixel-ratio: 1.5) {
   width:100%;
   }
   #collapse-2 {
-  	font-size: 14px;
+    font-size: 14px;
   }
 }
 /* This is the case when we have only enough space for the medium toolbar but on 1 single line, for English text */
@@ -342,12 +342,12 @@ screen and (min-device-pixel-ratio: 1.5) {
     height: 50px;
   }
   body:lang(en) #app-sub-menu-div.affix {
-	  top: 53px;;
-	  z-index:802;
-	  width:100%;
+    top: 53px;;
+    z-index:802;
+    width:100%;
   }
   body:lang(en) #collapse-2 {
-  	font-size: 12px;
+    font-size: 12px;
   }
 }
 /* This is the case when we have only enough space for the medium toolbar but on 1 single line, for French text */
@@ -357,12 +357,12 @@ screen and (min-device-pixel-ratio: 1.5) {
     height: 50px;
   }
   body:lang(fr) #app-sub-menu-div.affix {
-	  top: 53px;;
-	  z-index:802;
-	  width:100%;
+    top: 53px;;
+    z-index:802;
+    width:100%;
   }
   body:lang(fr) #collapse-2 {
-  	font-size: 12px;
+    font-size: 12px;
   }
 }
 /* This is the best-case scenario, the case when we have enough space for the full-size toolbar, for English */
@@ -372,12 +372,12 @@ screen and (min-device-pixel-ratio: 1.5) {
     height: 50px;
   }
   body:lang(en) #app-sub-menu-div.affix {
-	  top: 53px;;
-	  z-index:802;
-	  width:100%;
+    top: 53px;;
+    z-index:802;
+    width:100%;
   }
   body:lang(en) #collapse-2 {
-  	font-size: 14px;
+    font-size: 14px;
   }
 }
 /* This is the best-case scenario, the case when we have enough space for the full-size toolbar, for French */
@@ -387,12 +387,12 @@ screen and (min-device-pixel-ratio: 1.5) {
     height: 50px;
   }
   body:lang(fr) #app-sub-menu-div.affix {
-	  top: 53px;;
-	  z-index:802;
-	  width:100%;
+    top: 53px;;
+    z-index:802;
+    width:100%;
   }
   body:lang(fr) #collapse-2 {
-  	font-size: 14px;
+    font-size: 14px;
   }
 }
 #user-sub-menu {
@@ -429,23 +429,23 @@ screen and (min-device-pixel-ratio: 1.5) {
 }
 @media all and (min-width: $w2)
 {
-	#collapse-2 { 
-	  padding-left:0px; padding-rignt: 0px;
-	  }
-	#collapse-4 { 
-		padding-left:0px; padding-rignt: 0px;
-		
-		}
+  #collapse-2 { 
+    padding-left:0px; padding-rignt: 0px;
+    }
+  #collapse-4 { 
+    padding-left:0px; padding-rignt: 0px;
+    
+    }
 }
 #right-menu-navbar a {
-	color: #cccccc;
+  color: #cccccc;
 }
 #right-menu-navbar li a:hover {
-	background-color: #be1f41;
-	color: #ffffff;
+  background-color: #be1f41;
+  color: #ffffff;
 }
 #right-menu-navbar a:hover {
-	color: #222222;
+  color: #222222;
 }
 /* Styles for the footer portion of the app */
 
@@ -531,14 +531,14 @@ div.select2-container.select2-container-multi.form-control {
 }
 
 .accordion-heading {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: bold;
 }
 
 .gr-sidebar {
-	background-color: #f8f8f8;
-	margin-bottom: 15px;
+  background-color: #f8f8f8;
+  margin-bottom: 15px;
 }
 
 /* Fix for checkbox sizing */
@@ -548,7 +548,7 @@ input[type="checkbox"] {
 }
 
 #debug-info {
-	display:none;
+  display:none;
 }
 
 /*
@@ -868,7 +868,7 @@ h5.tag-panel-title {
 }
 .h3-subtitle {
     font-size: 75%;
-    color: rgba(80%,80%,80%,100%);
+    color: rgba(80%,80%,80%,1);
     margin-top: +6px;
     
 }
@@ -1744,7 +1744,7 @@ div.upload_section {
 }
 
 i.publication-count-num {
-  font-style: normal;	
+  font-style: normal; 
 }
 
 .select2-container.gr-conf-selector {
@@ -1755,10 +1755,10 @@ i.publication-count-num {
     }
 }
 .url-definition {
-	color: #428bca;
+  color: #428bca;
 }
 .subsite-part {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .field-postal_address .form-control[name='postal_address'] { 

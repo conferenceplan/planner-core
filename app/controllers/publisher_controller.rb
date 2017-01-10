@@ -56,7 +56,7 @@ class PublisherController < PlannerController
     @extra_pub_review_json = [] if ! @extra_pub_review_json
     
     # Get a list of the people that have change since the past pub date
-    lastPubDate = PublicationDate.find :first, :order => 'id desc'
+    lastPubDate = PublicationDate.order('id desc').first
     if (lastPubDate)
       @peopleChanged = PublishedProgramItemsService.getUpdatedPeople lastPubDate.timestamp
     end
@@ -75,10 +75,11 @@ class PublisherController < PlannerController
     @pending_count += pubjob.getModifiedRooms().count
     @pending_count += pubjob.getModifiedVenues().count
  
-    lastPubDate = PublicationDate.find :first, :order => 'id desc'
+    lastPubDate = PublicationDate.order('id desc').first
     if lastPubDate
-      pending_people = PublishedProgramItemsService.getUpdatedPeople(lastPubDate.timestamp)
-      @pending_count += pending_people[:updatedPeople].size + pending_people[:removedPeople].size
+      # TODO - R4 FIX
+      # pending_people = PublishedProgramItemsService.getUpdatedPeople(lastPubDate.timestamp)
+      # @pending_count += pending_people[:updatedPeople].size + pending_people[:removedPeople].size
     end
   end
   

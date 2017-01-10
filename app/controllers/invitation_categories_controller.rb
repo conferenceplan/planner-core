@@ -4,7 +4,7 @@ class InvitationCategoriesController < PlannerController
   #
   #
   def index
-    invitationCategories = InvitationCategory.find :all, :order => 'position asc'
+    invitationCategories = InvitationCategory.all.order('position asc')
     
     render json: invitationCategories.to_json, :content_type => 'application/json'
   end
@@ -51,7 +51,7 @@ class InvitationCategoriesController < PlannerController
   
   def list  
     # Get all the roles in the database
-    @invitationCategories = InvitationCategory.find :all, :order => 'position asc'
+    @invitationCategories = InvitationCategory.all.order('position asc')
     render :layout => 'plain'
   end
 end

@@ -10,8 +10,8 @@ class Communications::MailHistoryController < PlannerController
     conditions = {:person_id => person_id, :testrun => false} if person_id
 
     # TODO - check to see if we need constraint
-    @total = MailHistory.includes([ :person , {:mailing => :mail_template} ]).where(conditions).count
-    @mail_history = MailHistory.where(conditions).includes([ {:person => :pseudonym} , {:mailing => :mail_template} ]).offset(offset).limit(limit).order('date_sent desc')
+    @total = ::MailHistory.where(conditions).references(:person).count
+    @mail_history = ::MailHistory.where(conditions).references(:person).includes([ {:person => :pseudonym} , {:mailing => :mail_template} ]).offset(offset).limit(limit).order('date_sent desc')
   end
   
   def list

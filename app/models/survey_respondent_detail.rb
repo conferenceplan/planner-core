@@ -8,20 +8,20 @@ class SurveyRespondentDetail < ActiveRecord::Base
 
   # Get the responses for a particular survey
   def getResponses(surveyId)
-    return survey_responses.find(:all, :conditions => {:survey_id => surveyId})
+    return survey_responses.where({:survey_id => surveyId})
   end
 
   def getHistories(surveyId)
-    return survey_histories.find(:all, :conditions => {:survey_id => surveyId})
+    return survey_histories.where({:survey_id => surveyId})
   end
 
   # Get a particular response for a given survey and question  
   def getResponse(surveyId, questionId)
-    return survey_responses.first(:conditions => {:survey_id => surveyId, :survey_question_id => questionId})
+    return survey_responses.where({:survey_id => surveyId, :survey_question_id => questionId}).first
   end
   
   def getResponsesForQuestion(surveyId, questionId) # TODO - optimize usage
-    return survey_responses.find(:all, :conditions => {:survey_id => surveyId, :survey_question_id => questionId})
+    return survey_responses.where({:survey_id => surveyId, :survey_question_id => questionId})
   end
   
   # return whether or not there are responses for a particular survey

@@ -4,7 +4,7 @@
 module JobUtils
   
   def getSiteConfig
-    SiteConfig.find :first
+    SiteConfig.first
   end
   
 end

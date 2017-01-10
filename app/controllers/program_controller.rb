@@ -153,7 +153,7 @@ class ProgramController < ApplicationController
     @scale = params[:scale].to_f
     @changes = nil
 
-    first_date = PublicationDate.find :first, :order => 'id desc'
+    first_date = PublicationDate.order('id desc').first
     if first_date
       pubIndex = params[:pubidx] ? params[:pubidx].to_i : first_date.id
     else

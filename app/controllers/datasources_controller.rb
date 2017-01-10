@@ -4,7 +4,7 @@ class DatasourcesController < PlannerController
   #
   #
   def index
-    datasources = Datasource.find :all
+    datasources = Datasource.all
     
     render json: datasources.to_json, :content_type => 'application/json'
   end

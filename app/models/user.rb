@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
   #
   alias :devise_valid_password? :valid_password?
   def valid_password?(password)
-    debugger
+    # debugger
     begin
       devise_valid_password?(password)
     rescue BCrypt::Errors::InvalidHash

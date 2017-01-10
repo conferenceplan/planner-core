@@ -11,15 +11,15 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
                                 help: '<%= t "template-name-hint" %>', validators: ['required'] },
 
             mail_use_id     : { type : 'Select', title : '<%= t "mail-use" %>', help: '<%= t "template-mail-use-hint" %>',
-                                            options : <%= [].concat(MailUse.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
+                                            options : <%= [].concat(MailUse.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         },
             transiton_invite_status_id : { type : 'Select', title : '<%= t "transition-person-invite-to" %>',
-                                            options : <%= [''].concat(InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
+                                            options : <%= [''].concat(InviteStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         , 
                                         help: '<%= t "template-invite-status-hint" %>'
                                 },
             survey_id       : { type : 'Select', title : '<%= t "survey" %>',
-                                            options : <%= [[nil,'']].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
+                                            options : <%= [[nil,'']].concat(Survey.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>
                                         , help: '<%= t "template-survey-id-hint" %>'
                                         },
 

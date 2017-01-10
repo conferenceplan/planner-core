@@ -37,6 +37,7 @@ module PlannerReportsService
   def self.items_over_capacity
     ProgrammeItem.where("(audience_size is not null) AND (audience_size > room_setups.capacity)").
                     includes([{:room_item_assignment => {:room => [:room_setup, :venue]}}, :time_slot]).
+                    references([{:room_item_assignment => {:room => [:room_setup, :venue]}}, :time_slot]).
                     where(self.constraints()).
                     order("time_slots.start, venues.sort_order, rooms.sort_order")
   end
@@ -51,6 +52,7 @@ module PlannerReportsService
 
     Person.where(conditions).
             includes([:pseudonym, {:programmeItemAssignments => :programmeItem}]).
+            references([:pseudonym, {:programmeItemAssignments => :programmeItem}]).
             joins("left outer join edited_bios on edited_bios.person_id = people.id").
             where(self.constraints()).
             order("people.last_name")
@@ -75,6 +77,7 @@ module PlannerReportsService
     EditedBio.where(conditions).
               joins({:person => :person_con_state}).
               includes({:person => :pseudonym}).
+              references({:person => :pseudonym}).
               where(self.constraints()).
               order('people.last_name, people.first_name')
   end
@@ -83,6 +86,7 @@ module PlannerReportsService
     
     ProgrammeItem.joins('left outer JOIN programme_item_assignments ON programme_item_assignments.programme_item_id = programme_items.id').
                   includes(:time_slot).
+                  references(:time_slot).
                   where("programme_item_assignments.id is null").
                   where(self.constraints()).
                   order("time_slots.start")
@@ -104,6 +108,14 @@ module PlannerReportsService
     
     ProgrammeItem.where(conditions).
                   includes([
+                          { :programme_item_assignments => { :person => :pseudonym} },
+                          { :parent => [:time_slot, {:room => :venue}, :format] },
+                          :time_slot, 
+                          {:room => :venue}, 
+                          :format, 
+                          :equipment_needs
+                          ]).
+                  references([
                           { :programme_item_assignments => { :person => :pseudonym} },
                           { :parent => [:time_slot, {:room => :venue}, :format] },
                           :time_slot, 
@@ -149,6 +161,7 @@ module PlannerReportsService
     
     ProgrammeItem.where(conditions).
                   includes([{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
+                  references([{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
                   order(ord_str)
   end
   
@@ -159,6 +172,7 @@ module PlannerReportsService
     Person.joins([:person_con_state]).
             joins("left outer join programme_item_assignments on programme_item_assignments.person_id = people.id").
             includes([:pseudonym]).
+            references([:pseudonym]).
             where(["person_con_states.acceptance_status_id in (?) AND programme_item_assignments.person_id is null", 
                         [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]).
             where(self.constraints()).
@@ -185,6 +199,14 @@ module PlannerReportsService
     
     Person.
           includes({:pseudonym => {}, :programmeItemAssignments => {
+                      :programmeItem => [
+                          :time_slot, 
+                          {:room => :venue}, 
+                          # :format, 
+                          :parent => [:time_slot, {:room => :venue}, :format] ]
+                    }
+                  }).
+          references({:pseudonym => {}, :programmeItemAssignments => {
                       :programmeItem => [
                           :time_slot, 
                           {:room => :venue}, 
@@ -221,7 +243,17 @@ module PlannerReportsService
                           ]
                       }
                   ]).
-          where(self.constraints()).
+          references([
+                    :pseudonym, :edited_bio, :bio_image , 
+                    :programmeItemAssignments => {
+                      :programmeItem => [
+                            { :parent => [:time_slot, {:room => :venue}, :format] },
+                            { :room => :venue }, 
+                            :time_slot, 
+                            :format
+                          ]
+                      }
+                  ]).          where(self.constraints()).
           order(order_by)
   end
   
@@ -243,6 +275,14 @@ module PlannerReportsService
     
     Person.where(conditions).
               includes([
+                    :pseudonym, 
+                    {:published_programme_items => [
+                      :format, 
+                      {:published_room => :published_venue}, :published_time_slot,
+                      {:parent => [:published_time_slot, {:published_room => :published_venue}, :format] }
+                     ]}
+                  ]).
+              references([
                     :pseudonym, 
                     {:published_programme_items => [
                       :format, 
@@ -357,6 +397,15 @@ module PlannerReportsService
                         :equipment_needs
                         ]}
                   ]).
+          references([
+                    :venue,
+                    {:programme_items => [
+                        {:children => :equipment_needs},
+                        :time_slot, 
+                        :format, 
+                        :equipment_needs
+                        ]}
+                  ]).
           where("time_slots.start is not NULL").
           where(self.constraints()).
           order("venues.sort_order, rooms.sort_order, time_slots.start, time_slots.end")
@@ -388,6 +437,19 @@ module PlannerReportsService
                 }
               ]
             ]).
+            references([:published_venue,
+              :published_room_item_assignments => 
+              [
+                :published_time_slot, 
+                {:published_programme_item => #
+                  [
+                    {:published_programme_item_assignments => {:person => :pseudonym}}, 
+                    :format,
+                    {:children => {:published_programme_item_assignments => {:person => :pseudonym}}}
+                  ]
+                }
+              ]
+            ]).
             where(self.constraints()).
             order("published_venues.sort_order, published_rooms.sort_order, published_time_slots.start")
     
@@ -399,6 +461,13 @@ module PlannerReportsService
   def self.findPanelsByTimeslot
     TimeSlot.joins([{:rooms => :venue}]).
             includes([
+                {:rooms => :venue}, 
+                {:programme_items => [
+                  :equipment_needs,
+                  {:children => :equipment_needs},
+                ]}
+              ]).
+            references([
                 {:rooms => :venue}, 
                 {:programme_items => [
                   :equipment_needs,
@@ -425,7 +494,16 @@ module PlannerReportsService
                     ]
                   }
                  ]).
-              where("programme_items.print = 1 and time_slots.start is not NULL").
+              references([
+                  {:rooms => :venue},
+                  {:programme_items => 
+                    [
+                      {:programme_item_assignments => {:person => :pseudonym}},
+                      {:children => {:programme_item_assignments => {:person => :pseudonym}}},
+                      :format
+                    ]
+                  }
+                 ]).              where("programme_items.print = 1 and time_slots.start is not NULL").
               where(self.constraints()).
               order("time_slots.start, venues.sort_order, rooms.sort_order") #
   end
@@ -443,6 +521,7 @@ module PlannerReportsService
         joins("left join room_item_assignments as parent_rooms ON parent_rooms.programme_item_id = parents.id").
         joins(:person).
         includes({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
+        references({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
         where(self.constraints()).
         where("programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s + "," + PersonItemRole['Participant'].id.to_s + ")").
         group("programme_item_assignments.person_id , IF(room_item_assignments.day is not null, room_item_assignments.day, parent_rooms.day)").
@@ -459,6 +538,7 @@ module PlannerReportsService
             joins("left join person_constraints on person_constraints.person_id = programme_item_assignments.person_id").
             joins(:person).
             includes({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
+            references({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
             where(self.constraints()).
             where("max_items_per_con > 0 AND programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s + "," + PersonItemRole['Participant'].id.to_s + ")").
             group("programme_item_assignments.person_id").having("nbr_items > max_items_per_con").
@@ -481,7 +561,16 @@ module PlannerReportsService
                   }
                 }
               ]).
+            references([
+                {:person => :pseudonym}, 
+                {
+                  :programmeItem => {
+                    :people => :programmeItems
+                  }
+                }
+              ]).
             group("programme_item_assignments.programme_item_id").having("count(programme_item_assignments.programme_item_id) = 1").
+            to_a.
             sort!{|a,b| a.person.last_name <=> b.person.last_name }
     
   end
@@ -496,15 +585,31 @@ module PlannerReportsService
             having("count(programme_item_assignments.programme_item_id) >= 1").
             pluck(:programme_item_id)
 
-    ProgrammeItem.all :include => [
-          { :parent => [:time_slot, {:room => :venue}, :format] },
-          :programme_item_assignments,
-          :time_slot, 
-          {:room => :venue}, 
-          :format
-        ],
-      :conditions => ["(time_slots.start is not NULL || time_slots_programme_items.start is not null) AND (programme_items.minimum_people > 1 OR programme_items.maximum_people > 1) AND (programme_items.id not in (?))", ids],
-      :order => "IF(time_slots.start is not null, time_slots.start, time_slots_programme_items.start), IF(time_slots.start is not null, time_slots.end, time_slots_programme_items.end), IF(venues.sort_order, venues.sort_order, venues_rooms.sort_order), IF(rooms.sort_order, rooms.sort_order, rooms_programme_items.sort_order)"
+    ProgrammeItem.
+        references(
+          [
+            { :parent => [:time_slot, {:room => :venue}, :format] },
+            :programme_item_assignments,
+            :time_slot, 
+            {:room => :venue}, 
+            :format
+          ]
+        ).
+        includes(
+          [
+            { :parent => [:time_slot, {:room => :venue}, :format] },
+            :programme_item_assignments,
+            :time_slot, 
+            {:room => :venue}, 
+            :format
+          ]
+        ).
+        where(
+          ["(time_slots.start is not NULL || time_slots_programme_items.start is not null) AND (programme_items.minimum_people > 1 OR programme_items.maximum_people > 1) AND (programme_items.id not in (?))", ids]
+        ).
+        order(
+          "IF(time_slots.start is not null, time_slots.start, time_slots_programme_items.start), IF(time_slots.start is not null, time_slots.end, time_slots_programme_items.end), IF(venues.sort_order, venues.sort_order, venues_rooms.sort_order), IF(rooms.sort_order, rooms.sort_order, rooms_programme_items.sort_order)"
+        )
   end
 
 #
@@ -517,8 +622,8 @@ protected
   end
 
   def self.word_counts_if_clause(attr)
-    attr_length = Arel::Nodes::NamedFunction.new( "CHAR_LENGTH", [ attr ])
-    attr_replace = Arel::Nodes::NamedFunction.new( "REPLACE", [ attr, ' ', '' ])
+    attr_length = Arel::Nodes::NamedFunction.new( "CHAR_LENGTH", [ Arel::Nodes::Quoted.new(attr) ])
+    attr_replace = Arel::Nodes::NamedFunction.new( "REPLACE", [ Arel::Nodes::Quoted.new(attr), Arel::Nodes::Quoted.new(' '), Arel::Nodes::Quoted.new('') ])
     Arel::Nodes::NamedFunction.new("IF", [
                         attr_length.gt(0), 
                         (Arel::Nodes::Addition.new( Arel::Nodes::Subtraction.new(attr_length, Arel::Nodes::NamedFunction.new( "LENGTH", [ attr_replace ])), 1)),
@@ -527,11 +632,11 @@ protected
   end
 
   def self.constraints(*args)
-    true
+    nil
   end
   
   def self.arel_constraints(*args)
-    true
+    nil
   end
   
 end

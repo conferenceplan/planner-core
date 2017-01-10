@@ -11,8 +11,8 @@ ParticipantApp.PeopleExport = (function(Backbone){
         schema : {
             //:invitestatus_id
             //:invitation_category_id
-            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= [[' ',' ']].concat(InviteStatus.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
+            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= [[' ',' ']].concat(InviteStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
         },
         
         data : {

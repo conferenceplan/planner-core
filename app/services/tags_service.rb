@@ -22,16 +22,24 @@ protected
     taggings = Arel::Table.new(:taggings)
     tags = Arel::Table.new(:tags)
     
-    q = taggings.project(taggings[:tag_id].count.as("count"), taggings[:tag_id]).where(self.constraints()).where(
+    q = taggings.project(taggings[:tag_id].count.as("count"), taggings[:tag_id]).where(
         taggings[:taggable_type].eq(classname).and(taggings[:context].eq(context))
-        ).group(taggings[:tag_id]).having(taggings[:tag_id].count.gt(0)).as('taggs')
+        ).group(taggings[:tag_id]).having(taggings[:tag_id].count.gt(0)) #.as('taggs')
+
+    if self.constraints()
+      q = q.where(self.constraints())
+    end
     
-    tags.project(Arel.sql('tags.*, taggs.count AS count')).join(q).on('tags.id = taggs.tag_id').order("count desc")
+    tags.project(Arel.sql('tags.*, taggs.count AS count')).join(q.as('taggs')).on('tags.id = taggs.tag_id').order("count desc")
   end
   
   def self.taggingSql(instance, context)
     taggings = Arel::Table.new(:taggings)
-    taggings[:taggable_id].eq(instance.id.to_s).where(self.constraints()).and(taggings[:taggable_type].eq(instance.class.name))
+    q = taggings[:taggable_id].eq(instance.id.to_s).and(taggings[:taggable_type].eq(instance.class.name))
+    if self.constraints()
+      q = q.where(self.constraints())
+    end
+    q
   end
   
   def self.conditions
@@ -39,7 +47,7 @@ protected
   end
 
   def self.constraints(*args)
-    true
+    nil
   end
 
 end
