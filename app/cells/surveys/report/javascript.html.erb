@@ -305,7 +305,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         init : function() {
             // showQueries();
             currentQuestions = new QuestionsCollection();
-            <% if Survey.firs) %>
+            <% if Survey.first %>
                 setCurrentQuestionsBySurvey(<%= Survey.first.id %>);
             <% end %>
         },

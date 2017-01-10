@@ -131,7 +131,7 @@ ReportApp.ReportManagement = (function(Backbone){
     var TagsByContextForm = Backbone.Form.extend({
         schema : {
             context : { type : 'Select', title : '<%= t "report-selection-for-tag-context" %>', 
-                options : <%= TagContext.all(:order => 'name').collect {|s| {'val' => s.name, 'label' => s.name} }.to_json.html_safe %> },
+                options : <%= TagContext.all.order('name').to_a.collect {|s| {'val' => s.name, 'label' => s.name} }.to_json.html_safe %> },
         },
         
         data : {
