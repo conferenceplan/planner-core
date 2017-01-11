@@ -43,7 +43,7 @@ class ProgrammeItem < ActiveRecord::Base
   #
   has_many  :external_images, :as => :imageable,  :dependent => :delete_all do
     def use(u) # get the image for a given use (defined as a string)
-      find(:all, :conditions => ['external_images.use = ?', u])
+      where(['external_images.use = ?', u])
     end
   end
 
@@ -81,6 +81,7 @@ class ProgrammeItem < ActiveRecord::Base
     # find the assignments to remove
     del_candidates = programme_item_assignments.
                           where(["role_id in (?)",[PersonItemRole['Invisible'].id, PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Reserved'].id]]).
+                          to_a.
                           keep_if{|c| !update_ids.include?(c.id)}
     
     # find the assignments to create & update

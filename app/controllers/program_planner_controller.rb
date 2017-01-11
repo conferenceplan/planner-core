@@ -7,12 +7,31 @@ class ProgramPlannerController < PlannerController
     rooms = params[:rooms] ? params[:rooms].split(',').collect{|a| a.to_i} : nil
     @day = params[:day] # Day
     if rooms
-      @roomListing = Room.unscoped.where(where_clause).all :order => 'venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc',
-                            :conditions => ["rooms.id in (?)", rooms],
-                            :joins => :venue
+      if where_clause
+        @roomListing = Room.unscoped.where(where_clause).
+                          references(:venue).
+                          includes(:venue).
+                          where(["rooms.id in (?)", rooms]).
+                          order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+      else  
+        @roomListing = Room.unscoped.
+                          references(:venue).
+                          includes(:venue).
+                          where(["rooms.id in (?)", rooms]).
+                          order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+      end
     else
-      @roomListing = Room.unscoped.where(where_clause).all :order => 'venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc',
-                            :joins => :venue
+      if where_clause
+        @roomListing = Room.unscoped.where(where_clause).
+                          references(:venue).
+                          includes(:venue).
+                          order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+      else
+        @roomListing = Room.unscoped.
+                          references(:venue).
+                          includes(:venue).
+                          order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+      end
     end
     site_config = SiteConfig.first
     @currentDate = Time.zone.parse(site_config.start_date.to_s) + @day.to_i.day
@@ -75,7 +94,7 @@ class ProgramPlannerController < PlannerController
   protected
   
   def where_clause
-    true
+    nil
   end
 
 end

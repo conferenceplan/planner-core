@@ -6,16 +6,16 @@ class Room < ActiveRecord::Base
   include RankedModel
   ranks :sort_order, :with_same => :venue_id 
   
-  default_scope order('rooms.sort_order asc, rooms.name asc')
+  default_scope {order('rooms.sort_order asc, rooms.name asc')}
   
   belongs_to  :venue
   
   # this is a many to many
   has_many :room_item_assignments, :dependent => :destroy do
     def day(d) # get the room item assignments for the given day if the day parameter is used
-      find(:all, 
-        :include => [:programme_item, :time_slot],
-        :conditions => ['day = ?', d], :joins => :time_slot, :order => 'time_slots.start asc')
+        references([:programme_item, :time_slot]).
+        where(['day = ?', d]).
+        joins(:time_slot).order('time_slots.start asc')
     end
   end
   has_many :programme_items, :through => :room_item_assignments # through the room item assignment

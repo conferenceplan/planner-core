@@ -17,9 +17,10 @@ class SurveyRespondents::ReviewsController < PlannerController
     # we need the survey and the survey respondent
     if params[:id].to_i != 0
       person_id = params[:id].to_i
-      @respondent = SurveyRespondent.find :first,
-        :conditions => ["survey_respondents.person_id = ? and survey_respondent_details.id is not null and survey_responses.survey_id = ?", person_id, survey_id],
-        :include => { :survey_respondent_detail => {:survey_responses => {}, :survey_respondent => {}} }
+      @respondent = SurveyRespondent.
+                      references({ :survey_respondent_detail => [:survey_responses, :survey_respondent] }).
+                      where(["survey_respondents.person_id = ? and survey_respondent_details.id is not null and survey_responses.survey_id = ?", person_id, survey_id]).
+                      includes({ :survey_respondent_detail => [:survey_responses, :survey_respondent] }).first
     end
     
     render json: { 'survey' => survey_to_html(@survey,@respondent.survey_respondent_detail, false) }, :content_type => 'application/json'

@@ -4,7 +4,7 @@ class ExternalImagesController < PlannerController
       className = params[:cname]
       images = eval(className).find(params[:cid]).external_images
     else
-      images = ExternalImage.find :all
+      images = ExternalImage.all
     end
     
     render json: images.to_json, :content_type => 'application/json'

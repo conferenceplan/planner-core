@@ -55,9 +55,9 @@ module Planner
     #
     #
     #    
-    included do
-      # initialization to do once the module has been included
-    end
+    # included do
+      # # initialization to do once the module has been included
+    # end
 
     #
     #
@@ -72,10 +72,10 @@ module Planner
         Planner::Linkable.config.linkedto_types.each do |linkedto_type|
           has_many linkedto_type.name.demodulize.pluralize.underscore.to_sym, :through => :linked, :class_name => linkedto_type.name  do
                       def category(c)
-                        find(:all, :joins => [:category_names], :conditions => ['category_names.name = ?', c])
+                        includes([:category_names]).references([:category_names]).where(['category_names.name = ?', c]).joins([:category_names])
                       end
                       def uncategorized
-                        find(:all, :include => [:categories], :conditions => ['categories.id is null'])
+                        where(['categories.id is null']).includes([:categories]).references([:categories])
                       end
                     end
         end

@@ -5,9 +5,9 @@ PublicationsApp = new Backbone.Marionette.Application();
 PublicationsApp.PrintManagement = (function(Backbone){
     
     var people = <%= [].concat(PeopleService.findAssignedParticipants.collect {|p| {'id' => p.id, 'text' => p.getFullPublicationName}}).to_json.html_safe %>;
-    var rooms = <%= [].concat(RoomsService.findPublishedRooms.collect {|r| {'id' => r.id, 'text' => r.name}}).to_json.html_safe %>
-    var items = <%= [].concat(PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople.collect {|r| {'id' => r.id, 'text' => r.title}}).to_json.html_safe %>
-    var all_formats = <%= [].concat(Format.all.collect {|r| {'id' => r.id, 'text' => r.name}}).to_json.html_safe %>
+    var rooms = <%= [].concat(RoomsService.findPublishedRooms.collect {|r| {'id' => r.id, 'text' => r.name}}).to_json.html_safe %>;
+    var items = <%= [].concat(PublishedProgramItemsService.getPublishedProgramItemsThatHavePeople.collect {|r| {'id' => r.id, 'text' => r.title}}).to_json.html_safe %>;
+    var all_formats = <%= [].concat(Format.all.collect {|r| {'id' => r.id, 'text' => r.name}}).to_json.html_safe %>;
 
     var GenericForm = Backbone.Form.extend({
         schema : {
@@ -161,7 +161,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
         schema : {
             additional_roles : { type : 'Checkbox', title : '<%= t "publications-include-invisible" %>'},
             label_type : { type : 'Select', title : '<%= t "label-type" %>', 
-                            options : <%= [].concat(LabelDimensions.find(:all).collect {|s| {'val' => s.id, 'label' => (s.manufacturer + ' - ' + s.name)} }).to_json.html_safe %> },
+                            options : <%= [].concat(LabelDimensions.all.collect {|s| {'val' => s.id, 'label' => (s.manufacturer + ' - ' + s.name)} }).to_json.html_safe %> },
             people : { type : 'Select2', title : '<%= t "publications-people" %>', 
                         config : {
                             multiple: true,
@@ -223,7 +223,7 @@ PublicationsApp.PrintManagement = (function(Backbone){
                           options : { landscape : 'Landscape' , portrait : 'Portrait'} 
                 },
             since : { type : 'Select', title : '<%= t "published-date" %>', 
-                          options : <%= [].concat((PublicationDate.find :all, :order => 'id desc').collect {|d| {'val' => d.id, 'label' => d.timestamp.strftime("%H:%M, %Y-%m-%d")} }).to_json.html_safe %> 
+                          options : <%= [].concat((PublicationDate.all.order('id desc')).collect {|d| {'val' => d.id, 'label' => d.timestamp.strftime("%H:%M, %Y-%m-%d")} }).to_json.html_safe %> 
                 }
         },
         

@@ -2,7 +2,7 @@ require 'survey_respondent'
 
 class FixEmails < ActiveRecord::Migration
   def self.up
-    respondents = SurveyRespondent.find(:all)
+    respondents = SurveyRespondent.all
     
     respondents.each do  |r|
       if r.person

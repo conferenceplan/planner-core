@@ -66,7 +66,7 @@ class Person < ActiveRecord::Base
             :source => :excludable,
             :source_type => 'Person' do
               def find_by_source(s)
-                find(:all, :conditions => ['source = ?', s])
+                where(['source = ?', s])
               end
             end
   
@@ -74,7 +74,7 @@ class Person < ActiveRecord::Base
             :source => :excludable,
             :source_type => 'TimeSlot' do
               def find_by_source(s)
-                find(:all, :conditions => ['source = ?', s])
+                where(['source = ?', s])
               end
             end
   
@@ -82,7 +82,7 @@ class Person < ActiveRecord::Base
             :source => :excludable,
             :source_type => "ProgrammeItem" do
               def find_by_source(s)
-                find(:all, :conditions => ['source = ?', s])
+                where(['source = ?', s])
               end
             end
   
@@ -484,7 +484,7 @@ class Person < ActiveRecord::Base
   def removePostalAddress(address)
      postal_addresses.delete(address) # remove it from the person
      # and then make sure that it is not used by another person
-     if (! addresses.find(:all, :conditions =>  ["addressable_id = ? and person_id != ?", address, @id] ) )
+     if (! addresses.where(["addressable_id = ? and person_id != ?", address, @id]) )
        address.destroy
      end
   end
@@ -492,7 +492,7 @@ class Person < ActiveRecord::Base
   def removeEmailAddress(address)
      email_addresses.delete(address) # remove it from the person
      # and then make sure that it is not used by another person
-     if (! addresses.find(:all, :conditions =>  ["addressable_id = ? and person_id != ?", address, @id] ) )
+     if (! addresses.where(["addressable_id = ? and person_id != ?", address, @id]) )
        address.destroy
      end
   end

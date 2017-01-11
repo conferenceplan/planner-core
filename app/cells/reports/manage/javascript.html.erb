@@ -84,7 +84,7 @@ ReportApp.ReportManagement = (function(Backbone){
             sort_by : { type : 'Select', title : '<%= t "report-selection-sort-by" %>', options : [{ val: 'time', label: 'Date/Time' }, { val: 'room', label: 'Room' }, { val: 'title', label: 'Title' }] },
             scheduled       : { type : 'Checkbox', title : '<%= t "report-selection-only-scheduled-items" %>'}, // Include scheduled panels only
             // description     : { type : 'Checkbox'}, // Include item descriptions
-            format_id       : { type : 'Select', title : '<%= t "report-selection-item-format" %>', title : '<%= t "report-selection-item-format" %>', options : <%= [{'val' => -1, 'label' => 'All'}].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            format_id       : { type : 'Select', title : '<%= t "report-selection-item-format" %>', title : '<%= t "report-selection-item-format" %>', options : <%= [{'val' => -1, 'label' => 'All'}].concat(Format.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
             fewer_than      : { type : 'Number', title : '<%= t "report-selection-with-fewer-than" %>'},
             more_than       : { type : 'Number', title : '<%= t "report-selection-with-more-than" %>'}
         },
@@ -102,7 +102,7 @@ ReportApp.ReportManagement = (function(Backbone){
             invisible   : { type : 'Checkbox', title : '<%= t "report-selection-include-invisible-participants" %>'},
             reserved    : { type : 'Checkbox', title : '<%= t "report-selection-include-reserved-participants" %>'},
             forprint    : { type : 'Checkbox', title : '<%= t "report-selection-only-items-for-print" %>'},
-            format_id       : { type : 'Select', title : '<%= t "report-selection-item-format" %>', title : '<%= t "report-selection-item-format" %>', options : <%= [{'val' => -1, 'label' => 'All'}].concat(Format.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
+            format_id       : { type : 'Select', title : '<%= t "report-selection-item-format" %>', title : '<%= t "report-selection-item-format" %>', options : <%= [{'val' => -1, 'label' => 'All'}].concat(Format.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
         },
         
         data : {
@@ -131,7 +131,7 @@ ReportApp.ReportManagement = (function(Backbone){
     var TagsByContextForm = Backbone.Form.extend({
         schema : {
             context : { type : 'Select', title : '<%= t "report-selection-for-tag-context" %>', 
-                options : <%= TagContext.all(:order => 'name').collect {|s| {'val' => s.name, 'label' => s.name} }.to_json.html_safe %> },
+                options : <%= TagContext.all.order('name').to_a.collect {|s| {'val' => s.name, 'label' => s.name} }.to_json.html_safe %> },
         },
         
         data : {

@@ -1,6 +1,6 @@
 class SiteConfigsController < PlannerController
   def index
-    site_config = SiteConfig.find :first
+    site_config = SiteConfig.first
     
     if site_config
       site_config.start_date  = Date.today if !site_config.start_date

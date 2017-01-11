@@ -3,7 +3,7 @@ class RolesController < PlannerController
     
   def list
     # Get all the roles in the database
-    @roles = Role.find :all
+    @roles = Role.all
   end
 
 end

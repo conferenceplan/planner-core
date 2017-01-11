@@ -6,7 +6,7 @@ module UISettingsService
 
   def self.getLanguages
 
-    setting = UserInterfaceSetting.first :conditions => {:key => 'languages'}
+    setting = UserInterfaceSetting.where({:key => 'languages'}).first
     if setting
       setting.value
     else

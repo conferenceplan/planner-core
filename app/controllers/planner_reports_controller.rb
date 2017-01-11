@@ -723,9 +723,7 @@ class PlannerReportsController < PlannerController
 
     TimeSlot.uncached do
       @times = PlannerReportsService.findProgramItemsByTimeAndRoom # TODO - need to fix
-      @rooms = Room.all :select => 'distinct rooms.name',
-                                 :order => 'venues.sort_order, rooms.sort_order', 
-                                 :include => :venue
+      @rooms = Room.all.includes(:venue).references(:venue).distinct('rooms.name').order('venues.sort_order, rooms.sort_order')
       
       respond_to do |format|
         format.xml {
@@ -896,9 +894,8 @@ class PlannerReportsController < PlannerController
   end
   
   def getContexts(className)
-    taggings = ActsAsTaggableOn::Tagging.find :all,
-                  :select => "DISTINCT(context)",
-                  :conditions => "taggable_type like '" + className + "'"
+    taggings = ActsAsTaggableOn::Tagging.where(["taggable_type like ?", className]).
+                  distinct(:context)
                   
     contexts = Array.new
 

@@ -4,24 +4,21 @@
 module MailReportsService
   
   def self.countItems(filters = nil, nameSearch = nil, person_id = nil, page_to = nil)
-    args = genArgsForSql(nameSearch, filters, person_id, page_to)
-    
-    MailHistory.count args
+    q = genQuery(MailHistory, nameSearch, filters, person_id, page_to)
+    q.count
   end
   
   def self.findItems(rows=15, page=1, index=nil, sort_order='asc', filters = nil, nameSearch = nil, person_id = nil)
-    args = genArgsForSql(nameSearch, filters, person_id)
+    q = genQuery(MailHistory, nameSearch, filters, person_id)
     
     offset = (page - 1) * rows.to_i
-    args.merge!(:offset => offset, :limit => rows)
-    
     if (index != nil && index != "")
-       args.merge!(:offset => offset, :limit => rows, :order => index + " " + sort_order)
+       order_part = index + " " + sort_order
     else
-       args.merge!(:offset => offset, :limit => rows, :order => "people.last_name, people.first_name, mailings.id")
+       order_part = "people.last_name, people.first_name, mailings.id"
     end
 
-    MailHistory.find :all, args
+    q.offset(offset).limit(rows).order(order_part)
   end
   
   ##########
@@ -48,7 +45,7 @@ module MailReportsService
   #
   def self.getMailHistory(conditions = {}, options = {} )
     per_page = nil
-    count = MailHistory.count :joins => [ :person , :mailing ], :conditions => conditions
+    count = MailHistory.where(conditions).joins([ :person , :mailing ]).count
 
     if options[:per_page]
       per_page = options[:per_page]
@@ -57,16 +54,17 @@ module MailReportsService
       offset = 0
     end
     
-    order = nil
+    order = 'people.last_name, people.first_name, mailings.id'
     if options[:sort_by]
       order = @@mapping[options[:sort_by]] + " " + options[:order]
     end
     
     conditions = buildClause options
 
-    MailHistory.all :joins => [ :person , :mailing ], :conditions => conditions,
-        :order => 'people.last_name, people.first_name, mailings.id',
-        :offset => offset, :limit => per_page, :order => order
+    MailHistory.where(conditions).joins([ :person , :mailing ]).
+                order(order).
+                offset(offset).
+                limit(per_page)
   end
 
   #
@@ -75,7 +73,7 @@ module MailReportsService
   def self.getNumberOfMailHistories(conditions = {}, options = {})
     conditions = self.buildClause options
     
-    MailHistory.count :joins => [ :person , :mailing ], :conditions => conditions
+    MailHistory.where(conditions).joins([ :person , :mailing ]).count
   end
   
   #
@@ -101,7 +99,7 @@ module MailReportsService
   
 protected
 
-  def self.genArgsForSql(nameSearch, filters, person_id = nil, page_to = nil)
+  def self.genQuery(obj, nameSearch, filters, person_id = nil, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['email_status_id','testrun', 'mailing_id'],
                   ['email_status_id','testrun', 'mailing_id'], ['people.last_name'])
@@ -120,14 +118,13 @@ protected
     personQuery = ' people.id = ? '
     clause = DataService.addClause( clause, personQuery, person_id) if person_id && ! person_id.empty?
 
-    args = { :conditions => clause }
     if nameSearch #&& ! nameSearch.empty?
-      args.merge!( :joins => 'JOIN people ON people.id = mail_histories.person_id LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id' )
+      join_part = 'JOIN people ON people.id = mail_histories.person_id LEFT JOIN pseudonyms ON pseudonyms.person_id = people.id'
     else
-      args.merge! :joins =>  [ :person, :mailing ]
+      join_part =  [ :person, :mailing ]
     end
 
-    args
+    obj.where(clause).joins(join_part)
   end
   
 end

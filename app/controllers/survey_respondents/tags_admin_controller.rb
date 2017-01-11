@@ -4,9 +4,9 @@
 class SurveyRespondents::TagsAdminController < PlannerController
   # The start page, we start with a hash of the tag contexts and their associated tags
   def index
-    taggings = ActsAsTaggableOn::Tagging.find :all,
-                  :select => "DISTINCT(context)",
-                  :conditions => "taggable_type like 'SurveyRespondent'"
+    taggings = ActsAsTaggableOn::Tagging.
+                  where("taggable_type like 'SurveyRespondent'").
+                  distinct(:context)
                   
     @tagContexts = Array.new
 
@@ -38,9 +38,8 @@ class SurveyRespondents::TagsAdminController < PlannerController
   end
   
   def fix
-    taggings = ActsAsTaggableOn::Tagging.find :all,
-                  :select => "DISTINCT(context)",
-                  :conditions => "taggable_type like 'SurveyRespondent'"
+    taggings = ActsAsTaggableOn::Tagging.where("taggable_type like 'SurveyRespondent'").
+                  distinct(:context)
                   
     tcs = Array.new
     # for each context get the set of tags (sorted), and add them to the collection for display on the page
@@ -61,7 +60,7 @@ class SurveyRespondents::TagsAdminController < PlannerController
     # end
 
     tcs.each do |context|
-      responses = SurveyResponse.all :include => :survey_question, :conditions => {:survey_questions => {:tags_label => context}}
+      responses = SurveyResponse.references(:survey_question).where({:survey_questions => {:tags_label => context}})
       responses.each do |response|
         tags = response.survey_respondent_detail.survey_respondent.tag_counts_on(context)
         new_tags = tags.collect {|tag| tag.name }
@@ -99,7 +98,7 @@ private
       end
     end
     
-    responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
+    responses = SurveyResponse.where(["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
     responses.each do |response|
       tags = response.survey_respondent_detail.survey_respondent.tag_counts_on(context)
       new_tags = tags.collect {|tag| tag.name }
@@ -135,7 +134,8 @@ private
       end
 
       # Make sure that it is moved to the corresponding question for the respondent    
-      responses = SurveyResponse.all :include => :survey_question, :conditions => {:survey_questions => {:tags_label => destination}, :survey_respondent_detail_id => respondent.survey_respondent_detail }
+      responses = SurveyResponse.references(:survey_question).
+                      where({:survey_questions => {:tags_label => destination}, :survey_respondent_detail_id => respondent.survey_respondent_detail })
       responses.each do |response|
         tags = response.survey_respondent_detail.survey_respondent.tag_counts_on(destination)
         new_tags = tags.collect {|tag| tag.name }
@@ -145,7 +145,7 @@ private
     end
     
     # delete it
-    responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
+    responses = SurveyResponse.where(["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
     responses.each do |response|
       str = response.response
       response.response = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}.compact.join(',')
@@ -173,7 +173,7 @@ private
       end
     end
     
-    responses = SurveyResponse.all( :conditions => ["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
+    responses = SurveyResponse.where(["response like ? and survey_question_id in (SELECT id FROM survey_questions where tags_label = ?)", '%'+ old_value +'%', context])
     responses.each do |response|
       str = response.response
       response.response = str.split(',').collect { |val| (val.strip.downcase == old_value.downcase) ? nil : (val.strip == ',' || val.strip == '') ? nil : val.strip}.compact.join(',')

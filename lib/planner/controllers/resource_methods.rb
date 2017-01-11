@@ -118,7 +118,8 @@ module Planner
           end
           
           def _collection
-            model_class.scoped
+            # TODO - RAILS4 check
+            model_class.all #.scoped
           end
           
           def model_name

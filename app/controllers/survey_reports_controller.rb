@@ -106,10 +106,11 @@ class SurveyReportsController < PlannerController
   #
   #  
   def missing_bio
-    @missing_bio = Person.all :joins => {:survey_respondent => {:survey_respondent_detail => :survey_responses}}, 
-                :include => :edited_bio,
-                :conditions => {:survey_responses => {:isbio => true}, :edited_bios => { :person_id => nil} },
-                :order => "people.last_name ASC"
+    @missing_bio = Person.
+                      references(:edited_bio).
+                      joins({:survey_respondent => {:survey_respondent_detail => :survey_responses}}).
+                      where({:survey_responses => {:isbio => true}, :edited_bios => { :person_id => nil} }).
+                      order("people.last_name ASC")
   end
 
 end

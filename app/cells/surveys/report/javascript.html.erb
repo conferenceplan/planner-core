@@ -12,7 +12,7 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         schema : {
             name            : { type : 'Text',      title : '<%= t "name" %>',  validators: ['required'], help: '<%= t "survey-query-name-hint" %>' },
             survey_id       : { type : 'Select',    title : '<%= t "survey" %>', help: '<%= t "survey-select-hint" %>',
-                                options : <%= [].concat(Survey.find(:all).collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
+                                options : <%= [].concat(Survey.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %>,
                                 validators: ['required']
                               },
             shared          : { type : 'Checkbox',  title : '<%= t "survey-shared" %>', help: '<%= t "survey-shared-hint" %>' },
@@ -305,8 +305,8 @@ SurveyReportApp.SurveyReport = (function(Backbone){
         init : function() {
             // showQueries();
             currentQuestions = new QuestionsCollection();
-            <% if Survey.find(:first) %>
-                setCurrentQuestionsBySurvey(<%= Survey.find(:first).id %>);
+            <% if Survey.first %>
+                setCurrentQuestionsBySurvey(<%= Survey.first.id %>);
             <% end %>
         },
         

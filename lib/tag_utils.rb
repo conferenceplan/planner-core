@@ -1,6 +1,6 @@
 module TagUtils
   # def getContexts
-    # taggings = ActsAsTaggableOn::Tagging.find :all,
+    # taggings = ActsAsTaggableOn::Tagging.all,
                   # :select => "DISTINCT(context)",
                   # :conditions => "taggable_type like 'SurveyRespondent'"
 #                   

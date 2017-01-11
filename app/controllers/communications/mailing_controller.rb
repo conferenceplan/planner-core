@@ -7,7 +7,7 @@ class Communications::MailingController < PlannerController
   end
   
   def listWithBlank
-    @mailings = Mailing.all :order => "mailings.mailing_number asc"
+    @mailings = Mailing.all.order("mailings.mailing_number asc")
     render :layout => 'plain'
   end
 
@@ -41,7 +41,7 @@ class Communications::MailingController < PlannerController
       PersonMailingAssignment.transaction do
         people.each do |pid|
           # find the mailing assignment
-          mailingAssignment = PersonMailingAssignment.first conditions: { person_id: pid, mailing_id: mailingId }
+          mailingAssignment = PersonMailingAssignment.where({ person_id: pid, mailing_id: mailingId }).first
           
           # and then delete it
           mailingAssignment.destroy

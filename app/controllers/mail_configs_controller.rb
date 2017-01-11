@@ -5,7 +5,7 @@ class MailConfigsController < PlannerController
   #
   def index
     # TODO - when we have multi-tenant base this on the current convention...
-    mail_config = MailConfig.find :first
+    mail_config = MailConfig.first
     
     render json: mail_config.to_json, :content_type => 'application/json'
   end

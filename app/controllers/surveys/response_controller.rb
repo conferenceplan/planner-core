@@ -59,24 +59,22 @@ class Surveys::ResponseController < ApplicationController
           if @respondent
             updatePerson(@respondent, params[:survey_respondent_detail]) 
           else
-            if params[:survey_respondent_detail]
-              # associate the survey with a person by creatng a respondent...
-              # - find the person (possible match)
-              # - create the respondent
-              candidate = find_or_create_person(params[:survey_respondent_detail]) # TODO - params[:survey_respondent_detail]
-               
-              # submitted_survey, :email_status_id, :person_id
-              if candidate
-                @respondent = nil # candidate.survey_respondent
-                if !@respondent
-                   @respondent = SurveyRespondent.create({
-                    person_id: candidate.id
-                  })
-                  @respondent.survey_respondent_detail = respondentDetails
-                  @respondent.save!
-                end
-              end
-            end
+             # associate the survey with a person by creatng a respondent...
+             # - find the person (possible match)
+             # - create the respondent
+             candidate = find_or_create_person(params[:survey_respondent_detail]) # TODO - params[:survey_respondent_detail]
+             
+             # submitted_survey, :email_status_id, :person_id
+             if candidate
+               @respondent = nil # candidate.survey_respondent
+               if !@respondent
+                 @respondent = SurveyRespondent.create({
+                   person_id: candidate.id
+                 })
+                 @respondent.survey_respondent_detail = respondentDetails
+                 @respondent.save!
+               end
+             end
           end
 
           # we may need to clear out reponses that have missing answers... i.e. go through the questions and delete the responses for ones that do not have answers
@@ -617,10 +615,7 @@ class Surveys::ResponseController < ApplicationController
       
       if address
         # find all questions in this survey that are of type address
-        results = SurveyQuestion.all(
-          :conditions => ['survey_groups.survey_id = ? AND question_type = ?', survey.id, 'address'],
-          :include => [:survey_group]
-        )
+        results = SurveyQuestion.references(:survey_group).where(['survey_groups.survey_id = ? AND question_type = ?', survey.id, 'address'])
         
         if results.respond_to?('each')
           results.each do |q|
@@ -717,7 +712,6 @@ class Surveys::ResponseController < ApplicationController
   def find_or_create_person(respondentParams)
       person = nil
 
-      # TODO
       people = Person.includes(:email_addresses).
                   where(
                     ["TRIM(last_name) = ? AND TRIM(first_name) like ? AND email_addresses.email = ?", 

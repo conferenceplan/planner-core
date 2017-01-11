@@ -40,7 +40,6 @@ class AvailableDatesController < PlannerController
 
   def index
     # TODO - to be checked
-    # availableDates = AvailableDate.find :all
     if (params[:person_id])
        person = Person.find(params[:person_id])
        @availableDate = person.available_date

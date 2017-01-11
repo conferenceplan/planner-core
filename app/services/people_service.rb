@@ -192,11 +192,21 @@ module PeopleService
 
     # TODO - should this be from the published items rather than the pre-published?
     # TODO - need to test that programme item assignments actually exist
-    Person.where(self.constraints()).all :conditions => conditions, 
-              :joins => { :programmeItemAssignments => {} },
-              :include => {:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} },
-              :order => "people.last_name"
-
+    if self.constraints()
+      Person.where(self.constraints()).
+                  references({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
+                  joins(:programmeItemAssignments).
+                  where(conditions).
+                  includes({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
+                  order("people.last_name")
+    else  
+      Person.
+                  references({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
+                  joins(:programmeItemAssignments).
+                  where(conditions).
+                  includes({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
+                  order("people.last_name")
+    end
   end
   
   #
@@ -286,18 +296,25 @@ module PeopleService
   #
   def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil,
                         scheduled=false, includeMailings=false, includeMailHistory=false, email = nil)
-    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings, includeMailHistory, email)
+    query = where_clause(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings, includeMailHistory, email)
     tagquery = DataService.genTagSql(context, tags)
 
-    includes = [:pseudonym, :email_addresses]
     # includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
-    args.merge! :include => includes
 
     if tagquery.empty?
-      Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).uniq.count args
+      Person.
+            includes([:pseudonym, :email_addresses, :person_con_state]).
+            where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+            where(query).
+            references([:pseudonym, :email_addresses, :person_con_state]).
+            uniq.count
     else
-      Person.tagged_with(*tagquery).uniq.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).uniq.count args
-      # eval %Q[Person#{tagquery}.where(#{self.constraints(includeMailings,includeMailHistory,mailing_id,onlySurveyRespondents,filters,extraClause)}).uniq.count( :all, ] + args.inspect + ")"
+      Person.tagged_with(*tagquery).uniq.
+            includes([:pseudonym, :email_addresses, :person_con_state]).
+            where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+            where(query).
+            references([:pseudonym, :email_addresses, :person_con_state]).
+            uniq.count
     end
   end
 
@@ -306,35 +323,49 @@ module PeopleService
   #
   def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil,
                         onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, op=nil, 
-                        scheduled=false, includeMailings=false, includeMailHistory=false, email = nil)
-    args = genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, nil, includeMailings, includeMailHistory, email)
+                        scheduled=false, includeMailings=false, includeMailHistory=false, email = nil, page_to = nil)
+# TODO - FIX NilClass       undefined local variable or method `page_to' for PeopleService:Module                 
+    query = where_clause(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings, includeMailHistory, email)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
     offset = 0 if offset < 0
-    args.merge!(:offset => offset, :limit => rows)
+
+    sort_order = ""
     if index
-      args.merge!(:order => index + " " + sort_order)
+      sort_order = index + " " + sort_order
     end
     
-    includes = [:pseudonym, :email_addresses]
-    # includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
-    args.merge! :include => includes
+    # includes = [:pseudonym, :email_addresses]
+    # # includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
+    # args.merge! :include => includes
     
     if tagquery.empty?
-      people = Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).includes(:pseudonym).uniq.all args
+      people = Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+                  includes([:pseudonym, :email_addresses, :person_con_state]).
+                  where(query).
+                  references([:pseudonym, :email_addresses, :person_con_state]).
+                  order(sort_order).
+                  offset(offset).
+                  limit(rows).
+                  uniq
     else
-      people = Person.tagged_with(*tagquery).uniq.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).includes(:pseudonym).uniq.all args
-      # people = eval %Q[Person#{tagquery}.uniq.where(#{self.constraints(includeMailings,includeMailHistory,mailing_id,onlySurveyRespondents,filters,extraClause)}).includes(:pseudonym).uniq.find :all, ] + args.inspect
+      people = Person.tagged_with(*tagquery).
+                  uniq.
+                  includes([:pseudonym, :email_addresses, :person_con_state]).
+                  where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+                  where(query).
+                  references([:pseudonym, :email_addresses, :person_con_state]).
+                  order(sort_order).
+                  offset(offset).
+                  limit(rows).
+                  uniq
     end
   end
   
   private
   
-  #
-  #
-  #
-  def self.genArgsForSql(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false, includeMailHistory=false, email=nil)
+  def self.where_clause(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false, includeMailHistory=false, email=nil)
     includeConState = false
     clause = DataService.createWhereClause(filters, 
           ['person_con_states.invitestatus_id', 'person_con_states.invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
@@ -381,7 +412,7 @@ module PeopleService
     mailingQuery +=  ' in (select person_id from person_mailing_assignments where mailing_id = ?)'
     clause = DataService.addClause( clause, mailingQuery, mailing_id) if mailing_id && ! mailing_id.empty?
     
-    clause = DataService.addClause( clause, 'people.last_name <= ?', page_to) if page_to
+    clause = DataService.addClause( clause, 'people.last_name <= ?', page_to) if page_to && !page_to.empty?
     
     # Then we want to filter for scehduled people
     # select distinct person_id from programme_item_assignments;
@@ -389,40 +420,25 @@ module PeopleService
 
     clause = DataService.addClause( clause, 'email_addresses.email like ?', '%' + email + '%') if email
 
-    # if the where clause contains pseudonyms. then we need to add the join
-    args = { :conditions => clause }
+    clause    
+  end
 
-    if args[:joins]
-      args[:joins] += conStateJoinString
-    else  
-      args.merge!( :joins => conStateJoinString )
-    end
+  def self.join_clause(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, includeMailings=false, includeMailHistory=false, email=nil)
+    join_str = conStateJoinString
 
     if includeMailings && clause && (clause[0].include? "mailing_id")
-      if args[:joins]
-        args[:joins] += ' LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
-      else  
-        args.merge!( :joins => 'LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id' )
-      end
+      join_str += ' LEFT JOIN person_mailing_assignments on people.id = person_mailing_assignments.person_id'
     end
 
     if includeMailHistory && clause && (clause[0].include? "mailing_id")
-      if args[:joins]
-        args[:joins] += ' LEFT JOIN mail_histories on people.id = mail_histories.person_id and mail_histories.testrun = 0'
-      else  
-        args.merge!( :joins => 'LEFT JOIN mail_histories on people.id = mail_histories.person_id and mail_histories.testrun = 0' )
-      end
+      join_str += ' LEFT JOIN mail_histories on people.id = mail_histories.person_id and mail_histories.testrun = 0'
     end
     
     if onlySurveyRespondents
-      if args[:joins]
-        args[:joins] += ' JOIN survey_respondents ON people.id = survey_respondents.person_id'
-      else  
-        args.merge!( :joins => 'JOIN survey_respondents ON people.id = survey_respondents.person_id' )
-      end
+      join_str += ' JOIN survey_respondents ON people.id = survey_respondents.person_id'
     end
     
-    args
+    join_str
   end
   
   def self.conStateJoinString
@@ -430,11 +446,11 @@ module PeopleService
   end
   
   def self.constraints(*args)
-    true
+    nil
   end
   
   def self.arel_constraints(*args)
-    true
+    nil
   end
   
 end
