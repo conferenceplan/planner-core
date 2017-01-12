@@ -1,10 +1,11 @@
 class PlannerMailer < ActionMailer::Base
   
+  # TODO
   def send_email(args, content)
     message = mail args
     message.content_type 'multipart/alternative'
 
-    addHTMLPart(message, content)
+    # addHTMLPart(message, content)
     addTextPart(message, content)
 
     message

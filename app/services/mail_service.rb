@@ -52,7 +52,7 @@ module MailService
           })
 
     begin
-      PlannerMailer.send_email({
+      PlannerMailer.send_email({ #
           from:     config.from,
           reply_to: config.reply_to,
           to:       email,
@@ -60,7 +60,9 @@ module MailService
           subject:  template.subject,
           title:    template.title,
           return_path: config.from,
-          skip_premailer: true
+          skip_premailer: true,
+          content_type: "text/html",
+          body: content
         }, content
       ).deliver
       transitionPersonInviteStateAfterEmail(person, toInviteState) if toInviteState
@@ -104,7 +106,9 @@ module MailService
             subject:  template.subject,
             title:    template.title,
             return_path: config.from,
-            skip_premailer: true
+            skip_premailer: true,
+            content_type: "text/html",
+            body: content
           }, content
         ).deliver
         saveMailHistory(person, nil, content, EmailStatus[:Sent], template.subject)
@@ -177,9 +181,11 @@ module MailService
               cc:       cc,
               subject:  subject,
               title:    template.title,
-              skip_premailer: true
+              skip_premailer: true,
+              content_type: "text/html",
+              body: content
             }, content
-          ).deliver
+          ).deliver_now
           saveMailHistory(person, mailing, content, EmailStatus[:Sent], subject)
           transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
         rescue Net::SMTPSyntaxError
