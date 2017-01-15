@@ -243,11 +243,11 @@ Rails.application.routes.draw do
     resources :people
   end
 
-  get 'pending_import_people/import_file', :controller => 'pending_import_people', :action => 'import_file'
+  post 'pending_import_people/import_file', :controller => 'pending_import_people', :action => 'import_file'
   get 'pending_import_people/get_possible_matches', :controller => 'pending_import_people', :action => 'get_possible_matches'
-  get 'pending_import_people/merge_all_pending', :controller => 'pending_import_people', :action => 'merge_all_pending'
-  get 'pending_import_people/merge_pending', :controller => 'pending_import_people', :action => 'merge_pending'
-  get 'pending_import_people/create_from_pending', :controller => 'pending_import_people', :action => 'create_from_pending'
+  post 'pending_import_people/merge_all_pending', :controller => 'pending_import_people', :action => 'merge_all_pending'
+  post 'pending_import_people/merge_pending', :controller => 'pending_import_people', :action => 'merge_pending'
+  post 'pending_import_people/create_from_pending', :controller => 'pending_import_people', :action => 'create_from_pending'
   resources :pending_import_people
 
   match 'program_planner/assignments', :controller => 'program_planner', :action => 'assignments', :via => 'get'
@@ -341,9 +341,9 @@ Rails.application.routes.draw do
   get 'tasks/update_exclusions', :controller => 'tasks/update_exclusions', :action => 'index'
 
   # Tools for exporting
-  get "tools/people_exporter/export", :controller => 'tools/people_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
-  get "tools/item_exporter/export", :controller => 'tools/item_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
-  get "tools/cloud_tools/sign", :controller => 'tools/cloud_tools', :action => 'sign' #, :defaults => { :format => 'json' }
+  post "tools/people_exporter/export", :controller => 'tools/people_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
+  post "tools/item_exporter/export", :controller => 'tools/item_exporter', :action => 'export', :defaults => { :format => 'xlsx' }
+  # get "tools/cloud_tools/sign", :controller => 'tools/cloud_tools', :action => 'sign' #, :defaults => { :format => 'json' }
 
   planner_resources 'category_names',         :defaults => { :format => 'json' }
   planner_resources 'theme_names',         :defaults => { :format => 'json' }

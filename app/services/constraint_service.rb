@@ -224,7 +224,7 @@ module ConstraintService
 
     query = query.where(self.arel_constraints()) if self.arel_constraints()
     
-    ActiveRecord::Base.connection.select_all(query.to_sql).uniq.collect{|a| a['id']}
+    ActiveRecord::Base.connection.select_all(query.to_sql).to_a.uniq.collect{|a| a['id']}
   end
 
   def self.getPeopleWithItemExclusions

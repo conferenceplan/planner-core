@@ -22,7 +22,7 @@ module ImportService
                 on(peoplesources[:person_id].eq(people[:id])).
               order(pending_import_people[:id])
 
-    people_ids = ActiveRecord::Base.connection.select_all(query.to_sql)
+    people_ids = ActiveRecord::Base.connection.select_all(query.to_sql).to_a
 
     query = pending_import_people.project(*attrs).
               where(pending_import_people[:id].eq(pending_id)).
@@ -33,7 +33,7 @@ module ImportService
                 on(people[:id].eq(peoplesources[:person_id])).
               order(pending_import_people[:id])
 
-    people_ids += ActiveRecord::Base.connection.select_all(query.to_sql)
+    people_ids += ActiveRecord::Base.connection.select_all(query.to_sql).to_a
 
     Person.where(id: people_ids.collect{|a| a["person_id"] })
   end
@@ -204,8 +204,11 @@ protected
                 on(people[:first_name].eq(pending_import_people[:first_name]).
                 and(people[:last_name].eq(pending_import_people[:last_name]))).
               join(peoplesources, Arel::Nodes::OuterJoin).
-                on(peoplesources[:person_id].eq(people[:id])).where(self.arel_constraints()).
-              group(pending_import_people[:id]).having(pending_import_people[:id].count.eq(1))
+                on(peoplesources[:person_id].eq(people[:id]))
+    
+    query = query.where(self.arel_constraints()) if self.arel_constraints()
+    
+    query = query.group(pending_import_people[:id]).having(pending_import_people[:id].count.eq(1))
 
     result = ActiveRecord::Base.connection.select_all(query.to_sql)
 
@@ -386,7 +389,7 @@ protected
   end
 
   def self.arel_constraints(*args)
-    true
+    nil
   end
   
 

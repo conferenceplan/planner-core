@@ -28,7 +28,9 @@ module PlannerReportsService
                   ).or(
                     word_counts_if_clause(programme_items[:short_precis]).gt(short_precis_size)
                   )
-                ).where(self.arel_constraints())
+                )
+                
+    query = query.where(self.arel_constraints()) if self.arel_constraints()
 
     ActiveRecord::Base.connection.select_all(query.to_sql)
   end
@@ -356,8 +358,9 @@ module PlannerReportsService
     query = tags_table.project(*attrs).
                   join(taggings).on(taggings[:tag_id].eq(tags_table[:id]).and(taggings[:taggable_type].eq('Person'))).
                   join(people).on(people[:id].eq(taggings[:taggable_id])).
-                  join(pseudonyms, Arel::Nodes::OuterJoin).on(pseudonyms[:person_id].eq(people[:id])).
-                  where(self.arel_constraints())
+                  join(pseudonyms, Arel::Nodes::OuterJoin).on(pseudonyms[:person_id].eq(people[:id]))
+
+    query = query.where(self.arel_constraints()) if self.arel_constraints()
 
     query = query.where(tags_table[:name].in(tags.split(',').collect{|t| t.strip })) if !tags.blank? # TODO - redo to use wildcard
     
@@ -375,9 +378,11 @@ module PlannerReportsService
     prog_items = Arel::Table.new(:programme_item_assignments)
 
     query = prog_items.project((prog_items[:person_id].count).as('people')).
-                where(prog_items[:role_id].in([PersonItemRole['Moderator'].id, PersonItemRole['Participant'].id])).
-                where(self.arel_constraints()).
-                group(prog_items[:programme_item_id])
+                where(prog_items[:role_id].in([PersonItemRole['Moderator'].id, PersonItemRole['Participant'].id]))
+
+    query = query.where(self.arel_constraints()) if where(self.arel_constraints())
+    
+    query = query.group(prog_items[:programme_item_id])
 
     ActiveRecord::Base.connection.select_all( "select max(people) as max_people from (" + query.to_sql + ") as p" )
   end

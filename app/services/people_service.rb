@@ -192,21 +192,12 @@ module PeopleService
 
     # TODO - should this be from the published items rather than the pre-published?
     # TODO - need to test that programme item assignments actually exist
-    if self.constraints()
-      Person.where(self.constraints()).
-                  references({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
-                  joins(:programmeItemAssignments).
-                  where(conditions).
-                  includes({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
-                  order("people.last_name")
-    else  
-      Person.
-                  references({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
-                  joins(:programmeItemAssignments).
-                  where(conditions).
-                  includes({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
-                  order("people.last_name")
-    end
+    Person.where(self.constraints()).
+                references({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
+                joins(:programmeItemAssignments).
+                where(conditions).
+                includes({:pseudonym => {}, :programmeItemAssignments => {:programmeItem => {}} }).
+                order("people.last_name")
   end
   
   #
@@ -255,22 +246,21 @@ module PeopleService
     
     # Get people for conference
     # i.e. if they have registrations or item assignments
+    state_join = stateTable[:person_id].eq(peopleTable[:id])
+    state_join = state_join.and(self.arel_constraints(PersonConState)) if self.arel_constraints(PersonConState)
+
+    reg_join = regTable[:person_id].eq(peopleTable[:id])
+    reg_join = reg_join.and(self.arel_constraints(RegistrationDetail)) if self.arel_constraints(RegistrationDetail)
+    
+    assignment_join = assignments[:person_id].eq(peopleTable[:id])
+    assignment_join = assignment_join.and(self.arel_constraints(ProgrammeItemAssignment)) if self.arel_constraints(ProgrammeItemAssignment)
+    
     join_query = peopleTable.join(stateTable, Arel::Nodes::OuterJoin).
-                    on(
-                      stateTable[:person_id].eq(peopleTable[:id]).and(
-                        self.arel_constraints(PersonConState)
-                      )
-                    ).join(regTable, Arel::Nodes::OuterJoin). # Look at the registration data
-                    on(
-                      regTable[:person_id].eq(peopleTable[:id]).and(
-                        self.arel_constraints(RegistrationDetail)
-                      )
-                    ).join(assignments, Arel::Nodes::OuterJoin). # Look at the item assignment data
-                    on(
-                      assignments[:person_id].eq(peopleTable[:id]).and(
-                        self.arel_constraints(ProgrammeItemAssignment)
-                      )
-                    ).
+                      on(state_join).
+                    join(regTable, Arel::Nodes::OuterJoin). # Look at the registration data
+                      on(reg_join).
+                    join(assignments, Arel::Nodes::OuterJoin). # Look at the item assignment data
+                      on(assignment_join).
                     join_sources
 
     query = stateTable[:invitestatus_id].eq(invitestatus) if invitestatus && invitestatus > 0
