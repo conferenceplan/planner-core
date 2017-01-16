@@ -380,7 +380,7 @@ module PlannerReportsService
     query = prog_items.project((prog_items[:person_id].count).as('people')).
                 where(prog_items[:role_id].in([PersonItemRole['Moderator'].id, PersonItemRole['Participant'].id]))
 
-    query = query.where(self.arel_constraints()) if where(self.arel_constraints())
+    query = query.where(self.arel_constraints()) if self.arel_constraints()
     
     query = query.group(prog_items[:programme_item_id])
 
@@ -526,7 +526,6 @@ module PlannerReportsService
         joins("left join room_item_assignments as parent_rooms ON parent_rooms.programme_item_id = parents.id").
         joins(:person).
         includes({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
-        # references({:person => [:pseudonym, {:programmeItems => :time_slot}]}).
         where(self.constraints()).
         where("programme_item_assignments.person_id is not null AND programme_item_assignments.role_id in (" + PersonItemRole['Moderator'].id.to_s + "," + PersonItemRole['Participant'].id.to_s + ")").
         group("programme_item_assignments.person_id , IF(room_item_assignments.day is not null, room_item_assignments.day, parent_rooms.day)").
