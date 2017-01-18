@@ -118,7 +118,9 @@ module SurveyService
   #
   def self.findSurveysForPerson(person_id)
     
-    Survey.includes(:survey_responses => {:survey_respondent_detail => {:survey_respondent => :person}} ).where("people.id" => person_id)
+    Survey.includes(:survey_responses => {:survey_respondent_detail => {:survey_respondent => :person}} ).
+            references(:survey_responses => {:survey_respondent_detail => {:survey_respondent => :person}} ).
+            where("people.id" => person_id)
     
   end
 

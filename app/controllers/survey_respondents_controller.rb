@@ -95,7 +95,7 @@ private
   def findRespondent(key, last_name)
     respondent = nil
     # use the join to lookup by the name of the person
-    candidate = SurveyRespondent.references(:person).
+    candidate = SurveyRespondent.includes(:person).references(:person).
                       where(["survey_respondents.key = ? AND people.last_name = ?", key, last_name]).first
     
     # since the join is a read only result set we need to get the actual survey_respondent to store the acceptance status in

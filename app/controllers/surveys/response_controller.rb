@@ -36,7 +36,7 @@ class Surveys::ResponseController < ApplicationController
             respondentDetails = @respondent.survey_respondent_detail
             respondentDetails.update_attributes(p)
             respondentDetails.save!
-            originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id) #.collect{|r| r.id}
+            originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id).to_a #.collect{|r| r.id}
           else
             # save the details and add to the respondent, create the respondent details and link to the responses
             if p
@@ -51,7 +51,7 @@ class Surveys::ResponseController < ApplicationController
               # and assign the details to the respondent
               @respondent.survey_respondent_detail = respondentDetails
               @respondent.save!
-              originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id)
+              originalResponses = @respondent.survey_respondent_detail.getResponses(@survey.id).to_a
             end
           end
           
@@ -59,20 +59,22 @@ class Surveys::ResponseController < ApplicationController
           if @respondent
             updatePerson(@respondent, params[:survey_respondent_detail]) 
           else
-             # associate the survey with a person by creatng a respondent...
-             # - find the person (possible match)
-             # - create the respondent
-             candidate = find_or_create_person(params[:survey_respondent_detail]) # TODO - params[:survey_respondent_detail]
-             
-             # submitted_survey, :email_status_id, :person_id
-             if candidate
-               @respondent = nil # candidate.survey_respondent
-               if !@respondent
-                 @respondent = SurveyRespondent.create({
-                   person_id: candidate.id
-                 })
-                 @respondent.survey_respondent_detail = respondentDetails
-                 @respondent.save!
+            if params[:survey_respondent_detail]
+               # associate the survey with a person by creatng a respondent...
+               # - find the person (possible match)
+               # - create the respondent
+               candidate = find_or_create_person(params[:survey_respondent_detail]) # TODO - params[:survey_respondent_detail]
+               
+               # submitted_survey, :email_status_id, :person_id
+               if candidate
+                 @respondent = nil # candidate.survey_respondent
+                 if !@respondent
+                   @respondent = SurveyRespondent.create({
+                     person_id: candidate.id
+                   })
+                   @respondent.survey_respondent_detail = respondentDetails
+                   @respondent.save!
+                 end
                end
              end
           end
@@ -113,7 +115,7 @@ class Surveys::ResponseController < ApplicationController
                   end
                 else
                   if res[1].empty?
-                    r = saveResponse(@respondent, @survey, res[0], '', respondentDetails)
+                    r = saveResponse(@respondent, @survey, res[0], '', respondentDetails) # TODO
                     originalResponses.delete( r ) if originalResponses
                   else
                     r = saveResponse(@respondent, @survey, res[0], res[1].to_s, respondentDetails)
@@ -187,7 +189,7 @@ class Surveys::ResponseController < ApplicationController
       @errors = Hash.new()
     end
   end
-
+  
   #
   # Use a page alias for the survey and use it to render the survey to the potential respondent
   #
@@ -212,6 +214,8 @@ class Surveys::ResponseController < ApplicationController
         if  !@preview && @survey.authenticate
           # check to see if the use is authenticated
           if !respondent_logged_in?
+# TODO - the new_survey_respondent_url is not taking into account the base url
+# came out as http://demo.myplan.co:3000/survey_respondents/new
             logger.error "NEED TO LOGIN " + new_survey_respondent_url
             store_page page
             store_location
@@ -615,7 +619,7 @@ class Surveys::ResponseController < ApplicationController
       
       if address
         # find all questions in this survey that are of type address
-        results = SurveyQuestion.references(:survey_group).where(['survey_groups.survey_id = ? AND question_type = ?', survey.id, 'address'])
+        results = SurveyQuestion.includes(:survey_group).references(:survey_group).where(['survey_groups.survey_id = ? AND question_type = ?', survey.id, 'address'])
         
         if results.respond_to?('each')
           results.each do |q|
@@ -712,7 +716,7 @@ class Surveys::ResponseController < ApplicationController
   def find_or_create_person(respondentParams)
       person = nil
 
-      people = Person.includes(:email_addresses).
+      people = Person.includes(:email_addresses).references(:email_addresses).includes(:email_addresses).
                   where(
                     ["TRIM(last_name) = ? AND TRIM(first_name) like ? AND email_addresses.email = ?", 
                       respondentParams['last_name'], respondentParams['first_name'], respondentParams['email']]

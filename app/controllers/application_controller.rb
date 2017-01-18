@@ -12,6 +12,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
   
   helper_method :current_user_session, :current_respondent
+
+  def optimize_routes_generation?
+    false
+  end
+
+
   
   def current_user
     user = nil
