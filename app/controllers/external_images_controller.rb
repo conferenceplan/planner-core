@@ -37,7 +37,8 @@ class ExternalImagesController < PlannerController
       image.use = params[:use]
       image.save!
     end
-    
+
+    image.reload
     render json: image.to_json, :content_type => 'application/json'
   end
 
@@ -54,6 +55,7 @@ class ExternalImagesController < PlannerController
       image.save!
     end
     
+    image.reload
     render json: image.to_json, :content_type => 'application/json'
   end
 
