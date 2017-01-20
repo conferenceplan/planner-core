@@ -112,17 +112,21 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
     RegistrationDetail = Backbone.Model.extend({
         schema : {
-            registration_number : { type : 'Text', title : '<%= t "reg-number" %>' },
+            registered : { type : 'Checkbox', title : '<%= t "registered" %>' , help: '<%= t "registered-hint" %>', help_placement: 'auto right',},
+            registration_number : { type : 'DependentText', title : '<%= t "reg-number" %>',
+                                dependsOn : 'registered', dependentValues : ['true'], help: '<%= t "registration-number-hint" %>',
+                              help_placement: 'auto right',},
             registration_type : { 
                 type : 'TypeAheadText', 
                 title : '<%= t "reg-type" %>',
+                help: '<%= t "registeration-type-hint" %>',
                 config : {
                     minLength: 0,
                     limit: 10,
                     source: registrationTypes
                 }
             },
-            registered : { type : 'Checkbox', title : '<%= t "registered" %>' },
+            
             can_share : { type : 'Checkbox', title : '<%= t "can-share-details" %>', help: '<%= t "can-share-details-hint" %>' }
         },
         urlRoot: "<%= baseUri + '/registrationDetails' %>"
