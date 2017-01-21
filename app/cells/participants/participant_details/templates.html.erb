@@ -192,14 +192,16 @@
             
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
             <dl class="dl-horizontal-small dt50">
-                <dt><%= t "reg-number" %></dt>
-                <dd>{{= registration_number ? registration_number : "&nbsp;" }}</dd>
-                <dt><%= t "reg-type" %></dt>
-                <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
                 <dt><%= t "registered" %></dt>
                 <dd>{{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-                <dt class="dt-breaking"><%= t "can-share-details" %> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-trigger="hover" title="<%= t "can-share-details" %>" data-content="<%= t 'can-share-details-hint' %>"></i></dt>
-                <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+                {{ if (registered) { }}
+                  <dt><%= t "reg-number" %></dt>
+                  <dd>{{= registration_number ? registration_number : "&nbsp;" }}</dd>
+                  <dt><%= t "reg-type" %></dt>
+                  <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
+                  <dt class="dt-breaking"><%= t "can-share-details" %> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-trigger="hover" title="<%= t "can-share-details" %>" data-content="<%= t 'can-share-details-hint' %>"></i></dt>
+                  <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+                {{ } }}
             </dl>       
         {{ } else { }}
             <%= t "no-registration-details" %>
