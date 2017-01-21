@@ -1765,4 +1765,12 @@ i.publication-count-num {
   height: auto;   
 }
 
+label.schedule-type-checkbox-label {
+  font-weight: normal;
+  margin-left: 4px;
+  margin-bottom: 0;
+}
+input[type='checkbox'][disabled] + label.schedule-type-checkbox-label {
+  color: #ccc;
+}
 
