@@ -171,17 +171,67 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     BioDetails = Backbone.Model.extend({
         schema : {
             survey_bio : { type : 'TextArea', title : '<%= t "bio-from-survey" %>', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
-            bio : { type : 'Html', title : '<%= t "bio" %>', editorAttrs: { rows : 6, cols : 60 } },
-            website : { type : 'Text', title : '<i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %>' },
-            facebook : { type : 'Text', title : '<i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %>' },
-            twitterinfo : { type : 'Text', title : '<i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %>' },
-            linkedin : { type : 'Text', title : '<i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-handle" %>' },
-            youtube : { type : 'Text', title : '<i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-handle" %>' },
-            twitch : { type : 'Text', title : '<i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-handle" %>' },
-            instagram : { type : 'Text', title : '<i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-handle" %>' },
-            flickr : { type : 'Text', title : '<i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-handle" %>' },
-            reddit : { type : 'Text', title : '<i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-handle" %>' },
-            othersocialmedia : { type : 'Text', title : '<%= t "other-social-media" %>' },
+            bio : { 
+              type : 'Html', 
+              title : '<%= t "bio" %>', 
+              editorAttrs: { rows : 6, cols : 60 },
+            },
+            facebook : { 
+              type : 'Text', title : '<i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %>',
+              validators : ['url'], 
+            },
+            twitterinfo : { 
+              type : 'Text', 
+              title : '<i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %>',
+              hint: "<%= (t 'twitter-hint').html_safe %>",
+              validators: [{
+                type: 'regexp',
+                regexp: /^@(\w){1,15}$/,
+                message: '<%= (t "please-use-twitter-form").html_safe %>',
+              }],
+            },
+            linkedin : { 
+              type : 'Text', 
+              title : '<i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-handle" %>',
+              validators : ['url'], 
+            },
+            youtube : { 
+              type : 'Text', 
+              title : '<i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-handle" %>',
+              validators : ['url'], 
+             },
+            twitch : { 
+              type : 'Text', 
+              title : '<i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-handle" %>',
+              validators : ['url'],
+             },
+            instagram : { 
+              type : 'Text', 
+              title : '<i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-handle" %>',
+              validators : ['url'], 
+            },
+            flickr : { 
+              type : 'Text', 
+              title : '<i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-handle" %>',
+              validators : ['url'], 
+            },
+            reddit : { 
+              type : 'Text', 
+              title : '<i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-handle" %>',
+              validators : ['url'], 
+            },
+            website : { 
+              type : 'Text', 
+              title : '<i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %>' ,
+              validators : ['url'], 
+              help: '<%= t "personal-web-site-url" %>',
+            },
+            othersocialmedia : { 
+              type : 'Text', 
+              title : '<%= t "other-social-media" %>',
+              validators : ['url'], 
+              help: '<%= t "other-social-media-url" %>',
+            },
         },
         urlRoot : "<%= baseUri + '/edited_bios' %>"
     });

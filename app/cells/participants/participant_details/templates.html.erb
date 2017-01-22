@@ -20,6 +20,7 @@
         <div class="tab-pane" id="tags-tab">
             <div id="tags-view"></div>
         </div>
+        
         <div class="tab-pane " id="surveys-tab">
             <%= render_cell "participants/survey_review", :tab_display %>            
         </div>
@@ -325,13 +326,11 @@
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
             <dl class="dl-airy">
                 <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text"> (<%= t "biography-edited" %>)</span>' : (survey_bio ? ' <span class="minor-text"> (<%= t "biography-filled-out-by-person-on-the-survey" %>)</span>' : '&nbsp;') }}</dt>
-                <dd>{{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}</dd>
-                <dt><i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %></dt>
-                <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
+                <dd>{{= bio ? bio : (survey_bio ? survey_bio : "<span class='minor-text'><%= t 'none-provided' %></span>") }}</dd>
                 <dt><i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %></dt>
                 <dd>{{= facebookid ? "<a href='http://www.facebook.com/" + facebookid + "' target='_blank'>" + facebookid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %></dt>
-                <dd>{{= twitterid ? "<a href='https://twitter.com/" + twitterid + "' target='_blank'>" + twitterid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
+                <dd>{{= twitterid ? "<a href='https://twitter.com/" + twitterid + "' target='_blank'>" + "@" + twitterid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-url" %></dt>
                 <dd>{{= linkedinid ? "<a href='http://www.linkedin.com/in/" + linkedinid + "' target='_blank'>" + linkedinid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-url" %></dt>
@@ -344,6 +343,8 @@
                 <dd>{{= flickrid ? "<a href='http://www.flickr.com/photos/" + flickrid + "' target='_blank'>" + flickrid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-url" %></dt>
                 <dd>{{= redditid ? "<a href='http://www.reddit.com/user/" + redditid + "' target='_blank'>" + redditid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
+                <dt><i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %></dt>
+                <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "other-social-media" %></dt>
                 <dd>{{= othersocialmedia ? "<a href='" + othersocialmedia + "' target='_blank'>" + othersocialmedia + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
             </dl>
