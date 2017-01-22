@@ -80,7 +80,7 @@ module Planner
     end
 
     def get_logo(conference = nil,scale = 2)
-      logo = ConferenceLogo.unscoped.find_by_conference_id conference.id if conference
+      logo = ConferenceLogo.unscoped.find_by(conference_id: conference.id) if conference
       
       if logo && logo.image
         logo.scale = scale

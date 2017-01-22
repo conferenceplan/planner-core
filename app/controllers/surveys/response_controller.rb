@@ -206,7 +206,7 @@ class Surveys::ResponseController < ApplicationController
       # if not a preview then check if authentication is needed, it it is then ask for authentication before rendering the form
       
       # find the survey for the page alias
-      @survey = Survey.find_by_alias(page)
+      @survey = Survey.find_by(alias: page)
       if @survey && (@survey.public || @preview)
         
         # return unless @survey.public || @preview

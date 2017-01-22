@@ -7,7 +7,7 @@ class PopulateSurveyHistory < ActiveRecord::Migration
   # For each survey filled make sure that the survey history table has an entry (where possible)
   def up
     # select the survey that is part survey
-    survey = Survey.find_by_alias('partsurvey')
+    survey = Survey.find_by (alias: 'partsurvey')
     
     if survey
       # select each survey respondent detail that has a respondent id

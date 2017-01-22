@@ -11,7 +11,7 @@ class SurveyRespondents::ReviewsController < PlannerController
     if survey_id != 0
       @survey = Survey.find(survey_id)
     else
-      @survey = Survey.find_by_alias('partsurvey') # a default cause the conventions used to use part survey....
+      @survey = Survey.find_by(alias: 'partsurvey') # a default cause the conventions used to use part survey....
     end
   
     # we need the survey and the survey respondent

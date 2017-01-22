@@ -30,7 +30,7 @@ class DatasourcesController < PlannerController
   end
   
   def destroy
-    peoplesources = Peoplesource.find_by_datasource_id(params[:id])
+    peoplesources = Peoplesource.find_by(datasource_id: params[:id])
     if (peoplesources.blank?)
       Datasource.find(params[:id]).destroy
       render status: :ok, text: {}.to_json

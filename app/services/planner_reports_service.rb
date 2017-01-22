@@ -99,7 +99,7 @@ module PlannerReportsService
     conditions = []
 
     if plus_setups
-      setup = Format.find_by_name('RESET') # TODO - check that this makes sense i.e. format of name RESET?
+      setup = Format.find_by(name: 'RESET') # TODO - check that this makes sense i.e. format of name RESET?
       cond_str = "(equipment_needs.programme_item_id is not NULL or formats.id = ?) and (time_slots.start is not NULL || time_slots_programme_items.start is not null)"
       conditions.push setup
     else
@@ -138,7 +138,7 @@ module PlannerReportsService
 
     if equip_only
       if plus_setups
-        setup = Format.find_by_name('RESET') # TODO - check that this makes sense i.e. format of name RESET?
+        setup = Format.find_by(name: 'RESET') # TODO - check that this makes sense i.e. format of name RESET?
         cond_str << " and (equipment_needs.programme_item_id is not NULL or formats.id = ?)"
         conditions.push setup
       else

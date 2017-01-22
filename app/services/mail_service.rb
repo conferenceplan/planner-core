@@ -307,7 +307,7 @@ module MailService
     newKeyValue = 0
     begin
       newKeyValue = ('%05d' % rand(1e5))
-      survey_respondent = SurveyRespondent.find_by_key(newKeyValue)
+      survey_respondent = SurveyRespondent.find_by(key: newKeyValue)
     end until survey_respondent == nil
 
     if (!person.survey_respondent)
