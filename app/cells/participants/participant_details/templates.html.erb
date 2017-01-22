@@ -277,14 +277,17 @@
 
 <script type="text/template" id="bio-image-template">
     <div>
-        <h5><%= t "published-picture" %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-published-picture' %></span></a></h5>
+        <h5>
+          <%= t "published-picture" %>
+          <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t 'tip-published-picture' %>" data-original-title="<%= t 'published-picture' %>"></i>
+        </h5>
         <% if ConfigService.hasCloudinaryConfig? %>
         <div>
             {{ if (typeof id != 'undefined') { }}
             <div align="left" class="voffset10">
-                {{ if (bio_picture &&  (typeof bio_picture.standard != 'undefined') ) { }}
-            	   <image src="{{= bio_picture.standard.url }}" class="img-responsive img-rounded" id="bio-picture-image"></image>
-            	{{ } }}
+                  {{ if (bio_picture &&  (typeof bio_picture.standard != 'undefined') ) { }}
+            	       <image src="{{= bio_picture.standard.url }}" class="img-responsive img-rounded" id="bio-picture-image"></image>
+            	    {{ } }}
             </div>
             <div class="caption voffset5">
                 <p><%= t "bio-image" %>
@@ -299,7 +302,7 @@
             {{ } else { }}
             <div class="caption">
                 <p>
-                    <%= t "bio-image" %>
+                    <span class="minor-text"><%= t "no-bio-image" %></span>
                     <button class="model-new-button btn btn-primary btn-xs pull-right">
                         <i class="glyphicon glyphicon-pencil"></i>
                     </button>
@@ -314,39 +317,45 @@
 </script>
 
 <script type="text/template" id="bio-view-template">
-        <h5><%= t 'biography-and-social-media-links' %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-published-bio' %></span></a></h5>
+        <h5>
+          <%= t 'biography-and-social-media-links' %>
+          <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t 'tip-published-bio' %>" data-original-title="<%= t 'biography-and-social-media-links' %>"></i>
+        </h5>
         {{ if (typeof id != 'undefined') { }}
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
             <dl class="dl-airy">
                 <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text"> (<%= t "biography-edited" %>)</span>' : (survey_bio ? ' <span class="minor-text"> (<%= t "biography-filled-out-by-person-on-the-survey" %>)</span>' : '&nbsp;') }}</dt>
                 <dd>{{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}</dd>
-                <dt><%= t "participant-url" %></dt>
+                <dt><i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %></dt>
                 <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-facebook-url" %></dt>
+                <dt><i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %></dt>
                 <dd>{{= facebookid ? "<a href='http://www.facebook.com/" + facebookid + "' target='_blank'>" + facebookid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-twitter-handle" %></dt>
+                <dt><i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %></dt>
                 <dd>{{= twitterid ? "<a href='https://twitter.com/" + twitterid + "' target='_blank'>" + twitterid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-linkedin-url" %></dt>
+                <dt><i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-url" %></dt>
                 <dd>{{= linkedinid ? "<a href='http://www.linkedin.com/in/" + linkedinid + "' target='_blank'>" + linkedinid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-youtube-url" %></dt>
+                <dt><i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-url" %></dt>
                 <dd>{{= youtubeid ? "<a href='http://www.youtube.com/user/" + youtubeid + "' target='_blank'>" + youtubeid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-twitch-url" %></dt>
+                <dt><i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-url" %></dt>
                 <dd>{{= twitchid ? "<a href='http://www.twitch.tv/" + twitchid + "' target='_blank'>" + twitchid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-instagram-url" %></dt>
+                <dt><i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-url" %></dt>
                 <dd>{{= instagramid ? "<a href='http://www.instagram.com/" + instagramid + "' target='_blank'>" + instagramid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-flickr-url" %></dt>
+                <dt><i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-url" %></dt>
                 <dd>{{= flickrid ? "<a href='http://www.flickr.com/photos/" + flickrid + "' target='_blank'>" + flickrid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-reddit-url" %></dt>
+                <dt><i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-url" %></dt>
                 <dd>{{= redditid ? "<a href='http://www.reddit.com/user/" + redditid + "' target='_blank'>" + redditid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "other-social-media" %></dt>
                 <dd>{{= othersocialmedia ? "<a href='" + othersocialmedia + "' target='_blank'>" + othersocialmedia + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
             </dl>
         {{ } else { }}
             <button class="model-new-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
-            <dl class="dl-airy">
-                <dt><%= t "bio" %></dt>
-                <dd>{{= survey_bio ? survey_bio : "&nbsp;" }}</dd>
-            </dl>
+            <p><span class="minor-text"><%= t "no-public-profile" %></span></p>
+            {{ if (survey_bio) { }}
+              <dl class="dl-airy">
+                  <dt><%= t "bio-from-survey" %></dt>
+                  <dd>{{= survey_bio ? survey_bio : "&nbsp;" }}</dd>
+              </dl>
+            {{ } }}
         {{ }; }}
 
 </script>
