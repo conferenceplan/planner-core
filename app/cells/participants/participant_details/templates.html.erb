@@ -263,7 +263,7 @@
                     {{ } else if (acceptance_status_name == 'Declined')  { }}
                     <dd><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span> <%= t "person-acceptance-declined" %></span></dd>
                     {{ } else if ((acceptance_status_name == 'Unknown') || (acceptance_status_name == 'Probable'))  { }}
-                    <dd><span class="label label-warning"> <%= t "person-acceptance-unknown" %></span></dd>                    
+                    <dd><span class="label label-default"> <%= t "person-acceptance-unknown" %></span></dd>                    
                     {{ } else { }}
                     <dd>{{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</dd>
                 {{ } }}    
