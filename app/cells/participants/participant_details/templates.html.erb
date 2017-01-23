@@ -190,26 +190,35 @@
     <div class="col-md-4" id="registration-view-details">  
         <h5><%= t "registration"%> <i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "registration"%>" data-toggle="popover" data-trigger="hover" data-placement="top"  data-content="<%= t "registration-help" %>"></i></h5>  
         {{ if (typeof id != 'undefined') { }}
-            
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
             <dl class="dl-horizontal-small dt50">
                 <dt><%= t "registered" %></dt>
-                <dd>{{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+                <dd>
+                  {{ if (registered) { }}
+                      <span class="label label-success"><i class="fa fa-check" aria-hidden="true"></i> <%= t "yes" %></span>
+                    {{ } else { }}
+                      <span class="label label-default"><i class="fa fa-times" aria-hidden="true"></i> <%= t "no" %></span>
+                  {{ } }}
+                </dd>
                 {{ if (registered) { }}
                   <dt><%= t "reg-number" %></dt>
-                  <dd>{{= registration_number ? registration_number : "&nbsp;" }}</dd>
+                  <dd>{{= registration_number ? registration_number : "<span class='minor-text'>(<%= t 'unknown' %>)</span>" }}</dd>
                   <dt><%= t "reg-type" %></dt>
-                  <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
+                  <dd>{{= registration_type ? registration_type : "<span class='minor-text'>(<%= t 'unknown' %>)</span>" }}</dd>
                   <dt class="dt-breaking"><%= t "can-share-details" %> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-trigger="hover" title="<%= t "can-share-details" %>" data-content="<%= t 'can-share-details-hint' %>"></i></dt>
                   <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
                 {{ } }}
             </dl>       
         {{ } else { }}
-            <%= t "no-registration-details" %>
             <button class="model-new-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
-            
+            <dl class="dl-horizontal-small dt50">
+              <dt><%= t "registered" %></dt>
+              <dd>
+                <span class="minor-text">(<%= t "unknown" %>)</span>
+              </dd>
+            </dl>
         {{ }; }}
     </div>
 </script>
