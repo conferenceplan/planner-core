@@ -183,11 +183,11 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             twitterinfo : { 
               type : 'Text', 
               title : '<i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %>',
-              hint: "<%= (t 'twitter-hint').html_safe %>",
+              hint: '<%= (j t('twitter-hint')).html_safe %>',
               validators: [{
                 type: 'regexp',
                 regexp: /^@(\w){1,15}$/,
-                message: '<%= (t "please-use-twitter-form").html_safe %>',
+                message: '<%= (j t "please-use-twitter-form").html_safe %>',
               }],
             },
             linkedin : { 
@@ -224,13 +224,13 @@ ParticipantApp.PeopleManagement = (function(Backbone){
               type : 'Text', 
               title : '<i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %>' ,
               validators : ['url'], 
-              help: '<%= t "personal-web-site-url" %>',
+              help: '<%= j t "personal-web-site-url" %>',
             },
             othersocialmedia : { 
               type : 'Text', 
               title : '<%= t "other-social-media" %>',
               validators : ['url'], 
-              help: '<%= t "other-social-media-url" %>',
+              help: '<%= j t "other-social-media-url" %>',
             },
         },
         urlRoot : "<%= baseUri + '/edited_bios' %>"
