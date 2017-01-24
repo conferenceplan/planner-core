@@ -2,7 +2,7 @@
 #
 #
 class Publication < ActiveRecord::Base
-  attr_accessible :lock_version, :published_id, :published_type, :original_id, :original_type, :user_id, :publication_date
+  attr_accessible :lock_version, :published_id, :published_type, :original_id, :original_type, :user_id, :publication_date, :published, :original
   
   audited :allow_mass_assignment => true
 
