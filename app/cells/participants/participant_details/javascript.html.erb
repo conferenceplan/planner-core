@@ -386,6 +386,30 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         },
     });
 
+
+
+    //////// Section for dealing with the share person profile modal
+
+    ShareModalContents = Marionette.ItemView.extend({
+        template : "#share-profile-modal-template",
+        className : "share-profile-content",
+        onRender : function() {
+
+            this.$("[data-toggle='tooltip']").tooltip();
+
+            // Copy-to-clipboard functionality
+            var clipboard = new Clipboard('.share-profile-content #copy-url-btn');
+            clipboard.on('success', function(e) {
+                var $elem = $(e.trigger);
+                $elem.tooltip("show");
+                setTimeout(function() {$elem.tooltip("hide")}, 750);
+                e.clearSelection();
+            });
+        },
+    });
+
+    ////////// end share person schedule section
+
     var tabLists = [];
     var tabContent = {};
     var filters = null;
@@ -550,6 +574,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         publishedInfoLayout = new PublishedInfoLayout();
         personTabLayout.published_info.show(publishedInfoLayout);
 
+        publishedInfoLayout.$("#share-profile-btn").attr("href", ("#share_profile/" + id)); // set the selected id for the share profile modal
+
         var bio_details = instantiate_area(id, BioDetails, "<%= baseUri + '/participants/' %>" + id + "/edited_bios.json");
         bio_details.deferred.done(function() {
             TabUtils.createTabContent({
@@ -581,6 +607,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
             });
         });
+
 
         TabUtils.createTabListContent({
             collectionType : ProgramItemCollection,
@@ -811,6 +838,51 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             $('#participant-tabs').tabdrop({
                 text : "..."
             });
+
+            var Router = Backbone.Router.extend({
+                routes : {
+                    "share_profile/:id" : "shareProfile",
+                },
+                shareProfile : function(id) {
+                    var self = this;
+                    $.ajax({
+                        url : "<%= baseUri %>/participants/" + id + ".json",
+                        async : false,
+                        success : function(response) {
+                            var contents = new ShareModalContents({
+                                model : new Backbone.Model({
+                                    url : '<%= site_url + "/participants/" %>' + id,
+                                    mailto : ("mailto:" + (response.email_address ? response.email_address : "") + "?subject=<%= t('profile-email-button-subject') %>" + "&body=<%= t('profile-email-button-body', url: (site_url + "/participants/")) %>" + id),
+                                    email_target : "_blank",
+                                })
+                            });
+
+                            var modal = new AppUtils.InfoModal({
+                                title : "<%= j t('share-profile-for').html_safe %> " + response.full_publication_name,
+                                content : contents.render().$el,
+                                postRenderFn : function(){
+                                    this.$(".confirm-btn").removeClass("btn-primary").addClass("btn-default").html("<%= t('close') %>");
+                                }
+                            });
+                            modal.render();
+                            self.navigate("#");
+                        },
+                        error : function(response) {
+                            // console.log(response);
+                            AppUtils.setMessage({
+                              text : response.responseText,
+                              style : 'error',
+                              renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                              fade : true,
+                              fadeTimeout : 10000
+                            });
+                            self.navigate("#");
+                        }
+                    });
+                },
+            });
+
+            new Router();
         },
 
         InviteDetails : InviteDetails,
