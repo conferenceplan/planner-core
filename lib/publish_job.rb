@@ -92,7 +92,7 @@ class PublishJob
     assignments.each do |assignment|
       a = PublishedProgrammeItemAssignment.find assignment.id
       a.person_name = assignment.person.getFullPublicationName
-      a.touch
+      a.touch if !a.new_record?
       a.save
     end
   end
@@ -218,7 +218,7 @@ class PublishJob
         # and once fixed we need to 'touch' all the items
         copyTags(srcItem, newItem)
         
-        newItem.touch #update_attribute(:updated_at,Time.now)
+        newItem.touch if !newItem.new_record? #update_attribute(:updated_at,Time.now)
         newItem.save
         
         updateImages(srcItem, newItem)
@@ -372,7 +372,7 @@ class PublishJob
         pubRoom.name = srcRoom.name
         pubRoom.sort_order = srcRoom.sort_order
 
-        pubRoom.touch
+        pubRoom.touch if !pubRoom.new_record?
         pubRoom.save
         nbrProcessed += 1
       end
@@ -390,7 +390,7 @@ class PublishJob
         pubVenue.name = srcVenue.name
         pubVenue.sort_order = srcVenue.sort_order
 
-        pubVenue.touch
+        pubVenue.touch if !pubVenue.new_record?
         pubVenue.save
         nbrProcessed += 1
       end

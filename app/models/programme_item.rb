@@ -90,7 +90,7 @@ class ProgrammeItem < ActiveRecord::Base
 
     # We may not want to delete since the item may be moved to another role ....
     if del_candidates
-      self.touch
+      self.touch if !self.new_record?
       self.save
     end
     del_candidates.each do |c|
