@@ -852,7 +852,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                             var contents = new ShareModalContents({
                                 model : new Backbone.Model({
                                     url : '<%= site_url + "/participants/" %>' + id,
-                                    mailto : ("mailto:" + (response.email_address ? response.email_address : "") + "?subject=<%= t('profile-email-button-subject') %>" + "&body=<%= t('profile-email-button-body', url: (site_url + "/participants/")) %>" + id),
+                                    mailto : ("mailto:" + (response.email_address ? response.email_address : "") + '?subject=<%= t("profile-email-button-subject") %>' + '&body=<%= t("profile-email-button-body", url: (site_url + "/participants/")) %>' + id),
                                     email_target : "_blank",
                                 })
                             });
