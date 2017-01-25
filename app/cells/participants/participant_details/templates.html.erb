@@ -16,7 +16,8 @@
         <div class="tab-pane" id="contacts-tab">
             <div id="contacts-view"></div>
         </div>
-        <div class="tab-pane" id="published-info-tab"><div id="published-info-view"></div></div>
+        <div class="tab-pane" id="published-info-tab">
+          <div id="published-info-view"></div></div>
         <div class="tab-pane" id="tags-tab">
             <div id="tags-view"></div>
         </div>
@@ -279,12 +280,16 @@
 </script>
 
 <script type="text/template" id="published-info-layout-template">
-    <section style="overflow: hidden;">
-        <a href="#" id="share-profile-btn" class="btn btn-primary btn-sm pull-right"><i class="fa fa-share-alt"></i> <%= t('share-this') %></a>
+    <section>
+        <h3 class="h3-underlined"><%= t 'public-profile' %>
+          <a href="#" id="share-profile-btn" class="btn btn-primary btn-sm pull-right"><i class="fa fa-share-alt"></i> <%= t('share-this-public-profile') %></a>
+        </h3>
     </section>
     <section>
-        <div id="picture-region-div" class="col-md-3"></div>
-        <div id="bio-region-div" class="col-md-9"></div>
+        <div class="row">
+          <div id="picture-region-div" class="col-md-3"></div>
+          <div id="bio-region-div" class="col-md-9"></div>
+        </div>
     </section>
 </script>
 
