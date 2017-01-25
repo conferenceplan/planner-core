@@ -598,7 +598,7 @@ input[type="checkbox"] {
     vertical-align: middle;
 }
 .row .gr-color-choice button:before {
-    // content:url('/assets/ui-colorpicker.png');
+    // content:url('ui-colorpicker.png');
     position: absolute;
 }
 .gr-subrow {
@@ -715,7 +715,7 @@ input[type="checkbox"] {
     margin-top: 10px;
     margin-bottom: 10px;
     padding-left: 35px;
-    background-image: url('/assets/icons/report-icon.png');
+    background-image: url('icons/report-icon.png');
     background-size: 20px 20px;
     background-repeat: no-repeat;
     background-position: 0px center; 
@@ -1657,7 +1657,7 @@ div.understated-drag-person-hint p {
     height:     100%;
     width:      100%;
     background: rgba( 255, 255, 255, .8 ) 
-                url('/assets/ajax-loader.gif') 
+                url('ajax-loader.gif') 
                 50% 50% 
                 no-repeat;
 }
