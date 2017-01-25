@@ -69,10 +69,10 @@ body:lang(fr) .dl-horizontal dd {
 
 /* Styles for the header logo */
 body:lang(en) #event-planner-logo-link-container {
-   background: url('/assets/grenadine-event-planner-en.png') 0 0 no-repeat;
+   background: url('grenadine-event-planner-en.png') 0 0 no-repeat;
 }
 body:lang(fr) #event-planner-logo-link-container {
-   background: url('/assets/grenadine-event-planner-fr.png') 0 0 no-repeat;
+   background: url('grenadine-event-planner-fr.png') 0 0 no-repeat;
 }
 #event-planner-logo-link-container {
   height: 51px;
@@ -84,12 +84,12 @@ screen and (-webkit-min-device-pixel-ratio: 1.5),
 screen and (-moz-min-device-pixel-ratio: 1.5),
 screen and (min-device-pixel-ratio: 1.5) {
   body:lang(fr) #event-planner-logo-link-container {
-    background: url('/assets/grenadine-event-planner-fr-102.png') 0 0 no-repeat;
+    background: url('grenadine-event-planner-fr-102.png') 0 0 no-repeat;
     background-size: 100%;
     
         }
     body:lang(en) #event-planner-logo-link-container {
-        background: url('/assets/grenadine-event-planner-en-102.png') 0 0 no-repeat;
+        background: url('grenadine-event-planner-en-102.png') 0 0 no-repeat;
         background-size: 100%;
         
         }
