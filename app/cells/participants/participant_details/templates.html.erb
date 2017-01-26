@@ -125,11 +125,9 @@
                 </div>
             </div>
             <div class="col-sm-8 col-sm-offset-4" style="margin-top: -15px; padding-left: 10px; margin-bottom: 15px;">
-                <div id="short-version-selection-div">
-                    <input type="checkbox" id="show-pseudonym-versions-checkbox" onclick="showRegistrationsDiv(this);" tabindex="-1"> <%= t 'show-pseudonym-versions' %></input>
-                </div>
+                <span data-editors="has_pseudonym"><%= t 'show-pseudonym-versions' %>
             </div>
-            <div class="form-group" id="short-version-div" style="display: none;">
+            <div class="form-group" id="short-version-div">
                 <label class="col-sm-4 control-label">
                     <%= t "publication-name" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "publication-name" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "publication-name-help" %>'></i>
                 </label>

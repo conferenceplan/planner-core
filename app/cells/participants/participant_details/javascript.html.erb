@@ -1,14 +1,5 @@
 <script type="text/javascript">
 
-function showRegistrationsDiv(el) {
-    target = jQuery(el).closest(".form-horizontal").find('#short-version-div');
-    if (target.is(":visible")) {
-        target.hide();
-    } else {
-        target.show();
-    }
-};
-
 ParticipantApp = new Backbone.Marionette.Application();
 
 ParticipantApp.PeopleManagement = (function(Backbone){
@@ -152,10 +143,25 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             first_name : { type : 'Text', title : '<%= t "first-name" %>', editorAttrs : { placeholder : '<%= t "first-name" %>' } },
             last_name : { type : 'Text', title : '<%= t "last-name" %>', editorAttrs : { placeholder : '<%= t "last-name" %>' }, validators: ['required'] },
             suffix : { type : 'Text', title : '<%= t "suffix" %>', editorAttrs : { placeholder : '<%= t "suffix" %>' } },
-            'pseudonym.prefix' : { type : 'Text', title : '<%= t "prefix" %>', editorAttrs : { placeholder : '<%= t "prefix" %>' } },
-            'pseudonym.first_name' : { type : 'Text', title : '<%= t "pub-first-name" %>', editorAttrs : { placeholder : '<%= t "pub-first-name" %>' } },
-            'pseudonym.last_name' : { type : 'Text', title : '<%= t "pub-last-name" %>', editorAttrs : { placeholder : '<%= t "pub-last-name" %>' } },
-            'pseudonym.suffix' : { type : 'Text', title : '<%= t "pub-suffix" %>', editorAttrs : { placeholder : '<%= t "suffix" %>' } },
+            has_pseudonym : {
+                type: 'Checkbox'
+            },
+            'pseudonym.prefix' : { type : 'DependentText', 
+                                    title : '<%= t "prefix" %>', 
+                                    dependsOn : 'has_pseudonym', dependentValues : ['true'], 
+                                    editorAttrs : { placeholder : '<%= t "prefix" %>' } },
+            'pseudonym.first_name' : { type : 'DependentText', 
+                                        title : '<%= t "pub-first-name" %>', 
+                                        dependsOn : 'has_pseudonym', dependentValues : ['true'], 
+                                        editorAttrs : { placeholder : '<%= t "pub-first-name" %>' } },
+            'pseudonym.last_name' : { type : 'DependentText', 
+                                        title : '<%= t "pub-last-name" %>', 
+                                        dependsOn : 'has_pseudonym', dependentValues : ['true'], 
+                                        editorAttrs : { placeholder : '<%= t "pub-last-name" %>' } },
+            'pseudonym.suffix' : { type : 'DependentText', 
+                                        title : '<%= t "pub-suffix" %>', 
+                                        dependsOn : 'has_pseudonym', dependentValues : ['true'], 
+                                        editorAttrs : { placeholder : '<%= t "suffix" %>' } },
             'company' : { type : 'Text', title : '<%= t "company" %>', editorAttrs : { placeholder : '<%= t "company" %>' } },
             'job_title' : { type : 'Text', title : '<%= t "job-title" %>', editorAttrs : { placeholder : '<%= t "job-title" %>' } },
             'comments' : { type : 'TextArea', title : '<%= t "comments" %>', editorAttrs : { placeholder : '<%= t "comments-placeholder" %>' } },

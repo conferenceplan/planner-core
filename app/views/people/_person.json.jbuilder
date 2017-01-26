@@ -4,6 +4,7 @@
     json.first_name                 person.first_name 
     json.last_name                  person.last_name
     json.suffix                     person.suffix
+    json.has_pseudonym              (person.pseudonym ? true : false)
     if person.pseudonym
         json.pseudonym do
             json.prefix             person.pseudonym.prefix if person.pseudonym.prefix
