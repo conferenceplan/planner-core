@@ -195,7 +195,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
               hint: '<%= (j t('twitter-hint')).html_safe %>',
               validators: [{
                 type: 'regexp',
-                regexp: /^@(\w){1,15}$/,
+                regexp: /(^@)?(\w){1,15}$/,
                 message: '<%= (j t "please-use-twitter-form").html_safe %>',
               }],
             },
