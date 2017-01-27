@@ -66,6 +66,7 @@ module PlannerCore
         grenadine/ckeditor-edit.css
         jquery.js
         iframeResizer.contentWindow.js
+        images/*.png
       )
     end
 
