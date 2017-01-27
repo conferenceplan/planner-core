@@ -7,7 +7,7 @@ class RepairRoomSetups < ActiveRecord::Migration
     Room.reset_column_information
 
     Room.all.each do |room|
-      roomSetup = RoomSetup.find_by_room_id room.id
+      roomSetup = RoomSetup.find_by room_id: room.id
       room.setup_id = roomSetup.id
       room.save
     end

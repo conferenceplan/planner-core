@@ -83,7 +83,7 @@ class RoomSetupsController < PlannerController
   #
   def destroy
     room_setup = RoomSetup.find(params[:id])
-    room = Room.find_by_setup_id(room_setup.id)
+    room = Room.find_by(setup_id: room_setup.id)
     if room.nil? # if it is not the default
       room_setup.destroy
       render status: :ok, text: {}.to_json

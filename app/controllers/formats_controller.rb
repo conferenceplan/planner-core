@@ -39,6 +39,7 @@ class FormatsController < PlannerController
   def destroy
     format = Format.find params[:id]
     format.delete
+    render status: :ok, text: {}.to_json
   end
 
 end

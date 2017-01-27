@@ -78,7 +78,7 @@ class PeopleController < PlannerController
         end
         
         @person = Person.new(params[:person])
-        datasourcetmp = Datasource.find_by_name("Application") # TODO - verify, we need to make sure we have the data-source Application
+        datasourcetmp = Datasource.find_by(name: "Application") # TODO - verify, we need to make sure we have the data-source Application
         @person.datasource = datasourcetmp
         @person.save!
         @person.person_con_state.save!
@@ -212,8 +212,8 @@ class PeopleController < PlannerController
   
   ############
   def exportbiolist
-    accepted = AcceptanceStatus.find_by_name("Accepted")
-    invitestatus = InviteStatus.find_by_name("Invited")
+    accepted = AcceptanceStatus.find_by(name: "Accepted")
+    invitestatus = InviteStatus.find_by(name: "Invited")
     
     @people = findAllPeopleByInviteAndAcceptance(invitestatus.id, accepted.id)
     

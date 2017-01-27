@@ -16,10 +16,12 @@
         <div class="tab-pane" id="contacts-tab">
             <div id="contacts-view"></div>
         </div>
-        <div class="tab-pane" id="published-info-tab"><div id="published-info-view"></div></div>
+        <div class="tab-pane" id="published-info-tab">
+          <div id="published-info-view"></div></div>
         <div class="tab-pane" id="tags-tab">
             <div id="tags-view"></div>
         </div>
+        
         <div class="tab-pane " id="surveys-tab">
             <%= render_cell "participants/survey_review", :tab_display %>            
         </div>
@@ -123,11 +125,9 @@
                 </div>
             </div>
             <div class="col-sm-8 col-sm-offset-4" style="margin-top: -15px; padding-left: 10px; margin-bottom: 15px;">
-                <div id="short-version-selection-div">
-                    <input type="checkbox" id="show-pseudonym-versions-checkbox" onclick="showRegistrationsDiv(this);" tabindex="-1"> <%= t 'show-pseudonym-versions' %></input>
-                </div>
+                <span data-editors="has_pseudonym"><%= t 'show-pseudonym-versions' %>
             </div>
-            <div class="form-group" id="short-version-div" style="display: none;">
+            <div class="form-group" id="short-version-div">
                 <label class="col-sm-4 control-label">
                     <%= t "publication-name" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "publication-name" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "publication-name-help" %>'></i>
                 </label>
@@ -189,24 +189,35 @@
     <div class="col-md-4" id="registration-view-details">  
         <h5><%= t "registration"%> <i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "registration"%>" data-toggle="popover" data-trigger="hover" data-placement="top"  data-content="<%= t "registration-help" %>"></i></h5>  
         {{ if (typeof id != 'undefined') { }}
-            
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
             <dl class="dl-horizontal-small dt50">
-                <dt><%= t "reg-number" %></dt>
-                <dd>{{= registration_number ? registration_number : "&nbsp;" }}</dd>
-                <dt><%= t "reg-type" %></dt>
-                <dd>{{= registration_type ? registration_type : "&nbsp;" }}</dd>
                 <dt><%= t "registered" %></dt>
-                <dd>{{= registered ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-                <dt class="dt-breaking"><%= t "can-share-details" %> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-trigger="hover" title="<%= t "can-share-details" %>" data-content="<%= t 'can-share-details-hint' %>"></i></dt>
-                <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+                <dd>
+                  {{ if (registered) { }}
+                      <span class="label label-success"><i class="fa fa-check" aria-hidden="true"></i> <%= t "yes" %></span>
+                    {{ } else { }}
+                      <span class="label label-default"><i class="fa fa-times" aria-hidden="true"></i> <%= t "no" %></span>
+                  {{ } }}
+                </dd>
+                {{ if (registered) { }}
+                  <dt><%= t "reg-number" %></dt>
+                  <dd>{{= registration_number ? registration_number : "<span class='minor-text'>(<%= t 'unknown' %>)</span>" }}</dd>
+                  <dt><%= t "reg-type" %></dt>
+                  <dd>{{= registration_type ? registration_type : "<span class='minor-text'>(<%= t 'unknown' %>)</span>" }}</dd>
+                  <dt class="dt-breaking"><%= t "can-share-details" %> <i class="glyphicon glyphicon-info-sign bpopover" data-toggle="popover" data-trigger="hover" title="<%= t "can-share-details" %>" data-content="<%= t 'can-share-details-hint' %>"></i></dt>
+                  <dd>{{= can_share ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+                {{ } }}
             </dl>       
         {{ } else { }}
-            <%= t "no-registration-details" %>
             <button class="model-new-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
-            
+            <dl class="dl-horizontal-small dt50">
+              <dt><%= t "registered" %></dt>
+              <dd>
+                <span class="minor-text">(<%= t "unknown" %>)</span>
+              </dd>
+            </dl>
         {{ }; }}
     </div>
 </script>
@@ -251,7 +262,7 @@
                     {{ } else if (acceptance_status_name == 'Declined')  { }}
                     <dd><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span> <%= t "person-acceptance-declined" %></span></dd>
                     {{ } else if ((acceptance_status_name == 'Unknown') || (acceptance_status_name == 'Probable'))  { }}
-                    <dd><span class="label label-warning"> <%= t "person-acceptance-unknown" %></span></dd>                    
+                    <dd><span class="label label-default"> <%= t "person-acceptance-unknown" %></span></dd>                    
                     {{ } else { }}
                     <dd>{{= acceptance_status_name ? acceptance_status_name : "&nbsp;"}}</dd>
                 {{ } }}    
@@ -268,21 +279,31 @@
 
 <script type="text/template" id="published-info-layout-template">
     <section>
-        <div id="picture-region-div" class="col-md-3"></div>
-        <div id="bio-region-div" class="col-md-9"></div>
+        <h3 class="h3-underlined"><%= t 'public-profile' %>
+          <a href="#" id="share-profile-btn" class="btn btn-primary btn-sm pull-right"><i class="fa fa-share-alt"></i> <%= t('share-this-public-profile') %></a>
+        </h3>
+    </section>
+    <section>
+        <div class="row">
+          <div id="picture-region-div" class="col-md-3"></div>
+          <div id="bio-region-div" class="col-md-9"></div>
+        </div>
     </section>
 </script>
 
 <script type="text/template" id="bio-image-template">
     <div>
-        <h5><%= t "published-picture" %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-published-picture' %></span></a></h5>
+        <h5>
+          <%= t "published-picture" %>
+          <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t 'tip-published-picture' %>" data-original-title="<%= t 'published-picture' %>"></i>
+        </h5>
         <% if ConfigService.hasCloudinaryConfig? %>
         <div>
             {{ if (typeof id != 'undefined') { }}
             <div align="left" class="voffset10">
-                {{ if (bio_picture &&  (typeof bio_picture.standard != 'undefined') ) { }}
-            	   <image src="{{= bio_picture.standard.url }}" class="img-responsive img-rounded" id="bio-picture-image"></image>
-            	{{ } }}
+                  {{ if (bio_picture &&  (typeof bio_picture.standard != 'undefined') ) { }}
+            	       <image src="{{= bio_picture.standard.url }}" class="img-responsive img-rounded" id="bio-picture-image"></image>
+            	    {{ } }}
             </div>
             <div class="caption voffset5">
                 <p><%= t "bio-image" %>
@@ -297,7 +318,7 @@
             {{ } else { }}
             <div class="caption">
                 <p>
-                    <%= t "bio-image" %>
+                    <span class="minor-text"><%= t "no-bio-image" %></span>
                     <button class="model-new-button btn btn-primary btn-xs pull-right">
                         <i class="glyphicon glyphicon-pencil"></i>
                     </button>
@@ -312,39 +333,45 @@
 </script>
 
 <script type="text/template" id="bio-view-template">
-        <h5><%= t 'biography' %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'tip-published-bio' %></span></a></h5>
+        <h5>
+          <%= t 'biography-and-social-media-links' %>
+          <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t 'tip-published-bio' %>" data-original-title="<%= t 'biography-and-social-media-links' %>"></i>
+        </h5>
         {{ if (typeof id != 'undefined') { }}
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
             <dl class="dl-airy">
                 <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text"> (<%= t "biography-edited" %>)</span>' : (survey_bio ? ' <span class="minor-text"> (<%= t "biography-filled-out-by-person-on-the-survey" %>)</span>' : '&nbsp;') }}</dt>
-                <dd>{{= bio ? bio : (survey_bio ? survey_bio : "&nbsp;") }}</dd>
-                <dt><%= t "participant-url" %></dt>
-                <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-facebook-url" %></dt>
+                <dd>{{= bio ? bio : (survey_bio ? survey_bio : "<span class='minor-text'><%= t 'none-provided' %></span>") }}</dd>
+                <dt><i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %></dt>
                 <dd>{{= facebookid ? "<a href='http://www.facebook.com/" + facebookid + "' target='_blank'>" + facebookid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-twitter-handle" %></dt>
-                <dd>{{= twitterid ? "<a href='https://twitter.com/" + twitterid + "' target='_blank'>" + twitterid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-linkedin-url" %></dt>
+                <dt><i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %></dt>
+                <dd>{{= twitterid ? "<a href='https://twitter.com/" + twitterid + "' target='_blank'>" + "@" + twitterid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
+                <dt><i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-url" %></dt>
                 <dd>{{= linkedinid ? "<a href='http://www.linkedin.com/in/" + linkedinid + "' target='_blank'>" + linkedinid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-youtube-url" %></dt>
+                <dt><i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-url" %></dt>
                 <dd>{{= youtubeid ? "<a href='http://www.youtube.com/user/" + youtubeid + "' target='_blank'>" + youtubeid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-twitch-url" %></dt>
+                <dt><i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-url" %></dt>
                 <dd>{{= twitchid ? "<a href='http://www.twitch.tv/" + twitchid + "' target='_blank'>" + twitchid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-instagram-url" %></dt>
+                <dt><i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-url" %></dt>
                 <dd>{{= instagramid ? "<a href='http://www.instagram.com/" + instagramid + "' target='_blank'>" + instagramid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-flickr-url" %></dt>
+                <dt><i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-url" %></dt>
                 <dd>{{= flickrid ? "<a href='http://www.flickr.com/photos/" + flickrid + "' target='_blank'>" + flickrid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "participant-reddit-url" %></dt>
+                <dt><i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-url" %></dt>
                 <dd>{{= redditid ? "<a href='http://www.reddit.com/user/" + redditid + "' target='_blank'>" + redditid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
+                <dt><i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %></dt>
+                <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
                 <dt><%= t "other-social-media" %></dt>
                 <dd>{{= othersocialmedia ? "<a href='" + othersocialmedia + "' target='_blank'>" + othersocialmedia + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
             </dl>
         {{ } else { }}
             <button class="model-new-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
-            <dl class="dl-airy">
-                <dt><%= t "bio" %></dt>
-                <dd>{{= survey_bio ? survey_bio : "&nbsp;" }}</dd>
-            </dl>
+            <p><span class="minor-text"><%= t "no-public-profile" %></span></p>
+            {{ if (survey_bio) { }}
+              <dl class="dl-airy">
+                  <dt><%= t "bio-from-survey" %></dt>
+                  <dd>{{= survey_bio ? survey_bio : "&nbsp;" }}</dd>
+              </dl>
+            {{ } }}
         {{ }; }}
 
 </script>
@@ -571,6 +598,19 @@
 
 <script type="text/template" id="participant-filters-template">
     <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="glyphicon glyphicon-remove"></i></span>
+</script>
+
+<script type="text/template" id="share-profile-modal-template">
+    <p><%= t 'share-profile-url-intro' %>:</p>
+    <div class="input-group boffset30">
+        <input id="url-input-field" readonly type="text" name="url" value="{{= url }}" class="form-control boffset10 text-cursor">
+        <div class="input-group-btn">
+            <a id="go-to-schedule-btn" href="{{= url }}" target="person-schedule" class="btn btn-default" data-toggle="tooltip" data-trigger="hover" title="<%= strip_tags t('go-to-schedule') %>"><i class="fa fa-external-link"></i> <%= t('open') %></a>
+            <span id="copy-url-btn" class="btn btn-default" data-clipboard-target="#url-input-field" data-toggle="tooltip" data-trigger="manual" title= "<%= t('copied') %>" data-placement="top auto"><i class="fa fa-clipboard"></i> <%= t('copy') %></span>
+            <a id="email-schedule-btn" href="{{= mailto }}" target="{{= email_target }}" class="btn btn-primary"><i class="fa fa-envelope-o"></i> <%= t('email-this-persons-schedule') %></a>
+        </div>
+    </div>
+    <div id="form-container"></div> 
 </script>
 
 

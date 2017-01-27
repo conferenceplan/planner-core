@@ -125,7 +125,7 @@ class ProgrammeItemsController < PlannerController
           @programmeItem.save!
 
           if @programmeItem.parent
-            @programmeItem.parent.touch
+            @programmeItem.parent.touch if !@programmeItem.parent.new_record?
             @programmeItem.parent.save
           end
         end
@@ -153,7 +153,7 @@ class ProgrammeItemsController < PlannerController
         @programmeItem = ProgrammeItem.find(params[:id])
 
         if @programmeItem.parent
-          @programmeItem.parent.touch
+          @programmeItem.parent.touch if !@programmeItem.parent.new_record?
           @programmeItem.parent.save
         end
 
@@ -181,7 +181,7 @@ class ProgrammeItemsController < PlannerController
           @programmeItem.save!
 
           if @programmeItem.parent
-            @programmeItem.parent.touch
+            @programmeItem.parent.touch if !@programmeItem.parent.new_record?
             @programmeItem.parent.save
           end
         end

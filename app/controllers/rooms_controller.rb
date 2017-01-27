@@ -111,7 +111,7 @@ class RoomsController < PlannerController
         @room.save!
 
         # TODO - set a default setup type???
-        # type = SetupType.find_by_name(SetupType::THEATRE)
+        # type = SetupType.find_by(name: SetupType::THEATRE)
         # roomSetup = RoomSetup.new(:room_id => @room.id, :setup_type_id => type.id)
         # roomSetup.save
         # @room.setup_id = roomSetup.id

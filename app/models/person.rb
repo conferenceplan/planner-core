@@ -103,7 +103,7 @@ class Person < ActiveRecord::Base
   
   belongs_to  :dep_invitation_category, :foreign_key => 'invitation_category_id', :class_name => "InvitationCategory" # TODO - SCOPE
   
-  has_one      :person_con_state
+  has_one      :person_con_state, dependent: :destroy
   
   # ----------------------------------------------------------------------------------------------
   def acceptance_status_id=(arg)

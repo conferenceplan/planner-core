@@ -48,7 +48,7 @@ class SetupTypesController < ApplicationController
   def destroy
     candidate = SetupType.find(params[:id])
     
-    test = RoomSetup.find_by_setup_type_id(candidate.id)
+    test = RoomSetup.find_by(setup_type_id: candidate.id)
     if test.nil?
       candidate.destroy
       render status: :ok, text: {}.to_json

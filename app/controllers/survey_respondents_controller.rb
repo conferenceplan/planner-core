@@ -11,7 +11,7 @@ class SurveyRespondentsController < ApplicationController
     @survey_respondent = SurveyRespondent.new
     @page_title = "Questionnaire Start"
     page = get_stored_page
-    @survey = Survey.find_by_alias(page)
+    @survey = Survey.find_by(alias: page)
     config = MailConfig.first
     if config.info
       @ourEmail = config.info
@@ -33,7 +33,7 @@ class SurveyRespondentsController < ApplicationController
 
     # We need to get the survey that is to be filled in, if we do not have page then we can get if back
     page = get_stored_page
-    @survey = Survey.find_by_alias(page)
+    @survey = Survey.find_by(alias: page)
     
     if @survey_respondent
       
@@ -41,7 +41,7 @@ class SurveyRespondentsController < ApplicationController
       # Redirect the person to the survey
       if @survey_respondent.save
         if params[:cancel]
-          @survey = Survey.find_by_alias("partsurvey") if !@survey
+          @survey = Survey.find_by(alias: "partsurvey") if !@survey
           if (@survey.decline_status && @survey_respondent.person) # TODO hanle case of no surevy selected?????
             @survey_respondent.person.acceptance_status = @survey.decline_status
             @survey_respondent.person.save!

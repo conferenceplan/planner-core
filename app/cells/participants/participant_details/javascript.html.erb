@@ -1,14 +1,5 @@
 <script type="text/javascript">
 
-function showRegistrationsDiv(el) {
-    target = jQuery(el).closest(".form-horizontal").find('#short-version-div');
-    if (target.is(":visible")) {
-        target.hide();
-    } else {
-        target.show();
-    }
-};
-
 ParticipantApp = new Backbone.Marionette.Application();
 
 ParticipantApp.PeopleManagement = (function(Backbone){
@@ -112,17 +103,25 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
     RegistrationDetail = Backbone.Model.extend({
         schema : {
-            registration_number : { type : 'Text', title : '<%= t "reg-number" %>' },
+            registered : { type : 'Checkbox', title : '<%= t "registered" %>' , help: '<%= t "registered-hint" %>', help_placement: 'auto right',},
+            registration_number : { 
+                type : 'DependentText', title : '<%= t "reg-number" %>',
+                dependsOn : 'registered', dependentValues : ['true'], 
+                help: '<%= t "registration-number-hint" %>',
+                help_placement: 'auto right',
+            },
             registration_type : { 
-                type : 'TypeAheadText', 
+                type : 'DependentTypeAheadText',
+                dependsOn : 'registered', dependentValues : ['true'], 
                 title : '<%= t "reg-type" %>',
+                help: '<%= t "registeration-type-hint" %>',
                 config : {
                     minLength: 0,
                     limit: 10,
                     source: registrationTypes
                 }
             },
-            registered : { type : 'Checkbox', title : '<%= t "registered" %>' },
+            
             can_share : { type : 'Checkbox', title : '<%= t "can-share-details" %>', help: '<%= t "can-share-details-hint" %>' }
         },
         urlRoot: "<%= baseUri + '/registrationDetails' %>"
@@ -144,17 +143,35 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             first_name : { type : 'Text', title : '<%= t "first-name" %>', editorAttrs : { placeholder : '<%= t "first-name" %>' } },
             last_name : { type : 'Text', title : '<%= t "last-name" %>', editorAttrs : { placeholder : '<%= t "last-name" %>' }, validators: ['required'] },
             suffix : { type : 'Text', title : '<%= t "suffix" %>', editorAttrs : { placeholder : '<%= t "suffix" %>' } },
-            'pseudonym.prefix' : { type : 'Text', title : '<%= t "prefix" %>', editorAttrs : { placeholder : '<%= t "prefix" %>' } },
-            'pseudonym.first_name' : { type : 'Text', title : '<%= t "pub-first-name" %>', editorAttrs : { placeholder : '<%= t "pub-first-name" %>' } },
-            'pseudonym.last_name' : { type : 'Text', title : '<%= t "pub-last-name" %>', editorAttrs : { placeholder : '<%= t "pub-last-name" %>' } },
-            'pseudonym.suffix' : { type : 'Text', title : '<%= t "pub-suffix" %>', editorAttrs : { placeholder : '<%= t "suffix" %>' } },
+            has_pseudonym : {
+                type: 'Checkbox'
+            },
+            'pseudonym.prefix' : { type : 'DependentText', 
+                                    title : '<%= t "prefix" %>', 
+                                    dependsOn : 'has_pseudonym', dependentValues : ['true'], 
+                                    editorAttrs : { placeholder : '<%= t "prefix" %>' } },
+            'pseudonym.first_name' : { type : 'DependentText', 
+                                        title : '<%= t "pub-first-name" %>', 
+                                        dependsOn : 'has_pseudonym', dependentValues : ['true'], 
+                                        editorAttrs : { placeholder : '<%= t "pub-first-name" %>' } },
+            'pseudonym.last_name' : { type : 'DependentText', 
+                                        title : '<%= t "pub-last-name" %>', 
+                                        dependsOn : 'has_pseudonym', dependentValues : ['true'], 
+                                        editorAttrs : { placeholder : '<%= t "pub-last-name" %>' } },
+            'pseudonym.suffix' : { type : 'DependentText', 
+                                        title : '<%= t "pub-suffix" %>', 
+                                        dependsOn : 'has_pseudonym', dependentValues : ['true'], 
+                                        editorAttrs : { placeholder : '<%= t "suffix" %>' } },
             'company' : { type : 'Text', title : '<%= t "company" %>', editorAttrs : { placeholder : '<%= t "company" %>' } },
             'job_title' : { type : 'Text', title : '<%= t "job-title" %>', editorAttrs : { placeholder : '<%= t "job-title" %>' } },
             'comments' : { type : 'TextArea', title : '<%= t "comments" %>', editorAttrs : { placeholder : '<%= t "comments-placeholder" %>' } },
             invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= InviteStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
             acceptance_status_id : { type : 'Select', title : '<%= t "acceptance-status" %>', options : <%= AcceptanceStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-
+            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
+        },
+        defaults: {
+            invitestatus_id : <%= InviteStatus['Not Set'].id %>,
+            acceptance_status_id : <%= AcceptanceStatus['Unknown'].id %>
         },
         urlRoot : "<%= baseUri + '/participants' %>"
     });
@@ -163,17 +180,67 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     BioDetails = Backbone.Model.extend({
         schema : {
             survey_bio : { type : 'TextArea', title : '<%= t "bio-from-survey" %>', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
-            bio : { type : 'Html', title : '<%= t "bio" %>', editorAttrs: { rows : 6, cols : 60 } },
-            facebook : { type : 'Text', title : '<%= t "participant-facebook-url" %>' },
-            othersocialmedia : { type : 'Text', title : '<%= t "other-social-media" %>' },
-            twitterinfo : { type : 'Text', title : '<%= t "participant-twitter-handle" %>' },
-            linkedin : { type : 'Text', title : '<%= t "participant-linkedin-handle" %>' },
-            youtube : { type : 'Text', title : '<%= t "participant-youtube-handle" %>' },
-            twitch : { type : 'Text', title : '<%= t "participant-twitch-handle" %>' },
-            instagram : { type : 'Text', title : '<%= t "participant-instagram-handle" %>' },
-            flickr : { type : 'Text', title : '<%= t "participant-flickr-handle" %>' },
-            reddit : { type : 'Text', title : '<%= t "participant-reddit-handle" %>' },
-            website : { type : 'Text', title : '<%= t "participant-url" %>' }
+            bio : { 
+              type : 'Html', 
+              title : '<%= t "bio" %>', 
+              editorAttrs: { rows : 6, cols : 60 },
+            },
+            facebook : { 
+              type : 'Text', title : '<i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %>',
+              validators : ['url'], 
+            },
+            twitterinfo : { 
+              type : 'Text', 
+              title : '<i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %>',
+              hint: '<%= (j t('twitter-hint')).html_safe %>',
+              validators: [{
+                type: 'regexp',
+                regexp: /(^@)?(\w){1,15}$/,
+                message: '<%= (j t "please-use-twitter-form").html_safe %>',
+              }],
+            },
+            linkedin : { 
+              type : 'Text', 
+              title : '<i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-handle" %>',
+              validators : ['url'], 
+            },
+            youtube : { 
+              type : 'Text', 
+              title : '<i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-handle" %>',
+              validators : ['url'], 
+             },
+            twitch : { 
+              type : 'Text', 
+              title : '<i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-handle" %>',
+              validators : ['url'],
+             },
+            instagram : { 
+              type : 'Text', 
+              title : '<i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-handle" %>',
+              validators : ['url'], 
+            },
+            flickr : { 
+              type : 'Text', 
+              title : '<i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-handle" %>',
+              validators : ['url'], 
+            },
+            reddit : { 
+              type : 'Text', 
+              title : '<i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-handle" %>',
+              validators : ['url'], 
+            },
+            website : { 
+              type : 'Text', 
+              title : '<i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %>' ,
+              validators : ['url'], 
+              help: '<%= j t "personal-web-site-url" %>',
+            },
+            othersocialmedia : { 
+              type : 'Text', 
+              title : '<%= t "other-social-media" %>',
+              validators : ['url'], 
+              help: '<%= j t "other-social-media-url" %>',
+            },
         },
         urlRoot : "<%= baseUri + '/edited_bios' %>"
     });
@@ -324,6 +391,30 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             bio     : "#bio-region-div"
         },
     });
+
+
+
+    //////// Section for dealing with the share person profile modal
+
+    ShareModalContents = Marionette.ItemView.extend({
+        template : "#share-profile-modal-template",
+        className : "share-profile-content",
+        onRender : function() {
+
+            this.$("[data-toggle='tooltip']").tooltip();
+
+            // Copy-to-clipboard functionality
+            var clipboard = new Clipboard('.share-profile-content #copy-url-btn');
+            clipboard.on('success', function(e) {
+                var $elem = $(e.trigger);
+                $elem.tooltip("show");
+                setTimeout(function() {$elem.tooltip("hide")}, 750);
+                e.clearSelection();
+            });
+        },
+    });
+
+    ////////// end share person schedule section
 
     var tabLists = [];
     var tabContent = {};
@@ -489,6 +580,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         publishedInfoLayout = new PublishedInfoLayout();
         personTabLayout.published_info.show(publishedInfoLayout);
 
+        publishedInfoLayout.$("#share-profile-btn").attr("href", ("#share_profile/" + id)); // set the selected id for the share profile modal
+
         var bio_details = instantiate_area(id, BioDetails, "<%= baseUri + '/participants/' %>" + id + "/edited_bios.json");
         bio_details.deferred.done(function() {
             TabUtils.createTabContent({
@@ -520,6 +613,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
             });
         });
+
 
         TabUtils.createTabListContent({
             collectionType : ProgramItemCollection,
@@ -750,6 +844,51 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             $('#participant-tabs').tabdrop({
                 text : "..."
             });
+
+            var Router = Backbone.Router.extend({
+                routes : {
+                    "share_profile/:id" : "shareProfile",
+                },
+                shareProfile : function(id) {
+                    var self = this;
+                    $.ajax({
+                        url : "<%= baseUri %>/participants/" + id + ".json",
+                        async : false,
+                        success : function(response) {
+                            var contents = new ShareModalContents({
+                                model : new Backbone.Model({
+                                    url : '<%= site_url + "/participants/" %>' + id,
+                                    mailto : ("mailto:" + (response.email_address ? response.email_address : "") + '?subject=<%= t("profile-email-button-subject") %>' + '&body=<%= t("profile-email-button-body", url: (site_url + "/participants/")) %>' + id),
+                                    email_target : "_blank",
+                                })
+                            });
+
+                            var modal = new AppUtils.InfoModal({
+                                title : "<%= j t('share-profile-for').html_safe %> " + response.full_publication_name,
+                                content : contents.render().$el,
+                                postRenderFn : function(){
+                                    this.$(".confirm-btn").removeClass("btn-primary").addClass("btn-default").html("<%= t('close') %>");
+                                }
+                            });
+                            modal.render();
+                            self.navigate("#");
+                        },
+                        error : function(response) {
+                            // console.log(response);
+                            AppUtils.setMessage({
+                              text : response.responseText,
+                              style : 'error',
+                              renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                              fade : true,
+                              fadeTimeout : 10000
+                            });
+                            self.navigate("#");
+                        }
+                    });
+                },
+            });
+
+            new Router();
         },
 
         InviteDetails : InviteDetails,

@@ -37,6 +37,11 @@ _.extend(Form.Editor.prototype, {
                 }
             }
         }
+        if ($.inArray('not-zero', expectedValues) > -1) {
+            if (value != 0) {
+                show = true;
+            }
+        }
 
         if ( ((value != null) && ($.inArray(value.toString(), expectedValues) > -1)) || show) {
             element.first().removeClass('hidden-form-group');

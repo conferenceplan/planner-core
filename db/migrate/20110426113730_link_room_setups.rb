@@ -29,7 +29,7 @@ class LinkRoomSetups < ActiveRecord::Migration
     add_column :rooms, :capacity, :integer
     Room.reset_column_information
 
-    theatre = SetupType.find_by_name(SetupType::THEATRE)
+    theatre = SetupType.find_by(name: SetupType::THEATRE)
     
     RoomSetup.find_all_by_setup_type_id(theatre.id).each do |rs|
       r = Room.find(rs.room_id)

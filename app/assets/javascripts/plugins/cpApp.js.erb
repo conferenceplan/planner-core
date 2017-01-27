@@ -317,6 +317,10 @@ var AppUtils = (function(){
             if (!(typeof this.options.cancelBtnText == 'undefined') && this.options.cancelBtnText.length > 0) {
               this.$('.cancel-btn').html(this.options.cancelBtnText);
             };
+
+            if (typeof this.options.postRenderFn == 'function') {
+              this.options.postRenderFn.call(this);
+            };
             
             this.delegateEvents();
             

@@ -90,7 +90,7 @@ class ProgrammeItem < ActiveRecord::Base
 
     # We may not want to delete since the item may be moved to another role ....
     if del_candidates
-      self.touch
+      self.touch if !self.new_record?
       self.save
     end
     del_candidates.each do |c|
@@ -111,12 +111,11 @@ class ProgrammeItem < ActiveRecord::Base
 
   def self.deep_clone_members
     [
-      :format, 
       :children, 
       :programme_item_assignments, 
       {room_item_assignment: :time_slot},
       :taggings,
-      :themes,
+      :themes
     ]
   end
 
