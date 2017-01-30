@@ -2,11 +2,8 @@ class PlannerMailer < ActionMailer::Base
   
   # TODO
   def send_email(args, content)
+    # attachments['text/plain'] = addTextPart(message, content)
     message = mail args
-    message.content_type 'multipart/alternative'
-
-    # addHTMLPart(message, content)
-    addTextPart(message, content)
 
     message
   end
@@ -29,10 +26,12 @@ class PlannerMailer < ActionMailer::Base
       end
     end
     
-    message.add_part(Mail::Part.new(
-      content_type: 'text/plain',
-      body: body_parts.uniq.join("\n") #.encode("ISO-8859-1")
-    ))
+    # message.add_part(Mail::Part.new(
+      # content_type: 'text/plain',
+      # body: body_parts.uniq.join("\n") #.encode("ISO-8859-1")
+    # ))
+    
+    body_parts.uniq.join("\n") #.encode("ISO-8859-1")
   end
   
 end
