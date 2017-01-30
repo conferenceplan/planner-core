@@ -14,12 +14,12 @@
         <%= csrf_meta_tags %>
 
         <%= stylesheet_link_tag "application", :media => "all" %>
-        <%= stylesheet_link_tag params[:controller] if params[:controller] && Rails.application.assets.find_asset( params[:controller] + ".css") %>
+        <%= stylesheet_link_tag params[:controller] if params[:controller] && Rails.application.assets_manifest.assets[params[:controller] + ".css"] %>
         <%= stylesheet_link_tag "cells/" + params[:cellname] if params[:cellname] && Rails.application.assets.find_asset("cells/" + params[:cellname] + ".css") %>
         <%= yield(:cssheader) if content_for?(:cssheader) %>
 
         <%= javascript_include_tag "application" %>
-        <%= javascript_include_tag params[:controller] if params[:controller] && Rails.application.assets.find_asset( params[:controller] + ".js") %>
+        <%= javascript_include_tag params[:controller] if params[:controller] && Rails.application.assets_manifest.assets[params[:controller] + ".js"] %>
         <%= javascript_include_tag "cells/" + params[:cellname] if params[:cellname] && Rails.application.assets.find_asset("cells/" + params[:cellname] + ".js") %>
         <%=render 'layouts/common_js' %>
         <%= yield(:jsheader) if content_for?(:jsheader) %>
