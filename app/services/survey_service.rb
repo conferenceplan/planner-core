@@ -269,6 +269,7 @@ module SurveyService
       
       SurveyResponse.
           references([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}]).
+          includes([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}]).
           where(conditions).
           order("created_at desc")
     else
@@ -292,6 +293,7 @@ module SurveyService
       
       SurveyResponse.
             references([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}])
+            includes([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}])
             where(conditions).
             order("created_at desc")
     else
