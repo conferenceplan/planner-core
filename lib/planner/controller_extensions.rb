@@ -41,6 +41,7 @@ module Planner
         config.api_secret           = cfg ? cfg.api_secret : ''
         config.enhance_image_tag    = cfg ? cfg.enhance_image_tag : false
         config.static_image_support = cfg ? cfg.static_image_support : false
+        config.secure = true
        config.cdn_subdomain = true
       end
 
