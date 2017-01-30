@@ -31,7 +31,7 @@ module SurveyService
   #
   #
   def self.updateBioTextFromSurvey(sinceDate = nil)
-    bioQuestion = SurveyQuestion.where(:isbio => true).order("created_at desc").first
+    bioQuestion = SurveyQuestion.where(:isbio => true).order("survey_questions.created_at desc").first
 
     Person.transaction do
       people = SurveyService.findPeopleWhoAnsweredBio(sinceDate)
@@ -55,11 +55,11 @@ module SurveyService
     Person.transaction do
       # Get the response from the survey
       # If the response is newer that the info in the Bio then update the Bio
-      websiteQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['WebSite']).order("created_at desc")
-      twitterQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Twitter']).order("created_at desc")
-      otherQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['OtherSocialMedia']).order("created_at desc")
+      websiteQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['WebSite']).order("survey_questions.created_at desc")
+      twitterQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Twitter']).order("survey_questions.created_at desc")
+      otherQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['OtherSocialMedia']).order("survey_questions.created_at desc")
       # photoQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Photo']).order("created_at desc")
-      faceQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Facebook']).order("created_at desc")
+      faceQuestion = SurveyQuestion.where(:questionmapping_id => QuestionMapping['Facebook']).order("survey_questions.created_at desc")
 
       setResponse('website', websiteQuestion,sinceDate) if websiteQuestion
       setResponse('twitterinfo', twitterQuestion,sinceDate) if twitterQuestion
@@ -75,7 +75,7 @@ module SurveyService
   #
   #
   def self.findAnswersForExcludedItems
-    SurveyAnswer.where(['answertype_id = ?', AnswerType['ItemConflict'].id]).includes(:programme_items).order('answer')
+    SurveyAnswer.where(['answertype_id = ?', AnswerType['ItemConflict'].id]).includes(:programme_items).order('survey_answers.answer')
   end
 
   #
@@ -183,7 +183,7 @@ module SurveyService
     Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => {:survey_question => :survey_answers}}}}).
           where(conditions).
           where(self.constraints()).
-          order('last_name, first_name')
+          order('people.last_name, people.first_name')
   end
   
   #
@@ -195,7 +195,7 @@ module SurveyService
                                       answer.answer + "'").
            where("survey_responses.id is null").
            where(self.constraints()).
-           order('last_name, first_name')
+           order('people.last_name, people.first_name')
   end
   
   #
@@ -213,7 +213,7 @@ module SurveyService
     Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}).
             where(conditions).
             where(self.constraints()).
-            order('last_name, first_name')
+            order('people.last_name, people.first_name')
       
   end
   
@@ -232,7 +232,7 @@ module SurveyService
     Person.joins({:survey_respondent => {:survey_respondent_detail => {:survey_responses => :survey_question}}}).
             where(conditions).
             where(self.constraints()).
-            order('last_name, first_name')
+            order('people.last_name, people.first_name')
       
   end
   
@@ -271,7 +271,7 @@ module SurveyService
           references([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}]).
           includes([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}]).
           where(conditions).
-          order("created_at desc")
+          order("survey_responses.created_at desc")
     else
       [nil] 
     end
@@ -295,7 +295,7 @@ module SurveyService
             references([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}])
             includes([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}])
             where(conditions).
-            order("created_at desc")
+            order("survey_responses.created_at desc")
     else
       [nil] 
     end
@@ -309,7 +309,7 @@ module SurveyService
 
     SurveyResponse.joins({:survey_respondent_detail => {:survey_respondent => :person}}).
           where({:isbio => true, :people => {:id => person_id}}).
-          order("created_at desc").first
+          order("survey_responses.created_at desc").first
     
   end
   
