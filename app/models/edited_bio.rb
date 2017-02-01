@@ -1,47 +1,13 @@
 class EditedBio < ActiveRecord::Base
-  attr_accessible :lock_version, :bio, :website, :twitterinfo, :othersocialmedia, :photourl, :facebook, :person_id, :linkedin, :youtube, :twitch, :instagram, :flickr, :reddit
+  attr_accessible :lock_version, :person_id, :bio, :photourl, :website
   belongs_to  :person 
 
+  has_social_media :facebook, :twitterinfo, :linkedin, :youtube, :twitch, :instagram, :flickr, :reddit, :othersocialmedia
+
   audited :associated_with => :person, :allow_mass_assignment => true
-  
-  def twitterid
-    /[^\/|^@]+$/.match(twitterinfo ? twitterinfo.gsub(/\/+$/,'') : '').to_s
-  end
-  
-  def facebookid
-    /[^\/|^@]+$/.match(facebook ? facebook.gsub(/\/+$/,'') : '').to_s
-  end
-  
-  def linkedinid
-    /[^\/|^@]+$/.match(linkedin ? linkedin.gsub(/\/+$/,'') : '').to_s
-  end
 
-  def youtubeid
-    /[^\/|^@]+$/.match(youtube ? youtube.gsub(/\/+$/,'') : '').to_s
-  end
-
-  def twitchid
-    /[^\/|^@]+$/.match(twitch ? twitch.gsub(/\/+$/,'') : '').to_s
-  end
-
-  def instagramid
-    /[^\/|^@]+$/.match(instagram ? instagram.gsub(/\/+$/,'') : '').to_s
-  end
-
-  def flickrid
-    /[^\/|^@]+$/.match(flickr ? flickr.gsub(/\/+$/,'') : '').to_s
-  end
-
-  def redditid
-    /[^\/|^@]+$/.match(reddit ? reddit.gsub(/\/+$/,'') : '').to_s
-  end
-  
   def website_url
     fix_url(website)
-  end
-
-  def has_social_media?
-    website.present? || othersocialmedia.present? || twitterinfo.present? || facebook.present? || linkedin.present? || youtube.present? || twitch.present? || instagram.present? || flickr.present? || reddit.present?
   end
 
   protected
@@ -61,5 +27,5 @@ class EditedBio < ActiveRecord::Base
       url
     end
   end
-
+  
 end
