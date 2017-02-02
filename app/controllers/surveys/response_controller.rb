@@ -716,7 +716,7 @@ class Surveys::ResponseController < ApplicationController
   def find_or_create_person(respondentParams)
       person = nil
 
-      people = Person.includes(:email_addresses).references(:email_addresses)
+      people = Person.includes(:email_addresses).references(:email_addresses).
                   where(
                     ["TRIM(last_name) = ? AND TRIM(first_name) like ? AND email_addresses.email = ?", 
                       respondentParams['last_name'], respondentParams['first_name'], respondentParams['email']]
