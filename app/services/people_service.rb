@@ -128,23 +128,28 @@ module PeopleService
         survey_respondent.person = dest_person
         survey_respondent.save
       else
-        if !src_person.survey_respondent
-          # move each of the surveys
-          src_detail = src_person.survey_respondent.survey_respondent_detail
-          dest_detail = dest_person.survey_respondent.survey_respondent_detail
-  
-          # go through each of the surveys
-          surveys = Survey.all
-          surveys.each do |survey|
-            # if the dest already has a responses then do not copy ....
-            if dest_detail.getResponses(survey.id).size == 0
-              src_detail.getResponses(survey.id).each do |response|
+        # move each of the surveys
+        src_detail = src_person.survey_respondent.survey_respondent_detail
+        dest_detail = dest_person.survey_respondent.survey_respondent_detail
+
+        # go through each of the surveys
+        surveys = Survey.all
+        surveys.each do |survey|
+          # if the dest already has a responses then do not copy ....
+          if dest_detail.getResponses(survey.id).size == 0
+            src_detail.getResponses(survey.id).each do |response|
+              response.survey_respondent_detail = dest_detail
+              response.save
+            end
+            src_detail.getHistories(survey.id).each do |history|
+              history.survey_respondent_detail = dest_detail
+              history.save
+            end
+          else # else merge in the responses???
+            src_detail.getResponses(survey.id).each do |response|
+              if !dest_detail.getResponse(survey.id, response.survey_question_id)
                 response.survey_respondent_detail = dest_detail
                 response.save
-              end
-              src_detail.getHistories(survey.id).each do |history|
-                history.survey_respondent_detail = dest_detail
-                history.save
               end
             end
           end
