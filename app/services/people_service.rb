@@ -289,21 +289,19 @@ module PeopleService
     query = where_clause(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings, includeMailHistory, email)
     tagquery = DataService.genTagSql(context, tags)
 
-    # includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
-
     if tagquery.empty?
       Person.
-            includes([:pseudonym, :email_addresses, :person_con_state]).
+            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent]).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
-            references([:pseudonym, :email_addresses, :person_con_state]).
+            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent]).
             uniq.count
     else
       Person.tagged_with(*tagquery).uniq.
-            includes([:pseudonym, :email_addresses, :person_con_state]).
+            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent]).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
-            references([:pseudonym, :email_addresses, :person_con_state]).
+            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent]).
             uniq.count
     end
   end
@@ -332,9 +330,9 @@ module PeopleService
     
     if tagquery.empty?
       people = Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
-                  includes([:pseudonym, :email_addresses, :person_con_state]).
+                  includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent]).
                   where(query).
-                  references([:pseudonym, :email_addresses, :person_con_state]).
+                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent]).
                   order(sort_order).
                   offset(offset).
                   limit(rows).
@@ -342,10 +340,10 @@ module PeopleService
     else
       people = Person.tagged_with(*tagquery).
                   uniq.
-                  includes([:pseudonym, :email_addresses, :person_con_state]).
+                  includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent]).
                   where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
                   where(query).
-                  references([:pseudonym, :email_addresses, :person_con_state]).
+                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent]).
                   order(sort_order).
                   offset(offset).
                   limit(rows).
