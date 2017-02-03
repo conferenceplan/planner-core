@@ -92,19 +92,6 @@ module Planner
           end
         end
 
-        ## Define social media checker
-        send(:define_method, :has_social_media?) do
-          (self.respond_to?(:facebook) && facebook.present?) || 
-          (self.respond_to?(:twitter) && twitter.present?) || 
-          (self.respond_to?(:linkedin) && linkedin.present?) || 
-          (self.respond_to?(:youtube) && youtube.present?) || 
-          (self.respond_to?(:twitch) && twitch.present?) || 
-          (self.respond_to?(:instagram) && instagram.present?) || 
-          (self.respond_to?(:flickr) && flickr.present?) || 
-          (self.respond_to?(:reddit) && reddit.present?) || 
-          (self.respond_to?(:othersocialmedia) && othersocialmedia.present?)
-        end
-
         ## Base URLs for each social media provider
         social_base_urls = {
           :facebook => "http://www.facebook.com/",
@@ -164,8 +151,20 @@ module Planner
           end
         end
         
+        ## Define social media checker
+        send(:define_method, :has_social_media?) do
+          (self.respond_to?(:facebook_url) && facebook_url.present?) || 
+          (self.respond_to?(:twitter_url) && twitter_url.present?) || 
+          (self.respond_to?(:linkedin_url) && linkedin_url.present?) || 
+          (self.respond_to?(:youtube_url) && youtube_url.present?) || 
+          (self.respond_to?(:twitch_url) && twitch_url.present?) || 
+          (self.respond_to?(:instagram_url) && instagram_url.present?) || 
+          (self.respond_to?(:flickr_url) && flickr_url.present?) || 
+          (self.respond_to?(:reddit_url) && reddit_url.present?) || 
+          (self.respond_to?(:othersocialmedia_url) && othersocialmedia_url.present?) || 
+          (self.respond_to?(:website_url) && website_url.present?)
+        end
       end
-     
     end
   end
 end
