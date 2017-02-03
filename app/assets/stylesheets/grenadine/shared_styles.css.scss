@@ -99,4 +99,146 @@ ul.form-control {
   font-weight: normal;
   max-width: 90%;
 }
+
+// Social media styles
+.instagram {
+  background: #ccc;
+
+  border-radius: .2em;
+  height: 1em;
+  position: relative;
+  width: 1em;
+  font-size: 1.8em;
+  margin-top: 0.05em;
+
+  &:before,
+  &:after {
+    color: #fff;
+    content: '';
+    display: block;
+    position: absolute;
+    border: .075em solid;
+  }
+
+  &:before {
+    border-radius: inherit;
+    height: .75em;
+    transform: translate(.125em, .125em);
+    width: .75em;
+  }
+
+  &:after {
+    border-radius: 1em;
+    box-shadow: .2em -.2em 0 -.16em;
+    height: .4em;
+    transform: translate(.3em, .3em);
+    width: .4em;    
+  }
+}
+
+.gr-social-icon {
+    display: inline-block;
+    vertical-align: top;
+
+    .fa-square {
+        color: #ccc;
+    }
+
+    &:hover:not(.disabled), &.active {
+        text-decoration: none;
+
+        &.facebook {
+            .fa-square {
+                color: #3b5998;
+            }
+        }
+        &.twitter {
+            .fa-square {
+                color: #55acee;
+            }
+        }
+        &.linkedin {
+            .fa-square {
+                color: #007bb6;
+            }
+        }
+        &.youtube {
+            .fa-square {
+                color: #cd201f;
+            }
+        }
+        &.twitch {
+            .fa-square {
+                color: #6441a5;
+            }
+        }
+        &.instagram {
+            background:
+                /////// Use radial gradients to get the rounded
+                /////// gradient effect in each corner
+
+                // left bottom
+                radial-gradient(circle farthest-corner at 35% 90%, #fec564, transparent 50%),
+                radial-gradient(circle farthest-corner at 0 140%, #fec564, transparent 50%),
+                // left top
+                radial-gradient(ellipse farthest-corner at 0 -25%, #5258cf, transparent 50%),
+                radial-gradient(ellipse farthest-corner at 20% -50%, #5258cf, transparent 50%),
+                //  right top
+                radial-gradient(ellipse farthest-corner at 100% 0, #893dc2, transparent 50%),
+                radial-gradient(ellipse farthest-corner at 60% -20%, #893dc2, transparent 50%),
+                // right bottom
+                radial-gradient(ellipse farthest-corner at 100% 100%, #d9317a, transparent),
+
+                /////// create a base coat to smooth
+                /////// corner gradients
+                linear-gradient(#6559ca, #bc318f 30%, #e33f5f 50%, #f77638 70%, #fec66d 100%);
+        }
+        &.reddit {
+            .fa-square {
+                color: #ff4500;
+            }
+        }
+        &.website {
+            .fa-square {
+                color: green;
+            }
+        }
+        &.other-social {
+            .fa-square {
+                color: gray;
+            }
+        }
+    }
+}
+
+.flickr {
+    color: #ccc;
+
+    &.disabled {
+      color: #ccc;
+      text-decoration: none;
+    }
+
+    &:hover:not(.disabled), &.on-dashboard, &.active {
+        color: #fff !important;
+        text-shadow: 1px 1px 1px #999;
+        text-decoration: none;
+        background-image: linear-gradient(to right, #0062da 50%, #ff0084 50%);   
+        background-size: 80% 80%; 
+        background-position:center;
+        background-repeat: no-repeat;
+    }
+}
+
+.social-media-container {
+    .tooltip-inner {
+        max-width: none;
+    }
+}
+
+
+
+
+
+
 //

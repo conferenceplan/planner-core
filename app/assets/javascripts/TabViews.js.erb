@@ -44,6 +44,7 @@ var TabUtils = (function(){
 
         onShow: function(){
             this.$el.find('.bpopover').popover({html : true});
+            this.$('[data-toggle="tooltip"]').tooltip();
         },
         
         events : {
