@@ -2,7 +2,7 @@ class SociableCell < Cell::Rails
   def javascript
     render
   end
-  def icons_template
+  def template_icons
     render
   end
 end

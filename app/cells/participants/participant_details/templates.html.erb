@@ -342,7 +342,7 @@
             <dl class="dl-airy">
                 <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text"> (<%= t "biography-edited" %>)</span>' : (survey_bio ? ' <span class="minor-text"> (<%= t "biography-filled-out-by-person-on-the-survey" %>)</span>' : '&nbsp;') }}</dt>
                 <dd>{{= bio ? bio : (survey_bio ? survey_bio : "<span class='minor-text'><%= t 'none-provided' %></span>") }}</dd>
-                <%= render_cell "sociable", :icons_template %>
+                <%= render_cell "sociable", :template_icons %>
             </dl>
         {{ } else { }}
             <button class="model-new-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
