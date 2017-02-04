@@ -1,5 +1,6 @@
 
 <%= render_cell "sociable", :javascript %>
+<%= render_cell "contactable", :javascript %>
 
 <script type="text/javascript">
 
@@ -24,75 +25,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                         hint:  '<%= (t "merge-src-person-hint").html_safe %>' }
         }
     });
-
-    //
-    //
-    //
-    Address = Backbone.Model.extend({
-        schema : {
-            line1 : { type : 'Text', title : '<%= t "line1" %>' },
-            line2 : { type : 'Text', title : '<%= t "line2" %>' },
-            line3 : { type : 'Text', title : '<%= t "line3" %>' },
-            city : { type : 'Text', title : '<%= t "city" %>' },
-            state : { type : 'Text', title : '<%= t "state" %>' },
-            postcode : { type : 'Text', title : '<%= t "post-code" %>' },
-            country : { type : 'Text', title : '<%= t "country" %>' },
-            isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'},
-        },
-        urlRoot : "<%= baseUri + '/postal_addresses' %>"
-    });
-
-    AddressCollection = Backbone.Collection.extend({
-        model : Address
-    });
-
-    var emailLabelNames = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace, //('value'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      remote: {
-        url: '<%= baseUri + '/email_addresses/labels/%QUERY' %>',
-        wildcard: '%QUERY'
-      }
-    });
-
-    EmailAddress = Backbone.Model.extend({
-        schema : {
-            email : { type : 'Text', title : '<%= t "email" %>'},
-            label : { 
-                type : 'TypeAheadText', 
-                title : '<%= t "label" %>', 
-                help: '<%= t "email-label-help" %>',
-                config : {
-                    minLength: 0,
-                    limit: 10,
-                    source: emailLabelNames
-                }
-            },
-            isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>', help: '<%= t "email-default-help" %>' }
-        },
-        urlRoot : "<%= baseUri + '/email_addresses' %>"
-    });
-
-    EmailCollection = Backbone.Collection.extend({
-        model : EmailAddress
-    });
-
-    PhoneNumber = Backbone.Model.extend({
-        schema : {
-            number : { type : 'Text', title : '<%= t "phone-number" %>'},
-            phone_type_id : { type : 'Select', title : '<%= t "phone type" %>', options : <%= PhoneTypes.all.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-        },
-        urlRoot : "<%= baseUri + '/phone_numbers' %>"
-    });
-
-    PhoneCollection = Backbone.Collection.extend({
-        model : PhoneNumber
-    });
-
-    //
-    //
-    //
-    
 
 
     var registrationTypes = new Bloodhound({
@@ -312,19 +244,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             exclusion_times : "#exclusion-times-div",
             items           : "#items-tab"
         }
-    });
-
-    AddressLayout = Backbone.Marionette.Layout.extend({
-        template: "#address-layout-template",
-
-        regions : {
-            postalControlRegion: "#postal-control-div",
-            postalRegion: "#postal-region-div",
-            emailControlRegion: "#email-control-div",
-            emailRegion: "#email-region-div",
-            phoneControlRegion: "#phone-control-div",
-            phoneRegion: "#phone-region-div",
-        },
     });
 
     SummaryLayout = Backbone.Marionette.Layout.extend({
@@ -621,69 +540,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             }
         });
 
-        addressLayout = new AddressLayout();
-        personTabLayout.contacts.show(addressLayout);
+        tabLists = Contactable.renderAddressLayout(personTabLayout.contacts, id, ("<%= baseUri + '/participants/' %>" + id), { tabLists : tabLists });
 
-        TabUtils.createTabControl({
-            template : "#address-control-template",
-            modelType : Address,
-            id : id,
-            id_name : 'person_id',
-            view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "create-address-details" %>',
-            region : addressLayout.postalControlRegion
-        });
-        tabLists.push( TabUtils.createTabListContent({
-            collectionType : AddressCollection,
-            url : "<%= baseUri + '/participants/' %>" + id + "/postalAddresses.json",
-            template : "#address-view-template",
-            view_refresh_event : "address:refresh",
-            child_view_refresh_event : "address:refresh",
-            region : addressLayout.postalRegion,
-            newTitle : '<%= t "create-address" %>',
-            editTitle : '<%= t "edit-address" %>',
-        }) );
-
-
-        TabUtils.createTabControl({
-            template : "#phone-control-template",
-            modelType : PhoneNumber,
-            id : id,
-            id_name : 'person_id',
-            view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "create-phone-number" %>',
-            region : addressLayout.phoneControlRegion,
-        });
-        tabLists.push( TabUtils.createTabListContent({
-            collectionType : PhoneCollection,
-            url : "<%= baseUri + '/participants/' %>" + id + "/phoneNumbers.json",
-            template : "#phone-view-template",
-            view_refresh_event : "address:refresh",
-            region : addressLayout.phoneRegion,
-            newTitle : '<%= t "create-phone-number" %>',
-            editTitle : '<%= t "edit-phone-number" %>',
-        }) );
-
-        TabUtils.createTabControl({
-            template : "#email-control-template",
-            modelType : EmailAddress,
-            id : id,
-            id_name : 'person_id',
-            view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "create-email" %>',
-            region : addressLayout.emailControlRegion
-        });
-        tabLists.push( TabUtils.createTabListContent({
-            collectionType : EmailCollection,
-            url : "<%= baseUri + '/participants/' %>" + id + "/emailAddresses.json",
-            template : "#email-view-template",
-            view_refresh_event : "address:refresh",
-            child_view_refresh_event : "address:refresh",
-            region : addressLayout.emailRegion,
-            newTitle : '<%= t "create-email" %>',
-            editTitle : '<%= t "edit-email" %>',
-        }) );
-
+        
         eventAggregator.on("refreshTagList", syncModel, invite_details);
 
         //initialize the popovers
