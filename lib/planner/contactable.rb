@@ -127,14 +127,14 @@ module Planner
                     return e ? e.email == email : false
                   end
 
-                  send(:define_method, 'updateDefaultEmail') do |email|
+                  send(:define_method, 'updateDefaultEmail') do |email, label: nil|
                     e = getDefaultEmail()
                     if e
                       e.isdefault = false
                       e.save!
                     end
                   
-                    e = self.email_addresses.new :email => email, :isdefault => true 
+                    e = self.email_addresses.new :email => email, label: label, :isdefault => true 
                    
                     self.save!
                   end
