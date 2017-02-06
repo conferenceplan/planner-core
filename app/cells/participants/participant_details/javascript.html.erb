@@ -288,7 +288,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
     ////////// end share person schedule section
 
-    var tabLists = [];
     var tabContent = {};
     var filters = null;
     var personTabLayout = null;
@@ -540,7 +539,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             }
         });
 
-        tabLists = Contactable.renderAddressLayout(personTabLayout.contacts, id, ("<%= baseUri + '/participants/' %>" + id), { tabLists : tabLists });
+        Contactable.renderAddressLayout(personTabLayout.contacts, id, ("<%= baseUri + '/participants/' %>" + id));
 
         
         eventAggregator.on("refreshTagList", syncModel, invite_details);
