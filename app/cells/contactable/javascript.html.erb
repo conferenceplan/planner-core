@@ -61,13 +61,23 @@
         isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>', help: '<%= t "email-default-help" %>' }
     };
 
-    defaultEmailSchema = $.extend(
+    defaultEmailSubSchema = $.extend(
       {},
       emailSchema,
       {
         isdefault : { type : "Hidden" }
       }
     );
+
+    defaultEmailSchema = {
+      default_email_address : {
+        type : "Object",
+        title : '<%= j t('default-email-address') %>',
+        editorClass : 'sub-schema-field',
+
+        subSchema : defaultEmailSubSchema
+      }
+    };
 
     EmailAddress = Backbone.Model.extend({
         schema : emailSchema,
@@ -197,6 +207,7 @@
       PostalAddress : PostalAddress,
       PostalAddressCollection : PostalAddressCollection,
       emailLabelNames : emailLabelNames,
+      defaultEmailSubSchema : defaultEmailSubSchema,
       defaultEmailSchema : defaultEmailSchema,
       DefaultEmailAddress : DefaultEmailAddress,
       EmailAddress : EmailAddress,
