@@ -47,7 +47,11 @@
     });
 
     emailSchema = {
-        email : { type : 'Text', title : '<%= t "email" %>'},
+        email : { 
+          type : 'Text', 
+          title : '<%= t "email" %>',
+          validators : ['email']
+        },
         label : { 
             type : 'TypeAheadText', 
             title : '<%= t "label" %>', 
