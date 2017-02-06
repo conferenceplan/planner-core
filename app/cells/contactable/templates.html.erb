@@ -4,18 +4,18 @@
 <script type="text/template" id="address-layout-template">
     <section>
         <div class="row">
-            <div class="col-md-5 col-xs-12">
-                <div id="postal-control-div"></div>
-                <div id="postal-region-div"></div>
-            </div>
-            <div class="col-md-4 col-xs-12">
+            <div class="col-lg-4 col-md-6 col-xs-12">
                 <div id="email-control-div"></div>
                 <div id="email-region-div"></div>
             </div>
-            <div class="col-md-3 col-xs-12">
+            <div class="col-lg-5 col-md-6 col-xs-12">
+                <div id="postal-control-div"></div>
+                <div id="postal-region-div"></div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-xs-12">
                 <div id="phone-control-div"></div>
                 <div id="phone-region-div"></div>
-            </div>    
+            </div>
         </div>
     </section>
 </script>
@@ -23,14 +23,14 @@
 
 <script type="text/template" id="address-control-template">
     <button class="add-model-button btn btn-xs btn-primary pull-right ">
-        <%= t "add-address" %>
+        <i class="fa fa-plus" aria-hidden="true"></i> <%= t "add" %>
     </button>
     <h5><%= t "postal-addresses" %></h5>
 </script>
 
 <script type="text/template" id="email-control-template">
 <div>
-    <button class="add-model-button btn btn-xs btn-primary pull-right "><%= t "add-email" %></button>
+    <button class="add-model-button btn btn-xs btn-primary pull-right "><i class="fa fa-plus" aria-hidden="true"></i>  <%= t "add" %></button>
     <h5><%= t "email-addresses" %></h5>
 </div>
 </script>
@@ -38,7 +38,7 @@
 <script type="text/template" id="phone-control-template">
 <div>
     <button class="add-model-button btn btn-xs btn-primary pull-right ">
-        <%= t "add-phone" %>
+        <i class="fa fa-plus" aria-hidden="true"></i>  <%= t "add" %>
     </button>
     <h5><%= t "phone" %></h5>
 </div>
