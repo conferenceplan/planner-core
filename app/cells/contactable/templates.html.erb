@@ -46,6 +46,7 @@
 
 
 <script type="text/template" id="phone-view-template">
+{{ if (typeof(number) != "undefined") { }}
 <div>
     <div  class="contact-details-div">
         <div class="caption" class="pull-left">
@@ -67,9 +68,11 @@
         </div>
     </div>
 </div>
+{{ } }}
 </script>
 
 <script type="text/template" id="email-view-template">
+{{ if (typeof(email) != "undefined") { }}
 <div>
     <div class="contact-details-div">
         
@@ -94,10 +97,12 @@
         
     </div>
 </div>
+{{ } }}
 </script>
 
 
 <script type="text/template" id="address-view-template">
+{{ if (typeof(line1) != "undefined") { }}
     <div class="contact-details-div">
             
             <button class="model-delete-button btn btn-danger btn-xs pull-right">
@@ -159,5 +164,6 @@
             </small>
         
     </div>
+{{ } }}
 </script>
 
