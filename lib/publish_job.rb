@@ -136,12 +136,13 @@ class PublishJob
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
 
     last_pub_date = PublicationDate.order("timestamp desc").first
+    ts = last_pub_date ? last_pub_date.timestamp : 0
     clause = addClause(clause, [
       '(? < external_images.updated_at)', 
       ' OR (? < programme_items.updated_at)', 
       ' OR (? < room_item_assignments.updated_at)',
       ' OR (? < programme_item_assignments.updated_at)'
-    ].join, [last_pub_date.timestamp,last_pub_date.timestamp,last_pub_date.timestamp,last_pub_date.timestamp], "AND", true)
+    ].join, [ts,ts,ts,ts], "AND", true)
 
     ProgrammeItem.includes([:room_item_assignment, :programme_item_assignments, :publication, :external_images, :linked]).
                   references([:room_item_assignment, :programme_item_assignments]).
