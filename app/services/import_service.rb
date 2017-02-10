@@ -14,7 +14,7 @@ module ImportService
     
     query = pending_import_people.project(*attrs).
               where(pending_import_people[:id].eq(pending_id)).
-              where(self.constraints()).
+              where(self.arel_constraints()).
               join(people, Arel::Nodes::OuterJoin).
                 on(people[:first_name].eq(pending_import_people[:first_name]).
                 and(people[:last_name].eq(pending_import_people[:last_name]))).
@@ -26,7 +26,7 @@ module ImportService
 
     query = pending_import_people.project(*attrs).
               where(pending_import_people[:id].eq(pending_id)).
-              where(self.constraints()).
+              where(self.arel_constraints()).
               join(peoplesources).
                 on(peoplesources[:datasource_dbid].eq(pending_import_people[:datasource_dbid]).and(peoplesources[:datasource_dbid].not_eq(nil))).
               join(people, Arel::Nodes::OuterJoin).

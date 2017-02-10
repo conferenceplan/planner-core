@@ -134,7 +134,15 @@ class PublishJob
     clause = addClause(nil,'print = ?',true) # only get those that are marked for print
     clause = addClause(clause,'room_item_assignments.id is not null or parent_id is not null ', nil)
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'((select timestamp from publication_dates order by timestamp desc limit 1) < external_images.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_items.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < room_item_assignments.updated_at) OR ((select timestamp from publication_dates order by timestamp desc limit 1) < programme_item_assignments.updated_at)', nil)
+
+    last_pub_date = PublicationDate.order("timestamp desc").first
+    ts = last_pub_date ? last_pub_date.timestamp : 0
+    clause = addClause(clause, [
+      '(? < external_images.updated_at)', 
+      ' OR (? < programme_items.updated_at)', 
+      ' OR (? < room_item_assignments.updated_at)',
+      ' OR (? < programme_item_assignments.updated_at)'
+    ].join, [ts,ts,ts,ts], "AND", true)
 
     ProgrammeItem.includes([:room_item_assignment, :programme_item_assignments, :publication, :external_images, :linked]).
                   references([:room_item_assignment, :programme_item_assignments]).
@@ -172,17 +180,21 @@ class PublishJob
 
   private
   
-  def addClause(clause, clausestr, field)
+  def addClause(clause, clausestr, field, op = "AND", concat = false)
     if clause == nil || clause.empty?
       clause = [clausestr, field]
     else
       isEmpty = clause[0].strip().empty?
       clause[0] = " ( " + clause[0]
-      clause[0] += ") AND ( " if ! isEmpty
+      clause[0] += ") " + op + " ( " if ! isEmpty
       clause[0] += " " + clausestr
       clause[0] += " ) "  if ! isEmpty
       if field
-        clause << field
+        if concat
+          clause.concat field
+        else
+          clause << field
+        end
       end
     end
     

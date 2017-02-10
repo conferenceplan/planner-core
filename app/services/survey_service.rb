@@ -107,6 +107,7 @@ module SurveyService
     
     SurveyRespondentDetail.joins(:survey_responses, :survey_histories).
                             includes([:survey_histories, :survey_responses, {:survey_respondent => {:person => :postal_addresses}}]).
+                            references([:survey_histories, :survey_responses, {:survey_respondent => {:person => :postal_addresses}}]).
                             where(query).
                             where("survey_histories.survey_id = ?", surveyQuery.survey_id).
                             order("survey_respondent_details.last_name, survey_respondent_details.first_name")
@@ -139,10 +140,11 @@ module SurveyService
   #
   def self.findPeopleWhoRespondedToSurvey(survey_name)
     survey = Survey.where("surveys.alias" => survey_name).first
-    respondent_detail = SurveyRespondentDetail.includes(:survey_responses).where('survey_responses.survey_id' => survey.id)
+    respondent_detail = SurveyRespondentDetail.includes(:survey_responses).references(:survey_responses).where('survey_responses.survey_id' => survey.id)
 
     Person.where(["survey_respondent_details.id in (?)", respondent_detail]).
-            include({:survey_respondent => :survey_respondent_detail}).
+            includes({:survey_respondent => :survey_respondent_detail}).
+            references({:survey_respondent => :survey_respondent_detail}).
             where(self.constraints()).
             order('people.last_name, people.first_name')
   end
@@ -292,8 +294,8 @@ module SurveyService
       end
       
       SurveyResponse.
-            references([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}])
-            includes([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}])
+            references([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}]).
+            includes([:survey_question, {:survey_respondent_detail => {:survey_respondent => :person}}]).
             where(conditions).
             order("survey_responses.created_at desc")
     else
