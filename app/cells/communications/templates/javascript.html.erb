@@ -28,6 +28,9 @@ MailTemplateApp.TemplateManagment = (function(Backbone){
             content         : { type : 'HtmlExt', title : '<%= t "mail-content" %>', imagetype : 'PlannerMobile::MobileContentImage', 
                                 baseUri : "<%= baseUri %>",
                                 gallery : 'mails', editorAttrs : {rows : 50} }
+        },
+        defaults : {
+            mail_use_id : <%= MailUse['General'].id %>
         }
     });
     

@@ -123,37 +123,44 @@ module PeopleService
     end
 
     if src_person.survey_respondent
-      if !dest_person.survey_respondent
+      if !dest_person.survey_respondent || !dest_person.survey_respondent.survey_respondent_detail
+        candidate = dest_person.survey_respondent
         survey_respondent = src_person.survey_respondent
         survey_respondent.person = dest_person
         survey_respondent.save
+
+        candidate.person = nil
+        candidate.delete # TODO - test
       else
         # move each of the surveys
         src_detail = src_person.survey_respondent.survey_respondent_detail
         dest_detail = dest_person.survey_respondent.survey_respondent_detail
 
-        # go through each of the surveys
-        surveys = Survey.all
-        surveys.each do |survey|
-          # if the dest already has a responses then do not copy ....
-          if dest_detail.getResponses(survey.id).size == 0
-            src_detail.getResponses(survey.id).each do |response|
-              response.survey_respondent_detail = dest_detail
-              response.save
-            end
-            src_detail.getHistories(survey.id).each do |history|
-              history.survey_respondent_detail = dest_detail
-              history.save
-            end
-          else # else merge in the responses???
-            src_detail.getResponses(survey.id).each do |response|
-              if !dest_detail.getResponse(survey.id, response.survey_question_id)
+        if src_detail
+          # go through each of the surveys
+          surveys = Survey.all
+          surveys.each do |survey|
+            # if the dest already has a responses then do not copy ....
+            if dest_detail.getResponses(survey.id).size == 0
+              src_detail.getResponses(survey.id).each do |response|
                 response.survey_respondent_detail = dest_detail
                 response.save
               end
+              src_detail.getHistories(survey.id).each do |history|
+                history.survey_respondent_detail = dest_detail
+                history.save
+              end
+            else # else merge in the responses???
+              src_detail.getResponses(survey.id).each do |response|
+                if !dest_detail.getResponse(survey.id, response.survey_question_id)
+                  response.survey_respondent_detail = dest_detail
+                  response.save
+                end
+              end
             end
-          end
+          end 
         end
+
       end
     end
 
@@ -297,17 +304,17 @@ module PeopleService
 
     if tagquery.empty?
       Person.
-            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail]).
+            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings]).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
-            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail]).
+            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings]).
             uniq.count
     else
       Person.tagged_with(*tagquery).uniq.
-            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail]).
+            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings]).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
-            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail]).
+            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings]).
             uniq.count
     end
   end
@@ -336,9 +343,9 @@ module PeopleService
     
     if tagquery.empty?
       people = Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
-                  includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail]).
+                  includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings]).
                   where(query).
-                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail]).
+                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetai, :mailingsl]).
                   order(sort_order).
                   offset(offset).
                   limit(rows).
@@ -346,10 +353,10 @@ module PeopleService
     else
       people = Person.tagged_with(*tagquery).
                   uniq.
-                  includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail]).
+                  includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings]).
                   where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
                   where(query).
-                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail]).
+                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings]).
                   order(sort_order).
                   offset(offset).
                   limit(rows).
