@@ -129,8 +129,10 @@ module PeopleService
         survey_respondent.person = dest_person
         survey_respondent.save
 
-        candidate.person = nil
-        candidate.delete # TODO - test
+        if candidate
+          candidate.person = nil
+          candidate.delete # TODO - test
+        end
       else
         # move each of the surveys
         src_detail = src_person.survey_respondent.survey_respondent_detail
