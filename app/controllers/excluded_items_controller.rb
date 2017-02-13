@@ -7,7 +7,7 @@ class ExcludedItemsController < PlannerController
   
   #
   def show
-    @answer = SurveyAnswer.find params[:id], :include => :programme_items
+    @answer = SurveyAnswer.find( params[:id])
   end
   
   # update the exclusions
@@ -25,7 +25,7 @@ class ExcludedItemsController < PlannerController
             exclusion.save
           end
         end
-        @answer = SurveyAnswer.find params[:id], :include => :programme_items
+        @answer = SurveyAnswer.find params[:id]
       end
     rescue => ex
       render status: :bad_request, text: ex.message
