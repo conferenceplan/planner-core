@@ -425,17 +425,5 @@
     <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="glyphicon glyphicon-remove"></i></span>
 </script>
 
-<script type="text/template" id="share-profile-modal-template">
-    <p><%= t 'share-profile-url-intro' %>:</p>
-    <div class="input-group boffset30">
-        <input id="url-input-field" readonly type="text" name="url" value="{{= url }}" class="form-control boffset10 text-cursor">
-        <div class="input-group-btn">
-            <a id="go-to-schedule-btn" href="{{= url }}" target="person-schedule" class="btn btn-default" data-toggle="tooltip" data-trigger="hover" title="<%= strip_tags t('go-to-schedule') %>"><i class="fa fa-external-link"></i> <%= t('open') %></a>
-            <span id="copy-url-btn" class="btn btn-default" data-clipboard-target="#url-input-field" data-toggle="tooltip" data-trigger="manual" title= "<%= t('copied') %>" data-placement="top auto"><i class="fa fa-clipboard"></i> <%= t('copy') %></span>
-            <a id="email-schedule-btn" href="{{= mailto }}" target="{{= email_target }}" class="btn btn-primary"><i class="fa fa-envelope-o"></i> <%= t('email-this-persons-schedule') %></a>
-        </div>
-    </div>
-    <div id="form-container"></div> 
-</script>
 
 
