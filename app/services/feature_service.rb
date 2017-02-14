@@ -20,5 +20,12 @@ module FeatureService
     true
     
   end
+  
+  #
+  #
+  #
+  def self.is_current?
+    true
+  end
 
 end
