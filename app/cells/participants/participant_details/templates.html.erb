@@ -73,65 +73,85 @@
                    <%= t  "name" %> *  <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "name" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "name-help" %>'></i>
                 </label>
                 <div class="col-sm-8">
-                    <span data-editor>
+                    <div data-editor>
                         <div class="row">
-                            <div class="col-sm-2"><span data-editors="prefix"></span></div>
-                            <div class="col-sm-4"><span data-editors="first_name"></span></div>
-                            <div class="col-sm-4"><span data-editors="last_name"></span></div>
-                            <div class="col-sm-2"><span data-editors="suffix"></span></span></div>
+                            <div class="col-sm-2">
+                                <div class="field-prefix">
+                                    <div data-editors="prefix"></div>
+                                    <div class="has-error"><p class="help-block" data-error></p></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="field-first_name">
+                                    <div data-editors="first_name"></div>
+                                    <div class="has-error"><p class="help-block" data-error></p></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="field-last_name">
+                                    <div data-editors="last_name"></div>
+                                    <div class="has-error"><p class="help-block" data-error></p></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="field-suffix">
+                                    <div data-editors="suffix"></div>
+                                    <div class="has-error"><p class="help-block" data-error></p></div>
+                                </div>
+                            </div>
                         </div>
-                    </span>
+                    </div>
                 </div>
             </div>
             <div class="col-sm-8 col-sm-offset-4" style="margin-top: -15px; padding-left: 10px; margin-bottom: 15px;">
-                <span data-editors="has_pseudonym"><%= t 'show-pseudonym-versions' %>
+                <div style="display: inline; margin-right: 5px;" data-editors="has_pseudonym"></div><%= t 'show-pseudonym-versions' %>
             </div>
             <div class="form-group" id="short-version-div">
                 <label class="col-sm-4 control-label">
                     <%= t "publication-name" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "publication-name" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "publication-name-help" %>'></i>
                 </label>
                 <div class="col-sm-8">
-                    <span data-editor>
+                    <div data-editor>
                         <div class="row">
-                            <div class="col-sm-2"><span data-editors="pseudonym.prefix"></span></div>
-                            <div class="col-sm-4"><span data-editors="pseudonym.first_name"></span></div>
-                            <div class="col-sm-4"><span data-editors="pseudonym.last_name"></span></div>
-                            <div class="col-sm-2"><span data-editors="pseudonym.suffix"></span></span></div>
+                            <div class="col-sm-2"><div data-editors="pseudonym.prefix"></div></div>
+                            <div class="col-sm-4"><div data-editors="pseudonym.first_name"></div></div>
+                            <div class="col-sm-4"><div data-editors="pseudonym.last_name"></div></div>
+                            <div class="col-sm-2"><div data-editors="pseudonym.suffix"></div></div>
                         </div>
-                    </span>
+                    </div>
                 </div>
             </div>
             <div class="form-group">
-            <label class="col-sm-4 control-label">
-                <%= t "company-information" %>
-            </label>
-            <div class="col-sm-4" data-editors="company"></div>
-            <div class="col-sm-4" data-editors="job_title"></div>
+                <label class="col-sm-4 control-label">
+                    <%= t "company-information" %>
+                </label>
+                <div class="col-sm-4" data-editors="company"></div>
+                <div class="col-sm-4" data-editors="job_title"></div>
             </div>
             <hr class="understated-separator">
             <div class="form-group">
-            <label class="col-sm-4 control-label">
-                <%= t "invitation-category" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "invitation-category" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "invitation-category-help" %>'></i>
-            </label>
-            <div class="col-sm-4" data-editors="invitation_category_id"></div>
+                <label class="col-sm-4 control-label">
+                    <%= t "invitation-category" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "invitation-category" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "invitation-category-help" %>'></i>
+                </label>
+                <div class="col-sm-4" data-editors="invitation_category_id"></div>
             </div>
             <div class="form-group">
-            <label class="col-sm-4 control-label">
-                <%= t "invitation-status" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "invitation-status" %>' data-container='body' data-trigger='hover' data-placement='right' data-toggle='popover' data-content='<%= t "invitation-status-help" %>'></i>
-            </label>
-            <div class="col-sm-4" data-editors="invitestatus_id"></div>
+                <label class="col-sm-4 control-label">
+                    <%= t "invitation-status" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "invitation-status" %>' data-container='body' data-trigger='hover' data-placement='right' data-toggle='popover' data-content='<%= t "invitation-status-help" %>'></i>
+                </label>
+                <div class="col-sm-4" data-editors="invitestatus_id"></div>
             </div>
             <div class="form-group">
-            <label class="col-sm-4 control-label">
-                <%= t "acceptance-status" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "acceptance-status" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "acceptance-status-help" %>'></i>
-            </label>
-            <div class="col-sm-4" data-editors="acceptance_status_id"></div>
+                <label class="col-sm-4 control-label">
+                    <%= t "acceptance-status" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "acceptance-status" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "acceptance-status-help" %>'></i>
+                </label>
+                <div class="col-sm-4" data-editors="acceptance_status_id"></div>
             </div>
             <div class="form-group">
-            <label class="col-sm-4 control-label">
-                <%= t "comments" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "comments" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "comments-help" %>'></i>
-            </label>
-            <div class="col-sm-8" data-editors="comments"></div>
+                <label class="col-sm-4 control-label">
+                    <%= t "comments" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "comments" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "comments-help" %>'></i>
+                </label>
+                <div class="col-sm-8" data-editors="comments"></div>
             </div>
         </fieldset>
     </form>

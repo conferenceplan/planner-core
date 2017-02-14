@@ -79,7 +79,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             last_name : { type : 'Text', title : '<%= t "last-name" %>', editorAttrs : { placeholder : '<%= t "last-name" %>' }, validators: ['required'] },
             suffix : { type : 'Text', title : '<%= t "suffix" %>', editorAttrs : { placeholder : '<%= t "suffix" %>' } },
             has_pseudonym : {
-                type: 'Checkbox'
+                type: 'Checkbox',
+                editorAttrs : {
+                    class : null
+                },
             },
             'pseudonym.prefix' : { type : 'DependentText', 
                                     title : '<%= t "prefix" %>', 
