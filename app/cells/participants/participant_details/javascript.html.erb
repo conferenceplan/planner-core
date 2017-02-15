@@ -1,3 +1,7 @@
+
+<%= render_cell "sociable", :javascript %>
+<%= render_cell "contactable", :javascript %>
+
 <script type="text/javascript">
 
 ParticipantApp = new Backbone.Marionette.Application();
@@ -21,75 +25,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                         hint:  '<%= (t "merge-src-person-hint").html_safe %>' }
         }
     });
-
-    //
-    //
-    //
-    Address = Backbone.Model.extend({
-        schema : {
-            line1 : { type : 'Text', title : '<%= t "line1" %>' },
-            line2 : { type : 'Text', title : '<%= t "line2" %>' },
-            line3 : { type : 'Text', title : '<%= t "line3" %>' },
-            city : { type : 'Text', title : '<%= t "city" %>' },
-            state : { type : 'Text', title : '<%= t "state" %>' },
-            postcode : { type : 'Text', title : '<%= t "post-code" %>' },
-            country : { type : 'Text', title : '<%= t "country" %>' },
-            isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'},
-        },
-        urlRoot : "<%= baseUri + '/postal_addresses' %>"
-    });
-
-    AddressCollection = Backbone.Collection.extend({
-        model : Address
-    });
-
-    var emailLabelNames = new Bloodhound({
-      datumTokenizer: Bloodhound.tokenizers.obj.whitespace, //('value'),
-      queryTokenizer: Bloodhound.tokenizers.whitespace,
-      remote: {
-        url: '<%= baseUri + '/email_addresses/labels/%QUERY' %>',
-        wildcard: '%QUERY'
-      }
-    });
-
-    EmailAddress = Backbone.Model.extend({
-        schema : {
-            email : { type : 'Text', title : '<%= t "email" %>'},
-            label : { 
-                type : 'TypeAheadText', 
-                title : '<%= t "label" %>', 
-                help: '<%= t "email-label-help" %>',
-                config : {
-                    minLength: 0,
-                    limit: 10,
-                    source: emailLabelNames
-                }
-            },
-            isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>', help: '<%= t "email-default-help" %>' }
-        },
-        urlRoot : "<%= baseUri + '/email_addresses' %>"
-    });
-
-    EmailCollection = Backbone.Collection.extend({
-        model : EmailAddress
-    });
-
-    PhoneNumber = Backbone.Model.extend({
-        schema : {
-            number : { type : 'Text', title : '<%= t "phone-number" %>'},
-            phone_type_id : { type : 'Select', title : '<%= t "phone type" %>', options : <%= PhoneTypes.all.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-        },
-        urlRoot : "<%= baseUri + '/phone_numbers' %>"
-    });
-
-    PhoneCollection = Backbone.Collection.extend({
-        model : PhoneNumber
-    });
-
-    //
-    //
-    //
-    
 
 
     var registrationTypes = new Bloodhound({
@@ -144,7 +79,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             last_name : { type : 'Text', title : '<%= t "last-name" %>', editorAttrs : { placeholder : '<%= t "last-name" %>' }, validators: ['required'] },
             suffix : { type : 'Text', title : '<%= t "suffix" %>', editorAttrs : { placeholder : '<%= t "suffix" %>' } },
             has_pseudonym : {
-                type: 'Checkbox'
+                type: 'Checkbox',
+                editorAttrs : {
+                    class : null
+                },
             },
             'pseudonym.prefix' : { type : 'DependentText', 
                                     title : '<%= t "prefix" %>', 
@@ -167,81 +105,35 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             'comments' : { type : 'TextArea', title : '<%= t "comments" %>', editorAttrs : { placeholder : '<%= t "comments-placeholder" %>' } },
             invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= InviteStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
             acceptance_status_id : { type : 'Select', title : '<%= t "acceptance-status" %>', options : <%= AcceptanceStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
+            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            'default_email_address.email' : Contactable.defaultEmailSubSchema.email,
+            'default_email_address.label' : Contactable.defaultEmailSubSchema.label,
+            'default_email_address.isdefault' : Contactable.defaultEmailSubSchema.isdefault
         },
         defaults: {
             invitestatus_id : <%= InviteStatus['Not Set'].id %>,
-            acceptance_status_id : <%= AcceptanceStatus['Unknown'].id %>
+            acceptance_status_id : <%= AcceptanceStatus['Unknown'].id %>,
+            'default_email_address.isdefault' : true
         },
         urlRoot : "<%= baseUri + '/participants' %>"
     });
-
+    
     //
     BioDetails = Backbone.Model.extend({
-        schema : {
-            survey_bio : { type : 'TextArea', title : '<%= t "bio-from-survey" %>', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
-            bio : { 
-              type : 'Html', 
-              title : '<%= t "bio" %>', 
-              editorAttrs: { rows : 6, cols : 60 },
-            },
-            facebook : { 
-              type : 'Text', title : '<i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %>',
-              validators : ['url'], 
-            },
-            twitterinfo : { 
-              type : 'Text', 
-              title : '<i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %>',
-              hint: '<%= (j t('twitter-hint')).html_safe %>',
-              validators: [{
-                type: 'regexp',
-                regexp: /(^@)?(\w){1,15}$/,
-                message: '<%= (j t "please-use-twitter-form").html_safe %>',
-              }],
-            },
-            linkedin : { 
-              type : 'Text', 
-              title : '<i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-handle" %>',
-              validators : ['url'], 
-            },
-            youtube : { 
-              type : 'Text', 
-              title : '<i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-handle" %>',
-              validators : ['url'], 
-             },
-            twitch : { 
-              type : 'Text', 
-              title : '<i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-handle" %>',
-              validators : ['url'],
-             },
-            instagram : { 
-              type : 'Text', 
-              title : '<i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-handle" %>',
-              validators : ['url'], 
-            },
-            flickr : { 
-              type : 'Text', 
-              title : '<i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-handle" %>',
-              validators : ['url'], 
-            },
-            reddit : { 
-              type : 'Text', 
-              title : '<i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-handle" %>',
-              validators : ['url'], 
-            },
-            website : { 
-              type : 'Text', 
-              title : '<i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %>' ,
-              validators : ['url'], 
-              help: '<%= j t "personal-web-site-url" %>',
-            },
-            othersocialmedia : { 
-              type : 'Text', 
-              title : '<%= t "other-social-media" %>',
-              validators : ['url'], 
-              help: '<%= j t "other-social-media-url" %>',
-            },
-        },
+        schema : $.extend(
+            {
+                survey_bio : { type : 'TextArea', title : '<%= t "bio-from-survey" %>', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
+                bio : { 
+                  type : 'Html', 
+                  title : '<%= t "bio" %>', 
+                  editorAttrs: { rows : 6, cols : 60 },
+                }
+            }, 
+            Sociable.generateSchema(
+                "facebook", "twitterinfo", "linkedin", "youtube", "twitch", 
+                "instagram", "flickr", "reddit", "othersocialmedia", "website"
+            )
+        ),
         urlRoot : "<%= baseUri + '/edited_bios' %>"
     });
 
@@ -361,19 +253,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         }
     });
 
-    AddressLayout = Backbone.Marionette.Layout.extend({
-        template: "#address-layout-template",
-
-        regions : {
-            postalControlRegion: "#postal-control-div",
-            postalRegion: "#postal-region-div",
-            emailControlRegion: "#email-control-div",
-            emailRegion: "#email-region-div",
-            phoneControlRegion: "#phone-control-div",
-            phoneRegion: "#phone-region-div",
-        },
-    });
-
     SummaryLayout = Backbone.Marionette.Layout.extend({
         template: "#summary-layout-template",
 
@@ -392,31 +271,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         },
     });
 
-
-
-    //////// Section for dealing with the share person profile modal
-
-    ShareModalContents = Marionette.ItemView.extend({
-        template : "#share-profile-modal-template",
-        className : "share-profile-content",
-        onRender : function() {
-
-            this.$("[data-toggle='tooltip']").tooltip();
-
-            // Copy-to-clipboard functionality
-            var clipboard = new Clipboard('.share-profile-content #copy-url-btn');
-            clipboard.on('success', function(e) {
-                var $elem = $(e.trigger);
-                $elem.tooltip("show");
-                setTimeout(function() {$elem.tooltip("hide")}, 750);
-                e.clearSelection();
-            });
-        },
-    });
-
-    ////////// end share person schedule section
-
-    var tabLists = [];
     var tabContent = {};
     var filters = null;
     var personTabLayout = null;
@@ -668,69 +522,9 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             }
         });
 
-        addressLayout = new AddressLayout();
-        personTabLayout.contacts.show(addressLayout);
+        Contactable.renderAddressLayout(personTabLayout.contacts, id, ("<%= baseUri + '/participants/' %>" + id));
 
-        TabUtils.createTabControl({
-            template : "#address-control-template",
-            modelType : Address,
-            id : id,
-            id_name : 'person_id',
-            view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "create-address-details" %>',
-            region : addressLayout.postalControlRegion
-        });
-        tabLists.push( TabUtils.createTabListContent({
-            collectionType : AddressCollection,
-            url : "<%= baseUri + '/participants/' %>" + id + "/postalAddresses.json",
-            template : "#address-view-template",
-            view_refresh_event : "address:refresh",
-            child_view_refresh_event : "address:refresh",
-            region : addressLayout.postalRegion,
-            newTitle : '<%= t "create-address" %>',
-            editTitle : '<%= t "edit-address" %>',
-        }) );
-
-
-        TabUtils.createTabControl({
-            template : "#phone-control-template",
-            modelType : PhoneNumber,
-            id : id,
-            id_name : 'person_id',
-            view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "create-phone-number" %>',
-            region : addressLayout.phoneControlRegion,
-        });
-        tabLists.push( TabUtils.createTabListContent({
-            collectionType : PhoneCollection,
-            url : "<%= baseUri + '/participants/' %>" + id + "/phoneNumbers.json",
-            template : "#phone-view-template",
-            view_refresh_event : "address:refresh",
-            region : addressLayout.phoneRegion,
-            newTitle : '<%= t "create-phone-number" %>',
-            editTitle : '<%= t "edit-phone-number" %>',
-        }) );
-
-        TabUtils.createTabControl({
-            template : "#email-control-template",
-            modelType : EmailAddress,
-            id : id,
-            id_name : 'person_id',
-            view_refresh_event : "address:refresh",
-            modal_create_title : '<%= t "create-email" %>',
-            region : addressLayout.emailControlRegion
-        });
-        tabLists.push( TabUtils.createTabListContent({
-            collectionType : EmailCollection,
-            url : "<%= baseUri + '/participants/' %>" + id + "/emailAddresses.json",
-            template : "#email-view-template",
-            view_refresh_event : "address:refresh",
-            child_view_refresh_event : "address:refresh",
-            region : addressLayout.emailRegion,
-            newTitle : '<%= t "create-email" %>',
-            editTitle : '<%= t "edit-email" %>',
-        }) );
-
+        
         eventAggregator.on("refreshTagList", syncModel, invite_details);
 
         //initialize the popovers
@@ -844,51 +638,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             $('#participant-tabs').tabdrop({
                 text : "..."
             });
-
-            var Router = Backbone.Router.extend({
-                routes : {
-                    "share_profile/:id" : "shareProfile",
-                },
-                shareProfile : function(id) {
-                    var self = this;
-                    $.ajax({
-                        url : "<%= baseUri %>/participants/" + id + ".json",
-                        async : false,
-                        success : function(response) {
-                            var contents = new ShareModalContents({
-                                model : new Backbone.Model({
-                                    url : '<%= site_url + "/participants/" %>' + id,
-                                    mailto : ("mailto:" + (response.email_address ? response.email_address : "") + '?subject=<%= t("profile-email-button-subject") %>' + '&body=<%= t("profile-email-button-body", url: (site_url + "/participants/")) %>' + id),
-                                    email_target : "_blank",
-                                })
-                            });
-
-                            var modal = new AppUtils.InfoModal({
-                                title : "<%= j t('share-profile-for').html_safe %> " + response.full_publication_name,
-                                content : contents.render().$el,
-                                postRenderFn : function(){
-                                    this.$(".confirm-btn").removeClass("btn-primary").addClass("btn-default").html("<%= t('close') %>");
-                                }
-                            });
-                            modal.render();
-                            self.navigate("#");
-                        },
-                        error : function(response) {
-                            // console.log(response);
-                            AppUtils.setMessage({
-                              text : response.responseText,
-                              style : 'error',
-                              renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
-                              fade : true,
-                              fadeTimeout : 10000
-                            });
-                            self.navigate("#");
-                        }
-                    });
-                },
-            });
-
-            new Router();
         },
 
         InviteDetails : InviteDetails,
@@ -1019,3 +768,4 @@ jQuery(document).ready(function() {
 <% @extra_javascript.each do |extra| %>
     <%= render extra %>
 <% end %>
+

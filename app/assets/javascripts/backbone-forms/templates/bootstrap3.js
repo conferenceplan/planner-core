@@ -8,7 +8,7 @@
 
 ;(function(Form) {
 
-  Form.Field.prototype.templateData = function() {
+  var sharedTemplateData = function() {
     var schema = this.schema;
 
     return {
@@ -22,6 +22,10 @@
       editorId: this.editor.id
     };
   };
+
+  Form.Field.prototype.templateData = sharedTemplateData;
+
+  Form.NestedField.prototype.templateData = sharedTemplateData;
 
 
   /**
@@ -61,11 +65,14 @@
     <div class="field-<%= key %>">\
       <label for="<%= editorId %>">\
         <%= title %>\
+        <% if (help && (help.length > 0) ) { %>\
+            <i class="glyphicon glyphicon-info-sign bpopover" title="<%- title %>" data-container="body" data-trigger="hover" data-placement="<%= help_placement %>" data-toggle="popover" data-content="<%= help %>"></i>\
+        <% }; %>\
       </label>\
-      <div title="<%= title %>" class="input-xlarge">\
+      <div title="<%- title %>" class="input-xlarge">\
         <span data-editor></span>\
         <p class="help-block" data-error></p>\
-        <p class="help-block"><%= help %></p>\
+        <p class="help-block"><%= hint %></p>\
       </div>\
     </div>\
   ');

@@ -1,0 +1,169 @@
+
+
+
+<script type="text/template" id="address-layout-template">
+    <section>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-xs-12">
+                <div id="email-control-div"></div>
+                <div id="email-region-div"></div>
+            </div>
+            <div class="col-lg-5 col-md-6 col-xs-12">
+                <div id="postal-control-div"></div>
+                <div id="postal-region-div"></div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-xs-12">
+                <div id="phone-control-div"></div>
+                <div id="phone-region-div"></div>
+            </div>
+        </div>
+    </section>
+</script>
+
+
+<script type="text/template" id="address-control-template">
+    <button class="add-model-button btn btn-xs btn-primary pull-right ">
+        <i class="fa fa-plus" aria-hidden="true"></i> <%= t "add" %>
+    </button>
+    <h5><%= t "postal-addresses" %></h5>
+</script>
+
+<script type="text/template" id="email-control-template">
+<div>
+    <button class="add-model-button btn btn-xs btn-primary pull-right "><i class="fa fa-plus" aria-hidden="true"></i>  <%= t "add" %></button>
+    <h5><%= t "email-addresses" %></h5>
+</div>
+</script>
+
+<script type="text/template" id="phone-control-template">
+<div>
+    <button class="add-model-button btn btn-xs btn-primary pull-right ">
+        <i class="fa fa-plus" aria-hidden="true"></i>  <%= t "add" %>
+    </button>
+    <h5><%= t "phone" %></h5>
+</div>
+</script>
+
+
+<script type="text/template" id="phone-view-template">
+{{ if (typeof(number) != "undefined") { }}
+<div>
+    <div  class="contact-details-div">
+        <div class="caption" class="pull-left">
+            <button class="model-delete-button btn btn-danger btn-xs pull-right">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </button>
+            <small>
+                <dl class="dl-horizontal-small">
+                    <dt>
+                        {{= phone_type_name ? phone_type_name : "&nbsp;"}}
+                    </dt>
+                    <dd>
+                        {{= number ? "<a href='tel:" + number + "'>" + number + "</a>" : "&nbsp;" }}
+                    </dd>
+                </dl> </small>
+        </div>
+    </div>
+</div>
+{{ } }}
+</script>
+
+<script type="text/template" id="email-view-template">
+{{ if (typeof(email) != "undefined") { }}
+<div>
+    <div class="contact-details-div">
+        
+            <button class="model-delete-button btn btn-danger btn-xs pull-right">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </button>
+            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "primary-email" %></div>' : ''}}
+            <small>
+                <dl class="dl-horizontal-small">
+                    <dd>
+                        {{= email ? "<a href='mailto:" + email + "'>" + email + "</a>" : "&nbsp;" }}
+                    </dd>
+                    {{ if (!(typeof label == undefined) && label != null) { }}
+                        <dd>
+                            <span class="badge">{{= label }}</span>
+                        </dd>
+                    {{ } }}
+                </dl> </small>
+        
+    </div>
+</div>
+{{ } }}
+</script>
+
+
+<script type="text/template" id="address-view-template">
+{{ if (typeof(line1) != "undefined") { }}
+    <div class="contact-details-div">
+            
+            <button class="model-delete-button btn btn-danger btn-xs pull-right">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+            <button class="model-edit-button btn btn-primary btn-xs pull-right">
+                <i class="glyphicon glyphicon-pencil"></i>
+            </button>
+            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
+            <small>
+                <dl class="dl-horizontal-small">
+                    <dt>
+                        <%= t "line1" %>
+                    </dt>
+                    <dd>
+                        {{= line1 ? line1 : "&nbsp;" }}
+                    </dd>
+                    {{ if (line2) { }}                    
+                        <dt>
+                            <%= t "line2" %>
+                        </dt>
+                        <dd>
+                            {{= line2 ? line2 : "&nbsp;" }}
+                        </dd>
+                    {{ } }}    
+                    {{ if (line3) { }}
+                        <dt>
+                            <%= t "line3" %>
+                        </dt>
+                        <dd>
+                            {{= line3 ? line3 : "&nbsp;" }}
+                        </dd>
+                    {{ } }}
+                    <dt>
+                        <%= t "city" %>
+                    </dt>
+                    <dd>
+                        {{= city ? city : "&nbsp;" }}
+                    </dd>
+                    <dt>
+                        <%= t "state" %>
+                    </dt>
+                    <dd>
+                        {{= state ? state : "&nbsp;" }}
+                    </dd>
+                    <dt>
+                        <%= t "post-code" %>
+                    </dt>
+                    <dd>
+                        {{= postcode ? postcode : "&nbsp;" }}
+                    </dd>
+                    <dt>
+                        <%= t "country" %>
+                    </dt>
+                    <dd>
+                        {{= country ? country : "&nbsp;" }}
+                    </dd>
+                </dl> 
+            </small>
+        
+    </div>
+{{ } }}
+</script>
+

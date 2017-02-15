@@ -1,0 +1,80 @@
+{{ if (has_social_media) { }}
+  <div class="social-media-container">
+    {{ if (typeof facebook_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon facebook fa-stack
+      {{ if (facebook_url && facebook_url.trim().length > 0) { }} active"  href="{{= facebook_url }}" title="Facebook: {{= facebookid }}" target="facebook"
+      {{ } else { }} disabled" title="Facebook: <%= t('value-not-set') %>"{{ } }}>
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x" style="color: white;"></i>
+      </a>
+    {{ } }}
+    {{ if (typeof twitter_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon twitter fa-stack
+      {{ if (twitter_url && twitter_url.trim().length > 0) { }} active" href="{{= twitter_url }}" title="Twitter: @{{= twitterid }}" target="twitter"
+      {{ } else { }} disabled" title="Twitter: <%= t('value-not-set') %>"{{ } }}>
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x" style="color: white;"></i>
+      </a>
+    {{ } }}
+    {{ if (typeof linkedin_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon linkedin fa-stack
+      {{ if (linkedin_url && linkedin_url.trim().length > 0) { }} active" href="{{= linkedin_url }}" title="LinkedIn: {{= linkedinid }}" target="linkedin"
+      {{ } else { }} disabled" title="LinkedIn: <%= t('value-not-set') %>"{{ } }}>
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-linkedin fa-stack-1x" style="color: white;"></i>
+      </a>
+    {{ } }}
+    {{ if (typeof youtube_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon youtube fa-stack
+      {{ if (youtube_url && youtube_url.trim().length > 0) { }} active" href="{{= youtube_url }}" title="Youtube: {{= youtubeid }}" target="youtube"
+      {{ } else { }} disabled" title="Youtube: <%= t('value-not-set') %>"{{ } }}>
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-youtube-play fa-stack-1x" style="color: white;"></i>
+      </a>
+    {{ } }}
+    {{ if (typeof twitch_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon twitch fa-stack
+      {{ if (twitch_url && twitch_url.trim().length > 0) { }} active" target="twitch" href="{{= twitch_url }}" title="Twitch: {{= twitchid }}"
+      {{ } else { }} disabled" title="Twitch: <%= t('value-not-set') %>"{{ } }}>
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-twitch fa-stack-1x" style="color: white;"></i>
+      </a>
+    {{ } }}
+    {{ if (typeof instagram_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon instagram
+      {{ if (instagram_url && instagram.trim().length > 0) { }} active" target="instagram" href="{{= instagram_url }}" title="Instagram: @{{= instagramid }}"
+      {{ } else { }} disabled" title="Instagram: <%= t('value-not-set') %>"{{ } }}>
+      </a>
+    {{ } }}
+    {{ if (typeof flickr_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" style="margin-left: 3px;" class="gr-social-icon flickr fa fa-flickr fa-2x
+      {{ if (flickr_url && flickr.trim().length > 0) { }} active" target="flickr" href="{{= flickr_url }}" title="Flickr: {{= flickrid }}"
+      {{ } else { }} disabled" title="Instagram: <%= t('value-not-set') %>"{{ } }}>
+      </a>
+    {{ } }}
+    {{ if (typeof reddit_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon reddit fa-stack
+      {{ if (reddit_url && reddit_url.trim().length > 0) { }} active" target="reddit" href="{{= reddit_url }}" title="Reddit: {{= redditid }}"
+      {{ } else { }} disabled" title="Reddit: <%= t('value-not-set') %>"{{ } }}>
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-reddit-alien fa-stack-1x" style="color: white;"></i>
+      </a>
+    {{ } }}
+    {{ if (typeof website_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon website fa-stack
+      {{ if (website_url && website_url.trim().length > 0) { }} active" target="website" href="{{= website_url }}" title="{{= website_url }}"
+      {{ } else { }} disabled" title="<%= t('value-not-set') %>"{{ } }}>
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-globe fa-stack-1x" style="color: white;"></i>
+      </a>
+    {{ } }}
+    {{ if (typeof othersocialmedia_url != "undefined") { }}
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon other-social fa-stack
+      {{ if (othersocialmedia_url && othersocialmedia_url.trim().length > 0) { }} active" target="othersocialmedia" href="{{= othersocialmedia_url }}" title="{{= othersocialmedia_url }}"
+      {{ } else { }} disabled" title="<%= t('value-not-set') %>"{{ } }}>
+          <i class="fa fa-square fa-stack-2x"></i>
+          <i class="fa fa-link fa-stack-1x" style="color: white;"></i>
+      </a>
+    {{ } }}
+  </div>
+{{ } }}

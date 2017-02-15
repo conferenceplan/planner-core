@@ -7,25 +7,11 @@ class Person < ActiveRecord::Base
   attr_accessor :details
 
   acts_as_taggable
+
+  has_contact_info
   
   # Put in audit for people
   audited :allow_mass_assignment => true
-  
-  has_many  :addresses, :dependent => :delete_all
-  
-  has_many  :postal_addresses, :through => :addresses,
-            :source => :addressable, 
-            :source_type => 'PostalAddress'
-  
-  has_many  :email_addresses, :through => :addresses, 
-            :source => :addressable, 
-            :source_type => 'EmailAddress'
-
-  has_many :phone_numbers, :through => :addresses,
-            :source => :addressable,
-            :source_type => 'PhoneNumber'
-
-  accepts_nested_attributes_for :postal_addresses, :email_addresses, :phone_numbers
 
   has_many  :relationships, :dependent => :delete_all
 
@@ -104,8 +90,28 @@ class Person < ActiveRecord::Base
   belongs_to  :dep_invitation_category, :foreign_key => 'invitation_category_id', :class_name => "InvitationCategory" # TODO - SCOPE
   
   has_one      :person_con_state, dependent: :destroy
+
+  ## Scopes ##
+  def self.attendees
+    people = joins(:registrationDetail).where("registration_details.registered is true")
+    people.uniq
+  end
+
+  def self.speakers
+    speakers = joins(:programmeItemAssignments)
+    speakers.uniq
+  end
+
+  def self.participants
+    where([
+      "people.id in (:assigned_people) OR people.id in (:registered_people)", 
+      { assigned_people: Person.speakers.pluck(:id), registered_people: Person.attendees.pluck(:id) }
+    ]).uniq
+  end
   
   # ----------------------------------------------------------------------------------------------
+
+
   def acceptance_status_id=(arg)
     self.person_con_state = PersonConState.new if !self.person_con_state
     self.person_con_state.acceptance_status_id = arg
@@ -182,14 +188,6 @@ class Person < ActiveRecord::Base
     self.person_con_state.save! if self.id && self.id > 0
   end  
   
-  def getFullName()
-    full_name
-  end
-  
-  def full_name()
-    [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ').strip
-  end
-  
   # check that the person has not been assigned to program items, if they have then return an error and do not delete
   def check_if_assigned
     if (ProgrammeItemAssignment.unscoped.where(person_id: id).count > 0) || (PublishedProgrammeItemAssignment.unscoped.where(person_id: id).count > 0)
@@ -226,157 +224,13 @@ class Person < ActiveRecord::Base
     edited_bio ? edited_bio.linkedin : ""
   end
   
-  def updatePhone(new_phone, phonetype)
-    
-    # first find the existing phone of the given type
-    # if found update it
-    # otherwise create a new instance
-    phone = phone_numbers.detect { |ph| ph.phone_type == PhoneTypes[phonetype] }# findPhoneByType(phonetype)
-    if phone
-      phone.number = new_phone
-      phone.save!
-    else
-      phone = self.phone_numbers.new :number => new_phone
-      phone.number = new_phone
-      phone.phone_type = PhoneTypes[phonetype]
-      self.save!
-    end
-    
+
+  def getFullName()
+    full_name
   end
   
-  #
-  #
-  #
-  def addressMatch?(new_line1, new_city, new_state, new_postcode, new_country)
-    address = getDefaultPostalAddress()
-
-    if address
-      if ((address.line1 == new_line1) &&
-         (address.city == new_city) &&
-         (address.state == new_state) &&
-         (address.postcode == new_postcode) &&
-         (address.country == new_country))
-         return true
-      else
-        return false
-      end
-    else
-      return false
-    end
-  end
-  
-  #
-  #
-  #
-  def emailMatch?(email)
-    e = getDefaultEmail()
-    
-    return e ? e.email == email : false
-  end
-
-  def updateDefaultEmail(email)
-    e = getDefaultEmail()
-    if e
-      e.isdefault = false
-      e.save!
-    end
- 
-    e = self.email_addresses.new :email => email, :isdefault => true 
-   
-    self.save!
-  end
-
-  #
-  #
-  #
-  def updateDefaultAddress(new_line1, new_city, new_state, new_postcode, new_country)
-    # We will create a new address object and make that the default (so the old one will no longer be used but will still be in the list)
-    address = getDefaultPostalAddress
-    
-    if address
-      address.isdefault = false
-      address.save!
-    end
-    
-    postalAddress = self.postal_addresses.new :line1 => new_line1, :city => new_city, :state => new_state, :postcode => new_postcode, :country => new_country, :isdefault => true 
-
-    self.save!
-  end
-
-  #
-  #
-  #
-  def replaceDefaultAddress(new_line1, new_line2, new_city, new_state, new_postcode, new_country, new_state_code, new_country_code)
-    # We will create a new address object and make that the default (so the old one will no longer be used but will still be in the list)
-    address = getDefaultPostalAddress
-    
-    if address
-      address.line1 = new_line1
-      address.line2 = new_line2
-      address.city = new_city
-      address.state = new_state if !new_state.blank?
-      address.postcode = new_postcode
-      address.country = new_country if !new_country.blank?
-      address.state_code = new_state_code
-      address.country_code = new_country_code
-      address.save!
-    else
-      postalAddress = self.postal_addresses.create :line1 => new_line1, 
-                                    :line2 => new_line2, 
-                                    :city => new_city, 
-                                    # :state => new_state, 
-                                    :postcode => new_postcode, 
-                                    # :country => new_country, 
-                                    :state_code => new_state_code,
-                                    :country_code => new_country_code,
-                                    :isdefault => true 
-      postalAddress.state = new_state if !new_state.blank?
-      postalAddress.country = new_country if !new_country.blank?
-      postalAddress.save
-    end
-
-    self.save!
-    self
-  end
-
-  #
-  #
-  #
-  def getDefaultPostalAddress()
-    possibleAddresses = postal_addresses
-    theAddress = nil
-    if possibleAddresses
-      possibleAddresses.each do |addr| 
-        if addr.isdefault
-          theAddress = addr
-        else # if the address is empty we want to take the first one (unless there is a default)
-          if theAddress == nil
-            theAddress = addr
-          end
-        end
-      end
-    end
-    return theAddress
-  end
-
-  #
-  #
-  #
-  def getDefaultEmail()
-    possibleEmails = email_addresses
-    theEmail = nil
-    if possibleEmails
-      possibleEmails.each do |email| 
-        if email.isdefault
-          theEmail = email
-        else # if the email is empty we want to take the first one (unless there is a default)
-          if theEmail == nil
-            theEmail = email
-          end
-        end
-      end
-    end
-    return theEmail
+  def full_name()
+    [self.prefix, self.first_name,self.last_name,self.suffix].compact.join(' ').strip
   end
 
   def real_name
@@ -481,39 +335,6 @@ class Person < ActiveRecord::Base
     end
   end
   
-  def removePostalAddress(address)
-     postal_addresses.delete(address) # remove it from the person
-     # and then make sure that it is not used by another person
-     if (! addresses.where(["addressable_id = ? and person_id != ?", address, @id]) )
-       address.destroy
-     end
-  end
-  
-  def removeEmailAddress(address)
-     email_addresses.delete(address) # remove it from the person
-     # and then make sure that it is not used by another person
-     if (! addresses.where(["addressable_id = ? and person_id != ?", address, @id]) )
-       address.destroy
-     end
-  end
-
-  def removeAllAddresses()
-    # Get the addresses and if they are not reference by other people the get rid of them...
-    postalAddresses = self.postal_addresses
-    
-    if (postalAddresses)
-      postalAddresses.each do |address|
-        self.removePostalAddress(address)
-      end
-    end
-    emailAddresses = self.email_addresses
-    if (emailAddresses)
-      emailAddresses.each do |eaddress|
-        self.removeEmailAddress(eaddress)
-      end
-    end
-  end
-
   def is_speaker?
     published_programme_items && published_programme_items.any?
   end
@@ -523,23 +344,6 @@ class Person < ActiveRecord::Base
     url = image.public_image_url(opts) if image.present?
 
     url
-  end
-
-  def self.attendees
-    people = joins(:registrationDetail).where("registration_details.registered is true")
-    people.uniq
-  end
-
-  def self.speakers
-    speakers = joins(:programmeItemAssignments)
-    speakers.uniq
-  end
-
-  def self.participants
-    where([
-      "people.id in (:assigned_people) OR people.id in (:registered_people)", 
-      { assigned_people: Person.speakers.pluck(:id), registered_people: Person.attendees.pluck(:id) }
-    ]).uniq
   end
 
 end

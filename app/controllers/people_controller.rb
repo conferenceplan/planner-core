@@ -80,6 +80,10 @@ class PeopleController < PlannerController
         @person = Person.new(params[:person])
         datasourcetmp = Datasource.find_by(name: "Application") # TODO - verify, we need to make sure we have the data-source Application
         @person.datasource = datasourcetmp
+
+        
+        @person = update_default_email_address @person
+
         @person.save!
         @person.person_con_state.save!
       end
@@ -113,6 +117,7 @@ class PeopleController < PlannerController
         end
     
         @person.update_attributes(params[:person])
+        @person = update_default_email_address @person
       end
     rescue => ex
       render status: :bad_request, text: ex.message
@@ -178,7 +183,7 @@ class PeopleController < PlannerController
     
     begin
       person = Person.find(params[:id])
-      key = MailService.generateSurveyKey person
+      MailService.generateSurveyKey person
       
       render status: :ok, text: {}.to_json
     rescue => ex
@@ -218,6 +223,29 @@ class PeopleController < PlannerController
     @people = findAllPeopleByInviteAndAcceptance(invitestatus.id, accepted.id)
     
     render :layout => 'content'
+  end
+
+
+  private
+  def update_default_email_address person
+    # Email address
+    if params[:default_email_address] && params[:default_email_address].present? && params[:default_email_address][:email].present?
+      email = params[:default_email_address][:email]
+      label = params[:default_email_address][:label]
+      email_address = person.email_addresses.find_by(email: email)
+      if email_address.present?
+        email_address.email = email
+        email_address.label = label
+        email_address.isdefault = true if !email_address.isdefault
+        email_address.save!
+      else
+        person.updateDefaultEmail(email, label: label)
+      end
+    else # make sure it gets deleted
+      person.getDefaultEmail.destroy if person.getDefaultEmail && person.getDefaultEmail.isdefault
+    end
+
+    person
   end
   
 end
