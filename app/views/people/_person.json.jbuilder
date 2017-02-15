@@ -29,4 +29,5 @@
     json.bio_image                  person.bio_image if person.bio_image
     json.lock_version               person.lock_version
     json.email_address              person.getDefaultEmail.present? ? person.getDefaultEmail.email : nil
+    json.default_email_address      person.getDefaultEmail
     

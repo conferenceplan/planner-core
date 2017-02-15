@@ -105,11 +105,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             'comments' : { type : 'TextArea', title : '<%= t "comments" %>', editorAttrs : { placeholder : '<%= t "comments-placeholder" %>' } },
             invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= InviteStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
             acceptance_status_id : { type : 'Select', title : '<%= t "acceptance-status" %>', options : <%= AcceptanceStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
+            invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            'default_email_address.email' : Contactable.defaultEmailSubSchema.email,
+            'default_email_address.label' : Contactable.defaultEmailSubSchema.label,
+            'default_email_address.isdefault' : Contactable.defaultEmailSubSchema.isdefault
         },
         defaults: {
             invitestatus_id : <%= InviteStatus['Not Set'].id %>,
-            acceptance_status_id : <%= AcceptanceStatus['Unknown'].id %>
+            acceptance_status_id : <%= AcceptanceStatus['Unknown'].id %>,
+            'default_email_address.isdefault' : true
         },
         urlRoot : "<%= baseUri + '/participants' %>"
     });

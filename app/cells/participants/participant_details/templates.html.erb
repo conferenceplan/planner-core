@@ -128,6 +128,30 @@
                 <div class="col-sm-4" data-editors="company"></div>
                 <div class="col-sm-4" data-editors="job_title"></div>
             </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">
+                    <%= t('primary-email-address') %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "primary-email-address" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "person-primary-email-address-help" %>'></i>
+                </label>
+                <div class="field-default_email_address_email col-sm-4" style="padding-top: 6px;">
+                  <label>
+                    <%= t('email') %>
+                  </label>
+                  <div title="<%= t('email') %>" class="input-xlarge">
+                    <div data-editors="default_email_address.email"></div>
+                    <div class="has-error"><p class="help-block" data-error></p></div>
+                  </div>
+                </div>
+                <div class="field-default_email_address_label col-sm-4" style="padding-top: 6px;">
+                  <label>
+                    <%= t('label') %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "label" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "email-label-help" %>'></i>
+                  </label>
+                  <div title="<%= t('label') %>" class="input-xlarge">
+                    <div data-editors="default_email_address.label"></div>
+                    <div class="has-error"><p class="help-block" data-error></p></div>
+                  </div>
+                </div>
+                <div data-editors="default_email_address.isdefault"></div>
+            </div>
             <hr class="understated-separator">
             <div class="form-group">
                 <label class="col-sm-4 control-label">
@@ -286,7 +310,7 @@
             </div>
             <div class="caption voffset5">
                 <p><%= t "bio-image" %>
-                    <button class="model-delete-button btn btn-primary btn-xs pull-right">
+                    <button class="model-delete-button btn btn-danger btn-xs pull-right">
                         <i class="glyphicon glyphicon-trash"></i>
                     </button>
                     <button class="model-edit-button btn btn-primary btn-xs pull-right">
