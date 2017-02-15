@@ -46,13 +46,19 @@
       }
     });
 
-    emailSchema = {
-        email : { 
+    function generateEmailSchema(options={}) {
+      var emailOptions = options.emailOptions || {};
+      var labelOptions = options.labelOptions || {};
+      var isdefaultOptions = options.isdefaultOptions || {};
+
+      var emailSchema = {
+        email : $.extend({ 
           type : 'Text', 
           title : '<%= t "email" %>',
           validators : ['email']
-        },
-        label : { 
+        }, emailOptions),
+
+        label : $.extend({ 
             type : 'TypeAheadText', 
             title : '<%= t "label" %>', 
             help: '<%= t "email-label-help" %>',
@@ -61,22 +67,26 @@
                 limit: 10,
                 source: emailLabelNames
             }
-        },
-        isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>', help: '<%= t "email-default-help" %>' }
+        }, labelOptions),
+
+        isdefault : $.extend({ 
+          type : 'Checkbox', 
+          title : '<%= t "email-is-primary" %>', 
+          help: '<%= t "email-default-help" %>' 
+        }, isdefaultOptions)
+      };
+      
+      return emailSchema;
     };
 
-    defaultEmailSubSchema = $.extend(
-      {},
-      emailSchema,
-      {
-        isdefault : { type : "Hidden" }
-      }
-    );
+    
+
+    defaultEmailSubSchema = generateEmailSchema({isdefaultOptions : { type : "Hidden" } });
 
     defaultEmailSchema = {
       default_email_address : {
         type : "Object",
-        title : '<%= j t('default-email-address') %>',
+        title : '<%= j t('primary-email-address') %>',
         editorClass : 'sub-schema-field',
 
         subSchema : defaultEmailSubSchema
@@ -84,7 +94,7 @@
     };
 
     EmailAddress = Backbone.Model.extend({
-        schema : emailSchema,
+        schema : generateEmailSchema(),
         urlRoot : "<%= baseUri + '/email_addresses' %>"
     });
 
@@ -218,7 +228,8 @@
       EmailCollection : EmailCollection,
       PhoneNumber : PhoneNumber,
       PhoneCollection : PhoneCollection,
-      renderAddressLayout : renderAddressLayout
+      renderAddressLayout : renderAddressLayout,
+      generateEmailSchema : generateEmailSchema
     };
   })(Backbone, Marionette);
 </script>
