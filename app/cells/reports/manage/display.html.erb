@@ -5,7 +5,13 @@
 <div class="row">
     <div class="col-md-6">
         
-        <h3><%= t "reports" %></h3>
+        <h3><%= t "reports" %>
+            <i class="glyphicon glyphicon-info-sign bpopover"
+                title="<%= t "reports" %>" 
+                data-container="body" data-trigger="hover" 
+                data-placement="right auto" data-toggle="popover" data-content="<%= (t "reports-tooltip").html_safe %>">
+            </i>
+        </h3>
 
         <ul class="nav nav-tabs" id="report-tabs">
             <li class="active"><a href="#people-reports-tab" data-toggle="tab"><%= t 'people-reports' %></a></li>

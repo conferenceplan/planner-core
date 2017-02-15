@@ -43,3 +43,4 @@ tmp/**/*
 /spec/dummy/tmp
 
 spec/dummy/config/application.yml
+.buildpath
