@@ -2,6 +2,8 @@
     <%= render extra %>
 <% end %>
 
+<%= render_cell "contactable", :templates %>
+
 <script type="text/template" id="person-tab-layout-template">
     <div class="tab-content">
         <div class="tab-pane  active" id="invite-tab">
@@ -42,49 +44,6 @@
             <%= render extra %>
         <% end %>
     </div>
-</script>
-
-<script type="text/template" id="address-layout-template">
-    <section>
-        <div class="row">
-            <div class="col-md-5 col-xs-12">
-                <div id="postal-control-div"></div>
-                <div id="postal-region-div"></div>
-            </div>
-            <div class="col-md-4 col-xs-12">
-                <div id="email-control-div"></div>
-                <div id="email-region-div"></div>
-            </div>
-            <div class="col-md-3 col-xs-12">
-                <div id="phone-control-div"></div>
-                <div id="phone-region-div"></div>
-            </div>    
-        </div>
-    </section>
-</script>
-
-
-<script type="text/template" id="address-control-template">
-    <button class="add-model-button btn btn-xs btn-primary pull-right ">
-        <%= t "add-address" %>
-    </button>
-    <h5><%= t "postal-addresses" %></h5>
-</script>
-
-<script type="text/template" id="email-control-template">
-<div>
-    <button class="add-model-button btn btn-xs btn-primary pull-right "><%= t "add-email" %></button>
-    <h5><%= t "email-addresses" %></h5>
-</div>
-</script>
-
-<script type="text/template" id="phone-control-template">
-<div>
-    <button class="add-model-button btn btn-xs btn-primary pull-right ">
-        <%= t "add-phone" %>
-    </button>
-    <h5><%= t "phone" %></h5>
-</div>
 </script>
 
 <script type="text/template" id="bio-image-form-template">
@@ -342,26 +301,7 @@
             <dl class="dl-airy">
                 <dt><%= t "bio" %>{{= bio ? ' <span class="minor-text"> (<%= t "biography-edited" %>)</span>' : (survey_bio ? ' <span class="minor-text"> (<%= t "biography-filled-out-by-person-on-the-survey" %>)</span>' : '&nbsp;') }}</dt>
                 <dd>{{= bio ? bio : (survey_bio ? survey_bio : "<span class='minor-text'><%= t 'none-provided' %></span>") }}</dd>
-                <dt><i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %></dt>
-                <dd>{{= facebookid ? "<a href='http://www.facebook.com/" + facebookid + "' target='_blank'>" + facebookid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %></dt>
-                <dd>{{= twitterid ? "<a href='https://twitter.com/" + twitterid + "' target='_blank'>" + "@" + twitterid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-url" %></dt>
-                <dd>{{= linkedinid ? "<a href='http://www.linkedin.com/in/" + linkedinid + "' target='_blank'>" + linkedinid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-url" %></dt>
-                <dd>{{= youtubeid ? "<a href='http://www.youtube.com/user/" + youtubeid + "' target='_blank'>" + youtubeid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-url" %></dt>
-                <dd>{{= twitchid ? "<a href='http://www.twitch.tv/" + twitchid + "' target='_blank'>" + twitchid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-url" %></dt>
-                <dd>{{= instagramid ? "<a href='http://www.instagram.com/" + instagramid + "' target='_blank'>" + instagramid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-url" %></dt>
-                <dd>{{= flickrid ? "<a href='http://www.flickr.com/photos/" + flickrid + "' target='_blank'>" + flickrid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-url" %></dt>
-                <dd>{{= redditid ? "<a href='http://www.reddit.com/user/" + redditid + "' target='_blank'>" + redditid + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><i class="fa fa-globe" aria-hidden="true"></i> <%= t "participant-url" %></dt>
-                <dd>{{= website ? "<a href='" + website + "' target='_blank'>" + website + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
-                <dt><%= t "other-social-media" %></dt>
-                <dd>{{= othersocialmedia ? "<a href='" + othersocialmedia + "' target='_blank'>" + othersocialmedia + "</a>" : "<span class='minor-text'><%= t "none-provided" %></span>" }}</dd>
+                <%= render_cell "sociable", :template_icons %>
             </dl>
         {{ } else { }}
             <button class="model-new-button btn btn-primary btn-xs pull-right"><span class="glyphicon glyphicon-pencil"></span></button>
@@ -376,121 +316,6 @@
 
 </script>
 
-<script type="text/template" id="phone-view-template">
-<div>
-    <div  class="contact-details-div">
-        <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-            <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-pencil"></i>
-            </button>
-            <small>
-                <dl class="dl-horizontal-small">
-                    <dt>
-                        {{= phone_type_name ? phone_type_name : "&nbsp;"}}
-                    </dt>
-                    <dd>
-                        {{= number ? "<a href='tel:" + number + "'>" + number + "</a>" : "&nbsp;" }}
-                    </dd>
-                </dl> </small>
-        </div>
-    </div>
-</div>
-</script>
-
-<script type="text/template" id="email-view-template">
-<div>
-    <div class="contact-details-div">
-        
-            <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-            <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-pencil"></i>
-            </button>
-            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
-            <small>
-                <dl class="dl-horizontal-small">
-                    <dd>
-                        {{= email ? "<a href='mailto:" + email + "'>" + email + "</a>" : "&nbsp;" }}
-                    </dd>
-                    {{ if (!(typeof label == undefined) && label != null) { }}
-                        <dd>
-                            <span class="badge">{{= label }}</span>
-                        </dd>
-                    {{ } }}
-                </dl> </small>
-        
-    </div>
-</div>
-</script>
-
-
-<script type="text/template" id="address-view-template">
-    <div class="contact-details-div">
-            
-            <button class="model-delete-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-            <button class="model-edit-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-pencil"></i>
-            </button>
-            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
-            <small>
-                <dl class="dl-horizontal-small">
-                    <dt>
-                        <%= t "line1" %>
-                    </dt>
-                    <dd>
-                        {{= line1 ? line1 : "&nbsp;" }}
-                    </dd>
-                    {{ if (line2) { }}                    
-                        <dt>
-                            <%= t "line2" %>
-                        </dt>
-                        <dd>
-                            {{= line2 ? line2 : "&nbsp;" }}
-                        </dd>
-                    {{ } }}    
-                    {{ if (line3) { }}
-                        <dt>
-                            <%= t "line3" %>
-                        </dt>
-                        <dd>
-                            {{= line3 ? line3 : "&nbsp;" }}
-                        </dd>
-                    {{ } }}
-                    <dt>
-                        <%= t "city" %>
-                    </dt>
-                    <dd>
-                        {{= city ? city : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "state" %>
-                    </dt>
-                    <dd>
-                        {{= state ? state : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "post-code" %>
-                    </dt>
-                    <dd>
-                        {{= postcode ? postcode : "&nbsp;" }}
-                    </dd>
-                    <dt>
-                        <%= t "country" %>
-                    </dt>
-                    <dd>
-                        {{= country ? country : "&nbsp;" }}
-                    </dd>
-                </dl> 
-            </small>
-        
-    </div>
-</script>
 
 <script type="text/template" id="exclusions-layout-template">
 <section>
@@ -600,17 +425,5 @@
     <span class="label label-info remove-filter-button filter-remove-button" tagcontext="{{= context}}" tagname="{{= name }}">{{= name }}<i class="glyphicon glyphicon-remove"></i></span>
 </script>
 
-<script type="text/template" id="share-profile-modal-template">
-    <p><%= t 'share-profile-url-intro' %>:</p>
-    <div class="input-group boffset30">
-        <input id="url-input-field" readonly type="text" name="url" value="{{= url }}" class="form-control boffset10 text-cursor">
-        <div class="input-group-btn">
-            <a id="go-to-schedule-btn" href="{{= url }}" target="person-schedule" class="btn btn-default" data-toggle="tooltip" data-trigger="hover" title="<%= strip_tags t('go-to-schedule') %>"><i class="fa fa-external-link"></i> <%= t('open') %></a>
-            <span id="copy-url-btn" class="btn btn-default" data-clipboard-target="#url-input-field" data-toggle="tooltip" data-trigger="manual" title= "<%= t('copied') %>" data-placement="top auto"><i class="fa fa-clipboard"></i> <%= t('copy') %></span>
-            <a id="email-schedule-btn" href="{{= mailto }}" target="{{= email_target }}" class="btn btn-primary"><i class="fa fa-envelope-o"></i> <%= t('email-this-persons-schedule') %></a>
-        </div>
-    </div>
-    <div id="form-container"></div> 
-</script>
 
 
