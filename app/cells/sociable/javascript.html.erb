@@ -5,6 +5,11 @@
     function generateSchema() {
       var args = arguments;
       var schema = {};
+      if (args.length > 0) {
+        schema = {
+          divider : { template : _.template('<hr class="understated-separator">') }
+        };
+      };
 
       for (i in args) {
         var arg = args[i];
@@ -16,7 +21,9 @@
                 type : 'Text', title : '<i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %>',
                 validators : ['url'],
                 help: '<%= j t("planner.sociable-module.help.facebook").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
               }
             });
           };
@@ -30,7 +37,9 @@
               title : '<i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %>',
               validators: ['url'],
                 help: '<%= j t("planner.sociable-module.help.twitter").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
             };
             schema = $.extend(schema, twitter);
           };
@@ -43,7 +52,9 @@
                 title : '<i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-handle" %>',
                 validators : ['url'],
                 help: '<%= j t("planner.sociable-module.help.linkedin").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
               }
             });
           };
@@ -56,7 +67,9 @@
                 title : '<i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-handle" %>',
                 validators : ['url'],
                 help: '<%= j t("planner.sociable-module.help.youtube").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
               }
             });
           };
@@ -69,7 +82,9 @@
                 title : '<i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-handle" %>',
                 validators : ['url'],
                 help: '<%= j t("planner.sociable-module.help.twitch").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
               }
             });
           };
@@ -82,7 +97,9 @@
                 title : '<i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-handle" %>',
                 validators : ['url'],
                 help: '<%= j t("planner.sociable-module.help.instagram").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
               }
             });
           };
@@ -95,7 +112,9 @@
                 title : '<i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-handle" %>',
                 validators : ['url'],
                 help: '<%= j t("planner.sociable-module.help.flickr").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
               }
             });
           };
@@ -108,7 +127,9 @@
                 title : '<i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-handle" %>',
                 validators : ['url'],
                 help: '<%= j t("planner.sociable-module.help.reddit").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
               }
             });
           };
@@ -121,7 +142,9 @@
                 title : '<i class="fa fa-users" aria-hidden="true"></i> <%= t "other-social-media" %>',
                 validators : ['url'],
                 help: '<%= j t("planner.sociable-module.help.othersocialmedia").html_safe %>', 
-                help_placement: 'bottom',
+                help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
               }
             });
           };
@@ -135,7 +158,9 @@
               title : '<i class="fa fa-globe" aria-hidden="true"></i> <%= t "website-url" %>',
               validators : ['url'],
               help: '<%= j t("planner.sociable-module.help.website-url").html_safe %>', 
-              help_placement: 'bottom',
+              help_placement: 'auto',
+                template : Backbone.Form.NestedField.template,
+                fieldClass : 'col-sm-6'
             };
             schema = $.extend(schema, addition);
           };
