@@ -200,10 +200,22 @@ var AppUtils = (function(){
             var errors = msgRenderOptions.errorObject;
             for (var property in errors) {
                 if (errors.hasOwnProperty(property)) {
-                    if (Object.keys(errors).length > 1)
-                      message += errors[property].message + '<br>';
-                    else {
-                      message += errors[property].message;
+                  var error = errors[property];
+                    if (typeof(error.message) != 'undefined') {
+                      message += error.message;
+                      if (Object.keys(errors).length > 1) {
+                        message += '<br>';
+                      };
+                    };
+                    if (property == '_others') {
+                      for (var e in error) {
+                        if (typeof(error[e]) == 'string') {
+                          message += error[e];
+                          if (Object.keys(error).length > 1) {
+                            message += '<br>';
+                          };
+                        };
+                      };
                     };
                 };
             };

@@ -28,8 +28,37 @@
             country : { type : 'Text', title : '<%= t "country" %>' },
             isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'},
         },
-        urlRoot : "<%= baseUri + '/postal_addresses' %>"
+        urlRoot : "<%= baseUri + '/postal_addresses' %>",
+        validate : function(attrs, options) {
+          if (!(attrs.line1.length > 0 || attrs.line2.length > 0 || attrs.line3.length > 0 || attrs.city.length > 0 || attrs.state.length > 0 || attrs.postcode.length > 0 || attrs.country.length > 0)){
+            return '<%= t "you-must-enter-a-value-for-at-least-one-field" %>';
+          };
+        }
     });
+
+    function ensureAtLeastOneTextFieldEntered(exclusions=[]) {
+      var error = {
+          type: "empty_form",
+          message: '<%= t "you-must-enter-a-value-for-at-least-one-field" %>'
+      };
+      var fields = this.form.fields;
+      var hasValues = false;
+      for (var prop in fields) {
+          if (fields.hasOwnProperty(prop) && exclusions.indexOf(prop) == -1) {
+              var field = fields[prop];
+              var type = this.form.schema[prop].type;
+              if (type == "Text") {
+                if (field.editor.$el.val().length > 0){
+                  hasValues = true;
+                };
+              };
+          };
+      };
+
+      if (!hasValues) {
+        return error;
+      };
+    };
 
     PostalAddressCollection = Backbone.Collection.extend({
         model : PostalAddress
@@ -94,7 +123,7 @@
     };
 
     EmailAddress = Backbone.Model.extend({
-        schema : generateEmailSchema(),
+        schema : generateEmailSchema({ emailOptions : { validators : ['email', 'required'] } }),
         urlRoot : "<%= baseUri + '/email_addresses' %>"
     });
 
@@ -113,7 +142,7 @@
 
     PhoneNumber = Backbone.Model.extend({
         schema : {
-            number : { type : 'Text', title : '<%= t "phone-number" %>'},
+            number : { type : 'Text', title : '<%= t "phone-number" %>', validators : ['required']},
             phone_type_id : { type : 'Select', title : '<%= t "phone type" %>', options : <%= PhoneTypes.all.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
         },
         urlRoot : "<%= baseUri + '/phone_numbers' %>"
@@ -229,7 +258,10 @@
       PhoneNumber : PhoneNumber,
       PhoneCollection : PhoneCollection,
       renderAddressLayout : renderAddressLayout,
-      generateEmailSchema : generateEmailSchema
+      generateEmailSchema : generateEmailSchema,
+      validators : {
+        ensureAtLeastOneTextFieldEntered : ensureAtLeastOneTextFieldEntered
+      }
     };
   })(Backbone, Marionette);
 </script>
