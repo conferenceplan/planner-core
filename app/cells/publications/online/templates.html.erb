@@ -8,25 +8,28 @@
     <div class="row">
         <div class="col-md-12">
             <% if FeatureService.is_current? %>
-            {{ if (pending == 'true') { }}
-                <p>
-                    <button class="btn btn-lg btn-warning">
-                        <i class="fa fa-cog fa-spin fa-lg"></i> <%= t "publish-pending-button" %>
-                    </button>
-                </p>
-                <p>
-                    <%= (t "publish-pending").html_safe %>
-                </p>
-            {{ } else { }}
-                <button class="publish-button btn btn-lg btn-primary">
-                    <i class="fa fa-chevron-right"></i> <%= t "schedule-publish" %>
-                </button>
-            {{ } }}
+              {{ if (pending == 'true') { }}
+                  <p>
+                      <button class="btn btn-lg btn-warning">
+                          <i class="fa fa-cog fa-spin fa-lg"></i> <%= t "publish-pending-button" %>
+                      </button>
+                  </p>
+                  <p>
+                      <%= (t "publish-pending").html_safe %>
+                  </p>
+              {{ } else { }}
+                  <button class="publish-button btn btn-lg btn-primary">
+                      <i class="fa fa-chevron-right"></i> <%= t "schedule-publish" %>
+                  </button>
+              {{ } }}
             <% else %>
                 <p>
-                    <button class="btn btn-lg btn-warning">
+                    <button class="publish-button btn btn-lg btn-primary disabled">
                         <%= t "publish-disabled-button" %>
                     </button>
+                </p>
+                <p>
+                    <%= (t "publish-disabled-warning").html_safe %> <a href="../../pages/account_page/index"><%= t('manage-your-subscription') %></a>
                 </p>
             <% end %>
         </div>
