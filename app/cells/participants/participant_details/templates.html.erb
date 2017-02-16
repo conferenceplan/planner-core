@@ -70,7 +70,7 @@
         <fieldset>
             <div class="form-group">
                 <label class="col-sm-4 control-label">
-                   <%= t  "name" %> *  <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "name" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "name-help" %>'></i>
+                   <%= t  "name" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "name" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "name-help" %>'></i>
                 </label>
                 <div class="col-sm-8">
                     <div data-editor>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-sm-4">
                                 <div class="field-last_name">
-                                    <div data-editors="last_name"></div>
+                                    <div data-editors="last_name" class="mandatory-field"></div>
                                     <div class="has-error"><p class="help-block" data-error></p></div>
                                 </div>
                             </div>
@@ -115,7 +115,9 @@
                         <div class="row">
                             <div class="col-sm-2"><div data-editors="pseudonym.prefix"></div></div>
                             <div class="col-sm-4"><div data-editors="pseudonym.first_name"></div></div>
-                            <div class="col-sm-4"><div data-editors="pseudonym.last_name"></div></div>
+                            <div class="col-sm-4">
+                              <div data-editors="pseudonym.last_name"></div>
+                            </div>
                             <div class="col-sm-2"><div data-editors="pseudonym.suffix"></div></div>
                         </div>
                     </div>
