@@ -15,7 +15,7 @@ ThemeApp.Mgmt = (function(Backbone){
         Theme : Theme,
 
         createNewTheme : function(name, callback, arg) {
-            var mdl = new ThemeApp.Mgmt.Theme({ name : name });
+            var mdl = new ThemeApp.Mgmt.Theme({ name : unescape(name) });
             var modal = new ModelModal({
                 model : mdl,
                 title : '<%= t "create-a-new-theme" %>',

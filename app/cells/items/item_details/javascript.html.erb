@@ -103,7 +103,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                                 return obj.text;
                                             },
                                             formatNoMatches : function(term) {
-                                                return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + term + '\', set_theme, \'item-theme\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
+                                                return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + escape(term) + '\', set_theme, \'item-theme\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
                                             },
                                             ajax : {
                                                 url : "<%= baseUri %>/theme_names",
