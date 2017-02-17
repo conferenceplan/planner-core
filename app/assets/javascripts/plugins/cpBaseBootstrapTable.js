@@ -32,6 +32,7 @@ $.widget( "cp.baseBootstrapTable" , {
         modelType           : null,
         modelTemplate       : null,
         showControls        : true,
+        disableControls     : false,
         filterControl       : false,
         filterShowClear     : false,
         controlDiv          : 'item-control-area', // Use this if using control and multiple grids on one page
@@ -329,7 +330,7 @@ $.widget( "cp.baseBootstrapTable" , {
                 "click .edit-model-button"      : "editModel",
                 "click .delete-model-button"    : "deleteModal",
             },
-
+            
             initialize : function(options) {
                 this.options = options || {};
                 var ctl_template = this.options.ctl_template;//'#table-control-template'
@@ -437,10 +438,15 @@ $.widget( "cp.baseBootstrapTable" , {
                     modelType           : modelType,
                     modalType           : this.options.modalType,
                     view_callback       : this.options.callback,
-                    ctl_template        : this.options.ctl_template
+                    ctl_template        : this.options.ctl_template,
+                    disableControls     : this.options.disableControls
             });
             control.render();
             $("#" + this.options.controlDiv).html(control.el);
+
+            if (this.options.disableControls) {
+                control.$(':button').prop('disabled', true);
+            }
         };
 
     }
