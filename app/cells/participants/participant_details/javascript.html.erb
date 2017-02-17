@@ -73,6 +73,12 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     });
 
     InviteDetails = Backbone.DeepModel.extend({
+        initialize : function() {
+            var self = this;
+            this.listenTo(eventAggregator, "refresh:person", function(){
+                self.fetch();
+            });
+        },
         schema : {
             prefix  : { type : 'Text', title : '<%= t "prefix" %>', editorAttrs : { placeholder : '<%= t "prefix" %>' }},
             first_name : { type : 'Text', title : '<%= t "first-name" %>', editorAttrs : { placeholder : '<%= t "first-name" %>' } },

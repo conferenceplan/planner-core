@@ -237,6 +237,9 @@
             region : addressLayout.emailRegion,
             newTitle : '<%= t "create-email" %>',
             editTitle : '<%= t "edit-email" %>',
+            updateCallback : function() {
+              AppUtils.eventAggregator.trigger("refresh:person");
+            }
         }) );
       };
 
