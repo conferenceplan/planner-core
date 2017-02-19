@@ -1,0 +1,270 @@
+
+<script id="contactable-module" type="text/javascript">
+  var Contactable = (function(Backbone, Marionette) {
+
+    AddressLayout = Backbone.Marionette.Layout.extend({
+        template: "#address-layout-template",
+
+        regions : {
+            postalControlRegion: "#postal-control-div",
+            postalRegion: "#postal-region-div",
+            emailControlRegion: "#email-control-div",
+            emailRegion: "#email-region-div",
+            phoneControlRegion: "#phone-control-div",
+            phoneRegion: "#phone-region-div",
+        },
+    });
+
+    // Postal Addresses
+
+    PostalAddress = Backbone.Model.extend({
+        schema : {
+            line1 : { type : 'Text', title : '<%= t "line1" %>' },
+            line2 : { type : 'Text', title : '<%= t "line2" %>' },
+            line3 : { type : 'Text', title : '<%= t "line3" %>' },
+            city : { type : 'Text', title : '<%= t "city" %>' },
+            state : { type : 'Text', title : '<%= t "state" %>' },
+            postcode : { type : 'Text', title : '<%= t "post-code" %>' },
+            country : { type : 'Text', title : '<%= t "country" %>' },
+            isdefault : { type : 'Checkbox', title : '<%= t "is-default" %>'},
+        },
+        urlRoot : "<%= baseUri + '/postal_addresses' %>",
+        validate : function(attrs, options) {
+          if (!(attrs.line1.length > 0 || attrs.line2.length > 0 || attrs.line3.length > 0 || attrs.city.length > 0 || attrs.state.length > 0 || attrs.postcode.length > 0 || attrs.country.length > 0)){
+            return '<%= t "you-must-enter-a-value-for-at-least-one-field" %>';
+          };
+        }
+    });
+
+    function ensureAtLeastOneTextFieldEntered(exclusions=[]) {
+      var error = {
+          type: "empty_form",
+          message: '<%= t "you-must-enter-a-value-for-at-least-one-field" %>'
+      };
+      var fields = this.form.fields;
+      var hasValues = false;
+      for (var prop in fields) {
+          if (fields.hasOwnProperty(prop) && exclusions.indexOf(prop) == -1) {
+              var field = fields[prop];
+              var type = this.form.schema[prop].type;
+              if (type == "Text") {
+                if (field.editor.$el.val().length > 0){
+                  hasValues = true;
+                };
+              };
+          };
+      };
+
+      if (!hasValues) {
+        return error;
+      };
+    };
+
+    PostalAddressCollection = Backbone.Collection.extend({
+        model : PostalAddress
+    });
+
+    // Email Addresses
+
+    emailLabelNames = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace, //('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '<%= baseUri + '/email_addresses/labels/%QUERY' %>',
+        wildcard: '%QUERY'
+      }
+    });
+
+    function generateEmailSchema(options={}) {
+      var emailOptions = options.emailOptions || {};
+      var labelOptions = options.labelOptions || {};
+      var isdefaultOptions = options.isdefaultOptions || {};
+
+      var emailSchema = {
+        email : $.extend({ 
+          type : 'Text', 
+          title : '<%= t "email" %>',
+          validators : ['email']
+        }, emailOptions),
+
+        label : $.extend({ 
+            type : 'TypeAheadText', 
+            title : '<%= t "label" %>', 
+            help: '<%= t "email-label-help" %>',
+            config : {
+                minLength: 0,
+                limit: 10,
+                source: emailLabelNames
+            }
+        }, labelOptions),
+
+        isdefault : $.extend({ 
+          type : 'Checkbox', 
+          title : '<%= t "email-is-primary" %>', 
+          help: '<%= t "email-default-help" %>' 
+        }, isdefaultOptions)
+      };
+      
+      return emailSchema;
+    };
+
+    
+
+    defaultEmailSubSchema = generateEmailSchema({isdefaultOptions : { type : "Hidden" } });
+
+    defaultEmailSchema = {
+      default_email_address : {
+        type : "Object",
+        title : '<%= j t('primary-email-address') %>',
+        editorClass : 'sub-schema-field',
+
+        subSchema : defaultEmailSubSchema
+      }
+    };
+
+    EmailAddress = Backbone.Model.extend({
+        schema : generateEmailSchema({ emailOptions : { validators : ['email', 'required'] } }),
+        urlRoot : "<%= baseUri + '/email_addresses' %>"
+    });
+
+    DefaultEmailAddress = EmailAddress.extend({
+      schema : defaultEmailSchema,
+      defaults : {
+        isdefault : true
+      }
+    });
+
+    EmailCollection = Backbone.Collection.extend({
+        model : EmailAddress
+    });
+
+    // Phone Numbers
+
+    PhoneNumber = Backbone.Model.extend({
+        schema : {
+            number : { type : 'Text', title : '<%= t "phone-number" %>', validators : ['required']},
+            phone_type_id : { type : 'Select', title : '<%= t "phone type" %>', options : <%= PhoneTypes.all.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
+        },
+        urlRoot : "<%= baseUri + '/phone_numbers' %>"
+    });
+
+    PhoneCollection = Backbone.Collection.extend({
+        model : PhoneNumber
+    });
+
+
+    function renderAddressLayout(region, objectId, baseCollectionUrl, options={}) {
+      var opts = $.extend({
+        tabLists : [],
+        addressables : ['EmailAddress','PostalAddress','PhoneNumber'],
+        id_name : 'person_id'
+      }, options);
+
+      var tabLists = opts.tabLists;
+
+      var addressLayout = new AddressLayout();
+      
+      if (typeof(region) == "string") {
+        $(region).html(addressLayout.$el);
+      } else if (region instanceof jQuery) {
+        region.html(addressLayout.$el);
+      } else if (region instanceof Marionette.Region) {
+        region.show(addressLayout);
+      } else {
+        console.error("region is not valid");
+        return;
+      };
+
+      if ($.inArray('PostalAddress', opts.addressables) != -1) {
+        TabUtils.createTabControl({
+            template : "#address-control-template",
+            modelType : PostalAddress,
+            id : objectId,
+            id_name : opts.id_name,
+            view_refresh_event : "address:refresh",
+            modal_create_title : '<%= t "create-address-details" %>',
+            region : addressLayout.postalControlRegion
+        });
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : PostalAddressCollection,
+            url : baseCollectionUrl + "/postalAddresses.json",
+            template : "#address-view-template",
+            view_refresh_event : "address:refresh",
+            child_view_refresh_event : "address:refresh",
+            region : addressLayout.postalRegion,
+            newTitle : '<%= t "create-address" %>',
+            editTitle : '<%= t "edit-address" %>',
+        }) );
+      };
+
+      if ($.inArray('PhoneNumber', opts.addressables) != -1) {
+        TabUtils.createTabControl({
+            template : "#phone-control-template",
+            modelType : PhoneNumber,
+            id : objectId,
+            id_name : opts.id_name,
+            view_refresh_event : "address:refresh",
+            modal_create_title : '<%= t "create-phone-number" %>',
+            region : addressLayout.phoneControlRegion,
+        });
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : PhoneCollection,
+            url : baseCollectionUrl + "/phoneNumbers.json",
+            template : "#phone-view-template",
+            view_refresh_event : "address:refresh",
+            region : addressLayout.phoneRegion,
+            newTitle : '<%= t "create-phone-number" %>',
+            editTitle : '<%= t "edit-phone-number" %>',
+        }) );
+      };
+
+      if ($.inArray('EmailAddress', opts.addressables) != -1) {
+        TabUtils.createTabControl({
+            template : "#email-control-template",
+            modelType : EmailAddress,
+            id : objectId,
+            id_name : opts.id_name,
+            view_refresh_event : "address:refresh",
+            modal_create_title : '<%= t "create-email" %>',
+            region : addressLayout.emailControlRegion
+        });
+        tabLists.push( TabUtils.createTabListContent({
+            collectionType : EmailCollection,
+            url : baseCollectionUrl + "/emailAddresses.json",
+            template : "#email-view-template",
+            view_refresh_event : "address:refresh",
+            child_view_refresh_event : "address:refresh",
+            region : addressLayout.emailRegion,
+            newTitle : '<%= t "create-email" %>',
+            editTitle : '<%= t "edit-email" %>',
+            updateCallback : function() {
+              AppUtils.eventAggregator.trigger("refresh:person");
+            }
+        }) );
+      };
+
+
+      return tabLists;
+    };
+    
+
+    return {
+      AddressLayout : AddressLayout,
+      PostalAddress : PostalAddress,
+      PostalAddressCollection : PostalAddressCollection,
+      emailLabelNames : emailLabelNames,
+      defaultEmailSubSchema : defaultEmailSubSchema,
+      defaultEmailSchema : defaultEmailSchema,
+      DefaultEmailAddress : DefaultEmailAddress,
+      EmailAddress : EmailAddress,
+      EmailCollection : EmailCollection,
+      PhoneNumber : PhoneNumber,
+      PhoneCollection : PhoneCollection,
+      renderAddressLayout : renderAddressLayout,
+      generateEmailSchema : generateEmailSchema,
+      validators : {
+        ensureAtLeastOneTextFieldEntered : ensureAtLeastOneTextFieldEntered
+      }
+    };
+  })(Backbone, Marionette);
+</script>

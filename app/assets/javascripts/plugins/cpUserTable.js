@@ -10,6 +10,11 @@ $.widget( "cp.userTable", $.cp.baseTable , {
             name: 'login',
             index: 'login',
             search : true
+        },{
+            label : this.options.email[1],
+            hidden : !this.options.email[0],
+            name: 'email',
+            search : false
         }, {
             label : this.options.roles[1],
             hidden : !this.options.roles[0],

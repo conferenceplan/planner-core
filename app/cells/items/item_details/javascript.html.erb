@@ -82,7 +82,7 @@ ItemApp.ItemManagement = (function(Backbone){
     var minItemDuration = 1;
     ProgramItem = Backbone.RelationalModel.extend({
         schema : {
-            title       : { type : 'Text', title : '<%= t "title" %>', validators: ['required'] },
+            title       : { type : 'Text', title : '<%= t "title" %>', validators: ['required'], editorClass: 'mandatory-field' },
             theme_name_ids  : { type : 'DependentSelect2', title : '<%= t "themes" %>', fieldClass : 'item-theme',
                                 editorAttrs : { placeholder : '<%= t "select-a-theme-for-this-item" %>' },
                                 dependsOn : 'is_break', dependentValues : ['false'],
@@ -103,7 +103,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                                 return obj.text;
                                             },
                                             formatNoMatches : function(term) {
-                                                return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + term + '\', set_theme, \'item-theme\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
+                                                return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + escape(term) + '\', set_theme, \'item-theme\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
                                             },
                                             ajax : {
                                                 url : "<%= baseUri %>/theme_names",

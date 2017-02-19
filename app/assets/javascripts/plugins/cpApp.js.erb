@@ -200,10 +200,27 @@ var AppUtils = (function(){
             var errors = msgRenderOptions.errorObject;
             for (var property in errors) {
                 if (errors.hasOwnProperty(property)) {
-                    if (Object.keys(errors).length > 1)
-                      message += errors[property].message + '<br>';
-                    else {
-                      message += errors[property].message;
+                  var error = errors[property];
+                    if (typeof(error.message) != 'undefined') {
+                      message += error.message;
+                      if (Object.keys(errors).length > 1) {
+                        message += '<br>';
+                      };
+                    } else if (typeof(error) == 'string') {
+                      message += error;
+                      if (Object.keys(error).length > 1) {
+                        message += '<br>';
+                      };
+                    };
+                    if (property == '_others') {
+                      for (var e in error) {
+                        if (typeof(error[e]) == 'string') {
+                          message += error[e];
+                          if (Object.keys(error).length > 1) {
+                            message += '<br>';
+                          };
+                        };
+                      };
                     };
                 };
             };
@@ -742,7 +759,7 @@ var AppUtils = (function(){
                         setMessage({
                           text : (!(typeof self.options.form.successMsg == 'undefined') ? self.options.form.successMsg : I18n.t('core.messages.data-successfully-saved')),
                           style : 'success',
-                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                          renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
                           fade : true,
                           fadeTimeout : 10000
                         });
@@ -752,7 +769,7 @@ var AppUtils = (function(){
                       setMessage({
                         text : response.responseText,
                         style : 'error',
-                        renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                        renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
                         fade : true,
                         fadeTimeout : 10000
                       });
@@ -817,7 +834,7 @@ var AppUtils = (function(){
                         setMessage({
                           text : I18n.t('core.messages.data-successfully-saved'),
                           style : 'success',
-                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                          renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
                           fade : true,
                           fadeTimeout : 10000
                         });
@@ -827,7 +844,7 @@ var AppUtils = (function(){
                       setMessage({
                         text : response.responseText,
                         style : 'error',
-                        renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                        renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
                         fade : true,
                         fadeTimeout : 10000
                       });
@@ -934,7 +951,7 @@ var AppUtils = (function(){
                         setMessage({
                           text : I18n.t('core.messages.data-successfully-saved'),
                           style : 'success',
-                          renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                          renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
                           fade : true,
                           fadeTimeout : 10000
                         });
@@ -948,7 +965,7 @@ var AppUtils = (function(){
                             setMessage({
                               text : response.responseText,
                               style : 'error',
-                              renderLocation : ($('.modal').length > 0 ? 'modal' : 'main-layout'),
+                              renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
                               fade : true,
                               fadeTimeout : 10000
                             });

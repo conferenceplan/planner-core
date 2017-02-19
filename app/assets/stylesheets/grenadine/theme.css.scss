@@ -638,6 +638,7 @@ input[type="checkbox"] {
 
 .form-control {
     padding: 4px;
+    padding-left: 7px;
 }
 
 
@@ -683,6 +684,7 @@ input[type="checkbox"] {
 }
 .form-horizontal input[type="checkbox"] {
     margin-top: 10px;
+    margin-right: 3px;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     font-weight: bold;
@@ -1765,12 +1767,12 @@ i.publication-count-num {
   height: auto;   
 }
 
-label.schedule-type-checkbox-label {
+label.checkbox-label {
   font-weight: normal;
   margin-left: 4px;
   margin-bottom: 0;
 }
-input[type='checkbox'][disabled] + label.schedule-type-checkbox-label {
+input[type='checkbox'][disabled] + label.checkbox-label {
   color: #ccc;
 }
 
