@@ -47,13 +47,14 @@
             <h5><%= t "surveys" %></h5>
             <span class="glyphicon glyphicon-comment"></span> <a href="<%= baseUri + '/pages/participants_dash/survey_review' %>"><%= t "review-surveys" %></a>            
             <h5><%= t "filters" %></h5>
+            <h6><%= t "filter-by-people" %></h6>
             <div class="form-horizontal">
                 <%= t "show-people-from-other-events" %><i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t "show-people-from-other-events-hint" %>" data-original-title="<%= t "show-people-from-other-events" %>"></i>
                 <div class="input-group pull-right" id="people-filter">
                     <input id="toggle-people" type="checkbox" data-size="mini" data-onstyle="success">
                 </div>
             </div>
-            <p class="voffset5"><%= t "filter-by-email" %></p>
+            <h6><%= t "filter-by-email" %></h6>
             <div class="form-horizontal">
                 <div class="input-group" id="email-filter-input-group">
                     <span class="input-group-btn" style="max-width: 35px;">
@@ -65,11 +66,9 @@
                     </span>
                 </div>
             </div>
-            <div class="voffset10">
-              <p><%= t "filter-by-tag" %></p>
-              <div class='collapse-group tag-cloud-area' id='tag-cloud-area'>
-                  <div id="participant-tag-cloud" class="collapse in"></div>
-              </div>
+            <h6><%= t "filter-by-tag" %></h6>
+            <div class='collapse-group tag-cloud-area' id='tag-cloud-area'>
+                <div id="participant-tag-cloud" class="collapse in"></div>
             </div>
         </div>
     </div>
