@@ -32,6 +32,7 @@
 //= require bootstrap-tabdrop
 //= require bootstrap-table/bootstrap-table
 //= require bootstrap-table/extensions/filter-control/bootstrap-table-filter-control
+//= require bootstrap-toggle
 
 //= require backbone/underscore-min
 //= require backbone/backbone

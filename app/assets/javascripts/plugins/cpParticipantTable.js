@@ -539,6 +539,26 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
     /*
      * 
      */
+    filterPeople : function(do_filter) {
+        if (this.options.extraClause && (this.options.extraClause.length > 0)) {
+            this.options.extraClause += "&only_relevent=" + do_filter;
+        } else {
+            this.options.extraClause = "only_relevent=" + do_filter;
+        }
+
+        if (!this.options.delayed) {
+            var newUrl = this.createUrl();
+
+            this.element.jqGrid('setGridParam', {
+                url: newUrl,
+                contentType : 'application/x-www-form-urlencoded; charset=UTF-8'
+            }).trigger("reloadGrid");
+        }
+    },
+    
+    /*
+     * 
+     */
     emailQuery : function(email) {
         if (this.options.extraClause && (this.options.extraClause.length > 0)) {
             this.options.extraClause += "&email=" + email;

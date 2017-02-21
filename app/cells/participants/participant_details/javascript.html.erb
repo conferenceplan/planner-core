@@ -556,6 +556,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             jQuery("#participants").participantTable('emailQuery', val);
         });
     };
+    
+    function create_people_fiter() {
+        $('#toggle-people').change(function(ev) {
+            var val = $(this).val();
+            // console.log(ev.currentTarget);
+            // console.log($(ev.target).prop("checked"));
+            jQuery("#participants").participantTable('filterPeople', !$(ev.target).prop("checked"));
+        });
+    }
 
     function mergePeople() {
         /*
@@ -622,6 +631,12 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         },
 
         init : function() {
+            
+            $('#toggle-people').bootstrapToggle({
+                  on:  '<%= t "yes" %>',
+                  off: '<%= t "no" %>'
+                });
+            
             personTabLayout = new PersonTabLayout();
             personTabLayout.render();
             $('#item-tabs').html(personTabLayout.el);
@@ -640,6 +655,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             });
 
             create_email_filter();
+            create_people_fiter();
 
             $('#participant-tabs').tabdrop({
                 text : "..."

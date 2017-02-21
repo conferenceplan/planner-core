@@ -15,7 +15,8 @@
     :extra_button => true,
     :extra_button_title => t("merge"),
     :extra_modal_action => "ParticipantApp.PeopleManagement.mergePeople",
-    :hide_select_all => true
+    :hide_select_all => true,
+    :extraClause => "only_relevent=true"
     %>
 <%= render_cell "participants/participant_details", :javascript %>
 
@@ -45,6 +46,13 @@
             <span class="glyphicon glyphicon-export"></span> <a href="<%= baseUri + '/pages/participants_dash/export' %>"><%= t "export-people" %></a>
             <h5><%= t "surveys" %></h5>
             <span class="glyphicon glyphicon-comment"></span> <a href="<%= baseUri + '/pages/participants_dash/survey_review' %>"><%= t "review-surveys" %></a>            
+            <h5><%= t "filter-people" %></h5>
+            <div class="form-horizontal">
+                <div class="input-group" id="people-filter">
+                    <%= t "show-people-from-other-events" %>
+                    <input id="toggle-people" type="checkbox">
+                </div>
+            </div>
             <h5><%= t "filter-by-email" %></h5>
             <div class="form-horizontal">
                 <div class="input-group" id="email-filter-input-group">

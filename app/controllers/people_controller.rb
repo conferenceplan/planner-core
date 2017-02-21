@@ -150,13 +150,17 @@ class PeopleController < PlannerController
     operation = params[:op]
     @includeMailings = params[:includeMailings] ? params[:includeMailings] : false
     @includeMailHistory = params[:includeMailHistory] ? params[:includeMailHistory] : false
+    only_relevent_people = params[:only_relevent] ? (params[:only_relevent] == "true") : false
 
 # TODO - fix page_to does a find as well....
-    @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, tags, nil, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email
+    @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, 
+                                        tags, nil, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email,
+                                        only_relevent_people
     
     if page_to && !page_to.empty?
       gotoNum = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, 
-                                  tags, page_to, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email
+                                        tags, page_to, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email,
+                                        only_relevent_people
       if gotoNum
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
@@ -173,7 +177,7 @@ class PeopleController < PlannerController
     
     @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents,
                   nameSearch, context, tags, mailing_id, operation, scheduled, 
-                  @includeMailings, @includeMailHistory, email
+                  @includeMailings, @includeMailHistory, email, only_relevent_people
   end
   
   #
