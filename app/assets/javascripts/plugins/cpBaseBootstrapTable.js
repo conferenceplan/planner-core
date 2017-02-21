@@ -109,6 +109,10 @@ $.widget( "cp.baseBootstrapTable" , {
         this.element.bootstrapTable('pageFrom');
     },
 
+    removeAll : function() {
+        this.element.bootstrapTable('removeAll');
+    },
+
     pageFrom : function() {
         this.element.bootstrapTable('pageFrom');
     },
