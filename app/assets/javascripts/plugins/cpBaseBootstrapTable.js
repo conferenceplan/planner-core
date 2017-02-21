@@ -85,6 +85,10 @@ $.widget( "cp.baseBootstrapTable" , {
         }
     },
 
+    _destroy : function() {
+        this.element.bootstrapTable('destroy');
+    },
+
     render : function() {
         if (this.options.delayed) {
             this.selected = this.model = null;
