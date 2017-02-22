@@ -291,7 +291,7 @@ module PeopleService
     Person.joins(join_query).
                 includes(include_list).
                 where(query).
-                uniq.
+                distinct.
                 order("people.last_name")
   end
 
@@ -313,16 +313,17 @@ module PeopleService
             where(people_filter).
             references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
             joins(only_relevent_joins).
-            uniq.count
+            distinct.count
+      
     else
-      Person.tagged_with(*tagquery).uniq.
+      Person.tagged_with(*tagquery).distinct.
             includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
             where(people_filter).
             references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
             joins(only_relevent_joins).
-            uniq.count
+            distinct.count
     end
   end
 
@@ -360,10 +361,10 @@ module PeopleService
                   order(sort_order).
                   offset(offset).
                   limit(rows).
-                  uniq
+                  distinct
     else
       people = Person.tagged_with(*tagquery).
-                  uniq.
+                  distinct.
                   includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
                   where(query).
@@ -373,7 +374,7 @@ module PeopleService
                   order(sort_order).
                   offset(offset).
                   limit(rows).
-                  uniq
+                  distinct
     end
   end
   
