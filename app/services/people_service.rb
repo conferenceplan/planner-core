@@ -304,24 +304,34 @@ module PeopleService
     tagquery = DataService.genTagSql(context, tags)
 
     people_filter = only_relevent_people ? only_relevent_clause : ''
+    
+    included = [:pseudonym, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]
+    included << :email_addresses if email && !email.blank?
 
     if tagquery.empty?
+      # Rails.logger.warn Person.
+            # includes(included).
+            # where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+            # where(query).
+            # where(people_filter).
+            # references(included).
+            # joins(only_relevent_joins).
+            # distinct.explain
       Person.
-            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
+            includes(included).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
             where(people_filter).
-            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
+            references(included).
             joins(only_relevent_joins).
             distinct.count
-      
     else
       Person.tagged_with(*tagquery).distinct.
-            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
+            includes(included).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
             where(people_filter).
-            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
+            references(included).
             joins(only_relevent_joins).
             distinct.count
     end
@@ -356,7 +366,7 @@ module PeopleService
                   includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   where(query).
                   where(people_filter).
-                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetai, :mailings, :programmeItemAssignments]).
+                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   joins(only_relevent_joins).
                   order(sort_order).
                   offset(offset).
@@ -447,7 +457,7 @@ module PeopleService
     # select distinct person_id from programme_item_assignments;
     clause = DataService.addClause( clause, 'people.id in (select distinct person_id from room_item_assignments ra join programme_item_assignments pa on pa.programme_item_id = ra.programme_item_id)', nil) if scheduled
 
-    clause = DataService.addClause( clause, 'email_addresses.email like ?', '%' + email + '%') if email
+    clause = DataService.addClause( clause, 'email_addresses.email like ?', '%' + email + '%') if email && !email.blank?
 
     clause    
   end
