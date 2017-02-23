@@ -291,7 +291,7 @@ module PeopleService
     Person.joins(join_query).
                 includes(include_list).
                 where(query).
-                uniq.
+                distinct.
                 order("people.last_name")
   end
 
@@ -304,25 +304,36 @@ module PeopleService
     tagquery = DataService.genTagSql(context, tags)
 
     people_filter = only_relevent_people ? only_relevent_clause : ''
+    
+    included = [:pseudonym, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]
+    included << :email_addresses if email && !email.blank?
 
     if tagquery.empty?
+      # Rails.logger.warn Person.
+            # includes(included).
+            # where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+            # where(query).
+            # where(people_filter).
+            # references(included).
+            # joins(only_relevent_joins).
+            # distinct.explain
       Person.
-            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
+            includes(included).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
             where(people_filter).
-            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
+            references(included).
             joins(only_relevent_joins).
-            uniq.count
+            distinct.count
     else
-      Person.tagged_with(*tagquery).uniq.
-            includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
+      Person.tagged_with(*tagquery).distinct.
+            includes(included).
             where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
             where(query).
             where(people_filter).
-            references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
+            references(included).
             joins(only_relevent_joins).
-            uniq.count
+            distinct.count
     end
   end
 
@@ -355,15 +366,15 @@ module PeopleService
                   includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   where(query).
                   where(people_filter).
-                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetai, :mailings, :programmeItemAssignments]).
+                  references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   joins(only_relevent_joins).
                   order(sort_order).
                   offset(offset).
                   limit(rows).
-                  uniq
+                  distinct
     else
       people = Person.tagged_with(*tagquery).
-                  uniq.
+                  distinct.
                   includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
                   where(query).
@@ -373,7 +384,7 @@ module PeopleService
                   order(sort_order).
                   offset(offset).
                   limit(rows).
-                  uniq
+                  distinct
     end
   end
   
@@ -382,7 +393,8 @@ module PeopleService
   # The person has "tickets" or orders
   # the person has sign ups to items
   def self.only_relevent_clause
-    q = ["person_con_states.id is not null or registration_details.id is not null or programme_item_assignments.id is not null"]
+    # person_mailing_assignments.id is not null - covered by mailing....
+    q = ["person_con_states.id is not null or registration_details.id is not null or programme_item_assignments.id is not null or survey_respondents.id is not null or mailings.id is not null"]
   
     q
   end
@@ -446,7 +458,7 @@ module PeopleService
     # select distinct person_id from programme_item_assignments;
     clause = DataService.addClause( clause, 'people.id in (select distinct person_id from room_item_assignments ra join programme_item_assignments pa on pa.programme_item_id = ra.programme_item_id)', nil) if scheduled
 
-    clause = DataService.addClause( clause, 'email_addresses.email like ?', '%' + email + '%') if email
+    clause = DataService.addClause( clause, 'email_addresses.email like ?', '%' + email + '%') if email && !email.blank?
 
     clause    
   end
