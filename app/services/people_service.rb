@@ -393,7 +393,8 @@ module PeopleService
   # The person has "tickets" or orders
   # the person has sign ups to items
   def self.only_relevent_clause
-    q = ["person_con_states.id is not null or registration_details.id is not null or programme_item_assignments.id is not null"]
+    # person_mailing_assignments.id is not null - covered by mailing....
+    q = ["person_con_states.id is not null or registration_details.id is not null or programme_item_assignments.id is not null or survey_respondents.id is not null or mailings.id is not null"]
   
     q
   end
