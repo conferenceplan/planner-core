@@ -15,7 +15,7 @@ module Planner
     
     def human_time mins
       [[60, I18n.t(:minutes)], [24, I18n.t(:hours)], [1000, I18n.t(:days)]].map{ |count, name|
-        if mins > 0
+        if mins && mins > 0
           mins, n = mins.divmod(count)
           "#{n.to_i} #{(n == 1 ? name.to_s.singularize : name)}" if n > 0
         end
