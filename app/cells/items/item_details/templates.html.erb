@@ -358,12 +358,12 @@
         <div class="row">
             <div class="col-md-3">
                 <h5><%= t "moderator(s)" %></h5>
-                <ul class="list-group">
+                <ul class="people-list-group">
                 {{ _.each(moderators, function(person) { }}
-                    <li class="list-group-item">
+                    <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
@@ -373,12 +373,12 @@
             </div>    
             <div class="col-md-3">
                 <h5><%= t "program-participants" %></h5>
-                <ul class="list-group">
+                <ul class="people-list-group">
                 {{ _.each(participants, function(person) { }}
-                    <li class="list-group-item">
+                    <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
@@ -388,12 +388,12 @@
             </div>
             <div class="col-md-3">
                 <h5><%= t "reserved" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "reserved" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "reserved-help").html_safe %>'></i></h5>
-                <ul class="list-group">
+                <ul class="people-list-group">
                 {{ _.each(reserves, function(person) { }}
-                    <li class="list-group-item">
+                    <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
@@ -403,12 +403,12 @@
             </div>
             <div class="col-md-3">
                 <h5><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisible-help").html_safe %>'></i></h5>
-                <ul class="list-group">
+                <ul class="people-list-group">
                 {{ _.each(invisibles, function(person) { }}
-                    <li class="list-group-item">
+                    <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
