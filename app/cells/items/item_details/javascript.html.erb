@@ -972,6 +972,7 @@ ItemApp.ItemManagement = (function(Backbone){
             url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
             async: true,
         }).done(function() {
+                <% unless @dont_render_participants %>
                 TabUtils.createTabContent({
                     model : itemMdl,
                     template : '#program-participants-view-template',
@@ -1012,6 +1013,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         }
                     }
                 });
+                <% end %>
                 
                 mdl = TabUtils.createTabContent({
                     model : itemMdl,
