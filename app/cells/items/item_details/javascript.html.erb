@@ -1045,6 +1045,8 @@ ItemApp.ItemManagement = (function(Backbone){
                     })
                 });
                 
+                $('[data-toggle="tooltip"]').tooltip();
+                
                 eventAggregator.on("refreshTagList", syncModel, itemMdl);
         
                 selectCallbacks.fire({

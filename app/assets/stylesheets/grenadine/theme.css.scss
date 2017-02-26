@@ -794,6 +794,13 @@ h5.venues {
     color: #ccc;
     font-style: italic;
 }
+a.minor-text.email-icon {
+    color: #ddd;
+    padding-left: 3px;
+}
+a.minor-text.email-icon:hover {
+    color: #bbb;
+}
 a.minor-link {
     color: #AAA;
 }

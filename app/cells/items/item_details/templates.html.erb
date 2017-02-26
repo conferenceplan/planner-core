@@ -362,10 +362,13 @@
                 {{ _.each(moderators, function(person) { }}
                     <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
-                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
+                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }})</span>
                         {{ } else { }}
-                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
+                        {{ } }}
+                        {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
+                          <a data-toggle="tooltip" data-container="body" class="minor-text email-icon" target="_blank" data-original-title="{{= person.default_email_address }}bla" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                         {{ } }}
                     </li>
                 {{ }); }}
@@ -377,10 +380,13 @@
                 {{ _.each(participants, function(person) { }}
                     <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
-                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
+                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }})</span>
                         {{ } else { }}
-                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
+                        {{ } }}
+                        {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
+                          <a data-toggle="tooltip" data-container="body" class="minor-text email-icon" target="_blank" data-original-title="{{= person.default_email_address }}bla" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                         {{ } }}
                     </li>
                 {{ }); }}
@@ -392,10 +398,13 @@
                 {{ _.each(reserves, function(person) { }}
                     <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
-                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
+                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }})</span>
                         {{ } else { }}
-                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }}
+                        {{ } }}
+                        {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
+                          <a data-toggle="tooltip" data-container="body" class="minor-text email-icon" target="_blank" data-original-title="{{= person.default_email_address }}bla" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                         {{ } }}
                     </li>
                 {{ }); }}
@@ -411,6 +420,9 @@
                             <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                        {{ } }}
+                        {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
+                          <a data-toggle="tooltip" data-container="body" class="minor-text email-icon" target="_blank" data-original-title="{{= person.default_email_address }}bla" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                         {{ } }}
                     </li>
                 {{ }); }}
