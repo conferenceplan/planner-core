@@ -361,6 +361,9 @@
                 <ul class="people-list-group">
                 {{ _.each(moderators, function(person) { }}
                     <li class="people-list-group-item">
+                        {{ if (person.bio_image) { }}
+                            <img src="{{=person.bio_image}}" width="30" height="30">
+                        {{ } }}
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
                             <span class="minor-text">
@@ -372,6 +375,7 @@
                         {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
                           <a data-toggle="tooltip" data-container="body" class="minor-text email-icon" target="_blank" data-original-title="{{= person.default_email_address }}bla" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
                         {{ } }}
+                        <!--{= JSON.stringify(person) }}-->
                     </li>
                 {{ }); }}
                 </ul>
@@ -381,6 +385,9 @@
                 <ul class="people-list-group">
                 {{ _.each(participants, function(person) { }}
                     <li class="people-list-group-item">
+                        {{ if (person.bio_image) { }}
+                            <img src="{{=person.bio_image}}" width="30" height="30">
+                        {{ } }}
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
                             <span class="minor-text">
@@ -401,6 +408,9 @@
                 <ul class="people-list-group">
                 {{ _.each(reserves, function(person) { }}
                     <li class="people-list-group-item">
+                        {{ if (person.bio_image) { }}
+                            <img src="{{=person.bio_image}}" width="30" height="30">
+                        {{ } }}
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
                             <span class="minor-text">
@@ -421,6 +431,9 @@
                 <ul class="people-list-group">
                 {{ _.each(invisibles, function(person) { }}
                     <li class="people-list-group-item">
+                        {{ if (person.bio_image) { }}
+                            <img src="{{=person.bio_image}}" width="30" height="30">
+                        {{ } }}
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                             <span class="minor-text">
