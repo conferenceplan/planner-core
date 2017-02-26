@@ -363,7 +363,9 @@
                     <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
-                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }})</span>
+                            <span class="minor-text">
+                              <br>(<%= t "real-name" %>: {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
+                            </span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
                         {{ } }}
@@ -381,7 +383,9 @@
                     <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
-                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }})</span>
+                            <span class="minor-text">
+                              <br>(<%= t "real-name" %>: {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
+                            </span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
                         {{ } }}
@@ -399,7 +403,9 @@
                     <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
-                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }})</span>
+                            <span class="minor-text">
+                              <br>(<%= t "real-name" %>: {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
+                            </span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }}
                         {{ } }}
@@ -417,7 +423,9 @@
                     <li class="people-list-group-item">
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
-                            <span class="minor-text">({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})</span>
+                            <span class="minor-text">
+                              <br>(<%= t "real-name" %>: {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
+                            </span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
                         {{ } }}
