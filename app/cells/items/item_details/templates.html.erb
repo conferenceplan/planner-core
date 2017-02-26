@@ -358,6 +358,9 @@
         <div class="row">
             <div class="col-md-3">
                 <h5><%= t "moderator(s)" %></h5>
+                {{ if ($.isEmptyObject(moderators)) { }}
+                  <span class="minor-text">(<%= t "none" %>)</span>
+                {{ } }}
                 <ul class="people-list-group">
                 {{ _.each(moderators, function(person) { }}
                     <li class="people-list-group-item">
@@ -367,7 +370,7 @@
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
                             <span class="minor-text">
-                              <br>(<%= t "real-name" %>: {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
+                              (<%= t "real-name" %> {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
                             </span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
@@ -382,6 +385,9 @@
             </div>    
             <div class="col-md-3">
                 <h5><%= t "program-participants" %></h5>
+                {{ if ($.isEmptyObject(participants)) { }}
+                  <span class="minor-text">(<%= t "none" %>)</span>
+                {{ } }}
                 <ul class="people-list-group">
                 {{ _.each(participants, function(person) { }}
                     <li class="people-list-group-item">
@@ -391,7 +397,7 @@
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
                             <span class="minor-text">
-                              <br>(<%= t "real-name" %>: {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
+                              (<%= t "real-name" %> {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
                             </span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
@@ -405,6 +411,9 @@
             </div>
             <div class="col-md-3">
                 <h5><%= t "reserved" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "reserved" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "reserved-help").html_safe %>'></i></h5>
+                {{ if ($.isEmptyObject(reserves)) { }}
+                  <span class="minor-text">(<%= t "none" %>)</span>
+                {{ } }}
                 <ul class="people-list-group">
                 {{ _.each(reserves, function(person) { }}
                     <li class="people-list-group-item">
@@ -414,7 +423,7 @@
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
                             <span class="minor-text">
-                              <br>(<%= t "real-name" %>: {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
+                              (<%= t "real-name" %> {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
                             </span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }}
@@ -428,6 +437,9 @@
             </div>
             <div class="col-md-3">
                 <h5><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisible-help").html_safe %>'></i></h5>
+                {{ if ($.isEmptyObject(invisibles)) { }}
+                  <span class="minor-text">(<%= t "none" %>)</span>
+                {{ } }}
                 <ul class="people-list-group">
                 {{ _.each(invisibles, function(person) { }}
                     <li class="people-list-group-item">
@@ -437,7 +449,7 @@
                         {{ if (person.pseudonym) { }}
                             {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
                             <span class="minor-text">
-                              <br>(<%= t "real-name" %>: {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
+                              (<%= t "real-name" %> {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }})
                             </span>
                         {{ } else { }}
                             {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
