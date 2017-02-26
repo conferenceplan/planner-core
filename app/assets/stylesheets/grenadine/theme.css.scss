@@ -790,17 +790,15 @@ h5.venues {
     min-height: 100px;
     
 }
+ul.people-list-group li img {
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
 .minor-text {
     color: #ccc;
     font-style: italic;
 }
-a.minor-text.email-icon {
-    color: #ddd;
-    padding-left: 3px;
-}
-a.minor-text.email-icon:hover {
-    color: #bbb;
-}
+
 a.minor-link {
     color: #AAA;
 }
@@ -1784,5 +1782,74 @@ input[type='checkbox'][disabled] + label.checkbox-label {
 }
 
 .people-list-group {
-  padding-left: 16px;
+  padding-left: 0px;
+}
+.people-list-group li div {
+  display: inline-block;
+}
+.people-list-group li span.job-title {
+  font-size: 9px;
+}
+.people-list-group li div img {
+  vertical-align: bottom;
+  margin: 0;
+  margin-left: 1px;
+}
+.people-list-group li span.published-name {
+  font-weight: bold;
+}
+
+a.minor-text.email-icon {
+    //color: #ddd;
+    padding-left: 3px;
+}
+a.minor-text.email-icon:hover {
+    //color: #bbb;
+}
+.person-actions {
+  text-align: right;
+  margin-top: 2px;
+}
+.people-list-group li {
+  
+  line-height: 1;
+  list-style-type: none;
+  
+  min-height: 42px;
+  
+  margin-bottom: 7px;
+  
+  border-top-left-radius: 23px;
+  border-bottom-left-radius: 23px;
+  border: #ccc 1px solid;
+  
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  
+  padding: 4px 6px 3px 6px;
+  
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,eeeeee+100 */
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(left, #ffffff 0%, #eeeeee 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #ffffff 0%,#eeeeee 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #ffffff 0%,#eeeeee 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+
+}
+.people-list-group li.moderator {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f8ffa3+100 */
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(left, #ffffff 0%, #f5f5b0 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left, #ffffff 0%,#f5f5b0 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right, #ffffff 0%,#f5f5b0 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+}
+.people-list-group li.participant {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,2e6da4+100&1+0,0.54+100 */
+  background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(46,109,164,0.54) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(46,109,164,0.54) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(46,109,164,0.54) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#8a2e6da4',GradientType=1 ); /* IE6-9 */
+
+
 }
