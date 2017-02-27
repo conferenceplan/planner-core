@@ -2,6 +2,8 @@
 #
 #
 json.id person.id
+json.real_name person.full_name
+json.full_publication_name person.full_publication_name
 json.first_name person.first_name
 json.last_name person.last_name
 json.suffix person.suffix

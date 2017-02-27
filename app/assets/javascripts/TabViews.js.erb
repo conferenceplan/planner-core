@@ -42,9 +42,12 @@ var TabUtils = (function(){
             deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
         },
 
-        onShow: function(){
+        onRender: function(){
             this.$el.find('.bpopover').popover({html : true});
-            this.$('[data-toggle="tooltip"]').tooltip();
+            this.$('[data-toggle="tooltip"]').tooltip({html : true});
+            if (typeof(this.options.postRenderFn) == 'function') {
+                this.options.postRenderFn.call(this);
+            };
         },
         
         events : {
@@ -291,7 +294,8 @@ var TabUtils = (function(){
                         modal_template : options.modal_template,
                         extra_events : options.events,
                         view_refresh_event : options.view_refresh_event,
-                        className : options.className
+                        className : options.className,
+                        postRenderFn : options.postRenderFn
                     });
                     tabView.render();
                     if (options.region) {
@@ -324,7 +328,8 @@ var TabUtils = (function(){
                 form_event_fn : options.form_event_fn,
                 modal_template : options.modal_template,
                 extra_events : options.events,
-                view_refresh_event : options.view_refresh_event
+                view_refresh_event : options.view_refresh_event,
+                postRenderFn : options.postRenderFn
                 });
             tabView.render();
             if (options.region) {

@@ -790,7 +790,7 @@ h5.venues {
     min-height: 100px;
     
 }
-ul.people-list-group li img {
+.people-list-group .people-list-group-item img {
   margin-top: 3px;
   margin-bottom: 3px;
 }
@@ -1784,19 +1784,16 @@ input[type='checkbox'][disabled] + label.checkbox-label {
 .people-list-group {
   padding-left: 0px;
 }
-.people-list-group li div {
-  display: inline-block;
-}
-.people-list-group li span.job-title {
+.people-list-group .person-card span.job-title {
   font-size: 9px;
 }
-.people-list-group li div img {
+.people-list-group .person-card img.person-img {
   vertical-align: bottom;
   margin: 0;
   margin-top: 1px;
   border-radius: 3px;
 }
-.people-list-group li span.published-name {
+.people-list-group .person-card span.published-name {
   font-weight: bold;
 }
 
@@ -1810,8 +1807,9 @@ a.minor-text.email-icon:hover {
 .person-actions {
   text-align: right;
   margin-top: 2px;
+  min-width: 50px;
 }
-.people-list-group li {
+.people-list-group .person-card {
   
   line-height: 1;
   list-style-type: none;
@@ -1833,16 +1831,16 @@ a.minor-text.email-icon:hover {
 
 
 }
-.people-list-group li.moderator {
+.people-list-group .person-card.moderator {
   background-color: #f5f5b0;
 
 }
-.people-list-group li.participant {
+.people-list-group .person-card.participant {
 
   background-color: rgba(51,122,183,0.25);
 
 }
-.people-list-group li.invisible-participant {
+.people-list-group .person-card.invisible-person {
 
   background-color: white;
   border-style: dashed;

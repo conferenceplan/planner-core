@@ -347,11 +347,10 @@
     <div class="clearfix">
         <div class="row">
             <div class="col-md-12">
-                <div class="caption" class="pull-left">
-                    <button class="add-people-button btn btn-primary btn-xs pull-right">
-                        <%= t 'add-people' %>
-                    </button>
-                </div>
+                <h3 class="h3-underlined">
+                  <%= t "program-participants" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= strip_tags(t("program-participants")) %>" data-container="body" data-trigger="hover" data-placement="right auto" data-toggle="popover" data-content="<%= strip_tags(t "program-participants-title-pub-item-help").html_safe %>"></i>
+                    <button class="add-people-button btn btn-primary btn-xs pull-right"><%= t 'add-people' %></button>
+                </h3>
             </div>
         </div>
         <!-- List of participants etc. -->
@@ -361,234 +360,71 @@
                 {{ if ($.isEmptyObject(moderators)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
-                <ul class="people-list-group">
-                {{ _.each(moderators, function(person) { }}
-                    <li class="people-list-group-item moderator">
-                        {{ if (person.bio_image) { }}
-                            <div>
-                              <img src="{{=person.bio_image}}" width="30" height="30">
-                            </div>
-                        {{ } else { }}
-                            <div>
-                              <img src="{{=person.default_bio_image }}" width="30" height="30">
-                            </div>                        
-                        {{ } }}
-                        <div>
-                            {{ if (person.pseudonym) { }}
-                                <span class="published-name">
-                                  {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
-                                </span>
-                            {{ } else { }}
-                                <span class="published-name">
-                                  {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
-                                </span>
-                            {{ } }}
-                            <br>
-                            {{ if (person.job_title && person.job_title.length > 0) { }}
-                                <span class="job-title">
-                                  {{= person.job_title }}
-                                </span>
-                            {{ } }}
-                            {{ if (person.company && person.company.length > 0) { }}
-                                <span class="job-title">
-                                  {{= person.company }}
-                                </span>
-                            {{ } }}
-                            &nbsp;
-                        </div>
-                        <div class="person-actions" style="float:right;">
-                          {{ if (person.pseudonym) { }}
-                            <i class="fa fa-user-secret" aria-hidden="true" data-toggle="tooltip" data-container="body" data-original-title="<%= (t "real-name").capitalize %> {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }}" href="mailto:{{= person.default_email_address }}"></i>
-                          {{ } }}
-                          {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
-                            <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= person.default_email_address }}" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                          {{ } }}
-                          <br>
-                          {{ if (person.prog_item_count && person.prog_item_count > 1) { }}
-                              <span class="job-title" style="padding-right: 3px">
-                                <%= t "speaks-in" %> {{= person.prog_item_count -1 }} <%= t "other-items" %>
-                              </span>
-                          {{ } }}
-                        </div>
-                    </li>
-                {{ }); }}
-                </ul>
+                <div class="moderating-people-container"></div>
             </div>    
             <div class="col-md-4">
                 <h5><%= t "program-participants" %></h5>
                 {{ if ($.isEmptyObject(participants)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
-                <ul class="people-list-group">
-                {{ _.each(participants, function(person) { }}
-                <li class="people-list-group-item participant">
-                    {{ if (person.bio_image) { }}
-                        <div>
-                          <img src="{{=person.bio_image}}" width="30" height="30">
-                        </div>
-                    {{ } else { }}
-                        <div>
-                          <img src="{{=person.default_bio_image }}" width="30" height="30">
-                        </div>                        
-                    {{ } }}
-                    <div>
-                        {{ if (person.pseudonym) { }}
-                            <span class="published-name">
-                              {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
-                            </span>
-                        {{ } else { }}
-                            <span class="published-name">
-                              {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
-                            </span>
-                        {{ } }}
-                        <br>
-                        {{ if (person.job_title && person.job_title.length > 0) { }}
-                            <span class="job-title">
-                              {{= person.job_title }}
-                            </span>
-                        {{ } }}
-                        {{ if (person.company && person.company.length > 0) { }}
-                            <span class="job-title">
-                              {{= person.company }}
-                            </span>
-                        {{ } }}
-                        &nbsp;
-                    </div>
-                    <div class="person-actions" style="float:right;">
-                      {{ if (person.pseudonym) { }}
-                        <i class="fa fa-user-secret" aria-hidden="true" data-toggle="tooltip" data-container="body" data-original-title="<%= (t "real-name").capitalize %> {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }}" href="mailto:{{= person.default_email_address }}"></i>
-                      {{ } }}
-                      {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
-                        <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= person.default_email_address }}" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                      {{ } }}
-                      <br>
-                      {{ if (person.prog_item_count && person.prog_item_count > 1) { }}
-                          <span class="job-title" style="padding-right: 3px">
-                            <%= t "speaks-in" %> {{= person.prog_item_count -1 }} <%= t "other-items" %>
-                          </span>
-                      {{ } }}
-                    </div>
-                </li>
-                {{ }); }}
-                </ul>
+                <div class="participating-people-container"></div>
             </div>
             <div class="col-md-4">
                 <h5><%= t "reserved" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "reserved" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "reserved-help").html_safe %>'></i></h5>
                 {{ if ($.isEmptyObject(reserves)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
-                <ul class="people-list-group">
-                {{ _.each(reserves, function(person) { }}
-                  <li class="people-list-group-item reserved">
-                    {{ if (person.bio_image) { }}
-                        <div>
-                          <img src="{{=person.bio_image}}" width="30" height="30">
-                        </div>
-                    {{ } else { }}
-                        <div>
-                          <img src="{{=person.default_bio_image }}" width="30" height="30">
-                        </div>                        
-                    {{ } }}
-                    <div>
-                        {{ if (person.pseudonym) { }}
-                            <span class="published-name">
-                              {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
-                            </span>
-                        {{ } else { }}
-                            <span class="published-name">
-                              {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
-                            </span>
-                        {{ } }}
-                        <br>
-                        {{ if (person.job_title && person.job_title.length > 0) { }}
-                            <span class="job-title">
-                              {{= person.job_title }}
-                            </span>
-                        {{ } }}
-                        {{ if (person.company && person.company.length > 0) { }}
-                            <span class="job-title">
-                              {{= person.company }}
-                            </span>
-                        {{ } }}
-                        &nbsp;
-                    </div>
-                    <div class="person-actions" style="float:right;">
-                      {{ if (person.pseudonym) { }}
-                        <i class="fa fa-user-secret" aria-hidden="true" data-toggle="tooltip" data-container="body" data-original-title="<%= (t "real-name").capitalize %> {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }}" href="mailto:{{= person.default_email_address }}"></i>
-                      {{ } }}
-                      {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
-                        <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= person.default_email_address }}" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                      {{ } }}
-                      <br>
-                      {{ if (person.prog_item_count && person.prog_item_count > 1) { }}
-                          <span class="job-title" style="padding-right: 3px">
-                            <%= t "speaks-in" %> {{= person.prog_item_count -1 }} <%= t "other-items" %>
-                          </span>
-                      {{ } }}
-                    </div>
-                  </li>
-                {{ }); }}
-                </ul>
+                <div class="reserved-people-container"></div>
+
                 <h5 style="margin-top: 20px;"><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisible-help").html_safe %>'></i></h5>
                 {{ if ($.isEmptyObject(invisibles)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
-                <ul class="people-list-group">
-                {{ _.each(invisibles, function(person) { }}
-                  <li class="people-list-group-item invisible-participant">
-                    {{ if (person.bio_image) { }}
-                        <div>
-                          <img src="{{=person.bio_image}}" width="30" height="30">
-                        </div>
-                    {{ } else { }}
-                        <div>
-                          <img src="{{=person.default_bio_image }}" width="30" height="30">
-                        </div>                        
-                    {{ } }}
-                    <div>
-                        {{ if (person.pseudonym) { }}
-                            <span class="published-name">
-                              {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }} {{= person.pseudonym.suffix }}
-                            </span>
-                        {{ } else { }}
-                            <span class="published-name">
-                              {{= person.prefix }} {{= person.first_name }} {{= person.last_name }} {{= person.suffix }} 
-                            </span>
-                        {{ } }}
-                        <br>
-                        {{ if (person.job_title && person.job_title.length > 0) { }}
-                            <span class="job-title">
-                              {{= person.job_title }}
-                            </span>
-                        {{ } }}
-                        {{ if (person.company && person.company.length > 0) { }}
-                            <span class="job-title">
-                              {{= person.company }}
-                            </span>
-                        {{ } }}
-                        &nbsp;
-                    </div>
-                    <div class="person-actions" style="float:right;">
-                      {{ if (person.pseudonym) { }}
-                        <i class="fa fa-user-secret" aria-hidden="true" data-toggle="tooltip" data-container="body" data-original-title="<%= (t "real-name").capitalize %> {{= (((person.prefix || "") + " " + (person.first_name || "") + " " + (person.last_name || "") + " " + (person.suffix || "")).trim()) }}" href="mailto:{{= person.default_email_address }}"></i>
-                      {{ } }}
-                      {{ if (person.default_email_address && person.default_email_address.length > 0) { }}
-                        <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= person.default_email_address }}" href="mailto:{{= person.default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-                      {{ } }}
-                      <br>
-                      {{ if (person.prog_item_count && person.prog_item_count > 1) { }}
-                          <span class="job-title" style="padding-right: 3px">
-                            <%= t "speaks-in" %> {{= person.prog_item_count -1 }} <%= t "other-items" %>
-                          </span>
-                      {{ } }}
-                    </div>
-                  </li>
-                {{ }); }}
-                </ul>
+                <div class="invisible-people-container"></div>
             </div>
         </div>
     </div>
     {{ }; }}    
+</script>
+
+<script type="text/template" id="assigned-person-template">
+  <div>
+      <div class="media-left">
+        <img class="person-img" src="{{= (typeof(bio_image) != 'undefined') ? bio_image : default_bio_image }}" width="30" height="30">
+      </div>
+      <div class="media-body">
+          <span class="published-name">
+            {{= full_publication_name }}
+          </span>
+          <br>
+          {{ if ((typeof(job_title) != 'undefined') && job_title.length > 0) { }}
+              <span class="job-title">
+                {{= job_title }}
+              </span>
+          {{ } }}
+          {{ if ((typeof(company) != 'undefined') && company.length > 0) { }}
+              <span class="job-title">
+                {{= company }}
+              </span>
+          {{ } }}
+          &nbsp;
+      </div>
+      <div class="media-right person-actions">
+        {{ if (typeof(pseudonym) != 'undefined') { }}
+          <i class="fa fa-user-secret" aria-hidden="true" data-toggle="tooltip" data-container="body" data-original-title="<%= (t "real-name").capitalize %> {{= real_name }}" href="mailto:{{= default_email_address }}"></i>
+        {{ } }}
+        {{ if ((typeof(default_email_address) != 'undefined') && default_email_address.length > 0) { }}
+          <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= default_email_address }}" href="mailto:{{= default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+        {{ } }}
+      </div>
+  </div>
+    {{ if ((typeof(prog_item_count) != 'undefined') && prog_item_count > 1) { }}
+      <div class="text-right">
+        <span class="job-title" style="padding-right: 3px">
+          <%= t "assigned-to" %> {{= prog_item_count -1 }} <%= t "other-items" %>
+        </span>
+      </div>
+    {{ } }}
 </script>
 
 <script type="text/template" id="tag-context-layout-template">
