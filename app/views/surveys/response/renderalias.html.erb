@@ -47,7 +47,7 @@
                     </div>
                 </div>
             <% end %>
-            <% @survey.survey_groups.each do |group| %>
+            <% @survey.survey_groups.order(:sort_order).each do |group| %>
                 <div class="row">
                     <div class="col-sm-12">
                         <%=render :partial => 'group', :locals => {:group => group}%>

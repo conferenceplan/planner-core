@@ -6,10 +6,10 @@ item_assignments.
     if ia.programmeItem && (@allowed_roles.include? ia.role)
         row << (ia.programmeItem.pub_reference_number ? ia.programmeItem.pub_reference_number : '')
         if ia.programmeItem.time_slot
-            row << (ia.programmeItem.time_slot.start + Time.zone.utc_offset.seconds)
+            row << (ia.programmeItem.time_slot.start)
             row << (ia.programmeItem.time_slot.start.strftime('%A'))
         else
-            row << (ia.programmeItem.parent.time_slot.start + Time.zone.utc_offset.seconds)
+            row << (ia.programmeItem.parent.time_slot.start)
             row << (ia.programmeItem.parent.time_slot.start.strftime('%A'))
         end
         row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')
