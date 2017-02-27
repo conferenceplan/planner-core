@@ -416,7 +416,7 @@
       </div>
       <div class="media-right person-actions">
 
-        {{ if ((typeof(default_email_address) != 'undefined') && default_email_address.length > 0) { }}
+        {{ if ((typeof(default_email_address) != 'undefined') && default_email_address != null && default_email_address.length > 0) { }}
           <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= default_email_address }}" href="mailto:{{= default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
         {{ } }}
       </div>
