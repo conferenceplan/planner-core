@@ -410,7 +410,7 @@
           &nbsp;
       </div>
       <div class="media-right person-actions">
-        {{ if (typeof(pseudonym) != 'undefined') { }}
+        {{ if ((typeof(pseudonym) != 'undefined') && (pseudonym)) { }}
           <i class="fa fa-user-secret" aria-hidden="true" data-toggle="tooltip" data-container="body" data-original-title="<%= (t "real-name").capitalize %> {{= real_name }}" href="mailto:{{= default_email_address }}"></i>
         {{ } }}
         {{ if ((typeof(default_email_address) != 'undefined') && default_email_address.length > 0) { }}
