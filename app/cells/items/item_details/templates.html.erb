@@ -396,6 +396,11 @@
           <span class="published-name">
             {{= full_publication_name }}
           </span>
+          {{ if ((typeof(pseudonym) != 'undefined') && (pseudonym)) { }}
+            <span class="real-name minor-text">
+              <br>(<%= (t "real-name") %> {{= real_name }})
+            </span>
+          {{ } }}
           <br>
           {{ if ((typeof(job_title) != 'undefined') && job_title.length > 0) { }}
               <span class="job-title">
@@ -410,9 +415,7 @@
           &nbsp;
       </div>
       <div class="media-right person-actions">
-        {{ if ((typeof(pseudonym) != 'undefined') && (pseudonym)) { }}
-          <i class="fa fa-user-secret" aria-hidden="true" data-toggle="tooltip" data-container="body" data-original-title="<%= (t "real-name").capitalize %> {{= real_name }}" href="mailto:{{= default_email_address }}"></i>
-        {{ } }}
+
         {{ if ((typeof(default_email_address) != 'undefined') && default_email_address.length > 0) { }}
           <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= default_email_address }}" href="mailto:{{= default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
         {{ } }}
