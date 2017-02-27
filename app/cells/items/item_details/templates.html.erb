@@ -529,13 +529,13 @@
                   </li>
                 {{ }); }}
                 </ul>
-                <h5><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisible-help").html_safe %>'></i></h5>
+                <h5 style="margin-top: 20px;"><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisible-help").html_safe %>'></i></h5>
                 {{ if ($.isEmptyObject(invisibles)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
                 <ul class="people-list-group">
                 {{ _.each(invisibles, function(person) { }}
-                  <li class="people-list-group-item invisible">
+                  <li class="people-list-group-item invisible-participant">
                     {{ if (person.bio_image) { }}
                         <div>
                           <img src="{{=person.bio_image}}" width="30" height="30">
