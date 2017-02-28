@@ -962,7 +962,7 @@ ItemApp.ItemManagement = (function(Backbone){
         current_item = null;
     };
     
-    function showDetails(id) {
+    function showDetails(id, filterTable=false) {
         var data = jQuery("#items").jqGrid('getRowData', id);
         $('#selected-program-item').html(data['item[title]']);
 
@@ -970,6 +970,12 @@ ItemApp.ItemManagement = (function(Backbone){
 
         itemMdl.deferred = itemMdl.fetch({
             url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
+            success : function(response) {
+                if (filterTable){
+                    $('#selected-program-item').html(response.get('title'));
+                    $('input[name="programme_items.title"]').val(response.get('title')).trigger('keydown');
+                };
+            },
             async: true,
         }).done(function() {
                 <% unless @dont_render_participants %>
@@ -1126,9 +1132,9 @@ ItemApp.ItemManagement = (function(Backbone){
             selectCallbacks.add(func);
         },
         
-        showDetails : function(id) {
+        showDetails : function(id, filterTable=false) {
             clearDetails();
-            return showDetails(id);
+            return showDetails(id, filterTable);
         },
         clearDetails : function() {
             clearDetails();
