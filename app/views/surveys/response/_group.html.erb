@@ -6,6 +6,6 @@
 <% end %>
 </p>
 
-    <% group.survey_questions.each do |question| %>
+    <% group.survey_questions.order(:sort_order).each do |question| %>
         <%=render :partial => 'question', :locals => {:question => question}%>
     <% end %>
