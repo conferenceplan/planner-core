@@ -348,42 +348,43 @@
         <div class="row">
             <div class="col-md-12">
                 <h3 class="h3-underlined">
-                  <%= t "program-participants" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= strip_tags(t("program-participants")) %>" data-container="body" data-trigger="hover" data-placement="right auto" data-toggle="popover" data-content="<%= strip_tags(t "program-participants-title-pub-item-help").html_safe %>"></i>
-                    <button class="add-people-button btn btn-primary btn-xs pull-right"><%= t 'add-people' %></button>
+                    <%= t "participants-and-staff" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= strip_tags(t("participants-and-staff")) %>" data-container="body" data-trigger="hover" data-placement="right auto" data-toggle="popover" data-content="<%= strip_tags(t "participants-and-staff-title-pub-item-help").html_safe %>"></i>
+                    <button class="add-people-button btn btn-primary btn-xs pull-right"><%= t 'assign-participants' %></button>
                 </h3>
             </div>
         </div>
         <!-- List of participants etc. -->
         <div class="row">
             <div class="col-md-4">
-                <h5><%= t "moderator(s)" %></h5>
+                <h5><%= t "speakers" %></h5>
                 {{ if ($.isEmptyObject(moderators)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
                 <div class="moderating-people-container"></div>
-            </div>    
-            <div class="col-md-4">
-                <h5><%= t "program-participants" %></h5>
                 {{ if ($.isEmptyObject(participants)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
                 <div class="participating-people-container"></div>
-            </div>
+            </div>    
             <div class="col-md-4">
-                <h5><%= t "reserved" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "reserved" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "reserved-help").html_safe %>'></i></h5>
-                {{ if ($.isEmptyObject(reserves)) { }}
-                  <span class="minor-text">(<%= t "none" %>)</span>
-                {{ } }}
-                <div class="reserved-people-container"></div>
-
-                <h5 style="margin-top: 20px;"><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisible-help").html_safe %>'></i></h5>
+                <h5>
+                  <%= t "invisibles" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisibles" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisibles-help").html_safe %>'></i>
+                </h5>
                 {{ if ($.isEmptyObject(invisibles)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
                 <div class="invisible-people-container"></div>
             </div>
+            <div class="col-md-4">
+                <h5>
+                  <%= t "potentials" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "potentials" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "potentials-help").html_safe %>'></i>
+                </h5>
+                {{ if ($.isEmptyObject(reserves)) { }}
+                  <span class="minor-text">(<%= t "none" %>)</span>
+                {{ } }}
+                <div class="reserved-people-container"></div>
+            </div>
         </div>
-    </div>
     {{ }; }}    
 </script>
 
@@ -415,8 +416,7 @@
           &nbsp;
       </div>
       <div class="media-right person-actions">
-
-        {{ if ((typeof(default_email_address) != 'undefined') && default_email_address != null && default_email_address.length > 0) { }}
+        {{ if ((typeof(default_email_address) != 'undefined') && default_email_address.length > 0) { }}
           <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= default_email_address }}" href="mailto:{{= default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
         {{ } }}
       </div>
