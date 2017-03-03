@@ -23,6 +23,12 @@ json.start_offset           item.start_offset
 json.is_published           item.published ? true : false
 json.is_break               item.is_break
 
+json.published_item do
+    if item.published
+        json.partial! 'published_programme_items/published_programme_item', item: item.published
+    end
+end
+
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 
 json.start_time             item.start_time.present? ? item.start_time : ""
