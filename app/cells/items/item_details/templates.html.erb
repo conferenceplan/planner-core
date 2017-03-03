@@ -357,13 +357,10 @@
         <div class="row">
             <div class="col-md-4">
                 <h5><%= t "speakers" %></h5>
-                {{ if ($.isEmptyObject(moderators)) { }}
+                {{ if ($.isEmptyObject(moderators) && $.isEmptyObject(participants)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
                 <div class="moderating-people-container"></div>
-                {{ if ($.isEmptyObject(participants)) { }}
-                  <span class="minor-text">(<%= t "none" %>)</span>
-                {{ } }}
                 <div class="participating-people-container"></div>
             </div>    
             <div class="col-md-4">
@@ -416,7 +413,7 @@
           &nbsp;
       </div>
       <div class="media-right person-actions">
-        {{ if ((typeof(default_email_address) != 'undefined') && default_email_address.length > 0) { }}
+        {{ if ((typeof(default_email_address) != 'undefined') && default_email_address != null && default_email_address.length > 0) { }}
           <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= default_email_address }}" href="mailto:{{= default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
         {{ } }}
       </div>
