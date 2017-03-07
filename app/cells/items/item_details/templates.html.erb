@@ -270,34 +270,34 @@
                 <h3><%= t 'extra-information' %> <a><i id="toggle-item-extras-btn" class="fa fa-plus-square"  onclick="toggleItemExtras(this);"></i></a></h3>
             </div>
             <div class="row" id="programme-item-extras" style="display: none;">
-            	<div class="col-ms-12">
-		            <div class="row">
-		                <div class="form-group">
-		                    <label class="col-sm-3 control-label"><%= t "item-publication-reference" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-publication-reference" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-publication-reference-help" %>'></i></label>
-		                    <div class="col-sm-4">
-		                        <div data-editors="pub_reference_number"></div>
-		                    </div>
-		                </div>
-		            </div>
-		            <div class="row">
-		                <div class="form-group">
-		                    <span data-editor>
-		                        <label class="col-sm-3 control-label"><%= t "item-notes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "notes-help" %>'></i></label>
-		                        <div class="col-sm-9">
-		                            <div data-editors="item_notes"></div>
-		                        </div>
-		                    </span>
-		                </div>
-		            </div>
-		            <div class="row">
-		                <div class="form-group">
-		                    <label class="col-sm-3 control-label"><%= t "item-notes-for-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes-for-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-notes-for-participants-help" %>'></i></label>
-		                    <div class="col-sm-9">
-		                        <div data-editors="participant_notes" class="notes-text-area"></div>
-		                    </div>
-		                </div>
-		            </div>
-	            </div>
+                <div class="col-ms-12">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><%= t "item-publication-reference" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-publication-reference" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-publication-reference-help" %>'></i></label>
+                            <div class="col-sm-4">
+                                <div data-editors="pub_reference_number"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <span data-editor>
+                                <label class="col-sm-3 control-label"><%= t "item-notes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "notes-help" %>'></i></label>
+                                <div class="col-sm-9">
+                                    <div data-editors="item_notes"></div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><%= t "item-notes-for-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes-for-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-notes-for-participants-help" %>'></i></label>
+                            <div class="col-sm-9">
+                                <div data-editors="participant_notes" class="notes-text-area"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </fieldset>
     </form>
@@ -347,85 +347,78 @@
     <div class="clearfix">
         <div class="row">
             <div class="col-md-12">
-                <h3 class="h3-underlined">
-                    <%= t "participants-and-staff" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= strip_tags(t("participants-and-staff")) %>" data-container="body" data-trigger="hover" data-placement="right auto" data-toggle="popover" data-content="<%= strip_tags(t "participants-and-staff-title-pub-item-help").html_safe %>"></i>
-                    <!-- <button class="email-people-button btn btn-sm btn-primary pull-right" style="margin-left: 5px;"><i class="fa fa-envelope" aria-hidden="true"></i> <%= t 'email-participants' %></button> -->
-                    <button class="add-people-button btn btn-sm btn-primary pull-right"><i class="fa fa-users" aria-hidden="true"></i> <%= t 'assign-participants' %></button>
-                </h3>
+                <div class="caption" class="pull-left">
+                    <button class="add-people-button btn btn-primary btn-xs pull-right">
+                        <%= t 'add-people' %>
+                    </button>
+                </div>
             </div>
         </div>
         <!-- List of participants etc. -->
         <div class="row">
-            <div class="col-md-4">
-                <h5 class="speakers-header"><%= t "speakers" %></h5>
-                {{ if ($.isEmptyObject(moderators) && $.isEmptyObject(participants)) { }}
-                  <span class="minor-text">(<%= t "none" %>)</span>
-                {{ } }}
-                <div class="moderating-people-container"></div>
-                <div class="participating-people-container"></div>
+            <div class="col-md-3">
+                <h5><%= t "moderator(s)" %></h5>
+                <ul class="list-group">
+                {{ _.each(moderators, function(person) { }}
+                    <li class="list-group-item">
+                        {{ if (person.pseudonym) { }}
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                        {{ } else { }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                        {{ } }}
+                    </li>
+                {{ }); }}
+                </ul>
             </div>    
-            <div class="col-md-4">
-                <h5 class="invisibles-header">
-                  <%= t "invisibles" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisibles" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisibles-help").html_safe %>'></i>
-                </h5>
-                {{ if ($.isEmptyObject(invisibles)) { }}
-                  <span class="minor-text">(<%= t "none" %>)</span>
-                {{ } }}
-                <div class="invisible-people-container"></div>
+            <div class="col-md-3">
+                <h5><%= t "program-participants" %></h5>
+                <ul class="list-group">
+                {{ _.each(participants, function(person) { }}
+                    <li class="list-group-item">
+                        {{ if (person.pseudonym) { }}
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                        {{ } else { }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                        {{ } }}
+                    </li>
+                {{ }); }}
+                </ul>
             </div>
-            <div class="col-md-4">
-                <h5 class="potentials-header">
-                  <%= t "potentials" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "potentials" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "potentials-help").html_safe %>'></i>
-                </h5>
-                {{ if ($.isEmptyObject(reserves)) { }}
-                  <span class="minor-text">(<%= t "none" %>)</span>
-                {{ } }}
-                <div class="reserved-people-container"></div>
+            <div class="col-md-3">
+                <h5><%= t "reserved" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "reserved" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "reserved-help").html_safe %>'></i></h5>
+                <ul class="list-group">
+                {{ _.each(reserves, function(person) { }}
+                    <li class="list-group-item">
+                        {{ if (person.pseudonym) { }}
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                        {{ } else { }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                        {{ } }}
+                    </li>
+                {{ }); }}
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisible-help").html_safe %>'></i></h5>
+                <ul class="list-group">
+                {{ _.each(invisibles, function(person) { }}
+                    <li class="list-group-item">
+                        {{ if (person.pseudonym) { }}
+                            {{= person.pseudonym.prefix }} {{= person.pseudonym.first_name }} {{= person.pseudonym.last_name }}  {{= person.pseudonym.suffix }}
+                            ({{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }})
+                        {{ } else { }}
+                            {{= person.prefix }} {{= person.first_name }} {{= person.last_name }}  {{= person.suffix }}
+                        {{ } }}
+                    </li>
+                {{ }); }}
+                </ul>
             </div>
         </div>
+    </div>
     {{ }; }}    
-</script>
-
-<script type="text/template" id="assigned-person-template">
-  <div>
-      <div class="media-left">
-        <img class="person-img" src="{{= (typeof(bio_image) != 'undefined') ? bio_image : default_bio_image }}" width="30" height="30">
-      </div>
-      <div class="media-body">
-          <span class="published-name">
-            {{= full_publication_name }}
-          </span>
-          {{ if ((typeof(pseudonym) != 'undefined') && (pseudonym)) { }}
-            <span class="real-name minor-text">
-              <br>(<%= (t "real-name") %> {{= real_name }})
-            </span>
-          {{ } }}
-          <br>
-          {{ if ((typeof(job_title) != 'undefined') && job_title.length > 0) { }}
-              <span class="job-title">
-                {{= job_title }}
-              </span>
-          {{ } }}
-          {{ if ((typeof(company) != 'undefined') && company.length > 0) { }}
-              <span class="job-title">
-                {{= company }}
-              </span>
-          {{ } }}
-          &nbsp;
-      </div>
-      <div class="media-right person-actions">
-        {{ if ((typeof(default_email_address) != 'undefined') && default_email_address != null && default_email_address.length > 0) { }}
-          <a data-toggle="tooltip" data-container="body" target="_blank" data-original-title="{{= default_email_address }}" href="mailto:{{= default_email_address }}"><i class="fa fa-envelope" aria-hidden="true"></i></a>
-        {{ } }}
-      </div>
-  </div>
-    {{ if ((typeof(prog_item_count) != 'undefined') && prog_item_count > 1) { }}
-      <div class="text-right">
-        <span class="job-title" style="padding-right: 3px">
-          <%= t "assigned-to" %> {{= prog_item_count -1 }} <%= t "other-items" %>
-        </span>
-      </div>
-    {{ } }}
 </script>
 
 <script type="text/template" id="tag-context-layout-template">
@@ -504,5 +497,4 @@
         <%= t 'cloudinary-not-configured' %>
     <% end %>
 </script>
-
 
