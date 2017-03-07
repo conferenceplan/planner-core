@@ -349,7 +349,7 @@
             <div class="col-md-12">
                 <h3 class="h3-underlined">
                     <%= t "participants-and-staff" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= strip_tags(t("participants-and-staff")) %>" data-container="body" data-trigger="hover" data-placement="right auto" data-toggle="popover" data-content="<%= strip_tags(t "participants-and-staff-title-pub-item-help").html_safe %>"></i>
-                    <button class="email-people-button btn btn-sm btn-primary pull-right" style="margin-left: 5px;"><i class="fa fa-envelope" aria-hidden="true"></i> <%= t 'email-participants' %></button>
+                    <!-- <button class="email-people-button btn btn-sm btn-primary pull-right" style="margin-left: 5px;"><i class="fa fa-envelope" aria-hidden="true"></i> <%= t 'email-participants' %></button> -->
                     <button class="add-people-button btn btn-sm btn-primary pull-right"><i class="fa fa-users" aria-hidden="true"></i> <%= t 'assign-participants' %></button>
                 </h3>
             </div>
@@ -357,7 +357,7 @@
         <!-- List of participants etc. -->
         <div class="row">
             <div class="col-md-4">
-                <h5><%= t "speakers" %></h5>
+                <h5 class="speakers-header"><%= t "speakers" %></h5>
                 {{ if ($.isEmptyObject(moderators) && $.isEmptyObject(participants)) { }}
                   <span class="minor-text">(<%= t "none" %>)</span>
                 {{ } }}
@@ -365,7 +365,7 @@
                 <div class="participating-people-container"></div>
             </div>    
             <div class="col-md-4">
-                <h5>
+                <h5 class="invisibles-header">
                   <%= t "invisibles" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisibles" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisibles-help").html_safe %>'></i>
                 </h5>
                 {{ if ($.isEmptyObject(invisibles)) { }}
@@ -374,7 +374,7 @@
                 <div class="invisible-people-container"></div>
             </div>
             <div class="col-md-4">
-                <h5>
+                <h5 class="potentials-header">
                   <%= t "potentials" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "potentials" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "potentials-help").html_safe %>'></i>
                 </h5>
                 {{ if ($.isEmptyObject(reserves)) { }}

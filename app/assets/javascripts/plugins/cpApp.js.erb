@@ -1221,6 +1221,10 @@ var AppUtils = (function(){
                             onRender : render_callback
                         },
                         onRender : function() {
+                            if (typeof(options.onCollectionRenderFn) == 'function') {
+                              options.onCollectionRenderFn.call(this);
+                            };
+
                             this.$('.bpopover').popover({
                                 html: true,
                                 trigger: 'hover'
