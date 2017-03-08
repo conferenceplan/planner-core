@@ -1789,9 +1789,7 @@ input[type='checkbox'][disabled] + label.checkbox-label {
 }
 .people-list-group .person-card img.person-img {
   vertical-align: bottom;
-  margin: 0;
-  margin-top: 1px;
-  border-radius: 3px;
+  margin: -5px;
 }
 .people-list-group .person-card span.published-name {
   font-weight: bold;
@@ -1809,40 +1807,36 @@ a.minor-text.email-icon:hover {
   margin-top: 2px;
   min-width: 50px;
 }
-.people-list-group .person-card {
-  
-  line-height: 1;
-  list-style-type: none;
-  
-  min-height: 42px;
-  
-  margin-bottom: 7px;
-  
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  border: #ccc 1px solid;
-  
-  border-top-right-radius: 0px;
-  border-bottom-right-radius: 4px;
-  
-  padding: 4px 6px 3px 6px;
-  
-  background-color: #eee;
-
-
+.person-actions a:hover {
+  text-decoration: none;
 }
-.people-list-group .person-card.moderator {
-  background-color: #f5f5b0;
+.person-actions i {
+  color: #ccc;
+}
+.people-list-group .person-card {
+  line-height: 100%;
+  list-style-type: none;
+  min-height: 42px;
+  margin-bottom: 7px;
+  border: #ccc 1px solid;
+  padding: 5px;
+  //background-color: #eee;
+}
+.people-list-group .media {
+  margin-top: 0;
+  margin-bottom: 7px;
+}
 
+.people-list-group .person-card.moderator {
+  border-right: 7px solid #bf1f40;
 }
 .people-list-group .person-card.participant {
-
-  background-color: rgba(51,122,183,0.25);
-
+  border-right: 7px solid #337ab7;
 }
 .people-list-group .person-card.invisible-person {
-
+  border-right: 7px solid #ccc;
 }
+
 .people-list-group .person-card.reserved {
   background-color: white;
   border-style: dashed;
