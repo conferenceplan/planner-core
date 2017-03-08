@@ -13,8 +13,10 @@ class Theme < ActiveRecord::Base
 
   # update the timestamp of the themed item
   def update_timestamp
-    themed.touch if !themed.new_record?
-    themed.save
+    if themed
+      themed.touch if !themed.new_record?
+      themed.save
+    end
   end
 
 end

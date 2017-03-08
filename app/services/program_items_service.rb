@@ -18,14 +18,26 @@ module ProgramItemsService
   end
   
   # given the id of the item to duplicate create a copy and return that copy
-  def self.duplicate_item(item_id)
+  def self.duplicate_item(item_id, conference_id = nil, keep_room_assignment = true, dict = {}) #, dest_conference = nil)
     old_item = ProgrammeItem.find item_id
     
-    kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members, 
-      use_dictionary: true do |original, _kopy|
-        _kopy.title = _kopy.title + " (copy)" if _kopy.respond_to?(:title)
+    kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members(keep_room_assignment, conference_id), 
+      use_dictionary: dict do |original, _kopy|
+        _kopy.title = _kopy.title + " (copy)" if _kopy.respond_to?(:title) && !conference_id
         _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
       end
+      
+    # TODO - move out of core
+    if conference_id
+      kopy.conference_id = conference_id
+      kopy.children.update_all conference_id: conference_id
+      kopy.programme_item_assignments.update_all conference_id: conference_id
+
+      # TODO - themes
+      # TODO - tags
+      # kopy.taggings.update_all conference_id: conference_id
+      # kopy.themes.update_all conference_id: conference_id
+    end
     
     kopy.save!
     kopy
@@ -119,14 +131,20 @@ module ProgramItemsService
   #
   #
   #
-  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, theme_ids = nil, ignoreScheduled = false, include_children = true, page_to = nil)
+  def self.countItems(filters = nil, extraClause = nil, nameSearch=nil, context=nil, tags = nil, theme_ids = nil, ignoreScheduled = false, include_children = true, page_to = nil, index=nil, sort_order='asc')
     clause = where_clause(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to)
     tagquery = DataService.genTagSql(context, tags)
     
-    if tagquery.empty?
-      ProgrammeItem.where(clause).joins(join_clause).uniq.count
+    if (index != nil && index != "")
+      order_clause = index + " " + sort_order
     else
-      ProgrammeItem.where(clause).joins(join_clause).tagged_with(*tagquery).order("time_slots.start asc, programme_items.title asc").uniq.count
+      order_clause = "time_slots.start asc, programme_items.title asc"
+    end
+
+    if tagquery.empty?
+      ProgrammeItem.where(clause).joins(join_clause).order(order_clause).uniq.count
+    else
+      ProgrammeItem.where(clause).joins(join_clause).tagged_with(*tagquery).order(order_clause).uniq.count
     end
   end
   
