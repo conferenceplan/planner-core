@@ -41,6 +41,25 @@ $.widget( "cp.baseTable" , {
     translate : function(str) {
         return this.options.translations[str] ? this.options.translations[str] : str;
     },
+
+    goToModel : function(mdl) {
+        var grid = this.element;
+        if (mdl) {
+            var page_to = this.pageTo(mdl);
+            var to_id = mdl.id;
+            var post_data = {
+                    page_to : page_to, // make sure that the current page contains the selected element
+                    filters : {},
+                    current_selection : to_id // to pass back for the selection
+            };
+            mdl.clear();
+            grid.jqGrid('setGridParam', {
+                postData : post_data
+            });
+        };
+
+        grid.trigger("reloadGrid");
+    },
     
     /*
      *

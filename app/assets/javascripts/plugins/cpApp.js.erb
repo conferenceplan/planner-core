@@ -1221,10 +1221,15 @@ var AppUtils = (function(){
                             onRender : render_callback
                         },
                         onRender : function() {
-                            jQuery(this.$el).find('.bpopover').popover({
-                                        html: true,
-                                        trigger: 'hover'
-                                    });
+                            if (typeof(options.onCollectionRenderFn) == 'function') {
+                              options.onCollectionRenderFn.call(this);
+                            };
+
+                            this.$('.bpopover').popover({
+                                html: true,
+                                trigger: 'hover'
+                            });
+                            this.$('[data-toggle="tooltip"]').tooltip({html : true});
                         }
                     });
                     

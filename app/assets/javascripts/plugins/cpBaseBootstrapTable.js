@@ -85,6 +85,14 @@ $.widget( "cp.baseBootstrapTable" , {
         }
     },
 
+    _destroy : function() {
+        this.element.bootstrapTable('destroy');
+    },
+
+    getData : function() {
+        return this.element.bootstrapTable('getData');
+    },
+
     render : function() {
         if (this.options.delayed) {
             this.selected = this.model = null;
@@ -107,6 +115,10 @@ $.widget( "cp.baseBootstrapTable" , {
 
     pageFrom : function() {
         this.element.bootstrapTable('pageFrom');
+    },
+
+    removeAll : function() {
+        this.element.bootstrapTable('removeAll');
     },
 
     pageFrom : function() {

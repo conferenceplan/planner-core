@@ -964,14 +964,21 @@ ItemApp.ItemManagement = (function(Backbone){
     
     function showDetails(id) {
         var data = jQuery("#items").jqGrid('getRowData', id);
-        $('#selected-program-item').html(data['item[title]']);
+        var title = data['item[title]'];
+        $('#selected-program-item').html(title);
 
         var itemMdl = new ProgramItem;
 
         itemMdl.deferred = itemMdl.fetch({
             url : "<%= baseUri + '/programme_items/' %>" + id + '.json',
             async: true,
+            success : function(response) {
+                if (typeof(title) == 'undefined') {
+                    $('#selected-program-item').html(response.get('title'));
+                };
+            }
         }).done(function() {
+                <% unless @dont_render_participants %>
                 TabUtils.createTabContent({
                     model : itemMdl,
                     template : '#program-participants-view-template',
@@ -1012,6 +1019,7 @@ ItemApp.ItemManagement = (function(Backbone){
                         }
                     }
                 });
+                <% end %>
                 
                 mdl = TabUtils.createTabContent({
                     model : itemMdl,
@@ -1042,6 +1050,8 @@ ItemApp.ItemManagement = (function(Backbone){
                         container: 'body',
                     })
                 });
+                
+                $('[data-toggle="tooltip"]').tooltip();
                 
                 eventAggregator.on("refreshTagList", syncModel, itemMdl);
         
@@ -1115,6 +1125,7 @@ ItemApp.ItemManagement = (function(Backbone){
     return {
         
         ProgramItem : ProgramItem,
+        ProgrammeItem : ProgramItem,
 
         cloneItem : cloneItem,
         
