@@ -76,28 +76,28 @@ end
 if moderators
     json.moderators do
         json.array! moderators do |p|
-            json.partial! 'person', person: p.person
+            json.partial! 'person', person: p.person, type: 'moderator'
         end
     end
 end
 if participants
     json.participants do
         json.array! participants do |p|
-            json.partial! 'person', person: p.person
+            json.partial! 'person', person: p.person, type: 'participant'
         end
     end
 end
 if reserves
     json.reserves do
         json.array! reserves do |p|
-            json.partial! 'person', person: p.person
+            json.partial! 'person', person: p.person, type: 'reserved'
         end
     end
 end
 if invisibles
     json.invisibles do
         json.array! invisibles do |p|
-            json.partial! 'person', person: p.person
+            json.partial! 'person', person: p.person, type: 'invisible'
         end
     end
 end
