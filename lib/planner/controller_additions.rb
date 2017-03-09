@@ -8,7 +8,7 @@ module Planner
                          :strip_html_tags, :site_url, :site_url_no_lang, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
                          :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?,
-                         :human_time
+                         :human_time, :person_img_url
     end
 
 
@@ -89,6 +89,31 @@ module Planner
       else
         nil
       end
+    end
+
+    def person_img_url person, scale: 1, version: :detail, default_img: nil
+      url = ENV['G_DEFAULT_PERSON_IMAGE_URL'] #start with default grenadine person image url. This will get replaced by the others if the correct conditions are met
+      if person && person.bio_image
+        img = person.bio_image
+        img.scale = scale
+        image = img.bio_picture.send(version)
+        
+        if image && image.url
+          url = image_url(image)
+        end
+        # if the person has an image, use that image
+      elsif default_img.present? || DefaultBioImage.first.present?
+        img = default_img || DefaultBioImage.first
+        img.scale = scale
+        image = img.image.send(version)
+        
+        if image && image.url
+          url = image_url(image)
+        end
+        # if there is no person image but there is a default image, use that one
+      end
+      
+      url
     end
 
     def image_url(im)

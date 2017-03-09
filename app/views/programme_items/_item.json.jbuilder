@@ -71,33 +71,38 @@ json.theme_names do
     end
 end
 
+if moderators.any? || participants.any? || reserves.any? || invisibles.any?
+    default_person_img = default_person_img || DefaultBioImage.first
+else
+    default_person_img = nil
+end
 
 # TODO - do we want to list the participants?
 if moderators
     json.moderators do
         json.array! moderators do |p|
-            json.partial! 'person', person: p.person, type: 'moderator'
+            json.partial! 'person', person: p.person, type: 'moderator', default_img: default_person_img
         end
     end
 end
 if participants
     json.participants do
         json.array! participants do |p|
-            json.partial! 'person', person: p.person, type: 'participant'
+            json.partial! 'person', person: p.person, type: 'participant', default_img: default_person_img
         end
     end
 end
 if reserves
     json.reserves do
         json.array! reserves do |p|
-            json.partial! 'person', person: p.person, type: 'reserved'
+            json.partial! 'person', person: p.person, type: 'reserved', default_img: default_person_img
         end
     end
 end
 if invisibles
     json.invisibles do
         json.array! invisibles do |p|
-            json.partial! 'person', person: p.person, type: 'invisible'
+            json.partial! 'person', person: p.person, type: 'invisible', default_img: default_person_img
         end
     end
 end
