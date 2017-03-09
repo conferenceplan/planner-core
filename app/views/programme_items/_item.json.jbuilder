@@ -71,11 +71,7 @@ json.theme_names do
     end
 end
 
-if moderators.any? || participants.any? || reserves.any? || invisibles.any?
-    default_person_img = default_person_img || DefaultBioImage.first
-else
-    default_person_img = nil
-end
+default_person_img = default_person_img || DefaultBioImage.first
 
 # TODO - do we want to list the participants?
 if moderators
