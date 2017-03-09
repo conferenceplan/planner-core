@@ -5,6 +5,7 @@ if @programmeItem
                         participants: @participantAssociations, 
                         moderators: @moderatorAssociations, 
                         reserves: @reserveAssociations, 
-                        invisibles: @invisibleAssociations
+                        invisibles: @invisibleAssociations,
+                        default_person_img: DefaultBioImage.first
     
 end
