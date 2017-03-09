@@ -1787,3 +1787,17 @@ input[type='checkbox'][disabled] + label.checkbox-label {
   color: #ccc;
 }
 
+/* <!-- note: yes these need to be in core --> */
+.pretty-nav-list {
+  border: 1px #ddd solid;
+  margin-top: 10px;
+}
+.li-menu-header {
+  font-weight: bold;
+  height: 50px;
+  padding: 14px;
+  background-color: #ddd;
+}
+.pretty-nav-list li i {
+  margin-top: 5px;
+}
