@@ -736,6 +736,12 @@ input[type="checkbox"] {
     font-size: 12px;
     margin-top: 17px;
 }
+.report-selector-action-group h5 {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 12px;
+  margin-top: 17px;
+}
 .right-bar-action-group h5:first-of-type {
     margin-top: 0px;
 }
@@ -1841,4 +1847,17 @@ a.minor-text.email-icon:hover {
   background-color: white;
   border-style: dashed;
 
+}
+.report-nav-list {
+  border: 1px #ddd solid;
+  margin-top: 10px;
+}
+.li-menu-header {
+  font-weight: bold;
+  height: 50px;
+  padding: 14px;
+  background-color: #ddd;
+}
+.report-nav-list li i {
+  margin-top: 5px;
 }
