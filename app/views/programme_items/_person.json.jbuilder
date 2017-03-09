@@ -1,3 +1,4 @@
+type = type || nil
 #
 #
 #
@@ -17,5 +18,4 @@ json.bio_image (get_base_image_url + person.bio_image.bio_picture.thumbnail.url.
 json.prog_item_count person.published_programme_items.count
 json.default_email_address person.getDefaultEmail.present? ? person.getDefaultEmail.email : nil
 json.default_bio_image ((get_base_image_url + DefaultBioImage.first.image.url.partition(/upload/)[2]).sub! '/upload/', '/upload/f_jpg,h_60,w_60/') if DefaultBioImage.first.image
-
-            
+json.assignment_type type
