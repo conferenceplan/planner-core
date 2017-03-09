@@ -21,22 +21,15 @@ module ProgramItemsService
   def self.duplicate_item(item_id, conference_id = nil, keep_room_assignment = true, dict = {}) #, dest_conference = nil)
     old_item = ProgrammeItem.find item_id
     
-    kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members(keep_room_assignment, conference_id), 
-      use_dictionary: dict do |original, _kopy|
+    kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members(keep_room_assignment, !conference_id), 
+      dictionary: dict do |original, _kopy|
         _kopy.title = _kopy.title + " (copy)" if _kopy.respond_to?(:title) && !conference_id
         _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
+        _kopy.conference_id = conference_id if _kopy.respond_to?(:conference_id) && conference_id
       end
-      
-    # TODO - move out of core
-    if conference_id
-      kopy.conference_id = conference_id
-      kopy.children.update_all conference_id: conference_id
-      kopy.programme_item_assignments.update_all conference_id: conference_id
 
-      # TODO - themes
-      # TODO - tags
-      # kopy.taggings.update_all conference_id: conference_id
-      # kopy.themes.update_all conference_id: conference_id
+    if !kopy.format
+      kopy.format_id = nil
     end
     
     kopy.save!
