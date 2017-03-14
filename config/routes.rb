@@ -252,7 +252,7 @@ Rails.application.routes.draw do
 
   match 'program_planner/assignments', :controller => 'program_planner', :action => 'assignments', :via => 'get'
   match 'program_planner/addItem', :controller => 'program_planner', :action => 'addItem', :via => 'post'
-  match 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :via => 'get'
+  match 'program_planner/removeItem', :controller => 'program_planner', :action => 'removeItem', :via => ['get', 'post']
   match 'program_planner/getConflicts', :controller => 'program_planner', :action => 'getConflicts', :via => 'get'
 
   match 'publisher/publish', :controller => 'publisher', :action => 'publish', :via => 'post'
