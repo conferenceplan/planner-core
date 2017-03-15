@@ -59,6 +59,9 @@ $.widget( "cp.baseBootstrapTable" , {
         sortOrder           : 'asc',
         sortName            : 'id',
         ctl_template        : '#table-control-template',
+        extra_button        : false,
+        extra_button_title  : "extra",
+        extra_modal_action  : function() {}
     },
 
     /*
@@ -341,12 +344,24 @@ $.widget( "cp.baseBootstrapTable" , {
                 "click .add-model-button"       : "newModel",
                 "click .edit-model-button"      : "editModel",
                 "click .delete-model-button"    : "deleteModal",
+                "click .extra-action-model-button"  : "extraAction"
             },
-            
+
+            templateHelpers: function(){
+              return {
+                display: that.options.extra_button,
+                label: that.options.extra_button_title
+              }
+            },
+
             initialize : function(options) {
-                this.options = options || {};
-                var ctl_template = this.options.ctl_template;//'#table-control-template'
-                this.template = _.template($(ctl_template).html());
+              this.options = options || {};
+              var ctl_template = '#table-control-template'
+              this.template = _.template($(ctl_template).html());
+            },
+
+            extraAction : function() {
+                that.options.extra_modal_action();
             },
 
             newModel : function(e) {

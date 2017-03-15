@@ -22,6 +22,7 @@
         <%= javascript_include_tag params[:controller] if params[:controller] && Rails.application.assets.find_asset(params[:controller] + ".js")  %>
         <%= javascript_include_tag "cells/" + params[:cellname] if params[:cellname] && Rails.application.assets.find_asset("cells/" + params[:cellname] + ".js") %>
         <%=render 'layouts/common_js' %>
+        <%=render 'layouts/messages_js' if lookup_context.find_all('layouts/_messages_js').any? %>
         <%= yield(:jsheader) if content_for?(:jsheader) %>
 
         <style type="text/css">
