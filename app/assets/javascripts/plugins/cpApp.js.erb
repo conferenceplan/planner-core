@@ -755,14 +755,15 @@ var AppUtils = (function(){
                         if (refreshFn) {
                             refreshFn(data); // cause problem with templates used ???
                         };
-
-                        setMessage({
-                          text : (!(typeof self.options.form.successMsg == 'undefined') ? self.options.form.successMsg : I18n.t('core.messages.data-successfully-saved')),
-                          style : 'success',
-                          renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
-                          fade : true,
-                          fadeTimeout : 10000
-                        });
+                        if (!self.options.form.noSuccessMsg) {
+                          setMessage({
+                            text : (!(typeof self.options.form.successMsg == 'undefined') ? self.options.form.successMsg : I18n.t('core.messages.data-successfully-saved')),
+                            style : 'success',
+                            renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
+                            fade : true,
+                            fadeTimeout : 10000
+                          });
+                        };
                     },
                     customError : function(response) {
                       // console.log(xhr, status, error);
