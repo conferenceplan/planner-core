@@ -8,10 +8,18 @@ module Planner
                          :strip_html_tags, :site_url, :site_url_no_lang, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
                          :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?,
-                         :human_time, :person_img_url
+                         :human_time, :person_img_url, :current_user
     end
 
-
+    def current_user
+      user = nil
+      if support_user_signed_in?
+        user = current_support_user
+      else
+        user = @current_user ||= warden.authenticate(scope: :user)
+      end
+      user
+    end
     
     def human_time mins
       [[60, I18n.t(:minutes)], [24, I18n.t(:hours)], [1000, I18n.t(:days)]].map{ |count, name|

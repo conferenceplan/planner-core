@@ -17,18 +17,6 @@ class ApplicationController < ActionController::Base
     false
   end
 
-
-  
-  def current_user
-    user = nil
-    if support_user_signed_in?
-      user = current_support_user
-    else
-      user = @current_user ||= warden.authenticate(scope: :user)
-    end
-    user
-  end
-  
   after_filter :store_prev_location
     
   private
