@@ -93,7 +93,7 @@ class SurveyQueryController < PlannerController
         raise "can not copy query as a support user" if support_user_signed_in?
         original = SurveyQuery.find(params[:id])
         
-        @query = original.dup :include => :survey_query_predicates
+        @query = original.deep_clone :include => :survey_query_predicates
         @query.name += ' (Copy)'
         @query.user = @current_user
         @query.shared = false

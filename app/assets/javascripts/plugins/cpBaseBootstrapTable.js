@@ -59,6 +59,9 @@ $.widget( "cp.baseBootstrapTable" , {
         sortOrder           : 'asc',
         sortName            : 'id',
         ctl_template        : '#table-control-template',
+        extra_button        : false,
+        extra_button_title  : "extra",
+        extra_modal_action  : function() {}
     },
 
     /*
@@ -85,6 +88,14 @@ $.widget( "cp.baseBootstrapTable" , {
         }
     },
 
+    _destroy : function() {
+        this.element.bootstrapTable('destroy');
+    },
+
+    getData : function() {
+        return this.element.bootstrapTable('getData');
+    },
+
     render : function() {
         if (this.options.delayed) {
             this.selected = this.model = null;
@@ -107,6 +118,10 @@ $.widget( "cp.baseBootstrapTable" , {
 
     pageFrom : function() {
         this.element.bootstrapTable('pageFrom');
+    },
+
+    removeAll : function() {
+        this.element.bootstrapTable('removeAll');
     },
 
     pageFrom : function() {
@@ -329,12 +344,24 @@ $.widget( "cp.baseBootstrapTable" , {
                 "click .add-model-button"       : "newModel",
                 "click .edit-model-button"      : "editModel",
                 "click .delete-model-button"    : "deleteModal",
+                "click .extra-action-model-button"  : "extraAction"
             },
-            
+
+            templateHelpers: function(){
+              return {
+                display: that.options.extra_button,
+                label: that.options.extra_button_title
+              }
+            },
+
             initialize : function(options) {
-                this.options = options || {};
-                var ctl_template = this.options.ctl_template;//'#table-control-template'
-                this.template = _.template($(ctl_template).html());
+              this.options = options || {};
+              var ctl_template = '#table-control-template'
+              this.template = _.template($(ctl_template).html());
+            },
+
+            extraAction : function() {
+                that.options.extra_modal_action();
             },
 
             newModel : function(e) {

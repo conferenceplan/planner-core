@@ -270,34 +270,34 @@
                 <h3><%= t 'extra-information' %> <a><i id="toggle-item-extras-btn" class="fa fa-plus-square"  onclick="toggleItemExtras(this);"></i></a></h3>
             </div>
             <div class="row" id="programme-item-extras" style="display: none;">
-            	<div class="col-ms-12">
-		            <div class="row">
-		                <div class="form-group">
-		                    <label class="col-sm-3 control-label"><%= t "item-publication-reference" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-publication-reference" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-publication-reference-help" %>'></i></label>
-		                    <div class="col-sm-4">
-		                        <div data-editors="pub_reference_number"></div>
-		                    </div>
-		                </div>
-		            </div>
-		            <div class="row">
-		                <div class="form-group">
-		                    <span data-editor>
-		                        <label class="col-sm-3 control-label"><%= t "item-notes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "notes-help" %>'></i></label>
-		                        <div class="col-sm-9">
-		                            <div data-editors="item_notes"></div>
-		                        </div>
-		                    </span>
-		                </div>
-		            </div>
-		            <div class="row">
-		                <div class="form-group">
-		                    <label class="col-sm-3 control-label"><%= t "item-notes-for-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes-for-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-notes-for-participants-help" %>'></i></label>
-		                    <div class="col-sm-9">
-		                        <div data-editors="participant_notes" class="notes-text-area"></div>
-		                    </div>
-		                </div>
-		            </div>
-	            </div>
+                <div class="col-ms-12">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><%= t "item-publication-reference" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-publication-reference" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-publication-reference-help" %>'></i></label>
+                            <div class="col-sm-4">
+                                <div data-editors="pub_reference_number"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <span data-editor>
+                                <label class="col-sm-3 control-label"><%= t "item-notes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "notes-help" %>'></i></label>
+                                <div class="col-sm-9">
+                                    <div data-editors="item_notes"></div>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"><%= t "item-notes-for-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes-for-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-notes-for-participants-help" %>'></i></label>
+                            <div class="col-sm-9">
+                                <div data-editors="participant_notes" class="notes-text-area"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </fieldset>
     </form>
@@ -497,5 +497,4 @@
         <%= t 'cloudinary-not-configured' %>
     <% end %>
 </script>
-
 

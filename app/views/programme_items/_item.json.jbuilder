@@ -23,6 +23,12 @@ json.start_offset           item.start_offset
 json.is_published           item.published ? true : false
 json.is_break               item.is_break
 
+json.published_item do
+    if item.published
+        json.partial! 'published_programme_items/published_programme_item', item: item.published
+    end
+end
+
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 
 json.start_time             item.start_time.present? ? item.start_time : ""
@@ -65,33 +71,34 @@ json.theme_names do
     end
 end
 
+default_person_img = default_person_img || DefaultBioImage.first
 
 # TODO - do we want to list the participants?
 if moderators
     json.moderators do
         json.array! moderators do |p|
-            json.partial! 'person', person: p.person
+            json.partial! 'person', person: p.person, type: 'moderator', default_img: default_person_img
         end
     end
 end
 if participants
     json.participants do
         json.array! participants do |p|
-            json.partial! 'person', person: p.person
+            json.partial! 'person', person: p.person, type: 'participant', default_img: default_person_img
         end
     end
 end
 if reserves
     json.reserves do
         json.array! reserves do |p|
-            json.partial! 'person', person: p.person
+            json.partial! 'person', person: p.person, type: 'reserved', default_img: default_person_img
         end
     end
 end
 if invisibles
     json.invisibles do
         json.array! invisibles do |p|
-            json.partial! 'person', person: p.person
+            json.partial! 'person', person: p.person, type: 'invisible', default_img: default_person_img
         end
     end
 end
