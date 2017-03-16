@@ -13,19 +13,12 @@ module VenuesService
             requirement: {categories: :category_name}
           ]
         }
-      }, 
+      },
       dictionary: dict
-    ) #, :address, :postal_address]
-    
-    # TODO - move
-    if conference_id
-      kopy.conference_id = conference_id
-      kopy.rooms.each do |r|
-        r.conference_id = conference_id
-        r.save!
-      end
+    ) do |orig, _kopy|
+      _kopy.conference_id = conference_id if  _kopy.respond_to?(:conference_id)
     end
-    
+
     kopy.save!
     kopy
   end
