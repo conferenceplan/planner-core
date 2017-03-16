@@ -100,6 +100,7 @@ module PlannerCore
 
     initializer :before_initialize do
       ActionController::Base.send(:include, Planner::ControllerAdditions)
+      Cell::Rails.send(:include, Devise::Controllers::Helpers)
       Cell::Rails.send(:include, Planner::ControllerAdditions)
       ActionMailer::Base.send(:include, Planner::ControllerAdditions)
     end
