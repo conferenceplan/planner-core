@@ -36,7 +36,8 @@
         }
     });
 
-    function ensureAtLeastOneTextFieldEntered(exclusions=[]) {
+    function ensureAtLeastOneTextFieldEntered(_exclusions) {
+      var exclusions = _exclusions || [];
       var error = {
           type: "empty_form",
           message: '<%= t "you-must-enter-a-value-for-at-least-one-field" %>'
@@ -75,7 +76,8 @@
       }
     });
 
-    function generateEmailSchema(options={}) {
+    function generateEmailSchema(_options) {
+      var options = _options || {};
       var emailOptions = options.emailOptions || {};
       var labelOptions = options.labelOptions || {};
       var isdefaultOptions = options.isdefaultOptions || {};
@@ -153,7 +155,8 @@
     });
 
 
-    function renderAddressLayout(region, objectId, baseCollectionUrl, options={}) {
+    function renderAddressLayout(region, objectId, baseCollectionUrl, _options) {
+      var options = _options || {};
       var opts = $.extend({
         tabLists : [],
         addressables : ['EmailAddress','PostalAddress','PhoneNumber'],
