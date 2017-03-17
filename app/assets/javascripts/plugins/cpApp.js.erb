@@ -632,6 +632,7 @@ var AppUtils = (function(){
 
         render: function () {
             var numModals = Backbone.BootstrapModal.count++;
+            if (!$('body').hasClass('modal-open')) $('body').addClass('modal-open');
 
             this.$el.html($(this.template({
                 title : this.options.title
@@ -652,7 +653,6 @@ var AppUtils = (function(){
             
             this.$el.find("input").filter(':visible:first').focus();
 
-            $('body').addClass('showing-modal');
 
             if (!(typeof this.options.confirmBtnText == 'undefined') && this.options.confirmBtnText.length > 0) {
               this.$('.confirm-btn').html(this.options.confirmBtnText);
@@ -678,8 +678,7 @@ var AppUtils = (function(){
             
             if (! errors ) {
                 if (e.type != "hide") this.$el.modal("hide");
-                this.remove();
-                $('body').removeClass('showing-modal');
+                this.close_modal();
             };
         },
         
@@ -701,7 +700,11 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];
             Backbone.BootstrapModal.count--;
-            $('body').removeClass('showing-modal');
+            if (Backbone.BootstrapModal.count < 1) {
+              $('body').removeClass('modal-open');
+            } else if (!$('body').hasClass('modal-open')) {
+              $('body').addClass('modal-open');
+            };
         },
         
         // over-ride this for the body of the form        
@@ -880,8 +883,7 @@ var AppUtils = (function(){
             var that = this;
             this.submitData(function() {
                 that.$el.modal("hide");
-                that.remove();
-                $('body').removeClass('showing-modal');
+                that.close_modal();
             });
         },
 
