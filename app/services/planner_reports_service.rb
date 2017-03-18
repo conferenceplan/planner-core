@@ -626,8 +626,8 @@ protected
   end
 
   def self.word_counts_if_clause(attr)
-    attr_length = Arel::Nodes::NamedFunction.new( "CHAR_LENGTH", [ Arel::Nodes::Quoted.new(attr) ])
-    attr_replace = Arel::Nodes::NamedFunction.new( "REPLACE", [ Arel::Nodes::Quoted.new(attr), Arel::Nodes::Quoted.new(' '), Arel::Nodes::Quoted.new('') ])
+    attr_length = Arel::Nodes::NamedFunction.new( "CHAR_LENGTH", [ attr ])
+    attr_replace = Arel::Nodes::NamedFunction.new( "REPLACE", [ attr, Arel::Nodes::Quoted.new(' '), Arel::Nodes::Quoted.new('') ])
     Arel::Nodes::NamedFunction.new("IF", [
                         attr_length.gt(0), 
                         (Arel::Nodes::Addition.new( Arel::Nodes::Subtraction.new(attr_length, Arel::Nodes::NamedFunction.new( "LENGTH", [ attr_replace ])), 1)),
