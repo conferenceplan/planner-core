@@ -79,7 +79,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
   def end_time
     if self.parent
       _end_time = self.parent.published_time_slot.end
-      _end_time = self.parent.published_time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset
+      _end_time = self.parent.published_time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset && self.duration
     else
       _end_time = self.published_time_slot.end
     end
