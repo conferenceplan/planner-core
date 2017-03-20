@@ -82,51 +82,73 @@ ItemApp.ItemManagement = (function(Backbone){
     var minItemDuration = 1;
     ProgramItem = Backbone.RelationalModel.extend({
         schema : {
-            title       : { type : 'Text', title : '<%= t "title" %>', validators: ['required'], editorClass: 'mandatory-field' },
-            theme_name_ids  : { type : 'DependentSelect2', title : '<%= t "themes" %>', fieldClass : 'item-theme',
-                                editorAttrs : { placeholder : '<%= t "select-a-theme-for-this-item" %>' },
-                                dependsOn : 'is_break', dependentValues : ['false'],
-                                        config : {
-                                            multiple: true,
-                                            initSelection : function(element,callback) {
-                                                var vals = element.val();
-                                                if (vals && current_item) {
-                                                    res = [];
-                                                    cats = current_item.get("theme_names");
-                                                    _.each(cats, function(item) {
-                                                        res.push( {'id' : item.id, 'text' : item.name} );
-                                                    });
-                                                    callback(res);
-                                                }
-                                            },
-                                            formatSelection : function(obj, container) {
-                                                return obj.text;
-                                            },
-                                            formatNoMatches : function(term) {
-                                                return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + escape(term) + '\', set_theme, \'item-theme\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
-                                            },
-                                            ajax : {
-                                                url : "<%= baseUri %>/theme_names",
-                                                data : function(term, page) {
-                                                    return { 'search' : term };
-                                                },
-                                                results : function(_data, page, query) {
-                                                    res = [];
-                                                    _.each(_data.rows, function(item) {
-                                                        res.push( {'id' : item.id, 'text' : item.name} );
-                                                    });
-                                                    var data = {
-                                                        results: res
-                                                    };
-                                                    return data;
-                                                }
-                                            }
-                                        }
-                                    },
-            short_title : { type : 'Text', title : '<%= t "short-title" %>' },
-            precis : { type : 'Html', title : '<%= t "item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
-            short_precis : { type : 'Html', title : '<%= t "short-item-description" %>', editorAttrs: { rows : 2, cols : 60 } },
-            is_break    : { type : 'Checkbox', title : '<%= t "item-is-break" %>' },
+            title : { 
+                type : 'Text', 
+                title : '<%= t "title" %>', 
+                validators: ['required'], 
+                editorClass: 'mandatory-field' 
+            },
+            theme_name_ids : { 
+                type : 'DependentSelect2', 
+                title : '<%= t "themes" %>', 
+                fieldClass : 'item-theme',
+                editorAttrs : { placeholder : '<%= t "select-a-theme-for-this-item" %>' },
+                dependsOn : 'is_break', dependentValues : ['false'],
+                config : {
+                    multiple: true,
+                    initSelection : function(element,callback) {
+                        var vals = element.val();
+                        if (vals && current_item) {
+                            res = [];
+                            cats = current_item.get("theme_names");
+                            _.each(cats, function(item) {
+                                res.push( {'id' : item.id, 'text' : item.name} );
+                            });
+                            callback(res);
+                        }
+                    },
+                    formatSelection : function(obj, container) {
+                        return obj.text;
+                    },
+                    formatNoMatches : function(term) {
+                        return '<%= t "no-matches-found" %> <a href="/" onclick="ThemeApp.Mgmt.createNewTheme(\'' + escape(term) + '\', set_theme, \'item-theme\');"><%= t "create-theme" %> <b>' + term + '</b></a>'
+                    },
+                    ajax : {
+                        url : "<%= baseUri %>/theme_names",
+                        data : function(term, page) {
+                            return { 'search' : term };
+                        },
+                        results : function(_data, page, query) {
+                            res = [];
+                            _.each(_data.rows, function(item) {
+                                res.push( {'id' : item.id, 'text' : item.name} );
+                            });
+                            var data = {
+                                results: res
+                            };
+                            return data;
+                        }
+                    }
+                }
+            },
+            short_title : { 
+                type : 'Text', 
+                title : '<%= t "short-title" %>' 
+            },
+            precis : { 
+                type : 'Html', 
+                title : '<%= t "item-description" %>', 
+                editorAttrs: { rows : 2, cols : 60 } 
+            },
+            short_precis : { 
+                type : 'Html', 
+                title : '<%= t "short-item-description" %>', 
+                editorAttrs: { rows : 2, cols : 60 } 
+            },
+            is_break : { 
+                type : 'Checkbox', 
+                title : '<%= t "item-is-break" %>' 
+            },
             room_id : { 
                 type : 'Select2',
                 title : '<%= t "item-room" %>', 
@@ -190,7 +212,9 @@ ItemApp.ItemManagement = (function(Backbone){
                     }
                 }
              },
-            start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>',
+            start_time : { 
+                type : 'Datetime', 
+                title : '<%= t "item-start-time" %>',
                 editorClass : 'item-form-element',
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
                 defaultDate: "<%= Time.zone.parse((@start_date.start_date + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
@@ -737,38 +761,89 @@ ItemApp.ItemManagement = (function(Backbone){
                     };
                 }
             },
-            item_notes : { type : 'DependentTextArea', 
-                            dependsOn : 'is_break', dependentValues : ['false'], 
-                            title : '<%= t "item-notes" %>', editorClass : 'item-form-element notes-text-area note-small', editorAttrs: { rows : 2, cols : 60 } },
-            participant_notes : { type : 'DependentTextArea', editorClass : 'item-form-element notes-text-area note-small',
-                        dependsOn : 'is_break', dependentValues : ['false'],
-                        title : '<%= t "item-notes-for-participants" %>', editorAttrs: { rows : 2, cols : 60 } },
-            format_id : { type : 'Select',
-                        editorClass : 'item-form-element',
-                        title : '<%= t "item-format" %>', options : <%= [[' ',' ']].concat(Format.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            setup_type_id : { type : 'Select', editorClass : 'item-form-element',
-                        title : '<%= t "item-setup" %>', options : <%= [[' ',' ']].concat(SetupType.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            print : { type : 'Checkbox', title : '<%= t "item-print" %>',  editorClass : 'item-form-element', editorAttrs : {tabindex : "-1"} },
-            minimum_people : { type : 'DependentNumber', editorClass : 'item-form-element',
-                                dependsOn : 'is_break', dependentValues : ['false'],
-                                editorAttrs : { placeholder : '<%= t "min" %>' },
-                                title : '<%= t "item-min-participants" %>', validators: [
-                                { type: 'regexp', message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', regexp: /^[0-9]\d*$/ }
-                            ] },
-            maximum_people : { type : 'DependentNumber', editorClass : 'item-form-element',
-                                dependsOn : 'is_break', dependentValues : ['false'],
-                                editorAttrs : { placeholder : '<%= t "max" %>' },
-                                title : '<%= t "item-max-participants" %>', validators: [
-                                { type: 'regexp', message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', regexp: /^[0-9]\d*$/ }
-                            ] },
-            audience_size  : { type : 'DependentNumber', editorClass : 'item-form-element',
-                                dependsOn : 'is_break', dependentValues : ['false'],
-                                title : '<%= t "item-estimated-audience-size" %>' },
-            pub_reference_number : { type : 'DependentText', editorClass : 'item-form-element',
-                                    dependsOn : 'is_break', dependentValues : ['false'],
-                                    title : '<%= t "item-publication-reference" %>' },
-            mobile_card_size    : { type : 'Select',  editorClass : 'item-form-element', editorAttrs : {tabindex : "-1"}, title : '<%= t "mobile-card-size" %>', 
-                                options : [{ val: 1, label: '<%= (t "small-feminin") %>' },{ val: 5, label: '<%= (t "medium-feminin") %>' },{ val: 10, label: '<%= (t "large-feminin") %>' }] }
+            item_notes : { 
+                type : 'DependentTextArea', 
+                dependsOn : 'is_break', dependentValues : ['false'], 
+                title : '<%= t "item-notes" %>', 
+                editorClass : 'item-form-element notes-text-area note-small', 
+                editorAttrs: { rows : 2, cols : 60 } 
+            },
+            participant_notes : { 
+                type : 'DependentTextArea', 
+                editorClass : 'item-form-element notes-text-area note-small',
+                dependsOn : 'is_break', dependentValues : ['false'],
+                title : '<%= t "item-notes-for-participants" %>', 
+                editorAttrs: { rows : 2, cols : 60 } 
+            },
+            format_id : { 
+                type : 'Select',
+                editorClass : 'item-form-element',
+                title : '<%= t "item-format" %>', 
+                options : <%= [[' ',' ']].concat(Format.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
+            },
+            setup_type_id : { 
+                type : 'Select', 
+                editorClass : 'item-form-element',
+                title : '<%= t "item-setup" %>', 
+                options : <%= [[' ',' ']].concat(SetupType.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
+            },
+            print : { 
+                type : 'Checkbox', 
+                title : '<%= t "item-print" %>',  
+                editorClass : 'item-form-element', 
+                editorAttrs : {tabindex : "-1"} 
+            },
+            minimum_people : { 
+                type : 'DependentNumber', 
+                editorClass : 'item-form-element',
+                dependsOn : 'is_break', dependentValues : ['false'],
+                editorAttrs : { placeholder : '<%= t "min" %>' },
+                title : '<%= t "item-min-participants" %>', 
+                validators: [
+                    { 
+                        type: 'regexp', 
+                        message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', 
+                        regexp: /^[0-9]\d*$/ 
+                    }
+                ]
+            },
+            maximum_people : { 
+                type : 'DependentNumber', 
+                editorClass : 'item-form-element',
+                dependsOn : 'is_break', dependentValues : ['false'],
+                editorAttrs : { placeholder : '<%= t "max" %>' },
+                title : '<%= t "item-max-participants" %>', 
+                validators: [
+                    { 
+                        type: 'regexp', 
+                        message: '<%= t "planner.core.errors.must-be-a-positive-number" %>', 
+                        regexp: /^[0-9]\d*$/ 
+                    }
+                ]
+            },
+            audience_size  : { 
+                type : 'DependentNumber', 
+                editorClass : 'item-form-element',
+                dependsOn : 'is_break', dependentValues : ['false'],
+                title : '<%= t "item-estimated-audience-size" %>' 
+            },
+            pub_reference_number : { 
+                type : 'DependentText', 
+                editorClass : 'item-form-element',
+                dependsOn : 'is_break', dependentValues : ['false'],
+                title : '<%= t "item-publication-reference" %>' 
+            },
+            mobile_card_size    : { 
+                type : 'Select',  
+                editorClass : 'item-form-element', 
+                editorAttrs : {tabindex : "-1"}, 
+                title : '<%= t "mobile-card-size" %>', 
+                options : [
+                    { val: 1, label: '<%= (t "small-feminin") %>' },
+                    { val: 5, label: '<%= (t "medium-feminin") %>' },
+                    { val: 10, label: '<%= (t "large-feminin") %>' }
+                ] 
+            }
         },
         // Default values used when creating a new instance
         defaults: {
