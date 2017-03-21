@@ -21,6 +21,26 @@ function set_theme(mdl, arg) {
     }
 };
 
+function set_format(mdl, arg) {
+    if (mdl) {
+        var $el = $("[name='format_id']");
+        // var data = el.select2('data');
+        // data.push({'id' : mdl.id, 'text' : mdl.get('name')});
+        $el.select2('data', {'id' : mdl.id, 'text' : mdl.get('name')});
+        $el.select2('close');
+    }
+};
+
+function set_setup_type(mdl, arg) {
+    if (mdl) {
+        var $el = $("[name='setup_type_id']");
+        // var data = el.select2('data');
+        // data.push({'id' : mdl.id, 'text' : mdl.get('name')});
+        $el.select2('data', {'id' : mdl.id, 'text' : mdl.get('name')});
+        $el.select2('close');
+    }
+};
+
 function toggleItemExtras(el) {
     if (!jQuery('input[name="is_break"]').is(":checked")){
         $extras = jQuery("#programme-item-extras");
@@ -44,6 +64,54 @@ ItemApp.ItemManagement = (function(Backbone){
     var eventAggregator = AppUtils.eventAggregator;
     var selectCallbacks = $.Callbacks();
     var current_item = null;
+
+    Format = Backbone.Model.extend({
+        schema : {
+            name     : { type : 'Text', title : '<%= t "format-name" %>' }
+        },
+        urlRoot : "<%= baseUri + '/formats' %>"
+    });
+
+    SetupType = Backbone.Model.extend({
+        schema : {
+            name     : { type : 'Text', title : '<%= t "room-setup-name" %>' },
+        },
+        urlRoot : "<%= baseUri + '/setup_types' %>"
+    });
+
+    function createNewFormat(name, callback, arg) {
+        var mdl = new Format({ 
+            name : unescape(name),
+            position : null
+        });
+        var modal = new ModelModal({
+            model : mdl,
+            title : '<%= t "create-a-new-format" %>',
+            refresh : function(mdl) {
+                if (callback) {
+                    callback(mdl, arg);
+                }
+            }
+        });
+        modal.render();
+    };
+
+    function createNewSetupType(name, callback, arg) {
+        var mdl = new SetupType({ 
+            name : unescape(name),
+            position : null
+        });
+        var modal = new ModelModal({
+            model : mdl,
+            title : '<%= t "create-a-new-room-setup" %>',
+            refresh : function(mdl) {
+                if (callback) {
+                    callback(mdl, arg);
+                }
+            }
+        });
+        modal.render();
+    };
 
     Picture = Backbone.RelationalModel.extend({
         schema : {
@@ -776,16 +844,100 @@ ItemApp.ItemManagement = (function(Backbone){
                 editorAttrs: { rows : 2, cols : 60 } 
             },
             format_id : { 
-                type : 'Select',
-                editorClass : 'item-form-element',
+                type : 'Select2', 
                 title : '<%= t "item-format" %>', 
-                options : <%= [[' ',' ']].concat(Format.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
+                help : '<%= t "item-format-help" %>',
+                config : {
+                    placeholder : '<%= j t('select-one-prompt').html_safe %>',
+                    allowClear : true,
+                    formatSelection : function(obj, container) {
+                        return obj.text;
+                    },
+                    formatResult : function(obj, container) {
+                        return obj.text;
+                    },
+                    formatNoMatches : function(term) {
+                        return '<%= t "no-matches-found" %> <a href="/" onclick="ItemApp.ItemManagement.createNewFormat(\'' + escape(term) + '\', set_format, \'item-format\');"><%= t "create-format" %> <b>' + term + '</b></a>'
+                    },
+                    initSelection : function (element, callback) {
+                        if (current_item) {
+                            var itemFormatId = current_item.get('format_id');
+                            var itemFormatName = current_item.get('format_name');
+                            if (itemFormatId && itemFormatName && itemFormatName.length > 0) {
+                                callback(
+                                    {
+                                        id : itemFormatId, 
+                                        text : itemFormatName
+                                    }
+                                );
+                            }
+                        };
+                    },
+                    ajax : {
+                        url : "<%= baseUri %>/formats",
+                        data : function(term, page) {
+                            return { 'search' : term };
+                        },
+                        results : function(_data, page, query) {
+                            res = [];
+                            _.each(_data, function(object) {
+                                res.push( {'id' : object.id, 'text' : object.name} );
+                            });
+                            var data = {
+                                results: res
+                            };
+                            return data;
+                        }
+                    }
+                },
             },
             setup_type_id : { 
-                type : 'Select', 
-                editorClass : 'item-form-element',
+                type : 'Select2', 
                 title : '<%= t "item-setup" %>', 
-                options : <%= [[' ',' ']].concat(SetupType.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> 
+                help : '<%= t "item-setup-help" %>',
+                config : {
+                    placeholder : '<%= j t('select-one-prompt').html_safe %>',
+                    allowClear : true,
+                    formatSelection : function(obj, container) {
+                        return obj.text;
+                    },
+                    formatResult : function(obj, container) {
+                        return obj.text;
+                    },
+                    formatNoMatches : function(term) {
+                        return '<%= t "no-matches-found" %> <a href="/" onclick="ItemApp.ItemManagement.createNewSetupType(\'' + escape(term) + '\', set_setup_type, \'setup-type\');"><%= t "create-a-new-room-setup" %> <b>' + term + '</b></a>'
+                    },
+                    initSelection : function (element, callback) {
+                        if (current_item) {
+                            var setupTypeId = current_item.get('setup_type_id');
+                            var setupTypeName = current_item.get('setup_name');
+                            if (setupTypeId && setupTypeName && setupTypeName.length > 0) {
+                                callback(
+                                    {
+                                        id : setupTypeId, 
+                                        text : setupTypeName
+                                    }
+                                );
+                            }
+                        };
+                    },
+                    ajax : {
+                        url : "<%= baseUri %>/setup_types",
+                        data : function(term, page) {
+                            return { 'search' : term };
+                        },
+                        results : function(_data, page, query) {
+                            res = [];
+                            _.each(_data, function(object) {
+                                res.push( {'id' : object.id, 'text' : object.name} );
+                            });
+                            var data = {
+                                results: res
+                            };
+                            return data;
+                        }
+                    },
+                },
             },
             print : { 
                 type : 'Checkbox', 
@@ -1203,6 +1355,9 @@ ItemApp.ItemManagement = (function(Backbone){
         ProgrammeItem : ProgramItem,
 
         cloneItem : cloneItem,
+
+        createNewFormat : createNewFormat,
+        createNewSetupType : createNewSetupType,
         
         addSelectCallback : function(func) {
             selectCallbacks.add(func);
