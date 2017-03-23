@@ -218,37 +218,41 @@
                     </span>
                 </div>
             </div>
-            <div id="item-planning-title" class="row item-section-title">
-                <h3><%= t 'planning' %></h3>
-            </div>
-            <div class="row">
-                <div class="form-group" style="margin-bottom: 0;">
-                    <span data-editor>
-                        <label  class="col-sm-3 control-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size-long" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
+            <div id="item-planning-container">
+                <div id="item-planning-title" class="row item-section-title">
+                    <h3><%= t 'planning' %></h3>
+                </div>
+                <div class="row">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="col-sm-3 control-label"><%= t "item-nb-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-nb-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-nb-participants-help" %>'></i></label>
                         <div class="col-sm-2">
-                            <div data-editors="audience_size"></div>
+                            <div data-editors="minimum_people"></div>
                             <div class="has-error">
                                 <p class="help-block" data-error></p>
                             </div>
                         </div>
-                    </span>
-                    <label class="col-sm-3 control-label"><%= t "item-nb-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-nb-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-nb-participants-help" %>'></i></label>
-                    <div class="col-sm-2">
-                        <div data-editors="minimum_people"></div>
-                        <div class="has-error">
-                            <p class="help-block" data-error></p>
+                        <!--<label class="col-sm-3 control-label"><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>-->
+                        <div class="col-sm-2">
+                            <div data-editors="maximum_people"></div>
+                            <div class="has-error">
+                                <p class="help-block" data-error></p>
+                            </div>
                         </div>
-                    </div>
-                    <!--<label class="col-sm-3 control-label"><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>-->
-                    <div class="col-sm-2">
-                        <div data-editors="maximum_people"></div>
-                        <div class="has-error">
-                            <p class="help-block" data-error></p>
+                        <div id="audience-size-container" class="col-sm-5" data-editor>
+                            <div class="row">
+                                <label class="col-sm-7 control-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size-long" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
+                                <div class="col-sm-5">
+                                    <div data-editors="audience_size"></div>
+                                    <div class="has-error">
+                                        <p class="help-block" data-error></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row item-section-title" style="margin-bottom: 20px;">
+            <div id="item-options-divider" class="row item-section-title" style="margin-bottom: 20px;">
                 <h3><%= t 'options' %></h3>
             </div>
             <div class="row" id="print-item-row">

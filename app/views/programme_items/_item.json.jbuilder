@@ -71,6 +71,8 @@ json.theme_names do
     end
 end
 
+json.published item.published.present?
+
 default_person_img = default_person_img || DefaultBioImage.first
 
 # TODO - do we want to list the participants?
