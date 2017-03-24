@@ -33,7 +33,7 @@ json.start_day              item.room_item_assignment ? item.room_item_assignmen
 
 json.start_time             item.start_time.present? ? item.start_time : ""
 json.end_time             item.end_time.present? ? item.end_time : ""
-json.start_day_str          item.start_time.present? ? item.start_time.strftime('%A') : "" # we want this to be the number
+json.start_day_str          item.start_time.present? ? item.start_time.strftime('%a, %b %d') : "" # we want this to be the number
 json.start_time_str         item.start_time.present? ? item.start_time.strftime('%H:%M') : ""
 
 json.audience_size          item.audience_size
