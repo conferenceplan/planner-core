@@ -301,6 +301,7 @@ var AppUtils = (function(){
         events: {
             "submit"            : "submit",
             "click .close-modal": "hide",
+            "click .close-modal": "hideExtra",
             "hidden.bs.modal"   : "hide",
             "keypress"          : "swallow"
         },
@@ -370,6 +371,11 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];  
             this.remove();
+        },
+        hideExtra : function(e) {
+          if (this.options.closeFn) {
+            this.options.closeFn.call(this, e);
+          };
         }
     });
     

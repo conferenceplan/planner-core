@@ -992,6 +992,17 @@ input[type="number"] {
     max-width: 150px;
 }
 
+.input-group {
+  input[type="number"] {
+      max-width: none;
+  }
+  .input-group-addon {
+    label {
+      display: inline;
+    }
+  }
+}
+
 p.help-block {
     font-size: 12px;
     margin-bottom: 5px;
