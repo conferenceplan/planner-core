@@ -814,6 +814,7 @@ var AppUtils = (function(){
         submitData : function(callback) {
             $('.modal-msg-container').removeClass('active').html('');
             var self = this;
+            var originalAttributes = _.clone(this.model.attributes);
             // gather the data and update the underlying model etc.
             var errors = this.form.commit({ validate: true }); // To save the values from the form back into the model
             
@@ -823,6 +824,7 @@ var AppUtils = (function(){
             
                 // accept-charset="UTF-8"
                 this.model.save(null, { 
+                    wait : true,
                     success : function(mdl) {
                         // Refresh the view if there is a refresh method
                         if (refreshEvent) {
@@ -852,6 +854,7 @@ var AppUtils = (function(){
                         fade : true,
                         fadeTimeout : 10000
                       });
+                      self.model.set(originalAttributes);
                     }
                 }); // save the model to the server
             } else {
