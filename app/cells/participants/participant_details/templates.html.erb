@@ -194,6 +194,7 @@
     <div class="col-md-4" id="registration-view-details">  
         <h5><%= t "registration"%> <i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "registration"%>" data-toggle="popover" data-trigger="hover" data-placement="top"  data-content="<%= t "registration-help" %>"></i></h5>  
         {{ if (typeof id != 'undefined') { }}
+            <button class="model-delete-button btn btn-danger btn-xs pull-right" data-toggle="tooltip" data-trigger="hover" title="<%= t('delete') %>"><i class="fa fa-trash"></i></button>
             <button class="model-edit-button btn btn-primary btn-xs pull-right"><%= t "edit" %></button>
             <dl class="dl-horizontal-small dt50">
                 <dt><%= t "registered" %></dt>
@@ -215,13 +216,10 @@
             </dl>       
         {{ } else { }}
             <button class="model-new-button btn btn-primary btn-xs pull-right">
-                <i class="glyphicon glyphicon-pencil"></i>
+                <i class="fa fa-plus"></i> <%= t('add') %>
             </button>
             <dl class="dl-horizontal-small dt50">
-              <dt><%= t "registered" %></dt>
-              <dd>
-                <span class="minor-text">(<%= t "unknown" %>)</span>
-              </dd>
+                <span class="minor-text">(<%= t "no-registration-details" %>)</span>
             </dl>
         {{ }; }}
     </div>
