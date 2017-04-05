@@ -308,5 +308,17 @@ table.ui-sortable {
   color: black;
 }
 
+#item-detail-list {
+  .item-summary-attribute {
+
+    > .row > [class^='col-'] {
+      line-height: 1.42857143;
+      &:first-child {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
 
 

@@ -38,7 +38,18 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
     RegistrationDetail = Backbone.Model.extend({
         schema : {
-            registered : { type : 'Checkbox', title : '<%= t "registered" %>' , help: '<%= t "registered-hint" %>', help_placement: 'auto right',},
+            registered : { 
+                type : 'CheckboxWithChange', 
+                title : '<%= t "registered" %>', 
+                help: '<%= t "registered-hint" %>', 
+                help_placement: 'auto right',
+                changeFn : function() {
+                    if (this.$el.is(':checked')) {
+                        this.form.fields.registration_number.editor.$el.val(null);
+                        this.form.fields.registration_type.editor.$el.val(null);
+                    };
+                }
+            },
             registration_number : { 
                 type : 'DependentText', title : '<%= t "reg-number" %>',
                 dependsOn : 'registered', dependentValues : ['true'], 
@@ -387,6 +398,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         reg_details.deferred.done(function() {
             TabUtils.createTabContent({
                 model : reg_details,
+                modelType : RegistrationDetail,
                 template : '#registration-view-template',
                 region : summaryLayout.registration,
                 id : id,
@@ -394,7 +406,19 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 newTitle : '<%= t "create-registration" %>',
                 editTitle : '<%= t "edit-registration" %>',
                 deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
-                deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
+                deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>',
+                updateCallback : function(mdl, response, opts) {
+                    $("#participants").jqGrid('setGridParam', {
+                        loadComplete: function(data) {
+                            $("#participants").jqGrid('setSelection', id, false); // when load is complete the selection is called...
+                            $(this).jqGrid('setGridParam', { loadComplete: function() {} });
+                        }
+                    });
+                    $("#participants").trigger("reloadGrid");
+                },
+                postRenderFn : function() {
+                    this.$('[data-toggle="tooltip"]').tooltip();
+                }
             });
         });
 
@@ -410,14 +434,14 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 newTitle : '<%= t "create-invite" %>',
                 editTitle : '<%= t "edit-invite" %>',
                 updateCallback : function(mdl, response, opts) {
-                                $("#participants").jqGrid('setGridParam', {
-                                    loadComplete: function(data) {
-                                        $("#participants").jqGrid('setSelection', id, false); // when load is complete the selection is called...
-                                        $(this).jqGrid('setGridParam', { loadComplete: function() {} });
-                                    }
-                                });
-                                $("#participants").trigger("reloadGrid");
-                            },
+                    $("#participants").jqGrid('setGridParam', {
+                        loadComplete: function(data) {
+                            $("#participants").jqGrid('setSelection', id, false); // when load is complete the selection is called...
+                            $(this).jqGrid('setGridParam', { loadComplete: function() {} });
+                        }
+                    });
+                    $("#participants").trigger("reloadGrid");
+                },
                 events : {
                     'click .model-generate-invite-key-button' : function() {
                         mdl = this.model;
