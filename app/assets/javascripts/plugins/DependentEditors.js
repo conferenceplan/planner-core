@@ -102,6 +102,24 @@ Form.editors.DependentText = Form.editors.Text.extend({
     }
 
 });
+Form.editors.DependentHidden = Form.editors.Hidden.extend({
+
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Hidden.prototype.initialize.call(this, options);
+    },
+
+    render: function() {
+        this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
+       
+        this.setValue(this.value);
+
+        this.dependInit(this.form);
+
+        return this;
+    }
+
+});
 
 Form.editors.DependentTextArea = Form.editors.TextArea.extend({
 
@@ -177,6 +195,47 @@ Form.editors.DependentCheckbox = Form.editors.Checkbox.extend({
         this.setValue(this.value);
 
         this.dependInit(this.form);
+
+        var self = this;
+        self.$el.on("change", function(e) {
+            if (self.options.schema.changeFn) {
+                self.options.schema.changeFn.call(self, e);
+            };
+        });
+
+        if (self.options.schema.postRenderFn) {
+            self.options.schema.postRenderFn.call(self);
+        };
+        
+        return this;
+    }
+
+});
+
+Form.editors.DependentRadio = Form.editors.Radio.extend({
+
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.Radio.prototype.initialize.call(this, options);
+    },
+    
+    render: function() {
+        this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this );
+       
+        this.setOptions(this.schema.options);
+
+        this.dependInit(this.form);
+
+        var self = this;
+        self.$el.on("change", function(e) {
+            if (self.options.schema.changeFn) {
+                self.options.schema.changeFn.call(self, e);
+            }
+        });
+
+        if (self.options.schema.postRenderFn) {
+            self.options.schema.postRenderFn.call(self);
+        };
         
         return this;
     }
@@ -314,6 +373,10 @@ Form.editors.DependentNumber = Form.editors.Number.extend({
                 self.options.schema.changeFn.call(self, e);
             }
         });
+
+        if (self.options.schema.postRenderFn) {
+            self.options.schema.postRenderFn.call(self);
+        };
         
         return this;
     }
