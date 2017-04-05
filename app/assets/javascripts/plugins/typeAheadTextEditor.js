@@ -43,7 +43,7 @@
                 self.$el.typeahead(null, self.config);
 
                 self.$el.on("change", function (e) { 
-                    self.form.trigger(key + ":change", self, self);
+                    self.form.trigger(self.key + ":change", self, self);
 
                     if (self.options.schema.changeFn) {
                         self.options.schema.changeFn.call(self, e);
