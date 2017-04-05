@@ -93,6 +93,7 @@
 jQuery(document).ready(function() {
     _.templateSettings = {
         interpolate : /\{\{\=(.+?)\}\}/g,
+        escape : /\{\{\-(.+?)\}\}/g,
         evaluate : /\{\{(.+?)\}\}/g
     };
 
