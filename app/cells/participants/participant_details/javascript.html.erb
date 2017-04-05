@@ -220,6 +220,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         model : ExcludedItemModel
     });
     ExcludedTimesModel = Backbone.RelationalModel.extend({
+      // TODO - need to add a schema for the editor
     });
     ExcludedTimesCollection = Backbone.Collection.extend({
         model : ExcludedTimesModel
@@ -523,7 +524,13 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 TabUtils.createTabListContent({
                     collection : obj.get('times'),
                     template : "#time-exclusion-view-template",
-                    region : personTabLayout.exclusion_times
+                    region : personTabLayout.exclusion_times,
+                    // id : id,
+                    // id_name : 'person_id',
+                    // newTitle : '<%= t "create-availability" %>',
+                    // editTitle : '<%= t "edit-availability" %>',
+                    // deleteTitle : '<%= I18n.t "delete-confirmation" %> ',
+                    // deleteMessage : '<%= (I18n.t "confirm-that-you-really-want-to-delete").html_safe %>'
                 });
             }
         });

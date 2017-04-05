@@ -105,7 +105,8 @@ module ConstraintService
       Time.use_zone(SiteConfig.first.time_zone) do
         excludedTimesMaps = ExcludedPeriodsSurveyMap.all
         
-        Exclusion.delete_all({:excludable_type  => TimeSlot.name}) # clear out the time exclusions and then we recreate them
+        # TODO - only do the delete if teh source is survey, cause if the exclusion came from elsewhere then do not touch it
+        Exclusion.delete_all({:excludable_type  => TimeSlot.name, :source => "survey"}) # clear out the time exclusions and then we recreate them
         
         peopleWithConstraints = []
         excludedTimesMaps.each do |excludedTimesMap|

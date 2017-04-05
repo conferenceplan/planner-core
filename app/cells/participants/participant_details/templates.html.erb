@@ -407,6 +407,9 @@
 <script type="text/template" id="date-exclusion-view-template">
 {{ if (typeof id != 'undefined') { }}
 <div class="thumbnail clearfix">
+    <button class="model-delete-button btn btn-primary btn-xs pull-right">
+        <%= t "delete" %>
+    </button>
     <button class="model-edit-button btn btn-primary btn-xs pull-right">
         <%= t "edit" %>
     </button>
@@ -426,9 +429,21 @@
 </script>
 
 <script type="text/template" id="time-exclusion-view-template">
-<div class="thumbnail clearfix">
-    <small> {{= start_str }} <i class="glyphicon glyphicon-arrow-right"></i> {{= end_str }} </small>
-</div>
+  {{ if (typeof id != 'undefined') { }}
+  <div class="thumbnail clearfix">
+    <button class="model-delete-button btn btn-primary btn-xs pull-right">
+        <%= t "delete" %>
+    </button>
+      <button class="model-edit-button btn btn-primary btn-xs pull-right">
+          <%= t "edit" %>
+      </button>
+      <small> {{= start_str }} <i class="glyphicon glyphicon-arrow-right"></i> {{= end_str }} </small>
+  </div>
+  {{ } else { }}
+      <button class="model-new-button btn btn-primary btn-xs pull-right">
+          <%= t "new" %>
+      </button>
+  {{ }; }}
 </script>
 
 <script type="text/template" id="program-item-view-template">
