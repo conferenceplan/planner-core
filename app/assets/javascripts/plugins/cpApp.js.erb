@@ -823,8 +823,7 @@ var AppUtils = (function(){
                 var refreshEvent = this.options.view_refresh_event;
             
                 // accept-charset="UTF-8"
-                this.model.save(null, { 
-                    wait : true,
+                this.model.save(null, {
                     success : function(mdl) {
                         // Refresh the view if there is a refresh method
                         if (refreshEvent) {
