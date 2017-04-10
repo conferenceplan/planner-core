@@ -10,7 +10,12 @@
    * Bootstrap 3 templates
    */
   Form.template = _.template('\
-    <form class="form-horizontal" role="form" data-fieldsets></form>\
+    <form class="form-horizontal" role="form">\
+      <div data-fieldsets></div>\
+      <% if (submitButton) { %>\
+        <button type="submit" class="btn"><%= submitButton %></button>\
+      <% } %>\
+    </form>\
   ');
 
 
@@ -25,8 +30,11 @@
 
   Form.Field.template = _.template('\
     <div class="form-group field-<%= key %>">\
-      <label class="col-sm-4 control-label" for="<%= editorId %>"><%= title %></label>\
-      <div class="col-sm-8">\
+      <label class="col-sm-2 control-label" for="<%= editorId %>">\
+        <% if (titleHTML){ %><%= titleHTML %>\
+        <% } else { %><%- title %><% } %>\
+      </label>\
+      <div class="col-sm-10">\
         <span data-editor></span>\
         <p class="help-block" data-error></p>\
         <p class="help-block"><%= help %></p>\
@@ -37,7 +45,7 @@
 
   Form.NestedField.template = _.template('\
     <div class="field-<%= key %>">\
-      <div title="<%= title %>" class="input-xlarge">\
+      <div title="<% if (titleHTML){ %><%= titleHTML %><% } else { %><%- title %><% } %>" class="input-xlarge">\
         <span data-editor></span>\
         <div class="help-inline" data-error></div>\
       </div>\
@@ -46,6 +54,8 @@
   ');
 
   Form.editors.Base.prototype.className = 'form-control';
+  Form.editors.Checkbox.prototype.className = 'checkbox';
+  Form.editors.Checkboxes.prototype.className = 'checkbox';
   Form.Field.errorClassName = 'has-error';
 
 

@@ -1,7 +1,7 @@
 /**
  * Backbone Forms v0.14.0
  *
- * Copyright (c) 2013 Charles Davison, Pow Media Ltd
+ * Copyright (c) 2014 Charles Davison, Pow Media Ltd
  *
  * License and more information at:
  * http://github.com/powmedia/backbone-forms
@@ -11,15 +11,13 @@
   //DEPENDENCIES
   //CommonJS
   if (typeof exports !== 'undefined' && typeof require !== 'undefined') {
-    var $ = root.jQuery || root.Zepto || root.ender || require('jquery'),
-        _ = root._ || require('underscore'),
+    var _ = root._ || require('underscore'),
         Backbone = root.Backbone || require('backbone');
   }
 
   //Browser
   else {
-    var $ = root.jQuery,
-        _ = root._,
+    var _ = root._,
         Backbone = root.Backbone;
   }
 
@@ -31,9 +29,15 @@
 
 var Form = Backbone.View.extend({
 
+  events: {
+    'submit': function(event) {
+      this.trigger('submit', event);
+    }
+  },
+
   /**
    * Constructor
-   * 
+   *
    * @param {Object} [options.schema]
    * @param {Backbone.Model} [options.model]
    * @param {Object} [options.data]
@@ -43,11 +47,15 @@ var Form = Backbone.View.extend({
    * @param {Form.Field} [options.Field]
    * @param {Form.Fieldset} [options.Fieldset]
    * @param {Function} [options.template]
+   * @param {Boolean|String} [options.submitButton]
    */
   initialize: function(options) {
     var self = this;
 
-    options = options || {};
+    //Merge default options
+    options = this.options = _.extend({
+      submitButton: false
+    }, options);
 
     //Find the schema to use
     var schema = this.schema = (function() {
@@ -56,14 +64,10 @@ var Form = Backbone.View.extend({
 
       //Then schema on model
       var model = options.model;
-      if (model && model.schema) {
-        return (_.isFunction(model.schema)) ? model.schema() : model.schema;
-      }
+      if (model && model.schema) return _.result(model, 'schema');
 
       //Then built-in schema
-      if (self.schema) {
-        return (_.isFunction(self.schema)) ? self.schema() : self.schema;
-      }
+      if (self.schema) return _.result(self, 'schema');
 
       //Fallback to empty schema
       return {};
@@ -91,7 +95,7 @@ var Form = Backbone.View.extend({
     }, this);
 
     //Create fieldsets
-    var fieldsetSchema = options.fieldsets || [selectedFields],
+    var fieldsetSchema = options.fieldsets || _.result(this, 'fieldsets') || _.result(this.model, 'fieldsets') || [selectedFields],
         fieldsets = this.fieldsets = [];
 
     _.each(fieldsetSchema, function(itemSchema) {
@@ -109,7 +113,8 @@ var Form = Backbone.View.extend({
   createFieldset: function(schema) {
     var options = {
       schema: schema,
-      fields: this.fields
+      fields: this.fields,
+      legend: schema.legend || null
     };
 
     return new this.Fieldset(options);
@@ -136,7 +141,7 @@ var Form = Backbone.View.extend({
     } else if (this.data) {
       options.value = this.data[key];
     } else {
-      options.value = null;
+      options.value = undefined;
     }
 
     var field = new this.Field(options);
@@ -185,9 +190,18 @@ var Form = Backbone.View.extend({
     }
   },
 
+  templateData: function() {
+    var options = this.options;
+
+    return {
+      submitButton: options.submitButton
+    }
+  },
+
   render: function() {
     var self = this,
-        fields = this.fields;
+        fields = this.fields,
+        $ = Backbone.$;
 
     //Render form
     var $form = $($.trim(this.template(_.result(this, 'templateData'))));
@@ -246,9 +260,14 @@ var Form = Backbone.View.extend({
 
     //Set the main element
     this.setElement($form);
-    
+
     //Set class
     $form.addClass(this.className);
+
+    //Set attributes
+    if (this.attributes) {
+      $form.attr(this.attributes)
+    }
 
     return this;
   },
@@ -339,7 +358,7 @@ var Form = Backbone.View.extend({
     }, options);
 
     this.model.set(this.getValue(), setOptions);
-    
+
     if (modelError) return modelError;
   },
 
@@ -462,23 +481,27 @@ var Form = Backbone.View.extend({
   }
 
 }, {
-
-  //STATICS
-  template: _.template('\
-    <form data-fieldsets></form>\
-  ', null, this.templateSettings),
-
-  templateSettings: {
-    evaluate: /<%([\s\S]+?)%>/g, 
-    interpolate: /<%=([\s\S]+?)%>/g, 
-    escape: /<%-([\s\S]+?)%>/g
-  },
-
-  editors: {}
+    editors: {}
 
 });
 
-  
+//Statics to add on after Form is declared
+Form.templateSettings = {
+    evaluate: /<%([\s\S]+?)%>/g,
+    interpolate: /<%=([\s\S]+?)%>/g,
+    escape: /<%-([\s\S]+?)%>/g
+};
+
+Form.template = _.template('\
+    <form>\
+     <div data-fieldsets></div>\
+      <% if (submitButton) { %>\
+        <button type="submit"><%= submitButton %></button>\
+      <% } %>\
+    </form>\
+  ', null, Form.templateSettings);
+
+
 //==================================================================================================
 //VALIDATORS
 //==================================================================================================
@@ -490,105 +513,136 @@ Form.validators = (function() {
   validators.errMessages = {
     required: 'Required',
     regexp: 'Invalid',
+    number: 'Must be a number',
+    range: _.template('Must be a number between <%= min %> and <%= max %>', null, Form.templateSettings),
     email: 'Invalid email address',
     url: 'Invalid URL',
     match: _.template('Must match field "<%= field %>"', null, Form.templateSettings)
   };
-  
+
   validators.required = function(options) {
     options = _.extend({
       type: 'required',
       message: this.errMessages.required
     }, options);
-     
+
     return function required(value) {
       options.value = value;
-      
+
       var err = {
         type: options.type,
         message: _.isFunction(options.message) ? options.message(options) : options.message
       };
-      
-      if (value === null || value === undefined || value === false || value === '') return err;
+
+      if (value === null || value === undefined || value === false || value === '' || $.trim(value) === '' ) return err;
     };
   };
-  
+
   validators.regexp = function(options) {
     if (!options.regexp) throw new Error('Missing required "regexp" option for "regexp" validator');
-    
+
     options = _.extend({
       type: 'regexp',
       match: true,
       message: this.errMessages.regexp
     }, options);
-    
+
     return function regexp(value) {
       options.value = value;
-      
+
       var err = {
         type: options.type,
         message: _.isFunction(options.message) ? options.message(options) : options.message
       };
-      
+
       //Don't check empty values (add a 'required' validator for this)
       if (value === null || value === undefined || value === '') return;
 
       //Create RegExp from string if it's valid
       if ('string' === typeof options.regexp) options.regexp = new RegExp(options.regexp, options.flags);
 
-       if ((options.match) ? !options.regexp.test(value) : options.regexp.test(value)) return err;
+      if ((options.match) ? !options.regexp.test(value) : options.regexp.test(value)) return err;
     };
   };
 
-    validators.number = function(options) {
-        options = _.extend({
-            type: 'number',
-            message: this.errMessages.number,
-            regexp: /^[0-9]*\.?[0-9]*?$/
-        }, options);
-        
-        return validators.regexp(options);
-    };
-  
-  validators.email = function(options) {
+  validators.number = function(options) {
     options = _.extend({
-      type: 'email',
-      message: this.errMessages.email,
-      regexp: /^[\w\-]{1,}([\w\-\+.]{1,1}[\w\-]{1,}){0,}[@][\w\-]{1,}([.]([\w\-]{1,})){1,3}$/
+      type: 'number',
+      message: this.errMessages.number,
+      regexp: /^[-+]?([0-9]*.[0-9]+|[0-9]+)$/
     }, options);
-    
+
     return validators.regexp(options);
   };
-  
-  validators.url = function(options) {
+
+  validators.range = function(options) {
     options = _.extend({
-      type: 'url',
-      message: this.errMessages.url,
-      regexp: /^(http|https):\/\/(([A-Z0-9][A-Z0-9_\-]*)(\.[A-Z0-9][A-Z0-9_\-]*)+)(:(\d+))?\/?/i
+      type: 'range',
+      message: this.errMessages.range,
+      numberMessage: this.errMessages.number,
+      min: 0,
+      max: 100
     }, options);
-    
-    return validators.regexp(options);
-  };
-  
-  validators.match = function(options) {
-    if (!options.field) throw new Error('Missing required "field" options for "match" validator');
-    
-    options = _.extend({
-      type: 'match',
-      message: this.errMessages.match
-    }, options);
-    
-    return function match(value, attrs) {
+
+    return function range(value) {
       options.value = value;
-      
       var err = {
         type: options.type,
         message: _.isFunction(options.message) ? options.message(options) : options.message
       };
-      
+
       //Don't check empty values (add a 'required' validator for this)
       if (value === null || value === undefined || value === '') return;
-      
+
+      // check value is a number
+      var numberCheck = validators.number({message: options.numberMessage})(value);
+      if (numberCheck) return numberCheck;
+
+      // check value is in range
+      var number = parseFloat(options.value);
+      if (number < options.min || number > options.max) return err;
+    }
+  }
+
+  validators.email = function(options) {
+    options = _.extend({
+      type: 'email',
+      message: this.errMessages.email,
+      regexp: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
+    }, options);
+
+    return validators.regexp(options);
+  };
+
+  validators.url = function(options) {
+    options = _.extend({
+      type: 'url',
+      message: this.errMessages.url,
+      regexp: /^((http|https):\/\/)?(([A-Z0-9][A-Z0-9_\-]*)(\.[A-Z0-9][A-Z0-9_\-]*)+)(:(\d+))?\/?/i
+    }, options);
+
+    return validators.regexp(options);
+  };
+
+  validators.match = function(options) {
+    if (!options.field) throw new Error('Missing required "field" options for "match" validator');
+
+    options = _.extend({
+      type: 'match',
+      message: this.errMessages.match
+    }, options);
+
+    return function match(value, attrs) {
+      options.value = value;
+
+      var err = {
+        type: options.type,
+        message: _.isFunction(options.message) ? options.message(options) : options.message
+      };
+
+      //Don't check empty values (add a 'required' validator for this)
+      if (value === null || value === undefined || value === '') return;
+
       if (value !== attrs[options.field]) return err;
     };
   };
@@ -625,7 +679,7 @@ Form.Fieldset = Backbone.View.extend({
     this.fields = _.pick(options.fields, schema.fields);
     
     //Override defaults
-    this.template = options.template || this.constructor.template;
+    this.template = options.template || schema.template || this.template || this.constructor.template;
   },
 
   /**
@@ -676,7 +730,8 @@ Form.Fieldset = Backbone.View.extend({
    */
   render: function() {
     var schema = this.schema,
-        fields = this.fields;
+        fields = this.fields,
+        $ = Backbone.$;
 
     //Render fieldset
     var $fieldset = $($.trim(this.template(_.result(this, 'templateData'))));
@@ -731,7 +786,7 @@ Form.Field = Backbone.View.extend({
 
   /**
    * Constructor
-   * 
+   *
    * @param {Object} options.key
    * @param {Object} options.form
    * @param {Object} [options.schema]
@@ -752,8 +807,8 @@ Form.Field = Backbone.View.extend({
     var schema = this.schema = this.createSchema(options.schema);
 
     //Override defaults
-    this.template = options.template || schema.template || this.constructor.template;
-    this.errorClassName = options.errorClassName || this.constructor.errorClassName;
+    this.template = options.template || schema.template || this.template || this.constructor.template;
+    this.errorClassName = options.errorClassName || schema.errorClassName || this.errorClassName || this.constructor.errorClassName;
 
     //Create editor
     this.editor = this.createEditor();
@@ -849,6 +904,7 @@ Form.Field = Backbone.View.extend({
     return {
       help: schema.help || '',
       title: schema.title,
+      titleHTML: schema.titleHTML,
       fieldAttrs: schema.fieldAttrs,
       editorAttrs: schema.editorAttrs,
       key: this.key,
@@ -863,10 +919,11 @@ Form.Field = Backbone.View.extend({
    */
   render: function() {
     var schema = this.schema,
-        editor = this.editor;
+        editor = this.editor,
+        $ = Backbone.$;
 
-    //Only render the editor if Hidden
-    if (schema.type == Form.editors.Hidden) {
+    //Only render the editor if requested
+    if (this.editor.noField === true) {
       return this.setElement(editor.render().el);
     }
 
@@ -892,13 +949,45 @@ Form.Field = Backbone.View.extend({
   },
 
   /**
+   * Disable the field's editor
+   * Will call the editor's disable method if it exists
+   * Otherwise will add the disabled attribute to all inputs in the editor
+   */
+  disable: function(){
+    if ( _.isFunction(this.editor.disable) ){
+      this.editor.disable();
+    }
+    else {
+      $input = this.editor.$el;
+      $input = $input.is("input") ? $input : $input.find("input");
+      $input.attr("disabled",true);
+    }
+  },
+
+  /**
+   * Enable the field's editor
+   * Will call the editor's disable method if it exists
+   * Otherwise will remove the disabled attribute to all inputs in the editor
+   */
+  enable: function(){
+    if ( _.isFunction(this.editor.enable) ){
+      this.editor.enable();
+    }
+    else {
+      $input = this.editor.$el;
+      $input = $input.is("input") ? $input : $input.find("input");
+      $input.attr("disabled",false);
+    }
+  },
+
+  /**
    * Check the validity of the field
    *
    * @return {String}
    */
   validate: function() {
     var error = this.editor.validate();
-    
+
     if (error) {
       this.setError(error.message);
     } else {
@@ -921,12 +1010,7 @@ Form.Field = Backbone.View.extend({
     this.$el.addClass(this.errorClassName);
 
     //Set error message
-    if (this.$('[data-error]').size() > 0) {
-        this.$('[data-error]').html(msg);
-    } else {
-        $(this.editor.$el).parent().parent().find('[data-error]').text(msg); //.text(err.message);
-    };
-
+    this.$('[data-error]').last().html(msg);
   },
 
   /**
@@ -995,7 +1079,10 @@ Form.Field = Backbone.View.extend({
 
   template: _.template('\
     <div>\
-      <label for="<%= editorId %>"><%= title %></label>\
+      <label for="<%= editorId %>">\
+        <% if (titleHTML){ %><%= titleHTML %>\
+        <% } else { %><%- title %><% } %>\
+      </label>\
       <div>\
         <span data-editor></span>\
         <div data-error></div>\
@@ -1016,20 +1103,8 @@ Form.Field = Backbone.View.extend({
 //NESTEDFIELD
 //==================================================================================================
 
-// Form.NestedField = Form.Field.extend({
-// 
-  // template: _.template($.trim('\
-    // <div>\
-      // <span data-editor></span>\
-      // <% if (help) { %>\
-        // <div><%= help %></div>\
-      // <% } %>\
-      // <div data-error></div>\
-    // </div>\
-  // '), null, Form.templateSettings)
-// 
-// });
 Form.NestedField = Form.Field.extend({
+
   template: _.template('\
     <div>\
       <label for="<%= editorId %>">\
@@ -1045,7 +1120,6 @@ Form.NestedField = Form.Field.extend({
   ', null, Form.templateSettings)
 
 });
-
 
 /**
  * Base editor (interface). To be extended, not used directly
@@ -1180,12 +1254,9 @@ Form.Editor = Form.editors.Base = Backbone.View.extend({
         getValidator = this.getValidator;
 
     if (validators) {
-        var self = this;
       //Run through validators until an error is found
-      
       _.every(validators, function(validator) {
-          fn = getValidator(validator).bind(self);
-        error = fn(value, formValues);
+        error = getValidator(validator)(value, formValues);
 
         return error ? false : true;
       });
@@ -1325,6 +1396,7 @@ Form.editors.Text = Form.Editor.extend({
    * @param {String}
    */
   setValue: function(value) {
+    this.value = value;
     this.$el.val(value);
   },
 
@@ -1452,7 +1524,7 @@ Form.editors.Number = Form.editors.Text.extend({
     })();
 
     if (_.isNaN(value)) value = null;
-
+    this.value = value;
     Form.editors.Text.prototype.setValue.call(this, value);
   }
 
@@ -1464,6 +1536,8 @@ Form.editors.Number = Form.editors.Text.extend({
 Form.editors.Hidden = Form.editors.Text.extend({
 
   defaultValue: '',
+
+  noField: true,
 
   initialize: function(options) {
     Form.editors.Text.prototype.initialize.call(this, options);
@@ -1529,6 +1603,7 @@ Form.editors.Checkbox = Form.editors.Base.extend({
     }else{
       this.$el.prop('checked', false);
     }
+    this.value = !!value;
   },
 
   focus: function() {
@@ -1558,7 +1633,16 @@ Form.editors.Select = Form.editors.Base.extend({
 
   tagName: 'select',
 
+  previousValue: '',
+
   events: {
+    'keyup':    'determineChange',
+    'keypress': function(event) {
+      var self = this;
+      setTimeout(function() {
+        self.determineChange();
+      }, 0);
+    },
     'change': function(event) {
       this.trigger('change', this);
     },
@@ -1666,18 +1750,29 @@ Form.editors.Select = Form.editors.Base.extend({
       html = this._getOptionsHtml(newOptions);
     //Or any object
     }else{
-      html=this._objectToHtml(options);
+      html = this._objectToHtml(options);
     }
 
     return html;
   },
 
+  determineChange: function(event) {
+    var currentValue = this.getValue();
+    var changed = (currentValue !== this.previousValue);
+
+    if (changed) {
+      this.previousValue = currentValue;
+
+      this.trigger('change', this);
+    }
+  },
 
   getValue: function() {
     return this.$el.val();
   },
 
   setValue: function(value) {
+    this.value = value;
     this.$el.val(value);
   },
 
@@ -1739,26 +1834,27 @@ Form.editors.Select = Form.editors.Base.extend({
    * @return {String} HTML
    */
   _arrayToHtml: function(array) {
-    var html = [];
+    var html = $();
 
     //Generate HTML
     _.each(array, function(option) {
       if (_.isObject(option)) {
         if (option.group) {
-          html.push('<optgroup label="'+option.group+'">');
-          html.push(this._getOptionsHtml(option.options))
-          html.push('</optgroup>');
+          var optgroup = $("<optgroup>")
+            .attr("label",option.group)
+            .html( this._getOptionsHtml(option.options) );
+          html = html.add(optgroup);
         } else {
           var val = (option.val || option.val === 0) ? option.val : '';
-          html.push('<option value="'+val+'">'+option.label+'</option>');
+          html = html.add( $('<option>').val(val).text(option.label) );
         }
       }
       else {
-        html.push('<option>'+option+'</option>');
+        html = html.add( $('<option>').text(option) );
       }
     }, this);
 
-    return html.join('');
+    return html;
   }
 
 });
@@ -1794,11 +1890,21 @@ Form.editors.Radio = Form.editors.Select.extend({
     }
   },
 
+  /**
+   * Returns the template. Override for custom templates
+   *
+   * @return {Function}       Compiled template
+   */
+  getTemplate: function() {
+    return this.schema.template || this.constructor.template;
+  },
+
   getValue: function() {
     return this.$('input[type=radio]:checked').val();
   },
 
   setValue: function(value) {
+    this.value = value;
     this.$('input[type=radio]').val([value]);
   },
 
@@ -1827,26 +1933,44 @@ Form.editors.Radio = Form.editors.Select.extend({
    * @return {String} HTML
    */
   _arrayToHtml: function (array) {
-    var html = [];
     var self = this;
 
-    _.each(array, function(option, index) {
-      var itemHtml = '<li>';
+    var template = this.getTemplate(),
+        name = self.getName(),
+        id = self.id;
+
+    var items = _.map(array, function(option, index) {
+      var item = {
+        name: name,
+        id: id + '-' + index
+      };
+
       if (_.isObject(option)) {
-        var val = (option.val || option.val === 0) ? option.val : '';
-        itemHtml += ('<input type="radio" name="'+self.getName()+'" value="'+val+'" id="'+self.id+'-'+index+'" />');
-        itemHtml += ('<label for="'+self.id+'-'+index+'">'+option.label+'</label>');
+        item.value = (option.val || option.val === 0) ? option.val : '';
+        item.label = option.label;
+        item.labelHTML = option.labelHTML;
+      } else {
+        item.value = option;
+        item.label = option;
       }
-      else {
-        itemHtml += ('<input type="radio" name="'+self.getName()+'" value="'+option+'" id="'+self.id+'-'+index+'" />');
-        itemHtml += ('<label for="'+self.id+'-'+index+'">'+option+'</label>');
-      }
-      itemHtml += '</li>';
-      html.push(itemHtml);
+
+      return item;
     });
 
-    return html.join('');
+    return template({ items: items });
   }
+
+}, {
+
+  //STATICS
+  template: _.template('\
+    <% _.each(items, function(item) { %>\
+      <li>\
+        <input type="radio" name="<%= item.name %>" value="<%- item.value %>" id="<%= item.id %>" />\
+        <label for="<%= item.id %>"><% if (item.labelHTML){ %><%= item.labelHTML %><% }else{ %><%- item.label %><% } %></label>\
+      </li>\
+    <% }); %>\
+  ', null, Form.templateSettings)
 
 });
 
@@ -1885,14 +2009,16 @@ Form.editors.Checkboxes = Form.editors.Select.extend({
 
   getValue: function() {
     var values = [];
+    var self = this;
     this.$('input[type=checkbox]:checked').each(function() {
-      values.push($(this).val());
+      values.push(self.$(this).val());
     });
     return values;
   },
 
   setValue: function(values) {
     if (!_.isArray(values)) values = [values];
+    this.value = values;
     this.$('input[type=checkbox]').val(values);
   },
 
@@ -1915,38 +2041,38 @@ Form.editors.Checkboxes = Form.editors.Select.extend({
    * @return {String} HTML
    */
   _arrayToHtml: function (array) {
-    var html = [];
+    var html = $();
     var self = this;
 
     _.each(array, function(option, index) {
-      var itemHtml = '<li>';
-			var close = true;
+      var itemHtml = $('<li>');
       if (_.isObject(option)) {
         if (option.group) {
           var originalId = self.id;
-          self.id += "-" + self.groupNumber++; 
-          itemHtml = ('<fieldset class="group"> <legend>'+option.group+'</legend>');
-          itemHtml += (self._arrayToHtml(option.options));
-          itemHtml += ('</fieldset>');
+          self.id += "-" + self.groupNumber++;
+          itemHtml = $('<fieldset class="group">').append( $('<legend>').text(option.group) );
+          itemHtml = itemHtml.append( self._arrayToHtml(option.options) );
           self.id = originalId;
-					close = false;
+          close = false;
         }else{
           var val = (option.val || option.val === 0) ? option.val : '';
-          itemHtml += ('<input type="checkbox" name="'+self.getName()+'" value="'+val+'" id="'+self.id+'-'+index+'" />');
-          itemHtml += ('<label for="'+self.id+'-'+index+'">'+option.label+'</label>');
+          itemHtml.append( $('<input type="checkbox" name="'+self.getName()+'" id="'+self.id+'-'+index+'" />').val(val) );
+          if (option.labelHTML){
+            itemHtml.append( $('<label for="'+self.id+'-'+index+'" />').html(option.labelHTML) );
+          }
+          else {
+            itemHtml.append( $('<label for="'+self.id+'-'+index+'" />').text(option.label) );
+          }
         }
       }
       else {
-        itemHtml += ('<input type="checkbox" name="'+self.getName()+'" value="'+option+'" id="'+self.id+'-'+index+'" />');
-        itemHtml += ('<label for="'+self.id+'-'+index+'">'+option+'</label>');
+        itemHtml.append( $('<input type="checkbox" name="'+self.getName()+'" id="'+self.id+'-'+index+'" />').val(option) );
+        itemHtml.append( $('<label for="'+self.id+'-'+index+'" />').text(option) );
       }
-			if(close){
-				itemHtml += '</li>';
-			}
-      html.push(itemHtml);
+      html = html.add(itemHtml);
     });
 
-    return html.join('');
+    return html;
   }
 
 });
@@ -2029,7 +2155,11 @@ Form.editors.Object = Form.editors.Base.extend({
   },
 
   validate: function() {
-    return this.nestedForm.validate();
+    var errors = _.extend({}, 
+      Form.editors.Base.prototype.validate.call(this),
+      this.nestedForm.validate()
+    );
+    return _.isEmpty(errors)?false:errors;
   },
 
   _observeFormEvents: function() {
@@ -2180,7 +2310,8 @@ Form.editors.Date = Form.editors.Base.extend({
 
   render: function() {
     var options = this.options,
-        schema = this.schema;
+        schema = this.schema,
+        $ = Backbone.$;
 
     var datesOptions = _.map(_.range(1, 32), function(date) {
       return '<option value="'+date+'">' + date + '</option>';
@@ -2248,6 +2379,7 @@ Form.editors.Date = Form.editors.Base.extend({
    * @param {Date} date
    */
   setValue: function(date) {
+    this.value = date;
     this.$date.val(date.getDate());
     this.$month.val(date.getMonth());
     this.$year.val(date.getFullYear());
@@ -2353,7 +2485,8 @@ Form.editors.DateTime = Form.editors.Base.extend({
       return n < 10 ? '0' + n : n;
     }
 
-    var schema = this.schema;
+    var schema = this.schema,
+        $ = Backbone.$;
 
     //Create options
     var hoursOptions = _.map(_.range(0, 24), function(hour) {
@@ -2414,7 +2547,7 @@ Form.editors.DateTime = Form.editors.Base.extend({
    */
   setValue: function(date) {
     if (!_.isDate(date)) date = new Date(date);
-
+    this.value = date;
     this.dateEditor.setValue(date);
 
     this.$hour.val(date.getHours());
@@ -2478,6 +2611,6 @@ Form.editors.DateTime = Form.editors.Base.extend({
 
   //Exports
   Backbone.Form = Form;
-  if (typeof exports !== 'undefined') exports = Form;
+  if (typeof module !== 'undefined') module.exports = Form;
 
 })(window || global || this);

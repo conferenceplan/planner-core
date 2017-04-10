@@ -22,27 +22,23 @@
   }
 
   var template = _.template('\
-      <div class="modal-dialog">\
-        <div class="modal-content">\
-            <% if (title) { %>\
-              <div class="modal-header">\
-                <% if (allowCancel) { %>\
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>\
-                <% } %>\
-                <h4 class="modal-title">Modal title</h4>\
-              </div>\
-            <% } %>\
-          <div class="modal-body">{{content}}</div>\
-          <div class="modal-footer">\
-              <% if (allowCancel) { %>\
-                <% if (cancelText) { %>\
-                    <button type="button" class="btn cancel btn-default" data-dismiss="modal">{{cancelText}}</button>\
-                <% } %>\
-              <% } %>\
-              <button type="button" class="btn ok btn-primary">{{okText}}</button>\
-          </div>\
-        </div>\
+    <% if (title) { %>\
+      <div class="modal-header">\
+        <% if (allowCancel) { %>\
+          <a class="close">×</a>\
+        <% } %>\
+        <h3>{{title}}</h3>\
       </div>\
+    <% } %>\
+    <div class="modal-body">{{content}}</div>\
+    <div class="modal-footer">\
+      <% if (allowCancel) { %>\
+        <% if (cancelText) { %>\
+          <a href="#" class="btn cancel">{{cancelText}}</a>\
+        <% } %>\
+      <% } %>\
+      <a href="#" class="btn ok btn-primary">{{okText}}</a>\
+    </div>\
   ');
 
   //Reset to users' template settings
