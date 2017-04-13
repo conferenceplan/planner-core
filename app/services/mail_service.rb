@@ -209,7 +209,7 @@ module MailService
     _email = person.getDefaultEmail.email if person.getDefaultEmail
     
     mailHistory = MailHistory.new :person_mailing_assignment  => pma,
-                                  :email                      => email,
+                                  :email                      => _email,
                                   :person                     => person,
                                   :testrun                    => (mailing ? mailing.testrun : false),
                                   :date_sent                  => DateTime.now,
