@@ -564,7 +564,7 @@ Form.validators = (function() {
     options = _.extend({
       type: 'url',
       message: this.errMessages.url,
-      regexp: /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/i
+      regexp: /^(http|https):\/\/(([A-Z0-9][A-Z0-9_\-]*)(\.[A-Z0-9][A-Z0-9_\-]*)+)(:(\d+))?\/?/i
     }, options);
     
     return validators.regexp(options);
@@ -1920,7 +1920,7 @@ Form.editors.Checkboxes = Form.editors.Select.extend({
 
     _.each(array, function(option, index) {
       var itemHtml = '<li>';
-			var close = true;
+            var close = true;
       if (_.isObject(option)) {
         if (option.group) {
           var originalId = self.id;
@@ -1929,7 +1929,7 @@ Form.editors.Checkboxes = Form.editors.Select.extend({
           itemHtml += (self._arrayToHtml(option.options));
           itemHtml += ('</fieldset>');
           self.id = originalId;
-					close = false;
+                    close = false;
         }else{
           var val = (option.val || option.val === 0) ? option.val : '';
           itemHtml += ('<input type="checkbox" name="'+self.getName()+'" value="'+val+'" id="'+self.id+'-'+index+'" />');
@@ -1940,9 +1940,9 @@ Form.editors.Checkboxes = Form.editors.Select.extend({
         itemHtml += ('<input type="checkbox" name="'+self.getName()+'" value="'+option+'" id="'+self.id+'-'+index+'" />');
         itemHtml += ('<label for="'+self.id+'-'+index+'">'+option+'</label>');
       }
-			if(close){
-				itemHtml += '</li>';
-			}
+            if(close){
+                itemHtml += '</li>';
+            }
       html.push(itemHtml);
     });
 
