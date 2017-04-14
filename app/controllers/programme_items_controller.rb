@@ -219,6 +219,11 @@ class ProgrammeItemsController < PlannerController
     search = params[:search] ? params[:search] : nil
     include_breaks = params[:no_breaks] == nil
 
+    # For select2
+    if params[:page].present? && limit && offset.nil?
+      offset = params[:page].to_i * limit
+    end
+
     sort_by = params[:sort] ? params[:sort] : 'title'
     sort_order = params[:order] ? params[:order] : 'asc'
 
