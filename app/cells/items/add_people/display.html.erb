@@ -28,10 +28,10 @@
     :edit => false,
     :add => false,
     :format_name => false,
-    :duration => false,
+    :duration => true,
     :room => false,
-    :day => false,
-    :time => false,
+    :day => true,
+    :time => true,
     :ref_number => false,
     :selectNotifyMethod => "ItemApp.PeopleManagement.showProgrammeItem",
     :showControls => false
@@ -41,14 +41,17 @@
 <%= render_cell "items/add_people", :templates %>
 
 <div class="row" id="item-assignment-mgmt">
-    <div class="col-xs-4 left-jqgrid" id="participants-list">
+    <div class="col-sm-5 left-jqgrid" >
+        <%= render_cell "items/item_list", :display %>
+    </div>
+    <div class="col-sm-4 left-jqgrid" id="participants-list">
         <%= render_cell "participants/participant_list", :display,
                 :pager => "participants-pager"
          %>
         <div class="voffset10"></div>
-        <div id="people-control-view"></div>
+        <div id="people-control-view" class="boffset20"></div>
     </div>
-    <div class="col-xs-5">
+    <div class="col-sm-3">
         <div class="row">
             <div class="col-xs-12">
                 <div class="well">
@@ -81,18 +84,18 @@
                     <p><%= (t 'drag-people-hint').html_safe %></p>
                 </div>
                 <div>
-                    <h5><%= t "potentials" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "reserved" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "potential-help").html_safe %>'></i></h5>
+                    <h5><%= t "invisibles" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisibles" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisibles-help").html_safe %>'></i></h5>
+                </div>
+                <div class="ui-droppable well" id="invisible-area">
+                    <div id="invisibles-view"></div>
+                </div>
+                <div>
+                    <h5><%= t "potentials" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "potentials" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= t("potentials-help").html_safe %>'></i></h5>
                 </div>
                 <div class="ui-droppable well" id="reserve-area">
                     <div id="reserveds-view"></div>
                 </div>
 
-                <div>
-                    <h5><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisibles-help").html_safe %>'></i></h5>
-                </div>
-                <div class="ui-droppable well" id="invisible-area">
-                    <div id="invisibles-view"></div>
-                </div>
             </div>
         </div>
         <div class="row">
@@ -101,8 +104,5 @@
             </div>
         </div>
         <div class="voffset10"></div>
-    </div>
-    <div class="col-xs-3 right-jqgrid" >
-        <%= render_cell "items/item_list", :display %>
     </div>
 </div>
