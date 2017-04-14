@@ -736,6 +736,8 @@ ItemApp.ItemManagement = (function(Backbone){
                 help: '<%= t "parent-item-help" %>',
                 config : {
                     multiple: false,
+                    allowClear : true,
+                    placeholder : '(<%= t('none').downcase %>)',
                     initSelection : function(element,callback) {
                         if (current_item) {
                             var pitem = current_item.get('parent_val');
@@ -743,7 +745,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                 callback(
                                     {
                                         'id' : pitem.get('id'), 
-                                        'text' : (pitem.get('title') + pitem.get('date_time_str')),
+                                        'text' : (pitem.get('title') + '&nbsp;&nbsp;<i class="fa fa-clock-o"></i> ' + pitem.get('date_time_str')),
                                         start_time : pitem.get('start_time'),
                                         end_time : pitem.get('end_time'),
                                         start_time_str : pitem.get("start_time_str"),
@@ -756,18 +758,19 @@ ItemApp.ItemManagement = (function(Backbone){
                     formatSelection : function(obj, container) {
                         return obj.text;
                     },
+                    escapeMarkup: function (m) { return m; },
                     ajax : {
                         url : "<%= baseUri %>/programme_items/list/no_breaks", // get the list of programme items - using a search term ....
                         data : function(term, page) {
                             return { 'search' : term };
                         },
                         results : function(_data, page, query) {
-                            res = [{'id' : null, 'text' : "(<%= t 'planner.core.messages.no-parent' %>)" }];
+                            res = [];
                             _.each(_data.rows, function(item) {
                                 res.push( 
                                     {
                                         'id' : item.id, 
-                                        'text' : (item.title + item.date_time_str),
+                                        'text' : (item.title + '&nbsp;&nbsp;<i class="fa fa-clock-o"></i> ' + item.date_time_str),
                                         start_time : item.start_time,
                                         end_time : item.end_time,
                                         start_time_str : item.start_time_str,
