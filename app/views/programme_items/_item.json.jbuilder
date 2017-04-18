@@ -44,6 +44,8 @@ json.external_images    item.external_images
 # TODO - do we want just the name or do we want the actual id or entity?
 json.room                   item.room ? item.room.name : ""
 json.room_id                item.room ? item.room.id : ""
+json.venue                  item.room && item.room.venue ? item.room.venue.name : ""
+json.venue_id               item.room && item.room.venue ? item.room.venue.id : ""
     
 json.lock_version           item.lock_version
 
