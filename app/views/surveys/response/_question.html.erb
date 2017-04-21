@@ -57,7 +57,7 @@
                             </div>
                         <% end %>
                     <% end %>
-                    <% if ([:textfield].include? question.question_type) %>
+                    <% if ([:textfield].include? question.question_type) && !question.horizontal%>
                         <% if question.mandatory %>
                             <div class="required-icon">
                                 <div class="text">*</div>
