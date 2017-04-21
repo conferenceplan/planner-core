@@ -705,6 +705,7 @@ var AppUtils = (function(){
             } else if (!$('body').hasClass('modal-open')) {
               $('body').addClass('modal-open');
             };
+            $('.select2-dropdown-open').siblings('input[name]').select2('close');
         },
         
         // over-ride this for the body of the form        
