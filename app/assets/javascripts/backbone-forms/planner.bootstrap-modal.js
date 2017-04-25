@@ -165,8 +165,8 @@
           backdropIndex = $backdrop.css('z-index'),
           elIndex = $backdrop.css('z-index');
 
-      $backdrop.css('z-index', backdropIndex + numModals);
-      this.$el.css('z-index', elIndex + numModals);
+      // $backdrop.css('z-index', backdropIndex + numModals);
+      // this.$el.css('z-index', elIndex + numModals);
 
       if (this.options.allowCancel) {
         $backdrop.one('click', function() {
@@ -205,15 +205,26 @@
         return;
       }
 
+      $el.on('hide.bs.modal', function() {
+        setTimeout(function() {
+          if ($('.modal').length < 1) {
+            $('body').removeClass('modal-open');
+          } else if (!$('body').hasClass('modal-open')) {
+            $('body').addClass('modal-open');
+          };
+          $('.select2-dropdown-open').siblings('input[name]').select2('close');
+        }, 500);
+      });
+
       $el.modal('hide');
 
       $el.one('hidden', function() {
         self.remove();
-
         self.trigger('hidden');
       });
 
       Modal.count--;
+
     },
 
     /**
