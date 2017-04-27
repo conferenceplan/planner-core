@@ -218,37 +218,41 @@
                     </span>
                 </div>
             </div>
-            <div id="item-planning-title" class="row item-section-title">
-                <h3><%= t 'planning' %></h3>
-            </div>
-            <div class="row">
-                <div class="form-group" style="margin-bottom: 0;">
-                    <span data-editor>
-                        <label  class="col-sm-3 control-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size-long" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
+            <div id="item-planning-container">
+                <div id="item-planning-title" class="row item-section-title">
+                    <h3><%= t 'planning' %></h3>
+                </div>
+                <div class="row">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label class="col-sm-3 control-label"><%= t "item-nb-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-nb-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-nb-participants-help" %>'></i></label>
                         <div class="col-sm-2">
-                            <div data-editors="audience_size"></div>
+                            <div data-editors="minimum_people"></div>
                             <div class="has-error">
                                 <p class="help-block" data-error></p>
                             </div>
                         </div>
-                    </span>
-                    <label class="col-sm-3 control-label"><%= t "item-nb-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-nb-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-nb-participants-help" %>'></i></label>
-                    <div class="col-sm-2">
-                        <div data-editors="minimum_people"></div>
-                        <div class="has-error">
-                            <p class="help-block" data-error></p>
+                        <!--<label class="col-sm-3 control-label"><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>-->
+                        <div class="col-sm-2">
+                            <div data-editors="maximum_people"></div>
+                            <div class="has-error">
+                                <p class="help-block" data-error></p>
+                            </div>
                         </div>
-                    </div>
-                    <!--<label class="col-sm-3 control-label"><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>-->
-                    <div class="col-sm-2">
-                        <div data-editors="maximum_people"></div>
-                        <div class="has-error">
-                            <p class="help-block" data-error></p>
+                        <div id="audience-size-container" class="col-sm-5" data-editor>
+                            <div class="row">
+                                <label class="col-sm-7 control-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size-long" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
+                                <div class="col-sm-5">
+                                    <div data-editors="audience_size"></div>
+                                    <div class="has-error">
+                                        <p class="help-block" data-error></p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row item-section-title" style="margin-bottom: 20px;">
+            <div id="item-options-divider" class="row item-section-title" style="margin-bottom: 20px;">
                 <h3><%= t 'options' %></h3>
             </div>
             <div class="row" id="print-item-row">
@@ -318,19 +322,92 @@
     </div>
     <div class="col-md-4">
         <h5><%= t 'details' %></h5>
-        <dl class="dl-horizontal-small dt60" id="item-detail-list">
-            <dt><%= t "ref-number" %></dt><dd>{{= pub_reference_number ? pub_reference_number : "&nbsp;" }}</dd>
-            <dt><%= t "item-is-break" %></dt><dd>{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-            <dt><%= t "format" %></dt><dd>{{= format_name ? format_name : "&nbsp;" }}</dd>
-            <dt><%= t "setup" %></dt><dd>{{= setup_name ? setup_name : "&nbsp;" }}</dd>    
-            <dt><%= t "room" %></dt><dd>{{= room ? '<span class="fa fa-map-marker"></span> ' + room : "&nbsp;" }}</dd>
-            <dt><%= t "start-day-and-time" %></dt><dd>{{= start_day_str ? start_day_str : "&nbsp;" }} {{= start_time_str ? start_time_str : "&nbsp;" }}</dd>
-            <dt><%= t "duration" %></dt><dd>{{= duration ? duration + ' mins' : "&nbsp;" }}</dd>
-            <dt><%= t "for-print" %></dt><dd>{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-            <dt><%= t "nb-participants" %></dt><dd>{{= minimum_people ? 'Min ' + minimum_people : "&nbsp;" }} {{= maximum_people ? 'Max ' + maximum_people : "&nbsp;" }}</dd>
-            <dt><%= t "item-estimated-audience-size" %></dt><dd>{{= audience_size ? audience_size : "&nbsp;" }}</dd> 
-            <dt><%= t "mobile-card-size" %></dt><dd>{{= mobile_card_size ? {1:'<%= (t "small-feminin") %>',5:'<%= (t "medium-feminin") %>',10:'<%= (t "large-feminin") %>'}[mobile_card_size] : "&nbsp;" }}</dd> 
-        </dl>
+        <div class="row" id="item-detail-list">
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "item-is-break" %></div>
+                    <div class="col-xs-6">{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "for-print" %></div>
+                    <div class="col-xs-6">{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "published" %></div>
+                    <div class="col-xs-6">{{= published ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "ref-number" %></div>
+                    <div class="col-xs-6">{{= pub_reference_number ? pub_reference_number : '<span class="minor-text"><%= t "none-provided" %></span>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "format" %></div>
+                    <div class="col-xs-6">{{= format_name ? format_name : '<span class="minor-text"><%= t "none-provided" %></span>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "setup" %></div>
+                    <div class="col-xs-6">{{= setup_name ? setup_name : '<span class="minor-text"><%= t "none-provided" %></span>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "location" %></div>
+                    <div class="col-xs-6">
+                    {{ if (room) { }}
+                        <span class="fa fa-map-marker"></span>&nbsp;{{= venue }}, {{= room }}
+                    {{ } else { }}
+                        <span class="minor-text"><%= t "none-provided" %></span>
+                    {{ } }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "start-day-and-time" %></div>
+                    <div class="col-xs-6">{{= start_day_str ? start_day_str : '<span class="minor-text"><%= t "none-provided" %></span>' }} {{= start_time_str ? start_time_str : '' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "duration" %></div>
+                    <div class="col-xs-6">{{= duration ? duration + ' mins' : '<span class="minor-text"><%= t "none-provided" %></span>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "nb-participants" %></div>
+                    <div class="col-xs-6">{{= minimum_people ? 'Min ' + minimum_people : '<span class="minor-text"><%= t "none-provided" %></span>' }} {{= maximum_people ? 'Max ' + maximum_people : '<span class="minor-text"><%= t "none-provided" %></span>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "participants-and-staff" %></div>
+                    <div class="col-xs-6">{{= participants ? participants.length : '' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "item-estimated-audience-size" %></div>
+                    <div class="col-xs-6">{{= audience_size ? audience_size : '<span class="minor-text"><%= t "none-provided" %></span>' }}</div>
+                </div>
+            </div>
+            <div class="col-xs-12 item-summary-attribute">
+                <div class="row">
+                    <div class="col-xs-6"><%= t "mobile-card-size" %></div>
+                    <div class="col-xs-6">{{= mobile_card_size ? {1:'<%= (t "small-feminin") %>',5:'<%= (t "medium-feminin") %>',10:'<%= (t "large-feminin") %>'}[mobile_card_size] : '<span class="minor-text"><%= t "none-provided" %></span>' }}</div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="col-md-4">
         <h5><%= t 'notes' %></h5>

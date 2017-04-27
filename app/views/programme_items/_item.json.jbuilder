@@ -32,8 +32,8 @@ end
 json.start_day              item.room_item_assignment ? item.room_item_assignment.day : "" # we want this to be the number
 
 json.start_time             item.start_time.present? ? item.start_time : ""
-json.end_time               item.end_time.present? ? item.end_time : ""
-json.start_day_str          item.start_time.present? ? item.start_time.strftime('%A') : "" # we want this to be the number
+json.end_time             item.end_time.present? ? item.end_time : ""
+json.start_day_str          item.start_time.present? ? item.start_time.strftime('%a, %b %d') : "" # we want this to be the number
 json.start_time_str         item.start_time.present? ? item.start_time.strftime('%H:%M') : ""
 
 json.audience_size          item.audience_size
@@ -44,6 +44,8 @@ json.external_images    item.external_images
 # TODO - do we want just the name or do we want the actual id or entity?
 json.room                   item.room ? item.room.name : ""
 json.room_id                item.room ? item.room.id : ""
+json.venue                  item.room && item.room.venue ? item.room.venue.name : ""
+json.venue_id               item.room && item.room.venue ? item.room.venue.id : ""
     
 json.lock_version           item.lock_version
 
@@ -70,6 +72,8 @@ json.theme_names do
         json.name   n.name
     end
 end
+
+json.published item.published.present?
 
 default_person_img = default_person_img || DefaultBioImage.first
 

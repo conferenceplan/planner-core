@@ -206,9 +206,10 @@ module MailService
   #
   def self.saveMailHistory(person, mailing, content, email_status, subject = nil)
     pma = PersonMailingAssignment.where({:person_id => person, :mailing_id => mailing}).first
+    _email = person.getDefaultEmail.email if person.getDefaultEmail
     
     mailHistory = MailHistory.new :person_mailing_assignment  => pma,
-                                  :email                      => person.getDefaultEmail,
+                                  :email                      => _email,
                                   :person                     => person,
                                   :testrun                    => (mailing ? mailing.testrun : false),
                                   :date_sent                  => DateTime.now,

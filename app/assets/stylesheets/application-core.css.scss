@@ -304,8 +304,25 @@ table.ui-sortable {
   padding-top: 6px;
 }
 
-.btn span.translation_missing {
+.btn span.translation_missing, 
+.label span.translation_missing {
   color: black;
+}
+
+.modal-header .translation_missing {
+  background-color: #d8d8d8;
+}
+
+#item-detail-list {
+  .item-summary-attribute {
+
+    > .row > [class^='col-'] {
+      line-height: 1.42857143;
+      &:first-child {
+        font-weight: bold;
+      }
+    }
+  }
 }
 
 

@@ -301,6 +301,7 @@ var AppUtils = (function(){
         events: {
             "submit"            : "submit",
             "click .close-modal": "hide",
+            "click .close-modal": "hideExtra",
             "hidden.bs.modal"   : "hide",
             "keypress"          : "swallow"
         },
@@ -370,6 +371,11 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];  
             this.remove();
+        },
+        hideExtra : function(e) {
+          if (this.options.closeFn) {
+            this.options.closeFn.call(this, e);
+          };
         }
     });
     
@@ -632,6 +638,7 @@ var AppUtils = (function(){
 
         render: function () {
             var numModals = Backbone.BootstrapModal.count++;
+            if (!$('body').hasClass('modal-open')) $('body').addClass('modal-open');
 
             this.$el.html($(this.template({
                 title : this.options.title
@@ -652,7 +659,6 @@ var AppUtils = (function(){
             
             this.$el.find("input").filter(':visible:first').focus();
 
-            $('body').addClass('showing-modal');
 
             if (!(typeof this.options.confirmBtnText == 'undefined') && this.options.confirmBtnText.length > 0) {
               this.$('.confirm-btn').html(this.options.confirmBtnText);
@@ -676,10 +682,9 @@ var AppUtils = (function(){
             
             var errors = this.submitData();
             
-            if (! errors ) {
+            if (!errors) {
                 if (e.type != "hide") this.$el.modal("hide");
-                this.remove();
-                $('body').removeClass('showing-modal');
+                this.close_modal();
             };
         },
         
@@ -701,7 +706,13 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];
             Backbone.BootstrapModal.count--;
-            $('body').removeClass('showing-modal');
+            if (Backbone.BootstrapModal.count < 1 || $('.modal').length < 1) {
+              $('body').removeClass('modal-open');
+              Backbone.BootstrapModal.count = 0;
+            } else if (!$('body').hasClass('modal-open')) {
+              $('body').addClass('modal-open');
+            };
+            $('.select2-dropdown-open').siblings('input[name]').select2('close');
         },
         
         // over-ride this for the body of the form        
@@ -765,17 +776,20 @@ var AppUtils = (function(){
                           });
                         };
                     },
-                    customError : function(response) {
+                    error : function(response) {
                       // console.log(xhr, status, error);
+                      if (refreshFn) {
+                          refreshFn(); // cause problem with templates used ???
+                      };
                       setMessage({
                         text : response.responseText,
                         style : 'error',
                         renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
                         fade : true,
-                        fadeTimeout : 10000
+                        fadeTimeout : 15000
                       });
                     }
-                }).done(function(d) {
+                }).always(function(d) {
                     // remove please wait
                     $body.removeClass("loading");
                 });
@@ -811,6 +825,7 @@ var AppUtils = (function(){
         submitData : function(callback) {
             $('.modal-msg-container').removeClass('active').html('');
             var self = this;
+            var originalAttributes = _.clone(this.model.attributes);
             // gather the data and update the underlying model etc.
             var errors = this.form.commit({ validate: true }); // To save the values from the form back into the model
             
@@ -819,7 +834,7 @@ var AppUtils = (function(){
                 var refreshEvent = this.options.view_refresh_event;
             
                 // accept-charset="UTF-8"
-                this.model.save(null, { 
+                this.model.save(null, {
                     success : function(mdl) {
                         // Refresh the view if there is a refresh method
                         if (refreshEvent) {
@@ -849,6 +864,7 @@ var AppUtils = (function(){
                         fade : true,
                         fadeTimeout : 10000
                       });
+                      self.model.set(originalAttributes);
                     }
                 }); // save the model to the server
             } else {
@@ -880,8 +896,7 @@ var AppUtils = (function(){
             var that = this;
             this.submitData(function() {
                 that.$el.modal("hide");
-                that.remove();
-                $('body').removeClass('showing-modal');
+                that.close_modal();
             });
         },
 

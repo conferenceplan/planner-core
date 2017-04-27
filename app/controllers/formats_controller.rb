@@ -13,13 +13,19 @@ class FormatsController < PlannerController
   end
 
   def index
-    @formats = Format.all.order('position asc')
+    if params[:search].present?
+      @formats = Format.where(["name like ?", ("%" + params[:search] + "%")]).order('position asc')
+    else
+      @formats = Format.all.order('position asc')
+    end
   end
 
   def create
+    last_pos = Format.pluck(:position).compact.max || 0
+    position = params[:position] || (last_pos + 1)
     @format = Format.create(
       name: params[:name],
-      position: params[:position]
+      position: position
     )
   end
 

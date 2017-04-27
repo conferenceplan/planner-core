@@ -80,8 +80,7 @@
 //= require plugins/cpPendingImportPeopleTable
 //= require plugins/typeAheadTextEditor
 //= require plugins/styledCheckboxEditor
-//= require plugins/NumberWithChange
-//= require plugins/TextWithChange
+//= require plugins/editorsWithChange
 
 //= require TabViews
 
@@ -94,6 +93,7 @@
 jQuery(document).ready(function() {
     _.templateSettings = {
         interpolate : /\{\{\=(.+?)\}\}/g,
+        escape : /\{\{\-(.+?)\}\}/g,
         evaluate : /\{\{(.+?)\}\}/g
     };
 

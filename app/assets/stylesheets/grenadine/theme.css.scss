@@ -992,6 +992,17 @@ input[type="number"] {
     max-width: 150px;
 }
 
+.input-group {
+  input[type="number"] {
+      max-width: none;
+  }
+  .input-group-addon {
+    label {
+      display: inline;
+    }
+  }
+}
+
 p.help-block {
     font-size: 12px;
     margin-bottom: 5px;
@@ -1793,8 +1804,8 @@ input[type='checkbox'][disabled] + label.checkbox-label {
 }
 .li-menu-header {
   font-weight: bold;
-  height: 50px;
-  padding: 14px;
+  height: 45px;
+  padding: 13px;
   background-color: #ddd;
 }
 .pretty-nav-list li i {
