@@ -301,6 +301,7 @@ var AppUtils = (function(){
         events: {
             "submit"            : "submit",
             "click .close-modal": "hide",
+            "click .close-modal": "hideExtra",
             "hidden.bs.modal"   : "hide",
             "keypress"          : "swallow"
         },
@@ -370,6 +371,11 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];  
             this.remove();
+        },
+        hideExtra : function(e) {
+          if (this.options.closeFn) {
+            this.options.closeFn.call(this, e);
+          };
         }
     });
     
@@ -676,7 +682,7 @@ var AppUtils = (function(){
             
             var errors = this.submitData();
             
-            if (! errors ) {
+            if (!errors) {
                 if (e.type != "hide") this.$el.modal("hide");
                 this.close_modal();
             };
@@ -700,8 +706,9 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];
             Backbone.BootstrapModal.count--;
-            if (Backbone.BootstrapModal.count < 1) {
+            if (Backbone.BootstrapModal.count < 1 || $('.modal').length < 1) {
               $('body').removeClass('modal-open');
+              Backbone.BootstrapModal.count = 0;
             } else if (!$('body').hasClass('modal-open')) {
               $('body').addClass('modal-open');
             };
@@ -769,17 +776,20 @@ var AppUtils = (function(){
                           });
                         };
                     },
-                    customError : function(response) {
+                    error : function(response) {
                       // console.log(xhr, status, error);
+                      if (refreshFn) {
+                          refreshFn(); // cause problem with templates used ???
+                      };
                       setMessage({
                         text : response.responseText,
                         style : 'error',
                         renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
                         fade : true,
-                        fadeTimeout : 10000
+                        fadeTimeout : 15000
                       });
                     }
-                }).done(function(d) {
+                }).always(function(d) {
                     // remove please wait
                     $body.removeClass("loading");
                 });

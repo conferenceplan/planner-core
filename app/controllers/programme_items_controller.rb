@@ -216,22 +216,28 @@ class ProgrammeItemsController < PlannerController
   def list
     limit = params[:limit] ? params[:limit].to_i : nil
     offset = params[:offset] ? params[:offset].to_i : nil
+    page = params[:page] ? params[:page].to_i : nil
     search = params[:search] ? params[:search] : nil
     include_breaks = params[:no_breaks] == nil
+
+    # For select2
+    if page.present? && page > 1 && limit && offset.nil?
+      offset = page * limit
+    end
 
     sort_by = params[:sort] ? params[:sort] : 'title'
     sort_order = params[:order] ? params[:order] : 'asc'
 
     if search
-      query = ["parent_id is null AND is_break is false AND title like ?", '%' + search + '%'] 
-      query = ["parent_id is null AND title like ?", '%' + search + '%'] if include_breaks
+      @query = ["parent_id is null AND is_break is false AND title like ?", '%' + search + '%'] 
+      @query = ["parent_id is null AND title like ?", '%' + search + '%'] if include_breaks
     else
-      query = ["parent_id is null AND is_break is false"]
-      query = ["parent_id is null"] if include_breaks
+      @query = ["parent_id is null AND is_break is false"]
+      @query = ["parent_id is null"] if include_breaks
     end
 
-    @total = ProgrammeItem.where(query).count
-    @items = ProgrammeItem.where(query).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+    @total = ProgrammeItem.where(@query).count
+    @items = ProgrammeItem.where(@query).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
 
   end
   

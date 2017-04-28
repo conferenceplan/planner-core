@@ -46,7 +46,14 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             index: 'rooms.name',
             search: false,
             width: 125,
-            editable: false
+            editable: false,
+            formatter : function(cellvalue, options, rowObject) {
+                var str = "";
+                if (rowObject.venue.length > 0) str += rowObject.venue + ', ';
+                if (rowObject.room.length > 0) str += rowObject.room;
+
+                return str;
+            }
         }, {
             label: this.options.day[1], //'Day',
             name: 'start_day',
