@@ -646,26 +646,26 @@ ItemApp.ItemManagement = (function(Backbone){
                 ],
                 changeFn : function() {
                     // console.log(this);
-                    form = this.form;
-                    offset = this.$el.val();
-                    parent = fields.parent_id.editor.$el.select2("data");
+                    var form = this.form;
+                    var offset = this.$el.val();
+                    var parent = fields.parent_id.editor.$el.select2("data");
                     if (
                         form.fields.start_time.editor.picker 
                         && parent && parent.id != null 
                         && parent.start_time_str && parent.start_time_str.length > 0
                     ){
+                        var duration = form.fields.duration.editor.$el.val();
                         // If parent item selected and it has a valid start time string
-                        pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
-                        endTime = form.fields.end_time.editor.picker.data("DateTimePicker").date();
+                        var pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS");
+                        var pEnd = moment(parent.end_time_str, "MM/DD/YYYY, HH:mm:SS");
 
-                        newStart = pStart.clone().add(offset, "minutes"); // New start time is parent time plus offset value
-
-                        // Set duration to difference between new start time and the end time
-                        newDuration = moment.duration(endTime.diff(newStart)).asMinutes();
-                        form.fields.duration.editor.$el.val(newDuration);
+                        var newStart = pStart.clone().add(offset, "minutes"); // New start time is parent time plus offset value
+                        var newEnd = newStart.clone().add(duration, "minutes"); // New end time is old time plus offset value
                         
-                        // Set start time to new start time
-                        form.fields.start_time.editor.picker.data("DateTimePicker").date(newStart); 
+                        // Set new times
+                        form.fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
+                        form.fields.start_time.editor.picker.data("DateTimePicker").date(newStart);
+                        form.fields.duration.editor.$el.val(duration).trigger('change');
                     };
                 }
             },
