@@ -674,7 +674,8 @@ ItemApp.ItemManagement = (function(Backbone){
                 title : '<%= t "item-duration" %>', 
                 editorClass : 'item-form-element', 
                 editorAttrs : {
-                    step : 1
+                    step : 1,
+                    min : 1
                 },
                 validators: [
                     'required',
