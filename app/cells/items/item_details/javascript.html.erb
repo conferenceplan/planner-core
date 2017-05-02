@@ -285,7 +285,7 @@ ItemApp.ItemManagement = (function(Backbone){
                 title : '<%= t "item-start-time" %>',
                 editorClass : 'item-form-element',
                 tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
-                defaultDate: "<%= Time.zone.parse((@start_date.start_date + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                // defaultDate: "<%= Time.zone.parse((@start_date.start_date + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : minItemDuration,
@@ -362,51 +362,34 @@ ItemApp.ItemManagement = (function(Backbone){
                     // console.log("start time changed");
                     // console.log(this);
                     // console.log(e);
-                    fields = this.form.fields;
+                    var fields = this.form.fields;
                     
                     if (this.picker && fields.end_time.editor.picker) {
                         // If both the start and end time fields have been initialized
-                        startTime = this.picker.data("DateTimePicker").date();
-                        endTime = fields.end_time.editor.picker.data("DateTimePicker").date();
+                        var startTime = this.picker.data("DateTimePicker").date();
+                        var endTime = fields.end_time.editor.picker.data("DateTimePicker").date();
                         // console.log(startTime);
                         if (startTime && endTime) {
                             // If both the start and end times are not empty
-                            parent = fields.parent_id.editor.$el.select2("data"); // Parent object or null if not selected
-                            withinParent = true;
+                            var parent = fields.parent_id.editor.$el.select2("data"); // Parent object or null if not selected
+                            var withinParent = true;
 
                             if (parent && parent.id != null && parent.start_time_str && parent.start_time_str.length > 0) {
                                 // If parent item is set, the end time should not change when changing the start time. 
                                 // Changes in the start time should set the offset to the difference between the parent start time and the new start time.
                                 
-                                pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS"); // Parent Start Time
-                                pOffset = moment.duration(startTime.diff(pStart)).asMinutes(); // Parent start time offset
-                                endDiff = moment.duration(endTime.diff(startTime)).asMinutes(); // Minutes between item's start and end times
+                                var pStart = moment(parent.start_time_str, "MM/DD/YYYY, HH:mm:SS"); // Parent Start Time
+                                var pOffset = moment.duration(startTime.diff(pStart)).asMinutes(); // Parent start time offset
+                                var endDiff = moment.duration(endTime.diff(startTime)).asMinutes(); // Minutes between item's start and end times
 
                                 if (pOffset < 0) {
                                     withinParent = false; // If calculated offset is less than 0, the item time is outside the parent range
                                 };
 
                                 if (withinParent) { 
-                                    // If the start time is within the parent time range
-                                    if (endDiff >= minItemDuration){ 
-                                        // If the difference between the new start time and the end time is at least 5 minutes, set the start_offset field to the calculated offset value
-                                        fields.start_offset.editor.$el.val(pOffset);
-                                        fields.start_offset.editor.$el.trigger("change");
-                                    } else { 
-                                        // If the new start time will be greater than the end time, set the start date to minItemDuration mins less than the end time and cancel any further start time increases. 5 minutes is the min duration.
-                                        newStart = endTime.subtract(minItemDuration, "minutes");
-                                        this.picker.data("DateTimePicker").date(newStart);
-
-                                        this.picker.effect("shake", { 
-                                            times : 1,
-                                            distance : 5
-                                        }, 200);
-
-                                        fields.duration.editor.$el.effect("shake", { 
-                                            times : 1,
-                                            distance : 5
-                                        }, 200);
-                                    };
+                                    // If the start time is within the parent time range, let the start_offset handle the logic
+                                    fields.start_offset.editor.$el.val(pOffset);
+                                    fields.start_offset.editor.$el.trigger("change");
                                 } else { 
                                     // If item time is not within parent's time range, cancel the time change and alert the user by shaking the time and parent fields. This limits the start time to the parent's start time
                                     this.picker.data("DateTimePicker").date(pStart);
@@ -425,12 +408,12 @@ ItemApp.ItemManagement = (function(Backbone){
                                 // If a parent item is not selected, changes in the start time should set the end time to the new start_time  + the duration
                                 fields.start_offset.editor.$el.val(null); // Clear the start_offset field
 
-                                diff = moment.duration(endTime.diff(startTime)).asMinutes();
-                                duration = fields.duration.editor.$el.val();
-                                endMax = fields.end_time.editor.picker.data("DateTimePicker").maxDate().add(1, "seconds");
-                                endDiff = moment.duration(endMax.diff(endTime)).asMinutes(); // Minutes between the current end time and the max end time
-                                newEnd = startTime.clone().add(duration, "minutes"); // Potential new end time given the changed start time and duration
-                                newEndDiff = moment.duration(endMax.diff(newEnd)).asMinutes(); // Minutes between the potential new end time and the max end time
+                                var diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                                var duration = fields.duration.editor.$el.val();
+                                var endMax = fields.end_time.editor.picker.data("DateTimePicker").maxDate().add(1, "seconds");
+                                var endDiff = moment.duration(endMax.diff(endTime)).asMinutes(); // Minutes between the current end time and the max end time
+                                var newEnd = startTime.clone().add(duration, "minutes"); // Potential new end time given the changed start time and duration
+                                var newEndDiff = moment.duration(endMax.diff(newEnd)).asMinutes(); // Minutes between the potential new end time and the max end time
 
                                 if (newEndDiff >= minItemDuration){
                                     // If the difference between the potential new end time will not exceed the max end time
@@ -473,8 +456,8 @@ ItemApp.ItemManagement = (function(Backbone){
                             };
                         } else if (startTime && endTime == null) {
                             // If the start time is present but the end time is empty, set the end time to the start time plus the duration
-                            duration = fields.duration.editor.$el.val();
-                            end = startTime.clone().add(duration, "minutes");
+                            var duration = fields.duration.editor.$el.val();
+                            var end = startTime.clone().add(duration, "minutes");
                             fields.end_time.editor.picker.data("DateTimePicker").date(end);
                             if (!fields.end_time.editor.picker.find("input").attr('style')) {
                                 fields.end_time.editor.picker.find("input").effect("highlight", 800);    
@@ -610,7 +593,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                     }, 200);
                                 };
                             } else {
-                                // If new end date is after parent end date, set the end date to the aprent end date and shake the fields to indicate that the change failed
+                                // If new end date is after parent end date, set the end date to the parent end date and shake the fields to indicate that the change failed
                                 this.picker.data("DateTimePicker").date(pEnd);
 
                                 this.picker.effect("shake", { 
@@ -717,8 +700,6 @@ ItemApp.ItemManagement = (function(Backbone){
                                     fields.end_time.editor.picker.find("input").effect("highlight", 800);
                                 };
                             };
-
-                            
                         };
                     } else { 
                         // If duration is less than 5 mins, set duration to 5 mins (the minimum) and shake field to indicate a failed change
@@ -811,25 +792,37 @@ ItemApp.ItemManagement = (function(Backbone){
                             var pDiff = moment.duration(pEnd.diff(pStart)).asMinutes(); // parent duration
                             form.fields.duration.editor.$el.val(pDiff); // set duration first to avoid change conflicts
 
-                            // Set start and end time to parent times
-                            
+                            // Clear old datetimes
                             form.fields.start_time.editor.picker.data("DateTimePicker").date(null);
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(null);
+
+                            // Set min and max times for the datepickers to the parent's date range
+                            form.fields.start_time.editor.picker.data("DateTimePicker").maxDate(pEnd);
+                            form.fields.start_time.editor.picker.data("DateTimePicker").minDate(pStart);
+                            form.fields.end_time.editor.picker.data("DateTimePicker").maxDate(pEnd);
+                            form.fields.end_time.editor.picker.data("DateTimePicker").minDate(pStart);
+
+                            // Set start and end time to parent times
                             form.fields.start_time.editor.picker.data("DateTimePicker").date(pStart);
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(pEnd);
-                            
                         } else {
                             form.fields.start_time.editor.picker.data("DateTimePicker").date(null);
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(null);
+
                             form.fields.duration.editor.$el.val(60);
                             $form.find("#item-times-row").hide();
-
                         };
-                    } else if (parent && parent.id == null){
+                    } else {
                         // If parent item is cleared, show room and room setup fields and clear start_offset value
                         this.form.$el.find("[name='room_id']").parents(".form-group").show();
                         $form.find("#item-times-row").show();
                         form.fields.start_offset.editor.$el.val(null);
+
+                        // Reset min and max datetimes to the original values as defined in the schema
+                        form.fields.start_time.editor.picker.data("DateTimePicker").maxDate(moment("<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 2.minutes).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>"));
+                        form.fields.start_time.editor.picker.data("DateTimePicker").minDate(moment("<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>"));
+                        form.fields.end_time.editor.picker.data("DateTimePicker").maxDate(moment("<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 1.seconds).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>"));
+                        form.fields.end_time.editor.picker.data("DateTimePicker").minDate(moment("<%= Time.zone.parse((@start_date.start_date + 1.minutes).to_s).strftime('%m/%d/%Y') %>"));
                     };
                 }
             },
