@@ -4,7 +4,9 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :format_id, :is_break, :start_offset
+                  :format_id, :is_break, :start_offset, :target_audience_id
+
+  has_enumerated :target_audience
 
   audited :allow_mass_assignment => true
 
@@ -90,4 +92,11 @@ class PublishedProgrammeItem < ActiveRecord::Base
     published_room.id if published_room
   end
 
+
+  def target_audience_name
+    target_audience.name if target_audience
+  end
+
+
+  ActiveSupport.run_load_hooks(:published_programme_item, self)
 end

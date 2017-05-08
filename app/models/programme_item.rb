@@ -1,8 +1,11 @@
-class ProgrammeItem < ActiveRecord::Base
-  attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :item_notes, :print,
-                  :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :setup_type_id, :format_id, :short_precis, :parent_id, :is_break, :start_offset
 
+class ProgrammeItem < ActiveRecord::Base
+  attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :item_notes,
+                  :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
+                  :setup_type_id, :format_id, :short_precis, :parent_id, :is_break, :start_offset, :target_audience_id
+
+  has_enumerated :target_audience
+  
   audited :allow_mass_assignment => true
   acts_as_taggable
 
@@ -123,6 +126,11 @@ class ProgrammeItem < ActiveRecord::Base
     members
   end
 
+  def target_audience_name
+    target_audience.name if target_audience
+  end
+
+
   protected
 
   def sanitize_for_break
@@ -152,6 +160,7 @@ class ProgrammeItem < ActiveRecord::Base
     where("parent_id is not null")
   end
 
+  ActiveSupport.run_load_hooks(:programme_item, self)
 end
 
 # TODO - create a clone function
