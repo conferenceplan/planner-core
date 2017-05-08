@@ -10,7 +10,8 @@ json.short_precis           item.short_precis
 json.item_notes             item.item_notes
 json.participant_notes      item.participant_notes
 json.pub_reference_number   item.pub_reference_number
-json.print                  item.print
+json.target_audience_id     item.target_audience_id
+json.target_audience_name   item.target_audience_name
 json.duration               item.duration
 json.maximum_people         item.maximum_people
 json.minimum_people         item.minimum_people

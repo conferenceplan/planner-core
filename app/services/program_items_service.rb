@@ -100,7 +100,7 @@ module ProgramItemsService
   def self.assign_reference_numbers(increment = 3)
       items = ProgrammeItem.
                   references([:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ]).
-                  where('programme_items.print = true').
+                  where(target_audience_id: TargetAudience['Admin'].id).
                   includes([:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ]).
                   order('time_slots.start ASC, venues.sort_order, rooms.sort_order')
       
@@ -355,7 +355,7 @@ protected
     # TODO - add these
     # if ignorePending
       # clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
-      # clause = addClause( clause, 'programme_items.print = true', nil )
+      # clause = addClause( clause, "programme_items.target_audience_id != #{TargetAudience['Admin'].id}", nil )
     # end
     
     # TODO - assumed that the new creation does not have a time slot. Need to change
