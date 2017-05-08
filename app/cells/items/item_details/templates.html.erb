@@ -111,6 +111,16 @@
                     </div>
                 </div>
             </div>
+            <div class="row" id="target-audience-item-row">
+                <label class="col-sm-3 control-label">
+                    <%= t "item-visibility" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= strip_tags t("item-visibility") %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= strip_tags t("item-visibility-hint") %>'></i>
+                </label>
+                <div class="col-sm-9">
+                    <div id="target-audience-item-div">
+                        <div data-editors="target_audience_id" class="inline-checkbox-div" tabindex="-1"></div>
+                    </div>
+                </div>
+            </div>
             <div class="row" id="formats-row" style="margin-top: 10px;">
                 <div class="form-group " style="margin-bottom: 3px;">                
                     <label class="col-sm-3 control-label"><%= t "item-format" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-format" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-format-help" %>'></i></label>
@@ -254,13 +264,6 @@
             </div>
             <div id="item-options-divider" class="row item-section-title" style="margin-bottom: 20px;">
                 <h3><%= t 'options' %></h3>
-            </div>
-            <div class="row" id="print-item-row">
-                <div class="col-sm-9 col-sm-offset-3">
-                    <div id="print-item-div">
-                        <div data-editors="print" class="inline-checkbox-div" tabindex="-1"></div> <%= t "item-print" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-print" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-print-hint" %>'></i>
-                    </div>
-                </div>
             </div>
             <div class="row voffset10" id="card-size-row">
                 <label class="col-sm-3 control-label"><%= t "mobile-card-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "mobile-card-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "mobile-card-size-help" %>'></i></label>

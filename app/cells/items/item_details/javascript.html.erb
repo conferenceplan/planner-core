@@ -936,11 +936,26 @@ ItemApp.ItemManagement = (function(Backbone){
                     },
                 },
             },
-            print : { 
-                type : 'Checkbox', 
-                title : '<%= t "item-print" %>',  
-                editorClass : 'item-form-element', 
-                editorAttrs : {tabindex : "-1"} 
+            target_audience_id : { 
+                type : 'Select2', 
+                title : '<%= t "item-visibility" %>',
+                config : {
+                    data : [
+                        { 
+                            id : <%= TargetAudience['Public'].id %>, 
+                            text : '<%= t('item-target-audience.public') %>' 
+                        },
+                        { 
+                            id : <%= TargetAudience['Private'].id %>, 
+                            text : '<%= t('item-target-audience.private') %>' 
+                        },
+                        { 
+                            id : <%= TargetAudience['None'].id %>, 
+                            text : '<%= t('item-target-audience.none') %>' 
+                        },
+                    ],
+                    escapeMarkup: function(m) { return m; }
+                }
             },
             minimum_people : { 
                 type : 'DependentNumber', 
