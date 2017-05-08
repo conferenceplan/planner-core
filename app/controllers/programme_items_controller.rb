@@ -11,6 +11,8 @@ class ProgrammeItemsController < PlannerController
       @assignments = assignments.sort{|a,b| (a.programmeItem.start_time && b.programmeItem.start_time) ? a.programmeItem.start_time <=> b.programmeItem.start_time : -1}
     end
   rescue => ex
+    Rails.logger.error ex.message if Rails.env.development?
+    Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
     render status: :bad_request, text: ex.message
   end
 
@@ -34,6 +36,8 @@ class ProgrammeItemsController < PlannerController
 
     render status: :ok, text: {}.to_json
   rescue => ex
+    Rails.logger.error ex.message if Rails.env.development?
+    Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
     render status: :bad_request, text: ex.message
   end
   
@@ -64,6 +68,8 @@ class ProgrammeItemsController < PlannerController
     end
 
   rescue => ex
+    Rails.logger.error ex.message if Rails.env.development?
+    Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
     render status: :bad_request, text: ex.message
   end
   
@@ -92,6 +98,8 @@ class ProgrammeItemsController < PlannerController
                                   includes({:person => :pseudonym}).
                                   order("people.last_name")
   rescue => ex
+    Rails.logger.error ex.message if Rails.env.development?
+    Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
     render status: :bad_request, text: ex.message
   end
 
@@ -189,6 +197,8 @@ class ProgrammeItemsController < PlannerController
         _after_save(@programmeItem)
       end
     rescue => ex
+      Rails.logger.error ex.message if Rails.env.development?
+      Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
       render status: :bad_request, text: ex.message
     end
   end
@@ -206,6 +216,8 @@ class ProgrammeItemsController < PlannerController
         render status: :ok, text: {}.to_json
       end
     rescue => ex
+      Rails.logger.error ex.message if Rails.env.development?
+      Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
       render status: :bad_request, text: ex.message
     end
   end
