@@ -99,7 +99,7 @@ class PublishJob
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getNewProgramItems
-    clause = addClause(nil,'programme_items.print = ?',true) # only get those that are marked for print
+    clause = addClause(nil,'programme_items.target_audience_id != ?', TargetAudience['None'].id) # only get those that are not admin-only
     clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
     clause = addClause(clause,'room_item_assignments.id is not null AND programme_items.parent_id is null', nil)
 
@@ -108,9 +108,9 @@ class PublishJob
   end
   
   def getNewChildren
-    clause = addClause(nil,'programme_items.print = ?',true) # only get those that are marked for print
+    clause = addClause(nil,'programme_items.target_audience_id != ?', TargetAudience['None'].id) # only get those that are not admin-only
     clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'programme_items.parent_id is not null AND parents_programme_items.print = ? ', true)
+    clause = addClause(clause,'programme_items.parent_id is not null AND parents_programme_items.target_audience_id != ? ', TargetAudience['None'].id)
 
     return ProgrammeItem.
         joins([:parent]).where(clause)
@@ -131,7 +131,7 @@ class PublishJob
   # Check this for modified items - i.e what happens if the time is changed?
   # in that case the room item assignment is recreated...
   def getModifiedProgramItems
-    clause = addClause(nil,'print = ?',true) # only get those that are marked for print
+    clause = addClause(nil,'target_audience_id != ?', TargetAudience['None']) # only get those that are not admin-only
     clause = addClause(clause,'room_item_assignments.id is not null or parent_id is not null ', nil)
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
 
@@ -169,13 +169,13 @@ class PublishJob
   def getUnpublishedItems
     PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
       joins("join programme_items on programme_items.id = publications.original_id and publications.original_type = 'ProgrammeItem'").
-      where("(programme_items.print = 0 AND publications.published_id is not null AND published_programme_items.parent_id is null)")
+      where("(programme_items.target_audience_id = #{TargetAudience['None'].id} AND publications.published_id is not null AND published_programme_items.parent_id is null)")
   end
 
   def getUnpublishedSubItems
     PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
       joins("join programme_items on programme_items.id = publications.original_id and publications.original_type = 'ProgrammeItem'").
-      where("(programme_items.print = 0 AND publications.published_id is not null AND published_programme_items.parent_id is not null)")
+      where("(programme_items.target_audience_id = #{TargetAudience['None'].id} AND publications.published_id is not null AND published_programme_items.parent_id is not null)")
   end
 
   private
