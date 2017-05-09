@@ -9,20 +9,8 @@ class PublishJob
   end
   
   def before(job)
-    ActiveSupport.on_load(:programme_item) do
-      Planner::Linkable.configure do |config|
-        config.addLinkable ProgrammeItem
-        ProgrammeItem.linked
-      end
-    end
-    ActiveSupport.on_load(:published_programme_item) do
-      Planner::Linkable.configure do |config|
-        config.addLinkable PublishedProgrammeItem
-        PublishedProgrammeItem.linked
-      end
-    end
     Planner::Linkable.configure do |config|
-      config.addLinkable [Person, Venue, Room]
+      config.addLinkable ["Person", "ProgrammeItem", "PublishedProgrammeItem", "Venue", "Room"]
     end
     ActiveRecord::Base.send(:include, Planner::Linkable)
     Planner::Linkable.setup
