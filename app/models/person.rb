@@ -346,4 +346,13 @@ class Person < ActiveRecord::Base
     url
   end
 
+  def viewable_by_public?
+    viewable = publishedProgrammeItemAssignments.with_public_items.any?
+    if !viewable && registrationDetail && registrationDetail.registered
+      viewable = registrationDetail.can_share
+    end
+
+    viewable
+  end
+
 end
