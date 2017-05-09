@@ -159,8 +159,21 @@ class ProgrammeItem < ActiveRecord::Base
   def self.child_items
     where("parent_id is not null")
   end
+  
 
-  ActiveSupport.run_load_hooks(:programme_item, self)
+  def public?
+    target_audience == TargetAudience['Public']
+  end
+
+  def private?
+    target_audience == TargetAudience['Private']
+  end
+
+  def visibility_none?
+    target_audience == TargetAudience['None']
+  end
+
+
 end
 
 # TODO - create a clone function

@@ -54,6 +54,10 @@ class PublishedProgrammeItem < ActiveRecord::Base
   alias_attribute :description, :precis
   alias_attribute :requires_signup, :item_registerable
 
+  def self.only_public
+    where(target_audience_id: TargetAudience['Public'].id)
+  end
+
   def sorted_published_item_assignments
     assignments = []
     [PersonItemRole["Moderator"],PersonItemRole["Participant"]].each do |role|
@@ -97,6 +101,12 @@ class PublishedProgrammeItem < ActiveRecord::Base
     target_audience.name if target_audience
   end
 
+  def public?
+    target_audience == TargetAudience['Public']
+  end
 
-  ActiveSupport.run_load_hooks(:published_programme_item, self)
+  def private?
+    target_audience == TargetAudience['Private']
+  end
+  
 end

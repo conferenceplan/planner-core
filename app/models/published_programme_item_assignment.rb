@@ -30,4 +30,8 @@ class PublishedProgrammeItemAssignment < ActiveRecord::Base
     role_as_string
   end
 
+  def self.with_public_items
+    joins(:published_programme_item).where(published_programme_items: {target_audience_id: TargetAudience['Public']})
+  end
+
 end
