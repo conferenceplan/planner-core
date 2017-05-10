@@ -347,12 +347,20 @@ class Person < ActiveRecord::Base
   end
 
   def viewable_by_public?
-    viewable = publishedProgrammeItemAssignments.with_public_items.any?
+    viewable = has_public_assigned_items?
     if !viewable && registrationDetail && registrationDetail.registered
       viewable = registrationDetail.can_share
     end
 
     viewable
+  end
+
+  def has_public_assigned_items?
+    publishedProgrammeItemAssignments.with_public_items.any?
+  end
+
+  def self.with_public_assigned_items
+    joins(:published_programme_items).where(published_programme_items: {target_audience_id: TargetAudience['Public']}).uniq
   end
 
 end
