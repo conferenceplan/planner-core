@@ -58,6 +58,10 @@ class PublishedProgrammeItem < ActiveRecord::Base
     where(target_audience_id: TargetAudience['Public'].id)
   end
 
+  def self.only_private
+    where(target_audience_id: TargetAudience['Private'].id)
+  end
+
   def sorted_published_item_assignments
     assignments = []
     [PersonItemRole["Moderator"],PersonItemRole["Participant"]].each do |role|
