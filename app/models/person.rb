@@ -363,4 +363,8 @@ class Person < ActiveRecord::Base
     joins(:published_programme_items).where(published_programme_items: {target_audience_id: TargetAudience['Public']}).uniq
   end
 
+  def is_assigned_to_items_with_person?(person)
+    published_programme_items.any? && person.published_programme_items.any? && (published_programme_items & person.published_programme_items).any?
+  end
+
 end
