@@ -405,6 +405,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                     }, 200);
                                 };
                             } else {
+                                // console.log('no parent');
                                 // If a parent item is not selected, changes in the start time should set the end time to the new start_time  + the duration
                                 fields.start_offset.editor.$el.val(null); // Clear the start_offset field
 
@@ -416,12 +417,14 @@ ItemApp.ItemManagement = (function(Backbone){
                                 var newEndDiff = moment.duration(endMax.diff(newEnd)).asMinutes(); // Minutes between the potential new end time and the max end time
 
                                 if (newEndDiff >= minItemDuration){
+                                    // console.log('new end is greater than min duration');
                                     // If the difference between the potential new end time will not exceed the max end time
                                     if (endDiff >= minItemDuration && duration >= minItemDuration) {
+                                        // console.log('new end time is less than max end time');
                                         // If the new end time will not exceed the max end date, set the end date to the new value
-                                        // 
+                                        // console.log('duration: ', duration);
+                                        // console.log('diff: ', diff);
                                         fields.end_time.editor.picker.data("DateTimePicker").date(newEnd);
-                                        fields.duration.editor.$el.val(diff);
 
                                         if (newEndDiff > minItemDuration){
                                             if (!fields.end_time.editor.picker.find("input").attr('style')) {
@@ -430,6 +433,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                         };
                                     } else {
                                         // If the new end time will exceed the max end time, reduce the duration
+                                        // console.log('new end time will exceed max end time: ', endMax);
                                         fields.duration.editor.$el.val(diff);
                                         if (!fields.duration.editor.$el.attr('style')) {
                                             fields.duration.editor.$el.effect("highlight", 800);
@@ -437,8 +441,10 @@ ItemApp.ItemManagement = (function(Backbone){
                                     };
                                 } else {
                                     // If the new end time will exceed the max end time
+                                    // console.log('new end time will exceed max end time');
                                     if (diff > 0){
                                         // If the new start time is not the same as the current end time, reduce the duration
+                                        // console.log('set duration to diff: ', diff);
                                         fields.duration.editor.$el.val(diff);
                                         if (!fields.duration.editor.$el.attr('style')) {
                                             fields.duration.editor.$el.effect("highlight", 800);
