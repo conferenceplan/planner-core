@@ -159,15 +159,18 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.countParticipants
+  def self.countParticipants(only_public: true)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
     cndStr = ' (published_programme_item_assignments.role_id in (?))'
+    cndStr += " AND (published_programme_items.target_audience_id = #{TargetAudience['Public'].id})" if only_public
 
     conditions = [cndStr]
     conditions << roles
     
     Person.where(conditions).
             joins([:publishedProgrammeItemAssignments]).
+            includes(:published_programme_items).
+            references(:published_programme_items).
             where(self.constraints()).uniq.count
     
   end
@@ -175,11 +178,12 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.findParticipants(peopleIds = nil)
+  def self.findParticipants(peopleIds = nil, only_public: true)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     cndStr  = '(published_time_slots.start is not NULL || published_time_slots_published_programme_items.start is not null)'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
     cndStr += ' AND (published_programme_item_assignments.role_id in (?))'
+    cndStr += " AND (published_programme_items.target_audience_id = #{TargetAudience['Public'].id})" if only_public
 
     conditions = [cndStr]
     conditions << peopleIds if peopleIds
@@ -196,7 +200,7 @@ module PublishedProgramItemsService
                         { :parent => [:published_time_slot] },
                       ]
                   }
-              }).
+            }).
             references({
               :pseudonym => {}, 
               :publishedProgrammeItemAssignments => 
@@ -206,7 +210,7 @@ module PublishedProgramItemsService
                         { :parent => [:published_time_slot] },
                       ]
                   }
-              }).
+            }).
             where(self.constraints()).
             order("people.last_name, published_time_slots.start asc")
     
