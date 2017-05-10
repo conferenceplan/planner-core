@@ -32,7 +32,11 @@ UserMgmtApp.UserManagement = (function(Backbone){
                             }
                          ]
                        },
-            password_confirmation : { type : 'Password', title : '<%= t "user-password-again" %>'},
+            password_confirmation : { 
+                                      type : 'Password', 
+                                      title : '<%= t "user-password-again" %>', 
+                                      
+                                    },
             roles : { type : 'List',
                         title : '<%= t "roles" %>',
                         itemToString : function(item) {
@@ -40,10 +44,16 @@ UserMgmtApp.UserManagement = (function(Backbone){
                                             return r.label;
                                         },
                         itemType : 'Object',
+                        
+                        help: '<%= t "user-role-help" %>', 
+                        hint: '<%= (t "user-role-hint").html_safe %>',
+
                         subSchema : {
                             id : { 
                                     title : '<%= t "user-role" %>',
                                     type : 'Select',
+                                    help: '<%= t "user-role-help" %>', 
+                                    hint: '<%= (t "user-role-hint").html_safe %>',
                                     options : roles 
                             }
                         }
