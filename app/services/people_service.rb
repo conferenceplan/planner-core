@@ -200,7 +200,7 @@ module PeopleService
   #
   def self.findAssignedParticipants
     
-    cndStr = "programme_items.target_audience_id != #{TargetAudience['None'].id}"
+    cndStr = "programme_items.visibility_id != #{Visibility['None'].id}"
 
     conditions = [cndStr] #, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
 

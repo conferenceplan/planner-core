@@ -8,5 +8,5 @@ json.lock_version   item.lock_version
 json.updated_at     item.updated_at
 json.created_at     item.created_at
 
-json.target_audience_id     item.target_audience_id
-json.target_audience_name   item.target_audience_name
+json.visibility_id     item.visibility_id
+json.visibility_name   item.visibility_name

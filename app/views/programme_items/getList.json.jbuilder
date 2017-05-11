@@ -20,7 +20,7 @@ json.rowdata @items do |item|
     json.set! "programme_item[lock_version]", item.lock_version
     
     json.set! "programme_item[participants]", item.programme_item_assignments.collect{|m| (m.role == PersonItemRole['Participant'] || m.role == PersonItemRole['Moderator'])? m : nil}.compact.length
-    json.set! "programme_item[visibility]", t('item-target-audience.' + item.target_audience_name.downcase) if item.target_audience
+    json.set! "programme_item[visibility]", t('item-visibility.' + item.visibility_name.downcase) if item.visibility
 
     json.set! "programme_item[children]", (item.children.size > 0)
     json.set! "children", (item.children.size > 0)

@@ -4,9 +4,9 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :format_id, :is_break, :start_offset, :target_audience_id
+                  :format_id, :is_break, :start_offset, :visibility_id
 
-  has_enumerated :target_audience
+  has_enumerated :visibility
 
   audited :allow_mass_assignment => true
 
@@ -55,11 +55,11 @@ class PublishedProgrammeItem < ActiveRecord::Base
   alias_attribute :requires_signup, :item_registerable
 
   def self.only_public
-    where(target_audience_id: TargetAudience['Public'].id)
+    where(visibility_id: Visibility['Public'].id)
   end
 
   def self.only_private
-    where(target_audience_id: TargetAudience['Private'].id)
+    where(visibility_id: Visibility['Private'].id)
   end
 
   def sorted_published_item_assignments
@@ -101,16 +101,20 @@ class PublishedProgrammeItem < ActiveRecord::Base
   end
 
 
-  def target_audience_name
-    target_audience.name if target_audience
+  def visibility_name
+    visibility.name if visibility
   end
 
   def public?
-    target_audience == TargetAudience['Public']
+    visibility == Visibility['Public']
   end
 
   def private?
-    target_audience == TargetAudience['Private']
+    visibility == Visibility['Private']
+  end
+
+  def visible?(person: nil)
+    public? || (person && person.published_programme_items.include?(self))
   end
   
 end

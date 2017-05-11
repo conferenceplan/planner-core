@@ -162,7 +162,7 @@ module PublishedProgramItemsService
   def self.countParticipants(only_public: true)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
     cndStr = ' (published_programme_item_assignments.role_id in (?))'
-    cndStr += " AND (published_programme_items.target_audience_id = #{TargetAudience['Public'].id})" if only_public
+    cndStr += " AND (published_programme_items.visibility_id = #{Visibility['Public'].id})" if only_public
 
     conditions = [cndStr]
     conditions << roles
@@ -183,7 +183,7 @@ module PublishedProgramItemsService
     cndStr  = '(published_time_slots.start is not NULL || published_time_slots_published_programme_items.start is not null)'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
     cndStr += ' AND (published_programme_item_assignments.role_id in (?))'
-    cndStr += " AND (published_programme_items.target_audience_id = #{TargetAudience['Public'].id})" if only_public
+    cndStr += " AND (published_programme_items.visibility_id = #{Visibility['Public'].id})" if only_public
 
     conditions = [cndStr]
     conditions << peopleIds if peopleIds

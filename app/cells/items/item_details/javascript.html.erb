@@ -942,22 +942,22 @@ ItemApp.ItemManagement = (function(Backbone){
                     },
                 },
             },
-            target_audience_id : { 
+            visibility_id : { 
                 type : 'Select2', 
                 title : '<%= t "item-visibility" %>',
                 config : {
                     data : [
                         { 
-                            id : <%= TargetAudience['Public'].id %>, 
-                            text : '<%= t('item-target-audience.public') %>' 
+                            id : <%= Visibility['Public'].id %>, 
+                            text : '<%= t('item-visibility.public') %>' 
                         },
                         { 
-                            id : <%= TargetAudience['Private'].id %>, 
-                            text : '<%= t('item-target-audience.private') %>' 
+                            id : <%= Visibility['Private'].id %>, 
+                            text : '<%= t('item-visibility.private') %>' 
                         },
                         { 
-                            id : <%= TargetAudience['None'].id %>, 
-                            text : '<%= t('item-target-audience.none') %>' 
+                            id : <%= Visibility['None'].id %>, 
+                            text : '<%= t('item-visibility.none') %>' 
                         },
                     ],
                     escapeMarkup: function(m) { return m; }
@@ -1024,7 +1024,7 @@ ItemApp.ItemManagement = (function(Backbone){
             "mobile_card_size" : 1,
             "is_break"  : false,
             "audience_size" : 0,
-            target_audience_id : <%= TargetAudience['Public'].id %>
+            visibility_id : <%= Visibility['Public'].id %>
         },
         urlRoot : "<%= baseUri + '/programme_items' %>",
         relations : [{

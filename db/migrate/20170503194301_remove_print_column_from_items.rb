@@ -1,6 +1,6 @@
 require 'programme_item'
 require "enum"
-require "target_audience"
+require "visibility"
 
 class RemovePrintColumnFromItems < ActiveRecord::Migration
   def up
@@ -9,6 +9,6 @@ class RemovePrintColumnFromItems < ActiveRecord::Migration
 
   def down
     add_column :programme_items, :print, :boolean, nil: false, default: true
-    ProgrammeItem.where(target_audience_id: TargetAudience['None'].id).update_all(print: false)
+    ProgrammeItem.where(visibility_id: Visibility['None'].id).update_all(print: false)
   end
 end

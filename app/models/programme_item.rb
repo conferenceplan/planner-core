@@ -2,9 +2,9 @@
 class ProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :item_notes,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :setup_type_id, :format_id, :short_precis, :parent_id, :is_break, :start_offset, :target_audience_id
+                  :setup_type_id, :format_id, :short_precis, :parent_id, :is_break, :start_offset, :visibility_id
 
-  has_enumerated :target_audience
+  has_enumerated :visibility
   
   audited :allow_mass_assignment => true
   acts_as_taggable
@@ -126,8 +126,8 @@ class ProgrammeItem < ActiveRecord::Base
     members
   end
 
-  def target_audience_name
-    target_audience.name if target_audience
+  def visibility_name
+    visibility.name if visibility
   end
 
 
@@ -162,15 +162,15 @@ class ProgrammeItem < ActiveRecord::Base
   
 
   def public?
-    target_audience == TargetAudience['Public']
+    visibility == Visibility['Public']
   end
 
   def private?
-    target_audience == TargetAudience['Private']
+    visibility == Visibility['Private']
   end
 
   def visibility_none?
-    target_audience == TargetAudience['None']
+    visibility == Visibility['None']
   end
 
 

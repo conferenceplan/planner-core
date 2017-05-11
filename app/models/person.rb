@@ -360,7 +360,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.with_public_assigned_items
-    joins(:published_programme_items).where(published_programme_items: {target_audience_id: TargetAudience['Public']}).uniq
+    joins(:published_programme_items).where(published_programme_items: {visibility_id: Visibility['Public']}).uniq
   end
 
   def is_assigned_to_items_with_person?(person)

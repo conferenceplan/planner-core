@@ -12,7 +12,7 @@ class PublishedRoomItemAssignment < ActiveRecord::Base
   belongs_to :published_time_slot, :dependent => :destroy
 
   def self.with_public_items
-    joins(:published_programme_item).where(published_programme_items: {target_audience_id: TargetAudience['Public']})
+    joins(:published_programme_item).where(published_programme_items: {visibility_id: Visibility['Public']})
   end
   
 end

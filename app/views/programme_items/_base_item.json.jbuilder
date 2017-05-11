@@ -9,8 +9,8 @@ json.format_name            item.format.name if item.format
 json.maximum_people         item.maximum_people
 json.minimum_people         item.minimum_people
 json.item_notes             item.item_notes
-json.target_audience_id     item.target_audience_id
-json.target_audience_name   item.target_audience_name
+json.visibility_id     item.visibility_id
+json.visibility_name   item.visibility_name
 json.pub_reference_number   item.pub_reference_number
 json.isPublished            item.published != nil
 json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%A, %B %e %Y, %l:%M %P') : ""
