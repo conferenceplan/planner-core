@@ -115,16 +115,20 @@ class PublishedProgrammeItem < ActiveRecord::Base
   end
 
   def visible?(person: nil)
-    public? || (person && person.published_programme_items.include?(self))
+    public? || (
+      person && (
+        person.published_programme_items.include?(self) || 
+        (self.children & person.published_programme_items).any?
+      )
+    )
   end
 
   def self.only_visible(person: nil)
+    conditions = { visibility_id: Visibility['Public'].id }
     if person && person.published_programme_items.any?
       ids = person.published_programme_items.pluck(:id).uniq.compact.join(', ')
       conditions = "published_programme_items.visibility_id = '#{Visibility['Public'].id}' \
-      OR published_programme_items.id in (#{ids})"
-    else
-      conditions = { visibility_id: Visibility['Public'].id }
+      OR published_programme_items.id in (#{ids})" if ids.present?
     end
     where(conditions)
   end
