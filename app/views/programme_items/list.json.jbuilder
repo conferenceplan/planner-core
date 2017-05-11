@@ -20,5 +20,7 @@ json.rows @items do |item|
     json.num_assigned_participants item.programme_item_assignments.count
     json.min_people item.minimum_people
     json.max_people item.maximum_people
+    json.visibility_id     item.visibility_id
+    json.visibility_name   item.visibility_name
 
 end

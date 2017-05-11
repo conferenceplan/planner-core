@@ -62,6 +62,8 @@ json.parent_val do
         json.date_time_str       ( item.parent.start_time.present? ? 
         ' [' + l(item.parent.start_time, format: :start_time_with_date) + " - " + l(item.parent.end_time, format: :end_time) + ']' 
         : "")
+        json.visibility_id     item.parent.visibility_id
+        json.visibility_name   item.parent.visibility_name
     end
 end
 
