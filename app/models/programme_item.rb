@@ -68,7 +68,8 @@ class ProgrammeItem < ActiveRecord::Base
   def end_time
     if self.parent && self.parent.time_slot
       _end_time = self.parent.time_slot.end
-      _end_time = self.parent.time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset && self.duration
+      offset = self.start_offset || 0
+      _end_time = self.parent.time_slot.start + offset.minutes + self.duration.minutes if offset && self.duration
     else
       _end_time = self.time_slot ? self.time_slot.end : nil
     end

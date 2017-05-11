@@ -89,7 +89,8 @@ class PublishedProgrammeItem < ActiveRecord::Base
   def end_time
     if self.parent
       _end_time = self.parent.published_time_slot.end
-      _end_time = self.parent.published_time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset && self.duration
+      offset = self.start_offset || 0
+      _end_time = self.parent.published_time_slot.start + offset.minutes + self.duration.minutes if offset && self.duration
     else
       _end_time = self.published_time_slot.end
     end
@@ -115,6 +116,17 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   def visible?(person: nil)
     public? || (person && person.published_programme_items.include?(self))
+  end
+
+  def self.only_visible(person: nil)
+    if person && person.published_programme_items.any?
+      ids = person.published_programme_items.pluck(:id).uniq.compact.join(', ')
+      conditions = "published_programme_items.visibility_id = '#{Visibility['Public'].id}' \
+      OR published_programme_items.id in (#{ids})"
+    else
+      conditions = { visibility_id: Visibility['Public'].id }
+    end
+    where(conditions)
   end
   
 end
