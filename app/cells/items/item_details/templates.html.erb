@@ -125,12 +125,12 @@
                 <div class="form-group " style="margin-bottom: 3px;">                
                     <label class="col-sm-3 control-label"><%= t "item-format" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-format" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-format-help" %>'></i></label>
                     <div class="col-sm-4">
-                        <span data-editor>
+                        <div data-editor>
                             <div data-editors="format_id"></div>
                             <div class="has-error">
                                 <p class="help-block" data-error></p>
                             </div>
-                        </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,10 +139,10 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "themes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "themes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "themes-help" %>'></i>
                     </label>
-                    <span data-editor>
+                    <div data-editor>
                         <div class="col-sm-9" data-editors="theme_name_ids"></div>
                         <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    </div>
                 </div>
             </div>
             <div class="row" id="parent-item-row">
@@ -150,10 +150,10 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "parent-item" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "parent-item" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "parent-title-help" %>'></i>
                     </label>
-                    <span data-editor>
+                    <div data-editor>
                         <div class="col-sm-9" data-editors="parent_id"></div>
                         <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    </div>
                 </div>
             </div>
             <div class="row item-section-title voffset10">
