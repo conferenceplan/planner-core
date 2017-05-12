@@ -25,6 +25,15 @@ json.parent_id              item.parent_id
 json.is_break               item.is_break
 json.start_offset           item.start_offset || 0
 
+if item.start_time.present?
+    multi_day = item.start_time.day != item.end_time.day
+    end_format = multi_day ? :start_time_with_date : :end_time
+
+    json.date_time_str l(item.start_time, format: :start_time_with_date) + " - " + l(item.end_time, format: end_format)
+else
+    json.date_time_str ''
+end
+
 json.parent_val do
     if item.parent
         json.partial! 'base_item', item: item.parent, role: nil

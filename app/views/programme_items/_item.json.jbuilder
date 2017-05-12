@@ -53,17 +53,7 @@ json.lock_version           item.lock_version
 json.parent_id              item.parent_id
 json.parent_val do
     if item.parent
-        json.id     item.parent.id
-        json.title   item.parent.title
-        json.start_time   item.parent.start_time
-        json.start_time_str   (item.parent.start_time.present? ? Time.zone.parse((item.parent.start_time).to_s).strftime('%m/%d/%Y %H:%M:%S') : "")
-        json.end_time   item.parent.end_time
-        json.end_time_str        (item.parent.end_time.present? ? Time.zone.parse((item.parent.end_time).to_s).strftime('%m/%d/%Y %H:%M:%S') : "")
-        json.date_time_str       ( item.parent.start_time.present? ? 
-        ' [' + l(item.parent.start_time, format: :start_time_with_date) + " - " + l(item.parent.end_time, format: :end_time) + ']' 
-        : "")
-        json.visibility_id     item.parent.visibility_id
-        json.visibility_name   item.parent.visibility_name
+        json.partial! 'base_item', item: item.parent, role: nil
     end
 end
 
