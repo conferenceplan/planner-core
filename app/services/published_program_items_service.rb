@@ -23,7 +23,11 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.findProgramItemsForPerson(person)
+  def self.findProgramItemsForPerson(person, only_public: true)
+    visibility_conditions = nil
+    if only_public
+      visibility_conditions = { published_programme_items: { visibility_id: Visibility['Public'].id } }
+    end
     PublishedProgrammeItemAssignment.uncached do
       PublishedProgrammeItemAssignment.
             where(
@@ -31,6 +35,7 @@ module PublishedProgramItemsService
                 person.id, 
                 [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]]            
             ).
+            where(visibility_conditions).
             includes(
               {:published_programme_item => 
                 [{:published_programme_item_assignments => 
@@ -115,10 +120,11 @@ module PublishedProgramItemsService
                             order('published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order')
   end
   
-  def self.getPublishedProgramItemsThatHavePeople(itemIds = nil, formatList = nil)
+  def self.getPublishedProgramItemsThatHavePeople(itemIds = nil, formatList = nil, only_public: true)
     cndStr = "published_programme_items.parent_id is null"
     cndStr += " AND published_programme_items.id in(?)" if itemIds
     cndStr += " AND published_programme_items.format_id in(?)" if formatList
+    cndStr += " AND published_programme_items.visibility_id = #{Visibility['Public'].id}" if only_public
     conditions = [cndStr]
     conditions << itemIds if itemIds
     conditions << formatList if formatList
