@@ -72,9 +72,12 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getPublishedProgramItems(day = nil)
-
-    PublishedProgrammeItem.where("published_programme_items.parent_id is null").
+  def self.getPublishedProgramItems(day = nil, only_public: true)
+    visibility_conditions = nil
+    if only_public
+      visibility_conditions = { visibility_id: Visibility['Public'].id }
+    end
+    PublishedProgrammeItem.where(visibility_conditions).where(parent_id: nil).
                           references( [
                               :published_time_slot,
                               {
