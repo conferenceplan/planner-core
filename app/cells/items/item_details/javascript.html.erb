@@ -67,7 +67,7 @@ ItemApp.ItemManagement = (function(Backbone){
 
     var privateVisibilitySelect2Choice = { 
         id : <%= Visibility['Private'].id %>, 
-        text : '<%= t('item-visibility.private') %>' 
+        text : '<%= t('item-visibility.private-with-explanation') %>' 
     };
 
     function toggleChildVisibility(parent, form) {
@@ -986,12 +986,12 @@ ItemApp.ItemManagement = (function(Backbone){
                     data : [
                         { 
                             id : <%= Visibility['Public'].id %>, 
-                            text : '<%= t('item-visibility.public') %>' 
+                            text : '<%= t('item-visibility.public-with-explanation') %>' 
                         },
                         privateVisibilitySelect2Choice,
                         { 
                             id : <%= Visibility['None'].id %>, 
-                            text : '<%= t('item-visibility.none') %>' 
+                            text : '<%= t('item-visibility.none-with-explanation') %>' 
                         },
                     ],
                     escapeMarkup: function(m) { return m; }
