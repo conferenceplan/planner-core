@@ -50,12 +50,16 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getPublishedRooms(day = nil, name = nil, lastname = nil)    
-    
+  def self.getPublishedRooms(day = nil, name = nil, lastname = nil, only_public: true)    
+    visibility_conditions = nil
+    if only_public
+      visibility_conditions = { published_programme_items: { visibility_id: Visibility['Public'].id } }
+    end
     PublishedRoom.uncached do
       PublishedRoom.
             references([:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}]).
             where(getConditions(day, name, lastname)).
+            where(visibility_conditions).
             includes([:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}]).
             references([:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}]).
             distinct("published_rooms.name").
