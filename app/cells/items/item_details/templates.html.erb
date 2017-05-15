@@ -328,14 +328,25 @@
         <div class="row" id="item-detail-list">
             <div class="col-xs-12 item-summary-attribute">
                 <div class="row">
-                    <div class="col-xs-6"><%= t "item-is-break" %></div>
-                    <div class="col-xs-6">{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                    <div class="col-xs-6"><%= t "item-visibility" %></div>
+                    <div class="col-xs-6">
+                        {{ if (visibility_id) { }}
+                            <span class="label 
+                            {{ if (visibility_id == <%= Visibility['Public'].id %>) { }}
+                              label-success"><%= t('item-visibility.public') %>
+                            {{ } else if (visibility_id == <%= Visibility['Private'].id %>) { }}
+                              label-primary"><%= t('item-visibility.private') %>
+                            {{ } else if (visibility_id == <%= Visibility['None'].id %>) { }}
+                              label-default"><%= t('item-visibility.none') %>
+                            {{ }; }}</span>
+                        {{ }; }}
+                    </div>
                 </div>
             </div>
             <div class="col-xs-12 item-summary-attribute">
                 <div class="row">
-                    <div class="col-xs-6"><%= t "for-print" %></div>
-                    <div class="col-xs-6">{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                    <div class="col-xs-6"><%= t "item-is-break" %></div>
+                    <div class="col-xs-6">{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
                 </div>
             </div>
             <div class="col-xs-12 item-summary-attribute">
