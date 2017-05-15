@@ -115,12 +115,20 @@ class PublishedProgrammeItem < ActiveRecord::Base
   end
 
   def visible?(person: nil)
-    public? || (
-      person && (
+    if defined?(super)
+      visible = super(person: person)
+    else
+      visible = false
+    end
+
+    visible = visible || public? || (
+      private? && person.present? && (
         person.published_programme_items.include?(self) || 
         (self.children & person.published_programme_items).any?
       )
     )
+
+    visible
   end
 
   def self.only_visible(person: nil)
