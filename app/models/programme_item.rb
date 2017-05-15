@@ -132,23 +132,6 @@ class ProgrammeItem < ActiveRecord::Base
   end
 
 
-  protected
-
-  def sanitize_for_break
-    if self.is_break
-      self.parent_id = nil # ensure no parent/child
-    end
-  end
-  
-  def check_parent
-    raise "An item can't be a parent of itself." if self.id && (self.id == self.parent_id)
-    raise "You can't set an item as a child of a child." if self.id && self.parent_id && self.parent.parent_id
-    raise "You can't set an parent for an item that is also a parent." if self.id && self.parent_id && (self.children.size > 0)
-    raise "Item can't be a child of a break." if self.id && self.parent_id && self.parent.is_break
-    raise "A break can't have a parent." if self.id && self.parent_id && self.is_break
-    raise "A break can't be a parent." if self.id && (self.children.size > 0) && self.is_break
-  end
-
   def self.scheduled
     joins(:room_item_assignment).uniq
   end
@@ -172,6 +155,23 @@ class ProgrammeItem < ActiveRecord::Base
 
   def visibility_none?
     visibility == Visibility['None']
+  end
+
+  protected
+
+  def sanitize_for_break
+    if self.is_break
+      self.parent_id = nil # ensure no parent/child
+    end
+  end
+  
+  def check_parent
+    raise "An item can't be a parent of itself." if self.id && (self.id == self.parent_id)
+    raise "You can't set an item as a child of a child." if self.id && self.parent_id && self.parent.parent_id
+    raise "You can't set an parent for an item that is also a parent." if self.id && self.parent_id && (self.children.size > 0)
+    raise "Item can't be a child of a break." if self.id && self.parent_id && self.parent.is_break
+    raise "A break can't have a parent." if self.id && self.parent_id && self.is_break
+    raise "A break can't be a parent." if self.id && (self.children.size > 0) && self.is_break
   end
 
 
