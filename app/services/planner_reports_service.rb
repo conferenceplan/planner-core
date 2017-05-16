@@ -50,7 +50,7 @@ module PlannerReportsService
   def self.findParticipantsWithNoBios
     # Person must be assigned to a programme item (and be visible to the members)
     conditions = ["(programme_item_assignments.role_id in (?)) AND (programme_items.visibility_id != #{Visibility['None'].id}) AND (edited_bios.id is null OR edited_bios.bio is null OR edited_bios.bio = '')",
-                     [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] ]
+                     [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id] ]
 
     Person.where(conditions).
             includes([:pseudonym, {:programmeItemAssignments => :programmeItem}]).
@@ -185,7 +185,7 @@ module PlannerReportsService
   # visibleOnly == only print items
   #  
   def self.findPanelistsWithPanels(peopleIds = nil, additional_roles = nil, scheduledOnly = false, visibleOnly = false, format_id = nil)
-    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
+    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id] # ,PersonItemRole['Invisible'].id
     roles.concat(additional_roles) if additional_roles
     
     assignments = Arel::Table.new(ProgrammeItemAssignment.table_name)
@@ -226,7 +226,7 @@ module PlannerReportsService
   #
   #  
   def self.findPanelistsAndBios(order_by)
-    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
+    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id] # ,PersonItemRole['Invisible'].id
     cndStr = '(programme_item_assignments.role_id in (?))'
     cndStr += ' AND (time_slots.start is not NULL || time_slots_programme_items.start is not null)'
     cndStr += " AND (programme_items.visibility_id != #{Visibility['None'].id})"
@@ -264,7 +264,7 @@ module PlannerReportsService
   #
   #
   def self.findPublishedPanelistsWithPanels(peopleIds = nil, additional_roles = nil, itemIds = nil, formatList = nil)
-    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
+    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id]
     roles.concat(additional_roles) if additional_roles
     cndStr = '(published_programme_item_assignments.role_id in (?))'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds

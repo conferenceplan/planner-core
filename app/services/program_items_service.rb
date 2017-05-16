@@ -183,7 +183,7 @@ module ProgramItemsService
         where(
             ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
               person.id, 
-              [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]]        
+              [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id,PersonItemRole['Invisible'].id]]        
         ).
         includes(
           {:programmeItem => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, :equipment_types, {:room => :venue}, :time_slot]}

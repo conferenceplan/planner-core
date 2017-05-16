@@ -31,7 +31,7 @@ def print_assignment(pdf, item, assignment, page_width, page_height)
         elsif item.parent
             pdf.text item.parent.published_time_slot.start.strftime(@day_and_time_format), :fallback_fonts => planner_fallback_fonts
         end
-        pdf.text "<b>Participants:</b> " + item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || PersonItemRole['Speaker'] || x.role == PersonItemRole['Moderator']}.collect{|p| p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","), :inline_format => true, :fallback_fonts => planner_fallback_fonts
+        pdf.text "<b>Participants:</b> " + item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || PersonItemRole['OtherParticipant'] || x.role == PersonItemRole['Moderator']}.collect{|p| p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","), :inline_format => true, :fallback_fonts => planner_fallback_fonts
         pdf.text "<b>Description:</b> " + sanitize(item.precis, tags: %w(b i u strikethrough sub sup font link color), attributes: %w(href size name character_spacing rgb cmyk) ), :fallback_fonts => planner_fallback_fonts, :inline_format => true if item.precis
     end
 end
@@ -46,7 +46,7 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
     
     if @by_time
         @items.each do |item|
-            item.published_programme_item_assignments.find_all{|x| x.role == PersonItemRole['Participant'] || PersonItemRole['Speaker'] || x.role == PersonItemRole['Moderator']}.
+            item.published_programme_item_assignments.find_all{|x| x.role == PersonItemRole['Participant'] || PersonItemRole['OtherParticipant'] || x.role == PersonItemRole['Moderator']}.
                     sort_by{ |a| (a.published_programme_item.parent && a.published_programme_item.parent.published_time_slot) ? a.published_programme_item.parent.published_time_slot.start : (a.published_programme_item.published_time_slot ? a.published_programme_item.published_time_slot.start : @conf_start_time) }.
                     each do |assignment|
                 pdf.start_new_page if !first_page
@@ -55,7 +55,7 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
             end
             if item.children.size > 0
                 item.children.each do |child|
-                    child.published_programme_item_assignments.find_all{|x| x.role == PersonItemRole['Participant'] || PersonItemRole['Speaker'] || x.role == PersonItemRole['Moderator']}.
+                    child.published_programme_item_assignments.find_all{|x| x.role == PersonItemRole['Participant'] || PersonItemRole['OtherParticipant'] || x.role == PersonItemRole['Moderator']}.
                     each do |assignment|
                         pdf.start_new_page if !first_page
                         first_page = false
