@@ -867,6 +867,7 @@ ItemApp.ItemManagement = (function(Backbone){
                 afterInitFn : function() {
                     var parent = this.$el.select2('data');
                     toggleChildVisibility(parent, this.form);
+                    this.$el.trigger('change');
                 }
             },
             item_notes : { 
