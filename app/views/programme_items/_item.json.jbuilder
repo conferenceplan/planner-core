@@ -85,6 +85,13 @@ if participants
         end
     end
 end
+if other_participants
+    json.other_participants do
+        json.array! other_participants do |p|
+            json.partial! 'person', person: p.person, type: 'other_participant', default_img: default_person_img
+        end
+    end
+end
 if reserves
     json.reserves do
         json.array! reserves do |p|

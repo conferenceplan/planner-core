@@ -61,6 +61,10 @@ class ProgrammeItemsController < PlannerController
                                   where(['programme_item_id = ? AND role_id = ?', @programmeItem.id, PersonItemRole['Participant'].id]).
                                   includes({:person => :pseudonym}).
                                   order("people.last_name")
+      @otherParticipantAssociations = ProgrammeItemAssignment.rank(:sort_order).
+                                  where(['programme_item_id = ? AND role_id = ?', @programmeItem.id, PersonItemRole['OtherParticipant'].id]).
+                                  includes({:person => :pseudonym}).
+                                  order("people.last_name")
       @reserveAssociations = ProgrammeItemAssignment.rank(:sort_order).
                                   where(['programme_item_id = ? AND role_id = ?', @programmeItem.id, PersonItemRole['Reserved'].id]).
                                   includes({:person => :pseudonym}).
@@ -91,6 +95,10 @@ class ProgrammeItemsController < PlannerController
                         order("people.last_name")
       @participantAssociations = ProgrammeItemAssignment.rank(:sort_order).
                                   where(['programme_item_id = ? AND role_id = ?', @programmeItem.id, PersonItemRole['Participant'].id]).
+                                  includes({:person => :pseudonym}).
+                                  order("people.last_name")
+      @otherParticipantAssociations = ProgrammeItemAssignment.rank(:sort_order).
+                                  where(['programme_item_id = ? AND role_id = ?', @programmeItem.id, PersonItemRole['OtherParticipant'].id]).
                                   includes({:person => :pseudonym}).
                                   order("people.last_name")
       @reserveAssociations = ProgrammeItemAssignment.rank(:sort_order).
