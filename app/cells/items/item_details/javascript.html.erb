@@ -65,6 +65,30 @@ ItemApp.ItemManagement = (function(Backbone){
     var selectCallbacks = $.Callbacks();
     var current_item = null;
 
+    var privateVisibilitySelect2Choice = { 
+        id : <%= Visibility['Private'].id %>, 
+        text : '<%= t('item-visibility.private-with-explanation') %>' 
+    };
+
+    function toggleChildVisibility(parent, form) {
+        if (form) {
+            var visibility = form.fields.visibility_id.editor;
+            if (parent && parent.item) {
+                if (parent.item.visibility_id == <%= Visibility['Private'].id %> && !visibility.$el.data('select2')._readonly) {
+                    visibility.$el.select2('data', privateVisibilitySelect2Choice);
+                    visibility.$el.select2('readonly', true);
+                } else {
+                    visibility.$el.select2('readonly', false);
+                };
+            } else {
+                if (visibility.$el.data('select2')._readonly) {
+                    visibility.$el.select2('readonly', false);
+                    form.fields.visibility_id.$el.effect("highlight", 800);
+                }
+            };
+        };
+    };
+
     Format = Backbone.Model.extend({
         schema : {
             name     : { type : 'Text', title : '<%= t "format-name" %>' }
@@ -462,6 +486,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             };
                         } else if (startTime && endTime == null) {
                             // If the start time is present but the end time is empty, set the end time to the start time plus the duration
+                            // console.log('no end time');
                             var duration = fields.duration.editor.$el.val();
                             var end = startTime.clone().add(duration, "minutes");
                             fields.end_time.editor.picker.data("DateTimePicker").date(end);
@@ -737,7 +762,8 @@ ItemApp.ItemManagement = (function(Backbone){
                                         start_time : pitem.get('start_time'),
                                         end_time : pitem.get('end_time'),
                                         start_time_str : pitem.get("start_time_str"),
-                                        end_time_str : pitem.get("end_time_str")
+                                        end_time_str : pitem.get("end_time_str"),
+                                        item : pitem.attributes
                                     }
                                 );
                             }
@@ -763,6 +789,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                         end_time : item.end_time,
                                         start_time_str : item.start_time_str,
                                         end_time_str : item.end_time_str,
+                                        item : item
                                     } 
                                 );
                             });
@@ -780,6 +807,8 @@ ItemApp.ItemManagement = (function(Backbone){
                     form = this.form;
                     $form = this.form.$el;
 
+                    toggleChildVisibility(parent, form);
+
                     if (parent && parent.id != null) {
                         // If parent item selected, clear room info and set item times to parent times
                         // 
@@ -788,7 +817,6 @@ ItemApp.ItemManagement = (function(Backbone){
                         $room.val(null);
                         $form.find("[name='setup_type_id']").val(null);
                         $room.parents(".form-group").hide();
-
                         if (parent.start_time_str && parent.start_time_str.length > 0 && parent.end_time_str && parent.end_time_str.length > 0) {
                             $form.find("#item-times-row").show();
                             // If parent has valid date strings, set item times to parent time
@@ -803,8 +831,13 @@ ItemApp.ItemManagement = (function(Backbone){
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(null);
 
                             // Set min and max times for the datepickers to the parent's date range
+                            form.fields.start_time.editor.picker.data("DateTimePicker").maxDate(false);
+                            form.fields.start_time.editor.picker.data("DateTimePicker").minDate(false);
                             form.fields.start_time.editor.picker.data("DateTimePicker").maxDate(pEnd);
                             form.fields.start_time.editor.picker.data("DateTimePicker").minDate(pStart);
+
+                            form.fields.end_time.editor.picker.data("DateTimePicker").maxDate(false);
+                            form.fields.end_time.editor.picker.data("DateTimePicker").minDate(false);
                             form.fields.end_time.editor.picker.data("DateTimePicker").maxDate(pEnd);
                             form.fields.end_time.editor.picker.data("DateTimePicker").minDate(pStart);
 
@@ -830,6 +863,10 @@ ItemApp.ItemManagement = (function(Backbone){
                         form.fields.end_time.editor.picker.data("DateTimePicker").maxDate(moment("<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 1.seconds).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>"));
                         form.fields.end_time.editor.picker.data("DateTimePicker").minDate(moment("<%= Time.zone.parse((@start_date.start_date + 1.minutes).to_s).strftime('%m/%d/%Y') %>"));
                     };
+                }, 
+                afterInitFn : function() {
+                    var parent = this.$el.select2('data');
+                    toggleChildVisibility(parent, this.form);
                 }
             },
             item_notes : { 
@@ -942,11 +979,23 @@ ItemApp.ItemManagement = (function(Backbone){
                     },
                 },
             },
-            print : { 
-                type : 'Checkbox', 
-                title : '<%= t "item-print" %>',  
-                editorClass : 'item-form-element', 
-                editorAttrs : {tabindex : "-1"} 
+            visibility_id : { 
+                type : 'Select2', 
+                title : '<%= t "item-visibility" %>',
+                config : {
+                    data : [
+                        { 
+                            id : <%= Visibility['Public'].id %>, 
+                            text : '<%= t('item-visibility.public-with-explanation') %>' 
+                        },
+                        privateVisibilitySelect2Choice,
+                        { 
+                            id : <%= Visibility['None'].id %>, 
+                            text : '<%= t('item-visibility.none-with-explanation') %>' 
+                        },
+                    ],
+                    escapeMarkup: function(m) { return m; }
+                }
             },
             minimum_people : { 
                 type : 'DependentNumber', 
@@ -1009,6 +1058,8 @@ ItemApp.ItemManagement = (function(Backbone){
             "mobile_card_size" : 1,
             "is_break"  : false,
             "audience_size" : 0,
+            start_offset : 0,
+            visibility_id : <%= Visibility['Public'].id %>
         },
         urlRoot : "<%= baseUri + '/programme_items' %>",
         relations : [{

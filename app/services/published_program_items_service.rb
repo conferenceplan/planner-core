@@ -23,7 +23,11 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.findProgramItemsForPerson(person)
+  def self.findProgramItemsForPerson(person, only_public: true)
+    visibility_conditions = nil
+    if only_public
+      visibility_conditions = { published_programme_items: { visibility_id: Visibility['Public'].id } }
+    end
     PublishedProgrammeItemAssignment.uncached do
       PublishedProgrammeItemAssignment.
             where(
@@ -31,6 +35,7 @@ module PublishedProgramItemsService
                 person.id, 
                 [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]]            
             ).
+            where(visibility_conditions).
             includes(
               {:published_programme_item => 
                 [{:published_programme_item_assignments => 
@@ -50,12 +55,16 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getPublishedRooms(day = nil, name = nil, lastname = nil)    
-    
+  def self.getPublishedRooms(day = nil, name = nil, lastname = nil, only_public: true)    
+    visibility_conditions = nil
+    if only_public
+      visibility_conditions = { published_programme_items: { visibility_id: Visibility['Public'].id } }
+    end
     PublishedRoom.uncached do
       PublishedRoom.
             references([:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}]).
             where(getConditions(day, name, lastname)).
+            where(visibility_conditions).
             includes([:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}]).
             references([:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}]).
             distinct("published_rooms.name").
@@ -72,9 +81,12 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.getPublishedProgramItems(day = nil)
-
-    PublishedProgrammeItem.where("published_programme_items.parent_id is null").
+  def self.getPublishedProgramItems(day = nil, only_public: true)
+    visibility_conditions = nil
+    if only_public
+      visibility_conditions = { visibility_id: Visibility['Public'].id }
+    end
+    PublishedProgrammeItem.where(visibility_conditions).where(parent_id: nil).
                           references( [
                               :published_time_slot,
                               {
@@ -108,10 +120,11 @@ module PublishedProgramItemsService
                             order('published_time_slots.start ASC, published_venues.sort_order, published_rooms.sort_order')
   end
   
-  def self.getPublishedProgramItemsThatHavePeople(itemIds = nil, formatList = nil)
+  def self.getPublishedProgramItemsThatHavePeople(itemIds = nil, formatList = nil, only_public: true)
     cndStr = "published_programme_items.parent_id is null"
     cndStr += " AND published_programme_items.id in(?)" if itemIds
     cndStr += " AND published_programme_items.format_id in(?)" if formatList
+    cndStr += " AND published_programme_items.visibility_id = #{Visibility['Public'].id}" if only_public
     conditions = [cndStr]
     conditions << itemIds if itemIds
     conditions << formatList if formatList
@@ -159,15 +172,18 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.countParticipants
+  def self.countParticipants(only_public: true)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id]
     cndStr = ' (published_programme_item_assignments.role_id in (?))'
+    cndStr += " AND (published_programme_items.visibility_id = #{Visibility['Public'].id})" if only_public
 
     conditions = [cndStr]
     conditions << roles
     
     Person.where(conditions).
             joins([:publishedProgrammeItemAssignments]).
+            includes(:published_programme_items).
+            references(:published_programme_items).
             where(self.constraints()).uniq.count
     
   end
@@ -175,11 +191,12 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.findParticipants(peopleIds = nil)
+  def self.findParticipants(peopleIds = nil, only_public: true)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     cndStr  = '(published_time_slots.start is not NULL || published_time_slots_published_programme_items.start is not null)'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
     cndStr += ' AND (published_programme_item_assignments.role_id in (?))'
+    cndStr += " AND (published_programme_items.visibility_id = #{Visibility['Public'].id})" if only_public
 
     conditions = [cndStr]
     conditions << peopleIds if peopleIds
@@ -196,7 +213,7 @@ module PublishedProgramItemsService
                         { :parent => [:published_time_slot] },
                       ]
                   }
-              }).
+            }).
             references({
               :pseudonym => {}, 
               :publishedProgrammeItemAssignments => 
@@ -206,7 +223,7 @@ module PublishedProgramItemsService
                         { :parent => [:published_time_slot] },
                       ]
                   }
-              }).
+            }).
             where(self.constraints()).
             order("people.last_name, published_time_slots.start asc")
     

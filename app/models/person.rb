@@ -346,4 +346,25 @@ class Person < ActiveRecord::Base
     url
   end
 
+  def viewable_by_public?
+    viewable = has_public_assigned_items?
+    if !viewable && registrationDetail && registrationDetail.registered
+      viewable = registrationDetail.can_share
+    end
+
+    viewable
+  end
+
+  def has_public_assigned_items?
+    publishedProgrammeItemAssignments.with_public_items.any?
+  end
+
+  def self.with_public_assigned_items
+    joins(:published_programme_items).where(published_programme_items: {visibility_id: Visibility['Public']}).uniq
+  end
+
+  def is_assigned_to_items_with_person?(person)
+    published_programme_items.any? && person.published_programme_items.any? && (published_programme_items & person.published_programme_items).any?
+  end
+
 end

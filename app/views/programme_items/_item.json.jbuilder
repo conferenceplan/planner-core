@@ -10,7 +10,8 @@ json.short_precis           item.short_precis
 json.item_notes             item.item_notes
 json.participant_notes      item.participant_notes
 json.pub_reference_number   item.pub_reference_number
-json.print                  item.print
+json.visibility_id     item.visibility_id
+json.visibility_name   item.visibility_name
 json.duration               item.duration
 json.maximum_people         item.maximum_people
 json.minimum_people         item.minimum_people
@@ -18,7 +19,7 @@ json.setup_type_id          item.setup_type_id
 json.setup_name             item.setup_type ? item.setup_type.name : "" 
 json.format_id              item.format_id if item.format
 json.format_name            item.format ? item.format.name : ""
-json.start_offset           item.start_offset
+json.start_offset           item.start_offset || 0
 
 json.is_published           item.published ? true : false
 json.is_break               item.is_break
@@ -52,15 +53,7 @@ json.lock_version           item.lock_version
 json.parent_id              item.parent_id
 json.parent_val do
     if item.parent
-        json.id     item.parent.id
-        json.title   item.parent.title
-        json.start_time   item.parent.start_time
-        json.start_time_str   (item.parent.start_time.present? ? Time.zone.parse((item.parent.start_time).to_s).strftime('%m/%d/%Y %H:%M:%S') : "")
-        json.end_time   item.parent.end_time
-        json.end_time_str        (item.parent.end_time.present? ? Time.zone.parse((item.parent.end_time).to_s).strftime('%m/%d/%Y %H:%M:%S') : "")
-        json.date_time_str       ( item.parent.start_time.present? ? 
-        ' [' + l(item.parent.start_time, format: :start_time_with_date) + " - " + l(item.parent.end_time, format: :end_time) + ']' 
-        : "")
+        json.partial! 'base_item', item: item.parent, role: nil
     end
 end
 

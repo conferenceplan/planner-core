@@ -49,7 +49,7 @@ module PlannerReportsService
   #
   def self.findParticipantsWithNoBios
     # Person must be assigned to a programme item (and be visible to the members)
-    conditions = ["(programme_item_assignments.role_id in (?)) AND (programme_items.print = true) AND (edited_bios.id is null OR edited_bios.bio is null OR edited_bios.bio = '')",
+    conditions = ["(programme_item_assignments.role_id in (?)) AND (programme_items.visibility_id != #{Visibility['None'].id}) AND (edited_bios.id is null OR edited_bios.bio is null OR edited_bios.bio = '')",
                      [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] ]
 
     Person.where(conditions).
@@ -228,7 +228,7 @@ module PlannerReportsService
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
     cndStr = '(programme_item_assignments.role_id in (?))'
     cndStr += ' AND (time_slots.start is not NULL || time_slots_programme_items.start is not null)'
-    cndStr += ' AND (programme_items.print = true)'
+    cndStr += " AND (programme_items.visibility_id != #{Visibility['None'].id})"
 
     conditions = [cndStr, roles]
 
@@ -508,7 +508,7 @@ module PlannerReportsService
                       :format
                     ]
                   }
-                 ]).              where("programme_items.print = 1 and time_slots.start is not NULL").
+                 ]).              where("programme_items.visibility_id != #{Visibility['None'].id} and time_slots.start is not NULL").
               where(self.constraints()).
               order("time_slots.start, venues.sort_order, rooms.sort_order") #
   end

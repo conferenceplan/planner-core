@@ -101,6 +101,22 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 }
             }     
         },
+         {
+            label : this.options.visibility[1], //'Ref',
+            name: 'programme_item[visibility]',
+            hidden : !this.options.visibility[0],
+            sortable: false,
+            search: false,
+            editable: false,
+            width: 70,
+            formatter : function(cellvalue, options, rowObject) {
+                if (typeof rowObject['programme_item[visibility]'] != 'undefined') {
+                    if (rowObject['programme_item[visibility]']) {
+                        return rowObject['programme_item[visibility]'];
+                    }
+                }
+            }     
+        },
         {
             name: 'programme_item[lock_version]',
             width: 3,

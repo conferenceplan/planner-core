@@ -47,7 +47,7 @@ end
 
 json.parent item.parent_id
 if item.children
-    json.children item.children.each do |sub_item|
+    json.children item.children.only_public.each do |sub_item|
             json.partial! 'item', item: sub_item
     end
 end
