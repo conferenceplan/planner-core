@@ -182,7 +182,7 @@ module PlannerReportsService
   end
   
   #
-  #
+  # visibleOnly == only print items
   #  
   def self.findPanelistsWithPanels(peopleIds = nil, additional_roles = nil, scheduledOnly = false, visibleOnly = false, format_id = nil)
     roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id] # ,PersonItemRole['Invisible'].id
@@ -196,7 +196,8 @@ module PlannerReportsService
     conditions = assignments[:role_id].in(roles)
     conditions = conditions.and(assignments[:person_id].in(peopleIds)) if peopleIds
     conditions = conditions.and(time_slots[:start].not_eq(nil).or(parent_time_slots[:start].not_eq(nil))) if scheduledOnly
-    conditions = conditions.and(items[:print].eq(true)) if visibleOnly
+    conditions = conditions.and(items[:visibility_id].eq(Visibility['Public'].id)) if visibleOnly
+
     conditions = conditions.and(items[:format_id].eq(format_id)) if format_id
     
     Person.
