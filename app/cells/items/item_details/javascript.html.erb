@@ -774,11 +774,12 @@ ItemApp.ItemManagement = (function(Backbone){
                     },
                     escapeMarkup: function (m) { return m; },
                     ajax : {
-                        url : "<%= baseUri %>/programme_items/list/no_breaks", // get the list of programme items - using a search term ....
+                        url : "<%= baseUri %>/programme_items/list/no_breaks?limit=30", // get the list of programme items - using a search term ....
                         data : function(term, page) {
-                            return { 'search' : term };
+                            return { search : term, page : page };
                         },
                         results : function(_data, page, query) {
+                            var more = (page * 30) < _data.total;
                             res = [];
                             _.each(_data.rows, function(item) {
                                 res.push( 
@@ -794,7 +795,8 @@ ItemApp.ItemManagement = (function(Backbone){
                                 );
                             });
                             var data = {
-                                results: res
+                                results: res,
+                                more : more
                             };
                             return data;
                         }
