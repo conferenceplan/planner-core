@@ -13,7 +13,6 @@ json.visibility_id     item.visibility_id
 json.visibility_name   item.visibility_name
 json.pub_reference_number   item.pub_reference_number
 json.isPublished            item.published != nil
-json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%A, %B %e %Y, %l:%M %P') : ""
 json.time_slot              item.time_slot
 json.room                   item.room
 json.venue                  item.room.venue if item.room
@@ -24,6 +23,12 @@ json.other_participants     item.programme_item_assignments.collect{|a| (a.perso
 json.parent_id              item.parent_id
 json.is_break               item.is_break
 json.start_offset           item.start_offset || 0
+# json.start_time_str         item.time_slot ? item.time_slot.start.strftime('%A, %B %e %Y, %l:%M %P') : ""
+json.start_time             item.start_time
+json.start_time_str         (item.start_time.present? ? Time.zone.parse((item.start_time).to_s).strftime('%m/%d/%Y %H:%M:%S') : "")
+
+json.end_time               item.end_time
+json.end_time_str           (item.end_time.present? ? Time.zone.parse((item.end_time).to_s).strftime('%m/%d/%Y %H:%M:%S') : "")
 
 if item.start_time.present?
     multi_day = item.start_time.day != item.end_time.day
