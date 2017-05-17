@@ -819,14 +819,21 @@ ItemApp.ItemManagement = (function(Backbone){
                         $room.val(null);
                         $form.find("[name='setup_type_id']").val(null);
                         $room.parents(".form-group").hide();
+
+                        var currentDuration = form.fields.duration.editor.$el.val();
+                        var currentOffset = form.fields.start_offset.editor.$el.val();
+
+                        if (parent.item) parent = parent.item;
+
                         if (parent.start_time_str && parent.start_time_str.length > 0 && parent.end_time_str && parent.end_time_str.length > 0) {
                             $form.find("#item-times-row").show();
                             // If parent has valid date strings, set item times to parent time
                             var pStart = moment(parent.start_time_str);
                             var pEnd = moment(parent.end_time_str);
+                            var pDuration = parent.duration;
 
                             var pDiff = moment.duration(pEnd.diff(pStart)).asMinutes(); // parent duration
-                            form.fields.duration.editor.$el.val(pDiff); // set duration first to avoid change conflicts
+                            if (currentDuration > pDuration) form.fields.duration.editor.$el.val(pDiff); // set duration first to avoid change conflicts
 
                             // Clear old datetimes
                             form.fields.start_time.editor.picker.data("DateTimePicker").date(null);
@@ -844,13 +851,16 @@ ItemApp.ItemManagement = (function(Backbone){
                             form.fields.end_time.editor.picker.data("DateTimePicker").minDate(pStart);
 
                             // Set start and end time to parent times
-                            form.fields.start_time.editor.picker.data("DateTimePicker").date(pStart);
-                            form.fields.end_time.editor.picker.data("DateTimePicker").date(pEnd);
+                            var newStart = pStart.clone();
+                            if (currentOffset && currentOffset > 0) newStart = newStart.add(currentOffset, 'minutes');
+
+                            form.fields.start_time.editor.picker.data("DateTimePicker").date(newStart);
+                            if (currentDuration > pDuration) form.fields.end_time.editor.picker.data("DateTimePicker").date(pEnd);
                         } else {
                             form.fields.start_time.editor.picker.data("DateTimePicker").date(null);
                             form.fields.end_time.editor.picker.data("DateTimePicker").date(null);
 
-                            form.fields.duration.editor.$el.val(60);
+                            // form.fields.duration.editor.$el.val(60);
                             $form.find("#item-times-row").hide();
                         };
                     } else {
@@ -869,7 +879,18 @@ ItemApp.ItemManagement = (function(Backbone){
                 afterInitFn : function() {
                     var parent = this.$el.select2('data');
                     toggleChildVisibility(parent, this.form);
-                    this.$el.trigger('change');
+                    if (parent && parent.id != null) {
+                        // If parent item selected, clear room info and set item times to parent times
+                        // 
+                        // Clear room and setup fields
+                        // 
+                        $form = this.form.$el;
+                        $room = $form.find("[name='room_id']");
+                        $room.val(null);
+                        $form.find("[name='setup_type_id']").val(null);
+                        $room.parents(".form-group").hide();
+                    };
+
                 }
             },
             item_notes : { 
