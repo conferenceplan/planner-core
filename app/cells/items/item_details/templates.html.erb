@@ -331,14 +331,16 @@
                     <div class="col-xs-6"><%= t "item-visibility" %></div>
                     <div class="col-xs-6">
                         {{ if (visibility_id) { }}
-                            <span class="label 
+                            {{ var visBadgeStr = '<span class="label'; }} 
                             {{ if (visibility_id == <%= Visibility['Public'].id %>) { }}
-                              label-success"><%= t('item-visibility.public') %>
+                              {{ visBadgeStr += ' label-success"><%= t('item-visibility.public') %>'; }}
                             {{ } else if (visibility_id == <%= Visibility['Private'].id %>) { }}
-                              label-primary"><%= t('item-visibility.private') %>
+                              {{ visBadgeStr += ' label-primary"><%= t('item-visibility.private') %>'; }}
                             {{ } else if (visibility_id == <%= Visibility['None'].id %>) { }}
-                              label-default"><%= t('item-visibility.none') %>
-                            {{ }; }}</span>
+                              {{ visBadgeStr += ' label-default"><%= t('item-visibility.none') %>'; }}
+                            {{ }; }}
+                            {{ visBadgeStr += '</span>'; }}
+                            {{= visBadgeStr }}
                         {{ }; }}
                     </div>
                 </div>
