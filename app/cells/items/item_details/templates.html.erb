@@ -331,16 +331,21 @@
                     <div class="col-xs-6"><%= t "item-visibility" %></div>
                     <div class="col-xs-6">
                         {{ if (visibility_id) { }}
-                            {{ var visBadgeStr = '<span class="label'; }} 
-                            {{ if (visibility_id == <%= Visibility['Public'].id %>) { }}
-                              {{ visBadgeStr += ' label-success"><%= t('item-visibility.public') %>'; }}
-                            {{ } else if (visibility_id == <%= Visibility['Private'].id %>) { }}
-                              {{ visBadgeStr += ' label-primary"><%= t('item-visibility.private') %>'; }}
-                            {{ } else if (visibility_id == <%= Visibility['None'].id %>) { }}
-                              {{ visBadgeStr += ' label-default"><%= t('item-visibility.none') %>'; }}
-                            {{ }; }}
-                            {{ visBadgeStr += '</span>'; }}
-                            {{= visBadgeStr }}
+                          {{ var visBadgeClass = 'label'; }}
+                          {{ var visBadgeLabel = ''; }}
+
+                          {{ if (visibility_id == <%= Visibility['Public'].id %>) { }}
+                            {{ visBadgeClass += " label-success"; }}
+                            {{ visBadgeLabel = "<%= t('item-visibility.public') %>";}}
+                          {{ } else if (visibility_id == <%= Visibility['Private'].id %>) { }}
+                            {{ visBadgeClass += " label-primary"; }}
+                            {{ visBadgeLabel = "<%= t('item-visibility.private') %>";}}
+                          {{ } else if (visibility_id == <%= Visibility['None'].id %>) { }}
+                            {{ visBadgeClass += " label-default"; }}
+                            {{ visBadgeLabel = "<%= t('item-visibility.none') %>";}}
+                          {{ }; }}
+                          
+                          <span class='{{= visBadgeClass }}'>{{= visBadgeLabel}}</span>
                         {{ }; }}
                     </div>
                 </div>
