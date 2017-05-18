@@ -23,6 +23,8 @@ class ProgrammeItemAssignment < ActiveRecord::Base
       if role_desc
         self.description = role_desc._value
       end
+    else
+      self.description = nil if self.description != nil
     end
   end
 
