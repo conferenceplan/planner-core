@@ -5,25 +5,23 @@ module Planner
   module Sociable
     extend ActiveSupport::Concern
     
-    def self.setup
-      ## Base URLs for each social media provider
-      @@social_base_urls = {
-        :facebook => "http://www.facebook.com/",
-        :twitter => "http://www.twitter.com/",
-        :linkedin => "http://www.linkedin.com/in/",
-        :youtube => "http://www.youtube.com/user/", 
-        :twitch => "http://www.twitch.tv/", 
-        :instagram => "http://www.instagram.com/", 
-        :flickr => "http://www.flickr.com/photos/", 
-        :reddit => "http://www.reddit.com/user/"
-      }
-    end
-
     module ClassMethods
       def has_social_media *args
         # Available options include:
         # :facebook, :twitter/:twitterinfo, :linkedin, :youtube, :twitch, 
         # :instagram, :flickr, :reddit, :othersocialmedia, :website, :url
+        # base.instance_variable_set :@social_base_urls, {
+
+        @@social_base_urls = {
+          :facebook => "http://www.facebook.com/",
+          :twitter => "http://www.twitter.com/",
+          :linkedin => "http://www.linkedin.com/in/",
+          :youtube => "http://www.youtube.com/user/", 
+          :twitch => "http://www.twitch.tv/", 
+          :instagram => "http://www.instagram.com/", 
+          :flickr => "http://www.flickr.com/photos/", 
+          :reddit => "http://www.reddit.com/user/"
+        }
 
         ## Set accessible attributes
         attr_accessible *args
