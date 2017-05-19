@@ -390,9 +390,9 @@ ItemApp.PeopleManagement = (function(Backbone){
                     var person_id = $(ui.draggable).find(".assignment-details").attr('id'); // get the id of the person from the dragged object
                     var source = $(ui.draggable).find(".assignment-details").attr('src'); // get the source area
 
-                    if (this.id.indexOf(source.toLowerCase()) == -1) {
+                    if ((this.id.indexOf(source.toLowerCase()) == -1) || (this.id.indexOf(source.toLowerCase()) > 1)) {
                         dropped = true;
-    
+
                         var src = get_collection(source);
                         if (src) {
                             var assignment = src.find(function(item){
