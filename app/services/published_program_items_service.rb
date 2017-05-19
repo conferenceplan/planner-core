@@ -191,8 +191,8 @@ module PublishedProgramItemsService
   #
   #
   #
-  def self.findParticipants(peopleIds = nil, only_public: true)
-    roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id] # ,PersonItemRole['Invisible'].id
+  def self.findParticipants(peopleIds = nil, only_public: true, roles: [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id] )
+    # roles =  [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id] # ,PersonItemRole['Invisible'].id
     cndStr  = '(published_time_slots.start is not NULL || published_time_slots_published_programme_items.start is not null)'
     cndStr += ' AND (published_programme_item_assignments.person_id in (?))' if peopleIds
     cndStr += ' AND (published_programme_item_assignments.role_id in (?))'

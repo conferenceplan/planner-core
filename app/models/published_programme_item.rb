@@ -23,6 +23,9 @@ class PublishedProgrammeItem < ActiveRecord::Base
     def role(r) # get the people with the given role
       where(['role_id = ?', r.id]).order('published_programme_item_assignments.sort_order asc')
     end
+    def roles(r) # get the people with the given role
+      where(['role_id in (?)', r]).order('published_programme_item_assignments.sort_order asc')
+    end
   end
   has_many  :people, :through => :published_programme_item_assignments
 
@@ -62,9 +65,10 @@ class PublishedProgrammeItem < ActiveRecord::Base
     where(visibility_id: Visibility['Private'].id)
   end
 
-  def sorted_published_item_assignments
+  def sorted_published_item_assignments(roles: [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole["OtherParticipant"]])
     assignments = []
-    [PersonItemRole["Moderator"],PersonItemRole["Participant"],PersonItemRole["OtherParticipant"]].each do |role|
+    # [PersonItemRole["Moderator"],PersonItemRole["Participant"],PersonItemRole["OtherParticipant"]].each do |role|
+    roles.each do |role|
       assignments.concat published_programme_item_assignments.role(role).rank(:sort_order)
     end
     assignments
