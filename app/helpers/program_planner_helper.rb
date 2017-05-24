@@ -26,6 +26,26 @@ module ProgramPlannerHelper
         assignment = RoomItemAssignment.new(:room => room, :time_slot => newTimeSlot, :day => day, :programme_item => item)
       end
       
+      # check the children
+      item.children.each do |child|
+        child_off_and_duration = child.duration + child.start_offset
+        if child_off_and_duration > item.duration
+          # Then there is a problem
+          # Try to keep the duration
+          # first change the offset
+          potential_offset = child.start_offset - 
+                                (child_off_and_duration - item.duration)
+          if potential_offset >= 0
+            child.start_offset = potential_offset
+          else
+            child.start_offset = 0
+            child.duration = item.duration if child.duration > item.duration
+          end
+          
+          child.save
+        end
+      end
+      
       assignment.save
     end
     
