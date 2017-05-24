@@ -67,8 +67,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   def sorted_published_item_assignments(roles: [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole["OtherParticipant"]])
     assignments = []
-    # [PersonItemRole["Moderator"],PersonItemRole["Participant"],PersonItemRole["OtherParticipant"]].each do |role|
-    roles.each do |role|
+    [PersonItemRole["Moderator"],PersonItemRole["Participant"],PersonItemRole["OtherParticipant"]].each do |role|
       assignments.concat published_programme_item_assignments.role(role).rank(:sort_order)
     end
     assignments

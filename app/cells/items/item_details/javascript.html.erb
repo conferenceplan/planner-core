@@ -527,7 +527,7 @@ ItemApp.ItemManagement = (function(Backbone){
                             startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
 
                             if (startTime && endTime) {
-                                diff = moment.duration(endTime.diff(startTime)).asMinutes();
+                                var diff = moment.duration(endTime.diff(startTime)).asMinutes();
 
                                 if (diff <= 0) {
                                     return err;
@@ -552,11 +552,11 @@ ItemApp.ItemManagement = (function(Backbone){
                             && parent && parent.id != null 
                             && parent.end_time_str && parent.end_time_str.length > 0
                         ){
-                            endTime = this.picker.data("DateTimePicker").date();
-                            pEnd = moment(parent.end_time_str, "MM/DD/YYYY, HH:mm:SS");
+                            var endTime = this.picker.data("DateTimePicker").date();
+                            var pEnd = moment(parent.end_time_str, "MM/DD/YYYY, HH:mm:SS");
 
                             if (endTime && pEnd) {
-                                diff = moment.duration(endTime.diff(pEnd)).asMinutes();
+                                var diff = moment.duration(endTime.diff(pEnd)).asMinutes();
                                 // console.log(diff);
 
                                 if (diff > 0) {
@@ -576,20 +576,20 @@ ItemApp.ItemManagement = (function(Backbone){
                     // console.log("end time changed");
                     // console.log(this);
                     // console.log(e);
-                    fields = this.form.fields;
+                    var fields = this.form.fields;
                     var self = this;
                     
                     if (this.picker && fields.start_time.editor.picker) {
                         // If both start and end time fields are instantiated
-                        endTime = this.picker.data("DateTimePicker").date();
-                        startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
+                        var endTime = this.picker.data("DateTimePicker").date();
+                        var startTime = fields.start_time.editor.picker.data("DateTimePicker").date();
                         // console.log(endTime);
-                        parent = fields.parent_id.editor.$el.select2("data");
+                        var parent = fields.parent_id.editor.$el.select2("data");
 
                         if (startTime && endTime) {
                             // If both start and end times are set
-                            duration = fields.duration.editor.$el.val(); // Present duration
-                            diff = moment.duration(endTime.diff(startTime)).asMinutes(); // Calculated new duration
+                            var duration = fields.duration.editor.$el.val(); // Present duration
+                            var diff = moment.duration(endTime.diff(startTime)).asMinutes(); // Calculated new duration
                             withinParent = true; // Default value. 
 
                             if (parent && parent.id != null && parent.end_time_str && parent.end_time_str.length > 0){
@@ -625,6 +625,7 @@ ItemApp.ItemManagement = (function(Backbone){
                                 };
                             } else {
                                 // If new end date is after parent end date, set the end date to the parent end date and shake the fields to indicate that the change failed
+                                // TODO - this causes a REGEX issue when the date is edited....
                                 this.picker.data("DateTimePicker").date(pEnd);
 
                                 this.picker.effect("shake", { 
