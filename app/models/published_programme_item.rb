@@ -4,7 +4,9 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :format_id, :is_break, :start_offset
+                  :format_id, :is_break, :start_offset, :visibility_id
+
+  has_enumerated :visibility
 
   audited :allow_mass_assignment => true
 
@@ -20,6 +22,9 @@ class PublishedProgrammeItem < ActiveRecord::Base
   has_many  :published_programme_item_assignments, :dependent => :destroy do #, :class_name => 'Published::ProgrammeItemAssignment'
     def role(r) # get the people with the given role
       where(['role_id = ?', r.id]).order('published_programme_item_assignments.sort_order asc')
+    end
+    def roles(r) # get the people with the given role
+      where(['role_id in (?)', r]).order('published_programme_item_assignments.sort_order asc')
     end
   end
   has_many  :people, :through => :published_programme_item_assignments
@@ -52,9 +57,17 @@ class PublishedProgrammeItem < ActiveRecord::Base
   alias_attribute :description, :precis
   alias_attribute :requires_signup, :item_registerable
 
-  def sorted_published_item_assignments
+  def self.only_public
+    where(visibility_id: Visibility['Public'].id)
+  end
+
+  def self.only_private
+    where(visibility_id: Visibility['Private'].id)
+  end
+
+  def sorted_published_item_assignments(roles: [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole["OtherParticipant"]])
     assignments = []
-    [PersonItemRole["Moderator"],PersonItemRole["Participant"]].each do |role|
+    [PersonItemRole["Moderator"],PersonItemRole["Participant"],PersonItemRole["OtherParticipant"]].each do |role|
       assignments.concat published_programme_item_assignments.role(role).rank(:sort_order)
     end
     assignments
@@ -79,7 +92,8 @@ class PublishedProgrammeItem < ActiveRecord::Base
   def end_time
     if self.parent
       _end_time = self.parent.published_time_slot.end
-      _end_time = self.parent.published_time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset && self.duration
+      offset = self.start_offset || 0
+      _end_time = self.parent.published_time_slot.start + offset.minutes + self.duration.minutes if offset && self.duration
     else
       _end_time = self.published_time_slot.end
     end
@@ -90,4 +104,44 @@ class PublishedProgrammeItem < ActiveRecord::Base
     published_room.id if published_room
   end
 
+
+  def visibility_name
+    visibility.name if visibility
+  end
+
+  def public?
+    visibility == Visibility['Public']
+  end
+
+  def private?
+    visibility == Visibility['Private']
+  end
+
+  def visible?(person: nil)
+    if defined?(super)
+      visible = super(person: person)
+    else
+      visible = false
+    end
+
+    visible = visible || public? || (
+      private? && person.present? && (
+        person.published_programme_items.include?(self) || 
+        (self.children & person.published_programme_items).any?
+      )
+    )
+
+    visible
+  end
+
+  def self.only_visible(person: nil)
+    conditions = { visibility_id: Visibility['Public'].id }
+    if person && person.published_programme_items.any?
+      ids = person.published_programme_items.pluck(:id).uniq.compact.join(', ')
+      conditions = "published_programme_items.visibility_id = '#{Visibility['Public'].id}' \
+      OR published_programme_items.id in (#{ids})" if ids.present?
+    end
+    where(conditions)
+  end
+  
 end

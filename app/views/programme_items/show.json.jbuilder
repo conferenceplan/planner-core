@@ -2,7 +2,8 @@
 if @programmeItem
 
     json.partial! 'item', item: @programmeItem, 
-                        participants: @participantAssociations, 
+                        participants: @participantAssociations,
+                        other_participants: @otherParticipantAssociations,
                         moderators: @moderatorAssociations, 
                         reserves: @reserveAssociations, 
                         invisibles: @invisibleAssociations,

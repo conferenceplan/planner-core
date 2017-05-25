@@ -40,11 +40,21 @@ module Planner
     
     def self.setup
       @@config.linkable_types.each do |linkable_type|
-        linkable_type.linked
+        if linkable_type.is_a? String
+          clazz = Object.const_get linkable_type
+          clazz.linked
+        else
+          linkable_type.linked
+        end
       end
       @@config.linkedto_types.each do |linkedto_type|
-        linkedto_type.linkable
-        linkedto_type.send(:define_method, 'before_links_destroy') do
+        if linkedto_type.is_a? String
+          clazz = Object.const_get linkedto_type
+        else
+          clazz = linkedto_type
+        end
+        clazz.linkable
+        clazz.send(:define_method, 'before_links_destroy') do
           if defined? self._before_links_destroy
             _before_links_destroy
           end
@@ -70,7 +80,13 @@ module Planner
         has_many  :linked, :as => :linkedto, :dependent => :destroy, :class_name => 'Link'
 
         Planner::Linkable.config.linkedto_types.each do |linkedto_type|
-          has_many linkedto_type.name.demodulize.pluralize.underscore.to_sym, :through => :linked, :class_name => linkedto_type.name  do
+          if linkedto_type.is_a? String
+            clazz = Object.const_get linkedto_type
+          else
+            clazz = linkedto_type
+          end
+
+          has_many clazz.name.demodulize.pluralize.underscore.to_sym, :through => :linked, :class_name => clazz.name  do
                       def category(c)
                         includes([:category_names]).references([:category_names]).where(['category_names.name = ?', c]).joins([:category_names])
                       end
@@ -90,9 +106,15 @@ module Planner
         has_many  :links, :dependent => :destroy
 
         Planner::Linkable.config.linkable_types.each do |linkable_type|
-          has_many  linkable_type.name.demodulize.pluralize.underscore.to_sym, :through => :links,
+          if linkable_type.is_a? String
+            clazz = Object.const_get linkable_type
+          else
+            clazz = linkable_type
+          end
+
+          has_many  clazz.name.demodulize.pluralize.underscore.to_sym, :through => :links,
                     :source => :linkedto,
-                    :source_type => linkable_type.name
+                    :source_type => clazz.name
         end
       end
 

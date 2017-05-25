@@ -78,7 +78,9 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   def bioList
     width = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
     height = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
-    return :height => height, :width => width, :crop => :fill, :gravity => :face, :radius => :max, :fetch_format => :jpg
+    return :height => height, :width => width, :crop => :fill, 
+      :gravity => :face, :radius => :max, :fetch_format => :jpg,
+      :version => 33
   end
   
   def bioDetail
