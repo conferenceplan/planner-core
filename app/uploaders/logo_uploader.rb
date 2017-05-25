@@ -4,6 +4,10 @@ class LogoUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave   # Use cloudinary as the image store
   include UploaderHelper
 
+  def stored_version
+    self.model.lock_version
+  end
+
   #
   # Use a combination of the person's name for the id of the image
   #

@@ -3,6 +3,10 @@
 class GalleryImageUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave   # Use cloudinary as the image store
   include UploaderHelper
+
+  def stored_version
+    self.model.lock_version
+  end
   
   # We want a name for the gallery at cloudinary
   # and we will also use the convention name
