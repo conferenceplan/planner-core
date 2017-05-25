@@ -8,7 +8,7 @@ class BioImagesController < PlannerController
       @bio_image = BioImage.find(params[:id])
     end
     
-    # render json: bio_image.to_json, :content_type => 'application/json'
+    render json: bio_image.to_json, :content_type => 'application/json'
   rescue => ex
     render status: :bad_request, text: ex.message
   end
@@ -22,7 +22,7 @@ class BioImagesController < PlannerController
       @bio_image = BioImage.find(params[:id])
     end
 
-    # render json: bio_image.to_json, :content_type => 'application/json'
+    render json: bio_image.to_json, :content_type => 'application/json'
   rescue => ex
     render status: :bad_request, text: ex.message
   end
@@ -35,7 +35,7 @@ class BioImagesController < PlannerController
     end # TODO - if no person should we return an error?
     
     @bio_image.reload        
-    # render json: bio_image.to_json, :content_type => 'application/json'
+    render json: bio_image.to_json, :content_type => 'application/json'
   rescue => ex
     render status: :bad_request, text: ex.message
   end
@@ -47,7 +47,7 @@ class BioImagesController < PlannerController
     @bio_image.save!
 
     @bio_image.reload        
-    # render json: bio_image.to_json, :content_type => 'application/json'
+    render json: bio_image.to_json, :content_type => 'application/json'
   rescue => ex
     render status: :bad_request, text: ex.message
   end
