@@ -682,7 +682,7 @@ class PlannerReportsController < PlannerController
     @page_size = params[:page_size]
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
     @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false
-    @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+    @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['OtherParticipant']]
     @conf_start_time = SiteConfig.first.start_date
     
     # if the report is a pdf then order by format then name
@@ -789,7 +789,7 @@ class PlannerReportsController < PlannerController
     Person.uncached do
       # Only use the scheduled items
       @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, !show_invisible_items
-      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['OtherParticipant']]
       @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
       @single_venue = Venue.count == 1
       
@@ -821,7 +821,7 @@ class PlannerReportsController < PlannerController
     Person.uncached do
       # Only use the scheduled items
       @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, for_print
-      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['OtherParticipant']]
       @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
       
       respond_to do |format|

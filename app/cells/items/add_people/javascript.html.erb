@@ -188,12 +188,16 @@ ItemApp.PeopleManagement = (function(Backbone){
     var needsSaved = false;
     var moderators = null;
     var participants = null;
+    var other_participants = null;
     var reserved = null;
     var invisible = null;
     
     function get_collection(src) {
         var coll = null;
         switch(src) {
+            case "OtherParticipant":
+                coll = other_participants;
+                break;
             case "Participant":
                 coll = participants;
                 break;
@@ -265,6 +269,16 @@ ItemApp.PeopleManagement = (function(Backbone){
             }
         });
 
+        showSpinner('#other-participants-view');
+        other_participants = new ItemAssignments();
+        other_participants.url = "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['OtherParticipant'].id %>;
+        other_participants.fetch({
+            url: "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['OtherParticipant'].id %>,
+            success : function(coll) {
+                ItemApp.getRegion("other_participants").show(new ParticipantsView({collection : coll}));
+            }
+        });
+
         showSpinner('#reserveds-view');
         reserved = new ItemAssignments();
         reserved.url = "<%= baseUri + '/programme_item_assignments/' %>" + id + '/' + <%= PersonItemRole['Reserved'].id %>;
@@ -322,9 +336,13 @@ ItemApp.PeopleManagement = (function(Backbone){
                                 function() {
                                     clear_and_refresh(invisible,
                                         function() {
-                                            if (callback) {
-                                                callback();
-                                            }
+                                            clear_and_refresh(other_participants, 
+                                                function() {
+                                                    if (callback) {
+                                                        callback();
+                                                    }
+                                                }
+                                            )
                                         }
                                     )
                                 }
@@ -362,6 +380,7 @@ ItemApp.PeopleManagement = (function(Backbone){
                 item            : "#program-item-view",
                 moderators      : "#moderators-view",
                 participants    : "#participants-view",
+                other_participants    : "#other-participants-view",
                 reserveds       : "#reserveds-view",
                 invisibles      : "#invisibles-view",
             });
@@ -371,9 +390,9 @@ ItemApp.PeopleManagement = (function(Backbone){
                     var person_id = $(ui.draggable).find(".assignment-details").attr('id'); // get the id of the person from the dragged object
                     var source = $(ui.draggable).find(".assignment-details").attr('src'); // get the source area
 
-                    if (this.id.indexOf(source.toLowerCase()) == -1) {
+                    if ((this.id.indexOf(source.toLowerCase()) == -1) || (this.id.indexOf(source.toLowerCase()) > 1)) {
                         dropped = true;
-    
+
                         var src = get_collection(source);
                         if (src) {
                             var assignment = src.find(function(item){
@@ -383,6 +402,11 @@ ItemApp.PeopleManagement = (function(Backbone){
                             // force a refresh of the views
                             var dest = null;
                             switch(this.id) {
+                                case "other-participant-area":
+                                    dest = other_participants;
+                                    dest_role = "OtherParticipant";
+                                    dest_role_id = <%= PersonItemRole['OtherParticipant'].id %>;
+                                    break;
                                 case "participant-area":
                                     dest = participants;
                                     dest_role = "Participant";
@@ -421,6 +445,7 @@ ItemApp.PeopleManagement = (function(Backbone){
                 var all_people = [];
                 all_people = all_people.concat(moderators.models);
                 all_people = all_people.concat(participants.models);
+                all_people = all_people.concat(other_participants.models);
                 all_people = all_people.concat(reserved.models);
                 all_people = all_people.concat(invisible.models);
                 

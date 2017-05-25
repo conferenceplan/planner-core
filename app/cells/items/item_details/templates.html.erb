@@ -111,16 +111,26 @@
                     </div>
                 </div>
             </div>
+            <div class="row" id="item-visibility-row">
+                <label class="col-sm-3 control-label">
+                    <%= t "item-visibility" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= strip_tags t("item-visibility") %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= strip_tags t("item-visibility-hint") %>'></i>
+                </label>
+                <div class="col-sm-9">
+                    <div id="item-visibility-div">
+                        <div data-editors="visibility_id" tabindex="-1"></div>
+                    </div>
+                </div>
+            </div>
             <div class="row" id="formats-row" style="margin-top: 10px;">
                 <div class="form-group " style="margin-bottom: 3px;">                
                     <label class="col-sm-3 control-label"><%= t "item-format" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-format" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-format-help" %>'></i></label>
                     <div class="col-sm-4">
-                        <span data-editor>
+                        <div data-editor>
                             <div data-editors="format_id"></div>
                             <div class="has-error">
                                 <p class="help-block" data-error></p>
                             </div>
-                        </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,10 +139,10 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "themes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "themes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "themes-help" %>'></i>
                     </label>
-                    <span data-editor>
+                    <div data-editor>
                         <div class="col-sm-9" data-editors="theme_name_ids"></div>
                         <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    </div>
                 </div>
             </div>
             <div class="row" id="parent-item-row">
@@ -140,10 +150,10 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "parent-item" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "parent-item" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "parent-title-help" %>'></i>
                     </label>
-                    <span data-editor>
+                    <div data-editor>
                         <div class="col-sm-9" data-editors="parent_id"></div>
                         <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    </div>
                 </div>
             </div>
             <div class="row item-section-title voffset10">
@@ -255,13 +265,6 @@
             <div id="item-options-divider" class="row item-section-title" style="margin-bottom: 20px;">
                 <h3><%= t 'options' %></h3>
             </div>
-            <div class="row" id="print-item-row">
-                <div class="col-sm-9 col-sm-offset-3">
-                    <div id="print-item-div">
-                        <div data-editors="print" class="inline-checkbox-div" tabindex="-1"></div> <%= t "item-print" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-print" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-print-hint" %>'></i>
-                    </div>
-                </div>
-            </div>
             <div class="row voffset10" id="card-size-row">
                 <label class="col-sm-3 control-label"><%= t "mobile-card-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "mobile-card-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "mobile-card-size-help" %>'></i></label>
                 <div class="col-sm-4">
@@ -325,14 +328,32 @@
         <div class="row" id="item-detail-list">
             <div class="col-xs-12 item-summary-attribute">
                 <div class="row">
-                    <div class="col-xs-6"><%= t "item-is-break" %></div>
-                    <div class="col-xs-6">{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                    <div class="col-xs-6"><%= t "item-visibility" %></div>
+                    <div class="col-xs-6">
+                        {{ if (visibility_id) { }}
+                          {{ var visBadgeClass = 'label'; }}
+                          {{ var visBadgeLabel = ''; }}
+
+                          {{ if (visibility_id == <%= Visibility['Public'].id %>) { }}
+                            {{ visBadgeClass += " label-success"; }}
+                            {{ visBadgeLabel = "<%= t('item-visibility.public') %>";}}
+                          {{ } else if (visibility_id == <%= Visibility['Private'].id %>) { }}
+                            {{ visBadgeClass += " label-primary"; }}
+                            {{ visBadgeLabel = "<%= t('item-visibility.private') %>";}}
+                          {{ } else if (visibility_id == <%= Visibility['None'].id %>) { }}
+                            {{ visBadgeClass += " label-default"; }}
+                            {{ visBadgeLabel = "<%= t('item-visibility.none') %>";}}
+                          {{ }; }}
+                          
+                          <span class='{{= visBadgeClass }}'>{{= visBadgeLabel}}</span>
+                        {{ }; }}
+                    </div>
                 </div>
             </div>
             <div class="col-xs-12 item-summary-attribute">
                 <div class="row">
-                    <div class="col-xs-6"><%= t "for-print" %></div>
-                    <div class="col-xs-6">{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                    <div class="col-xs-6"><%= t "item-is-break" %></div>
+                    <div class="col-xs-6">{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
                 </div>
             </div>
             <div class="col-xs-12 item-summary-attribute">

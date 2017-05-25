@@ -46,6 +46,7 @@ class Items::ItemListCell < Cell::Rails
     @extra_modal_action = args.has_key?(:extra_modal_action) ? args[:extra_modal_action] : "function() {}"
     
     @showNbrParticipants = args.has_key?(:showNbrParticipants) ? args[:showNbrParticipants] : false
+    @showVisibility = args.has_key?(:showVisibility) ? args[:showVisibility] : false
     
     render
   end

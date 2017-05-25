@@ -4,12 +4,24 @@ require 'active_support/concern'
 module Planner
   module Sociable
     extend ActiveSupport::Concern
-
+    
     module ClassMethods
       def has_social_media *args
         # Available options include:
         # :facebook, :twitter/:twitterinfo, :linkedin, :youtube, :twitch, 
         # :instagram, :flickr, :reddit, :othersocialmedia, :website, :url
+        # base.instance_variable_set :@social_base_urls, {
+
+        @@social_base_urls = {
+          :facebook => "http://www.facebook.com/",
+          :twitter => "http://www.twitter.com/",
+          :linkedin => "http://www.linkedin.com/in/",
+          :youtube => "http://www.youtube.com/user/", 
+          :twitch => "http://www.twitch.tv/", 
+          :instagram => "http://www.instagram.com/", 
+          :flickr => "http://www.flickr.com/photos/", 
+          :reddit => "http://www.reddit.com/user/"
+        }
 
         ## Set accessible attributes
         attr_accessible *args
@@ -92,18 +104,6 @@ module Planner
           end
         end
 
-        ## Base URLs for each social media provider
-        social_base_urls = {
-          :facebook => "http://www.facebook.com/",
-          :twitter => "http://www.twitter.com/",
-          :linkedin => "http://www.linkedin.com/in/",
-          :youtube => "http://www.youtube.com/user/", 
-          :twitch => "http://www.twitch.tv/", 
-          :instagram => "http://www.instagram.com/", 
-          :flickr => "http://www.flickr.com/photos/", 
-          :reddit => "http://www.reddit.com/user/"
-        }
-
         ## For each social media provider set for the model, define url generator methods
         args.each do |arg|
           if arg == :url || arg == :website
@@ -136,7 +136,7 @@ module Planner
                     url = social
                   else
                     ## If social attribute is not a url, build the url using one of the base urls defined in "social_base_urls" variable
-                    base = social_base_urls[social_arg]
+                    base = @@social_base_urls[social_arg]
                     if base.present?
                       social_id = self.send(social_arg.to_s + "id")
                       url = base + social_id

@@ -101,6 +101,22 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                 }
             }     
         },
+         {
+            label : this.options.visibility[1], //'Ref',
+            name: 'programme_item[visibility]',
+            hidden : !this.options.visibility[0],
+            sortable: false,
+            search: false,
+            editable: false,
+            width: 70,
+            formatter : function(cellvalue, options, rowObject) {
+                if (typeof rowObject['programme_item[visibility]'] != 'undefined') {
+                    if (rowObject['programme_item[visibility]']) {
+                        return rowObject['programme_item[visibility]'];
+                    }
+                }
+            }     
+        },
         {
             name: 'programme_item[lock_version]',
             width: 3,
@@ -187,6 +203,24 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                                         width: 145
                                     },
                                     {
+                                        label: tbl.itemTable('option', 'day')[1], //'Day',
+                                        name: 'start_day',
+                                        hidden : !tbl.itemTable('option', 'day')[0],
+                                        index: 'time_slots.start',
+                                        sortable: true,
+                                        search: false,
+                                        width: 130,
+                                        editable: false
+                                    }, {
+                                        label : tbl.itemTable('option', 'time')[1], //'Time',
+                                        name: 'start_time',
+                                        hidden : !tbl.itemTable('option', 'time')[0],
+                                        sortable: false,
+                                        search: false,
+                                        width: 60,
+                                        editable: false
+                                    },
+                                    {
                                         label :  tbl.itemTable('option', 'duration')[1],
                                         name: 'programme_item[duration]',
                                         index: 'duration',
@@ -208,6 +242,22 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
                                                     return rowObject['programme_item[participants]'];
                                                 } else {
                                                     return "<span class='minor-text'>none</span>";
+                                                }
+                                            }
+                                        }     
+                                    },
+                                    {
+                                        label : tbl.itemTable('option', 'visibility')[1], //'Ref',
+                                        name: 'programme_item[visibility]',
+                                        hidden : !tbl.itemTable('option', 'visibility')[0],
+                                        sortable: false,
+                                        search: false,
+                                        editable: false,
+                                        width: 70,
+                                        formatter : function(cellvalue, options, rowObject) {
+                                            if (typeof rowObject['programme_item[visibility]'] != 'undefined') {
+                                                if (rowObject['programme_item[visibility]']) {
+                                                    return rowObject['programme_item[visibility]'];
                                                 }
                                             }
                                         }     

@@ -1,4 +1,5 @@
 class Person < ActiveRecord::Base
+  include Planner::ImageUrlGenerator
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :language, :comments, :company, :job_title,
                   :pseudonym_attributes, :acceptance_status_id, :invitestatus_id, :invitation_category_id,
                   :postal_addresses_attributes, :email_addresses_attributes, :phone_numbers_attributes, :registrationDetail_attributes,
@@ -339,11 +340,29 @@ class Person < ActiveRecord::Base
     published_programme_items && published_programme_items.any?
   end
 
-  def public_image_url opts={}
-    url = ""
-    url = image.public_image_url(opts) if image.present?
+  def public_image_url scale: 1, version: :standard
+    person_image(image, scale: scale, version: version)
+  end
 
-    url
+  def viewable_by_public?
+    viewable = has_public_assigned_items?
+    if !viewable && registrationDetail && registrationDetail.registered
+      viewable = registrationDetail.can_share
+    end
+
+    viewable
+  end
+
+  def has_public_assigned_items?
+    publishedProgrammeItemAssignments.with_public_items.any?
+  end
+
+  def self.with_public_assigned_items
+    joins(:published_programme_items).where(published_programme_items: {visibility_id: Visibility['Public']}).uniq
+  end
+
+  def is_assigned_to_items_with_person?(person)
+    published_programme_items.any? && person.published_programme_items.any? && (published_programme_items & person.published_programme_items).any?
   end
 
 end

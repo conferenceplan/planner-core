@@ -21,5 +21,10 @@ class PublishedRoom < ActiveRecord::Base
   has_one :original, :through => :publication,
           :source => :original,
           :source_type => 'Room'
+
+
+  def self.with_public_items
+    joins(:published_programme_items).where(published_programme_items: {visibility_id: Visibility['Public']})
+  end
           
 end

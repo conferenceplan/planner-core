@@ -25,4 +25,4 @@ if person.bio_image && @partition_val
 #    json.detail_image_url   (get_base_image_url + listImage.bio_picture.detail.url.partition(@partition_val)[2]) if listImage.bio_picture.detail.url
 #    json.full_image_url     (get_base_image_url + listImage.bio_picture.standard.url.partition(@partition_val)[2]) if listImage.bio_picture.standard.url
 end
-json.prog       person.published_programme_items.collect{|i| i.id}
+json.prog       person.published_programme_items.only_public.collect{|i| i.id}

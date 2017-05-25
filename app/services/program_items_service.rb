@@ -100,7 +100,7 @@ module ProgramItemsService
   def self.assign_reference_numbers(increment = 3)
       items = ProgrammeItem.
                   references([:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ]).
-                  where('programme_items.print = true').
+                  where(visibility_id: Visibility['None'].id).
                   includes([:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ]).
                   order('time_slots.start ASC, venues.sort_order, rooms.sort_order')
       
@@ -183,7 +183,7 @@ module ProgramItemsService
         where(
             ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
               person.id, 
-              [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]]        
+              [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id,PersonItemRole['Invisible'].id]]        
         ).
         includes(
           {:programmeItem => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, :equipment_types, {:room => :venue}, :time_slot]}
@@ -355,7 +355,7 @@ protected
     # TODO - add these
     # if ignorePending
       # clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
-      # clause = addClause( clause, 'programme_items.print = true', nil )
+      # clause = addClause( clause, "programme_items.visibility_id != #{Visibility['None'].id}", nil )
     # end
     
     # TODO - assumed that the new creation does not have a time slot. Need to change

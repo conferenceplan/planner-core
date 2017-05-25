@@ -77,6 +77,13 @@
 
 
                 <div>
+                    <h5><%= t "other-participants" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "other-participants" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "other-participants-help").html_safe %>'></i></h5>
+                </div>
+                <div class="ui-droppable well" id="other-participant-area">
+                    <div id="other-participants-view"></div>
+                </div>
+
+                <div>
                     <h5><%= t "invisible" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisible" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisibles-help").html_safe %>'></i></h5>
                 </div>
                 <div class="ui-droppable well" id="invisible-area">
