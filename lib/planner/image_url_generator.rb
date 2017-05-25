@@ -9,7 +9,7 @@ module Planner
         image = img.bio_picture.send(version)
         
         if image && image.url
-          url = get_image_url(image)
+          url = get_image_url(image, img.lock_version)
         end
         # if the person has an image, use that image
       elsif !DefaultBioImage.first.nil?
@@ -18,7 +18,7 @@ module Planner
         image = img.image.send(version)
         
         if image && image.url
-          url = get_image_url(image)
+          url = get_image_url(image, img.lock_version)
         end
         # if there is no person image but there is a default image, use that one
       end
@@ -37,12 +37,16 @@ module Planner
       eval(ENV[:base_image_url.to_s])
     end
     
-    def get_image_url img
+    def get_image_url img, version = nil
       #
       # Arguments: img (BioPictureUploader::Uploader)
       # Returns: url (String) pointing to the an image's grenadine cdn url for cloudinary images
       #
-      url = base_image_url + img.url.partition(/upload/)[2]
+      if version
+        url = base_image_url + img.url(version: version).partition(/upload/)[2]
+      else
+        url = base_image_url + img.url.partition(/upload/)[2]
+      end
       
       url
     end
