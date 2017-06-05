@@ -232,7 +232,7 @@ module ProgramItemsService
     res = ActiveRecord::Base.connection.select_all(query)
 
     query = itemConflictSqlWithParent(day)
-
+    
     res.to_a.concat(ActiveRecord::Base.connection.select_all(query).to_a) # Combine the queries
 
     query = sub_item_conflict_sql(day)
@@ -376,7 +376,6 @@ protected
 
   # For double book participants
   # take into account parent items
-  # todo - prune out parent of the item i.e. so it is not a conflict with itself....
   def self.itemConflictSqlWithParent(day = nil)
     conflict_exceptions = Arel::Table.new(:conflict_exceptions)
 
@@ -423,7 +422,9 @@ protected
                                           and(time_slots[:start].lteq(time_slots_alias[:start])).
                                           and(assignments[:programme_item_id].not_eq(assignments_alias[:programme_item_id])).
                                           and(assignments[:person_id].eq(assignments_alias[:person_id])).
-                                          and(assignments[:role_id].not_eq(PersonItemRole['Reserved'].id).and(assignments_alias[:role_id].not_eq(PersonItemRole['Reserved'].id)))
+                                          and(assignments[:role_id].not_eq(PersonItemRole['Reserved'].id).and(assignments_alias[:role_id].not_eq(PersonItemRole['Reserved'].id))).
+                                          # prune out parent of the item i.e. so it is not a conflict with itself  
+                                          and(assignments_alias[:programme_item_id].not_eq(parents[:id]))
                                       )
 
     query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
