@@ -114,9 +114,8 @@ class ProgrammeItem < ActiveRecord::Base
   end
 
   def self.deep_clone_members(keep_room_assignment = true, within_conference = true)
-    #    , # TODO - issue? when we clone in the service the children are an issue...
     members = [
-      :programme_item_assignments, :parent
+      :programme_item_assignments #, :parent
     ]
 
     members << {:children => :programme_item_assignments} if within_conference

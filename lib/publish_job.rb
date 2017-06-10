@@ -325,6 +325,7 @@ class PublishJob
         finalUrl = 'image/upload' +url + '#' + sig
   
         newimg = newItem.external_images.new :use => img.use, :picture => finalUrl
+        newimg.lock_version = img.lock_version
         newimg.save
       end
       
