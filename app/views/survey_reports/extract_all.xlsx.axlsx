@@ -22,7 +22,7 @@ wb.add_worksheet(name: "Responses") do |sheet|
     sheet.add_row questions
     
     @respondents.each do |respondent|
-        row = Array.new(@questions.size + 11){''}
+        row = Array.new(@nbr_question_cols + 11){''}
         
         row[0] = respondent.prefix
         row[1] = respondent.first_name
