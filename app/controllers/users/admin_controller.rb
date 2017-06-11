@@ -56,30 +56,10 @@ class Users::AdminController < PlannerController
   #
   def create
     begin
-      
       # first check to see if the person is allowed to create one more user
       # depending on his subscription level
+      # NOTE - logic moved to before filter in front
       
-      if multi_enabled?
-      
-        organization = Organization.where(subdomain: Apartment::Tenant.current).first
-        customer = organization.customer
-        subscriptions = customer.subscriptions if customer
-        @current_users = UserService.countUsers
-        # puts "Current users: " + @current_users.to_s
-        @max_users = subscriptions.first.quantity if subscriptions && subscriptions.size > 0
-        @account_management_URL = "/pages/account_page/"
-        
-        if !customer.subscription_current?
-            raise (t "cannot-create-users-while-subscription-not-current", billingurl: @account_management_URL)
-        elsif customer && subscriptions && subscriptions.size > 0
-          if @current_users > @max_users
-            raise (t "cannot-create-more-users-than-allowed-by-subscription", nbusers: @max_users, billingurl: @account_management_URL)
-          end
-        end
-      
-      end
-
       User.transaction do
         # get the role and add it to the user
         @user = User.new #params[:user]
