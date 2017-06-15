@@ -10,7 +10,8 @@ ConfigApp.ConfigManagement = (function(Backbone){
             info                : { type : 'Text', title : '<%= t "config-info-email" %>' },
             reply_to            : { type : 'Text', title : '<%= t "config-reply-to-email" %>' },
             cc                  : { type : 'Text', title : '<%= t "config-cc-email" %>' },
-            test_email          : { type : 'Text', title : '<%= t "config-test-email" %>' }
+            test_email          : { type : 'Text', title : '<%= t "config-test-email" %>' },
+            receive_notifications : { type : 'Checkbox', title : '<%= t "config-email-notifications" %>' }
         },
         urlRoot : "<%= baseUri + '/mail_configs' %>"
     });

@@ -121,6 +121,7 @@
         <dt><%= t "config-reply-to-email" %></dt><dd>{{= reply_to ? reply_to : '' }}</dd>
         <dt><%= t "config-cc-email" %></dt><dd>{{= cc }}</dd>
         <dt><%= t "config-test-email" %></dt><dd>{{= test_email }}</dd>
+        <dt><%= t "config-email-notifications" %></dt><dd>{{= receive_notifications ? 'Yes' : 'No' }}</dd>
         {{ } else{ }}
         NO CONFIG
         {{ } }}
