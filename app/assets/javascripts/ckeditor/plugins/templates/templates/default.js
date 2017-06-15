@@ -46,7 +46,7 @@ var emailTemplateBottom =            '</td>' +
                                     'http://events.grenadine.co' +
                                 '</td>' +
                                 '<td  align="right" style="padding: 15px; padding-right: 25px; padding-top: 20px;">' +
-                                    '<img src="https://static.grenadine.co/logos/Grenadine-Event-Planner-Logo-350.png" width="175" style="opacity: 0.6;">' +
+                                    '<img src="http://fastmedia.events.grenadine.co/html-email-templates/Grenadine-Event-Planner-Logo-350.png" width="175" style="opacity: 0.6;">' +
                                 '</td>' +
                             '</tr>' +
                         '</table>' +
