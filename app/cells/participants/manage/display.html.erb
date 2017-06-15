@@ -41,8 +41,8 @@
                 <%= render extra %>
             <% end %>
             <h5><%= t "import-and-export" %></h5>
-            <span class="glyphicon glyphicon-import"></span> <a href="<%= baseUri + '/pages/participants_dash/import' %>"><%= t "import-people" %></a><br>
-            <span class="glyphicon glyphicon-inbox"></span> <a href="<%= baseUri + '/pages/participants_dash/review_import' %>"><%= t "review-pending-import" %></a><br>
+            <span class="glyphicon glyphicon-import"></span> <%= t "import-people" %><i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t "import-people-not-available-hint" %>" data-original-title="<%= t "import-people-not-available" %>"></i><br> <!-- href="<%= baseUri + '/pages/participants_dash/import' %>" -->
+            <!--<span class="glyphicon glyphicon-inbox"></span> <a href="<%= baseUri + '/pages/participants_dash/review_import' %>"><%= t "review-pending-import" %></a><br>-->
             <span class="glyphicon glyphicon-export"></span> <a href="<%= baseUri + '/pages/participants_dash/export' %>"><%= t "export-people" %></a>
             <h5><%= t "surveys" %></h5>
             <span class="glyphicon glyphicon-comment"></span> <a href="<%= baseUri + '/pages/participants_dash/survey_review' %>"><%= t "review-surveys" %></a>            

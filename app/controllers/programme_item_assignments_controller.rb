@@ -47,7 +47,11 @@ class ProgrammeItemAssignmentsController < PlannerController
   def destroy
 
     programme_item_assignment = ProgrammeItemAssignment.find params[:id]
+    programme_item_assignment.programmeItem.touch
+    programme_item_assignment.programmeItem.save
     programme_item_assignment.destroy
+    
+    # need to touch the item
 
   rescue => ex
     render status: :bad_request, text: ex.message

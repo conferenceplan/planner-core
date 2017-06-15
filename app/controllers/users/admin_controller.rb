@@ -56,6 +56,10 @@ class Users::AdminController < PlannerController
   #
   def create
     begin
+      # first check to see if the person is allowed to create one more user
+      # depending on his subscription level
+      # NOTE - logic moved to before filter in front
+      
       User.transaction do
         # get the role and add it to the user
         @user = User.new #params[:user]
