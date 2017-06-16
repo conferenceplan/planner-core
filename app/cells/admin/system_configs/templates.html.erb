@@ -117,11 +117,13 @@
     <dl class="dl-horizontal">
         {{ if (typeof id != 'undefined') { }}
         <dt><%= t "config-info-email" %></dt><dd>{{= info }}</dd>
+        <dt><%= t "config-email-notifications" %></dt><dd>{{= receive_notifications ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+        <dt class="voffset20"></dt><dd></dd>
         <dt><%= t "config-from-email" %></dt><dd>{{= from }}</dd>
         <dt><%= t "config-reply-to-email" %></dt><dd>{{= reply_to ? reply_to : '' }}</dd>
         <dt><%= t "config-cc-email" %></dt><dd>{{= cc }}</dd>
         <dt><%= t "config-test-email" %></dt><dd>{{= test_email }}</dd>
-        <dt><%= t "config-email-notifications" %></dt><dd>{{= receive_notifications ? 'Yes' : 'No' }}</dd>
+        
         {{ } else{ }}
         NO CONFIG
         {{ } }}
