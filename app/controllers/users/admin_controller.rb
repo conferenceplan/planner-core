@@ -55,31 +55,29 @@ class Users::AdminController < PlannerController
   #
   #
   def create
-    begin
-      # first check to see if the person is allowed to create one more user
-      # depending on his subscription level
-      # NOTE - logic moved to before filter in front
-      
-      User.transaction do
-        # get the role and add it to the user
-        @user = User.new #params[:user]
-        @user.login = params[:login]
-        @user.email = params[:email]
-        @user.password = params[:password] if params[:password]
-        @user.password_confirmation = params[:password_confirmation] if params[:password_confirmation]
-        
-        if (params[:roles])
-          roleArray = params[:roles]
-      
-          roles = Role.find(roleArray.collect{|r| r[:id]})
-          @user.roles << roles
-        end
+    # first check to see if the person is allowed to create one more user
+    # depending on his subscription level
+    # NOTE - logic moved to before filter in front
     
-        @user.save!
+    User.transaction do
+      # get the role and add it to the user
+      @user = User.new #params[:user]
+      @user.login = params[:login]
+      @user.email = params[:email]
+      @user.password = params[:password] if params[:password]
+      @user.password_confirmation = params[:password_confirmation] if params[:password_confirmation]
+      
+      if (params[:roles])
+        roleArray = params[:roles]
+    
+        roles = Role.find(roleArray.collect{|r| r[:id]})
+        @user.roles << roles
       end
-    rescue Exception => err  
-      render status: :bad_request, text: err
+  
+      @user.save!
     end
+  rescue Exception => err  
+    render status: :bad_request, text: err.message
   end
 
   #
@@ -88,34 +86,32 @@ class Users::AdminController < PlannerController
   def update
     @user = User.find params[:id]
     
-    begin
-      User.transaction do
-        if (params[:roles])
-          roleArray = params[:roles]
-          
-          @user.roles.clear
-          
-          Role.find(roleArray.collect{|r| r[:id]}).each do |role|
-            assignment = RoleAssignment.new(:user => @user, :role => role)
-            assignment.save!
-          end
+    User.transaction do
+      if (params[:roles])
+        roleArray = params[:roles]
+        
+        @user.roles.clear
+        
+        Role.find(roleArray.collect{|r| r[:id]}).each do |role|
+          assignment = RoleAssignment.new(:user => @user, :role => role)
+          assignment.save!
         end
-        
-        @user.email = params[:email]
-        @user.login = params[:login]
-        
-        if (params[:password].length > 0) 
-          @user.password = params[:password]
-          @user.password_confirmation = params[:password_confirmation]
-        end
-        
-        @user.save! 
-        @user.reload
       end
-    rescue Exception => err  
-      # IF there is a fail ten we can to catch the exception and report the problem
-      render status: :bad_request, text: err
+      
+      @user.email = params[:email]
+      @user.login = params[:login]
+      
+      if (params[:password].length > 0) 
+        @user.password = params[:password]
+        @user.password_confirmation = params[:password_confirmation]
+      end
+      
+      @user.save! 
+      @user.reload
     end
+  rescue Exception => err  
+    # IF there is a fail ten we can to catch the exception and report the problem
+    render status: :bad_request, text: err.message
   end
 
   #

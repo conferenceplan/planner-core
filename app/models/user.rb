@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
   #
   # TODO - change the role and access control mechanism
   #  
-  has_many  :roleAssignments
+  has_many  :roleAssignments, :dependent => :delete_all
   has_many  :roles, :through => :roleAssignments
   
   #
