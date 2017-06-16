@@ -9,7 +9,7 @@ item_assignments.
             row << ia.programmeItem.time_slot.start.strftime('%Y-%m-%d %H:%M:%S')
             row << (ia.programmeItem.time_slot.start.strftime('%A'))
         else
-            row << ia.programmeItem.parent.time_slot..strftime('%Y-%m-%d %H:%M:%S')
+            row << ia.programmeItem.parent.time_slot.start.strftime('%Y-%m-%d %H:%M:%S')
             row << (ia.programmeItem.parent.time_slot.start.strftime('%A'))
         end
         row << (ia.programmeItem.duration ? ia.programmeItem.duration.to_s : '')

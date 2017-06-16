@@ -256,7 +256,9 @@ module PlannerReportsService
                             :format
                           ]
                       }
-                  ]).          where(self.constraints()).
+                  ]).
+          where({"programme_items.visibility_id" => Visibility['Public'].id}).
+          where(self.constraints()).
           order(order_by)
   end
   
@@ -456,6 +458,7 @@ module PlannerReportsService
                 }
               ]
             ]).
+            where({"published_programme_items.visibility_id" => Visibility['Public'].id}).
             where(self.constraints()).
             order("published_venues.sort_order, published_rooms.sort_order, published_time_slots.start")
     
@@ -509,7 +512,8 @@ module PlannerReportsService
                       :format
                     ]
                   }
-                 ]).              where("programme_items.visibility_id != #{Visibility['None'].id} and time_slots.start is not NULL").
+                 ]).
+              where("programme_items.visibility_id = #{Visibility['Public'].id} and time_slots.start is not NULL").
               where(self.constraints()).
               order("time_slots.start, venues.sort_order, rooms.sort_order") #
   end
