@@ -1,8 +1,6 @@
 class JobInfo < ActiveRecord::Base
   attr_accessible :job_name, :last_run
   
-  validates_inclusion_of :job_name, :in => [:update_from_survey]
-
   def job_name
     read_attribute(:job_name).to_sym
   end
