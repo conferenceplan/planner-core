@@ -21,7 +21,7 @@ class BioImage < ActiveRecord::Base
   def touch_person
     if person
       person.touch
-      persin.save
+      person.save
     end
   end
 
