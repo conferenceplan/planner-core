@@ -1086,6 +1086,9 @@ protected
     child_assignments = assignments.alias('child_assignments')
     children_alias = programme_items.alias('children_alias')
     child_assignments_alias = assignments.alias('child_assignments_alias')
+    
+    # back to back margin
+    margin = SiteConfig.first ? SiteConfig.first.back2back_margin : 30
 
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'),
@@ -1118,7 +1121,10 @@ protected
                           join(child_assignments_alias, Arel::Nodes::OuterJoin).on(children_alias[:id].not_eq(nil).and(child_assignments_alias[:programme_item_id].eq(children_alias[:id]))).
 
                           where(
-                            time_slots[:end].eq(time_slots_alias[:start]).
+                            # check if within margin i.e.
+                            # start >= end AND start <= (end + margin)
+                            time_slots_alias[:start].gteq(time_slots[:end]).
+                            and(time_slots_alias[:start].lteq(margin_fn(time_slots[:end], margin))).
                             and( assignments[:id].not_eq(assignments_alias[:id]) ).
                             and( 
                               assignments[:person_id].eq(assignments_alias[:person_id]).
@@ -1145,6 +1151,14 @@ protected
 
   def self.constraints(*args)
     nil
+  end
+
+  # margin_fn(TimeSlot.arel_table[:start], mins).as('item_start'),
+  def self.margin_fn(start, mins)
+    item_start_fn = Arel::Nodes::NamedFunction.new("ADDDATE", [
+                        start,
+                        Arel::Nodes::SqlLiteral.new("INTERVAL " + mins.to_s + " MINUTE")
+                        ])
   end
 
 end
