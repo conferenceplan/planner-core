@@ -190,6 +190,35 @@ module Planner
                       self.save!
                     end
                   end
+
+                  send(:define_method, 'updateDefaultPhoneNumber') do |number, phone_type_id: nil, label: nil|
+                    e = getDefaultPhoneNumber()
+                    if e
+                      e.isdefault = false
+                      e.save!
+                    end
+                  
+                    e = self.phone_numbers.new :number => number, phone_type_id: phone_type_id, label: label, :isdefault => true 
+                   
+                    self.save!
+                  end
+
+                  send(:define_method, 'getDefaultPhoneNumber') do
+                    possiblePhoneNumbers = phone_numbers
+                    thePhoneNumber = nil
+                    if possiblePhoneNumbers
+                      possiblePhoneNumbers.each do |number| 
+                        if number.isdefault
+                          thePhoneNumber = number
+                        else # if the number is empty we want to take the first one (unless there is a default)
+                          if thePhoneNumber.nil?
+                            thePhoneNumber = number
+                          end
+                        end
+                      end
+                    end
+                    return thePhoneNumber
+                  end
               end
 
 

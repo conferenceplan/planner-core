@@ -243,6 +243,8 @@ Rails.application.routes.draw do
     resources :people
   end
 
+  get "phone_numbers/labels(/:query)" => "phone_numbers#labels"
+
   post 'pending_import_people/import_file', :controller => 'pending_import_people', :action => 'import_file'
   get 'pending_import_people/get_possible_matches', :controller => 'pending_import_people', :action => 'get_possible_matches'
   post 'pending_import_people/merge_all_pending', :controller => 'pending_import_people', :action => 'merge_all_pending'
