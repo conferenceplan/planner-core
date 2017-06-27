@@ -11,9 +11,24 @@ SurveyQuestionApp.SurveyQuestionManagement = (function(Backbone){
             question            : { type : 'Html', title : '<%= t "survey-question" %>', validators: ['required'], help: '<%= t 'survey-question-help' %>' },
             //title               : { type : 'Text', title : '<%= t "title" %>' }, // TODO - is this used???
             sort_order          : { type : 'Number', title : '<%= t "sort_order" %>', help: '<%= t "sort_order-help" %>', validators: ['number', /^[0-9]\d*$/] },
-            question_type       : { type : 'Select', title : '<%= t "survey-question-type" %>', help: '<%= t "survey-question-type-help" %>',
-                                    options : <%= [:textfield, :textbox, :singlechoice, :multiplechoice, :selectionbox, :availability, :address, :phone, :photo].to_json.html_safe %>
-                                    },
+            question_type       : { 
+                type : 'Select', 
+                title : '<%= t "survey-question-type" %>', 
+                help: '<%= t "survey-question-type-help" %>',
+                options : [
+                    { label : '<%= j(t('select-a-type')) %>', val : null },
+                    { label : '<%= j(t('text-field')) %>', val : 'textfield' },
+                    { label : '<%= j(t('text-box')) %>', val : 'textbox' },
+                    { label : '<%= j(t('single-choice')) %>', val : 'singlechoice' },
+                    { label : '<%= j(t('multiple-choice')) %>', val : 'multiplechoice' },
+                    { label : '<%= j(t('selection-box')) %>', val : 'selectionbox' },
+                    { label : '<%= j(t('availability')) %>', val : 'availability' },
+                    { label : '<%= j(t('address')) %>', val : 'address' },
+                    { label : '<%= j(t('phone')) %>', val : 'phone' },
+                    { label : '<%= j(t('photo')) %>', val : 'photo' },
+                ],
+                validators : ['required']
+            },
             text_size           : { type : 'DependentNumber',  title : '<%= t "survey-length-of-textbox" %>', help: '<%= t 'survey-text-size-hint' %>',
                                     dependsOn : 'question_type', dependentValues : ['textfield', 'textbox'] , validators: ['number', /^[0-9]\d*$/]},        
             mandatory           : { type : 'Checkbox', title : '<%= t "survey-mandatory" %>', help: '<%= t 'survey-mandatory-question-hint' %>' },

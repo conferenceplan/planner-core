@@ -209,7 +209,7 @@
         setTimeout(function() {
           if ($('.modal').length < 1) {
             $('body').removeClass('modal-open');
-          } else if (!$('body').hasClass('modal-open')) {
+          } else if (!$('body').hasClass('modal-open') && $('.modal').is(':visible')) {
             $('body').addClass('modal-open');
           };
           $('.select2-dropdown-open').siblings('input[name]').select2('close');
