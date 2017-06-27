@@ -7,169 +7,180 @@
       var schema = {};
       if (args.length > 0) {
         schema = {
-          divider : { template : _.template('<hr class="understated-separator">') }
+          divider : { template : _.template('<hr class="understated-separator"><div class="row">') }
         };
-      };
 
-      for (i in args) {
-        var arg = args[i];
+        for (i in args) {
+          var arg = args[i];
 
-        switch (arg) {
-          case "facebook": {
-            schema = $.extend(schema, {
-              facebook : { 
-                type : 'Text', title : '<i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %>',
-                validators : ['url'],
-                help: '<%= j t("planner.sociable-module.help.facebook").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
-              }
-            });
-          };
-          break;
-
-          case "twitterinfo":
-          case "twitter": {
-            var twitter = {};
-            twitter[arg] = { 
-              type : 'Text', 
-              title : '<i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %>',
-              validators: ['url'],
-                help: '<%= j t("planner.sociable-module.help.twitter").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
+          switch (arg) {
+            case "facebook": {
+              schema = $.extend(schema, {
+                facebook : { 
+                  type : 'Text', title : '<i class="fa fa-facebook-square" aria-hidden="true"></i> <%= t "participant-facebook-url" %>',
+                  validators : ['url'],
+                  help: '<%= j t("planner.sociable-module.help.facebook").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+                }
+              });
             };
-            schema = $.extend(schema, twitter);
-          };
-          break;
-          
-          case "linkedin": {
-            schema = $.extend(schema, {
-              linkedin : { 
-                type : 'Text', 
-                title : '<i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-handle" %>',
-                validators : ['url'],
-                help: '<%= j t("planner.sociable-module.help.linkedin").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
-              }
-            });
-          };
-          break;
+            break;
 
-          case "youtube": {
-            schema = $.extend(schema, {
-              youtube : { 
+            case "twitterinfo":
+            case "twitter": {
+              var twitter = {};
+              twitter[arg] = { 
                 type : 'Text', 
-                title : '<i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-handle" %>',
-                validators : ['url'],
-                help: '<%= j t("planner.sociable-module.help.youtube").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
-              }
-            });
-          };
-          break;
-
-          case "twitch": {
-            schema = $.extend(schema, {
-              twitch : { 
-                type : 'Text', 
-                title : '<i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-handle" %>',
-                validators : ['url'],
-                help: '<%= j t("planner.sociable-module.help.twitch").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
-              }
-            });
-          };
-          break;
-
-          case "instagram": {
-            schema = $.extend(schema, {
-              instagram : { 
-                type : 'Text', 
-                title : '<i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-handle" %>',
-                validators : ['url'],
-                help: '<%= j t("planner.sociable-module.help.instagram").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
-              }
-            });
-          };
-          break;
-
-          case "flickr": {
-            schema = $.extend(schema, {
-              flickr : { 
-                type : 'Text', 
-                title : '<i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-handle" %>',
-                validators : ['url'],
-                help: '<%= j t("planner.sociable-module.help.flickr").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
-              }
-            });
-          };
-          break;
-
-          case "reddit": {
-            schema = $.extend(schema, {
-              reddit : { 
-                type : 'Text', 
-                title : '<i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-handle" %>',
-                validators : ['url'],
-                help: '<%= j t("planner.sociable-module.help.reddit").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
-              }
-            });
-          };
-          break;
-
-          case "othersocialmedia": {
-            schema = $.extend(schema, {
-              othersocialmedia : { 
-                type : 'Text', 
-                title : '<i class="fa fa-users" aria-hidden="true"></i> <%= t "other-social-media" %>',
-                validators : ['url'],
-                help: '<%= j t("planner.sociable-module.help.othersocialmedia").html_safe %>', 
-                help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
-              }
-            });
-          };
-          break;
-
-          case "url":
-          case "website": {
-            var addition = {};
-            addition[arg] = { 
-              type : 'Text', 
-              title : '<i class="fa fa-globe" aria-hidden="true"></i> <%= t "website-url" %>',
-              validators : ['url'],
-              help: '<%= j t("planner.sociable-module.help.website-url").html_safe %>', 
-              help_placement: 'auto',
-                template : Backbone.Form.NestedField.template,
-                fieldClass : 'col-sm-6'
+                title : '<i class="fa fa-twitter-square" aria-hidden="true"></i> <%= t "participant-twitter-handle" %>',
+                validators: ['url'],
+                  help: '<%= j t("planner.sociable-module.help.twitter").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+              };
+              schema = $.extend(schema, twitter);
             };
-            schema = $.extend(schema, addition);
-          };
-          break;
+            break;
+            
+            case "linkedin": {
+              schema = $.extend(schema, {
+                linkedin : { 
+                  type : 'Text', 
+                  title : '<i class="fa fa-linkedin-square" aria-hidden="true"></i> <%= t "participant-linkedin-handle" %>',
+                  validators : ['url'],
+                  help: '<%= j t("planner.sociable-module.help.linkedin").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+                }
+              });
+            };
+            break;
 
-          default: {
-            console.log("Unknown platform: " + arg);
+            case "youtube": {
+              schema = $.extend(schema, {
+                youtube : { 
+                  type : 'Text', 
+                  title : '<i class="fa fa-youtube-square" aria-hidden="true"></i> <%= t "participant-youtube-handle" %>',
+                  validators : ['url'],
+                  help: '<%= j t("planner.sociable-module.help.youtube").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+                }
+              });
+            };
+            break;
+
+            case "twitch": {
+              schema = $.extend(schema, {
+                twitch : { 
+                  type : 'Text', 
+                  title : '<i class="fa fa-twitch" aria-hidden="true"></i> <%= t "participant-twitch-handle" %>',
+                  validators : ['url'],
+                  help: '<%= j t("planner.sociable-module.help.twitch").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+                }
+              });
+            };
+            break;
+
+            case "instagram": {
+              schema = $.extend(schema, {
+                instagram : { 
+                  type : 'Text', 
+                  title : '<i class="fa fa-instagram" aria-hidden="true"></i> <%= t "participant-instagram-handle" %>',
+                  validators : ['url'],
+                  help: '<%= j t("planner.sociable-module.help.instagram").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+                }
+              });
+            };
+            break;
+
+            case "flickr": {
+              schema = $.extend(schema, {
+                flickr : { 
+                  type : 'Text', 
+                  title : '<i class="fa fa-flickr" aria-hidden="true"></i> <%= t "participant-flickr-handle" %>',
+                  validators : ['url'],
+                  help: '<%= j t("planner.sociable-module.help.flickr").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+                }
+              });
+            };
+            break;
+
+            case "reddit": {
+              schema = $.extend(schema, {
+                reddit : { 
+                  type : 'Text', 
+                  title : '<i class="fa fa-reddit-square" aria-hidden="true"></i> <%= t "participant-reddit-handle" %>',
+                  validators : ['url'],
+                  help: '<%= j t("planner.sociable-module.help.reddit").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+                }
+              });
+            };
+            break;
+
+            case "othersocialmedia": {
+              schema = $.extend(schema, {
+                othersocialmedia : { 
+                  type : 'Text', 
+                  title : '<i class="fa fa-users" aria-hidden="true"></i> <%= t "other-social-media" %>',
+                  validators : ['url'],
+                  help: '<%= j t("planner.sociable-module.help.othersocialmedia").html_safe %>', 
+                  help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+                }
+              });
+            };
+            break;
+
+            case "url":
+            case "website":
+            case "blog": {
+              var addition = {};
+
+              if (arg == 'blog') {
+                var title = '<%= t "blog-url" %>';
+                var help = '<%= j t("planner.sociable-module.help.blog-url").html_safe %>'
+              } else {
+                var title = '<%= t "website-url" %>';
+                var help = '<%= j t("planner.sociable-module.help.website-url").html_safe %>';
+              };
+
+              addition[arg] = { 
+                type : 'Text', 
+                title : '<i class="fa fa-globe" aria-hidden="true"></i> ' + title,
+                validators : ['url'],
+                help: help, 
+                help_placement: 'auto',
+                  template : Backbone.Form.NestedField.template,
+                  fieldClass : 'col-sm-6'
+              };
+              schema = $.extend(schema, addition);
+            };
+            break;
+
+            default: {
+              console.log("Unknown platform: " + arg);
+            };
           };
         };
+
       };
 
       return schema;
