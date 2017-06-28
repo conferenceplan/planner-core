@@ -282,6 +282,26 @@
     </div>
 </script>
 
+<script type="text/template" id="publication-template-nopdf">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="report-body" id="report-body"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="pull-right">
+                <button class="btn btn-primary report-xml-button">
+                    <%= t "publications-export-to-xml" %>
+                </button>
+                <button class="btn btn-primary report-xlsx-button">
+                    <%= t "publications-export-to-xlsx" %>
+                </button>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script type="text/template" id="schedule-conflict-view-template">
     <div class="thumbnail clearfix">
         <button type="button" class="close exclude" aria-hidden="true">×</button>

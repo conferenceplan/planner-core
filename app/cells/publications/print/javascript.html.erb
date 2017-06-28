@@ -247,7 +247,8 @@ PublicationsApp.PrintManagement = (function(Backbone){
         report : function(query) {
             ReportBase.reportRegion.close();
             ReportBase.resultRegion.close();
-            ReportBase.reportRegion.show(new ReportBase.PublicationView({
+            // TODO - remove PDF button
+            ReportBase.reportRegion.show(new ReportBase.PublicationSanPdfView({
                 form        : GenericForm,
                 endPoint    : "<%= baseUri + '/planner_reports/' %>" + query
             }));
