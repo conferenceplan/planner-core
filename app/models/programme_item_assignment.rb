@@ -15,11 +15,17 @@ class ProgrammeItemAssignment < ActiveRecord::Base
   has_enumerated :role, :class_name => 'PersonItemRole'
   
   #
-  # TODO - this is a temporary fix until we have a UI for the person to set the description
+  # TODO - this is a temporary fix until we
+  # put in a mechanism for the planner to assign the role names etc.
   #
   def check_role_description
     if role_id == PersonItemRole['Moderator'].id
       role_desc = UserInterfaceSetting.where({:key => 'moderator_role'}).first
+      if role_desc
+        self.description = role_desc._value
+      end
+    elsif role_id == PersonItemRole['OtherParticipant'].id
+      role_desc = UserInterfaceSetting.where({:key => 'other_role'}).first
       if role_desc
         self.description = role_desc._value
       end
