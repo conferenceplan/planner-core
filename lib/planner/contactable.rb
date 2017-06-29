@@ -156,6 +156,16 @@ module Planner
                     return theEmail
                   end
 
+                  send(:define_method, 'default_email_address') do
+                    address = getDefaultEmail
+                    address.present? && address.email.present? ? address.email.strip : nil
+                  end
+
+                  send(:define_method, 'hasDefaultEmail?') do
+                    address = getDefaultEmail
+                    address.present? && address.email.present?
+                  end
+
                   send(:define_method, 'removeEmailAddress') do |address|
                      email_addresses.delete(address) # remove it from the person
                      # and then make sure that it is not used by another person
@@ -218,6 +228,16 @@ module Planner
                       end
                     end
                     return thePhoneNumber
+                  end
+
+                  send(:define_method, 'hasDefaultPhoneNumber?') do
+                    phone = getDefaultPhoneNumber
+                    phone.present? && phone.number.present?
+                  end
+
+                  send(:define_method, 'default_phone_number') do
+                    phone = getDefaultPhoneNumber
+                    phone.present? && phone.number.present? ? phone.number.strip : nil
                   end
               end
 
