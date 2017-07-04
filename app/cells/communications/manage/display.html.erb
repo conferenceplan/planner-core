@@ -66,11 +66,23 @@
 </div>
 <div id="mailing-area" class="row voffset10">
     <h3 class="h3-underlined"><%= t 'recipients' %><a class="mtooltip"><i class="glyphicon glyphicon-info-sign"></i><span><%= t 'hint-recipients' %></span></a></h3>
-    <div class="col-xs-8 left-jqgrid right-jqgrid">
-        <%= render_cell "participants/participant_list", :display,
-            :pager => "participants-pager",
-            :place => "participants"
-         %>
+    <div class="col-xs-8">
+      <div class="row">
+        <div class="col-xs-6">
+            <%= t "show-people-assigned-to-items" %><i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t "show-people-assigned-to-items-hint" %>" data-original-title="<%= t "show-people-assigned-to-items" %>"></i>
+            <div class="input-group pull-right" id="people-filter">
+                <input id="toggle-people" type="checkbox" data-size="mini" data-onstyle="success">
+            </div>
+        </div>
+      </div>
+      <div class="row voffset10">
+        <div class="col-xs-12 left-jqgrid right-jqgrid">
+          <%= render_cell "participants/participant_list", :display,
+              :pager => "participants-pager",
+              :place => "participants"
+           %>
+        </div>
+      </div>
     </div>
     <div class="col-xs-1" style="padding-top: 50px;">
         <center>
