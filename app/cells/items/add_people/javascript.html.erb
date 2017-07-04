@@ -355,6 +355,16 @@ ItemApp.PeopleManagement = (function(Backbone){
             });
         }
     };
+
+    function create_people_fiter() {
+        $('#toggle-people').change(function(ev) {
+            var val = $(this).val();
+            // console.log(ev.currentTarget);
+            // console.log($(ev.target).prop("checked"));
+            jQuery("#participants").participantTable('filterPeople', !$(ev.target).prop("checked"));
+        });
+    }
+
     
     return {
         needsSaved : function() {
@@ -374,6 +384,11 @@ ItemApp.PeopleManagement = (function(Backbone){
         },
         
         init : function() {
+            $('#toggle-people').bootstrapToggle({
+                  on:  '<%= t "yes" %>',
+                  off: '<%= t "no" %>'
+                });
+
             // Add the regions to this app
             ItemApp.addRegions({
                 people_ctl      : "#people-control-view",
@@ -463,6 +478,8 @@ ItemApp.PeopleManagement = (function(Backbone){
 
             // Add the control for adding people to items            
             ItemApp.getRegion("people_ctl").show(new PeopleControlView());
+            
+            create_people_fiter();
         }
     }
 
