@@ -168,6 +168,13 @@ CommunicationsApp.Management = (function(Backbone){
             poller.start();
         };
     };
+
+    function create_people_fiter() {
+      $('#toggle-people').change(function(ev) {
+        var val = $(this).val();
+        jQuery("#participants").participantTable('scheduledPeople', !$(ev.target).prop("checked"));
+      });
+    };
     
     /*
      * 
@@ -178,11 +185,18 @@ CommunicationsApp.Management = (function(Backbone){
         },
         
         init : function(options) {
+            $('#toggle-people').bootstrapToggle({
+                on:  '<%= t "yes" %>',
+                off: '<%= t "no" %>'
+              });
+
             $('#mailing-area').hide();
             var ctlView = new MailingListControlView();
             ctlView.render();
             var previewCtl = new PreviewControlView();
             previewCtl.render();
+
+            create_people_fiter();
         }
     }
     
