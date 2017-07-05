@@ -141,13 +141,81 @@
     });
 
     // Phone Numbers
+    // 
+    phoneLabelNames = new Bloodhound({
+      datumTokenizer: Bloodhound.tokenizers.obj.whitespace, //('value'),
+      queryTokenizer: Bloodhound.tokenizers.whitespace,
+      remote: {
+        url: '<%= baseUri + '/phone_numbers/labels/%QUERY' %>',
+        wildcard: '%QUERY'
+      }
+    });
+
+    function generatePhoneNumberSchema(_options) {
+      var options = _options || {};
+      var numberOptions = options.numberOptions || {};
+      var typeOptions = options.typeOptions || {};
+      var labelOptions = options.labelOptions || {};
+      var isdefaultOptions = options.isdefaultOptions || {};
+
+      var phoneNumberSchema = {
+        number : $.extend({ 
+          type : 'Text', 
+          title : '<%= t "phone-number" %>', 
+          validators : ['required']
+        }, numberOptions),
+
+        phone_type_id : $.extend({ 
+          type : 'Select', 
+          title : '<%= t "phone type" %>', 
+          options : <%= PhoneTypes.all.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> 
+        }, typeOptions),
+
+        label : $.extend({ 
+            type : 'TypeAheadText', 
+            title : '<%= t "label" %>', 
+            help: '<%= strip_tags(j t("phone-label-help")) %>',
+            config : {
+                minLength: 0,
+                limit: 10,
+                source: phoneLabelNames
+            }
+        }, labelOptions),
+
+        isdefault : $.extend({ 
+          type : 'Checkbox', 
+          title : '<%= t "phone-is-primary" %>', 
+          help: '<%= t "phone-default-help" %>' 
+        }, isdefaultOptions)
+      };
+      
+      return phoneNumberSchema;
+    };
+
+    
+
+    defaultPhoneNumberSubSchema = generatePhoneNumberSchema({isdefaultOptions : { type : "Hidden" } });
+
+    defaultPhoneNumberSchema = {
+      default_phone_number : {
+        type : "Object",
+        title : '<%= j t('primary-phone-number') %>',
+        editorClass : 'sub-schema-field',
+
+        subSchema : defaultPhoneNumberSubSchema
+      }
+    };
 
     PhoneNumber = Backbone.Model.extend({
-        schema : {
-            number : { type : 'Text', title : '<%= t "phone-number" %>', validators : ['required']},
-            phone_type_id : { type : 'Select', title : '<%= t "phone type" %>', options : <%= PhoneTypes.all.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> },
-        },
+        schema : generatePhoneNumberSchema({ phoneNumberOptions : { validators : ['required'] } }),
         urlRoot : "<%= baseUri + '/phone_numbers' %>"
+    });
+
+    DefaultPhoneNumber = PhoneNumber.extend({
+      schema : defaultPhoneNumberSchema,
+      defaults : {
+        isdefault : true
+      }
     });
 
     PhoneCollection = Backbone.Collection.extend({
@@ -253,21 +321,28 @@
 
     return {
       AddressLayout : AddressLayout,
+      renderAddressLayout : renderAddressLayout,
+      validators : {
+        ensureAtLeastOneTextFieldEntered : ensureAtLeastOneTextFieldEntered
+      },
       PostalAddress : PostalAddress,
       PostalAddressCollection : PostalAddressCollection,
+
       emailLabelNames : emailLabelNames,
+      generateEmailSchema : generateEmailSchema,
       defaultEmailSubSchema : defaultEmailSubSchema,
       defaultEmailSchema : defaultEmailSchema,
       DefaultEmailAddress : DefaultEmailAddress,
       EmailAddress : EmailAddress,
       EmailCollection : EmailCollection,
+
+      phoneLabelNames : phoneLabelNames,
+      generatePhoneNumberSchema : generatePhoneNumberSchema,
+      defaultPhoneNumberSubSchema : defaultPhoneNumberSubSchema,
+      defaultPhoneNumberSchema : defaultPhoneNumberSchema,
+      DefaultPhoneNumber : DefaultPhoneNumber,
       PhoneNumber : PhoneNumber,
-      PhoneCollection : PhoneCollection,
-      renderAddressLayout : renderAddressLayout,
-      generateEmailSchema : generateEmailSchema,
-      validators : {
-        ensureAtLeastOneTextFieldEntered : ensureAtLeastOneTextFieldEntered
-      }
+      PhoneCollection : PhoneCollection
     };
   })(Backbone, Marionette);
 </script>

@@ -156,6 +156,16 @@ module Planner
                     return theEmail
                   end
 
+                  send(:define_method, 'default_email_address') do
+                    address = getDefaultEmail
+                    address.present? && address.email.present? ? address.email.strip : nil
+                  end
+
+                  send(:define_method, 'hasDefaultEmail?') do
+                    address = getDefaultEmail
+                    address.present? && address.email.present?
+                  end
+
                   send(:define_method, 'removeEmailAddress') do |address|
                      email_addresses.delete(address) # remove it from the person
                      # and then make sure that it is not used by another person
@@ -189,6 +199,45 @@ module Planner
                       phone.phone_type = PhoneTypes[phonetype]
                       self.save!
                     end
+                  end
+
+                  send(:define_method, 'updateDefaultPhoneNumber') do |number, phone_type_id: nil, label: nil|
+                    e = getDefaultPhoneNumber()
+                    if e
+                      e.isdefault = false
+                      e.save!
+                    end
+                  
+                    e = self.phone_numbers.new :number => number, phone_type_id: phone_type_id, label: label, :isdefault => true 
+                   
+                    self.save!
+                  end
+
+                  send(:define_method, 'getDefaultPhoneNumber') do
+                    possiblePhoneNumbers = phone_numbers
+                    thePhoneNumber = nil
+                    if possiblePhoneNumbers
+                      possiblePhoneNumbers.each do |number| 
+                        if number.isdefault
+                          thePhoneNumber = number
+                        else # if the number is empty we want to take the first one (unless there is a default)
+                          if thePhoneNumber.nil?
+                            thePhoneNumber = number
+                          end
+                        end
+                      end
+                    end
+                    return thePhoneNumber
+                  end
+
+                  send(:define_method, 'hasDefaultPhoneNumber?') do
+                    phone = getDefaultPhoneNumber
+                    phone.present? && phone.number.present?
+                  end
+
+                  send(:define_method, 'default_phone_number') do
+                    phone = getDefaultPhoneNumber
+                    phone.present? && phone.number.present? ? phone.number.strip : nil
                   end
               end
 

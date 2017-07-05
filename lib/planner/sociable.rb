@@ -9,7 +9,7 @@ module Planner
       def has_social_media *args
         # Available options include:
         # :facebook, :twitter/:twitterinfo, :linkedin, :youtube, :twitch, 
-        # :instagram, :flickr, :reddit, :othersocialmedia, :website, :url
+        # :instagram, :flickr, :reddit, :othersocialmedia, :website, :url, :blog
         # base.instance_variable_set :@social_base_urls, {
 
         @@social_base_urls = {
@@ -106,12 +106,14 @@ module Planner
 
         ## For each social media provider set for the model, define url generator methods
         args.each do |arg|
-          if arg == :url || arg == :website
+          if arg == :url || arg == :website || arg == :blog
             send(:define_method, :website_url) do
               if self.has_attribute?(:website)
                 fix_url(self.read_attribute(:website))
               elsif self.has_attribute?(:url)
                 fix_url(self.read_attribute(:url))
+              elsif self.has_attribute?(:blog)
+                fix_url(self.read_attribute(:blog))
               else
                 nil
               end
@@ -126,7 +128,7 @@ module Planner
 
             ## Define url method for provider
             send(:define_method, method_name) do
-              url = ""
+              url = nil
               social_arg = arg_name.to_sym
               if self.respond_to?(social_arg)
                 social = self.send(social_arg)
@@ -145,7 +147,9 @@ module Planner
                 end
               end
 
-              url.gsub(/\/+$/,'')
+              url = url.gsub(/\/+$/,'') if url.present?
+
+              url
             end
 
           end
