@@ -9,13 +9,23 @@ builder.bar do
             end
         end
         builder.tags do
-           item.base_tags.each do |tag|
-                builder.tag tag.name
-           end
+          item.taggings do |tagging|
+            builder.tag tagging.tag.name
+          end
         end
+        # builder.tags do
+        #    item.base_tags.each do |tag|
+        #         builder.tag tag.name
+        #    end
+        # end
         builder.title item.title
         builder.short_title item.short_title
-        builder.description ((@short_desc && !item.short_precis.blank?) ? item.short_precis : item.precis)
+        builder.description do
+          builder.cdata!(item.precis) if item.precis
+        end
+        builder.short_description do
+          builder.cdata!(item.short_precis) if item.short_precis
+        end
         builder.people do # we want the moderators and then participants
             item.programme_item_assignments.find_all {|x| x.role == PersonItemRole['Moderator'] }.each do |p|
                 builder.moderator do
