@@ -498,8 +498,19 @@ module PlannerReportsService
                   {:programme_items => 
                     [
                       {:programme_item_assignments => {:person => :pseudonym}},
-                      {:children => {:programme_item_assignments => {:person => :pseudonym}}},
-                      :format
+                      :format,
+                      :external_images,
+                      {:themes => :theme_name},
+                      {:taggings => :tag},
+                      {
+                        :children => [
+                          {:programme_item_assignments => {:person => :pseudonym}},
+                          :format,
+                          :external_images,
+                          {:themes => :theme_name},
+                          {:taggings => :tag}
+                        ]
+                      }
                     ]
                   }
                  ]).
@@ -508,8 +519,19 @@ module PlannerReportsService
                   {:programme_items => 
                     [
                       {:programme_item_assignments => {:person => :pseudonym}},
-                      {:children => {:programme_item_assignments => {:person => :pseudonym}}},
-                      :format
+                      :format,
+                      :external_images,
+                      {:themes => :theme_name},
+                      {:taggings => :tag},
+                      {
+                        :children => [
+                          {:programme_item_assignments => {:person => :pseudonym}},
+                          :format,
+                          :external_images,
+                          {:themes => :theme_name},
+                          {:taggings => :tag}
+                        ]
+                      }
                     ]
                   }
                  ]).
