@@ -205,6 +205,12 @@ var ReportBase = (function(Backbone){
             }
         }),
         
+        PublicationSanPdfView : ReportViewBase.extend({
+            initialize : function() {
+                this.template = _.template($('#publication-template-nopdf').html());
+            }
+        }),
+
         ExportView : ReportViewBase.extend({
             initialize : function() {
                 this.template = _.template($('#export-template').html());

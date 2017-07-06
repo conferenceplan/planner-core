@@ -717,6 +717,7 @@ class PlannerReportsController < PlannerController
     @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false
     
     @max_people = PlannerReportsService.findMaxParticipants[0]["max_people"] # maximum nbr of participants for this conference
+    # only get the contexts for publication
     @contexts = getContexts('ProgrammeItem').sort_by{|name| name.downcase }
     
     @tagOwner = getTagOwner
@@ -894,15 +895,17 @@ class PlannerReportsController < PlannerController
   end
   
   def getContexts(className)
-    taggings = ActsAsTaggableOn::Tagging.where(["taggable_type like ?", className]).
-                  distinct(:context)
-                  
-    contexts = Array.new
+    # taggings = ActsAsTaggableOn::Tagging.where(["taggable_type like ?", className]).
+    #               distinct(:context)
+    #               
+    # contexts = Array.new
+    # 
+    # # for each context get the set of tags (sorted), and add them to the collection for display on the page
+    # taggings.each do |tagging|
+    #   contexts << tagging.context
+    # end
 
-    # for each context get the set of tags (sorted), and add them to the collection for display on the page
-    taggings.each do |tagging|
-      contexts << tagging.context
-    end
+    contexts = TagContext.where({publish: true}).collect{|v| v.name}
     
     return contexts
   end
