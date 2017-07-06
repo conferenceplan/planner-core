@@ -81,13 +81,14 @@ class PeopleController < PlannerController
         datasourcetmp = Datasource.find_by(name: "Application") # TODO - verify, we need to make sure we have the data-source Application
         @person.datasource = datasourcetmp
 
-        
+        @person.save!
         @person = update_default_email_address @person
 
-        @person.save!
-        @person.person_con_state.save!
+        @person.person_con_state.save! if @person.person_con_state.present?
       end
     rescue => ex
+      Rails.logger.error ex.message if Rails.env.development?
+      Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
       render status: :bad_request, text: ex.message
     end
   end
@@ -120,10 +121,18 @@ class PeopleController < PlannerController
         @person = update_default_email_address @person
       end
     rescue => ex
+      Rails.logger.error ex.message if Rails.env.development?
+      Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
       render status: :bad_request, text: ex.message
     end
   end
 
+
+
+  def index
+    @people = Person.all
+    render json: @people.to_json
+  end
   #
   #
   #
@@ -233,13 +242,18 @@ class PeopleController < PlannerController
   private
   def update_default_email_address person
     # Email address
-    if params[:default_email_address] && params[:default_email_address].present? && params[:default_email_address][:email].present?
-      email = params[:default_email_address][:email]
-      label = params[:default_email_address][:label]
-      email_address = person.email_addresses.find_by(email: email)
+    if params[:default_email_address].present?
+      if params[:default_email_address].is_a?(Hash)
+        email = params[:default_email_address][:email]
+        label = params[:default_email_address][:label]
+      else
+        email = params[:default_email_address].strip
+      end
+
+      email_address = person.email_addresses.find_or_create_by(email: email)
       if email_address.present?
         email_address.email = email
-        email_address.label = label
+        email_address.label = label if label
         email_address.isdefault = true if !email_address.isdefault
         email_address.save!
       else
