@@ -172,7 +172,11 @@ CommunicationsApp.Management = (function(Backbone){
     function create_people_fiter() {
       $('#toggle-people').change(function(ev) {
         var val = $(this).val();
-        jQuery("#participants").participantTable('scheduledPeople', !$(ev.target).prop("checked"));
+        jQuery("#participants").participantTable('scheduledPeople', $(ev.target).prop("checked"));
+      });
+      $('#toggle-other-people').change(function(ev) {
+          var val = $(this).val();
+          jQuery("#participants").participantTable('filterPeople', !$(ev.target).prop("checked"));
       });
     };
     
@@ -186,6 +190,10 @@ CommunicationsApp.Management = (function(Backbone){
         
         init : function(options) {
             $('#toggle-people').bootstrapToggle({
+                on:  '<%= t "yes" %>',
+                off: '<%= t "no" %>'
+              });
+            $('#toggle-other-people').bootstrapToggle({
                 on:  '<%= t "yes" %>',
                 off: '<%= t "no" %>'
               });

@@ -148,7 +148,7 @@ class PeopleController < PlannerController
     idx = params[:sidx]
     order = params[:sord]
     nameSearch = params[:namesearch]
-    scheduled = params[:scheduled] ? params[:scheduled] : false
+    scheduled = params[:scheduled] ? (params[:scheduled] == "true") : false
     filters = params[:filters]
     extraClause = params[:extraClause]
     onlySurveyRespondents = params[:onlySurveyRespondents]

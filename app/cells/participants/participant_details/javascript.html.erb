@@ -584,8 +584,6 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     function create_people_fiter() {
         $('#toggle-people').change(function(ev) {
             var val = $(this).val();
-            // console.log(ev.currentTarget);
-            // console.log($(ev.target).prop("checked"));
             jQuery("#participants").participantTable('filterPeople', !$(ev.target).prop("checked"));
         });
     }
