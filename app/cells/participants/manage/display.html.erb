@@ -53,6 +53,12 @@
                     <input id="toggle-people" type="checkbox" data-size="mini" data-onstyle="success">
                 </div>
             </div>
+            <div class="form-horizontal voffset10">
+              <%= t "show-people-assigned-to-items" %><i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t "show-people-assigned-to-items-hint" %>" data-original-title="<%= t "show-people-assigned-to-items" %>"></i>
+              <div class="input-group pull-right" id="people-filter">
+                  <input id="toggle-participants" type="checkbox" data-size="mini" data-onstyle="success">
+              </div>
+            </div>
             <h6><%= t "filter-by-email" %></h6>
             <div class="form-horizontal">
                 <div class="input-group" id="email-filter-input-group">

@@ -586,6 +586,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             var val = $(this).val();
             jQuery("#participants").participantTable('filterPeople', !$(ev.target).prop("checked"));
         });
+        $('#toggle-participants').change(function(ev) {
+            var val = $(this).val();
+            jQuery("#participants").participantTable('scheduledPeople', $(ev.target).prop("checked"));
+        });
     }
 
     function mergePeople() {
@@ -655,6 +659,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         init : function() {
             
             $('#toggle-people').bootstrapToggle({
+                  on:  '<%= t "yes" %>',
+                  off: '<%= t "no" %>'
+                });
+            $('#toggle-participants').bootstrapToggle({
                   on:  '<%= t "yes" %>',
                   off: '<%= t "no" %>'
                 });
