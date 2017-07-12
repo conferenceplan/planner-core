@@ -201,28 +201,38 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     AvailabilityDateModel = Backbone.RelationalModel.extend({
         schema : {
-            start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>', help: '<%= t "availability-start-time-hint" %>',
-                    tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
-                    picker : {
-                        locale : "<%= I18n.locale %>",
-                        stepping : 15,
-                        format : "DD MMM YYYY, HH:mm",
-                        useCurrent: false,
-                        minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
-                        defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>"
-                } },
-            end_time : { type : 'Datetime', title : '<%= t "item-end-time" %>', help: '<%= t "availability-end-time-hint" %>',
-                    tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
-                    picker : {
-                        locale : "<%= I18n.locale %>",
-                        stepping : 15,
-                        format : "DD MMM YYYY, HH:mm",
-                        useCurrent: false,
-                        minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
-                        defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>"
-                } }
+            start_time : { 
+                type : 'Datetime', 
+                title : '<%= t "item-start-time" %>', 
+                help: '<%= t "availability-start-time-hint" %>',
+                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                picker : {
+                    locale : "<%= I18n.locale %>",
+                    stepping : 15,
+                    format : "DD MMM YYYY, hh:mm a",
+                    useCurrent: false,
+                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
+                    defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    sideBySide : true
+                } 
+            },
+            end_time : { 
+                type : 'Datetime', 
+                title : '<%= t "item-end-time" %>', 
+                help: '<%= t "availability-end-time-hint" %>',
+                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                picker : {
+                    locale : "<%= I18n.locale %>",
+                    stepping : 15,
+                    format : "DD MMM YYYY, hh:mm a",
+                    useCurrent: false,
+                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
+                    defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    sideBySide : true
+                } 
+            }
         },
         urlRoot : "<%= baseUri + '/available_dates' %>"
     });
