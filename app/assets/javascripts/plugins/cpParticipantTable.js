@@ -94,6 +94,19 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     return res;
                 }
             }, {
+                  name : 'person[organization]',
+                  index : 'company',
+                  label : this.options.organization[1],
+                  hidden : !this.options.organization[0],
+                  editable : false,
+                  sortable : true,
+                  search : true,
+                  searchoptions : {
+                      clearSearch : false
+                  },
+                  align : 'left',
+                  width : 50
+            }, {
                 name : 'emails',
                 hidden : true,
                 formatter : function(cellvalue, options, rowObject) {

@@ -16,6 +16,7 @@ jQuery(document).ready(function() {
         invite_status : [<%= @invite_status%>, '<%= t "invitation-status"%><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invitation-status" %>" data-container="body" data-trigger="hover" data-placement="right" data-toggle="popover" data-content="<%= (t "invitation-status-help").html_safe %>"></i>' ],
         invite_category : [<%= @invite_category%>, '<%= t "invitation-category-abbreviated"%>' ],
         acceptance_status : [<%= @acceptance_status%>, '<%= t "acceptance"%>'],
+        organization : [<%= @organization%>, '<%= t "organization"%>'],
         has_survey : [<%= @has_survey%>, '<%= t "survey"%>'],
         reg_type   : [<%= @reg_type%>, '<%= t "reg-type"%>'],
 

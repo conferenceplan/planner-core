@@ -22,6 +22,7 @@ class Participants::ParticipantListCell < Cell::Rails
     @acceptance_status = args.has_key?(:acceptance_status) ? args[:acceptance_status] : true
     @has_survey = args.has_key?(:has_survey) ? args[:has_survey] : true
     @reg_type = args.has_key?(:reg_type) ? args[:reg_type] : true
+    @organization = args.has_key?(:organization) ? args[:organization] : true
     
     @view = args.has_key?(:view) ? args[:view] : false
     @search = args.has_key?(:search) ? args[:search] : false
