@@ -375,6 +375,9 @@ protected
 
     if !pendingPerson.invite_category.blank?
       invite_category = InvitationCategory.where({'name' => pendingPerson.invite_category}).first
+      if !invite_category # create it ...
+        invite_category = InvitationCategory.create({'name' => pendingPerson.invite_category})
+      end
       person.invitation_category_id = invite_category.id if invite_category
     end
 
