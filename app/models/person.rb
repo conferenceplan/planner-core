@@ -309,13 +309,15 @@ class Person < ActiveRecord::Base
   end
 
   def pubFirstName
-    return self.pseudonym.first_name if (self.pseudonym != nil) && !self.pseudonym.first_name.blank?
+    return self.pseudonym.first_name if (self.pseudonym != nil) && 
+      (!self.pseudonym.last_name.blank? || !self.pseudonym.first_name.blank?)
     
     return first_name
   end
 
   def pubLastName
-    return self.pseudonym.last_name if (self.pseudonym != nil) && !self.pseudonym.last_name.blank?
+    return self.pseudonym.last_name if (self.pseudonym != nil) && 
+      (!self.pseudonym.last_name.blank? || !self.pseudonym.first_name.blank?)
     
     return last_name
   end
