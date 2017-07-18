@@ -42,11 +42,17 @@ jQuery(document).ready(function() {
         error : function(response) {
             $("body").removeClass("loading");
             if (response.status > 0) {
+              if (response.status == 403 || response.status == 401) {
+                window.location.replace("/");
+              } else if (response.status > 500) {
+                alertMessage("Error communicating with backend");
+              } else {
                 if (response.responseText) {
                     alertMessage(response.responseText);
                 } else {
                     alertMessage("Error communicating with backend");
                 };
+              }
             };
         }
     });
