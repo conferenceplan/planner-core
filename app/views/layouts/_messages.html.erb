@@ -1,5 +1,5 @@
 <% flash.each do |type, message| %>
-<div class="alert <%= {success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', notice: 'alert-info'}[type.to_sym] || type.to_s %> fade in">
+<div class="alert <%= {success: 'alert-success', error: 'alert-danger', alert: 'alert-warning', warn: 'alert-warning', notice: 'alert-info'}[type.to_sym] || type.to_s %> fade in">
 <button class="close" data-dismiss="alert">×</button>
     <%= message %>
 </div>
