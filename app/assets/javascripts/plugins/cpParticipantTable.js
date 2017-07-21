@@ -631,7 +631,12 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
      * 
      */
     mailingQuery : function(options) {
-        this.options.extraClause = "mailing_id=" + options.mailingId;
+      if (this.options.extraClause && (this.options.extraClause.length > 0)) {
+          this.options.extraClause += "&mailing_id=" + options.mailingId;
+      } else {
+          this.options.extraClause = "mailing_id=" + options.mailingId;
+      }
+
         if (options.op) {
             this.options.extraClause += '&op=' + options.op; 
         }

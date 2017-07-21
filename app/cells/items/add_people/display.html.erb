@@ -17,7 +17,9 @@
     
     :multiselect => true,
     :showControls => false,
-    :selectNotifyMethod => "ItemApp.PeopleManagement.showPerson"
+    :selectNotifyMethod => "ItemApp.PeopleManagement.showPerson",
+
+    :extraClause => "only_relevent=true"
 %>
     
 <%= render_cell "items/item_list", :javascript, 
@@ -57,8 +59,8 @@
         <div class="row">
           <div class="col-sm-8">
               <%= t "show-people-from-other-events" %><i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t "show-people-from-other-events-hint" %>" data-original-title="<%= t "show-people-from-other-events" %>"></i>
-              <div class="input-group pull-right" id="people-filter">
-                  <input id="toggle-people" type="checkbox" data-size="mini" data-onstyle="success" checked>
+              <div class="input-group pull-right">
+                  <input id="toggle-people" type="checkbox" data-size="mini" data-onstyle="success">
               </div>
           </div>
         </div>

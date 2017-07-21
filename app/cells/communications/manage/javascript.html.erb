@@ -158,6 +158,8 @@ CommunicationsApp.Management = (function(Backbone){
             mailingId : id
         });
         jQuery("#mailing-participants").participantTable('render');
+
+        jQuery("#participants").participantTable('filterPeople', true);
         jQuery("#participants").participantTable('mailingQuery',{
             mailingId : id,
             op : 'not'
