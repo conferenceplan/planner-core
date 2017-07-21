@@ -29,6 +29,11 @@ class ProgrammeItemAssignment < ActiveRecord::Base
       if role_desc
         self.description = role_desc._value
       end
+    elsif role_id == PersonItemRole['Participant'].id
+      role_desc = UserInterfaceSetting.where({:key => 'participant_role'}).first
+      if role_desc
+        self.description = role_desc._value
+      end
     else
       self.description = nil if self.description != nil
     end
