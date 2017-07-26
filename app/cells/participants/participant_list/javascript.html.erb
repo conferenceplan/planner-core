@@ -4,6 +4,7 @@ jQuery(document).ready(function() {
     jQuery("#<%= @place %>").participantTable({
         caption : '<%= t @caption %>',
         selectNotifyMethod : <%= @selectNotifyMethod %>,
+        selectAllNotifyMethod : <%= @selectAllNotifyMethod %>,
         clearNotifyMethod : <%= @clearNotifyMethod %>,
         loadNotifyMethod : <%= @loadNotifyMethod %>,
         root_url : "<%= @root_url %>",

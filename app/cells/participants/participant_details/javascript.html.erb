@@ -662,6 +662,28 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     var $editDeleteBtns;
     var $mergeBtn;
 
+
+    function toggleBtnStates(number_selected) {
+        if ($emailBtn.length == 0) $emailBtn = control.$el.find('.email-ppl-btn');
+        if (number_selected == 0) {
+            $emailBtn.addClass('disabled');
+        } else {
+            $emailBtn.removeClass('disabled');
+        };
+
+        if (number_selected == 1) {
+            $editDeleteBtns.removeClass('disabled');
+        } else {
+            $editDeleteBtns.addClass('disabled');
+        };
+
+        if (number_selected == 2) {
+            $mergeBtn.removeClass('disabled');
+        } else {
+            $mergeBtn.addClass('disabled');
+        };
+    };
+
     //
     //
     //
@@ -669,7 +691,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         addSelectCallback : function(func) {
             selectCallbacks.add(func);
         },
-        $emailBtn : $emailBtn,
+
+        getSelectedPeople : function() {return selected_people},
 
         init : function() {
             
@@ -716,27 +739,25 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
         mergePeople : mergePeople,
 
+        processSelectAll : function(rowIds, status) {
+            clearRegDetails();
+            current_person = null;
+
+            if (status === false) {
+                var count = 0;
+                selected_people = [];
+            } else {
+                var count = rowIds.length;
+                selected_people = rowIds;
+            };
+
+            toggleBtnStates(count);
+        },
+
         showDetails : function(id, status, e) {
-            var selected_rows = jQuery('#participants').getGridParam('selarrrow');
+            var selected_rows = $('#participants').getGridParam('selarrrow');
 
-            if ($emailBtn.length == 0) $emailBtn = control.$el.find('.email-ppl-btn');
-            if (selected_rows.length == 0) {
-                $emailBtn.addClass('disabled');
-            } else {
-                $emailBtn.removeClass('disabled');
-            };
-
-            if (selected_rows.length == 1) {
-                $editDeleteBtns.removeClass('disabled');
-            } else {
-                $editDeleteBtns.addClass('disabled');
-            };
-
-            if (selected_rows.length == 2) {
-                $mergeBtn.removeClass('disabled');
-            } else {
-                $mergeBtn.addClass('disabled');
-            };
+            toggleBtnStates(selected_rows.length);
 
             if (status) {
                 selected_people.push(id);
