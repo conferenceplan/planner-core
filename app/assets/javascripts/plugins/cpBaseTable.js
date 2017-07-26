@@ -121,10 +121,10 @@ $.widget( "cp.baseTable" , {
         TableControlView = Backbone.Marionette.ItemView.extend({
 
             events : {
-                "click .add-model-button"           : "newModel",
-                "click .edit-model-button"          : "editModel",
-                "click .delete-model-button"        : "deleteModal",
-                "click .extra-action-model-button"  : "extraAction"
+                "click .add-model-button:not(.disabled)"           : "newModel",
+                "click .edit-model-button:not(.disabled)"          : "editModel",
+                "click .delete-model-button:not(.disabled)"        : "deleteModal",
+                "click .extra-action-model-button:not(.disabled)"  : "extraAction"
             },
             
             initialize : function(options) {
