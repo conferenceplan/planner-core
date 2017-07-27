@@ -146,11 +146,11 @@ module Planner
       eval(ENV[:base_image_url.to_s])
     end
 
-    def site_url path_extras: nil, lang: true, restricted_token: true
+    def site_url path_extras: nil, lang: true, private_token: true
       ''
     end
 
-    def site_url_no_lang path_extras: nil, restricted_token: true
+    def site_url_no_lang path_extras: nil, private_token: true
       ''
     end
 
