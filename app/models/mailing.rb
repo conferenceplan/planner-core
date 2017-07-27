@@ -18,7 +18,7 @@ class Mailing < ActiveRecord::Base
   end
 
   def date_sent order: 'asc'
-    mail_histories.any? ? mail_histories.order("date_sent #{order}").first.date_sent : nil
+    mail_histories.any? ? mail_histories.pluck(:date_sent).last : nil
   end
 
   
