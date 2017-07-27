@@ -167,7 +167,7 @@
 
         phone_type_id : $.extend({ 
           type : 'Select', 
-          title : '<%= t "phone type" %>', 
+          title : '<%= t "phone-type" %>', 
           options : <%= PhoneTypes.all.collect {|s| {'val' => s.id, 'label' => s.name} }.to_json.html_safe %> 
         }, typeOptions),
 

@@ -3,6 +3,7 @@ class Mailing < ActiveRecord::Base
   
   has_many  :person_mailing_assignments
   has_many  :people, :through => :person_mailing_assignments
+  has_many  :mail_histories
   
   belongs_to :mail_template
   
@@ -14,6 +15,10 @@ class Mailing < ActiveRecord::Base
     res['mail_use'] = mail_template ? mail_template.mail_use.name : ''
         
     return res
+  end
+
+  def date_sent order: 'asc'
+    mail_histories.any? ? mail_histories.pluck(:date_sent).last : nil
   end
 
   

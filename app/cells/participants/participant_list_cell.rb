@@ -10,6 +10,7 @@ class Participants::ParticipantListCell < Cell::Rails
     @place = args.has_key?(:place) ? args[:place] : "participants"
     @caption = args.has_key?(:caption) ? args[:caption] : "participants"
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
+    @selectAllNotifyMethod = args.has_key?(:selectAllNotifyMethod) ? args[:selectAllNotifyMethod] : "function() {}"
     @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
     @loadNotifyMethod = args.has_key?(:loadNotifyMethod) ? args[:loadNotifyMethod] : "function() {}"
     @pager = args.has_key?(:pager) ? args[:pager] : 'pager'

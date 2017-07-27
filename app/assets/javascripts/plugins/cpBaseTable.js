@@ -16,6 +16,7 @@ $.widget( "cp.baseTable" , {
         getGridData         : "",               // for getting the data (part of the URL)
         caption             : "My Table",
         selectNotifyMethod  : function(ids, status, e) {},
+        selectAllNotifyMethod  : function(ids, status) {},
         clearNotifyMethod   : function() {},
         loadNotifyMethod    : function() {},
         multiselect         : false,
@@ -106,6 +107,7 @@ $.widget( "cp.baseTable" , {
      */
     createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
+        var selectAllMethod = this.options.selectAllNotifyMethod;
         var loadNotifyMethod = this.options.loadNotifyMethod;
         var pageToMethod = this.pageTo;
         var clearNotifyMethod = this.options.clearNotifyMethod;
@@ -121,10 +123,10 @@ $.widget( "cp.baseTable" , {
         TableControlView = Backbone.Marionette.ItemView.extend({
 
             events : {
-                "click .add-model-button"           : "newModel",
-                "click .edit-model-button"          : "editModel",
-                "click .delete-model-button"        : "deleteModal",
-                "click .extra-action-model-button"  : "extraAction"
+                "click .add-model-button:not(.disabled)"           : "newModel",
+                "click .edit-model-button:not(.disabled)"          : "editModel",
+                "click .delete-model-button:not(.disabled)"        : "deleteModal",
+                "click .extra-action-model-button:not(.disabled)"  : "extraAction"
             },
             
             initialize : function(options) {
@@ -312,6 +314,10 @@ $.widget( "cp.baseTable" , {
                     }
 
                     return false;
+                },
+
+                onSelectAll : function(rowIds, status) {
+                    selectAllMethod(rowIds, status);
                 },
 
                 onPaging : function(pgButton) {

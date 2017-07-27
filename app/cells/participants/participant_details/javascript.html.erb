@@ -618,7 +618,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             modal.render();
         } else {
             // Show a modal with both people and ask to proceed
-            // get the names of the peopel based on the ids - can be extracted from the grid
+            // get the names of the people based on the ids - can be extracted from the grid
             // these need to be put in the form
             var data = jQuery("#participants").jqGrid('getRowData', selected_people[0]);
             src_name = getPersonName(data); // add email
@@ -657,6 +657,32 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     var filterCol = null;
     var current_person = null;
     var selected_people = [];
+    var control = {};
+    var $emailBtn;
+    var $editDeleteBtns;
+    var $mergeBtn;
+
+
+    function toggleBtnStates(number_selected) {
+        if ($emailBtn.length == 0) $emailBtn = control.$el.find('.email-ppl-btn');
+        if (number_selected == 0) {
+            $emailBtn.addClass('disabled');
+        } else {
+            $emailBtn.removeClass('disabled');
+        };
+
+        if (number_selected == 1) {
+            $editDeleteBtns.removeClass('disabled');
+        } else {
+            $editDeleteBtns.addClass('disabled');
+        };
+
+        if (number_selected == 2) {
+            $mergeBtn.removeClass('disabled');
+        } else {
+            $mergeBtn.addClass('disabled');
+        };
+    };
 
     //
     //
@@ -665,6 +691,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         addSelectCallback : function(func) {
             selectCallbacks.add(func);
         },
+
+        getSelectedPeople : function() {return selected_people},
 
         init : function() {
             
@@ -700,30 +728,47 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             $('#participant-tabs').tabdrop({
                 text : "..."
             });
+
+            control = $('#participants').participantTable('getControl');
+            $editDeleteBtns = control.$el.find('.edit-model-button, .delete-model-button');
+            $mergeBtn = control.$el.find('.extra-action-model-button');
+            $emailBtn = control.$el.find('.email-ppl-btn');
         },
 
         InviteDetails : InviteDetails,
 
         mergePeople : mergePeople,
 
-        showDetails : function(id, status, e) {
-            if (status) {
-                var selected_rows = jQuery('#participants').getGridParam('selarrrow');
+        processSelectAll : function(rowIds, status) {
+            clearRegDetails();
+            current_person = null;
 
-                if (selected_rows.length == 1) {
-                    jQuery("#participants").jqGrid('setSelection',removed);
-                    selected_people = [];
-                    selected_people.push(id);
-                } else {
-                    selected_people.push(id);
-                    if (selected_people.length > 2) {
-                        var removed = selected_people.shift();
-                        jQuery("#participants").jqGrid('setSelection',removed);
-                    }
-                }
+            if (status === false) {
+                var count = 0;
+                selected_people = [];
+            } else {
+                var count = rowIds.length;
+                selected_people = rowIds;
+            };
+
+            toggleBtnStates(count);
+        },
+
+        showDetails : function(id, status, e) {
+            var selected_rows = $('#participants').getGridParam('selarrrow');
+
+            toggleBtnStates(selected_rows.length);
+
+            if (status) {
+                selected_people.push(id);
 
                 clearRegDetails();
-                current_person = showRegDetails(id);
+
+                if (selected_rows.length == 1) {
+                    current_person = showRegDetails(id);
+                } else {
+                    current_person = null;
+                };
                 return current_person;
             } else {
                 idx = selected_people.indexOf(id);
@@ -734,9 +779,11 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 if (selected_people.length == 0) {
                     clearRegDetails();
                     current_person = null;
-                }
-                return null;
-            }
+                } else if (selected_people.length == 1) {
+                    current_person = showRegDetails(selected_people[0]);
+                };
+                return current_person;
+            };
         },
         clearDetails : function() {
             clearRegDetails();
