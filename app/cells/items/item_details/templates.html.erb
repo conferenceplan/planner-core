@@ -335,14 +335,14 @@
                           {{ var visBadgeLabel = ''; }}
 
                           {{ if (visibility_id == <%= Visibility['Public'].id %>) { }}
-                            {{ visBadgeClass += " label-success"; }}
-                            {{ visBadgeLabel = "<%= t('item-visibility.public') %>";}}
+                            {{ visBadgeClass += " label-public"; }}
+                            {{ visBadgeLabel = "<%= j t('item-visibility.public') %>";}}
                           {{ } else if (visibility_id == <%= Visibility['Private'].id %>) { }}
-                            {{ visBadgeClass += " label-primary"; }}
-                            {{ visBadgeLabel = "<%= t('item-visibility.private') %>";}}
+                            {{ visBadgeClass += " label-private"; }}
+                            {{ visBadgeLabel = "<%= j t('item-visibility.private') %>";}}
                           {{ } else if (visibility_id == <%= Visibility['None'].id %>) { }}
                             {{ visBadgeClass += " label-default"; }}
-                            {{ visBadgeLabel = "<%= t('item-visibility.none') %>";}}
+                            {{ visBadgeLabel = "<%= j t('item-visibility.none') %>";}}
                           {{ }; }}
                           
                           <span class='{{= visBadgeClass }}'>{{= visBadgeLabel}}</span>
