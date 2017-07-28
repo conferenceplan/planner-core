@@ -4,10 +4,14 @@
  * HTML field in the form that utlises the CK editor so we have rich text editor.
  */
 Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base.extend
-    
-    createCkWidget : function() {
+    initialize: function(options) {
+        this.options = options || {};
+        Form.editors.TextArea.prototype.initialize.call(this, options);
+    },
+    createCkWidget : function(_options) {
         // Add the CK editor as the field
         // TODO - add a mechanism to pass in options for the CK editor toolbar
+        var opts = _options || {};
         this.$el.ckeditor({
             // Prevent the translation of html elements (< and >) to encodings, so we can include "macros"
             entities : false,
@@ -40,7 +44,7 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
                 // Maximum allowed Char Count, -1 is default for unlimited
                 maxCharCount: -1
             },
-            height : '7em',
+            height : opts.height ? opts.height : '7em',
             enterMode : CKEDITOR.ENTER_BR,
             shiftEnterMode: CKEDITOR.ENTER_P,
             toolbar : 'CPlan',
@@ -60,7 +64,7 @@ Form.editors.Html = Form.editors.TextArea.extend({ // Backbone.Form.editors.Base
     
     render: function() {
         
-        this.createCkWidget();
+        this.createCkWidget(this.schema.ckOptions);
         
         this.setValue(this.value);
 
