@@ -14,7 +14,7 @@ module MailService
     # get the template from the database that matches the specified use
     template = mailing.mail_template
     
-    assignments = (mailing.mail_template && mailing.mail_template.mail_use == MailUse[:Schedule]) ? ProgramItemsService.findProgramItemsForPerson(person) : nil
+    assignments = mailing.mail_template ? ProgramItemsService.findProgramItemsForPerson(person) : nil
     respondentDetails = person.survey_respondent
     survey = (mailing.mail_template && mailing.mail_template.survey) ? mailing.mail_template.survey : nil
 
@@ -157,7 +157,7 @@ module MailService
           end
         end
         
-        assignments = (mailing.mail_template && mailing.mail_template.mail_use == MailUse[:Schedule]) ? ProgramItemsService.findProgramItemsForPerson(person) : nil
+        assignments = mailing.mail_template ? ProgramItemsService.findProgramItemsForPerson(person) : nil
         respondentDetails = person.survey_respondent
         key = respondentDetails ? respondentDetails.key : generateSurveyKey(person) # get the key (or generate it)
         survey = (mailing.mail_template && mailing.mail_template.survey) ? mailing.mail_template.survey : nil
