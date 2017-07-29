@@ -56,7 +56,6 @@ module MailService
           from:     config.from,
           reply_to: config.reply_to,
           to:       email,
-          cc:       config.cc,
           subject:  template.subject,
           title:    template.title,
           return_path: config.from,
@@ -89,8 +88,6 @@ module MailService
 
     to = person.getDefaultEmail.email
     if to && !to.blank?
-      cc = config.cc
-      
       content = generateEmailContent(template, {
               :person             => person,
               :survey             => survey,
@@ -102,7 +99,6 @@ module MailService
             from:     config.from,
             reply_to: config.reply_to,
             to:       to,
-            cc:       cc,
             subject:  template.subject,
             title:    template.title,
             return_path: config.from,
@@ -145,7 +141,7 @@ module MailService
       to = mailing.testrun ? config.test_email : person.getDefaultEmail.email
       
       if to && !to.blank?
-        cc = mailing.testrun ? nil : config.cc
+        cc = nil
         
         if !mailing.testrun && mailing.cc_all
           # add all the email addresses for the person to the CC
