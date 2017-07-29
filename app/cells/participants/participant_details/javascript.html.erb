@@ -328,6 +328,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         Backbone.Relational.store.reset();
 
         eventAggregator.off("refreshTagList", syncModel);
+        current_person = null;
     };
 
     function syncModel() {
@@ -741,49 +742,22 @@ ParticipantApp.PeopleManagement = (function(Backbone){
 
         processSelectAll : function(rowIds, status) {
             clearRegDetails();
-            current_person = null;
 
-            if (status === false) {
-                var count = 0;
-                selected_people = [];
-            } else {
-                var count = rowIds.length;
-                selected_people = rowIds;
-            };
-
-            toggleBtnStates(count);
+            selected_people = (status === false ? [] : rowIds);
+            toggleBtnStates(selected_people.length);
         },
 
         showDetails : function(id, status, e) {
-            var selected_rows = $('#participants').getGridParam('selarrrow');
+            selected_people = $('#participants').getGridParam('selarrrow');
 
-            toggleBtnStates(selected_rows.length);
-
-            if (status) {
-                selected_people.push(id);
-
-                clearRegDetails();
-
-                if (selected_rows.length == 1) {
-                    current_person = showRegDetails(id);
-                } else {
-                    current_person = null;
-                };
-                return current_person;
+            // clear the reg details if there are no more selections
+            if (selected_people.length == 1) {
+                current_person = showRegDetails(selected_people[0]);
             } else {
-                idx = selected_people.indexOf(id);
-                if (idx > -1) {
-                    selected_people.splice(idx, 1);
-                }
-                // clear the reg details if there are no more selections
-                if (selected_people.length == 0) {
-                    clearRegDetails();
-                    current_person = null;
-                } else if (selected_people.length == 1) {
-                    current_person = showRegDetails(selected_people[0]);
-                };
-                return current_person;
+                clearRegDetails();
             };
+            toggleBtnStates(selected_people.length);
+            return current_person;
         },
         clearDetails : function() {
             clearRegDetails();
