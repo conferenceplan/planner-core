@@ -339,7 +339,11 @@ private
 
       if (response && !response.response.empty?)
           person.edited_bio = EditedBio.new(:person_id => person.id) if !person.edited_bio
-          person.edited_bio.send("#{mapping}=", response.response)
+          if mapping == "twitter"
+            person.edited_bio.twitterinfo = response.response
+          else
+            person.edited_bio.send("#{mapping}=", response.response)
+          end
           person.edited_bio.save!
       end
     end
