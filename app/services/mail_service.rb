@@ -141,7 +141,7 @@ module MailService
       to = mailing.testrun ? config.test_email : person.getDefaultEmail.email
       
       if to && !to.blank?
-        cc = nil
+        cc = ""
         
         if !mailing.testrun && mailing.cc_all
           # add all the email addresses for the person to the CC
