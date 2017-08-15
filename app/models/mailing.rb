@@ -5,7 +5,7 @@ class Mailing < ActiveRecord::Base
   has_many  :people, :through => :person_mailing_assignments
   has_many  :mail_histories
   
-  belongs_to :mail_template
+  belongs_to :mail_template, touch: true
   
   validate :number_and_mail_use_unique
   
