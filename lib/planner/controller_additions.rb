@@ -8,7 +8,16 @@ module Planner
                          :strip_html_tags, :site_url, :site_url_no_lang, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
                          :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?,
-                         :human_time, :person_img_url, :current_user, :org_info_email
+                         :human_time, :person_img_url, :current_user, :org_info_email,
+                         :current_event, :current_event?
+    end
+
+    def current_event
+      nil
+    end
+
+    def current_event?
+      nil
     end
 
     def org_info_email

@@ -41,18 +41,18 @@ function set_setup_type(mdl, arg) {
     }
 };
 
-function toggleItemExtras(el) {
-    if (!jQuery('input[name="is_break"]').is(":checked")){
-        $extras = jQuery("#programme-item-extras");
-        $el = jQuery(el);
+function toggleItemExtras() {
+    if (!$('input[name="is_break"]').is(":checked")){
+        $extras = $("#programme-item-extras");
+        $icon = $('#toggle-item-extras-btn');
         if ($extras.length > 0){
             $extras.toggle();
             if ($extras.is(":visible")){
-                $el.removeClass("fa-plus-square");
-                $el.addClass("fa-minus-square");
+                $icon.removeClass("fa-plus-square");
+                $icon.addClass("fa-minus-square");
             } else {
-                $el.removeClass("fa-minus-square");
-                $el.addClass("fa-plus-square");
+                $icon.removeClass("fa-minus-square");
+                $icon.addClass("fa-plus-square");
             }
         }
     }
