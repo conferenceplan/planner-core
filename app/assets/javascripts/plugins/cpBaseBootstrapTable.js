@@ -61,7 +61,7 @@ $.widget( "cp.baseBootstrapTable" , {
         ctl_template        : '#table-control-template',
         extra_button        : false,
         extra_button_title  : "extra",
-        extra_modal_action  : function() {}
+        extra_modal_action  : function() {},
     },
 
     /*
@@ -447,7 +447,8 @@ $.widget( "cp.baseBootstrapTable" , {
                 onExpandRow         : this.options.onExpandRow,
                 onCollapseRow       : this.options.onCollapseRow,
                 sortOrder           : this.options.sortOrder,
-                sortName            : this.options.sortName
+                sortName            : this.options.sortName,
+                uniqueId            : this.options.uniqueId,
                 // ctl_template        : this.options.ctl_template
         });
 
