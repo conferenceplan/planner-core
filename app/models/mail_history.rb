@@ -3,7 +3,7 @@ class MailHistory < ActiveRecord::Base
                   :person_mailing_assignment, :email, :person, :mailing, :email_status, :subject
     
   belongs_to :person_mailing_assignment, touch: true
-  belongs_to :person
+  belongs_to :person, touch: true
   belongs_to :mailing, touch: true
   
   has_enumerated :email_status, :class_name => 'EmailStatus'

@@ -1,11 +1,11 @@
 class Mailing < ActiveRecord::Base
   attr_accessible :lock_version, :testrun, :scheduled, :mailing_number, :mail_template_id, :last_person_idx, :include_email, :cc_all
   
-  has_many  :person_mailing_assignments
+  has_many  :person_mailing_assignments, dependent: :destroy
   has_many  :people, :through => :person_mailing_assignments
-  has_many  :mail_histories
+  has_many  :mail_histories, dependent: :destroy
   
-  belongs_to :mail_template, touch: true
+  belongs_to :mail_template, touch: true, dependent: :destroy
   
   validate :number_and_mail_use_unique
   
@@ -27,5 +27,13 @@ class Mailing < ActiveRecord::Base
     m = Mailing.references(:mail_template).includes(:mail_template).where(["mailing_number = ? AND mail_templates.mail_use_id = ?", mailing_number, mail_template.mail_use_id]).first
     
     errors.add(:mailing_number, I18n.t("planner.core.errors.unique-mailing-error")) if m != nil && m.id != id
+  end
+
+  def subject
+    mail_template ? mail_template.subject : nil
+  end
+
+  def content
+    mail_template ? mail_template.content : nil
   end
 end
