@@ -683,7 +683,7 @@ var AppUtils = (function(){
             var errors = this.submitData();
             
             if (!errors) {
-                if (e.type != "hide") this.$el.modal("hide");
+                if ((e && e.type != "hide") || e === void 0) this.$el.modal("hide");
                 this.close_modal();
             };
         },
