@@ -3,6 +3,8 @@
 class BioPictureUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave   # Use cloudinary as the image store
   include UploaderHelper
+  
+  SALT = "This is a Bio Pic"
 
   def stored_version
     self.model.lock_version
@@ -13,19 +15,22 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   def public_id
     publicid = common_root_path + '/'
+    
     if model.is_a?(SurveyResponse)
       details = model.survey_respondent_detail
       if details
-        publicid += details.first_name ? details.first_name : ''
-        publicid += details.last_name ? details.last_name : ''
+        hasher = Hashids.new(SALT, 4)
+        publicid += hasher.encode(details.id)
+        publicid += "_"
       else
         publicid += 'response'
       end
       publicid += '_' + model.id.to_s
     else  
       if ((defined? model.person) && model.person)
-        publicid += model.person.getFullPublicationFirstAndLastName
-        publicid += '_' + model.id.to_s
+        hasher = Hashids.new(SALT, 4)
+        publicid += hasher.encode(model.person.id)
+        publicid += '_' + model.person.id.to_s
       else
         publicid += 'default_bio_image'
       end
