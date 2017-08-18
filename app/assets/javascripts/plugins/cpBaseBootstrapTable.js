@@ -449,6 +449,8 @@ $.widget( "cp.baseBootstrapTable" , {
                 sortOrder           : this.options.sortOrder,
                 sortName            : this.options.sortName,
                 uniqueId            : this.options.uniqueId,
+                onCheck             : this.options.onCheck,
+                onUncheck           : this.options.onUncheck,
                 // ctl_template        : this.options.ctl_template
         });
 
