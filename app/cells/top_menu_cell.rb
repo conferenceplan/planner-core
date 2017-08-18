@@ -15,7 +15,7 @@ class TopMenuCell < Cell::Rails
     # remove the baseUri if present
     
     idx = @topmenu.find_index{|item| 
-      found = item[:target].eql? path
+      found = item[:target].split("#")[0].eql? path
       if item[:sub_menu] # && !found
         subidx = item[:sub_menu].find_index{|i| i[:target].split("#")[0].eql? path }
       end
