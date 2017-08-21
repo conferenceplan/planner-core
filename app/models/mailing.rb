@@ -41,7 +41,7 @@ class Mailing < ActiveRecord::Base
   end
 
   def display_name
-    _name = title.present? ? "[#{title}] " : ''
+    _name = title.present? && title != subject ? "[#{title}] " : ''
     _name = _name + (subject.present? ? subject : I18n.t('planner.front.messages.emails.detail-panel.header.no-subject'))
     _name
   end
