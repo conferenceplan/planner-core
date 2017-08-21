@@ -317,6 +317,7 @@ var AppUtils = (function(){
 
         render: function () {
             Backbone.BootstrapModal.count++;
+            if (!$('body').hasClass('modal-open')) $('body').addClass('modal-open');
 
             this.$el.html($(this.template({
                 title : this.options.title
@@ -354,7 +355,7 @@ var AppUtils = (function(){
                 e.preventDefault();
                 e.stopPropagation();
                 if (this.options.continueAction) {
-                    this.options.continueAction();
+                    this.options.continueAction.call(this);
                 }
                 this.options.closeAction = null;
                 this.$el.modal("hide");
@@ -371,6 +372,14 @@ var AppUtils = (function(){
             this.unbind();
             this.views = [];  
             this.remove();
+
+            if (Backbone.BootstrapModal.count < 1 || $('.modal').length < 1) {
+              $('body').removeClass('modal-open');
+              Backbone.BootstrapModal.count = 0;
+            } else if (!$('body').hasClass('modal-open')) {
+              $('body').addClass('modal-open');
+            };
+            $('.select2-dropdown-open').siblings('input[name]').select2('close');
         },
         hideExtra : function(e) {
           if (this.options.closeFn) {
