@@ -17,7 +17,7 @@ class Mailing < ActiveRecord::Base
     return res
   end
 
-  def date_sent order: 'asc'
+  def date_sent
     mail_histories.any? ? mail_histories.pluck(:date_sent).last : nil
   end
 
@@ -25,8 +25,11 @@ class Mailing < ActiveRecord::Base
   def number_and_mail_use_unique
     # Make sure that the combination of number and mail_use_id is unique
     m = Mailing.references(:mail_template).includes(:mail_template).where(["mailing_number = ? AND mail_templates.mail_use_id = ?", mailing_number, mail_template.mail_use_id]).first
-    
-    errors.add(:mailing_number, I18n.t("planner.core.errors.unique-mailing-error")) if m != nil && m.id != id
+ errors.add(:mailing_number, I18n.t("planner.core.errors.unique-mailing-error")) if m != nil && m.id != id
+  end
+
+  def title
+    mail_template ? mail_template.title : nil
   end
 
   def subject
@@ -36,4 +39,11 @@ class Mailing < ActiveRecord::Base
   def content
     mail_template ? mail_template.content : nil
   end
+
+  def display_name
+    _name = title.present? ? "[#{title}] " : ''
+    _name = _name + (subject.present? ? subject : I18n.t('planner.front.messages.emails.detail-panel.header.no-subject'))
+    _name
+  end
+
 end
