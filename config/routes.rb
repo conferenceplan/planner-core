@@ -59,7 +59,7 @@ Rails.application.routes.draw do
   # Participant/Attendee management
   #
   #
-  get 'people', to: 'people#index', defaults: { format: :json }
+  match 'people', to: 'people#index', via: [:get, :post], defaults: { format: :json }
   match 'participants/merge',                         :controller => 'people', :action => 'merge',            :via => 'post'
   match 'participants/getList',                       :controller => 'people', :action => 'getList',            :via => ['post','get']
   match 'participants/count',                         :controller => 'people', :action => 'count',              :via => 'get'
