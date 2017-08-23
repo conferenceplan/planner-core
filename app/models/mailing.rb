@@ -40,6 +40,10 @@ class Mailing < ActiveRecord::Base
     mail_template ? mail_template.content : nil
   end
 
+  def transition_invite_status_id
+    mail_template ? mail_template.transiton_invite_status_id : nil
+  end
+
   def display_name
     _name = title.present? && title != subject ? "[#{title}] " : ''
     _name = _name + (subject.present? ? subject : I18n.t('planner.front.messages.emails.detail-panel.header.no-subject'))
