@@ -36,7 +36,8 @@ $.widget( "cp.baseTable" , {
         extra_button        : false,
         extra_button_title  : "extra",
         extra_modal_action  : function() {},
-        tagQuery            : ''
+        tagQuery            : '',
+        extraTableOpts      : {},
     },
 
     translate : function(str) {
@@ -251,8 +252,10 @@ $.widget( "cp.baseTable" , {
             },
         });
 
+        console.log(this.options.pager);
+
         // create the grid that is associated with the element
-        var grid = this.element.jqGrid({
+        var grid = this.element.jqGrid(_.extend({
                 url             : this.createUrl(),
                 datatype        : 'JSON',
                 jsonReader      : {
@@ -272,7 +275,7 @@ $.widget( "cp.baseTable" , {
                 // subGridUrl      : this.getSubGridUrl(),
                 multiselect     : this.options.multiselect,
                 multiboxonly    : this.options.multiboxonly,
-                pager           : jQuery(this.options.pager),
+                pager           : jQuery(that.options.pager),
                 rowNum          : 10,
                 autowidth       : true,
                 shrinkToFit     : true,
@@ -350,7 +353,7 @@ $.widget( "cp.baseTable" , {
                         }
                     }
                 }
-        });
+        }, this.options.extraTableOpts));
         
         if (this.options.hide_select_all) {
             $("#cb_" + this.element.attr('id')).hide();
