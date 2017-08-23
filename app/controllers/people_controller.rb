@@ -159,22 +159,34 @@ class PeopleController < PlannerController
     operation = params[:op]
     @includeMailings = params[:includeMailings] ? params[:includeMailings] : false
     @includeMailHistory = params[:includeMailHistory] ? params[:includeMailHistory] : false
-    only_relevent_people = params[:only_relevent] ? (params[:only_relevent] == "true") : false
+    only_relevant_people = params[:only_relevent] ? (params[:only_relevent] == "true") : false
+    excluded = nil
+    if params[:excluded_person_ids].present?
+      if params[:excluded_person_ids].is_a?(Array)
+        excluded = params[:excluded_person_ids]
+      else
+        excluded = params[:excluded_person_ids].split(',')
+      end
+    end
 
 # TODO - fix page_to does a find as well....
-    @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, 
-                                        tags, nil, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email,
-                                        only_relevent_people
+    @count = PeopleService.countPeople(filters: filters, extra_clause: extraClause, 
+        only_survey_respondents: onlySurveyRespondents, name_search: nameSearch, 
+        context: context, tags: tags, mailing_id: mailing_id, op: operation, 
+        scheduled: scheduled, include_mailings: @includeMailings, 
+        include_mail_history: @includeMailHistory, email: email, 
+        only_relevant_people: only_relevant_people, excluded_person_ids: excluded)
     
     if page_to && !page_to.empty?
-      gotoNum = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, 
-                                        tags, page_to, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email,
-                                        only_relevent_people
-      if gotoNum
+      gotoNum = PeopleService.countPeople(filters: filters, extra_clause: extraClause, 
+        only_survey_respondents: onlySurveyRespondents, name_search: nameSearch, 
+        context: context, tags: tags, page_to: page_to, mailing_id: mailing_id, op: operation, 
+        scheduled: scheduled, include_mailings: @includeMailings, 
+        include_mail_history: @includeMailHistory, email: email, 
+        only_relevant_people: only_relevant_people, excluded_person_ids: excluded)
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
         @page = 1 if @page <= 0
-      end
     end
     
     if rows.to_i > 0
@@ -184,9 +196,13 @@ class PeopleController < PlannerController
       @nbr_pages = 1
     end
     
-    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents,
-                  nameSearch, context, tags, mailing_id, operation, scheduled, 
-                  @includeMailings, @includeMailHistory, email, only_relevent_people
+    @people = PeopleService.findPeople(rows: rows, page: @page, index: idx, 
+        sort_order: order, filters: filters, extra_clause: extraClause, 
+        only_survey_respondents: onlySurveyRespondents, name_search: nameSearch, 
+        context: context, tags: tags, page_to: page_to, mailing_id: mailing_id, op: operation, 
+        scheduled: scheduled, include_mailings: @includeMailings, 
+        include_mail_history: @includeMailHistory, email: email, 
+        only_relevant_people: only_relevant_people, excluded_person_ids: excluded)
   end
   
   #
