@@ -183,12 +183,13 @@ CKEDITOR.config.htmlbuttons = [
         html:'<%= args[:person].pubLastName %>',
         title:'Person\'s published last name'
       },
-      {
-          name:'survey-url',
-          //icon:'icon2.png',
-          html:'<%= args[:survey_url] %>',
-          title:'Survey URL (inserts the URL to access the survey specified in this template)'
-      },
+      // Taking out survey mail merge until we find a good way to incorporate it
+      // {
+      //     name:'survey-url',
+      //     //icon:'icon2.png',
+      //     html:'<%= args[:survey_url] %>',
+      //     title:'Survey URL (inserts the URL to access the survey specified in this template)'
+      // },
       {
           name:'survey-key',
           //icon:'icon2.png',
