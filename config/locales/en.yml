@@ -68,6 +68,7 @@ en:
     formats:
       start_time_with_date: "%Y-%-m-%-d, %k:%M"
       end_time: "%k:%M"
-
-
+  date:
+    formats:
+      short_day: "%a, %b %e %Y"
 
