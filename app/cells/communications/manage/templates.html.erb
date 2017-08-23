@@ -1,15 +1,15 @@
 
 <script type="text/template" id="mailing-data-template">
-	<div class="well">
-	    <dl class="dl-horizontal dt35" style="margin-bottom: 0;">
-	        <dt><%= t "mail-mailing-number" %></dt><dd>{{= mailing_number }}</dd>
-	        <dt><%= t "mail-mailing-template" %></dt><dd>{{= mail_template ? mail_template : "&nbsp;" }}</dd>
-	        <dt><%= t "mail-mail-usage" %></dt><dd>{{= mail_use ? mail_use : "&nbsp;" }}</dd>
-	        <dt><%= t "mail-scheduled" %></dt><dd>{{= scheduled ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-	        <dt><%= t "mail-include-email" %></dt><dd>{{= include_email ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+  <div class="well">
+      <dl class="dl-horizontal dt35" style="margin-bottom: 0;">
+          <dt><%= t "mail-mailing-number" %></dt><dd>{{= mailing_number }}</dd>
+          <dt><%= t "mail-mailing-template" %></dt><dd>{{= mail_template ? mail_template : "&nbsp;" }}</dd>
+          <dt><%= t "mail-mail-usage" %></dt><dd>{{= mail_use ? mail_use : "&nbsp;" }}</dd>
+          <dt><%= t "mail-scheduled" %></dt><dd>{{= scheduled ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+          <dt><%= t "mail-include-email" %></dt><dd>{{= include_email ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
             <dt><%= t "mail-cc-all" %></dt><dd>{{= cc_all ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-	        <dt><%= t "mail-test-run" %></dt><dd>{{= testrun ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
-	    </dl>
+          <dt><%= t "mail-test-run" %></dt><dd>{{= testrun ? '<%= t "yes" %>' : '<%= t "no" %>' }}</dd>
+      </dl>
    </div>
 </script>
 
@@ -27,7 +27,7 @@
 </script>
 
 <script type="text/template" id="list-control-view-template">
-	<button class="btn btn-primary add-people-button"><i class="glyphicon glyphicon-chevron-right"></i></button>
+  <button class="btn btn-primary add-people-button"><i class="glyphicon glyphicon-chevron-right"></i></button>
     <div class="voffset10"></div>
     <button class="btn btn-primary remove-people-button"><i class="glyphicon glyphicon-chevron-left"></i></button>
 </script>
