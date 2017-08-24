@@ -855,14 +855,16 @@ var AppUtils = (function(){
                         if (callback) {
                             callback();
                         };
-
-                        setMessage({
-                          text : I18n.t('core.messages.data-successfully-saved'),
-                          style : 'success',
-                          renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
-                          fade : true,
-                          fadeTimeout : 10000
-                        });
+                        
+                        if (!self.options.noSuccessMsg) {
+                          setMessage({
+                            text : (!(typeof self.options.successMsg == 'undefined') ? self.options.successMsg : I18n.t('core.messages.data-successfully-saved')),
+                            style : 'success',
+                            renderLocation : (($('.modal').length > 0 && $('.modal').is(':visible')) ? 'modal' : 'main-layout'),
+                            fade : true,
+                            fadeTimeout : 10000
+                          });
+                        }
                     },
                     customError : function(response) {
                       // console.log(xhr, status, error);
