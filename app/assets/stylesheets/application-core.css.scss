@@ -243,6 +243,9 @@ $turquiose : #009999;
 
 #toggle-item-extras-btn {
   cursor: pointer;
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .ui-draggable.sortable {
