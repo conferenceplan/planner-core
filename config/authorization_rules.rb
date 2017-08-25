@@ -155,7 +155,7 @@ privileges do
         :surveyNames, :surveyQueryNames, :show, :questions, :runReport, :delSurveyQuery, :table_tents, :people_by_tag, :badge_labels, :room_signs, :people_nbr_items, :people_items_over_max, :participants_with_no_bios, :program_book_report,
         :panels_without_moderator, :edited_bios, :report_word_counts, :items_with_one_person, :capacity_report, :equipment_needs, :change_sheet, :part_schedule]
     privilege :read, :includes => [:report, :index, :show, :list, :listwithblank, :comphrensive,:acceptancestatuslist,:acceptancestatuslistwithblank,:ReportInviteStatus,
-        :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments, :listWithBlank, :items, :surveys]
+        :doReportInviteStatus,:invitestatuslist,:invitestatuslistwithblank,:getConflicts,:getRoomControl, :updateSelect, :getList, :list, :assignments, :listWithBlank, :items, :surveys, :counts]
     privilege :manage, :includes => [:create, :read, :update, :delete, :communicate, :add, :remove, :copy,
                                       :SetInvitePendingToInvited, :doSetInvitePendingToInvited, :addItem, :removeItem,:program_book_report, :addPeople, :removePeople]
     privilege :create, :includes => [:new,:import,:doimport]
