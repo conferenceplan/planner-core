@@ -247,11 +247,7 @@ module Planner
                   { :title => 'survey-reports', :target => '/pages/surveys_dash/reporting', :display => allowed?(:survey_reports) }
                 ]
               } if allowed? :surveys
-      menu << { :title => 'messages',   :target => '/pages//communications_dash/templates', :icon => "fa fa-envelope",  :target_base => '/pages/communications_dash',
-                :sub_menu => [
-                  { :title => 'manage-mailings', :target => '/pages/communications_dash/manage', :display => allowed?(:manage_mailings) },
-                  { :title => 'email-templates', :target => '/pages/communications_dash/templates', :display => allowed?(:mailing_templates) }
-                ]
+      menu << { :title => 'messages',   :target => '/pages//communications_dash/templates', :icon => "fa fa-envelope",  :target_base => '/pages/communications_dash'
               } if allowed? :communications
       menu << { :title => 'reports',        :target => '/pages/reports_dash/manage', :icon => "fa fa-bar-chart",     :target_base => '/pages/reports_dash',
                 :sub_menu => [
