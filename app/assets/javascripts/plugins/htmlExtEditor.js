@@ -32,7 +32,7 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
             removePlugins : "elementspath,flash",
             height : '40em',
             enterMode : CKEDITOR.ENTER_P,
-            extraPlugins: 'templates,htmlbuttons,wordcount',
+            extraPlugins: 'htmlbuttons,wordcount',
             wordcount : {
             
                 // Whether or not you want to show the Paragraphs Count
@@ -57,7 +57,6 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
                 maxCharCount: -1
             },
             //protectedSource: [/<%=[\s\S]*%>/g] ,
-            template_files: '/assets/ckeditor/plugins/templates/templates/default.js',
             contentsCss : '/assets/grenadine/ckeditor-edit.css',
             shiftEnterMode: CKEDITOR.ENTER_BR,
             toolbar : 'CPlan',
@@ -71,7 +70,6 @@ Form.editors.HtmlExt = Form.editors.TextArea.extend({ // Backbone.Form.editors.B
                 { name: 'styles', items : [ 'Styles','Format','Font','FontSize' ] },
                 { name: 'colors', items : [ 'TextColor','BGColor' ] },
                 { name: 'tools', items : [ 'Maximize', 'ShowBlocks','-','About' ] },
-                { name: 'grenadine-templates', items : ['Templates' ] },
                 { name: 'htmlbuttons', items : [
                             {
                                 name:'insert-grenadine-custom-fields'
