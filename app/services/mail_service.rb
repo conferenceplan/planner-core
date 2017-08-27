@@ -168,7 +168,6 @@ module MailService
     
         begin
           subject = template.subject
-          subject += ' - ' + person.getFullName() if person
           PlannerMailer.send_email({
               from:     config.from,
               reply_to: config.reply_to,
