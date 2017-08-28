@@ -9,7 +9,16 @@ module Planner
                          :public_start_date, :public_end_date, :public_days, :conference_name,
                          :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?,
                          :human_time, :person_img_url, :current_user, :org_info_email,
-                         :current_event, :current_event?
+                         :current_event, :current_event?, :custom_google_analytics_code,
+                         :custom_google_analytics_code?
+    end
+
+    def custom_google_analytics_code
+      nil
+    end
+
+    def custom_google_analytics_code?
+      nil
     end
 
     def current_event
