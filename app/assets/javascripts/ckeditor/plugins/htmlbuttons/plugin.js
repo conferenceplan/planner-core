@@ -197,12 +197,12 @@ CKEDITOR.config.htmlbuttons = [
           title:'Person\'s Survey Authentication Code (required if survey requires authentication)'
       },
 
-      {
-          name:'survey-responses',
-          //icon:'icon2.png',
-          html:'<%= survey_to_html(args[:survey],args[:respondentDetails]) %>',
-          title:'List of Person\'s Survey Responses'
-      },
+      // {
+      //     name:'survey-responses',
+      //     //icon:'icon2.png',
+      //     html:'<%= survey_to_html(args[:survey],args[:respondentDetails]) %>',
+      //     title:'List of Person\'s Survey Responses'
+      // },
       {
           name:'schedule-assignments',
           //icon:'icon2.png',
