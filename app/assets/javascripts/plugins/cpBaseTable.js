@@ -252,8 +252,6 @@ $.widget( "cp.baseTable" , {
             },
         });
 
-        console.log(this.options.pager);
-
         // create the grid that is associated with the element
         var grid = this.element.jqGrid(_.extend({
                 url             : this.createUrl(),
