@@ -1,7 +1,7 @@
 /* Variables that will set values depending on the user's language */
 
 $w2: 650px; // under this width, we collapse to a pull-down menu instead of a regular menu
-
+$w2-5: 767px;
 $w3: 1350px; // small toolbar width in English
 $w4: 1440px; // medium toolbar width in English 
 
@@ -293,7 +293,7 @@ screen and (min-device-pixel-ratio: 1.5) {
 #grenadine-application-menu {
   border-radius:0px;
   
-  border: 0px 0px 0px 0px;
+  border: none;
   margin-bottom: 0px;
   
 }
@@ -326,7 +326,10 @@ screen and (min-device-pixel-ratio: 1.5) {
   #user-menu {
     height: 100px;
   }
-  #app-sub-menu-div.affix {
+  #app-menu-div {
+    z-index: 802;
+  }
+  #app-sub-menu-div .affix {
   top: 104px;
   z-index:802;
   width:100%;
@@ -335,6 +338,26 @@ screen and (min-device-pixel-ratio: 1.5) {
     font-size: 14px;
   }
 }
+@media all and (min-width: $w2) and (max-width: $w2-5){
+  #grenadine-application-menu {
+    box-shadow: none;
+    z-index: 810;
+  }
+  #grenadine-sub-application-menu {
+    z-index: 799;
+  } 
+  #user-menu {
+    height: 50px;
+  }
+}
+
+@media all and (max-width: $w2-5){
+  #grenadine-sub-application-menu .navbar-nav, 
+  #grenadine-sub-application-menu.navbar {
+    height: auto;
+  }
+}
+
 /* This is the case when we have only enough space for the medium toolbar but on 1 single line, for English text */
 @media all and (min-width: $w3)
 {
@@ -430,11 +453,10 @@ screen and (min-device-pixel-ratio: 1.5) {
 @media all and (min-width: $w2)
 {
   #collapse-2 { 
-    padding-left:0px; padding-rignt: 0px;
+    // padding-left:0px; padding-right: 0px;
     }
   #collapse-4 { 
-    padding-left:0px; padding-rignt: 0px;
-    
+    padding-left:0px; padding-right: 0px;
     }
 }
 #right-menu-navbar a {
