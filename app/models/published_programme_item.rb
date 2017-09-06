@@ -81,10 +81,10 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   def start_time
     if self.parent
-      _start_time = self.parent.published_time_slot.start
-      _start_time = self.parent.published_time_slot.start + self.start_offset.minutes if self.start_offset
+      _start_time = self.parent.start_time
+      _start_time = self.parent.start_time + self.start_offset.minutes if self.start_offset
     else
-      _start_time = self.published_time_slot.start
+      _start_time = self.start_time
     end
     _start_time
   end

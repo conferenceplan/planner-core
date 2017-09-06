@@ -114,8 +114,8 @@ wb.add_worksheet(name: "New Items") do |sheet|
             item.precis,
             item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
                 p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join("\n"),        
-            item.published_time_slot.start.strftime('%A'),
-            item.published_time_slot.start.strftime('%H:%M'),
+            item.start_time.strftime('%A'),
+            item.start_time.strftime('%H:%M'),
         ]
     end
 end

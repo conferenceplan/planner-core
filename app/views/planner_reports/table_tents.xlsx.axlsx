@@ -17,7 +17,7 @@ wb.add_worksheet(name: "Table Tents") do |sheet|
         @people.each do |person|
             # should be the published items
             person.published_programme_items.collect{|i| @itemList ? (@itemList.include?(i.id.to_s) ? i : nil) : i }.compact.
-                sort_by{ |a| (a.parent && a.parent.published_time_slot) ? a.parent.published_time_slot.start : (a.published_time_slot ? a.published_time_slot.start : @conf_start_time) }.
+                sort_by{ |a| a.start_time ? a.start_time : @conf_start_time }.
                 each do |item|
                     row = []
                     
@@ -28,16 +28,13 @@ wb.add_worksheet(name: "Table Tents") do |sheet|
                     if item.parent
                         row << item.parent.published_room.name
                         row << item.parent.published_room.published_venue.name
-                        row << item.parent.published_time_slot.start.strftime('%A')
-                        row << item.parent.published_time_slot.start.strftime('%H:%M')
-                        row << item.parent.published_time_slot.start.strftime('%y-%m-%d')
                     else
                         row << item.published_room.name
                         row << item.published_room.published_venue.name
-                        row << item.published_time_slot.start.strftime('%A')
-                        row << item.published_time_slot.start.strftime('%H:%M')
-                        row << item.published_time_slot.start.strftime('%y-%m-%d')
                     end
+                    row << item.start_time.strftime('%A')
+                    row << item.start_time.strftime('%H:%M')
+                    row << item.start_time.strftime('%y-%m-%d')
 
                     sheet.add_row row
             end
