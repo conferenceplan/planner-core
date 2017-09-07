@@ -251,12 +251,13 @@ module PeopleService
   #
   # need invitation_status, invitation_category
   #
-  def self.findAllPeople(invitestatus = nil, invite_category = nil)
+  def self.findAllPeople(invitestatus = nil, invite_category = nil, only_relevant_people = false)
     stateTable = Arel::Table.new(:person_con_states)
     peopleTable = Arel::Table.new(:people)
     regTable = Arel::Table.new(:registration_details)
     assignments = Arel::Table.new(:programme_item_assignments)
     query = nil
+    people_filter = only_relevant_people ? only_relevent_clause : ''
     
     # Get people for conference
     # i.e. if they have registrations or item assignments
@@ -286,13 +287,19 @@ module PeopleService
       end
     end
     
-    include_list = [:pseudonym, :email_addresses, :postal_addresses, :programmeItemAssignments]
-    
+    include_list = [:pseudonym, :person_con_state, :survey_respondent,
+                    :registrationDetail,
+                    :email_addresses, :postal_addresses, :programmeItemAssignments,
+                    :mailings]
+
     Person.joins(join_query).
-                includes(include_list).
-                where(query).
-                distinct.
-                order("people.last_name")
+              joins(only_relevent_joins).
+              includes(include_list).
+              references(include_list).
+              where(people_filter).
+              where(query).
+              distinct.
+              order("people.last_name")
   end
 
   #

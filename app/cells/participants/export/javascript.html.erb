@@ -12,10 +12,16 @@ ParticipantApp.PeopleExport = (function(Backbone){
             //:invitestatus_id
             //:invitation_category_id
             invitation_category_id : { type : 'Select', title : '<%= t "invitation-category" %>', options : <%= [[' ',' ']].concat(InvitationCategory.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
-            invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= [[' ',' ']].concat(InviteStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> }
+            invitestatus_id : { type : 'Select', title : '<%= t "invitation-status" %>', options : <%= [[' ',' ']].concat(InviteStatus.all.to_a.collect {|s| {'val' => s.id, 'label' => s.name} }).to_json.html_safe %> },
+            only_relevent : {
+              type: 'Checkbox',
+              title: '<%= t "include-people-from-other-events" %>',
+              editorClass: 'toggle-participants'
+            }
         },
         
         data : {
+          only_relevent : false
         }
     });
 
@@ -30,7 +36,6 @@ ParticipantApp.PeopleExport = (function(Backbone){
                 endPoint    : "<%= baseUri + '/tools/people_exporter/export' %>",
                 caption     : '<%= t "export-participants" %>'
             }));
-
         }
     };
 })(Backbone);
