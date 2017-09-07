@@ -111,6 +111,11 @@ jQuery(document).ready(function() {
         } else {
             options.error = function(response) {
                 if (response.status > 0) {
+                  if (response.status == 403 || response.status == 401) {
+                    window.location.replace("/");
+                  } else if (response.status > 500) {
+                    alertMessage("Error communicating with backend");
+                  } else {
                     if (response.responseText) {
                         if (options.handle_error) {
                             options.handle_error(response);
@@ -118,8 +123,9 @@ jQuery(document).ready(function() {
                             alertMessage(response.responseText);
                         }
                     } else {
-                        alertMessage("Error communicating with backend ..."); // TODO - change to translatable string
+                        alertMessage("Error communicating with backend ...");
                     };
+                  }
                 };
             };
         };

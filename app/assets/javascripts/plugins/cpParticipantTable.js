@@ -1,7 +1,22 @@
 /*
  *
  */
+function removeURLParameter(url, parameter) {
+  var prefix= encodeURIComponent(parameter)+'=';
+  var pars= url.split(/[&;]/g);
 
+  //reverse iteration as may be destructive
+  for (var i= pars.length; i-- > 0;) {    
+    //idiom for string.startsWith
+    if (pars[i].lastIndexOf(prefix, 0) !== -1) {  
+      pars.splice(i, 1);
+    }
+  }
+
+  url= pars.join('&');
+  return url;
+};
+ 
 (function($) {    
 
 $.widget( "cp.participantTable", $.cp.baseTable , {
@@ -78,6 +93,19 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
                     
                     return res;
                 }
+            }, {
+                  name : 'person[organization]',
+                  index : 'company',
+                  label : this.options.organization[1],
+                  hidden : !this.options.organization[0],
+                  editable : false,
+                  sortable : true,
+                  search : true,
+                  searchoptions : {
+                      clearSearch : false
+                  },
+                  align : 'left',
+                  width : 50
             }, {
                 name : 'emails',
                 hidden : true,
@@ -535,15 +563,38 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
         url += urlArgs;
         return url;
     },
+
+    /*
+    */
+    scheduledPeople : function(do_filter) {
+      
+        if (this.options.extraClause && (this.options.extraClause.length > 0)) {
+          this.options.extraClause = removeURLParameter(this.options.extraClause, "scheduled");
+          this.options.extraClause += "&scheduled=" + do_filter;
+        } else {
+          this.options.extraClause = "scheduled=" + do_filter;
+        }
+
+        if (!this.options.delayed) {
+            var newUrl = this.createUrl();
+
+            this.element.jqGrid('setGridParam', {
+                url: newUrl,
+                contentType : 'application/x-www-form-urlencoded; charset=UTF-8'
+            }).trigger("reloadGrid");
+        }
+    },
     
     /*
      * 
      */
     filterPeople : function(do_filter) {
         if (this.options.extraClause && (this.options.extraClause.length > 0)) {
-            this.options.extraClause += "&only_relevent=" + do_filter;
+          // remove the clause if it is already there
+          this.options.extraClause = removeURLParameter(this.options.extraClause, "only_relevent");
+          this.options.extraClause += "&only_relevent=" + do_filter;
         } else {
-            this.options.extraClause = "only_relevent=" + do_filter;
+          this.options.extraClause = "only_relevent=" + do_filter;
         }
 
         if (!this.options.delayed) {
@@ -580,7 +631,12 @@ $.widget( "cp.participantTable", $.cp.baseTable , {
      * 
      */
     mailingQuery : function(options) {
-        this.options.extraClause = "mailing_id=" + options.mailingId;
+      if (this.options.extraClause && (this.options.extraClause.length > 0)) {
+          this.options.extraClause += "&mailing_id=" + options.mailingId;
+      } else {
+          this.options.extraClause = "mailing_id=" + options.mailingId;
+      }
+
         if (options.op) {
             this.options.extraClause += '&op=' + options.op; 
         }

@@ -23,7 +23,11 @@ class SurveyRespondents::ReviewsController < PlannerController
                       includes({ :survey_respondent_detail => [:survey_responses, :survey_respondent] }).first
     end
     
-    render json: { 'survey' => survey_to_html(@survey,@respondent.survey_respondent_detail, false) }, :content_type => 'application/json'
+    if @respondent
+      render json: { 'survey' => survey_to_html(@survey,@respondent.survey_respondent_detail, false) }, :content_type => 'application/json'
+    else
+      render json: { 'survey' => {} }, :content_type => 'application/json'
+    end
   end
 
   #

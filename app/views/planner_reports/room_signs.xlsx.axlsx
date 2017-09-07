@@ -9,7 +9,7 @@ days.each do |day| # For each day ...
             row << room.name + ' - ' + room.published_venue.name
             row << (Time.zone.parse(SiteConfig.first.start_date.to_s) + day.days).strftime('%A')
             room.published_room_item_assignments.day(day).each do |assignment|
-                row << assignment.published_time_slot.start.strftime('%H:%M')
+                row << assignment.start_time.strftime('%H:%M')
                 row << assignment.published_programme_item.title
                 row << assignment.published_programme_item.published_programme_item_assignments.collect{|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.collect{|p| p.person.getFullPublicationName}.join(',')
             end

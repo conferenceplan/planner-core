@@ -26,6 +26,7 @@ class SurveyReportsController < PlannerController
       i += 1 if question.question_type == :availability
       i += 1
     end
+    @nbr_question_cols = i
 
     @respondents = SurveyRespondentDetail.includes([{:survey_responses => {:survey_question => :survey_group}}]).
                         where({ :'survey_responses.survey_id' =>  survey.id}).

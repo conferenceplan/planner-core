@@ -47,56 +47,72 @@
 
 <script type="text/template" id="phone-view-template">
 {{ if (typeof(number) != "undefined") { }}
-<div>
-    <div  class="contact-details-div">
-        <div class="caption" class="pull-left">
-            <button class="model-delete-button btn btn-danger btn-xs pull-right">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-            <button class="model-edit-button btn btn-primary btn-xs pull-right">
+    <div class="contact-details-div row boffset10">
+        <div class="col-xs-9" style="font-size: 85%;">
+            {{= number ? "<a href='tel:" + number + "'>" + number + "</a>&nbsp;" : "" }}
+            {{= phone_type_name ? '(' + phone_type_name + ')&nbsp;' : "" }}
+            {{= isdefault ? '<span class="default-label"><i class="glyphicon glyphicon-ok"></i> <%= t "primary-email" %></span>' : ''}}
+            {{ if (!(typeof label == undefined) && label != null) { }}
+               <br><span class="badge" style="font-size: smaller;">{{= label }}</span>
+            {{ } }}
+        </div>
+        <div class="col-xs-3 text-right">
+            <button class="model-edit-button btn btn-primary btn-xs">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
-            <small>
-                <dl class="dl-horizontal-small">
-                    <dt>
-                        {{= phone_type_name ? phone_type_name : "&nbsp;"}}
-                    </dt>
-                    <dd>
-                        {{= number ? "<a href='tel:" + number + "'>" + number + "</a>" : "&nbsp;" }}
-                    </dd>
-                </dl> </small>
+            <button class="model-delete-button btn btn-danger btn-xs">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
         </div>
     </div>
-</div>
 {{ } }}
 </script>
 
 <script type="text/template" id="email-view-template">
 {{ if (typeof(email) != "undefined") { }}
-<div>
-    <div class="contact-details-div">
-        
-            <button class="model-delete-button btn btn-danger btn-xs pull-right">
-                <i class="glyphicon glyphicon-trash"></i>
-            </button>
-            <button class="model-edit-button btn btn-primary btn-xs pull-right">
+
+    <div class="contact-details-div row boffset10">
+        <div class="col-xs-9" style="font-size: 85%;">
+            {{= email ? "<a href='mailto:" + email + "'>" + email + "</a>&nbsp;" : "" }}
+            {{= isdefault ? '<span class="default-label"><i class="glyphicon glyphicon-ok"></i> <%= t "primary-email" %></span>' : ''}}
+            {{ if (!(typeof label == undefined) && label != null) { }}
+               <br><span class="badge" style="font-size: smaller;">{{= label }}</span>
+            {{ } }}
+        </div>
+        <div class="col-xs-3 text-right">
+            <button class="model-edit-button btn btn-primary btn-xs">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
-            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "primary-email" %></div>' : ''}}
-            <small>
-                <dl class="dl-horizontal-small">
-                    <dd>
-                        {{= email ? "<a href='mailto:" + email + "'>" + email + "</a>" : "&nbsp;" }}
-                    </dd>
-                    {{ if (!(typeof label == undefined) && label != null) { }}
-                        <dd>
-                            <span class="badge">{{= label }}</span>
-                        </dd>
-                    {{ } }}
-                </dl> </small>
-        
+            <button class="model-delete-button btn btn-danger btn-xs">
+                <i class="glyphicon glyphicon-trash"></i>
+            </button>
+        </div>
     </div>
-</div>
+
+
+<!-- <div>
+    <div class="contact-details-div">
+        <button class="model-delete-button btn btn-danger btn-xs pull-right">
+            <i class="glyphicon glyphicon-trash"></i>
+        </button>
+        <button class="model-edit-button btn btn-primary btn-xs pull-right">
+            <i class="glyphicon glyphicon-pencil"></i>
+        </button>
+        {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "primary-email" %></div>' : ''}}
+        <small>
+            <dl class="dl-horizontal-small">
+                <dd>
+                    {{= email ? "<a href='mailto:" + email + "'>" + email + "</a>" : "&nbsp;" }}
+                </dd>
+                {{ if (!(typeof label == undefined) && label != null) { }}
+                    <dd>
+                        <span class="badge">{{= label }}</span>
+                    </dd>
+                {{ } }}
+            </dl>
+        </small>
+    </div>
+</div> -->
 {{ } }}
 </script>
 
@@ -111,7 +127,7 @@
             <button class="model-edit-button btn btn-primary btn-xs pull-right">
                 <i class="glyphicon glyphicon-pencil"></i>
             </button>
-            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "default" %></div>' : ''}}
+            {{= isdefault ? '<div class="default-label pull-right"><span class="glyphicon glyphicon-ok"></span> <%= t "primary-email" %></div>' : ''}}
             <small>
                 <dl class="dl-horizontal-small">
                     <dt>

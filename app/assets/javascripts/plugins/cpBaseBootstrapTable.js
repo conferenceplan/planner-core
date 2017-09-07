@@ -61,7 +61,8 @@ $.widget( "cp.baseBootstrapTable" , {
         ctl_template        : '#table-control-template',
         extra_button        : false,
         extra_button_title  : "extra",
-        extra_modal_action  : function() {}
+        extra_modal_action  : function() {},
+        extraTableOpts      : {},
     },
 
     /*
@@ -107,13 +108,11 @@ $.widget( "cp.baseBootstrapTable" , {
     },
 
     reset : function() {
-        var newUrl = this.createUrl();
-        this.element.bootstrapTable('refresh', { url : newUrl});
+        this.element.bootstrapTable('refresh', { url : this.createUrl() });
     },
 
     refresh : function() {
-        var newUrl = this.createUrl();
-        this.element.bootstrapTable('refresh');//, { url : newUrl});
+        this.element.bootstrapTable('refresh');
     },
 
     pageFrom : function() {
@@ -134,6 +133,10 @@ $.widget( "cp.baseBootstrapTable" , {
 
     getModel : function() {
         return this.model;
+    },
+
+    getOptions() {
+        return this.options;
     },
 
     /*
@@ -168,7 +171,11 @@ $.widget( "cp.baseBootstrapTable" , {
     /*
      *
      */
-    createColModel : function() {},
+    createColModel : function() {
+        if(this.options.columns) {
+            return this.options.columns;
+        }
+    },
 
     /*
      *
@@ -388,7 +395,7 @@ $.widget( "cp.baseBootstrapTable" , {
             },
         });
 
-        var grid = this.element.bootstrapTable({
+        var grid = this.element.bootstrapTable(_.extend({
                 url: this.createUrl(),
                 onClickRow : function(row, element) {
                         $(element).parent().find('tr').removeClass('success');
@@ -447,9 +454,12 @@ $.widget( "cp.baseBootstrapTable" , {
                 onExpandRow         : this.options.onExpandRow,
                 onCollapseRow       : this.options.onCollapseRow,
                 sortOrder           : this.options.sortOrder,
-                sortName            : this.options.sortName
+                sortName            : this.options.sortName,
+                uniqueId            : this.options.uniqueId,
+                onCheck             : this.options.onCheck,
+                onUncheck           : this.options.onUncheck,
                 // ctl_template        : this.options.ctl_template
-        });
+        }, this.options.extraTableOpts));
 
         if (this.options.showControls) {
             // Create the control view

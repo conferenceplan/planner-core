@@ -14,7 +14,7 @@ module MailService
     # get the template from the database that matches the specified use
     template = mailing.mail_template
     
-    assignments = (mailing.mail_template && mailing.mail_template.mail_use == MailUse[:Schedule]) ? ProgramItemsService.findProgramItemsForPerson(person) : nil
+    assignments = mailing.mail_template ? ProgramItemsService.findProgramItemsForPerson(person) : nil
     respondentDetails = person.survey_respondent
     survey = (mailing.mail_template && mailing.mail_template.survey) ? mailing.mail_template.survey : nil
 
@@ -25,7 +25,7 @@ module MailService
             :survey             => survey,
             :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
             :respondentDetails  => respondentDetails,
-            :assignments        => {assignments: assignments, include_email: mailing.include_email}
+            :assignments        => assignments
           })
   end
   
@@ -56,7 +56,6 @@ module MailService
           from:     config.from,
           reply_to: config.reply_to,
           to:       email,
-          cc:       config.cc,
           subject:  template.subject,
           title:    template.title,
           return_path: config.from,
@@ -89,8 +88,6 @@ module MailService
 
     to = person.getDefaultEmail.email
     if to && !to.blank?
-      cc = config.cc
-      
       content = generateEmailContent(template, {
               :person             => person,
               :survey             => survey,
@@ -102,7 +99,6 @@ module MailService
             from:     config.from,
             reply_to: config.reply_to,
             to:       to,
-            cc:       cc,
             subject:  template.subject,
             title:    template.title,
             return_path: config.from,
@@ -145,7 +141,7 @@ module MailService
       to = mailing.testrun ? config.test_email : person.getDefaultEmail.email
       
       if to && !to.blank?
-        cc = mailing.testrun ? nil : config.cc
+        cc = ""
         
         if !mailing.testrun && mailing.cc_all
           # add all the email addresses for the person to the CC
@@ -156,8 +152,7 @@ module MailService
             end
           end
         end
-        
-        assignments = (mailing.mail_template && mailing.mail_template.mail_use == MailUse[:Schedule]) ? ProgramItemsService.findProgramItemsForPerson(person) : nil
+ assignments = mailing.mail_template ? ProgramItemsService.findProgramItemsForPerson(person) : nil
         respondentDetails = person.survey_respondent
         key = respondentDetails ? respondentDetails.key : generateSurveyKey(person) # get the key (or generate it)
         survey = (mailing.mail_template && mailing.mail_template.survey) ? mailing.mail_template.survey : nil
@@ -168,12 +163,11 @@ module MailService
                 :survey             => survey,
                 :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
                 :respondentDetails  => person.survey_respondent,
-                :assignments        => {assignments: assignments, include_email: mailing.include_email}
+                :assignments        => assignments
               })
     
         begin
           subject = template.subject
-          subject += ' - ' + person.getFullName() if person
           PlannerMailer.send_email({
               from:     config.from,
               reply_to: config.reply_to,
@@ -233,33 +227,32 @@ module MailService
   #
   # Convert the assignments for a person to HTML for inclusion in the email
   #
-  def self.assignments_to_html(assignments_hash)
+  def self.assignments_with_emails_to_html(assignments)
+    assignments_to_html(assignments, include_email: true)
+  end
+
+  def self.assignments_to_html(assignments, include_email: false)
     result = ''
+    noShareEmails = SurveyService.findPeopleWithDoNotShareEmail
     
-    if assignments_hash && assignments_hash[:assignments]
-      assignments = assignments_hash[:assignments]
-      include_email = assignments_hash[:include_email]
-      noShareEmails = SurveyService.findPeopleWithDoNotShareEmail
-      
-      assignments.each do | assignment |
-        # only interested in items that have been assigned to a time slot
-        if (assignment.programmeItem && (assignment.programmeItem.time_slot || (assignment.programmeItem.parent_id != nil && assignment.programmeItem.parent.time_slot)))
-          # item
-          result += "<div>\n"
-          # title
-          result += '<h2>' + assignment.programmeItem.title  + "</h2>\n" if assignment.programmeItem
-          
-          # TODO - If it is a sub item the show part of and the parent info
-          
-          result += assignment_to_html(assignment.programmeItem, noShareEmails, include_email)
+    assignments.each do | assignment |
+      # only interested in items that have been assigned to a time slot
+      if (assignment.programmeItem && (assignment.programmeItem.time_slot || (assignment.programmeItem.parent_id != nil && assignment.programmeItem.parent.time_slot)))
+        # item
+        result += "<div>\n"
+        # title
+        result += '<h2>' + assignment.programmeItem.title  + "</h2>\n" if assignment.programmeItem
         
-          # 
-          result += "</div></br>\n"
-        end
+        # TODO - If it is a sub item the show part of and the parent info
+        
+        result += assignment_to_html(assignment.programmeItem, noShareEmails, include_email)
+      
+        # 
+        result += "</div></br>\n"
       end
     end
     
-    return result
+    result
   end
   
   def self.assignment_to_html(programmeItem, noShareEmails, include_email)

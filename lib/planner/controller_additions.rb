@@ -8,7 +8,25 @@ module Planner
                          :strip_html_tags, :site_url, :site_url_no_lang, :only_free_tickets_available?,
                          :public_start_date, :public_end_date, :public_days, :conference_name,
                          :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?,
-                         :human_time, :person_img_url, :current_user, :org_info_email
+                         :human_time, :person_img_url, :current_user, :org_info_email,
+                         :current_event, :current_event?, :custom_google_analytics_code,
+                         :custom_google_analytics_code?
+    end
+
+    def custom_google_analytics_code
+      nil
+    end
+
+    def custom_google_analytics_code?
+      nil
+    end
+
+    def current_event
+      nil
+    end
+
+    def current_event?
+      nil
     end
 
     def org_info_email
@@ -146,11 +164,11 @@ module Planner
       eval(ENV[:base_image_url.to_s])
     end
 
-    def site_url
+    def site_url path_extras: nil, lang: true, private_token: true
       ''
     end
 
-    def site_url_no_lang
+    def site_url_no_lang path_extras: nil, private_token: true
       ''
     end
 
@@ -238,11 +256,7 @@ module Planner
                   { :title => 'survey-reports', :target => '/pages/surveys_dash/reporting', :display => allowed?(:survey_reports) }
                 ]
               } if allowed? :surveys
-      menu << { :title => 'messages',   :target => '/pages//communications_dash/templates', :icon => "fa fa-envelope",  :target_base => '/pages/communications_dash',
-                :sub_menu => [
-                  { :title => 'manage-mailings', :target => '/pages/communications_dash/manage', :display => allowed?(:manage_mailings) },
-                  { :title => 'email-templates', :target => '/pages/communications_dash/templates', :display => allowed?(:mailing_templates) }
-                ]
+      menu << { :title => 'messages',   :target => '/pages//communications_dash/templates', :icon => "fa fa-envelope",  :target_base => '/pages/communications_dash'
               } if allowed? :communications
       menu << { :title => 'reports',        :target => '/pages/reports_dash/manage', :icon => "fa fa-bar-chart",     :target_base => '/pages/reports_dash',
                 :sub_menu => [

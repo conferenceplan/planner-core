@@ -115,12 +115,12 @@
                 <div class="form-group " style="margin-bottom: 3px;">                
                     <label class="col-sm-3 control-label"><%= t "item-format" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-format" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-format-help" %>'></i></label>
                     <div class="col-sm-4">
-                        <span data-editor>
+                        <div data-editor>
                             <div data-editors="format_id"></div>
                             <div class="has-error">
                                 <p class="help-block" data-error></p>
                             </div>
-                        </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -129,175 +129,187 @@
                     <label class="col-sm-3 control-label">
                        <%= t  "themes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "themes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "themes-help" %>'></i>
                     </label>
-                    <span data-editor>
+                    <div data-editor>
                         <div class="col-sm-9" data-editors="theme_name_ids"></div>
                         <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
+                    </div>
                 </div>
             </div>
-            <div class="row" id="parent-item-row">
-                <div class="form-group" id="item-form-template-parent-id">
+            <div id="item-display-row" class="voffset10">
+                <div class="row item-section-title">
+                    <h3><%= t 'planner.core.items.form.dividers.display' %></h3>
+                </div>
+                <div class="row" id="item-visibility-row">
                     <label class="col-sm-3 control-label">
-                       <%= t  "parent-item" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "parent-item" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "parent-title-help" %>'></i>
+                        <%= t "item-visibility" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= strip_tags t("item-visibility") %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= strip_tags t("item-visibility-hint") %>'></i>
                     </label>
-                    <span data-editor>
-                        <div class="col-sm-9" data-editors="parent_id"></div>
-                        <div class="has-error"><p class="help-block" data-error></p></div>
-                    </span>
-                </div>
-            </div>
-            <div class="row item-section-title voffset10">
-                <h3><%= t 'scheduling' %></h3>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-sm-6">
-                    <div class="row">
-                        <label class="col-xs-6 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
-                        <div class="col-xs-6">
-                            <span data-editor>
-                                <div data-editors="duration"></div>
-                                <div class="has-error">
-                                    <p class="help-block" data-error></p>
-                                </div>
-                            </span>
+                    <div class="col-sm-9">
+                        <div id="item-visibility-div">
+                            <div data-editors="visibility_id" tabindex="-1"></div>
                         </div>
                     </div>
-                </div>    
-                <div class="form-group col-sm-6" id="start-offset-form-group">
-                    <div class="row">
-                        <label class="col-xs-6 control-label">
-                           <%= t  "item-start-offset" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-offset" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-offset-help" %>'></i>
+                </div>
+                <div class="row voffset10" id="card-size-row">
+                    <label class="col-sm-3 control-label"><%= t "mobile-card-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "mobile-card-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "mobile-card-size-help" %>'></i></label>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <div data-editors="mobile_card_size"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="item-scheduling-container" class="voffset10">
+                <div class="row item-section-title">
+                    <h3><%= t 'scheduling' %></h3>
+                </div>
+                <div class="row" id="parent-item-row">
+                    <div class="form-group" id="item-form-template-parent-id">
+                        <label class="col-sm-3 control-label">
+                           <%= t  "parent-item" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "parent-item" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "parent-title-help" %>'></i>
                         </label>
-                        <div class="col-xs-6">
-                            <div data-editors="start_offset"></div>
-                            <div class="has-error">
-                                <p class="help-block" id='start-time-error' data-error></p>
-                            </div>
+                        <div data-editor>
+                            <div class="col-sm-9" data-editors="parent_id"></div>
+                            <div class="has-error"><p class="help-block" data-error></p></div>
                         </div>
                     </div>
-                </div>         
-            </div>
-            <div class="row" id="item-times-row">
-                <label class="col-sm-3 control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>                 
-                <div class="form-group col-sm-4 col-md-4 col-xs-4" id="start-day-and-time-form-group">
-                    <div data-editors="start_time"></div>
-                    <div class="has-error">
-                        <p class="help-block" id='start-time-error' data-error></p>
-                    </div>
                 </div>
-                <label class="col-sm-1 control-label"><%= t "item-end-day-and-time" %> 
-                    <!--<i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-end-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-end-time-help" %>'></i>-->
-                </label>
-                <div class="form-group col-sm-4" id="end-day-and-time-form-group"> 
-                    <div data-editors="end_time"></div>
-                    <div class="has-error">
-                        <p class="help-block" id='end-time-error' data-error></p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group">
-                    <span data-editor>
-                        <label class="col-sm-3 control-label"><%= t "item-room" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-room" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-room-help" %>'></i></label>
-                        <div class="col-sm-4">
-                            <div data-editors="room_id"></div>
-                            <div class="has-error">
-                                <p class="help-block" id='room-error' data-error></p>
-                            </div>
-                        </div>
-                    </span>
-                    <span data-editor>
-                        <label  class="col-sm-2 control-label"><%= t "item-setup-short" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-setup" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-setup-help" %>'></i></label>
-                        <div class="col-sm-3">
-                            <div data-editors="setup_type_id"></div>
-                            <div class="has-error">
-                                <p class="help-block" data-error></p>
-                            </div>
-                        </div>
-                    </span>
-                </div>
-            </div>
-            <div id="item-planning-container">
-                <div id="item-planning-title" class="row item-section-title">
-                    <h3><%= t 'planning' %></h3>
-                </div>
+
                 <div class="row">
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label class="col-sm-3 control-label"><%= t "item-nb-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-nb-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-nb-participants-help" %>'></i></label>
-                        <div class="col-sm-2">
-                            <div data-editors="minimum_people"></div>
-                            <div class="has-error">
-                                <p class="help-block" data-error></p>
-                            </div>
-                        </div>
-                        <!--<label class="col-sm-3 control-label"><%= t "item-max-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-max-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-max-participants-help" %>'></i></label>-->
-                        <div class="col-sm-2">
-                            <div data-editors="maximum_people"></div>
-                            <div class="has-error">
-                                <p class="help-block" data-error></p>
-                            </div>
-                        </div>
-                        <div id="audience-size-container" class="col-sm-5" data-editor>
-                            <div class="row">
-                                <label class="col-sm-7 control-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size-long" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
-                                <div class="col-sm-5">
-                                    <div data-editors="audience_size"></div>
+                    <div class="form-group col-sm-6">
+                        <div class="row">
+                            <label class="col-xs-6 control-label"><%= t "item-duration" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-duration" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-duration-help" %>'></i></label>
+                            <div class="col-xs-6">
+                                <span data-editor>
+                                    <div data-editors="duration"></div>
                                     <div class="has-error">
                                         <p class="help-block" data-error></p>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="form-group col-sm-6" id="start-offset-form-group">
+                        <div class="row">
+                            <label class="col-xs-6 control-label">
+                               <%= t  "item-start-offset" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-offset" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-offset-help" %>'></i>
+                            </label>
+                            <div class="col-xs-6">
+                                <div data-editors="start_offset"></div>
+                                <div class="has-error">
+                                    <p class="help-block" id='start-time-error' data-error></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>         
+                </div>
+                <div class="row" id="item-times-row">
+                    <label class="col-sm-3 control-label"><%= t "item-start-day-and-time" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-start-time" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-start-time-help" %>'></i></label>                 
+                    <div class="form-group col-sm-4 col-md-4 col-xs-4" id="start-day-and-time-form-group">
+                        <div data-editors="start_time"></div>
+                        <div class="has-error">
+                            <p class="help-block" id='start-time-error' data-error></p>
+                        </div>
+                    </div>
+                    <label class="col-sm-1 control-label">
+                        <%= t "item-end-day-and-time" %> 
+                    </label>
+                    <div class="form-group col-sm-4" id="end-day-and-time-form-group"> 
+                        <div data-editors="end_time"></div>
+                        <div class="has-error">
+                            <p class="help-block" id='end-time-error' data-error></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <span data-editor>
+                            <label class="col-sm-3 control-label"><%= t "planner.core.items.form.labels.location" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= j t("planner.core.items.form.labels.location") %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-room-help" %>'></i></label>
+                            <div class="col-sm-4">
+                                <div data-editors="room_id"></div>
+                                <div class="has-error">
+                                    <p class="help-block" id='room-error' data-error></p>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div id="item-extras-container" class="voffset20">
+                <div id="item-extras-title" class="row item-section-title">
+                    <h3 id="toggle-item-extras-header" onclick="toggleItemExtras();"><%= t 'extra-information' %> <a class="fa fa-plus-square" id="toggle-item-extras-btn"></a></h3>
+                </div>
+                <div class="row" id="programme-item-extras" style="display: none;">
+                    <div class="col-ms-12">
+                        <div id="item-planning-container">
+                            <!-- <div id="item-planning-title" class="row item-section-title">
+                                <h3><%= t 'planning' %></h3>
+                            </div> -->
+                            <div class="row">
+                                <div class="form-group">
+                                    <div data-editor>
+                                        <label  class="col-sm-3 control-label"><%= t "item-setup-short" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-setup" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-setup-help" %>'></i></label>
+                                        <div class="col-sm-3">
+                                            <div data-editors="setup_type_id"></div>
+                                            <div class="has-error">
+                                                <p class="help-block" data-error></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group" style="margin-bottom: 0;">
+                                    <label class="col-sm-3 control-label"><%= t "item-nb-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-nb-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-nb-participants-help" %>'></i></label>
+                                    <div class="col-sm-2">
+                                        <div data-editors="minimum_people"></div>
+                                        <div class="has-error">
+                                            <p class="help-block" data-error></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div data-editors="maximum_people"></div>
+                                        <div class="has-error">
+                                            <p class="help-block" data-error></p>
+                                        </div>
+                                    </div>
+                                    <div id="audience-size-container" class="col-sm-5" data-editor>
+                                        <div class="row">
+                                            <label class="col-sm-7 control-label"><%= t "item-estimated-audience-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-estimated-audience-size-long" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-estimated-audience-size-help" %>'></i></label>
+                                            <div class="col-sm-5">
+                                                <div data-editors="audience_size"></div>
+                                                <div class="has-error">
+                                                    <p class="help-block" data-error></p>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div id="item-options-divider" class="row item-section-title" style="margin-bottom: 20px;">
-                <h3><%= t 'options' %></h3>
-            </div>
-            <div class="row" id="print-item-row">
-                <div class="col-sm-9 col-sm-offset-3">
-                    <div id="print-item-div">
-                        <div data-editors="print" class="inline-checkbox-div" tabindex="-1"></div> <%= t "item-print" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-print" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-print-hint" %>'></i>
-                    </div>
-                </div>
-            </div>
-            <div class="row voffset10" id="card-size-row">
-                <label class="col-sm-3 control-label"><%= t "mobile-card-size" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "mobile-card-size" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "mobile-card-size-help" %>'></i></label>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <div data-editors="mobile_card_size"></div>
-                    </div>
-                </div>
-            </div>
-            <div id="item-extras-title" class="row item-section-title">
-                <h3><%= t 'extra-information' %> <a><i id="toggle-item-extras-btn" class="fa fa-plus-square"  onclick="toggleItemExtras(this);"></i></a></h3>
-            </div>
-            <div class="row" id="programme-item-extras" style="display: none;">
-                <div class="col-ms-12">
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label"><%= t "item-publication-reference" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-publication-reference" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-publication-reference-help" %>'></i></label>
-                            <div class="col-sm-4">
-                                <div data-editors="pub_reference_number"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><%= t "item-publication-reference" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-publication-reference" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-publication-reference-help" %>'></i></label>
+                                <div class="col-sm-4">
+                                    <div data-editors="pub_reference_number"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <span data-editor>
-                                <label class="col-sm-3 control-label"><%= t "item-notes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "notes-help" %>'></i></label>
-                                <div class="col-sm-9">
-                                    <div data-editors="item_notes"></div>
-                                </div>
-                            </span>
+                        <div class="row">
+                            <div class="form-group">
+                                <span data-editor>
+                                    <label class="col-sm-3 control-label"><%= t "item-notes" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "notes-help" %>'></i></label>
+                                    <div class="col-sm-9">
+                                        <div data-editors="item_notes"></div>
+                                    </div>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label"><%= t "item-notes-for-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes-for-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-notes-for-participants-help" %>'></i></label>
-                            <div class="col-sm-9">
-                                <div data-editors="participant_notes" class="notes-text-area"></div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><%= t "item-notes-for-participants" %> <i class="glyphicon glyphicon-info-sign bpopover" title='<%= t "item-notes-for-participants" %>' data-container='body' data-trigger='hover' data-placement='top' data-toggle='popover' data-content='<%= t "item-notes-for-participants-help" %>'></i></label>
+                                <div class="col-sm-9">
+                                    <div data-editors="participant_notes" class="notes-text-area"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -325,14 +337,32 @@
         <div class="row" id="item-detail-list">
             <div class="col-xs-12 item-summary-attribute">
                 <div class="row">
-                    <div class="col-xs-6"><%= t "item-is-break" %></div>
-                    <div class="col-xs-6">{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                    <div class="col-xs-6"><%= t "item-visibility" %></div>
+                    <div class="col-xs-6">
+                        {{ if (visibility_id) { }}
+                          {{ var visBadgeClass = 'label'; }}
+                          {{ var visBadgeLabel = ''; }}
+
+                          {{ if (visibility_id == <%= Visibility['Public'].id %>) { }}
+                            {{ visBadgeClass += " label-public"; }}
+                            {{ visBadgeLabel = "<%= j t('item-visibility.public') %>";}}
+                          {{ } else if (visibility_id == <%= Visibility['Private'].id %>) { }}
+                            {{ visBadgeClass += " label-private"; }}
+                            {{ visBadgeLabel = "<%= j t('item-visibility.private') %>";}}
+                          {{ } else if (visibility_id == <%= Visibility['None'].id %>) { }}
+                            {{ visBadgeClass += " label-default"; }}
+                            {{ visBadgeLabel = "<%= j t('item-visibility.none') %>";}}
+                          {{ }; }}
+                          
+                          <span class='{{= visBadgeClass }}'>{{= visBadgeLabel}}</span>
+                        {{ }; }}
+                    </div>
                 </div>
             </div>
             <div class="col-xs-12 item-summary-attribute">
                 <div class="row">
-                    <div class="col-xs-6"><%= t "for-print" %></div>
-                    <div class="col-xs-6">{{= print ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
+                    <div class="col-xs-6"><%= t "item-is-break" %></div>
+                    <div class="col-xs-6">{{= is_break ? '<%= t "yes" %>' : '<%= t "no" %>' }}</div>
                 </div>
             </div>
             <div class="col-xs-12 item-summary-attribute">

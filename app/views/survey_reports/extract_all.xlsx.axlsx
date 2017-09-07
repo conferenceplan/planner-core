@@ -22,7 +22,7 @@ wb.add_worksheet(name: "Responses") do |sheet|
     sheet.add_row questions
     
     @respondents.each do |respondent|
-        row = Array.new(@questions.size + 11){''}
+        row = Array.new(@nbr_question_cols + 11){''}
         
         row[0] = respondent.prefix
         row[1] = respondent.first_name
@@ -57,7 +57,8 @@ wb.add_worksheet(name: "Responses") do |sheet|
                         startTime = startOfConference + 8.hour + (response.response1.to_i).day
                       end
                       
-                      row[idx] = startTime + startTime.utc_offset.seconds # take the offset out because of axslx bug with time
+                      # take the offset out because of axslx bug with time
+                      row[idx] = startTime + (startTime.utc_offset - Time.zone.now.utc_offset).seconds
                       
                       if (response.response4 && response.response4 != '---')
                         if (response.response4.downcase == 'noon')

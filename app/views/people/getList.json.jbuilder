@@ -12,6 +12,7 @@ json.rowdata @people do |person|
     json.set! "person[last_name]", person.last_name
     json.set! "person[suffix]", person.suffix
     json.set! "person[comments]", person.comments if person.comments
+    json.set! "person[organization]", (person.company ? person.company : '')
     
     json.set! "person[acceptance_status_id]", person.acceptance_status ? person.acceptance_status.name : AcceptanceStatus[:Unknown].name
     json.set! "person[invitestatus_id]", person.invitestatus ? person.invitestatus.name : InviteStatus['Not Set'].name

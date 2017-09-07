@@ -3,25 +3,34 @@
 class BioPictureUploader < CarrierWave::Uploader::Base
   include Cloudinary::CarrierWave   # Use cloudinary as the image store
   include UploaderHelper
+  
+  SALT = "This is a Bio Pic"
 
+  def stored_version
+    self.model.lock_version
+  end
+  
   #
   # Use a combination of the person's name for the id of the image
   #
   def public_id
     publicid = common_root_path + '/'
+    
     if model.is_a?(SurveyResponse)
       details = model.survey_respondent_detail
       if details
-        publicid += details.first_name ? details.first_name : ''
-        publicid += details.last_name ? details.last_name : ''
+        hasher = Hashids.new(SALT, 4)
+        publicid += hasher.encode(details.id)
+        publicid += "_"
       else
         publicid += 'response'
       end
       publicid += '_' + model.id.to_s
     else  
       if ((defined? model.person) && model.person)
-        publicid += model.person.getFullPublicationFirstAndLastName
-        publicid += '_' + model.id.to_s
+        hasher = Hashids.new(SALT, 4)
+        publicid += hasher.encode(model.person.id)
+        publicid += '_' + model.person.id.to_s
       else
         publicid += 'default_bio_image'
       end
@@ -78,7 +87,9 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   def bioList
     width = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
     height = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
-    return :height => height, :width => width, :crop => :fill, :gravity => :face, :radius => :max, :fetch_format => :jpg
+    return :height => height, :width => width, :crop => :fill, 
+      :gravity => :face, :radius => :max, :fetch_format => :jpg,
+      :version => 33
   end
   
   def bioDetail

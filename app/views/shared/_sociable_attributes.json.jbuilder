@@ -48,6 +48,7 @@ if object
   if object.respond_to?(:website_url)
     json.website object.website_url if object.respond_to?(:website)
     json.url object.website_url if object.respond_to?(:url)
+    json.blog object.website_url if object.respond_to?(:blog)
     json.website_url object.website_url
   end
   if object.respond_to?(:has_social_media?)

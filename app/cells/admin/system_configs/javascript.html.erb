@@ -7,10 +7,34 @@ ConfigApp.ConfigManagement = (function(Backbone){
     
     EmailConfig = Backbone.Model.extend({
         schema : {
-            info                : { type : 'Text', title : '<%= t "config-info-email" %>' },
-            reply_to            : { type : 'Text', title : '<%= t "config-reply-to-email" %>' },
-            cc                  : { type : 'Text', title : '<%= t "config-cc-email" %>' },
-            test_email          : { type : 'Text', title : '<%= t "config-test-email" %>' }
+            info                  : { type : 'Text', 
+                                      title : '<%= t "config-info-email" %>',
+                                      hint: "<%= (t "config-info-email-hint").html_safe %>",
+                                    },  
+            receive_notifications : { type : 'Checkbox', 
+                                      title : '<%= t "config-email-notifications" %>',
+                                      hint: "<%= (t "config-email-notifications-hint").html_safe %>",
+                                    },
+            from                  : { type : 'Text', 
+                                      editorAttrs: {
+                                        disabled: "true",
+                                      },
+                                     title : '<%= t "from-email" %>',
+                                     hint: "<%= (t "from-email-hint").html_safe %>",
+                                    },
+            reply_to              : { type : 'Text', 
+                                      title : '<%= t "config-reply-to-email" %>',
+                                      hint: "<%= (t "reply-to-email-hint").html_safe %>",
+                                    },
+            cc                    : { type : 'Text', 
+                                      title : '<%= t "config-cc-email" %>',
+                                      hint: "<%= (t "cc-email-hint").html_safe %>",
+                                    },
+            test_email            : { type : 'Text', 
+                                      title : '<%= t "config-test-email" %>',
+                                      hint: "<%= (t "test-email-hint").html_safe %>",
+                                    }
+            
         },
         urlRoot : "<%= baseUri + '/mail_configs' %>"
     });

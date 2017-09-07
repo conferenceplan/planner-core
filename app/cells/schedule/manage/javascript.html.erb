@@ -111,7 +111,7 @@ ScheduleApp.ItemManagement = (function(Backbone){
             // 1.a Save the new item on the server
             // 2. Add the item as a visual element to the grid
             // 3. Refresh the list of items on the left (i.e. remove dropped item from list)
-            this.$el.droppable({
+            this.$el.find('#program-grid').droppable({
                 drop: function(event, ui) {
                     setDropped( ui.draggable.find("div").attr('itemid') );
                 }
@@ -429,9 +429,15 @@ ScheduleApp.ItemManagement = (function(Backbone){
             // make the cells of the item list draggable
             $('#items').find( ".ui-draggable" ).draggable({
                 iframeFix: true,
-                zIndex: 200,
+                zIndex: 500,
                 revert : true,     // return to origin if not dropped on droppable area
-                helper : "clone"   // clone for visual effect
+                helper : function(e) {
+                    var $helper = $(this).find('div').clone();
+                    $helper.addClass('schedule-item dragging');
+
+                    return $helper;
+                },   // clone for visual effect
+                appendTo : 'body',
             });
         },
         

@@ -10,7 +10,7 @@ class PublishJob
   
   def before(job)
     Planner::Linkable.configure do |config|
-      config.addLinkable [Person, ProgrammeItem, PublishedProgrammeItem, Venue, Room]
+      config.addLinkable ["Person", "ProgrammeItem", "PublishedProgrammeItem", "Venue", "Room"]
     end
     ActiveRecord::Base.send(:include, Planner::Linkable)
     Planner::Linkable.setup
@@ -29,19 +29,26 @@ class PublishJob
         modifiedItems = 0
         removedItems = 0
         p = PublicationDate.new
+
+        # Rails.logger.error "******* Copy items"
         newItems = copyProgrammeItems(getNewProgramItems()) # copy all unpublished programme items
+        # Rails.logger.error "******* Copy children"
         newItems += copyProgrammeItems(getNewChildren())
+        # Rails.logger.error "******* Copy modified"
         modifiedItems = copyProgrammeItems(getModifiedProgramItems()) # copy all programme items that have changes made (room assignment, added person, details etc)
         
         # TODO - issue with order of deletes
+        # Rails.logger.error "******* Un Publish"
         removedItems = unPublish(getRemovedProgramItems()) # remove all items that should no longer be published
         removedItems += unPublish(getUnpublishedSubItems()) # remove all items that should no longer be published
         removedItems += unPublish(getUnpublishedItems()) # remove all items that should no longer be published
         removedItems += unPublish(getRemovedSubItems())
         
+        # Rails.logger.error "******* Rooms and Venues ..."
         modifiedRooms = publishRooms(getModifiedRooms())
         modifiedVenues = publishVenues(getModifiedVenues())
-        
+
+        # Rails.logger.error "******* Un Publish"
         updateAssignmentNames()
         
         extra_pubish_tasks(p);
@@ -99,7 +106,7 @@ class PublishJob
   
   # Select from publications and room item assignments items where published_id is not in the room item assignments items
   def getNewProgramItems
-    clause = addClause(nil,'programme_items.print = ?',true) # only get those that are marked for print
+    clause = addClause(nil,'programme_items.visibility_id != ?', Visibility['None'].id) # only get those that are not admin-only
     clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
     clause = addClause(clause,'room_item_assignments.id is not null AND programme_items.parent_id is null', nil)
 
@@ -108,9 +115,9 @@ class PublishJob
   end
   
   def getNewChildren
-    clause = addClause(nil,'programme_items.print = ?',true) # only get those that are marked for print
+    clause = addClause(nil,'programme_items.visibility_id != ?', Visibility['None'].id) # only get those that are not admin-only
     clause = addClause(clause,'programme_items.id not in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
-    clause = addClause(clause,'programme_items.parent_id is not null AND parents_programme_items.print = ? ', true)
+    clause = addClause(clause,'programme_items.parent_id is not null AND parents_programme_items.visibility_id != ? ', Visibility['None'].id)
 
     return ProgrammeItem.
         joins([:parent]).where(clause)
@@ -131,7 +138,7 @@ class PublishJob
   # Check this for modified items - i.e what happens if the time is changed?
   # in that case the room item assignment is recreated...
   def getModifiedProgramItems
-    clause = addClause(nil,'print = ?',true) # only get those that are marked for print
+    clause = addClause(nil,'visibility_id != ?', Visibility['None']) # only get those that are not admin-only
     clause = addClause(clause,'room_item_assignments.id is not null or parent_id is not null ', nil)
     clause = addClause(clause,'programme_items.id in (select publications.original_id from publications where publications.original_type = ?)', 'ProgrammeItem')
 
@@ -169,13 +176,13 @@ class PublishJob
   def getUnpublishedItems
     PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
       joins("join programme_items on programme_items.id = publications.original_id and publications.original_type = 'ProgrammeItem'").
-      where("(programme_items.print = 0 AND publications.published_id is not null AND published_programme_items.parent_id is null)")
+      where("(programme_items.visibility_id = #{Visibility['None'].id} AND publications.published_id is not null AND published_programme_items.parent_id is null)")
   end
 
   def getUnpublishedSubItems
     PublishedProgrammeItem.joins("left outer join publications on (publications.published_id = published_programme_items.id AND publications.published_type = 'PublishedProgrammeItem')").
       joins("join programme_items on programme_items.id = publications.original_id and publications.original_type = 'ProgrammeItem'").
-      where("(programme_items.print = 0 AND publications.published_id is not null AND published_programme_items.parent_id is not null)")
+      where("(programme_items.visibility_id = #{Visibility['None'].id} AND publications.published_id is not null AND published_programme_items.parent_id is not null)")
   end
 
   private
@@ -207,89 +214,93 @@ class PublishJob
   
   def unPublish(pubItems)
     nbrProcessed = 0
-    PublishedProgrammeItem.transaction do
+    # PublishedProgrammeItem.transaction do
       pubItems.each do |item|
         item.destroy
         nbrProcessed += 1
       end
-    end
+    # end
     return nbrProcessed
   end
   
   def copyProgrammeItems(srcItems)
     nbrProcessed = 0
-    PublishedProgrammeItem.transaction do
-      srcItems.each do |srcItem|
-        # check for existence of already published item and if it is there then use that
-        newItem = (srcItem.published == nil) ? PublishedProgrammeItem.new : srcItem.published
-        
-        # # copy the details from the unpublished item to the new
-        newItem = copy(srcItem, newItem)
-        
-        newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
-        # and once fixed we need to 'touch' all the items
-        copyTags(srcItem, newItem)
-        
-        newItem.touch if !newItem.new_record? #update_attribute(:updated_at,Time.now)
-        newItem.save
-        
-        updateImages(srcItem, newItem)
-        updateLinks(srcItem, newItem)
-        updateThemes(srcItem, newItem)
+    srcItems.each do |srcItem|
+      # Rails.logger.error "*******"
+      # Rails.logger.error srcItem.title
 
-        # link to the people (and their roles)
-        updateAssignments(srcItem, newItem)
-        
-        newRoom = nil
-        newRoom = publishRoom(srcItem.room) if srcItem.room
-        if newItem.published_room_item_assignment
-          if newRoom
-            newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
-          else
-            newItem.published_room_item_assignment.published_room = nil
-            newItem.published_room_item_assignment.save
-          end
-          
-          # Only need to copy time if the new time slot is more recent than the published
-          if srcItem.time_slot != nil
-            if newItem.published_time_slot != nil
-              if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
-                newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
-                newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
-                newTimeSlot.save
-                newItem.published_time_slot = newTimeSlot
-                newItem.save
-              end
-            else
-                newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
-                newTimeSlot.save
-                newItem.published_time_slot = newTimeSlot
-                newItem.save
-            end
-            newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
-            newItem.published_room_item_assignment.save
-          else
-            newItem.published_room_item_assignment.delete
-          end
-        elsif srcItem.time_slot # we only need to worry about the assignment if the source has a time and room assigned (which will not be the case for children)
-          newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
-          assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
-                  :published_time_slot => newTimeSlot, 
-                  :day => srcItem.room_item_assignment.day, 
-                  :published_programme_item => newItem)
-          assignment.save
+      # check for existence of already published item and if it is there then use that
+      newItem = (srcItem.published == nil) ? PublishedProgrammeItem.new : srcItem.published
+      
+      # # copy the details from the unpublished item to the new
+      # Rails.logger.error "******* copy"
+      newItem = copy(srcItem, newItem)
+      
+      newItem.original = srcItem if srcItem.published == nil # this create the Publication record as well to tie the two together
+      # and once fixed we need to 'touch' all the items
+      # Rails.logger.error "******* copy tags"
+      copyTags(srcItem, newItem)
+      
+      newItem.touch if !newItem.new_record? #update_attribute(:updated_at,Time.now)
+      newItem.save
+      
+      # Rails.logger.error "******* other stuff"
+      updateImages(srcItem, newItem)
+      updateLinks(srcItem, newItem)
+      updateThemes(srcItem, newItem)
+
+      # link to the people (and their roles)
+      # Rails.logger.error "******* other assignments"
+      updateAssignments(srcItem, newItem)
+      
+      newRoom = nil
+      newRoom = publishRoom(srcItem.room) if srcItem.room
+      if newItem.published_room_item_assignment
+        if newRoom
+          newItem.published_room = newRoom if newItem.published_room != newRoom # change the room if necessary
+        else
+          newItem.published_room_item_assignment.published_room = nil
+          newItem.published_room_item_assignment.save
         end
-
-        # Put the date and the person who did the publish into the association (Publication)
-        newItem.publication.publication_date = DateTime.current
-        newItem.publication.user = @current_user
-        newItem.publication.save
-        nbrProcessed += 1
+        
+        # Only need to copy time if the new time slot is more recent than the published
+        if srcItem.time_slot != nil
+          if newItem.published_time_slot != nil
+            if srcItem.time_slot.updated_at > newItem.published_time_slot.updated_at
+              newItem.published_time_slot.delete # if we are changing time slot then clean up the old one
+              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+              newTimeSlot.save
+              newItem.published_time_slot = newTimeSlot
+              newItem.save
+            end
+          else
+              newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new) 
+              newTimeSlot.save
+              newItem.published_time_slot = newTimeSlot
+              newItem.save
+          end
+          newItem.published_room_item_assignment.day = srcItem.room_item_assignment.day
+          newItem.published_room_item_assignment.save
+        else
+          newItem.published_room_item_assignment.delete
+        end
+      elsif srcItem.time_slot # we only need to worry about the assignment if the source has a time and room assigned (which will not be the case for children)
+        newTimeSlot = copy(srcItem.time_slot, PublishedTimeSlot.new)
+        assignment = PublishedRoomItemAssignment.new(:published_room => newRoom, 
+                :published_time_slot => newTimeSlot, 
+                :day => srcItem.room_item_assignment.day, 
+                :published_programme_item => newItem)
+        assignment.save
       end
 
-      updateParents(srcItems)
-    
+      # Put the date and the person who did the publish into the association (Publication)
+      newItem.publication.publication_date = DateTime.current
+      newItem.publication.user = @current_user
+      newItem.publication.save
+      nbrProcessed += 1
     end
+
+    updateParents(srcItems)
     
     return nbrProcessed
   end
@@ -325,6 +336,7 @@ class PublishJob
         finalUrl = 'image/upload' +url + '#' + sig
   
         newimg = newItem.external_images.new :use => img.use, :picture => finalUrl
+        newimg.lock_version = img.lock_version
         newimg.save
       end
       
@@ -559,6 +571,7 @@ class PublishJob
 
       taggings = ActsAsTaggableOn::Tagging.
                     where("taggable_type like '" + from.class.name + context_part).
+                    where(["taggable_id = ?", from.id]).
                     distinct("context")
       
       taggings.each do |tagging|

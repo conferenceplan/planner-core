@@ -58,6 +58,8 @@ Rails.application.routes.draw do
   #
   # Participant/Attendee management
   #
+  #
+  match 'people', to: 'people#index', via: [:get, :post], defaults: { format: :json }
   match 'participants/merge',                         :controller => 'people', :action => 'merge',            :via => 'post'
   match 'participants/getList',                       :controller => 'people', :action => 'getList',            :via => ['post','get']
   match 'participants/count',                         :controller => 'people', :action => 'count',              :via => 'get'
@@ -242,6 +244,8 @@ Rails.application.routes.draw do
   resources :phone_numbers do
     resources :people
   end
+
+  get "phone_numbers/labels(/:query)" => "phone_numbers#labels"
 
   post 'pending_import_people/import_file', :controller => 'pending_import_people', :action => 'import_file'
   get 'pending_import_people/get_possible_matches', :controller => 'pending_import_people', :action => 'get_possible_matches'

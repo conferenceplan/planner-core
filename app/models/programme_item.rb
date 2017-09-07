@@ -1,8 +1,11 @@
-class ProgrammeItem < ActiveRecord::Base
-  attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :item_notes, :print,
-                  :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :setup_type_id, :format_id, :short_precis, :parent_id, :is_break, :start_offset
 
+class ProgrammeItem < ActiveRecord::Base
+  attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :item_notes,
+                  :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
+                  :setup_type_id, :format_id, :short_precis, :parent_id, :is_break, :start_offset, :visibility_id
+
+  has_enumerated :visibility
+  
   audited :allow_mass_assignment => true
   acts_as_taggable
 
@@ -65,7 +68,8 @@ class ProgrammeItem < ActiveRecord::Base
   def end_time
     if self.parent && self.parent.time_slot
       _end_time = self.parent.time_slot.end
-      _end_time = self.parent.time_slot.start + self.start_offset.minutes + self.duration.minutes if self.start_offset && self.duration
+      offset = self.start_offset || 0
+      _end_time = self.parent.time_slot.start + offset.minutes + self.duration.minutes if offset && self.duration
     else
       _end_time = self.time_slot ? self.time_slot.end : nil
     end
@@ -110,9 +114,8 @@ class ProgrammeItem < ActiveRecord::Base
   end
 
   def self.deep_clone_members(keep_room_assignment = true, within_conference = true)
-    #    , # TODO - issue? when we clone in the service the children are an issue...
     members = [
-      :programme_item_assignments, :parent
+      :programme_item_assignments #, :parent
     ]
 
     members << {:children => :programme_item_assignments} if within_conference
@@ -121,6 +124,36 @@ class ProgrammeItem < ActiveRecord::Base
     members << {room_item_assignment: :time_slot} if keep_room_assignment
 
     members
+  end
+
+  def visibility_name
+    visibility.name if visibility
+  end
+
+
+  def self.scheduled
+    joins(:room_item_assignment).uniq
+  end
+
+  def self.unscheduled
+    where(["parent_id is null and id not in (?)", ProgrammeItem.scheduled.pluck(:id)])
+  end
+
+  def self.child_items
+    where("parent_id is not null")
+  end
+  
+
+  def public?
+    visibility == Visibility['Public']
+  end
+
+  def private?
+    visibility == Visibility['Private']
+  end
+
+  def visibility_none?
+    visibility == Visibility['None']
   end
 
   protected
@@ -140,17 +173,6 @@ class ProgrammeItem < ActiveRecord::Base
     raise "A break can't be a parent." if self.id && (self.children.size > 0) && self.is_break
   end
 
-  def self.scheduled
-    joins(:room_item_assignment).uniq
-  end
-
-  def self.unscheduled
-    where(["parent_id is null and id not in (?)", ProgrammeItem.scheduled.pluck(:id)])
-  end
-
-  def self.child_items
-    where("parent_id is not null")
-  end
 
 end
 

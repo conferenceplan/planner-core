@@ -10,6 +10,7 @@ class Participants::ParticipantListCell < Cell::Rails
     @place = args.has_key?(:place) ? args[:place] : "participants"
     @caption = args.has_key?(:caption) ? args[:caption] : "participants"
     @selectNotifyMethod = args.has_key?(:selectNotifyMethod) ? args[:selectNotifyMethod] : "function() {}"
+    @selectAllNotifyMethod = args.has_key?(:selectAllNotifyMethod) ? args[:selectAllNotifyMethod] : "function() {}"
     @clearNotifyMethod = args.has_key?(:clearNotifyMethod) ? args[:clearNotifyMethod] : "function() {}"
     @loadNotifyMethod = args.has_key?(:loadNotifyMethod) ? args[:loadNotifyMethod] : "function() {}"
     @pager = args.has_key?(:pager) ? args[:pager] : 'pager'
@@ -22,6 +23,7 @@ class Participants::ParticipantListCell < Cell::Rails
     @acceptance_status = args.has_key?(:acceptance_status) ? args[:acceptance_status] : true
     @has_survey = args.has_key?(:has_survey) ? args[:has_survey] : true
     @reg_type = args.has_key?(:reg_type) ? args[:reg_type] : true
+    @organization = args.has_key?(:organization) ? args[:organization] : true
     
     @view = args.has_key?(:view) ? args[:view] : false
     @search = args.has_key?(:search) ? args[:search] : false

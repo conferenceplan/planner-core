@@ -20,7 +20,7 @@ $.widget( "cp.mailHistoryBootstrapTable", $.cp.baseBootstrapTable , {
                         return "";
                     }
                 } else {
-                    return '<a href="#"><b>' + row.mailing.mailing_number + ' - ' + row.mailing.title + '</b></a>';
+                    return '<a href="#"><b>' + row.mailing.title + '</b></a>';
                 }
             }
         },

@@ -200,7 +200,7 @@ module PeopleService
   #
   def self.findAssignedParticipants
     
-    cndStr = 'programme_items.print = true'
+    cndStr = "programme_items.visibility_id != #{Visibility['None'].id}"
 
     conditions = [cndStr] #, [AcceptanceStatus['Accepted'].id, AcceptanceStatus['Probable'].id]]
 
@@ -251,12 +251,13 @@ module PeopleService
   #
   # need invitation_status, invitation_category
   #
-  def self.findAllPeople(invitestatus = nil, invite_category = nil)
+  def self.findAllPeople(invitestatus = nil, invite_category = nil, only_relevant_people = false)
     stateTable = Arel::Table.new(:person_con_states)
     peopleTable = Arel::Table.new(:people)
     regTable = Arel::Table.new(:registration_details)
     assignments = Arel::Table.new(:programme_item_assignments)
     query = nil
+    people_filter = only_relevant_people ? only_relevent_clause : ''
     
     # Get people for conference
     # i.e. if they have registrations or item assignments
@@ -286,24 +287,33 @@ module PeopleService
       end
     end
     
-    include_list = [:pseudonym, :email_addresses, :postal_addresses, :programmeItemAssignments]
-    
+    include_list = [:pseudonym, :person_con_state, :survey_respondent,
+                    :registrationDetail,
+                    :email_addresses, :postal_addresses, :programmeItemAssignments,
+                    :mailings]
+
     Person.joins(join_query).
-                includes(include_list).
-                where(query).
-                distinct.
-                order("people.last_name")
+              joins(only_relevent_joins).
+              includes(include_list).
+              references(include_list).
+              where(people_filter).
+              where(query).
+              distinct.
+              order("people.last_name")
   end
 
   #
   #
   #
-  def self.countPeople(filters = nil, extraClause = nil, onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, page_to = nil, mailing_id=nil, op=nil,
-                        scheduled=false, includeMailings=false, includeMailHistory=false, email = nil, only_relevent_people = false)
-    query = where_clause(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings, includeMailHistory, email)
+  def self.countPeople(filters: nil, extra_clause: nil, only_survey_respondents: false, 
+      name_search: nil, context: nil, tags: nil, page_to: nil, mailing_id: nil, 
+      op: nil, scheduled: false, include_mailings: false, include_mail_history: false, 
+      email: nil, only_relevant_people: false, excluded_person_ids: nil)
+
+    query = where_clause(name_search, mailing_id, op, scheduled, filters, extra_clause, only_survey_respondents, page_to, include_mailings, include_mail_history, email)
     tagquery = DataService.genTagSql(context, tags)
 
-    people_filter = only_relevent_people ? only_relevent_clause : ''
+    people_filter = only_relevant_people ? only_relevent_clause : ''
     
     included = [:pseudonym, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]
     included << :email_addresses if email && !email.blank?
@@ -311,7 +321,7 @@ module PeopleService
     if tagquery.empty?
       # Rails.logger.warn Person.
             # includes(included).
-            # where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+            # where(self.constraints(include_mailings, include_mail_history, mailing_id, only_survey_respondents, filters, extra_clause)).
             # where(query).
             # where(people_filter).
             # references(included).
@@ -319,18 +329,20 @@ module PeopleService
             # distinct.explain
       Person.
             includes(included).
-            where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+            where(self.constraints(include_mailings, include_mail_history, mailing_id, only_survey_respondents, filters, extra_clause)).
             where(query).
             where(people_filter).
+            where.not(id: excluded_person_ids).
             references(included).
             joins(only_relevent_joins).
             distinct.count
     else
       Person.tagged_with(*tagquery).distinct.
             includes(included).
-            where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+            where(self.constraints(include_mailings, include_mail_history, mailing_id, only_survey_respondents, filters, extra_clause)).
             where(query).
             where(people_filter).
+            where.not(id: excluded_person_ids).
             references(included).
             joins(only_relevent_joins).
             distinct.count
@@ -340,11 +352,13 @@ module PeopleService
   #
   #
   #
-  def self.findPeople(rows=15, page=1, index='last_name', sort_order='asc', filters = nil, extraClause = nil,
-                        onlySurveyRespondents = false, nameSearch=nil, context=nil, tags = nil, mailing_id=nil, op=nil, 
-                        scheduled=false, includeMailings=false, includeMailHistory=false, email = nil, only_relevent_people = false, page_to = nil)
+  def self.findPeople(rows: 15, page: 1, index:'last_name', sort_order: 'asc', 
+      filters: nil, extra_clause: nil, only_survey_respondents: false, 
+      name_search: nil, context: nil, tags: nil, page_to: nil, mailing_id: nil, 
+      op: nil, scheduled: false, include_mailings: false, include_mail_history: false, 
+      email: nil, only_relevant_people: false, excluded_person_ids: nil)
 # TODO - FIX NilClass       undefined local variable or method `page_to' for PeopleService:Module                 
-    query = where_clause(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to, includeMailings, includeMailHistory, email)
+    query = where_clause(name_search, mailing_id, op, scheduled, filters, extra_clause, only_survey_respondents, page_to, include_mailings, include_mail_history, email)
     tagquery = DataService.genTagSql(context, tags)
     
     offset = (page - 1) * rows.to_i
@@ -359,13 +373,14 @@ module PeopleService
     # # includes << :invitation_category if DataService.getFilterData( filters, 'invitation_category_id' )
     # args.merge! :include => includes
 
-    people_filter = only_relevent_people ? only_relevent_clause : ''
+    people_filter = only_relevant_people ? only_relevent_clause : ''
     
     if tagquery.empty?
-      people = Person.where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+      people = Person.where(self.constraints(include_mailings, include_mail_history, mailing_id, only_survey_respondents, filters, extra_clause)).
                   includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   where(query).
                   where(people_filter).
+                  where.not(id: excluded_person_ids).
                   references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   joins(only_relevent_joins).
                   order(sort_order).
@@ -376,9 +391,10 @@ module PeopleService
       people = Person.tagged_with(*tagquery).
                   distinct.
                   includes([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
-                  where(self.constraints(includeMailings, includeMailHistory, mailing_id, onlySurveyRespondents, filters, extraClause)).
+                  where(self.constraints(include_mailings, include_mail_history, mailing_id, only_survey_respondents, filters, extra_clause)).
                   where(query).
                   where(people_filter).
+                  where.not(id: excluded_person_ids).
                   references([:pseudonym, :email_addresses, :person_con_state, :survey_respondent, :registrationDetail, :mailings, :programmeItemAssignments]).
                   joins(only_relevent_joins).
                   order(sort_order).
@@ -403,8 +419,8 @@ module PeopleService
     nil
   end
   
-  def self.where_clause(nameSearch, mailing_id, op, scheduled, filters, extraClause, onlySurveyRespondents, page_to = nil, 
-                        includeMailings=false, includeMailHistory=false, email=nil)
+  def self.where_clause(name_search, mailing_id, op, scheduled, filters, extra_clause, only_survey_respondents, page_to = nil, 
+                        include_mailings=false, include_mail_history=false, email=nil)
     includeConState = false
     clause = DataService.createWhereClause(filters, 
           ['person_con_states.invitestatus_id', 'person_con_states.invitation_category_id', 'person_con_states.acceptance_status_id', 'mailing_id'],
@@ -412,7 +428,7 @@ module PeopleService
           {'person_con_states.acceptance_status_id' => '6', 'person_con_states.invitestatus_id' => '1'})
 
     # add the name search for last of first etc
-    if nameSearch #&& ! nameSearch.empty?
+    if name_search #&& ! name_search.empty?
       # get the last name from the filters and use that in the clause
       st = DataService.getFilterData( filters, 'people.last_name' )
       if (st)
@@ -434,15 +450,15 @@ module PeopleService
       end
     end
     
-    if extraClause
-      if (extraClause['value'].include? ',')
-        vals  = extraClause['value'].split(',')
-        clause = DataService.addClause( clause, extraClause['param'].to_s + ' in (?)', vals)
+    if extra_clause
+      if (extra_clause['value'].include? ',')
+        vals  = extra_clause['value'].split(',')
+        clause = DataService.addClause( clause, extra_clause['param'].to_s + ' in (?)', vals)
       else
         # TODO - change to like for regdetails
-        clause = DataService.addClause( clause, extraClause['param'].to_s + ' = ?', extraClause['value'].to_s)
+        clause = DataService.addClause( clause, extra_clause['param'].to_s + ' = ?', extra_clause['value'].to_s)
       end
-      includeConState = extraClause['param'].to_s.include?('person_con_states')
+      includeConState = extra_clause['param'].to_s.include?('person_con_states')
     end
 
     # Find people that do not have the specified mailing id

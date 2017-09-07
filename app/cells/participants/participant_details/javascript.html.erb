@@ -201,28 +201,38 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     //
     AvailabilityDateModel = Backbone.RelationalModel.extend({
         schema : {
-            start_time : { type : 'Datetime', title : '<%= t "item-start-time" %>', help: '<%= t "availability-start-time-hint" %>',
-                    tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
-                    picker : {
-                        locale : "<%= I18n.locale %>",
-                        stepping : 15,
-                        format : "DD MMM YYYY, HH:mm",
-                        useCurrent: false,
-                        minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
-                        defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>"
-                } },
-            end_time : { type : 'Datetime', title : '<%= t "item-end-time" %>', help: '<%= t "availability-end-time-hint" %>',
-                    tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
-                    picker : {
-                        locale : "<%= I18n.locale %>",
-                        stepping : 15,
-                        format : "DD MMM YYYY, HH:mm",
-                        useCurrent: false,
-                        minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                        maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
-                        defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>"
-                } }
+            start_time : { 
+                type : 'Datetime', 
+                title : '<%= t "item-start-time" %>', 
+                help: '<%= t "availability-start-time-hint" %>',
+                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                picker : {
+                    locale : "<%= I18n.locale %>",
+                    stepping : 15,
+                    format : "DD MMM YYYY, hh:mm a",
+                    useCurrent: false,
+                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
+                    defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    sideBySide : true
+                } 
+            },
+            end_time : { 
+                type : 'Datetime', 
+                title : '<%= t "item-end-time" %>', 
+                help: '<%= t "availability-end-time-hint" %>',
+                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                picker : {
+                    locale : "<%= I18n.locale %>",
+                    stepping : 15,
+                    format : "DD MMM YYYY, hh:mm a",
+                    useCurrent: false,
+                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
+                    defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    sideBySide : true
+                } 
+            }
         },
         urlRoot : "<%= baseUri + '/available_dates' %>"
     });
@@ -319,6 +329,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         Backbone.Relational.store.reset();
 
         eventAggregator.off("refreshTagList", syncModel);
+        current_person = null;
     };
 
     function syncModel() {
@@ -591,9 +602,11 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     function create_people_fiter() {
         $('#toggle-people').change(function(ev) {
             var val = $(this).val();
-            // console.log(ev.currentTarget);
-            // console.log($(ev.target).prop("checked"));
             jQuery("#participants").participantTable('filterPeople', !$(ev.target).prop("checked"));
+        });
+        $('#toggle-participants').change(function(ev) {
+            var val = $(this).val();
+            jQuery("#participants").participantTable('scheduledPeople', $(ev.target).prop("checked"));
         });
     }
 
@@ -613,7 +626,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             modal.render();
         } else {
             // Show a modal with both people and ask to proceed
-            // get the names of the peopel based on the ids - can be extracted from the grid
+            // get the names of the people based on the ids - can be extracted from the grid
             // these need to be put in the form
             var data = jQuery("#participants").jqGrid('getRowData', selected_people[0]);
             src_name = getPersonName(data); // add email
@@ -652,6 +665,32 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     var filterCol = null;
     var current_person = null;
     var selected_people = [];
+    var control = {};
+    var $emailBtn;
+    var $editDeleteBtns;
+    var $mergeBtn;
+
+
+    function toggleBtnStates(number_selected) {
+        if ($emailBtn.length == 0) $emailBtn = control.$el.find('.email-ppl-btn');
+        if (number_selected == 0) {
+            $emailBtn.addClass('disabled');
+        } else {
+            $emailBtn.removeClass('disabled');
+        };
+
+        if (number_selected == 1) {
+            $editDeleteBtns.removeClass('disabled');
+        } else {
+            $editDeleteBtns.addClass('disabled');
+        };
+
+        if (number_selected == 2) {
+            $mergeBtn.removeClass('disabled');
+        } else {
+            $mergeBtn.addClass('disabled');
+        };
+    };
 
     //
     //
@@ -661,9 +700,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             selectCallbacks.add(func);
         },
 
+        getSelectedPeople : function() {return selected_people},
+
         init : function() {
             
             $('#toggle-people').bootstrapToggle({
+                  on:  '<%= t "yes" %>',
+                  off: '<%= t "no" %>'
+                });
+            $('#toggle-participants').bootstrapToggle({
                   on:  '<%= t "yes" %>',
                   off: '<%= t "no" %>'
                 });
@@ -691,43 +736,35 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             $('#participant-tabs').tabdrop({
                 text : "..."
             });
+
+            control = $('#participants').participantTable('getControl');
+            $editDeleteBtns = control.$el.find('.edit-model-button, .delete-model-button');
+            $mergeBtn = control.$el.find('.extra-action-model-button');
+            $emailBtn = control.$el.find('.email-ppl-btn');
         },
 
         InviteDetails : InviteDetails,
 
         mergePeople : mergePeople,
 
+        processSelectAll : function(rowIds, status) {
+            clearRegDetails();
+
+            selected_people = (status === false ? [] : rowIds);
+            toggleBtnStates(selected_people.length);
+        },
+
         showDetails : function(id, status, e) {
-            if (status) {
-                var selected_rows = jQuery('#participants').getGridParam('selarrrow');
+            selected_people = $('#participants').getGridParam('selarrrow');
 
-                if (selected_rows.length == 1) {
-                    jQuery("#participants").jqGrid('setSelection',removed);
-                    selected_people = [];
-                    selected_people.push(id);
-                } else {
-                    selected_people.push(id);
-                    if (selected_people.length > 2) {
-                        var removed = selected_people.shift();
-                        jQuery("#participants").jqGrid('setSelection',removed);
-                    }
-                }
-
-                clearRegDetails();
-                current_person = showRegDetails(id);
-                return current_person;
+            // clear the reg details if there are no more selections
+            if (selected_people.length == 1) {
+                current_person = showRegDetails(selected_people[0]);
             } else {
-                idx = selected_people.indexOf(id);
-                if (idx > -1) {
-                    selected_people.splice(idx, 1);
-                }
-                // clear the reg details if there are no more selections
-                if (selected_people.length == 0) {
-                    clearRegDetails();
-                    current_person = null;
-                }
-                return null;
-            }
+                clearRegDetails();
+            };
+            toggleBtnStates(selected_people.length);
+            return current_person;
         },
         clearDetails : function() {
             clearRegDetails();

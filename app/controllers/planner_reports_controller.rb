@@ -682,7 +682,7 @@ class PlannerReportsController < PlannerController
     @page_size = params[:page_size]
     @orientation = params[:orientation] == 'portrait' ? :portrait : :landscape
     @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false
-    @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+    @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['OtherParticipant']]
     @conf_start_time = SiteConfig.first.start_date
     
     # if the report is a pdf then order by format then name
@@ -717,6 +717,7 @@ class PlannerReportsController < PlannerController
     @short_desc = params[:short_desc] ? (params[:short_desc] == 'true') : false
     
     @max_people = PlannerReportsService.findMaxParticipants[0]["max_people"] # maximum nbr of participants for this conference
+    # only get the contexts for publication
     @contexts = getContexts('ProgrammeItem').sort_by{|name| name.downcase }
     
     @tagOwner = getTagOwner
@@ -789,7 +790,7 @@ class PlannerReportsController < PlannerController
     Person.uncached do
       # Only use the scheduled items
       @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, !show_invisible_items
-      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['OtherParticipant']]
       @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
       @single_venue = Venue.count == 1
       
@@ -821,7 +822,7 @@ class PlannerReportsController < PlannerController
     Person.uncached do
       # Only use the scheduled items
       @people = PlannerReportsService.findPanelistsWithPanels peopleList, additional_roles, true, for_print
-      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['Speaker']]
+      @allowed_roles = [PersonItemRole['Participant'],PersonItemRole['Moderator'],PersonItemRole['OtherParticipant']]
       @allowed_roles.concat([PersonItemRole['Invisible']]) if additional_roles
       
       respond_to do |format|
@@ -894,15 +895,17 @@ class PlannerReportsController < PlannerController
   end
   
   def getContexts(className)
-    taggings = ActsAsTaggableOn::Tagging.where(["taggable_type like ?", className]).
-                  distinct(:context)
-                  
-    contexts = Array.new
+    # taggings = ActsAsTaggableOn::Tagging.where(["taggable_type like ?", className]).
+    #               distinct(:context)
+    #               
+    # contexts = Array.new
+    # 
+    # # for each context get the set of tags (sorted), and add them to the collection for display on the page
+    # taggings.each do |tagging|
+    #   contexts << tagging.context
+    # end
 
-    # for each context get the set of tags (sorted), and add them to the collection for display on the page
-    taggings.each do |tagging|
-      contexts << tagging.context
-    end
+    contexts = TagContext.where({publish: true}).collect{|v| v.name}
     
     return contexts
   end

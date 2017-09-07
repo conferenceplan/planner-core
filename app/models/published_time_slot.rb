@@ -9,5 +9,9 @@ class PublishedTimeSlot < ActiveRecord::Base
   has_many :published_room_item_assignments
   has_many :published_rooms, :through => :published_room_item_assignments
   has_many :published_programme_items, :through => :published_room_item_assignments
+
+  def self.with_public_items
+    joins(:published_programme_items).where(published_programme_items: {visibility_id: Visibility['Public']})
+  end
   
 end

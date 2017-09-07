@@ -81,6 +81,7 @@ class Communications::MailingController < PlannerController
 
     begin
       @mailing.update_attributes(params[:mailing])
+      @mailing.save!
       
       if @mailing.scheduled
         mailingJob = MailingJob.new

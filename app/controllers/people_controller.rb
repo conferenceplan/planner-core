@@ -81,13 +81,14 @@ class PeopleController < PlannerController
         datasourcetmp = Datasource.find_by(name: "Application") # TODO - verify, we need to make sure we have the data-source Application
         @person.datasource = datasourcetmp
 
-        
+        @person.save!
         @person = update_default_email_address @person
 
-        @person.save!
-        @person.person_con_state.save!
+        @person.person_con_state.save! if @person.person_con_state.present?
       end
     rescue => ex
+      Rails.logger.error ex.message if Rails.env.development?
+      Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
       render status: :bad_request, text: ex.message
     end
   end
@@ -120,10 +121,18 @@ class PeopleController < PlannerController
         @person = update_default_email_address @person
       end
     rescue => ex
+      Rails.logger.error ex.message if Rails.env.development?
+      Rails.logger.error ex.backtrace.join("\n\t") if Rails.env.development?
       render status: :bad_request, text: ex.message
     end
   end
 
+
+
+  def index
+    @people = Person.all
+    render json: @people.to_json
+  end
   #
   #
   #
@@ -139,7 +148,7 @@ class PeopleController < PlannerController
     idx = params[:sidx]
     order = params[:sord]
     nameSearch = params[:namesearch]
-    scheduled = params[:scheduled] ? params[:scheduled] : false
+    scheduled = params[:scheduled] ? (params[:scheduled] == "true") : false
     filters = params[:filters]
     extraClause = params[:extraClause]
     onlySurveyRespondents = params[:onlySurveyRespondents]
@@ -150,22 +159,34 @@ class PeopleController < PlannerController
     operation = params[:op]
     @includeMailings = params[:includeMailings] ? params[:includeMailings] : false
     @includeMailHistory = params[:includeMailHistory] ? params[:includeMailHistory] : false
-    only_relevent_people = params[:only_relevent] ? (params[:only_relevent] == "true") : false
+    only_relevant_people = params[:only_relevent] ? (params[:only_relevent] == "true") : false
+    excluded = nil
+    if params[:excluded_person_ids].present?
+      if params[:excluded_person_ids].is_a?(Array)
+        excluded = params[:excluded_person_ids]
+      else
+        excluded = params[:excluded_person_ids].split(',')
+      end
+    end
 
 # TODO - fix page_to does a find as well....
-    @count = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, 
-                                        tags, nil, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email,
-                                        only_relevent_people
+    @count = PeopleService.countPeople(filters: filters, extra_clause: extraClause, 
+        only_survey_respondents: onlySurveyRespondents, name_search: nameSearch, 
+        context: context, tags: tags, mailing_id: mailing_id, op: operation, 
+        scheduled: scheduled, include_mailings: @includeMailings, 
+        include_mail_history: @includeMailHistory, email: email, 
+        only_relevant_people: only_relevant_people, excluded_person_ids: excluded)
     
     if page_to && !page_to.empty?
-      gotoNum = PeopleService.countPeople filters, extraClause, onlySurveyRespondents, nameSearch, context, 
-                                        tags, page_to, mailing_id, operation, scheduled, @includeMailings, @includeMailHistory, email,
-                                        only_relevent_people
-      if gotoNum
+      gotoNum = PeopleService.countPeople(filters: filters, extra_clause: extraClause, 
+        only_survey_respondents: onlySurveyRespondents, name_search: nameSearch, 
+        context: context, tags: tags, page_to: page_to, mailing_id: mailing_id, op: operation, 
+        scheduled: scheduled, include_mailings: @includeMailings, 
+        include_mail_history: @includeMailHistory, email: email, 
+        only_relevant_people: only_relevant_people, excluded_person_ids: excluded)
         @page = (gotoNum / rows.to_i).floor
         @page += 1 if gotoNum % rows.to_i > 0
         @page = 1 if @page <= 0
-      end
     end
     
     if rows.to_i > 0
@@ -175,9 +196,13 @@ class PeopleController < PlannerController
       @nbr_pages = 1
     end
     
-    @people = PeopleService.findPeople rows, @page, idx, order, filters, extraClause, onlySurveyRespondents,
-                  nameSearch, context, tags, mailing_id, operation, scheduled, 
-                  @includeMailings, @includeMailHistory, email, only_relevent_people
+    @people = PeopleService.findPeople(rows: rows, page: @page, index: idx, 
+        sort_order: order, filters: filters, extra_clause: extraClause, 
+        only_survey_respondents: onlySurveyRespondents, name_search: nameSearch, 
+        context: context, tags: tags, page_to: page_to, mailing_id: mailing_id, op: operation, 
+        scheduled: scheduled, include_mailings: @includeMailings, 
+        include_mail_history: @includeMailHistory, email: email, 
+        only_relevant_people: only_relevant_people, excluded_person_ids: excluded)
   end
   
   #
@@ -233,13 +258,18 @@ class PeopleController < PlannerController
   private
   def update_default_email_address person
     # Email address
-    if params[:default_email_address] && params[:default_email_address].present? && params[:default_email_address][:email].present?
-      email = params[:default_email_address][:email]
-      label = params[:default_email_address][:label]
-      email_address = person.email_addresses.find_by(email: email)
+    if params[:default_email_address].present?
+      if params[:default_email_address].is_a?(Hash)
+        email = params[:default_email_address][:email]
+        label = params[:default_email_address][:label]
+      else
+        email = params[:default_email_address].strip
+      end
+
+      email_address = person.email_addresses.find_or_create_by(email: email)
       if email_address.present?
         email_address.email = email
-        email_address.label = label
+        email_address.label = label if label
         email_address.isdefault = true if !email_address.isdefault
         email_address.save!
       else

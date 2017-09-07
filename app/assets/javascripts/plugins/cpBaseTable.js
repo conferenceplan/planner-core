@@ -16,6 +16,7 @@ $.widget( "cp.baseTable" , {
         getGridData         : "",               // for getting the data (part of the URL)
         caption             : "My Table",
         selectNotifyMethod  : function(ids, status, e) {},
+        selectAllNotifyMethod  : function(ids, status) {},
         clearNotifyMethod   : function() {},
         loadNotifyMethod    : function() {},
         multiselect         : false,
@@ -35,7 +36,8 @@ $.widget( "cp.baseTable" , {
         extra_button        : false,
         extra_button_title  : "extra",
         extra_modal_action  : function() {},
-        tagQuery            : ''
+        tagQuery            : '',
+        extraTableOpts      : {},
     },
 
     translate : function(str) {
@@ -106,6 +108,7 @@ $.widget( "cp.baseTable" , {
      */
     createTable : function() {
         var selectMethod = this.options.selectNotifyMethod;
+        var selectAllMethod = this.options.selectAllNotifyMethod;
         var loadNotifyMethod = this.options.loadNotifyMethod;
         var pageToMethod = this.pageTo;
         var clearNotifyMethod = this.options.clearNotifyMethod;
@@ -121,10 +124,10 @@ $.widget( "cp.baseTable" , {
         TableControlView = Backbone.Marionette.ItemView.extend({
 
             events : {
-                "click .add-model-button"           : "newModel",
-                "click .edit-model-button"          : "editModel",
-                "click .delete-model-button"        : "deleteModal",
-                "click .extra-action-model-button"  : "extraAction"
+                "click .add-model-button:not(.disabled)"           : "newModel",
+                "click .edit-model-button:not(.disabled)"          : "editModel",
+                "click .delete-model-button:not(.disabled)"        : "deleteModal",
+                "click .extra-action-model-button:not(.disabled)"  : "extraAction"
             },
             
             initialize : function(options) {
@@ -250,7 +253,7 @@ $.widget( "cp.baseTable" , {
         });
 
         // create the grid that is associated with the element
-        var grid = this.element.jqGrid({
+        var grid = this.element.jqGrid(_.extend({
                 url             : this.createUrl(),
                 datatype        : 'JSON',
                 jsonReader      : {
@@ -270,7 +273,7 @@ $.widget( "cp.baseTable" , {
                 // subGridUrl      : this.getSubGridUrl(),
                 multiselect     : this.options.multiselect,
                 multiboxonly    : this.options.multiboxonly,
-                pager           : jQuery(this.options.pager),
+                pager           : jQuery(that.options.pager),
                 rowNum          : 10,
                 autowidth       : true,
                 shrinkToFit     : true,
@@ -314,6 +317,10 @@ $.widget( "cp.baseTable" , {
                     return false;
                 },
 
+                onSelectAll : function(rowIds, status) {
+                    selectAllMethod(rowIds, status);
+                },
+
                 onPaging : function(pgButton) {
                     that.selected = null;
                     that.model = null;
@@ -344,7 +351,7 @@ $.widget( "cp.baseTable" , {
                         }
                     }
                 }
-        });
+        }, this.options.extraTableOpts));
         
         if (this.options.hide_select_all) {
             $("#cb_" + this.element.attr('id')).hide();

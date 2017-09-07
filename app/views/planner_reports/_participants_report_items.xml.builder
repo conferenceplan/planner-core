@@ -12,6 +12,9 @@ builder.items do
                 builder.description do
                     builder.cdata!(assignment.programmeItem.precis) if assignment.programmeItem.precis
                 end
+                builder.short_description do
+                    builder.cdata!(assignment.programmeItem.short_precis) if assignment.programmeItem.short_precis
+                end
                 builder.format assignment.programmeItem.format ? assignment.programmeItem.format.name : ''
                 builder.room assignment.programmeItem.room.name if assignment.programmeItem.room
                 builder.venue assignment.programmeItem.room.venue.name if (assignment.programmeItem.room && assignment.programmeItem.room.venue)

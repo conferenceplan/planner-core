@@ -19,7 +19,7 @@ json.array!(@changes) do |change|
                     className = k.slice(0, idx).capitalize.gsub(/_[a-z]/){ |s| s[1].capitalize }
                 end
                 
-                if className && !(['Role', 'Format', 'SetupType'].include? className)
+                if className && !(['Role', 'Format', 'SetupType', 'Visibility'].include? className)
                     if Object.const_defined?(className)
                         if (eval ( className + '.exists? ' + v.to_s ))
                             instance = eval ( className + '.find ' + v.to_s )

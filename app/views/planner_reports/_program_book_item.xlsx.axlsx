@@ -1,6 +1,9 @@
 
 row = [
-    time.start + Time.zone.utc_offset.seconds, # fix for the timezone, since Excel does not understand timezones
+#  time.start.utc_offset,
+#  Time.zone.now.utc_offset,
+#  Time.zone.now.utc_offset - time.start.utc_offset,
+    time.start + (time.start.utc_offset - Time.zone.now.utc_offset).seconds, # fix for the daylight savings
     time.start.strftime('%A'),
     time.start.strftime('%H:%M'),
     time.programme_items[0].duration,

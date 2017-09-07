@@ -1,5 +1,4 @@
 
-
 <%= render_cell "participants/participant_list", :javascript, 
     :caption => "participants",
     :pager => "participants-pager",
@@ -10,7 +9,7 @@
     :invite_category => true,
     :acceptance_status => true,
     :has_survey => false,
-    :reg_type => false,
+    :reg_type => true,
     
     :pub_first_name => false,
     :pub_last_name => false,
@@ -18,7 +17,9 @@
     
     :multiselect => true,
     :showControls => false,
-    :selectNotifyMethod => "ItemApp.PeopleManagement.showPerson"
+    :selectNotifyMethod => "ItemApp.PeopleManagement.showPerson",
+
+    :extraClause => "only_relevent=true"
 %>
     
 <%= render_cell "items/item_list", :javascript, 
@@ -41,18 +42,45 @@
 <%= render_cell "items/add_people", :templates %>
 
 <div class="row" id="item-assignment-mgmt">
+
     <div class="col-sm-5 left-jqgrid" >
-        <%= render_cell "items/item_list", :display %>
+      <div class="row">
+        <div class="col-sm-12">
+          &nbsp;
+        </div>
+      </div>
+      <div class="row voffset10">
+        <div class="col-sm-12">
+          <%= render_cell "items/item_list", :display %>
+        </div>
+      </div>
     </div>
     <div class="col-sm-4 left-jqgrid" id="participants-list">
-        <%= render_cell "participants/participant_list", :display,
-                :pager => "participants-pager"
-         %>
-        <div class="voffset10"></div>
-        <div id="people-control-view" class="boffset20"></div>
+        <div class="row">
+          <div class="col-sm-8">
+              <%= t "show-people-from-other-events" %><i class="glyphicon glyphicon-info-sign bpopover" data-placement="top auto" data-toggle="popover" title="" data-trigger="hover" data-content="<%= t "show-people-from-other-events-hint" %>" data-original-title="<%= t "show-people-from-other-events" %>"></i>
+              <div class="input-group pull-right">
+                  <input id="toggle-people" type="checkbox" data-size="mini" data-onstyle="success">
+              </div>
+          </div>
+        </div>
+        <div class="row voffset10">
+          <div class="col-sm-12">
+            <%= render_cell "participants/participant_list", :display,
+                    :pager => "participants-pager"
+             %>
+            <div class="voffset10"></div>
+            <div id="people-control-view" class="boffset20"></div>
+          </div>
+        </div>
     </div>
     <div class="col-sm-3">
-        <div class="row">
+      <div class="row">
+        <div class="col-sm-12">
+          &nbsp;
+        </div>
+      </div>
+        <div class="row voffset10">
             <div class="col-xs-12">
                 <div class="well">
                     <div id="program-item-view"></div>
@@ -67,7 +95,7 @@
         <div class="row" id="participants-area">
             <div class="col-xs-12">
                 <div>
-                    <h5><%= t "moderator(s)" %></h5>
+                    <h5><%= t "moderators" %></h5>
                 </div>
                 <div class="ui-droppable well" id="moderator-area">
                     <div id="moderators-view"></div>
@@ -83,6 +111,14 @@
                 <div class="understated-drag-person-hint">
                     <p><%= (t 'drag-people-hint').html_safe %></p>
                 </div>
+
+                <div>
+                    <h5><%= t "other-participants" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "other-participants" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "other-participants-help").html_safe %>'></i></h5>
+                </div>
+                <div class="ui-droppable well" id="other-participant-area">
+                    <div id="other-participants-view"></div>
+                </div>
+
                 <div>
                     <h5><%= t "invisibles" %><i class="glyphicon glyphicon-info-sign bpopover" title="<%= t "invisibles" %>" data-container="body" data-trigger="hover" data-placement="top" data-toggle="popover" data-content='<%= (t "invisibles-help").html_safe %>'></i></h5>
                 </div>

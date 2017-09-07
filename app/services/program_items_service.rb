@@ -100,7 +100,7 @@ module ProgramItemsService
   def self.assign_reference_numbers(increment = 3)
       items = ProgrammeItem.
                   references([:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ]).
-                  where('programme_items.print = true').
+                  where(visibility_id: Visibility['None'].id).
                   includes([:time_slot, :room_item_assignment, {:people => :pseudonym}, {:room => [:venue]} ]).
                   order('time_slots.start ASC, venues.sort_order, rooms.sort_order')
       
@@ -183,7 +183,7 @@ module ProgramItemsService
         where(
             ['(programme_item_assignments.person_id = ?) AND (programme_item_assignments.role_id in (?))', 
               person.id, 
-              [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Speaker'].id,PersonItemRole['Invisible'].id]]        
+              [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id,PersonItemRole['Invisible'].id]]        
         ).
         includes(
           {:programmeItem => [{:programme_item_assignments => {:person => [:pseudonym, :email_addresses]}}, :equipment_types, {:room => :venue}, :time_slot]}
@@ -355,7 +355,7 @@ protected
     # TODO - add these
     # if ignorePending
       # clause = addClause( clause, 'pending_publication_items.programme_item_id is null', nil )
-      # clause = addClause( clause, 'programme_items.print = true', nil )
+      # clause = addClause( clause, "programme_items.visibility_id != #{Visibility['None'].id}", nil )
     # end
     
     # TODO - assumed that the new creation does not have a time slot. Need to change
@@ -1086,6 +1086,9 @@ protected
     child_assignments = assignments.alias('child_assignments')
     children_alias = programme_items.alias('children_alias')
     child_assignments_alias = assignments.alias('child_assignments_alias')
+    
+    # back to back margin
+    margin = SiteConfig.first ? SiteConfig.first.back2back_margin : 30
 
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'),
@@ -1118,7 +1121,10 @@ protected
                           join(child_assignments_alias, Arel::Nodes::OuterJoin).on(children_alias[:id].not_eq(nil).and(child_assignments_alias[:programme_item_id].eq(children_alias[:id]))).
 
                           where(
-                            time_slots[:end].eq(time_slots_alias[:start]).
+                            # check if within margin i.e.
+                            # start >= end AND start <= (end + margin)
+                            time_slots_alias[:start].gteq(time_slots[:end]).
+                            and(time_slots_alias[:start].lteq(margin_fn(time_slots[:end], margin))).
                             and( assignments[:id].not_eq(assignments_alias[:id]) ).
                             and( 
                               assignments[:person_id].eq(assignments_alias[:person_id]).
@@ -1145,6 +1151,14 @@ protected
 
   def self.constraints(*args)
     nil
+  end
+
+  # margin_fn(TimeSlot.arel_table[:start], mins).as('item_start'),
+  def self.margin_fn(start, mins)
+    item_start_fn = Arel::Nodes::NamedFunction.new("ADDDATE", [
+                        start,
+                        Arel::Nodes::SqlLiteral.new("INTERVAL " + mins.to_s + " MINUTE")
+                        ])
   end
 
 end
