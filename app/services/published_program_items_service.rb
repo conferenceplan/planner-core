@@ -558,8 +558,8 @@ private
   def self.getItemConditions(day, term)
     if (day)
       cfg = SiteConfig.first
-      start_of_day = cfg.start_date + day.to_i.days
-      end_of_day = start_of_day + 1.days
+      start_of_day = (cfg.start_date + day.to_i.days).beginning_of_day
+      end_of_day = start_of_day.end_of_day
     end
     
     # TODO - ensure we also use tags ....
@@ -587,8 +587,8 @@ private
     # find the day start_date + day.days@
     if (day)
       cfg = SiteConfig.first
-      start_of_day = cfg.start_date + day.to_i.days
-      end_of_day = start_of_day + 1.days
+      start_of_day = (cfg.start_date + day.to_i.days).beginning_of_day
+      end_of_day = start_of_day.end_of_day
     end
     
     conditionStr = "" if (day || name || lastname)
