@@ -68,7 +68,7 @@ module Planner
     end
     
     def end_date
-      (SiteConfig.first.start_date + (SiteConfig.first.number_of_days - 1).day).end_of_day if SiteConfig.first
+      SiteConfig.first.end_date if SiteConfig.first
     end
     
     def conference_days
@@ -88,7 +88,7 @@ module Planner
     end
 
     def public_end_date
-      (SiteConfig.first.public_start_date + (SiteConfig.first.public_number_of_days - 1).day) if SiteConfig.first
+      SiteConfig.first.public_end_date if SiteConfig.first
     end
 
     def public_days
@@ -96,11 +96,11 @@ module Planner
     end
 
     def event_happening_now?
-      Date.today >= start_date.to_date && Date.today <= ( start_date.to_date + (event_duration.days - 1.day)).to_date
+      SiteConfig.first.on_now? if SiteConfig.first
     end
     
     def event_is_over?
-      ((start_date + (event_duration-1).days).to_date - Date.today).to_i < 0
+      SiteConfig.first.has_finished? if SiteConfig.first
     end
     
     def only_free_tickets_available?
