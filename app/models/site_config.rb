@@ -1,11 +1,8 @@
 class SiteConfig < ActiveRecord::Base
   attr_accessible :lock_version, :name, :time_zone, :print_time_format,
-                  :start_date, :number_of_days,
-                  :public_start_date, :public_number_of_days
+                  :start_date, :public_start_date, :end_date, :public_end_date
 
-  attr_accessor :tz_offset
-
-  before_save :adjust_timezone, :check_public_dates
+  before_save :adjust_timezone
 
   def adjust_timezone
     Time.use_zone(self.time_zone) do 
@@ -22,34 +19,76 @@ class SiteConfig < ActiveRecord::Base
         self.public_start_date = self.start_date
       end
     end
-
-    if !public_number_of_days || (public_number_of_days == 0)
-      self.public_number_of_days = self.number_of_days
-    end
   end
-  
-  # before save check that the public dates etc are within the time period
-  def check_public_dates
-    raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if public_start_date < start_date
-    if number_of_days > 0
-      raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if public_end_date > end_date
+
+  def tz_offset
+    tz_offset_seconds / 60 if tz_offset_seconds.present?
+  end
+
+  def tz_offset_seconds
+    self.public_start_date.in_time_zone(self.time_zone).utc_offset if self.public_start_date.present?
+  end
+
+  def start_date
+    _start_date = read_attribute(:start_date)
+    if _start_date.blank? && public_start_date.present?
+      _start_date = public_start_date
     end
+
+    _start_date
   end
 
   def end_date
-    start_date + (number_of_days - 1).days
+    _end_date = read_attribute(:end_date)
+    if _end_date.blank? && public_end_date.present?
+      _end_date = public_end_date
+    end
+
+    _end_date
   end
 
-  def public_end_date
-    public_start_date + (public_number_of_days - 1).days
+  def read_start_date
+    read_attribute(:start_date)
+  end
+
+  def read_end_date
+    read_attribute(:end_date)
+  end
+  
+  # before save check that the public dates etc are within the time period
+  # def check_public_dates
+  #   raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if public_start_date < start_date
+  #   if number_of_days > 0
+  #     raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if public_end_date > end_date
+  #   end
+  # end
+
+  def number_of_days
+    if end_date.present?
+      _number_of_days = (end_date.to_date - start_date.to_date).to_i + 1
+    end
+
+    _number_of_days
+  end
+
+  def public_number_of_days
+    if public_end_date.present?
+      _public_number_of_days = (public_end_date.to_date - public_start_date.to_date).to_i + 1
+    end
+
+    _public_number_of_days
   end
 
   def on_now?
-    start_date.to_date <= Date.today && end_date >= Date.today
+    start_date <= DateTime.now && end_date >= DateTime.now
   end
 
   def on_now_for_public?
-    public_start_date.to_date <= Date.today && public_end_date >= Date.today
+    public_start_date.to_date <= DateTime.now && public_end_date >= DateTime.now
+  end
+
+  def has_finished?
+    end_date > DateTime.now
   end
 
   def end_dates_the_same?
