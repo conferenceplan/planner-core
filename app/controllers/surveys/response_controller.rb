@@ -485,7 +485,8 @@ class Surveys::ResponseController < ApplicationController
       person.company = detail.company if detail.company
       person.job_title = detail.job_title if detail.job_title
       
-      person.acceptance_status = AcceptanceStatus[:Accepted]
+      # This should not be set unless the survey is part of an invite ....
+      # person.acceptance_status = AcceptanceStatus[:Accepted]
       
       #
       # respondent.save!
