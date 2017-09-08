@@ -84,7 +84,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
       _start_time = self.parent.start_time
       _start_time = self.parent.start_time + self.start_offset.minutes if self.start_offset
     else
-      _start_time = self.start_time
+      _start_time = self.published_time_slot.start
     end
     _start_time
   end
