@@ -8,7 +8,7 @@ class Items::ItemDetailsCell < Cell::Rails
 
   def javascript
     @extra_javascript = [] if ! @extra_javascript
-    @start_date = SiteConfig.first
+    @cfg = SiteConfig.first
     render
   end
 
