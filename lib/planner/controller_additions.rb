@@ -184,11 +184,11 @@ module Planner
     end
     
     def request_path
-      basepath = request.fullpath 
-      if basepath.include? baseUri
-        basepath = basepath.slice(baseUri.length(), basepath.length())
+      basepath = request.fullpath
+      if basepath.include? baseUri(secure_url: true, path_only: true)
+        basepath = basepath.partition(baseUri(secure_url: true, path_only: true)).last
       elsif basepath.include? baseUri_no_lang
-        basepath = basepath.slice(baseUri_no_lang.length(), basepath.length())
+        basepath = basepath.partition(baseUri_no_lang).last
       end
       basepath
     end
