@@ -56,11 +56,11 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def read_start_date
-    self[(:start_date)]
+    self[:start_date]
   end
 
   def read_end_date
-    self[(:end_date)]
+    self[:end_date]
   end
   
   # before save check that the public dates etc are within the time period
