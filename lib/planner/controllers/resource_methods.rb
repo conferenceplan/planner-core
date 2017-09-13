@@ -47,7 +47,8 @@ module Planner
         def update
           begin
             before_update
-            @object.update_attributes params[object_name]
+            # @object.update_attributes _permitted_params(object_name) #params[object_name]
+            @object.update! _permitted_params(object_name)
             _after_update
             after_update
             render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :update, params[:controller]
@@ -160,7 +161,7 @@ module Planner
           end
         
           def build_resource
-            model_class.new params[object_name] #"#{model_name}"]
+            model_class.new  _permitted_params(object_name) #[object_name] #params[object_name] #"#{model_name}"]
           end
           
           def collection_actions
@@ -173,6 +174,22 @@ module Planner
       
           def new_actions
             [:new, :create]
+          end
+          
+          def allowed_params
+            nil
+          end
+          
+          def _permitted_params _object_name
+            # puts allowed_params
+            if allowed_params #self.respond_to?(:permitted_params, true)
+              # params.require(_object_name).permit(*permitted_params)
+              params.permit(
+                allowed_params
+              )
+            else
+              params[_object_name]
+            end
           end
         
     end
