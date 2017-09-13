@@ -103,4 +103,15 @@ class SiteConfig < ActiveRecord::Base
     start_dates_the_same? && end_dates_the_same?
   end
 
+  def single_day_event?
+    (end_date.to_date - start_date.to_date).to_i == 0
+  end
+
+  def all_day_event?
+    Time.use_zone(self.time_zone) do 
+      (public_start_date.in_time_zone.beginning_of_day - public_start_date.in_time_zone).to_i <= 60 && 
+      (public_end_date.in_time_zone.end_of_day - public_end_date.in_time_zone).to_i <= 60
+    end
+  end
+
 end
