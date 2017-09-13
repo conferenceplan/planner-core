@@ -26,7 +26,12 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def tz_offset_seconds
-    self.public_start_date.in_time_zone(self.time_zone).utc_offset if self.public_start_date.present?
+    if self.public_start_date.present?
+      offset = self.public_start_date.in_time_zone(self.time_zone).utc_offset
+    else
+      offset = 0
+    end
+    offset
   end
 
   def start_date
