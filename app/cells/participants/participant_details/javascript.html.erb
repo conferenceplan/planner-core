@@ -242,6 +242,43 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     });
     ExcludedTimesModel = Backbone.RelationalModel.extend({
       // TODO - need to add a schema for the editor
+      schema : {
+          start : { 
+              type : 'Datetime', 
+              title : '<%= t "item-start-time" %>', 
+              help: '<%= t "availability-start-time-hint" %>',
+              tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+              picker : {
+                  locale : "<%= I18n.locale %>",
+                  stepping : 15,
+                  format : "DD MMM YYYY, hh:mm a",
+                  useCurrent: false,
+                  minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                  maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
+                  defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                  sideBySide : true
+              } 
+          },
+          end : { 
+              type : 'Datetime', 
+              title : '<%= t "item-end-time" %>', 
+              help: '<%= t "availability-end-time-hint" %>',
+              tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+              picker : {
+                  locale : "<%= I18n.locale %>",
+                  stepping : 15,
+                  format : "DD MMM YYYY, hh:mm a",
+                  useCurrent: false,
+                  minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                  maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
+                  defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                  sideBySide : true
+              } 
+          }
+        }
+        // TODO - need to put in the URL to update and create the data in the DB ...
+        // Also need to be able to distingush with the survey ones because of the
+        // survey update mechanism
     });
     ExcludedTimesCollection = Backbone.Collection.extend({
         model : ExcludedTimesModel
