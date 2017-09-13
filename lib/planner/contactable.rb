@@ -127,7 +127,7 @@ module Planner
                     return e ? e.email == email : false
                   end
 
-                  send(:define_method, 'updateDefaultEmail') do |email, label: nil|
+                  send(:define_method, 'updateDefaultEmail') do |email, label: nil, save: true|
                     e = getDefaultEmail()
                     if e
                       e.isdefault = false
@@ -136,7 +136,7 @@ module Planner
                   
                     e = self.email_addresses.new :email => email, label: label, :isdefault => true 
                    
-                    self.save!
+                    self.save! if save
                   end
 
                   send(:define_method, 'getDefaultEmail') do
@@ -201,7 +201,7 @@ module Planner
                     end
                   end
 
-                  send(:define_method, 'updateDefaultPhoneNumber') do |number, phone_type_id: nil, label: nil|
+                  send(:define_method, 'updateDefaultPhoneNumber') do |number, phone_type_id: nil, label: nil, save: true|
                     e = getDefaultPhoneNumber()
                     if e
                       e.isdefault = false
@@ -210,7 +210,7 @@ module Planner
                   
                     e = self.phone_numbers.new :number => number, phone_type_id: phone_type_id, label: label, :isdefault => true 
                    
-                    self.save!
+                    self.save! if save
                   end
 
                   send(:define_method, 'getDefaultPhoneNumber') do

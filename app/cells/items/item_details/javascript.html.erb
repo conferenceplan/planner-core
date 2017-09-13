@@ -308,15 +308,14 @@ ItemApp.ItemManagement = (function(Backbone){
                 type : 'Datetime', 
                 title : '<%= t "item-start-time" %>',
                 editorClass : 'item-form-element',
-                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
-                // defaultDate: "<%= Time.zone.parse((@start_date.start_date + 8.hours).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                tz_offset : <%= @cfg.tz_offset %>,
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : minItemDuration,
                     format : "DD MMM YYYY, HH:mm",
                     useCurrent: false,
-                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                    maxDate : "<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 2.minutes).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>",
+                    minDate : "<%= Time.zone.parse(@cfg.start_date.beginning_of_day.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= Time.zone.parse((@cfg.end_date.end_of_day - 2.minutes).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
                     sideBySide : true
                 },
                 validators: [
@@ -504,14 +503,14 @@ ItemApp.ItemManagement = (function(Backbone){
                 type : 'Datetime', 
                 title : '<%= t "item-end-time" %>',
                 editorClass : 'item-form-element',
-                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                tz_offset : <%= @cfg.tz_offset %>,
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : minItemDuration,
                     format : "DD MMM YYYY, HH:mm",
                     useCurrent: false,
-                    minDate : "<%= Time.zone.parse((@start_date.start_date + 1.minutes).to_s).strftime('%m/%d/%Y') %>",
-                    maxDate : "<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 1.seconds).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>",
+                    minDate : "<%= Time.zone.parse((@cfg.start_date.beginning_of_day + 1.minutes).to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= Time.zone.parse((@cfg.end_date.end_of_day - 1.seconds).to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
                     sideBySide : true
                 },
                 validators: [
@@ -871,10 +870,10 @@ ItemApp.ItemManagement = (function(Backbone){
                         form.fields.start_offset.editor.$el.val(null);
 
                         // Reset min and max datetimes to the original values as defined in the schema
-                        form.fields.start_time.editor.picker.data("DateTimePicker").maxDate(moment("<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 2.minutes).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>"));
-                        form.fields.start_time.editor.picker.data("DateTimePicker").minDate(moment("<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>"));
-                        form.fields.end_time.editor.picker.data("DateTimePicker").maxDate(moment("<%= (Time.zone.parse((@start_date.start_date + @start_date.number_of_days.days - 1.seconds).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>"));
-                        form.fields.end_time.editor.picker.data("DateTimePicker").minDate(moment("<%= Time.zone.parse((@start_date.start_date + 1.minutes).to_s).strftime('%m/%d/%Y') %>"));
+                        form.fields.start_time.editor.picker.data("DateTimePicker").maxDate(moment("<%= (Time.zone.parse((@cfg.end_date - 2.minutes).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>"));
+                        form.fields.start_time.editor.picker.data("DateTimePicker").minDate(moment("<%= Time.zone.parse(@cfg.start_date.beginning_of_day.to_s).strftime('%m/%d/%Y') %>"));
+                        form.fields.end_time.editor.picker.data("DateTimePicker").maxDate(moment("<%= (Time.zone.parse((@cfg.end_date - 1.seconds).to_s)).strftime('%m/%d/%Y %H:%M:%S') %>"));
+                        form.fields.end_time.editor.picker.data("DateTimePicker").minDate(moment("<%= Time.zone.parse((@cfg.start_date.beginning_of_day + 1.minutes).to_s).strftime('%m/%d/%Y') %>"));
                     };
                 }, 
                 afterInitFn : function() {

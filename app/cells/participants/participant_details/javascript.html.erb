@@ -205,15 +205,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 type : 'Datetime', 
                 title : '<%= t "item-start-time" %>', 
                 help: '<%= t "availability-start-time-hint" %>',
-                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                tz_offset : <%= @cfg.tz_offset %>,
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : 15,
                     format : "DD MMM YYYY, hh:mm a",
                     useCurrent: false,
-                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
-                    defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    minDate : "<%= Time.zone.parse(@cfg.start_date.beginning_of_day.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= Time.zone.parse(@cfg.end_date.end_of_day.to_s).strftime('%m/%d/%Y') %>",
+                    defaultDate : "<%= Time.zone.parse(@cfg.start_date.to_s).strftime('%m/%d/%Y') %>",
                     sideBySide : true
                 } 
             },
@@ -221,15 +221,15 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 type : 'Datetime', 
                 title : '<%= t "item-end-time" %>', 
                 help: '<%= t "availability-end-time-hint" %>',
-                tz_offset : <%= Time.zone.parse(@start_date.start_date.to_s).utc_offset/60 %>,
+                tz_offset : <%= Time.zone.parse(@cfg.start_date.to_s).utc_offset/60 %>,
                 picker : {
                     locale : "<%= I18n.locale %>",
                     stepping : 15,
                     format : "DD MMM YYYY, hh:mm a",
                     useCurrent: false,
-                    minDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
-                    maxDate : "<%= (Time.zone.parse(@start_date.start_date.to_s) + ((@start_date.number_of_days).to_i).days).strftime('%m/%d/%Y') %>",
-                    defaultDate : "<%= Time.zone.parse(@start_date.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    minDate : "<%= Time.zone.parse(@cfg.start_date.beginning_of_day.to_s).strftime('%m/%d/%Y') %>",
+                    maxDate : "<%= Time.zone.parse(@cfg.end_date.end_of_day.to_s).strftime('%m/%d/%Y') %>",
+                    defaultDate : "<%= Time.zone.parse(@cfg.start_date.to_s).strftime('%m/%d/%Y') %>",
                     sideBySide : true
                 } 
             }
