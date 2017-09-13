@@ -24,15 +24,7 @@ class SiteConfigsController < PlannerController
   end
 
   def create
-    site_config = SiteConfig.new(params[:site_config])
-    day = Time.zone.parse(params[:start_date]).day
-    
-    # Make sure we use the selected time-zone of the convention
-    Time.use_zone(site_config.time_zone) do 
-      site_config.save!
-      
-      site_config.tz_offset = site_config.start_date.utc_offset/60
-    end
+    site_config = SiteConfig.create(params[:site_config])
 
     render json: site_config.to_json(:methods => [:tz_offset]), :content_type => 'application/json'
   rescue => ex
@@ -42,14 +34,6 @@ class SiteConfigsController < PlannerController
   def update
     site_config = SiteConfig.find(params[:id])
     site_config.update_attributes(params[:site_config])
-    day = Time.zone.parse(params[:start_date]).day
-    
-    # Make sure we use the selected time-zone of the convention
-    Time.use_zone(site_config.time_zone) do 
-      site_config.save!
-      
-      site_config.tz_offset = site_config.start_date.utc_offset/60
-    end
     
     render json: site_config.to_json(:methods => [:tz_offset]), :content_type => 'application/json'
   rescue => ex
