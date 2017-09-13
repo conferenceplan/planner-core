@@ -72,19 +72,15 @@ class SiteConfig < ActiveRecord::Base
   # end
 
   def number_of_days
-    if end_date.present?
-      _number_of_days = (end_date.to_date - start_date.to_date).to_i + 1
+    Time.use_zone(self.time_zone) do 
+      (end_date.in_time_zone.to_date - start_date.in_time_zone.to_date).to_i + 1
     end
-
-    _number_of_days
   end
 
   def public_number_of_days
-    if public_end_date.present?
-      _public_number_of_days = (public_end_date.to_date - public_start_date.to_date).to_i + 1
+    Time.use_zone(self.time_zone) do 
+      (public_end_date.in_time_zone.to_date - public_start_date.in_time_zone.to_date).to_i + 1
     end
-
-    _public_number_of_days
   end
 
   def on_now?
