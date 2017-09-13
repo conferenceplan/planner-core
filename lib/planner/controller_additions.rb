@@ -201,7 +201,7 @@ module Planner
       '/' + I18n.locale.to_s
     end
 
-    def baseUri lang: true, locale: nil, secure_url: true
+    def baseUri lang: true, locale: nil, secure_url: true, path_only: false
       '/' + I18n.locale.to_s
     end
     
