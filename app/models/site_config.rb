@@ -117,8 +117,12 @@ class SiteConfig < ActiveRecord::Base
     start_dates_the_same? && end_dates_the_same?
   end
 
-  def single_day_event?
-    (end_date.to_date - start_date.to_date).to_i == 0
+  def single_date_event?
+    duration_in_hours <= 24
+  end
+
+  def single_public_date_event?
+    public_duration_in_hours <= 24
   end
 
   def all_day_event?
@@ -126,6 +130,30 @@ class SiteConfig < ActiveRecord::Base
       (public_start_date.in_time_zone.beginning_of_day - public_start_date.in_time_zone).to_i <= 60 && 
       (public_end_date.in_time_zone.end_of_day - public_end_date.in_time_zone).to_i <= 60
     end
+  end
+
+  def duration_in_minutes
+    ((end_date - start_date) / 1.minute).round
+  end
+
+  def duration_in_hours
+    ((end_date - start_date) / 1.hour).round
+  end
+
+  def duration_in_days
+    ((end_date - start_date) / 1.day).round
+  end
+
+  def public_duration_in_minutes
+    ((public_end_date - public_start_date) / 1.minute).round
+  end
+
+  def public_duration_in_hours
+    ((public_end_date - public_start_date) / 1.hour).round
+  end
+
+  def public_duration_in_days
+    ((public_end_date - public_start_date) / 1.day).round
   end
 
 end
