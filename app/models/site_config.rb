@@ -3,7 +3,6 @@ class SiteConfig < ActiveRecord::Base
                   :start_date, :public_start_date, :end_date, :public_end_date
 
   after_validation :adjust_timezone
-  before_save :check_public_dates
 
   def adjust_timezone
     if self.public_start_date.time_zone.name.downcase != self.time_zone.downcase
@@ -65,10 +64,12 @@ class SiteConfig < ActiveRecord::Base
   end
   
   # before save check that the public dates etc are within the time period
-  def check_public_dates
-    raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if public_start_date < start_date
-    raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if public_end_date > end_date
-  end
+  # def check_public_dates
+  #   raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if public_start_date < start_date
+  #   if number_of_days > 0
+  #     raise I18n.t("planner.core.errors.messages.public-dates-not-in-range") if public_end_date > end_date
+  #   end
+  # end
 
   def number_of_days
     Time.use_zone(self.time_zone) do 
