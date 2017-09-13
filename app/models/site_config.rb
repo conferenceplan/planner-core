@@ -30,7 +30,7 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def start_date
-    _start_date = read_attribute(:start_date)
+    _start_date = read_start_date
     if _start_date.blank? && public_start_date.present?
       _start_date = public_start_date
     end
@@ -39,7 +39,7 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def end_date
-    _end_date = read_attribute(:end_date)
+    _end_date = read_end_date
     if _end_date.blank? && public_end_date.present?
       _end_date = public_end_date
     end
@@ -48,11 +48,11 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def read_start_date
-    read_attribute(:start_date)
+    self[(:start_date)]
   end
 
   def read_end_date
-    read_attribute(:end_date)
+    self[(:end_date)]
   end
   
   # before save check that the public dates etc are within the time period
