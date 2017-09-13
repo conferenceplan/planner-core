@@ -80,15 +80,21 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def on_now?
-    start_date <= DateTime.now && end_date >= DateTime.now
+    Time.use_zone(self.time_zone) do 
+      start_date.in_time_zone <= Time.current && end_date.in_time_zone >= Time.current
+    end
   end
 
   def on_now_for_public?
-    public_start_date.to_date <= DateTime.now && public_end_date >= DateTime.now
+    Time.use_zone(self.time_zone) do 
+      public_start_date.in_time_zone <= Time.current && public_end_date.in_time_zone >= Time.current
+    end
   end
 
   def has_finished?
-    end_date > DateTime.now
+    Time.use_zone(self.time_zone) do 
+      end_date.in_time_zone > Time.current
+    end
   end
 
   def end_dates_the_same?
