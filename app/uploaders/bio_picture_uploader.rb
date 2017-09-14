@@ -85,22 +85,22 @@ class BioPictureUploader < CarrierWave::Uploader::Base
   #
   #
   def bioList
-    width = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
-    height = ((model.scale && model.scale > 0) ? 60 * model.scale : 60).to_i
+    width = ((model.scale && model.scale > 0) ? 120 * model.scale : 120).to_i
+    height = ((model.scale && model.scale > 0) ? 120 * model.scale : 120).to_i
     return :height => height, :width => width, :crop => :fill, 
       :gravity => :face, :radius => :max, :fetch_format => :jpg,
       :version => 33
   end
   
   def bioDetail
-    width = ((model.scale && model.scale > 0) ? 100 * model.scale : 100).to_i
-    height = ((model.scale && model.scale > 0) ? 100 * model.scale : 100).to_i
+    width = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
+    height = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
     return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
   end
   
   def standardImage
-    width = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
-    height = ((model.scale && model.scale > 0) ? 368 * model.scale : 368).to_i
+    width = ((model.scale && model.scale > 0) ? 736 * model.scale : 736).to_i
+    height = ((model.scale && model.scale > 0) ? 736 * model.scale : 736).to_i
     return :height => height, :width => width, :crop => :fill, :gravity => :face, :fetch_format => :jpg
   end
   
