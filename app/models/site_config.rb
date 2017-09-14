@@ -105,7 +105,7 @@ class SiteConfig < ActiveRecord::Base
 
   def has_finished?
     Time.use_zone(self.time_zone) do 
-      end_date.in_time_zone > Time.current
+      end_date.in_time_zone < Time.current
     end
   end
 
