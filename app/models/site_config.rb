@@ -83,7 +83,11 @@ class SiteConfig < ActiveRecord::Base
 
   def public_number_of_days
     Time.use_zone(self.time_zone) do 
-      (public_end_date.in_time_zone.to_date - public_start_date.in_time_zone.to_date).to_i + 1
+      if public_end_date && public_start_date
+        (public_end_date.in_time_zone.to_date - public_start_date.in_time_zone.to_date).to_i + 1
+      else
+        0
+      end
     end
   end
 
