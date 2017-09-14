@@ -109,6 +109,24 @@ class SiteConfig < ActiveRecord::Base
     end
   end
 
+  def has_finished_for_public?
+    Time.use_zone(self.time_zone) do 
+      public_end_date.in_time_zone < Time.current
+    end
+  end
+
+  def in_future?
+    Time.use_zone(self.time_zone) do 
+      start_date.in_time_zone > Time.current
+    end
+  end
+
+  def in_future_for_public?
+    Time.use_zone(self.time_zone) do 
+      public_start_date.in_time_zone > Time.current
+    end
+  end
+
   def end_dates_the_same?
     end_date == public_end_date
   end
