@@ -97,7 +97,7 @@ class SiteConfig < ActiveRecord::Base
 
   def on_now?
     Time.use_zone(self.time_zone) do 
-      if self.start_date.present? && self.end_date.preesnt?
+      if self.start_date.present? && self.end_date.present?
         start_date.in_time_zone <= Time.current && end_date.in_time_zone >= Time.current
       else
         false
