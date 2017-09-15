@@ -25,7 +25,11 @@ class SiteConfig < ActiveRecord::Base
   end
 
   def tz_offset
-    tz_offset_seconds / 60 if tz_offset_seconds.present?
+    if tz_offset_seconds.present?
+      tz_offset_seconds / 60
+    else
+      0
+    end
   end
 
   def tz_offset_seconds
@@ -93,37 +97,61 @@ class SiteConfig < ActiveRecord::Base
 
   def on_now?
     Time.use_zone(self.time_zone) do 
-      start_date.in_time_zone <= Time.current && end_date.in_time_zone >= Time.current
+      if self.start_date.present? && self.end_date.preesnt?
+        start_date.in_time_zone <= Time.current && end_date.in_time_zone >= Time.current
+      else
+        false
+      end
     end
   end
 
   def on_now_for_public?
     Time.use_zone(self.time_zone) do 
-      public_start_date.in_time_zone <= Time.current && public_end_date.in_time_zone >= Time.current
+      if self.public_start_date.present?
+        public_start_date.in_time_zone <= Time.current && public_end_date.in_time_zone >= Time.current
+      else
+        false
+      end
     end
   end
 
   def has_finished?
     Time.use_zone(self.time_zone) do 
-      end_date.in_time_zone < Time.current
+      if self.end_date.present?
+        end_date.in_time_zone < Time.current
+      else
+        false
+      end
     end
   end
 
   def has_finished_for_public?
     Time.use_zone(self.time_zone) do 
-      public_end_date.in_time_zone < Time.current
+      if self.public_end_date.present?
+        public_end_date.in_time_zone < Time.current
+      else
+        false
+      end
     end
   end
 
   def in_future?
     Time.use_zone(self.time_zone) do 
-      start_date.in_time_zone > Time.current
+      if self.start_date.present?
+        start_date.in_time_zone > Time.current
+      else
+        false
+      end
     end
   end
 
   def in_future_for_public?
     Time.use_zone(self.time_zone) do 
-      public_start_date.in_time_zone > Time.current
+      if self.start_date.present?
+        public_start_date.in_time_zone > Time.current
+      else
+        false
+      end
     end
   end
 
@@ -149,33 +177,61 @@ class SiteConfig < ActiveRecord::Base
 
   def all_day_event?
     Time.use_zone(self.time_zone) do 
-      (public_start_date.in_time_zone.beginning_of_day - public_start_date.in_time_zone).to_i <= 60 && 
-      (public_end_date.in_time_zone.end_of_day - public_end_date.in_time_zone).to_i <= 60
+      if self.start_date.present?
+        (public_start_date.in_time_zone.beginning_of_day - public_start_date.in_time_zone).to_i <= 60 && 
+        (public_end_date.in_time_zone.end_of_day - public_end_date.in_time_zone).to_i <= 60
+      else
+        false
+      end
     end
   end
 
   def duration_in_minutes
-    ((end_date - start_date) / 1.minute).round
+    if self.start_date.present? && self.end_date.present?
+      ((end_date - start_date) / 1.minute).round
+    else
+      0
+    end
   end
 
   def duration_in_hours
-    ((end_date - start_date) / 1.hour).round
+    if self.start_date.present? && self.end_date.present?
+      ((end_date - start_date) / 1.hour).round
+    else
+      0
+    end
   end
 
   def duration_in_days
-    ((end_date - start_date) / 1.day).round
+    if self.start_date.present? && self.end_date.present?
+      ((end_date - start_date) / 1.day).round
+    else
+      0
+    end
   end
 
   def public_duration_in_minutes
-    ((public_end_date - public_start_date) / 1.minute).round
+    if self.public_start_date.present? && self.public_end_date.present?
+      ((public_end_date - public_start_date) / 1.minute).round
+    else
+      0
+    end
   end
 
   def public_duration_in_hours
-    ((public_end_date - public_start_date) / 1.hour).round
+    if self.public_start_date.present? && self.public_end_date.present?
+      ((public_end_date - public_start_date) / 1.hour).round
+    else
+      0
+    end
   end
 
   def public_duration_in_days
-    ((public_end_date - public_start_date) / 1.day).round
+    if self.public_start_date.present? && self.public_end_date.present?
+      ((public_end_date - public_start_date) / 1.day).round
+    else
+      0
+    end
   end
 
 end
