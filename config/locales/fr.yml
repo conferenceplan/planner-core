@@ -48,6 +48,9 @@ fr:
     formats:
       start_time_with_date: "%Y-%-m-%-d, %kh%M"
       end_time: "%kh%M"
+      event_datetime: "%-d %B %Y, %kh%M"
+      event_date: "%-d %B %Y"
+      event_time: "%kh%M"
   date:
     formats:
       short_day: "%a, %e %b %Y"
