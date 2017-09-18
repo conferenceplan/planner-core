@@ -234,4 +234,41 @@ class SiteConfig < ActiveRecord::Base
     end
   end
 
+  def has_date_info?
+    self.start_date.present? && self.end_date.present? && self.public_start_date.present? && self.public_end_date.present? && self.number_of_days.present? && self.public_number_of_days.present?
+  end
+
+  def generate_datestring(translation_key, public_dates: false, location_string: '')
+    if self.has_date_info? && translation_key.is_a?(String)
+      Time.use_zone(self.time_zone) do
+        _start_date = public_dates ? self.public_start_date : self.start_date
+        _end_date = public_dates ? self.public_end_date : self.end_date
+        _number_of_days = public_dates ? self.public_number_of_days : self.number_of_days
+
+        if self.all_day_event?
+          I18n.t(
+            "#{translation_key}.date-only", 
+            count: _number_of_days, 
+            start_date: I18n.l(_start_date, format: :event_date),
+            end_date: I18n.l(_end_date, format: :event_date),
+            location: location_string
+          ).html_safe
+        else
+          I18n.t(
+            "#{translation_key}.with-times", 
+            count: _number_of_days, 
+            start_datetime: I18n.l(_start_date, format: :event_datetime),
+            start_date: I18n.l(_start_date, format: :event_date),
+            start_time: I18n.l(_start_date, format: :event_time),
+            end_datetime: I18n.l(_end_date, format: :event_datetime),
+            end_date: I18n.l(_end_date, format: :event_date),
+            end_time: I18n.l(_end_date, format: :event_time),
+            location: location_string
+          ).html_safe
+        end
+      end
+    end
+
+  end
+
 end
