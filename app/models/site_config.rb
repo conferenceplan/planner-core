@@ -2,26 +2,23 @@ class SiteConfig < ActiveRecord::Base
   attr_accessible :lock_version, :name, :time_zone, :print_time_format,
                   :start_date, :public_start_date, :end_date, :public_end_date
 
-  after_validation :adjust_timezone
+  def adjust_dates_with_timezone
+    Time.use_zone(self.time_zone) do 
+      if self.public_start_date.present?
+        self.public_start_date = (self.public_start_date.in_time_zone - self.tz_offset_seconds)
+      end
+      if self.public_end_date.present?
+        self.public_end_date = (self.public_end_date.in_time_zone - self.tz_offset_seconds)
+      end
 
-  def adjust_timezone
-    if self.public_start_date.time_zone.name.downcase != self.time_zone.downcase
-      Time.use_zone(self.time_zone) do 
-        if self.public_start_date.present?
-          self.public_start_date = (self.public_start_date.in_time_zone - self.tz_offset_seconds)
-        end
-        if self.public_end_date.present?
-          self.public_end_date = (self.public_end_date.in_time_zone - self.tz_offset_seconds)
-        end
-
-        if self.read_start_date.present?
-          self.start_date = (self.start_date.in_time_zone - self.tz_offset_seconds)
-        end
-        if self.read_end_date.present?
-          self.end_date = (self.end_date.in_time_zone - self.tz_offset_seconds)
-        end
+      if self.read_start_date.present?
+        self.start_date = (self.start_date.in_time_zone - self.tz_offset_seconds)
+      end
+      if self.read_end_date.present?
+        self.end_date = (self.end_date.in_time_zone - self.tz_offset_seconds)
       end
     end
+    self.save!
   end
 
   def tz_offset
