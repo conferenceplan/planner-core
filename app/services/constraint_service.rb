@@ -59,6 +59,21 @@ module ConstraintService
           next if ((person.available_date != nil) && (person.available_date.updated_at > surveyResponse.updated_at))
 
           if (surveyResponse != nil)
+            if (surveyResponse.response == '1')
+              startTime = startOfConference
+              endTime = Time.zone.parse((SiteConfig.first.end_date).to_s).end_of_day
+              updateParams = { :start_time => startTime, :end_time => endTime}
+              if (person.available_date != nil)
+                if ((person.available_date.start_time != startTime) || (person.available_date.end_time != endTime))
+                  available_date =  person.available_date
+                  available_date.start_time = startTime
+                  available_date.end_time = endTime
+                  available_date.save
+                end
+              else
+                person.create_available_date(updateParams)
+              end
+            end
             if (surveyResponse.response == '2')
               if (surveyResponse.response2 && surveyResponse.response2 != '---')
                 if (surveyResponse.response2.downcase == 'noon')
