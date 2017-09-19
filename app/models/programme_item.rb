@@ -84,7 +84,7 @@ class ProgrammeItem < ActiveRecord::Base
 
     # find the assignments to remove
     del_candidates = programme_item_assignments.
-                          where(["role_id in (?)",[PersonItemRole['Invisible'].id, PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Reserved'].id]]).
+                          where(["role_id in (?)",[PersonItemRole['Invisible'].id, PersonItemRole['Participant'].id,PersonItemRole['OtherParticipant'].id,PersonItemRole['Moderator'].id,PersonItemRole['Reserved'].id]]).
                           to_a.
                           keep_if{|c| !update_ids.include?(c.id)}
     
