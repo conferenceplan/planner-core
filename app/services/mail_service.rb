@@ -269,7 +269,7 @@ module MailService
       names = []
       programmeItem.programme_item_assignments.each do |asg|
         if asg.person != nil
-          if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['Moderator']
+          if asg.role == PersonItemRole['Participant'] || PersonItemRole['OtherParticipant'] || asg.role == PersonItemRole['Moderator']
             name = ''
             name = asg.person.getFullPublicationName()
             name += " (M)" if asg.role == PersonItemRole['Moderator']
