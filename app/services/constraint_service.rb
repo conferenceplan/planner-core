@@ -46,7 +46,8 @@ module ConstraintService
     Person.transaction do
       Time.use_zone(SiteConfig.first.time_zone) do
       # If there is more than one we want to take the latest as that will have the most current information for the participant
-      availSurveyQuestion = SurveyQuestion.where(:question_type => :availability).order("created_at desc").first
+      availSurveyQuestions = SurveyQuestion.where(:question_type => :availability).order("created_at desc") #.first
+      availSurveyQuestions.each do |availSurveyQuestion|
       if (availSurveyQuestion != nil)
         people = SurveyService.findPeopleWhoAnsweredQuestion(availSurveyQuestion,sinceDate)
         startOfConference = Time.zone.parse(SiteConfig.first.start_date.to_s).beginning_of_day
@@ -92,6 +93,7 @@ module ConstraintService
             end
           end
         end
+      end
       end
       end
     end
