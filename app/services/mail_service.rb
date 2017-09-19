@@ -127,7 +127,7 @@ module MailService
   #
   #
   #
-  def self.sendEmailForMailing(person, mailing, base_url)
+  def self.sendEmailForMailing(person, mailing, base_url, test_address: nil, send_test: false)
     # Generate the email given the template and the args
     config = MailConfig.first # it will be the first mail config anyway
     raise "there is no mail configuration" if !config
@@ -136,14 +136,16 @@ module MailService
     raise "can not find a template for the email" if !template
     
     toInviteState = template.transiton_invite_status
+
+    _test_address = test_address || config.test_email
     
-    if (mailing.testrun && config.test_email) || (person.getDefaultEmail && person.getDefaultEmail.email.present?)
-      to = mailing.testrun ? config.test_email : person.getDefaultEmail.email
+    if (send_test && _test_address.present?) || (person.getDefaultEmail && person.getDefaultEmail.email.present?)
+      to = send_test ? _test_address : person.getDefaultEmail.email
       
-      if to && !to.blank?
+      if to.present?
         cc = ""
         
-        if !mailing.testrun && mailing.cc_all
+        if !send_test && mailing.cc_all
           # add all the email addresses for the person to the CC
           person.email_addresses.each do |addr|
             if addr.email != to
@@ -152,7 +154,7 @@ module MailService
             end
           end
         end
- assignments = mailing.mail_template ? ProgramItemsService.findProgramItemsForPerson(person) : nil
+        assignments = mailing.mail_template ? ProgramItemsService.findProgramItemsForPerson(person) : nil
         respondentDetails = person.survey_respondent
         key = respondentDetails ? respondentDetails.key : generateSurveyKey(person) # get the key (or generate it)
         survey = (mailing.mail_template && mailing.mail_template.survey) ? mailing.mail_template.survey : nil
@@ -180,8 +182,8 @@ module MailService
               body: content
             }, content
           ).deliver_now
-          saveMailHistory(person, mailing, content, EmailStatus[:Sent], subject)
-          transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !mailing.testrun)
+          saveMailHistory(person, mailing, content, EmailStatus[:Sent], subject) if !send_test
+          transitionPersonInviteStateAfterEmail(person, toInviteState) if (toInviteState && !send_test)
         rescue Net::SMTPSyntaxError
         rescue EOFError
           # this indicates that the email address is not valid

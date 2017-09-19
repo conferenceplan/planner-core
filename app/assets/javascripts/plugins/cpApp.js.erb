@@ -683,13 +683,13 @@ var AppUtils = (function(){
             return this;
         },
         
-        submit : function(e) {
+        submit : function(e, callback) {
             if (e && e.type == "submit") {
                 e.preventDefault();
                 e.stopPropagation();
             };
             
-            var errors = this.submitData();
+            var errors = this.submitData(callback);
             
             if (!errors) {
                 if ((e && e.type != "hide") || e === void 0) this.$el.modal("hide");
@@ -722,6 +722,10 @@ var AppUtils = (function(){
               $('body').addClass('modal-open');
             };
             $('.select2-dropdown-open').siblings('input[name]').select2('close');
+            
+            if (typeof this.afterCloseFn == 'function') {
+              this.afterCloseFn.call(this)
+            };
         },
         
         // over-ride this for the body of the form        
@@ -853,7 +857,7 @@ var AppUtils = (function(){
                             refreshFn(mdl); // cause problem with templates used ???
                         };
                         if (callback) {
-                            callback();
+                            callback.call(this);
                         };
                         
                         if (!self.options.noSuccessMsg) {
