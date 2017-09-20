@@ -5,6 +5,7 @@ wb.add_worksheet(name: "Badge Labels") do |sheet|
 
     titles =     [
         'Name',
+        'Organization',
         'Number of Items',
     ]
 
@@ -19,6 +20,7 @@ wb.add_worksheet(name: "Badge Labels") do |sheet|
     @people.each do |p|
         row = []
         row << p.getFullPublicationName
+        row << p.company ? p.company : ""
         
         row <<  p.programmeItemAssignments.size
         

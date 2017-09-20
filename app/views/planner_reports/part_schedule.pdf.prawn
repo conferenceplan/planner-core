@@ -21,7 +21,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
     @people.each do |p|
         pdf.start_new_page if !first_page
         first_page = false
-        pdf.pad(5) { pdf.text '<b>' + p.getFullPublicationName + "</b>", :size => 30, :inline_format => true, :align => :center }
+        pdf.pad(5) { pdf.text '<b>' + p.getFullPublicationName + "</b> - " + (p.company ? p.company : "") , :size => 30, :inline_format => true, :align => :center }
         p.programmeItemAssignments.
             sort_by{ |a| (a.programmeItem.parent && a.programmeItem.parent.time_slot) ? a.programmeItem.parent.time_slot.start : (a.programmeItem.time_slot ? a.programmeItem.time_slot.start : @conf_start_time) }.
             each do |assignment|
@@ -40,7 +40,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                     str += "\n"
 
                     # Add co-participants
-                    str += '<i>'
+                    # str += '<i>'
                     first_person = true
                     assignment.programmeItem.programme_item_assignments.collect {|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.each do |assignment|
                         if !first_person
@@ -51,13 +51,16 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                         str += assignment.person.getFullPublicationName 
                         str += '(' + (assignment.description.blank? ? assignment.role.name : assignment.description) + ')' if assignment.role == PersonItemRole['Moderator']
                         str += "</b>" if p == assignment.person
+                        str += ' - <i>' + p.company + "</i>" if !p.company.blank?
                     end
-                    str += '</i>'
+                    # str += '</i>'
     
                     # Add programme notes for participants
                     str += !assignment.programmeItem.participant_notes.blank? ? "\n<b>Notes:</b>\n" + assignment.programmeItem.participant_notes : ''
                     
-                    pdf.pad_top(10) { pdf.text str, :inline_format => true, :leading => 3 }
+                  pdf.group do |g|
+                    g.pad_top(10) { g.text str, :inline_format => true, :leading => 3 }
+                  end
                 end
             end
     end
