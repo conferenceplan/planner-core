@@ -86,12 +86,13 @@ class PlannerReportsController < PlannerController
         output = Array.new
 
         output.push [
-          'Person','Day','Date','Nbr of Items','Max per Day','Max per Con','Items'
+          'Person','Organization','Day','Date','Nbr of Items','Max per Day','Max per Con','Items'
         ]
         
         @assignments.reject{|a| a.day == nil }.each do |assignment|
           output.push [
                 assignment.person.getFullPublicationName,
+                assignment.person.company,
                 (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A'),
                 (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%d %b %Y'),
                 assignment.nbr_items,
