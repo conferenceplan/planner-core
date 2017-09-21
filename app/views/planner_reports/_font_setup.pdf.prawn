@@ -1,9 +1,5 @@
 kai = "#{Rails.root}/public/gkai00mp.ttf"
 
-def planner_fallback_fonts
-  ["Open Sans", 'kai']
-end
-
 pdf.font_families.update("times" => {
     :normal => "Times-Roman",
     :italic      => "Times-Italic",
@@ -28,5 +24,8 @@ pdf.font_families.update(
         :bold_italic => { :file => "#{Rails.root}/public/OpenSans-BoldItalic.ttf", :font => "OpenSans-BoldItalic" },
        }
     )
+# 
+pdf.font "Helvetica"
 
-pdf.font "Open Sans"
+pdf.fallback_fonts = ["Helvetica", 'kai']
+

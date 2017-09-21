@@ -4,6 +4,7 @@ json.currpage 1
 json.rowdata @assignments.reject{|a| a.day == nil } do |assignment|
     
     json.name               assignment.person.getFullPublicationName
+    json.company            assignment.person.company
     json.day                assignment.day
     json.day_str            assignment.day ? (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A') : ''
     json.date_str           assignment.day ? (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%d %b %Y') : ''
