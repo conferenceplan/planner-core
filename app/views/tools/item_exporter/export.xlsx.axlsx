@@ -17,6 +17,7 @@ wb.add_worksheet(name: "Items") do |sheet|
         'Tracks',
         'Parent',
         'Participants',
+        'Other Participants',
         'Notes for Organizers',
         'Notes for Speakers'
     ]
@@ -38,6 +39,8 @@ wb.add_worksheet(name: "Items") do |sheet|
             (item.parent_id ? item.parent.title : ''),
             item.programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| 
                 p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","),
+            item.programme_item_assignments.find_all {|x| x.role == PersonItemRole['OtherParticipant']}.collect{|p| 
+                p.person.getFullPublicationName }.join(","),
             item.item_notes,
             item.participant_notes
         ]

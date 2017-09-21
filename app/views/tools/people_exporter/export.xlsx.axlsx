@@ -104,8 +104,8 @@ wb.add_worksheet(name: "People") do |sheet|
         end
         row.concat reg_details
         
-        if person.publishedProgrammeItemAssignments.size > 0
-            row << person.publishedProgrammeItemAssignments.size.to_s
+        if person.programmeItemAssignments.size > 0
+            row << person.programmeItemAssignments.size.to_s
         end
         
         sheet.add_row row

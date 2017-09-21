@@ -42,7 +42,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                     # Add co-participants
                     # str += '<i>'
                     first_person = true
-                    assignment.programmeItem.programme_item_assignments.collect {|a| ([PersonItemRole['Participant'],PersonItemRole['Moderator']].include? a.role) ? a : nil}.compact.each do |assignment|
+                    assignment.programmeItem.programme_item_assignments.collect {|a| (@allowed_roles.include? a.role) ? a : nil}.compact.each do |assignment|
                         if !first_person
                             str += ', '
                         end
@@ -51,7 +51,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                         str += assignment.person.getFullPublicationName 
                         str += '(' + (assignment.description.blank? ? assignment.role.name : assignment.description) + ')' if assignment.role == PersonItemRole['Moderator']
                         str += "</b>" if p == assignment.person
-                        str += ' - <i>' + p.company + "</i>" if !p.company.blank?
+                        str += ' - <i>' + assignment.person.company + "</i>" if !p.company.blank?
                     end
                     # str += '</i>'
     
