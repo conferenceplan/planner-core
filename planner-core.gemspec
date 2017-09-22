@@ -58,7 +58,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'jqgrid-jquery-rails', '~> 4.5.200'
   s.add_dependency 'prawn_rails'
   s.add_dependency 'prawn-table'
-  s.add_dependency 'prawn-grouping'
+  # s.add_dependency 'prawn-grouping'
   s.add_dependency 'select2-rails'
   s.add_dependency 'recaptcha' #, '0.4.0'
   s.add_dependency 'carrierwave'
