@@ -58,9 +58,9 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
                     # Add programme notes for participants
                     str += !assignment.programmeItem.participant_notes.blank? ? "\n<b>Notes:</b>\n" + assignment.programmeItem.participant_notes : ''
                     
-                  pdf.group do |g|
-                    g.pad_top(10) { g.text str, :inline_format => true, :leading => 3 }
-                  end
+                  # pdf.group do |g|
+                  pdf.pad_top(10) { pdf.text str, :inline_format => true, :leading => 3 }
+                  # end
                 end
             end
     end
