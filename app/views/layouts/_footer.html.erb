@@ -15,11 +15,13 @@
         <div id="grenadine-footer-right-portion" class="col-md-6">
             <!-- We only need the locale for other languages besides English because in the public web site, English is the default language and set to the root domain -->
             <% if I18n.locale.to_s == 'en' %>
-                <a target="new" href="http://events.grenadine.co/support"><%= (t "technical-support") %></a>&nbsp;&nbsp;|&nbsp;
-                <a target="new" href="http://events.grenadine.co/contact"><%= (t "contact-us") %></a>
+              <a target="new" href="http://events.grenadine.co/grenadine-help-center"><%= (t "help") %></a>
+              &nbsp;|&nbsp;
+              <a target="new" href="http://events.grenadine.co/support"><%= (t "technical-support") %></a>
             <% else %>
-                <a target="new" href="http://events.grenadine.co<%= '/' + I18n.locale.to_s + '/' %>support"><%= (t "technical-support") %></a>&nbsp;&nbsp;|&nbsp;
-                <a target="new" href="http://events.grenadine.co<%= '/' + I18n.locale.to_s + '/' %>contactez-nous"><%= (t "contact-us") %></a>  
+              <a target="new" href="http://events.grenadine.co/grenadine-help-center"><%= (t "help") %></a>
+              &nbsp;|&nbsp;
+              <a target="new" href="http://events.grenadine.co/fr/support"><%= (t "technical-support") %></a>
             <% end %>
         </div>          
   </div>
