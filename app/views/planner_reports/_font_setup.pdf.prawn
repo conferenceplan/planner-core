@@ -27,5 +27,9 @@ pdf.font_families.update(
 # 
 pdf.font "Helvetica"
 
+def planner_fallback_fonts
+  ["Helvetica", 'kai']
+end
+
 pdf.fallback_fonts = ["Helvetica", 'kai']
 
