@@ -429,7 +429,7 @@ module PlannerReportsService
 
     conditions = [cndStr]
     conditions << roomIds if roomIds
-    conditions << day if day
+    conditions << day if !day.blank?
     
     PublishedRoom.where(conditions).
             includes([:published_venue,
