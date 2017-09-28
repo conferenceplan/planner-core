@@ -132,7 +132,8 @@ class ProgrammeItem < ActiveRecord::Base
 
   def self.deep_clone_members(keep_room_assignment = true, within_conference = true)
     members = [
-      :programme_item_assignments #, :parent
+      :programme_item_assignments, #, :parent
+      :translations
     ]
 
     members << {:children => :programme_item_assignments} if within_conference
