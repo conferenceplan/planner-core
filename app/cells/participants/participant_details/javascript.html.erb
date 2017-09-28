@@ -199,7 +199,7 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     });
 
     //
-    AvailabilityDateModel = Backbone.RelationalModel.extend({
+    AvailabilityDateModel = Backbone.Model.extend({
         schema : {
             start_time : { 
                 type : 'Datetime', 
@@ -531,10 +531,10 @@ ParticipantApp.PeopleManagement = (function(Backbone){
         //
         // get the exclusions and show them within the layout
         //
-        var availability = instantiate_area(id, AvailabilityDateModel, "<%= baseUri + '/participants/' %>" + id + '/available_dates.json');
-        availability.deferred.done(function() {
+        var currentAvailability = instantiate_area(id, AvailabilityDateModel, "<%= baseUri + '/participants/' %>" + id + '/available_dates.json');
+        currentAvailability.deferred.done(function() {
             TabUtils.createTabContent({
-                model : availability,
+                model : currentAvailability,
                 template : '#date-exclusion-view-template',
                 region : personTabLayout.availability,
                 id : id,
