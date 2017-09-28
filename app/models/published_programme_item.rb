@@ -6,7 +6,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
                   :format_id, :is_break, :start_offset, :visibility_id, :description
 
-  translates :title, :description, :short_title, touch: true
+  translates :title, :description, :short_title, touch: true, fallbacks_for_empty_translations: true
   globalize_accessors
 
   has_enumerated :visibility

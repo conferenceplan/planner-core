@@ -1,6 +1,6 @@
 
 class ProgrammeItem < ActiveRecord::Base
-  translates :title, :description, :short_title, :short_description, touch: true
+  translates :title, :description, :short_title, :short_description, touch: true, fallbacks_for_empty_translations: true
   globalize_accessors
 
   PERMITTED_PARAMS = 
