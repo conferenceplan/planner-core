@@ -126,7 +126,7 @@ class ProgrammeItemsController < PlannerController
 
     begin
       ProgrammeItem.transaction do
-        @programmeItem = ProgrammeItem.new(params[:programme_item])
+        @programmeItem = ProgrammeItem.new(permitted_params)
         @programmeItem.lock_version = 0
         if @programmeItem.save
           if (startDay.to_i > -1) && startTime && parent_id.blank? #&& (roomId.to_i > 0)
@@ -173,7 +173,7 @@ class ProgrammeItemsController < PlannerController
           @programmeItem.parent.save
         end
 
-        if @programmeItem.update_attributes(params[:programme_item])
+        if @programmeItem.update(permitted_params)
           
           if (startDay.to_i > -1) && startTime && parent_id.blank?
             room = nil
@@ -280,7 +280,7 @@ class ProgrammeItemsController < PlannerController
     if item
       @count = item.children.size
       if page_to && !page_to.empty?
-        gotoNum = item.children.where(['programme_items.title <= ?', page_to]).size
+        gotoNum = item.children.includes(:translations).references(:translations).where(['programme_item_translations.title <= ?', page_to]).size
         if gotoNum
           @page = (gotoNum / rows.to_i).floor
           @page += 1 if gotoNum % rows.to_i > 0
@@ -373,5 +373,10 @@ private
       # end
     # end
   # end
+  
+  protected
+  def permitted_params
+    params.permit(ProgrammeItem.permitted_params)
+  end
  
 end
