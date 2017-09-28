@@ -5,8 +5,8 @@
 json.id                     item.id    
 json.title                  item.title    
 json.short_title            item.short_title
-json.precis                 item.precis
-json.short_precis           item.short_precis
+json.description            item.description
+json.short_description      item.short_description
 json.item_notes             item.item_notes
 json.participant_notes      item.participant_notes
 json.pub_reference_number   item.pub_reference_number

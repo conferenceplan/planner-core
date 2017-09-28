@@ -62,7 +62,7 @@
                     </label>
                     <div class="col-sm-9">
                         <span data-editor>
-                            <div data-editors="precis"></div>
+                            <div data-editors="description"></div>
                             <div class="has-error"><p class="help-block" data-error></p></div>
                         </span>
                     </div>
@@ -94,7 +94,7 @@
                         </label>
                         <div class="col-sm-9">
                             <span data-editor>
-                                <div data-editors="short_precis"></div>
+                                <div data-editors="short_description"></div>
                                 <div class="has-error"><p class="help-block" data-error></p></div>
                             </span>
                         </div>
@@ -327,9 +327,9 @@
         <dl class="dl-airy">
             <dt><%= t "title" %></dt><dd>{{= title ? title : "&nbsp;" }}</dd>
             <dt><%= t "themes" %></dt><dd>{{= theme_names ? theme_names.map(function(item) {return item['name'];}).join(', ') : "&nbsp;" }}</dd>
-            <dt><%= t "item-description" %></dt><dd>{{= precis ? precis : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>
+            <dt><%= t "item-description" %></dt><dd>{{= description ? description : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>
             <dt><%= t "short-title" %></dt><dd>{{= short_title ? short_title : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>
-            <dt><%= t "short-item-description" %></dt><dd>{{= short_precis ? short_precis : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>
+            <dt><%= t "short-item-description" %></dt><dd>{{= short_description ? short_description : '<span class="minor-text"><%= t "none-provided" %></span>' }}</dd>
         </dl>
     </div>
     <div class="col-md-4">
