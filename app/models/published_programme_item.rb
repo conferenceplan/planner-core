@@ -4,7 +4,10 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :format_id, :is_break, :start_offset, :visibility_id
+                  :format_id, :is_break, :start_offset, :visibility_id, :description
+
+  translates :title, :description, :short_title, touch: true
+  globalize_accessors
 
   has_enumerated :visibility
 
@@ -54,8 +57,12 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   alias_attribute :images, :external_images
   alias_attribute :card_size, :mobile_card_size
-  alias_attribute :description, :precis
+  alias_attribute :precis, :description
   alias_attribute :requires_signup, :item_registerable
+
+  def get_precis
+    self[:precis]
+  end
 
   def self.only_public
     where(visibility_id: Visibility['Public'].id)
