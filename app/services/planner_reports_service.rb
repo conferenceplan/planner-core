@@ -158,12 +158,12 @@ module PlannerReportsService
     elsif sort_by == 'room'
       ord_str = "venues.sort_order, rooms.sort_order, time_slots.start, time_slots.end, people.last_name"
     else
-      ord_str = "programme_items.title, people.last_name"
+      ord_str = "programme_item_translations.title, people.last_name"
     end
     
     ProgrammeItem.where(conditions).
-                  includes([{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
-                  references([{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
+                  includes([:translations, {:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
+                  references([:translations, {:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
                   order(ord_str)
   end
   

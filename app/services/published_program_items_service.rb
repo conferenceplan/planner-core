@@ -88,6 +88,7 @@ module PublishedProgramItemsService
     end
     PublishedProgrammeItem.where(visibility_conditions).where(parent_id: nil).
                           references( [
+                              :translations,
                               :published_time_slot,
                               {
                                 :children => [
@@ -102,6 +103,7 @@ module PublishedProgramItemsService
                               {:published_room_item_assignment => [:published_time_slot, {:published_room => [:published_venue]}]} 
                             ] ).
                           includes( [
+                              :translations,
                               :published_time_slot,
                               {
                                 :children => [
@@ -160,9 +162,18 @@ module PublishedProgramItemsService
 
     PublishedProgrammeItem.uncached do
       PublishedProgrammeItem.tagged_with(tag, :op => true).
-              references([:publication, :published_time_slot, :published_room_item_assignment, 
-                  {:people => [:pseudonym, :edited_bio]}, {:published_room => [:published_venue]} 
-                  ]).
+              references([
+                :translations,
+                :publication, 
+                :published_time_slot, 
+                :published_room_item_assignment, 
+                {
+                  :people => [:pseudonym, :edited_bio]
+                }, 
+                {
+                  :published_room => [:published_venue]
+                } 
+              ]).
               where(getItemConditions(day, term)).
               order('published_time_slots.start, published_venues.sort_order, published_rooms.sort_order')
     end
@@ -571,8 +582,8 @@ private
       conditionStr += ' AND ' if day
       conditionStr += '('
       conditionStr += 'people.last_name like ? OR pseudonyms.last_name like ? OR people.first_name like ? OR pseudonyms.first_name like ? '
-      conditionStr += ' OR published_programme_items.title like ? '
-      conditionStr += ' OR published_programme_items.precis like ? '
+      conditionStr += ' OR published_programme_item_translations.title like ? '
+      conditionStr += ' OR published_programme_item_translations.description like ? '
       conditionStr += ')'
     end
 

@@ -43,12 +43,13 @@ module ProgramItemsService
     ProgrammeItem.select([ ProgrammeItem.arel_table[Arel.star],
                           parent_time_slots[:start].as('parent_item_start')
                         ]).
-                        includes([:time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
+                        includes([:translations, :time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
+                        references(:translations).
                         joins(find_all_joins).
                         order(
                           %w(
                             IF(parent_item_start IS NULL, time_slots.start, parent_item_start) ASC,
-                            programme_items.title
+                            programme_item_translations.title
                           ).join(" ")
                         )
     
@@ -131,13 +132,13 @@ module ProgramItemsService
     if (index != nil && index != "")
       order_clause = index + " " + sort_order
     else
-      order_clause = "time_slots.start asc, programme_items.title asc"
+      order_clause = "time_slots.start asc, programme_item_translations.title asc"
     end
 
     if tagquery.empty?
-      ProgrammeItem.where(clause).joins(join_clause).order(order_clause).uniq.count
+      ProgrammeItem.where(clause).includes(:translations).references(:translations).joins(join_clause).order(order_clause).uniq.count
     else
-      ProgrammeItem.where(clause).joins(join_clause).tagged_with(*tagquery).order(order_clause).uniq.count
+      ProgrammeItem.where(clause).includes(:translations).references(:translations).joins(join_clause).tagged_with(*tagquery).order(order_clause).uniq.count
     end
   end
   
@@ -152,23 +153,25 @@ module ProgramItemsService
     if (index != nil && index != "")
       order_clause = index + " " + sort_order
     else
-      order_clause = "time_slots.start asc, programme_items.title asc"
+      order_clause = "time_slots.start asc, programme_item_translations.title asc"
     end
 
     if tagquery.empty?
-      items = ProgrammeItem.includes(:children).
+      items = ProgrammeItem.includes(:translations, :children, :programme_item_assignments).
+                      references(:translations).
                       where(clause).joins(join_clause).
                       order(order_clause).
                       offset(offset).
                       limit(rows).
-                      uniq.includes(:programme_item_assignments)
+                      uniq
     else
-      items = ProgrammeItem.includes(:children).tagged_with(*tagquery).
+      items = ProgrammeItem.includes(:translations, :children, :programme_item_assignments).
+                      references(:translations).tagged_with(*tagquery).
                       where(clause).joins(join_clause).
                       order(order_clause).
                       offset(offset).
                       limit(rows).
-                      uniq.includes(:programme_item_assignments)
+                      uniq
     end
   end
   
@@ -333,7 +336,7 @@ protected
   def self.where_clause(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['programme_items.format_id','programme_items.pub_reference_number'],
-                  ['programme_items.format_id','programme_items.pub_reference_number'], ['programme_items.title'])
+                  ['programme_items.format_id','programme_items.pub_reference_number'], ['programme_item_translations.title'])
 
     if ignoreScheduled
       clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
@@ -341,9 +344,9 @@ protected
 
     # add the name search of the title
     if nameSearch
-      st = DataService.getFilterData( filters, 'programme_items.title' )
+      st = DataService.getFilterData( filters, 'programme_item_translations.title' )
       if (st)
-        clause = DataService.addClause(clause,'programme_items.title like ? ','%' + st + '%')
+        clause = DataService.addClause(clause,'programme_item_translations.title like ? ','%' + st + '%')
         clause = DataService.addClause(clause,'children.title like ? ','%' + st + '%','OR') if include_children
       end
     end
@@ -359,7 +362,7 @@ protected
     # end
     
     # TODO - assumed that the new creation does not have a time slot. Need to change
-    clause = DataService.addClause( clause, 'programme_items.title <= ? AND time_slots.start is null', page_to) if page_to
+    clause = DataService.addClause( clause, 'programme_item_translations.title <= ? AND time_slots.start is null', page_to) if page_to
     clause = DataService.addClause( clause, 'programme_items.parent_id is null', nil) # do not show the children in the result set
 
     clause    
