@@ -229,11 +229,15 @@ module MailService
   #
   # Convert the assignments for a person to HTML for inclusion in the email
   #
+  def self.assignments_detailed_to_html(assignments)
+    assignments_to_html(assignments, include_email: true, full_details: true)
+  end
+
   def self.assignments_with_emails_to_html(assignments)
     assignments_to_html(assignments, include_email: true)
   end
 
-  def self.assignments_to_html(assignments, include_email: false)
+  def self.assignments_to_html(assignments, include_email: false, full_details: false)
     result = ''
     noShareEmails = SurveyService.findPeopleWithDoNotShareEmail
     
@@ -247,7 +251,7 @@ module MailService
         
         # TODO - If it is a sub item the show part of and the parent info
         
-        result += assignment_to_html(assignment.programmeItem, noShareEmails, include_email)
+        result += assignment_to_html(assignment.programmeItem, noShareEmails, include_email, full_details)
       
         # 
         result += "</div></br>\n"
@@ -257,7 +261,7 @@ module MailService
     result
   end
   
-  def self.assignment_to_html(programmeItem, noShareEmails, include_email)
+  def self.assignment_to_html(programmeItem, noShareEmails, include_email, full_details)
     # time
    if (programmeItem.parent_id == nil)
       result = '<p>' + programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + programmeItem.time_slot.end.strftime('%H:%M') 
@@ -270,19 +274,33 @@ module MailService
       programmeItem.programme_item_assignments.each do |asg|
         if asg.person != nil
           if asg.role == PersonItemRole['Participant'] || PersonItemRole['OtherParticipant'] || asg.role == PersonItemRole['Moderator']
-            name = ''
+            
+            name = full_details ? "<p>" : ""
             name = asg.person.getFullPublicationName()
             name += " (M)" if asg.role == PersonItemRole['Moderator']
+            name += "<br>" if full_details
             # use default email ...
             if !noShareEmails.index(asg.person) && include_email
               email = asg.person.getDefaultEmail
-              name += " (" + email.email + ")\n" if email
+              name += " (" + email.email + ")<br>" if email
             end
+            if full_details
+              name += "t: " + asg.person.default_phone_number + "<br>" if asg.person.getDefaultPhoneNumber
+              if asg.person.edited_bio
+                name += asg.person.edited_bio.linkedin_url + "<br>" if asg.person.edited_bio.linkedin_url.present?
+                name += asg.person.edited_bio.twitter_url + "<br>" if asg.person.edited_bio.twitter_url.present?
+                name += asg.person.edited_bio.facebook_url + "<br>" if asg.person.edited_bio.facebook_url.present?
+                name += asg.person.edited_bio.website_url + "<br>" if asg.person.edited_bio.website_url.present?
+              end
+            end
+            name += "</p>" if full_details
+
             names << name
           end
         end
       end
-      result += '<p>' + names.join(', ') + "</p>\n"
+      result += '<p>' + names.join(', ') + "</p>\n" if !full_details
+      result += names.join('') if full_details
       
       if (programmeItem.participant_notes && (programmeItem.participant_notes.to_s.strip.length != 0))
         result += "<h4>Notes</h4>\n"
@@ -290,7 +308,7 @@ module MailService
       end
     else
       result = 'part of: <b><big>' + programmeItem.parent.title  + "</big></b>\n" #programmeItem.parent
-      result += assignment_to_html(programmeItem.parent, noShareEmails, include_email)
+      result += assignment_to_html(programmeItem.parent, noShareEmails, include_email, full_details)
     end
     result
   end
