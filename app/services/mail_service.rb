@@ -295,7 +295,7 @@ module MailService
                 name += "<br>" + asg.person.edited_bio.linkedin_url if asg.person.edited_bio.linkedin_url.present?
                 name += "<br>" + asg.person.edited_bio.twitter_url if asg.person.edited_bio.twitter_url.present?
                 name += "<br>" + asg.person.edited_bio.facebook_url if asg.person.edited_bio.facebook_url.present?
-                name += "<br>" + sg.person.edited_bio.website_url if asg.person.edited_bio.website_url.present?
+                name += "<br>" + asg.person.edited_bio.website_url if asg.person.edited_bio.website_url.present?
               end
             end
             name += "</p>" if full_details
