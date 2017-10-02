@@ -3,15 +3,10 @@ class ProgrammeItem < ActiveRecord::Base
   translates :title, :description, :short_title, :short_description, touch: true, fallbacks_for_empty_translations: true
   globalize_accessors
 
-  PERMITTED_PARAMS = 
-    self.globalize_attribute_names +
-    [
-      :lock_version, :duration, :minimum_people, :maximum_people, :item_notes, 
-      :pub_reference_number, :mobile_card_size, :audience_size, 
-      :participant_notes, :setup_type_id, :format_id, :parent_id, :is_break, 
-      :start_offset, :visibility_id
-    ]
-  attr_accessible *PERMITTED_PARAMS
+  attr_accessible :lock_version, :duration, :minimum_people, :maximum_people, :item_notes, 
+                  :pub_reference_number, :mobile_card_size, :audience_size, 
+                  :participant_notes, :setup_type_id, :format_id, :parent_id, :is_break, 
+                  :start_offset, :visibility_id, :description, :short_description
 
   has_enumerated :visibility
   
@@ -64,9 +59,9 @@ class ProgrammeItem < ActiveRecord::Base
 
   before_save :check_parent, :sanitize_for_break
 
-  def self.permitted_params
-    PERMITTED_PARAMS
-  end
+  # def self.permitted_params
+  #   PERMITTED_PARAMS
+  # end
 
   def get_precis
     self[:precis]
