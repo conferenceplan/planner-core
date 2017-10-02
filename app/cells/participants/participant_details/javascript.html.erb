@@ -208,12 +208,12 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 tz_offset : <%= @cfg.tz_offset %>,
                 picker : {
                     locale : "<%= I18n.locale %>",
-                    stepping : 15,
+                    stepping : 1,
                     format : "DD MMM YYYY, hh:mm a",
                     useCurrent: false,
-                    minDate : "<%= Time.zone.parse(@cfg.start_date.beginning_of_day.to_s).strftime('%m/%d/%Y') %>",
-                    maxDate : "<%= Time.zone.parse(@cfg.end_date.end_of_day.to_s).strftime('%m/%d/%Y') %>",
-                    defaultDate : "<%= Time.zone.parse(@cfg.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    minDate : "<%= Time.zone.parse(@cfg.start_date.beginning_of_day.to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                    maxDate : "<%= Time.zone.parse(@cfg.end_date.end_of_day.to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                    defaultDate : "<%= Time.zone.parse(@cfg.start_date.to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
                     sideBySide : true
                 } 
             },
@@ -224,12 +224,12 @@ ParticipantApp.PeopleManagement = (function(Backbone){
                 tz_offset : <%= Time.zone.parse(@cfg.start_date.to_s).utc_offset/60 %>,
                 picker : {
                     locale : "<%= I18n.locale %>",
-                    stepping : 15,
+                    stepping : 1,
                     format : "DD MMM YYYY, hh:mm a",
                     useCurrent: false,
-                    minDate : "<%= Time.zone.parse(@cfg.start_date.beginning_of_day.to_s).strftime('%m/%d/%Y') %>",
-                    maxDate : "<%= Time.zone.parse(@cfg.end_date.end_of_day.to_s).strftime('%m/%d/%Y') %>",
-                    defaultDate : "<%= Time.zone.parse(@cfg.start_date.to_s).strftime('%m/%d/%Y') %>",
+                    minDate : "<%= Time.zone.parse(@cfg.start_date.beginning_of_day.to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                    maxDate : "<%= Time.zone.parse(@cfg.end_date.end_of_day.to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
+                    defaultDate : "<%= Time.zone.parse(@cfg.start_date.to_s).strftime('%m/%d/%Y %H:%M:%S') %>",
                     sideBySide : true
                 } 
             }
