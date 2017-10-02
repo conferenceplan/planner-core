@@ -249,6 +249,8 @@ module MailService
         # title
         result += '<h2>' + assignment.programmeItem.title  + "</h2>\n" if assignment.programmeItem
         
+        # TODO - type of meeting
+        result += ("Format: " + assignment.programmeItem.format.name + '<br>') if assignment.programmeItem.format
         # TODO - If it is a sub item the show part of and the parent info
         
         result += assignment_to_html(assignment.programmeItem, noShareEmails, include_email, full_details)
@@ -264,19 +266,22 @@ module MailService
   def self.assignment_to_html(programmeItem, noShareEmails, include_email, full_details)
     # time
    if (programmeItem.parent_id == nil)
-      result = '<p>' + programmeItem.time_slot.start.strftime('%A %H:%M') + " - " + programmeItem.time_slot.end.strftime('%H:%M') 
+     # TODO - localise date and time formating
+      result = '<p>' + programmeItem.time_slot.start.strftime('%e %b %Y, %A %H:%M') + " - " + programmeItem.time_slot.end.strftime('%H:%M') 
       result += ', ' + programmeItem.room.name + ' (' + programmeItem.room.venue.name + ')' if programmeItem.room
       result += "</p>\n"
       # description
       result += '<p>' + programmeItem.precis + "</p>\n" if programmeItem.precis
       # participants (name + email)
       names = []
-      programmeItem.programme_item_assignments.each do |asg|
+      # TODO - ensure order
+      programmeItem.programme_item_assignments.sort{|a,b| a.sort_order <=> b.sort_order}.each do |asg|
         if asg.person != nil
           if asg.role == PersonItemRole['Participant'] || PersonItemRole['OtherParticipant'] || asg.role == PersonItemRole['Moderator']
             
             name = full_details ? "<p><b>" : ""
             name += asg.person.getFullPublicationName()
+            name += " (" + asg.person.company + ")" if asg.person.company.present?
             name += " (M)" if asg.role == PersonItemRole['Moderator']
             name += "</b>" if full_details
             # use default email ...
