@@ -4,7 +4,10 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :format_id, :is_break, :start_offset, :visibility_id, :description
+                  :format_id, :is_break, :start_offset, :visibility_id, :description,
+                  :title_en, :title_fr, :title_pl, 
+                  :short_title_en, :short_title_fr, :short_title_pl, 
+                  :description_en, :description_fr, :description_pl
 
   translates :title, :description, :short_title, touch: true, fallbacks_for_empty_translations: true
   globalize_accessors

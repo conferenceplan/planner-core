@@ -377,7 +377,7 @@ private
   protected
   def permitted_params
     params.permit(
-        self.globalize_attribute_names +
+        ProgrammeItem.globalize_attribute_names +
         [
           :lock_version, :duration, :minimum_people, :maximum_people, :item_notes, 
           :pub_reference_number, :mobile_card_size, :audience_size, 
@@ -385,8 +385,6 @@ private
           :start_offset, :visibility_id
         ]
     )
-    
-    
   end
  
 end

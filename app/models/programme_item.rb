@@ -1,12 +1,17 @@
 
 class ProgrammeItem < ActiveRecord::Base
-  translates :title, :description, :short_title, :short_description, touch: true, fallbacks_for_empty_translations: true
-  globalize_accessors
 
   attr_accessible :lock_version, :duration, :minimum_people, :maximum_people, :item_notes, 
                   :pub_reference_number, :mobile_card_size, :audience_size, 
                   :participant_notes, :setup_type_id, :format_id, :parent_id, :is_break, 
-                  :start_offset, :visibility_id, :description, :short_description
+                  :start_offset, :visibility_id, :description, :short_description, 
+                  :title_en, :title_fr, :title_pl, 
+                  :short_title_en, :short_title_fr, :short_title_pl, 
+                  :description_en, :description_fr, :description_pl, 
+                  :short_description_en, :short_description_fr, :short_description_pl
+
+  translates :title, :description, :short_title, :short_description, touch: true, fallbacks_for_empty_translations: true
+  globalize_accessors
 
   has_enumerated :visibility
   
