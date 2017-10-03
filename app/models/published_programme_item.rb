@@ -10,7 +10,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
                   :description_en, :description_fr, :description_pl
 
   translates :title, :description, :short_title, touch: true, fallbacks_for_empty_translations: true
-  globalize_accessors
+  globalize_accessors :locales => UISettingsService.getAllowedLanguages
 
   has_enumerated :visibility
 

@@ -18,7 +18,12 @@ module UISettingsService
   end
   
   def self.getAllowedLanguages
+    # THis will grow as we allow more languages for the Site UI
     ['en','fr','pl']
+  end
+
+  def self.getDefaultLocale
+    getLanguages.first
   end
 
   def self.getLanguages_sym
