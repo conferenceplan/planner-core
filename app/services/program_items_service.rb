@@ -408,7 +408,7 @@ protected
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      items[:id].as('item_id'), 
+      items[:id].as('item_id'),
       programme_item_trans[:title].as('item_name'), # TODO
       assignments[:role_id].as('item_role'), 
       time_slots[:start].as('item_start'),

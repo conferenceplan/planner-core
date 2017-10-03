@@ -11,7 +11,7 @@ class ProgrammeItem < ActiveRecord::Base
                   :short_description_en, :short_description_fr, :short_description_pl
 
   translates :title, :description, :short_title, :short_description, touch: true, fallbacks_for_empty_translations: true
-  globalize_accessors
+  globalize_accessors :locales => UISettingsService.getAllowedLanguages
 
   has_enumerated :visibility
   
