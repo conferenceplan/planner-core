@@ -543,6 +543,16 @@ class PublishJob
       if dest.parent_id && !src.parent_id
         dest.parent_id = nil
       end
+
+      # The translation fields also need to get copied ...
+      # for each locale get the translation if it exists etc
+      UISettingsService.getSiteLanguages.each do |lang|
+        I18n.with_locale(lang) do
+          dest.title = src.title
+          dest.short_title = dest.short_title
+          dest.description = src.description
+        end
+      end
     end
     
     return dest

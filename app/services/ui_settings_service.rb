@@ -3,6 +3,10 @@
 #
 
 module UISettingsService
+  
+  def self.getSiteLanguages
+    ['en','fr']
+  end
 
   def self.getLanguages
 
