@@ -49,15 +49,26 @@ module PlannerReportsService
   #
   def self.findParticipantsWithNoBios
     # Person must be assigned to a programme item (and be visible to the members)
-    conditions = ["(programme_item_assignments.role_id in (?)) AND (programme_items.visibility_id != #{Visibility['None'].id}) AND (edited_bios.id is null OR edited_bios.bio is null OR edited_bios.bio = '')",
+    conditions = ["(programme_item_assignments.role_id in (?)) AND (programme_items.visibility_id != #{Visibility['None'].id}) AND (edited_bios.id is null OR edited_bio_translations.bio is null OR edited_bio_translations.bio = '')",
                      [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id] ]
 
     Person.where(conditions).
-            includes([:pseudonym, {:programmeItemAssignments => :programmeItem}]).
-            references([:pseudonym, {:programmeItemAssignments => :programmeItem}]).
-            joins("left outer join edited_bios on edited_bios.person_id = people.id").
-            where(self.constraints()).
-            order("people.last_name")
+      includes(
+        [
+          :pseudonym, 
+          {:programmeItemAssignments => :programmeItem},
+          editedBio: [ :translations ]
+        ]
+      ).
+      references(
+        [
+          :pseudonym, 
+          {:programmeItemAssignments => :programmeItem},
+          editedBio: [ :translations ]
+        ]
+      ).
+      where(self.constraints()).
+      order("people.last_name")
   end
 
   #

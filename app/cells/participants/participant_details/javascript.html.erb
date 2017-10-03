@@ -141,7 +141,8 @@ ParticipantApp.PeopleManagement = (function(Backbone){
             {
                 survey_bio : { type : 'TextArea', title : '<%= t "bio-from-survey" %>', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
                 bio : { 
-                  type : 'Html', 
+                  type: 'TranslatableHtml',
+                  locales: <%= raw site_languages.to_json %>,
                   title : '<%= t "bio" %>', 
                   editorAttrs: { rows : 6, cols : 60 },
                 }
