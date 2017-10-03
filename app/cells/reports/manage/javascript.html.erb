@@ -197,6 +197,7 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'Room',              label : '<%= t "room" %>',                          jsonmap: "room_name"},
                     {name: 'Format',            label : '<%= t "report-selection-item-format" %>',  jsonmap: 'format'},
                     {name: 'Title',             label : '<%= t "item-title" %>',                    jsonmap: "title", width: 500},
+                    {name: 'Nbr',               label : '',                        jsonmap: "nbr_participants"},
                     {name: 'Moderator(s)',      label : '<%= t "moderator(s)" %>',                  jsonmap: 'moderators',width: 300, formatter: AppUtils.arrayToString },
                     {name: 'Participants',      label : '<%= t "item-participants" %>',             jsonmap: 'participants',width: 300, formatter: AppUtils.arrayToString }
                     // {name: 'Ref', label : '<%= t "pub-ref" %>', jsonmap: 'pub_reference_number', width: 100},

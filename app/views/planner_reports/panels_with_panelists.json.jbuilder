@@ -28,8 +28,14 @@ json.rowdata @panels.collect { |panel|
 #    json.minimum_people panel.minimum_people
 #    json.maximum_people panel.maximum_people
 #    json.context panel.taggings.collect{|t| t.context}.uniq
+    json.nbr_participants panel.programme_item_assignments.select{|pi| 
+      pi.role == PersonItemRole['Participant'] || 
+      pi.role == PersonItemRole['OtherParticipant'] ||
+      pi.role == PersonItemRole['Moderator']}.count
     
-    json.participants panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {|p| 
+    json.participants panel.programme_item_assignments.select{|pi| 
+      pi.role == PersonItemRole['Participant'] || 
+      pi.role == PersonItemRole['OtherParticipant'] }.collect {|p| 
             p.person.getFullPublicationName + (p.person.registrationDetail && p.person.registrationDetail.registered  ? " (Registered)" : '') 
             }
     json.moderators panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {|p| 
