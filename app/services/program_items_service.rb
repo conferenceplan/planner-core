@@ -379,11 +379,11 @@ protected
   
   # TODO - good to have a fall back locale
   def self.translation_join(
-    query: query, 
-    programme_item_trans: programme_item_trans, 
-    programme_item_trans_alias: programme_item_trans_alias,
-    items: items,
-    items_alias: items_alias
+    query: nil, 
+    programme_item_trans: nil, 
+    programme_item_trans_alias: nil,
+    items: nil,
+    items_alias: nil
   )
     default_locale = UISettingsService.getDefaultLocale
     current_locale = I18n.locale.to_s
