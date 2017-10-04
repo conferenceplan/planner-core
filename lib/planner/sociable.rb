@@ -26,9 +26,9 @@ module Planner
         ## Set accessible attributes
         attr_accessible *args
 
-        def self.sociable_attribute_names
-          args
-        end
+        class_attribute :sociable_attribute_names
+
+        self.sociable_attribute_names = args
 
         ## Handle twitter attr variation and define its method
         if args.include?(:twitter) || args.include?(:twitterinfo)
