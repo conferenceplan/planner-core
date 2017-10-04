@@ -336,7 +336,7 @@ protected
   def self.where_clause(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to = nil)
     clause = DataService.createWhereClause(filters, 
                   ['programme_items.format_id','programme_items.pub_reference_number'],
-                  ['programme_items.format_id','programme_items.pub_reference_number'], ['programme_item_translations.title'])
+                  ['programme_items.format_id','programme_items.pub_reference_number'], ['programme_items.title'])
 
     if ignoreScheduled
       clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
@@ -344,7 +344,7 @@ protected
 
     # add the name search of the title
     if nameSearch
-      st = DataService.getFilterData( filters, 'programme_item_translations.title' )
+      st = DataService.getFilterData( filters, 'programme_items.title' )
       if (st)
         clause = DataService.addClause(clause,'programme_item_translations.title like ? ','%' + st + '%')
         clause = DataService.addClause(clause,'children.title like ? ','%' + st + '%','OR') if include_children
