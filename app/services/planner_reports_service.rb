@@ -4,29 +4,30 @@
 module PlannerReportsService
   
   # Search the programme items and report back on the sizes
-  def self.word_counts(title_size = 0, short_title_size = 0, precis_size = 0, short_precis_size = 0)
+  def self.word_counts(title_size = 0, short_title_size = 0, description_size = 0, short_description_size = 0)
     programme_items = Arel::Table.new(:programme_items)
+    programme_item_translations = Arel::Table.new(ProgrammeItem::Translation.table_name)
     
     attrs = [
       programme_items[:id],
-      programme_items[:title].as('title'),
-      programme_items[:short_title].as('short_title'),
-      programme_items[:precis].as('precis'),
-      programme_items[:short_precis].as('short_precis'),
-      word_counts_if_clause(programme_items[:title]).as('title_words'),
-      word_counts_if_clause(programme_items[:short_title]).as('short_title_words'),
-      word_counts_if_clause(programme_items[:precis]).as('precis_words'),
-      word_counts_if_clause(programme_items[:short_precis]).as('short_precis_words')
+      programme_item_translations[:title].as('title'),
+      programme_item_translations[:short_title].as('short_title'),
+      programme_item_translations[:description].as('description'),
+      programme_item_translations[:short_description].as('short_description'),
+      word_counts_if_clause(programme_item_translations[:title]).as('title_words'),
+      word_counts_if_clause(programme_item_translations[:short_title]).as('short_title_words'),
+      word_counts_if_clause(programme_item_translations[:description]).as('description_words'),
+      word_counts_if_clause(programme_item_translations[:short_description]).as('short_description_words')
     ]
     
     query = programme_items.project(*attrs).
                 where(
-                  word_counts_if_clause(programme_items[:title]).gt(title_size).or(
-                    word_counts_if_clause(programme_items[:short_title]).gt(short_title_size)
+                  word_counts_if_clause(programme_item_translations[:title]).gt(title_size).or(
+                    word_counts_if_clause(programme_item_translations[:short_title]).gt(short_title_size)
                   ).or(
-                    word_counts_if_clause(programme_items[:precis]).gt(precis_size)
+                    word_counts_if_clause(programme_item_translations[:description]).gt(description_size)
                   ).or(
-                    word_counts_if_clause(programme_items[:short_precis]).gt(short_precis_size)
+                    word_counts_if_clause(programme_item_translations[:short_description]).gt(short_description_size)
                   )
                 )
                 

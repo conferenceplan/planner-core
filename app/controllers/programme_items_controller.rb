@@ -244,20 +244,52 @@ class ProgrammeItemsController < PlannerController
     if page.present? && page > 1 && limit && offset.nil?
       offset = page * limit
     end
+    sort = params[:sort]
 
-    sort_by = params[:sort] ? params[:sort] : 'title'
+    if sort.present? && sort == 'title'
+      sort = 'programme_item_translations.title'
+    end
+
+    sort_by = params[:sort] ? params[:sort] : 'programme_item_translations.title'
     sort_order = params[:order] ? params[:order] : 'asc'
 
     if search
-      @query = ["parent_id is null AND is_break is false AND title like ?", '%' + search + '%'] 
-      @query = ["parent_id is null AND title like ?", '%' + search + '%'] if include_breaks
+      @query = ["parent_id is null AND is_break is false AND programme_item_translations.title like ?", '%' + search + '%'] 
+      @query = ["parent_id is null AND programme_item_translations.title like ?", '%' + search + '%'] if include_breaks
     else
       @query = ["parent_id is null AND is_break is false"]
       @query = ["parent_id is null"] if include_breaks
     end
 
-    @total = ProgrammeItem.where(@query).count
-    @items = ProgrammeItem.where(@query).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+    items = ProgrammeItem.includes(
+        :translations,
+        { 
+          room: [ 
+            :base_room,
+            venue: :base_venue 
+          ] 
+        },
+        :time_slot,
+        :programme_item_assignments
+      ).
+      references(
+        :translations,
+        { 
+          room: [ 
+            :base_room,
+            venue: :base_venue 
+          ] 
+        },
+        :time_slot,
+        :programme_item_assignments
+      ).
+      where(@query)
+
+    @total = items.count
+    @items = items.
+      offset(offset).
+      limit(limit).
+      order(sort_by + ' ' + sort_order)
 
   end
   

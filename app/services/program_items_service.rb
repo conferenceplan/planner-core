@@ -347,7 +347,7 @@ protected
       st = DataService.getFilterData( filters, 'programme_items.title' )
       if (st)
         clause = DataService.addClause(clause,'programme_item_translations.title like ? ','%' + st + '%')
-        clause = DataService.addClause(clause,'children.title like ? ','%' + st + '%','OR') if include_children
+        clause = DataService.addClause(clause,'children_translations.title like ? ','%' + st + '%','OR') if include_children
       end
     end
     if theme_ids && theme_ids.size > 0
@@ -372,6 +372,7 @@ protected
     'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
     'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
     'LEFT OUTER JOIN programme_items as children on children.parent_id = programme_items.id ' +
+    'LEFT OUTER JOIN programme_item_translations as children_translations on children.id = children_translations.programme_item_id ' +
     "LEFT OUTER JOIN themes on themes.themed_id = programme_items.id AND themes.themed_type = 'ProgrammeItem' " +
     "LEFT OUTER JOIN themes as child_themes on child_themes.themed_id = children.id AND child_themes.themed_type = 'ProgrammeItem' " +
     "LEFT OUTER JOIN rooms on rooms.id = room_item_assignments.room_id"    

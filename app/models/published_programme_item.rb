@@ -19,7 +19,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
   # default sort children
   has_many   :children, :dependent => :destroy, :class_name => 'PublishedProgrammeItem', foreign_key: "parent_id" do
     def ordered_by_offset
-      order("start_offset asc, title asc")
+      includes(:translations).references(:translations).order("start_offset asc, published_programme_item_translations.title asc")
     end
   end
   
