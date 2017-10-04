@@ -371,6 +371,7 @@ protected
     if !pendingPerson.accept_status.blank?
       accept_status = Enum.where({'name' => pendingPerson.accept_status, :type => AcceptanceStatus.name}).first
       person.acceptance_status_id = accept_status.id if accept_status
+      person.save!
     end
 
     if !pendingPerson.invite_category.blank?
@@ -379,6 +380,7 @@ protected
         invite_category = InvitationCategory.create({'name' => pendingPerson.invite_category})
       end
       person.invitation_category_id = invite_category.id if invite_category
+      person.save!
     end
 
   end
