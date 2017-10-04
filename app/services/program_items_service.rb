@@ -376,6 +376,33 @@ protected
     "LEFT OUTER JOIN themes as child_themes on child_themes.themed_id = children.id AND child_themes.themed_type = 'ProgrammeItem' " +
     "LEFT OUTER JOIN rooms on rooms.id = room_item_assignments.room_id"    
   end
+  
+  # TODO - good to have a fall back locale
+  def self.translation_join(
+    query: query, 
+    programme_item_trans: programme_item_trans, 
+    programme_item_trans_alias: programme_item_trans_alias,
+    items: items,
+    items_alias: items_alias
+  )
+    default_locale = UISettingsService.getDefaultLocale
+    current_locale = I18n.locale.to_s
+
+    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
+              on(
+                programme_item_trans[:programme_item_id].eq(items[:id]).
+                and(programme_item_trans[:locale].eq(default_locale))
+              )
+    if (programme_item_trans_alias && items_alias)
+      query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
+                on(
+                  programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
+                  and(programme_item_trans_alias[:locale].eq(default_locale))
+                )
+    end
+
+    query
+  end
 
   # For double book participants
   # take into account parent items
@@ -453,17 +480,13 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
-
-    query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
-                and(programme_item_trans_alias[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
 
     query = query.where(self.constraints()) if self.constraints()
     
@@ -554,17 +577,13 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
-
-    query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
-                and(programme_item_trans_alias[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
 
     query = query.where(self.constraints()) if self.constraints()
     
@@ -638,17 +657,13 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
-
-    query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
-                and(programme_item_trans_alias[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
 
     query = query.where(self.constraints()) if self.constraints()
     
@@ -718,18 +733,14 @@ protected
                   join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
                   join(items_alias).on(items_alias[:id].eq(room_assignments_alias[:programme_item_id]))
 
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
 
-    query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
-                and(programme_item_trans_alias[:locale].eq(I18n.locale.to_s))
-              )
-                                        
     query = query.where(self.constraints()) if self.constraints() #.take(1000) # TODO - we need paging in the results
 
     query.take(1000).to_sql
@@ -816,17 +827,13 @@ protected
                                                     )
 
     # TODO - we want the default langauge as well in case the locale one is empty ...
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
-
-    query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
-                and(programme_item_trans_alias[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
 
     query = query.where(self.constraints()) if self.constraints()
 
@@ -912,17 +919,13 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     )
 
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
-
-    query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
-                and(programme_item_trans_alias[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: programme_items,
+      items_alias: items_alias
+    )
 
     query = query.where(self.constraints()) if self.constraints()
 
@@ -992,13 +995,12 @@ protected
                                                     ).where(
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      items: programme_items,
+    )
     
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
-
     query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
@@ -1071,11 +1073,11 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      items: programme_items,
+    )
 
     query = query.where(self.constraints()) if self.constraints()
 
@@ -1136,11 +1138,11 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      items: programme_items,
+    )
 
     query = query.where(self.constraints()) if self.constraints()
 
@@ -1203,11 +1205,11 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      items: programme_items,
+    )
 
     query = query.where(self.constraints()) if self.constraints()
 
@@ -1294,17 +1296,13 @@ protected
                             )
                           )
 
-    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
-                and(programme_item_trans[:locale].eq(I18n.locale.to_s))
-              )
-
-    query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
-                and(programme_item_trans_alias[:locale].eq(I18n.locale.to_s))
-              )
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: programme_items,
+      items_alias: items_alias
+    )
 
     query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
