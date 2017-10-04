@@ -413,7 +413,7 @@ class PlannerReportsController < PlannerController
         outfile = "panels_" + Time.now.strftime("%m-%d-%Y") + ".csv"
         output = Array.new
         output.push [
-          'Date', 'Day', 'Start Time','End Time','Venue','Room','Format', 'Title','Moderators','Participants'
+          'Date', 'Day', 'Start Time','End Time','Venue','Room','Format', 'Title', 'Nbr', 'Moderators','Participants'
         ]
         
         @panels.each do |panel|
@@ -431,10 +431,14 @@ class PlannerReportsController < PlannerController
             ((panel.room != nil) ? panel.room.name : ''),
             (panel.format ? panel.format.name : ''), 
             panel.title,
+            panel.programme_item_assignments.select{|pi| 
+              pi.role == PersonItemRole['Participant'] || 
+              pi.role == PersonItemRole['OtherParticipant'] ||
+              pi.role == PersonItemRole['Moderator']}.count,
             panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Moderator']}.collect {
               |p| p.person.getFullPublicationName + (p.person.registrationDetail && p.person.registrationDetail.registered  ? " (Registered)" : '') 
               }.join(","),
-            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant']}.collect {
+            panel.programme_item_assignments.select{|pi| pi.role == PersonItemRole['Participant'] || pi.role == PersonItemRole['Other Participant']}.collect {
               |p| p.person.getFullPublicationName + (p.person.registrationDetail && p.person.registrationDetail.registered  ? " (Registered)" : '') 
               }.join(",")
           ]
