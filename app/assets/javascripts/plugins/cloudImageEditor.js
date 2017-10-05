@@ -39,6 +39,7 @@ Form.editors.CloudImage = Form.editors.Text.extend({
                     cropping: 'server',
                     multiple: false,
                     thumbnails: false,
+                    client_allowed_formats: ['jpg', 'png', 'jpeg', 'gif'],
                     field_name: 'cl_image',
                     text: {
                       "powered_by_cloudinary": "Powered by Cloudinary - Image management in the cloud",
