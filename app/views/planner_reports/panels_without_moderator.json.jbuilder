@@ -9,7 +9,7 @@ json.rowdata @panels.collect { |panel|
 }.compact do |panel|
     json.pub_reference_number panel.pub_reference_number
     json.title panel.title + (panel.parent ? " [" + panel.parent.title  + "]" : '')
-    json.description panel.precis
+    json.description panel.description
     json.minimum_people panel.minimum_people
     json.maximum_people panel.maximum_people
     json.format (panel.format ? panel.format.name : '')

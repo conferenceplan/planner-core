@@ -20,10 +20,10 @@ class PlannerReportsController < PlannerController
   def report_word_counts
     title_size = params[:title_size] ? params[:title_size].to_i : 0
     short_title_size = params[:short_title_size] ? params[:short_title_size].to_i : 0
-    precis_size = params[:precis_size] ? params[:precis_size].to_i : 0
-    short_precis_size = params[:short_precis_size] ? params[:short_precis_size].to_i : 0
+    description_size = params[:description_size] ? params[:description_size].to_i : 0
+    short_description_size = params[:short_description_size] ? params[:short_description_size].to_i : 0
     
-    @res = PlannerReportsService.word_counts(title_size, short_title_size, precis_size, short_precis_size)
+    @res = PlannerReportsService.word_counts(title_size, short_title_size, description_size, short_description_size)
 
     respond_to do |format|
       format.json
@@ -37,10 +37,10 @@ class PlannerReportsController < PlannerController
             r['title_words'],
             r['short_title'],
             r['short_title_words'],
-            r['precis'],
-            r['precis_words'],
-            r['short_precis'],
-            r['short_precis_words'],
+            r['description'],
+            r['description_words'],
+            r['short_description'],
+            r['short_description_words'],
           ]
         end
         csv_out(output, outfile)

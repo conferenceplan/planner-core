@@ -9,7 +9,7 @@ json.rowdata @panels do |panel|
     else
         json.title panel.title
     end
-    json.description panel.precis
+    json.description panel.description
     json.minimum_people panel.minimum_people
     json.maximum_people panel.maximum_people
     json.format (panel.format ? panel.format.name : '')
