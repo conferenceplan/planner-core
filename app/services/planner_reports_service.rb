@@ -21,15 +21,17 @@ module PlannerReportsService
     ]
     
     query = programme_items.project(*attrs).
-                where(
-                  word_counts_if_clause(programme_item_translations[:title]).gt(title_size).or(
-                    word_counts_if_clause(programme_item_translations[:short_title]).gt(short_title_size)
-                  ).or(
-                    word_counts_if_clause(programme_item_translations[:description]).gt(description_size)
-                  ).or(
-                    word_counts_if_clause(programme_item_translations[:short_description]).gt(short_description_size)
-                  )
-                )
+      join(programme_item_translations, Arel::Nodes::OuterJoin).
+      on(programme_item_translations[:programme_item_id].eq(programme_items[:id])).
+      where(
+        word_counts_if_clause(programme_item_translations[:title]).gt(title_size).or(
+          word_counts_if_clause(programme_item_translations[:short_title]).gt(short_title_size)
+        ).or(
+          word_counts_if_clause(programme_item_translations[:description]).gt(description_size)
+        ).or(
+          word_counts_if_clause(programme_item_translations[:short_description]).gt(short_description_size)
+        )
+      )
                 
     query = query.where(self.arel_constraints()) if self.arel_constraints()
 
