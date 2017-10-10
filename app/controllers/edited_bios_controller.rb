@@ -64,7 +64,7 @@ class EditedBiosController < PlannerController
       EditedBio.globalize_attribute_names +
       EditedBio.sociable_attribute_names +
       [
-        :lock_version, :person_id, :photourl, :bio
+        :lock_version, :person_id, :photourl
       ]
     )
   end
