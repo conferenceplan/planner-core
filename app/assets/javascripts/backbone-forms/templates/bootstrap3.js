@@ -70,7 +70,7 @@
         <% }; %>\
       </label>\
       <div title="<%- title %>" class="input-xlarge">\
-        <span data-editor></span>\
+        <div data-editor></div>\
         <p class="help-block" data-error></p>\
         <p class="help-block"><%= hint %></p>\
       </div>\

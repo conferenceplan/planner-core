@@ -1829,6 +1829,12 @@ input[type='checkbox'][disabled] + label.checkbox-label {
   height: 45px;
   padding: 13px;
   background-color: #ddd;
+
+  &[data-toggle="collapse"] {
+    &:hover {
+      cursor: pointer;
+    }
+  }
 }
 .pretty-nav-list li i {
   margin-top: 3px;
