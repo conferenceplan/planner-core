@@ -113,8 +113,11 @@ class ProgramController < ApplicationController
     @partition_val = /upload/
 
     @participants = PublishedProgramItemsService.findParticipants( peopleIds,
-      roles: [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id] )
-    # PersonItemRole['OtherParticipant'].id
+      roles: [
+        PersonItemRole['Participant'].id,
+        PersonItemRole['Moderator'].id,
+        PersonItemRole['OtherParticipant'].id
+      ] )
   end  
   
   #
