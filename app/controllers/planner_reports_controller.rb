@@ -817,7 +817,14 @@ class PlannerReportsController < PlannerController
   #
   #
   def badge_labels
+    @alternate_size = nil
     @label_dimensions = LabelDimensions.find(params[:label_type])
+    
+    pos_sizes = PDF::Core::PageGeometry::SIZES.collect {|k,v| k }
+    if !pos_sizes.include? @label_dimensions.page_size
+      @alternate_size = JSON.parse @label_dimensions.page_size
+    end
+    
     @exclude_items = params[:exclude_items] == "true"
     peopleList = (params[:people].length > 0) ? URI.unescape(params[:people]).split(',') : nil
     additional_roles = params[:additional_roles] == "true" ? [PersonItemRole['Invisible'].id] : nil
