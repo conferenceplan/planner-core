@@ -2,7 +2,10 @@
 require "prawn/measurement_extensions"
 
 bleed = 0.1
-prawn_document(:page_size => @label_dimensions.page_size,
+prawn_document(:page_size => (
+                  @alternate_size ? @alternate_size.collect{|d| d * 1.send(@label_dimensions.unit) } : 
+                  @label_dimensions.page_size
+                ),
                 :page_layout => (@label_dimensions.orientation == 'portrait' ? :portrait : :landscape),
                 :top_margin => @label_dimensions.top_margin * 1.send(@label_dimensions.unit),
                 :bottom_margin => @label_dimensions.bottom_margin * 1.send(@label_dimensions.unit),
