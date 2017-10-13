@@ -277,7 +277,7 @@ module MailService
       # TODO - ensure order
       programmeItem.programme_item_assignments.sort{|a,b| a.sort_order <=> b.sort_order}.each do |asg|
         if asg.person != nil
-          if asg.role == PersonItemRole['Participant'] || PersonItemRole['OtherParticipant'] || asg.role == PersonItemRole['Moderator']
+          if asg.role == PersonItemRole['Participant'] || asg.role == PersonItemRole['OtherParticipant'] || asg.role == PersonItemRole['Moderator']
             
             name = full_details ? "<p><b>" : ""
             name += asg.person.getFullPublicationName()

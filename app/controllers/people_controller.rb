@@ -27,6 +27,7 @@ class PeopleController < PlannerController
       PeopleService.merge_people(src_person, dest_person)
       
       # delete the src_person
+      src_person.reload
       src_person.destroy
       
       render status: :ok, json: {person_id: dest_person.id}.to_json
