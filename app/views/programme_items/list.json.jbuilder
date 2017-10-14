@@ -21,7 +21,7 @@ json.rows @items do |item|
     json.room item.room
     json.venue item.room.present? ? item.room.venue : nil
 
-    json.num_assigned_participants item.programme_item_assignments.count
+    json.num_assigned_participants item.programme_item_assignments.size
     json.min_people item.minimum_people
     json.max_people item.maximum_people
     json.visibility_id     item.visibility_id

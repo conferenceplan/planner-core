@@ -2,7 +2,7 @@ json.id                     item.id
 json.lock_version           item.lock_version
 json.title                  item.title
 json.short_title            item.short_title
-json.precis                 item.precis
+json.description            item.description
 json.duration               item.duration
 json.format_id              item.format.id if item.format
 json.format_name            item.format.name if item.format

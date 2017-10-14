@@ -114,15 +114,15 @@ ReportApp.ReportManagement = (function(Backbone){
         schema : {
             title_size   : { type : 'Number', title : '<%= t "report-title-word-count" %>'},
             short_title_size    : { type : 'Number', title : '<%= t "report-short-title-word-count" %>'},
-            precis_size    : { type : 'Number', title : '<%= t "report-description-word-count" %>'},
-            short_precis_size    : { type : 'Number', title : '<%= t "report-short-description-word-count" %>'}
+            description_size    : { type : 'Number', title : '<%= t "report-description-word-count" %>'},
+            short_description_size    : { type : 'Number', title : '<%= t "report-short-description-word-count" %>'}
         },
         
         data : {
             title_size : 100,
             short_title_size : 100,
-            precis_size : 150,
-            short_precis_size : 150,
+            description_size : 150,
+            short_description_size : 150,
         }
     });
     
@@ -213,10 +213,10 @@ ReportApp.ReportManagement = (function(Backbone){
                     {name: 'Title Words', label : '<%= t "item-title-words" %>', jsonmap: 'title_words'},
                     {name: 'Short Title', label : '<%= t "item-short-title" %>', jsonmap: 'short_title'},
                     {name: 'Short Title Words', label : '<%= t "item-short-title-words" %>', jsonmap: 'short_title_words'},
-                    // {name: 'Description', label : '<%= t "item-description" %>', jsonmap: 'precis'},
-                    {name: 'Description Words', label : '<%= t "item-description-words" %>', jsonmap: 'precis_words'},
-                    // {name: 'Short Description', label : '<%= t "item-short-description" %>', jsonmap: 'short_precis'},
-                    {name: 'Shor Description Words', label : '<%= t "item-short-description-words" %>', jsonmap: 'short_precis_words'}
+                    // {name: 'Description', label : '<%= t "item-description" %>', jsonmap: 'description'},
+                    {name: 'Description Words', label : '<%= t "item-description-words" %>', jsonmap: 'description_words'},
+                    // {name: 'Short Description', label : '<%= t "item-short-description" %>', jsonmap: 'short_description'},
+                    {name: 'Shor Description Words', label : '<%= t "item-short-description-words" %>', jsonmap: 'short_description_words'}
                 ];
 
     var conflicts = null;

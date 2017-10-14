@@ -7,7 +7,7 @@ json.title              item.title
 json.themes             item.theme_names.collect{|c| c.id}
 json.format             item.format.name if item.format
 json.tags               item.base_tags.collect{|t| t.name} #tag_list_on('PrimaryArea') # TODO - do we jut want the PrimaryArea or make this configrable
-json.desc               item.precis
+json.desc               item.description
 json.mins               item.duration
 json.date               item.start_time.strftime('%Y-%m-%d')
 json.time               item.start_time.strftime('%H:%M')

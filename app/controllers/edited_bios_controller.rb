@@ -3,7 +3,7 @@ class EditedBiosController < PlannerController
   def update
     @editedBio = EditedBio.find(params[:id])
     
-    @editedBio.update_attributes(params[:edited_bio])
+    @editedBio.update_attributes(permitted_params)
     @surveyBio = @editedBio.person.GetSurveyBio
   rescue => ex
     render status: :bad_request, text: ex.message
@@ -12,10 +12,10 @@ class EditedBiosController < PlannerController
   def create
     if (params[:person_id])
       @person = Person.find(params[:person_id]) 
-      @editedBio = @person.create_edited_bio(params[:edited_bio])
+      @editedBio = @person.create_edited_bio(permitted_params)
       @surveyBio = @person.GetSurveyBio
     else
-      @editedBio = EditedBio.new(params[:edited_bio])
+      @editedBio = EditedBio.new(permitted_params)
       @surveyBio = @editedBio.person.GetSurveyBio
     end
     
@@ -56,6 +56,17 @@ class EditedBiosController < PlannerController
     editedBio.destroy
     
     render status: :ok, text: {}.to_json
+  end
+
+  protected
+  def permitted_params
+    params.permit(
+      EditedBio.globalize_attribute_names +
+      EditedBio.sociable_attribute_names +
+      [
+        :lock_version, :person_id, :photourl
+      ]
+    )
   end
   
 end

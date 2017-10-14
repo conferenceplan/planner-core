@@ -24,7 +24,7 @@ json.rowdata @panels.collect { |panel|
 #    json.pub_reference_number panel.pub_reference_number
     json.title panel.title
 
-#    json.description panel.precis
+#    json.description panel.description
 #    json.minimum_people panel.minimum_people
 #    json.maximum_people panel.maximum_people
 #    json.context panel.taggings.collect{|t| t.context}.uniq

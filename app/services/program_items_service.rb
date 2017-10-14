@@ -43,12 +43,13 @@ module ProgramItemsService
     ProgrammeItem.select([ ProgrammeItem.arel_table[Arel.star],
                           parent_time_slots[:start].as('parent_item_start')
                         ]).
-                        includes([:time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
+                        includes([:translations, :time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
+                        references(:translations).
                         joins(find_all_joins).
                         order(
                           %w(
                             IF(parent_item_start IS NULL, time_slots.start, parent_item_start) ASC,
-                            programme_items.title
+                            programme_item_translations.title
                           ).join(" ")
                         )
     
@@ -131,13 +132,13 @@ module ProgramItemsService
     if (index != nil && index != "")
       order_clause = index + " " + sort_order
     else
-      order_clause = "time_slots.start asc, programme_items.title asc"
+      order_clause = "time_slots.start asc, programme_item_translations.title asc"
     end
 
     if tagquery.empty?
-      ProgrammeItem.where(clause).joins(join_clause).order(order_clause).uniq.count
+      ProgrammeItem.where(clause).includes(:translations).references(:translations).joins(join_clause).order(order_clause).uniq.count
     else
-      ProgrammeItem.where(clause).joins(join_clause).tagged_with(*tagquery).order(order_clause).uniq.count
+      ProgrammeItem.where(clause).includes(:translations).references(:translations).joins(join_clause).tagged_with(*tagquery).order(order_clause).uniq.count
     end
   end
   
@@ -152,23 +153,25 @@ module ProgramItemsService
     if (index != nil && index != "")
       order_clause = index + " " + sort_order
     else
-      order_clause = "time_slots.start asc, programme_items.title asc"
+      order_clause = "time_slots.start asc, programme_item_translations.title asc"
     end
 
     if tagquery.empty?
-      items = ProgrammeItem.includes(:children).
+      items = ProgrammeItem.includes(:translations, :children, :programme_item_assignments).
+                      references(:translations).
                       where(clause).joins(join_clause).
                       order(order_clause).
                       offset(offset).
                       limit(rows).
-                      uniq.includes(:programme_item_assignments)
+                      uniq
     else
-      items = ProgrammeItem.includes(:children).tagged_with(*tagquery).
+      items = ProgrammeItem.includes(:translations, :children, :programme_item_assignments).
+                      references(:translations).tagged_with(*tagquery).
                       where(clause).joins(join_clause).
                       order(order_clause).
                       offset(offset).
                       limit(rows).
-                      uniq.includes(:programme_item_assignments)
+                      uniq
     end
   end
   
@@ -343,8 +346,8 @@ protected
     if nameSearch
       st = DataService.getFilterData( filters, 'programme_items.title' )
       if (st)
-        clause = DataService.addClause(clause,'programme_items.title like ? ','%' + st + '%')
-        clause = DataService.addClause(clause,'children.title like ? ','%' + st + '%','OR') if include_children
+        clause = DataService.addClause(clause,'programme_item_translations.title like ? ','%' + st + '%')
+        clause = DataService.addClause(clause,'children_translations.title like ? ','%' + st + '%','OR') if include_children
       end
     end
     if theme_ids && theme_ids.size > 0
@@ -359,7 +362,7 @@ protected
     # end
     
     # TODO - assumed that the new creation does not have a time slot. Need to change
-    clause = DataService.addClause( clause, 'programme_items.title <= ? AND time_slots.start is null', page_to) if page_to
+    clause = DataService.addClause( clause, 'programme_item_translations.title <= ? AND time_slots.start is null', page_to) if page_to
     clause = DataService.addClause( clause, 'programme_items.parent_id is null', nil) # do not show the children in the result set
 
     clause    
@@ -369,9 +372,37 @@ protected
     'LEFT JOIN room_item_assignments ON room_item_assignments.programme_item_id = programme_items.id ' +
     'LEFT JOIN time_slots on time_slots.id = room_item_assignments.time_slot_id ' +
     'LEFT OUTER JOIN programme_items as children on children.parent_id = programme_items.id ' +
+    'LEFT OUTER JOIN programme_item_translations as children_translations on children.id = children_translations.programme_item_id ' +
     "LEFT OUTER JOIN themes on themes.themed_id = programme_items.id AND themes.themed_type = 'ProgrammeItem' " +
     "LEFT OUTER JOIN themes as child_themes on child_themes.themed_id = children.id AND child_themes.themed_type = 'ProgrammeItem' " +
     "LEFT OUTER JOIN rooms on rooms.id = room_item_assignments.room_id"    
+  end
+  
+  # TODO - good to have a fall back locale
+  def self.translation_join(
+    query: nil, 
+    programme_item_trans: nil, 
+    programme_item_trans_alias: nil,
+    items: nil,
+    items_alias: nil
+  )
+    default_locale = UISettingsService.getDefaultLocale
+    current_locale = I18n.locale.to_s
+
+    query = query.join(programme_item_trans, Arel::Nodes::OuterJoin).
+              on(
+                programme_item_trans[:programme_item_id].eq(items[:id]).
+                and(programme_item_trans[:locale].eq(default_locale))
+              )
+    if (programme_item_trans_alias && items_alias)
+      query = query.join(programme_item_trans_alias, Arel::Nodes::OuterJoin).
+                on(
+                  programme_item_trans_alias[:programme_item_id].eq(items_alias[:id]).
+                  and(programme_item_trans_alias[:locale].eq(default_locale))
+                )
+    end
+
+    query
   end
 
   # For double book participants
@@ -398,14 +429,20 @@ protected
     
     candidate_items = items.alias('candidate_items')
     parents = items.alias('parent_items')
-
+    
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+    programme_item_trans_alias = programme_item_trans.alias
+    
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      items[:id].as('item_id'), items[:title].as('item_name'), assignments[:role_id].as('item_role'), 
+      items[:id].as('item_id'),
+      programme_item_trans[:title].as('item_name'), # TODO
+      assignments[:role_id].as('item_role'), 
       time_slots[:start].as('item_start'),
       rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
-      items_alias[:id].as('conflict_item_id'), items_alias[:title].as('conflict_item_title'), 
+      items_alias[:id].as('conflict_item_id'), 
+      programme_item_trans_alias[:title].as('conflict_item_title'), #  TODO
       assignments_alias[:role_id].as('conflict_item_role'), time_slots_alias[:start].as('conflict_start')
       ]
 
@@ -444,6 +481,14 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
+
     query = query.where(self.constraints()) if self.constraints()
     
     query.to_sql
@@ -477,13 +522,20 @@ protected
 
     pitems_alias = items.alias('pitems_2')
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+    programme_item_trans_alias = programme_item_trans.alias
+
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      items[:id].as('item_id'), items[:title].as('item_name'), assignments[:role_id].as('item_role'), 
+      items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
+      assignments[:role_id].as('item_role'), 
       time_slots[:start].as('item_start'),
-      rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
-      items_alias[:id].as('conflict_item_id'), items_alias[:title].as('conflict_item_title'), 
+      rooms_alias[:id].as('conflict_room_id'), 
+      rooms_alias[:name].as('conflict_room_name'), 
+      items_alias[:id].as('conflict_item_id'), 
+      programme_item_trans_alias[:title].as('conflict_item_title'), # TODO
       assignments_alias[:role_id].as('conflict_item_role'), time_slots_alias[:start].as('conflict_start')
       ]
 
@@ -526,6 +578,14 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
+
     query = query.where(self.constraints()) if self.constraints()
     
     query.to_sql    
@@ -550,13 +610,19 @@ protected
     people_alias = people.alias
     items_alias = items.alias
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+    programme_item_trans_alias = programme_item_trans.alias
+    
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      items[:id].as('item_id'), items[:title].as('item_name'), assignments[:role_id].as('item_role'), 
+      items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
+      assignments[:role_id].as('item_role'), 
       time_slots[:start].as('item_start'),
       rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
-      items_alias[:id].as('conflict_item_id'), items_alias[:title].as('conflict_item_title'), 
+      items_alias[:id].as('conflict_item_id'), 
+      programme_item_trans_alias[:title].as('conflict_item_title'), # TODO
       assignments_alias[:role_id].as('conflict_item_role'), time_slots_alias[:start].as('conflict_start')
       ]
 
@@ -592,6 +658,14 @@ protected
                                 join(people_alias).on(people_alias[:id].eq(assignments_alias[:person_id])).
                                 join(items_alias).on(items_alias[:id].eq(assignments_alias[:programme_item_id]))
 
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
+
     query = query.where(self.constraints()) if self.constraints()
     
     query.to_sql
@@ -615,11 +689,16 @@ protected
     rooms_alias = rooms.alias
     items_alias = items.alias
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+    programme_item_trans_alias = programme_item_trans.alias
+
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
-      items[:id].as('item_id'), items[:title].as('item_name'), 
+      items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
       time_slots[:start].as('item_start'),
-      items_alias[:id].as('conflict_item_id'), items_alias[:title].as('conflict_item_name'), 
+      items_alias[:id].as('conflict_item_id'), 
+      programme_item_trans_alias[:title].as('conflict_item_name'), # TODO
       # assignments_alias[:role_id].as('conflict_item_role'), 
       time_slots_alias[:start].as('conflict_start')
       ]
@@ -639,7 +718,7 @@ protected
                     room_assignments[:programme_item_id].not_eq(room_assignments_alias[:programme_item_id])
                   )
                 )
-                          
+
     query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
     query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
@@ -654,6 +733,14 @@ protected
                   join(items).on(items[:id].eq(room_assignments[:programme_item_id])).
                   join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
                   join(items_alias).on(items_alias[:id].eq(room_assignments_alias[:programme_item_id]))
+
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
 
     query = query.where(self.constraints()) if self.constraints() #.take(1000) # TODO - we need paging in the results
 
@@ -679,6 +766,8 @@ protected
     people = Arel::Table.new(:people)
     items = Arel::Table.new(:programme_items)
     programme_items = Arel::Table.new(:programme_items)
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+    programme_item_trans_alias = programme_item_trans.alias
 
     rooms_alias = rooms.alias
     items_alias = items.alias
@@ -688,39 +777,46 @@ protected
     parents = items.alias('parent_items')
 
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
-      people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      programme_items[:id].as('item_id'), programme_items[:title].as('item_name'),
+      rooms[:id].as('room_id'),
+      rooms[:name].as('room_name'), 
+      people[:id].as('person_id'),
+      people[:first_name].as('person_first_name'),
+      people[:last_name].as('person_last_name'),
+      programme_items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO - locale based or def is there is no data
       time_slots[:start].as('item_start'),
-      rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
-      items_alias[:id].as('conflict_item_id'), items_alias[:title].as('conflict_item_title'), 
-      assignments_alias[:role_id].as('item_role'), time_slots_alias[:start].as('conflict_start')
+      rooms_alias[:id].as('conflict_room_id'),
+      rooms_alias[:name].as('conflict_room_name'), 
+      items_alias[:id].as('conflict_item_id'),
+      programme_item_trans_alias[:title].as('conflict_item_title'), # TODO - locale based or def is there is no data
+      assignments_alias[:role_id].as('item_role'),
+      time_slots_alias[:start].as('conflict_start')
       ]
 
     query = people.project(*assignment_attrs).
-                          join(exclusions).on(exclusions[:person_id].eq(people[:id]).
-                            and(exclusions[:excludable_type].eq('ProgrammeItem'))
-                          ).
-                          join(room_assignments).on(room_assignments[:programme_item_id].eq(exclusions[:excludable_id])).
-                          join(rooms).on(rooms[:id].eq(room_assignments[:room_id])).
-                          join(time_slots).on(time_slots[:id].eq(room_assignments[:time_slot_id])).
-                          join(programme_items).on(programme_items[:id].eq(exclusions[:excludable_id])).
-                          join(assignments_alias).on(assignments_alias[:person_id].eq(people[:id])).
-                          join(programme_items_alias).on(programme_items_alias[:id].eq(assignments_alias[:programme_item_id])).
-                          join(parents).on(parents[:id].eq(programme_items_alias[:parent_id])).
-                          join(room_assignments_alias).on(room_assignments_alias[:programme_item_id].eq(parents[:id])).
-                          join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
-                          join(time_slots_alias).on(time_slots_alias[:id].eq(room_assignments_alias[:time_slot_id])).
-                          where(
-                            time_slots_alias[:start].gteq(time_slots[:start]).and(time_slots[:end].gt(time_slots_alias[:start])).or(
-                              time_slots_alias[:start].lt(time_slots[:start]).and(time_slots_alias[:end].gt(time_slots[:start]))
-                            ).and(
-                              exclusions[:excludable_id].not_eq(programme_items_alias[:id])
-                            ).and(
-                              exclusions[:person_id].eq(assignments_alias[:person_id])
-                            )
-                          )
-
+            join(exclusions).on(exclusions[:person_id].eq(people[:id]).
+              and(exclusions[:excludable_type].eq('ProgrammeItem'))
+            ).
+            join(room_assignments).on(room_assignments[:programme_item_id].eq(exclusions[:excludable_id])).
+            join(rooms).on(rooms[:id].eq(room_assignments[:room_id])).
+            join(time_slots).on(time_slots[:id].eq(room_assignments[:time_slot_id])).
+            join(programme_items).on(programme_items[:id].eq(exclusions[:excludable_id])).
+            join(assignments_alias).on(assignments_alias[:person_id].eq(people[:id])).
+            join(programme_items_alias).on(programme_items_alias[:id].eq(assignments_alias[:programme_item_id])).
+            join(parents).on(parents[:id].eq(programme_items_alias[:parent_id])).
+            join(room_assignments_alias).on(room_assignments_alias[:programme_item_id].eq(parents[:id])).
+            join(rooms_alias).on(rooms_alias[:id].eq(room_assignments_alias[:room_id])).
+            join(time_slots_alias).on(time_slots_alias[:id].eq(room_assignments_alias[:time_slot_id])).
+            where(
+              time_slots_alias[:start].gteq(time_slots[:start]).and(time_slots[:end].gt(time_slots_alias[:start])).or(
+                time_slots_alias[:start].lt(time_slots[:start]).and(time_slots_alias[:end].gt(time_slots[:start]))
+              ).and(
+                exclusions[:excludable_id].not_eq(programme_items_alias[:id])
+              ).and(
+                exclusions[:person_id].eq(assignments_alias[:person_id])
+              )
+            )
+  
     query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 
     query = query.join(conflict_exceptions, Arel::Nodes::OuterJoin).
@@ -730,6 +826,15 @@ protected
                                                     ).where(
                                                       conflict_exceptions[:id].eq(nil)
                                                     )
+
+    # TODO - we want the default langauge as well in case the locale one is empty ...
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: items,
+      items_alias: items_alias
+    )
 
     query = query.where(self.constraints()) if self.constraints()
 
@@ -762,14 +867,24 @@ protected
     items_alias = items.alias
     programme_items_alias = programme_items.alias
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+    programme_item_trans_alias = programme_item_trans.alias
+
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
-      people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      programme_items[:id].as('item_id'), programme_items[:title].as('item_name'),
+      rooms[:id].as('room_id'), 
+      rooms[:name].as('room_name'), 
+      people[:id].as('person_id'), 
+      people[:first_name].as('person_first_name'), 
+      people[:last_name].as('person_last_name'),
+      programme_items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
       time_slots[:start].as('item_start'),
-      rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
-      items_alias[:id].as('conflict_item_id'), items_alias[:title].as('conflict_item_title'), 
-      assignments_alias[:role_id].as('item_role'), time_slots_alias[:start].as('conflict_start')
+      rooms_alias[:id].as('conflict_room_id'), 
+      rooms_alias[:name].as('conflict_room_name'), 
+      items_alias[:id].as('conflict_item_id'), 
+      programme_item_trans_alias[:title].as('conflict_item_title'), # TODO
+      assignments_alias[:role_id].as('item_role'), 
+      time_slots_alias[:start].as('conflict_start')
       ]
 
     query = people.project(*assignment_attrs).
@@ -805,6 +920,14 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     )
 
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: programme_items,
+      items_alias: items_alias
+    )
+
     query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
@@ -831,10 +954,13 @@ protected
     people = Arel::Table.new(:people)
     programme_items = Arel::Table.new(:programme_items)
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      programme_items[:id].as('item_id'), programme_items[:title].as('item_name'),
+      programme_items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
       time_slots_alias[:start].as('item_start'),
       time_slots[:start].as('period_start'), time_slots[:end].as('period_end'), time_slots[:id].as('period_id'),
       assignments[:role_id].as('item_role')
@@ -870,6 +996,11 @@ protected
                                                     ).where(
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      items: programme_items,
+    )
     
     query = query.where(self.constraints()) if self.constraints()
 
@@ -897,10 +1028,13 @@ protected
     candidate_items = programme_items.alias('candidate_items')
     parents = programme_items.alias('parent_items')
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      programme_items[:id].as('item_id'), programme_items[:title].as('item_name'),
+      programme_items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
       time_slots_alias[:start].as('item_start'),
       time_slots[:start].as('period_start'), time_slots[:end].as('period_end'), time_slots[:id].as('period_id'),
       assignments[:role_id].as('item_role')
@@ -940,6 +1074,12 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      items: programme_items,
+    )
+
     query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
@@ -963,10 +1103,13 @@ protected
     people = Arel::Table.new(:people)
     programme_items = Arel::Table.new(:programme_items)
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      programme_items[:id].as('item_id'), programme_items[:title].as('item_name'),
+      programme_items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
       time_slots[:start].as('item_start'),
       available_dates[:start_time].as('period_start'), available_dates[:end_time].as('period_end'), available_dates[:id].as('period_id'),
       assignments[:role_id].as('item_role')
@@ -996,6 +1139,12 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      items: programme_items,
+    )
+
     query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
@@ -1016,13 +1165,16 @@ protected
     people = Arel::Table.new(:people)
     programme_items = Arel::Table.new(:programme_items)
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+
     candidate_items = programme_items.alias('candidate_items')
     children = programme_items.alias('children_items')
 
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      programme_items[:id].as('item_id'), programme_items[:title].as('item_name'),
+      programme_items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
       time_slots[:start].as('item_start'),
       available_dates[:start_time].as('period_start'), available_dates[:end_time].as('period_end'), available_dates[:id].as('period_id'),
       assignments[:role_id].as('item_role')
@@ -1054,6 +1206,12 @@ protected
                                                       conflict_exceptions[:id].eq(nil)
                                                     ).order(people[:id])
     
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      items: programme_items,
+    )
+
     query = query.where(self.constraints()) if self.constraints()
 
     query.to_sql
@@ -1082,6 +1240,9 @@ protected
     items_alias = items.alias
     programme_items_alias = programme_items.alias
 
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+    programme_item_trans_alias = programme_item_trans.alias
+
     children = programme_items.alias('children')
     child_assignments = assignments.alias('child_assignments')
     children_alias = programme_items.alias('children_alias')
@@ -1093,10 +1254,12 @@ protected
     assignment_attrs = [
       rooms[:id].as('room_id'), rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
-      programme_items[:id].as('item_id'), programme_items[:title].as('item_name'),
+      programme_items[:id].as('item_id'), 
+      programme_item_trans[:title].as('item_name'), # TODO
       time_slots[:start].as('item_start'),
       rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
-      programme_items_alias[:id].as('conflict_item_id'), programme_items_alias[:title].as('conflict_item_title'), 
+      programme_items_alias[:id].as('conflict_item_id'), 
+      programme_item_trans_alias[:title].as('conflict_item_title'), 
       time_slots_alias[:start].as('conflict_start'),
       assignments[:role_id].as('item_role'),
       assignments_alias[:role_id].as('conflict_item_role')
@@ -1133,6 +1296,14 @@ protected
                               or(child_assignments[:person_id].eq(assignments_alias[:person_id]))
                             )
                           )
+
+    query = translation_join(
+      query: query, 
+      programme_item_trans: programme_item_trans, 
+      programme_item_trans_alias: programme_item_trans_alias,
+      items: programme_items,
+      items_alias: items_alias
+    )
 
     query = query.where(room_assignments[:day].eq(day.to_s).and(room_assignments_alias[:day].eq(day.to_s))) if day
 

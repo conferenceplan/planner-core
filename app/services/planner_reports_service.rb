@@ -4,31 +4,34 @@
 module PlannerReportsService
   
   # Search the programme items and report back on the sizes
-  def self.word_counts(title_size = 0, short_title_size = 0, precis_size = 0, short_precis_size = 0)
+  def self.word_counts(title_size = 0, short_title_size = 0, description_size = 0, short_description_size = 0)
     programme_items = Arel::Table.new(:programme_items)
+    programme_item_translations = Arel::Table.new(ProgrammeItem::Translation.table_name)
     
     attrs = [
       programme_items[:id],
-      programme_items[:title].as('title'),
-      programme_items[:short_title].as('short_title'),
-      programme_items[:precis].as('precis'),
-      programme_items[:short_precis].as('short_precis'),
-      word_counts_if_clause(programme_items[:title]).as('title_words'),
-      word_counts_if_clause(programme_items[:short_title]).as('short_title_words'),
-      word_counts_if_clause(programme_items[:precis]).as('precis_words'),
-      word_counts_if_clause(programme_items[:short_precis]).as('short_precis_words')
+      programme_item_translations[:title].as('title'),
+      programme_item_translations[:short_title].as('short_title'),
+      programme_item_translations[:description].as('description'),
+      programme_item_translations[:short_description].as('short_description'),
+      word_counts_if_clause(programme_item_translations[:title]).as('title_words'),
+      word_counts_if_clause(programme_item_translations[:short_title]).as('short_title_words'),
+      word_counts_if_clause(programme_item_translations[:description]).as('description_words'),
+      word_counts_if_clause(programme_item_translations[:short_description]).as('short_description_words')
     ]
     
     query = programme_items.project(*attrs).
-                where(
-                  word_counts_if_clause(programme_items[:title]).gt(title_size).or(
-                    word_counts_if_clause(programme_items[:short_title]).gt(short_title_size)
-                  ).or(
-                    word_counts_if_clause(programme_items[:precis]).gt(precis_size)
-                  ).or(
-                    word_counts_if_clause(programme_items[:short_precis]).gt(short_precis_size)
-                  )
-                )
+      join(programme_item_translations, Arel::Nodes::OuterJoin).
+      on(programme_item_translations[:programme_item_id].eq(programme_items[:id])).
+      where(
+        word_counts_if_clause(programme_item_translations[:title]).gt(title_size).or(
+          word_counts_if_clause(programme_item_translations[:short_title]).gt(short_title_size)
+        ).or(
+          word_counts_if_clause(programme_item_translations[:description]).gt(description_size)
+        ).or(
+          word_counts_if_clause(programme_item_translations[:short_description]).gt(short_description_size)
+        )
+      )
                 
     query = query.where(self.arel_constraints()) if self.arel_constraints()
 
@@ -49,15 +52,26 @@ module PlannerReportsService
   #
   def self.findParticipantsWithNoBios
     # Person must be assigned to a programme item (and be visible to the members)
-    conditions = ["(programme_item_assignments.role_id in (?)) AND (programme_items.visibility_id != #{Visibility['None'].id}) AND (edited_bios.id is null OR edited_bios.bio is null OR edited_bios.bio = '')",
+    conditions = ["(programme_item_assignments.role_id in (?)) AND (programme_items.visibility_id != #{Visibility['None'].id}) AND (edited_bios.id is null OR edited_bio_translations.bio is null OR edited_bio_translations.bio = '')",
                      [PersonItemRole['Participant'].id,PersonItemRole['Moderator'].id,PersonItemRole['OtherParticipant'].id] ]
 
     Person.where(conditions).
-            includes([:pseudonym, {:programmeItemAssignments => :programmeItem}]).
-            references([:pseudonym, {:programmeItemAssignments => :programmeItem}]).
-            joins("left outer join edited_bios on edited_bios.person_id = people.id").
-            where(self.constraints()).
-            order("people.last_name")
+      includes(
+        [
+          :pseudonym, 
+          {:programmeItemAssignments => :programmeItem},
+          editedBio: [ :translations ]
+        ]
+      ).
+      references(
+        [
+          :pseudonym, 
+          {:programmeItemAssignments => :programmeItem},
+          editedBio: [ :translations ]
+        ]
+      ).
+      where(self.constraints()).
+      order("people.last_name")
   end
 
   #
@@ -158,12 +172,12 @@ module PlannerReportsService
     elsif sort_by == 'room'
       ord_str = "venues.sort_order, rooms.sort_order, time_slots.start, time_slots.end, people.last_name"
     else
-      ord_str = "programme_items.title, people.last_name"
+      ord_str = "programme_item_translations.title, people.last_name"
     end
     
     ProgrammeItem.where(conditions).
-                  includes([{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
-                  references([{:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
+                  includes([:translations, {:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
+                  references([:translations, {:programme_item_assignments => {:person => :pseudonym}}, :time_slot, {:room => :venue}, :format, :equipment_needs]).
                   order(ord_str)
   end
   

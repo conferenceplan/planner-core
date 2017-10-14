@@ -5,9 +5,9 @@ class PublishedProgrammeItemsController < ResourceController
     search = params[:search]
     
     if search
-      super.limit(20).where(["title like ?", '%' + search + '%']).where("parent_id is null").order('title asc')
+      super.includes(:translations).references(:translations).limit(20).where(["published_programme_item_translations.title like ?", '%' + search + '%']).where("parent_id is null").order('published_programme_item_translations.title asc')
     else
-      super.limit(20).where("parent_id is null").order('title asc')
+      super.includes(:translations).references(:translations).limit(20).where("parent_id is null").order('published_programme_item_translations.title asc')
     end
   end
   

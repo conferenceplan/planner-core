@@ -139,11 +139,18 @@ ParticipantApp.PeopleManagement = (function(Backbone){
     BioDetails = Backbone.Model.extend({
         schema : $.extend(
             {
-                survey_bio : { type : 'TextArea', title : '<%= t "bio-from-survey" %>', editorAttrs: { readonly : true, rows : 6, cols : 60 } },
+                survey_bio : { 
+                    type : 'TextArea', 
+                    title : '<%= t "bio-from-survey" %>', 
+                    editorAttrs: { readonly : true, rows : 6, cols : 60 },
+                    template : Backbone.Form.NestedField.template,
+                },
                 bio : { 
-                  type : 'Html', 
+                  type: 'TranslatableHtml',
+                  locales: <%= raw site_languages.to_json %>,
                   title : '<%= t "bio" %>', 
                   editorAttrs: { rows : 6, cols : 60 },
+                  template : Backbone.Form.NestedField.template,
                 }
             }, 
             Sociable.generateSchema(

@@ -4,7 +4,13 @@
 class PublishedProgrammeItem < ActiveRecord::Base
   attr_accessible :lock_version, :short_title, :title, :precis, :duration,
                   :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :format_id, :is_break, :start_offset, :visibility_id
+                  :format_id, :is_break, :start_offset, :visibility_id, :description,
+                  :title_en, :title_fr, :title_pl, 
+                  :short_title_en, :short_title_fr, :short_title_pl, 
+                  :description_en, :description_fr, :description_pl
+
+  translates :title, :description, :short_title, touch: true, fallbacks_for_empty_translations: true
+  globalize_accessors :locales => UISettingsService.getAllowedLanguages
 
   has_enumerated :visibility
 
@@ -13,7 +19,7 @@ class PublishedProgrammeItem < ActiveRecord::Base
   # default sort children
   has_many   :children, :dependent => :destroy, :class_name => 'PublishedProgrammeItem', foreign_key: "parent_id" do
     def ordered_by_offset
-      order("start_offset asc, title asc")
+      includes(:translations).references(:translations).order("start_offset asc, published_programme_item_translations.title asc")
     end
   end
   
@@ -54,8 +60,12 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   alias_attribute :images, :external_images
   alias_attribute :card_size, :mobile_card_size
-  alias_attribute :description, :precis
+  alias_attribute :precis, :description
   alias_attribute :requires_signup, :item_registerable
+
+  def get_precis
+    self[:precis]
+  end
 
   def self.only_public
     where(visibility_id: Visibility['Public'].id)

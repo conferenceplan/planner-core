@@ -126,7 +126,7 @@ class ProgrammeItemsController < PlannerController
 
     begin
       ProgrammeItem.transaction do
-        @programmeItem = ProgrammeItem.new(params[:programme_item])
+        @programmeItem = ProgrammeItem.new(permitted_params)
         @programmeItem.lock_version = 0
         if @programmeItem.save
           if (startDay.to_i > -1) && startTime && parent_id.blank? #&& (roomId.to_i > 0)
@@ -173,7 +173,7 @@ class ProgrammeItemsController < PlannerController
           @programmeItem.parent.save
         end
 
-        if @programmeItem.update_attributes(params[:programme_item])
+        if @programmeItem.update(permitted_params)
           
           if (startDay.to_i > -1) && startTime && parent_id.blank?
             room = nil
@@ -244,20 +244,52 @@ class ProgrammeItemsController < PlannerController
     if page.present? && page > 1 && limit && offset.nil?
       offset = page * limit
     end
+    sort = params[:sort]
 
-    sort_by = params[:sort] ? params[:sort] : 'title'
+    if sort.present? && sort == 'title'
+      sort = 'programme_item_translations.title'
+    end
+
+    sort_by = params[:sort] ? params[:sort] : 'programme_item_translations.title'
     sort_order = params[:order] ? params[:order] : 'asc'
 
     if search
-      @query = ["parent_id is null AND is_break is false AND title like ?", '%' + search + '%'] 
-      @query = ["parent_id is null AND title like ?", '%' + search + '%'] if include_breaks
+      @query = ["parent_id is null AND is_break is false AND programme_item_translations.title like ?", '%' + search + '%'] 
+      @query = ["parent_id is null AND programme_item_translations.title like ?", '%' + search + '%'] if include_breaks
     else
       @query = ["parent_id is null AND is_break is false"]
       @query = ["parent_id is null"] if include_breaks
     end
 
-    @total = ProgrammeItem.where(@query).count
-    @items = ProgrammeItem.where(@query).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+    items = ProgrammeItem.includes(
+        :translations,
+        { 
+          room: [ 
+            :base_room,
+            venue: :base_venue 
+          ] 
+        },
+        :time_slot,
+        :programme_item_assignments
+      ).
+      references(
+        :translations,
+        { 
+          room: [ 
+            :base_room,
+            venue: :base_venue 
+          ] 
+        },
+        :time_slot,
+        :programme_item_assignments
+      ).
+      where(@query)
+
+    @total = items.count
+    @items = items.
+      offset(offset).
+      limit(limit).
+      order(sort_by + ' ' + sort_order)
 
   end
   
@@ -280,7 +312,7 @@ class ProgrammeItemsController < PlannerController
     if item
       @count = item.children.size
       if page_to && !page_to.empty?
-        gotoNum = item.children.where(['programme_items.title <= ?', page_to]).size
+        gotoNum = item.children.includes(:translations).references(:translations).where(['programme_item_translations.title <= ?', page_to]).size
         if gotoNum
           @page = (gotoNum / rows.to_i).floor
           @page += 1 if gotoNum % rows.to_i > 0
@@ -373,5 +405,18 @@ private
       # end
     # end
   # end
+  
+  protected
+  def permitted_params
+    params.permit(
+        ProgrammeItem.globalize_attribute_names +
+        [
+          :lock_version, :duration, :minimum_people, :maximum_people, 
+          :item_notes, :pub_reference_number, :mobile_card_size, :audience_size, 
+          :participant_notes, :setup_type_id, :format_id, :parent_id, :is_break, 
+          :start_offset, :visibility_id
+        ]
+    )
+  end
  
 end

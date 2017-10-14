@@ -271,7 +271,7 @@ module MailService
       result += ', ' + programmeItem.room.name + ' (' + programmeItem.room.venue.name + ')' if programmeItem.room
       result += "</p>\n"
       # description
-      result += '<p>' + programmeItem.precis + "</p>\n" if programmeItem.precis
+      result += '<p>' + programmeItem.description + "</p>\n" if programmeItem.description
       # participants (name + email)
       names = []
       # TODO - ensure order

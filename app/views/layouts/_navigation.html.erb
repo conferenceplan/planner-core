@@ -40,9 +40,9 @@
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-                <% UISettingsService.getLanguages.each do |lang| %>
-                    <% if lang != I18n.locale.to_s %>
-                        <li><a href="<%= '/' + lang + baseUri_no_lang + request_path %>"><%= t lang %></a></li>
+                <% I18n.available_locales.each do |lang| %>
+                    <% if lang != I18n.locale %>
+                        <li><a href="<%= '/' + lang.to_s + baseUri_no_lang + request_path %>"><%= t lang.to_s %></a></li>
                     <% end %>
                 <% end %>
             </ul>

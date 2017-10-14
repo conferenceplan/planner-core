@@ -1,8 +1,17 @@
 
 class ProgrammeItem < ActiveRecord::Base
-  attr_accessible :lock_version, :short_title, :title, :precis, :duration, :minimum_people, :maximum_people, :item_notes,
-                  :pub_reference_number, :mobile_card_size, :audience_size, :participant_notes,
-                  :setup_type_id, :format_id, :short_precis, :parent_id, :is_break, :start_offset, :visibility_id
+
+  attr_accessible :lock_version, :duration, :minimum_people, :maximum_people, :item_notes, 
+                  :pub_reference_number, :mobile_card_size, :audience_size, 
+                  :participant_notes, :setup_type_id, :format_id, :parent_id, :is_break, 
+                  :start_offset, :visibility_id, :description, :short_description, 
+                  :title_en, :title_fr, :title_pl, 
+                  :short_title_en, :short_title_fr, :short_title_pl, 
+                  :description_en, :description_fr, :description_pl, 
+                  :short_description_en, :short_description_fr, :short_description_pl
+
+  translates :title, :description, :short_title, :short_description, touch: true, fallbacks_for_empty_translations: true
+  globalize_accessors :locales => UISettingsService.getAllowedLanguages
 
   has_enumerated :visibility
   
@@ -50,10 +59,18 @@ class ProgrammeItem < ActiveRecord::Base
     end
   end
 
-  alias_attribute :description, :precis
+  alias_attribute :precis, :description
   alias_attribute :requires_signup, :item_registerable
 
   before_save :check_parent, :sanitize_for_break
+
+  # def self.permitted_params
+  #   PERMITTED_PARAMS
+  # end
+
+  def get_precis
+    self[:precis]
+  end
 
   def start_time
     if self.parent && self.parent.time_slot
@@ -115,7 +132,8 @@ class ProgrammeItem < ActiveRecord::Base
 
   def self.deep_clone_members(keep_room_assignment = true, within_conference = true)
     members = [
-      :programme_item_assignments #, :parent
+      :programme_item_assignments, #, :parent
+      :translations
     ]
 
     members << {:children => :programme_item_assignments} if within_conference
