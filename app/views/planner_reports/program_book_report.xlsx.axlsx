@@ -45,7 +45,7 @@ wb.add_worksheet(name: "Program") do |sheet|
             (time.programme_items[0].title ? strip_html_tags(time.programme_items[0].title.gsub(/\n|\r/,"")) : ""),
             (!time.programme_items[0].precis.blank? ? strip_html_tags(time.programme_items[0].precis.gsub(/\n|\r/,"")) : ""),
             (time.programme_items[0].short_title ? strip_html_tags(time.programme_items[0].short_title.gsub(/\n|\r/,"")) : ""),
-            (!time.programme_items[0].short_precis.blank? ? strip_html_tags(time.programme_items[0].short_precis.gsub(/\n|\r/,"")) : ""),
+            (!time.programme_items[0].short_description.blank? ? strip_html_tags(time.programme_items[0].short_description.gsub(/\n|\r/,"")) : ""),
             time.programme_items[0].pub_reference_number,
             '',''
         #    time.programme_items[0].external_images.use('mediumcard')[0] ? time.programme_items[0].external_images.use('mediumcard')[0].picture.url : '',
@@ -83,7 +83,7 @@ wb.add_worksheet(name: "Program") do |sheet|
                   (child.title ? strip_html_tags(child.title.gsub(/\n|\r/,"")) : ""),
                   (!child.precis.blank? ? strip_html_tags(child.precis.gsub(/\n|\r/,"")) : ""),
                   (child.short_title ? strip_html_tags(child.short_title.gsub(/\n|\r/,"")) : ""),
-                  (!child.short_precis.blank? ? strip_html_tags(child.short_precis.gsub(/\n|\r/,"")) : ""),
+                  (!child.short_description.blank? ? strip_html_tags(child.short_description.gsub(/\n|\r/,"")) : ""),
                   child.pub_reference_number,
                   '',''
               #    child.external_images.use('mediumcard')[0] ? child.external_images.use('mediumcard')[0].picture.url : '',

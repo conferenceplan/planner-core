@@ -9,7 +9,7 @@ row = [
     (item.title ? strip_html_tags(item.title.gsub(/\n|\r/,"")) : ""),
     (!item.precis.blank? ? strip_html_tags(item.precis.gsub(/\n|\r/,"")) : ""),
     (item.short_title ? strip_html_tags(item.short_title.gsub(/\n|\r/,"")) : ""),
-    (!item.short_precis.blank? ? strip_html_tags(item.short_precis.gsub(/\n|\r/,"")) : ""),
+    (!item.short_description.blank? ? strip_html_tags(item.short_description.gsub(/\n|\r/,"")) : ""),
     item.pub_reference_number,
     item.external_images.use('mediumcard')[0] ? item.external_images.use('mediumcard')[0].picture.url : '',
     item.external_images.use('largecard')[0] ? item.external_images.use('largecard')[0].picture.url : ''

@@ -14,7 +14,7 @@ row = [
     (time.programme_items[0].title ? strip_html_tags(time.programme_items[0].title.gsub(/\n|\r/,"")) : ""),
     (!time.programme_items[0].precis.blank? ? strip_html_tags(time.programme_items[0].precis.gsub(/\n|\r/,"")) : ""),
     (time.programme_items[0].short_title ? strip_html_tags(time.programme_items[0].short_title.gsub(/\n|\r/,"")) : ""),
-    (!time.programme_items[0].short_precis.blank? ? strip_html_tags(time.programme_items[0].short_precis.gsub(/\n|\r/,"")) : ""),
+    (!time.programme_items[0].short_description.blank? ? strip_html_tags(time.programme_items[0].short_description.gsub(/\n|\r/,"")) : ""),
     time.programme_items[0].pub_reference_number,
     time.programme_items[0].external_images.use('mediumcard')[0] ? time.programme_items[0].external_images.use('mediumcard')[0].picture.url : '',
     time.programme_items[0].external_images.use('largecard')[0] ? time.programme_items[0].external_images.use('largecard')[0].picture.url : ''

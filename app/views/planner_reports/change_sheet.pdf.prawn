@@ -18,7 +18,7 @@ prawn_document(:page_size => @page_size, :page_layout => @orientation) do |pdf|
 
             if v[:changed]
                 v[:changed].each do |k, v|
-                    if (!v.blank? && (k.to_s != 'created_at') && (k.to_s != 'precis') && (k.to_s != 'short_precis'))
+                    if (!v.blank? && (k.to_s != 'created_at') && (k.to_s != 'precis') && (k.to_s != 'short_description'))
                         str = '<b>' + k.to_s + '</b>'
                         str += ' ' + ActionView::Base.full_sanitizer.sanitize(v[0]) if v[0]
                         str += ' <b>changed to</b> ' + ActionView::Base.full_sanitizer.sanitize(v[1])

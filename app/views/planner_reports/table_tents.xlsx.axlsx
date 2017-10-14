@@ -23,7 +23,7 @@ wb.add_worksheet(name: "Table Tents") do |sheet|
                     
                     row << person.getFullPublicationName
                     row << item.title
-                    row << item.precis ? item.precis : ''
+                    row << item.description ? item.description : ''
                     row << (item.format ? item.format.name : '')
                     if item.parent
                         row << item.parent.published_room.name

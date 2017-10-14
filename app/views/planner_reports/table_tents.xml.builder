@@ -10,7 +10,7 @@ xml.table_tent do
                         each do |item|
                             xml.item do
                                 xml.title item.title
-                                xml.description item.precis if item.precis
+                                xml.description item.description if item.description
                                 xml.format item.format.name if item.format
     
                                 if item.parent

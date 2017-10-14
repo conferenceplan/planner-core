@@ -24,7 +24,7 @@ builder.bar do
           builder.cdata!(item.programme_items[0].precis) if item.programme_items[0].precis
         end
         builder.short_description do
-          builder.cdata!(item.programme_items[0].short_precis) if item.programme_items[0].short_precis
+          builder.cdata!(item.programme_items[0].short_description) if item.programme_items[0].short_description
         end
 
         builder.people do # we want the moderators and then participants

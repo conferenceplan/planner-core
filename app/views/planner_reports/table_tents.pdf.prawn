@@ -98,7 +98,7 @@ prawn_document(:page_size => @page_size, :page_layout => :landscape) do |pdf|
                             pdf.text item.start_time.strftime(@day_and_time_format), :fallback_fonts => planner_fallback_fonts
                         end
                         pdf.text "<b>Participants:</b> " + item.published_programme_item_assignments.find_all {|x| x.role == PersonItemRole['Participant'] || x.role == PersonItemRole['Moderator']}.collect{|p| p.person.getFullPublicationName + (p.role == PersonItemRole['Moderator'] ? ' (M)' : '') }.join(","), :inline_format => true, :fallback_fonts => planner_fallback_fonts
-                        pdf.text "<b>Description:</b> " + item.precis, :inline_format => true, :fallback_fonts => planner_fallback_fonts
+                        pdf.text "<b>Description:</b> " + item.description, :inline_format => true, :fallback_fonts => planner_fallback_fonts if item.description
             end
         end
     end

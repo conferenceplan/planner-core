@@ -13,7 +13,7 @@ builder.items do
                     builder.cdata!(assignment.programmeItem.precis) if assignment.programmeItem.precis
                 end
                 builder.short_description do
-                    builder.cdata!(assignment.programmeItem.short_precis) if assignment.programmeItem.short_precis
+                    builder.cdata!(assignment.programmeItem.short_description) if assignment.programmeItem.short_description
                 end
                 builder.format assignment.programmeItem.format ? assignment.programmeItem.format.name : ''
                 builder.room assignment.programmeItem.room.name if assignment.programmeItem.room

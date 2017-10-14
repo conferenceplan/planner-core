@@ -24,7 +24,7 @@ builder.bar do
           builder.cdata!(item.precis) if item.precis
         end
         builder.short_description do
-          builder.cdata!(item.short_precis) if item.short_precis
+          builder.cdata!(item.short_description) if item.short_description
         end
         builder.people do # we want the moderators and then participants
             item.programme_item_assignments.find_all {|x| x.role == PersonItemRole['Moderator'] }.each do |p|

@@ -23,7 +23,15 @@ module ProgramItemsService
     
     kopy = old_item.deep_clone include: ProgrammeItem.deep_clone_members(keep_room_assignment, !conference_id), 
       dictionary: dict do |original, _kopy|
-        _kopy.title = _kopy.title + " (copy)" if _kopy.respond_to?(:title) && !conference_id
+        # deal with translations
+        if !conference_id
+          UISettingsService.getSiteLanguages.each do |lang|
+            attr = "title_" + lang
+            if _kopy.respond_to?(attr) && !_kopy.public_send(attr).blank?
+              _kopy.public_send(attr + "=", _kopy.public_send(attr) + " (copy)")
+            end
+          end
+        end
         _kopy.pub_reference_number = nil if _kopy.respond_to?(:pub_reference_number)
         _kopy.conference_id = conference_id if _kopy.respond_to?(:conference_id) && conference_id
       end
