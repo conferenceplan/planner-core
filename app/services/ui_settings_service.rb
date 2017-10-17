@@ -26,6 +26,10 @@ module UISettingsService
     getLanguages.first
   end
 
+  def self.default_site_locale
+    getSiteLanguages.first
+  end
+
   def self.getLanguages_sym
     res = getLanguages
     res.collect{|l| l.to_sym }
