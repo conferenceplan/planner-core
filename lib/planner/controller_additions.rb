@@ -262,9 +262,9 @@ module Planner
               } if allowed? :surveys
       menu << { :title => 'messages',   :target => '/pages//communications_dash/templates', :icon => "fa fa-envelope",  :target_base => '/pages/communications_dash'
               } if allowed? :communications
-      menu << { :title => 'reports',        :target => '/pages/reports_dash/manage', :icon => "fa fa-bar-chart",     :target_base => '/pages/reports_dash',
+      menu << { :title => 'reports',        :target => '/planner_reports/pages/reports/report', :icon => "fa fa-bar-chart",     :target_base => '/pages/reports_dash',
                 :sub_menu => [
-                  {:title => 'reports', :target => '/pages/reports_dash/manage', :display => allowed?(:reports) }
+                  {:title => 'reports-classic', :target => '/pages/reports_dash/manage', :display => allowed?(:reports) }
               ]} if allowed? :reports
       menu << { :title => 'menu-publications',   :target => '/pages/publications_dash/online', :icon => "fa fa-globe",     :target_base => '/pages/publications_dash',
                 :sub_menu => [

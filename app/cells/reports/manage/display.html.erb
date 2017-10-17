@@ -29,9 +29,11 @@
                 <li>
                     <a href="#panelists_with_panels"><%= t "report-participants-with-items" %></a>
                 </li>
-                <li>
-                    <a href="#people_without_items"><%= t "report-people-without-items" %></a>
-                </li>     
+                <!--
+                  <li>
+                      <a href="#people_without_items"><%= t "report-people-without-items" %></a>
+                  </li>     
+                -->
                 <li>
                     <a href="#edited_bios"><%= t "reports-participant-bios" %></a>
                 </li>
@@ -55,12 +57,14 @@
             </div>
             <div role="tabpanel" class="tab-pane" id="item-reports-tab">
               <ul>
-                <li>
-                    <a href="#panels_by_timeslot"><%= t "reports-items-by-time-slot" %></a>
-                </li>
-                <li>
-                    <a href="#panels_by_room"><%= t "reports-items-by-room" %></a>
-                </li>
+                <!--
+                  <li>
+                      <a href="#panels_by_timeslot"><%= t "reports-items-by-time-slot" %></a>
+                  </li>
+                  <li>
+                      <a href="#panels_by_room"><%= t "reports-items-by-room" %></a>
+                  </li>
+                -->
                 <li>
                     <a href="#panels_with_panelists"><%= t "report-items-with-participants" %></a>
                 </li> 
@@ -70,12 +74,14 @@
                 <li>
                     <a href="#panels_with_no_moderator"><%= t "report-items-without-moderator" %></a>
                 </li>
-                <li>
-                    <a href="#items_with_no_tags"><%= t "items-without-tags" %></a>
-                </li>
-                <li>
-                    <a href="#capacity_report"><%= t "reports-items-over-capacity" %></a>
-                </li>
+                <!-- removing, because now handled by the "new" reports section
+                  <li>
+                      <a href="#items_with_no_tags"><%= t "items-without-tags" %></a>
+                  </li>
+                  <li>
+                      <a href="#capacity_report"><%= t "reports-items-over-capacity" %></a>
+                  </li>
+                -->
                 <li>
                     <a href="#item_word_counts"><%= t "reports-item-word-counts" %></a>
                 </li>
