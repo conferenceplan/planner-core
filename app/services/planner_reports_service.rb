@@ -60,14 +60,14 @@ module PlannerReportsService
         [
           :pseudonym, 
           {:programmeItemAssignments => :programmeItem},
-          editedBio: [ :translations ]
+          edited_bio: [ :translations ]
         ]
       ).
       references(
         [
           :pseudonym, 
           {:programmeItemAssignments => :programmeItem},
-          editedBio: [ :translations ]
+          edited_bio: [ :translations ]
         ]
       ).
       where(self.constraints()).
