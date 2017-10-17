@@ -2,24 +2,24 @@
 #
 #
 
+# Used to get and set the available locales for planner and sites
 module UISettingsService
-  
   def self.getSiteLanguages
-    ['en','fr']
+    %w[en fr]
   end
 
   def self.getLanguages
-    setting = UserInterfaceSetting.where({:key => 'languages'}).first
+    setting = UserInterfaceSetting.where(key: 'languages').first
     if setting
       setting.value
     else
-      ['en','fr']
+      %w[en fr]
     end
   end
-  
+
   def self.getAllowedLanguages
-    # THis will grow as we allow more languages for the Site UI
-    ['en','fr','pl']
+    # This will grow as we allow more languages for the Site UI
+    %w[en fr pl]
   end
 
   def self.getDefaultLocale
@@ -32,13 +32,12 @@ module UISettingsService
 
   def self.getLanguages_sym
     res = getLanguages
-    res.collect{|l| l.to_sym }
+    res.collect(&:to_sym)
   end
 
   def self.setLanguages(value)
-    setting = UserInterfaceSetting.first_or_initialize({key: 'languages'})
+    setting = UserInterfaceSetting.first_or_initialize(key: 'languages')
     setting._value = Marshal.dump(value)
     setting.save!
   end
-
 end
