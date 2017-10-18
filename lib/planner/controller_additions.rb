@@ -123,7 +123,7 @@ module Planner
       
       if logo && logo.image
         logo.scale = scale
-        img = logo.image
+        img = logo.image.standard
         image_url(img)
       else
         nil
