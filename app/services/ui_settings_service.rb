@@ -26,7 +26,7 @@ module UISettingsService
     getLanguages.first
   end
 
-  def self.default_site_locale
+  def self.default_site_language
     getSiteLanguages.first
   end
 
@@ -39,5 +39,13 @@ module UISettingsService
     setting = UserInterfaceSetting.first_or_initialize(key: 'languages')
     setting._value = Marshal.dump(value)
     setting.save!
+  end
+
+  class << self
+    alias site_languages getSiteLanguages
+    alias planner_languages getLanguages
+    alias allowed_languages getAllowedLanguages
+    alias default_planner_language getDefaultLocale
+    alias languages= setLanguages
   end
 end
