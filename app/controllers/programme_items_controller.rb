@@ -414,7 +414,8 @@ private
           :lock_version, :duration, :minimum_people, :maximum_people, 
           :item_notes, :pub_reference_number, :mobile_card_size, :audience_size, 
           :participant_notes, :setup_type_id, :format_id, :parent_id, :is_break, 
-          :start_offset, :visibility_id
+          :start_offset, :visibility_id,
+          :item_registerable, :requires_signup
         ]
     )
   end

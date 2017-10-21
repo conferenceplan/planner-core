@@ -533,7 +533,11 @@ class PublishJob
   def copy(src, dest)
     src.attributes.each do |name, val|
       # but do not copy any of the variables needed for the optimistic locking, the id, etc
-      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", "pub_reference_number", "conference_id", "linkedto_type", "linkedto_id", "parent_id"].index(name) == nil)
+      if (dest.attributes.key? name) && (["lock_version", "created_at", "updated_at", "id", 
+        "pub_reference_number", "conference_id", "linkedto_type", "linkedto_id", "parent_id",
+      "title", "description", "short_title",
+      "precis", "short_precis"
+    ].index(name) == nil)
         # Only copy values that have changed?
         dest.send("#{name}=",val) if (dest.attributes[name] == nil) || (dest.attributes[name] != val) || (val != nil)
       end
@@ -548,9 +552,24 @@ class PublishJob
       # for each locale get the translation if it exists etc
       UISettingsService.getSiteLanguages.each do |lang|
         I18n.with_locale(lang) do
-          dest.title = src.title
-          dest.short_title = dest.short_title
-          dest.description = src.description
+          # make sure that we do not use fallbacks
+          if src.public_send('title_' + lang.to_s)
+            dest.public_send('title_' + lang.to_s + '=',
+              src.public_send('title_' + lang.to_s)
+            )
+          end
+          if src.public_send('short_title_' + lang.to_s)
+            dest.public_send('short_title_' + lang.to_s + '=',
+              src.public_send('short_title_' + lang.to_s) 
+            )
+            # dest.short_title = src.public_send('short_title_' + lang.to_s) 
+          end
+          if src.public_send('description_' + lang.to_s)
+            dest.public_send('description_' + lang.to_s + '=',
+              src.public_send('description_' + lang.to_s)
+            )
+            # dest.description = src.public_send('description_' + lang.to_s)
+          end
         end
       end
     end
