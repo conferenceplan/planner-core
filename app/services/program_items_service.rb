@@ -163,18 +163,28 @@ module ProgramItemsService
     else
       order_clause = "time_slots.start asc, programme_item_translations.title asc"
     end
+    
+    current_locale = I18n.locale.to_s
+    programme_items = Arel::Table.new(:programme_items)
+    programme_item_trans = Arel::Table.new(:programme_item_translations)
+    trans_join = programme_items.join(programme_item_trans, Arel::Nodes::OuterJoin).
+              on(
+                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
+                and(programme_item_trans[:locale].eq(current_locale))
+              ).join_sources
 
     if tagquery.empty?
-      items = ProgrammeItem.includes(:translations, :children, :programme_item_assignments).
-                      references(:translations).
+      items = ProgrammeItem.includes(:children, :programme_item_assignments).
+                      joins(trans_join).
                       where(clause).joins(join_clause).
                       order(order_clause).
                       offset(offset).
                       limit(rows).
                       uniq
     else
-      items = ProgrammeItem.includes(:translations, :children, :programme_item_assignments).
-                      references(:translations).tagged_with(*tagquery).
+      items = ProgrammeItem.includes(:children, :programme_item_assignments).
+                      joins(trans_join).
+                      tagged_with(*tagquery).
                       where(clause).joins(join_clause).
                       order(order_clause).
                       offset(offset).
