@@ -163,22 +163,23 @@ module ProgramItemsService
     else
       order_clause = "time_slots.start asc, programme_item_translations.title asc"
     end
-    
-    current_locale = I18n.locale.to_s
+
+    # current_locale = I18n.locale.to_s
     programme_items = Arel::Table.new(:programme_items)
     programme_item_trans = Arel::Table.new(:programme_item_translations)
-    trans_join = programme_items.join(programme_item_trans, Arel::Nodes::OuterJoin).
-              on(
-                programme_item_trans[:programme_item_id].eq(programme_items[:id]).
-                and(programme_item_trans[:locale].eq(current_locale))
-              ).join_sources
+    trans_join = programme_items.join(
+      programme_item_trans, Arel::Nodes::OuterJoin
+    ).on(
+      programme_item_trans[:programme_item_id].eq(programme_items[:id])
+      # .and(programme_item_trans[:locale].eq(current_locale))
+    ).join_sources
 
     name_query = nil
     if nameSearch
+      # TODO: would be nice to be able to search all the translations
       st = DataService.getFilterData(filters, 'programme_items.title')
       name_query = programme_item_trans[:title].matches("%#{st}%").to_sql
     end
-
 
     if tagquery.empty?
       items = ProgrammeItem.includes(:children, :programme_item_assignments).
