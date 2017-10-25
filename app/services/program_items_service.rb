@@ -173,10 +173,19 @@ module ProgramItemsService
                 and(programme_item_trans[:locale].eq(current_locale))
               ).join_sources
 
+    name_query = nil
+    if nameSearch
+      st = DataService.getFilterData(filters, 'programme_items.title')
+      name_query = programme_item_trans[:title].matches("%#{st}%").to_sql
+    end
+
+
     if tagquery.empty?
       items = ProgrammeItem.includes(:children, :programme_item_assignments).
                       joins(trans_join).
-                      where(clause).joins(join_clause).
+                      where(clause).
+                      where(name_query).
+                      joins(join_clause).
                       order(order_clause).
                       offset(offset).
                       limit(rows).
@@ -360,14 +369,6 @@ protected
       clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
     end
 
-    # add the name search of the title
-    if nameSearch
-      st = DataService.getFilterData( filters, 'programme_items.title' )
-      if (st)
-        clause = DataService.addClause(clause,'programme_item_translations.title like ? ','%' + st + '%')
-        clause = DataService.addClause(clause,'children_translations.title like ? ','%' + st + '%','OR') if include_children
-      end
-    end
     if theme_ids && theme_ids.size > 0
       clause = DataService.addClause(clause,'themes.theme_name_id in (?) ',theme_ids) 
       clause = DataService.addClause(clause,'child_themes.theme_name_id in (?) ',theme_ids, 'OR') if include_children
