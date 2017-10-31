@@ -148,7 +148,6 @@ class ProgrammeItem < ActiveRecord::Base
     visibility.name if visibility
   end
 
-
   def self.scheduled
     joins(:room_item_assignment).uniq
   end
@@ -160,7 +159,6 @@ class ProgrammeItem < ActiveRecord::Base
   def self.child_items
     where("parent_id is not null")
   end
-  
 
   def public?
     visibility == Visibility['Public']
