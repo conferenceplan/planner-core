@@ -1,5 +1,6 @@
 class PersonConState < ActiveRecord::Base
-  attr_accessible :invitestatus_id, :acceptance_status_id, :person_id, :invitation_category_id
+  attr_accessible :invitestatus_id, :acceptance_status_id, :person_id,
+                  :invitation_category_id, :lock_version
   
   belongs_to :person
   

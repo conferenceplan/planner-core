@@ -128,8 +128,11 @@ module Planner
           end
       
           def model_class
-            self.class.name.sub('Controller', '').singularize.constantize
-            # "#{controller_name.classify}".constantize
+            if defined? self.class::MODEL_CLASS
+              self.class::MODEL_CLASS.constantize
+            else
+              self.class.name.sub('Controller', '').singularize.constantize
+            end
           end
       
           def object_name
