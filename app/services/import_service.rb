@@ -163,11 +163,13 @@ module ImportService
   def self.mergeAllPending()
     matches = getSinglePossibleMatches
     matches.each do |match|
-      # match contains the person and pending
-      pending = PendingImportPerson.find match['pending_id']
-      person = Person.find match['person_id']
-      copy_person pending, person
-      pending.delete
+      if match['person_id']
+        # match contains the person and pending
+        pending = PendingImportPerson.find match['pending_id']
+        person = Person.find match['person_id']
+        copy_person pending, person
+        pending.delete
+      end
     end
   end
 
