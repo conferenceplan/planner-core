@@ -26,14 +26,7 @@ ConfigApp.ConfigManagement = (function(Backbone){
                                       title : '<%= t "config-reply-to-email" %>',
                                       hint: "<%= (t "reply-to-email-hint").html_safe %>",
                                     },
-            cc                    : { type : 'Text', 
-                                      title : '<%= t "config-cc-email" %>',
-                                      hint: "<%= (t "cc-email-hint").html_safe %>",
-                                    },
-            test_email            : { type : 'Text', 
-                                      title : '<%= t "config-test-email" %>',
-                                      hint: "<%= (t "test-email-hint").html_safe %>",
-                                    }
+            
             
         },
         urlRoot : "<%= baseUri + '/mail_configs' %>"
