@@ -1,7 +1,6 @@
 module Planner
   module Controllers
     module ResourceMethods
-
         def find_page
           begin
             @page = 0
@@ -48,7 +47,14 @@ module Planner
           begin
             before_update
             # @object.update_attributes _permitted_params(object_name) #params[object_name]
-            @object.update! _permitted_params(object_name)
+            if assign_without_protection
+              @object.update!(
+                _permitted_params(object_name), 
+                without_protection: true
+              )
+            else
+              @object.update!(_permitted_params(object_name))
+            end
             _after_update
             after_update
             render json: @object.to_json, :content_type => 'application/json' if !lookup_context.exists? :update, params[:controller]
@@ -161,7 +167,14 @@ module Planner
           end
         
           def build_resource
-            model_class.new  _permitted_params(object_name) #[object_name] #params[object_name] #"#{model_name}"]
+            if assign_without_protection
+              model_class.new(
+                _permitted_params(object_name),
+                without_protection: true
+              )
+            else
+              model_class.new(_permitted_params(object_name))
+            end
           end
           
           def collection_actions
@@ -180,7 +193,7 @@ module Planner
             nil
           end
           
-          def _permitted_params _object_name
+          def _permitted_params(_object_name)
             # puts allowed_params
             if allowed_params #self.respond_to?(:permitted_params, true)
               # params.require(_object_name).permit(*permitted_params)
@@ -191,7 +204,10 @@ module Planner
               params[_object_name]
             end
           end
-        
+
+      def assign_without_protection
+        false
+      end
     end
   end
 end

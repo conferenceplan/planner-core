@@ -12,8 +12,7 @@ class AddTranslationTablesForProgrammeItems < ActiveRecord::Migration
           :short_description => :text
         }, 
         {
-          :migrate_data => true,
-          :remove_source_columns => true
+          :migrate_data => true
         }
       )
       PublishedProgrammeItem.create_translation_table!(
@@ -23,8 +22,7 @@ class AddTranslationTablesForProgrammeItems < ActiveRecord::Migration
           :description => :text
         }, 
         {
-          :migrate_data => true,
-          :remove_source_columns => true
+          :migrate_data => true
         }
       )
     end
