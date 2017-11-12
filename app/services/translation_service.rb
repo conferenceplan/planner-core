@@ -16,7 +16,7 @@ module TranslationService
   # (query, ProgrammeItem, [:en, :fr], 'title', 'programme_item_id')
   # TranslationService.sort_by_column
   # (query, ProgrammeItem, [:en, :fr], 'title', 'programme_item_id')
-  def self.sort_by_column(query, model, locales, column, id_column)
+  def self.sort_by_column(query, model, locales, column, id_column, sort_order)
     src_table = Arel::Table.new(model.table_name)
     sort_table = translatable_join(model, locales, column, id_column)
                  .as('sort_table')
@@ -26,7 +26,11 @@ module TranslationService
     ).on(
       sort_table[id_column].eq(src_table[:id])
     ).order(
-      generate_order_clause(sort_table, column, locales)
+      if sort_order == 'asc'
+        generate_order_clause(sort_table, column, locales).asc
+      else
+        generate_order_clause(sort_table, column, locales).desc
+      end
     )
   end
 
