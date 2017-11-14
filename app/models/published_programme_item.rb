@@ -60,7 +60,8 @@ class PublishedProgrammeItem < ActiveRecord::Base
 
   has_many :comments,
            as: :link,
-           class_name: 'Babel::Comment'
+           class_name: 'Babel::Comment',
+           dependent: :destroy
 
   alias_attribute :images, :external_images
   alias_attribute :card_size, :mobile_card_size

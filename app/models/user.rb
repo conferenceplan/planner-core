@@ -27,9 +27,10 @@ class User < ActiveRecord::Base
   has_many  :roleAssignments, :dependent => :delete_all
   has_many  :roles, :through => :roleAssignments
 
-  has_many :comments,
+  has_many :owned_comments,
            as: :owner,
-           class_name: 'Babel::Comment'
+           class_name: 'Babel::Comment',
+           dependent: :destroy
   
   #
   #

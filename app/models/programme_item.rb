@@ -61,7 +61,8 @@ class ProgrammeItem < ActiveRecord::Base
 
   has_many :comments,
            as: :link,
-           class_name: 'Babel::Comment'
+           class_name: 'Babel::Comment',
+           dependent: :destroy
 
   alias_attribute :precis, :description
   alias_attribute :requires_signup, :item_registerable

@@ -92,9 +92,16 @@ class Person < ActiveRecord::Base
   
   has_one      :person_con_state, dependent: :destroy
 
-  has_many :comments,
+  has_many :owned_comments,
            as: :owner,
-           class_name: 'Babel::Comment'
+           class_name: 'Babel::Comment',
+           dependent: :destroy
+
+  # Planners should be able to comment on People too
+  # has_many :comments,
+  #          as: :link,
+  #          class_name: 'Babel::Comment',
+  #          dependent: :destroy
 
   ## Scopes ##
   def self.attendees
