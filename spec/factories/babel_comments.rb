@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :sociable_comment, class: 'Sociable::Comment' do
+  factory :sociable_comment, class: 'Babel::Comment' do
     title "MyString"
     body "MyText"
     owner_id ""

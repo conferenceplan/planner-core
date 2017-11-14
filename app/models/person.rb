@@ -94,7 +94,7 @@ class Person < ActiveRecord::Base
 
   has_many :comments,
            as: :owner,
-           class_name: 'Sociable::Comment'
+           class_name: 'Babel::Comment'
 
   ## Scopes ##
   def self.attendees

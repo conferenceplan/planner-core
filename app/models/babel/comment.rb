@@ -1,11 +1,25 @@
-module Sociable
+module Babel
   # A comment that a user submits related to a model.
   # This can include ProgrammeItem, PublishedProgrammeItem, Document, etc.
   class Comment < ActiveRecord::Base
+    ALLOWED_OWNERS = %w[Person User SupportUser].freeze
+    ALLOWED_links = %w[
+      ProgrammeItem PublishedProgrammeItem PlannerDocs::Document
+    ].freeze
+
     belongs_to :owner, polymorphic: true
     belongs_to :link, polymorphic: true
-    belongs_to :parent, class_name: 'Sociable::Comment'
-    has_many :children, class_name: 'Sociable::Comment'
+    belongs_to :parent,
+               class_name: 'Babel::Comment',
+               foreign_key: 'parent_id'
+    has_many :children,
+             class_name: 'Babel::Comment'
+
+    validates :body, presence: true
+    validates :owner_id, presence: true, numericality: { only_integer: true }
+    validates :owner_type, presence: true, inclusion: { in: ALLOWED_OWNERS }
+    validates :link_id, presence: true, numericality: { only_integer: true }
+    validates :link_type, presence: true, inclusion: { in: ALLOWED_LINKS }
 
     def self.deleted
       where.not(deleted_at: nil)

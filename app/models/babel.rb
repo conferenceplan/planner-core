@@ -1,5 +1,5 @@
-module Sociable
+module Babel
   def self.table_name_prefix
-    'sociable_'
+    'babel_'
   end
 end
