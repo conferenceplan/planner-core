@@ -1,10 +1,10 @@
 module Babel
-  # A comment that a user submits related to a model.
+  # A comment that someone submits about a model.
   # This can include ProgrammeItem, PublishedProgrammeItem, Document, etc.
   class Comment < ActiveRecord::Base
     ALLOWED_OWNERS = %w[Person User SupportUser].freeze
-    ALLOWED_links = %w[
-      ProgrammeItem PublishedProgrammeItem PlannerDocs::Document
+    ALLOWED_LINKS = %w[
+      Person ProgrammeItem PublishedProgrammeItem PlannerDocs::Document
     ].freeze
 
     belongs_to :owner, polymorphic: true
@@ -15,12 +15,18 @@ module Babel
     has_many :children,
              class_name: 'Babel::Comment'
 
+    # TODO: Build module to generate relationships to Babel::Comment as
+    # owner and link when included in a class
+
     validates :body, presence: true
     validates :owner_id, presence: true, numericality: { only_integer: true }
     validates :owner_type, presence: true, inclusion: { in: ALLOWED_OWNERS }
     validates :link_id, presence: true, numericality: { only_integer: true }
     validates :link_type, presence: true, inclusion: { in: ALLOWED_LINKS }
 
+    # TODO: Add enum for statuses
+
+    # Add query scopes
     def self.deleted
       where.not(deleted_at: nil)
     end
@@ -42,19 +48,38 @@ module Babel
     end
 
     def self.linked_to_pub_items
-      where(link_type: 'PublishedProgrammeItem')
+      linked_to('PublishedProgrammeItem')
     end
 
     def self.linked_to_items
-      where(link_type: 'ProgrammeItem')
+      linked_to('ProgrammeItem')
     end
 
     # def self.linked_to_documents
-    #   where(link_type: 'PlannerDocs::Document')
+    #   linked_to('PlannerDocs::Document')
     # end
 
+    def self.linked_to(type, id: nil)
+      # TODO: allow accepting array of ids
+      link_type = arel_table[:link_type]
+      link_id = arel_table[:link_id]
+      link_query = link_type.eq(type)
+      link_query = link_query.and(link_id.eq(id)) if id.present?
+
+      where(link_query)
+    end
+
+    def self.owned_by(type, id: nil)
+      owner_type = arel_table[:owner_type]
+      owner_id = arel_table[:owner_id]
+      owner_query = owner_type.eq(type)
+      owner_query = owner_query.and(owner_id.eq(id)) if id.present?
+
+      where(owner_query)
+    end
+
     def self.owned_by_people
-      where(owner_type: 'Person')
+      owned_by('Person')
     end
 
     def self.owned_by_planners
@@ -64,7 +89,5 @@ module Babel
       )
       where(owner_query)
     end
-
-    # TODO: Add status enums
   end
 end
