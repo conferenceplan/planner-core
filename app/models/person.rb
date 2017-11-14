@@ -92,6 +92,10 @@ class Person < ActiveRecord::Base
   
   has_one      :person_con_state, dependent: :destroy
 
+  has_many :comments,
+           as: :owner,
+           class_name: 'Sociable::Comment'
+
   ## Scopes ##
   def self.attendees
     people = joins(:registrationDetail).where("registration_details.registered is true")

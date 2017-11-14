@@ -26,6 +26,10 @@ class User < ActiveRecord::Base
   #  
   has_many  :roleAssignments, :dependent => :delete_all
   has_many  :roles, :through => :roleAssignments
+
+  has_many :comments,
+           as: :owner,
+           class_name: 'Sociable::Comment'
   
   #
   #

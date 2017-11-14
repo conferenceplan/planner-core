@@ -59,6 +59,10 @@ class ProgrammeItem < ActiveRecord::Base
     end
   end
 
+  has_many :comments,
+           as: :link,
+           class_name: 'Sociable::Comment'
+
   alias_attribute :precis, :description
   alias_attribute :requires_signup, :item_registerable
 

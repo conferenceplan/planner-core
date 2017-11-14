@@ -58,6 +58,10 @@ class PublishedProgrammeItem < ActiveRecord::Base
     end
   end
 
+  has_many :comments,
+           as: :link,
+           class_name: 'Sociable::Comment'
+
   alias_attribute :images, :external_images
   alias_attribute :card_size, :mobile_card_size
   alias_attribute :precis, :description
