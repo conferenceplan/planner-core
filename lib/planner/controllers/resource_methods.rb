@@ -47,7 +47,7 @@ module Planner
           begin
             before_update
             # @object.update_attributes _permitted_params(object_name) #params[object_name]
-            if assign_without_protection
+            if assign_without_protection?
               @object.update!(
                 _permitted_params(object_name), 
                 without_protection: true
@@ -170,7 +170,7 @@ module Planner
           end
         
           def build_resource
-            if assign_without_protection
+            if assign_without_protection?
               model_class.new(
                 _permitted_params(object_name),
                 without_protection: true
@@ -208,8 +208,12 @@ module Planner
             end
           end
 
-      def assign_without_protection
+      def assign_without_protection?
         false
+      end
+
+      def check_subscription_status?
+        true
       end
     end
   end
