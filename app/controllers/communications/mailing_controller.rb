@@ -3,7 +3,7 @@ require 'mailing_job'
 class Communications::MailingController < PlannerController
   
   def index
-    @mailings = Mailing.all
+    @mailings = Mailing.joins(:mail_template).all
   end
   
   def listWithBlank
