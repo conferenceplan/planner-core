@@ -10,7 +10,8 @@ module Planner
                          :start_date, :end_date, :conference_days, :event_is_over?, :google_map_key, :event_name, :event_duration, :event_happening_now?,
                          :human_time, :person_img_url, :current_user, :org_info_email,
                          :current_event, :current_event?, :custom_google_analytics_code,
-                         :custom_google_analytics_code?, :site_languages
+                         :custom_google_analytics_code?, :site_languages,
+                         :image_url
     end
 
     def site_languages

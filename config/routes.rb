@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     resources :home_dash
     
     get "participants_dash/:cellname" => "participants_dash#index"
+    get "participants_dash/:module_name/:cellname" => "participants_dash#index"
     get "items_dash/:cellname" => "items_dash#index"
     get "schedule_dash/:cellname" => "schedule_dash#index"
     get "venues_dash/:cellname" => "venues_dash#index"
