@@ -208,6 +208,10 @@ module Planner
       def assign_without_protection?
         false
       end
+
+      def check_subscription_status?
+        true
+      end
     end
   end
 end
