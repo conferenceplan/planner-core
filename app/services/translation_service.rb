@@ -16,7 +16,24 @@ module TranslationService
   # (query, ProgrammeItem, [:en, :fr], 'title', 'programme_item_id')
   # TranslationService.sort_by_column
   # (query, ProgrammeItem, [:en, :fr], 'title', 'programme_item_id')
-  def self.sort_by_column(query, model, locales, column, id_column, sort_order)
+  def self.sort_by_column(
+    query:,
+    model:,
+    column:,
+    id_column:,
+    sort_order: 'asc',
+    locales: nil
+  )
+    # If locales aren't passed, set them from the site_languages.
+    # If the current locale is in the list of site locales, pluck it and
+    # set it first in the array so that records are sorted correctly in the
+    # locale you are viewing them in
+    locales ||= UISettingsService.site_languages
+    if I18n.locale && locales.include?(I18n.locale.to_s)
+      locales.delete(I18n.locale.to_s)
+      locales.unshift(I18n.locale.to_s)
+    end
+
     src_table = Arel::Table.new(model.table_name)
     sort_table = translatable_join(model, locales, column, id_column)
                  .as('sort_table')
@@ -26,7 +43,7 @@ module TranslationService
     ).on(
       sort_table[id_column].eq(src_table[:id])
     ).order(
-      if sort_order == 'asc'
+      if sort_order.downcase == 'asc'
         generate_order_clause(sort_table, column, locales).asc
       else
         generate_order_clause(sort_table, column, locales).desc
@@ -39,17 +56,17 @@ module TranslationService
   # rubocop:disable Metrics/AbcSize
   def self.generate_order_clause(table, column, locales)
     if locales.length == 1
-      column + '_' + locales[0].to_s
+      "#{column}_#{locales[0]}"
     elsif locales.length == 2
       if_sel_col(
         table,
-        column + '_' + locales[0].to_s,
-        column + '_' + locales[1].to_s
+        "#{column}_#{locales[0]}",
+        "#{column}_#{locales[1]}"
       )
     elsif locales.length > 2
       if_sel_col_sub(
         table,
-        column + '_' + locales[0].to_s,
+        "#{column}_#{locales[0]}",
         generate_order_clause(
           table,
           column,
@@ -73,7 +90,7 @@ module TranslationService
     locales.each do |locale|
       select_fields << group_concat_fn(
         if_fn(table, locale, column)
-      ).as(column + '_' + locale.to_s)
+      ).as("#{column}_#{locale}")
     end
 
     table.project(

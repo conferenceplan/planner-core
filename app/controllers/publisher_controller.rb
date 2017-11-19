@@ -82,5 +82,10 @@ class PublisherController < PlannerController
       # @pending_count += pending_people[:updatedPeople].size + pending_people[:removedPeople].size
     end
   end
-  
+
+  private
+
+  def check_subscription_status?
+    false
+  end
 end
