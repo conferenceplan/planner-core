@@ -9,6 +9,7 @@ module Babel
 
     belongs_to :owner, polymorphic: true
     belongs_to :link, polymorphic: true
+    belongs_to :deleted_by, polymorphic: true
     belongs_to :parent,
                class_name: 'Babel::Comment',
                foreign_key: 'parent_id'
@@ -19,8 +20,18 @@ module Babel
     # owner and link when included in a class
 
     validates :body, presence: true
+
     validates :owner_id, presence: true, numericality: { only_integer: true }
     validates :owner_type, presence: true, inclusion: { in: ALLOWED_OWNERS }
+    validates :deleted_by_id,
+              presence: true,
+              numericality: { only_integer: true },
+              if: :deleted?
+    validates :deleted_by_type,
+              presence: true,
+              inclusion: { in: ALLOWED_OWNERS },
+              if: :deleted?
+
     validates :link_id, presence: true, numericality: { only_integer: true }
     validates :link_type, presence: true, inclusion: { in: ALLOWED_LINKS }
 
@@ -33,6 +44,23 @@ module Babel
 
     def self.not_deleted
       where(deleted_at: nil)
+    end
+
+    def self.not_deleted_by_owner
+      # Exclude comments deleted by their owner
+      deleted_at = arel_table[:deleted_at]
+      deleted_by_id = arel_table[:deleted_by_id]
+      deleted_by_type = arel_table[:deleted_by_type]
+      owner_id = arel_table[:owner_id]
+
+      deletion_query = deleted_at.eq(nil).or(
+        deleted_by_id.not_eq(owner_id).and(
+          deleted_by_type.eq('User').or(
+            deleted_by_type.eq('SupportUser')
+          )
+        )
+      )
+      where(deletion_query)
     end
 
     def self.top_level
@@ -88,6 +116,47 @@ module Babel
         owner_type.eq('SupportUser')
       )
       where(owner_query)
+    end
+
+    # Define instance methods
+    def deleted?
+      deleted_at.present?
+    end
+
+    def delete(deleted_by:)
+      mark_deleted(deleted_by)
+      save
+    end
+
+    def delete!(deleted_by:)
+      mark_deleted(deleted_by)
+      save!
+    end
+
+    # If the comment is deleted, ensure that the contents are not shown when
+    # the response is rendered
+    def body
+      if deleted?
+        I18n.t('planner.babel.comments.messages.deleted-body')
+      else
+        self[:body]
+      end
+    end
+
+    def title
+      if deleted? && self[:title].present?
+        I18n.t('planner.babel.comments.messages.deleted-title')
+      else
+        self[:title]
+      end
+    end
+
+    protected
+
+    def mark_deleted(deleted_by)
+      return I18n.t('planner.babel.comments.errors.no-deletion-actor-specified') unless deleted_by.present?
+      self.deleted_at = DateTime.current
+      self.deleted_by = deleted_by
     end
   end
 end
