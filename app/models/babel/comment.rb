@@ -23,6 +23,8 @@ module Babel
 
     validates :owner_id, presence: true, numericality: { only_integer: true }
     validates :owner_type, presence: true, inclusion: { in: ALLOWED_OWNERS }
+    validates :owner, presence: true # Ensure record exists
+
     validates :deleted_by_id,
               presence: true,
               numericality: { only_integer: true },
@@ -31,9 +33,11 @@ module Babel
               presence: true,
               inclusion: { in: ALLOWED_OWNERS },
               if: :deleted?
+    validates :deleted_by, presence: true, if: :deleted? # Ensure record exists
 
     validates :link_id, presence: true, numericality: { only_integer: true }
     validates :link_type, presence: true, inclusion: { in: ALLOWED_LINKS }
+    validates :link, presence: true # Ensure record exists
 
     # TODO: Add enum for statuses
 
