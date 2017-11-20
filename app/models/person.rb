@@ -105,6 +105,8 @@ class Person < ActiveRecord::Base
            dependent: :destroy
 
   # Planners should be able to comment on People too
+  # TODO: How do we enable comments for a person while a Person already has an
+  # attribute called "comments"???
   # has_many :comments,
   #          as: :link,
   #          class_name: 'Babel::Comment',
