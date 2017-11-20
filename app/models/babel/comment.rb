@@ -92,6 +92,7 @@ module Babel
     # end
 
     def self.linked_to(type, id: nil)
+      raise "Link not found: '#{type}'" unless ALLOWED_LINKS.include?(type)
       # TODO: allow accepting array of ids
       link_type = arel_table[:link_type]
       link_id = arel_table[:link_id]
@@ -102,6 +103,7 @@ module Babel
     end
 
     def self.owned_by(type, id: nil)
+      raise "Owner not found: '#{type}'" unless ALLOWED_OWNERS.include?(type)
       owner_type = arel_table[:owner_type]
       owner_id = arel_table[:owner_id]
       owner_query = owner_type.eq(type)
