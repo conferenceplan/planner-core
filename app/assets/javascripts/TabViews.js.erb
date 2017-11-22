@@ -159,7 +159,8 @@ var TabUtils = (function(){
         deleteModal : function() {
             var that = this;
             var clearFn = this.options.clearFn; 
-            var post_clearFn = this.options.post_clearFn; 
+            var post_clearFn = this.options.post_clearFn;
+            var view_refresh_event = this.options.view_refresh_event;
 
             modal = new AppUtils.ConfirmModel({
                 title : this.options.deleteTitle,
@@ -176,6 +177,9 @@ var TabUtils = (function(){
                             if (post_clearFn) {
                                 post_clearFn.bind(that)();
                             };
+                            if (view_refresh_event) {
+                              eventAggregator.trigger(view_refresh_event); 
+                            }
                         }
                     });
                 },
