@@ -2,7 +2,7 @@
 module Planner
   module ImageUrlGenerator
 
-    def person_image img, scale: 1, version: :standard
+    def self.person_image img, scale: 1, version: :standard
       url = ENV['G_DEFAULT_PERSON_IMAGE_URL'] #start with default grenadine person image url. This will get replaced by the others if the correct conditions are met
       if img.present?
         img.scale = scale

@@ -1,5 +1,4 @@
 class Person < ActiveRecord::Base
-  include Planner::ImageUrlGenerator
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :language,
                   :comments, :company, :job_title,
                   :pseudonym_attributes,
@@ -363,7 +362,9 @@ class Person < ActiveRecord::Base
   end
 
   def public_image_url scale: 1, version: :standard
-    person_image(image, scale: scale, version: version)
+    Planner::ImageUrlGenerator.person_image(
+      image, scale: scale, version: version
+    )
   end
 
   def viewable_by_public?

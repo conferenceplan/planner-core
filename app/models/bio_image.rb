@@ -1,5 +1,4 @@
 class BioImage < ActiveRecord::Base
-  include Planner::ImageUrlGenerator
   attr_accessible :lock_version, :bio_picture, :bio_picture_cache, :person_id
   attr_accessor :scale
 
@@ -10,7 +9,9 @@ class BioImage < ActiveRecord::Base
   audited except: :bio_picture, :associated_with => :person
 
   def public_image_url scale: 1, version: :standard
-    person_image(self, scale: scale, version: version)
+    Planner::ImageUrlGenerator.person_image(
+      self, scale: scale, version: version
+    )
   end
   
   # on destroy need to touch the person attached to ???
