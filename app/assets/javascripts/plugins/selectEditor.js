@@ -18,6 +18,7 @@ Backbone.Form.editors.Select2 = Form.editors.Text.extend({
         var schema = this.schema;
         
         this.config = schema.config || {};
+        this.$el.data("attr_model", this.model);
         this.init_callback = schema.init;
     },
      
