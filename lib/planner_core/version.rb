@@ -1,3 +1,3 @@
 module PlannerCore
-  VERSION = '1.3.189'.freeze
+  VERSION = '1.3.190'.freeze
 end

@@ -33,6 +33,7 @@ class BioPictureUploader < CarrierWave::Uploader::Base
         publicid += '_' + model.person.id.to_s
       else
         publicid += 'default_bio_image'
+        publicid += '_' + model.id.to_s
       end
     end
       
