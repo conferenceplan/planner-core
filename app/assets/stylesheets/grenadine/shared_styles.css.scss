@@ -245,3 +245,171 @@ ul#filter_by li label {
 
 
 //
+
+/* ---- ribbon ----- */
+#ribbon-container {
+    position: absolute;
+    top: 10px;
+    right: -10px;
+    overflow: visible; /* so we can see the pseudo-elements we're going to add to the anchor */
+    font-size: 13px; /* font-size and line-height must be equal so we can account for the height of the banner */
+    line-height: 13px;
+    z-index: 900;
+}
+/* an adjustment for the planner use case */
+#ribbon-container.planner {
+  top: 20px;
+  right: 5px;
+}
+.item-big-title #ribbon-container {
+    right: 5px;
+}
+div.card-size-10 #ribbon-container {
+    right: -13px;
+}
+
+
+#ribbon-container:before {
+    content:"";
+    height: 0;
+    width: 0;
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 0;
+    border-top: 18px solid rgba(0,0,0,.3); /* These 4 border properties create the first part of our drop-shadow */
+    border-bottom: 18px solid rgba(0,0,0,.3); 
+    border-right: 18px solid rgba(0,0,0,.3);
+    border-left: 18px solid transparent;
+}
+
+#ribbon-container:after { /* This adds the second part of our dropshadow */
+    content:"";
+    height: 3px;
+    background: rgba(0,0,0,.3);
+    display: block;
+    position: absolute;
+    bottom: -3px;
+    left: 36px;
+    right:3px;
+}
+
+#ribbon-container a {
+    display:block;
+    padding:10px;
+    position:relative; /* allows us to position our pseudo-elements properly */
+    background:#0089d0;
+    overflow:visible;
+    height:36px;
+    margin-left:18px;
+    color:#fff;
+    text-decoration:none;
+}
+
+#ribbon-container a:after { /* this creates the "folded" part of our ribbon */
+    content:""; 
+    height: 0;
+    width: 0;
+    display:block;
+    position:absolute;
+    bottom:-10px;
+    right:0;
+    border-top: 10px solid #004a70; 
+    border-right: 10px solid transparent;
+}
+
+#ribbon-container a:before { /* this creates the "forked" part of our ribbon */
+    content:"";
+    height: 0;
+    width: 0;
+    display:block;
+    position:absolute;
+    top:0;
+    left:-18px;
+    border-top: 18px solid #0089d0; 
+    border-bottom: 18px solid #0089d0; 
+    border-right: 18px solid transparent;
+    border-left: 18px solid transparent;
+}
+
+
+
+#ribbon-container a.green {
+    background: green;
+}
+#ribbon-container a.green:before {
+    border-top: 18px solid green; 
+    border-bottom: 18px solid green; 
+}
+#ribbon-container a.green:after {
+    border-top: 10px solid green;
+    border-right: 10px solid transparent; 
+}
+#ribbon-container a.green:hover {
+    background: #00aa00; 
+}
+#ribbon-container a.green:hover:before {
+    border-top: 18px solid #00aa00; 
+    border-bottom: 18px solid #00aa00; 
+}
+#ribbon-container a.green:hover:after {
+    border-top: 10px solid #00aa00;
+    border-right: 10px solid transparent; 
+}
+
+#ribbon-container a.amber {
+    background: #f0ad4e;
+}
+#ribbon-container a.amber:before {
+    border-top: 18px solid #f0ad4e; 
+    border-bottom: 18px solid #f0ad4e; 
+}
+#ribbon-container a.amber:after {
+    border-top: 10px solid #f0ad4e;
+    border-right: 10px solid transparent; 
+}
+#ribbon-container a.amber:hover {
+    background: #ffb853;
+}
+#ribbon-container a.amber:hover:before {
+    border-top: 18px solid #ffb853; 
+    border-bottom: 18px solid #ffb853; 
+}
+#ribbon-container a.amber:hover:after {
+    border-top: 10px solid #ffb853;
+    border-right: 10px solid transparent; 
+}
+
+
+#ribbon-container a.red {
+    background: #ce4844;
+}
+#ribbon-container a.red:before {
+    border-top: 18px solid #ce4844; 
+    border-bottom: 18px solid #ce4844; 
+}
+#ribbon-container a.red:after {
+    border-top: 10px solid #ce4844; 
+    border-right: 10px solid transparent; 
+}
+#ribbon-container a.red:hover {
+    background: #f0544f;
+}
+#ribbon-container a.red:hover:before {
+    border-top: 18px solid #f0544f; 
+    border-bottom: 18px solid #f0544f; 
+}
+#ribbon-container a.red:hover:after {
+    border-top: 10px solid #f0544f;
+    border-right: 10px solid transparent; 
+}
+
+#ribbon-container a:hover {
+background:#009ff1;
+}
+
+#ribbon-container a:hover:before { /* this makes sure that the "forked" part of the ribbon changes color with the anchor on :hover */
+    border-top: 18px solid #009ff1; 
+    border-bottom: 18px solid #009ff1;
+}
+
