@@ -98,19 +98,6 @@ class Person < ActiveRecord::Base
   has_one      :person_con_state, dependent: :destroy
   accepts_nested_attributes_for :person_con_state
 
-  has_many :owned_comments,
-           as: :owner,
-           class_name: 'Babel::Comment',
-           dependent: :destroy
-
-  # Planners should be able to comment on People too
-  # TODO: How do we enable comments for a person while a Person already has an
-  # attribute called "comments"???
-  # has_many :comments,
-  #          as: :link,
-  #          class_name: 'Babel::Comment',
-  #          dependent: :destroy
-
   ## Scopes ##
   def self.attendees
     people = joins(:registrationDetail).where("registration_details.registered is true")
