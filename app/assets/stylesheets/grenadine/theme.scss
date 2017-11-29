@@ -708,6 +708,9 @@ input[type="checkbox"] {
     margin-top: 10px;
     margin-right: 3px;
 }
+.nav-tabs > li {
+  margin-bottom: -2px;
+}
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     font-weight: bold;
     border-top: 3px #d52348 solid;
