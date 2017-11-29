@@ -17,4 +17,9 @@ group :test do
   gem 'test-unit', '~> 3.0'
 end
 
+group :development, :test do
+  gem 'rspec-rails', '~> 3.6'
+  gem 'factory_bot_rails', '~> 4.0'
+end
+
 gemspec

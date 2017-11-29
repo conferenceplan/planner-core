@@ -1,9 +1,11 @@
 class Person < ActiveRecord::Base
-  include Planner::ImageUrlGenerator
-  attr_accessible :lock_version, :first_name, :last_name, :suffix, :language, :comments, :company, :job_title,
-                  :pseudonym_attributes, :acceptance_status_id, :invitestatus_id, :invitation_category_id,
-                  :postal_addresses_attributes, :email_addresses_attributes, :phone_numbers_attributes, :registrationDetail_attributes,
-                  :prefix
+  attr_accessible :lock_version, :first_name, :last_name, :suffix, :language,
+                  :comments, :company, :job_title,
+                  :pseudonym_attributes,
+                  :acceptance_status_id, :invitestatus_id, :invitation_category_id,
+                  :postal_addresses_attributes, :email_addresses_attributes,
+                  :phone_numbers_attributes, :registrationDetail_attributes,
+                  :prefix, :person_con_state_attributes
                   
   attr_accessor :details
 
@@ -83,6 +85,9 @@ class Person < ActiveRecord::Base
   accepts_nested_attributes_for :registrationDetail
 
   has_one   :survey_respondent, :dependent => :destroy
+  has_one   :survey_respondent_detail, through: :survey_respondent
+  has_many  :survey_histories, through: :survey_respondent_detail
+  has_many  :surveys, through: :survey_histories
 
   has_many  :person_mailing_assignments
   has_many  :mailings, :through => :person_mailing_assignments
@@ -91,6 +96,7 @@ class Person < ActiveRecord::Base
   belongs_to  :dep_invitation_category, :foreign_key => 'invitation_category_id', :class_name => "InvitationCategory" # TODO - SCOPE
   
   has_one      :person_con_state, dependent: :destroy
+  accepts_nested_attributes_for :person_con_state
 
   ## Scopes ##
   def self.attendees
@@ -343,7 +349,9 @@ class Person < ActiveRecord::Base
   end
 
   def public_image_url scale: 1, version: :standard
-    person_image(image, scale: scale, version: version)
+    Planner::ImageUrlGenerator.person_image(
+      image, scale: scale, version: version
+    )
   end
 
   def viewable_by_public?

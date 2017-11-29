@@ -4,11 +4,23 @@ class InvitationCategoriesController < PlannerController
   #
   #
   def index
-    invitationCategories = InvitationCategory.all.order('position asc')
-    
-    render json: invitationCategories.to_json, :content_type => 'application/json'
+    query = params[:query].present? ? params[:query] : nil
+    where_clause = build_where(query)
+    invitation_categories = InvitationCategory
+                            .where(where_clause)
+                            .order('position asc')
+
+    render json: invitation_categories.to_json,
+           content_type: 'application/json'
   end
-  
+
+  #
+  def build_where(query)
+    if query
+      ['name like ?', "%#{query}%"]
+    end
+  end
+
   #
   #
   #

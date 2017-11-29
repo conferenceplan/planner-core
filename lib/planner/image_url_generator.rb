@@ -2,7 +2,7 @@
 module Planner
   module ImageUrlGenerator
 
-    def person_image img, scale: 1, version: :standard
+    def self.person_image img, scale: 1, version: :standard
       url = ENV['G_DEFAULT_PERSON_IMAGE_URL'] #start with default grenadine person image url. This will get replaced by the others if the correct conditions are met
       if img.present?
         img.scale = scale
@@ -26,10 +26,9 @@ module Planner
       url
     end
 
-    protected
     # Most of these methods are included here because their twins in various ControllerAdditions.rb files are inaccessible from this module
     
-    def base_image_url
+    def self.base_image_url
       #
       # Arguments: none
       # Returns: url (String) containing the Grenadine CDN image base url from PlannerCore's application.yml file
@@ -37,7 +36,7 @@ module Planner
       eval(ENV[:base_image_url.to_s])
     end
     
-    def get_image_url img, version = nil
+    def self.get_image_url img, version = nil
       #
       # Arguments: img (BioPictureUploader::Uploader)
       # Returns: url (String) pointing to the an image's grenadine cdn url for cloudinary images
