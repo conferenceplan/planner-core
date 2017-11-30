@@ -444,7 +444,7 @@ screen and (min-device-pixel-ratio: 1.5) {
     }
 }
 #menu-separator-div {
-  height: 20px;
+  height: 10px;
   clear: left;
 }
 #menu-separator-div.affix {
@@ -707,6 +707,9 @@ input[type="checkbox"] {
 .form-horizontal input[type="checkbox"] {
     margin-top: 10px;
     margin-right: 3px;
+}
+.nav-tabs > li {
+  margin-bottom: -2px;
 }
 .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
     font-weight: bold;
