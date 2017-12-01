@@ -363,7 +363,12 @@ $.widget( "cp.baseBootstrapTable" , {
 
             initialize : function(options) {
               this.options = options || {};
-              var ctl_template = '#table-control-template'
+              var ctl_template = '';
+              if (this.options.ctl_template) {
+                ctl_template = this.options.ctl_template;
+              } else {
+                ctl_template = '#table-control-template';
+              }
               this.template = _.template($(ctl_template).html());
             },
 
@@ -479,7 +484,11 @@ $.widget( "cp.baseBootstrapTable" , {
                     disableControls     : this.options.disableControls
             });
             control.render();
-            $("#" + this.options.controlDiv).html(control.el);
+            if (typeof this.options.controlDiv === 'object') {
+              this.options.controlDiv.append(control.el);
+            } else {
+              $("#" + this.options.controlDiv).html(control.el);
+            }
 
             if (this.options.disableControls) {
                 control.$(':button').prop('disabled', true);

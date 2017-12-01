@@ -100,7 +100,7 @@ jQuery(document).ready(function() {
     // Over-ride the backbone sync so that the rails CSRF token is passed to the backend
     Backbone._sync = Backbone.sync;
     Backbone.sync = function(method, model, options) {
-        if (method == 'create' || method == 'update' || method == 'delete') {
+        if (method == 'create' || method == 'update' || method == 'delete' || method == 'put') {
             var auth_options = {};
             auth_options[$("meta[name='csrf-param']").attr('content')] = $("meta[name='csrf-token']").attr('content');
             model.set(auth_options, {silent: true});
