@@ -246,7 +246,7 @@ module Planner
       
       menu << { :title => '',               :target => '/', :icon => "glyphicon glyphicon-home" }
       menu << { :title => 'venues',         :target => '/pages/venues_dash/manage', :icon => "fa fa-map-marker" } if allowed? :venues
-      menu << { :title => 'participants',   :target => '/pages/participants_dash/manage', :icon => "glyphicon glyphicon-user",      :target_base => '/pages/participants_dash'} if allowed? :participants
+      menu << { :title => 'participants',   :target => '/pages/participants_dash/people/manage', :icon => "glyphicon glyphicon-user",      :target_base => '/pages/participants_dash/people'} if allowed? :participants
       menu << { :title => 'program-items',  :target => '/pages/items_dash/manage', :icon => "fa fa-calendar",     :target_base => '/pages/items_dash',
                 :sub_menu => [
                   { :title => 'prog-items',      :target => '/pages/items_dash/manage', :display => allowed?(:items) },
