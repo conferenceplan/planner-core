@@ -47,7 +47,15 @@ jQuery(document).ready(function() {
         modal_edit_title : '<%= t "edit-program-item" %>',
         
         confirm_content     : '<%= t "delete-selected-data" %>',
-        confirm_title       : '<%= t "delete-confirmation" %>'
+        confirm_title       : '<%= t "delete-confirmation" %>',
+        afterCreateFn: function(mdl, originalAttributes) {
+          // Set the default duration for items to the last created item's duration
+          if (mdl) {
+            var duaration =
+              mdl.get('duration') || mdl._previousAttributes.duration
+            ItemApp.ItemManagement.setDefaultItemDuration(duration);
+          }
+        }
     });
     
     $('#collapseButton').click(function(ev) {

@@ -1075,15 +1075,21 @@ ItemApp.ItemManagement = (function(Backbone){
         },
         // Default values used when creating a new instance
         defaults: {
-            "duration":  60,
-            "minimum_people": 1,
-            "maximum_people": 5,
-            "print": true,
-            "mobile_card_size" : 1,
-            "is_break"  : false,
-            "audience_size" : 0,
-            start_offset : 0,
-            visibility_id : <%= Visibility['Public'].id %>
+            duration: <%= 
+              if ProgrammeItem.where.not(duration: nil).any?
+                ProgrammeItem.where.not(duration: nil).last.duration
+              else
+                60
+              end
+            %>,
+            minimum_people: 1,
+            maximum_people: 5,
+            print: true,
+            mobile_card_size: 1,
+            is_break: false,
+            audience_size: 0,
+            start_offset: 0,
+            visibility_id: <%= Visibility['Public'].id %>
         },
         urlRoot : "<%= baseUri + '/programme_items' %>",
         relations : [{
@@ -1562,6 +1568,12 @@ ItemApp.ItemManagement = (function(Backbone){
                 text : "..."
             });
 
+        },
+        setDefaultItemDuration: function(duration) {
+          // set the default duration to the specified duration
+          if (duration) {
+            ProgramItem.prototype.defaults.duration = duration;
+          }
         }
     };
     

@@ -36,6 +36,7 @@ $.widget( "cp.baseTable" , {
         extra_button        : false,
         extra_button_title  : "extra",
         extra_modal_action  : function() {},
+        afterCreateFn       : function() {},
         tagQuery            : '',
         extraTableOpts      : {},
     },
@@ -187,6 +188,7 @@ $.widget( "cp.baseTable" , {
                         // Refresh the grid - goto the page with the new item and make that the current selection
                         // ------------------
                         refreshGridFn(grid, mdl);
+                        that.options.afterCreateFn(mdl);
                     }
                 });
                 modal.render();
