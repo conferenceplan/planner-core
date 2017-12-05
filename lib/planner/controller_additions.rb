@@ -243,39 +243,9 @@ module Planner
     def top_menu
       #  return the hash for the top menu
       menu = []
-      
-      menu << { :title => '',               :target => '/', :icon => "glyphicon glyphicon-home" }
-      menu << { :title => 'venues',         :target => '/pages/venues_dash/manage', :icon => "fa fa-map-marker" } if allowed? :venues
-      menu << { :title => 'participants',   :target => '/pages/participants_dash/people/manage', :icon => "glyphicon glyphicon-user",      :target_base => '/pages/participants_dash/people'} if allowed? :participants
-      menu << { :title => 'program-items',  :target => '/pages/items_dash/manage', :icon => "fa fa-calendar",     :target_base => '/pages/items_dash',
-                :sub_menu => [
-                  { :title => 'prog-items',      :target => '/pages/items_dash/manage', :display => allowed?(:items) },
-                  { :title => 'scheduling-conflicts-tab-title',   :target => '/pages/schedule_dash/manage', :display => allowed?(:schedule)  }
-                  # conflicts ?
-                ]
-              } if allowed? :items
-      menu << { :title => 'surveys',          :target => '/pages/surveys_dash/manage', :icon => "fa fa-comment",  :target_base => '/pages/surveys_dash',
-                :sub_menu => [
-                  { :title => 'manage-surveys', :target => '/pages/surveys_dash/manage', :display => allowed?(:manage_surveys) },
-                  { :title => 'survey-queries', :target => '/pages/surveys_dash/report', :display => allowed?(:survey_reports) },
-                  { :title => 'survey-reports', :target => '/pages/surveys_dash/reporting', :display => allowed?(:survey_reports) }
-                ]
-              } if allowed? :surveys
-      menu << { :title => 'messages',   :target => '/pages//communications_dash/templates', :icon => "fa fa-envelope",  :target_base => '/pages/communications_dash'
-              } if allowed? :communications
-      menu << { :title => 'reports',        :target => '/planner_reports/pages/reports/report', :icon => "fa fa-bar-chart",     :target_base => '/pages/reports_dash',
-                :sub_menu => [
-                  {:title => 'reports-classic', :target => '/pages/reports_dash/manage', :display => allowed?(:reports) }
-              ]} if allowed? :reports
-      menu << { :title => 'menu-publications',   :target => '/pages/publications_dash/online', :icon => "fa fa-globe",     :target_base => '/pages/publications_dash',
-                :sub_menu => [
-                  {:title => 'publish', :target => '/pages/publications_dash/online', :display => allowed?(:publish) },
-                  {:title => 'print', :target => '/pages/publications_dash/print', :display => allowed?(:print) }
-                ]} if allowed? :publications
-
       menu
     end
-    
+
     # get a menu item by name
     def get_menu_index(menu, name)
       menu.find_index{|item| item[:title] == name }
