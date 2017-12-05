@@ -51,14 +51,10 @@ module ProgramItemsService
     ProgrammeItem.select([ ProgrammeItem.arel_table[Arel.star],
                           parent_time_slots[:start].as('parent_item_start')
                         ]).
-                        includes([:translations, :time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
-                        references(:translations).
+                        includes([:time_slot, :room_item_assignment, :programme_item_assignments, {:people => :pseudonym}, {:room => [:venue]}]).
                         joins(find_all_joins).
                         order(
-                          %w(
-                            IF(parent_item_start IS NULL, time_slots.start, parent_item_start) ASC,
-                            programme_item_translations.title
-                          ).join(" ")
+                          'IF(parent_item_start IS NULL, time_slots.start, parent_item_start) ASC'
                         )
     
   end
