@@ -8,7 +8,7 @@ class BioImage < ActiveRecord::Base
 
   audited except: :bio_picture, :associated_with => :person
 
-  def public_image_url scale: 1, version: :standard
+  def public_image_url scale: 1, version: :detail
     Planner::ImageUrlGenerator.person_image(
       self, scale: scale, version: version
     )

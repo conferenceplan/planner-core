@@ -348,7 +348,7 @@ class Person < ActiveRecord::Base
     published_programme_items && published_programme_items.any?
   end
 
-  def public_image_url scale: 1, version: :standard
+  def public_image_url scale: 1, version: :detail
     Planner::ImageUrlGenerator.person_image(
       image, scale: scale, version: version
     )
