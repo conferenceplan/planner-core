@@ -45,13 +45,11 @@
                 <div class="collapse navbar-collapse" id="collapse-4">
                     <ul class="nav navbar-nav">
                         <% @submenu.each do |entry| %>
-                            <% if entry[:display] %>
-                                <li class="<%= 'active' if entry[:title].eql? @active_sub_menu %>">
-                                    <a href="<%= baseUri + (entry[:target][0] == '/' ? entry[:target] : '/' + entry[:target]) %>">
-                                        <%= (t entry[:title]).html_safe %>
-                                    </a>
-                                </li>
-                            <% end %>
+                          <li class="<%= 'active' if entry[:title].eql? @active_sub_menu %>">
+                              <a href="<%= baseUri + (entry[:target][0] == '/' ? entry[:target] : '/' + entry[:target]) %>">
+                                  <%= (t entry[:title]).html_safe %>
+                              </a>
+                          </li>
                         <% end %>
                     </ul>
                 </div>
