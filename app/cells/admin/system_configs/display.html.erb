@@ -2,45 +2,38 @@
 <%= render_cell "admin/system_configs", :javascript %>
 
 <div class="row">
-    <div class="col-xs-12">
-        <h3 class="h3-underlined" style="margin-top: 0;"><%= t 'general-config-title' %></h3>
-        <p style="margin-bottom: 25px;"><%= (t 'general-config-intro-text').html_safe %></p>
-    </div>
+  <div class="col-xs-12">
+    <h3 class="h3-underlined" style="margin-top: 0;"><%= t 'general-config-title' %></h3>
+    <p style="margin-bottom: 25px;"><%= (t 'general-config-intro-text').html_safe %></p>
+  </div>
 </div>
 <div class="row">
-    <div class="col-xs-2">
-        <div class="gr-sidebar" role="complementary">
-            <ul class="gr-sidenav nav nav-pills nav-stacked">
-                <% if allowed? :manage_conf_config %>
-                    <li>
-                        <a href="#users_config"><%= t "users" %></a>
-                    </li>
-                    <li>
-                        <a href="#item_format_config"><%= t "config-item-formats" %></a>
-                    </li>
-                    <li>
-                        <a href="#room_setups_config"><%= t "config-room-setups" %></a>
-                    </li>
-                    <li>
-                        <a href="#data_sources_config"><%= t "data-sources" %></a>
-                    </li>
-                    <li>
-                        <a href="#email_config"><%= t "email-addresses" %></a>
-                    </li>
-                    <% @extra_system_config_menu.each do |extra| %>
-                        <%= render extra %>
-                    <% end %>
-                <% end %>
-                <% if allowed? :manage_system_config %>
-                    <li>
-                        <a href="#cloudinary_config"><%= t "config-cloudinary" %></a>
-                    </li>
-                <% end %>
-            </ul>
-        </div>
+  <div class="col-xs-2">
+    <div class="gr-sidebar" role="complementary">
+      <ul class="gr-sidenav nav nav-pills nav-stacked">
+        <li>
+          <a href="#users_config"><%= t "users" %></a>
+        </li>
+        <li>
+          <a href="#item_format_config"><%= t "config-item-formats" %></a>
+        </li>
+        <li>
+          <a href="#room_setups_config"><%= t "config-room-setups" %></a>
+        </li>
+        <li>
+          <a href="#data_sources_config"><%= t "data-sources" %></a>
+        </li>
+        <li>
+          <a href="#email_config"><%= t "email-addresses" %></a>
+        </li>
+        <% @extra_system_config_menu.each do |extra| %>
+          <%= render extra %>
+        <% end %>
+      </ul>
     </div>
-    <div class="col-xs-10">
-        <div id='config-area'></div>
-    </div>
+  </div>
+  <div class="col-xs-10">
+    <div id='config-area'></div>
+  </div>
 </div>
 
