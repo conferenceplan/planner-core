@@ -80,10 +80,10 @@ Gem::Specification.new do |s|
   s.add_dependency 'globalize'
   s.add_dependency 'globalize-accessors'
 
-  s.add_development_dependency  'capybara', '2.3.0'
-  s.add_development_dependency  'database_cleaner', '1.5.1'
-  s.add_development_dependency  'factory_girl_rails', '4.5.0'
-  s.add_development_dependency 'capybara-webkit', '1.7.0'
-  s.add_development_dependency 'rspec-rails', '~> 3.0'
-  s.add_development_dependency 'shoulda-matchers', '2.8'
+  s.add_development_dependency  'capybara'# , '2.3.0'
+  s.add_development_dependency  'database_cleaner'# , '1.5.1'
+  s.add_development_dependency  'factory_girl_rails'# , '4.5.0'
+  s.add_development_dependency 'capybara-webkit'# , '1.7.0'
+  s.add_development_dependency 'rspec-rails'# , '~> 3.0'
+  s.add_development_dependency 'shoulda-matchers'# , '2.8'
 end
