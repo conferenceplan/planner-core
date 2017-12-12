@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="form-group"  style="margin-left: 0; margin-right: 0;">
                     <div class="col-sm-2">
-                        <%= form.label (t 'first-name'), nil ,:class => "control-label" %>
+                        <%= form.label 'first_name', (t 'first-name'), :class => "control-label" %>
                         <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="Enter your first name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed."></i>
                     </div>
                     <div class="col-sm-4">
@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="form-group"  style="margin-left: 0; margin-right: 0;">
                     <div class="col-sm-2">
-                        <%= form.label (t 'last-name'), nil ,:class => "control-label" %>
+                        <%= form.label 'last_name', (t 'last-name'), :class => "control-label" %>
                         <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="Enter your last name as it appears in your invitation e-mail. You can change this in the questionnaire itself if needed."></i>
                     </div>
                     <div class="col-sm-4">
@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="form-group"  style="margin-left: 0; margin-right: 0;">
                     <div class="col-sm-2">
-                        <%= form.label (t 'invitation-code'), nil ,:class => "control-label" %>
+                        <%= form.label 'key', (t 'invitation-code'), :class => "control-label" %>
                         <i class="glyphicon glyphicon-info-sign bpopover" data-placement="top" data-toggle="popover" data-content="Enter the invitation code as it appears in your invitation e-mail. If the mail did not include an invitation code or if the invitation code did not work, write to <%= @ourEmail %> so we can send you the correct code."></i>
                     </div>
                     <div class="col-sm-2">
