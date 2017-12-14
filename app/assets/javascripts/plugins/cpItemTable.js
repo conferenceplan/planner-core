@@ -13,7 +13,7 @@ $.widget( "cp.itemTable", $.cp.baseTable , {
             label: this.options.title[1],
             hidden : !this.options.title[0],
             name: 'item[title]',
-            index: 'programme_items.title',
+            index: 'programme_item_translations.title',
             width: 400,
             searchoptions : {
                 clearSearch : false
