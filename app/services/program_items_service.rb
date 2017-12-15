@@ -173,7 +173,7 @@ module ProgramItemsService
     name_query = nil
     if nameSearch
       # TODO: would be nice to be able to search all the translations
-      st = DataService.getFilterData(filters, 'programme_items.title')
+      st = DataService.getFilterData(filters, 'programme_item_translations.title')
       name_query = programme_item_trans[:title].matches("%#{st}%").to_sql
     end
 
@@ -358,9 +358,12 @@ module ProgramItemsService
 protected
 
   def self.where_clause(nameSearch, filters, extraClause, theme_ids, ignoreScheduled, include_children, page_to = nil)
-    clause = DataService.createWhereClause(filters, 
-                  ['programme_items.format_id','programme_items.pub_reference_number'],
-                  ['programme_items.format_id','programme_items.pub_reference_number'], ['programme_items.title'])
+    clause = DataService.createWhereClause(
+      filters, 
+      ['programme_items.format_id','programme_items.pub_reference_number'],
+      ['programme_items.format_id','programme_items.pub_reference_number'],
+      ['programme_item_translations.title']
+     )
 
     if ignoreScheduled
       clause = DataService.addClause( clause, 'room_item_assignments.programme_item_id is null', nil )
