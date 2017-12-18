@@ -2,7 +2,6 @@ class Person < ActiveRecord::Base
   attr_accessible :lock_version, :first_name, :last_name, :suffix, :language,
                   :comments, :company, :job_title,
                   :pseudonym_attributes,
-                  :acceptance_status_id, :invitestatus_id, :invitation_category_id,
                   :postal_addresses_attributes, :email_addresses_attributes,
                   :phone_numbers_attributes, :registrationDetail_attributes,
                   :prefix, :person_con_state_attributes
