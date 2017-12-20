@@ -156,7 +156,7 @@ module MailService
         end
         assignments = mailing.mail_template ? ProgramItemsService.findProgramItemsForPerson(person) : nil
         respondentDetails = person.survey_respondent
-        key = respondentDetails ? respondentDetails.key : generateSurveyKey(person) # get the key (or generate it)
+        key = (respondentDetails && !respondentDetails.key.blank?) ? respondentDetails.key : generateSurveyKey(person) # get the key (or generate it)
         survey = (mailing.mail_template && mailing.mail_template.survey) ? mailing.mail_template.survey : nil
         
         content = generateEmailContent(template, {
@@ -166,7 +166,11 @@ module MailService
                 :survey_url         => (base_url && survey) ? (base_url + '/form/' + survey.alias) : '',
                 :respondentDetails  => person.survey_respondent,
                 :assignments        => assignments
-              })
+              }, {
+                title: template.subject.blank? ? template.title : template.subject,
+                batch: mailing.mailing_number.to_s 
+                # add in organization and conference?
+                })
     
         begin
           subject = template.subject
@@ -351,8 +355,49 @@ protected
   #
   # Given an email template and a set of argument generate the body for the email
   #
-  def self.generateEmailContent(template, args)
-    return ERB.new(template.content, 0, "%<>").result(binding) # pass in a context with the parameters i.e. ruby binding
+  def self.generateEmailContent(template, args, tracker_opts = nil)
+    return ERB.new(
+      add_trackers(template.content, tracker_opts),
+      0, "%<>"
+    ).result(binding) # pass in a context with the parameters i.e. ruby binding
+  end
+  
+  def self.tracker_template
+    %w(
+      <p>
+        <img 
+        src="https://www.google-analytics.com/collect?
+        v=1&
+        tid=%<ua_code>s&
+        cid=%<batch_id>s&
+        t=event&
+        ec=email&
+        ea=open&
+        el=openemail&
+        cs=grenadine-mail&
+        cm=email&
+        cn=%<campaign_title>s&
+        cm1=1"
+        />
+      </p>
+    ).join('')
+  end
+  
+  def self.add_trackers(content, tracker_opts = nil)
+    gr_tracker = ENV['GR_GOOGLE_ANALYTICS']
+    content if !tracker_opts && gr_tracker
+
+    batch_id = tracker_opts[:batch]
+    campaign_title = tracker_opts[:title]
+
+    tracker = format(
+      tracker_template,
+      batch_id: batch_id,
+      campaign_title: campaign_title,
+      ua_code: gr_tracker
+    )
+    
+    content + tracker
   end
   
 end
