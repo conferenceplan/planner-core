@@ -10,9 +10,15 @@ json.first_name person.first_name
 json.last_name person.last_name
 json.suffix person.suffix
 json.pseudonym person.pseudonym
-json.acceptance_status_id person.acceptance_status_id
-json.invitation_category_id person.invitation_category_id
-json.acceptance_status_id person.acceptance_status_id
+if person.person_con_state
+  json.acceptance_status_id person.person_con_state.acceptance_status_id
+  json.invitestatus_id person.person_con_state.invitestatus_id
+  json.invitation_category_id person.person_con_state.invitation_category_id
+else
+  json.acceptance_status_id nil
+  json.invitestatus_id nil
+  json.invitation_category_id nil
+end
 json.company person.company if person.company
 json.job_title person.job_title if person.job_title
 json.bio_image person_img_url(person, default_img: default_img)
