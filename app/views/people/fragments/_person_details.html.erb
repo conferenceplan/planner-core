@@ -2,7 +2,6 @@
   <div class='line'>Last Name: <%= @person.last_name %></div>
   <div class='line'>Survey Key: <%= @person.survey_respondent.key if @person.survey_respondent %></div>
   <div class='line'>Invitation Status: <%= @person.invitestatus.name if @person.invitestatus %></div>
-  <div class='line'>Mailing Number: <%= @person.mailing_number %></div>
   <div class='line'>Acceptance Status: <%= @person.acceptance_status.name if @person.acceptance_status%></div>
   <div class='line'>Invitation Category: <%= @person.invitation_category.name if @person.invitation_category%></div>
   <div class='line'>Survey?: <%if SurveyService.personAnsweredSurvey( @person, 'partsurvey') %>

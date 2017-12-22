@@ -8,7 +8,6 @@ xml.rows do
       xml.cell(person.last_name)
       xml.cell(person.suffix)
       # For precis view we do not need the following 
-      xml.cell(person.mailing_number)
       person.invitestatus ? xml.cell(person.invitestatus.name) : xml.cell("")
       person.invitation_category ? xml.cell(person.invitation_category.name) : xml.cell("")
       person.acceptance_status ? xml.cell(person.acceptance_status.name) : xml.cell("")
