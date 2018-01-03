@@ -11,7 +11,7 @@ module Planner
                          :human_time, :person_img_url, :current_user, :org_info_email,
                          :current_event, :current_event?, :custom_google_analytics_code,
                          :custom_google_analytics_code?, :site_languages,
-                         :image_url
+                         :image_url, :sites_user_logged_in?
     end
 
     def site_languages
@@ -184,10 +184,15 @@ module Planner
     def current_identity
       nil
     end
+
     def current_attendee
       nil
     end
-    
+
+    def sites_user_logged_in?
+      false
+    end
+
     def request_path
       basepath = request.fullpath
       if basepath.include? baseUri(secure_url: true, path_only: true)
