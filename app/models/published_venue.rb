@@ -2,10 +2,7 @@
 #
 #
 class PublishedVenue < ActiveRecord::Base
-  translates :name,
-             touch: true,
-             fallbacks_for_empty_translations: true
-  globalize_accessors locales: UISettingsService.getAllowedLanguages
+  attr_accessible :lock_version, :name
 
   default_scope {order('published_venues.sort_order asc, published_venues.name asc')}
 
