@@ -1,7 +1,7 @@
 #
 #
 #
-class RoomsController < ResourceController
+class RoomsController < PlannerController
 
   #
   #
@@ -125,20 +125,20 @@ class RoomsController < ResourceController
   #
   #
   #
-  # def update
+  def update
 
-  #   begin
-  #     Room.transaction do
+    begin
+      Room.transaction do
 
-  #       @room = Room.find(params[:id])
-  #       @room.update_attributes(params[:room])
+        @room = Room.find(params[:id])
+        @room.update_attributes(params[:room])
 
-  #     end
-  #   rescue => ex
-  #     render status: :bad_request, text: ex.message
-  #   end
+      end
+    rescue => ex
+      render status: :bad_request, text: ex.message
+    end
 
-  # end
+  end
 
   #
   #
