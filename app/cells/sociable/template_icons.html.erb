@@ -1,43 +1,42 @@
 {{ if (has_social_media) { }}
   <div class="social-media-container">
     {{ if (typeof facebook_url != "undefined") { }}
-      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon facebook fa-stack
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon facebook fa-layers fa-2x
       {{ if (facebook_url && facebook_url.trim().length > 0) { }} active"  href="{{= facebook_url }}" title="Facebook: {{= facebookid }}" target="facebook"
       {{ } else { }} disabled" title="Facebook: <%= t('value-not-set') %>"{{ } }}>
-          <i class="fa fa-square fa-stack-2x"></i>
-          <i class="fa fa-facebook fa-stack-1x" style="color: white;"></i>
+          <i class="fa fa-square"></i>
+          <i class="fa fa-facebook" style="color: white;" data-fa-transform="shrink-6"></i>
       </a>
     {{ } }}
     {{ if (typeof twitter_url != "undefined") { }}
-      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon twitter fa-stack
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon twitter fa-layers fa-2x
       {{ if (twitter_url && twitter_url.trim().length > 0) { }} active" href="{{= twitter_url }}" title="Twitter: @{{= twitterid }}" target="twitter"
       {{ } else { }} disabled" title="Twitter: <%= t('value-not-set') %>"{{ } }}>
-          <i class="fa fa-square fa-stack-2x"></i>
-          <i class="fa fa-twitter fa-stack-1x" style="color: white;"></i>
+          <i class="fa fa-square"></i>
+          <i class="fa fa-twitter" style="color: white;" data-fa-transform="shrink-6"></i>
       </a>
     {{ } }}
     {{ if (typeof linkedin_url != "undefined") { }}
-      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon linkedin fa-stack
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon linkedin fa-layers fa-2x
       {{ if (linkedin_url && linkedin_url.trim().length > 0) { }} active" href="{{= linkedin_url }}" title="LinkedIn: {{= linkedinid }}" target="linkedin"
       {{ } else { }} disabled" title="LinkedIn: <%= t('value-not-set') %>"{{ } }}>
-          <i class="fa fa-square fa-stack-2x"></i>
-          <i class="fa fa-linkedin fa-stack-1x" style="color: white;"></i>
+          <i class="fa fa-square"></i>
+          <i class="fa fa-linkedin" style="color: white;" data-fa-transform="shrink-6"></i>
       </a>
     {{ } }}
     {{ if (typeof youtube_url != "undefined") { }}
-      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon youtube fa-stack
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon youtube
       {{ if (youtube_url && youtube_url.trim().length > 0) { }} active" href="{{= youtube_url }}" title="Youtube: {{= youtubeid }}" target="youtube"
       {{ } else { }} disabled" title="Youtube: <%= t('value-not-set') %>"{{ } }}>
-          <i class="fa fa-square fa-stack-2x"></i>
-          <i class="fa fa-youtube-play fa-stack-1x" style="color: white;"></i>
+        <i class="fab fa-youtube-square fa-2x"></i>
       </a>
     {{ } }}
     {{ if (typeof twitch_url != "undefined") { }}
-      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon twitch fa-stack
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon twitch fa-layers fa-2x
       {{ if (twitch_url && twitch_url.trim().length > 0) { }} active" target="twitch" href="{{= twitch_url }}" title="Twitch: {{= twitchid }}"
       {{ } else { }} disabled" title="Twitch: <%= t('value-not-set') %>"{{ } }}>
-          <i class="fa fa-square fa-stack-2x"></i>
-          <i class="fa fa-twitch fa-stack-1x" style="color: white;"></i>
+          <i class="fa fa-square"></i>
+          <i class="fa fa-twitch" style="color: white;" data-fa-transform="shrink-6"></i>
       </a>
     {{ } }}
     {{ if (typeof instagram_url != "undefined") { }}
@@ -49,31 +48,31 @@
     {{ if (typeof flickr_url != "undefined") { }}
       <a data-toggle="tooltip" data-placement="bottom" data-container="body" style="margin-left: 3px;" class="gr-social-icon flickr fa fa-flickr fa-2x
       {{ if (flickr_url && flickr.trim().length > 0) { }} active" target="flickr" href="{{= flickr_url }}" title="Flickr: {{= flickrid }}"
-      {{ } else { }} disabled" title="Instagram: <%= t('value-not-set') %>"{{ } }}>
+      {{ } else { }} disabled" title="Flickr: <%= t('value-not-set') %>"{{ } }}>
       </a>
     {{ } }}
     {{ if (typeof reddit_url != "undefined") { }}
-      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon reddit fa-stack
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon reddit fa-layers fa-2x
       {{ if (reddit_url && reddit_url.trim().length > 0) { }} active" target="reddit" href="{{= reddit_url }}" title="Reddit: {{= redditid }}"
       {{ } else { }} disabled" title="Reddit: <%= t('value-not-set') %>"{{ } }}>
-          <i class="fa fa-square fa-stack-2x"></i>
-          <i class="fa fa-reddit-alien fa-stack-1x" style="color: white;"></i>
+          <i class="fa fa-square"></i>
+          <i class="fa fa-reddit-alien" style="color: white;" data-fa-transform="shrink-6"></i>
       </a>
     {{ } }}
     {{ if (typeof website_url != "undefined") { }}
-      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon website fa-stack
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon website fa-layers fa-2x
       {{ if (website_url && website_url.trim().length > 0) { }} active" target="website" href="{{= website_url }}" title="{{= website_url }}"
       {{ } else { }} disabled" title="<%= t('value-not-set') %>"{{ } }}>
-          <i class="fa fa-square fa-stack-2x"></i>
-          <i class="fa fa-globe fa-stack-1x" style="color: white;"></i>
+          <i class="fa fa-square"></i>
+          <i class="fa fa-globe" style="color: white;" data-fa-transform="shrink-6"></i>
       </a>
     {{ } }}
     {{ if (typeof othersocialmedia_url != "undefined") { }}
-      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon other-social fa-stack
+      <a data-toggle="tooltip" data-placement="bottom" data-container="body" class="gr-social-icon other-social fa-layers fa-2x
       {{ if (othersocialmedia_url && othersocialmedia_url.trim().length > 0) { }} active" target="othersocialmedia" href="{{= othersocialmedia_url }}" title="{{= othersocialmedia_url }}"
       {{ } else { }} disabled" title="<%= t('value-not-set') %>"{{ } }}>
-          <i class="fa fa-square fa-stack-2x"></i>
-          <i class="fa fa-link fa-stack-1x" style="color: white;"></i>
+          <i class="fa fa-square"></i>
+          <i class="fa fa-link" style="color: white;" data-fa-transform="shrink-6"></i>
       </a>
     {{ } }}
   </div>
