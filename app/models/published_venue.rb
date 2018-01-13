@@ -7,7 +7,7 @@ class PublishedVenue < ActiveRecord::Base
              fallbacks_for_empty_translations: true
   globalize_accessors locales: UISettingsService.getAllowedLanguages
 
-  default_scope {order('published_venues.sort_order asc, published_venues.name asc')}
+  default_scope {order('published_venues.sort_order asc')}
 
   audited :allow_mass_assignment => true
   has_many  :published_rooms #, :class_name => 'Published::Room'
