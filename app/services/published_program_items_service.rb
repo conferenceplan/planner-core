@@ -67,7 +67,7 @@ module PublishedProgramItemsService
             where(visibility_conditions).
             includes([:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}]).
             references([:published_venue, {:published_room_item_assignments => [:published_time_slot, {:published_programme_item => {:people => :pseudonym}}]}]).
-            distinct("published_rooms.name").
+            distinct("published_rooms.id").
             order('published_venues.sort_order, published_rooms.sort_order')
     end
     
