@@ -93,8 +93,8 @@ class PlannerReportsController < PlannerController
           output.push [
                 assignment.person.getFullPublicationName,
                 assignment.person.company,
-                (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%A'),
-                (Time.zone.parse(SiteConfig.first.start_date.to_s) + assignment.day.day).strftime('%d %b %Y'),
+                (Time.zone.parse(SiteConfig.first.start_date.beginning_of_day.to_s) + assignment.day.day).strftime('%A'),
+                (Time.zone.parse(SiteConfig.first.start_date.beginning_of_day.to_s) + assignment.day.day).strftime('%d %b %Y'),
                 assignment.nbr_items,
                 (assignment.max_items_per_day ? assignment.max_items_per_day : ''),
                 (assignment.max_items_per_con ? assignment.max_items_per_con : ''),

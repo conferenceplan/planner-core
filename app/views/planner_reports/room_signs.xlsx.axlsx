@@ -3,7 +3,7 @@ wb = xlsx_package.workbook
 
 days = @day ? [@day] : (0..((SiteConfig.first.number_of_days).to_i-1)).to_a
 days.each do |day| # For each day ...
-    wb.add_worksheet(name: "Room Signs - " + (Time.zone.parse(SiteConfig.first.start_date.to_s) + day.days).strftime('%A')) do |sheet|
+    wb.add_worksheet(name: "Room Signs - " + (Time.zone.parse(SiteConfig.first.start_date.beginning_of_day.to_s) + day.days).strftime('%A')) do |sheet|
         @rooms.each do |room|
             row = []
             row << room.name + ' - ' + room.published_venue.name
