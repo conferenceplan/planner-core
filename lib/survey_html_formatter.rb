@@ -265,8 +265,8 @@ module SurveyHtmlFormatter
       elsif response.response1
         content += '<div class="response_answer"><pre>'
         if SiteConfig.first
-          content += 'From: <em>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + response.response1.to_i.day).strftime('%A, %B %e') + ' at ' + response.response2 + '</em><br/>'
-          content += 'To: <em>' + (Time.zone.parse(SiteConfig.first.start_date.to_s) + response.response3.to_i.day).strftime('%A, %B %e') + ' at ' + response.response4 + '</em><br/>'
+          content += 'From: <em>' + (Time.zone.parse(SiteConfig.first.start_date.beginning_of_day.to_s) + response.response1.to_i.day).strftime('%A, %B %e') + ' at ' + response.response2 + '</em><br/>'
+          content += 'To: <em>' + (Time.zone.parse(SiteConfig.first.start_date.beginning_of_day.to_s) + response.response3.to_i.day).strftime('%A, %B %e') + ' at ' + response.response4 + '</em><br/>'
         end
           content += '</pre></div>'
       elsif response.response5

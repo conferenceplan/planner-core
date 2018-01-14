@@ -120,7 +120,7 @@ class ProgrammeItemsController < PlannerController
     # NOTE - name of the programmeItem passed in from form
     startTime = (params[:start_time] && params[:start_time].to_datetime) ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
     startDay = -1
-    startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
+    startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.beginning_of_day.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
     parent_id = params[:parent_id]
 
@@ -160,7 +160,7 @@ class ProgrammeItemsController < PlannerController
     @extra_item_json = [] if ! @extra_item_json
     startTime = (params[:start_time] && params[:start_time].to_datetime) ? (params[:start_time].to_datetime + zone_delta(params[:start_time].to_datetime)) : nil
     startDay = -1
-    startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.to_s).to_datetime).to_i if startTime
+    startDay = (startTime - Time.zone.parse(SiteConfig.first.start_date.beginning_of_day.to_s).to_datetime).to_i if startTime
     roomId = params[:room_id]
     parent_id = params[:parent_id]
     

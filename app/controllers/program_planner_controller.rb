@@ -12,29 +12,29 @@ class ProgramPlannerController < PlannerController
                           references(:venue).
                           includes(:venue).
                           where(["rooms.id in (?)", rooms]).
-                          order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+                          order('venues.sort_order asc, rooms.sort_order asc')
       else  
         @roomListing = Room.unscoped.
                           references(:venue).
                           includes(:venue).
                           where(["rooms.id in (?)", rooms]).
-                          order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+                          order('venues.sort_order asc, rooms.sort_order asc')
       end
     else
       if where_clause
         @roomListing = Room.unscoped.where(where_clause).
                           references(:venue).
                           includes(:venue).
-                          order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+                          order('venues.sort_order asc, rooms.sort_order asc')
       else
         @roomListing = Room.unscoped.
                           references(:venue).
                           includes(:venue).
-                          order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+                          order('venues.sort_order asc, rooms.sort_order asc')
       end
     end
     site_config = SiteConfig.first
-    @currentDate = Time.zone.parse(site_config.start_date.to_s) + @day.to_i.day
+    @currentDate = Time.zone.parse(site_config.start_date.beginning_of_day.to_s) + @day.to_i.day
   end
 
   #
