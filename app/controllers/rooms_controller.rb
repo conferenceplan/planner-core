@@ -36,7 +36,7 @@ class RoomsController < PlannerController
   #
   #
   def index
-    rooms = Room.unscoped.includes(:venue).order('venues.sort_order asc, venues.name asc, rooms.sort_order asc, rooms.name asc')
+    rooms = Room.unscoped.includes(:venue).order('venues.sort_order asc, rooms.sort_order asc')
 
     render json: rooms.to_json, :content_type => 'application/json'
   end
@@ -155,11 +155,12 @@ class RoomsController < PlannerController
 
   def for_select2
     query = nil
-    if params[:search].present?
-      query = "rooms.name like '%" + params[:search].strip + "%'"
-    end
+    # Will not work since rooms do not have names, translations needed
+    # if params[:search].present?
+    #   query = "rooms.name like '%" + params[:search].strip + "%'"
+    # end
 
-    @grouped_rooms = Room.joins(:venue).where(query).reorder('venues.sort_order asc, rooms.sort_order asc, rooms.name asc').group_by(&:venue)
+    @grouped_rooms = Room.joins(:venue).where(query).reorder('venues.sort_order asc, rooms.sort_order asc').group_by(&:venue)
   end
 
 end
