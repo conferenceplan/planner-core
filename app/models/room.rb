@@ -6,7 +6,7 @@ class Room < ActiveRecord::Base
   include RankedModel
   ranks :sort_order, :with_same => :venue_id 
   
-  default_scope {order('rooms.sort_order asc, rooms.name asc')}
+  default_scope {order('rooms.sort_order asc')}
   
   belongs_to  :venue
   

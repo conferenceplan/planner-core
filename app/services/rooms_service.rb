@@ -39,7 +39,7 @@ module RoomsService
   def self.where_clause(filters, venue_id= nil, page_to = nil)
     clause = DataService.createWhereClause(filters)
     
-    clause = DataService.addClause( clause, 'rooms.name <= ?', page_to) if page_to
+    # clause = DataService.addClause( clause, 'rooms.name <= ?', page_to) if page_to
     clause = DataService.addClause( clause, 'rooms.venue_id = ?', venue_id) if venue_id
     
     clause

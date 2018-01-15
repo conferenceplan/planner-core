@@ -729,7 +729,7 @@ class PlannerReportsController < PlannerController
 
     TimeSlot.uncached do
       @times = PlannerReportsService.findProgramItemsByTimeAndRoom # TODO - need to fix
-      @rooms = Room.all.includes(:venue).references(:venue).distinct('rooms.name').order('venues.sort_order, rooms.sort_order')
+      @rooms = Room.all.includes(:venue).references(:venue).distinct('rooms.id').order('venues.sort_order, rooms.sort_order')
       
       respond_to do |format|
         format.xml {
