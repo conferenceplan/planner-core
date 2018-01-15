@@ -7,7 +7,7 @@ module RoomsService
   #
   #
   def self.findPublishedRooms
-    PublishedRoom.all.order('name')
+    PublishedRoom.all
   end
   
   #
