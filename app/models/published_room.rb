@@ -2,16 +2,12 @@
 #
 #
 class PublishedRoom < ActiveRecord::Base
-  translates :name,
-             touch: true,
-             fallbacks_for_empty_translations: true
-  globalize_accessors locales: UISettingsService.getAllowedLanguages
+  attr_accessible :lock_version, :name, :published_venue_id
 
   default_scope {order('published_rooms.sort_order asc')}
   
   audited :allow_mass_assignment => true
   belongs_to  :published_venue
-  
   has_many :published_room_item_assignments do
     def day(d) # get the room item assignments for the given day if the day parameter is used
       where(['day = ?', d]).joins(:published_time_slot).order('published_time_slots.start asc')

@@ -8,7 +8,7 @@ xml.room_signs do
             xml.room do
                 xml.room_name room.name
                 xml.venue room.published_venue.name if room.published_venue
-                xml.day (Time.zone.parse(SiteConfig.first.start_date.to_s) + day.days).strftime('%A')
+                xml.day (Time.zone.parse(SiteConfig.first.start_date.beginning_of_day.to_s) + day.days).strftime('%A')
                 xml.items do
                     room.published_room_item_assignments.day(day).each do |assignment|
                         xml.item do
