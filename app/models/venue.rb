@@ -4,7 +4,7 @@ class Venue < ActiveRecord::Base
   include RankedModel
   ranks :sort_order
 
-  default_scope {order('venues.sort_order asc, venues.name asc')}
+  default_scope {order('venues.sort_order asc')}
   
   has_many  :rooms, :dependent => :destroy
   validates_presence_of :name
