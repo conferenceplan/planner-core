@@ -326,7 +326,9 @@ ItemApp.PeopleManagement = (function(Backbone){
                 url: current_url,
                 dataType: 'JSON',
                 data: JSON.stringify(programme_item_assignments),
-                success : function() {
+                success : function(data) {
+                  $('#item-assignment-mgmt').find('.save-button').prop('disabled', true);
+                  $('#people-control-view').find('.add-people-button').prop('disabled', true);
                     // Force a reload of the models etc....
                     clear_and_refresh(moderators,
                         function() {
@@ -338,6 +340,8 @@ ItemApp.PeopleManagement = (function(Backbone){
                                         function() {
                                             clear_and_refresh(other_participants, 
                                                 function() {
+                                                  $('#item-assignment-mgmt').find('.save-button').prop('disabled', false);
+                                                  $('#people-control-view').find('.add-people-button').prop('disabled', false);
                                                     if (callback) {
                                                         callback();
                                                     }
