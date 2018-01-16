@@ -13,13 +13,14 @@ class ProgrammeItemAssignmentsController < PlannerController
 
   #
   #
-  #  
+  #
   def update
-    item = ProgrammeItem.find(params[:item_id])
-    _assignments = params[:programme_item_assignments] # json rep of the assignments to update etc
-    assignments = []
-    if _assignments
-      assignments = _assignments.map{|a|
+    ProgrammeItem.transaction do
+      item = ProgrammeItem.find(params[:item_id])
+      _assignments = params[:programme_item_assignments] # json rep of the assignments to update etc
+      assignments = []
+      if _assignments
+        assignments = _assignments.map{|a|
           assignment = nil
           if (a["id"])
             assignment = ProgrammeItemAssignment.find(a["id"].to_i)
@@ -30,13 +31,13 @@ class ProgrammeItemAssignmentsController < PlannerController
 
           assignment
         }
+      end
+
+      item.update_assignments assignments #, role_id
+      item.reload
+
+      @programme_item_assignments = item.programme_item_assignments.rank(:sort_order).includes({:person => :pseudonym})
     end
-    
-    item.update_assignments assignments #, role_id
-    item.reload
-
-    @programme_item_assignments = item.programme_item_assignments.rank(:sort_order).includes({:person => :pseudonym})
-
   rescue => ex
     render status: :bad_request, text: ex.message
   end
