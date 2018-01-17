@@ -453,13 +453,13 @@ protected
     programme_item_trans_alias = programme_item_trans.alias
     
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'), 
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
       items[:id].as('item_id'),
       programme_item_trans[:title].as('item_name'), # TODO
       assignments[:role_id].as('item_role'), 
       time_slots[:start].as('item_start'),
-      rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
+      rooms_alias[:id].as('conflict_room_id'), #rooms_alias[:name].as('conflict_room_name'), 
       items_alias[:id].as('conflict_item_id'), 
       programme_item_trans_alias[:title].as('conflict_item_title'), #  TODO
       assignments_alias[:role_id].as('conflict_item_role'), time_slots_alias[:start].as('conflict_start')
@@ -545,14 +545,14 @@ protected
     programme_item_trans_alias = programme_item_trans.alias
 
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'), 
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
       items[:id].as('item_id'), 
       programme_item_trans[:title].as('item_name'), # TODO
       assignments[:role_id].as('item_role'), 
       time_slots[:start].as('item_start'),
       rooms_alias[:id].as('conflict_room_id'), 
-      rooms_alias[:name].as('conflict_room_name'), 
+      # rooms_alias[:name].as('conflict_room_name'), 
       items_alias[:id].as('conflict_item_id'), 
       programme_item_trans_alias[:title].as('conflict_item_title'), # TODO
       assignments_alias[:role_id].as('conflict_item_role'), time_slots_alias[:start].as('conflict_start')
@@ -633,13 +633,13 @@ protected
     programme_item_trans_alias = programme_item_trans.alias
     
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'), 
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
       items[:id].as('item_id'), 
       programme_item_trans[:title].as('item_name'), # TODO
       assignments[:role_id].as('item_role'), 
       time_slots[:start].as('item_start'),
-      rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
+      rooms_alias[:id].as('conflict_room_id'), #rooms_alias[:name].as('conflict_room_name'), 
       items_alias[:id].as('conflict_item_id'), 
       programme_item_trans_alias[:title].as('conflict_item_title'), # TODO
       assignments_alias[:role_id].as('conflict_item_role'), time_slots_alias[:start].as('conflict_start')
@@ -712,7 +712,7 @@ protected
     programme_item_trans_alias = programme_item_trans.alias
 
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'), 
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'), 
       items[:id].as('item_id'), 
       programme_item_trans[:title].as('item_name'), # TODO
       time_slots[:start].as('item_start'),
@@ -797,7 +797,7 @@ protected
 
     assignment_attrs = [
       rooms[:id].as('room_id'),
-      rooms[:name].as('room_name'), 
+      # rooms[:name].as('room_name'), 
       people[:id].as('person_id'),
       people[:first_name].as('person_first_name'),
       people[:last_name].as('person_last_name'),
@@ -805,7 +805,7 @@ protected
       programme_item_trans[:title].as('item_name'), # TODO - locale based or def is there is no data
       time_slots[:start].as('item_start'),
       rooms_alias[:id].as('conflict_room_id'),
-      rooms_alias[:name].as('conflict_room_name'), 
+      # rooms_alias[:name].as('conflict_room_name'), 
       items_alias[:id].as('conflict_item_id'),
       programme_item_trans_alias[:title].as('conflict_item_title'), # TODO - locale based or def is there is no data
       assignments_alias[:role_id].as('item_role'),
@@ -891,7 +891,7 @@ protected
 
     assignment_attrs = [
       rooms[:id].as('room_id'), 
-      rooms[:name].as('room_name'), 
+      # rooms[:name].as('room_name'), 
       people[:id].as('person_id'), 
       people[:first_name].as('person_first_name'), 
       people[:last_name].as('person_last_name'),
@@ -899,7 +899,7 @@ protected
       programme_item_trans[:title].as('item_name'), # TODO
       time_slots[:start].as('item_start'),
       rooms_alias[:id].as('conflict_room_id'), 
-      rooms_alias[:name].as('conflict_room_name'), 
+      # rooms_alias[:name].as('conflict_room_name'), 
       items_alias[:id].as('conflict_item_id'), 
       programme_item_trans_alias[:title].as('conflict_item_title'), # TODO
       assignments_alias[:role_id].as('item_role'), 
@@ -976,7 +976,7 @@ protected
     programme_item_trans = Arel::Table.new(:programme_item_translations)
 
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'),
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
       programme_items[:id].as('item_id'), 
       programme_item_trans[:title].as('item_name'), # TODO
@@ -1050,7 +1050,7 @@ protected
     programme_item_trans = Arel::Table.new(:programme_item_translations)
 
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'),
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
       programme_items[:id].as('item_id'), 
       programme_item_trans[:title].as('item_name'), # TODO
@@ -1125,7 +1125,7 @@ protected
     programme_item_trans = Arel::Table.new(:programme_item_translations)
 
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'),
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
       programme_items[:id].as('item_id'), 
       programme_item_trans[:title].as('item_name'), # TODO
@@ -1190,7 +1190,7 @@ protected
     children = programme_items.alias('children_items')
 
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'),
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
       programme_items[:id].as('item_id'), 
       programme_item_trans[:title].as('item_name'), # TODO
@@ -1271,12 +1271,12 @@ protected
     margin = SiteConfig.first ? SiteConfig.first.back2back_margin : 30
 
     assignment_attrs = [
-      rooms[:id].as('room_id'), rooms[:name].as('room_name'),
+      rooms[:id].as('room_id'), #rooms[:name].as('room_name'),
       people[:id].as('person_id'), people[:first_name].as('person_first_name'), people[:last_name].as('person_last_name'),
       programme_items[:id].as('item_id'), 
       programme_item_trans[:title].as('item_name'), # TODO
       time_slots[:start].as('item_start'),
-      rooms_alias[:id].as('conflict_room_id'), rooms_alias[:name].as('conflict_room_name'), 
+      rooms_alias[:id].as('conflict_room_id'), #rooms_alias[:name].as('conflict_room_name'), 
       programme_items_alias[:id].as('conflict_item_id'), 
       programme_item_trans_alias[:title].as('conflict_item_title'), 
       time_slots_alias[:start].as('conflict_start'),

@@ -4,7 +4,7 @@
 json.schedule @conflicts do |conflict|
     json.room_id                conflict['room_id']
     json.type                   :schedule
-    json.room_name              conflict['room_name']
+    json.room_name              Room.find(conflict['room_id']).name
     json.person_id              conflict['person_id']
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
     json.item_id                conflict['item_id']
@@ -12,7 +12,7 @@ json.schedule @conflicts do |conflict|
     json.item_role              PersonItemRole.find(conflict['item_role'].to_i).name
     json.item_start             Time.zone.parse( conflict['item_start'].to_s )
     json.conflict_room_id       conflict['conflict_room_id']
-    json.conflict_room_name     conflict['conflict_room_name']
+    json.conflict_room_name     Room.find(conflict['conflict_room_id']).name
     json.conflict_item_id       conflict['conflict_item_id']
     json.conflict_item_title    conflict['conflict_item_title']
     json.conflict_item_role     PersonItemRole.find(conflict['conflict_item_role'].to_i).name
@@ -26,7 +26,7 @@ end
 json.room @roomConflicts do |conflict|
     json.room_id                conflict['room_id']
     json.type                   :room
-    json.room_name              conflict['room_name']
+    json.room_name              Room.find(conflict['room_id']).name
     json.item_id                conflict['item_id']
     json.item_title             conflict['item_name']
     json.conflict_item_id       conflict['conflict_item_id']
@@ -45,13 +45,13 @@ json.excluded_item @excludedItemConflicts do |conflict|
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
     
     json.room_id                conflict['conflict_room_id']
-    json.room_name              conflict['conflict_room_name']
+    json.room_name              Room.find(conflict['conflict_room_id']).name
     json.item_id                conflict['conflict_item_id']
     json.item_title             conflict['conflict_item_title']
     json.item_start             Time.zone.parse( conflict['conflict_start'].to_s )
     
     json.conflict_room_id       conflict['room_id']
-    json.conflict_room_name     conflict['room_name']
+    json.conflict_room_name     Room.find(conflict['room_id']).name
     json.conflict_item_id       conflict['item_id']
     json.conflict_item_title    conflict['item_name']
     json.conflict_start         Time.zone.parse( conflict['item_start'].to_s )
@@ -66,7 +66,7 @@ end
 json.excluded_time @excludedTimeConflicts do |conflict|
     json.room_id                conflict['room_id']
     json.type                   :time
-    json.room_name              conflict['room_name']
+    json.room_name              Room.find(conflict['room_id']).name
     json.person_id              conflict['person_id']
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
     json.item_id                conflict['item_id']
@@ -85,7 +85,7 @@ end
 json.availability @availableTimeConflicts do |conflict|
     json.room_id                conflict['room_id']
     json.type                   :avail
-    json.room_name              conflict['room_name']
+    json.room_name              Room.find(conflict['room_id']).name
     json.person_id              conflict['person_id']
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
     json.item_id                conflict['item_id']
@@ -104,14 +104,14 @@ end
 json.back_to_back @backtobackConflicts do |conflict|
     json.room_id                conflict['room_id']
     json.type                   :back2back
-    json.room_name              conflict['room_name']
+    json.room_name              Room.find(conflict['room_id']).name
     json.person_id              conflict['person_id']
     json.person_name            conflict['person_first_name'] + ' ' + conflict['person_last_name']
     json.item_id                conflict['item_id']
     json.item_title             conflict['item_name']
     json.item_start             Time.zone.parse( conflict['item_start'].to_s )
     json.conflict_room_id       conflict['conflict_room_id']
-    json.conflict_room_name     conflict['conflict_room_name']
+    json.conflict_room_name     Room.find(conflict['conflict_room_id']).name
     json.conflict_item_id       conflict['conflict_item_id']
     json.conflict_item_title    conflict['conflict_item_title']
     json.conflict_start         Time.zone.parse( conflict['conflict_start'].to_s )
