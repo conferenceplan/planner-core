@@ -340,12 +340,19 @@ module PublishedProgramItemsService
         if item
           res[item.id] = { :item => item }  if !res[item.id]
           res[item.id][:people] = {} if !res[item.id][:people]
-          res[item.id][:people][a.audited_changes['person_id']] = 
-          {:person_name => a.audited_changes['person_name'], 
-            :action => translation[a.action],
-            :role => Enum.find(a.audited_changes['role_id']).name,
-            :created_at => a.created_at} if (
-            (res[item.id][:people][a.audited_changes['person_id']] && (res[item.id][:people][a.audited_changes['person_id']][:action] == a.action)) ? (a.created_at > res[item.id][:people][a.audited_changes['person_id']][:created_at]) : true)
+          if Person.exists? a.audited_changes['person_id']
+            person_name = a.audited_changes['person_name']
+            if person_name.blank?
+              person = Person.find a.audited_changes['person_id']
+              person_name = person.getFullPublicationName
+            end
+            res[item.id][:people][a.audited_changes['person_id']] = 
+            {:person_name => person_name, 
+              :action => translation[a.action],
+              :role => Enum.find(a.audited_changes['role_id']).name,
+              :created_at => a.created_at} if (
+              (res[item.id][:people][a.audited_changes['person_id']] && (res[item.id][:people][a.audited_changes['person_id']][:action] == a.action)) ? (a.created_at > res[item.id][:people][a.audited_changes['person_id']][:created_at]) : true)
+          end
         end
       end
     end
