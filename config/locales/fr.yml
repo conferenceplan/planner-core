@@ -51,6 +51,7 @@ fr:
       event_datetime: "%-d %B %Y, %kh%M"
       event_date: "%-d %B %Y"
       event_time: "%kh%M"
+      event_date_and_day: "%a, %-d %B %Y"
   date:
     formats:
       short_day: "%a, %e %b %Y"
