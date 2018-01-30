@@ -14,8 +14,33 @@ json.visibility_name   item.visibility_name
 json.pub_reference_number   item.pub_reference_number
 json.isPublished            item.published != nil
 json.time_slot              item.time_slot
-json.room                   item.room
-json.venue                  item.room.venue if item.room
+
+room = item.room
+if room
+  json.room do
+    json.id room.id
+    json.name room.name
+    json.lock_version room.lock_version
+    json.venue_id room.venue_id
+    json.purpose room.purpose
+    json.comment room.comment
+    json.setup_id room.setup_id
+    json.base_room_id room.base_room_id
+    json.sort_order room.sort_order
+  end
+
+  venue = room.venue
+  json.venue do
+    json.id venue.id
+    json.name venue.name
+    json.lock_version venue.lock_version
+    json.base_venue_id venue.base_venue_id
+    json.sort_order venue.sort_order
+  end
+else
+  json.room nil
+end
+
 json.setup_type_id          item.setup_type.id if item.setup_type
 json.setup_type_name        item.setup_type.name if item.setup_type
 json.role                   role if role

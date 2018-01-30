@@ -51,8 +51,7 @@ jQuery(document).ready(function() {
         afterCreateFn: function(mdl, originalAttributes) {
           // Set the default duration for items to the last created item's duration
           if (mdl) {
-            var duaration =
-              mdl.get('duration') || mdl._previousAttributes.duration
+            const duration = mdl.get('duration') || mdl._previousAttributes.duration;
             ItemApp.ItemManagement.setDefaultItemDuration(duration);
           }
         }

@@ -289,7 +289,7 @@ table.ui-sortable {
     tr:hover, tr.success {
       .grippy {
         opacity: 1;
-        cursor: move;
+        cursor: ns-resize;
       }
     }
   }

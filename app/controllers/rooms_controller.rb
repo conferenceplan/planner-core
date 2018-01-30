@@ -36,9 +36,7 @@ class RoomsController < ResourceController
   #
   #
   def index
-    rooms = Room.unscoped.includes(:venue).order('venues.sort_order asc, rooms.sort_order asc')
-
-    render json: rooms.to_json, :content_type => 'application/json'
+    @rooms = Room.unscoped.includes(:venue).order('venues.sort_order asc, rooms.sort_order asc')
   end
 
   #

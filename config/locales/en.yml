@@ -71,6 +71,7 @@ en:
       event_datetime: "%-d %B %Y, %l:%M %p"
       event_date: "%-d %B %Y"
       event_time: "%l:%M %p"
+      event_date_and_day: "%a, %-d %B %Y"
   date:
     formats:
       short_day: "%a, %b %e %Y"

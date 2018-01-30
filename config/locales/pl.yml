@@ -4,3 +4,4 @@ pl:
       event_datetime: "%-d %B %Y, %l:%M %P"
       event_date: "%-d %B %Y"
       event_time: "%l:%M %P"
+      event_date_and_day: "%a, %-d %B %Y"

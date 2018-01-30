@@ -18,8 +18,32 @@ json.rows @items do |item|
         json.date_time_str ''
     end
 
-    json.room item.room
-    json.venue item.room.present? ? item.room.venue : nil
+    room = item.room
+    if room
+      json.room do
+        json.id room.id
+        json.name room.name
+        json.lock_version room.lock_version
+        json.venue_id room.venue_id
+        json.purpose room.purpose
+        json.comment room.comment
+        json.setup_id room.setup_id
+        json.base_room_id room.base_room_id
+        json.sort_order room.sort_order
+      end
+
+      venue = room.venue
+      json.venue do
+        json.id venue.id
+        json.name venue.name
+        json.lock_version venue.lock_version
+        json.base_venue_id venue.base_venue_id
+        json.sort_order venue.sort_order
+      end
+    else
+      json.room nil
+      json.venue nil
+    end
 
     json.num_assigned_participants item.programme_item_assignments.size
     json.min_people item.minimum_people

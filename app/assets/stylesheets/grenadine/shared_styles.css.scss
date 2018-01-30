@@ -143,7 +143,7 @@ ul#filter_by li label {
     display: inline-block;
     vertical-align: top;
 
-    .fa-square {
+    .fa-square, .fa-youtube-square {
         color: #ccc;
     }
 
@@ -166,8 +166,10 @@ ul#filter_by li label {
             }
         }
         &.youtube {
-            .fa-square {
-                color: #cd201f;
+            color: #cd201f;
+            
+            .fa-youtube-square {
+              color: #cd201f;
             }
         }
         &.twitch {
