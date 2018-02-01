@@ -3,8 +3,15 @@ json.new_items      @candidateNewItems
 json.modified_items @candidateModifiedItems
 json.removed_items  @candidateRemovedItems
 
-json.modifed_rooms  @candidateRooms
-json.modifed_venues @candidateVenues
+json.modifed_rooms @candidateRooms do |room|
+  json.id room.id
+  json.name room.name
+end
+
+json.modifed_venues @candidateVenues do |venue|
+  json.id venue.id
+  json.name venue.name
+end
 
 if @peopleChanged
     json.people_added_updated    @peopleChanged[:updatedPeople].each do |personid|
