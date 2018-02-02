@@ -957,7 +957,7 @@ var AppUtils = (function(){
 
             var errors = this.submitData();
 
-            if (! errors ) {
+            if (!errors) {
                 // flip back to the read view
                 this.renderModel();
             };
@@ -1016,7 +1016,7 @@ var AppUtils = (function(){
         
         initialize : function(options) {
             this.options = options || {};
-            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'sync', this.render);
             
             this.template = _.template($('#item-edit-template').html()); //_.template(_model_html); //
 
