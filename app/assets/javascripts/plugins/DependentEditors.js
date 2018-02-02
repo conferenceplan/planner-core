@@ -18,36 +18,43 @@ _.extend(Form.Editor.prototype, {
         }
     },
 
-    setInitValue : function(element, value, expectedValues) {
-        var show = false;
-        if ($.inArray('not_null', expectedValues) > -1) {
-            if (value != null) {
-                show = true;
-                if (value.length == 0) {
-                    show = false;
-                }
-            }
-        }
-        if ($.inArray('false', expectedValues) > -1) {
-            if (value == null) {
-                show = true;
-            } else {
-                if (value.length == 0) {
-                    show = true;
-                }
-            }
-        }
-        if ($.inArray('not-zero', expectedValues) > -1) {
-            if (value != 0) {
-                show = true;
-            }
-        }
+    dependentFieldRenderInitializer : function() {
+      this.form.on(this.options.schema.dependsOn + ':change', this.dependsOnChanged, this);
+      this.dependInit(this.form);
+    },
 
-        if ( ((value != null) && ($.inArray(value.toString(), expectedValues) > -1)) || show) {
-            element.first().removeClass('hidden-form-group');
-        } else {
-            element.first().addClass('hidden-form-group');
+    shouldBeVisible : function(value, expectedValues) {
+      // Refactored this visibility check out so it can be re-used
+      var show = false;
+      if ($.inArray('not_null', expectedValues) > -1) {
+        if (value != null) {
+          show = true;
+          if (value.length == 0) {
+            show = false;
+          }
         }
+      }
+      if ($.inArray('false', expectedValues) > -1) {
+        if (value == null || value.length == 0 || value === false) {
+          show = true;
+        }
+      }
+      if ($.inArray('not-zero', expectedValues) > -1) {
+        if (value != 0) {
+          show = true;
+        }
+      }
+
+      return (value != null && ($.inArray(value.toString(), expectedValues) > -1)) || show;
+    },
+
+    setInitValue : function(element, value, expectedValues) {
+      // If the dependent field should be visible, remove the hidden classes
+      if (this.shouldBeVisible(value, expectedValues)) {
+        element.first().removeClass('hidden-form-group');
+      } else {
+        element.first().addClass('hidden-form-group');
+      }
     },
     
     getDependantValue : function(form) {
@@ -64,20 +71,23 @@ _.extend(Form.Editor.prototype, {
     },
 
     dependInit : function(form) {
-            _.defer( function(editor, el, dependsOn, expectedValues) {
-                var intialDependantValue = null;
-                var cid = null;
-                if ((typeof editor.form.model != 'undefined') && (editor.form.model != null)) {
-                    intialDependantValue = editor.form.model.get(dependsOn);
-                    cid = editor.form.model.cid;
-                } else if ((typeof editor.form.data != 'undefined') && (editor.form.data != null)) {
-                    intialDependantValue = editor.form.data[dependsOn];
-                    cid = editor.cid;
-                };
-                
-                var groupElement = el.parents('.form-group');
-                editor.setInitValue(groupElement, intialDependantValue, expectedValues);
-            }, this, this.$el, this.options.schema.dependsOn, this.options.schema.dependentValues );
+      _.defer(
+        function(editor, $el, dependsOn, expectedValues) {
+          var intialDependantValue = null;
+          var cid = null;
+          if ((typeof editor.form.model != 'undefined') && (editor.form.model != null)) {
+              intialDependantValue = editor.form.model.get(dependsOn);
+              cid = editor.form.model.cid;
+          } else if ((typeof editor.form.data != 'undefined') && (editor.form.data != null)) {
+              intialDependantValue = editor.form.data[dependsOn];
+              cid = editor.cid;
+          };
+          
+          var groupElement = $el.parents('.form-group');
+          editor.setInitValue(groupElement, intialDependantValue, expectedValues);
+        },
+        this, this.$el, this.options.schema.dependsOn, this.options.schema.dependentValues 
+      );
     }
 });
 
