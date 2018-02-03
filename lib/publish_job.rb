@@ -431,6 +431,7 @@ class PublishJob
       # that needs to be pushed out
       pub_room.sort_order = src_room.sort_order
       pub_room = set_translated_attrs(%w[name], src_room, pub_room)
+      pub_room.touch
       pub_room.save
     end
 
@@ -452,6 +453,7 @@ class PublishJob
     elsif src_venue.updated_at > pub_venue.updated_at
       pub_venue.sort_order = src_venue.sort_order
       pub_venue = set_translated_attrs(%w[name], src_venue, pub_venue)
+      pub_venue.touch
       pub_venue.save
     end
     
