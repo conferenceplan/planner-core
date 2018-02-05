@@ -5,13 +5,15 @@ class Person < ActiveRecord::Base
                   :postal_addresses_attributes, :email_addresses_attributes,
                   :phone_numbers_attributes, :registrationDetail_attributes,
                   :prefix, :person_con_state_attributes
-                  
+
   attr_accessor :details
 
   acts_as_taggable
 
   has_contact_info
-  
+
+  categorized
+
   # Put in audit for people
   audited :allow_mass_assignment => true
 
@@ -26,7 +28,7 @@ class Person < ActiveRecord::Base
   alias_attribute :image, :bio_image
 
   has_one :edited_bio, :dependent => :delete
-  
+
   has_one :peoplesource, :dependent => :delete
   has_one :datasource, :through => :peoplesource
 

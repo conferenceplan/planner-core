@@ -9,8 +9,8 @@ class CategoryNamesController < ResourceController
     sort_order = params[:order] ? params[:order] : 'asc'
 
     if search
-      @total = super.where(["name like ?", search + '%' ]).count
-      super.where(["name like ?", search + '%' ]).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
+      @total = super.where(["name like ?", '%' + search + '%' ]).count
+      super.where(["name like ?", '%' + search + '%' ]).offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
     else  
       @total = super.count
       super.offset(offset).limit(limit).order(sort_by + ' ' + sort_order)
