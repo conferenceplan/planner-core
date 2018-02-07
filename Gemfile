@@ -6,6 +6,8 @@ gem 'i18n-active_record', :require => 'i18n/active_record'
 gem "mysql2", "~> 0.3.10"
 gem "i18n-js", ">= 3.0.0.rc11"
 
+gem 'axlsx', '~> 3.0.0.pre', :git => 'git://github.com/randym/axlsx.git', :branch => 'release-3.0.0'
+
 group :assets do
   gem 'sass-rails', '>= 3.2'
 end

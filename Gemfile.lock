@@ -5,10 +5,21 @@ GIT
     enumerations_mixin (0.2.5)
       rails (>= 3.2.0)
 
+GIT
+  remote: git://github.com/randym/axlsx.git
+  revision: a981ae5afffb6b0dfe411820e3df1a44f5cbd63f
+  branch: release-3.0.0
+  specs:
+    axlsx (3.0.0.pre)
+      htmlentities (~> 4.3.4)
+      mimemagic (~> 0.3)
+      nokogiri (>= 1.7.1)
+      rubyzip (~> 1.2, >= 1.2.1)
+
 PATH
   remote: .
   specs:
-    planner-core (1.3.199)
+    planner-core (1.3.220)
       actionmailer
       activerecord
       acts-as-taggable-on
@@ -109,13 +120,9 @@ GEM
     audited-activerecord (4.2.2)
       activerecord (~> 4.0)
       audited (= 4.2.2)
-    autoprefixer-rails (7.2.2)
+    autoprefixer-rails (7.2.5)
       execjs
     aws_cf_signer (0.1.3)
-    axlsx (2.0.1)
-      htmlentities (~> 4.3.1)
-      nokogiri (>= 1.4.1)
-      rubyzip (~> 1.0.0)
     axlsx_rails (0.5.1)
       actionpack (>= 3.1)
       axlsx (>= 2.0.1)
@@ -127,17 +134,17 @@ GEM
       momentjs-rails (>= 2.8.1)
     browser (2.5.2)
     builder (3.2.3)
-    capybara (2.13.0)
+    capybara (2.17.0)
       addressable
-      mime-types (>= 1.16)
+      mini_mime (>= 0.1.3)
       nokogiri (>= 1.3.3)
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
-      xpath (~> 2.0)
-    capybara-webkit (1.14.0)
-      capybara (>= 2.3.0, < 2.14.0)
+      xpath (>= 2.0, < 4.0)
+    capybara-webkit (1.1.0)
+      capybara (~> 2.0, >= 2.0.2)
       json
-    carrierwave (1.2.1)
+    carrierwave (1.2.2)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
@@ -147,12 +154,12 @@ GEM
       uber (~> 0.0.8)
     ckeditor_rails (4.4.7)
       railties (>= 3.0)
-    cloudinary (1.8.2)
+    cloudinary (1.8.3)
       aws_cf_signer
       rest-client
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
-    countries (2.1.2)
+    countries (2.1.3)
       i18n_data (~> 0.8.0)
       money (~> 6.9)
       sixarm_ruby_unaccent (~> 1.1)
@@ -168,12 +175,12 @@ GEM
     declarative_authorization (0.5.7)
     deep_cloneable (2.3.1)
       activerecord (>= 3.1.0, < 5.2.0)
-    delayed_job (4.1.3)
+    delayed_job (4.1.4)
       activesupport (>= 3.0, < 5.2)
     delayed_job_active_record (4.1.2)
       activerecord (>= 3.0, < 5.2)
       delayed_job (>= 3.0, < 5)
-    devise (4.3.0)
+    devise (4.4.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0, < 5.2)
@@ -196,7 +203,7 @@ GEM
     factory_girl_rails (4.9.0)
       factory_girl (~> 4.9.0)
       railties (>= 3.0.0)
-    ffi (1.9.18)
+    ffi (1.9.21)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
@@ -207,20 +214,21 @@ GEM
     geocoder (1.4.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    globalize (5.0.1)
-      activemodel (>= 4.2.0, < 4.3)
-      activerecord (>= 4.2.0, < 4.3)
+    globalize (5.1.0)
+      activemodel (>= 4.2, < 5.2)
+      activerecord (>= 4.2, < 5.2)
+      request_store (~> 1.0)
     globalize-accessors (0.2.1)
       globalize (~> 5.0, >= 5.0.0)
     htmlentities (4.3.4)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
-    i18n (0.9.1)
+    i18n (0.9.3)
       concurrent-ruby (~> 1.0)
-    i18n-active_record (0.2.1)
+    i18n-active_record (0.2.2)
       i18n (>= 0.5.0)
-    i18n-js (3.0.2)
+    i18n-js (3.0.4)
       i18n (~> 0.6, >= 0.6.6)
     i18n_data (0.8.0)
     jbuilder (2.7.0)
@@ -248,22 +256,23 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
+    mimemagic (0.3.2)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
-    minitest (5.10.3)
+    minitest (5.11.3)
     momentjs-rails (2.17.1)
       railties (>= 3.1)
-    money (6.10.0)
+    money (6.10.1)
       i18n (>= 0.6.4, < 1.0)
-    multi_json (1.12.2)
+    multi_json (1.13.1)
     mysql2 (0.3.21)
     netrc (0.11.0)
-    nokogiri (1.8.1)
+    nokogiri (1.8.2)
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
     pdf-core (0.7.0)
     power_assert (1.1.1)
-    power_enum (3.0.1)
+    power_enum (3.1.0)
       activerecord (>= 4.2, < 5.2)
       railties (>= 4.2, < 5.2)
     prawn (2.2.2)
@@ -293,8 +302,8 @@ GEM
       sprockets-rails
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
-    rails-dom-testing (1.0.8)
-      activesupport (>= 4.2.0.beta, < 5.0)
+    rails-dom-testing (1.0.9)
+      activesupport (>= 4.2.0, < 5.0)
       nokogiri (~> 1.6)
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
@@ -315,8 +324,10 @@ GEM
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
-    recaptcha (4.6.2)
+    recaptcha (4.6.4)
       json
+    request_store (1.4.0)
+      rack (>= 1.4)
     responders (2.4.0)
       actionpack (>= 4.2.0, < 5.3)
       railties (>= 4.2.0, < 5.3)
@@ -327,7 +338,7 @@ GEM
     routing-filter (0.6.1)
       actionpack (>= 4.2, < 5.2)
       activesupport (>= 4.2, < 5.2)
-    rspec-core (3.7.0)
+    rspec-core (3.7.1)
       rspec-support (~> 3.7.0)
     rspec-expectations (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -343,9 +354,9 @@ GEM
       rspec-expectations (~> 3.7.0)
       rspec-mocks (~> 3.7.0)
       rspec-support (~> 3.7.0)
-    rspec-support (3.7.0)
-    rubyzip (1.0.0)
-    sass (3.5.3)
+    rspec-support (3.7.1)
+    rubyzip (1.2.1)
+    sass (3.5.5)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
       rb-fsevent (~> 0.9, >= 0.9.4)
@@ -385,23 +396,24 @@ GEM
       actionpack (>= 3.1)
       jquery-rails
       railties (>= 3.1)
-    tzinfo (1.2.4)
+    tzinfo (1.2.5)
       thread_safe (~> 0.1)
     uber (0.0.15)
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.4)
+    unf_ext (0.0.7.5)
     unicode_utils (1.4.0)
     warden (1.2.7)
       rack (>= 1.0)
     will_paginate (3.1.6)
-    xpath (2.1.0)
-      nokogiri (~> 1.3)
+    xpath (3.0.0)
+      nokogiri (~> 1.8)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  axlsx (~> 3.0.0.pre)!
   capybara
   capybara-webkit
   database_cleaner
@@ -419,4 +431,4 @@ DEPENDENCIES
   test-unit (~> 3.0)
 
 BUNDLED WITH
-   1.13.7
+   1.16.1
